@@ -22,7 +22,8 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <ndarr.hxx>
 #include "swcont.hxx"
 
@@ -47,9 +48,11 @@ enum class EditEntryMode
 {
     EDIT          = 0,
     UPD_IDX       = 1,
-    UNPROTECT_TABLE    = 2,
-    DELETE        = 3,
-    RENAME        = 4,
+    RMV_IDX       = 2,
+    UNPROTECT_TABLE    = 3,
+    DELETE        = 4,
+    RENAME        = 5,
+    TEXT_ALTERNATIVE = 6
 };
 
 // Flags for PopupMenu-enable/disable

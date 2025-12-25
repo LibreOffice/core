@@ -37,7 +37,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <utility>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 using namespace css;
 using namespace css::uno;

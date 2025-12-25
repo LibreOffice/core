@@ -353,7 +353,7 @@ class ScCellTextObj final : public ScCellTextData, public SvxUnoText
 {
 public:
                  ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
-        virtual  ~ScCellTextObj() COVERITY_NOEXCEPT_FALSE override;
+        virtual  ~ScCellTextObj() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

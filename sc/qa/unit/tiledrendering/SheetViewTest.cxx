@@ -23,6 +23,23 @@ using namespace css;
 
 class SheetViewTest : public ScTiledRenderingTest
 {
+protected:
+    static bool checkValues(ScTabViewShell* pTabView, SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+                            std::vector<std::u16string_view> const& rValues)
+    {
+        size_t nSize = nEndRow - nStartRow + 1;
+        if (nSize != rValues.size())
+            return false;
+
+        for (size_t nIndex = 0; nIndex < nSize; nIndex++)
+        {
+            OUString value = pTabView->GetCurrentString(nCol, nStartRow + nIndex);
+            if (value != rValues[nIndex])
+                return false;
+        }
+
+        return true;
+    }
 };
 
 /** Check auto-filter sorting.
@@ -54,20 +71,14 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     Scheduler::ProcessEventsToIdle();
 
     // Check AutoFilter values
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView1->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView1->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView1->GetCurrentString(0, 4));
+    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
 
     // Switch to view 2
     SfxLokHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Check auto-filter values
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView2->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView2->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 4));
+    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
 
     // Check what sheet we currently have selected for view 1 & 2
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
@@ -88,16 +99,10 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
 
     // Check view 2 - sorted
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView2->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView2->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 4));
+    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
 
     // Check view 1 - unsorted
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView1->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView1->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView1->GetCurrentString(0, 4));
+    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
@@ -213,15 +218,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // Check AutoFilter values for each view
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView1->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView1->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView1->GetCurrentString(0, 4));
-
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView2->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView2->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 4));
+    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
 
     // Switch to View2
     SfxLokHelper::setView(aView2.getViewID());
@@ -232,10 +230,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // Check values are sorted for view 2
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 1));
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView2->GetCurrentString(0, 2));
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView2->GetCurrentString(0, 3));
-    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 4));
+    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
 
     // Sheet view must be present
     auto pSheetViewManager = pDocument->GetSheetViewManager(0);
@@ -487,7 +483,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
     dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -503,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
     dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/workbook.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -695,6 +691,236 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
         // Not deleted but the sheet view is now null
         auto pSheetView2 = pSheetViewManager->get(1);
         CPPUNIT_ASSERT(!pSheetView2);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRenderStateInSheetView)
+{
+    // Check the View Render State is set correctly when in sheet view.
+    // When in sheet view, we expect the sheet view ID to be set in the state.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+
+    // View 1
+    ScTestViewCallback aView1;
+
+    // View 1 - default state
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+
+    // View 2
+    SfxLokHelper::createView();
+    ScTestViewCallback aView2;
+
+    // View 2 - default state
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+
+    // Create a sheet view in View 2
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    // View 2 - state includes view sheet ID
+    CPPUNIT_ASSERT_EQUAL("S;Default;VS:0"_ostr, pModelObj->getViewRenderState());
+
+    // Switch to View 1
+    SfxLokHelper::setView(aView1.getViewID());
+
+    // View 1 - still default state
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
+{
+    // Two related scenarios tested:
+    // 1. Auto-filter is sorted in the default view, then the data is changed in a sheet view.
+    //    In this case the sheet view is unsorted and the default view is sorted, so the data
+    //    in the default view needs to be first unsorted so the correct cell is changed.
+    // 2. Continuation of scenario 1, where the default view is sorted again (ascending then
+    //    descending order). In this case the sort orders must be combined correctly, so the
+    //    change in the sheet view would still change the correct cell in default view.
+
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Setup views
+    ScTestViewCallback aSheetView;
+    ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aDefaultView;
+    ScTabViewShell* pTabViewDefaultView = aDefaultView.getTabViewShell();
+
+    CPPUNIT_ASSERT(pTabViewSheetView != pTabViewDefaultView);
+    CPPUNIT_ASSERT(aSheetView.getViewID() != aDefaultView.getViewID());
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
+
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
+    }
+
+    // Switch to Default View
+    {
+        SfxLokHelper::setView(aDefaultView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
+
+        // Sort AutoFilter ascending
+        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
+
+        // Check values
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+
+        typeCharsInCell(std::string("9"), 0, 1, pTabViewDefaultView, pModelObj);
+
+        // Check values
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"9", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+
+        // Sort AutoFilter AGAIN descending
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        // Check values
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"9", u"7", u"5", u"4" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+
+        typeCharsInCell(std::string("6"), 0, 3, pTabViewDefaultView, pModelObj);
+
+        // Check values
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"9", u"7", u"6", u"4" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"6", u"9", u"7" }));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
+{
+    // Two related scenarios tested:
+    //
+    // 1. Auto-filter is sorted in the sheet view, then the data is changed in a sheet view.
+    //    In this case the default view is unsorted and the sheet view is sorted, so the data
+    //    in the sheet view needs to be first unsorted so we get the correct position of the
+    //    cell that needs to be changed.
+    // 2. Continuation of scenario 1, where the sheet view is sorted again (ascending then
+    //    descending order). In this case the sort orders must be combined correctly.
+
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Setup views
+    ScTestViewCallback aSheetView;
+    ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aDefaultView;
+    ScTabViewShell* pTabViewDefaultView = aDefaultView.getTabViewShell();
+
+    CPPUNIT_ASSERT(pTabViewSheetView != pTabViewDefaultView);
+    CPPUNIT_ASSERT(aSheetView.getViewID() != aDefaultView.getViewID());
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        // New Sheet view
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+
+        // Check values - Sheet View
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+
+        typeCharsInCell(std::string("9"), 0, 1, pTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+
+        // Scenario 2
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"7", u"5", u"4" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+
+        typeCharsInCell(std::string("6"), 0, 3, pTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"7", u"6", u"4" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"6", u"9", u"7" }));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetView)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Setup views
+    ScTestViewCallback aSheetView;
+    ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aDefaultView;
+    ScTabViewShell* pTabViewDefaultView = aDefaultView.getTabViewShell();
+
+    CPPUNIT_ASSERT(pTabViewSheetView != pTabViewDefaultView);
+    CPPUNIT_ASSERT(aSheetView.getViewID() != aDefaultView.getViewID());
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+    }
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aDefaultView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        // Check values
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
+    }
+
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        typeCharsInCell(std::string("44"), 0, 2, pTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"44", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"7", u"5", u"44", u"3" }));
     }
 }
 

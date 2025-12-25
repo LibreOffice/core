@@ -106,12 +106,6 @@ private:
 };
 }
 
-bool SbiRuntime::isVBAEnabled()
-{
-    SbiInstance* pInst = GetSbData()->pInst;
-    return pInst && pInst->pRun && pInst->pRun->bVBAEnabled;
-}
-
 void StarBASIC::SetVBAEnabled( bool bEnabled )
 {
     if ( bDocBasic )
@@ -371,6 +365,12 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 }
 
 #endif
+
+bool SbiRuntime::isVBAEnabled()
+{
+    SbiInstance* pInst = GetSbData()->pInst;
+    return pInst && pInst->pRun && pInst->pRun->bVBAEnabled;
+}
 
 // #39629 create NumberFormatter with the help of a static method now
 std::shared_ptr<SvNumberFormatter> const & SbiInstance::GetNumberFormatter()
@@ -654,7 +654,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             const SbxParamInfo* p = pInfo ? pInfo->GetParam( sal::static_int_cast<sal_uInt16>(i) ) : nullptr;
 
             // #111897 ParamArray
-            if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
+            if( p && ParamInfoFlag::checkFlagFor(p->nUserData, ParamInfo::ParamArray) )
             {
                 SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
                 sal_uInt32 nParamArrayParamCount = nParamCount - i;
@@ -697,7 +697,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                     bByVal = true;
                 }
 
-                bTargetTypeIsArray = (p->nUserData & PARAM_INFO_WITHBRACKETS) != 0;
+                bTargetTypeIsArray = ParamInfoFlag::checkFlagFor(p->nUserData, ParamInfo::WithBrackets);
             }
             if( bByVal )
             {
@@ -745,7 +745,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
     // #111897 Check first missing parameter for ParamArray
     const SbxParamInfo* p = pInfo->GetParam(sal::static_int_cast<sal_uInt16>(nParamCount));
-    if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
+    if( p && ParamInfoFlag::checkFlagFor(p->nUserData, ParamInfo::ParamArray) )
     {
         SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
         pArray->unoAddDim(0, -1);
@@ -1524,13 +1524,13 @@ void SbiRuntime::StepLIKE()
     {
         bTextMode = IsImageFlag( SbiImageFlags::COMPARETEXT );
     }
-    sal_uInt32 searchFlags = UREGEX_UWORD | UREGEX_DOTALL; // Dot matches newline
+    uint32_t searchFlags = UREGEX_UWORD | UREGEX_DOTALL; // Dot matches newline
     if( bTextMode )
     {
         searchFlags |= UREGEX_CASE_INSENSITIVE;
     }
 
-    static sal_uInt32 cachedSearchFlags = 0;
+    static uint32_t cachedSearchFlags = 0;
     static OUString cachedRegex;
     static std::optional<icu::RegexMatcher> oRegexMatcher;
     UErrorCode nIcuErr = U_ZERO_ERROR;
@@ -1541,6 +1541,12 @@ void SbiRuntime::StepLIKE()
         icu::UnicodeString sRegex(false, reinterpret_cast<const UChar*>(cachedRegex.getStr()),
                                   cachedRegex.getLength());
         oRegexMatcher.emplace(sRegex, cachedSearchFlags, nIcuErr);
+        if (U_FAILURE(nIcuErr))
+        {
+            // Bad regex; oRegexMatcher has no pattern - would crash in RegexMatcher::reset
+            oRegexMatcher.reset();
+            return Error(ERRCODE_BASIC_BAD_PATTERN);
+        }
     }
 
     icu::UnicodeString sSource(false, reinterpret_cast<const UChar*>(value.getStr()),

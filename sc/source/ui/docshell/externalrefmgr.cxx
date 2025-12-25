@@ -57,7 +57,7 @@
 #include <comphelper/configuration.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <stringutil.hxx>
 #include <scmatrix.hxx>
 #include <columnspanset.hxx>
@@ -1476,8 +1476,8 @@ void ScExternalRefLink::Closed()
         if (!pViewData)
             return ERROR_GENERAL;
 
-        ScDocShell& rDocShell = pViewData->GetDocShell();
-        ScDocShellModificator aMod(rDocShell);
+        ScDocShell* pDocShell = pViewData->GetDocShell();
+        ScDocShellModificator aMod(*pDocShell);
         pMgr->switchSrcFile(mnFileId, aFile, aFilter);
         aMod.SetDocumentModified();
     }

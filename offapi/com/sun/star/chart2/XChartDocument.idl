@@ -123,6 +123,11 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         @since LibreOffice 26.02
      */
     XChartStyle getStyles();
+
+    /** Get colorstyle information
+        @since LibreOffice 26.02
+     */
+    XChartColorStyle getColorStyles();
 };
 
 } ; // chart2

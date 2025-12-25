@@ -37,7 +37,7 @@
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -221,7 +221,7 @@ bool ThumbnailView::MouseMove(const MouseEvent& rMEvt)
     {
         ThumbnailViewItem *pItem = mFilteredItemList[i];
         ::tools::Rectangle aToInvalidate(pItem->updateHighlight(pItem->mbVisible && !rMEvt.IsLeaveWindow(), aPoint));
-        if (!aToInvalidate.IsEmpty() && IsReallyVisible() && IsUpdateMode())
+        if (!aToInvalidate.IsEmpty() && IsReallyVisible())
             Invalidate(aToInvalidate);
     }
 
@@ -288,22 +288,24 @@ void ThumbnailView::ImplInit()
     mbAllowMultiSelection = true;
     maFilterFunc = ViewFilterAll();
 
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    mpStartSelRange = mFilteredItemList.end();
+
+    mfHighlightTransparence = SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01;
+    mpItemAttrs->nMaxTextLength = 0;
+
+    UpdateColors(Application::GetSettings().GetStyleSettings());
+    updateItemAttrsFromColors();
+}
+
+void ThumbnailView::UpdateColors(const StyleSettings& rSettings)
+{
     maFillColor = rSettings.GetFieldColor();
     maTextColor = rSettings.GetWindowTextColor();
     maHighlightColor = rSettings.GetHighlightColor();
     maHighlightTextColor = rSettings.GetHighlightTextColor();
-
-    mfHighlightTransparence = SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01;
-
-    mpStartSelRange = mFilteredItemList.end();
-
-    UpdateColors();
-
-    mpItemAttrs->nMaxTextLength = 0;
 }
 
-void ThumbnailView::UpdateColors()
+void ThumbnailView::updateItemAttrsFromColors()
 {
     mpItemAttrs->aFillColor = maFillColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
@@ -618,7 +620,7 @@ bool ThumbnailView::ImplHasAccessibleListeners() const
 IMPL_LINK_NOARG(ThumbnailView, ImplScrollHdl, weld::ScrolledWindow&, void)
 {
     CalculateItemPositions(true);
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -952,6 +954,10 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rec
 {
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
 
+    // Re-read settings colors to handle system theme changes on-the-fly
+    UpdateColors(rRenderContext.GetSettings().GetStyleSettings());
+    updateItemAttrsFromColors();
+
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);
 
@@ -1027,7 +1033,7 @@ void ThumbnailView::Resize()
     CustomWidgetController::Resize();
     CalculateItemPositions();
 
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1070,7 +1076,7 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
 
     CalculateItemPositions();
 
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1083,7 +1089,7 @@ void ThumbnailView::Clear()
 
     CalculateItemPositions();
 
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -1150,10 +1156,10 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     pItem->setSelection(true);
     maItemStateHdl.Call(pItem);
 
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 
-    bool bNewOut = IsReallyVisible() && IsUpdateMode();
+    bool bNewOut = IsReallyVisible();
 
     // if necessary scroll to the visible area
     if (mbScroll && nItemId && mnCols)
@@ -1171,7 +1177,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
 
     if ( bNewOut )
     {
-        if ( IsReallyVisible() && IsUpdateMode() )
+        if (IsReallyVisible())
             Invalidate();
     }
 
@@ -1215,7 +1221,7 @@ void ThumbnailView::deselectItems()
         }
     }
 
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 

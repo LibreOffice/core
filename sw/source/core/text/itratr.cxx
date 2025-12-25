@@ -1775,7 +1775,7 @@ bool SwTextFrame::IsEmptyWithSplitFly() const
         return false;
     }
 
-    SwRectFnSet fnUpper(GetUpper());
+    SwRectFnSet fnUpper(*GetUpper());
     if (fnUpper.YDiff(fnUpper.GetBottom(getFrameArea()), fnUpper.GetPrtBottom(*GetUpper())) <= 0)
     {
         return false;
@@ -1833,7 +1833,7 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
             if (!pFrame->IsFollow() &&
                 pFrame->GetTextNodeForFirstText() == this)
             {
-                SwRectFnSet aRectFnSet(pFrame);
+                SwRectFnSet aRectFnSet(*pFrame);
                 SwRect aRect;
                 pFrame->GetCharRect( aRect, aPos );
                 nRet = pFrame->IsRightToLeft() ?

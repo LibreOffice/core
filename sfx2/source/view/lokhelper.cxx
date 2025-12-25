@@ -36,6 +36,7 @@
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
@@ -100,11 +101,31 @@ const std::size_t g_logNotifierCacheMaxSize = 50;
 ::std::list<::std::string> g_logNotifierCache;
 }
 
+#if !defined NDEBUG
+static bool isSfxMediumMissingInteractionHandled(SfxViewFrame& rViewFrame)
+{
+    const SfxObjectShell* pObjSh = rViewFrame.GetObjectShell();
+    const SfxMedium* pMed = pObjSh ? pObjSh->GetMedium() : nullptr;
+    if (!pMed)
+    {
+        // In this unlikely case it's not going to matter.
+        return false;
+    }
+    const SfxUnoAnyItem *pItem = pMed->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false);
+    return !pItem || !pItem->GetValue().hasValue();
+}
+#endif
+
 int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
 {
     assert(docId >= ViewShellDocId(0) && "Cannot createView for invalid (negative) DocId.");
 
-    SfxViewShell::SetCurrentDocId(docId);
+    // The XInteractionHandler installed during the original lo_documentLoad
+    // should still be present when new views are created. If it is not
+    // something has likely cleared the original SID_INTERACTIONHANDLER
+    assert(!isSfxMediumMissingInteractionHandled(rViewFrame) && "original XInteractionHandler missing");
+
+    comphelper::LibreOfficeKit::setDocId(docId);
     SfxRequest aRequest(rViewFrame, SID_NEWWINDOW);
     rViewFrame.ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -370,6 +391,27 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
         bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
         if (bIsCurrShell)
             comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
+    }
+}
+
+void SfxLokHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKLanguageAndLocale(rBcp47LanguageTag);
+            // sync also global getter if we are the current view
+            bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
+            if (bIsCurrShell)
+            {
+                comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
+                comphelper::LibreOfficeKit::setLocale(LanguageTag(rBcp47LanguageTag));
+            }
+            return;
+        }
     }
 }
 

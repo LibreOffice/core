@@ -22,7 +22,6 @@
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/polypolygon.hxx>
 #include <cppcanvas/bitmap.hxx>
-#include <basegfx/vector/b2isize.hxx>
 
 #include <cppcanvas/cppcanvasdllapi.h>
 
@@ -30,6 +29,7 @@ namespace basegfx
 {
     class B2DPolygon;
 }
+namespace basegfx { class B2ISize; }
 
 
 /* Definition of BaseGfxFactory class */

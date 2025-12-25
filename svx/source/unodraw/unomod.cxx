@@ -48,7 +48,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/SvxXTextColumns.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 

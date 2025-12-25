@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkListStore" id="liststore">
     <columns>
       <!-- column-name text -->
@@ -28,7 +28,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="topbar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="spacing">2</property>
@@ -54,6 +54,7 @@
                 <child>
                   <object class="GtkToolButton" id="searchoptions">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="quickfindpanel|moresearchoptions|tooltip_text">Search Options</property>
                     <property name="icon-name">sw/res/sr20006.png</property>
                     <child internal-child="accessible">
@@ -82,8 +83,17 @@
                 <property name="toolbar-style">icons</property>
                 <property name="show-arrow">False</property>
                 <child>
-                  <object class="GtkToolButton" id=".uno:SearchDialog">
+                  <object class="GtkToolButton" id="searchdialog">
                     <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="quickfindpanel|searchdialog|tooltip_text">Search with Find and Replace</property>
+                    <property name="icon-name">cmd/sc_searchdialog.png</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="searchdialog-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="quickfindpanel|searchdialog|accessible_name">Search with Find and Replace</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="quickfindpanel|extended_tip|searchdialog">Click here to transfer the search to the Find and Replace dialog to set more search options.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

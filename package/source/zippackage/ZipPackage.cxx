@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
@@ -1210,15 +1211,14 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
-    // Add default entries, the count must be updated manually when appending.
     // Add at least the standard default entries.
     uno::Sequence< beans::StringPair > aDefaultsSequence
     {
-        { u"xml"_ustr, u"application/xml"_ustr },
-        { u"rels"_ustr, u"application/vnd.openxmlformats-package.relationships+xml"_ustr },
-        { u"png"_ustr, u"image/png"_ustr },
+        { u"fntdata"_ustr, u"application/x-fontdata"_ustr },
         { u"jpeg"_ustr, u"image/jpeg"_ustr },
-        { u"fntdata"_ustr, u"application/x-fontdata"_ustr }
+        { u"png"_ustr, u"image/png"_ustr },
+        { u"rels"_ustr, u"application/vnd.openxmlformats-package.relationships+xml"_ustr },
+        { u"xml"_ustr, u"application/xml"_ustr }
     };
 
     uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
@@ -1226,20 +1226,30 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     sal_Int32 nOverSeqLength = 0;
     for (const auto& rMan : aManList)
     {
-        OUString aType;
         OSL_ENSURE( rMan[PKG_MNFST_MEDIATYPE].Name == "MediaType" && rMan[PKG_MNFST_FULLPATH].Name == "FullPath",
                     "The mediatype sequence format is wrong!" );
+        OUString aType;
         rMan[PKG_MNFST_MEDIATYPE].Value >>= aType;
-        if ( !aType.isEmpty() )
-        {
-            OUString aPath;
-            // only nonempty type makes sense here
-            rMan[PKG_MNFST_FULLPATH].Value >>= aPath;
-            //FIXME: For now we have no way of differentiating defaults from others.
-            aOverridesSequenceRange[nOverSeqLength].First = "/" + aPath;
-            aOverridesSequenceRange[nOverSeqLength].Second = aType;
-            ++nOverSeqLength;
-        }
+        if (aType.isEmpty())
+            continue;
+
+        OUString aPath, aExtension;
+        rMan[PKG_MNFST_FULLPATH].Value >>= aPath;
+        (void)comphelper::DirectoryHelper::splitAtLastToken(aPath, '.', aExtension);
+
+        // don't add override if same extension and content type exists as default
+        const bool bTypeFound
+            = !aExtension.isEmpty()
+              && std::find_if(aDefaultsSequence.begin(), aDefaultsSequence.end(),
+                              [&aExtension, &aType](const beans::StringPair& defPair)
+                              { return defPair.First == aExtension && defPair.Second == aType; })
+                     != aDefaultsSequence.end();
+        if (bTypeFound)
+            continue;
+
+        aOverridesSequenceRange[nOverSeqLength].First = "/" + aPath;
+        aOverridesSequenceRange[nOverSeqLength].Second = aType;
+        ++nOverSeqLength;
     }
     aOverridesSequence.realloc(nOverSeqLength);
 

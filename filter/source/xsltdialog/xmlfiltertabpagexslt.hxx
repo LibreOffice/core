@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/inettbc.hxx>
 
 class filter_info_impl;

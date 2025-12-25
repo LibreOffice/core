@@ -368,7 +368,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
     {
         int i;
 
-        OSL_ASSERT( rColors.getLength() == rStops.getLength() );
+        assert(rColors.getLength() == rStops.getLength() && "Color count does not match stop count");
 
         for( i = 0; i < rColors.getLength(); i++ )
         {

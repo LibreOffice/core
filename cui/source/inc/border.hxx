@@ -20,7 +20,9 @@
 
 #include <editeng/shaditem.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/IconView.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/algitem.hxx>
 #include <svx/colorbox.hxx>
@@ -168,8 +170,6 @@ private:
     DECL_LINK(ModifyWidthMFHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(SyncHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::Toggleable&, void);
-    DECL_LINK(QueryTooltipPreHdl, const weld::TreeIter&, OUString);
-    DECL_LINK(QueryTooltipSdwHdl, const weld::TreeIter&, OUString);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nIconViewIdx) const;
     OUString            GetPresetName(sal_uInt16 nIconViewIdx) const;

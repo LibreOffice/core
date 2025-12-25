@@ -323,30 +323,30 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (IsCompletelyDisabled())
     {
-        rRenderContext.DrawBitmapEx(m_aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
     }
     else
     {
-        rRenderContext.DrawBitmapEx(m_aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
 
         // Center for rectangle and line
-        rRenderContext.DrawBitmapEx(m_aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
 
-        rRenderContext.DrawBitmapEx(m_aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(m_aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(m_aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
     }
 
     // draw active button, avoid center pos for angle
@@ -358,7 +358,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
             Point aCenterPt(m_aPtNew);
             aCenterPt -= aToCenter;
 
-            rRenderContext.DrawBitmapEx(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap);
+            rRenderContext.DrawBitmap(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap);
         }
     }
 }
@@ -950,7 +950,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
         const Bitmap aBitmap = pList->GetBitmapForUISolidLine();
         const Size aBmpSize(aBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmapEx(Point(), aBitmap);
+        pVD->DrawBitmap(Point(), aBitmap);
         m_xControl->append(u""_ustr, pList->GetStringForUiSolidLine(), *pVD);
     }
 
@@ -967,7 +967,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
             m_xControl->append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
@@ -987,7 +987,7 @@ void SvxLineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmapEx(Point(), rBitmap);
+        pVD->DrawBitmap(Point(), rBitmap);
         m_xControl->append(u""_ustr, rEntry.GetName(), *pVD);
     }
     else
@@ -1006,7 +1006,7 @@ void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& r
 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmapEx(Point(), rBitmap);
+        pVD->DrawBitmap(Point(), rBitmap);
         m_xControl->insert(nPos, rEntry.GetName(), nullptr, nullptr, pVD);
     }
     else
@@ -1037,7 +1037,7 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
-            pVD->DrawBitmapEx(bStart ? Point() : Point(-aBmpSize.Width() / 2, 0), aBitmap);
+            pVD->DrawBitmap(bStart ? Point() : Point(-aBmpSize.Width() / 2, 0), aBitmap);
             m_xControl->append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
@@ -1055,7 +1055,7 @@ void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
-        pVD->DrawBitmapEx(Point(-aBmpSize.Width() / 2, 0), rBitmap);
+        pVD->DrawBitmap(Point(-aBmpSize.Width() / 2, 0), rBitmap);
         m_xControl->append(u""_ustr, rEntry.GetName(), *pVD);
     }
     else
@@ -1074,7 +1074,7 @@ void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bi
 
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
-        pVD->DrawBitmapEx(Point(-aBmpSize.Width() / 2, 0), rBitmap);
+        pVD->DrawBitmap(Point(-aBmpSize.Width() / 2, 0), rBitmap);
         m_xControl->insert(nPos, rEntry.GetName(), nullptr, nullptr, pVD);
     }
     else

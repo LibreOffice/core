@@ -26,17 +26,6 @@ namespace weld { class Widget; }
 
 namespace svt
 {
-    class IFilePickerController
-    {
-    public:
-        virtual weld::Widget* getControl( sal_Int16 nControlId, bool bLabelControl = false ) const = 0;
-        virtual void        enableControl( sal_Int16 nControlId, bool bEnable ) = 0;
-        virtual OUString    getCurFilter( ) const = 0;
-
-    protected:
-        ~IFilePickerController() {}
-    };
-
     class IFilePickerListener
     {
     public:

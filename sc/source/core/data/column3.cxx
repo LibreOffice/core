@@ -232,7 +232,7 @@ void ScColumn::Delete( SCROW nRow )
     CellStorageModified();
 }
 
-void ScColumn::FreeAll()
+void ScColumn::ImplDestroy()
 {
     maCells.event_handler().stop();
     maCellNotes.event_handler().stop();

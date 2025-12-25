@@ -290,7 +290,7 @@ model::ThemeColorType schemeTokenToThemeColorType(sal_uInt32 nToken)
 }
 
 Color::Color() :
-    meMode( ColorMode::Unused ),
+    meMode(model::ColorType::Unused),
     mnC1( 0 ),
     mnC2( 0 ),
     mnC3( 0 ),
@@ -349,7 +349,7 @@ bool Color::operator==(const Color& rhs) const
 
 void Color::setUnused()
 {
-    meMode = ColorMode::Unused;
+    meMode = model::ColorType::Unused;
 }
 
 void Color::setSrgbClr( ::Color nRgb )
@@ -360,7 +360,7 @@ void Color::setSrgbClr( ::Color nRgb )
 void Color::setSrgbClr( sal_Int32 nRgb )
 {
     OSL_ENSURE( (0 <= nRgb) && (nRgb <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
-    meMode = ColorMode::AbsoluteRgb;
+    meMode = model::ColorType::RGB;
     lclRgbToRgbComponents( mnC1, mnC2, mnC3, ::Color(ColorTransparency, nRgb) );
 }
 
@@ -369,7 +369,7 @@ void Color::setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
     OSL_ENSURE( (0 <= nR) && (nR <= MAX_PERCENT), "Color::setScrgbClr - invalid red value" );
     OSL_ENSURE( (0 <= nG) && (nG <= MAX_PERCENT), "Color::setScrgbClr - invalid green value" );
     OSL_ENSURE( (0 <= nB) && (nB <= MAX_PERCENT), "Color::setScrgbClr - invalid blue value" );
-    meMode = ColorMode::RelativeRgb;
+    meMode = model::ColorType::CRGB;
     mnC1 = getLimitedValue< sal_Int32, sal_Int32 >( nR, 0, MAX_PERCENT );
     mnC2 = getLimitedValue< sal_Int32, sal_Int32 >( nG, 0, MAX_PERCENT );
     mnC3 = getLimitedValue< sal_Int32, sal_Int32 >( nB, 0, MAX_PERCENT );
@@ -380,7 +380,7 @@ void Color::setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum )
     OSL_ENSURE( (0 <= nHue) && (nHue <= MAX_DEGREE), "Color::setHslClr - invalid hue value" );
     OSL_ENSURE( (0 <= nSat) && (nSat <= MAX_PERCENT), "Color::setHslClr - invalid saturation value" );
     OSL_ENSURE( (0 <= nLum) && (nLum <= MAX_PERCENT), "Color::setHslClr - invalid luminance value" );
-    meMode = ColorMode::Hsl;
+    meMode = model::ColorType::HSL;
     mnC1 = getLimitedValue< sal_Int32, sal_Int32 >( nHue, 0, MAX_DEGREE );
     mnC2 = getLimitedValue< sal_Int32, sal_Int32 >( nSat, 0, MAX_PERCENT );
     mnC3 = getLimitedValue< sal_Int32, sal_Int32 >( nLum, 0, MAX_PERCENT );
@@ -405,25 +405,61 @@ void Color::setHighlight(sal_Int32 nToken)
 void Color::setSchemeClr( sal_Int32 nToken )
 {
     OSL_ENSURE( nToken != XML_TOKEN_INVALID, "Color::setSchemeClr - invalid color token" );
-    meMode = (nToken == XML_phClr) ? ColorMode::PlaceHolder : ColorMode::Scheme;
+    meMode = (nToken == XML_phClr) ? model::ColorType::Placeholder :
+        model::ColorType::Theme;
     mnC1 = nToken;
-    if (meMode == ColorMode::Scheme)
+    if (meMode == model::ColorType::Theme)
         meThemeColorType = schemeTokenToThemeColorType(nToken);
 }
 
 void Color::setPaletteClr( sal_Int32 nPaletteIdx )
 {
     OSL_ENSURE( nPaletteIdx >= 0, "Color::setPaletteClr - invalid palette index" );
-    meMode = ColorMode::ApplicationPalette;
+    meMode = model::ColorType::Palette;
     mnC1 = nPaletteIdx;
 }
 
 void Color::setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb )
 {
     OSL_ENSURE( (-1 <= nLastRgb) && (nLastRgb <= 0xFFFFFF), "Color::setSysClr - invalid RGB value" );
-    meMode = ColorMode::SystemPalette;
+    meMode = model::ColorType::System;
     mnC1 = nToken;
     mnC2 = nLastRgb;
+}
+
+model::TransformationType Color::getTransformationType( sal_Int32 nElement )
+{
+    switch( nElement ) {
+        case XML_red:       return model::TransformationType::Red;
+        case XML_redMod:    return model::TransformationType::RedMod;
+        case XML_redOff:    return model::TransformationType::RedOff;
+        case XML_green:     return model::TransformationType::Green;
+        case XML_greenMod:  return model::TransformationType::GreenMod;
+        case XML_greenOff:  return model::TransformationType::GreenOff;
+        case XML_blue:      return model::TransformationType::Blue;
+        case XML_blueMod:   return model::TransformationType::BlueMod;
+        case XML_blueOff:   return model::TransformationType::BlueOff;
+        case XML_alpha:     return model::TransformationType::Alpha;
+        case XML_alphaMod:  return model::TransformationType::AlphaMod;
+        case XML_alphaOff:  return model::TransformationType::AlphaOff;
+        case XML_hue:       return model::TransformationType::Hue;
+        case XML_hueMod:    return model::TransformationType::HueMod;
+        case XML_hueOff:    return model::TransformationType::HueOff;
+        case XML_sat:       return model::TransformationType::Sat;
+        case XML_satMod:    return model::TransformationType::SatMod;
+        case XML_satOff:    return model::TransformationType::SatOff;
+        case XML_lum:       return model::TransformationType::Lum;
+        case XML_lumMod:    return model::TransformationType::LumMod;
+        case XML_lumOff:    return model::TransformationType::LumOff;
+        case XML_shade:     return model::TransformationType::Shade;
+        case XML_tint:      return model::TransformationType::Tint;
+        case XML_gray:      return model::TransformationType::Gray;
+        case XML_comp:      return model::TransformationType::Comp;
+        case XML_inv:       return model::TransformationType::Inv;
+        case XML_gamma:     return model::TransformationType::Gamma;
+        case XML_invGamma:  return model::TransformationType::InvGamma;
+        default:            assert(false); return model::TransformationType::Undefined;
+    }
 }
 
 void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
@@ -431,14 +467,17 @@ void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
     /*  Execute alpha transformations directly, store other transformations in
         a vector, they may depend on a scheme base color which will be resolved
         in Color::getColor(). */
-    sal_Int32 nToken = getBaseToken( nElement );
-    switch( nToken )
+    const sal_Int32 nToken = getBaseToken( nElement );
+    const model::TransformationType eType = getTransformationType(nToken);
+
+    switch(eType)
     {
-        case XML_alpha:     lclSetValue( mnAlpha, nValue ); break;
-        case XML_alphaMod:  lclModValue( mnAlpha, nValue ); break;
-        case XML_alphaOff:  lclOffValue( mnAlpha, nValue ); break;
-        default:            maTransforms.emplace_back( nToken, nValue );
+        case model::TransformationType::Alpha: lclSetValue( mnAlpha, nValue ); break;
+        case model::TransformationType::AlphaMod: lclModValue( mnAlpha, nValue ); break;
+        case model::TransformationType::AlphaOff: lclOffValue( mnAlpha, nValue ); break;
+        default: maTransforms.emplace_back(eType, nValue);
     }
+
     sal_Int32 nSize = maInteropTransformations.getLength();
     maInteropTransformations.realloc(nSize + 1);
     auto pInteropTransformations = maInteropTransformations.getArray();
@@ -450,9 +489,9 @@ void Color::addChartTintTransformation( double fTint )
 {
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( fTint * MAX_PERCENT + 0.5, -MAX_PERCENT, MAX_PERCENT );
     if( nValue < 0 )
-        maTransforms.emplace_back( XML_shade, nValue + MAX_PERCENT );
+        maTransforms.emplace_back(model::TransformationType::Shade, nValue + MAX_PERCENT);
     else if( nValue > 0 )
-        maTransforms.emplace_back( XML_tint, MAX_PERCENT - nValue );
+        maTransforms.emplace_back(model::TransformationType::Tint, MAX_PERCENT - nValue);
 }
 
 void Color::addExcelTintTransformation(double fTint)
@@ -460,12 +499,12 @@ void Color::addExcelTintTransformation(double fTint)
     sal_Int32 nValue = std::round(std::abs(fTint) * 100'000.0);
     if (fTint > 0.0)
     {
-        maTransforms.emplace_back(XML_lumMod, 100'000 - nValue);
-        maTransforms.emplace_back(XML_lumOff, nValue);
+        maTransforms.emplace_back(model::TransformationType::LumMod, 100'000 - nValue);
+        maTransforms.emplace_back(model::TransformationType::LumOff, nValue);
     }
     else if (fTint < 0.0)
     {
-        maTransforms.emplace_back(XML_lumMod, 100'000 - nValue);
+        maTransforms.emplace_back(model::TransformationType::LumMod, 100'000 - nValue);
     }
 }
 
@@ -608,16 +647,18 @@ void Color::clearTransparence()
 
 sal_Int16 Color::getTintOrShade() const
 {
-    for(auto const& aTransform : maTransforms)
+    for(const auto& aTransform : maTransforms)
     {
-        switch(aTransform.mnToken)
+        switch(aTransform.meType)
         {
-            case XML_tint:
+            case model::TransformationType::Tint:
                 // from 1000th percent to 100th percent...
                 return aTransform.mnValue/10;
-            case XML_shade:
+            case model::TransformationType::Shade:
                 // from 1000th percent to 100th percent...
                 return -aTransform.mnValue/10;
+            default:
+                break;
         }
     }
     return 0;
@@ -627,7 +668,7 @@ sal_Int16 Color::getLumMod() const
 {
     for (const auto& rTransform : maTransforms)
     {
-        if (rTransform.mnToken != XML_lumMod)
+        if (rTransform.meType != model::TransformationType::LumMod)
         {
             continue;
         }
@@ -643,7 +684,7 @@ sal_Int16 Color::getLumOff() const
 {
     for (const auto& rTransform : maTransforms)
     {
-        if (rTransform.mnToken != XML_lumOff)
+        if (rTransform.meType != model::TransformationType::LumOff)
         {
             continue;
         }
@@ -683,77 +724,77 @@ model::ComplexColor Color::getComplexColor() const
     const sal_Int32 nTempC1 = mnC1;
     const sal_Int32 nTempC2 = mnC2;
     const sal_Int32 nTempC3 = mnC3;
-    const ColorMode eTempMode = meMode;
+    const model::ColorType eTempMode = meMode;
 
     switch( meMode )
     {
-        case ColorMode::Unused:  mnC1 = sal_Int32(API_RGB_TRANSPARENT); break;
+        case model::ColorType::Unused: mnC1 = sal_Int32(API_RGB_TRANSPARENT); break;
 
-        case ColorMode::AbsoluteRgb:     break;  // nothing to do
-        case ColorMode::RelativeRgb:    break;  // nothing to do
-        case ColorMode::Hsl:     break;  // nothing to do
+        case model::ColorType::RGB: break; // nothing to do
+        case model::ColorType::CRGB: break; // nothing to do
+        case model::ColorType::HSL: break; // nothing to do
 
-        case ColorMode::Scheme:
+        case model::ColorType::Theme:
             setResolvedRgb( rGraphicHelper.getSchemeColor( mnC1 ) );
             break;
-        case ColorMode::ApplicationPalette:
+        case model::ColorType::Palette:
             setResolvedRgb( rGraphicHelper.getPaletteColor( mnC1 ) );
             break;
-        case ColorMode::SystemPalette:
+        case model::ColorType::System:
             setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, ::Color(ColorTransparency, mnC2) ) );
             break;
-        case ColorMode::PlaceHolder:
+        case model::ColorType::Placeholder:
             setResolvedRgb( nPhClr );
             break;
 
-        case ColorMode::Finalized:
+        case model::ColorType::Finalized:
             return ::Color(ColorTransparency, mnC1);
     }
 
     // if color is UNUSED or turns to UNUSED in setResolvedRgb, do not perform transformations
-    if( meMode != ColorMode::Unused )
+    if (meMode != model::ColorType::Unused)
     {
         for (auto const& transform : maTransforms)
         {
-            switch( transform.mnToken )
+            switch (transform.meType)
             {
-                case XML_red:       toCrgb(); lclSetValue( mnC1, transform.mnValue );    break;
-                case XML_redMod:    toCrgb(); lclModValue( mnC1, transform.mnValue );    break;
-                case XML_redOff:    toCrgb(); lclOffValue( mnC1, transform.mnValue );    break;
-                case XML_green:     toCrgb(); lclSetValue( mnC2, transform.mnValue );    break;
-                case XML_greenMod:  toCrgb(); lclModValue( mnC2, transform.mnValue );    break;
-                case XML_greenOff:  toCrgb(); lclOffValue( mnC2, transform.mnValue );    break;
-                case XML_blue:      toCrgb(); lclSetValue( mnC3, transform.mnValue );    break;
-                case XML_blueMod:   toCrgb(); lclModValue( mnC3, transform.mnValue );    break;
-                case XML_blueOff:   toCrgb(); lclOffValue( mnC3, transform.mnValue );    break;
+                case model::TransformationType::Red: toCrgb(); lclSetValue( mnC1, transform.mnValue ); break;
+                case model::TransformationType::RedMod: toCrgb(); lclModValue( mnC1, transform.mnValue ); break;
+                case model::TransformationType::RedOff: toCrgb(); lclOffValue( mnC1, transform.mnValue ); break;
+                case model::TransformationType::Green: toCrgb(); lclSetValue( mnC2, transform.mnValue ); break;
+                case model::TransformationType::GreenMod: toCrgb(); lclModValue( mnC2, transform.mnValue ); break;
+                case model::TransformationType::GreenOff: toCrgb(); lclOffValue( mnC2, transform.mnValue ); break;
+                case model::TransformationType::Blue: toCrgb(); lclSetValue( mnC3, transform.mnValue ); break;
+                case model::TransformationType::BlueMod: toCrgb(); lclModValue( mnC3, transform.mnValue ); break;
+                case model::TransformationType::BlueOff: toCrgb(); lclOffValue( mnC3, transform.mnValue ); break;
 
-                case XML_hue:       toHsl(); lclSetValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
-                case XML_hueMod:    toHsl(); lclModValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
-                case XML_hueOff:    toHsl(); lclOffValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
-                case XML_sat:       toHsl(); lclSetValue( mnC2, transform.mnValue );             break;
-                case XML_satMod:    toHsl(); lclModValue( mnC2, transform.mnValue );             break;
-                case XML_satOff:    toHsl(); lclOffValue( mnC2, transform.mnValue );             break;
+                case model::TransformationType::Hue: toHsl(); lclSetValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
+                case model::TransformationType::HueMod: toHsl(); lclModValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
+                case model::TransformationType::HueOff: toHsl(); lclOffValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
+                case model::TransformationType::Sat: toHsl(); lclSetValue( mnC2, transform.mnValue ); break;
+                case model::TransformationType::SatMod: toHsl(); lclModValue( mnC2, transform.mnValue ); break;
+                case model::TransformationType::SatOff:  toHsl(); lclOffValue( mnC2, transform.mnValue ); break;
 
-                case XML_lum:
+                case model::TransformationType::Lum:
                     toHsl();
                     lclSetValue( mnC3, transform.mnValue );
                     // if color changes to black or white, it will stay gray if luminance changes again
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
-                case XML_lumMod:
+                case model::TransformationType::LumMod:
                     toHsl();
                     lclModValue( mnC3, transform.mnValue );
                     // if color changes to black or white, it will stay gray if luminance changes again
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
-                case XML_lumOff:
+                case model::TransformationType::LumOff:
                     toHsl();
                     lclOffValue( mnC3, transform.mnValue );
                     // if color changes to black or white, it will stay gray if luminance changes again
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
 
-                case XML_shade:
+                case model::TransformationType::Shade:
                     // shade: 0% = black, 100% = original color
                     toCrgb();
                     OSL_ENSURE( (0 <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT), "Color::getColor - invalid shade value" );
@@ -765,7 +806,7 @@ model::ComplexColor Color::getComplexColor() const
                         mnC3 = static_cast< sal_Int32 >( mnC3 * fFactor );
                     }
                 break;
-                case XML_tint:
+                case model::TransformationType::Tint:
                     // tint: 0% = white, 100% = original color
                     toCrgb();
                     OSL_ENSURE( (0 <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
@@ -778,18 +819,18 @@ model::ComplexColor Color::getComplexColor() const
                     }
                 break;
 
-                case XML_gray:
+                case model::TransformationType::Gray:
                     // change color to gray, weighted RGB: 22% red, 72% green, 6% blue
                     toRgb();
                     mnC1 = mnC2 = mnC3 = (mnC1 * 22 + mnC2 * 72 + mnC3 * 6) / 100;
                 break;
 
-                case XML_comp:
+                case model::TransformationType::Comp:
                     // comp: rotate hue by 180 degrees, do not change lum/sat
                     toHsl();
                     mnC1 = (mnC1 + (180 * PER_DEGREE)) % MAX_DEGREE;
                 break;
-                case XML_inv:
+                case model::TransformationType::Inv:
                     // invert percentual RGB values
                     toCrgb();
                     mnC1 = MAX_PERCENT - mnC1;
@@ -797,20 +838,28 @@ model::ComplexColor Color::getComplexColor() const
                     mnC3 = MAX_PERCENT - mnC3;
                 break;
 
-                case XML_gamma:
+                case model::TransformationType::Gamma:
                     // increase gamma of color
                     toCrgb();
                     mnC1 = lclGamma( mnC1, INC_GAMMA );
                     mnC2 = lclGamma( mnC2, INC_GAMMA );
                     mnC3 = lclGamma( mnC3, INC_GAMMA );
                 break;
-                case XML_invGamma:
+                case model::TransformationType::InvGamma:
                     // decrease gamma of color
                     toCrgb();
                     mnC1 = lclGamma( mnC1, DEC_GAMMA );
                     mnC2 = lclGamma( mnC2, DEC_GAMMA );
                     mnC3 = lclGamma( mnC3, DEC_GAMMA );
                 break;
+                case model::TransformationType::Alpha:
+                case model::TransformationType::AlphaMod:
+                case model::TransformationType::AlphaOff:
+                    // nothing to do
+                    break;
+                default:
+                    assert(false);
+                    break;
             }
         }
 
@@ -822,7 +871,7 @@ model::ComplexColor Color::getComplexColor() const
             mnC1 |= static_cast<sal_Int32>(255.0 * (MAX_PERCENT - mnAlpha) / MAX_PERCENT) << 24;
         }
     }
-    else // if( meMode != ColorMode::Unused )
+    else // if( meMode != model::ColorType::Unused )
     {
         mnC1 = sal_Int32(API_RGB_TRANSPARENT);
     }
@@ -830,7 +879,7 @@ model::ComplexColor Color::getComplexColor() const
     sal_Int32 nRet = mnC1;
     // Restore the original values when the color depends on one of the input
     // parameters (rGraphicHelper or nPhClr)
-    if( eTempMode >= ColorMode::Scheme && eTempMode <= ColorMode::PlaceHolder )
+    if (eTempMode >= model::ColorType::Theme && eTempMode <= model::ColorType::Placeholder)
     {
         mnC1 = nTempC1;
         mnC2 = nTempC2;
@@ -839,9 +888,9 @@ model::ComplexColor Color::getComplexColor() const
     }
     else
     {
-        meMode = ColorMode::Finalized;
+        meMode = model::ColorType::Finalized;
     }
-    if( meMode == ColorMode::Finalized )
+    if (meMode == model::ColorType::Finalized)
         maTransforms.clear();
     return ::Color(ColorTransparency, nRet);
 }
@@ -865,17 +914,17 @@ sal_Int16 Color::getSchemeColorIndex() const
 model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHelper*/, sal_Int16 nPhClrTheme) const
 {
     model::ComplexColor aNewComplexColor;
-    if (meMode == ColorMode::PlaceHolder)
+    if (meMode == model::ColorType::Placeholder)
     {
         auto eTheme = model::convertToThemeColorType(nPhClrTheme);
         aNewComplexColor.setThemeColor(eTheme);
     }
-    else if (meMode == ColorMode::Scheme)
+    else if (meMode == model::ColorType::Theme)
     {
         auto eTheme = getThemeColorType();
         aNewComplexColor.setThemeColor(eTheme);
     }
-    else if (meMode == ColorMode::AbsoluteRgb)
+    else if (meMode == model::ColorType::RGB)
     {
         ::Color aColor(ColorTransparency, lclRgbComponentsToRgb(mnC1, mnC2, mnC3));
         aNewComplexColor = model::ComplexColor::createRGB(aColor);
@@ -890,23 +939,26 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
     {
         sal_Int16 nValue = sal_Int16(aTransform.mnValue / 10);
 
-        switch (aTransform.mnToken)
+        switch (aTransform.meType)
         {
-            case XML_lumMod:
+            case model::TransformationType::LumMod:
                 if (nValue != 10'000)
                     aNewComplexColor.addTransformation({model::TransformationType::LumMod, nValue});
                 break;
-            case XML_lumOff:
+            case model::TransformationType::LumOff:
                 if (nValue != 0)
                     aNewComplexColor.addTransformation({model::TransformationType::LumOff, nValue});
                 break;
-            case XML_tint:
+            case model::TransformationType::Tint:
                 if (nValue != 0)
                     aNewComplexColor.addTransformation({model::TransformationType::Tint, nValue});
                 break;
-            case XML_shade:
+            case model::TransformationType::Shade:
                 if (nValue != 0)
                     aNewComplexColor.addTransformation({model::TransformationType::Shade, nValue});
+                break;
+            default:
+                // nothing to do
                 break;
         }
     }
@@ -918,7 +970,7 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
 
 void Color::setResolvedRgb( ::Color nRgb ) const
 {
-    meMode = (sal_Int32(nRgb) < 0) ? ColorMode::Unused : ColorMode::AbsoluteRgb;
+    meMode = (sal_Int32(nRgb) < 0) ? model::ColorType::Unused : model::ColorType::RGB;
     lclRgbToRgbComponents( mnC1, mnC2, mnC3, nRgb );
 }
 
@@ -926,18 +978,18 @@ void Color::toRgb() const
 {
     switch( meMode )
     {
-        case ColorMode::AbsoluteRgb:
+        case model::ColorType::RGB:
             // nothing to do
         break;
-        case ColorMode::RelativeRgb:
-            meMode = ColorMode::AbsoluteRgb;
+        case model::ColorType::CRGB:
+            meMode = model::ColorType::RGB;
             mnC1 = lclCrgbCompToRgbComp( lclGamma( mnC1, INC_GAMMA ) );
             mnC2 = lclCrgbCompToRgbComp( lclGamma( mnC2, INC_GAMMA ) );
             mnC3 = lclCrgbCompToRgbComp( lclGamma( mnC3, INC_GAMMA ) );
         break;
-        case ColorMode::Hsl:
+        case model::ColorType::HSL:
         {
-            meMode = ColorMode::AbsoluteRgb;
+            meMode = model::ColorType::RGB;
             double fR = 0.0, fG = 0.0, fB = 0.0;
             if( (mnC2 == 0) || (mnC3 == MAX_PERCENT) )
             {
@@ -991,16 +1043,16 @@ void Color::toCrgb() const
 {
     switch( meMode )
     {
-        case ColorMode::Hsl:
+        case model::ColorType::HSL:
             toRgb();
             [[fallthrough]];
-        case ColorMode::AbsoluteRgb:
-            meMode = ColorMode::RelativeRgb;
+        case model::ColorType::RGB:
+            meMode = model::ColorType::CRGB;
             mnC1 = lclGamma( lclRgbCompToCrgbComp( mnC1 ), DEC_GAMMA );
             mnC2 = lclGamma( lclRgbCompToCrgbComp( mnC2 ), DEC_GAMMA );
             mnC3 = lclGamma( lclRgbCompToCrgbComp( mnC3 ), DEC_GAMMA );
         break;
-        case ColorMode::RelativeRgb:
+        case model::ColorType::CRGB:
             // nothing to do
         break;
         default:
@@ -1012,12 +1064,12 @@ void Color::toHsl() const
 {
     switch( meMode )
     {
-        case ColorMode::RelativeRgb:
+        case model::ColorType::CRGB:
             toRgb();
             [[fallthrough]];
-        case ColorMode::AbsoluteRgb:
+        case model::ColorType::RGB:
         {
-            meMode = ColorMode::Hsl;
+            meMode = model::ColorType::HSL;
             double fR = static_cast< double >( mnC1 ) / 255.0;  // red [0.0, 1.0]
             double fG = static_cast< double >( mnC2 ) / 255.0;  // green [0.0, 1.0]
             double fB = static_cast< double >( mnC3 ) / 255.0;  // blue [0.0, 1.0]
@@ -1049,7 +1101,7 @@ void Color::toHsl() const
                 mnC2 = static_cast< sal_Int32 >( fD / (2.0 - fMax - fMin) * MAX_PERCENT + 0.5 );
         }
         break;
-        case ColorMode::Hsl:
+        case model::ColorType::HSL:
             // nothing to do
         break;
         default:

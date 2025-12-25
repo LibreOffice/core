@@ -22,7 +22,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/deleter.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace pcr
 {

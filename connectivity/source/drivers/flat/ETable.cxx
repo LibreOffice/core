@@ -515,17 +515,15 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  )
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    for (const Type& rType : aTypes)
     {
-        if(!(*pBegin == cppu::UnoType<XKeysSupplier>::get()||
-            *pBegin == cppu::UnoType<XRename>::get()||
-            *pBegin == cppu::UnoType<XIndexesSupplier>::get()||
-            *pBegin == cppu::UnoType<XAlterTable>::get()||
-            *pBegin == cppu::UnoType<XDataDescriptorFactory>::get()))
+        if(!(rType == cppu::UnoType<XKeysSupplier>::get()||
+            rType == cppu::UnoType<XRename>::get()||
+            rType == cppu::UnoType<XIndexesSupplier>::get()||
+            rType == cppu::UnoType<XAlterTable>::get()||
+            rType == cppu::UnoType<XDataDescriptorFactory>::get()))
         {
-            aOwnTypes.push_back(*pBegin);
+            aOwnTypes.push_back(rType);
         }
     }
     return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());

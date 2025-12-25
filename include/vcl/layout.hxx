@@ -631,7 +631,6 @@ private:
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<VclDrawingArea&, void> m_aStyleUpdatedHdl;
-    Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
     Link<OUString&, int> m_aGetSurroundingHdl;
     Link<const Selection&, bool> m_aDeleteSurroundingHdl;
@@ -674,12 +673,7 @@ private:
             Invalidate();
         }
     }
-    virtual void Command(const CommandEvent& rEvent) override
-    {
-        if (m_aCommandHdl.Call(rEvent))
-            return;
-        Control::Command(rEvent);
-    }
+
     virtual void RequestHelp(const HelpEvent& rHelpEvent) override;
     virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override;
     virtual FactoryFunction GetUITestFactory() const override;
@@ -753,10 +747,7 @@ public:
     {
         m_aStyleUpdatedHdl = rLink;
     }
-    void SetCommandHdl(const Link<const CommandEvent&, bool>& rLink)
-    {
-        m_aCommandHdl = rLink;
-    }
+
     void SetQueryTooltipHdl(const Link<tools::Rectangle&, OUString>& rLink)
     {
         m_aQueryTooltipHdl = rLink;

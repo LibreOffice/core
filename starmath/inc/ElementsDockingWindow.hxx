@@ -20,8 +20,9 @@
 #pragma once
 
 #include <sfx2/dockwin.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/IconView.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/resmgr.hxx>
 
 #include "node.hxx"

@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -89,6 +89,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_b
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4253), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf169986_bottomSpacing, "tdf169986_bottomSpacing.docx")
+{
+    // given with a continuous section break with a lot of below spacing, and several footnotes...
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    auto pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf170003_bottomSpacing, "tdf170003_bottomSpacing.docx")
+{
+    // Given a document with a table before the page break, and a sectPr with a huge bottom spacing
+
+    // This must be 200 twips / 0.35cm / 353 mm100, not sectPr's 2000 twips / 3.53 cm / 3530 mm100
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaBottomMargin"_ustr));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf170119_bottomSpacing, "tdf170119_bottomSpacing.docx")
+{
+    // Given a document with a page break and a sectPr with a huge bottom spacing
+
+    // Without the fix, page 2 started with a 150pt gap, pushing content to the third page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_bottomSpacing.docx")
 {
     // given with a continuous break sectPr with no belowSpacing
@@ -124,6 +150,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1887), nFlyTop);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInvalidDatetimeInProps)
+{
+    createSwDoc("invalidDatetimeInProps.fodt");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 2
+    // - validation error in OOXML export: Errors: 2
+    saveAndReload(TestFilter::DOCX);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169413_asciiTheme)
+{
+    // the document failed to reload without errors after a round-trip
+    createSwDoc("tdf169413_asciiTheme.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 5
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
 {
     createSwDoc();
@@ -137,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
     // Exporting to a Word format, a tab is prepended to the endnote text. When imported, the
     // NoGapAfterNoteNumber compatibility flag is enabled; and the exported tab is the only thing
     // that separates the number and the text. The tab must not be stripped away on import.
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -150,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         CPPUNIT_ASSERT_EQUAL(u"\tEndnote text"_ustr, xEndnoteText->getString());
     }
     // Do a second round-trip. It must not duplicate the tab.
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -166,7 +214,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166620)
         xEndnoteText->setString(u"Endnote text"_ustr);
     }
     // Do a third round-trip. It must not introduce the tab, because of the compatibility flag.
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
         auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
@@ -187,7 +235,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     // - Actual  : Standard
 
     createSwDoc("tdf167082.docx");
-    saveAndReload(mpFilter);
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+    saveAndReload(TestFilter::DOCX);
+
     OUString aStyleName = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
@@ -197,7 +249,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
 {
     // Given a document with two floating tables after each other:
     // When saving that document to DOCX:
-    loadAndSave("floattable-anchorpos.docx");
+    createSwDoc("floattable-anchorpos.docx");
+    save(TestFilter::DOCX);
 
     // Then make sure that the dummy anchor of the first floating table is not written to the export
     // result:
@@ -231,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
     };
 
     fnVerify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     fnVerify();
 }
 
@@ -250,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     fnVerify(true);
 
     // Check that the value is persisted across save-reload
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     fnVerify(true);
 
     // Unset the compat flag
@@ -262,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     }
 
     fnVerify(false);
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     fnVerify(false);
 }
 
@@ -278,8 +331,48 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150822)
     };
 
     fnVerify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     fnVerify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testWNumDuplication)
+{
+    // Given a document that changes a lot between a few numbering styles and overrides:
+    createSwDoc("mixednumberings.docx");
+    save(TestFilter::DOCX);
+
+    // Then make sure that we export a reasonable number of "w:num" elements:
+    xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10
+    // - Actual  : 61
+    CPPUNIT_ASSERT_EQUAL(10, countXPathNodes(pXmlNum, "//w:numbering/w:num"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169274)
+{
+    createSwDoc("tdf169274.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    const OString sPath = "//w:body/w:tbl/w:tr/w:tc/w:p/w:sdt/"_ostr;
+
+    // Verify SDT exists with dataBinding property
+    assertXPath(pXmlDoc, sPath + "w:sdtPr/w:dataBinding", 1);
+    // Verify there are no nested SDTs
+    assertXPath(pXmlDoc, sPath + "w:sdtContent/w:sdt", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testQFormatPreservation)
+{
+    createSwDoc("nospacing_hidden.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
+    // not used currently and had qFormat = 0 on import
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='No spacing']/w:qFormat", 0);
 }
 
 } // end of anonymous namespace

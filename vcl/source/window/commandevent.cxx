@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <string.h>
 
 #include <utility>
@@ -30,7 +31,7 @@ CommandExtTextInputData::CommandExtTextInputData( OUString aText,
     if ( pTextAttr && !maText.isEmpty() )
     {
         mpTextAttr.reset( new ExtTextInputAttr[maText.getLength()] );
-        memcpy( mpTextAttr.get(), pTextAttr, maText.getLength()*sizeof(ExtTextInputAttr) );
+        std::copy_n(pTextAttr, maText.getLength(), mpTextAttr.get());
     }
 
     mnCursorPos     = nCursorPos;
@@ -44,7 +45,7 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
     if ( rData.mpTextAttr && !maText.isEmpty() )
     {
         mpTextAttr.reset( new ExtTextInputAttr[maText.getLength()] );
-        memcpy( mpTextAttr.get(), rData.mpTextAttr.get(), maText.getLength()*sizeof(ExtTextInputAttr) );
+        std::copy_n(rData.mpTextAttr.get(), maText.getLength(), mpTextAttr.get());
     }
 
     mnCursorPos     = rData.mnCursorPos;

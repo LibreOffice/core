@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
@@ -1048,8 +1048,7 @@ SfxObjectShell* SfxObjectShell::CreateObject( const OUString& rServiceName, SfxO
 
 Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet )
 {
-    uno::Sequence < beans::PropertyValue > aProps;
-    TransformItems( SID_OPENDOC, rSet, aProps );
+    comphelper::SequenceAsHashMap aProps = TransformItems(SID_OPENDOC, rSet);
     const SfxStringItem* pFileNameItem = rSet.GetItem<SfxStringItem>(SID_FILE_NAME, false);
     const SfxStringItem* pTargetItem = rSet.GetItem<SfxStringItem>(SID_TARGETNAME, false);
     OUString aURL;
@@ -1065,7 +1064,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     Reference <lang::XComponent> xComp;
     try
     {
-        xComp = xLoader->loadComponentFromURL(aURL, aTarget, 0, aProps);
+        xComp = xLoader->loadComponentFromURL(aURL, aTarget, 0, aProps.getAsConstPropertyValueList());
     }
     catch (const uno::Exception&)
     {

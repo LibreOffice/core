@@ -227,8 +227,11 @@ class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public cppu::OWeakObject
 {
 public:
     // Basic DiagramHelper support
+    virtual bool isDiagram() const;
     virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const;
-    bool isDiagram() const { return bool(getDiagramHelper()); }
+    const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelperFromDiagramOrMember() const;
+    void setDiagramDataModelID(const OUString& rID) { msDiagramDataModelID = rID; }
+    const OUString& getDiagramDataModelID() const { return msDiagramDataModelID; }
 
 private:
     friend class                SdrObjListIter;
@@ -379,7 +382,7 @@ public:
     // GrabBagItem for interim interop purposes
     void GetGrabBagItem(css::uno::Any& rVal) const;
 
-    virtual void SetGrabBagItem(const css::uno::Any& rVal);
+    void SetGrabBagItem(const css::uno::Any& rVal);
 
     // Return the position in the navigation order for the called object.
     // Note that this method may update the navigation position of the
@@ -984,8 +987,12 @@ private:
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.
     bool                        mbDoNotInsertIntoPageAutomatically;
+
     // Hyperlink for the whole shape
     OUString msHyperlink;
+
+    // if this object is a representation of Diagram Sub-Data, hold the DataModelID
+    OUString msDiagramDataModelID;
 
     // only for internal use!
     SvxShape* getSvxShape();

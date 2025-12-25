@@ -18,10 +18,8 @@ public abstract class Layer {
     private final ReentrantLock mTransactionLock;
     private boolean mInTransaction;
     private Rect mNewPosition;
-    private float mNewResolution;
 
     protected Rect mPosition;
-    protected float mResolution;
     protected boolean mUsesDefaultProgram = true;
 
     public Layer() {
@@ -35,7 +33,6 @@ public abstract class Layer {
         } else {
             mPosition = new Rect(0, 0, size.width, size.height);
         }
-        mResolution = 1.0f;
     }
 
     /**
@@ -65,7 +62,7 @@ public abstract class Layer {
 
     /** Given the intrinsic size of the layer, returns the pixel boundaries of the layer rect. */
     protected RectF getBounds(RenderContext context) {
-        return RectUtils.scale(new RectF(mPosition), context.zoomFactor / mResolution);
+        return RectUtils.scale(new RectF(mPosition), context.zoomFactor);
     }
 
     /**
@@ -89,7 +86,6 @@ public abstract class Layer {
             throw new RuntimeException("Nested transactions are not supported");
         mTransactionLock.lock();
         mInTransaction = true;
-        mNewResolution = mResolution;
     }
 
     /** Call this when you're done modifying the layer. */
@@ -117,22 +113,6 @@ public abstract class Layer {
         mNewPosition = newPosition;
     }
 
-    /** Returns the current layer's resolution. */
-    public float getResolution() {
-        return mResolution;
-    }
-
-    /**
-     * Sets the layer resolution. This value is used to determine how many pixels per
-     * device pixel this layer was rendered at. This will be reflected by scaling by
-     * the reciprocal of the resolution in the layer's transform() function.
-     * Only valid inside a transaction. */
-    public void setResolution(float newResolution) {
-        if (!mInTransaction)
-            throw new RuntimeException("setResolution() is only valid inside a transaction");
-        mNewResolution = newResolution;
-    }
-
     public boolean usesDefaultProgram() {
         return mUsesDefaultProgram;
     }
@@ -147,10 +127,6 @@ public abstract class Layer {
         if (mNewPosition != null) {
             mPosition = mNewPosition;
             mNewPosition = null;
-        }
-        if (mNewResolution != 0.0f) {
-            mResolution = mNewResolution;
-            mNewResolution = 0.0f;
         }
     }
 

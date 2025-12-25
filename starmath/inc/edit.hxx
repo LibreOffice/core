@@ -86,9 +86,11 @@ class SmEditWindow final
 
     void CreateEditView(weld::Builder& rBuilder);
 
+    void ImplDestroy();
+
 public:
     SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin, weld::Builder& rBuilder);
-    ~SmEditWindow() COVERITY_NOEXCEPT_FALSE;
+    ~SmEditWindow();
 
     weld::Window* GetFrameWeld() const;
 

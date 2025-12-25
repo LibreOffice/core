@@ -19,10 +19,11 @@
 
 #pragma once
 
-#include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <math.h>
 
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
+namespace basegfx { class B3DPoint; }
 
 namespace basegfx
 {

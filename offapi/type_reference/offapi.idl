@@ -3585,7 +3585,9 @@ module com {
      RIGHT = 1,
      BLOCK = 2,
      CENTER = 3,
-     STRETCH = 4
+     STRETCH = 4,
+     START = 5,
+     END = 6
     };
     published enum TabAlign {
      LEFT = 0,
@@ -13263,7 +13265,8 @@ module com {
      STOP = 0,
      WARNING = 1,
      INFO = 2,
-     MACRO = 3
+     MACRO = 3,
+     NONE = 4
     };
     published enum ValidationType {
      ANY = 0,

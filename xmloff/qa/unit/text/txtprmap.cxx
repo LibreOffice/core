@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartExport)
     xFrame->setPropertyValue(u"WrapTextAtFlyStart"_ustr, uno::Any(true));
 
     // When saving to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure we write a floating table, that wraps on all pages:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);

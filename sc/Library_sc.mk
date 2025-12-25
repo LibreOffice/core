@@ -67,6 +67,7 @@ endif
 $(eval $(call gb_Library_use_libraries,sc,\
     avmedia \
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \
@@ -212,6 +213,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/types \
     sc/source/core/data/userdat \
     sc/source/core/data/validat \
+    sc/source/core/data/pivot/PivotTableResultTraverser \
     sc/source/core/tool/addincfg \
     sc/source/core/tool/addincol \
     sc/source/core/tool/addinhelpid \
@@ -404,6 +406,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/cctrl/checklistmenu \
     sc/source/ui/cctrl/dpcontrol \
     sc/source/ui/cctrl/tbzoomsliderctrl \
+    sc/source/ui/cctrl/SheetViewBox \
+    sc/source/ui/cctrl/SheetViewControl \
     sc/source/ui/condformat/condformatdlg \
     sc/source/ui/condformat/condformatdlgentry \
     sc/source/ui/condformat/condformatdlgdata \
@@ -529,7 +533,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/pagedlg/tphfedit \
     sc/source/ui/sidebar/AlignmentPropertyPanel \
     sc/source/ui/sidebar/CellLineStyleControl \
-    sc/source/ui/sidebar/CellLineStyleValueSet \
     sc/source/ui/sidebar/CellAppearancePropertyPanel \
     sc/source/ui/sidebar/CellBorderStyleControl \
     sc/source/ui/sidebar/NumberFormatControl \

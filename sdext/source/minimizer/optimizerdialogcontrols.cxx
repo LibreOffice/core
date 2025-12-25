@@ -19,6 +19,8 @@
 
 
 #include "optimizerdialog.hxx"
+#include <sdextresid.hxx>
+#include <strings.hrc>
 
 
 #include "pppoptimizer.hxx"
@@ -145,7 +147,7 @@ void OptimizerDialog::InitPage3()
         }
     }
 
-    mpPage3->Init(nOLECount ? getString(STR_OLE_OBJECTS_DESC) : getString(STR_NO_OLE_OBJECTS_DESC));
+    mpPage3->Init(nOLECount ? SdextResId( STR_OLE_OBJECTS_DESC ) : SdextResId( STR_NO_OLE_OBJECTS_DESC ));
 
     UpdateControlStatesPage3();
 }
@@ -229,7 +231,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     if ( nDeletedSlides > 1 )
     {
-        OUString aStr( getString( STR_DELETE_SLIDES ) );
+        OUString aStr( SdextResId( STR_DELETE_SLIDES ) );
         OUString aPlaceholder( u"%SLIDES"_ustr  );
         sal_Int32 i = aStr.indexOf( aPlaceholder );
         if ( i >= 0 )
@@ -247,7 +249,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     GraphicCollector::CountGraphics( mxContext, mxController->getModel(), aGraphicSettings, nGraphics );
     if ( nGraphics > 1 )
     {
-        OUString aStr( getString( STR_OPTIMIZE_IMAGES ) );
+        OUString aStr( SdextResId( STR_OPTIMIZE_IMAGES ) );
         OUString aImagePlaceholder( u"%IMAGES"_ustr  );
         OUString aQualityPlaceholder( u"%QUALITY"_ustr  );
         OUString aResolutionPlaceholder( u"%RESOLUTION"_ustr  );
@@ -283,7 +285,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         }
         if ( nOLEReplacements > 1 )
         {
-            OUString aStr( getString( STR_CREATE_REPLACEMENT ) );
+            OUString aStr( SdextResId( STR_CREATE_REPLACEMENT ) );
             OUString aPlaceholder( u"%OLE"_ustr  );
             sal_Int32 i = aStr.indexOf( aPlaceholder );
             if ( i >= 0 )
@@ -317,7 +319,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         nEstimatedFileSize = static_cast< sal_Int64 >( fE );
     }
     sal_Unicode nSeparator = '.';
-    OUString aStr( getString( STR_FILESIZESEPARATOR ) );
+    OUString aStr( SdextResId( STR_FILESIZESEPARATOR ) );
     if ( !aStr.isEmpty() )
         nSeparator = aStr[ 0 ];
     mpPage4->UpdateControlStates(bSaveAs, bSaveSettingsEnabled, aItemList,
@@ -331,7 +333,7 @@ void OptimizerDialog::InitPage4()
 {
     // creating a default session name that hasn't been used yet
     OUString aSettingsName;
-    OUString aDefault( getString( STR_MY_SETTINGS ) );
+    OUString aDefault( SdextResId( STR_MY_SETTINGS ) );
     sal_Int32 nSession = 1;
     std::vector<OptimizerSettings>::size_type i;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );

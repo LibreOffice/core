@@ -29,6 +29,7 @@
 #include <oox/helper/binaryinputstream.hxx>
 #include <docuno.hxx>
 #include <rangeutl.hxx>
+#include <document.hxx>
 
 namespace oox::xls {
 
@@ -303,11 +304,16 @@ void AddressConverter::initializeMaxPos(
     // maximum cell position in Calc
     try
     {
-        Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
-        Reference< XCellRangeAddressable > xAddressable( xSheetsIA->getByIndex( 0 ), UNO_QUERY_THROW );
-        CellRangeAddress aRange = xAddressable->getRangeAddress();
-        maMaxApiPos = ScAddress( aRange.EndColumn, aRange.EndRow, API_MAXTAB );
-        maMaxPos = getBaseFilter().isImportFilter() ? maMaxApiPos : maMaxXlsPos;
+        ScDocument* pDoc = getDocument()->GetDocument();
+
+        if (pDoc)
+        {
+            SCCOL nEndCol = pDoc->MaxCol();
+            SCROW nEndRow = pDoc->MaxRow();
+
+            maMaxApiPos = ScAddress(nEndCol, nEndRow, API_MAXTAB);
+            maMaxPos = getBaseFilter().isImportFilter() ? maMaxApiPos : maMaxXlsPos;
+        }
     }
     catch( Exception& )
     {

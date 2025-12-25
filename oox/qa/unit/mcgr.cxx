@@ -28,7 +28,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradient)
     // Given a document with three-color gradient on a Fontwork.
     loadFromFile(u"MCGR_FontworkColorGradient.fodp");
     // Save it to PPTX
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     // And make sure a multi-color gradient fill is exported.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // linear gradient with 30deg angle
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testFontworkColorGradientWord)
     // Given a document with three-color gradient on a Fontwork.
     loadFromFile(u"MCGR_FontworkColorGradient.fodt");
     // Save it to DOCX
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     // And make sure a multi-color gradient fill is exported.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // linear gradient with 30deg angle
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testTdf155825_SourcOffsetRangeDifferent)
     // Save it to PPTX
     // Without fix, a debug-build would have crashed in oox/source/export/drawingml.cxx from
     // assert(false && "oox::WriteGradientFill: non-synchronized gradients (!)");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 }
 
 CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testStepCount)
     // Given a document with two-color gradient with StepCount 4.
     loadFromFile(u"tdf155852_MCGR_StepCount4.fodp");
     // Save it to PPTX
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // Without the fix the colors in the sections were wrong. And when opening a file with StepCount
@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(TestMCGR, testAxialColorLinearTrans)
     // two-stop linear transparency gradient from start 80% to end 0%.
     loadFromFile(u"tdf155827_MCGR_AxialColorLinearTrans.fodp");
     // Save it to PPTX
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     // OOXML has transparency together with color. Transparency is stored as opacity.
     // Expected: pos 0 #00ffff 20000, pos 50000 #ff0000 60000, pos 100000 #00ffff 100000.
     // Because of conversion through gray color the opacity values are not exact. If rounding

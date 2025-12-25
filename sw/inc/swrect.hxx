@@ -28,7 +28,7 @@ class SvStream;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 /// *Of course* Writer needs its own rectangles.
-/// This is half-open so m_Point.X() + m_Size.getWidth() is *not* included.
+/// This is half-open so m_Point.X() + m_Size.Width() is *not* included.
 /// Note the tools Rectangle is (usually? sometimes?) closed so there's a
 /// SVRect() to subtract 1 for the conversion.
 class SAL_WARN_UNUSED SwRect
@@ -37,8 +37,8 @@ class SAL_WARN_UNUSED SwRect
     Size m_Size;
 
 public:
-    inline SwRect();
-    inline SwRect( const SwRect &rRect ) = default;
+    SwRect() = default;
+    SwRect(const SwRect& rRect) = default;
     inline SwRect( const Point& rLT, const Size&  rSize );
     inline SwRect( const Point& rLT, const Point& rRB );
     inline SwRect( tools::Long X, tools::Long Y, tools::Long Width, tools::Long Height );
@@ -48,31 +48,31 @@ public:
 
     //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );
-    inline void Pos(  const Point& rNew );
-    inline void Pos( const tools::Long nNewX, const tools::Long nNewY );
-    inline void SSize( const Size&  rNew  );
-    inline void SSize( const tools::Long nHeight, const tools::Long nWidth );
-    inline void Width(  tools::Long nNew );
-    inline void Height( tools::Long nNew );
+    void Pos(const Point& rNew) { m_Point = rNew; }
+    void Pos(tools::Long nNewX, tools::Long nNewY) { Pos({ nNewX, nNewY }); }
+    void SSize(const Size& rNew) { m_Size = rNew; }
+    void SSize(tools::Long nHeight, tools::Long nWidth) { SSize({ nWidth, nHeight }); }
+    void Width(tools::Long nNew) { m_Size.setWidth(nNew); }
+    void Height(tools::Long nNew) { m_Size.setHeight(nNew); }
     inline void Left( const tools::Long nLeft );
-    inline void Right( const tools::Long nRight );
+    void Right(tools::Long nRight) { Width(nRight - Left() + 1); }
     inline void Top( const tools::Long nTop );
-    inline void Bottom( const tools::Long nBottom );
+    void Bottom(tools::Long nBottom) { Height(nBottom - Top() + 1); }
 
     //Get-Methods
-    inline const Point &Pos()  const;
-    inline const Size  &SSize() const;
-    inline tools::Long Width()  const;
-    inline tools::Long Height() const;
-    inline tools::Long Left()   const;
-    inline tools::Long Right()  const;
-    inline tools::Long Top()    const;
-    inline tools::Long Bottom() const;
+    const Point& Pos() const { return m_Point; }
+    const Size& SSize() const { return m_Size; }
+    tools::Long Width() const { return m_Size.Width(); }
+    tools::Long Height() const { return m_Size.Height(); }
+    tools::Long Left() const { return m_Point.X(); }
+    tools::Long Right() const { return Width() ? Left() + Width() - 1 : Left(); }
+    tools::Long Top() const { return m_Point.Y(); }
+    tools::Long Bottom() const { return Height() ? Top() + Height() - 1 : Top(); }
 
     // In order to be able to access the members of Pos and SSize from the layout side.
-    inline Point &Pos();
+    Point& Pos() { return m_Point; }
 
-    Point Center() const;
+    Point Center() const { return Point(Left() + Width() / 2, Top() + Height() / 2); }
 
     void Justify();
 
@@ -89,14 +89,13 @@ public:
     bool Contains( const SwRect& rRect ) const;
     bool Overlaps( const SwRect& rRect ) const;
     bool IsNear(const Point& rPoint, tools::Long nTolerance ) const;
-    inline bool HasArea() const;
-    inline bool IsEmpty() const;
-    inline void Clear();
+    bool HasArea() const { return Height() && Width(); }
+    bool IsEmpty() const { return !HasArea(); }
+    void Clear() { Chg({}, {}); }
 
     SwRect &operator = ( const SwRect &rRect ) = default;
 
-    inline bool operator == ( const SwRect& rRect ) const;
-    inline bool operator != ( const SwRect& rRect ) const;
+    bool operator==(const SwRect& rRect) const = default;
 
     inline SwRect &operator+=( const Point &rPt );
     inline SwRect &operator-=( const Point &rPt );
@@ -138,10 +137,10 @@ public:
     void SetUpperRightCorner(  const Point& rNew );
     void SetLowerLeftCorner(  const Point& rNew );
     Size  Size_() const;
-    Point TopLeft()  const;
-    Point TopRight()  const;
-    Point BottomLeft()  const;
-    Point BottomRight()  const;
+    Point TopLeft() const { return Point(Left(), Top()); }
+    Point TopRight() const { return Point(Right(), Top()); }
+    Point BottomLeft() const { return Point(Left(), Bottom()); }
+    Point BottomRight() const { return Point(Right(), Bottom()); }
     Size  SwappedSize() const;
     tools::Long GetLeftDistance( tools::Long ) const;
     tools::Long GetBottomDistance( tools::Long ) const;
@@ -168,113 +167,15 @@ inline void SwRect::Chg( const Point& rNP, const Size &rNS )
     m_Point = rNP;
     m_Size = rNS;
 }
-inline void SwRect::Pos(  const Point& rNew )
-{
-    m_Point = rNew;
-}
-inline void SwRect::Pos( const tools::Long nNewX, const tools::Long nNewY )
-{
-    m_Point.setX(nNewX);
-    m_Point.setY(nNewY);
-}
-inline void SwRect::SSize( const Size&  rNew  )
-{
-    m_Size = rNew;
-}
-inline void SwRect::SSize( const tools::Long nNewHeight, const tools::Long nNewWidth )
-{
-    m_Size.setWidth(nNewWidth);
-    m_Size.setHeight(nNewHeight);
-}
-inline void SwRect::Width(  tools::Long nNew )
-{
-    m_Size.setWidth(nNew);
-}
-inline void SwRect::Height( tools::Long nNew )
-{
-    m_Size.setHeight(nNew);
-}
 inline void SwRect::Left( const tools::Long nLeft )
 {
-    m_Size.AdjustWidth( m_Point.getX() - nLeft );
+    m_Size.AdjustWidth( Left() - nLeft );
     m_Point.setX(nLeft);
-}
-inline void SwRect::Right( const tools::Long nRight )
-{
-    m_Size.setWidth(nRight - m_Point.getX() + 1);
 }
 inline void SwRect::Top( const tools::Long nTop )
 {
-    m_Size.AdjustHeight( m_Point.getY() - nTop );
+    m_Size.AdjustHeight( Top() - nTop );
     m_Point.setY(nTop);
-}
-inline void SwRect::Bottom( const tools::Long nBottom )
-{
-    m_Size.setHeight(nBottom - m_Point.getY() + 1);
-}
-
-// Get-Methods
-inline const Point &SwRect::Pos()  const
-{
-    return m_Point;
-}
-inline Point &SwRect::Pos()
-{
-    return m_Point;
-}
-inline const Size  &SwRect::SSize() const
-{
-    return m_Size;
-}
-inline tools::Long SwRect::Width()  const
-{
-    return m_Size.Width();
-}
-inline tools::Long SwRect::Height() const
-{
-    return m_Size.Height();
-}
-inline tools::Long SwRect::Left()   const
-{
-    return m_Point.X();
-}
-inline tools::Long SwRect::Right()  const
-{
-    return m_Size.getWidth() ? m_Point.getX() + m_Size.getWidth() - 1 : m_Point.getX();
-}
-inline tools::Long SwRect::Top()    const
-{
-    return m_Point.Y();
-}
-inline tools::Long SwRect::Bottom() const
-{
-    return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
-}
-
-inline Point SwRect::TopLeft() const
-{
-    return Point( Left(), Top());
-}
-inline Point SwRect::TopRight() const
-{
-    return Point( Right(), Top());
-}
-inline Point SwRect::BottomLeft() const
-{
-    return Point( Left(), Bottom());
-}
-inline Point SwRect::BottomRight() const
-{
-    return Point( Right(), Bottom());
-}
-
-inline bool SwRect::operator == ( const SwRect& rRect ) const
-{
-    return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);
-}
-inline bool SwRect::operator != ( const SwRect& rRect ) const
-{
-    return (m_Point != rRect.m_Point || m_Size != rRect.m_Size);
 }
 
 inline SwRect &SwRect::operator+=( const Point &rPt )
@@ -292,33 +193,12 @@ inline SwRect &SwRect::operator-=( const Point &rPt )
 inline tools::Rectangle SwRect::SVRect() const
 {
     SAL_INFO_IF( IsEmpty(), "sw.core", "SVRect() without Width or Height" );
-    return tools::Rectangle( m_Point.getX(), m_Point.getY(),
-        m_Point.getX() + m_Size.getWidth() - 1,         //Right()
-        m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
-}
-
-inline bool SwRect::HasArea() const
-{
-    return !IsEmpty();
-}
-inline bool SwRect::IsEmpty() const
-{
-    return !(m_Size.getHeight() && m_Size.getWidth());
-}
-inline void SwRect::Clear()
-{
-    m_Point.setX(0);
-    m_Point.setY(0);
-    m_Size.setWidth(0);
-    m_Size.setHeight(0);
+    return tools::Rectangle( Left(), Top(),
+        Left() + Width() - 1,         //Right()
+        Top() + Height() - 1 );      //Bottom()
 }
 
 // constructors
-inline SwRect::SwRect() :
-    m_Point( 0, 0 ),
-    m_Size( 0, 0 )
-{
-}
 inline SwRect::SwRect( const Point& rLT, const Size&  rSize ) :
     m_Point( rLT ),
     m_Size( rSize )
@@ -333,12 +213,6 @@ inline SwRect::SwRect( tools::Long X, tools::Long Y, tools::Long W, tools::Long 
     m_Point( X, Y ),
     m_Size( W, H )
 {
-}
-
-inline Point SwRect::Center() const
-{
-    return Point( Left() + Width()  / 2,
-                  Top()  + Height() / 2 );
 }
 
 inline bool SwRect::Contains( const SwRect& rRect ) const

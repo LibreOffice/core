@@ -76,7 +76,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                     OUString sName;
                     xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
                     if (!sName.isEmpty())
-                        m_aDefaultStyles.push_back(std::pair<OUString, OUString>(rStyle, sName));
+                        m_aDefaultStyles.push_back(StylePreviewDescriptor(rStyle, sName));
                 }
                 catch (const css::container::NoSuchElementException&)
                 {
@@ -109,7 +109,7 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                             if (!sName.isEmpty())
                             {
                                 m_aDefaultStyles.push_back(
-                                    std::pair<OUString, OUString>(sStyleName, sName));
+                                    StylePreviewDescriptor(sStyleName, sName));
                             }
                         }
                     }
@@ -156,8 +156,8 @@ StylesPreviewToolBoxControl::createItemWindow(const css::uno::Reference<css::awt
         {
             SolarMutexGuard aSolarMutexGuard;
 
-            m_xVclBox = VclPtr<StylesPreviewWindow_Impl>::Create(
-                pParent, std::vector(m_aDefaultStyles), m_xFrame);
+            m_xVclBox
+                = VclPtr<StylesPreviewWindow_Impl>::Create(pParent, m_aDefaultStyles, m_xFrame);
             xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
         }
     }

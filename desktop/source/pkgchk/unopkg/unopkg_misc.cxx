@@ -24,7 +24,7 @@
 #include <config_folders.h>
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

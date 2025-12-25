@@ -1083,7 +1083,7 @@ SwContentNode::SwContentNode( const SwNode& rWhere, const SwNodeType nNdType,
         pColl->Add(*this);
 }
 
-SwContentNode::~SwContentNode()
+void SwContentNode::ImplDestroy()
 {
     // The base class SwClient of SwFrame excludes itself from the dependency list!
     // Thus, we need to delete all Frames in the dependency list.
@@ -1098,6 +1098,11 @@ SwContentNode::~SwContentNode()
     if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(mpAttrSet.get())->SetModifyAtAttr( nullptr );
     InvalidateInSwCache();
+}
+
+SwContentNode::~SwContentNode()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)

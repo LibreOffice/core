@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_CORE_RELATIONSHANDLER_HXX
 #define INCLUDED_OOX_CORE_RELATIONSHANDLER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <oox/core/fragmenthandler.hxx>
 #include <oox/core/relations.hxx>
 #include <sal/types.h>

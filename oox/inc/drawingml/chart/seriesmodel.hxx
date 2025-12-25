@@ -212,6 +212,9 @@ struct SeriesModel
     bool                mbBubble3d;         /// True = show bubbles with 3D shade.
     bool                mbInvertNeg;        /// True = invert negative data points.
     bool                mbSmooth;           /// True = smooth series line.
+    std::vector<sal_Int32>
+                        maAxisIds;          /// List of axis identifiers used
+                                            // (Only used by chartex)
 
     explicit            SeriesModel(bool bMSO2007Doc);
                         ~SeriesModel();

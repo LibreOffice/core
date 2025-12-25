@@ -39,6 +39,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/scripthintitem.hxx>
 
@@ -63,6 +64,7 @@
 #include <svl/voiditem.hxx>
 #include <i18nutil/unicode.hxx>
 #include <i18nutil/scriptchangescanner.hxx>
+#include <i18nutil/guessparadirection.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
@@ -465,6 +467,9 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                     mpIMEInfos->DestroyAttribs();
                     mpIMEInfos->nLen = pData->GetText().getLength();
                 }
+
+                // tdf#162120: Automatically adjust paragraph directions after edit
+                UpdateAutoParaDirection(EditSelection{ mpIMEInfos->aPos });
 
                 ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
                 pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
@@ -2070,12 +2075,29 @@ SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
     {
         eJustification = GetParaAttrib( nPara, EE_PARA_JUST ).GetAdjust();
 
-        if ( IsRightToLeft( nPara ) )
+        // Convert paragraph adjustment into an internal start/end value.
+        switch (eJustification)
         {
-            if ( eJustification == SvxAdjust::Left )
-                eJustification = SvxAdjust::Right;
-            else if ( eJustification == SvxAdjust::Right )
+            case SvxAdjust::ParaStart:
+                // Internally, the paragraph start is always the left margin:
                 eJustification = SvxAdjust::Left;
+                break;
+
+            case SvxAdjust::ParaEnd:
+                // Internally, the paragraph end is always the right margin:
+                eJustification = SvxAdjust::Right;
+                break;
+
+            case SvxAdjust::Left:
+                eJustification = IsRightToLeft(nPara) ? SvxAdjust::Right : SvxAdjust::Left;
+                break;
+
+            case SvxAdjust::Right:
+                eJustification = IsRightToLeft(nPara) ? SvxAdjust::Left : SvxAdjust::Right;
+                break;
+
+            default:
+                break;
         }
     }
     return eJustification;
@@ -2515,6 +2537,10 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
 
     UpdateSelectionsDelete(deleted);
     UpdateSelections();
+
+    // tdf#162120: Automatically adjust paragraph directions after edit
+    UpdateAutoParaDirection(rCurSel);
+
     TextModified();
     return aStartPaM;
 }
@@ -2746,12 +2772,62 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
         aPaM.SetIndex( aPaM.GetIndex()+1 );   // does not do EditDoc-Method anymore
     }
 
+    // tdf#162120: Automatically adjust paragraph direction after edit
+    UpdateAutoParaDirection(EditSelection{ aPaM });
+
     TextModified();
 
     if ( bUndoAction )
         UndoActionEnd();
 
     return aPaM;
+}
+
+void ImpEditEngine::UpdateAutoParaDirection(const EditSelection& rCurSel)
+{
+    EditPaM aPaM(rCurSel.Min());
+
+    auto nPara = maEditDoc.GetPos(aPaM.GetNode());
+    if (nPara >= GetParaPortions().Count() || !HasParaAttrib(nPara, EE_PARA_AUTOWRITINGDIR))
+    {
+        return;
+    }
+
+    const SvxAutoFrameDirectionItem& rItem = GetParaAttrib(nPara, EE_PARA_AUTOWRITINGDIR);
+    if (!rItem.GetValue())
+    {
+        return;
+    }
+
+    bool bIsAlreadyRtl = IsRightToLeft(nPara);
+
+    bool bShouldBeRtl = bIsAlreadyRtl;
+    switch (i18nutil::GuessParagraphDirection(aPaM.GetNode()->GetString()))
+    {
+        case i18nutil::ParagraphDirection::Ambiguous:
+            bShouldBeRtl = bIsAlreadyRtl;
+            break;
+
+        case i18nutil::ParagraphDirection::LeftToRight:
+            bShouldBeRtl = false;
+            break;
+
+        case i18nutil::ParagraphDirection::RightToLeft:
+            bShouldBeRtl = true;
+            break;
+    }
+
+    if (bShouldBeRtl == bIsAlreadyRtl)
+    {
+        return;
+    }
+
+    SvxFrameDirection eNeeded
+        = bShouldBeRtl ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
+
+    SfxItemSet aSet{ GetParaAttribs(nPara) };
+    aSet.Put(SvxFrameDirectionItem{ eNeeded, EE_PARA_WRITINGDIR });
+    SetParaAttribs(nPara, aSet);
 }
 
 EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUString& rStr)

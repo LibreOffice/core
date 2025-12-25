@@ -52,7 +52,7 @@ ObjectContact::ObjectContact()
 {
 }
 
-ObjectContact::~ObjectContact() COVERITY_NOEXCEPT_FALSE
+ObjectContact::~ObjectContact()
 {
     // get rid of all registered contacts
     // #i84257# To avoid that each 'delete pCandidate' again uses

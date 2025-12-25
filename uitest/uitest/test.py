@@ -7,12 +7,14 @@
 
 import time
 import threading
+import tempfile
 from contextlib import contextmanager
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, select_by_text
 
 from com.sun.star.uno import RuntimeException
 
 from libreoffice.uno.eventlistener import EventListener
+from libreoffice.uno.propertyvalue import mkPropertyValues
 
 DEFAULT_SLEEP = 0.1
 
@@ -166,6 +168,38 @@ class UITest(object):
             ui_object.executeAction(action, parameters)
             yield from self.wait_and_yield_dialog(event, xDialogParent, close_button)
 
+    # Executes a command and waits for a subcomponent event to be emitted. The frame from the event
+    # will be yielded. If close_win is True then .uno:CloseWin will be called at exit. This can be
+    # used for commands that open a new window for the same document.
+    @contextmanager
+    def open_subcomponent_through_command(self, command, printNames=False, close_win=True):
+        with EventListener(self._xContext, "OnSubComponentOpened", printNames=printNames) as event:
+            self._xUITest.executeCommand(command)
+            while not event.executed:
+                time.sleep(DEFAULT_SLEEP)
+            frame = event.supplements[0]
+
+        try:
+            yield frame
+        finally:
+            if close_win:
+                try:
+                    modified = frame.getController().isModified()
+                except AttributeError:
+                    modified = False
+                if modified:
+                    # Close the window and answer no when it asks if we want to save
+                    with self.execute_blocking_action(self._xUITest.executeCommandForProvider,
+                                                      args=(".uno:CloseWin", frame),
+                                                      close_button="no"):
+                        pass
+                else:
+                    self._xUITest.executeCommandForProvider(".uno:CloseWin", frame)
+                # Closing the window will happen asynchronously on the main thread so let’s wait
+                # until the close actually completes.
+                xToolkit = self._xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.waitUntilAllIdlesDispatched()
+
     # Calls UITest.close_doc at exit
     @contextmanager
     def create_doc_in_start_center(self, app):
@@ -188,6 +222,49 @@ class UITest(object):
                         self.close_doc()
                     return
                 time.sleep(DEFAULT_SLEEP)
+
+    # Creates an empty HSQLDB database with a temporary file name. On exit UITest.close_doc is
+    # called and the temporary file is deleted.
+    @contextmanager
+    def create_db_in_start_center(self):
+        # We have to give a filename to the database so let’s create a temporary one
+        with tempfile.NamedTemporaryFile(suffix=".odb") as temp:
+            with EventListener(self._xContext, "OnNew") as event:
+                xStartCenter = self._xUITest.getTopFocusWindow()
+                xBtn = xStartCenter.getChild("database_all")
+                with self.execute_dialog_through_action(xBtn, "CLICK",
+                                                        close_button=None) as xDialog:
+                    xDialog.getChild("createDatabase").executeAction("CLICK", tuple())
+                    select_by_text(xDialog.getChild("embeddeddbList"), "HSQLDB Embedded")
+
+                    xFinish = xDialog.getChild("finish")
+
+                    # Clicking finish will open a blocking dialog to set the filename
+                    with self.execute_blocking_action(xFinish.executeAction,
+                                                      ("CLICK", tuple()),
+                                                      close_button=None) as xFileDialog:
+                        xFileName = xFileDialog.getChild("file_name")
+                        xFileName.executeAction("SET", mkPropertyValues({"TEXT": temp.name}))
+
+                        xOpen = xFileDialog.getChild("open")
+
+                        # Clicking the open button will trigger another blocking dialog because the
+                        # file already exists and we have to confirm overwriting it
+                        with self.execute_blocking_action(xOpen.executeAction,
+                                                          ("CLICK", tuple()),
+                                                          close_button="yes"):
+                            pass
+
+                while not event.executed:
+                    time.sleep(DEFAULT_SLEEP)
+
+            frames = self.get_frames()
+            self.get_desktop().setActiveFrame(frames[0])
+            component = self.get_component()
+            try:
+                yield component
+            finally:
+                self.close_doc()
 
     def close_dialog_through_button(self, button, dialog=None):
         if dialog is None:
@@ -221,6 +298,11 @@ class UITest(object):
             if component.isModified():
                 with self.execute_dialog_through_command('.uno:CloseDoc', close_button="discard"):
                     pass
+                # execute_dialog_through_command will end up dispatching the command asynchronously
+                # on the main thread. The Base code seems to have a few race conditions so to avoid
+                # that let’s wait to make sure the close completes before continuing
+                xToolkit = self._xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.waitUntilAllIdlesDispatched()
             else:
                 self._xUITest.executeCommand(".uno:CloseDoc")
         frames = desktop.getFrames()

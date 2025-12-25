@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <colorpicker.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/string_view.hxx>
@@ -70,8 +71,8 @@
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolkit/unowrap.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
@@ -367,6 +368,7 @@ SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* p
     , m_bMouseEventListener(false)
     , m_nFreezeCount(0)
 {
+    m_xWidget->SetCommandHdl(LINK(this, SalInstanceWidget, CommandHdl));
 }
 
 void SalInstanceWidget::set_sensitive(bool sensitive) { m_xWidget->Enable(sensitive); }
@@ -395,8 +397,6 @@ void SalInstanceWidget::grab_focus()
 }
 
 bool SalInstanceWidget::has_focus() const { return m_xWidget->HasFocus(); }
-
-bool SalInstanceWidget::is_active() const { return m_xWidget->IsActive(); }
 
 bool SalInstanceWidget::has_child_focus() const { return m_xWidget->HasChildPathFocus(true); }
 
@@ -636,6 +636,7 @@ void SalInstanceWidget::queue_resize() { m_xWidget->queue_resize(); }
 
 SalInstanceWidget::~SalInstanceWidget()
 {
+    m_xWidget->SetCommandHdl(Link<const CommandEvent&, bool>());
     if (m_aStyleUpdatedHdl.IsSet())
         m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, SettingsChangedHdl));
     if (m_aMnemonicActivateHdl.IsSet())
@@ -810,6 +811,11 @@ bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
 IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 {
     HandleEventListener(rEvent);
+}
+
+IMPL_LINK(SalInstanceWidget, CommandHdl, const CommandEvent&, rEvent, bool)
+{
+    return signal_command(rEvent);
 }
 
 IMPL_LINK(SalInstanceWidget, KeyEventListener, VclWindowEvent&, rEvent, bool)
@@ -1447,8 +1453,8 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
             break;
         case OUTDEV_PRINTER:
         case OUTDEV_PDF:
-            rOutput.DrawBitmapEx(rRenderLogicPos, aRenderLogicSize,
-                                 xOutput->GetBitmap(Point(), aTempLogicSize));
+            rOutput.DrawBitmap(rRenderLogicPos, aRenderLogicSize,
+                               xOutput->GetBitmap(Point(), aTempLogicSize));
             break;
     }
 
@@ -3466,8 +3472,6 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 
 IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool) { return m_aActivateHdl.Call(*this); }
 
-class SalInstanceTreeView;
-
 static SalInstanceTreeView* g_DragSource;
 
 namespace
@@ -3504,6 +3508,167 @@ public:
             m_rTreeView.SetUpdateMode(true);
     }
 };
+}
+
+SalInstanceItemView::SalInstanceItemView(SvTreeListBox* pTreeListBox, SalInstanceBuilder* pBuilder,
+                                         bool bTakeOwnership)
+    : SalInstanceWidget(pTreeListBox, pBuilder, bTakeOwnership)
+    , m_pTreeListBox(pTreeListBox)
+{
+}
+
+std::unique_ptr<weld::TreeIter>
+SalInstanceItemView::make_iterator(const weld::TreeIter* pOrig) const
+{
+    return std::unique_ptr<weld::TreeIter>(
+        new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
+}
+
+bool SalInstanceItemView::get_iter_first(weld::TreeIter& rIter) const
+{
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+    rVclIter.iter = m_pTreeListBox->GetEntry(0);
+    return rVclIter.iter != nullptr;
+}
+
+bool SalInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
+{
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+    rVclIter.iter = rVclIter.iter->NextSibling();
+    return rVclIter.iter != nullptr;
+}
+
+int SalInstanceItemView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return SvTreeList::GetRelPos(rVclIter.iter);
+}
+
+std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_iterator(int nPos) const
+{
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nPos))
+        return std::make_unique<SalInstanceTreeIter>(pEntry);
+
+    return {};
+}
+
+const OUString* SalInstanceItemView::getEntryData(int index) const
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(nullptr, index);
+    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
+}
+
+OUString SalInstanceItemView::get_id(const weld::TreeIter& rIter) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
+    if (pStr)
+        return *pStr;
+    return OUString();
+}
+
+void SalInstanceItemView::set_id(const weld::TreeIter& rIter, const OUString& rId)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
+    rVclIter.iter->SetUserData(m_aUserData.back().get());
+}
+
+OUString SalInstanceItemView::get_selected_id() const
+{
+    assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected())
+    {
+        if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
+            return *pStr;
+    }
+    return OUString();
+}
+
+OUString SalInstanceItemView::get_selected_text() const
+{
+    assert(m_pTreeListBox->IsUpdateMode() && "don't request selection when frozen");
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected())
+        return SvTabListBox::GetEntryText(pEntry, 0);
+    return OUString();
+}
+
+std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_selected() const
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->FirstSelected();
+    if (pEntry)
+        return std::make_unique<SalInstanceTreeIter>(pEntry);
+
+    return {};
+}
+
+bool SalInstanceItemView::get_cursor(weld::TreeIter* pIter) const
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetCurEntry();
+    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
+    if (pVclIter)
+        pVclIter->iter = pEntry;
+    return pEntry != nullptr;
+}
+
+void SalInstanceItemView::do_select_all()
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+    m_pTreeListBox->SelectAll(true);
+}
+
+void SalInstanceItemView::do_unselect_all()
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+    m_pTreeListBox->SelectAll(false);
+}
+
+int SalInstanceItemView::n_children() const
+{
+    return m_pTreeListBox->GetModel()->GetChildList(nullptr).size();
+}
+
+void SalInstanceItemView::do_set_cursor(const weld::TreeIter& rIter)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->SetCurEntry(rVclIter.iter);
+}
+
+void SalInstanceItemView::do_select(const weld::TreeIter& rIter)
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->Select(rVclIter.iter, true);
+    m_pTreeListBox->MakeVisible(rVclIter.iter);
+}
+
+void SalInstanceItemView::do_unselect(const weld::TreeIter& rIter)
+{
+    assert(m_pTreeListBox->IsUpdateMode()
+           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+              "freeze");
+
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->Select(rVclIter.iter, false);
+}
+
+void SalInstanceItemView::do_remove(const weld::TreeIter& rIter)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_pTreeListBox->RemoveEntry(rVclIter.iter);
+}
+
+void SalInstanceItemView::do_clear()
+{
+    m_pTreeListBox->Clear();
+    m_aUserData.clear();
 }
 
 // Each row has a cell for the expander image, (and an optional cell for a
@@ -3553,7 +3718,7 @@ void SalInstanceTreeView::set_font_color(SvTreeListEntry* pEntry, const Color& r
 void SalInstanceTreeView::AddStringItem(SvTreeListEntry* pEntry, const OUString& rStr, int nCol)
 {
     auto xCell = std::make_unique<SvLBoxString>(rStr);
-    if (m_aCustomRenders.count(nCol))
+    if (m_aCustomRenders.contains(nCol))
         xCell->SetCustomRender();
     pEntry->AddItem(std::move(xCell));
 }
@@ -3734,7 +3899,7 @@ void SalInstanceTreeView::set_header_item_width(const std::vector<int>& rWidths)
 
 SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceWidget(pTreeView, pBuilder, bTakeOwnership)
+    : SalInstanceItemView(pTreeView, pBuilder, bTakeOwnership)
     , m_xTreeView(pTreeView)
     , m_aCheckButtonData(*pTreeView, false)
     , m_aRadioButtonData(*pTreeView, true)
@@ -3747,7 +3912,6 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     m_xTreeView->SetDeselectHdl(LINK(this, SalInstanceTreeView, DeSelectHdl));
     m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
     m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
-    m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
     m_xTreeView->SetCustomRenderHdl(LINK(this, SalInstanceTreeView, CustomRenderHdl));
     m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
     const std::vector<tools::Long> aTabPositions{ 0 };
@@ -3981,22 +4145,10 @@ void SalInstanceTreeView::bulk_insert_for_each(
     thaw();
 }
 
-void SalInstanceTreeView::set_font_color(int pos, const Color& rColor)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_font_color(pEntry, rColor);
-}
-
 void SalInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Color& rColor)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     set_font_color(rVclIter.iter, rColor);
-}
-
-void SalInstanceTreeView::do_remove(int pos)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    m_xTreeView->RemoveEntry(pEntry);
 }
 
 int SalInstanceTreeView::find_text(const OUString& rText) const
@@ -4032,49 +4184,10 @@ void SalInstanceTreeView::swap(int pos1, int pos2)
     pModel->Move(pEntry1, pEntry2);
 }
 
-void SalInstanceTreeView::do_clear()
-{
-    m_xTreeView->Clear();
-    m_aUserData.clear();
-}
-
-void SalInstanceTreeView::select_all() { unselect(-1); }
-
-void SalInstanceTreeView::unselect_all() { select(-1); }
-
-int SalInstanceTreeView::n_children() const
-{
-    return m_xTreeView->GetModel()->GetChildList(nullptr).size();
-}
-
 int SalInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return m_xTreeView->GetModel()->GetChildList(rVclIter.iter).size();
-}
-
-void SalInstanceTreeView::do_select(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-        m_xTreeView->SelectAll(false);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        assert(pEntry && "bad pos?");
-        m_xTreeView->Select(pEntry, true);
-        m_xTreeView->MakeVisible(pEntry);
-    }
-}
-
-int SalInstanceTreeView::get_cursor_index() const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
-    if (!pEntry)
-        return -1;
-    return SvTreeList::GetRelPos(pEntry);
 }
 
 void SalInstanceTreeView::do_set_cursor(int pos)
@@ -4085,35 +4198,6 @@ void SalInstanceTreeView::do_set_cursor(int pos)
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->SetCurEntry(pEntry);
-    }
-}
-
-void SalInstanceTreeView::do_scroll_to_row(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    m_xTreeView->MakeVisible(pEntry);
-}
-
-bool SalInstanceTreeView::is_selected(int pos) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return m_xTreeView->IsSelected(pEntry);
-}
-
-void SalInstanceTreeView::do_unselect(int pos)
-{
-    assert(m_xTreeView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1)
-        m_xTreeView->SelectAll(true);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        m_xTreeView->Select(pEntry, false);
     }
 }
 
@@ -4145,12 +4229,6 @@ OUString SalInstanceTreeView::get_text(SvTreeListEntry* pEntry, int col) const
     return static_cast<SvLBoxString&>(rItem).GetText();
 }
 
-OUString SalInstanceTreeView::get_text(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_text(pEntry, col);
-}
-
 void SalInstanceTreeView::set_text(SvTreeListEntry* pEntry, const OUString& rText, int col)
 {
     if (col == -1)
@@ -4180,12 +4258,6 @@ void SalInstanceTreeView::set_text(SvTreeListEntry* pEntry, const OUString& rTex
     }
 
     InvalidateModelEntry(pEntry);
-}
-
-void SalInstanceTreeView::set_text(int pos, const OUString& rText, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text(pEntry, rText, col);
 }
 
 void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col)
@@ -4236,18 +4308,6 @@ bool SalInstanceTreeView::get_sensitive(SvTreeListEntry* pEntry, int col) const
     return do_get_sensitive(pEntry, col);
 }
 
-void SalInstanceTreeView::set_sensitive(int pos, bool bSensitive, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_sensitive(pEntry, bSensitive, col);
-}
-
-bool SalInstanceTreeView::get_sensitive(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_sensitive(pEntry, col);
-}
-
 void SalInstanceTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
@@ -4258,12 +4318,6 @@ bool SalInstanceTreeView::get_sensitive(const weld::TreeIter& rIter, int col) co
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return get_sensitive(rVclIter.iter, col);
-}
-
-TriState SalInstanceTreeView::get_toggle(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_toggle(pEntry, col);
 }
 
 TriState SalInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int col) const
@@ -4281,12 +4335,6 @@ void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
     m_xTreeView->EnableCheckButton(rData);
     // EnableCheckButton clobbered this, restore it
     rData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
-}
-
-void SalInstanceTreeView::set_toggle(int pos, TriState eState, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_toggle(pEntry, eState, col);
 }
 
 void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int col)
@@ -4337,46 +4385,28 @@ void SalInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bO
     set_text_emphasis(rVclIter.iter, bOn, col);
 }
 
-void SalInstanceTreeView::set_text_emphasis(int pos, bool bOn, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text_emphasis(pEntry, bOn, col);
-}
-
 bool SalInstanceTreeView::get_text_emphasis(const weld::TreeIter& rIter, int col) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return get_text_emphasis(rVclIter.iter, col);
 }
 
-bool SalInstanceTreeView::get_text_emphasis(int pos, int col) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    return get_text_emphasis(pEntry, col);
-}
-
-void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, double fAlign, int col)
+void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, TxtAlign eAlign, int col)
 {
     col = to_internal_model(col);
 
     assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
     SvLBoxItem& rItem = pEntry->GetItem(col);
     assert(dynamic_cast<SvLBoxString*>(&rItem));
-    static_cast<SvLBoxString&>(rItem).Align(fAlign);
+    static_cast<SvLBoxString&>(rItem).Align(eAlign);
 
     InvalidateModelEntry(pEntry);
 }
 
-void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, double fAlign, int col)
+void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_text_align(rVclIter.iter, fAlign, col);
-}
-
-void SalInstanceTreeView::set_text_align(int pos, double fAlign, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_text_align(pEntry, fAlign, col);
+    set_text_align(rVclIter.iter, eAlign, col);
 }
 
 void SalInstanceTreeView::connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
@@ -4428,23 +4458,6 @@ void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage
     InvalidateModelEntry(pEntry);
 }
 
-void SalInstanceTreeView::set_image(int pos, const OUString& rImage, int col)
-{
-    set_image(m_xTreeView->GetEntry(nullptr, pos), createImage(rImage), col);
-}
-
-void SalInstanceTreeView::set_image(int pos,
-                                    const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                                    int col)
-{
-    set_image(m_xTreeView->GetEntry(nullptr, pos), Image(rImage), col);
-}
-
-void SalInstanceTreeView::set_image(int pos, VirtualDevice& rImage, int col)
-{
-    set_image(m_xTreeView->GetEntry(nullptr, pos), createImage(rImage), col);
-}
-
 void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
@@ -4465,67 +4478,6 @@ void SalInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& 
     set_image(rVclIter.iter, createImage(rImage), col);
 }
 
-const OUString* SalInstanceTreeView::getEntryData(int index) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, index);
-    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
-}
-
-OUString SalInstanceTreeView::get_id(int pos) const
-{
-    const OUString* pRet = getEntryData(pos);
-    if (!pRet)
-        return OUString();
-    return *pRet;
-}
-
-void SalInstanceTreeView::set_id(SvTreeListEntry* pEntry, const OUString& rId)
-{
-    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
-    pEntry->SetUserData(m_aUserData.back().get());
-}
-
-void SalInstanceTreeView::set_id(int pos, const OUString& rId)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-    set_id(pEntry, rId);
-}
-
-int SalInstanceTreeView::get_selected_index() const
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
-    SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
-    if (!pEntry)
-        return -1;
-    return SvTreeList::GetRelPos(pEntry);
-}
-
-OUString SalInstanceTreeView::get_selected_text() const
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
-        return SvTabListBox::GetEntryText(pEntry, 0);
-    return OUString();
-}
-
-OUString SalInstanceTreeView::get_selected_id() const
-{
-    assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xTreeView->FirstSelected())
-    {
-        if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
-            return *pStr;
-    }
-    return OUString();
-}
-
-std::unique_ptr<weld::TreeIter>
-SalInstanceTreeView::make_iterator(const weld::TreeIter* pOrig) const
-{
-    return std::unique_ptr<weld::TreeIter>(
-        new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
-}
-
 void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
     const SalInstanceTreeIter& rVclSource(static_cast<const SalInstanceTreeIter&>(rSource));
@@ -4533,48 +4485,10 @@ void SalInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::Tre
     rVclDest.iter = rVclSource.iter;
 }
 
-bool SalInstanceTreeView::get_selected(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
-bool SalInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetCurEntry();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
-void SalInstanceTreeView::do_set_cursor(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xTreeView->SetCurEntry(rVclIter.iter);
-}
-
-bool SalInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xTreeView->GetEntry(0);
-    return rVclIter.iter != nullptr;
-}
-
 bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
     rVclIter.iter = m_xTreeView->GetEntryAtAbsPos(nAbsPos);
-    return rVclIter.iter != nullptr;
-}
-
-bool SalInstanceTreeView::iter_next_sibling(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = rVclIter.iter->NextSibling();
     return rVclIter.iter != nullptr;
 }
 
@@ -4623,12 +4537,6 @@ bool SalInstanceTreeView::iter_parent(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
-void SalInstanceTreeView::do_remove(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xTreeView->RemoveEntry(rVclIter.iter);
-}
-
 void SalInstanceTreeView::do_select(const weld::TreeIter& rIter)
 {
     assert(m_xTreeView->IsUpdateMode()
@@ -4675,7 +4583,7 @@ bool SalInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
 bool SalInstanceTreeView::get_children_on_demand(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    if (m_aExpandingPlaceHolderParents.count(rVclIter.iter))
+    if (m_aExpandingPlaceHolderParents.contains(rVclIter.iter))
         return true;
     return GetPlaceHolderChild(rVclIter.iter) != nullptr;
 }
@@ -4722,21 +4630,6 @@ void SalInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& 
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     set_text(rVclIter.iter, rText, col);
-}
-
-OUString SalInstanceTreeView::get_id(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
-    if (pStr)
-        return *pStr;
-    return OUString();
-}
-
-void SalInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_id(rVclIter.iter, rId);
 }
 
 void SalInstanceTreeView::enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
@@ -4810,12 +4703,6 @@ bool SalInstanceTreeView::is_selected(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return m_xTreeView->IsSelected(rVclIter.iter);
-}
-
-int SalInstanceTreeView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    return SvTreeList::GetRelPos(rVclIter.iter);
 }
 
 int SalInstanceTreeView::iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const
@@ -5021,7 +4908,6 @@ SalInstanceTreeView::~SalInstanceTreeView()
     }
     if (g_DragSource == this)
         g_DragSource = nullptr;
-    m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
     m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
     m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
     m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
@@ -5237,11 +5123,6 @@ bool SalInstanceTreeView::ExpandRow(const SalInstanceTreeIter& rIter)
     return bRet;
 }
 
-IMPL_LINK(SalInstanceTreeView, PopupMenuHdl, const CommandEvent&, rEvent, bool)
-{
-    return m_aPopupMenuHdl.Call(rEvent);
-}
-
 IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)
 {
     return signal_editing_started(SalInstanceTreeIter(pEntry));
@@ -5255,13 +5136,12 @@ IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, const IterString&, rIterString, b
 
 SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceWidget(pIconView, pBuilder, bTakeOwnership)
+    : SalInstanceItemView(pIconView, pBuilder, bTakeOwnership)
     , m_xIconView(pIconView)
 {
     m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
     m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
     m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
-    m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
 }
 
 int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
@@ -5375,109 +5255,7 @@ void SalInstanceIconView::connect_get_image(
     m_xIconView->SetDumpImageHdl(LINK(this, SalInstanceIconView, DumpImageHdl));
 }
 
-OUString SalInstanceIconView::get_selected_id() const
-{
-    assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
-    {
-        if (const OUString* pStr = static_cast<const OUString*>(pEntry->GetUserData()))
-            return *pStr;
-    }
-    return OUString();
-}
-
-OUString SalInstanceIconView::get_selected_text() const
-{
-    assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
-    if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
-        return m_xIconView->GetEntryText(pEntry);
-    return OUString();
-}
-
 int SalInstanceIconView::count_selected_items() const { return m_xIconView->GetSelectionCount(); }
-
-void SalInstanceIconView::do_select(int pos)
-{
-    assert(m_xIconView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-        m_xIconView->SelectAll(false);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-        m_xIconView->Select(pEntry, true);
-        m_xIconView->MakeVisible(pEntry);
-    }
-}
-
-void SalInstanceIconView::do_unselect(int pos)
-{
-    assert(m_xIconView->IsUpdateMode()
-           && "don't select when frozen, select after thaw. Note selection doesn't survive a "
-              "freeze");
-    if (pos == -1)
-        m_xIconView->SelectAll(true);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-        m_xIconView->Select(pEntry, false);
-    }
-}
-
-void SalInstanceIconView::select_all() { unselect(-1); }
-
-void SalInstanceIconView::unselect_all() { select(-1); }
-
-int SalInstanceIconView::n_children() const
-{
-    return m_xIconView->GetModel()->GetChildList(nullptr).size();
-}
-
-std::unique_ptr<weld::TreeIter>
-SalInstanceIconView::make_iterator(const weld::TreeIter* pOrig) const
-{
-    return std::unique_ptr<weld::TreeIter>(
-        new SalInstanceTreeIter(static_cast<const SalInstanceTreeIter*>(pOrig)));
-}
-
-bool SalInstanceIconView::get_selected(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xIconView->FirstSelected();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
-bool SalInstanceIconView::get_cursor(weld::TreeIter* pIter) const
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetCurEntry();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
-}
-
-void SalInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    m_xIconView->SetCurEntry(rVclIter.iter);
-}
-
-bool SalInstanceIconView::get_iter_first(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xIconView->GetEntry(0);
-    return rVclIter.iter != nullptr;
-}
-
-bool SalInstanceIconView::iter_next_sibling(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = rVclIter.iter->NextSibling();
-    return rVclIter.iter != nullptr;
-}
 
 void SalInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
 {
@@ -5497,23 +5275,6 @@ void SalInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIt
             return;
         aVclIter.iter = m_xIconView->NextSelected(aVclIter.iter);
     }
-}
-
-OUString SalInstanceIconView::get_id(const weld::TreeIter& rIter) const
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
-    if (pStr)
-        return *pStr;
-    return OUString();
-}
-
-OUString SalInstanceIconView::get_id(int pos) const
-{
-    const OUString* pRet = getEntryData(pos);
-    if (!pRet)
-        return OUString();
-    return *pRet;
 }
 
 void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
@@ -5537,18 +5298,6 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
             m_xIconView->UpdateEntrySize(aImage);
         m_xIconView->ModelHasEntryInvalidated(aEntry);
     }
-}
-
-void SalInstanceIconView::do_remove(int pos)
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-    m_xIconView->RemoveEntry(pEntry);
-}
-
-const OUString* SalInstanceIconView::getEntryData(int index) const
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, index);
-    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
 }
 
 OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const
@@ -5577,13 +5326,6 @@ void SalInstanceIconView::set_text(int pos, const OUString& rText)
         m_xIconView->ModelHasEntryInvalidated(aEntry);
 }
 
-void SalInstanceIconView::set_id(int pos, const OUString& rId)
-{
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
-    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
-    pEntry->SetUserData(m_aUserData.back().get());
-}
-
 void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rName)
 {
     SvTreeListEntry* pEntry = m_xIconView->GetEntry(pos);
@@ -5591,19 +5333,17 @@ void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rNam
     pEntry->SetAccessibleName(rName);
 }
 
-tools::Rectangle SalInstanceIconView::get_rect(int pos) const
+void SalInstanceIconView::set_item_tooltip_text(int pos, const OUString& rToolTip)
 {
-    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
-    if (aEntry == nullptr)
-        return tools::Rectangle();
-
-    return m_xIconView->GetBoundingRect(aEntry);
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(pos);
+    assert(pEntry);
+    pEntry->SetToolTip(rToolTip);
 }
 
-void SalInstanceIconView::do_clear()
+tools::Rectangle SalInstanceIconView::get_rect(const weld::TreeIter& rIter) const
 {
-    m_xIconView->Clear();
-    m_aUserData.clear();
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return m_xIconView->GetBoundingRect(rVclIter.iter);
 }
 
 SalInstanceIconView::~SalInstanceIconView()
@@ -5628,11 +5368,6 @@ IMPL_LINK_NOARG(SalInstanceIconView, DeSelectHdl, SvTreeListBox*, void)
 IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
 {
     return !signal_item_activated();
-}
-
-IMPL_LINK(SalInstanceIconView, CommandHdl, const CommandEvent&, rEvent, bool)
-{
-    return m_aCommandHdl.Call(rEvent);
 }
 
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
@@ -6086,7 +5821,6 @@ SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea,
     m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
     m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
     m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
-    m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
     m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     m_xDrawingArea->SetGetSurroundingHdl(LINK(this, SalInstanceDrawingArea, GetSurroundingHdl));
     m_xDrawingArea->SetDeleteSurroundingHdl(
@@ -6197,7 +5931,6 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
     m_xDrawingArea->SetDeleteSurroundingHdl(Link<const Selection&, bool>());
     m_xDrawingArea->SetGetSurroundingHdl(Link<OUString&, int>());
     m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
-    m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
     m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
     m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
     m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
@@ -6297,11 +6030,6 @@ IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
 {
     m_aStyleUpdatedHdl.Call(*this);
-}
-
-IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
-{
-    return m_aCommandHdl.Call(rEvent);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, GetSurroundingHdl, OUString&, rSurrounding, int)
@@ -6860,10 +6588,10 @@ void SalInstancePopover::resize_to_request()
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
 
 SalInstanceColorChooserDialog::SalInstanceColorChooserDialog(
-    AbstractColorPickerDialog* pColorDialog)
-    : SalInstanceDialog(dynamic_cast<SalInstanceDialog&>(*pColorDialog->GetDialog()).getDialog(),
+    std::unique_ptr<ColorPickerDialog> pColorDialog)
+    : SalInstanceDialog(dynamic_cast<SalInstanceDialog&>(*pColorDialog->getDialog()).getDialog(),
                         nullptr, false)
-    , m_pAbstractColorPickerDialog(pColorDialog)
+    , m_pColorPickerDialog(std::move(pColorDialog))
 {
 }
 
@@ -6871,13 +6599,10 @@ SalInstanceColorChooserDialog::~SalInstanceColorChooserDialog() {}
 
 void SalInstanceColorChooserDialog::set_color(const Color& rColor)
 {
-    m_pAbstractColorPickerDialog->SetColor(rColor);
+    m_pColorPickerDialog->SetColor(rColor);
 }
 
-Color SalInstanceColorChooserDialog::get_color() const
-{
-    return m_pAbstractColorPickerDialog->GetColor();
-}
+Color SalInstanceColorChooserDialog::get_color() const { return m_pColorPickerDialog->GetColor(); }
 
 SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
                                        const OUString& rUIFile,
@@ -7357,12 +7082,9 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
 std::unique_ptr<weld::ColorChooserDialog>
 SalInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    assert(pFact);
-    VclPtr<AbstractColorPickerDialog> pDialog
-        = pFact->CreateColorPickerDialog(pParent, COL_BLACK, eMode);
-    assert(pDialog);
-    return std::make_unique<SalInstanceColorChooserDialog>(pDialog);
+    std::unique_ptr<ColorPickerDialog> pColorPickerDialog
+        = std::make_unique<ColorPickerDialog>(pParent, COL_BLACK, eMode);
+    return std::make_unique<SalInstanceColorChooserDialog>(std::move(pColorPickerDialog));
 }
 
 weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)

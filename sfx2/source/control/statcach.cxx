@@ -498,7 +498,7 @@ sal_Int16 SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
     {
         uno::Sequence < beans::PropertyValue > aArgs;
         if (pSet)
-            TransformItems( nId, *pSet, aArgs );
+            aArgs = TransformItems(nId, *pSet).getAsConstPropertyValueList();
 
         eRet = mxDispatch->Dispatch( aArgs, bForceSynchron );
     }

@@ -38,7 +38,7 @@
 #include <vcl/dialoghelper.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>

@@ -20,6 +20,7 @@
 
 #include <queue>
 #include <memory>
+#include <optional>
 
 #include "LoggedResources.hxx"
 #include "WrapPolygonHandler.hxx"
@@ -29,6 +30,12 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
+
+#include <comphelper/sequenceashashmap.hxx>
+#include <rtl/ref.hxx>
+
+#include <unotxdoc.hxx>
 
 class SwXTextGraphicObject;
 namespace com::sun::star {

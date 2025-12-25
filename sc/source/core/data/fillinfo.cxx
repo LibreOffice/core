@@ -72,7 +72,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = pDoc->GetAttr( rStartX, rStartY, nTab, ATTR_MERGE_FLAG )->GetValue();
+            ScMF nOverlap = pDoc->GetAttr( rStartX, rStartY, nTab, ATTR_MERGE_FLAG ).GetValue();
             bHOver = bool(nOverlap & ScMF::Hor);
             bVOver = bool(nOverlap & ScMF::Ver);
         }
@@ -95,7 +95,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
         else
         {
             ScMF nOverlap = pDoc->GetAttr(
-                                rStartX, rStartY, nTab, ATTR_MERGE_FLAG )->GetValue();
+                                rStartX, rStartY, nTab, ATTR_MERGE_FLAG ).GetValue();
             bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
@@ -110,7 +110,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
                                         GetItem(ATTR_MERGE);
     }
     else
-        pMerge = pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE);
+        pMerge = &pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE);
 
     rEndX = rStartX + pMerge->GetColMerge() - 1;
     rEndY = rStartY + pMerge->GetRowMerge() - 1;
@@ -561,9 +561,17 @@ void ScDocument::FillInfo(
 
                                 if (bContainsCondFormat && pCondFormList)
                                 {
-                                    bAnyCondition |= handleConditionalFormat(*pCondFormList, rCondFormats,
+                                    bool bCondition = handleConditionalFormat(*pCondFormList, rCondFormats,
                                             pInfo, &rTabInfo, pStlPool, ScAddress(nCol, nCurRow, nTab),
                                             bHidden, bHideFormula, bTabProtect);
+
+                                    bAnyCondition |= bCondition;
+
+                                    // if there is a condition, then old pPatternAttr was deleted.
+                                    // Therefore, we need to refetch it.
+                                    if (bCondition && pThisAttrArr->Count())
+                                        pInfo->pPatternAttr
+                                            = pThisAttrArr->mvData[nIndex].getScPatternAttr();
                                 }
 
                                 if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.getType() == CELLTYPE_FORMULA))

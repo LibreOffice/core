@@ -23,13 +23,13 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <rtl/ref.hxx>
 
 namespace com::sun::star::awt {
     struct FontDescriptor;
 }
 
 namespace com::sun::star::uno { class Any; }
+namespace rtl { template <class reference_type> class Reference; }
 
 
 namespace comphelper

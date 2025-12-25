@@ -60,6 +60,8 @@
 #include <vcl/filter/PngImageWriter.hxx>
 #include <sfx2/lokhelper.hxx>
 
+#include <config_cairo_rgba.h>
+
 #include <chrono>
 #include <cstdlib>
 #include <string_view>
@@ -1263,7 +1265,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     Scheduler::ProcessEventsToIdle();
 
     // now save, reload, and assert that we did not lose the edit
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -2827,6 +2829,32 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    Scheduler::ProcessEventsToIdle();
+
+    OString aPresentInfo = pXImpressDocument->getPresentationInfo(true);
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(aPresentInfo)));
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5),  aTree.get_child("slides").size());
+
+    // Slide Index 0
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
+        CPPUNIT_ASSERT_EQUAL(0, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
+
+        CPPUNIT_ASSERT(rChild.get_child("a11y").get_value<std::string>().length() > 0);
+        CPPUNIT_ASSERT(rChild.get_child("transitionLabel").get_value<std::string>().length() > 0);
+    }
+}
+
 namespace
 {
 std::string GetSlideHash(SdXImpressDocument* pDoc, sal_Int32 nSlideNumber)
@@ -3104,7 +3132,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
 
         // bottom-right corner
-        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), aBitmapEx.GetPixelColor(nRight, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nRight, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x40, 0xd0, 0xff), nColor);
+#endif
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -3129,7 +3162,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
         Bitmap aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
 
         // top-left corner
-        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), aBitmapEx.GetPixelColor(nLeft, nTop));
+        ::Color nColor = aBitmapEx.GetPixelColor(nLeft, nTop);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x50, 0x00), nColor);
+#endif
 
         // bottom-left corner
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
@@ -3218,7 +3256,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nTop));
 
         // bottom-left corner
-        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x80, 0xff), aBitmapEx.GetPixelColor(nLeft, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nLeft, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x80, 0xff), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0x80, 0x90), nColor);
+#endif
 
         // bottom-right corner
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nRight, nBottom));
@@ -3253,7 +3296,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nRight, nBottom));
 
         // bottom-center
-        CPPUNIT_ASSERT_EQUAL(Color(0x20, 0xaa, 0x00), aBitmapEx.GetPixelColor(nCenterX, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nCenterX, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x20, 0xaa, 0x00), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xaa, 0x20), nColor);
+#endif
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -3282,7 +3330,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));
 
         // bottom-right corner
-        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), aBitmapEx.GetPixelColor(nRight, nBottom));
+        ::Color nColor = aBitmapEx.GetPixelColor(nRight, nBottom);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x40, 0xd0, 0xff), nColor);
+#endif
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -3342,7 +3395,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         Bitmap aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
 
         // top-left corner
-        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), aBitmapEx.GetPixelColor(nLeft, nTop));
+        ::Color nColor = aBitmapEx.GetPixelColor(nLeft, nTop);
+#if !ENABLE_CAIRO_RGBA
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), nColor);
+#else
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x50, 0x00), nColor);
+#endif
 
         // bottom-left corner
         CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nLeft, nBottom));

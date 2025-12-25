@@ -22,7 +22,9 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <osl/thread.hxx>
-#include <unordered_set>
+#include <unotools/weakref.hxx>
+#include <condition_variable>
+#include <unordered_map>
 
 namespace drawinglayer::primitive2d
 {
@@ -49,10 +51,15 @@ private:
     void removeImpl(const BufferedDecompositionGroupPrimitive2D*);
 
     // Explicitly not using rtl::Reference because they are removed from here when they destruct.
-    std::unordered_set<BufferedDecompositionPrimitive2D*> maRegistered1;
-    std::unordered_set<BufferedDecompositionGroupPrimitive2D*> maRegistered2;
+    std::unordered_map<const BufferedDecompositionPrimitive2D*,
+                       unotools::WeakReference<BufferedDecompositionPrimitive2D>>
+        maRegistered1;
+    std::unordered_map<const BufferedDecompositionGroupPrimitive2D*,
+                       unotools::WeakReference<BufferedDecompositionGroupPrimitive2D>>
+        maRegistered2;
     std::mutex maMutex;
     bool mbShutdown{ false };
+    std::condition_variable maDelayOrTerminate;
 };
 
 } // end of namespace drawinglayer::primitive2d

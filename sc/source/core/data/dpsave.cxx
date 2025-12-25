@@ -26,6 +26,7 @@
 #include <generalfunction.hxx>
 #include <dptabdat.hxx>
 #include <pivot/PivotTableFormats.hxx>
+#include <tools/XmlWriter.hxx>
 
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -154,6 +155,22 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
     if ( nPosition >= 0 )
         ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_DP_POSITION, nPosition);
+}
+
+void ScDPSaveMember::dumpAsXml(tools::XmlWriter& rWriter) const
+{
+    rWriter.startElement("member");
+    rWriter.attribute("name", aName);
+    if (mpLayoutName)
+        rWriter.attribute("layout_name", *mpLayoutName);
+    else
+        rWriter.attribute("layout_name", "(none)");
+
+    if (nVisibleMode == SC_DPSAVEMODE_DONTKNOW)
+        rWriter.attribute("visibility", "(unknown)");
+    else
+        rWriter.attribute("visibility", (nVisibleMode ? "visible" : "hidden"));
+    rWriter.endElement();
 }
 
 #if DUMP_PIVOT_TABLE
@@ -642,6 +659,37 @@ void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
     }
 
     maMemberList.swap(aNew);
+}
+
+void ScDPSaveDimension::dumpAsXml(tools::XmlWriter& rWriter) const
+{
+    static constexpr auto sOrientNames = std::to_array<std::string_view>({
+        "hidden", "column", "row", "page", "data"
+    });
+
+    rWriter.startElement("dimension");
+    rWriter.attribute("name", aName);
+    if (nOrientation <= DataPilotFieldOrientation_DATA)
+        rWriter.attribute("orientation", sOrientNames[sal_Int32(nOrientation)]);
+    else
+        rWriter.attribute("orientation", "invalid");
+
+    if (mpLayoutName)
+        rWriter.attribute("layout_name", *mpLayoutName);
+
+    if (mpSubtotalName)
+        rWriter.attribute("subtotal_name", *mpSubtotalName);
+    else
+        rWriter.attribute("subtotal_name", "(none)");
+
+    rWriter.attribute("data_layout", (bIsDataLayout ? "yes" : "no"));
+    rWriter.attribute("duplicate", (bDupFlag ? "yes" : "no"));
+
+    for (ScDPSaveMember* pMember : maMemberList)
+    {
+        pMember->dumpAsXml(rWriter);
+    }
+    rWriter.endElement();
 }
 
 #if DUMP_PIVOT_TABLE
@@ -1331,6 +1379,15 @@ bool ScDPSaveData::HasInvisibleMember(std::u16string_view rDimName) const
         return false;
 
     return pDim->HasInvisibleMember();
+}
+
+void ScDPSaveData::dumpAsXml(tools::XmlWriter& rWriter) const
+{
+    for (auto const& itDim: m_DimList)
+    {
+        const ScDPSaveDimension& rSaveDimension = *itDim;
+        rSaveDimension.dumpAsXml(rWriter);
+    }
 }
 
 #if DUMP_PIVOT_TABLE

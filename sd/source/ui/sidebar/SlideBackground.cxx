@@ -59,6 +59,7 @@
 #include <utility>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 #include <editeng/sizeitem.hxx>
 #include <comphelper/lok.hxx>
@@ -1289,21 +1290,11 @@ IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, weld::ComboBox&, void )
 
 basegfx::BColorStops SlideBackground::createColorStops()
 {
-    basegfx::BColorStops aColorStops;
+    basegfx::BColorStops aColorStops = maColorStops;
 
-    if (maColorStops.size() >= 2)
-    {
-        aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(),
-                                                  mxFillGrad1->GetSelectEntryColor().getBColor());
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(),
-                                                 mxFillGrad2->GetSelectEntryColor().getBColor());
-    }
-    else
-    {
-        aColorStops.emplace_back(0.0, mxFillGrad1->GetSelectEntryColor().getBColor());
-        aColorStops.emplace_back(1.0, mxFillGrad2->GetSelectEntryColor().getBColor());
-    }
+    aColorStops.changeStartAndEnd(
+        mxFillGrad1->GetSelectEntryColor().getBColor(),
+        mxFillGrad2->GetSelectEntryColor().getBColor());
 
     return aColorStops;
 }

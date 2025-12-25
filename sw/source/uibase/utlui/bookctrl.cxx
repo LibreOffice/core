@@ -24,7 +24,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

@@ -28,6 +28,7 @@
 #include <utility>
 #include <i18nutil/searchopt.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 class SfxModule;
 class SfxShell;

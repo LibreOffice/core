@@ -11,7 +11,7 @@
 #include <string>
 
 #include <sal/config.h>
-#include <rtl/math.hxx>
+#include <sal/mathconf.h>
 
 class NanPayloadTest
 {

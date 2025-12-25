@@ -72,6 +72,8 @@ for clazz in (definitionSet - overridingSet):
         continue
     if loc.startswith("64-linux-gnu/"):
         continue
+    if loc.startswith("ux-gnu/"):
+        continue
     # there is a bunch of Windows specific code that we don't see
     if loc.startswith("include/canvas/"):
         continue
@@ -98,6 +100,8 @@ for clazz in (definitionSet - nonEmptySet):
     if loc.startswith("workdir/"):
         continue
     if loc.startswith("64-linux-gnu/"):
+        continue
+    if loc.startswith("ux-gnu/"):
         continue
 
     deadSet.add( (clazz,loc) )

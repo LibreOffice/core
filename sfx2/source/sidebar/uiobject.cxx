@@ -9,6 +9,7 @@
 
 #include "uiobject.hxx"
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace sfx2::sidebar
 {
@@ -21,14 +22,14 @@ TabBarUIObject::TabBarUIObject(const VclPtr<TabBar>& xTabBar)
 StringMap TabBarUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    OUString rsHighlightedTabsIds;
+    OUStringBuffer rsHighlightedTabsIds;
     for (auto const& item : mxTabBar->maItems)
     {
         if (item->mxButton->get_item_active(u"toggle"_ustr))
         {
             if (!rsHighlightedTabsIds.isEmpty())
-                rsHighlightedTabsIds += ",";
-            rsHighlightedTabsIds += item->msDeckId;
+                rsHighlightedTabsIds.append(",");
+            rsHighlightedTabsIds.append(item->msDeckId);
         }
     }
     aMap[u"HighlightedTabsIds"_ustr] = rsHighlightedTabsIds;

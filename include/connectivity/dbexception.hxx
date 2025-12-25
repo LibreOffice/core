@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
-#define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
+#pragma once
 
 #include <config_options.h>
-#include <connectivity/standardsqlstate.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 namespace com::sun::star
 {
@@ -38,6 +36,8 @@ namespace com::sun::star
         class SQLException;
     }
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace dbtools { enum class StandardSQLState; }
 
 namespace dbtools
 {
@@ -325,9 +325,5 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 
 
 }   // namespace dbtools
-
-
-#endif // INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

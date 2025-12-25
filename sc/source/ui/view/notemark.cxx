@@ -28,6 +28,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <dbfunc.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #define SC_NOTEOVERLAY_TIME    800
 #define SC_NOTEOVERLAY_SHORT   70
@@ -95,7 +96,7 @@ const drawinglayer::primitive2d::Primitive2DContainer& ScNoteOverlay::getOrCreat
         pSdrPage->NbcRemoveObject(mxObject->GetOrdNum());
 
         // show the visualization with slight transparency
-        static bool bUseTransparency(true);
+        static bool bUseTransparency(officecfg::Office::Calc::Content::Display::NoteTransparency::get());
         if (bUseTransparency && !maSequence.empty())
         {
             maSequence = drawinglayer::primitive2d::Primitive2DContainer{

@@ -19,7 +19,9 @@
 #pragma once
 
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 namespace chart { class ControllerLockHelper; }

@@ -112,10 +112,10 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
             displayParamsBuilder.colorType(visual->red_mask > visual->blue_mask
                                                ? kBGRA_8888_SkColorType
                                                : kRGBA_8888_SkColorType);
-            return skwindow::MakeRasterForXlib(winInfo, displayParamsBuilder.build());
+            return skwindow::MakeRasterForXlib(winInfo, displayParamsBuilder.detach());
         }
         case RenderVulkan:
-            return skwindow::MakeGaneshVulkanForXlib(winInfo, displayParamsBuilder.build());
+            return skwindow::MakeGaneshVulkanForXlib(winInfo, displayParamsBuilder.detach());
         case RenderMetal:
             abort();
             break;

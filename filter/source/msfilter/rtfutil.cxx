@@ -96,7 +96,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
 
 namespace msfilter::rtfutil
 {
-OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
+OString OutHex(sal_uInt32 nHex, sal_uInt8 nLen)
 {
     char aNToABuf[] = "0000000000000000";
 
@@ -227,25 +227,8 @@ OString OutString(std::u16string_view rStr, rtl_TextEncoding eDestEnc, bool bUni
     return aBuf.makeStringAndClear();
 }
 
-/// Checks if lossless conversion of the string to eDestEnc is possible or not.
-static bool TryOutString(std::u16string_view rStr, rtl_TextEncoding eDestEnc)
-{
-    int nUCMode = 1;
-    for (size_t n = 0; n < rStr.size(); ++n)
-    {
-        bool bRet;
-        OutChar(rStr[n], &nUCMode, eDestEnc, &bRet);
-        if (!bRet)
-            return false;
-    }
-    return true;
-}
-
 OString OutStringUpr(std::string_view pToken, std::u16string_view rStr, rtl_TextEncoding eDestEnc)
 {
-    if (TryOutString(rStr, eDestEnc))
-        return OString::Concat("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
-
     return OString::Concat("{" OOO_STRING_SVTOOLS_RTF_UPR "{") + pToken + " "
            + OutString(rStr, eDestEnc, /*bUnicode =*/false)
            + "}{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_UD "{" + pToken + " "

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svl/typedwhich.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "charsets.hxx"
 
 class SfxItemSet;

@@ -91,21 +91,9 @@ struct ImplBmpMonoParam
 
 struct ImplColReplaceParam
 {
-    std::unique_ptr<sal_uLong[]>     pMinR;
-    std::unique_ptr<sal_uLong[]>     pMaxR;
-    std::unique_ptr<sal_uLong[]>     pMinG;
-    std::unique_ptr<sal_uLong[]>     pMaxG;
-    std::unique_ptr<sal_uLong[]>     pMinB;
-    std::unique_ptr<sal_uLong[]>     pMaxB;
-    const Color *                  pDstCols;
-    sal_uLong                      nCount;
-};
-
-struct ImplBmpReplaceParam
-{
     const Color*        pSrcCols;
     const Color*        pDstCols;
-    sal_uLong           nCount;
+    sal_uInt32          nCount;
 };
 
 }
@@ -434,9 +422,9 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
                 if( aBitmap.Create( xBitmapCanvas, aSize ) )
                 {
                     if (rOut.GetMapMode().GetMapUnit() == MapUnit::MapPixel)
-                        rOut.DrawBitmapEx( rPos, aBitmap );
+                        rOut.DrawBitmap( rPos, aBitmap );
                     else
-                        rOut.DrawBitmapEx( rPos, rLogicDestSize, aBitmap );
+                        rOut.DrawBitmap( rPos, rLogicDestSize, aBitmap );
                     return true;
                 }
             }
@@ -1328,9 +1316,9 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
     std::vector<vcl::PushFlags> aPushFlagStack;
 
     tools::Rectangle aBound;
-    const sal_uLong nCount(GetActionSize());
+    const sal_uInt32 nCount(GetActionSize());
 
-    for(sal_uLong a(0); a < nCount; a++)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
         MetaAction* pAction = GetAction(a);
         const MetaActionType nActionType = pAction->GetType();
@@ -1780,27 +1768,16 @@ Bitmap GDIMetaFile::ImplBmpMonoFnc( const Bitmap& rBmp, const void* pBmpParam )
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
 {
-    const sal_uLong nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
-
-    for( sal_uLong i = 0; i < static_cast<const ImplColReplaceParam*>(pColParam)->nCount; i++ )
-    {
-        if( ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinR[ i ] <= nR ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxR[ i ] >= nR ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinG[ i ] <= nG ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxG[ i ] >= nG ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinB[ i ] <= nB ) &&
-            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxB[ i ] >= nB ) )
-        {
-            return static_cast<const ImplColReplaceParam*>(pColParam)->pDstCols[ i ];
-        }
-    }
-
+    auto& rColReplaceParam = *static_cast<const ImplColReplaceParam*>(pColParam);
+    auto begin = rColReplaceParam.pSrcCols, end = begin + rColReplaceParam.nCount;
+    if (auto it = std::find(begin, end, rColor.GetRGBColor()); it != end)
+        return rColReplaceParam.pDstCols[std::distance(begin, it)];
     return rColor;
 }
 
 Bitmap GDIMetaFile::ImplBmpReplaceFnc( const Bitmap& rBmp, const void* pBmpParam )
 {
-    const ImplBmpReplaceParam*  p = static_cast<const ImplBmpReplaceParam*>(pBmpParam);
+    const ImplColReplaceParam* p = static_cast<const ImplColReplaceParam*>(pBmpParam);
     Bitmap                      aRet( rBmp );
 
     aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, nullptr );
@@ -2154,43 +2131,16 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
     ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
 }
 
-void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount )
+void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uInt32 nColorCount )
 {
-    ImplColReplaceParam aColParam;
-    ImplBmpReplaceParam aBmpParam;
+    assert(std::none_of(pSearchColors, pSearchColors + nColorCount,
+                        [](Color c) { return c.IsTransparent(); }));
 
-    aColParam.pMinR.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMaxR.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMinG.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMaxG.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMinB.reset(new sal_uLong[ nColorCount ]);
-    aColParam.pMaxB.reset(new sal_uLong[ nColorCount ]);
+    ImplColReplaceParam aColParam{ .pSrcCols = pSearchColors,
+                                   .pDstCols = pReplaceColors,
+                                   .nCount = nColorCount };
 
-    for( sal_uLong i = 0; i < nColorCount; i++ )
-    {
-        tools::Long        nVal;
-
-        nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
-        aColParam.pMaxR[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
-
-        nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
-        aColParam.pMaxG[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
-
-        nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
-        aColParam.pMaxB[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
-    }
-
-    aColParam.pDstCols = pReplaceColors;
-    aColParam.nCount = nColorCount;
-
-    aBmpParam.pSrcCols = pSearchColors;
-    aBmpParam.pDstCols = pReplaceColors;
-    aBmpParam.nCount = nColorCount;
-
-    ImplExchangeColors( ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aBmpParam );
+    ImplExchangeColors(ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aColParam);
 };
 
 GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
@@ -2208,9 +2158,9 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
     return aRet;
 }
 
-sal_uLong GDIMetaFile::GetSizeBytes() const
+sal_uInt32 GDIMetaFile::GetSizeBytes() const
 {
-    sal_uLong nSizeBytes = 0;
+    sal_uInt32 nSizeBytes = 0;
 
     for( size_t i = 0, nObjCount = GetActionSize(); i < nObjCount; ++i )
     {

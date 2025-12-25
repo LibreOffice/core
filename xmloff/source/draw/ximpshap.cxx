@@ -2462,7 +2462,7 @@ void SdXMLGraphicObjectShapeContext::endFastElement(sal_Int32 nElement)
 {
     if (mxBase64Stream.is())
     {
-        uno::Reference<graphic::XGraphic> xGraphic(GetImport().loadGraphicFromBase64(mxBase64Stream));
+        uno::Reference<graphic::XGraphic> xGraphic(GetImport().loadGraphicFromBase64(mxBase64Stream, mnPage));
         if (xGraphic.is())
         {
             uno::Reference<beans::XPropertySet> xProperties(mxShape, uno::UNO_QUERY);

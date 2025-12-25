@@ -20,7 +20,8 @@
 
 #include <config_options.h>
 #include <memory>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/svtdllapi.h>
 
 namespace svtools

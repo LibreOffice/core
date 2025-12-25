@@ -16,7 +16,11 @@
 #include <QtWidgets/QWidget>
 
 #include <rtl/ustring.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 class QtInstanceBuilder : public weld::Builder
 {
@@ -56,8 +60,6 @@ public:
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OUString& rId) override;
     virtual std::unique_ptr<weld::Entry> weld_entry(const OUString& rId) override;
     virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OUString& rId) override;
-    virtual std::unique_ptr<weld::MetricSpinButton>
-    weld_metric_spin_button(const OUString& rId, FieldUnit eUnit) override;
     virtual std::unique_ptr<weld::FormattedSpinButton>
     weld_formatted_spin_button(const OUString& rId) override;
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OUString& rId) override;

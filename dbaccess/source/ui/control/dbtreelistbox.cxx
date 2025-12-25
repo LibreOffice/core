@@ -115,7 +115,7 @@ TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLTyp
     m_xTreeView->connect_key_press(LINK(this, TreeListBox, KeyInputHdl));
     m_xTreeView->connect_selection_changed(LINK(this, TreeListBox, SelectHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, TreeListBox, QueryTooltipHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, TreeListBox, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, TreeListBox, CommandHdl));
 
     if (bSQLType)
         m_xHelper.set(new ODataClipboard);
@@ -142,17 +142,17 @@ IMPL_LINK(TreeListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     switch (eFunc)
     {
         case KeyFuncType::COPY:
-            bHandled = m_aCopyHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            bHandled = m_aCopyHandler.IsSet() && !m_xTreeView->get_selected();
             if (bHandled)
                 m_aCopyHandler.Call(nullptr);
             break;
         case KeyFuncType::PASTE:
-            bHandled = m_aPasteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            bHandled = m_aPasteHandler.IsSet() && !m_xTreeView->get_selected();
             if (bHandled)
                 m_aPasteHandler.Call(nullptr);
             break;
         case KeyFuncType::DELETE:
-            bHandled = m_aDeleteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
+            bHandled = m_aDeleteHandler.IsSet() && !m_xTreeView->get_selected();
             if (bHandled)
                 m_aDeleteHandler.Call(nullptr);
             break;
@@ -219,9 +219,7 @@ IMPL_LINK(TreeListBox, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
     if (m_pActionListener)
     {
-        m_xDragedEntry = m_xTreeView->make_iterator();
-        if (!m_xTreeView->get_selected(m_xDragedEntry.get()))
-            m_xDragedEntry.reset();
+        m_xDragedEntry = m_xTreeView->get_selected();
         if (m_xDragedEntry && m_pActionListener->requestDrag(*m_xDragedEntry))
         {
             // if the (asynchronous) drag started, stop the selection timer

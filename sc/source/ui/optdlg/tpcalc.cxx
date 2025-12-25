@@ -20,7 +20,7 @@
     #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/numformat.hxx>
 
 #include <globstr.hrc>
@@ -273,7 +273,7 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
 
 OUString ScTpCalcOptions::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label5"_ustr, u"label1"_ustr,  u"precft"_ustr,
                           u"label2"_ustr, u"stepsft"_ustr, u"minchangeft"_ustr,
                           u"label4"_ustr, u"label3"_ustr,  u"openclframe"_ustr };
@@ -281,7 +281,7 @@ OUString ScTpCalcOptions::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -290,7 +290,7 @@ OUString ScTpCalcOptions::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"formulawildcards"_ustr, u"formularegex"_ustr, u"formulaliteral"_ustr,
@@ -299,10 +299,10 @@ OUString ScTpCalcOptions::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )

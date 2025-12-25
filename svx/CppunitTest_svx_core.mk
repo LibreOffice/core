@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_core, \
     unotest \
     utl \
     vcl \
+    xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,svx_core))

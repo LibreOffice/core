@@ -244,20 +244,21 @@ SwCalc::SwCalc( SwDoc& rD )
         UserOptToken::TelephoneHome, UserOptToken::Fax, UserOptToken::Email, UserOptToken::State
     };
 
-    static sal_uInt16 SwDocStat::* const aDocStat1[ 3 ] =
+    static sal_uInt32 SwDocStat::* const aDocStat[ 7 ] =
     {
-        &SwDocStat::nTable, &SwDocStat::nGrf, &SwDocStat::nOLE
-    };
-    static sal_uLong SwDocStat::* const aDocStat2[ 4 ] =
-    {
-        &SwDocStat::nPage, &SwDocStat::nPara,
-        &SwDocStat::nWord, &SwDocStat::nChar
+        &SwDocStat::nTable,
+        &SwDocStat::nGrf,
+        &SwDocStat::nOLE,
+        &SwDocStat::nPage,
+        &SwDocStat::nPara,
+        &SwDocStat::nWord,
+        &SwDocStat::nChar
     };
 
     const SwDocStat& rDocStat = m_rDoc.getIDocumentStatistics().GetDocStat();
 
     SwSbxValue nVal;
-    sal_uInt16 n;
+    sal_uInt32 n;
 
     for( n = 0; n < 25; ++n )
         m_aVarTable.insert( { sNTypeTab[n], SwCalcExp( nVal, nullptr ) } );
@@ -267,10 +268,8 @@ SwCalc::SwCalc( SwDoc& rD )
     lcl_GetCalcExp(m_aVarTable, sNTypeTab[2]).nValue.PutDouble( M_PI );
     lcl_GetCalcExp(m_aVarTable, sNTypeTab[3]).nValue.PutDouble( M_E );
 
-    for( n = 0; n < 3; ++n )
-        lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 4]).nValue.PutLong( rDocStat.*aDocStat1[ n ] );
-    for( n = 0; n < 4; ++n )
-        lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 7]).nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
+    for( n = 0; n < 7; ++n )
+        lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 4]).nValue.PutLong( rDocStat.*aDocStat[ n ] );
 
     SvtUserOptions& rUserOptions = SwModule::get()->GetUserOptions();
 

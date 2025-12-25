@@ -200,7 +200,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     if (pTmpFrame->getFrameArea().Top() == FAR_AWAY && !bAllowFarAway)
         return false;
 
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     const SwTwips nUpperMaxY = aRectFnSet.GetPrtBottom(*pTmpFrame);
     const SwTwips nFrameMaxY = aRectFnSet.GetPrtBottom(*pFrame);
 
@@ -374,7 +374,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     pFrame->GetFormatted();
     const SwFrame* pTmpFrame = pFrame->GetUpper();
 
-    SwRectFnSet aRectFnSet(pTmpFrame);
+    SwRectFnSet aRectFnSet(*pTmpFrame);
     SwTwips nUpperMaxY = aRectFnSet.GetPrtBottom(*pTmpFrame);
 
     // nMaxY is in absolute value
@@ -430,7 +430,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY );
         if( aTmpState.m_aRealHeight.X() >= 0 )
         {
-            rOrig.Pos().AdjustY(aTmpState.m_aRealHeight.X() );
+            rOrig.SetPosY(rOrig.Pos().Y() + aTmpState.m_aRealHeight.X());
             rOrig.Height( aTmpState.m_aRealHeight.Y() );
         }
 
@@ -464,7 +464,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
     }
     else
     {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         if ( IsEmpty() || !aRectFnSet.GetHeight(getFramePrintArea()) )
         {
             // consider upper space amount considered
@@ -476,7 +476,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
             // determine formatted text frame that contains the requested position
             SwTextFrame* pFrame = &(const_cast<SwTextFrame*>(this)->GetFrameAtOfst( nOffset ));
             pFrame->GetFormatted();
-            aRectFnSet.Refresh(pFrame);
+            aRectFnSet.Refresh(*pFrame);
             // If proportional line spacing is applied
             // to the text frame, the top of the anchor character is also the
             // top of the line.
@@ -869,7 +869,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             if ( bPrevLine || bSecondOfDouble )
             {
                 aCharBox.Width( aCharBox.SSize().Width() / 2 );
-                aCharBox.Pos().setX( aCharBox.Pos().X() - 150 );
+                aCharBox.SetPosX(aCharBox.Pos().X() - 150);
 
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
 #if OSL_DEBUG_LEVEL > 0
@@ -927,7 +927,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             }
             if ( !pPrevPrev )
                 return pTmpPrev->SwContentFrame::UnitUp( pPam, nOffset, bSetInReadOnly );
-            aCharBox.Pos().setY( pPrevPrev->getFrameArea().Bottom() - 1 );
+            aCharBox.SetPosY(pPrevPrev->getFrameArea().Bottom() - 1);
             return pPrevPrev->GetKeyCursorOfst( pPam->GetPoint(), aCharBox.Pos() );
         }
     }
@@ -1306,7 +1306,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
     // We take a shortcut for follows
     if( pTmpFollow )
     {
-        aCharBox.Pos().setY( pTmpFollow->getFrameArea().Top() + 1 );
+        aCharBox.SetPosY(pTmpFollow->getFrameArea().Top() + 1);
         return static_cast<const SwTextFrame*>(pTmpFollow)->GetKeyCursorOfst( pPam->GetPoint(),
                                                      aCharBox.Pos() );
     }
@@ -1716,7 +1716,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                          pUp->GetUpper()->GetUpper()->IsSctFrame() )
                     pUp = pUp->GetUpper()->GetUpper()->GetUpper();
             }
-            SwRectFnSet aRectFnSet(this);
+            SwRectFnSet aRectFnSet(*this);
             SwTwips nLimit = aRectFnSet.GetPrtBottom(*pUp);
             SwTwips nRectBottom = rRect.Bottom();
             if ( aRectFnSet.IsVert() )

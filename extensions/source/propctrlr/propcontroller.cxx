@@ -40,8 +40,8 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -258,17 +258,10 @@ namespace pcr
 
     Sequence< Reference< XDispatch > > SAL_CALL OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests )
     {
-        Sequence< Reference< XDispatch > > aReturn;
-        sal_Int32 nLen = Requests.getLength();
-        aReturn.realloc( nLen );
-
-        Reference< XDispatch >* pReturn     = aReturn.getArray();
-        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
-        const   DispatchDescriptor*     pDescripts  = Requests.getConstArray();
-
-        for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
-            *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
-
+        Sequence<Reference<XDispatch>> aReturn(Requests.getLength());
+        std::transform(Requests.begin(), Requests.end(), aReturn.getArray(),
+                       [this](const DispatchDescriptor& d)
+                       { return queryDispatch(d.FeatureURL, d.FrameName, d.SearchFlags); });
         return aReturn;
     }
 
@@ -278,17 +271,16 @@ namespace pcr
         if ( m_bConstructed )
             throw AlreadyInitializedException();
 
-        StlSyntaxSequence< Any > arguments( _arguments );
-        if ( arguments.empty() )
+        if (!_arguments.hasElements())
         {   // constructor: "createDefault()"
             m_bConstructed = true;
             return;
         }
 
         Reference< XObjectInspectorModel > xModel;
-        if ( arguments.size() == 1 )
+        if (_arguments.size() == 1)
         {   // constructor: "createWithModel( XObjectInspectorModel )"
-            if ( !( arguments[0] >>= xModel ) )
+            if (!(_arguments[0] >>= xModel))
                 throw IllegalArgumentException( OUString(), *this, 0 );
             createWithModel( xModel );
             return;
@@ -946,9 +938,9 @@ namespace pcr
             {
                 DBG_ASSERT( aHandler->get(), "OPropertyBrowserController::doInspection: invalid handler!" );
 
-                StlSyntaxSequence< Property > aThisHandlersProperties(  (*aHandler)->getSupportedProperties() );
+                Sequence<Property> aThisHandlersProperties((*aHandler)->getSupportedProperties());
 
-                if ( aThisHandlersProperties.empty() )
+                if (!aThisHandlersProperties.hasElements())
                 {
                     // this handler doesn't know anything about the current inspectee -> ignore it
                     (*aHandler)->dispose();
@@ -985,7 +977,7 @@ namespace pcr
                 }
 
                 // determine the superseded properties
-                StlSyntaxSequence< OUString > aSupersededByThisHandler( (*aHandler)->getSupersededProperties() );
+                Sequence<OUString> aSupersededByThisHandler((*aHandler)->getSupersededProperties());
                 for (const auto & superseded : aSupersededByThisHandler)
                 {
                     std::vector< Property >::iterator existent = std::find_if(
@@ -1012,7 +1004,7 @@ namespace pcr
                 }
 
                 // see if the handler expresses interest in any actuating properties
-                StlSyntaxSequence< OUString > aInterestingActuations( (*aHandler)->getActuatingProperties() );
+                Sequence<OUString> aInterestingActuations((*aHandler)->getActuatingProperties());
                 for (const auto & aInterestingActuation : aInterestingActuations)
                 {
                     m_aDependencyHandlers.emplace( aInterestingActuation, *aHandler );
@@ -1127,9 +1119,9 @@ namespace pcr
     {
         OSL_PRECOND( m_aPageIds.empty(), "OPropertyBrowserController::impl_buildCategories_throw: duplicate call!" );
 
-        StlSyntaxSequence< PropertyCategoryDescriptor > aCategories;
+        Sequence<PropertyCategoryDescriptor> aCategories;
         if ( m_xModel.is() )
-            aCategories = StlSyntaxSequence< PropertyCategoryDescriptor >(m_xModel->describeCategories());
+            aCategories = m_xModel->describeCategories();
 
         for (auto const& category : aCategories)
         {

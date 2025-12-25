@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf137105(UITestCase):
 
-   def test_tdf137105(self):
+    def test_tdf137105(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             text = document.getText()

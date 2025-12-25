@@ -13,7 +13,7 @@ from uitest.uihelper.common import change_measurement_unit
 
 class tdf139511(UITestCase):
 
-   def test_tdf139511(self):
+    def test_tdf139511(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

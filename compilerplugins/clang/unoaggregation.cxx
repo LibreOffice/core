@@ -18,7 +18,6 @@
 #include <cassert>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -86,7 +85,7 @@ bool basesHaveOnlyPureQueryInterface(CXXRecordDecl const* decl)
             {
                 continue;
             }
-            if (!compat::isPureVirtual(d2))
+            if (!d2->isPureVirtual())
             {
                 return false;
             }

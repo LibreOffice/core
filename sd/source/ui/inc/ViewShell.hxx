@@ -549,8 +549,6 @@ protected:
     void doShow();
 
 private:
-    OUString msOldWindowState; // imported window state
-
     VclPtr<vcl::Window> mpParentWindow;
     /** This window updater is used to keep all relevant windows up to date
         with reference to the digit language used to display digits in text

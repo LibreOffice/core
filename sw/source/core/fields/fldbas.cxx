@@ -143,6 +143,8 @@ UIName SwFieldType::GetName() const
     return UIName();
 }
 
+void SwFieldType::SetName(const UIName& /*newName*/) { assert(!"Wrong field type"); }
+
 void SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
 {
 }

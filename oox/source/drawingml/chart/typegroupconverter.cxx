@@ -47,8 +47,13 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <tools/UnitConversion.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
-namespace oox::drawingml::chart {
+namespace oox::drawingml::chart
+{
+
+using namespace css;
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
@@ -69,7 +74,6 @@ const char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
 const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
 const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 const char SERVICE_CHART2_FUNNEL[]    = "com.sun.star.chart2.FunnelChartType";
-const char SERVICE_CHART2_HISTO[]     = "com.sun.star.chart2.HistogramChartType";
 
 namespace csscd = css::chart::DataLabelPlacement;
 
@@ -78,7 +82,6 @@ const TypeGroupInfo spTypeInfos[] =
     // type-id          type-category         service                   varied-point-color   default label pos     polar  area2d 1stvis xcateg swap   stack  picopt
     { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
     { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
-    { TYPEID_HISTO,     TYPECATEGORY_HISTO,   SERVICE_CHART2_HISTO,     VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
     { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, true,  false },
     { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,      VARPOINTMODE_NONE,   csscd::CENTER,        false, true,  false, true,  false, true,  false },
     { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,    VARPOINTMODE_NONE,   csscd::RIGHT,         false, false, false, true,  false, true,  false },
@@ -156,19 +159,26 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( areaChart ):      ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_AREA;      mb3dChart = false;  break;
         case C_TOKEN( bar3DChart ):     ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_BAR;       mb3dChart = true;   break;
         case C_TOKEN( barChart ):       ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
+        case CX_TOKEN( boxWhisker ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BOXWHISKER;mb3dChart = false;  break;
         case C_TOKEN( bubbleChart ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BUBBLE;    mb3dChart = false;  break;
+        case CX_TOKEN( clusteredColumn ): ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;     mb3dChart = false;  break;
         case C_TOKEN( doughnutChart ):  ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_DOUGHNUT;  mb3dChart = false;  break;
         case CX_TOKEN( funnel ):        ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_FUNNEL;    mb3dChart = false;  break;
         case C_TOKEN( line3DChart ):    ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_LINE;      mb3dChart = true;   break;
         case C_TOKEN( lineChart ):      ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_LINE;      mb3dChart = false;  break;
         case C_TOKEN( ofPieChart ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_OFPIE;     mb3dChart = false;  break;
+        case CX_TOKEN( paretoLine ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_PARETOLINE;mb3dChart = false;  break;
         case C_TOKEN( pie3DChart ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_PIE;       mb3dChart = true;   break;
         case C_TOKEN( pieChart ):       ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_PIE;       mb3dChart = false;  break;
+        case CX_TOKEN( regionMap ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_REGIONMAP; mb3dChart = false;  break;
         case C_TOKEN( radarChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_RADARLINE; mb3dChart = false;  break;
         case C_TOKEN( scatterChart ):   ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_SCATTER;   mb3dChart = false;  break;
         case C_TOKEN( stockChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_STOCK;     mb3dChart = false;  break;
+        case CX_TOKEN( sunburst ):      ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_SUNBURST;  mb3dChart = false;  break;
         case C_TOKEN( surface3DChart ): ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;
         case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    // 3D bar chart from all surface charts
+        case CX_TOKEN( treemap ):       ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_TREEMAP;   mb3dChart = false;  break;
+        case CX_TOKEN( waterfall ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
         default:    OSL_FAIL( "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
 #undef ENSURE_AXESCOUNT
     }
@@ -527,17 +537,26 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
 
     if(xShapeProps.is())
     {
-        Color aFillColor = xShapeProps->getFillProperties().maFillColor;
-        aSymbol.FillColor = sal_Int32(aFillColor.getColor(getFilter().getGraphicHelper()));
+        Color aFillOOXColor = xShapeProps->getFillProperties().maFillColor;
+        aSymbol.FillColor = sal_Int32(aFillOOXColor.getColor(getFilter().getGraphicHelper()));
         // tdf#124817: if there is no fill color, use line color of the symbol
         if( aSymbol.FillColor < 0 )
         {
-            Color aLineColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
-            aSymbol.BorderColor = sal_Int32(aLineColor.getColor(getFilter().getGraphicHelper()));
+            Color aLineOOXColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
+            aSymbol.BorderColor = sal_Int32(aLineOOXColor.getColor(getFilter().getGraphicHelper()));
             rPropSet.setProperty(PROP_Color, aSymbol.BorderColor);
+
+            model::ComplexColor aComplexColor = aLineOOXColor.getComplexColor();
+            auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+            rPropSet.setProperty(PROP_ComplexColor, uno::Any(xComplexColor));
         }
         else
+        {
             rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
+            model::ComplexColor aComplexColor = aFillOOXColor.getComplexColor();
+            auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+            rPropSet.setProperty(PROP_ComplexColor, uno::Any(xComplexColor));
+        }
     }
 
     // set the property

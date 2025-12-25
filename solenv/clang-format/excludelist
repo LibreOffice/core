@@ -2165,8 +2165,6 @@ cui/source/customize/macropg_impl.hxx
 cui/source/dialogs/DiagramDialog.cxx
 cui/source/dialogs/SpellAttrib.hxx
 cui/source/dialogs/SpellDialog.cxx
-cui/source/dialogs/about.cxx
-cui/source/dialogs/colorpicker.cxx
 cui/source/dialogs/cuifmsearch.cxx
 cui/source/dialogs/cuigaldlg.cxx
 cui/source/dialogs/cuigrfflt.cxx
@@ -4693,7 +4691,6 @@ include/comphelper/interfacecontainer2.hxx
 include/comphelper/logging.hxx
 include/comphelper/mimeconfighelper.hxx
 include/comphelper/namedvaluecollection.hxx
-include/comphelper/newarray.hxx
 include/comphelper/numberedcollection.hxx
 include/comphelper/numbers.hxx
 include/comphelper/ofopxmlhelper.hxx
@@ -5331,7 +5328,6 @@ include/sfx2/app.hxx
 include/sfx2/basedlgs.hxx
 include/sfx2/bindings.hxx
 include/sfx2/chalign.hxx
-include/sfx2/charwin.hxx
 include/sfx2/childwin.hxx
 include/sfx2/ctrlitem.hxx
 include/sfx2/dinfdlg.hxx
@@ -5627,7 +5623,6 @@ include/svx/grfflt.hxx
 include/svx/gridctrl.hxx
 include/svx/hdft.hxx
 include/svx/helperhittest3d.hxx
-include/svx/hexcolorcontrol.hxx
 include/svx/hlnkitem.hxx
 include/svx/hyperdlg.hxx
 include/svx/ifaceids.hxx
@@ -5854,7 +5849,6 @@ include/svx/xlntrit.hxx
 include/svx/xlnwtit.hxx
 include/svx/xmleohlp.hxx
 include/svx/xmlexchg.hxx
-include/svx/xmlgrhlp.hxx
 include/svx/xmlsecctrl.hxx
 include/svx/xoutbmp.hxx
 include/svx/xpoly.hxx
@@ -6103,6 +6097,7 @@ include/vcl/graphictools.hxx
 include/vcl/hatch.hxx
 include/vcl/headbar.hxx
 include/vcl/help.hxx
+include/vcl/hexcolorcontrol.hxx
 include/vcl/i18nhelp.hxx
 include/vcl/idle.hxx
 include/vcl/image.hxx
@@ -6282,6 +6277,7 @@ include/xmloff/xmlerror.hxx
 include/xmloff/xmlevent.hxx
 include/xmloff/xmlexp.hxx
 include/xmloff/xmlexppr.hxx
+include/xmloff/xmlgrhlp.hxx
 include/xmloff/xmlictxt.hxx
 include/xmloff/xmlimp.hxx
 include/xmloff/xmlimppr.hxx
@@ -8805,7 +8801,6 @@ sc/source/ui/sidebar/CellAppearancePropertyPanel.cxx
 sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx
 sc/source/ui/sidebar/CellBorderStyleControl.cxx
 sc/source/ui/sidebar/CellLineStyleControl.cxx
-sc/source/ui/sidebar/CellLineStyleValueSet.cxx
 sc/source/ui/sidebar/NumberFormatControl.cxx
 sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx
 sc/source/ui/sidebar/NumberFormatPropertyPanel.hxx
@@ -10044,6 +10039,7 @@ sfx2/source/bastyp/progress.cxx
 sfx2/source/bastyp/sfxhtml.cxx
 sfx2/source/config/evntconf.cxx
 sfx2/source/control/bindings.cxx
+sfx2/source/control/charmapcontainer.cxx
 sfx2/source/control/charmapcontrol.cxx
 sfx2/source/control/ctrlitem.cxx
 sfx2/source/control/dispatch.cxx
@@ -11472,7 +11468,6 @@ svx/source/sidebar/text/TextCharacterSpacingControl.hxx
 svx/source/sidebar/text/TextPropertyPanel.cxx
 svx/source/sidebar/text/TextPropertyPanel.hxx
 svx/source/sidebar/text/TextUnderlineControl.cxx
-svx/source/sidebar/tools/ValueSetWithTextControl.cxx
 svx/source/smarttags/SmartTagMgr.cxx
 svx/source/stbctrls/insctrl.cxx
 svx/source/stbctrls/modctrl.cxx
@@ -11654,7 +11649,6 @@ svx/source/unogallery/unogaltheme.hxx
 svx/source/unogallery/unogalthemeprovider.cxx
 svx/source/xml/xmleohlp.cxx
 svx/source/xml/xmlexport.cxx
-svx/source/xml/xmlgrhlp.cxx
 svx/source/xml/xmlxtexp.cxx
 svx/source/xml/xmlxtimp.cxx
 svx/source/xoutdev/_xoutbmp.cxx
@@ -11863,6 +11857,7 @@ sw/inc/txtrfmrk.hxx
 sw/inc/txttxmrk.hxx
 sw/inc/undobj.hxx
 sw/inc/unobaseclass.hxx
+sw/inc/unobookmark.hxx
 sw/inc/unochart.hxx
 sw/inc/unocoll.hxx
 sw/inc/unocrsr.hxx
@@ -11870,12 +11865,14 @@ sw/inc/unocrsrhelper.hxx
 sw/inc/unodraw.hxx
 sw/inc/unofieldcoll.hxx
 sw/inc/unoframe.hxx
+sw/inc/unoidx.hxx
 sw/inc/unoidxcoll.hxx
 sw/inc/unomap.hxx
 sw/inc/unomid.h
 sw/inc/unoparagraph.hxx
 sw/inc/unoredline.hxx
 sw/inc/unoredlines.hxx
+sw/inc/unosection.hxx
 sw/inc/unosett.hxx
 sw/inc/unosrch.hxx
 sw/inc/unostyle.hxx
@@ -12263,17 +12260,14 @@ sw/source/core/inc/txtfly.hxx
 sw/source/core/inc/txtfrm.hxx
 sw/source/core/inc/txttypes.hxx
 sw/source/core/inc/undoflystrattr.hxx
-sw/source/core/inc/unobookmark.hxx
 sw/source/core/inc/unofield.hxx
 sw/source/core/inc/unoflatpara.hxx
 sw/source/core/inc/unofldmid.h
 sw/source/core/inc/unofootnote.hxx
-sw/source/core/inc/unoidx.hxx
 sw/source/core/inc/unometa.hxx
 sw/source/core/inc/unoparaframeenum.hxx
 sw/source/core/inc/unoport.hxx
 sw/source/core/inc/unorefmark.hxx
-sw/source/core/inc/unosection.hxx
 sw/source/core/inc/unotextmarkup.hxx
 sw/source/core/inc/viewimp.hxx
 sw/source/core/inc/wrong.hxx
@@ -14681,10 +14675,12 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
+vcl/source/pdf/PDFPage.cxx
 vcl/source/pdf/pdfextoutdevdata.cxx
 vcl/source/pdf/pdfwriter.cxx
 vcl/source/pdf/pdfwriter_impl.cxx
 vcl/source/pdf/pdfwriter_impl2.cxx
+vcl/source/pdf/pdfwriterimpl_utils.cxx
 vcl/source/pdf/pwdinteract.cxx
 vcl/source/text/ImplLayoutRuns.cxx
 vcl/source/text/textlayout.cxx
@@ -14718,6 +14714,7 @@ vcl/source/window/brdwin.cxx
 vcl/source/window/bubblewindow.cxx
 vcl/source/window/builder.cxx
 vcl/source/window/clipping.cxx
+vcl/source/window/colorpicker.cxx
 vcl/source/window/commandevent.cxx
 vcl/source/window/cursor.cxx
 vcl/source/window/debugevent.cxx
@@ -15199,6 +15196,7 @@ xmloff/source/core/unointerfacetouniqueidentifiermapper.cxx
 xmloff/source/core/xmlcnimp.cxx
 xmloff/source/core/xmlerror.cxx
 xmloff/source/core/xmlexp.cxx
+xmloff/source/core/xmlgrhlp.cxx
 xmloff/source/core/xmlictxt.cxx
 xmloff/source/core/xmlimp.cxx
 xmloff/source/core/xmlmultiimagehelper.cxx

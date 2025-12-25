@@ -76,20 +76,6 @@ public:
         };
     };
 
-    xmlDocUniquePtr parseLayout() const
-    {
-        SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-        CPPUNIT_ASSERT(pModel);
-        SfxObjectShell* pShell = pModel->GetObjectShell();
-        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
-        MetafileXmlDump dumper;
-
-        xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
-        CPPUNIT_ASSERT(pXmlDoc);
-
-        return pXmlDoc;
-    }
-
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
 };
@@ -152,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBackgroundImage)
 
     // Save as PPTX, reload and check again so we make sure exporting to PPTX is working correctly
     {
-        saveAndReload(u"Impress Office Open XML"_ustr);
+        saveAndReload(TestFilter::PPTX);
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1),
                                      xDoc->getDrawPages()->getCount());
@@ -177,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBackgroundImage)
 
     // Save as ODP, reload and check again so we make sure exporting and importing to ODP is working correctly
     {
-        saveAndReload(u"impress8"_ustr);
+        saveAndReload(TestFilter::ODP);
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("not exactly one page", static_cast<sal_Int32>(1),
                                      xDoc->getDrawPages()->getCount());
@@ -225,7 +211,7 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparentBackground)
 {
     createSdImpressDoc("odp/transparent_background.odp");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -239,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparentBackground)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf162283)
 {
     createSdImpressDoc("pptx/tdf162283.pptx");
-    saveAndReload(u"MS PowerPoint 97"_ustr);
+    saveAndReload(TestFilter::PPT);
 
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
@@ -357,17 +343,17 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testDecorative)
 
     doTest("initial pptx load: "_ostr);
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     doTest("reload OOXML: "_ostr);
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     doTest("reload ODF: "_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf142716)
 {
     createSdImpressDoc("pptx/tdf142716.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(0));
@@ -395,7 +381,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testMediaEmbedding)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testFillBitmapUnused)
 {
     createSdImpressDoc("odp/fillbitmap2.odp");
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // shapes
@@ -472,7 +458,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testFillBitmapUnused)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testFdo84043)
 {
     createSdImpressDoc("fdo84043.odp");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     // the bug was duplicate attributes, causing crash in a build with asserts
     const SdrPage* pPage = GetPage(1);
@@ -510,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf97630)
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
     }
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     {
         uno::Reference<drawing::XDrawPage> xDP(getPage(0));
@@ -571,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf97630)
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testImpressPasswordExport)
 {
-    std::vector<OUString> vFormat{ u"impress8"_ustr, u"Impress Office Open XML"_ustr };
+    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX };
 
     for (size_t i = 0; i < vFormat.size(); i++)
     {
@@ -585,21 +571,21 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testDrawPasswordExport)
 {
     createSdDrawDoc();
 
-    saveAndReload(u"draw8"_ustr, /*pPassword*/ "test");
+    saveAndReload(TestFilter::ODG, /*pPassword*/ "test");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testSwappedOutImageExport)
 {
     // Problem was with the swapped out images, which were not swapped in during export.
 
-    std::vector<OUString> vFormat{ u"impress8"_ustr, u"Impress Office Open XML"_ustr,
-                                   u"MS PowerPoint 97"_ustr };
+    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX, TestFilter::PPT };
 
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         // Load the original file with one image
         createSdImpressDoc("odp/document_with_two_images.odp");
-        const OString sFailedMessage = "Failed on filter: " + vFormat[i].toUtf8();
+        const OString sFailedMessage
+            = "Failed on filter: " + TestFilterNames.at(vFormat[i]).toUtf8();
 
         // Export the document and import again for a check
         saveAndReload(vFormat[i]);
@@ -659,7 +645,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testOOoXMLAnimations)
     // FIXME: Error: unexpected attribute "presentation:preset-property"
     skipValidation();
 
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     // the problem was that legacy OOoXML animations were lost if store
     // immediately follows load because they were "converted" async by a timer
@@ -729,7 +715,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testUnknownAttributes)
     // FIXME: Error: unexpected attribute "foo:non-existent-att"
     skipValidation();
 
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/"
@@ -754,7 +740,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf80020)
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"Test Style"_ustr),
                                              uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u"text"_ustr, xStyle->getParentStyle());
-        saveAndReload(u"impress8"_ustr);
+        saveAndReload(TestFilter::ODP);
     }
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
@@ -787,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128985)
 
         xPropSet->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::LR_TB));
 
-        saveAndReload(u"impress8"_ustr);
+        saveAndReload(TestFilter::ODP);
     }
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
@@ -810,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128985)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
 {
     // FIXME: PPTX fails
-    std::vector<OUString> vFormat{ u"impress8"_ustr, u"MS PowerPoint 97"_ustr };
+    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPT };
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         // Load the original file with one image
@@ -843,7 +829,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
 
         // Check whether graphic imported well after export
         {
-            const OString sFailedMessage = "Failed on filter: " + vFormat[i].toUtf8();
+            const OString sFailedMessage
+                = "Failed on filter: " + TestFilterNames.at(vFormat[i]).toUtf8();
 
             SdXImpressDocument* pXImpressDocument
                 = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -868,7 +855,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf79082)
 {
     createSdImpressDoc("ppt/tdf79082.ppt");
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // P1 should have 6 tab stops defined
@@ -905,13 +892,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID)
     // Check how LO handles when the imported graphic's ID is different from that one
     // which is generated by LO.
 
-    std::vector<OUString> vFormat{ u"impress8"_ustr, u"Impress Office Open XML"_ustr,
-                                   u"MS PowerPoint 97"_ustr };
+    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX, TestFilter::PPT };
     for (size_t i = 0; i < vFormat.size(); i++)
     {
         // Load the original file
         createSdImpressDoc("odp/images_with_special_IDs.odp");
-        const OString sFailedMessage = "Failed on filter: " + vFormat[i].toUtf8();
+        const OString sFailedMessage
+            = "Failed on filter: " + TestFilterNames.at(vFormat[i]).toUtf8();
         saveAndReload(vFormat[i]);
 
         // Check whether graphic was exported well
@@ -985,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf62176)
     CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, xParagraph->getString());
 
     //Saving and Reloading the file
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     uno::Reference<drawing::XDrawPage> xPage2(getPage(0));
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage2->getCount());
@@ -1014,7 +1001,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedPdf)
     }
 
     createSdImpressDoc("odp/embedded-pdf.odp");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
@@ -1032,8 +1019,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
     loadFromFile(u"pdf/sample.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
-    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -1055,8 +1042,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
     loadFromFile(u"pdf/textheight1.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
-    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
 
     xmlDocUniquePtr pXml = parseLayout();
     sal_Int32 x = getXPath(pXml, "//textarray[1]", "x").toInt32();
@@ -1069,7 +1056,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
 #endif
     sal_Int32 y = getXPath(pXml, "//textarray[1]", "y").toInt32();
     // was 3092 originally
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3063, y, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3057, y, 0);
+
+    // Before fix, on reimport this was split over two lines when it
+    // should have remained as one line.
+    assertXPath(pXml, "//textarray", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
@@ -1082,8 +1073,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
     loadFromFile(u"pdf/differentfonts.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
-    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
 
     xmlDocUniquePtr pXml = parseLayout();
     {
@@ -1099,13 +1090,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
 #if !defined _WIN32
     //TODO, debug this
     {
-        OUString sWeight = getXPath(pXml, "//font[4]", "weight");
+        OUString sWeight = getXPath(pXml, "//font[3]", "weight");
         // was "normal" before
         CPPUNIT_ASSERT_EQUAL(u"bold"_ustr, sWeight);
         // check that the others remain as expected
-        OUString sFontName = getXPath(pXml, "//font[4]", "name");
+        OUString sFontName = getXPath(pXml, "//font[3]", "name");
         CPPUNIT_ASSERT_EQUAL(u"Liberation Sans"_ustr, sFontName);
-        int nFontHeight = getXPath(pXml, "//font[4]", "height").toInt32();
+        sal_Int32 nFontHeight = getXPath(pXml, "//font[3]", "height").toInt32();
         CPPUNIT_ASSERT_EQUAL(564, nFontHeight);
     }
 #endif
@@ -1121,7 +1112,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
     loadFromFile(u"pdf/BasicHindi.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(u"OpenDocument Drawing Flat XML"_ustr);
+    save(TestFilter::FODG);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1148,8 +1139,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
-    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
@@ -1185,6 +1176,36 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     CPPUNIT_ASSERT_MESSAGE("Shape should be Invisible", !bVisible);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfClippedImages)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/ClippedImages.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
+
+    uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroupShape.is());
+
+    uno::Reference<beans::XPropertySet> xGraphicShape1(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGraphicShape1.is());
+    bool bVisible(true);
+    xGraphicShape1->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT_MESSAGE("1st Graphic should be Visible", bVisible);
+
+    // before the fix the clip for this graphic wasn't taken into account so it was visible
+    // now it is detected as entirely clipped out and toggled to invisible
+    uno::Reference<beans::XPropertySet> xGraphicShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGraphicShape2.is());
+    xGraphicShape2->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT_MESSAGE("2nd Graphic should be Invisible", !bVisible);
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
@@ -1195,8 +1216,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
     loadFromFile(u"pdf/ErrareHumanumEst.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
-    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+    setImportFilterName(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -1210,10 +1231,116 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
     CPPUNIT_ASSERT_EQUAL(u"Errare humanum est"_ustr, sText);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/sciencejournalsource.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(TestFilter::FODG);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // The PT Serif embedded font should have been extracted and embedded into the fodg,
+    // ensure we have the bold variant
+    assertXPath(pXmlDoc, "/office:document/office:font-face-decls/style:font-face[@style:name='PT "
+                         "Serif']/svg:font-face-src/svg:font-face-uri[@loext:font-weight='bold' "
+                         "and @loext:font-style='normal']/office:binary-data");
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/pattern-stroke.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(TestFilter::FODG);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // ensure the stroke color is this redish color, and not gray which is what it
+    // defaults to if the stroke pattern isn't taken into account.
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='gr1']/"
+                         "style:graphic-properties[@svg:stroke-color='#ed1b2d']");
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/pattern-fill.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(TestFilter::FODG);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // ensure the stroke color is this redish color, and not gray which is what it
+    // defaults to if the stroke pattern isn't taken into account.
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='gr1']/"
+                         "style:graphic-properties[@style:repeat='repeat' and "
+                         "@draw:fill-image-width='1.27cm' and @draw:fill-image-height='1.27cm' and "
+                         "@draw:fill-image-name='Bitmap_20_1']");
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testPdfPageMasterOrientation)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/SampleSlideDeck.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(TestFilter::FODG);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // Ensure the page size is landscape. Before fix the master pagesize was
+    // portrait Letter so on reimport of the [f]odg the master page size is
+    // what is applied to the reloaded pages and was obviously wrong on reload.
+    assertXPath(pXmlDoc,
+                "/office:document/office:automatic-styles/style:page-layout[@style:name='PM0']/"
+                "style:page-layout-properties[@style:print-orientation='landscape']");
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextShear)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/textshear.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    save(TestFilter::FODG);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // Ensure the Lato font style is italic, seen as regular before improvement to take
+    // text shear into account.
+    assertXPath(pXmlDoc,
+                "/office:document/office:automatic-styles/style:style[@style:name='P2']/"
+                "style:text-properties[@style:font-name='Lato' and @fo:font-style='italic']");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
@@ -1241,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparenText)
 {
     createSdDrawDoc("transparent-text.fodg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
@@ -1258,7 +1385,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparenText)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testDefaultSubscripts)
 {
     createSdDrawDoc("tdf80194_defaultSubscripts.fodg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     uno::Reference<drawing::XDrawPage> xPage = getPage(0);
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(1), uno::UNO_QUERY);
@@ -1270,7 +1397,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testDefaultSubscripts)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf98477)
 {
     createSdImpressDoc("pptx/tdf98477grow.pptx");
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//anim:animateTransform", "by", u"0.5,0.5");
@@ -1280,7 +1407,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testAuthorField)
 {
     createSdImpressDoc("odp/author_fixed.odp");
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     uno::Reference<text::XTextField> xField = getTextFieldFromPage(0, 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
@@ -1295,7 +1422,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf50499)
 {
     createSdImpressDoc("pptx/tdf50499.pptx");
 
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//anim:animate[1]", "from", u"(-width/2)");
@@ -1307,7 +1434,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf100926)
 {
     createSdImpressDoc("pptx/tdf100926_ODP.pptx");
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     const SdrPage* pPage = GetPage(1);
     CPPUNIT_ASSERT(pPage != nullptr);
@@ -1335,7 +1462,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testPageWithTransparentBackground)
 {
     createSdImpressDoc("odp/page_transparent_background.odp");
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one page", static_cast<sal_Int32>(1),
                                  xDoc->getDrawPages()->getCount());
@@ -1367,7 +1494,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
     // attribute value "tb-rl90" is included in ODF strict.
     {
         createSdImpressDoc("pptx/shape-text-rotate.pptx");
-        saveAndReload(u"impress8"_ustr);
+        saveAndReload(TestFilter::ODP);
 
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
@@ -1381,7 +1508,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
 
         createSdImpressDoc("pptx/shape-text-rotate.pptx");
-        saveAndReload(u"impress8"_ustr);
+        saveAndReload(TestFilter::ODP);
 
         uno::Reference<drawing::XDrawPage> xPage(getPage(0));
         uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
@@ -1404,7 +1531,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf115394PPT)
     createSdImpressDoc("ppt/tdf115394.ppt");
 
     // Export the document and import again for a check
-    saveAndReload(u"MS PowerPoint 97"_ustr);
+    saveAndReload(TestFilter::PPT);
 
     double fTransitionDuration;
 
@@ -1430,7 +1557,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf115394PPT)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpress8)
 {
     createSdImpressDoc("odp/BulletsAsImage.odp");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
@@ -1480,7 +1607,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpress8)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpressOfficeOpenXml)
 {
     createSdImpressDoc("odp/BulletsAsImage.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
@@ -1532,7 +1659,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpressOfficeOpenXml)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageMsPowerpoint97)
 {
     createSdImpressDoc("odp/BulletsAsImage.odp");
-    saveAndReload(u"MS PowerPoint 97"_ustr);
+    saveAndReload(TestFilter::PPT);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
@@ -1585,9 +1712,9 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113822)
     createSdImpressDoc("pptx/tdf113822underline.pptx");
 
     // Was unable to export iterate container (tdf#99213).
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     // Was unable to import iterate container (tdf#113822).
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1603,9 +1730,9 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113822)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113818)
 {
     createSdImpressDoc("pptx/tdf113818-swivel.pptx");
-    saveAndReload(u"MS PowerPoint 97"_ustr);
-    saveAndReload(u"Impress Office Open XML"_ustr);
-    save(u"impress8"_ustr);
+    saveAndReload(TestFilter::PPT);
+    saveAndReload(TestFilter::PPTX);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//anim:animate[1]", "formula", u"width*sin(2.5*pi*$)");
@@ -1615,8 +1742,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113818)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf119629)
 {
     createSdImpressDoc("ppt/tdf119629.ppt");
-    saveAndReload(u"MS PowerPoint 97"_ustr);
-    save(u"impress8"_ustr);
+    saveAndReload(TestFilter::PPT);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1636,7 +1763,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf119629)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf141269)
 {
     createSdImpressDoc("odp/tdf141269.odp");
-    saveAndReload(u"MS PowerPoint 97"_ustr);
+    saveAndReload(TestFilter::PPT);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xShape.is());
@@ -1659,8 +1786,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf141269)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf123557)
 {
     createSdImpressDoc("pptx/trigger.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
-    save(u"impress8"_ustr);
+    saveAndReload(TestFilter::PPTX);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Contains 2 interactive sequences and 3 triggered effects.
@@ -1682,7 +1809,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf123557)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf126761)
 {
     createSdImpressDoc("ppt/tdf126761.ppt");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Get first paragraph of the text
@@ -1701,7 +1828,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf126761)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testGlow)
 {
     createSdDrawDoc("odg/glow.odg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Check glow properties
@@ -1740,7 +1867,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testGlow)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testGlowTextInShape)
 {
     createSdImpressDoc("odp/shape-text-glow-effect.odp");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     uno::Reference<drawing::XDrawPage> xDP(getPage(0));
     uno::Reference<beans::XPropertySet> xShape(xDP->getByIndex(0), uno::UNO_QUERY);
@@ -1781,7 +1908,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testGlowTextInShape)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
 {
     createSdDrawDoc("odg/softedges.odg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     auto xShapeProps(getShapeFromPage(0, 0));
 
     // Check property
@@ -1819,7 +1946,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testShadowBlur)
 {
     createSdImpressDoc("odp/shadow-blur.odp");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     sal_Int32 nRad = 0;
@@ -1840,14 +1967,14 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testRhbz1870501)
 {
     //Without the fix in place, it would crash at export time
     createSdDrawDoc("odg/rhbz1870501.odg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf152606)
 {
     //Without the fix in place, it would crash at import time
     createSdImpressDoc("pptx/tdf152606.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -1857,23 +1984,26 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf152606)
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf154754)
 {
-    //Without the fix in place, it would crash at export time
+    // odfvalidator warns because we are missing a xlink:href attribute and it therefore concludes that
+    // we must have a <office:binary-data> sub-element. Most likely the input file is invalid.
     skipValidation();
+
+    //Without the fix in place, it would crash at export time
     createSdImpressDoc("odp/tdf154754.odp");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf91060)
 {
     //Without the fix in place, it would crash at import time
     createSdImpressDoc("pptx/tdf91060.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128550)
 {
     createSdImpressDoc("pptx/tdf128550.pptx");
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='background']", 1);
     assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='text']", 4);
@@ -1884,7 +2014,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf140714)
     //Without the fix in place, shape will be imported as GraphicObjectShape instead of CustomShape.
 
     createSdImpressDoc("pptx/tdf140714.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShape->getShapeType());
@@ -1893,7 +2023,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf140714)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf156649)
 {
     createSdImpressDoc("pptx/tdf156649.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     auto xShapeProps(getShapeFromPage(0, 0));
     // Without the fix in place, this test would have failed with
@@ -2005,7 +2135,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testMasterPageBackgroundFullSize)
             xBackgroundProps->getPropertyValue(u"FillTransparence"_ustr).get<sal_Int16>());
     }
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     xMPS.set(mxComponent, uno::UNO_QUERY);
     xMPs.set(xMPS->getMasterPages());
@@ -2157,7 +2287,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testColumnsODG)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(700), pTextObj->GetTextColumnsSpacing());
     }
 
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
@@ -2195,7 +2325,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testColumnsODG)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf112126)
 {
     createSdDrawDoc("tdf112126.odg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
 
@@ -2216,7 +2346,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testCellProperties)
     skipValidation();
 
     createSdDrawDoc("odg/tablestyles.fodg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     const SdrPage* pPage = GetPage(1);
     auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -2248,7 +2378,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testUserTableStyles)
     skipValidation();
 
     createSdDrawDoc("odg/tablestyles.fodg");
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
@@ -2273,7 +2403,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testUserTableStyles)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf153179)
 {
     createSdImpressDoc("pptx/ole-emf_min.pptx");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     // Check number of shapes after export.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
@@ -2281,14 +2411,14 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf153179)
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
 {
-    for (OUString const& rFormat : { u"impress8"_ustr, u"Impress Office Open XML"_ustr })
+    for (TestFilter eFormat : { TestFilter::ODP, TestFilter::PPTX })
     {
         // Load the original file
         createSdImpressDoc("odp/SvgImageTest.odp");
         // Save into the target format
-        saveAndReload(rFormat);
+        saveAndReload(eFormat);
 
-        const OString sFailedMessage = "Failed on filter: " + rFormat.toUtf8();
+        const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFormat).toUtf8();
 
         // Check whether SVG graphic was exported as expected
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
@@ -2324,7 +2454,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTableBordersTransparancy)
 {
     createSdImpressDoc("pptx/tdf164936.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));

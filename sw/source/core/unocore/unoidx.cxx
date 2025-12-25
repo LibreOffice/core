@@ -1926,9 +1926,9 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     SwTextAttr *pNewTextAttr = nullptr;
     rDoc.getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags,
             /*pLayout*/nullptr, &pNewTextAttr);
-    if (bMark && *rPam.GetPoint() > *rPam.GetMark())
+    if (bMark)
     {
-        rPam.Exchange();
+        rPam.Normalize();
     }
 
     if (!pNewTextAttr)
@@ -2353,6 +2353,15 @@ SwXDocumentIndexes::getCount()
 uno::Any SAL_CALL
 SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 {
+    rtl::Reference< SwXDocumentIndex > xTmp = getDocumentIndexByIndex(nIndex);
+    uno::Any aRet;
+    aRet <<= uno::Reference< text::XDocumentIndex >(xTmp);
+    return aRet;
+}
+
+rtl::Reference< SwXDocumentIndex >
+SwXDocumentIndexes::getDocumentIndexByIndex(sal_Int32 nIndex)
+{
     SolarMutexGuard aGuard;
 
     sal_Int32 nIdx = 0;
@@ -2366,12 +2375,8 @@ SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
             pSect->GetFormat()->GetSectionNode() &&
             nIdx++ == nIndex )
         {
-           const rtl::Reference< SwXDocumentIndex > xTmp =
-               SwXDocumentIndex::CreateXDocumentIndex(
+           return SwXDocumentIndex::CreateXDocumentIndex(
                    rDoc, static_cast<SwTOXBaseSection *>(pSect));
-           uno::Any aRet;
-           aRet <<= uno::Reference< text::XDocumentIndex >(xTmp);
-           return aRet;
         }
     }
 

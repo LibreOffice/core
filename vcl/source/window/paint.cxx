@@ -1146,6 +1146,12 @@ void Window::Invalidate( InvalidateFlags nFlags )
     if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
         return;
 
+    if (!mpWindowImpl)
+    {
+        // ImplInvalidate() would dereference mpWindowImpl unconditionally.
+        return;
+    }
+
     ImplInvalidate( nullptr, nFlags );
     LogicInvalidate(nullptr);
 }
@@ -1252,6 +1258,8 @@ void Window::Validate()
 
 bool Window::HasPaintEvent() const
 {
+    if (!mpWindowImpl)
+        return false;
 
     if ( !mpWindowImpl->mbReallyVisible )
         return false;
@@ -1540,7 +1548,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     aMtf.WindStart();
     aMtf.Play(*pMaskedDevice);
     Bitmap aBmpEx( pMaskedDevice->GetBitmap( Point( 0, 0 ), aPaintRect.GetSize() ) );
-    i_pTargetOutDev->DrawBitmapEx( i_rPos, aBmpEx );
+    i_pTargetOutDev->DrawBitmap( i_rPos, aBmpEx );
     // get rid of virtual device now so they don't pile up during recursive calls
     pMaskedDevice.disposeAndClear();
 

@@ -55,7 +55,11 @@ namespace com::sun::star {
     }
 }
 
-namespace tools { class Rectangle; }
+namespace tools
+{
+    class Rectangle;
+    class XmlWriter;
+}
 class ScDPSaveData;
 class ScDPOutput;
 struct ScImportSourceDesc;
@@ -79,6 +83,34 @@ struct ScDPServiceDesc
     bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
 
+namespace sc
+{
+
+/** Stores the style information for a pivot table */
+struct PivotTableStyleInfo
+{
+    // Style name, which is used to determine how the pivot table is styles
+    OUString maName;
+
+    // Should headers be styled
+    bool mbShowRowHeaders = false;
+    bool mbShowColHeaders = false;
+
+    // Should use stripes / bands
+    bool mbShowRowStripes = false;
+    bool mbShowColStripes = false;
+
+    bool mbShowLastColumn = false;
+
+    // If no name is set, the style is not used
+    bool isSet() const
+    {
+        return !maName.isEmpty();
+    }
+};
+
+}
+
 class ScDPObject
 {
 private:
@@ -97,16 +129,14 @@ private:
     css::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
     std::unique_ptr<ScDPOutput> mpOutput;
 
-    // name -> sequence of sequences of css::xml::FastAttribute or css::xml::Attribute
-    // see PivotTable::putToInteropGrabBag in sc/source/filter/oox/pivottablebuffer.cxx for details
-    std::map<OUString, css::uno::Any> maInteropGrabBag;
-
     sal_Int32 mnHeaderRows;    // page fields plus filter button
     bool mbHeaderLayout : 1;  // true : grid, false : standard
     bool mbAllowMove : 1;
     bool mbSettingsChanged : 1;
     bool mbEnableGetPivotData : 1;
     bool mbHideHeader : 1 = false;
+
+    sc::PivotTableStyleInfo maStyleInfo;
 
     void              CreateObjects();
     void              CreateOutput();
@@ -156,7 +186,6 @@ public:
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
     void                WriteSourceDataTo( ScDPObject& rDest ) const;
-    void                WriteTempDataTo( ScDPObject& rDest ) const;
 
     const ScSheetSourceDesc* GetSheetDesc() const { return mpSheetDescription.get(); }
     const ScImportSourceDesc* GetImportSourceDesc() const { return mpImportDescription.get(); }
@@ -245,6 +274,16 @@ public:
     // (button attribute must be present)
     void                RefreshAfterLoad();
 
+    sc::PivotTableStyleInfo const& getStyleInfo() const
+    {
+        return maStyleInfo;
+    }
+
+    void setStyleInfo(sc::PivotTableStyleInfo const& rStyleInfo)
+    {
+        maStyleInfo = rStyleInfo;
+    }
+
     SC_DLLPUBLIC void BuildAllDimensionMembers();
 
     /**
@@ -269,17 +308,8 @@ public:
 
     SC_DLLPUBLIC static bool IsOrientationAllowed( css::sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags );
 
-    void PutInteropGrabBag(std::map<OUString, css::uno::Any>&& val)
-    {
-        maInteropGrabBag = std::move(val);
-    }
-    std::pair<bool, css::uno::Any> GetInteropGrabBagValue(const OUString& sName) const
-    {
-        if (const auto it = maInteropGrabBag.find(sName); it != maInteropGrabBag.end())
-            return { true, it->second };
-
-        return { false, css::uno::Any() };
-    }
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
+    void dumpXmlFile() const;
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;
@@ -434,10 +464,6 @@ public:
     bool IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const;
     bool IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const;
     bool HasTable( const ScRange& rRange ) const;
-
-#if DEBUG_PIVOT_TABLE
-    void DumpTables() const;
-#endif
 
 private:
     /** Only to be called from ScDPCache::RemoveReference(). */

@@ -636,7 +636,11 @@ void PushButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (GetSymbol() != SymbolType::DONTKNOW)
         rJsonWriter.put("symbol", symbolTypeName(GetSymbol()));
     if (isToggleButton())
+    {
         rJsonWriter.put("isToggle", true);
+        if (IsChecked())
+            rJsonWriter.put("checked", true);
+    }
 }
 
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
@@ -2999,13 +3003,13 @@ void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Button::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("checked", IsChecked());
 
-    OUString sGroupId;
+    OUStringBuffer sGroupId;
     std::vector<VclPtr<RadioButton>> aGroup = GetRadioButtonGroup();
     for(const auto& pButton : aGroup)
-        sGroupId += pButton->get_id();
+        sGroupId.append(pButton->get_id());
 
     if (!sGroupId.isEmpty())
-        rJsonWriter.put("group", sGroupId);
+        rJsonWriter.put("group", sGroupId.toString());
 
     if (!!maImage)
     {

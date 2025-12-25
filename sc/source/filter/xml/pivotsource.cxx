@@ -52,11 +52,27 @@ void PivotTableSources::appendSelectedPages( ScDPObject* pObj, SelectedPagesType
     maSelectedPagesList.emplace_back(pObj, std::move(rSelected));
 }
 
-namespace {
-
-struct SelectedPageProcessor
+void PivotTableSources::process()
 {
-    void operator() ( PivotTableSources::SelectedPages& rItem )
+    for (SheetSource const& rSource : maSheetSources)
+    {
+        ScDPObject* pObj = rSource.mpDP;
+        pObj->SetSheetDesc(rSource.maDesc);
+    }
+
+    for (DBSource const& rSource: maDBSources)
+    {
+        ScDPObject* pObj = rSource.mpDP;
+        pObj->SetImportDesc(rSource.maDesc);
+    }
+
+    for (ServiceSource const& rSource: maServiceSources)
+    {
+        ScDPObject* pObj = rSource.mpDP;
+        pObj->SetServiceData(rSource.maDesc);
+    }
+
+    for (SelectedPages const& rItem: maSelectedPagesList)
     {
         // Set selected pages after building all dimension members.
         if (!rItem.mpDP)
@@ -76,43 +92,6 @@ struct SelectedPageProcessor
             pDim->SetCurrentPage(&rSelected);
         }
     }
-};
-
-struct PivotSheetDescSetter
-{
-    void operator() ( sc::PivotTableSources::SheetSource& rSrc )
-    {
-        ScDPObject* pObj = rSrc.mpDP;
-        pObj->SetSheetDesc(rSrc.maDesc);
-    }
-};
-
-struct PivotDBDescSetter
-{
-    void operator() ( sc::PivotTableSources::DBSource& rSrc )
-    {
-        ScDPObject* pObj = rSrc.mpDP;
-        pObj->SetImportDesc(rSrc.maDesc);
-    }
-};
-
-struct PivotServiceDataSetter
-{
-    void operator() ( sc::PivotTableSources::ServiceSource& rSrc )
-    {
-        ScDPObject* pObj = rSrc.mpDP;
-        pObj->SetServiceData(rSrc.maDesc);
-    }
-};
-
-}
-
-void PivotTableSources::process()
-{
-    std::for_each(maSheetSources.begin(), maSheetSources.end(), PivotSheetDescSetter());
-    std::for_each(maDBSources.begin(), maDBSources.end(), PivotDBDescSetter());
-    std::for_each(maServiceSources.begin(), maServiceSources.end(), PivotServiceDataSetter());
-    std::for_each(maSelectedPagesList.begin(), maSelectedPagesList.end(), SelectedPageProcessor());
 }
 
 }

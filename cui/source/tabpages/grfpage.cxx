@@ -652,11 +652,13 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
             m_aExampleWN.SetBottom(nVal);
         }
 
+        assert(nSpin >= SAL_MIN_INT64 / 10 && nSpin <= SAL_MAX_INT64 / 10);
         m_xLeftMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         m_xRightMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         nSpin = m_xTopMF->normalize(m_aOrigSize.Height()) / 20;
         nSpin = vcl::ConvertValue( nSpin, m_aOrigSize.Width(), 0,
                                                eUnit, m_xLeftMF->get_unit() );
+        assert(nSpin >= SAL_MIN_INT64 / 10 && nSpin <= SAL_MAX_INT64 / 10);
         m_xTopMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         m_xBottomMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
 

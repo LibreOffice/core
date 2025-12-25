@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 class AuthFallbackDlg : public weld::GenericDialogController
 {

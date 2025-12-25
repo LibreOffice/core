@@ -36,6 +36,7 @@
 #include <unocontentcontrol.hxx>
 #include <unoport.hxx>
 #include <unofield.hxx>
+#include <unofieldcoll.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -499,8 +500,7 @@ void SdtHelper::createDateContentControl()
         xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::Any(sFullDate));
     }
 
-    uno::Reference<util::XRefreshable> xRefreshable(m_rDM_Impl.GetTextDocument()->getTextFields(),
-                                                    uno::UNO_QUERY);
+    rtl::Reference<SwXTextFieldTypes> xRefreshable(m_rDM_Impl.GetTextDocument()->getSwTextFields());
     xRefreshable->refresh();
 
     // Store all unused sdt parameters from grabbag

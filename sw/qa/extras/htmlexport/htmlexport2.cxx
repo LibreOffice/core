@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to plain HTML:
-    saveAndReload(u"HTML (StarWriter)"_ustr);
+    saveAndReload(TestFilter::HTML_WRITER);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected:
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testJson)
     // When exporting to HTML, and specifying options as JSON:
     setFilterOptions(u"{\"XhtmlNs\":{\"type\":\"string\", \"value\":\"reqif-xhtml\"},"
                      "\"ShapeDPI\":{\"type\":\"long\",\"value\":\"192\"}}"_ustr);
-    save(u"HTML (StarWriter)"_ustr);
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure those options are not ignored:
     // Without the accompanying fix in place, this test would have failed, as GetPngPath() expects
@@ -489,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
     createSwWebDoc("clearing-break.html");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
     xBodyText->insertTextContent(xCursor, xTextContent, false);
 
     // When exporting to HTML:
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure that the width is not a fixed size, that would break on resizing the browser
     // window:
@@ -623,7 +623,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
     xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u".\\another.odt"_ustr));
 
     // Export
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pHtmlDoc);
@@ -638,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
 {
     createSwDoc("TableWithIndent.fodt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     // Parse it as XML (strict!)
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
@@ -981,7 +981,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
 
     // Test import
 
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
@@ -1010,7 +1010,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     // Test import
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
@@ -1075,7 +1075,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_NoPreserveSpaces)
 
     // Test import
 
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
 
     CPPUNIT_ASSERT_EQUAL(u"No special spaces"_ustr, getParagraph(1)->getString());
@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoPreserveSpaces)
     // Test import
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     loadFromURL(maTempFile.GetURL());
 
     CPPUNIT_ASSERT_EQUAL(u"No special spaces"_ustr, getParagraph(1)->getString());

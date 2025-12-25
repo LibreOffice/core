@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_win,\
     i18nutil \
     sal \
     salhelper \
+    sot \
     tl \
     utl \
 ))

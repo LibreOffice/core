@@ -497,25 +497,22 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 
         // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
         tools::Long nIndent = 0;
-        const SvxHorJustifyItem* pHorJustifyItem = rDoc.GetAttr( aCellPos, ATTR_HOR_JUSTIFY );
-        SvxCellHorJustify eHorJust = pHorJustifyItem ? pHorJustifyItem->GetValue() : SvxCellHorJustify::Standard;
+        const SvxHorJustifyItem& rHorJustifyItem = rDoc.GetAttr( aCellPos, ATTR_HOR_JUSTIFY );
+        SvxCellHorJustify eHorJust = rHorJustifyItem.GetValue();
         if ( eHorJust == SvxCellHorJustify::Left )
         {
-            const ScIndentItem* pIndentItem = rDoc.GetAttr( aCellPos, ATTR_INDENT );
-            if ( pIndentItem )
-            {
-                nIndent = static_cast< tools::Long >( pIndentItem->GetValue() );
-            }
+            const ScIndentItem& rIndentItem = rDoc.GetAttr( aCellPos, ATTR_INDENT );
+            nIndent = static_cast< tools::Long >( rIndentItem.GetValue() );
         }
 
-        const SvxMarginItem* pMarginItem = rDoc.GetAttr( aCellPos, ATTR_MARGIN );
+        const SvxMarginItem& rMarginItem = rDoc.GetAttr( aCellPos, ATTR_MARGIN );
         ScViewData& rViewData = mpViewShell->GetViewData();
         double nPPTX = rViewData.GetPPTX();
         double nPPTY = rViewData.GetPPTY();
-        tools::Long nLeftM = ( pMarginItem ? static_cast< tools::Long >( ( pMarginItem->GetLeftMargin() + nIndent ) * nPPTX ) : 0 );
-        tools::Long nTopM = ( pMarginItem ? static_cast< tools::Long >( pMarginItem->GetTopMargin() * nPPTY ) : 0 );
-        tools::Long nRightM = ( pMarginItem ? static_cast< tools::Long >( pMarginItem->GetRightMargin() * nPPTX ) : 0 );
-        tools::Long nBottomM = ( pMarginItem ? static_cast< tools::Long >( pMarginItem->GetBottomMargin() * nPPTY ) : 0 );
+        tools::Long nLeftM = static_cast< tools::Long >( ( rMarginItem.GetLeftMargin() + nIndent ) * nPPTX );
+        tools::Long nTopM = static_cast< tools::Long >( rMarginItem.GetTopMargin() * nPPTY );
+        tools::Long nRightM = static_cast< tools::Long >( rMarginItem.GetRightMargin() * nPPTX );
+        tools::Long nBottomM = static_cast< tools::Long >( rMarginItem.GetBottomMargin() * nPPTY );
         tools::Long nWidth = aSize.getWidth() - nLeftM - nRightM;
         aSize.setWidth( nWidth );
         aSize.setHeight( aSize.getHeight() - nTopM - nBottomM );
@@ -536,8 +533,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             return the size of the complete text then, which is used to expand
             the cell bounding box in ScAccessibleCell::GetBoundingBox()
             (see sc/source/ui/Accessibility/AccessibleCell.cxx). */
-        const ScRotateValueItem* pItem = rDoc.GetAttr( aCellPos, ATTR_ROTATE_VALUE );
-        if( pItem && (pItem->GetValue() != 0_deg100) )
+        const ScRotateValueItem& rItem = rDoc.GetAttr( aCellPos, ATTR_ROTATE_VALUE );
+        if (rItem.GetValue() != 0_deg100)
         {
             pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
             tools::Long nTxtWidth = static_cast< tools::Long >( pEditEngine->CalcTextWidth() );
@@ -546,8 +543,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         else
         {
             // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
-            const ScLineBreakCell* pLineBreakItem = rDoc.GetAttr( aCellPos, ATTR_LINEBREAK );
-            bool bLineBreak = ( pLineBreakItem && pLineBreakItem->GetValue() );
+            const ScLineBreakCell& rLineBreakItem = rDoc.GetAttr( aCellPos, ATTR_LINEBREAK );
+            bool bLineBreak = rLineBreakItem.GetValue();
             if ( !bLineBreak )
             {
                 tools::Long nTxtWidth = static_cast< tools::Long >( pEditEngine->CalcTextWidth() );
@@ -595,9 +592,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         }
 
         tools::Long nOffsetY = 0;
-        const SvxVerJustifyItem* pVerJustifyItem = rDoc.GetAttr( aCellPos, ATTR_VER_JUSTIFY );
-        SvxCellVerJustify eVerJust = ( pVerJustifyItem ? pVerJustifyItem->GetValue() : SvxCellVerJustify::Standard );
-        switch ( eVerJust )
+        const SvxVerJustifyItem& rVerJustifyItem = rDoc.GetAttr( aCellPos, ATTR_VER_JUSTIFY );
+        switch (rVerJustifyItem.GetValue())
         {
             case SvxCellVerJustify::Standard:
             case SvxCellVerJustify::Bottom:
@@ -653,7 +649,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 {
     ScDocShell* pDocSh = nullptr;
     if (pViewShell)
-        pDocSh = &pViewShell->GetViewData().GetDocShell();
+        pDocSh = pViewShell->GetViewData().GetDocShell();
     return pDocSh;
 }
 
@@ -851,7 +847,7 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool b
         {
             if ( !mpTxtWnd->IsInputActive() )
             {
-                mpTxtWnd->StartEditEngine();
+                mpTxtWnd->StartEditEngine(ScInputHandler::ErrorMessage);
                 mpTxtWnd->GrabFocus();
 
                 mpEditView = mpTxtWnd->GetEditView();

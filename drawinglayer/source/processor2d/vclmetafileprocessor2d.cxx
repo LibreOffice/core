@@ -1229,7 +1229,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     if (bPDFExport && !bDecorative)
     {
         // PDF export. Emulate data handling from UnoControlPDFExportContact
-        std::unique_ptr<vcl::PDFWriter::AnyWidget> pPDFControl(
+        std::unique_ptr<vcl::pdf::PDFWriter::AnyWidget> pPDFControl(
             ::toolkitform::describePDFControl(rXControl, *mpPDFExtOutDevData));
 
         if (pPDFControl)
@@ -1249,24 +1249,24 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             pPDFControl->TextFont.SetFontSize(aFontSize);
 
             mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Form);
-            vcl::PDFWriter::StructAttributeValue role;
+            vcl::pdf::PDFWriter::StructAttributeValue role;
             switch (pPDFControl->Type)
             {
-                case vcl::PDFWriter::PushButton:
-                    role = vcl::PDFWriter::Pb;
+                case vcl::pdf::PDFWriter::PushButton:
+                    role = vcl::pdf::PDFWriter::Pb;
                     break;
-                case vcl::PDFWriter::RadioButton:
-                    role = vcl::PDFWriter::Rb;
+                case vcl::pdf::PDFWriter::RadioButton:
+                    role = vcl::pdf::PDFWriter::Rb;
                     break;
-                case vcl::PDFWriter::CheckBox:
-                    role = vcl::PDFWriter::Cb;
+                case vcl::pdf::PDFWriter::CheckBox:
+                    role = vcl::pdf::PDFWriter::Cb;
                     break;
                 default: // there is a paucity of roles, tv is the catch-all one
-                    role = vcl::PDFWriter::Tv;
+                    role = vcl::pdf::PDFWriter::Tv;
                     break;
             }
             // ISO 14289-1:2014, Clause: 7.18.4
-            mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Role, role);
+            mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Role, role);
             // ISO 14289-1:2014, Clause: 7.18.1
             OUString const& rAltText(rControlPrimitive.GetAltText());
             if (!rAltText.isEmpty())
@@ -1304,7 +1304,8 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
         else
             mpPDFExtOutDevData->WrapBeginStructureElement(
                 vcl::pdf::StructElement::NonStructElement);
-        mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement, vcl::PDFWriter::Block);
+        mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Placement,
+                                                  vcl::pdf::PDFWriter::Block);
         auto const range(rControlPrimitive.getB2DRange(getViewInformation2D()));
         tools::Rectangle const aLogicRect(basegfx::fround<tools::Long>(range.getMinX()),
                                           basegfx::fround<tools::Long>(range.getMinY()),
@@ -1440,7 +1441,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
 
     if (bIsExportTaggedPDF)
     {
-        mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::PDFWriter::LinkAnnotation,
+        mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::pdf::PDFWriter::LinkAnnotation,
                                                            aBookmark.nLinkId);
         mpPDFExtOutDevData->EndStructureElement();
     }
@@ -2706,11 +2707,11 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         basegfx::fround(aDiscreteRange.getHeight()), nMaximumQuadraticPixels));
 
     // add to target metafile (will create MetaFloatTransparentAction)
-    mpOutputDevice->DrawBitmapEx(Point(basegfx::fround<tools::Long>(aLogicRange.getMinX()),
-                                       basegfx::fround<tools::Long>(aLogicRange.getMinY())),
-                                 Size(basegfx::fround<tools::Long>(aLogicRange.getWidth()),
-                                      basegfx::fround<tools::Long>(aLogicRange.getHeight())),
-                                 aBitmap);
+    mpOutputDevice->DrawBitmap(Point(basegfx::fround<tools::Long>(aLogicRange.getMinX()),
+                                     basegfx::fround<tools::Long>(aLogicRange.getMinY())),
+                               Size(basegfx::fround<tools::Long>(aLogicRange.getWidth()),
+                                    basegfx::fround<tools::Long>(aLogicRange.getHeight())),
+                               aBitmap);
 }
 
 void VclMetafileProcessor2D::processStructureTagPrimitive2D(
@@ -2759,13 +2760,13 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 case vcl::pdf::StructElement::Formula:
                 case vcl::pdf::StructElement::Figure:
                 case vcl::pdf::StructElement::Annot:
-                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
-                                                              vcl::PDFWriter::Block);
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Placement,
+                                                              vcl::pdf::PDFWriter::Block);
                     break;
                 case vcl::pdf::StructElement::TableData:
                 case vcl::pdf::StructElement::TableHeader:
-                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
-                                                              vcl::PDFWriter::Inline);
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Placement,
+                                                              vcl::pdf::PDFWriter::Inline);
                     break;
                 default:
                     break;
@@ -2795,8 +2796,8 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
             }
             if (rTagElement == vcl::pdf::StructElement::TableHeader)
             {
-                mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Scope,
-                                                          vcl::PDFWriter::Column);
+                mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Scope,
+                                                          vcl::pdf::PDFWriter::Column);
             }
         }
         // background object

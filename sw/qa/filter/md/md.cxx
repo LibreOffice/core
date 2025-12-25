@@ -14,6 +14,8 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <vcl/graphicfilter.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -47,7 +49,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/filter/md/data/"_ustr, u"Markdown"_ustr)
+        : SwModelTestBase(u"/sw/qa/filter/md/data/"_ustr)
     {
     }
 
@@ -66,10 +68,24 @@ CPPUNIT_TEST_FIXTURE(Test, testExportFormula)
     createSwDoc("tdf168572.odt");
 
     // Without the fix in place, this test would have crashed here
-    save(mpFilter);
+    save(TestFilter::MD);
 
     std::string aActual = TempFileToString();
-    std::string aExpected("![]()" SAL_NEWLINE_STRING);
+
+    CPPUNIT_ASSERT(aActual.starts_with("![]("));
+    CPPUNIT_ASSERT(aActual.ends_with(")" SAL_NEWLINE_STRING));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testExportTableFrame)
+{
+    createSwDoc("table.odt");
+
+    // Without the fix in place, this test would have crashed here
+    save(TestFilter::MD);
+
+    std::string aActual = TempFileToString();
+    std::string aExpected("Text" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+                          "![]()Text" SAL_NEWLINE_STRING);
 
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
@@ -78,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
 {
     createSwDoc("basic-elements.fodt");
 
-    save(mpFilter);
+    save(TestFilter::MD);
     std::string aActual = TempFileToString();
     std::string aExpected(
         // clang-format off
@@ -110,9 +126,21 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169884_import_crash)
+{
+    setImportFilterName(TestFilter::MD);
+    createSwDoc("tdf169884.md");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Selected range of Release "
+                                  "note\nhttps://wiki.documentfoundation.org/ReleaseNotes/"
+                                  "26.2#Markdown::text=Added%20support%20for%20importing%20from%"
+                                  "20Markdown%20format"),
+                         getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testHeading)
 {
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("heading.md");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getParagraph(1)->getString());
@@ -122,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHeading)
 
 CPPUNIT_TEST_FIXTURE(Test, testList)
 {
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("list.md");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SVX_NUM_ARABIC), getNumberingTypeOfParagraph(1));
@@ -143,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
     createSwDoc("redlines-and-comments.odt");
 
     // Save as a markdown document
-    save(mpFilter);
+    save(TestFilter::MD);
     SvFileStream fileStream(maTempFile.GetURL(), StreamMode::READ);
     OUString aParagraph;
     // 1st paragraph
@@ -166,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
 
 CPPUNIT_TEST_FIXTURE(Test, testTables)
 {
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("tables.md");
 
     uno::Reference<text::XTextContent> const xtable(getParagraphOrTable(1));
@@ -232,7 +260,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     pWrtShell->SetAttrSet(aSet);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the format of B is exported:
     std::string aActual = TempFileToString();
@@ -270,7 +298,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingList)
     pWrtShell->NumUpDown(/*bDown=*/true);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure list type and level is exported:
     std::string aActual = TempFileToString();
@@ -314,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the image is exported:
     std::string aActual = TempFileToString();
@@ -358,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingTable)
     pWrtShell->Insert(u"C3"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the table content is not lost:
     std::string aActual = TempFileToString();
@@ -385,7 +413,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdImport)
 {
     // Given a document with a "block quote" 2nd paragraph:
     // When importing that document:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("quote.md");
 
     // Then make sure that the paragraph style is set correctly:
@@ -419,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdExport)
     pWrtShell->Insert(u"test"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the format of the paragraph is exported:
     std::string aActual = TempFileToString();
@@ -453,7 +481,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCodeBlockMdExport)
     pDoc->SetTextFormatColl(*pCursor, pColl);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the code block is exported:
     std::string aActual = TempFileToString();
@@ -498,7 +526,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableColumnAdjustMdExport)
     pWrtShell->SetAttrItem(SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST));
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the table content is not lost:
     std::string aActual = TempFileToString();
@@ -522,7 +550,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdImport)
 {
     // Given a document with an image which has a link on it:
     // When importing that document:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("image-and-link.md");
 
     // Then make sure the link is not lost:
@@ -564,7 +592,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the image is exported and the link is not lost:
     std::string aActual = TempFileToString();
@@ -587,7 +615,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNewlineMdExport)
     pWrtShell->Insert(u"B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     std::string aActual = TempFileToString();
     std::string aExpected("A  " SAL_NEWLINE_STRING "B" SAL_NEWLINE_STRING);
@@ -621,7 +649,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageDescTitleExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the image is exported and the desc/title is not lost:
     std::string aActual = TempFileToString();
@@ -669,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiParaTableMdExport)
     pWrtShell->Insert(u"C3"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure the A1 cell still only has inlines:
     std::string aActual = TempFileToString();
@@ -725,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTableMdExport)
     pWrtShell->Insert(u"B2 outer"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure that the inner table is exported as flat paragraphs:
     std::string aActual = TempFileToString();
@@ -748,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTableMdExport)
 CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdImport)
 {
     // Given a document with 2 task list items:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
 
     // When importing that document from markdown:
     createSwDoc("task-list-items.md");
@@ -807,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdExport)
     pWrtShell->Insert(u" bar"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure that the task list item markup is used:
     std::string aActual = TempFileToString();
@@ -824,7 +852,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdImport)
 {
     // Given a document with an embedded image:
     // When importing that document:
-    setImportFilterName("Markdown");
+    setImportFilterName(TestFilter::MD);
     createSwDoc("embedded-image.md");
 
     // Then make sure the embedded image gets imported, with the correct size:
@@ -866,7 +894,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedImageMdExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure that the embedded image is exported:
     std::string aActual = TempFileToString();
@@ -899,13 +927,78 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedAnchoredImageMdExport)
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
-    save(mpFilter);
+    save(TestFilter::MD);
 
     // Then make sure that the embedded image is exported:
     std::string aActual = TempFileToString();
     // Without the accompanying fix in place, this test would have failed, aActual was 'A  B\n'.
     CPPUNIT_ASSERT(aActual.starts_with("A ![mydesc](data:image/png;base64,"));
     CPPUNIT_ASSERT(aActual.ends_with(") B" SAL_NEWLINE_STRING));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTemplateMdImport)
+{
+    // Given a document with a template:
+    setImportFilterOptions(uR"json({
+    "TemplateURL": {
+        "type": "string",
+        "value": "./template.ott"
+    }
+})json"_ustr);
+
+    // When importing that markdown:
+    createSwDoc("template.md");
+
+    // Then make sure the styles are taken from the template:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+    SwFormatColl* pStyle = pTextNode->GetFormatColl();
+    auto pXFillStyleItem = pStyle->GetAttrSet().GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (drawing::FillStyle_SOLID)
+    // - Actual  : 0 (drawing::FillStyle_NONE)
+    // i.e. the heading 1 style had the default black color instead of ~blue.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, pXFillStyleItem->GetValue());
+    auto pXFillColorItem = pStyle->GetAttrSet().GetItem<XFillColorItem>(XATTR_FILLCOLOR);
+    CPPUNIT_ASSERT_EQUAL(Color(0x156082), pXFillColorItem->GetColorValue());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxTemplateMdImport)
+{
+    // Given a document with a DOCX template:
+    setImportFilterOptions(uR"json({
+    "TemplateURL": {
+        "type": "string",
+        "value": "./template.docx"
+    }
+})json"_ustr);
+
+    // When importing that markdown:
+    // Without the accompanying fix in place, this crashed.
+    createSwDoc("template.md");
+
+    // Then make sure the styles are taken from the template:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+    SwFormatColl* pStyle = pTextNode->GetFormatColl();
+    auto pXFillStyleItem = pStyle->GetAttrSet().GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, pXFillStyleItem->GetValue());
+    auto pXFillColorItem = pStyle->GetAttrSet().GetItem<XFillColorItem>(XATTR_FILLCOLOR);
+    CPPUNIT_ASSERT_EQUAL(Color(0x156082), pXFillColorItem->GetColorValue());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOLEWithoutGraphicMdExport)
+{
+    // Given a document with an OLE object that has no graphic:
+    createSwDoc("ole-without-graphic.odt");
+
+    // When exporting it as markdown:
+    // Then make sure this doesn't crash:
+    save(TestFilter::MD);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

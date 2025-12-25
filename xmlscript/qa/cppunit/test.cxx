@@ -33,6 +33,8 @@
 #include <xmlscript/xml_helper.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace ::com::sun::star::uno;
 
 using namespace ::com::sun::star;

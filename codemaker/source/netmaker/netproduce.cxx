@@ -14,6 +14,7 @@
 #include <rtl/strbuf.hxx>
 #include <unoidl/unoidl.hxx>
 
+#include <codemaker/unotype.hxx>
 #include "netproduce.hxx"
 #include "csharpfile.hxx"
 

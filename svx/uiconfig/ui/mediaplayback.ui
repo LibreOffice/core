@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.2 -->
 <interface domain="svx">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="MediaPlaybackPanel">
     <property name="visible">True</property>
@@ -133,7 +133,7 @@
                 <property name="visible">True</property>
                 <property name="valign">center</property>
                 <property name="vexpand">True</property>
-                <property name="label" translatable="no">Mute</property>
+                <property name="label" translatable="yes" context="mediaplayback|mute">Mute</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">avmedia/res/av02054.png</property>
               </object>
@@ -194,7 +194,7 @@
             <child>
               <object class="GtkToggleToolButton" id="play">
                 <property name="visible">True</property>
-                <property name="label" translatable="no">Play</property>
+                <property name="label" translatable="yes" context="mediaplayback|play">Play</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">avmedia/res/av02049.png</property>
               </object>
@@ -206,7 +206,7 @@
             <child>
               <object class="GtkToggleToolButton" id="pause">
                 <property name="visible">True</property>
-                <property name="label" translatable="no">Pause</property>
+                <property name="label" translatable="yes" context="mediaplayback|pause">Pause</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">avmedia/res/av02050.png</property>
               </object>
@@ -218,7 +218,7 @@
             <child>
               <object class="GtkToggleToolButton" id="stop">
                 <property name="visible">True</property>
-                <property name="label" translatable="no">Stop</property>
+                <property name="label" translatable="yes" context="mediaplayback|stop">Stop</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">avmedia/res/av02051.png</property>
               </object>
@@ -240,7 +240,7 @@
             <child>
               <object class="GtkToggleToolButton" id="loop">
                 <property name="visible">True</property>
-                <property name="label" translatable="no">Repeat</property>
+                <property name="label" translatable="yes" context="mediaplayback|repeat">Repeat</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">avmedia/res/av02052.png</property>
               </object>

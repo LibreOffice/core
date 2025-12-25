@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class Tdf137637(UITestCase):
 
-   def test_tdf137637(self):
+    def test_tdf137637(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()

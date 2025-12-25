@@ -189,6 +189,11 @@ void SwWrtShell::SelAll()
         {
             bNeedsExtendedSelectAll = !HasWholeTabSelection();
         }
+        // tdf#136419 Select All in Frame does not select all contents
+        else if (!bNeedsExtendedSelectAll)
+        {
+            bNeedsExtendedSelectAll = GetCurrFlyFrame(false) != nullptr;
+        }
 
         if (bNeedsExtendedSelectAll)
         {

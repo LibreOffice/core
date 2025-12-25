@@ -18,7 +18,7 @@
  */
 
 #include <SelectLayerDlg.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 SdSelectLayerDlg::SdSelectLayerDlg(weld::Window* pParent)
     : GenericDialogController(pParent, u"modules/sdraw/ui/selectlayerdialog.ui"_ustr,

@@ -93,6 +93,7 @@ SFX_IMPL_INTERFACE(SwView, SfxViewShell)
 void SwView::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SwNavigatorWrapper::GetChildWindowId(), true); // SID_NAVIGATOR
+    GetStaticInterface()->RegisterChildWindow(SID_QUICKFIND, false);
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 
@@ -266,6 +267,11 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( lcl_IsViewMarks(*pOpt) ); break;
             case FN_VIEW_META_CHARS:
                 aBool.SetValue( pOpt->IsViewMetaChars() ); break;
+            case FN_VIEW_REDLINE_RENDER_MODE:
+            {
+                aBool.SetValue(pOpt->GetRedlineRenderMode() != SwRedlineRenderMode::Standard);
+            }
+            break;
             case FN_VIEW_TABLEGRID:
                 aBool.SetValue( pOpt->IsTableBoundaries() ); break;
             case SID_TOGGLE_NOTES:
@@ -379,6 +385,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             break;
             case SID_CLICK_CHANGE_ROTATION:
                 aBool.SetValue( pOpt->IsClickChangeRotation());
+            break;
+            case FN_VIEW_BASELINE_GRID_VISIBLE:
+                aBool.SetValue(pOpt->IsBaselineGridVisible());
             break;
         }
 
@@ -667,6 +676,21 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         lcl_SetViewMetaChars( *pOpt, bFlag );
         break;
 
+    case FN_VIEW_REDLINE_RENDER_MODE:
+    {
+        SwRedlineRenderMode eMode
+            = bFlag ? SwRedlineRenderMode::OmitDeletes : SwRedlineRenderMode::Standard;
+        if (eState == STATE_TOGGLE)
+        {
+            eMode = pOpt->GetRedlineRenderMode() == SwRedlineRenderMode::Standard
+                        ? SwRedlineRenderMode::OmitDeletes
+                        : SwRedlineRenderMode::Standard;
+        }
+
+        pOpt->SetRedlineRenderMode(eMode);
+    }
+    break;
+
     case SID_AUTOSPELL_CHECK:
         const SfxPoolItem* pItem;
 
@@ -799,6 +823,11 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsClickChangeRotation();
         pOpt->SetClickChangeRotation(bFlag);
     break;
+    case FN_VIEW_BASELINE_GRID_VISIBLE:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsBaselineGridVisible();
+        pOpt->SetBaselineGridVisible( bFlag );
+        break;
 
     default:
         OSL_FAIL("wrong request method");

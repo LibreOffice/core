@@ -109,7 +109,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_bSupportedPropertiesAreKnown )
         {
-            m_aSupportedProperties = StlSyntaxSequence<css::beans::Property>(doDescribeSupportedProperties());
+            m_aSupportedProperties = doDescribeSupportedProperties();
             m_bSupportedPropertiesAreKnown = true;
         }
         return m_aSupportedProperties;
@@ -300,7 +300,7 @@ namespace pcr
     const Property& PropertyHandler::impl_getPropertyFromName_throw( const OUString& _rPropertyName ) const
     {
         const_cast< PropertyHandler* >( this )->getSupportedProperties();
-        StlSyntaxSequence< Property >::const_iterator pFound = std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
+        auto pFound = std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
             FindPropertyByName( _rPropertyName )
         );
         if ( pFound == m_aSupportedProperties.end() )

@@ -94,6 +94,7 @@
 #include <formatlinebreak.hxx>
 #include <translatelangselect.hxx>
 #include <copyfielddlg.hxx>
+#include <SwGridTabPage.hxx>
 
 using namespace css::frame;
 using namespace css::uno;
@@ -457,10 +458,11 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptio
 namespace
 {
 class AbstractDropDownFieldDialog_Impl
-    : public vcl::AbstractDialogImpl_Sync<AbstractDropDownFieldDialog, sw::DropDownFieldDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractDropDownFieldDialog, sw::DropDownFieldDialog>
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    void Apply() override { m_pDlg->Apply(); }
     bool PrevButtonPressed() const override { return m_pDlg->PrevButtonPressed(); }
     bool NextButtonPressed() const override { return m_pDlg->NextButtonPressed(); }
 };
@@ -1289,6 +1291,9 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         break;
         case RID_SW_TP_COMPARISON_OPT :
             pRet = SwCompareOptionsTabPage::Create;
+        break;
+        case RID_SVXPAGE_GRID :
+            pRet = SwGridTabPage::Create;
         break;
     }
 

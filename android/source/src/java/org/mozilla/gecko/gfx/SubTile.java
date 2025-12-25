@@ -18,7 +18,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class SubTile extends Layer {
-    private static String LOGTAG = SubTile.class.getSimpleName();
+    private static final String LOGTAG = SubTile.class.getSimpleName();
     public final TileIdentifier id;
 
     private final RectF mBounds;

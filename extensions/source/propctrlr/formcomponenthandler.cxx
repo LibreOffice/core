@@ -98,6 +98,7 @@
 #include <svx/numinf.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/unohelp.hxx>
@@ -398,14 +399,13 @@ namespace pcr
                         aPropertyValue >>= aOldIdStrings;
                         try
                         {
-                            const OUString* pOldIdStrings = aOldIdStrings.getConstArray();
                             sal_Int32 nOldIdCount = aOldIdStrings.getLength();
                             for ( i = 0; i < nNewCount; ++i )
                             {
                                 OUString aOldPureIdStr;
                                 if( i < nOldIdCount )
                                 {
-                                    OUString aOldIdStr = pOldIdStrings[i];
+                                    OUString aOldIdStr = aOldIdStrings[i];
                                     aOldPureIdStr = aOldIdStr.copy( 1 );
                                 }
                                 const OUString& aNewPureIdStr = pNewPureIds[i];

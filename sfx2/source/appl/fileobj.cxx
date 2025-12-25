@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -211,7 +212,7 @@ static OUString impl_getFilter( const OUString& _rURL )
             css::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
-            utl::MediaDescriptor aDescr;
+            comphelper::SequenceAsHashMap aDescr;
             aDescr[ utl::MediaDescriptor::PROP_URL ] <<= _rURL;
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();

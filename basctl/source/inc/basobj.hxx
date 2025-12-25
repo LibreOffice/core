@@ -21,6 +21,8 @@
 #include <basctl/basctldllpublic.hxx>
 #include <basctl/scriptdocument.hxx>
 #include <tools/long.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 class SbMethod;
 class SbModule;

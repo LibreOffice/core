@@ -30,7 +30,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -1142,8 +1142,8 @@ IMPL_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, rTree, void)
         return;
     }
 
-    auto xSelectedIter = rTree.make_iterator();
-    if (!rTree.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTree.get_selected();
+    if (!xSelectedIter)
     {
         UpdateStatusBar(nullptr, nullptr);
         UpdateDetailsPane(nullptr, false);
@@ -1175,14 +1175,13 @@ IMPL_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, rTree, void)
         return;
     }
 
-    auto xLeftIter = m_xLeftTreeView->make_iterator();
+    std::unique_ptr<weld::TreeIter> xLeftIter = m_xLeftTreeView->get_selected();
     std::shared_ptr<const IdeSymbolInfo> pLeftSymbol
-        = m_xLeftTreeView->get_selected(xLeftIter.get())
-              ? GetSymbolForIter(*xLeftIter, *m_xLeftTreeView, m_aLeftTreeSymbolIndex)
-              : nullptr;
+        = xLeftIter ? GetSymbolForIter(*xLeftIter, *m_xLeftTreeView, m_aLeftTreeSymbolIndex)
+                    : nullptr;
 
-    auto xRightIter = rTree.make_iterator();
-    if (!rTree.get_selected(xRightIter.get()))
+    std::unique_ptr<weld::TreeIter> xRightIter = rTree.get_selected();
+    if (!xRightIter)
     {
         // Revert to showing container info if right-pane selection is cleared
         UpdateStatusBar(pLeftSymbol.get(), nullptr);
@@ -1251,8 +1250,8 @@ IMPL_LINK(ObjectBrowser, OnRightTreeDoubleClick, weld::TreeView&, rTree, bool)
         return false;
     }
 
-    auto xSelectedIter = rTree.make_iterator();
-    if (!rTree.get_selected(xSelectedIter.get()))
+    std::unique_ptr<weld::TreeIter> xSelectedIter = rTree.get_selected();
+    if (!xSelectedIter)
     {
         SAL_INFO("basctl", "OnRightTreeDoubleClick: No item selected.");
         return false;
@@ -1312,8 +1311,7 @@ IMPL_LINK(ObjectBrowser, OnRightTreeDoubleClick, weld::TreeView&, rTree, bool)
     }
 
     // Find documentable parent in LEFT tree
-    auto xLeftTreeParentIter = m_xLeftTreeView->make_iterator();
-    if (m_xLeftTreeView->get_selected(xLeftTreeParentIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xLeftTreeParentIter = m_xLeftTreeView->get_selected())
     {
         auto pParentSymbol
             = GetSymbolForIter(*xLeftTreeParentIter, *m_xLeftTreeView, m_aLeftTreeSymbolIndex);

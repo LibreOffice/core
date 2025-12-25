@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_DBTOOLS_HXX
-#define INCLUDED_CONNECTIVITY_DBTOOLS_HXX
+#pragma once
 
 #include <sal/config.h>
 
+#include <map>
 #include <string_view>
+#include <vector>
 
-#include <connectivity/dbexception.hxx>
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <connectivity/FValue.hxx>
+#include <connectivity/standardsqlstate.hxx>
 
 namespace com::sun::star {
 
@@ -73,6 +73,8 @@ namespace task {
 }
 
 class SvStream;
+namespace dbtools { class SQLExceptionInfo; }
+namespace connectivity { class ORowSetValue; }
 
 namespace dbtools
 {
@@ -870,7 +872,5 @@ namespace dbase
 
 } // namespace connectivity::dbase
 } // namespace connectivity
-
-#endif // INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

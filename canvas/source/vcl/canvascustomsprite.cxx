@@ -58,13 +58,26 @@ namespace vclcanvas
         BackBufferSharedPtr pBackBuffer = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev() );
         pBackBuffer->setSize( aSize );
 
+        // create mask backbuffer
+        BackBufferSharedPtr pBackBufferMask = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev() );
+        pBackBufferMask->setSize( aSize );
+
         // TODO(F1): Implement alpha vdev (could prolly enable
         // antialiasing again, then)
 
         // disable font antialiasing (causes ugly shadows otherwise)
         pBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::DisableText );
+        pBackBufferMask->getOutDev().SetAntialiasing( AntialiasingFlags::DisableText );
+
+        // set mask vdev drawmode, such that everything is painted
+        // black. That leaves us with a binary image, white for
+        // background, black for painted content
+        pBackBufferMask->getOutDev().SetDrawMode( DrawModeFlags::BlackLine | DrawModeFlags::BlackFill | DrawModeFlags::BlackText |
+                                                  DrawModeFlags::BlackGradient | DrawModeFlags::BlackBitmap );
+
 
         // setup canvas helper
+
 
         // always render into back buffer, don't preserve state (it's
         // our private VDev, after all), have notion of alpha
@@ -72,13 +85,16 @@ namespace vclcanvas
                              pBackBuffer,
                              false,
                              true );
+        maCanvasHelper.setBackgroundOutDev( pBackBufferMask );
 
 
         // setup sprite helper
 
+
         maSpriteHelper.init( rSpriteSize,
                              rOwningSpriteCanvas,
                              pBackBuffer,
+                             pBackBufferMask,
                              bShowSpriteBounds );
 
         // clear sprite to 100% transparent

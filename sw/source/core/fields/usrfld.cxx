@@ -215,6 +215,8 @@ UIName SwUserFieldType::GetName() const
     return m_aName;
 }
 
+void SwUserFieldType::SetName(const UIName& newName) { m_aName = newName; }
+
 void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::SwLegacyModify)

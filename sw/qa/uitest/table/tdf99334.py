@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf99334(UITestCase):
 
-   def test_tdf99334_table_sort_umlauts(self):
+    def test_tdf99334_table_sort_umlauts(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf99334.odt")) as writer_doc:
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")

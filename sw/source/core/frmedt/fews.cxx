@@ -770,7 +770,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         if ( !pFrame )
             pFrame = pTmp;
         _orRect = pFrame->getFrameArea();
-        SwRectFnSet aRectFnSet(pFrame);
+        SwRectFnSet aRectFnSet(*pFrame);
         bRTL = pFrame->IsRightToLeft();
         if ( bRTL )
             aPos = pFrame->getFrameArea().TopRight();
@@ -875,13 +875,28 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
         }
         if ( _opPercent )
-            *_opPercent = pFrame->getFramePrintArea().SSize();
+        {
+            if (RndStdIds::FLY_AT_FLY == _nAnchorId || !pFormatFrameSize)
+                *_opPercent = pFrame->getFramePrintArea().SSize();
+            else
+            {
+                if (pFormatFrameSize->GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                    _opPercent->setWidth(pFrame->getFrameArea().Width());
+                else
+                    _opPercent->setWidth(pFrame->getFramePrintArea().Width());
+
+                if (pFormatFrameSize->GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                     _opPercent->setHeight(pFrame->getFrameArea().Height());
+                else
+                    _opPercent->setHeight(pFrame->getFramePrintArea().Height());
+            }
+        }
     }
     else
     {
         const SwFrame* pUpper = ( pFrame->IsPageFrame() || pFrame->IsFlyFrame() ) ?
                               pFrame : pFrame->GetUpper();
-        SwRectFnSet aRectFnSet(pUpper);
+        SwRectFnSet aRectFnSet(*pUpper);
         if ( _opPercent )
         {
             // If the size is relative from page, then full size should be counted from the page frame.
@@ -923,7 +938,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             if ( _bFollowTextFlow )
             {
                 aVertEnvironRect = rVertEnvironLayFrame.getFramePrintArea();
-                aVertEnvironRect.Pos() += rVertEnvironLayFrame.getFrameArea().Pos();
+                aVertEnvironRect += rVertEnvironLayFrame.getFrameArea().Pos();
                 // #i18732# - adjust vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.

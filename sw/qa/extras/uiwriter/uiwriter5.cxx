@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
     CPPUNIT_ASSERT_EQUAL(u"Lorem ipsum dolor sit amet..."_ustr, getParagraph(1)->getString());
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Test comment range feature on tracked deletion.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     bool bAnnotationStart = false;
     bool bBeforeAnnotation = true;
-    OUString sTextBeforeAnnotation;
+    OUStringBuffer sTextBeforeAnnotation;
     while (xRunEnum->hasMoreElements())
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
@@ -426,13 +426,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf140982)
             else if (aType == "Text")
             {
                 uno::Reference<text::XTextRange> xRun(xPropertySet, uno::UNO_QUERY);
-                sTextBeforeAnnotation += xRun->getString();
+                sTextBeforeAnnotation.append(xRun->getString());
             }
         }
     }
 
     // This was "Lorem ipsum" (collapsed annotation range)
-    CPPUNIT_ASSERT_EQUAL(u"Lorem "_ustr, sTextBeforeAnnotation);
+    CPPUNIT_ASSERT_EQUAL(u"Lorem "_ustr, sTextBeforeAnnotation.toString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126206)
@@ -1142,7 +1142,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
         xShape->setPropertyValue(u"HoriOrientRelation"_ustr, uno::Any(static_cast<sal_Int16>(0)));
     }
     // save it to docx
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
 

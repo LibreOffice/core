@@ -29,6 +29,7 @@
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <o3tl/any.hxx>
 #include <tools/color.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace
 {
@@ -245,7 +246,7 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
     const css::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes,
     IA2AttributeType eAttributeType)
 {
-    OUString aRet;
+    OUStringBuffer aRet;
     for (css::beans::PropertyValue const& prop : rUnoAttributes)
     {
         OUString sAttribute;
@@ -291,7 +292,7 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
             else if (prop.Name == "CharStrikeout")
             {
                 const sal_Int16 nStrikeout = *o3tl::doAccess<sal_Int16>(prop.Value);
-                aRet += lcl_ConverCharStrikeout(nStrikeout);
+                aRet.append(lcl_ConverCharStrikeout(nStrikeout));
             }
             else if (prop.Name == "CharUnderline")
             {
@@ -304,11 +305,11 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
 
                 // leave 'sAttribute' and 'sName' empty, set all attributes here
                 if (!sUnderlineStyle.isEmpty())
-                    aRet += u"text-underline-style:" + sUnderlineStyle + ";";
+                    aRet.append(u"text-underline-style:" + sUnderlineStyle + ";");
                 if (!sUnderlineType.isEmpty())
-                    aRet += u"text-underline-type:" + sUnderlineType + ";";
+                    aRet.append(u"text-underline-type:" + sUnderlineType + ";");
                 if (!sUnderlineWidth.isEmpty())
-                    aRet += u"text-underline-width:" + sUnderlineWidth + ";";
+                    aRet.append(u"text-underline-width:" + sUnderlineWidth + ";");
             }
             else if (prop.Name == "CharWeight")
             {
@@ -338,10 +339,10 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
         }
 
         if (!sAttribute.isEmpty() && !sValue.isEmpty())
-            aRet += sAttribute + ":" + sValue + ";";
+            aRet.append(sAttribute + ":" + sValue + ";");
     }
 
-    return aRet;
+    return aRet.toString();
 }
 
 OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(

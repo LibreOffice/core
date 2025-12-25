@@ -12,7 +12,7 @@ from uitest.uihelper.common import type_text
 
 class PasteSpecial(UITestCase):
 
-   def test_pasteSpecial(self):
+    def test_pasteSpecial(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

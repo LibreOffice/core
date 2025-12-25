@@ -88,7 +88,7 @@ protected:
 public:
     // basic constructor
     ObjectContact();
-    virtual ~ObjectContact() COVERITY_NOEXCEPT_FALSE;
+    virtual ~ObjectContact();
 
     // LazyInvalidate request. This is used from the VOCs to mark that they
     // got invalidated by an ActionChanged() call. An active view needs to remember

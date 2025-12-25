@@ -291,6 +291,8 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_START );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_END );
     rBindings.Invalidate( SID_NUMBER_TYPE_FORMAT);
 
     rBindings.Invalidate( SID_ALIGNLEFT );
@@ -333,6 +335,8 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
     rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_START );
+    rBindings.Invalidate( SID_ALIGN_ANY_END );
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
     rBindings.Invalidate( SID_ALIGN_ANY_VDEFAULT );
     rBindings.Invalidate( SID_ALIGN_ANY_TOP );
@@ -417,8 +421,8 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         return;
 
     ScDocument& rDoc = aViewData.GetDocument();
-    ScDocShell& rDocSh = aViewData.GetDocShell();
-    ScModelObj* pModelObj = rDocSh.GetModel();
+    ScDocShell* pDocSh = aViewData.GetDocShell();
+    ScModelObj* pModelObj = pDocSh->GetModel();
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();
@@ -432,6 +436,9 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     Size aNewSize(0, 0);
     if (pModelObj)
         aNewSize = pModelObj->getDocumentSize();
+
+    if (!pDocSh)
+        return;
 
     if (pModelObj)
     {
@@ -657,7 +664,7 @@ void ScTabView::CursorPosChanged()
 {
     bool bRefMode = ScModule::get()->IsFormulaMode();
     if ( !bRefMode ) // check that RefMode works when switching sheets
-        aViewData.GetDocShell().Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
+        aViewData.GetDocShell()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
     //  Broadcast, so that other Views of the document also switch
 
@@ -817,13 +824,13 @@ void ScTabView::TestHintWindow()
     ScAddress aListValPos;
 
     ScDocument& rDoc = aViewData.GetDocument();
-    const SfxUInt32Item* pItem = rDoc.GetAttr( aViewData.GetCurX(),
+    const SfxUInt32Item& rItem = rDoc.GetAttr( aViewData.GetCurX(),
                                                aViewData.GetCurY(),
                                                aViewData.CurrentTabForData(),
                                                ATTR_VALIDDATA );
-    if ( pItem->GetValue() )
+    if ( rItem.GetValue() )
     {
-        const ScValidationData* pData = rDoc.GetValidationEntry( pItem->GetValue() );
+        const ScValidationData* pData = rDoc.GetValidationEntry( rItem.GetValue() );
         OSL_ENSURE(pData,"ValidationData not found");
         OUString aTitle, aMessage;
 
@@ -1931,7 +1938,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     // Update pending row heights before switching the sheet, so Reschedule from the progress bar
     // doesn't paint the new sheet with old heights
-    aViewData.GetDocShell().UpdatePendingRowHeights( nTab );
+    aViewData.GetDocShell()->UpdatePendingRowHeights( nTab );
 
     SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nOldPos = nTab;
@@ -2125,6 +2132,8 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     rBindings.Invalidate( SID_STYLE_FAMILY2 );      // Designer
     rBindings.Invalidate( SID_STYLE_FAMILY4 );      // Designer
     rBindings.Invalidate( SID_TABLES_COUNT );
+
+    rBindings.Invalidate(FID_CURRENT_SHEET_VIEW);
 
     if (pScMod->IsRefDialogOpen())
     {
@@ -3006,7 +3015,7 @@ void ScTabView::PaintRangeFinder( tools::Long nNumber )
         return;
 
     ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
-    if ( !(pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell().GetTitle()) )
+    if ( !(pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell()->GetTitle()) )
         return;
 
     SCTAB nTab = aViewData.CurrentTabForData();
@@ -3064,7 +3073,7 @@ void ScTabView::DoChartSelection(
     {
         Color aSelColor(ColorTransparency, rHighlightedRange.PreferredColor);
         ScRangeList aRangeList;
-        ScDocument& rDoc = aViewData.GetDocShell().GetDocument();
+        ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
                 aRangeList, rHighlightedRange.RangeRepresentation, rDoc, rDoc.GetAddressConvention(), sep ))
         {
@@ -3097,7 +3106,7 @@ void ScTabView::DoChartSelection(
                     tools::Long nY2 = aTargetRange.aEnd.Row();
                     tools::Long nTab = aTargetRange.aStart.Tab();
 
-                    aReferenceMarks[nIndex++] = ScInputHandler::GetReferenceMark( aViewData, aViewData.GetDocShell(),
+                    aReferenceMarks[nIndex++] = ScInputHandler::GetReferenceMark( aViewData, *aViewData.GetDocShell(),
                                                                             nX1, nX2, nY1, nY2,
                                                                             nTab, aSelColor );
                 }
@@ -3111,7 +3120,7 @@ void ScTabView::DoChartSelection(
 
 void ScTabView::DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize)
 {
-    ScDocument& rDocument = aViewData.GetDocShell().GetDocument();
+    ScDocument& rDocument = aViewData.GetDocShell()->GetDocument();
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
 
     if (!pWin)

@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/restartdialog.hxx>
@@ -476,13 +476,13 @@ std::unique_ptr<SfxTabPage> SvxJavaOptionsPage::Create(weld::Container* pPage, w
 
 OUString SvxJavaOptionsPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"javapath"_ustr, u"selectruntime"_ustr, u"label12"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"javaenabled"_ustr, u"experimental"_ustr, u"macrorecording"_ustr };
@@ -490,7 +490,7 @@ OUString SvxJavaOptionsPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString buttons[] = { u"add"_ustr, u"parameters"_ustr, u"classpath"_ustr, u"expertconfig"_ustr };
@@ -498,10 +498,10 @@ OUString SvxJavaOptionsPage::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
@@ -771,7 +771,7 @@ void SvxJavaParameterDlg::EditParameter()
 short SvxJavaParameterDlg::run()
 {
     m_xParameterEdit->grab_focus();
-    m_xAssignedList->select(-1);
+    m_xAssignedList->unselect_all();
     return GenericDialogController::run();
 }
 

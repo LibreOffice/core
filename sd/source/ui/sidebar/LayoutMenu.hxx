@@ -25,6 +25,7 @@
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <map>
 
 #include <unotools/resmgr.hxx>
@@ -99,10 +100,6 @@ private:
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
-    std::map<AutoLayout, TranslateId> maLayoutToStringMap;
-
-    std::unique_ptr<weld::Builder> mxMenuBuilder;
-    std::unique_ptr<weld::Menu> mxMenu;
 
     // Store the size of preview image
     Size maPreviewSize;
@@ -162,18 +159,15 @@ private:
     /** When clicked then set the current page of the view in the center pane.
     */
     DECL_LINK(LayoutSelected, weld::IconView&, bool);
-    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+
     DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(MenuSelectAsyncHdl, void*, void);
-    DECL_LINK(OnPopupEnd, const OUString&, void);
 
     static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
     static Bitmap GetPreviewAsBitmap(const Image& rImage);
     void HandleMenuSelect(std::u16string_view rIdent);
-
-    TranslateId GetStringResourceIdForLayout(AutoLayout aLayout) const;
 };
 
 } // end of namespace ::sd::toolpanel

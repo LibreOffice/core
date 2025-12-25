@@ -95,26 +95,6 @@ namespace basegfx
         return *this;
     }
 
-    B3DHomMatrix& B3DHomMatrix::operator*=(double fValue)
-    {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fValue))
-            mpImpl->doMulMatrix(fValue);
-
-        return *this;
-    }
-
-    B3DHomMatrix& B3DHomMatrix::operator/=(double fValue)
-    {
-        const double fOne(1.0);
-
-        if(!fTools::equal(fOne, fValue))
-            mpImpl->doMulMatrix(1.0 / fValue);
-
-        return *this;
-    }
-
     B3DHomMatrix& B3DHomMatrix::operator*=(const B3DHomMatrix& rMat)
     {
         if(rMat.isIdentity())

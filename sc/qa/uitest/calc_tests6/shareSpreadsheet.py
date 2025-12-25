@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class shareSpreadsheet(UITestCase):
 
-   def test_share_spreadsheet(self):
+    def test_share_spreadsheet(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             #dialog shareSpreadsheet
             with self.ui_test.execute_dialog_through_command(".uno:ShareDocument", close_button="cancel") as xDialog:

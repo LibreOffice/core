@@ -51,7 +51,6 @@ core_constructor_list = [
     "com_sun_star_comp_chart_CandleStickChartType_get_implementation",
     "com_sun_star_comp_chart_ChartTypeManager_get_implementation",
     "com_sun_star_comp_chart_ColumnChartType_get_implementation",
-    "com_sun_star_comp_chart_HistogramChartType_get_implementation",
     "com_sun_star_comp_chart_DataSeries_get_implementation",
     "com_sun_star_comp_chart_DataSource_get_implementation",
     "com_sun_star_comp_chart_FilledNetChartType_get_implementation",
@@ -115,6 +114,7 @@ core_constructor_list = [
 # cppcanvas/source/uno/mtfrenderer.component
     "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
 # cui/util/cui.component
+    ("com_sun_star_cui_ColorPicker_get_implementation", "#if !ENABLE_FUZZERS"),
     ("com_sun_star_cui_GetCreateDialogFactoryService", "#if !ENABLE_FUZZERS"),
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_DataAccessDescriptorFactory",
@@ -390,8 +390,6 @@ core_constructor_list = [
     "com_sun_star_comp_svx_ColorToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FrameToolBoxControl_get_implementation",
-    "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
-    "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
     "com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
@@ -539,6 +537,8 @@ core_constructor_list = [
     "com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation",
+    "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
+    "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation",
     "com_sun_star_comp_xmlscript_XMLBasicExporter",

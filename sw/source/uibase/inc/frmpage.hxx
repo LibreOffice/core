@@ -25,6 +25,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <svx/swframeexample.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <swtypes.hxx>
 #include "bmpwin.hxx"
 #include "prcntfld.hxx"
@@ -153,6 +154,7 @@ class SwFramePage final : public SfxTabPage
 
     DECL_LINK(RealSizeHdl, weld::Button&, void);
     DECL_LINK(RelSizeClickHdl, weld::Toggleable&, void);
+    DECL_LINK(RelRelationClickHdl, weld::ComboBox&, void);
     DECL_LINK(MirrorHdl, weld::Toggleable&, void);
 
     DECL_LINK(AutoWidthClickHdl, weld::Toggleable&, void);

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <tools/long.hxx>
 
 class GDIMetaFile;
 class Bitmap;

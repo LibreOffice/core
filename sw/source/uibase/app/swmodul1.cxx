@@ -482,12 +482,26 @@ std::size_t SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 }
 
 static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
-                        const AuthorCharAttr &rAttr )
+                        const AuthorCharAttr &rAttr, SwRedlineRenderMode eRenderMode = SwRedlineRenderMode::Standard )
 {
     Color aCol( rAttr.m_nColor );
 
     if( rAttr.m_nColor == COL_TRANSPARENT )
+    {
         aCol = lcl_GetAuthorColor(nAuthor);
+
+        // See if the redline render mode requires to de-saturize the color of the text portion.
+        if (eRenderMode != SwRedlineRenderMode::Standard)
+        {
+            sal_uInt16 nHue;
+            sal_uInt16 nSaturation;
+            sal_uInt16 nBrightness;
+            aCol.RGBtoHSB(nHue, nSaturation, nBrightness);
+            // 25% saturation: balance between complete gray and hard-to-notice small difference.
+            nSaturation = nSaturation / 4;
+            aCol = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
+        }
+    }
 
     bool bBackGr = rAttr.m_nColor == COL_NONE_COLOR;
 
@@ -540,14 +554,24 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
         rSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
 }
 
-void SwModule::GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet)
+void SwModule::GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet, SwRedlineRenderMode eRenderMode)
 {
-    lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetInsertAuthorAttr());
+    SwRedlineRenderMode eMode = SwRedlineRenderMode::Standard;
+    if (eRenderMode == SwRedlineRenderMode::OmitInserts)
+    {
+        eMode = eRenderMode;
+    }
+    lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetInsertAuthorAttr(), eMode);
 }
 
-void SwModule::GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet)
+void SwModule::GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet, SwRedlineRenderMode eRenderMode)
 {
-    lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetDeletedAuthorAttr());
+    SwRedlineRenderMode eMode = SwRedlineRenderMode::Standard;
+    if (eRenderMode == SwRedlineRenderMode::OmitDeletes)
+    {
+        eMode = eRenderMode;
+    }
+    lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetDeletedAuthorAttr(), eMode);
 }
 
 // For future extension:

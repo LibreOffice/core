@@ -1301,7 +1301,6 @@ bool SvListView::IsExpanded( SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvDataTable::const_iterator itr = m_pImpl->m_DataTable.find(pEntry);
-    DBG_ASSERT(itr != m_pImpl->m_DataTable.end(),"Entry not in Table");
     if (itr == m_pImpl->m_DataTable.end())
         return false;
     return itr->second->IsExpanded();

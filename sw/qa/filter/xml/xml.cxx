@@ -35,7 +35,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/filter/xml/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/filter/xml/data/"_ustr)
     {
     }
 };
@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRecordFlatExport)
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
 
     // When saving that to FODT:
-    save(u"OpenDocument Text Flat XML"_ustr);
+    save(TestFilter::FODT);
 
     // Then make sure this is written in the export result:
     xmlDocUniquePtr pDoc = parseXml(maTempFile);

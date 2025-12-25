@@ -155,6 +155,14 @@ void SwTableBoxFormula::Calc( SwTableCalcPara& rCalcPara, double& rValue )
     }
 }
 
+void SwTableBoxFormula::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableBoxFormula"));
+    SfxPoolItem::dumpAsXml(pWriter);
+    SwTableFormula::dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwTableBoxValue::SwTableBoxValue()
     : SfxPoolItem( RES_BOXATR_VALUE ), m_nValue( 0 )
 {
@@ -178,6 +186,15 @@ bool SwTableBoxValue::operator==( const SfxPoolItem& rAttr ) const
 SwTableBoxValue* SwTableBoxValue::Clone( SfxItemPool* ) const
 {
     return new SwTableBoxValue( m_nValue );
+}
+
+void SwTableBoxValue::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableBoxValue"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(m_nValue).getStr()));
+    SfxPoolItem::dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

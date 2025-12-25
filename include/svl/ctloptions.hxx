@@ -38,7 +38,6 @@ public:
     SvtCTLOptions( bool bDontLoad = false );
     virtual ~SvtCTLOptions() override;
 
-    void        SetCTLFontEnabled( bool _bEnabled );
     static bool IsCTLFontEnabled();
 
     void SetCTLVerticalText(bool bVertical);
@@ -70,18 +69,6 @@ public:
     };
     void            SetCTLTextNumerals( TextNumerals _eNumerals );
     static TextNumerals GetCTLTextNumerals();
-
-    enum EOption
-    {
-        E_CTLFONT,
-        E_CTLSEQUENCECHECKING,
-        E_CTLCURSORMOVEMENT,
-        E_CTLTEXTNUMERALS,
-        E_CTLSEQUENCECHECKINGRESTRICTED,
-        E_CTLSEQUENCECHECKINGTYPEANDREPLACE,
-        E_CTLVERTICALTEXT
-    };
-    bool IsReadOnly(EOption eOption) const;
 };
 
 #endif // INCLUDED_SVL_CTLOPTIONS_HXX

@@ -31,6 +31,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include "PropertyIds.hxx"
 #include <unofootnote.hxx>
+#include <unoxstyle.hxx>
+
 #include <memory>
 #include <optional>
 #include <map>
@@ -338,6 +340,8 @@ private:
     void CopyLastHeaderFooter(DomainMapper_Impl& rDM_Impl);
 
     void CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl, PageBreakType eBreakType);
+
+    void EmulateSectPrBelowSpacing(DomainMapper_Impl& rDM_Impl);
 
     void PrepareHeaderFooterProperties();
 

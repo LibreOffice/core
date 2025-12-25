@@ -99,7 +99,7 @@ void DebugEventInjector::InjectMenuEvent()
     std::vector< SalMenuEvent > aIds;
     CollectMenuItemIds( pMenuBar, aIds );
 
-    SalEvent nEvent = nEvents[ static_cast<int>(getRandom() * SAL_N_ELEMENTS( nEvents )) ];
+    SalEvent nEvent = nEvents[ static_cast<int>(getRandom() * std::size( nEvents )) ];
     SalMenuEvent aEvent = aIds[ getRandom() * aIds.size() ];
     bool bHandled = ImplWindowFrameProc( pSysWin, nEvent, &aEvent);
 
@@ -140,7 +140,7 @@ void DebugEventInjector::InjectTextEvent()
             { KEY_A, KEY_Z, 'a' }
         };
 
-        size_t i = getRandom() * SAL_N_ELEMENTS( nTextCodes );
+        size_t i = getRandom() * std::size( nTextCodes );
         int offset = int( getRandom() * ( nTextCodes[i].nCodeEnd - nTextCodes[i].nCodeStart ) );
         aKeyEvent.mnCode = nTextCodes[i].nCodeStart + offset;
         aKeyEvent.mnCharCode = nTextCodes[i].aCharStart + offset;

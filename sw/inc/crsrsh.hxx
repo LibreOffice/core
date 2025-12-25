@@ -587,7 +587,7 @@ public:
     // true:  in which cursor is located.
     // false: which is visible at the upper margin.
     SW_DLLPUBLIC void GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
-                     bool bAtCursorPos = true, const bool bCalcFrame = true );
+                     bool bAtCursorPos = true, const bool bCalcFrame = true ) const;
     // Returns current page's sequential number (1-based),in which cursor is located, ignoring autoinserted empty pages.
     // Returns 0 on error
     SW_DLLPUBLIC sal_uInt16 GetPageNumSeqNonEmpty();

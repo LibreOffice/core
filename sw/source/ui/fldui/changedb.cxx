@@ -212,8 +212,7 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl, weld::TreeView&, void)
 void SwChangeDBDlg::TreeSelect()
 {
     bool bEnable = false;
-    std::unique_ptr<weld::TreeIter> xIter(m_xAvailDBTLB->make_iterator());
-    if (m_xAvailDBTLB->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xAvailDBTLB->get_selected())
     {
         if (m_xAvailDBTLB->get_iter_depth(*xIter))
             bEnable = true;

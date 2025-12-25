@@ -597,7 +597,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testColorScaleExportODS)
 {
     createScDoc("ods/colorscale.ods");
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -609,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testColorScaleExportXLSX)
 {
     createScDoc("xlsx/colorscale.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
 
@@ -621,7 +621,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testDataBarExportODS)
 {
     createScDoc("ods/databar.ods");
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testDataBarExportXLSX)
 {
     createScDoc("xlsx/databar.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
 
@@ -662,7 +662,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testComplexIconSetsXLSX)
 
     createScDoc("xlsx/complex_icon_set.xlsx");
     verify();
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     verify();
 }
 
@@ -684,12 +684,12 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf162948)
 
     createScDoc("xlsx/tdf162948.xlsx");
     verify();
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     verify();
 
     // FIXME: Error: tag name "calcext:icon-set" is not allowed. Possible tag names are: <color-scale>,<condition>,<data-bar>
     skipValidation();
-    saveAndReload(u"calc8"_ustr); // tdf#163337
+    saveAndReload(TestFilter::ODS); // tdf#163337
     verify();
 }
 
@@ -716,7 +716,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf165383)
 
     createScDoc("ods/tdf165383.ods");
     verify();
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     verify();
 }
 
@@ -744,14 +744,14 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf166669)
 
     createScDoc("ods/tdf166669.ods");
     verify();
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testCondFormatExportCellIs)
 {
     createScDoc("xlsx/condFormat_cellis.xlsx");
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
@@ -784,7 +784,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatExportXLSX)
 {
     createScDoc("xlsx/new_cond_format_test_export.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     ScDocument* pDoc = getScDoc();
     {
         OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_export.csv");
@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatExportODS)
 {
     createScDoc("ods/new_cond_format_test_export.ods");
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
     OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_export.csv");
     testCondFile(aCSVPath, pDoc, 0);
@@ -842,7 +842,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatNumberInTextRule)
     pFormat->AddEntry(pEntry);
     pDocument->AddCondFormat(std::move(pFormat), 0);
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDocument = getScDoc();
 
     ScConditionalFormat* pCondFormat = pDocument->GetCondFormat(0, 0, 0);
@@ -1045,7 +1045,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testCondFormatCfvoScaleValueXLSX)
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testNumberFormatODS)
 {
     createScDoc("ods/testNumberFormats.ods");
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
     sal_uInt32 nNumberFormat;
     const sal_Int32 nCountFormats = 18;
@@ -1075,7 +1075,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testNumberFormatODS)
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatRangeListXLSX)
 {
     createScDoc("ods/conditionalformat_rangelist.ods");
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", u"F4 F10");
@@ -1084,7 +1084,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatRangeListXLSX)
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatContainsTextXLSX)
 {
     createScDoc("ods/conditionalformat_containstext.ods");
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula",
@@ -1094,7 +1094,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatContainsTextXLSX)
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatPriorityCheckXLSX)
 {
     createScDoc("xlsx/conditional_fmt_checkpriority.xlsx");
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     constexpr bool bHighPriorityExtensionA1
@@ -1141,7 +1141,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatPriorityCheckXLSX)
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testConditionalFormatOriginXLSX)
 {
     createScDoc("xlsx/conditional_fmt_origin.xlsx");
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
@@ -1160,10 +1160,24 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf79998)
     CPPUNIT_ASSERT_EQUAL(u"Utilities (FX Kurse, Kreditkarten etc)"_ustr, aTabNames1[1]);
 
     // check: saved XLSX document has truncated tab name
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
     const std::vector<OUString> aTabNames2 = pDoc->GetAllTableNames();
     CPPUNIT_ASSERT_EQUAL(u"Utilities (FX Kurse, Kreditkart"_ustr, aTabNames2[1]);
+}
+
+// Test that we do not deduplicate conditional formats more than we should.
+CPPUNIT_TEST_FIXTURE(CondFormatTest, tdf169379)
+{
+    // previously, we were combining all of these into one conditional format.
+    createScDoc("xlsx/tdf169379.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0); // first column
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), pFormat->GetKey());
+    pFormat = pDoc->GetCondFormat(1, 0, 0); // second column
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), pFormat->GetKey());
+    pFormat = pDoc->GetCondFormat(2, 0, 0); // third column
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), pFormat->GetKey());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

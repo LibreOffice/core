@@ -136,7 +136,7 @@ SwFrameNotify::~SwFrameNotify()
 
 void SwFrameNotify::ImplDestroy()
 {
-    SwRectFnSet aRectFnSet(mpFrame);
+    SwRectFnSet aRectFnSet(*mpFrame);
     const bool bAbsP = aRectFnSet.PosDiff(maFrame, mpFrame->getFrameArea());
     const bool bChgWidth =
             aRectFnSet.GetWidth(maFrame) != aRectFnSet.GetWidth(mpFrame->getFrameArea());
@@ -492,7 +492,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
 void SwLayNotify::ImplDestroy()
 {
     SwLayoutFrame *pLay = static_cast<SwLayoutFrame*>(mpFrame);
-    SwRectFnSet aRectFnSet(pLay);
+    SwRectFnSet aRectFnSet(*pLay);
     bool bNotify = false;
     if ( pLay->getFramePrintArea().SSize() != maPrt.SSize() )
     {
@@ -712,7 +712,7 @@ void SwFlyNotify::ImplDestroy()
 
     //Have the size or the position changed,
     //so should the view know this.
-    SwRectFnSet aRectFnSet(pFly);
+    SwRectFnSet aRectFnSet(*pFly);
     const bool bPosChgd = aRectFnSet.PosDiff( maFrame, pFly->getFrameArea() );
     const bool bFrameChgd = pFly->getFrameArea().SSize() != maFrame.SSize();
     const bool bPrtChgd = maPrt != pFly->getFramePrintArea();
@@ -829,7 +829,7 @@ void SwContentNotify::ImplDestroy()
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();
 
-    SwRectFnSet aRectFnSet(pCnt);
+    SwRectFnSet aRectFnSet(*pCnt);
     if ( pCnt->IsInTab() && ( aRectFnSet.PosDiff( pCnt->getFrameArea(), maFrame ) ||
                              pCnt->getFrameArea().SSize() != maFrame.SSize()))
     {
@@ -1077,7 +1077,10 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
                 {
                     if ( !pNew->GetAnchorFrame() )
                     {
-                        pFrame->AppendDrawObj( *(pNew->GetAnchoredObj( nullptr )) );
+                        SwAnchoredObject& rAnchorObj = *(pNew->GetAnchoredObj(nullptr));
+                        pFrame->AppendDrawObj(rAnchorObj);
+                        if (rAnchorObj.GetDrawObj()->IsVisible())
+                            pNew->MoveObjToVisibleLayer(rAnchorObj.DrawObj());
                     }
                     // OD 19.06.2003 #108784# - add 'virtual' drawing object,
                     // if necessary. But control objects have to be excluded.
@@ -1486,7 +1489,7 @@ void RecreateStartTextFrames(SwTextNode & rNode)
 static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
-    SwRectFnSet aRectFnSet(&_rLayFrame);
+    SwRectFnSet aRectFnSet(_rLayFrame);
     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(_rNewFrame);
     aRectFnSet.SetPos( aFrm, aRectFnSet.GetPos(_rLayFrame.getFrameArea()) );
 
@@ -1494,11 +1497,11 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
     // notifications for a new calculated position after its formatting.
     if ( aRectFnSet.IsVert() )
     {
-        aFrm.Pos().AdjustX( -1 );
+        aFrm.SetPosX(aFrm.Pos().X() - 1);
     }
     else
     {
-        aFrm.Pos().AdjustY(1 );
+        aFrm.SetPosY(aFrm.Pos().Y() + 1);
     }
 }
 
@@ -2067,9 +2070,9 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc& rDoc,
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
-void MakeFrames( SwDoc& rDoc, const SwNode &rSttIdx, const SwNode &rEndIdx )
+void MakeFrames(SwDoc& rDoc, const SwNode& rSttIdx, const SwNode& rEndIdx, const bool _bObjsDirect)
 {
-    bObjsDirect = false;
+    bObjsDirect = _bObjsDirect;
 
     SwNodeOffset nEndIdx = rEndIdx.GetIndex();
     // TODO for multiple layouts there should be a loop here
@@ -3053,7 +3056,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
 {
     assert(pSav && pParent && "no Save or Parent provided for RestoreContent.");
-    SwRectFnSet aRectFnSet(pParent);
+    SwRectFnSet aRectFnSet(*pParent);
 
     // If there are already FlowFrames below the new parent, so add the chain (starting with pSav)
     // after the last one. The parts are inserted and invalidated if needed.
@@ -3384,7 +3387,7 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
 
     auto pTextFrame = static_cast<SwTextFrame*>(pCnt);
     SwRect aCntPrt( pCnt->getFramePrintArea() );
-    aCntPrt.Pos() += pCnt->getFrameArea().Pos();
+    aCntPrt += pCnt->getFrameArea().Pos();
 
     if (eHint == PrepareHint::FlyFrameArrive)
     {
@@ -4006,7 +4009,7 @@ bool IsExtraData( const SwDoc& rDoc )
 SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
 {
     SwRect aPrtWithoutHeaderFooter( getFramePrintArea() );
-    aPrtWithoutHeaderFooter.Pos() += getFrameArea().Pos();
+    aPrtWithoutHeaderFooter += getFrameArea().Pos();
 
     const SwFrame* pLowerFrame = Lower();
     while ( pLowerFrame )

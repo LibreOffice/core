@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
@@ -171,7 +172,7 @@ private:
     bool checkForUsingMap(const CXXMethodDecl * calleeMethodDecl);
     bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
                                         CalleeWrapper calleeFunctionDecl);
-    compat::optional<CalleeWrapper> getCallee(CallExpr const *);
+    std::optional<CalleeWrapper> getCallee(CallExpr const *);
 
     RecordDecl *   insideMoveOrCopyOrCloneDeclParent = nullptr;
     RecordDecl *   insideStreamOutputOperator = nullptr;
@@ -409,9 +410,9 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
         if (cxxMethodDecl->isCopyAssignmentOperator()
             || cxxMethodDecl->isMoveAssignmentOperator()
             || (cxxMethodDecl->getIdentifier()
-                && (compat::starts_with(cxxMethodDecl->getName(), "Clone")
-                    || compat::starts_with(cxxMethodDecl->getName(), "clone")
-                    || compat::starts_with(cxxMethodDecl->getName(), "createClone"))))
+                && (cxxMethodDecl->getName().starts_with("Clone")
+                    || cxxMethodDecl->getName().starts_with("clone")
+                    || cxxMethodDecl->getName().starts_with("createClone"))))
             insideMoveOrCopyOrCloneDeclParent = cxxMethodDecl->getParent();
         // these are similar in that they tend to simply enumerate all the fields of an object without putting
         // them to some useful purpose
@@ -1215,7 +1216,7 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
     }
 }
 
-compat::optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
+std::optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
 {
     FunctionDecl const * functionDecl = callExpr->getDirectCallee();
     if (functionDecl)
@@ -1229,7 +1230,7 @@ compat::optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExp
         }
     }
 
-    return compat::optional<CalleeWrapper>();
+    return std::optional<CalleeWrapper>();
 }
 
 loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);

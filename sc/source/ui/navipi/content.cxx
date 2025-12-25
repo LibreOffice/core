@@ -138,7 +138,7 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     m_xTreeView->connect_row_activated(LINK(this, ScContentTree, ContentDoubleClickHdl));
     m_xTreeView->connect_mouse_release(LINK(this, ScContentTree, MouseReleaseHdl));
     m_xTreeView->connect_key_press(LINK(this, ScContentTree, KeyInputHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, ScContentTree, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, ScContentTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, ScContentTree, QueryTooltipHdl));
 
     rtl::Reference<TransferDataContainer> xHelper(m_xTransferObj);
@@ -262,8 +262,10 @@ void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChild
     rnRootIndex = ScContentId::ROOT;
     rnChildIndex = SC_CONTENT_NOCHILD;
 
-    if( !pEntry )
+    if( !pEntry ) {
+        SAL_WARN("sc", "got a null TreeIter");
         return;
+    }
 
     std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(pEntry));
     if (!m_xTreeView->iter_parent(*xParent))
@@ -999,7 +1001,8 @@ void ScContentTree::GetNoteStrings()
     for (const auto& rEntry : aEntries)
     {
         OUString aValue = lcl_NoteString(*rEntry.mpNote);
-        m_xTreeView->insert(pParent, -1, &aValue, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        OUString aId = OUString::number(rEntry.mpNote->GetId());
+        m_xTreeView->insert(pParent, -1, &aValue, &aId, nullptr, nullptr, false, m_xScratchIter.get());
         m_xTreeView->set_sensitive(*m_xScratchIter, true);
     }
 }
@@ -1525,6 +1528,41 @@ void ScContentTree::SelectEntryByName(const ScContentId nRoot, std::u16string_vi
         bEntry = m_xTreeView->iter_next(*xEntry);
     }
 }
+
+void ScContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
+{
+    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_iter_first(*xIter))
+        return;
+
+    do
+    {
+        ScContentId nType;
+        sal_uLong nChild;
+        GetEntryIndexes(nType, nChild, xIter.get());
+
+        if (nType == ScContentId::NOTE)
+        {
+            m_xTreeView->set_cursor(*xIter);
+            m_xTreeView->select(*xIter);
+            m_xTreeView->expand_row(*xIter);
+
+            OUString aCommentId(OUString::number(nCommentId));
+            for (bool bChild = m_xTreeView->iter_children(*xIter); bChild;
+                 bChild = m_xTreeView->iter_next_sibling(*xIter))
+            {
+                if (m_xTreeView->get_id(*xIter) == aCommentId)
+                {
+                    m_xTreeView->select(*xIter);
+                    break;
+                }
+            }
+            break;
+        }
+        else
+            m_xTreeView->collapse_row(*xIter);
+
+    } while (m_xTreeView->iter_next_sibling(*xIter));}
 
 void ScContentTree::ApplyNavigatorSettings()
 {

@@ -50,10 +50,10 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     protected static RectF inflate(RectF rect, IntSize inflateSize) {
         RectF newRect = new RectF(rect);
         newRect.left -= inflateSize.width;
-        newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
+        newRect.left = Math.max(newRect.left, 0.0f);
 
         newRect.top -= inflateSize.height;
-        newRect.top = newRect.top < 0.0f ? 0.0f : newRect.top;
+        newRect.top = Math.max(newRect.top, 0.0f);
 
         newRect.right += inflateSize.width;
         newRect.bottom += inflateSize.height;
@@ -133,17 +133,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         return validRegion;
     }
 
-    @Override
-    public void setResolution(float newResolution) {
-        super.setResolution(newResolution);
-        tilesReadLock.lock();
-        for (SubTile tile : tiles) {
-            tile.setResolution(newResolution);
-        }
-        tilesReadLock.unlock();
-    }
-
-    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics, DisplayPortMetrics mDisplayPort) {
+    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
         RectF newViewPort = getViewPort(viewportMetrics);
         float newZoom = getZoom(viewportMetrics);
 

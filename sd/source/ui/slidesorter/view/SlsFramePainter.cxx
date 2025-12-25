@@ -144,7 +144,7 @@ void FramePainter::OffsetBitmap::PaintCorner (
     const Point& rAnchor) const
 {
     if ( ! maBitmap.IsEmpty())
-        rDevice.DrawBitmapEx(rAnchor+maOffset, maBitmap);
+        rDevice.DrawBitmap(rAnchor+maOffset, maBitmap);
 }
 
 void FramePainter::OffsetBitmap::PaintSide (
@@ -172,7 +172,7 @@ void FramePainter::OffsetBitmap::PaintSide (
             - 1);
         for (sal_Int32 nX=nLeft; nX<=nRight; nX+=aBitmapSize.Width())
         {
-            rDevice.DrawBitmapEx(
+            rDevice.DrawBitmap(
                 Point(nX,nY),
                 Size(std::min(aBitmapSize.Width(),static_cast<::tools::Long>(nRight-nX+1)),aBitmapSize.Height()),
                 maBitmap);
@@ -192,7 +192,7 @@ void FramePainter::OffsetBitmap::PaintSide (
             - 1);
         for (sal_Int32 nY=nTop; nY<=nBottom; nY+=aBitmapSize.Height())
         {
-            rDevice.DrawBitmapEx(
+            rDevice.DrawBitmap(
                 Point(nX,nY),
                 Size(aBitmapSize.Width(), std::min(aBitmapSize.Height(), static_cast<::tools::Long>(nBottom-nY+1))),
                 maBitmap);
@@ -214,7 +214,7 @@ void FramePainter::OffsetBitmap::PaintCenter (
     const Size aBitmapSize (maBitmap.GetSizePixel());
     for (::tools::Long nY=rBox.Top(); nY<=rBox.Bottom(); nY+=aBitmapSize.Height())
         for (::tools::Long nX=rBox.Left(); nX<=rBox.Right(); nX+=aBitmapSize.Width())
-            rDevice.DrawBitmapEx(
+            rDevice.DrawBitmap(
                 Point(nX,nY),
                 Size(
                     ::std::min(aBitmapSize.Width(), rBox.Right()-nX+1),

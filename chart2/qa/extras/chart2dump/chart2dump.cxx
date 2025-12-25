@@ -24,9 +24,9 @@
 #include <string_view>
 
 #if defined(X86)
-#define INT_EPS     2.1
+constexpr double INT_EPS = 2.1;
 #else
-#define INT_EPS     0.1
+constexpr double INT_EPS = 0.1;
 #endif
 
 #define DECLARE_DUMP_TEST(TestName, BaseClass, DumpMode) \

@@ -401,6 +401,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	basegfx \
 	bib \
 	chart2 \
+	chart2api \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	configmgr \
@@ -1046,7 +1047,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
-	$(if $(USING_X11)$(DISABLE_GUI)$(filter ANDROID EMSCRIPTEN,$(OS)), \
+	$(if $(USING_X11)$(DISABLE_GUI)$(filter FONTCONFIG,$(BUILD_TYPE))$(filter ANDROID EMSCRIPTEN,$(OS)), \
 		postprocess_fontconfig) \
 	$(call gb_Helper_optional,MORE_FONTS,\
 		fonts_alef \
@@ -1117,9 +1118,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
 	$(if $(and $(filter-out EMSCRIPTEN HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
-		$(if $(DISABLE_GUI),, \
-			desktop_soffice_sh \
-		) \
+		desktop_soffice_sh \
 	) \
 	readlicense_oo_files \
 	readlicense_oo_license \
@@ -1214,6 +1213,7 @@ $(eval $(call gb_Helper_register_mos,\
 	sca \
 	scc \
 	sd \
+	sdext \
 	sfx \
 	shell \
 	sm \

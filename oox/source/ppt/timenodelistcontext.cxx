@@ -503,10 +503,10 @@ namespace oox::ppt {
                     return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( to ):
                     // CT_Color
-                    return new ColorContext( *this, maToClr );
+                    return new ColorContext(*this, &maToClr);
                 case PPT_TOKEN( from ):
                     // CT_Color
-                    return new ColorContext( *this, maFromClr );
+                    return new ColorContext(*this, &maFromClr);
 
                 default:
                     break;

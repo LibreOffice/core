@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <tools/debug.hxx>
 #include <tools/inetmsg.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/eitem.hxx>
@@ -53,6 +54,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -64,11 +66,10 @@
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
 
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/sharecontrolfile.hxx>
@@ -1124,9 +1125,8 @@ void SfxObjectShell::InitOwnModel_Impl()
         SfxItemSet& rSet = GetMedium()->GetItemSet();
         if ( !GetMedium()->IsReadOnly() )
             rSet.ClearItem( SID_INPUTSTREAM );
-        uno::Sequence< beans::PropertyValue > aArgs;
-        TransformItems( SID_OPENDOC, rSet, aArgs );
-        xModel->attachResource( GetMedium()->GetOrigURL(), aArgs );
+        comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rSet);
+        xModel->attachResource(GetMedium()->GetOrigURL(), aArgs.getAsConstPropertyValueList());
         impl_addToModelCollection(xModel);
     }
 
@@ -1978,8 +1978,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
             return false;
         }
 
-        if (utl::MediaDescriptor desc(pMedium->GetArgs());
-            !desc.getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
+        if (!pMedium->GetArgs().getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
         {
             mbContinueImportOnFilterExceptions = no;
             return false;

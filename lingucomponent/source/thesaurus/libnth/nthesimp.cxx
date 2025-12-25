@@ -465,7 +465,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
     if (1 == nLen || 2 == nLen)
     {
         Reference< XLinguProperties >   xPropSet;
-        rArguments.getConstArray()[0] >>= xPropSet;
+        rArguments[0] >>= xPropSet;
         assert(xPropSet);
 
         //! Pointer allows for access of the non-UNO functions.

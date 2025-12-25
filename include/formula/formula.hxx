@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_FORMULA_HXX
-#define INCLUDED_FORMULA_FORMULA_HXX
+#pragma once
 
 #include <config_options.h>
 #include <memory>
@@ -31,6 +30,7 @@
 #include <sal/types.h>
 #include <sfx2/basedlgs.hxx>
 #include <tools/gen.hxx>
+#include <vcl/weld/DialogController.hxx>
 
 class SfxBindings;
 class SfxChildWindow;
@@ -121,7 +121,5 @@ protected:
 };
 
 } // formula
-
-#endif // INCLUDED_FORMULA_FORMULA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

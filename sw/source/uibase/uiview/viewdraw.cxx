@@ -85,7 +85,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     SdrObjKind eNewFormObjKind = SdrObjKind::NONE;
     if (nSlotId == SID_FM_CREATE_CONTROL)
     {
-        const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
+        const SfxUInt16Item* pIdentifierItem = rReq.GetArg(SID_FM_CONTROL_IDENTIFIER);
         if (pIdentifierItem)
             eNewFormObjKind = static_cast<SdrObjKind>(pIdentifierItem->GetValue());
     }

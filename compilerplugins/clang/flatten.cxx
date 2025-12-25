@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "compat.hxx"
 #include "plugin.hxx"
 #include <cassert>
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <optional>
 #include <set>
 #include <stack>
 
@@ -49,7 +49,7 @@ private:
     SourceRange ignoreMacroExpansions(SourceRange range);
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
-    compat::optional<std::string> invertCondition(
+    std::optional<std::string> invertCondition(
         Expr const * condExpr, SourceRange conditionRange);
     bool isLargeCompoundStmt(Stmt const *);
 
@@ -303,7 +303,7 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    compat::optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    std::optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
     if (!conditionString)
         return false;
 
@@ -393,7 +393,7 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    compat::optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    std::optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
     if (!conditionString)
         return false;
 
@@ -417,7 +417,7 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
     return true;
 }
 
-compat::optional<std::string> Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
+std::optional<std::string> Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
 {
     std::string s = getSourceAsString(conditionRange);
 
@@ -456,7 +456,7 @@ compat::optional<std::string> Flatten::invertCondition(Expr const * condExpr, So
                 s = "!(" + s + ")";
         }
         if (!ok)
-           return compat::optional<std::string>();
+           return std::optional<std::string>();
     }
     else if (auto opCallExpr = dyn_cast<CXXOperatorCallExpr>(condExpr))
     {
@@ -473,7 +473,7 @@ compat::optional<std::string> Flatten::invertCondition(Expr const * condExpr, So
                 s = "!(" + s + ")";
         }
         if (!ok)
-            return compat::optional<std::string>();
+            return std::optional<std::string>();
     }
     else if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
         s = "!" + s;

@@ -47,78 +47,121 @@
 #define GF_FONTMASK  0xF0000000
 #define GF_FONTSHIFT 28
 
-
-sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
+namespace
 {
-    // currently only conversion from ASCII digits is interesting
-    if( (nChar < '0') || ('9' < nChar) )
-        return nChar;
 
-    int nOffset;
+int GetLocalizedDigitOffset( LanguageType eLang )
+{
     // eLang & LANGUAGE_MASK_PRIMARY catches language independent of region.
     // CAVEAT! To some like Mongolian MS assigned the same primary language
     // although the script type is different!
     LanguageType pri = primary(eLang);
     if( pri == primary(LANGUAGE_ARABIC_SAUDI_ARABIA) )
-        nOffset = 0x0660 - '0';  // arabic-indic digits
+        return 0x0660 - '0';  // arabic-indic digits
     else if ( pri.anyOf(
         primary(LANGUAGE_FARSI),
         primary(LANGUAGE_URDU_PAKISTAN),
         primary(LANGUAGE_PUNJABI), //???
         primary(LANGUAGE_SINDHI)))
-        nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
+        return 0x06F0 - '0';  // eastern arabic-indic digits
     else if ( pri == primary(LANGUAGE_BENGALI) )
-        nOffset = 0x09E6 - '0';  // bengali
+        return 0x09E6 - '0';  // bengali
     else if ( pri == primary(LANGUAGE_HINDI) )
-        nOffset = 0x0966 - '0';  // devanagari
+        return 0x0966 - '0';  // devanagari
     else if ( pri.anyOf(
         primary(LANGUAGE_AMHARIC_ETHIOPIA),
         primary(LANGUAGE_TIGRIGNA_ETHIOPIA)))
         // TODO case:
-        nOffset = 0x1369 - '0';  // ethiopic
+        return 0x1369 - '0';  // ethiopic
     else if ( pri == primary(LANGUAGE_GUJARATI) )
-        nOffset = 0x0AE6 - '0';  // gujarati
+        return 0x0AE6 - '0';  // gujarati
 #ifdef LANGUAGE_GURMUKHI // TODO case:
     else if ( pri == primary(LANGUAGE_GURMUKHI) )
-        nOffset = 0x0A66 - '0';  // gurmukhi
+        return 0x0A66 - '0';  // gurmukhi
 #endif
     else if ( pri == primary(LANGUAGE_KANNADA) )
-        nOffset = 0x0CE6 - '0';  // kannada
+        return 0x0CE6 - '0';  // kannada
     else if ( pri == primary(LANGUAGE_KHMER))
-        nOffset = 0x17E0 - '0';  // khmer
+        return 0x17E0 - '0';  // khmer
     else if ( pri == primary(LANGUAGE_LAO) )
-        nOffset = 0x0ED0 - '0';  // lao
+        return 0x0ED0 - '0';  // lao
     else if ( pri == primary(LANGUAGE_MALAYALAM) )
-        nOffset = 0x0D66 - '0';  // malayalam
+        return 0x0D66 - '0';  // malayalam
     else if ( pri == primary(LANGUAGE_MONGOLIAN_MONGOLIAN_LSO))
     {
         if (eLang.anyOf(
              LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,
              LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,
              LANGUAGE_MONGOLIAN_MONGOLIAN_LSO))
-                nOffset = 0x1810 - '0';   // mongolian
+                return 0x1810 - '0';   // mongolian
         else
-                nOffset = 0;              // mongolian cyrillic
+                return 0;              // mongolian cyrillic
     }
     else if ( pri == primary(LANGUAGE_BURMESE) )
-        nOffset = 0x1040 - '0';  // myanmar
+        return 0x1040 - '0';  // myanmar
     else if ( pri == primary(LANGUAGE_ODIA) )
-        nOffset = 0x0B66 - '0';  // odia
+        return 0x0B66 - '0';  // odia
     else if ( pri == primary(LANGUAGE_TAMIL) )
-        nOffset = 0x0BE7 - '0';  // tamil
+        return 0x0BE7 - '0';  // tamil
     else if ( pri == primary(LANGUAGE_TELUGU) )
-        nOffset = 0x0C66 - '0';  // telugu
+        return 0x0C66 - '0';  // telugu
     else if ( pri == primary(LANGUAGE_THAI) )
-        nOffset = 0x0E50 - '0';  // thai
+        return 0x0E50 - '0';  // thai
     else if ( pri == primary(LANGUAGE_TIBETAN) )
-        nOffset = 0x0F20 - '0';  // tibetan
+        return 0x0F20 - '0';  // tibetan
     else
+        return 0;
+}
+
+}
+
+OUString LocalizeDigitsInString( const OUString& sStr, LanguageType eTextLanguage,
+                                 sal_Int32 nStart, sal_Int32& nLen )
+{
+    int digitOffset = GetLocalizedDigitOffset(eTextLanguage);
+
+    // If we’re already using arabic digits then we can shortcut the function just return the
+    // original string
+    if (digitOffset == 0)
+        return sStr;
+
+    sal_Int32 nEnd = nStart + nLen;
+
+    for (sal_Int32 i = nStart; i < nEnd; ++i)
     {
-        nOffset = 0;
+        sal_Unicode nChar = sStr[i];
+
+        // The first time we encounter a character that needs to change we’ll make a copy of the
+        // string so we can return a new modified one
+        if (nChar >= '0' && nChar <= '9')
+        {
+            // The new string is very likely to have the same length as the old one
+            OUStringBuffer xTmpStr(sStr.getLength());
+            xTmpStr.append(sStr.subView(0, i));
+
+            // Convert the remainder of the range
+            for (; i < nEnd; ++i)
+            {
+                nChar = sStr[i];
+                if (nChar >= '0' && nChar <= '9')
+                    xTmpStr.appendUtf32(nChar + digitOffset);
+                else
+                    xTmpStr.append(nChar);
+            }
+
+            // Add the rest of the string outside of the range
+            xTmpStr.append(sStr.subView(nEnd));
+
+            // The length of the string might have changed if the offset makes the character need
+            // surrogate pairs
+            nLen += xTmpStr.getLength() - sStr.getLength();
+
+            return xTmpStr.makeStringAndClear();
+        }
     }
 
-    nChar += nOffset;
-    return nChar;
+    // Nothing changed so we can just return the original string
+    return sStr;
 }
 
 SalLayout::SalLayout()
@@ -408,7 +451,7 @@ void GenericSalLayout::Justify(double nNewWidth)
 // to enable automatic halfwidth substitution for fullwidth punctuation
 // return value is negative for l, positive for r, zero for neutral
 // TODO: handle vertical layout as proposed in commit 43bf2ad49c2b3989bbbe893e4fee2e032a3920f5?
-static int lcl_CalcAsianKerning(sal_UCS4 c, bool bLeft)
+static int lcl_CalcAsianKerning(sal_Unicode c, bool bLeft)
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static const signed char nTable[0x30] =

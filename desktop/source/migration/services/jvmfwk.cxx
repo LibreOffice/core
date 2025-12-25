@@ -173,13 +173,11 @@ css::uno::Sequence< OUString > SAL_CALL JavaMigration::getSupportedServiceNames(
 //XInitialization ----------------------------------------------------------------------
 void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
-    const css::uno::Any* pIter = aArguments.getConstArray();
-    const css::uno::Any* pEnd = pIter + aArguments.getLength();
     css::uno::Sequence<css::beans::NamedValue> aOldConfigValues;
-    css::beans::NamedValue aValue;
-    for(;pIter != pEnd;++pIter)
+    for (const css::uno::Any& rArg : aArguments)
     {
-        *pIter >>= aValue;
+        css::beans::NamedValue aValue;
+        rArg >>= aValue;
         if ( aValue.Name == "OldConfiguration" )
         {
             bool bSuccess = aValue.Value >>= aOldConfigValues;
@@ -187,13 +185,11 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
                        "] XInitialization::initialize: Argument OldConfiguration has wrong type.");
             if (bSuccess)
             {
-                const css::beans::NamedValue* pIter2 = aOldConfigValues.getConstArray();
-                const css::beans::NamedValue* pEnd2 = pIter2 + aOldConfigValues.getLength();
-                for(;pIter2 != pEnd2;++pIter2)
+                for (const css::beans::NamedValue& rNamedValue : aOldConfigValues)
                 {
-                    if ( pIter2->Name == "org.openoffice.Office.Java" )
+                    if (rNamedValue.Name == "org.openoffice.Office.Java")
                     {
-                        pIter2->Value >>= m_xLayer;
+                        rNamedValue.Value >>= m_xLayer;
                         break;
                     }
                 }

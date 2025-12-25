@@ -20,8 +20,10 @@
 #pragma once
 
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>
 
 #include <com/sun/star/container/XIndexContainer.hpp>

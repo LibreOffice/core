@@ -30,7 +30,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <config_features.h>
 
 #if HAVE_FEATURE_SCRIPTING
@@ -118,7 +120,7 @@ public:
     {
         m_xTreeView->connect_selection_changed(rLink);
     }
-    void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink) { m_xTreeView->connect_popup_menu(rLink); }
+    void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_xTreeView->connect_command(rLink); }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     void freeze() { m_xTreeView->freeze(); }
     void thaw() { m_xTreeView->thaw(); }
@@ -147,22 +149,22 @@ public:
     void remove(const weld::TreeIter& rIter) { m_xTreeView->remove(rIter); }
     void expand_row(const weld::TreeIter& rIter) { m_xTreeView->expand_row(rIter); }
     int n_children() const { return m_xTreeView->n_children(); }
-    std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool iter_has_child(const weld::TreeIter& rIter) const { return m_xTreeView->iter_has_child(rIter); }
     OUString get_text(int nPos) const { return m_xTreeView->get_text(nPos); }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
-    bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
+    std::unique_ptr<weld::TreeIter> get_selected() const { return m_xTreeView->get_selected(); }
     OUString get_selected_text() const
     {
-        if (!m_xTreeView->get_selected(m_xScratchIter.get()))
-            return OUString();
-        return m_xTreeView->get_text(*m_xScratchIter);
+        if (std::unique_ptr<weld::TreeIter> pIter = m_xTreeView->get_selected())
+            return m_xTreeView->get_text(*pIter);
+        return OUString();
+
     }
     OUString get_selected_id() const
     {
-        if (!m_xTreeView->get_selected(m_xScratchIter.get()))
-            return OUString();
-        return m_xTreeView->get_id(*m_xScratchIter);
+        if (std::unique_ptr<weld::TreeIter> pIter = m_xTreeView->get_selected())
+            return m_xTreeView->get_id(*pIter);
+        return OUString();
     }
     void select(int pos) { m_xTreeView->select(pos); }
     void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }

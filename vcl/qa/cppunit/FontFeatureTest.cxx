@@ -57,10 +57,10 @@ void FontFeatureTest::testGetFontFeaturesGraphite()
     std::vector<vcl::font::Feature> rFontFeatures;
     CPPUNIT_ASSERT(aVDev->GetFontFeatures(rFontFeatures));
 
-    OUString aFeaturesString;
+    OUStringBuffer aFeaturesString;
     for (vcl::font::Feature const& rFeature : rFontFeatures)
     {
-        aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
+        aFeaturesString.append(vcl::font::featureCodeAsString(rFeature.m_nCode) + " ");
     }
 
     CPPUNIT_ASSERT_EQUAL(size_t(53), rFontFeatures.size());
@@ -72,7 +72,7 @@ void FontFeatureTest::testGetFontFeaturesGraphite()
                          "itlc para algn arti circ dash dbls foot "
                          "frsp grkn hang lng minu nfsp name quot "
                          "texm thou vari caps ligc "_ustr,
-                         aFeaturesString);
+                         aFeaturesString.toString());
 
     // Check C2SC feature
     {
@@ -141,16 +141,16 @@ void FontFeatureTest::testGetFontFeaturesOpenType()
     std::vector<vcl::font::Feature> rFontFeatures;
     CPPUNIT_ASSERT(aVDev->GetFontFeatures(rFontFeatures));
 
-    OUString aFeaturesString;
+    OUStringBuffer aFeaturesString;
     for (vcl::font::Feature const& rFeature : rFontFeatures)
-        aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
+        aFeaturesString.append(vcl::font::featureCodeAsString(rFeature.m_nCode) + " ");
 
     CPPUNIT_ASSERT_EQUAL(size_t(15), rFontFeatures.size());
 
     CPPUNIT_ASSERT_EQUAL(u"dnom liga numr pnum ss01 ss02 "
                          "ss03 ss04 ss05 ss06 ss07 ss08 kern kern "
                          "ss05 "_ustr,
-                         aFeaturesString);
+                         aFeaturesString.toString());
 
     // Check ss01 feature
     {
@@ -190,15 +190,15 @@ void FontFeatureTest::testGetFontFeaturesOpenTypeEnum()
     std::vector<vcl::font::Feature> rFontFeatures;
     CPPUNIT_ASSERT(aVDev->GetFontFeatures(rFontFeatures));
 
-    OUString aFeaturesString;
+    OUStringBuffer aFeaturesString;
     for (vcl::font::Feature const& rFeature : rFontFeatures)
-        aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
+        aFeaturesString.append(vcl::font::featureCodeAsString(rFeature.m_nCode) + " ");
 
     CPPUNIT_ASSERT_EQUAL(size_t(10), rFontFeatures.size());
 
     CPPUNIT_ASSERT_EQUAL(u"aalt case cv01 cv02 cv03 frac ordn sups "
                          "zero kern "_ustr,
-                         aFeaturesString);
+                         aFeaturesString.toString());
 
     // Check aalt feature
     {

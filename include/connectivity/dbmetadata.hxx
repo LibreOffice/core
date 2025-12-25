@@ -17,16 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_DBMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_DBMETADATA_HXX
-
-#include <com/sun/star/uno/Reference.hxx>
+#pragma once
 
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::sdbc { class XConnection; }
 namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace dbtools
 {
@@ -187,8 +186,5 @@ namespace dbtools
 
 
 } // namespace dbtools
-
-
-#endif // INCLUDED_CONNECTIVITY_DBMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

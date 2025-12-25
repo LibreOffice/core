@@ -13,12 +13,13 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_GlowShadowReflection)
 {
-    loadAndReload("TextEffects_Glow_Shadow_Reflection.docx");
+    createSwDoc("TextEffects_Glow_Shadow_Reflection.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow", "rad").match("63500"));
@@ -86,7 +87,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_GlowShadowReflection)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextOutline)
 {
-    loadAndReload("TextEffects_TextOutline.docx");
+    createSwDoc("TextEffects_TextOutline.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Paragraph 1
@@ -142,7 +144,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextOutline)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextFill)
 {
-    loadAndReload("TextEffects_TextFill.docx");
+    createSwDoc("TextEffects_TextFill.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Paragraph 1 has no textFill
 
@@ -180,7 +183,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextFill)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing)
 {
-    loadAndReload("TextEffects_Props3d_Ligatures_NumForm_NumSpacing.docx");
+    createSwDoc("TextEffects_Props3d_Ligatures_NumForm_NumSpacing.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Paragraph 1 - w14:props3d
@@ -226,7 +230,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_StylisticSets_CntxtAlts)
 {
-    loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
+    createSwDoc("TextEffects_StylisticSets_CntxtAlts.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Paragraph 1 - w14:stylisticSets
@@ -243,7 +248,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_StylisticSets_CntxtAlts)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_McIgnorable)
 {
-    loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
+    createSwDoc("TextEffects_StylisticSets_CntxtAlts.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document", "Ignorable", u"w14 wp14 w15");
@@ -255,7 +261,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_McIgnorable)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_CompatSettingsForW14)
 {
-    loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
+    createSwDoc("TextEffects_StylisticSets_CntxtAlts.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting", 5);
@@ -283,7 +290,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_CompatSettingsForW14)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Groupshapes)
 {
-    loadAndReload("TextEffects_Groupshapes.docx");
+    createSwDoc("TextEffects_Groupshapes.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     OString sPathToWGP = "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp"_ostr;
@@ -397,7 +405,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Groupshapes)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_InStyleXml)
 {
-    loadAndReload("TextEffects_InStyle.docx");
+    createSwDoc("TextEffects_InStyle.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
 
     OString sPathToCharacterStyle = "/w:styles/w:style[3]"_ostr;
@@ -625,7 +634,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_InStyleXml)
 
 CPPUNIT_TEST_FIXTURE(Test, Test_no_tag_if_no_fill)
 {
-    loadAndReload("tdf112103_tablebgnofill.docx");
+    createSwDoc("tdf112103_tablebgnofill.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:shd", 0);

@@ -20,7 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <o3tl/string_view.hxx>
@@ -47,7 +47,7 @@ ScAutoFormatDlg::ScAutoFormatDlg(weld::Window* pParent,
     , aStrRename(ScResId(STR_RENAME_AUTOFORMAT_TITLE))
     , pFormat(pAutoFormat)
     , pSelFmtData(pSelFormatData)
-    , nIndex(0)
+    , m_nIndex(0)
     , bCoreDataChanged(false)
     , bFmtInserted(false)
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
@@ -106,7 +106,7 @@ void ScAutoFormatDlg::Init()
     m_xBtnRename->set_sensitive(false);
     m_xBtnRemove->set_sensitive(false);
 
-    nIndex = 0;
+    m_nIndex = 0;
     UpdateChecks();
 
     if ( !pSelFmtData )
@@ -119,7 +119,7 @@ void ScAutoFormatDlg::Init()
 
 void ScAutoFormatDlg::UpdateChecks()
 {
-    const ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
+    const ScAutoFormatData* pData = pFormat->findByIndex(m_nIndex);
 
     m_xBtnNumFormat->set_active( pData->GetIncludeValueFormat() );
     m_xBtnBorder->set_active( pData->GetIncludeFrame() );
@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl, weld::TreeView&, bool)
 
 IMPL_LINK(ScAutoFormatDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
-    ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
+    ScAutoFormatData* pData = pFormat->findByIndex(m_nIndex);
     bool bCheck = rBtn.get_active();
 
     if (&rBtn == m_xBtnNumFormat.get())
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, weld::Button&, void)
 {
-    if ( (nIndex > 0) && (m_xLbFormat->n_children() > 0) )
+    if ( (m_nIndex > 0) && (m_xLbFormat->n_children() > 0) )
     {
         OUString aMsg = o3tl::getToken(aStrDelMsg, 0, '#' )
                       + m_xLbFormat->get_selected_text()
@@ -255,10 +255,10 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, weld::Button&, void)
 
         if (RET_YES == xQueryBox->run())
         {
-            m_xLbFormat->remove(nIndex);
-            m_xLbFormat->select(nIndex-1);
+            m_xLbFormat->remove(m_nIndex);
+            m_xLbFormat->select(m_nIndex-1);
 
-            if ( nIndex-1 == 0 )
+            if ( m_nIndex-1 == 0 )
                 m_xBtnRemove->set_sensitive(false);
 
             if ( !bCoreDataChanged )
@@ -268,9 +268,9 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, weld::Button&, void)
             }
 
             ScAutoFormat::iterator it = pFormat->begin();
-            std::advance(it, nIndex);
+            std::advance(it, m_nIndex);
             pFormat->erase(it);
-            nIndex--;
+            m_nIndex--;
 
             SelFmtHdl( *m_xLbFormat );
         }
@@ -308,12 +308,12 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, weld::Button&, void)
                 {
                     // no format with this name yet, so we can rename
 
-                    m_xLbFormat->remove(nIndex);
-                    const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
+                    m_xLbFormat->remove(m_nIndex);
+                    const ScAutoFormatData* p = pFormat->findByIndex(m_nIndex);
                     std::unique_ptr<ScAutoFormatData> pNewData(new ScAutoFormatData(*p));
 
                     it = pFormat->begin();
-                    std::advance(it, nIndex);
+                    std::advance(it, m_nIndex);
                     pFormat->erase(it);
 
                     pNewData->SetName( aFormatName );
@@ -358,10 +358,12 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl, weld::TreeView&, void)
 {
-    nIndex = m_xLbFormat->get_selected_index();
+    int nIndex = m_xLbFormat->get_selected_index();
+    assert(nIndex != -1 && "nothing selected");
+    m_nIndex = nIndex;
     UpdateChecks();
 
-    if ( nIndex == 0 )
+    if ( m_nIndex == 0 )
     {
         m_xBtnRename->set_sensitive(false);
         m_xBtnRemove->set_sensitive(false);
@@ -372,13 +374,13 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl, weld::TreeView&, void)
         m_xBtnRemove->set_sensitive(true);
     }
 
-    ScAutoFormatData* p = pFormat->findByIndex(nIndex);
+    ScAutoFormatData* p = pFormat->findByIndex(m_nIndex);
     m_aWndPreview.NotifyChange(p);
 }
 
 OUString ScAutoFormatDlg::GetCurrFormatName()
 {
-    const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
+    const ScAutoFormatData* p = pFormat->findByIndex(m_nIndex);
     return p ? p->GetName() : OUString();
 }
 

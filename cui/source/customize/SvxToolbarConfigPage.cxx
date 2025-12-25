@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/event.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 
@@ -69,9 +69,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
     rTreeView.show();
 
     rTreeView.connect_selection_changed(LINK(this, SvxToolbarConfigPage, SelectToolbarEntry));
-    rTreeView.connect_popup_menu(LINK(this, SvxToolbarConfigPage, ContentContextMenuHdl));
+    rTreeView.connect_command(LINK(this, SvxToolbarConfigPage, ContentContextMenuHdl));
 
-    m_xFunctions->get_widget().connect_popup_menu(
+    m_xFunctions->get_widget().connect_command(
         LINK(this, SvxToolbarConfigPage, FunctionContextMenuHdl));
 
     m_xTopLevelListBox->set_help_id(HID_SVX_TOPLEVELLISTBOX);

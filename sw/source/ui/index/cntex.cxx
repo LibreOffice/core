@@ -40,6 +40,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>
 #include <unoidxcoll.hxx>
+#include <unoidx.hxx>
 #include <names.hxx>
 
 using namespace ::com::sun::star;
@@ -93,23 +94,21 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
         if( xDoc )
             xDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );
 
-        uno::Reference< container::XNameAccess >  xSections =
-                                        xDoc->getTextSections();
+        rtl::Reference< SwXTextSections > xSections =
+                                        xDoc->getSwTextSections();
 
         for(int i = 0; i < 7; ++i )
         {
             OUString sTmp = "IndexSection_" + OUString::number(i);
-            uno::Any aSection = xSections->getByName( sTmp );
-            aSection >>= m_vTypeData[i].m_oIndexSections->xContainerSection;
+            m_vTypeData[i].m_oIndexSections->xContainerSection =
+                    xSections->getSwTextSectionByName( sTmp );
         }
         rtl::Reference< SwXDocumentIndexes >  xIdxs = xDoc->getSwDocumentIndexes();
         int n = xIdxs->getCount();
         while(n)
         {
             n--;
-            uno::Any aIdx = xIdxs->getByIndex(n);
-            uno::Reference< text::XDocumentIndex >  xIdx;
-            aIdx >>= xIdx;
+            rtl::Reference< SwXDocumentIndex > xIdx = xIdxs->getDocumentIndexByIndex(n);
             xIdx->dispose();
         }
         CreateOrUpdateExample(m_eCurrentTOXType.eType);
@@ -155,20 +154,20 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
              OUString sIndexTypeName(OUString::createFromAscii( IndexServiceNames[
                     nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
-             m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.set(xModel->createInstance(sIndexTypeName), uno::UNO_QUERY);
-             uno::Reference< text::XTextContent >  xContent = m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex;
+             m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex = xModel->createDocumentIndex(sIndexTypeName);
+             uno::Reference< text::XTextContent >  xContent = static_cast<SwXSection*>(m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.get());
              xCursor->getText()->insertTextContent(xCursor, xContent, false);
         }
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
         {
-            uno::Reference< beans::XPropertySet >  xSectPr(m_vTypeData[i].m_oIndexSections->xContainerSection, uno::UNO_QUERY);
+            rtl::Reference< SwXTextSection >  xSectPr(m_vTypeData[i].m_oIndexSections->xContainerSection);
             if(xSectPr.is())
             {
                 xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, Any(i == nTOXIndex));
             }
         }
         // set properties
-        uno::Reference< beans::XPropertySet >  xIdxProps(m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex, uno::UNO_QUERY);
+        rtl::Reference< SwXDocumentIndex >  xIdxProps(m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex);
         uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
         SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
         SwTOIOptions nIdxOptions = rDesc.GetIndexOptions();

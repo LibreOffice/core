@@ -25,7 +25,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <strings.hrc>
 #include <componentmodule.hxx>

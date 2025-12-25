@@ -147,7 +147,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
         aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
-    aSigBuffer.append(" /M (" + vcl::PDFWriter::GetDateTime(&rSigningContext)
+    aSigBuffer.append(" /M (" + vcl::pdf::PDFWriter::GetDateTime(&rSigningContext)
                       + ")"
 
                         // Byte range: we can write offset1-length1 and offset2 right now, will
@@ -1483,10 +1483,10 @@ OString PDFDocument::ReadKeyword(SvStream& rStream)
         aBuf.append(ch);
         rStream.ReadChar(ch);
         if (rStream.eof())
-            return aBuf.toString();
+            return aBuf.makeStringAndClear();
     }
     rStream.SeekRel(-1);
-    return aBuf.toString();
+    return aBuf.makeStringAndClear();
 }
 
 size_t PDFDocument::FindStartXRef(SvStream& rStream)

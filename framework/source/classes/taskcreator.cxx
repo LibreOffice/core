@@ -26,6 +26,9 @@
 #include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+
+#include <rtl/ref.hxx>
+
 #include <utility>
 
 namespace framework{
@@ -54,7 +57,7 @@ TaskCreator::~TaskCreator()
 /*-****************************************************************************************************
     TODO document me
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
+css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor )
 {
     rtl::Reference< TaskCreatorService > xCreator = new TaskCreatorService(m_xContext);
 

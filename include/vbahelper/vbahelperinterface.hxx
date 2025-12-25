@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -90,12 +89,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
     {
         css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
-        const OUString* pStart = sServices.getConstArray();
-        const OUString* pEnd = pStart + sServices.getLength();
-        for ( ; pStart != pEnd ; ++pStart )
-            if ( *pStart == ServiceName )
-                return true;
-        return false;
+        return std::find(sServices.begin(), sServices.end(), ServiceName) != sServices.end();
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
     {

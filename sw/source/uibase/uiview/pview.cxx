@@ -19,13 +19,16 @@
 
 #include <config_wasm_strip.h>
 
+#include <comphelper/OAccessible.hxx>
+
 #include <sfx2/objface.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <svl/whiter.hxx>
 #include <svl/slstitm.hxx>
@@ -1127,6 +1130,7 @@ void SwPagePreview::Init()
     aOpt.SetTable( true );
     aOpt.SetSnap( false );
     aOpt.SetGridVisible( false );
+    aOpt.SetBaselineGridVisible( false );
     aOpt.SetOnlineSpell( false );
     aOpt.SetHideWhitespaceMode( false );
 

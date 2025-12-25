@@ -98,7 +98,7 @@ public:
     void LoadImageForWidth(int nWidth)
     {
         mbIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
-        SfxApplication::loadBrandSvg(mbIsDark ? "shell/logo-sc_inverted" : "shell/logo-sc",
+        SfxApplication::loadBrandSvg(mbIsDark ? u"shell/logo-sc_inverted" : u"shell/logo-sc",
                                     maBrandImage, nWidth);
     }
 
@@ -141,7 +141,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override
     {
-        rRenderContext.DrawBitmapEx(Point(0, 0), maBrandImage);
+        rRenderContext.DrawBitmap(Point(0, 0), maBrandImage);
     }
 };
 

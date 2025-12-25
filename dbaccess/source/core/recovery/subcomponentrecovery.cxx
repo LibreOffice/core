@@ -24,6 +24,7 @@
 #include "subcomponentloader.hxx"
 #include "settingsimport.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>

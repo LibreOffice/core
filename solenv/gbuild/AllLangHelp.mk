@@ -24,13 +24,13 @@ $(call gb_AllLangHelp_get_helpfiles_target,%): | \
 	touch $@
 endif
 
-$(dir $(call gb_AllLangHelp_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(gb_AllLangHelp_targetdir)/%/.dir :
+	mkdir -p $(@D) && touch $@
 
-$(dir $(call gb_AllLangHelp_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(gb_AllLangHelp_targetdir)/.dir :
+	mkdir -p $(@D) && touch $@
 
-$(call gb_AllLangHelp_get_target,%) :
+$(gb_AllLangHelp_targetdir)/% :
 ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(true),ALH,5)
 	$(call gb_Trace_MakeMark,$*,ALH)
@@ -42,7 +42,7 @@ ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(false),ALH,5)
 endif
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_AllLangHelp_get_target,$*) $(call gb_AllLangHelp_get_helpfiles_target,$*) \
+		rm -f $(gb_AllLangHelp_targetdir)/$* $(call gb_AllLangHelp_get_helpfiles_target,$*) \
 	)
 
 # gb_AllLangHelp_AllLangHelp__one_lang module lang helpname
@@ -50,9 +50,9 @@ define gb_AllLangHelp_AllLangHelp__one_lang
 $(call gb_HelpTarget_HelpTarget,$(3),$(1),$(2))
 $(call gb_HelpTarget_set_helpdir,$(3),$(gb_AllLangHelp_HELPDIR))
 
-$(call gb_AllLangHelp_get_target,$(1)) : $(call gb_HelpTarget_get_target,$(3))
+$(gb_AllLangHelp_targetdir)/$(1) : $(call gb_HelpTarget_get_target,$(3))
 ifeq ($(ENABLE_HTMLHELP),)
-$(call gb_AllLangHelp_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_HelpTarget_get_packagename,$(3)))
+$(gb_AllLangHelp_targetdir)/$(1) : $(call gb_Package_get_target,$(call gb_HelpTarget_get_packagename,$(3)))
 endif
 $(call gb_AllLangHelp_get_clean_target,$(1)) : $(call gb_HelpTarget_get_clean_target,$(3))
 ifeq ($(ENABLE_HTMLHELP),)
@@ -71,10 +71,10 @@ gb_AllLangHelp_ALLTARGETS += $(1)
 $(foreach lang,$(gb_HELP_LANGS),\
 	$(call gb_AllLangHelp_AllLangHelp__one_lang,$(1),$(lang),$(call gb_AllLangHelp__get_helpname,$(1),$(lang))))
 
-$(call gb_AllLangHelp_get_target,$(1)) :| $(dir $(call gb_AllLangHelp_get_target,$(1))).dir
+$(gb_AllLangHelp_targetdir)/$(1) :| $(dir $(gb_AllLangHelp_targetdir)/$(1)).dir
 
-$$(eval $$(call gb_Module_register_target,$(call gb_AllLangHelp_get_target,$(1)),$(call gb_AllLangHelp_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),AllLangHelp)
+$$(eval $$(call gb_Module_register_target,$(gb_AllLangHelp_targetdir)/$(1),$(call gb_AllLangHelp_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),AllLangHelp,$(gb_AllLangHelp_targetdir)/$(1))
 
 endef
 

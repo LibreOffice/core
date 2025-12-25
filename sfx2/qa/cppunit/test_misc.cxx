@@ -44,6 +44,8 @@
 #include <sfx2/app.hxx>
 #include <osl/file.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace ::com::sun::star;
 
 namespace {

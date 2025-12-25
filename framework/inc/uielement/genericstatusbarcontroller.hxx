@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include "statusbaritem.hxx"
+
 #include <svtools/statusbarcontroller.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -32,7 +34,7 @@ class GenericStatusbarController final : public svt::StatusbarController
     public:
         GenericStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                     const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                    const css::uno::Reference< css::ui::XStatusbarItem >& rxItem,
+                                    const rtl::Reference<StatusbarItem>& rpItem,
                                     AddonStatusbarItemData *pItemData );
         virtual ~GenericStatusbarController() override;
 

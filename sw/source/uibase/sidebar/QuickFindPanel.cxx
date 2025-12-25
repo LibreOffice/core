@@ -8,7 +8,7 @@
  *
  */
 
-#include "QuickFindPanel.hxx"
+#include <QuickFindPanel.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/scopeguard.hxx>
@@ -23,9 +23,19 @@
 #include <cntfrm.hxx>
 #include <strings.hrc>
 #include <vcl/event.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <swwait.hxx>
+
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/bindings.hxx>
+
+#include <svx/srchdlg.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 
 const int CharactersBeforeAndAfter = 40;
 
@@ -95,9 +105,29 @@ IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilaritySettingsDialogBut
     }
 }
 
+QuickFindPanelWindow::QuickFindPanelWindow(SfxBindings* _pBindings, SfxChildWindow* pChildWin,
+                                           vcl::Window* pParent, SfxChildWinInfo* pInfo)
+    : SfxQuickFind(_pBindings, pChildWin, pParent, pInfo)
+    , m_xQuickFindPanel(std::make_unique<QuickFindPanel>(m_xContainer.get(),
+                                                         _pBindings->GetActiveFrame(), _pBindings))
+{
+    _pBindings->Invalidate(SID_QUICKFIND);
+}
+
+QuickFindPanelWrapper::QuickFindPanelWrapper(vcl::Window* pParent, sal_uInt16 nId,
+                                             SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+    : SfxQuickFindWrapper(pParent, nId)
+{
+    SetWindow(VclPtr<QuickFindPanelWindow>::Create(pBindings, this, pParent, pInfo));
+    Initialize();
+}
+
+SFX_IMPL_DOCKINGWINDOW(QuickFindPanelWrapper, SID_QUICKFIND);
+
 std::unique_ptr<PanelLayout>
 QuickFindPanel::Create(weld::Widget* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                       SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to QuickFindPanel::Create",
@@ -105,20 +135,35 @@ QuickFindPanel::Create(weld::Widget* pParent,
     if (!rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to QuickFindPanel::Create", nullptr,
                                              0);
-    return std::make_unique<QuickFindPanel>(pParent, rxFrame);
+    return std::make_unique<QuickFindPanel>(pParent, rxFrame, pBindings);
 }
 
-QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame)
+QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame,
+                               SfxBindings* pBindings)
     : PanelLayout(pParent, u"QuickFindPanel"_ustr, u"modules/swriter/ui/sidebarquickfind.ui"_ustr)
     , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
     , m_xSearchOptionsToolbar(m_xBuilder->weld_toolbar(u"searchoptionstoolbar"_ustr))
     , m_xFindAndReplaceToolbar(m_xBuilder->weld_toolbar(u"findandreplacetoolbar"_ustr))
     , m_xFindAndReplaceToolbarDispatch(
           new ToolbarUnoDispatcher(*m_xFindAndReplaceToolbar, *m_xBuilder, rxFrame))
+    , m_xTopbar(m_xBuilder->weld_box(u"topbar"_ustr))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
     , m_pWrtShell(::GetActiveWrtShell())
+    , m_xAcceleratorExecute(svt::AcceleratorExecute::createAcceleratorHelper())
+    , m_pBindings(pBindings)
 {
+    m_xAcceleratorExecute->init(comphelper::getProcessComponentContext(), rxFrame);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
+        jsdialog::SendQuickFindForView(nShellId);
+
+        // disable search options for online as still tunneled dialog
+        m_xSearchOptionsToolbar->set_visible(false);
+        m_xTopbar->set_visible(false);
+    }
     m_nMinimumPanelWidth
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
     m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);
@@ -127,6 +172,8 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xSearchFindEntry->connect_activate(
         LINK(this, QuickFindPanel, SearchFindEntryActivateHandler));
     m_xSearchFindEntry->connect_changed(LINK(this, QuickFindPanel, SearchFindEntryChangedHandler));
+    m_xSearchFindEntry->connect_key_press(
+        LINK(this, QuickFindPanel, SearchFindEntryKeyInputHandler));
 
     m_xSearchOptionsToolbar->connect_clicked(
         LINK(this, QuickFindPanel, SearchOptionsToolbarClickedHandler));
@@ -134,10 +181,15 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xFindAndReplaceToolbar->connect_clicked(
         LINK(this, QuickFindPanel, FindAndReplaceToolbarClickedHandler));
 
-    m_xSearchFindsList->connect_custom_get_size(
-        LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
-    m_xSearchFindsList->connect_custom_render(LINK(this, QuickFindPanel, SearchFindsListRender));
-    m_xSearchFindsList->set_column_custom_renderer(1, true);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        m_xSearchFindsList->connect_custom_get_size(
+            LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
+        m_xSearchFindsList->connect_custom_render(
+            LINK(this, QuickFindPanel, SearchFindsListRender));
+        m_xSearchFindsList->set_column_custom_renderer(1, true);
+    }
+
     m_xSearchFindsList->connect_selection_changed(
         LINK(this, QuickFindPanel, SearchFindsListSelectionChangedHandler));
     m_xSearchFindsList->connect_row_activated(
@@ -181,25 +233,46 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUStri
 // tdf#162580 related: When upgrading from Find toolbar search to advanced Find and Replace
 // search dialog, inherit (pre-fill) search field's term from current value of find bar's
 // focused search entry
+
+bool QuickFindPanel::UpgradeSearchToSearchDialog()
+{
+    m_pWrtShell->AssureStdMode();
+    SvxSearchDialog* pSearchDialog = SwView::GetSearchDialog();
+    if (!pSearchDialog)
+    {
+        m_pBindings->ExecuteSynchron(SID_SEARCH_DLG);
+        pSearchDialog = SwView::GetSearchDialog();
+    }
+    if (pSearchDialog)
+    {
+        pSearchDialog->SetSearchLabel(EMPTY_OUSTRING);
+        pSearchDialog->SetSearchLBEntryTextAndGrabFocus(m_xSearchFindEntry->get_text());
+        pSearchDialog->Present();
+        return true;
+    }
+    return false;
+}
+
 IMPL_LINK(QuickFindPanel, FindAndReplaceToolbarClickedHandler, const OUString&, rCommand, void)
 {
-    if (!SwView::GetSearchDialog())
-    {
-        SvxSearchItem* pSearchItem = SwView::GetSearchItem();
-        if (!pSearchItem)
-        {
-            pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
-            SwView::SetSearchItem(pSearchItem);
-        }
-        pSearchItem->SetSearchString(m_xSearchFindEntry->get_text());
-    }
-    m_xFindAndReplaceToolbarDispatch->Select(rCommand);
+    if (rCommand == "searchdialog")
+        UpgradeSearchToSearchDialog();
+}
+
+IMPL_LINK(QuickFindPanel, SearchFindEntryKeyInputHandler, const KeyEvent&, rKeyEvent, bool)
+{
+    const OUString aCommand(m_xAcceleratorExecute->findCommand(
+        svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyEvent.GetKeyCode())));
+    if (aCommand == ".uno:SearchDialog")
+        return UpgradeSearchToSearchDialog();
+    return false;
 }
 
 QuickFindPanel::~QuickFindPanel()
 {
     m_xSearchFindEntry.reset();
     m_xSearchFindsList.reset();
+    m_xAcceleratorExecute.reset();
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryFocusInHandler, weld::Widget&, void)
@@ -453,11 +526,11 @@ void QuickFindPanel::FillSearchFindsList()
         nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
     aSearchOptions.transliterateFlags = nTransliterationFlags;
 
-    m_pWrtShell->SttSelect();
+    m_pWrtShell->StartAllAction();
     /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
         aSearchOptions, false, SwDocPositions::Start, SwDocPositions::End,
         FindRanges::InBody | FindRanges::InSelAll, false);
-    m_pWrtShell->EndSelect();
+    m_pWrtShell->EndAllAction();
 
     if (m_pWrtShell->HasMark())
     {
@@ -580,8 +653,16 @@ void QuickFindPanel::FillSearchFindsList()
             if (xPaM->GetPageNum() != nPage)
             {
                 nPage = xPaM->GetPageNum();
-                OUString sPageEntry(u"-"_ustr + SwResId(ST_PGE) + u" "_ustr
-                                    + OUString::number(nPage));
+                OUString sPageEntry;
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    sPageEntry = u"-$#~"_ustr + SwResId(ST_PGE) + u" "_ustr
+                                 + OUString::number(nPage) + u"~#$-"_ustr;
+                }
+                else
+                {
+                    sPageEntry = u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage);
+                }
                 m_xSearchFindsList->append(sPageEntry, sPageEntry);
             }
 

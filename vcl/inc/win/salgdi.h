@@ -81,7 +81,6 @@ private:
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
     LOGFONTW                maLogFont;
-    mutable sal::systools::COMReference<IDWriteFontFace> mxDWFontFace;
 };
 
 /**
@@ -201,7 +200,7 @@ public:
 
     HRGN getRegion() const;
 
-    static IDWriteFactory* getDWriteFactory();
+    static const sal::systools::COMReference<IDWriteFactory>& getDWriteFactory();
     static IDWriteGdiInterop* getDWriteGdiInterop();
 
     HWND gethWnd();

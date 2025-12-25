@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include "connpooloptions.hxx"
 #include "connpoolsettings.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <svl/eitem.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <strings.hrc>
@@ -173,13 +174,13 @@ namespace offapp
 
     OUString ConnectionPoolOptionsPage::GetAllStrings()
     {
-        OUString sAllStrings;
+        OUStringBuffer sAllStrings;
         OUString labels[] = { u"label1"_ustr, u"driverslabel"_ustr, u"driverlabel"_ustr, u"timeoutlabel"_ustr, u"driver"_ustr };
 
         for (const auto& label : labels)
         {
             if (const auto pString = m_xBuilder->weld_label(label))
-                sAllStrings += pString->get_label() + " ";
+                sAllStrings.append(pString->get_label() + " ");
         }
 
         OUString checkButton[] = { u"connectionpooling"_ustr, u"enablepooling"_ustr };
@@ -187,10 +188,10 @@ namespace offapp
         for (const auto& check : checkButton)
         {
             if (const auto pString = m_xBuilder->weld_check_button(check))
-                sAllStrings += pString->get_label() + " ";
+                sAllStrings.append(pString->get_label() + " ");
         }
 
-        return sAllStrings.replaceAll("_", "");
+        return sAllStrings.toString().replaceAll("_", "");
     }
 
     bool ConnectionPoolOptionsPage::FillItemSet(SfxItemSet* _rSet)
@@ -282,7 +283,7 @@ namespace offapp
             m_xDriversLabel->set_sensitive(bGloballyEnabled);
             m_xDriverList->set_sensitive(bGloballyEnabled);
             if (!bGloballyEnabled)
-                m_xDriverList->select(-1);
+                m_xDriverList->unselect_all();
             m_xDriverLabel->set_sensitive(bGloballyEnabled);
             m_xDriver->set_sensitive(bGloballyEnabled);
             m_xDriverPoolingEnabled->set_sensitive(bGloballyEnabled && !m_xDriverPoolingEnabledImg->get_visible());

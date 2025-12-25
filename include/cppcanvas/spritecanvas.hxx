@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <basegfx/vector/b2dsize.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/customsprite.hxx>
 #include <memory>
@@ -28,6 +27,7 @@ namespace com::sun::star::rendering
 {
     class  XSpriteCanvas;
 }
+namespace basegfx { class B2DSize; }
 
 
 /* Definition of SpriteCanvas */

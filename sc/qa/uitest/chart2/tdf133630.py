@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf133630(UITestCase):
 
-   def test_tdf133630(self):
+    def test_tdf133630(self):
 
         with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
 

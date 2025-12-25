@@ -32,7 +32,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <accessibility/vclxaccessibleedit.hxx>
 #include <window.h>

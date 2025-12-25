@@ -5320,6 +5320,15 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="UseSystemColorDialog" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if the system's color pickers should be
+          used. If false, the proprietary color picker implementation
+          will be used. Relevant on platforms where color picker
+          integration is implemented.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="UseSystemFileDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if the system's file and folder pickers should be
@@ -5454,6 +5463,18 @@
       <prop oor:name="QueryShowFieldName" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether to show the field name when entering the field mode.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="QueryClearRecentDocuments" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to show the confirmation dialog when clearing recent documents.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="QueryClearUnavailableDocuments" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to show the confirmation dialog when clearing unavailable documents.</desc>
         </info>
         <value>true</value>
       </prop>

@@ -19,7 +19,9 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ScViewData;
 class ScDocShell;
@@ -32,7 +34,7 @@ private:
     OUString            m_aStrUnknownUser;
     OUString            m_aStrExclusiveAccess;
 
-    ScDocShell&         mrDocShell;
+    ScDocShell*         mpDocShell;
 
     std::unique_ptr<weld::CheckButton> m_xCbShare;
     std::unique_ptr<weld::Label> m_xFtWarning;

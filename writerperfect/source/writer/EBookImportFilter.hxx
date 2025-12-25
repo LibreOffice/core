@@ -34,7 +34,7 @@ private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;
     virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
                                   OdtGenerator& rGenerator,
-                                  utl::MediaDescriptor& rDescriptor) override;
+                                  comphelper::SequenceAsHashMap& rDescriptor) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

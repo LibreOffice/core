@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <basegfx/vector/b2enums.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include "emfpbrush.hxx"
 #include <vector>

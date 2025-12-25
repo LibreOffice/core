@@ -22,11 +22,11 @@
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
 class ImplBorderWindowView;
+struct NotebookBarAddonsItem;
 enum class DrawButtonFlags;
 
 enum class BorderWindowStyle {
@@ -152,7 +152,7 @@ public:
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,
-                        const NotebookBarAddonsItem &aNotebookBarAddonsItem);
+                        std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem);
     void CloseNotebookBar();
     const VclPtr<NotebookBar>& GetNotebookBar() const { return mpNotebookBar; }
 

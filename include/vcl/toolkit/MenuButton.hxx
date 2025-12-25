@@ -36,7 +36,6 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MenuButton : public PushButton
 private:
     friend class VclBuilder;
 
-    std::unique_ptr<Timer> mpMenuTimer;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<Window>  mpFloatingWindow;
     OUString         msCurItemIdent;

@@ -43,7 +43,6 @@
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
 #include <tools/gen.hxx>
-#include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/poly.hxx>
 #include <vcl/graph.hxx>

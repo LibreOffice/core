@@ -25,7 +25,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo47669, "fdo47669.docx")
@@ -60,7 +60,8 @@ DECLARE_OOXMLEXPORT_TEST(testN789482, "n789482.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testBnc834035)
 {
-    loadAndReload("bnc834035.odt");
+    createSwDoc("bnc834035.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     // Illustration index had wrong hyperlinks: anchor was using Writer's
@@ -72,7 +73,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc834035)
 
 CPPUNIT_TEST_FIXTURE(Test, testCp1000015)
 {
-    loadAndReload("cp1000015.odt");
+    createSwDoc("cp1000015.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Redline and hyperlink end got exported in an incorrect order.
     getParagraph(1, u"Hello."_ustr);
@@ -81,7 +83,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCp1000015)
 
 CPPUNIT_TEST_FIXTURE(Test, testHyperlineIsEnd)
 {
-    loadAndReload("hyperlink.docx");
+    createSwDoc("hyperlink.docx");
+    saveAndReload(TestFilter::DOCX);
     // Check  that the document.xml contents all the tag properly closed.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // If  document.xml miss any ending tag then parseExport() returns NULL which fail the test case.
@@ -92,7 +95,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlineIsEnd)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69649)
 {
-    loadAndReload("fdo69649.docx");
+    createSwDoc("fdo69649.docx");
+    saveAndReload(TestFilter::DOCX);
     // The DOCX containing the Table of Contents was not exported with correct page nos
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -101,7 +105,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69649)
 
 CPPUNIT_TEST_FIXTURE(Test, testFieldFlagO)
 {
-    loadAndReload("TOC_field_f.docx");
+    createSwDoc("TOC_field_f.docx");
+    saveAndReload(TestFilter::DOCX);
     // This test case is to verify \o flag should come once.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -112,7 +117,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldFlagO)
 
 CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_f)
 {
-    loadAndReload("toc_doc.docx");
+    createSwDoc("toc_doc.docx");
+    saveAndReload(TestFilter::DOCX);
     // Export logic for all TOC field flags was enclosed inside
     // if( SwTOXElement::Mark & pTOX->GetCreateType() ) in ww8atr.cxx which gets true for \f,
     // this was the reason if there is \f flag present in original doc then only other flags like
@@ -128,7 +134,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_f)
 
 CPPUNIT_TEST_FIXTURE(Test, testPreserveZfield)
 {
-    loadAndReload("preserve_Z_field_TOC.docx");
+    createSwDoc("preserve_Z_field_TOC.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[2]/w:instrText", u" TOC \\z \\f \\o \"1-3\" \\h");
@@ -136,7 +143,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPreserveZfield)
 
 CPPUNIT_TEST_FIXTURE(Test, testPreserveWfieldTOC)
 {
-    loadAndReload("PreserveWfieldTOC.docx");
+    createSwDoc("PreserveWfieldTOC.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", u" TOC \\z \\w \\f \\o \"1-3\" \\h");
@@ -144,7 +152,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPreserveWfieldTOC)
 
 CPPUNIT_TEST_FIXTURE(Test, testFieldFlagB)
 {
-    loadAndReload("TOC_field_b.docx");
+    createSwDoc("TOC_field_b.docx");
+    saveAndReload(TestFilter::DOCX);
     // This test case is to verify \b flag.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -155,7 +164,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldFlagB)
 
 CPPUNIT_TEST_FIXTURE(Test, testPreserveXfieldTOC)
 {
-    loadAndReload("PreserveXfieldTOC.docx");
+    createSwDoc("PreserveXfieldTOC.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", u" TOC \\x \\f \\o \"1-3\" \\h");
@@ -163,7 +173,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPreserveXfieldTOC)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
 {
-    loadAndReload("FDO77715.docx");
+    createSwDoc("FDO77715.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // tdf#153090 check that para style is preserved
@@ -183,7 +194,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77715)
 
 CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_u)
 {
-    loadAndReload("testTOCFlag_u.docx");
+    createSwDoc("testTOCFlag_u.docx");
+    saveAndReload(TestFilter::DOCX);
     // DOCX containing TOC should preserve code field '\u'.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -194,7 +206,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTOCFlag_u)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo73596_RunInStyle)
 {
-    loadAndReload("fdo73596_RunInStyle.docx");
+    createSwDoc("fdo73596_RunInStyle.docx");
+    saveAndReload(TestFilter::DOCX);
     // INDEX should be preserved.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -203,7 +216,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo73596_RunInStyle)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo73596_AlphaSeparator)
 {
-    loadAndReload("fdo73596_AlphaSeparator.docx");
+    createSwDoc("fdo73596_AlphaSeparator.docx");
+    saveAndReload(TestFilter::DOCX);
     // INDEX flag \h "A" should be preserved.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -212,7 +226,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo73596_AlphaSeparator)
 
 CPPUNIT_TEST_FIXTURE(Test, testCaption1)
 {
-    loadAndReload("EquationAsScientificNumbering.docx");
+    createSwDoc("EquationAsScientificNumbering.docx");
+    saveAndReload(TestFilter::DOCX);
     // fdo#74431 : This test case is to verify the Captions are coming properly
     // earlier it was coming as "SEQ "scientific"\*ROMAN now it is SEQ scientific\* ROMAN"
 
@@ -223,7 +238,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCaption1)
 
 CPPUNIT_TEST_FIXTURE(Test, testCaption2)
 {
-    loadAndReload("EquationWithAboveAndBelowCaption.docx");
+    createSwDoc("EquationWithAboveAndBelowCaption.docx");
+    saveAndReload(TestFilter::DOCX);
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
     // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -233,7 +249,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCaption2)
 
 CPPUNIT_TEST_FIXTURE(Test, testCaption3)
 {
-    loadAndReload("FigureAsLabelPicture.docx");
+    createSwDoc("FigureAsLabelPicture.docx");
+    saveAndReload(TestFilter::DOCX);
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
     // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -243,7 +260,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCaption3)
 
 CPPUNIT_TEST_FIXTURE(Test, testCaption4)
 {
-    loadAndReload("TableWithAboveCaptions.docx");
+    createSwDoc("TableWithAboveCaptions.docx");
+    saveAndReload(TestFilter::DOCX);
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
     // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -253,7 +271,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCaption4)
 
 CPPUNIT_TEST_FIXTURE(Test, testFooterContainHyperlink)
 {
-    loadAndReload("footer-contain-hyperlink.docx");
+    createSwDoc("footer-contain-hyperlink.docx");
+    saveAndReload(TestFilter::DOCX);
     // Problem is that footer1.xml.rels contains the empty
     // Target due to which the file get corrupted
     // in MS Office 2007.
@@ -265,7 +284,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFooterContainHyperlink)
 
 CPPUNIT_TEST_FIXTURE(Test, testAlphabeticalIndex_MultipleColumns)
 {
-    loadAndReload("alphabeticalIndex_MultipleColumns.docx");
+    createSwDoc("alphabeticalIndex_MultipleColumns.docx");
+    saveAndReload(TestFilter::DOCX);
     // Bug :: fdo#73596
     /*
      * Index with multiple columns was not imported correctly and
@@ -287,7 +307,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAlphabeticalIndex_MultipleColumns)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageref)
 {
-    loadAndReload("testPageref.docx");
+    createSwDoc("testPageref.docx");
+    saveAndReload(TestFilter::DOCX);
     // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
     // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -297,7 +318,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageref)
 
 CPPUNIT_TEST_FIXTURE(Test, testAlphabeticalIndex_AutoColumn)
 {
-    loadAndReload("alphabeticalIndex_AutoColumn.docx");
+    createSwDoc("alphabeticalIndex_AutoColumn.docx");
+    saveAndReload(TestFilter::DOCX);
     // Bug :: fdo#73596
     /*
      * When the columns in Index are 0; i.e not specified by the
@@ -314,7 +336,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAlphabeticalIndex_AutoColumn)
 
 CPPUNIT_TEST_FIXTURE(Test, testIndexFieldFlagF)
 {
-    loadAndReload("IndexFieldFlagF.docx");
+    createSwDoc("IndexFieldFlagF.docx");
+    saveAndReload(TestFilter::DOCX);
     // This test case is to verify the Index field flag '\f' with some
     // Specific Entry Type (ex. "Syn" in our case).
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -328,7 +351,8 @@ CPPUNIT_TEST_FIXTURE(Test, testIndexFieldFlagF)
 
 CPPUNIT_TEST_FIXTURE(Test, testBibliography)
 {
-    loadAndReload("FDO75133.docx");
+    createSwDoc("FDO75133.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText", u" BIBLIOGRAPHY ");
@@ -338,7 +362,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBibliography)
 
 CPPUNIT_TEST_FIXTURE(Test, testGenericTextField)
 {
-    loadAndReload("Unsupportedtextfields.docx");
+    createSwDoc("Unsupportedtextfields.docx");
+    saveAndReload(TestFilter::DOCX);
     // fdo#75158 : This test case is to verify the unsupported textfields are exported properly.
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -352,7 +377,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGenericTextField)
 
 CPPUNIT_TEST_FIXTURE(Test, test_FieldType)
 {
-    loadAndReload("99_Fields.docx");
+    createSwDoc("99_Fields.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for three field types (BIBLIOGRAPHY, BIDIOUTLINE, CITATION) in sequence
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
@@ -362,7 +388,8 @@ CPPUNIT_TEST_FIXTURE(Test, test_FieldType)
 
 CPPUNIT_TEST_FIXTURE(Test, testCitation)
 {
-    loadAndReload("FDO74775.docx");
+    createSwDoc("FDO74775.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:instrText", u" CITATION Kra06 \\l 1033 ");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtContent/w:r[4]/w:t", u"(Kramer & Chen, 2006)");
@@ -370,7 +397,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCitation)
 
 CPPUNIT_TEST_FIXTURE(Test, testHyperLinkTagEnded)
 {
-    loadAndReload("fdo76316.docx");
+    createSwDoc("fdo76316.docx");
+    saveAndReload(TestFilter::DOCX);
     /* XML tag <w:hyperlink> was not getting closed when its inside another
      * <w:hyperlink> tag.
      */
@@ -382,7 +410,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperLinkTagEnded)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76163 )
 {
-    loadAndReload("fdo76163.docx");
+    createSwDoc("fdo76163.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     //docx file after RT is getting corrupted.
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[10]/w:fldChar", "fldCharType", u"end" );
@@ -390,7 +419,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76163 )
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78659)
 {
-    loadAndReload("fdo78659.docx");
+    createSwDoc("fdo78659.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:r[3]/w:fldChar[1]", 0);
@@ -398,7 +428,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78659)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78654 )
 {
-    loadAndReload("fdo78654.docx");
+    createSwDoc("fdo78654.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // In case of two "Hyperlink" tags in one paragraph and one of them
     // contains "PAGEREF" field then field end tag was missing from hyperlink.
@@ -408,7 +439,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78654 )
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78599)
 {
-    loadAndReload("fdo78599.docx");
+    createSwDoc("fdo78599.docx");
+
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     //docx file after RT is getting corrupted.
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[6]/w:fldChar", "fldCharType", u"end" );
@@ -421,7 +454,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78599)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78886)
 {
-    loadAndReload("fdo78886.docx");
+    createSwDoc("fdo78886.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[2]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:r[2]/w:fldChar[1]", 0);
@@ -429,7 +463,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78886)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78910)
 {
-    loadAndReload("fdo78910.docx");
+    createSwDoc("fdo78910.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // This is to ensure that the fld starts and ends inside a hyperlink...
@@ -439,7 +474,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78910)
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78590)
 {
-    loadAndReload("FDO78590.docx");
+    createSwDoc("FDO78590.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // This is to ensure that the fld starts and ends inside a hyperlink...
@@ -449,7 +485,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO78590)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtCitationRun)
 {
-    loadAndReload("sdt-citation-run.docx");
+    createSwDoc("sdt-citation-run.docx");
+    saveAndReload(TestFilter::DOCX);
     // The problem was that the SDT was around the whole paragraph, not only around the citation field.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:t", u"Before sdt.");
@@ -459,7 +496,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtCitationRun)
 
 CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
 {
-    loadAndReload("paragraph-sdt.docx");
+    createSwDoc("paragraph-sdt.docx");
+    saveAndReload(TestFilter::DOCX);
     // The problem was that the SDT was around the run only, not the whole paragraph.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The path to w:sdt contained a w:p.
@@ -488,7 +526,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
 {
-    loadAndReload("tdf158661_blockSDT.docx");
+    createSwDoc("tdf158661_blockSDT.docx");
+    saveAndReload(TestFilter::DOCX);
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -529,7 +568,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
 {
-    loadAndReload("sdt-2-para.docx");
+    createSwDoc("sdt-2-para.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r/w:t", u"first");
@@ -540,7 +580,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
 
 CPPUNIT_TEST_FIXTURE(Test, test2Id)
 {
-    loadAndReload("2-id.docx");
+    createSwDoc("2-id.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 2, but only one w:id is allowed.
     assertXPath(pXmlDoc, "//w:sdtPr/w:id", 1);
@@ -548,7 +589,8 @@ CPPUNIT_TEST_FIXTURE(Test, test2Id)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStart2Sdt)
 {
-    loadAndReload("table-start-2-sdt.docx");
+    createSwDoc("table-start-2-sdt.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:docPartGallery should be a child of <w:docPartObj>, make sure it's not a child of w:text.
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text/w:docPartGallery", 0);
@@ -602,20 +644,22 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDateDuplicate)
 
     createSwDoc("sdt-date-duplicate.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo81492)
 {
-    loadAndReload("fdo81492.docx");
+    createSwDoc("fdo81492.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[6]/w:instrText", u"ADDIN EN.CITE.DATA");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEditTime)
 {
-    loadAndReload("fdo81341.docx");
+    createSwDoc("fdo81341.docx");
+    saveAndReload(TestFilter::DOCX);
     /* Issue was LO was not able to Import and Export EditTime in seconds format.
      * It was supporting Time in "HH:MM" format. But if DOCX contains Time in seconds,
      * then LO was not able to display time in "HH:MM:SS" format.
@@ -631,7 +675,8 @@ CPPUNIT_TEST_FIXTURE(Test, testEditTime)
 
 CPPUNIT_TEST_FIXTURE(Test, testFlyFieldmark)
 {
-    loadAndReload("fly_fieldmark.fodt");
+    createSwDoc("fly_fieldmark.fodt");
+    saveAndReload(TestFilter::DOCX);
     // the problem was that the flys were written after the field start
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // run 1 contains 2 shapes, one was at-page, one was at-char
@@ -644,7 +689,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyFieldmark)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo81945)
 {
-    loadAndReload("fdo81945.docx");
+    createSwDoc("fdo81945.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "//w:sdt//w:sdt", 0);
@@ -652,7 +698,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81945)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo82123)
 {
-    loadAndReload("fdo82123.docx");
+    createSwDoc("fdo82123.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // make sure there is only one run inside first SDT after RT as in the Original file.
@@ -662,7 +709,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82123)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtBeforeField)
 {
-    loadAndReload("sdt-before-field.docx");
+    createSwDoc("sdt-before-field.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Make sure the field doesn't sneak inside the SDT: the SDT should contain only a single run (there were 6 ones).
     assertXPath(pXmlDoc, "//w:p/w:sdt/w:sdtContent/w:r/w:t", 1);
@@ -671,7 +719,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtBeforeField)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo81946)
 {
-    loadAndReload("fdo81946.docx");
+    createSwDoc("fdo81946.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header1.xml"_ustr);
     // make sure AlternateContent should not present in sdt
     assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:r[2]/mc:AlternateContent[1]",0);
@@ -679,7 +728,9 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo81946)
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo82492)
 {
-    loadAndReload("fdo82492.docx");
+    createSwDoc("fdo82492.docx");
+
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // make sure there is only one run inside first SDT after RT as in the Original file.
@@ -689,7 +740,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82492)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
 {
-    loadAndReload("sdt-header.docx");
+    createSwDoc("sdt-header.docx");
+    saveAndReload(TestFilter::DOCX);
     // Problem was that w:sdt elements in headers were lost on import.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     // This was 0, w:sdt (and then w:date) was missing.
@@ -698,7 +750,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtCompanyMultipara)
 {
-    loadAndReload("sdt-company-multipara.docx");
+    createSwDoc("sdt-company-multipara.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Here is just a simple text node, so there should be either one or zero paragraph
     // (in this case sdt element is inside paragraph)
@@ -724,7 +777,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFixedDateFields)
 
     createSwDoc("fixed-date-field.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -735,13 +788,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFixedDateFields)
 
 CPPUNIT_TEST_FIXTURE(Test, testToxmarkHyperlink)
 {
-    loadAndReload("toxmarkhyperlink.fodt");
+    createSwDoc("toxmarkhyperlink.fodt");
+    saveAndReload(TestFilter::DOCX);
     // test that export doesn't assert with overlapping fields / hyperlink attr
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOO34469)
 {
-    loadAndReload("ooo34469-1.odt");
+    createSwDoc("ooo34469-1.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", u"2.9.2.Creating_New_files|outline");
@@ -749,7 +804,8 @@ CPPUNIT_TEST_FIXTURE(Test, testOO34469)
 
 CPPUNIT_TEST_FIXTURE(Test, testOO39845)
 {
-    loadAndReload("ooo39845-7.odt");
+    createSwDoc("ooo39845-7.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", u"Figure4|graphic");
@@ -763,7 +819,8 @@ DECLARE_OOXMLEXPORT_TEST( testTdf85161, "tdf85161.docx" )
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf66401)
 {
-    loadAndReload("tdf66401.docx");
+    createSwDoc("tdf66401.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:rFonts", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:rFonts", "ascii", u"Arial Black");
@@ -812,7 +869,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFieldInShape)
 
     createSwDoc("date_field_in_shape.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
@@ -853,7 +910,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFieldAtEndOfParagraph)
 
     createSwDoc("date_field_at_end_of_paragraph.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
@@ -886,13 +943,14 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
 
     createSwDoc("tdf126792.odt" );
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132185)
 {
-    loadAndReload("tdf132185.docx");
+    createSwDoc("tdf132185.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/footer2.xml"_ustr);
     // Since the default (without xml:space attribute) is to ignore leading and trailing spaces,
     // " PAGE \\* roman " will get imported as "PAGE \\* roman". This is also valid, and must be
@@ -902,7 +960,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132185)
 
 CPPUNIT_TEST_FIXTURE(Test, testConditionalText)
 {
-    loadAndReload("conditional-text.fodt");
+    createSwDoc("conditional-text.fodt");
+    saveAndReload(TestFilter::DOCX);
     // Load a document which has a conditional text field in it.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     std::u16string_view aExpected(u" IF 1 < 2 \"True\" \"- 'False' -\"");
@@ -916,7 +975,8 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText)
 
 CPPUNIT_TEST_FIXTURE(Test, testConditionalText2)
 {
-    loadAndReload("tdf114537_conditional-text2.doc");
+    createSwDoc("tdf114537_conditional-text2.doc");
+    saveAndReload(TestFilter::DOCX);
     // Load a document which has a conditional text field in it.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     std::u16string_view aExpected(u" IF 1 = 1 \"test1\" \"test2\"");
@@ -927,7 +987,8 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText2)
 
 CPPUNIT_TEST_FIXTURE(Test, testConditionalText3)
 {
-    loadAndReload("tdf125038_conditionalText3.docx");
+    createSwDoc("tdf125038_conditionalText3.docx");
+    saveAndReload(TestFilter::DOCX);
     // It is unclear what the purpose of all the conditional IF statements is,
     // but the end result should not produce any output.
     // Previously, the fields were being displayed as text
@@ -937,7 +998,8 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText3)
 
 CPPUNIT_TEST_FIXTURE(Test, testConditionalText4)
 {
-    loadAndReload("tdf125038_conditionalText_DOCPROPERTY.docx");
+    createSwDoc("tdf125038_conditionalText_DOCPROPERTY.docx");
+    saveAndReload(TestFilter::DOCX);
     getParagraph(1, u"customized field"_ustr);
 }
 
@@ -959,7 +1021,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142464_ampm)
 
     createSwDoc("tdf142464_ampm.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -974,7 +1036,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142464_ampm)
 CPPUNIT_TEST_FIXTURE(Test, testSdtDatePicker)
 {
     // Check that roundtrip for date picker field does not lose essential data
-    loadAndSave("test_sdt_datepicker.docx");
+    createSwDoc("test_sdt_datepicker.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Placeholder is here
@@ -1003,7 +1066,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
     // output was produced:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
@@ -1014,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
     // output was produced, since the <w:sdt> was conditional but the </w:sdt> was unconditional:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
@@ -1044,7 +1107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
     xContentControl2->setString(u"New Extended Property Value"_ustr);
 
     // Save and check saved data
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlCustomPropsDoc = parseExport(u"customXml/item1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlCustomPropsDoc);
     // FIXME: strange it won't run simple /employees/employee/name xpath query. Does not like namespaces?

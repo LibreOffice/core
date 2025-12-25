@@ -12,12 +12,15 @@ $(eval $(call gb_Library_Library,docmodel))
 $(eval $(call gb_Library_add_exception_objects,docmodel,\
     docmodel/source/uno/UnoComplexColor \
     docmodel/source/uno/UnoChartStyle \
+    docmodel/source/uno/UnoChartColorStyle \
     docmodel/source/uno/UnoGradientTools \
     docmodel/source/uno/UnoTheme \
     docmodel/source/theme/ColorSet \
     docmodel/source/theme/Theme \
     docmodel/source/color/ComplexColorJSON \
+    docmodel/source/color/ComplexColor \
     docmodel/source/styles/ChartStyle \
+    docmodel/source/styles/ChartColorStyle \
 ))
 
 $(eval $(call gb_Library_set_include,docmodel,\
@@ -28,6 +31,7 @@ $(eval $(call gb_Library_set_include,docmodel,\
 $(eval $(call gb_Library_use_externals,docmodel,\
     libxml2 \
     boost_headers \
+    frozen \
 ))
 
 $(eval $(call gb_Library_add_defs,docmodel,\

@@ -59,10 +59,6 @@ namespace svt
             PropFlags       nPropertyFlags;
         };
 
-
-        typedef const ControlDescription* ControlDescIterator;
-
-
         #define PROPERTY_FLAGS_COMMON       ( PropFlags::Enabled | PropFlags::Visible | PropFlags::HelpUrl )
         #define PROPERTY_FLAGS_LISTBOX      ( PropFlags::ListItems | PropFlags::SelectedItem | PropFlags::SelectedItemIndex )
         #define PROPERTY_FLAGS_CHECKBOX     ( PropFlags::Checked | PropFlags::Text )
@@ -152,11 +148,11 @@ namespace svt
         };
     }
 
-    OControlAccess::OControlAccess(IFilePickerController* pController, SvtFileView* pFileView)
-        : m_pFilePickerController(pController)
+    OControlAccess::OControlAccess(SvtFileDialog_Base* pController, SvtFileView* pFileView)
+        : m_pFilePicker(pController)
         , m_pFileView(pFileView)
     {
-        DBG_ASSERT( m_pFilePickerController, "OControlAccess::OControlAccess: invalid control locator!" );
+        DBG_ASSERT( m_pFilePicker, "OControlAccess::OControlAccess: invalid control locator!" );
     }
 
     bool OControlAccess::IsFileViewWidget(weld::Widget const * pControl) const
@@ -235,7 +231,7 @@ namespace svt
         if ( aFoundRange.first != aFoundRange.second )
         {
             // get the VCL control determined by this id
-            pControl = m_pFilePickerController->getControl( aFoundRange.first->nControlId );
+            pControl = m_pFilePicker->getControl( aFoundRange.first->nControlId );
         }
 
         // if not found 'til here, the name is invalid, or we do not have the control in the current mode
@@ -273,10 +269,10 @@ namespace svt
         OUString* pControls = aControls.getArray();
 
         // collect the names of all _actually_existent_ controls
-        for ( ControlDescIterator aControl = s_pControls; aControl != s_pControlsEnd; ++aControl )
+        for (const ControlDescription* pControl = s_pControls; pControl != s_pControlsEnd; ++pControl)
         {
-            if ( m_pFilePickerController->getControl( aControl->nControlId ) )
-                *pControls++ = OUString::createFromAscii( aControl->pControlName );
+            if (m_pFilePicker->getControl(pControl->nControlId))
+                *pControls++ = OUString::createFromAscii(pControl->pControlName);
         }
 
         aControls.realloc( pControls - aControls.getArray() );
@@ -329,7 +325,7 @@ namespace svt
 
     void OControlAccess::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const Any& rValue )
     {
-        weld::Widget* pControl = m_pFilePickerController->getControl( nControlId );
+        weld::Widget* pControl = m_pFilePicker->getControl( nControlId );
         DBG_ASSERT( pControl, "OControlAccess::SetValue: don't have this control in the current mode!" );
         if ( !pControl )
             return;
@@ -383,7 +379,7 @@ namespace svt
     {
         Any aRet;
 
-        weld::Widget* pControl = m_pFilePickerController->getControl( nControlId );
+        weld::Widget* pControl = m_pFilePicker->getControl( nControlId );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
@@ -411,7 +407,7 @@ namespace svt
                     case LISTBOX_FILTER:
                         if ( ControlActions::GET_SELECTED_ITEM == nControlAction )
                         {
-                            aRet <<= m_pFilePickerController->getCurFilter();
+                            aRet <<= m_pFilePicker->getCurFilter();
                         }
                         else
                         {
@@ -451,7 +447,7 @@ namespace svt
 
     void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
-        weld::Widget* pControl = m_pFilePickerController->getControl(nId, true);
+        weld::Widget* pControl = m_pFilePicker->getControl(nId, true);
         if (weld::Label* pLabel = dynamic_cast<weld::Label*>(pControl))
         {
             pLabel->set_label(rLabel);
@@ -467,7 +463,7 @@ namespace svt
 
     OUString OControlAccess::getLabel( sal_Int16 nId ) const
     {
-        weld::Widget* pControl = m_pFilePickerController->getControl(nId, true);
+        weld::Widget* pControl = m_pFilePicker->getControl(nId, true);
         if (weld::Label* pLabel = dynamic_cast<weld::Label*>(pControl))
             return pLabel->get_label();
         if (weld::Button* pButton = dynamic_cast<weld::Button*>(pControl))
@@ -478,7 +474,7 @@ namespace svt
 
     void OControlAccess::enableControl(sal_Int16 nId, bool bEnable)
     {
-        m_pFilePickerController->enableControl(nId, bEnable);
+        m_pFilePicker->enableControl(nId, bEnable);
     }
 
     void OControlAccess::implDoListboxAction(weld::ComboBox* pListbox, sal_Int16 nControlAction, const Any& rValue)
@@ -527,12 +523,12 @@ namespace svt
     void OControlAccess::implSetControlProperty( sal_Int16 nControlId, weld::Widget* pControl, PropFlags _nProperty, const Any& rValue, bool _bIgnoreIllegalArgument )
     {
         if ( !pControl )
-            pControl = m_pFilePickerController->getControl( nControlId );
+            pControl = m_pFilePicker->getControl( nControlId );
         DBG_ASSERT( pControl, "OControlAccess::implSetControlProperty: invalid argument, this will crash!" );
         if ( !pControl )
             return;
 
-        DBG_ASSERT( pControl == m_pFilePickerController->getControl( nControlId ),
+        DBG_ASSERT( pControl == m_pFilePicker->getControl( nControlId ),
             "OControlAccess::implSetControlProperty: inconsistent parameters!" );
 
         switch ( _nProperty )
@@ -558,7 +554,7 @@ namespace svt
                 bool bEnabled = false;
                 if ( rValue >>= bEnabled )
                 {
-                    m_pFilePickerController->enableControl( nControlId, bEnabled );
+                    m_pFilePicker->enableControl( nControlId, bEnabled );
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {

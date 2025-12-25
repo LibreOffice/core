@@ -31,7 +31,7 @@
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -540,11 +540,11 @@ namespace editeng
             {
                 // silent conversion (e.g. for simplified/traditional Chinese)...
                 if(m_aCurrentSuggestions.hasElements())
-                    implChange( m_aCurrentSuggestions.getConstArray()[0] );
+                    implChange( m_aCurrentSuggestions[0] );
             }
             else if (bAutoChange)
             {
-                implChange( m_aCurrentSuggestions.getConstArray()[0] );
+                implChange( m_aCurrentSuggestions[0] );
             }
             else if ( bAlwaysChangeThis )
             {

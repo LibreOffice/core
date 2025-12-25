@@ -1,40 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="basctl">
-  <requires lib="gtk+" version="3.20"/><!--actual version="3.24"-->
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkTreeStore" id="LeftTreeStore">
     <columns>
+      <!-- column-name gdkpixbuf -->
       <column type="GdkPixbuf"/>
+      <!-- column-name gchararray -->
       <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray3 -->
       <column type="gchararray"/>
     </columns>
+  </object>
+  <object class="GtkImage" id="NextImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_nextrecord.png</property>
+  </object>
+  <object class="GtkImage" id="PreviousImage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_prevrecord.png</property>
   </object>
   <object class="GtkTreeStore" id="RightMembersStore">
     <columns>
+      <!-- column-name gdkpixbuf -->
       <column type="GdkPixbuf"/>
+      <!-- column-name gchararray -->
       <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
       <column type="gchararray"/>
+      <!-- column-name gchararray3 -->
       <column type="gchararray"/>
     </columns>
   </object>
-    <object class="GtkBox" id="ObjectBrowser">
+  <object class="GtkBox" id="ObjectBrowser">
     <property name="name">ObjectBrowser</property>
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
-    <!-- Search Bar Container -->
     <child>
       <object class="GtkBox" id="SearchBoxContainer">
         <property name="name">SearchBoxContainer</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="orientation">horizontal</property>
         <property name="spacing">6</property>
-        <!-- Search Entry -->
         <child>
           <object class="GtkEntry" id="FilterBox">
             <property name="name">FilterBox</property>
@@ -49,15 +66,18 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <!-- Clear Button -->
         <child>
           <object class="GtkButton" id="ClearSearchButton">
-            <property name="label" translatable="yes" context="objectbrowser|ClearSearchButton">✕</property>
+            <property name="label" context="objectbrowser|ClearSearchButton">✕</property>
             <property name="name">ClearSearchButton</property>
-            <property name="visible">False</property> <!-- Initially hidden -->
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes" context="objectbrowser|ClearSearchButton">Clear Search</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="ClearSearchButton-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="objectbrowser|extended_tip|ClearSearchButton">Clears the existing search.</property>
+              </object>
+            </child>
             <style>
               <class name="flat"/>
             </style>
@@ -75,13 +95,11 @@
         <property name="position">0</property>
       </packing>
     </child>
-    <!-- Controls Row -->
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="spacing">6</property>
-        <!-- Label -->
         <child>
           <object class="GtkLabel" id="ScopeSelectorLabel">
             <property name="name">ScopeSelectorLabel</property>
@@ -98,7 +116,6 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <!-- ComboBox -->
         <child>
           <object class="GtkComboBoxText" id="ScopeSelector">
             <property name="name">ScopeSelector</property>
@@ -114,7 +131,6 @@
             <property name="position">1</property>
           </packing>
         </child>
-        <!-- Spacer to push buttons to the right -->
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
@@ -127,15 +143,20 @@
             <property name="position">2</property>
           </packing>
         </child>
-        <!-- Back Button -->
         <child>
           <object class="GtkButton" id="BackButton">
-            <property name="label" translatable="yes" context="objectbrowser|BackButton">◀</property>
             <property name="name">BackButton</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes" context="objectbrowser|BackButtonTip">Back in Navigation History</property>
+            <property name="image">PreviousImage</property>
+            <property name="always-show-image">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="BackButton-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="objectbrowser|extended_tip|BackButton">Go to the previous entry in navigation history.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -143,15 +164,19 @@
             <property name="position">3</property>
           </packing>
         </child>
-        <!-- Forward Button -->
         <child>
           <object class="GtkButton" id="ForwardButton">
-            <property name="label" translatable="yes" context="objectbrowser|ForwardButton">▶</property>
             <property name="name">ForwardButton</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes" context="objectbrowser|ForwardButtonTip">Forward in Navigation History</property>
+            <property name="image">NextImage</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="ForwardButton-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="objectbrowser|extended_tip|ForwardButton">Go to the next entry in navigation history.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -166,7 +191,6 @@
         <property name="position">1</property>
       </packing>
     </child>
-    <!-- Main Content Area -->
     <child>
       <object class="GtkPaned" id="MainVerticalSplitter">
         <property name="name">MainVerticalSplitter</property>
@@ -223,10 +247,13 @@
                         <property name="can-focus">True</property>
                         <property name="model">LeftTreeStore</property>
                         <property name="headers-visible">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="LeftTreeColumn">
-                            <property name="title" translatable="yes" context="ObjectBrowserPanel">Objects</property>
                             <property name="spacing">6</property>
+                            <property name="title" translatable="yes" context="ObjectBrowserPanel">Objects</property>
                             <child>
                               <object class="GtkCellRendererPixbuf"/>
                               <attributes>
@@ -240,9 +267,6 @@
                               </attributes>
                             </child>
                           </object>
-                        </child>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
                         </child>
                         <accessibility>
                           <relation type="labelled-by" target="LeftPaneLabel"/>
@@ -301,10 +325,13 @@
                         <property name="can-focus">True</property>
                         <property name="model">RightMembersStore</property>
                         <property name="headers-visible">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="RightTreeColumn">
-                            <property name="title" translatable="yes" context="ObjectBrowserMembers">Members</property>
                             <property name="spacing">6</property>
+                            <property name="title" translatable="yes" context="ObjectBrowserMembers">Members</property>
                             <child>
                               <object class="GtkCellRendererPixbuf"/>
                               <attributes>
@@ -318,9 +345,6 @@
                               </attributes>
                             </child>
                           </object>
-                        </child>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
                         </child>
                         <accessibility>
                           <relation type="labelled-by" target="RightPaneHeaderLabel"/>
@@ -411,7 +435,6 @@
         <property name="position">2</property>
       </packing>
     </child>
-    <!-- Status Bar -->
     <child>
       <object class="GtkStatusbar" id="StatusBar">
         <property name="visible">True</property>
@@ -421,9 +444,9 @@
           <object class="GtkLabel" id="StatusLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="objectbrowser|StatusLabel">Ready</property>
             <property name="halign">start</property>
             <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="objectbrowser|StatusLabel">Ready</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -440,4 +463,3 @@
     </child>
   </object>
 </interface>
-

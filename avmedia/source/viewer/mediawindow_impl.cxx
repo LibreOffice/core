@@ -638,7 +638,7 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     Point aPoint(aBasePos.X() + ((aVideoRect.GetWidth() - aLogoSize.Width()) >> 1),
                  aBasePos.Y() + ((aVideoRect.GetHeight() - aLogoSize.Height()) >> 1));
 
-    rRenderContext.DrawBitmapEx(aPoint, aLogoSize, *pLogo);
+    rRenderContext.DrawBitmap(aPoint, aLogoSize, *pLogo);
 }
 
 void MediaWindowImpl::GetFocus()

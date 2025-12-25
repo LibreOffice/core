@@ -23,7 +23,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/weakref.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 class filter_info_impl;
 class GlobalEventListenerImpl;

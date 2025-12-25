@@ -124,7 +124,7 @@ class LOKitTileProvider implements TileProvider {
         // Writer documents always have one part, so hide the navigation drawer.
         if (mDocument.getDocumentType() == Document.DOCTYPE_TEXT) {
             mContext.disableNavigationDrawer();
-            mContext.getToolbarController().hideItem(R.id.action_parts);
+            mContext.getToolbarController().setItemVisible(R.id.action_parts, false);
         }
 
         // Enable headers for Calc documents

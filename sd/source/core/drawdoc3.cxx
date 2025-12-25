@@ -34,7 +34,7 @@
 #include <svx/svdundo.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <strings.hrc>

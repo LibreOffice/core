@@ -23,20 +23,20 @@
 
 struct SW_DLLPUBLIC SwDocStat
 {
-    sal_uInt16          nTable;
-    sal_uInt16          nGrf;
-    sal_uInt16          nOLE;
-    sal_uLong           nPage;
+    sal_uInt32          nTable;
+    sal_uInt32          nGrf;
+    sal_uInt32          nOLE;
+    sal_uInt32          nPage;
     /// paragraphs for document statistic: non-empty and non-hidden ones
-    sal_uLong           nPara;
+    sal_uInt32           nPara;
     /// all paragraphs, including empty/hidden ones
-    sal_uLong           nAllPara;
-    sal_uLong           nWord;
-    sal_uLong           nAsianWord;
-    sal_uLong           nChar;
-    sal_uLong           nCharExcludingSpaces;
-    sal_uLong           nComments;
-    bool            bModified;
+    sal_uInt32          nAllPara;
+    sal_uInt32          nWord;
+    sal_uInt32          nAsianWord;
+    sal_uInt32          nChar;
+    sal_uInt32          nCharExcludingSpaces;
+    sal_uInt32          nComments;
+    bool                bModified;
 
     SwDocStat();
     void Reset();

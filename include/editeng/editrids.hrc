@@ -151,6 +151,8 @@
 #define RID_SVXITEMS_ADJUST_BLOCK               NC_("RID_SVXITEMS_ADJUST_BLOCK", "Justify")
 #define RID_SVXITEMS_ADJUST_CENTER              NC_("RID_SVXITEMS_ADJUST_CENTER", "Centered")
 #define RID_SVXITEMS_ADJUST_BLOCKLINE           NC_("RID_SVXITEMS_ADJUST_BLOCKLINE", "Justify")
+#define RID_SVXITEMS_ADJUST_PARASTART           NC_("RID_SVXITEMS_ADJUST_PARASTART", "Start")
+#define RID_SVXITEMS_ADJUST_PARAEND             NC_("RID_SVXITEMS_ADJUST_PARAEND", "End")
 #define RID_SOLID                               NC_("RID_SOLID", "Single, solid")
 #define RID_DOTTED                              NC_("RID_DOTTED", "Single, dotted")
 #define RID_DASHED                              NC_("RID_DASHED", "Single, dashed")
@@ -235,8 +237,8 @@
 #define RID_SVXITEMS_LINESPACING_FIXED          NC_("RID_SVXITEMS_LINESPACING_FIXED", "Fixed")
 // To translators: %1 == will be replaced by the number of lines
 #define RID_SVXITEMS_LINES                      NC_("RID_SVXITEMS_LINES", "%1 Lines")
-#define RID_SVXITEMS_WIDOWS_COMPLETE            NC_("RID_SVXITEMS_WIDOWS_COMPLETE", "Widow control")
-#define RID_SVXITEMS_ORPHANS_COMPLETE           NC_("RID_SVXITEMS_ORPHANS_COMPLETE", "Orphan control")
+#define RID_SVXITEMS_WIDOWS_COMPLETE            NC_("RID_SVXITEMS_WIDOWS_COMPLETE", "Don’t split at end of paragraph: %1 lines")
+#define RID_SVXITEMS_ORPHANS_COMPLETE           NC_("RID_SVXITEMS_ORPHANS_COMPLETE", "Don’t split at beginning of paragraph: %1 lines")
 #define RID_SVXITEMS_HYPHEN_MINLEAD             NC_("RID_SVXITEMS_HYPHEN_MINLEAD", "%1 characters at end of line")
 #define RID_SVXITEMS_HYPHEN_MINTRAIL            NC_("RID_SVXITEMS_HYPHEN_MINTRAIL", "%1 characters at beginning of line")
 #define RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD    NC_("RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD", "%1 compound word characters at end of line")
@@ -299,6 +301,8 @@
 #define RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT90     NC_("RID_SVXITEMS_FRMDIR_Vert_TOP_RIGHT90", "Text direction right-to-left (vertical, all characters rotated)")
 #define RID_SVXITEMS_PARASNAPTOGRID_ON          NC_("RID_SVXITEMS_PARASNAPTOGRID_ON", "Paragraph snaps to text grid (if active)")
 #define RID_SVXITEMS_PARASNAPTOGRID_OFF         NC_("RID_SVXITEMS_PARASNAPTOGRID_OFF", "Paragraph does not snap to text grid")
+#define RID_SVXITEMS_AUTOFRAMEDIRECTION_ON      NC_("RID_SVXITEMS_AUTOFRAMEDIRECTION_ON", "Text direction is automatically updated")
+#define RID_SVXITEMS_AUTOFRAMEDIRECTION_OFF     NC_("RID_SVXITEMS_AUTOFRAMEDIRECTION_OFF", "Text direction is not automatically updated")
 #define RID_SVXITEMS_CHARHIDDEN_FALSE           NC_("RID_SVXITEMS_CHARHIDDEN_FALSE", "Not hidden")
 #define RID_SVXITEMS_CHARHIDDEN_TRUE            NC_("RID_SVXITEMS_CHARHIDDEN_TRUE", "Hidden")
 

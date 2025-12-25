@@ -425,8 +425,7 @@ void SwFieldDBPage::CheckInsert()
     bool bInsert = true;
     const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
 
-    std::unique_ptr<weld::TreeIter> xIter(m_xDatabaseTLB->make_iterator());
-    if (m_xDatabaseTLB->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xDatabaseTLB->get_selected())
     {
         bool bEntry = m_xDatabaseTLB->iter_parent(*xIter);
 
@@ -450,8 +449,8 @@ void SwFieldDBPage::CheckInsert()
 
 IMPL_LINK(SwFieldDBPage, TreeSelectHdl, weld::TreeView&, rBox, void)
 {
-    std::unique_ptr<weld::TreeIter> xIter(rBox.make_iterator());
-    if (!rBox.get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = rBox.get_selected();
+    if (!xIter)
         return;
 
     const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());

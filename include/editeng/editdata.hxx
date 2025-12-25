@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// MyEDITDATA, wegen exportiertem EditData
 #ifndef INCLUDED_EDITENG_EDITDATA_HXX
 #define INCLUDED_EDITENG_EDITDATA_HXX
 

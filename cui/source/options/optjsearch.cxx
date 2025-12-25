@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <unotools/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "optjsearch.hxx"
 
 
@@ -201,13 +202,13 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet* )
 
 OUString SvxJSearchOptionsPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"matchcase"_ustr,
@@ -233,10 +234,10 @@ OUString SvxJSearchOptionsPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet* )

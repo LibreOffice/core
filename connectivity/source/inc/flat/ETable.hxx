@@ -24,6 +24,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <file/quotedstring.hxx>
 #include <unotools/syslocale.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
 namespace connectivity::flat

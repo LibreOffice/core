@@ -316,7 +316,8 @@ void SwView::SelectShell()
     if ( m_pFormShell && m_pFormShell->IsActiveControl() )
         nNewSelectionType |= SelectionType::FormControl;
 
-    if ( nNewSelectionType == m_nSelectionType )
+    if ( nNewSelectionType == m_nSelectionType &&
+        !(m_nSelectionType == SelectionType::Ole && m_pWrtShell->IsOLEMath()) )
     {
         GetViewFrame().GetBindings().InvalidateAll( false );
         if ( m_nSelectionType & SelectionType::Ole ||
@@ -654,7 +655,8 @@ void SwView::CheckReadonlyState()
             SID_ATTR_CHAR_COLOR_BACKGROUND_EXT, SID_CHARMAP, FN_SVX_SET_NUMBER,
             FN_SVX_SET_BULLET, FN_SVX_SET_OUTLINE, SID_ATTR_CHAR_BACK_COLOR,
             SID_ULINE_VAL_SINGLE, SID_ULINE_VAL_DOUBLE, SID_ULINE_VAL_DOTTED,
-            SID_ATTR_CHAR_OVERLINE, SID_AUTOSPELL_CHECK, SID_SBA_BRW_INSERT,
+            SID_ATTR_CHAR_OVERLINE, SID_ATTR_PARA_ADJUST_START, SID_ATTR_PARA_ADJUST_END,
+            SID_AUTOSPELL_CHECK, SID_SBA_BRW_INSERT,
             FN_NUM_BULLET_ON, FN_NUM_NUMBERING_ON, FN_SELECT_PARA,
             FN_INSERT_BOOKMARK, FN_INSERT_BREAK, FN_INSERT_BREAK_DLG,
             FN_INSERT_COLUMN_BREAK, FN_INSERT_LINEBREAK, FN_INSERT_CONTENT_CONTROL,
@@ -1511,7 +1513,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         }
         else if (rValue.Name == "WindowState")
         {
-            rValue.Value >>= m_sOldWindowState;
+            // ignored
         }
         // Fallback to common SdrModel processing
         else
@@ -2053,6 +2055,17 @@ std::optional<OString> SwView::getLOKPayload(int nType, int nViewId) const
         return std::nullopt;
 }
 
+int SwView::getEditMode() const
+{
+    SwWrtShell* pWrtShell = GetWrtShellPtr();
+    if (!pWrtShell)
+    {
+        return 0;
+    }
+
+    return static_cast<int>(pWrtShell->GetViewOptions()->GetRedlineRenderMode());
+}
+
 OUString SwView::GetDataSourceName() const
 {
     uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -2157,6 +2170,19 @@ IMPL_LINK_NOARG(SwView, BringToAttentionBlinkTimerHdl, Timer*, void)
     {
         m_xBringToAttentionOverlayObject.reset();
         m_aBringToAttentionBlinkTimer.Stop();
+    }
+}
+
+void SwView::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                       int nMode) const
+{
+    SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
+    if (static_cast<SwRedlineRenderMode>(nMode) == SwRedlineRenderMode::OmitDeletes)
+    {
+        // If an "omit deletes" mode is invalidated, also invalidate the matching "omit inserts"
+        // mode.
+        SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(
+            pRect, nPart, static_cast<int>(SwRedlineRenderMode::OmitInserts));
     }
 }
 

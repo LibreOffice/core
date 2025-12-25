@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.05</property>
     <property name="upper">9</property>
@@ -41,6 +41,8 @@
       <column type="GdkPixbuf"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="shadows_liststore">
@@ -48,6 +50,8 @@
       <!-- column-name pixbuf -->
       <column type="GdkPixbuf"/>
       <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -74,48 +78,6 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkScrolledWindow" id="frameselwin">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="framesel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="userdefft">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="borderpage|userdefft">Click edge or corner to cycle through three states: set, unchanged, remove.</property>
-                <property name="label" translatable="yes" context="borderpage|userdefft">_User-defined:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">framesel</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label14">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -139,11 +101,54 @@
                 <property name="model">presets_liststore</property>
                 <property name="pixbuf-column">0</property>
                 <property name="columns">5</property>
+                <property name="tooltip-column">2</property>
                 <property name="activate-on-single-click">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="userdefft">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="borderpage|userdefft">Click edge or corner to cycle through three states: set, unchanged, remove.</property>
+                <property name="label" translatable="yes" context="borderpage|userdefft">_User-defined:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">framesel</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="frameselwin">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="framesel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -227,37 +232,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label16">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="borderpage|label16">_Thickness:</property>
-                <property name="use-underline">True</property>
-                <property name="xalign">0</property>
-                <accessibility>
-                  <relation type="label-for" target="linewidthlb"/>
-                  <relation type="label-for" target="linewidthmf"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label17">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="borderpage|label17">_Color:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">linecolorlb</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkMenuButton" id="linestylelb">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -275,6 +249,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="label17">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="borderpage|label17">_Color:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">linecolorlb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkMenuButton" id="linecolorlb">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -289,6 +277,23 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label16">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="borderpage|label16">_Thickness:</property>
+                <property name="use-underline">True</property>
+                <property name="xalign">0</property>
+                <accessibility>
+                  <relation type="label-for" target="linewidthlb"/>
+                  <relation type="label-for" target="linewidthmf"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -379,63 +384,6 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkSpinButton" id="leftmf">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="valign">center</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment2</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="topmf">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment5</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="rightmf">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment4</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="bottommf">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment6</property>
-                <property name="digits">2</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="leftft">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -447,6 +395,21 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="leftmf">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="valign">center</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment2</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -465,6 +428,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkSpinButton" id="rightmf">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment4</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="topft">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -479,6 +456,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkSpinButton" id="topmf">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment5</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="bottomft">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -489,6 +480,20 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="bottommf">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment6</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -541,22 +546,6 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkIconView" id="shadows">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
-                <property name="model">shadows_liststore</property>
-                <property name="pixbuf-column">0</property>
-                <property name="columns">5</property>
-                <property name="activate-on-single-click">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label22">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -571,34 +560,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="distanceft">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="borderpage|distanceft">Width of shadow</property>
-                <property name="label" translatable="yes" context="borderpage|distanceft">Distan_ce:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">distancemf</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="distancemf">
+              <object class="GtkIconView" id="shadows">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="halign">start</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <property name="adjustment">adjustment3</property>
-                <property name="value">0.5</property>
-                <property name="digits">2</property>
+                <property name="valign">start</property>
+                <property name="model">shadows_liststore</property>
+                <property name="pixbuf-column">0</property>
+                <property name="columns">5</property>
+                <property name="tooltip-column">2</property>
+                <property name="activate-on-single-click">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
@@ -630,6 +605,37 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="distanceft">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes" context="borderpage|distanceft">Width of shadow</property>
+                <property name="label" translatable="yes" context="borderpage|distanceft">Distan_ce:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">distancemf</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="distancemf">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="halign">start</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment3</property>
+                <property name="value">0.5</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
           </object>

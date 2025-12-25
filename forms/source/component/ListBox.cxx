@@ -1924,24 +1924,12 @@ namespace frm
                 if (xSet.is())
                 {
                     // Has the selection been changed?
-                    bool bModified(false);
                     Any aValue = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
                     Sequence<sal_Int16> const & rSelection = *o3tl::doAccess<Sequence<sal_Int16>>(aValue);
                     Sequence<sal_Int16> const & rOldSelection = *o3tl::doAccess<Sequence<sal_Int16>>(m_aCurrentSelection);
-                    sal_Int32 nLen = rSelection.getLength();
-                    if (nLen != rOldSelection.getLength())
-                        bModified = true;
-                    else
-                    {
-                        const sal_Int16* pVal = rSelection.getConstArray();
-                        const sal_Int16* pCompVal = rOldSelection.getConstArray();
 
-                        while (nLen-- && !bModified)
-                            bModified = pVal[nLen] != pCompVal[nLen];
-                    }
-
-                    if (bModified)
+                    if (rSelection != rOldSelection)
                     {
                         m_aCurrentSelection = std::move(aValue);
                         m_aChangeIdle.Start();

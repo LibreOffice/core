@@ -374,7 +374,7 @@ void SvxLineEndWindow::FillValueSet()
     Point aPt0( 0, 0 );
     Point aPt1( maBmpSize.Width(), 0 );
 
-    pVD->DrawBitmapEx( Point(), aBmp );
+    pVD->DrawBitmap( Point(), aBmp );
     mxLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
     mxLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
 
@@ -387,7 +387,7 @@ void SvxLineEndWindow::FillValueSet()
         aBmp = mpLineEndList->GetUiBitmap( i );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
-        pVD->DrawBitmapEx( aPt0, aBmp );
+        pVD->DrawBitmap( aPt0, aBmp );
         mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
                 Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
         mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
@@ -432,7 +432,7 @@ void SvxLineEndWindow::SetSize()
     aSize.AdjustWidth(6 );
     aSize.AdjustHeight(6 );
     aSize = mxLineEndSet->CalcWindowSizePixel( aSize );
-    if (nBits | WB_VSCROLL)
+    if (nBits & WB_VSCROLL)
         aSize.AdjustWidth(mxLineEndSet->GetScrollWidth());
     mxLineEndSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
     mxLineEndSet->SetOutputSizePixel(aSize);
@@ -573,7 +573,7 @@ void SvxLineBox::Fill( const XDashListRef &pList )
     aSize.AdjustWidth(6);
     aSize.AdjustHeight(6);
     aSize = mxLineStyleSet->CalcWindowSizePixel(aSize);
-    if (nBits | WB_VSCROLL)
+    if (nBits & WB_VSCROLL)
         aSize.AdjustWidth(mxLineStyleSet->GetScrollWidth());
     mxLineStyleSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
     mxLineStyleSet->SetOutputSizePixel(aSize);

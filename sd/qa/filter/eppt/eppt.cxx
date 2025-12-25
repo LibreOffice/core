@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 {
     // Save the bugdoc to PPT.
     loadFromFile(u"custom-shape-bitmap-fill.pptx");
-    saveAndReload(u"MS PowerPoint 97"_ustr);
+    saveAndReload(TestFilter::PPT);
 
     // Check if the bitmap shape was lost.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     }
 
     // Export to PPTX and load again:
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     // Verify that this color is not lost:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
@@ -117,7 +117,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     loadFromFile(u"video-loop.pptx");
 
     // When exporting that to PPTX:
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Then make sure that the "infinite" repeat count is written:
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);

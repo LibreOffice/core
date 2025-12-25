@@ -47,6 +47,7 @@
 #include <QtCore/QLibraryInfo>
 #include <QtCore/QThread>
 #include <QtGui/QScreen>
+#include <QtGui/QStyleHints>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QMessageBox>
@@ -307,6 +308,11 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
     connect(qApp, &QGuiApplication::primaryScreenChanged, this, &QtInstance::primaryScreenChanged);
     connect(qApp, &QGuiApplication::screenAdded, this, &QtInstance::screenAdded);
     connect(qApp, &QGuiApplication::screenRemoved, this, &QtInstance::screenRemoved);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged, this,
+            &QtInstance::colorSchemeChanged);
+#endif
 
 #ifndef EMSCRIPTEN
     m_bSupportsOpenGL = true;
@@ -764,6 +770,8 @@ void QtInstance::screenAdded(QScreen* pScreen)
 }
 
 void QtInstance::screenRemoved(QScreen*) { notifyDisplayChanged(); }
+
+void QtInstance::colorSchemeChanged() { UpdateStyle(false); }
 
 void QtInstance::virtualGeometryChanged(const QRect&) { notifyDisplayChanged(); }
 

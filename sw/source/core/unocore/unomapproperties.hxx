@@ -255,6 +255,7 @@
         { UNO_NAME_CHAR_SHADING_VALUE,                  RES_CHRATR_BACKGROUND,         cppu::UnoType<sal_Int32>::get(),         PROPERTY_NONE,                MID_SHADING_VALUE                      }, \
         { UNO_NAME_PARA_INTEROP_GRAB_BAG,               RES_PARATR_GRABBAG,            cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE,                0                                      }, \
         { UNO_NAME_CHAR_SCRIPT_HINT,                    RES_CHRATR_SCRIPT_HINT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_SCRIPTHINT }, \
+        { UNO_NAME_PARA_WRITING_MODE_AUTOMATIC,         RES_PARATR_AUTOFRAMEDIR,       cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0 }, \
 
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
@@ -547,7 +548,8 @@
                     { UNO_NAME_OUTLINE_LEVEL, RES_PARATR_OUTLINELEVEL,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, 0}, \
                     { UNO_NAME_HIDDEN, FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0}, \
                     { UNO_NAME_STYLE_INTEROP_GRAB_BAG, FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
-                    { UNO_NAME_PARA_INTEROP_GRAB_BAG, RES_PARATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
+                    { UNO_NAME_PARA_INTEROP_GRAB_BAG, RES_PARATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
+                    { UNO_NAME_PARA_WRITING_MODE_AUTOMATIC, RES_PARATR_AUTOFRAMEDIR, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0},
 
 #define COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE \
                     { UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR }, \

@@ -28,7 +28,7 @@
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
 
 #include <doc.hxx>
@@ -360,6 +360,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = nullptr );
     SW_DLLPUBLIC void LaunchOLEObj(sal_Int32 nVerb = css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY); // start server
+    bool    IsOLEMath();
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset ) override;
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = nullptr,
@@ -426,6 +427,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
     // update DropDown fields
     bool    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, weld::Widget* pParentWin, FieldDialogPressedButton* pPressedButton = nullptr);
+    // update single DropDown field
+    void    EditDropDownFieldDlg(SwField*, weld::Widget* pParentWin);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) override;

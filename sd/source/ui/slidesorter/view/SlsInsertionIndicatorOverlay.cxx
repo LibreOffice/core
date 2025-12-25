@@ -179,7 +179,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         // Paint the preview.
         Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
         aPreview.Scale(rPreviewSize, BmpScaleFlag::BestQuality);
-        rContent.DrawBitmapEx(aPageOffset, aPreview);
+        rContent.DrawBitmap(aPageOffset, aPreview);
 
         // When the page is marked as excluded from the slide show then
         // paint an overlay that visualizes this.
@@ -194,7 +194,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
             {
                 for (::tools::Long nX=0; nX<rPreviewSize.Width(); nX+=nIconWidth)
                     for (::tools::Long nY=0; nY<rPreviewSize.Height(); nY+=nIconHeight)
-                        rContent.DrawBitmapEx(Point(nX,nY)+aPageOffset, aExclusionOverlay);
+                        rContent.DrawBitmap(Point(nX,nY)+aPageOffset, aExclusionOverlay);
             }
             rContent.SetClipRegion(aSavedClipRegion);
         }

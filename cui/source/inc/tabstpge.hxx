@@ -18,8 +18,11 @@
  */
 #pragma once
 
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <editeng/tstpitem.hxx>

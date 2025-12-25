@@ -182,7 +182,7 @@ private:
     SAL_DLLPRIVATE XPolygon ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const;
     SAL_DLLPRIVATE XPolygon ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
         const Point& rPt2, tools::Long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
-        sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
+        sal_uInt64* pnQuality, SdrEdgeInfoRec* pInfo) const;
     SAL_DLLPRIVATE static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr, SdrDragStat* pDragStat = nullptr);
     SAL_DLLPRIVATE static SdrEscapeDirection ImpCalcEscAngle(SdrObject const * pObj, const Point& aPt2);
     SAL_DLLPRIVATE void ImpSetTailPoint(bool bTail1, const Point& rPt);
@@ -319,7 +319,7 @@ public:
  //      true -> when determining the connector exit angle, angle for
  //      object rotation is taken as an offset.
  //
- //  sal_uIntPtr EdgeFlowDefDist    default 0, min 0, max ?
+ //  sal_uInt64 EdgeFlowDefDist    default 0, min 0, max ?
  //      This is the default minimum distance on calculation of the
  //      connection Line to the docked objects is in logical units.
  //      This distance is overridden within the object, as soon as the

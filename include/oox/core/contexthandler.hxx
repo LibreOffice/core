@@ -23,9 +23,7 @@
 #include <memory>
 #include <string_view>
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>

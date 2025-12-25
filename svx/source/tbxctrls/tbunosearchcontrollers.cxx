@@ -63,6 +63,10 @@
 
 #include <findtextfield.hxx>
 
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
+
 using namespace css;
 
 namespace {
@@ -352,8 +356,68 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
             bRet = true;
         }
         else if (aCommand == ".uno:SearchDialog")
+        {
+#if HAVE_FEATURE_DESKTOP
+            const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
+            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+            if (pViewFrm)
+            {
+                SvxSearchDialogWrapper* pWrp
+                    = static_cast<SvxSearchDialogWrapper*>(pViewFrm->GetChildWindow(nId));
+                if (pWrp) // if the search dialog wrapper window exists
+                {
+                    SvxSearchDialog* pSearchDialog = pWrp->getDialog();
+                    assert(pSearchDialog);
+                    if (pSearchDialog) // if we have the wrapper window this should be good, shouldn't it?
+                    {
+                        pSearchDialog->SetSearchLBEntryTextAndGrabFocus(
+                            m_xWidget->get_active_text());
+                        pSearchDialog->Present();
+                        bRet = true;
+                    }
+                    else // likely not needed
+                    {
+                        pViewFrm->GetBindings().ExecuteSynchron(SID_SEARCH_DLG);
+                        pWrp = static_cast<SvxSearchDialogWrapper*>(pViewFrm->GetChildWindow(nId));
+                        if (pWrp)
+                        {
+                            pSearchDialog = pWrp->getDialog();
+                            assert(pSearchDialog);
+                            if (pSearchDialog)
+                            {
+                                pSearchDialog->SetSearchLBEntryTextAndGrabFocus(
+                                    m_xWidget->get_active_text());
+                                pSearchDialog->Present();
+                                bRet = true;
+                            }
+                        }
+                    }
+                }
+                else // the search dialog wrapper window does not exist so try to make it exist
+                {
+                    pViewFrm->GetBindings().ExecuteSynchron(SID_SEARCH_DLG);
+                    pWrp = static_cast<SvxSearchDialogWrapper*>(pViewFrm->GetChildWindow(nId));
+                    if (pWrp)
+                    {
+                        SvxSearchDialog* pSearchDialog = pWrp->getDialog();
+                        assert(pSearchDialog);
+                        if (pSearchDialog)
+                        {
+                            pSearchDialog->SetSearchLBEntryTextAndGrabFocus(
+                                m_xWidget->get_active_text());
+                            pSearchDialog->Present();
+                            bRet = true;
+                        }
+                    }
+                }
+            }
+            else // probably shouldn't happen, be safe anyway
+                bRet = m_pAcc->execute(awtKey);
+        }
+#else
             bRet = m_pAcc->execute(awtKey);
-
+        }
+#endif
         // find-shortcut called with focus already in find
         if (aCommand == "vnd.sun.star.findbar:FocusToFindbar")
         {

@@ -123,10 +123,12 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
     {
         public:
             explicit    PrepareSaveGuard( ScDocShell & rDocShell );
-                        ~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE;
+                        ~PrepareSaveGuard();
         private:
                         ScDocShell & mrDocShell;
     };
+
+    bool ImportFrom(SfxMedium&, const css::uno::Reference<css::text::XTextRange>&) override;
 
     bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
@@ -169,6 +171,7 @@ private:
 public:
     explicit        ScDocShell( const ScDocShell& rDocShell ) = delete;
     SC_DLLPUBLIC explicit ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT, const std::shared_ptr<ScDocument>& pDoc = {} );
+    explicit ScDocShell(const SfxModelFlags i_nSfxCreationFlags, ScDocumentMode);
                     virtual ~ScDocShell() override;
 
     SC_DLLPUBLIC virtual SfxUndoManager* GetUndoManager() override;
@@ -400,13 +403,6 @@ public:
     SC_DLLPUBLIC static SCTAB       GetCurTab();
 
     SAL_RET_MAYBENULL static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
-    static OUString   GetOwnFilterName();
-    static const OUString & GetHtmlFilterName();
-    static const OUString & GetWebQueryFilterName();
-    static const OUString & GetAsciiFilterName();
-    static const OUString & GetLotusFilterName();
-    static const OUString & GetDBaseFilterName();
-    static const OUString & GetDifFilterName();
     static bool       HasAutomaticTableName( std::u16string_view rFilter );
     static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
@@ -436,12 +432,18 @@ public:
 
     ScModelObj* GetModel() const { return static_cast<ScModelObj*>(SfxObjectShell::GetModel().get()); }
 
+    void AddDelayedInfobarEntry(const OUString& sId, const OUString& sPrimaryMessage,
+                                const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                bool bShowCloseButton);
+
 private:
     void ExecuteChartSource(SfxRequest& rReq);
     void ExecuteChartSourcePost( bool bUndo, bool bMultiRange,
         const OUString& rChartName, const ScRangeListRef& rRangeListRef,
         bool bColHeaders, bool bRowHeaders, bool bAddRange,
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab);
+
+    void SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageType eCtl);
 };
 
 void UpdateAcceptChangesDialog();

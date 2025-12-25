@@ -472,6 +472,7 @@
 #define REG_SMARTTAGS                       NC_("REG_SMARTTAGS", "Smart tags")
 #define REG_SHADOW                          NC_("REG_SHADOW", "Shadows")
 #define REG_WRITERTEXTGRID                  NC_("REG_WRITERTEXTGRID", "Text grid")
+#define REG_WRITERBASELINEGRID              NC_("REG_WRITERBASELINEGRID", "Baseline grid")
 #define REG_WRITERFIELDSHADINGS             NC_("REG_WRITERFIELDSHADINGS", "Field shadings")
 #define REG_WRITERIDXSHADINGS               NC_("REG_WRITERIDXSHADINGS", "Index and table shadings")
 #define REG_WRITERDIRECTCURSOR              NC_("REG_WRITERDIRECTCURSOR", "Direct cursor")

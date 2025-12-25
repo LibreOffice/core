@@ -34,6 +34,7 @@
 #include <svx/svdview.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
+#include <svx/svdogrp.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
@@ -45,6 +46,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <tools/XPath.hxx>
 
 using namespace ::com::sun::star;
 
@@ -237,52 +239,63 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 {
-    // Given a document with a groupshape, which has 2 children.
-    loadFromURL(u"private:factory/sdraw"_ustr);
-    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xRect1(
-        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
-    xRect1->setPosition(awt::Point(1000, 1000));
-    xRect1->setSize(awt::Size(10000, 10000));
-    uno::Reference<drawing::XShape> xRect2(
-        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
-    xRect2->setPosition(awt::Point(1000, 1000));
-    xRect2->setSize(awt::Size(10000, 10000));
-    uno::Reference<drawing::XShapes> xGroup(
-        xFactory->createInstance(u"com.sun.star.drawing.GroupShape"_ustr), uno::UNO_QUERY);
+    // Adapted this test to work with a *real* SmartArt/Diagram (SA). The former
+    // test created a 'fake' one and checked if on TextEdit The GrabBag gets deleted.
+    // The updated SA text edit *tries* to keep the SA Data (in IDiagramHelper
+    // attached to SdrObjGroup). It clears the GrabBag, but only if a 'real' SA
+    // exists.
+    // Thus I added a bugdoc for that task which contains a 'real' SA to test
+    // if GrabBag gets cleared on change of the SA model data.
+
+    // load document
+    loadFromFile(u"tdf132368.pptx");
+
+    // get DrawPage
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
-    xDrawPage->add(xGroupShape);
-    xGroup->add(xRect1);
-    xGroup->add(xRect2);
-    uno::Reference<text::XTextRange> xRect2Text(xRect2, uno::UNO_QUERY);
-    xRect2Text->setString(u"x"_ustr);
-    uno::Sequence<beans::PropertyValue> aGrabBag = {
-        comphelper::makePropertyValue(u"OOXLayout"_ustr, true),
-    };
-    uno::Reference<beans::XPropertySet> xGroupProps(xGroup, uno::UNO_QUERY);
-    xGroupProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag));
 
-    // When editing the shape text of the 2nd rectangle (insert a char at the start).
+    // get 1st object, this is the SA. Get as GroupObject
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroupShape(xShape, uno::UNO_QUERY);
+
+    // get the GrabBag. After import there may be values, but none anymore
+    // starting with 'OOX.*', these are now at the DiagramHelper
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    uno::Reference<beans::XPropertySet> xGroupProps(xGroupShape, uno::UNO_QUERY);
+    xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+    if (aGrabBag.hasElements())
+    {
+        for (sal_Int32 i = 0; i < aGrabBag.getLength(); ++i)
+        {
+            if (aGrabBag[i].Name.startsWith("OOX"))
+                CPPUNIT_ASSERT(false);
+        }
+    }
+
+    // get the 1st text shape (containing 'A'). There is a BGShape and an Arrow
+    // in indices before
+    uno::Reference<drawing::XShape> xShapeA(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+
+    // TextEdit: insert a char at the start
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
-    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xRect2);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShapeA);
     pSdrView->SdrBeginTextEdit(pObject);
     EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-    rEditView.InsertText(u"y"_ustr);
+    rEditView.InsertText(u"X"_ustr);
     pSdrView->SdrEndTextEdit();
 
-    // Then make sure that grab-bag is empty to avoid losing the new text.
+    // make sure the grab-bag is empty after change
     xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-    // Without the accompanying fix in place, this test would have failed with:
-    // assertion failed
-    // - Expression: !aGrabBag.hasElements()
-    // i.e. the grab-bag was still around after modifying the shape, and that grab-bag contained the
-    // old text.
     CPPUNIT_ASSERT(!aGrabBag.hasElements());
+
+    // get SdrObjGroup and check, it should still be a Diagram
+    SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(nullptr != pGroup);
+    CPPUNIT_ASSERT(pGroup->isDiagram());
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
@@ -317,45 +330,56 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
 
-    assertXPath(pXmlDoc, "/primitive2D", 1);
+    tools::XPath aPath(pXmlDoc.get());
+    CPPUNIT_ASSERT(aPath.create("/primitive2D"));
 
-    OString aBasePath("/primitive2D/sdrrectangle/group/polypolygoncolor"_ostr);
-    assertXPath(pXmlDoc, aBasePath, "color", u"#729fcf");
+    auto aPolyPoly = aPath.create("/primitive2D/sdrrectangle/group/polypolygoncolor");
+    CPPUNIT_ASSERT(aPolyPoly);
+    CPPUNIT_ASSERT_EQUAL(u"#729fcf"_ustr, aPolyPoly->attribute("color"));
 
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "height",
-                u"99"); // weird Rectangle is created with size 100
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "width", u"99");
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "minx", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "miny", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxx", u"99");
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxy", u"99");
+    auto aPolyPolyPath = aPath.create(aPolyPoly, "/polypolygon");
+    CPPUNIT_ASSERT(aPolyPolyPath);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPolyPolyPath->count());
+    auto aPolyPolyElement = aPolyPolyPath->at(0);
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute(
+                                         "height")); // weird Rectangle is created with size 100
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute("width"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPolyPolyElement->attribute("minx"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPolyPolyElement->attribute("miny"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute("maxx"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPolyPolyElement->attribute("maxy"));
 
-    aBasePath = "/primitive2D/sdrrectangle/group/polypolygoncolor/polypolygon/polygon"_ostr;
+    auto aPolyPath
+        = aPath.create("/primitive2D/sdrrectangle/group/polypolygoncolor/polypolygon/polygon");
+    CPPUNIT_ASSERT(aPolyPath);
+    auto aPoints = aPath.create(aPolyPath, "/point");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aPoints->count());
+    CPPUNIT_ASSERT_EQUAL(u"49.5"_ustr, aPoints->at(0)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(0)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(1)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(1)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(2)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(2)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(3)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aPoints->at(3)->attribute("y"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(4)->attribute("x"));
+    CPPUNIT_ASSERT_EQUAL(u"99"_ustr, aPoints->at(4)->attribute("y"));
 
-    assertXPath(pXmlDoc, aBasePath + "/point", 5);
-    assertXPath(pXmlDoc, aBasePath + "/point[1]", "x", u"49.5"); // hmm, weird, why?
-    assertXPath(pXmlDoc, aBasePath + "/point[1]", "y", u"99");
-    assertXPath(pXmlDoc, aBasePath + "/point[2]", "x", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/point[2]", "y", u"99");
-    assertXPath(pXmlDoc, aBasePath + "/point[3]", "x", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/point[3]", "y", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/point[4]", "x", u"99");
-    assertXPath(pXmlDoc, aBasePath + "/point[4]", "y", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/point[5]", "x", u"99");
-    assertXPath(pXmlDoc, aBasePath + "/point[5]", "y", u"99");
+    auto aStrokePath = aPath.create("/primitive2D/sdrrectangle/group/polygonstroke");
+    CPPUNIT_ASSERT(aStrokePath);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStrokePath->count());
 
-    aBasePath = "/primitive2D/sdrrectangle/group/polygonstroke"_ostr;
-    assertXPath(pXmlDoc, aBasePath, 1);
+    auto aLinePath = aPath.create(aStrokePath, "/line");
+    CPPUNIT_ASSERT_EQUAL(u"#3465a4"_ustr, aLinePath->attribute("color"));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aLinePath->attribute("width"));
+    CPPUNIT_ASSERT_EQUAL(u"Round"_ustr, aLinePath->attribute("linejoin"));
+    CPPUNIT_ASSERT_EQUAL(u"BUTT"_ustr, aLinePath->attribute("linecap"));
 
-    assertXPath(pXmlDoc, aBasePath + "/line", "color", u"#3465a4");
-    assertXPath(pXmlDoc, aBasePath + "/line", "width", u"0");
-    assertXPath(pXmlDoc, aBasePath + "/line", "linejoin", u"Round");
-    assertXPath(pXmlDoc, aBasePath + "/line", "linecap", u"BUTT");
-
-    assertXPathContent(pXmlDoc, aBasePath + "/polygon", u"49.5,99 0,99 0,0 99,0 99,99");
+    auto aLineContentPath = aPath.create(aStrokePath, "/polygon");
+    CPPUNIT_ASSERT_EQUAL(u"49.5,99 0,99 0,0 99,0 99,99"_ustr, aLineContentPath->content());
 
     // If solid line, then there is no line stroke information
-    assertXPath(pXmlDoc, aBasePath + "/stroke", 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPath.create(aStrokePath, "/stroke")->count());
 
     pPage->RemoveObject(0);
 }
@@ -402,14 +426,19 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-    assertXPath(pXmlDoc, "/primitive2D", 1);
+    tools::XPath aXPath(pXmlDoc.get());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aXPath.create("/primitive2D")->count());
+    CPPUNIT_ASSERT_EQUAL(u"Perspective"_ustr,
+                         aXPath.create("//scene")->attribute("projectionMode"));
 
-    assertXPath(pXmlDoc, "//scene", "projectionMode", u"Perspective");
-    assertXPath(pXmlDoc, "//scene/extrude3D[1]/fill", "color", u"#ff0000");
-    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "color", u"#ff0000");
+    auto aFillPath = aXPath.create("//scene/extrude3D[1]/fill");
+    CPPUNIT_ASSERT_EQUAL(u"#ff0000"_ustr, aFillPath->attribute("color"));
+
+    auto aMaterialPath = aXPath.create("//scene/extrude3D[1]/object3Dattributes/material");
+    CPPUNIT_ASSERT_EQUAL(u"#ff0000"_ustr, aMaterialPath->attribute("color"));
+
     // ODF default 50% is represented by Specular Intensity = 2^5. The relationship is not linear.
-    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "specularIntensity",
-                u"32");
+    CPPUNIT_ASSERT_EQUAL(u"32"_ustr, aMaterialPath->attribute("specularIntensity"));
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
@@ -425,16 +454,18 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
         SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
         xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+        tools::XPath aXPath(pXmlDoc.get());
 
         // this is a group shape, hence 2 nested objectinfo
-        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/group/unhandled/group/"
-                            "polypolygoncolor/polypolygon/"_ostr;
+        auto aBasePath = aXPath.create("/primitive2D/objectinfo[4]/objectinfo/unhandled/group/"
+                                       "unhandled/group/polypolygoncolor/polypolygon");
 
         // The text is: "O" + eop + "O" + eol + "O"
         // It should be displayed as 3 line of text. (1 "O" letter in every line)
-        sal_Int32 nY1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "y").toInt32();
-        sal_Int32 nY2 = getXPath(pXmlDoc, aBasePath + "polygon[3]/point[1]", "y").toInt32();
-        sal_Int32 nY3 = getXPath(pXmlDoc, aBasePath + "polygon[5]/point[1]", "y").toInt32();
+
+        sal_Int32 nY1 = aXPath.create(aBasePath, "/polygon[1]/point[1]")->attribute("y").toInt32();
+        sal_Int32 nY2 = aXPath.create(aBasePath, "/polygon[3]/point[1]")->attribute("y").toInt32();
+        sal_Int32 nY3 = aXPath.create(aBasePath, "/polygon[5]/point[1]")->attribute("y").toInt32();
 
         sal_Int32 nDiff21 = nY2 - nY1;
         sal_Int32 nDiff32 = nY3 - nY2;
@@ -468,16 +499,17 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
         SdrPage* pSdrPage = getFirstDrawPageWithAssert();
 
         xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+        tools::XPath aXPath(pXmlDoc.get());
 
-        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/group/unhandled/group/"
-                            "polypolygoncolor/polypolygon/"_ostr;
+        auto aBasePath = aXPath.create("/primitive2D/objectinfo[4]/objectinfo/unhandled/group/"
+                                       "unhandled/group/polypolygoncolor/polypolygon");
 
         // The text is: 7 line od "OOOOOOO"
         // Take the x coord of the 4 "O" on the corners
-        sal_Int32 nX1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "x").toInt32();
-        sal_Int32 nX2 = getXPath(pXmlDoc, aBasePath + "polygon[13]/point[1]", "x").toInt32();
-        sal_Int32 nX3 = getXPath(pXmlDoc, aBasePath + "polygon[85]/point[1]", "x").toInt32();
-        sal_Int32 nX4 = getXPath(pXmlDoc, aBasePath + "polygon[97]/point[1]", "x").toInt32();
+        sal_Int32 nX1 = aXPath.create(aBasePath, "/polygon[1]/point[1]")->attribute("x").toInt32();
+        sal_Int32 nX2 = aXPath.create(aBasePath, "/polygon[13]/point[1]")->attribute("x").toInt32();
+        sal_Int32 nX3 = aXPath.create(aBasePath, "/polygon[85]/point[1]")->attribute("x").toInt32();
+        sal_Int32 nX4 = aXPath.create(aBasePath, "/polygon[97]/point[1]")->attribute("x").toInt32();
 
         if (i < 2)
         {
@@ -602,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
     loadFromFile(u"page-view-draw-layer-clip.docx");
 
     // When saving that document to PDF:
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     // Then make sure that line shape gets clipped:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pDoc = parsePDFExport();

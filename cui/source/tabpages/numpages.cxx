@@ -21,6 +21,8 @@
 
 #include <numpages.hxx>
 #include <dialmgr.hxx>
+#include <o3tl/untaint.hxx>
+#include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/numitem.hxx>
@@ -528,7 +530,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     if (aMap.run() != RET_OK)
         return;
 
-    sal_Unicode cChar = aMap.GetChar();
+    sal_UCS4 cChar = aMap.GetChar();
     vcl::Font aActBulletFont = aMap.GetCharFont();
 
     sal_uInt16 _nMask = 1;
@@ -554,7 +556,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     {
         if (i == nIndex)
         {
-            aBulletSymbolsListRange[i] = OUStringChar(cChar);
+            aBulletSymbolsListRange[i] = OUString(&cChar, 1);
             aBulletSymbolsFontsListRange[i] = aActBulletFont.GetFamilyName();
         }
         else
@@ -1945,7 +1947,7 @@ IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, ColorListBox&, rColorBox, void
 
 IMPL_LINK(SvxNumOptionsTabPage, BulRelSizeHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    sal_uInt16 nRelSize = rField.get_value(FieldUnit::PERCENT);
+    sal_uInt16 nRelSize = o3tl::sanitizing_cast<sal_uInt16>(rField.get_value(FieldUnit::PERCENT));
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2081,7 +2083,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, 
                 aBitmap.Scale(nScale, nScale);
             }
             pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
             m_xGalleryMenu->append(sItemId, sGrfName, *pVD);
         }
         else

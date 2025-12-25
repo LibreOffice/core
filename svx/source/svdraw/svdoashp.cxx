@@ -76,6 +76,7 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -84,6 +85,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svdobjplusdata.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <o3tl/string_view.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 #include <editeng/frmdiritem.hxx>
@@ -355,7 +357,7 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
                 ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
                 pVirDev->SetOutputSizePixel(aBitmap.GetSizePixel());
                 BitmapFilter::Filter(aBitmap, BitmapShadowFilter(aShadowColor));
-                pVirDev->DrawBitmapEx(Point(), aBitmap);
+                pVirDev->DrawBitmap(Point(), aBitmap);
                 aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmap(Point(0,0), aBitmap.GetSizePixel())));
             }
 
@@ -2607,8 +2609,20 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
     if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
     if (pViewInit!=nullptr) *pViewInit=aViewInit;
 }
+
 void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
+    if (!getDiagramDataModelID().isEmpty())
+    {
+        std::shared_ptr< svx::diagram::IDiagramHelper > pIDiagramHelper(getDiagramHelperFromDiagramOrMember());
+
+        if (pIDiagramHelper)
+        {
+            // try to do the needed changes at the associated DiagramData model
+            pIDiagramHelper->TextInformationChange(getDiagramDataModelID(), rOutl);
+        }
+    }
+
     SdrTextObj::EndTextEdit( rOutl );
     InvalidateRenderGeometry();
 }

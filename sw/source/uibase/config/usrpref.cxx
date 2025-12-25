@@ -71,7 +71,8 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_aGridConfig(bWeb, *this),
     m_aCursorConfig(*this),
     m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
-    m_aFmtAidsAutoComplConfig(*this)
+    m_aFmtAidsAutoComplConfig(*this),
+    m_aBaselineGridConfig(bWeb ? std::nullopt : std::make_optional<SwBaselineGridConfig>(*this))
 {
     if (comphelper::IsFuzzing())
     {

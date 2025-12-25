@@ -217,7 +217,7 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
 {
     SwTwips nHeight = 0;
     SwTwips nOffset = 0;
-    SwRectFnSet aRectFnSet(&_rVertOrientFrame);
+    SwRectFnSet aRectFnSet(_rVertOrientFrame);
     // #i11860# - top of <_rVertOrientFrame> for object positioning
     const SwTwips nVertOrientTop = GetTopForObjPos( _rVertOrientFrame, aRectFnSet.FnRect(), aRectFnSet.IsVert() );
     // #i11860# - upper space amount of <_rVertOrientFrame> considered
@@ -379,7 +379,7 @@ SwTwips SwAnchoredObjectPosition::GetVertRelPos(
                                     SwTwips& _roVertOffsetToFrameAnchorPos ) const
 {
     SwTwips nRelPosY = 0;
-    SwRectFnSet aRectFnSet(&_rVertOrientFrame);
+    SwRectFnSet aRectFnSet(_rVertOrientFrame);
 
     SwTwips nAlignAreaHeight;
     SwTwips nAlignAreaOffset;
@@ -671,7 +671,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
 {
     SwTwips nWidth = 0;
     SwTwips nOffset = 0;
-    SwRectFnSet aRectFnSet(&_rHoriOrientFrame);
+    SwRectFnSet aRectFnSet(_rHoriOrientFrame);
     switch ( _eRelOrient )
     {
         case text::RelOrientation::PRINT_AREA:
@@ -904,7 +904,7 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
                              nWidth, nOffset, bAlignedRelToPage );
 
     const SwFrame& rAnchorFrame = GetAnchorFrame();
-    SwRectFnSet aRectFnSet(&_rHoriOrientFrame);
+    SwRectFnSet aRectFnSet(_rHoriOrientFrame);
     SwTwips nObjWidth = aRectFnSet.GetWidth(GetAnchoredObj().GetObjRect());
     SwTwips nRelPosX = nOffset;
     if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE )
@@ -1014,7 +1014,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
     const SwFlyAtContentFrame& rFlyAtContentFrame =
                         static_cast<const SwFlyAtContentFrame&>(GetAnchoredObj());
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
-    SwRectFnSet aRectFnSet(&_rHoriOrientFrame);
+    SwRectFnSet aRectFnSet(_rHoriOrientFrame);
 
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
 
@@ -1075,8 +1075,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().setY( rAnchorTextFrame.getFrameArea().Top() +
-                                            nAdjustedRelPosX );
+                    aTmpObjRect.SetPosY(rAnchorTextFrame.getFrameArea().Top() + nAdjustedRelPosX);
                 }
             }
             else
@@ -1114,8 +1113,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().setX( rAnchorTextFrame.getFrameArea().Left() +
-                                            nAdjustedRelPosX );
+                    aTmpObjRect.SetPosX(rAnchorTextFrame.getFrameArea().Left() + nAdjustedRelPosX);
                 }
             } // end of <if (bVert)>
         } // end of <if DrawAsideFly(..)>
@@ -1141,7 +1139,7 @@ bool SwAnchoredObjectPosition::DrawAsideFly( const SwFlyFrame* _pFly,
 {
     bool bRetVal = false;
 
-    SwRectFnSet aRectFnSet(&GetAnchorFrame());
+    SwRectFnSet aRectFnSet(GetAnchorFrame());
 
     if ( _pFly->IsFlyAtContentFrame() &&
          aRectFnSet.BottomDist( _pFly->getFrameArea(), aRectFnSet.GetTop(_rObjRect) ) < 0 &&

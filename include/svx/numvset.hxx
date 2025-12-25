@@ -49,23 +49,23 @@ enum class NumberingPageType
 
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
-    NumberingPageType ePageType;
-    tools::Rectangle       aOrgRect;
-    VclPtr<VirtualDevice> pVDev;
+    NumberingPageType mePageType;
+    tools::Rectangle       maOrgRect;
+    VclPtr<VirtualDevice> mpVDev;
 
-    css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
-    css::lang::Locale aLocale;
+    css::uno::Reference<css::text::XNumberingFormatter> mxFormatter;
+    css::lang::Locale maLocale;
 
     // Pair of bullet chars (first), and their respective font (second)
     std::vector<std::pair<OUString, OUString>> maCustomBullets;
 
     css::uno::Sequence<
         css::uno::Sequence<
-            css::beans::PropertyValue> > aNumSettings;
+            css::beans::PropertyValue> > maNumSettings;
 
     css::uno::Sequence<
         css::uno::Reference<
-            css::container::XIndexAccess> > aOutlineSettings;
+            css::container::XIndexAccess> > maOutlineSettings;
 
 public:
     SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
@@ -96,8 +96,8 @@ public:
 
 class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
 {
-    Idle        aFormatIdle;
-    bool        bGrfNotFound;
+    Idle        m_aFormatIdle;
+    bool        m_bGrfNotFound;
 
     DECL_DLLPRIVATE_LINK(FormatHdl_Impl, Timer *, void);
 

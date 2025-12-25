@@ -13,10 +13,9 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <osl/file.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <map>
 #include <string_view>
 

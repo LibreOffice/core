@@ -27,7 +27,7 @@ REMINDER: Always start new tabs in the browser, reload might fail / cache!
 
 ## Setup for the LO WASM build (with Qt)
 
-We're using Qt 5.15.2 with Emscripten 3.1.46. There are a bunch of Qt patches
+We're using Qt 5.15.2 with Emscripten 4.0.10. There are a bunch of Qt patches
 to fix the most grave bugs. Also there's rapid development in Emscripten, so
 using another version often causes arbitrary problems.
 
@@ -38,8 +38,8 @@ using another version often causes arbitrary problems.
 <https://emscripten.org/docs/getting_started/index.html>
 
     git clone https://github.com/emscripten-core/emsdk.git
-    ./emsdk install 3.1.46
-    ./emsdk activate 3.1.46
+    ./emsdk install 4.0.10
+    ./emsdk activate 4.0.10
 
 Example `bashrc` scriptlet:
 
@@ -138,7 +138,7 @@ Recommended configure setup is thusly:
 ```
 
 FWIW: it's also possible to build an almost static Linux LibreOffice by just using
---disable-dynloading --enable-customtarget-components. System externals are still
+--disable-dynamic-loading --enable-customtarget-components. System externals are still
 linked dynamically, but everything else is static.
 
 ### "Deploying" soffice.wasm

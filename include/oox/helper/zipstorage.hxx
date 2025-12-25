@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_ZIPSTORAGE_HXX
 #define INCLUDED_OOX_HELPER_ZIPSTORAGE_HXX
 
-#include <vector>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <rtl/ustring.hxx>

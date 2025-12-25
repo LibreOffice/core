@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <swtypes.hxx>
 #include <swdllapi.h>
 

@@ -117,8 +117,9 @@ Const OFFSETADDRESSERROR		=	&quot;OFFSETADDRESSERROR&quot;
 Const DUPLICATECHARTERROR		=	&quot;DUPLICATECHARTERROR&quot;
 Const RANGEEXPORTERROR			=	&quot;RANGEEXPORTERROR&quot;
 
-&apos;	SF_Chart
-Const CHARTEXPORTERROR			=	&quot;CHARTEXPORTERROR&quot;
+&apos;	SF_SHAPE
+Const DUPLICATESHAPEERROR		=	&quot;DUPLICATESHAPEERROR&quot;
+Const SHAPEEXPORTERROR			=	&quot;SHAPEEXPORTERROR&quot;
 
 &apos;	SF_Form
 Const FORMDEADERROR				=	&quot;FORMDEADERROR&quot;
@@ -1074,14 +1075,19 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DUPLICATECHART&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4), pvArgs(5))
+			Case DUPLICATESHAPEERROR	&apos;	SF_Calc.CreateShapeFromFile(shape, ShapeName, sheet, SheetName, Document, file)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DUPLICATESHAPE&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4), pvArgs(5))
 			Case RANGEEXPORTERROR	&apos;	SF_Calc.ExportRangeToFile(Arg1Name, FileName, Arg2, Overwrite)
 				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;RANGEEXPORT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
-			Case CHARTEXPORTERROR	&apos;	SF_Chart.ExportToFile(Arg1Name, FileName, Arg2, Overwrite)
+			Case SHAPEEXPORTERROR	&apos;	SF_Shape.ExportToFile(Arg1Name, FileName, Arg2, Overwrite)
 				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
-					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CHARTEXPORT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SHAPEEXPORT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case FORMDEADERROR		&apos;	SF_Form._IsStillAlive(FormName, DocumentName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FORMDEAD&quot;, pvArgs(0), pvArgs(1))
@@ -1323,7 +1329,7 @@ Private Sub _ConsoleRefresh()
 		&apos;	Do nothing if console inactive
 		If IsNull(.ConsoleDialog) Then GoTo Finally
 		If Not .ConsoleDialog._IsStillAlive(False) Then		&apos;	False to not generate an error when dead
-			Set .ConsoleControl = .ConsoleControl.Dispose()
+			If Not IsNull(.ConsoleControl) Then Set .ConsoleControl = .ConsoleControl.Dispose()
 			Set .ConsoleDialog = Nothing
 			GoTo Finally
 		End If

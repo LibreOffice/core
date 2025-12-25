@@ -144,15 +144,18 @@ void SQLDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
-    mxSQLFetchThread = new SQLFetchThread(*mpDoc, mrDataSource.getID(),
-                                          std::bind(&SQLDataProvider::ImportFinished, this),
-                                          std::vector(mrDataSource.getDataTransformation()));
-    mxSQLFetchThread->launch();
+    mxSQLFetchThread
+        = new SQLFetchThread(*mpDoc, mrDataSource.getID(), [this]() { this->ImportFinished(); },
+                             std::vector(mrDataSource.getDataTransformation()));
 
     if (mbDeterministic)
     {
         SolarMutexReleaser aReleaser;
-        mxSQLFetchThread->join();
+        mxSQLFetchThread->execute();
+    }
+    else
+    {
+        mxSQLFetchThread->launch();
     }
 }
 

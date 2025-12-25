@@ -18,6 +18,10 @@ namespace com::sun::star::awt
 {
 class XBitmap;
 }
+namespace com::sun::star::graphic
+{
+class XGraphic;
+}
 namespace com::sun::star::uno
 {
 class Any;

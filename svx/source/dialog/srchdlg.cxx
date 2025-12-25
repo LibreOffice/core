@@ -311,6 +311,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
         m_xHelpBtn->hide();
         m_xSearchLB->set_entry_text(u""_ustr);
         m_xReplaceLB->set_entry_text(u""_ustr);
+        m_xSearchLB->grab_focus();
     }
 
     m_aPresentIdle.SetTimeout(50);
@@ -357,6 +358,12 @@ void SvxSearchDialog::Present()
     PresentTimeoutHdl_Impl(nullptr);
     // tdf#133807 try again in a short timeout
     m_aPresentIdle.Start();
+}
+
+void SvxSearchDialog::SetSearchLBEntryTextAndGrabFocus(const OUString& rStr)
+{
+    m_xSearchLB->set_entry_text(rStr);
+    m_xSearchLB->grab_focus();
 }
 
 void SvxSearchDialog::ChildWinDispose()

@@ -74,8 +74,8 @@ LanguageType ScViewUtil::GetEffLanguage( ScDocument& rDoc, const ScAddress& rPos
     SvtScriptType nScript = rDoc.GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
     sal_uInt16 nWhich = ( nScript == SvtScriptType::ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                     ( ( nScript == SvtScriptType::COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
-    const SfxPoolItem* pItem = rDoc.GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
-    const SvxLanguageItem* pLangIt = dynamic_cast<const SvxLanguageItem*>( pItem  );
+    const SfxPoolItem& rItem = rDoc.GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
+    const SvxLanguageItem* pLangIt = dynamic_cast<const SvxLanguageItem*>(&rItem);
     LanguageType eLnge;
     if (pLangIt)
     {

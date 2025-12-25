@@ -125,7 +125,7 @@ void ScUndoWidthOrHeight::Undo()
 
     if (pViewShell)
     {
-        SCTAB nCurrentTab = pViewShell->GetViewData().CurrentTabForData();
+        SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNumber();
         bool bAffectsVisibility = (eMode != SC_SIZE_ORIGINAL && eMode != SC_SIZE_VISOPT);
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 pViewShell, bWidth /* bColumns */, !bWidth /* bRows */,
@@ -156,7 +156,7 @@ void ScUndoWidthOrHeight::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
+        SCTAB nTab = pViewShell->GetViewData().GetTabNumber();
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
 

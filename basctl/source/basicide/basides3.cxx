@@ -29,6 +29,8 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace basctl

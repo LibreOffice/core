@@ -24,6 +24,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
+#include <o3tl/untaint.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <svx/svxids.hrc>
@@ -36,7 +37,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(SvxContourDlgChildWindow, SID_CONTOUR_DLG);
 
@@ -635,7 +636,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
         if( aGraphic.GetType() == GraphicType::Bitmap )
         {
-            const tools::Long  nTol = static_cast<tools::Long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255 / 100);
+            const auto nPercentage = o3tl::sanitizing_cast<sal_uInt16>(m_xMtfTolerance->get_value(FieldUnit::PERCENT));
+            const auto nTol = nPercentage * 255 / 100;
 
             AlphaMask aMask = aGraphic.GetBitmap().CreateColorBitmap().CreateAlphaMask( rColor, nTol );
 

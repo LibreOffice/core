@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_THEME_HXX
 #define INCLUDED_OOX_DRAWINGML_THEME_HXX
 
-#include <functional>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/shape.hxx>

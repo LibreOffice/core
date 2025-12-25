@@ -29,7 +29,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
@@ -369,14 +369,14 @@ void StyleList::Initialize()
     m_xFmtLb->connect_mouse_press(LINK(this, StyleList, MousePressHdl));
     m_xFmtLb->connect_query_tooltip(LINK(this, StyleList, QueryTooltipHdl));
     m_xFmtLb->connect_selection_changed(LINK(this, StyleList, FmtSelectHdl));
-    m_xFmtLb->connect_popup_menu(LINK(this, StyleList, PopupFlatMenuHdl));
+    m_xFmtLb->connect_command(LINK(this, StyleList, PopupFlatMenuHdl));
     m_xFmtLb->connect_key_press(LINK(this, StyleList, KeyInputHdl));
     m_xFmtLb->set_selection_mode(SelectionMode::Multiple);
     m_xTreeBox->connect_selection_changed(LINK(this, StyleList, FmtSelectHdl));
     m_xTreeBox->connect_row_activated(LINK(this, StyleList, TreeListApplyHdl));
     m_xTreeBox->connect_mouse_press(LINK(this, StyleList, MousePressHdl));
     m_xTreeBox->connect_query_tooltip(LINK(this, StyleList, QueryTooltipHdl));
-    m_xTreeBox->connect_popup_menu(LINK(this, StyleList, PopupTreeMenuHdl));
+    m_xTreeBox->connect_command(LINK(this, StyleList, PopupTreeMenuHdl));
     m_xTreeBox->connect_key_press(LINK(this, StyleList, KeyInputHdl));
     m_xTreeBox->connect_drag_begin(LINK(this, StyleList, DragBeginHdl));
     m_xTreeView1DropTargetHelper.reset(new TreeViewDropTarget(*this, *m_xFmtLb));
@@ -534,8 +534,8 @@ IMPL_LINK(StyleList, ExecuteDrop, const ExecuteDropEvent&, rEvt, sal_Int8)
     if (!pSource || pSource != m_xTreeBox.get())
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xSource(m_xTreeBox->make_iterator());
-    if (!m_xTreeBox->get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_xTreeBox->get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_xTreeBox->make_iterator());
@@ -1785,7 +1785,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     ::tools::Rectangle aRect(
         rRect.TopLeft(),
         Size(rRenderContext.GetOutputSize().Width() - rRect.Left(), rRect.GetHeight()));
-    bool bSelected = std::get<2>(aPayload);
+    bool bSelected = comphelper::LibreOfficeKit::isActive() ? false : std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
@@ -1981,7 +1981,8 @@ const SfxStyleFamilyItem& StyleList::GetFamilyItemByIndex(size_t i) const
 IMPL_STATIC_LINK(StyleList, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)
 {
     vcl::RenderContext& rRenderContext = aPayload.first;
-    return Size(42, 32 * rRenderContext.GetDPIScaleFactor());
+    return Size(comphelper::LibreOfficeKit::isActive() ? 200 : 42,
+                32 * rRenderContext.GetDPIScaleFactor());
 }
 
 IMPL_LINK(StyleList, PopupFlatMenuHdl, const CommandEvent&, rCEvt, bool)

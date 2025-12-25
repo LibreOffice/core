@@ -15,6 +15,7 @@
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -2234,41 +2235,41 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
     {
         aTests[tests.getStatus()].push_back(tests.getTestName());
     }
-    OUString writeResult = getResultString() + "\n---Name of the tests that failed---\n";
+    OUStringBuffer writeResult(getResultString() + "\n---Name of the tests that failed---\n");
     if (static_cast<int>(aTests[u"FAILED"_ustr].size()) > 0)
     {
         for (const class OUString& tests : aTests[u"FAILED"_ustr])
         {
-            writeResult += tests + "\n";
+            writeResult.append(tests + "\n");
         }
     }
     else
     {
-        writeResult += "No test has been failed.\n";
+        writeResult.append("No test has been failed.\n");
     }
-    writeResult += "\n---Name of the tests that were Quirky---\n";
+    writeResult.append("\n---Name of the tests that were Quirky---\n");
     if (static_cast<int>(aTests[u"QUIRKY"_ustr].size()) > 0)
     {
         for (const class OUString& tests : aTests[u"QUIRKY"_ustr])
         {
-            writeResult += tests + "\n";
+            writeResult.append(tests + "\n");
         }
     }
     else
     {
-        writeResult += "No test was Quirky.\n";
+        writeResult.append("No test was Quirky.\n");
     }
-    writeResult += "\n---Name of the tests that were Skipped---\n";
+    writeResult.append("\n---Name of the tests that were Skipped---\n");
     if (static_cast<int>(aTests[u"SKIPPED"_ustr].size()) > 0)
     {
         for (const class OUString& tests : aTests[u"SKIPPED"_ustr])
         {
-            writeResult += tests + "\n";
+            writeResult.append(tests + "\n");
         }
     }
     else
     {
-        writeResult += "No test was Skipped.";
+        writeResult.append("No test was Skipped.");
     }
     logFile.WriteOString(OUStringToOString(writeResult, RTL_TEXTENCODING_UTF8));
 }

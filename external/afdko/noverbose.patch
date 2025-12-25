@@ -1,0 +1,56 @@
+--- afdko/c/mergefonts/source/mergeFonts.c	2025-10-22 13:47:13.840056699 +0100
++++ afdko/c/mergefonts/source/mergeFonts.c	2025-10-22 13:48:02.496428544 +0100
+@@ -1727,7 +1727,9 @@
+         for (j = 0; j < mergeInfo->newiFDArray.cnt; j++) {
+             if (curMaxFD < mergeInfo->newiFDArray.array[j]) {
+                 curMaxFD = mergeInfo->newiFDArray.array[j];
+-                fprintf(stderr, "Adding font dict %d from %s.\n", curMaxFD, h->src.stm.filename);
++                if (h->flags & SHOW_NAMES) {
++                    fprintf(stderr, "Adding font dict %d from %s.\n", curMaxFD, h->src.stm.filename);
++                }
+             }
+         }
+ 
+--- afdko/c/makeotf/include/hotconv.h	2025-10-22 14:51:54.161381982 +0100
++++ afdko/c/makeotf/include/hotconv.h	2025-10-22 14:57:50.948032645 +0100
+@@ -383,6 +383,7 @@
+ #define HOT_SUBSET          (1<<13)
+ #define HOT_SUPRESS__WIDTH_OPT (1<<14) /* suppress width optimization in CFF: makes it easier to poke at charstrings with other tools */
+ #define HOT_VERBOSE            (1<<15) /* Print all warnings and notes: else suppress the most annoying ones. */
++#define HOT_SUPRESS_WARNINGS (1<<16) /* Print standard warnings and notes: else suppress the standard warnings. */
+ 
+ struct hotReadFontOverrides_           /* Record for instructions to modify font as it is read in. */
+     {
+--- afdko/c/makeotf/lib/hotconv/hot.c	2025-10-22 14:51:49.995353104 +0100
++++ afdko/c/makeotf/lib/hotconv/hot.c	2025-10-22 14:56:10.084139451 +0100
+@@ -324,7 +324,9 @@
+ 
+     /* Convert to CFF */
+     tcflags = 0;
+-    tcflags |= TC_DO_WARNINGS;
++    if (!(flags & HOT_SUPRESS_WARNINGS)) {
++        tcflags |= TC_DO_WARNINGS;
++    }
+     if (flags & HOT_ADD_AUTH_AREA) {
+         tcflags |= TC_ADDAUTHAREA;
+     }
+@@ -385,7 +385,9 @@
+          fi->FontName.length);
+     g->font.FontName.array[fi->FontName.length] = '\0';
+     g->font.FontName.cnt = fi->FontName.length + 1;
+-    hotMsg(g, hotHEADING, "processing font <%s>", g->font.FontName.array);
++    if (!(flags & HOT_SUPRESS_WARNINGS)) {
++        hotMsg(g, hotHEADING, "processing font <%s>", g->font.FontName.array);
++    }
+ 
+     /* Copy basic font information */
+     g->font.Notice = fi->Notice;
+@@ -1444,7 +1444,7 @@
+ /* Print note, error, warning, or fatal message (from note buffer is fmt is
+    NULL). If note used, handle reuse of g->note. */
+ void CDECL hotMsg(hotCtx g, int level, const char *fmt, ...) {
+-    if (g->cb.message != NULL) {
++    if (g->cb.message != NULL && g->convertFlags & HOT_CONVERT_VERBOSE) {
+         // int lenName = g->font.FontName.cnt + 2;
+ 
+         if (fmt == NULL) {

@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <osl/mutex.hxx>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <memory>
@@ -32,6 +30,14 @@
 namespace com::sun::star::uno
 {
 class XInterface;
+}
+namespace com::sun::star::lang
+{
+struct EventObject;
+}
+namespace osl
+{
+class Mutex;
 }
 
 namespace comphelper

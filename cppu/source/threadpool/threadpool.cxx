@@ -79,7 +79,6 @@ namespace cppu_threadpool
 
     ThreadPool::~ThreadPool()
     {
-        SAL_WARN_IF( m_mapQueue.size(), "cppu.threadpool", "ThreadIdHashMap:  " << m_mapQueue.size() << " left");
     }
 
     void ThreadPool::dispose( void const * nDisposeId )

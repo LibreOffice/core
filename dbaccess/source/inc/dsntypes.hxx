@@ -191,7 +191,6 @@ class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) ODsnTypeCollection::TypeIterator
     friend class ODsnTypeCollection;
 
     friend bool OOO_DLLPUBLIC_DBA operator==(const TypeIterator& lhs, const TypeIterator& rhs);
-    friend bool OOO_DLLPUBLIC_DBA operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
 
 protected:
     const ODsnTypeCollection*   m_pContainer;

@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <fldmgr.hxx>
 
 #define FIELD_COLUMN_WIDTH 19

@@ -74,7 +74,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap()
 {
     // It tests chart area, data series line and regression-curve line.
     loadFromFile(u"xlsx/tdf135184RoundLineCap.xlsx");
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -103,7 +103,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap2()
 {
     // It tests legend, data series sector and title.
     loadFromFile(u"xlsx/tdf135184RoundLineCap2.xlsx");
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -134,7 +134,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap3()
 {
     // It tests chart area, data series line and regression-curve line.
     loadFromFile(u"xlsx/tdf135184RoundLineCap.xlsx");
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -152,7 +152,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap4()
 {
     // It tests legend, data series sector and title.
     loadFromFile(u"xlsx/tdf135184RoundLineCap2.xlsx");
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -177,7 +177,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
     // ODF im/export for MCGR is integrated
 
     // Make sure the chart area has a transparency in gradient stops in saved pptx file.
-    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+    save(TestFilter::PPTX_2007);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -203,7 +203,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     loadFromFile(u"pptx/tdf128345_ChartArea_CG_TS.pptx");
 
     // Find transparency gradient name
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName = getXPathContent(
@@ -218,7 +218,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify the content of the opacity definition
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -238,7 +238,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
     loadFromFile(u"odp/tdf128345_ChartWall_CS_TG.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
-    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+    save(TestFilter::PPTX_2007);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -257,7 +257,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
     loadFromFile(u"pptx/tdf128345_ChartWall_CS_TG.pptx");
 
     // Find transparency gradient name
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName
@@ -272,7 +272,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -290,7 +290,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
     loadFromFile(u"odp/tdf128345_Legend_CS_TG_axial.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
-    save(u"Impress MS PowerPoint 2007 XML"_ustr);
+    save(TestFilter::PPTX_2007);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -319,7 +319,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     loadFromFile(u"pptx/tdf128345_Legend_CS_TG_axial.pptx");
 
     // Find transparency gradient name
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     const OUString sOUChartStyleName
@@ -334,7 +334,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -439,7 +439,7 @@ void Chart2GeometryTest::testTdf135366LabelExport()
     // FIXME: Error: unexpected attribute "loext:label-stroke-color"
     skipValidation();
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -468,7 +468,7 @@ void Chart2GeometryTest::testTdf135366_CustomLabelText()
     // although the used <chart:data-label> element exists since ODF 1.2.
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_012);
     loadFromFile(u"pptx/tdf135366_CustomLabelText.pptx");
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 

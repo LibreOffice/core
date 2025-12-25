@@ -69,6 +69,7 @@ public:
     void testBookmarkDeleteTdf90816();
     void testControlShapeGrouping();
     void testTdf151846();
+    void testTdf155780_filename_display_format();
     void testTdf162431();
     void testFdo55289();
     void testFdo68983();
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testBookmarkDeleteTdf90816);
     CPPUNIT_TEST(testControlShapeGrouping);
     CPPUNIT_TEST(testTdf151846);
+    CPPUNIT_TEST(testTdf155780_filename_display_format);
     CPPUNIT_TEST(testTdf162431);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
@@ -359,6 +361,18 @@ void SwMacrosTest::testTdf151846()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
 }
 
+void SwMacrosTest::testTdf155780_filename_display_format()
+{
+    loadFromFile(u"odt/tdf155780_filename_display_format.odt");
+
+    uno::Any aRet = executeMacro(
+        u"vnd.sun.Star.script:Standard.Module1.testFilenameDisplayFormat?language=Basic&location=document"_ustr);
+
+    OUString aStringRes;
+    CPPUNIT_ASSERT(aRet >>= aStringRes);
+    CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
+}
+
 void SwMacrosTest::testTdf162431()
 {
     loadFromFile(u"odt/tdf162431.odt");
@@ -409,7 +423,7 @@ void SwMacrosTest::testFdo68983()
     loadFromFile(u"odt/fdo68983.odt");
     Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // check that password-protected library survived store and re-load
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
@@ -438,7 +452,7 @@ void SwMacrosTest::testFdo87530()
         xBasLibPwd->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     {
         // check that password-protected library survived store and re-load
@@ -461,7 +475,7 @@ void SwMacrosTest::testFdo87530()
         xBasLibPwd->changeLibraryPassword(u"FooLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // check that password-protected library survived store and re-load
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);

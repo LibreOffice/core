@@ -34,7 +34,6 @@
 #include <comphelper/errcode.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
-#include <vcl/region.hxx>
 #include <vcl/jobset.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -163,13 +162,13 @@ protected:
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel) override;
 
-    bool                        DrawTransformBitmapExDirect( const basegfx::B2DHomMatrix& aFullTransform,
+    bool                        DrawTransformedBitmap(const basegfx::B2DHomMatrix& aFullTransform,
                                     const Bitmap& rBitmap, double fAlpha = 1.0) override;
 
     bool                        TransformAndReduceBitmapExToTargetRange( const basegfx::B2DHomMatrix& aFullTransform,
                                     basegfx::B2DRange &aVisibleRange, double &fMaximumArea) override;
 
-    void                        DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
+    void                        DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     Bitmap& rBitmap ) override;
 

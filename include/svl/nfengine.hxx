@@ -22,8 +22,6 @@
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <i18nlangtag/lang.h>
-#include <tools/link.hxx>
-#include <svl/nfkeytab.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>

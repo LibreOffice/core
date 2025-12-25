@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Toggleable&, voi
     TriState eState = m_xTsbPixel->get_state();
     if (eState == TRISTATE_TRUE)
     {
-        auto nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) / 10;
+        auto nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE);
         m_xMtrFldAmount->set_sensitive(true);
         m_xMtrFldAmount->set_unit(FieldUnit::CUSTOM);
         m_xMtrFldAmount->set_digits(0);
@@ -486,11 +486,11 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Toggleable&, voi
         m_xMtrFldAmount->set_increments(1, 10, FieldUnit::NONE);
         m_xMtrFldAmount->set_range(1, 100, FieldUnit::NONE);
 
-        m_xMtrFldAmount->set_value(nValue, FieldUnit::NONE);
+        m_xMtrFldAmount->set_value(nValue / 10, FieldUnit::NONE);
     }
     else if( eState == TRISTATE_FALSE )
     {
-        auto nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE) * 10;
+        auto nValue = m_xMtrFldAmount->get_value(FieldUnit::NONE);
         m_xMtrFldAmount->set_sensitive(true);
         m_xMtrFldAmount->set_unit(eFUnit);
         m_xMtrFldAmount->set_digits(2);
@@ -498,7 +498,8 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, weld::Toggleable&, voi
         m_xMtrFldAmount->set_increments(10, 100, FieldUnit::NONE);
         m_xMtrFldAmount->set_range(1, 10000, FieldUnit::NONE);
 
-        m_xMtrFldAmount->set_value(nValue, FieldUnit::NONE);
+        assert(nValue >= 1 && nValue <= 100 && "given original range");
+        m_xMtrFldAmount->set_value(nValue * 10, FieldUnit::NONE);
     }
 }
 

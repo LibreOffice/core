@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class insertSignatureLine(UITestCase):
 
-   def test_insert_signature_line(self):
+    def test_insert_signature_line(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # set the signature line

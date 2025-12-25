@@ -11,6 +11,7 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace svx::sidebar
 {
@@ -38,8 +39,30 @@ private:
     sfx2::sidebar::ControllerItem maColumnsNumberController;
     sfx2::sidebar::ControllerItem maColumnsSpacingController;
 
+    std::unique_ptr<weld::CheckButton> m_xFitWidth;
+    std::unique_ptr<weld::CheckButton> m_xFitHeight;
+    std::unique_ptr<weld::CheckButton> m_xFitFrame;
+
+    sfx2::sidebar::ControllerItem maFitController;
+    sfx2::sidebar::ControllerItem maFitWidthController;
+    sfx2::sidebar::ControllerItem maFitHeightController;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xPaddingLeft;
+    std::unique_ptr<weld::MetricSpinButton> m_xPaddingRight;
+    std::unique_ptr<weld::MetricSpinButton> m_xPaddingTop;
+    std::unique_ptr<weld::MetricSpinButton> m_xPaddingBottom;
+
+    sfx2::sidebar::ControllerItem maLeftDistController;
+    sfx2::sidebar::ControllerItem maRightDistController;
+    sfx2::sidebar::ControllerItem maUpperDistController;
+    sfx2::sidebar::ControllerItem maLowerDistController;
+
     DECL_LINK(ModifyColumnsNumberHdl, weld::SpinButton&, void);
     DECL_LINK(ModifyColumnsSpacingHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ClickFitOptionHdl, weld::Toggleable&, void);
+    DECL_LINK(ModifyPaddingHdl, weld::MetricSpinButton&, void);
+
+    void UpdateFitControls();
 };
 }
 

@@ -186,8 +186,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16          m_nOldPageNum;
     UIName              m_sOldSectionName;
 
-    OUString            m_sOldWindowState; // imported window state
-
     Point               m_aTabColFromDocPos;  // moving table columns out of the document
     SwTextNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 
@@ -735,6 +733,8 @@ public:
     virtual tools::Rectangle getLOKVisibleArea() const override;
     virtual void flushPendingLOKInvalidateTiles() override;
     virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const override;
+    /// See SfxViewShell::getEditMode().
+    int getEditMode() const override;
 
     bool IsSpotlightCharDF() const { return m_bIsSpotlightCharDF; }
     bool IsSpotlightParaStyles() const { return m_bIsSpotlightParaStyles; }
@@ -752,6 +752,10 @@ public:
     void BringToAttention(std::vector<basegfx::B2DRange>&& aRanges = {});
     void BringToAttention(const tools::Rectangle& rRect);
     void BringToAttention(const SwNode* pNode);
+
+    /// See SfxViewShell::libreOfficeKitViewInvalidateTilesCallback().
+    void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                   int nMode) const override;
 };
 
 std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,

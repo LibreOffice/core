@@ -1045,7 +1045,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
 
     std::unique_ptr<SfxMedium> pMed;
     SwDoc& rDoc = pUnoCursor->GetDoc();
-    utl::MediaDescriptor aMediaDescriptor( rOptions );
+    comphelper::SequenceAsHashMap aMediaDescriptor(rOptions);
     OUString sFileName = rURL;
     OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
     uno::Reference < io::XStream > xStream;

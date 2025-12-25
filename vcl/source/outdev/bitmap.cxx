@@ -38,15 +38,28 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
     assert(!is_double_buffered_window());
 
-    const Size aSizePix( rBitmap.GetSizePixel() );
-    DrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, MetaActionType::BMP );
+    const Size aSizePix(rBitmap.GetSizePixel());
+
+    if (!rBitmap.HasAlpha())
+    {
+        DrawBitmap(rDestPt, PixelToLogic(aSizePix), Point(), aSizePix, rBitmap, MetaActionType::BMP);
+        return;
+    }
+
+    DrawAlphaBitmap(rDestPt, PixelToLogic(aSizePix), Point(), aSizePix, rBitmap, MetaActionType::BMPEX);
 }
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
     assert(!is_double_buffered_window());
 
-    DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPSCALE );
+    if (!rBitmap.HasAlpha())
+    {
+        DrawBitmap(rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPSCALE);
+        return;
+    }
+
+    DrawAlphaBitmap(rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPEXSCALE);
 }
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
@@ -55,7 +68,13 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 {
     assert(!is_double_buffered_window());
 
-    DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, MetaActionType::BMPSCALEPART );
+    if (!rBitmap.HasAlpha())
+    {
+        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, MetaActionType::BMPSCALEPART);
+        return;
+    }
+
+    DrawAlphaBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, MetaActionType::BMPEXSCALEPART);
 }
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
@@ -70,6 +89,23 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if ( RasterOp::Invert == meRasterOp )
     {
         DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
+        return;
+    }
+
+    if (mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
+    {
+        sal_uInt8 cCmpVal;
+
+        if (mnDrawMode & DrawModeFlags::BlackBitmap)
+            cCmpVal = 0;
+        else
+            cCmpVal = 255;
+
+        Color aCol(cCmpVal, cCmpVal, cCmpVal);
+        auto popIt = ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        SetLineColor(aCol);
+        SetFillColor(aCol);
+        DrawRect(tools::Rectangle(rDestPt, rDestSize));
         return;
     }
 
@@ -156,6 +192,99 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 
     mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetSalBitmap(), *this );
+}
+
+void OutputDevice::DrawAlphaBitmap( const Point& rDestPt, const Size& rDestSize,
+                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                 const Bitmap& rBitmap, const MetaActionType nAction )
+{
+    assert(!is_double_buffered_window());
+    assert(rBitmap.HasAlpha());
+
+    if( ImplIsRecordLayout() )
+        return;
+
+    if (RasterOp::Invert == meRasterOp)
+    {
+        DrawRect(tools::Rectangle(rDestPt, rDestSize));
+        return;
+    }
+
+    Bitmap aBmp(vcl::drawmode::GetBitmap(rBitmap, GetDrawMode()));
+
+    if (mpMetaFile)
+    {
+        switch(nAction)
+        {
+            case MetaActionType::BMPEX:
+                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, aBmp));
+                break;
+
+            case MetaActionType::BMPEXSCALE:
+                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmp));
+                break;
+
+            case MetaActionType::BMPEXSCALEPART:
+                mpMetaFile->AddAction(new MetaBmpExScalePartAction(rDestPt, rDestSize,
+                                                                   rSrcPtPixel, rSrcSizePixel, aBmp));
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (!IsDeviceOutputNecessary())
+        return;
+
+    if (!mpGraphics && !AcquireGraphics())
+        return;
+
+    if (mbInitClipRegion)
+        InitClipRegion();
+
+    if (mbOutputClipped)
+        return;
+
+    DrawDeviceBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp);
+}
+
+void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
+                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                     Bitmap& rBitmap )
+{
+    assert(!is_double_buffered_window());
+
+    if (rBitmap.HasAlpha())
+    {
+        DrawDeviceAlphaBitmap(rBitmap,
+                              rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
+        return;
+    }
+
+    if (rBitmap.IsEmpty())
+        return;
+
+    SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(),
+                       rSrcSizePixel.Height(), ImplLogicXToDevicePixel(rDestPt.X()),
+                       ImplLogicYToDevicePixel(rDestPt.Y()),
+                       ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                       ImplLogicHeightToDevicePixel(rDestSize.Height()));
+
+    const BmpMirrorFlags nMirrFlags = AdjustTwoRect(aPosAry, rBitmap.GetSizePixel());
+
+    if (!(aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight))
+        return;
+
+    if (nMirrFlags != BmpMirrorFlags::NONE)
+        rBitmap.Mirror(nMirrFlags);
+
+    const SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
+
+    assert(!rBitmap.HasAlpha()
+            && "I removed some code here that will need to be restored");
+
+    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *this);
 }
 
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
@@ -310,6 +439,28 @@ bool OutputDevice::HasFastDrawTransformedBitmap() const
 
     return mpGraphics->HasFastDrawTransformedBitmap();
 }
+
+bool OutputDevice::DrawTransformedBitmap(
+        const basegfx::B2DHomMatrix& aFullTransform,
+        const Bitmap& rBitmap,
+        double fAlpha)
+{
+    assert(!is_double_buffered_window());
+
+    // try to paint directly
+    const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
+    const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
+    const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
+    SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
+
+    return mpGraphics->DrawTransformedBitmap(
+        aNull,
+        aTopX,
+        aTopY,
+        *pSalSrcBmp,
+        fAlpha,
+        *this);
+};
 
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {

@@ -24,7 +24,6 @@
 #include <string_view>
 #include <vector>
 
-#include <codemaker/unotype.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
@@ -37,6 +36,7 @@ namespace unoidl {
     class MapCursor;
     class Provider;
 }
+namespace codemaker::UnoType { enum class Sort; }
 
 class TypeManager final : public salhelper::SimpleReferenceObject {
 public:

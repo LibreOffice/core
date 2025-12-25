@@ -14,6 +14,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
@@ -78,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
                          getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     CPPUNIT_ASSERT_EQUAL(Color(0xdedce6), getProperty<Color>(getParagraph(2), u"FillColor"_ustr));
     // on round-trip, the paragraph style name was lost
@@ -126,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
         "height", u"260");
 
     // save it to DOCX
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
@@ -388,15 +389,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
+    Resetter resetter([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(false, pBatch);
+        officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(false, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(true, pBatch);
+    officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(true, pBatch);
+    pBatch->commit();
+
     createSwDoc();
     SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    corr.GetSwFlags().bReplaceStyles = true;
-    SvxSwAutoFormatFlags flags(*SwEditShell::GetAutoFormatFlags());
-    comphelper::ScopeGuard const g([=]() { SwEditShell::SetAutoFormatFlags(&flags); });
-    flags.bReplaceStyles = true;
-    SwEditShell::SetAutoFormatFlags(&flags);
-
     pWrtShell->Insert(u"test"_ustr);
     const sal_Unicode cIns = ':';
     pWrtShell->AutoCorrect(corr, cIns);
@@ -2271,7 +2279,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     createSwDoc("tdf76817.fodt");
 
     // save it to DOCX
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
@@ -2575,7 +2583,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
     createSwDoc(); // new, empty doc - everything defaults to RTL with Arabic locale
 
     // Save it and load it back.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
@@ -2692,7 +2700,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pDoc = getSwDoc();
     const auto& rFormats2 = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());
@@ -3221,7 +3229,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testConditionalHiddenSectionIssue)
     }
 
     // PDF export
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     auto pPdfDocument = parsePDFExport();
     auto pPdfPage = pPdfDocument->openPage(0);

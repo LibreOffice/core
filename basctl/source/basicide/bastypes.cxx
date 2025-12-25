@@ -31,6 +31,7 @@
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
 
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <sal/log.hxx>
@@ -47,7 +48,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/stream.hxx>
 #include <o3tl/hash_combine.hxx>
 

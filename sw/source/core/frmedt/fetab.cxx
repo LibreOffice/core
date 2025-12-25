@@ -729,7 +729,7 @@ void SwFEShell::GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const
         if (m_pColumnCache->pLastTable == pTab->GetTable())
         {
             bDel = false;
-            SwRectFnSet aRectFnSet(pTab);
+            SwRectFnSet aRectFnSet(*pTab);
 
             const SwPageFrame* pPage = pTab->FindPageFrame();
             const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
@@ -741,7 +741,7 @@ void SwFEShell::GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const
             {
                 // if TabFrame was changed, we only shift a little bit
                 // as the width is the same
-                SwRectFnSet fnRectX(m_pColumnCache->pLastTabFrame);
+                SwRectFnSet fnRectX(*m_pColumnCache->pLastTabFrame);
                 if (fnRectX.GetWidth(m_pColumnCache->pLastTabFrame->getFrameArea()) ==
                     aRectFnSet.GetWidth(pTab->getFrameArea()) )
                 {
@@ -794,7 +794,7 @@ void SwFEShell::GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const
         if (m_pRowCache->pLastTable == pTab->GetTable())
         {
             bDel = false;
-            SwRectFnSet aRectFnSet(pTab);
+            SwRectFnSet aRectFnSet(*pTab);
             const SwPageFrame* pPage = pTab->FindPageFrame();
             const tools::Long nLeftMin  = ( aRectFnSet.IsVert() ?
                                      pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
@@ -1580,7 +1580,7 @@ size_t SwFEShell::GetCurTabColNum() const
 
     size_t nRet = 0;
 
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
 
     const SwPageFrame* pPage = pFrame->FindPageFrame();
 
@@ -1689,11 +1689,11 @@ static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay
                     // We first check if the given point is 'close' to the left or top
                     // border of the table frame:
                     OSL_ENSURE( pFrame, "Nested table frame without outer table" );
-                    SwRectFnSet aRectFnSet(pFrame);
+                    SwRectFnSet aRectFnSet(*pFrame);
                     const bool bRTL = pFrame->IsRightToLeft();
 
                     SwRect aTabRect = pFrame->getFramePrintArea();
-                    aTabRect.Pos() += pFrame->getFrameArea().Pos();
+                    aTabRect += pFrame->getFrameArea().Pos();
 
                     const SwTwips nLeft = bRTL ?
                                           aRectFnSet.GetRight(aTabRect) :
@@ -1715,7 +1715,7 @@ static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay
                         if ( pPrev )
                         {
                             SwRect aPrevRect = pPrev->getFramePrintArea();
-                            aPrevRect.Pos() += pPrev->getFrameArea().Pos();
+                            aPrevRect += pPrev->getFrameArea().Pos();
 
                             if( aPrevRect.Contains( rPt ) )
                             {
@@ -1801,9 +1801,9 @@ static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay
                     // used for mouse move of columns/rows
                     const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
                     SwRect aTabRect = pTabFrame->getFramePrintArea();
-                    aTabRect.Pos() += pTabFrame->getFrameArea().Pos();
+                    aTabRect += pTabFrame->getFrameArea().Pos();
 
-                    SwRectFnSet aRectFnSet(pTabFrame);
+                    SwRectFnSet aRectFnSet(*pTabFrame);
 
                     const SwTwips nTabTop  = aRectFnSet.GetTop(aTabRect);
                     const SwTwips nMouseTop = aRectFnSet.IsVert() ? rPt.X() : rPt.Y();
@@ -2407,7 +2407,7 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     // if the table is in relative values (USHRT_MAX)
     // then it should be recalculated to absolute values now
     const SwFormatFrameSize& rTableFrameSz = pTab->GetFormat()->GetFrameSize();
-    SwRectFnSet aRectFnSet(pTab);
+    SwRectFnSet aRectFnSet(*pTab);
     tools::Long nPrtWidth = aRectFnSet.GetWidth(pTab->getFramePrintArea());
     TableChgWidthHeightType eTypePos = extractPosition(eType);
     if( TableChgMode::VarWidthChangeAbs == pTab->GetTable()->GetTableChgMode() &&

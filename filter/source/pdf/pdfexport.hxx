@@ -59,11 +59,11 @@ private:
     std::optional<Degree10> moWatermarkRotateAngle;
     OUString            msTiledWatermark;
 
-    void                ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
+    void                ImplExportPage( vcl::pdf::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                         const GDIMetaFile& rMtf );
 
-    void                ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
-    void                ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
+    void                ImplWriteWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize );
+    void                ImplWriteTiledWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize );
     css::uno::Reference<css::security::XCertificate> GetCertificateFromSubjectName(std::u16string_view rSubjectName) const;
 
 
@@ -75,7 +75,7 @@ public:
                                     const css::uno::Reference< css::uno::XComponentContext >& xFact );
                         ~PDFExport();
 
-    bool                ExportSelection( vcl::PDFWriter& rPDFWriter,
+    bool                ExportSelection( vcl::pdf::PDFWriter& rPDFWriter,
                                     css::uno::Reference< css::view::XRenderable > const & rRenderable,
                                     const css::uno::Any& rSelection,
                                     const StringRangeEnumerator& rRangeEnum,
@@ -84,7 +84,7 @@ public:
 
     bool                Export( const OUString& rFile, const css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
 
-    void                showErrors( const std::set<vcl::PDFWriter::ErrorCode>& );
+    void                showErrors( const std::set<vcl::pdf::PDFWriter::ErrorCode>& );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

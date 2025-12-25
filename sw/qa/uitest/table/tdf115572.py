@@ -13,11 +13,11 @@ from uitest.uihelper.common import select_pos
 
 class tdf115572(UITestCase):
 
-   def insertTextIntoCell(self, table, cellName, text ):
+    def insertTextIntoCell(self, table, cellName, text ):
         tableText = table.getCellByName( cellName )
         tableText.setString( text )
 
-   def test_tdf115572_table_format_gets_reset_deleting_row(self):
+    def test_tdf115572_table_format_gets_reset_deleting_row(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
@@ -41,7 +41,7 @@ class tdf115572(UITestCase):
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 
-   def test_tdf115572_table_format_gets_reset_deleting_column(self):
+    def test_tdf115572_table_format_gets_reset_deleting_column(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):

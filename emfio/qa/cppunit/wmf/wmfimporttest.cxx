@@ -92,8 +92,7 @@ void WmfTest::testEOFWmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/metafile/push", 2);
@@ -147,8 +146,7 @@ void WmfTest::testTdf88163NonPlaceableWmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -182,9 +180,7 @@ void WmfTest::testTdf88163PlaceableWmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -220,9 +216,7 @@ void WmfTest::testSetTextAlignWmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -461,8 +455,7 @@ void WmfTest::testTdf93750()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -497,8 +490,7 @@ void WmfTest::testTdf39894Wmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -514,8 +506,7 @@ void WmfTest::testTdf39894Emf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -531,8 +522,7 @@ void WmfTest::testETO_PDYWmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -551,8 +541,7 @@ void WmfTest::testETO_PDYEmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 
@@ -571,8 +560,7 @@ void WmfTest::testStockObject()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    MetafileXmlDump dumper;
-    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    xmlDocUniquePtr pDoc = dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT(pDoc);
 

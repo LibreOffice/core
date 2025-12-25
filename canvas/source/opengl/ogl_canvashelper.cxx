@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
 #include <memory>
 #include <functional>
 #include <epoxy/gl.h>
@@ -173,7 +174,7 @@ namespace oglcanvas
             for( sal_Int32 i=0; i<nNumCols; ++i )
                 *pCurrCol++ = rHelper.getDevice()->getDeviceColorSpace()->convertToARGB(rValues.maColors[i])[0];
 
-            OSL_ASSERT(nNumCols == rValues.maStops.getLength());
+            SAL_WARN_IF(nNumCols != rValues.maStops.getLength(), "canvas", "Color count does not match stops count");
 
             switch( rValues.meType )
             {
@@ -378,44 +379,58 @@ namespace oglcanvas
     }
 
     void CanvasHelper::drawLine( const rendering::XCanvas*      /*pCanvas*/,
-                                 const geometry::RealPoint2D&   aStartPoint,
-                                 const geometry::RealPoint2D&   aEndPoint,
+                                 const geometry::RealPoint2D&   rStartPoint,
+                                 const geometry::RealPoint2D&   rEndPoint,
                                  const rendering::ViewState&    viewState,
                                  const rendering::RenderState&  renderState )
     {
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = std::bind(&lcl_drawLine,
-                                          std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                          aStartPoint, aEndPoint);
+
+            rAct.maFunction = [rStartPoint, rEndPoint]
+                (const CanvasHelper& rHelper,
+                 const basegfx::B2DHomMatrix& rTransform,
+                 GLenum eSrcBlend,
+                 GLenum eDstBlend,
+                 const rendering::ARGBColor& rColor,
+                 const basegfx::B2DPolyPolygonVector& /*polygons*/) -> bool
+            {
+                return lcl_drawLine(rHelper, rTransform, eSrcBlend, eDstBlend, rColor, rStartPoint, rEndPoint);
+            };
+
         }
     }
 
     void CanvasHelper::drawBezier( const rendering::XCanvas*            /*pCanvas*/,
-                                   const geometry::RealBezierSegment2D& aBezierSegment,
-                                   const geometry::RealPoint2D&         aEndPoint,
+                                   const geometry::RealBezierSegment2D& rBezierSegment,
+                                   const geometry::RealPoint2D&         rEndPoint,
                                    const rendering::ViewState&          viewState,
                                    const rendering::RenderState&        renderState )
     {
         if( !mpDevice )
             return;
 
-        mpRecordedActions->push_back( Action() );
-        Action& rAct=mpRecordedActions->back();
+        Action& rAct=mpRecordedActions->emplace_back();
 
         setupGraphicsState( rAct, viewState, renderState );
 
         // TODO(F2): subdivide&render whole curve
-        rAct.maFunction = std::bind(&lcl_drawLine,
-                                        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                        geometry::RealPoint2D(
-                                            aBezierSegment.Px,
-                                            aBezierSegment.Py),
-                                        aEndPoint);
+
+        rAct.maFunction = [rStartPoint = geometry::RealPoint2D(rBezierSegment.Px, rBezierSegment.Py),
+                           rEndPoint]
+            (const CanvasHelper& rHelper,
+             const basegfx::B2DHomMatrix& rTransform,
+             GLenum eSrcBlend,
+             GLenum eDstBlend,
+             const rendering::ARGBColor& rColor,
+             const basegfx::B2DPolyPolygonVector& /*polygons*/) -> bool
+        {
+            return lcl_drawLine(rHelper, rTransform, eSrcBlend, eDstBlend, rColor, rStartPoint, rEndPoint);
+        };
+
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
@@ -428,8 +443,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -454,8 +468,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -513,8 +526,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -539,8 +551,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+            Action& rAct=mpRecordedActions->emplace_back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
@@ -559,14 +570,25 @@ namespace oglcanvas
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)
-                    const ::canvas::ParametricPolyPolygon::Values aValues(
-                        pGradient->getValues() );
 
-                    rAct.maFunction = std::bind(&lcl_fillGradientPolyPolygon,
-                                                    std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
-                                                    aValues,
-                                                    textures[0],
-                                                    std::placeholders::_6);
+                    rAct.maFunction = [aValues = pGradient->getValues(), textures]
+                        (const CanvasHelper& rHelper,
+                         const basegfx::B2DHomMatrix& rTransform,
+                         GLenum eSrcBlend,
+                         GLenum eDstBlend,
+                         const rendering::ARGBColor& /*rColor*/,
+                         const basegfx::B2DPolyPolygonVector& rPolyPolygons) -> bool
+                    {
+                        return lcl_fillGradientPolyPolygon(rHelper,
+                                                           rTransform,
+                                                           eSrcBlend,
+                                                           eDstBlend,
+                                                           aValues,
+                                                           textures[0],
+                                                           rPolyPolygons);
+                    };
+
+
                 }
                 else
                 {
@@ -605,15 +627,28 @@ namespace oglcanvas
                                 aPixelData,
                                 canvastools::getStdColorSpace()));
 
-                        rAct.maFunction = std::bind(&lcl_fillTexturedPolyPolygon,
-                                                        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
-                                                        textures[0],
-                                                        aSize,
-                                                        aARGBBytes,
-                                                        rtl_crc32(0,
-                                                                  aARGBBytes.getConstArray(),
-                                                                  aARGBBytes.getLength()),
-                                                        std::placeholders::_6);
+                        rAct.maFunction = [textures,
+                                           aPixelSize = aSize,
+                                           aPixelData = aARGBBytes,
+                                           nPixelCrc32 = rtl_crc32(0, aARGBBytes.getConstArray(), aARGBBytes.getLength())]
+                            (const CanvasHelper& rHelper,
+                             const basegfx::B2DHomMatrix& rTransform,
+                             GLenum eSrcBlend,
+                             GLenum eDstBlend,
+                             const rendering::ARGBColor& /*rColor*/,
+                             const basegfx::B2DPolyPolygonVector& rPolyPolygons) -> bool
+                        {
+                            return lcl_fillTexturedPolyPolygon(rHelper,
+                                                               rTransform,
+                                                               eSrcBlend,
+                                                               eDstBlend,
+                                                               textures[0],
+                                                               aPixelSize,
+                                                               aPixelData,
+                                                               nPixelCrc32,
+                                                               rPolyPolygons);
+                        };
+
                     }
                     // TODO(F1): handle non-integer case
                 }
@@ -719,8 +754,7 @@ namespace oglcanvas
                 // set font
                 pVDev->SetFont(aFont);
 
-                mpRecordedActions->push_back( Action() );
-                Action& rAct=mpRecordedActions->back();
+                Action& rAct=mpRecordedActions->emplace_back();
 
                 setupGraphicsState( rAct, viewState, renderState );
 
@@ -728,10 +762,7 @@ namespace oglcanvas
                 uno::Sequence<double> aLogicalAdvancements=xLayoutetText->queryLogicalAdvancements();
                 if( aLogicalAdvancements.hasElements() )
                 {
-                    KernArraySpan aDXArray(aLogicalAdvancements.getConstArray(), aLogicalAdvancements.getLength());
-
                     uno::Sequence<sal_Bool> aKashidaPositions=xLayoutetText->queryKashidaPositions();
-                    std::span<const sal_Bool> aKashidaArray(aKashidaPositions.getConstArray(), aKashidaPositions.getLength());
 
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,
@@ -740,8 +771,8 @@ namespace oglcanvas
                                           aTxt.StartPosition,
                                           aTxt.Length,
                                           0,
-                                          aDXArray,
-                                          aKashidaArray);
+                                          aLogicalAdvancements,
+                                          aKashidaPositions);
                 }
                 else
                 {
@@ -782,13 +813,21 @@ namespace oglcanvas
                 // insert as transformed copy of bitmap action vector -
                 // during rendering, this gets rendered into a temporary
                 // buffer, and then composited to the front
-                mpRecordedActions->push_back( Action() );
-                Action& rAct=mpRecordedActions->back();
+                Action& rAct=mpRecordedActions->emplace_back();
 
                 setupGraphicsState( rAct, viewState, renderState );
-                rAct.maFunction = std::bind(&lcl_drawOwnBitmap,
-                                                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                                *pOwnBitmap);
+
+                rAct.maFunction = [pOwnBitmap](const CanvasHelper& rHelper,
+                                               const basegfx::B2DHomMatrix& rTransform,
+                                               GLenum eSrcBlend,
+                                               GLenum eDstBlend,
+                                               const rendering::ARGBColor& rColor,
+                                               const basegfx::B2DPolyPolygonVector& /*polygons*/) -> bool
+                {
+                    return lcl_drawOwnBitmap(rHelper, rTransform, eSrcBlend, eDstBlend, rColor, *pOwnBitmap);
+                };
+
+
             }
             else
             {
@@ -811,16 +850,22 @@ namespace oglcanvas
                             aPixelData,
                             canvastools::getStdColorSpace()));
 
-                    mpRecordedActions->push_back( Action() );
-                    Action& rAct=mpRecordedActions->back();
+                    Action& rAct=mpRecordedActions->emplace_back();
 
                     setupGraphicsState( rAct, viewState, renderState );
-                    rAct.maFunction = std::bind(&lcl_drawGenericBitmap,
-                                                    std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                                    aSize, aARGBBytes,
-                                                    rtl_crc32(0,
-                                                              aARGBBytes.getConstArray(),
-                                                              aARGBBytes.getLength()));
+
+                    rAct.maFunction = [aPixelSize = aSize,
+                                       aPixelData = aARGBBytes,
+                                       nPixelCrc32 = rtl_crc32(0, aARGBBytes.getConstArray(), aARGBBytes.getLength())]
+                        (const CanvasHelper& rHelper,
+                         const basegfx::B2DHomMatrix& rTransform,
+                         GLenum eSrcBlend,
+                         GLenum eDstBlend,
+                         const rendering::ARGBColor& rColor,
+                         const basegfx::B2DPolyPolygonVector& /*polygons*/) -> bool
+                    {
+                        return lcl_drawGenericBitmap(rHelper, rTransform, eSrcBlend, eDstBlend, rColor, aPixelSize, aPixelData, nPixelCrc32);
+                    };
                 }
                 // TODO(F1): handle non-integer case
             }

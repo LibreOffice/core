@@ -368,10 +368,10 @@ void SdMiscTest::testFillGradient()
         = model::gradient::getColorStopsFromUno(aGradient2.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops.getStopColor(1)));
 }
 
 void SdMiscTest::testTdf44774()
@@ -395,7 +395,7 @@ void SdMiscTest::testTdf44774()
     rStyleB.SetParent(u"StyleA"_ustr);
 
     // Now save the file and reload
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     pDocShell = pXImpressDocument->GetDocShell();
@@ -420,7 +420,7 @@ void SdMiscTest::testTdf38225()
     pSSPool->Make(u"StyleWithName1"_ustr, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined);
 
     // Now save the file and reload
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     pDocShell = pXImpressDocument->GetDocShell();
@@ -433,7 +433,7 @@ void SdMiscTest::testTdf38225()
     CPPUNIT_ASSERT(pStyle->SetName(u"StyleWithName2"_ustr));
 
     // Save the file and reload again
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
     pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     pDocShell = pXImpressDocument->GetDocShell();
@@ -549,7 +549,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
     pBatch->commit();
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
 
     // Verify, that the saved document still has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -603,7 +603,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
     pBatch->commit();
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
 
     // Verify, that the saved document still has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -640,7 +640,7 @@ void SdMiscTest::testTdf101242_settings_keep()
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
     pBatch->commit();
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
 
     // Verify, that the saved document has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -695,7 +695,7 @@ void SdMiscTest::testTdf101242_settings_remove()
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
     pBatch->commit();
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
 
     // Verify, that the saved document has the ODF attributes
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -740,7 +740,7 @@ void SdMiscTest::testTdf119392()
     pPageView->SetLayerVisible(u"-P-"_ustr, false);
     pPageView->SetLayerPrintable(u"-P-"_ustr, true);
     pPageView->SetLayerLocked(u"-P-"_ustr, false);
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
 
     // Verify correct bit order in bitfield in the config items in settings.xml
     xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
@@ -842,7 +842,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     pShape->Mirror(Point(4000, 2000), Point(4000, 10000));
 
     // Save and examine attribute draw:transform
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
     static constexpr OString sPathStart(
@@ -1034,7 +1034,7 @@ void SdMiscTest::testEncodedTableStyles()
             ->replaceByName(u"body"_ustr, uno::Any(xCellStyle));
     }
 
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,

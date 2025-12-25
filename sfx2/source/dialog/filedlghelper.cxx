@@ -49,6 +49,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <comphelper/fileurl.hxx>
@@ -56,9 +57,10 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <osl/file.hxx>

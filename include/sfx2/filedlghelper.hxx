@@ -33,7 +33,6 @@
 
 #include <memory>
 #include <optional>
-#include <vector>
 
 namespace com::sun::star::ui::dialogs
 {

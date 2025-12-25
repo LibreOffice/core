@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testRoundtripEmbeddedFontsPPTX)
     }
 
     // Test Export
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Check the exported document has the font
     {
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testExportEmbeddedFontsPPTX)
     xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(false));
     xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(false));
 
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Check the exported document has the embedded fonts enabled and has entries
     {
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testTdf167214)
     createSdImpressDoc("pptx/tdf167214.pptx");
     verify();
     //Without the fix in place, it would crash at export time
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     verify();
 }
 

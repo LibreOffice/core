@@ -80,54 +80,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_dataprovider,\
 $(eval $(call gb_CppunitTest_use_ure,sc_dataprovider))
 $(eval $(call gb_CppunitTest_use_vcl,sc_dataprovider))
 
-$(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
-	basic/util/sb \
-    chart2/source/chart2 \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    connectivity/source/cpool/dbpool2 \
-    $(if $(ENABLE_JAVA),connectivity/source/drivers/hsqldb/hsqldb) \
-    connectivity/source/drivers/dbase/dbase \
-    $(if $(ENABLE_FIREBIRD_SDBC),connectivity/source/drivers/firebird/firebird_sdbc) \
-    $(if $(ENABLE_JAVA),connectivity/source/drivers/jdbc/jdbc) \
-    connectivity/source/manager/sdbc2 \
-    dbaccess/source/filter/xml/dbaxml \
-    dbaccess/util/dba \
-    dbaccess/util/dbu \
-    embeddedobj/util/embobj \
-    eventattacher/source/evtatt \
-    filter/source/config/cache/filterconfig1 \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/source/search/i18nsearch \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    extensions/source/logging/log \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    sc/util/sc \
-    sc/util/scfilt \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/util/svl \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    vcl/vcl.common \
-    xmloff/util/xo \
-    xmlsecurity/util/xmlsecurity \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_dataprovider,services))
 
 $(eval $(call gb_CppunitTest_use_externals,sc_dataprovider,\
 	orcus \

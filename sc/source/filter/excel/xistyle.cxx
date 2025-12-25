@@ -271,6 +271,10 @@ void XclImpFont::ReadFont( XclImpStream& rStrm )
             DBG_ERROR_BIFF();
             return;
     }
+
+    constexpr sal_uInt16 MIN_FONT_HEIGHT_1_20th_PT = 20;
+    maData.mnHeight = std::max(maData.mnHeight, MIN_FONT_HEIGHT_1_20th_PT);
+
     GuessScriptType();
     SetAllUsedFlags( true );
 }
@@ -1962,13 +1966,13 @@ void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, Sv
     SCROW nFromScRow = (nLine == SvxBoxItemLine::BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
     ScDocument& rDoc = GetDoc();
 
-    const SvxBoxItem* pFromItem =
+    const SvxBoxItem& rFromItem =
         rDoc.GetAttr( nFromScCol, nFromScRow, nScTab, ATTR_BORDER );
-    const SvxBoxItem* pToItem =
+    const SvxBoxItem& rToItem =
         rDoc.GetAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, ATTR_BORDER );
 
-    SvxBoxItem aNewItem( *pToItem );
-    aNewItem.SetLine( pFromItem->GetLine( nLine ), nLine );
+    SvxBoxItem aNewItem(rToItem);
+    aNewItem.SetLine(rFromItem.GetLine(nLine), nLine);
     rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
 }
 
@@ -2071,7 +2075,7 @@ void XclImpXFRangeBuffer::Finalize()
         // #i93609# merged range in a single row: test if manual row height is needed
         if( !bMultiRow )
         {
-            bool bTextWrap = rDoc.GetAttr( rStart, ATTR_LINEBREAK )->GetValue();
+            bool bTextWrap = rDoc.GetAttr( rStart, ATTR_LINEBREAK ).GetValue();
             if( !bTextWrap && (rDoc.GetCellType( rStart ) == CELLTYPE_EDIT) )
                 if (const EditTextObject* pEditObj = rDoc.GetEditText(rStart))
                     bTextWrap = pEditObj->GetParagraphCount() > 1;

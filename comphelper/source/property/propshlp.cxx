@@ -22,6 +22,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/propshlp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

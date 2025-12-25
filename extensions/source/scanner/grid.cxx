@@ -27,10 +27,10 @@
 
 #include "grid.hxx"
 #include <vcl/bitmap.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <algorithm>
 #include <limits>
@@ -58,7 +58,7 @@ class GridWindow : public weld::CustomWidgetController
         void draw(vcl::RenderContext& rRenderContext, const Bitmap& rBitmap)
         {
             const Point aOffset(rRenderContext.PixelToLogic(Point(mnOffX, mnOffY)));
-            rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmap);
+            rRenderContext.DrawBitmap(maPos - aOffset, rBitmap);
         }
 
         bool isHit(OutputDevice const & rWin, const Point& rPos)
@@ -171,7 +171,7 @@ void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCut
     if (m_pOrigYValues && m_nValues)
     {
         m_pNewYValues.reset(new double[ m_nValues ]);
-        memcpy( m_pNewYValues.get(), m_pOrigYValues, sizeof( double ) * m_nValues );
+        std::copy_n(m_pOrigYValues, m_nValues, m_pNewYValues.get());
     }
 
     setBoundings( 0, 0, 1023, 1023 );
@@ -640,7 +640,7 @@ void GridWindow::ChangeMode(ResetType nType)
         case ResetType::RESET:
         {
             if( m_pOrigYValues && m_pNewYValues && m_nValues )
-                memcpy( m_pNewYValues.get(), m_pOrigYValues, m_nValues*sizeof(double) );
+                std::copy_n(m_pOrigYValues, m_nValues, m_pNewYValues.get());
         }
         break;
         case ResetType::EXPONENTIAL:

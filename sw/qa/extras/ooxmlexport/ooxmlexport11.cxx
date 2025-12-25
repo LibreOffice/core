@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/style/BreakType.hpp>
@@ -31,11 +33,14 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 DECLARE_OOXMLEXPORT_TEST(testTdf57589_hashColor, "tdf57589_hashColor.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 51
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, getProperty<Color>(getParagraph(1), u"ParaBackColor"_ustr));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(getParagraph(2), u"FillStyle"_ustr));
@@ -76,14 +81,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90906_colAutoB, "tdf90906_colAutoB.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92524_autoColor)
 {
-    loadAndReload("tdf92524_autoColor.doc");
+    createSwDoc("tdf92524_autoColor.doc");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(getParagraph(1), u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getParagraph(1), u"ParaBackColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116436_rowFill)
 {
-    loadAndReload("tdf116436_rowFill.odt");
+    createSwDoc("tdf116436_rowFill.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -100,7 +111,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121665_back2backColumnBreaks, "tdf121665_back2ba
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
 {
-    loadAndReload("tdf126795_TabsRelativeToIndent0.odt");
+    createSwDoc("tdf126795_TabsRelativeToIndent0.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
@@ -110,7 +122,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent1)
 {
-    loadAndReload("tdf126795_TabsRelativeToIndent1.odt");
+    createSwDoc("tdf126795_TabsRelativeToIndent1.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
@@ -147,7 +160,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124384, "tdf124384.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 {
-    loadAndReload("tdf121456_tabsOffset.odt");
+    createSwDoc("tdf121456_tabsOffset.odt");
+    saveAndReload(TestFilter::DOCX);
     for (int i=2; i<8; i++)
     {
         uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( i ), u"ParaTabStops"_ustr);
@@ -160,7 +174,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
 // tdf#121561: make sure w:sdt/w:sdtContent around TOC is written during ODT->DOCX conversion
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 {
-    loadAndSave("tdf121456_tabsOffset.odt");
+    createSwDoc("tdf121456_tabsOffset.odt");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", u"Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", u" TOC \\f \\o \"1-9\" \\h");
@@ -170,7 +185,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129525)
 {
-    loadAndSave("tdf129525.rtf");
+    createSwDoc("tdf129525.rtf");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", u"Overview");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", u"3");
@@ -190,7 +210,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitleDocx)
 {
-    loadAndSave("tdf121456_tabsOffset.odt");
+    createSwDoc("tdf121456_tabsOffset.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -246,7 +267,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 {
-    loadAndSave("tdf76683_negativeTwipsMeasure.docx");
+    createSwDoc("tdf76683_negativeTwipsMeasure.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
     sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
@@ -343,6 +365,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117988, "tdf117988.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 81
+    skipValidation();
+
     // This was a 2-page document with unwanted line breaking in table cells, because
     // the table was narrower, than defined (< 1/100 mm loss during twip to 1/100 mm conversion)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -350,7 +375,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 {
-    loadAndSave("parasplit-on-section-border.odt");
+    createSwDoc("parasplit-on-section-border.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -362,7 +388,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 {
-    loadAndSave("tdf44832_section_new_header.odt");
+    createSwDoc("tdf44832_section_new_header.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
@@ -370,6 +397,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 
 DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<drawing::XShape> xSignatureLineShape = getShape(1);
     uno::Reference<beans::XPropertySet> xPropSet(xSignatureLineShape, uno::UNO_QUERY);
 
@@ -408,7 +438,8 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117805)
 {
-    loadAndSave("tdf117805.odt");
+    createSwDoc("tdf117805.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -458,7 +489,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113399)
 {
-    loadAndReload("tdf113399.doc");
+    createSwDoc("tdf113399.doc");
+    saveAndReload(TestFilter::DOCX);
     // 0 padding was not preserved
     // In LO 0 is the default, but in OOXML format the default is 254 / 127
     uno::Reference<beans::XPropertySet> xPropSet(getShape(1), uno::UNO_QUERY);
@@ -482,7 +514,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf49073, "tdf49073.docx")
 {
     // test case for Asian phontic guide (ruby text.)
     sal_Unicode aRuby[3] = {0x304D,0x3082,0x3093};
-    OUString sRuby(aRuby, SAL_N_ELEMENTS(aRuby));
+    OUString sRuby(aRuby, std::size(aRuby));
     CPPUNIT_ASSERT_EQUAL(sRuby,getProperty<OUString>(getParagraph(1)->getStart(), u"RubyText"_ustr));
     OUString sStyle = getProperty<OUString>( getParagraph(1)->getStart(), u"RubyCharStyleName"_ustr);
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"CharacterStyles"_ustr)->getByName(sStyle), uno::UNO_QUERY );
@@ -509,6 +541,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf114703, "tdf114703.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113258, "tdf113258.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was 494, i.e. automatic spacing resulted in non-zero paragraph top
     // margin for the first paragraph in a shape.
@@ -518,6 +553,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258, "tdf113258.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf113258_noBeforeAutospacing, "tdf113258_noBeforeAutospacing.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was 0, i.e. disabled automatic spacing still resulted in zero paragraph
     // top margin for the first paragraph in a shape.
@@ -534,7 +572,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142542_cancelledAutospacing, "tdf142542_cancelle
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf137655)
 {
-    loadAndSave("tdf137655.docx");
+    createSwDoc("tdf137655.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 280.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", u"0");
@@ -579,7 +618,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaI
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBreak_after)
 {
-    loadAndReload("pageBreak_after.odt");
+    createSwDoc("pageBreak_after.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     // The problem was that the page breakAfter put the empty page BEFORE the table
     xmlDocUniquePtr pDump = parseLayoutDump();
     assertXPath(pDump, "/root/page[1]/body/tab", 1);
@@ -706,7 +750,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCe
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf98620_environmentBiDi)
 {
-    loadAndReload("tdf98620_environmentBiDi.odt");
+    createSwDoc("tdf98620_environmentBiDi.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( getParagraph(1), u"WritingMode"_ustr ));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(1), u"ParaAdjust"_ustr ));
@@ -747,6 +792,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116801, "tdf116801.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107969, "tdf107969.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // A VML object in a footnote's tracked changes caused write past end of document.xml at export to docx.
     // After that, importing after export failed with
     // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word/document.xml'.
@@ -759,6 +807,9 @@ DECLARE_OOXMLEXPORT_TEST(testOpenDocumentAsReadOnly, "open-as-read-only.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testNoDefault, "noDefault.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 7
+    skipValidation();
+
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -854,7 +905,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149996, "lorem_hyperlink.fodt")
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupedShapeLink)
 {
-    loadAndSave("grouped_link.docx");
+    createSwDoc("grouped_link.docx");
+    save(TestFilter::DOCX);
     // tdf#145147 Hyperlink in grouped shape not imported
     // tdf#154469 Hyperlink in grouped shape not exported
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);

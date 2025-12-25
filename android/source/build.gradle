@@ -6,7 +6,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            url "https://ipv6.repo1.maven.org/maven2"
+            url = "https://ipv6.repo1.maven.org/maven2"
         }
         google()
     }
@@ -16,12 +16,12 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-            url "https://ipv6.repo1.maven.org/maven2"
+            url = "https://ipv6.repo1.maven.org/maven2"
         }
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.13.0'
+        classpath 'com.android.tools.build:gradle:8.13.1'
     }
 }
 
@@ -32,7 +32,7 @@ dependencies {
             "libreoffice.jar",
             "unoloader.jar"
     ])
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.material:material:1.13.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.preference:preference:1.2.1'
 }
@@ -42,7 +42,7 @@ base {
 }
 
 android {
-    namespace 'org.libreoffice'
+    namespace = 'org.libreoffice'
     compileSdk 35
     buildFeatures {
         buildConfig = true
@@ -55,8 +55,8 @@ android {
         main.res.srcDirs = ['res', 'res_generated']
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
-        strippedUI.assets.srcDirs 'assets_strippedUI'
-        strippedUIEditing.assets.srcDirs 'assets_strippedUI'
+        main.assets.srcDirs 'assets_strippedUI'
+        quest.manifest.srcFile 'AndroidManifest_quest.xml'
     }
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle
@@ -85,9 +85,16 @@ android {
             dimension "default"
             buildConfigField 'boolean', 'ALLOW_EDITING', 'true'
         }
+
+        // product flavor for Meta Quest devices (Horizon OS)
+        quest {
+            dimension "default"
+            buildConfigField 'boolean', 'ALLOW_EDITING', 'false'
+        }
+
     }
     lint {
-        warningsAsErrors true
+        warningsAsErrors = true
         // ignore missing or extra translations, since these are tracked/managed via Weblate
         disable 'ExtraTranslation', 'MissingTranslation'
         // don't error-out on external updates (new gradle plugin, library versions
@@ -98,7 +105,7 @@ android {
         // don't fail on pre-existing issues
         // These should be dealt with at some point, though.
         // To update lint-baseline.xml, just remove the file and run the build again.
-        baseline file("lint-baseline.xml")
+        baseline = file("lint-baseline.xml")
         // s.a. lint.xml that contains further config
     }
 }
@@ -124,7 +131,7 @@ extent)
 // are files read by non-LO code, fontconfig and freetype for now, that doesn't
 // understand "/assets" paths.
 task copyUnpackAssets(type: Copy) {
-    description "copies assets that need to be extracted on the device"
+    description = "copies assets that need to be extracted on the device"
     into 'assets/unpack'
     into('program') {
         from("${liboInstdir}/${liboEtcFolder}/types") {
@@ -163,7 +170,7 @@ task copyUnpackAssets(type: Copy) {
 }
 
 task copyAssets(type: Copy) {
-    description "copies assets that can be accessed within the installed apk"
+    description = "copies assets that can be accessed within the installed apk"
     into 'assets'
 
     // include icons, Impress styles and required .ui files
@@ -208,7 +215,7 @@ task copyAssets(type: Copy) {
 }
 
 task copyAppResources(type: Copy) {
-    description "copies documents to make them available as app resources"
+    description = "copies documents to make them available as app resources"
     into 'res_generated/raw'
     from("${liboInstdir}") {
         includes = ["LICENSE", "NOTICE"]

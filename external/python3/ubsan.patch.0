@@ -12,9 +12,9 @@
  #ifdef F_OK
 --- Objects/dictobject.c
 +++ Objects/dictobject.c
-@@ -1497,7 +1497,7 @@
+@@ -2105,7 +2105,7 @@
              if (unicode) { // combined unicode -> combined unicode
-                 PyDictUnicodeEntry *newentries = DK_UNICODE_ENTRIES(mp->ma_keys);
+                 PyDictUnicodeEntry *newentries = DK_UNICODE_ENTRIES(newkeys);
                  if (oldkeys->dk_nentries == numentries && mp->ma_keys->dk_kind == DICT_KEYS_UNICODE) {
 -                    memcpy(newentries, oldentries, numentries * sizeof(PyDictUnicodeEntry));
 +                    memcpy(newentries, (void *) oldentries, numentries * sizeof(PyDictUnicodeEntry));
@@ -32,17 +32,43 @@
      for (i = 0; i < Py_SIZE(b); i++) {
          PyObject *v = src[i];
          dest[i] = Py_NewRef(v);
---- Parser/tokenizer.c
-+++ Parser/tokenizer.c
-@@ -373,9 +373,9 @@
+@@ -1325,7 +1325,7 @@
+     Py_ssize_t setpos = 0;
+     Py_hash_t hash;
+     PyObject *key;
+-    PyObject **dest = self->ob_item + m;
++    PyObject **dest = m == 0 ? self->ob_item : self->ob_item + m;
+     while (_PySet_NextEntryRef((PyObject *)other, &setpos, &key, &hash)) {
+         FT_ATOMIC_STORE_PTR_RELEASE(*dest, key);
+         dest++;
+@@ -1344,7 +1344,7 @@
+         return -1;
+     }
  
-   for (index = tok->tok_mode_stack_index; index >= 0; --index) {
-     mode = &(tok->tok_mode_stack[index]);
--    mode->f_string_start = tok->buf + mode->f_string_start_offset;
-+    mode->f_string_start = (char *) (((intptr_t) tok->buf) + mode->f_string_start_offset);
-     mode->f_string_multi_line_start =
--        tok->buf + mode->f_string_multi_line_start_offset;
-+        (char *) (((intptr_t) tok->buf) + mode->f_string_multi_line_start_offset);
-   }
+-    PyObject **dest = self->ob_item + m;
++    PyObject **dest = m == 0 ? self->ob_item : self->ob_item + m;
+     Py_ssize_t pos = 0;
+     PyObject *keyvalue[2];
+     while (_PyDict_Next((PyObject *)dict, &pos, &keyvalue[0], &keyvalue[1], NULL)) {
+@@ -1367,7 +1367,7 @@
+         return -1;
+     }
+ 
+-    PyObject **dest = self->ob_item + m;
++    PyObject **dest = m == 0 ? self->ob_item : self->ob_item + m;
+     Py_ssize_t pos = 0;
+     Py_ssize_t i = 0;
+     PyObject *key, *value;
+--- Parser/lexer/buffer.c
++++ Parser/lexer/buffer.c
+@@ -27,8 +27,8 @@
+ 
+     for (index = tok->tok_mode_stack_index; index >= 0; --index) {
+         mode = &(tok->tok_mode_stack[index]);
+-        mode->f_string_start = tok->buf + mode->f_string_start_offset;
+-        mode->f_string_multi_line_start = tok->buf + mode->f_string_multi_line_start_offset;
++        mode->f_string_start = (char *) (((intptr_t) tok->buf) + mode->f_string_start_offset);
++        mode->f_string_multi_line_start = (char *) (((intptr_t) tok->buf) + mode->f_string_multi_line_start_offset);
+     }
  }
  

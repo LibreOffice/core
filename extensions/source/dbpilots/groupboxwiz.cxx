@@ -370,7 +370,7 @@ namespace dbp
         }
 
         m_nLastSelection = m_xOptions->get_selected_index();
-        DBG_ASSERT(o3tl::make_unsigned(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
+        assert(o3tl::make_unsigned(m_nLastSelection) < m_aUncommittedValues.size() && "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
         m_xValue->set_text(m_aUncommittedValues[m_nLastSelection]);
     }
 

@@ -53,7 +53,7 @@ css::uno::Sequence<sal_Int8> WinDIBToOOBMP(const css::uno::Sequence<sal_Int8>& a
 
 /*------------------------------------------------------------------------
     input:
-    aWinDIB - sequence of bytes containing a windows bitmap handle
+    HBITMAP - a windows bitmap handle
 ------------------------------------------------------------------------*/
 css::uno::Sequence<sal_Int8> WinBITMAPToOOBMP(HBITMAP);
 

@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/json_parser/error.hpp>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+
 #include <osl/diagnose.h>
-#include <list.hxx>
 #include <numrule.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
-#include <fmthdft.hxx>
 #include <fltini.hxx>
-#include <itabenum.hxx>
 #include <fchrfmt.hxx>
 #include <swerror.h>
 #include <strings.hrc>
@@ -34,7 +36,6 @@
 #include <hintids.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svl/itemiter.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
@@ -44,11 +45,18 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+#include <rtl/uri.hxx>
 #include <ndgrf.hxx>
-#include <fmtcntnt.hxx>
 #include <swtypes.hxx>
 #include <fmturl.hxx>
 #include <formatcontentcontrol.hxx>
+#include <docsh.hxx>
 
 #include "swmd.hxx"
 
@@ -742,10 +750,87 @@ SwMarkdownParser::SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUS
     m_pArr.reset(new char[m_nFilesize + 1]);
 }
 
+void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
+{
+    // See if any import options are provided: if so, collect them into a map.
+    if (!m_pMedium)
+    {
+        return;
+    }
+
+    auto pItem = m_pMedium->GetItemSet().GetItem(SID_FILE_FILTEROPTIONS);
+    if (!pItem)
+    {
+        return;
+    }
+
+    OUString aFilterOptions = pItem->GetValue();
+    if (!aFilterOptions.startsWith("{"))
+    {
+        return;
+    }
+
+    uno::Sequence<beans::PropertyValue> aFilterData;
+    try
+    {
+        std::vector<beans::PropertyValue> aData
+            = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
+        aFilterData = comphelper::containerToSequence(aData);
+    }
+    catch (const boost::property_tree::json_parser::json_parser_error& e)
+    {
+        SAL_WARN("sw.md", "failed to parse FilterOptions as JSON: " << e.message());
+    }
+    comphelper::SequenceAsHashMap aMap(aFilterData);
+    OUString aTemplateURL;
+    aMap[u"TemplateURL"_ustr] >>= aTemplateURL;
+    if (aTemplateURL.isEmpty())
+    {
+        return;
+    }
+
+    // Have a TemplateURL: open it in a new object shell.
+    if (!m_pMedium->GetName().isEmpty())
+    {
+        aTemplateURL = rtl::Uri::convertRelToAbs(m_pMedium->GetName(), aTemplateURL);
+    }
+    SwDocShell* pDocShell = rDoc.GetDocShell();
+    if (!pDocShell)
+    {
+        return;
+    }
+
+    // Go via filter detection so non-ODF templates work, too.
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
+        comphelper::makePropertyValue("Hidden", true),
+    };
+    uno::Reference<lang::XComponent> xTemplateComponent
+        = xComponentLoader->loadComponentFromURL(aTemplateURL, u"_blank"_ustr, 0, aTemplateArgs);
+    auto pTemplateModel = dynamic_cast<SfxBaseModel*>(xTemplateComponent.get());
+    if (!pTemplateModel)
+    {
+        return;
+    }
+
+    SfxObjectShell* pTemplateShell = pTemplateModel->GetObjectShell();
+    if (!pTemplateShell)
+    {
+        return;
+    }
+
+    // Copy the styles from the template doc to our document.
+    pDocShell->LoadStyles(*pTemplateShell);
+
+    xTemplateComponent->dispose();
+}
+
 ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString&)
 {
     ErrCode nRet;
 
+    SetupFilterOptions(rDoc);
     SwMarkdownParser parser(rDoc, rPam, *m_pStream, rBaseURL, !m_bInsertMode);
     nRet = parser.CallParser();
 

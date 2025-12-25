@@ -39,7 +39,8 @@
 #include <comphelper/SelectionMultiplex.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <ReportVisitor.hxx>
 #include <core_resource.hxx>
@@ -221,7 +222,7 @@ NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportC
     m_xTreeView->set_selection_mode(SelectionMode::Multiple);
 
     m_xTreeView->connect_selection_changed(LINK(this, NavigatorTree, OnEntrySelDesel));
-    m_xTreeView->connect_popup_menu(LINK(this, NavigatorTree, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, NavigatorTree, CommandHdl));
 }
 
 NavigatorTree::~NavigatorTree()
@@ -276,20 +277,20 @@ IMPL_LINK(NavigatorTree, CommandHdl, const CommandEvent&, rEvt, bool)
             std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu(u"menu"_ustr));
 
             const OUString aIds[] = { u"sorting"_ustr, u"page"_ustr, u"report"_ustr, u"function"_ustr, u"properties"_ustr, u"delete"_ustr };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+            for (const auto& sIdentifier : aIds)
             {
-                sal_uInt16 nSId = mapIdent(aIds[i]);
+                sal_uInt16 nSId = mapIdent(sIdentifier);
 
-                if (aIds[i] == "page" || aIds[i] == "report" || aIds[i] == "properties")
-                    xContextMenu->set_active(aIds[i], m_rController.isCommandChecked(nSId));
+                if (sIdentifier == "page" || sIdentifier == "report" || sIdentifier == "properties")
+                    xContextMenu->set_active(sIdentifier, m_rController.isCommandChecked(nSId));
                 bool bEnabled = m_rController.isCommandEnabled(nSId);
                 if (nSId == SID_RPT_NEW_FUNCTION)
-                    xContextMenu->set_sensitive(aIds[i], m_rController.isEditable() && (xSupplier.is() || xFunctions.is()));
+                    xContextMenu->set_sensitive(sIdentifier, m_rController.isEditable() && (xSupplier.is() || xFunctions.is()));
                 // special condition, check for function and group
                 else if (nSId == SID_DELETE)
-                    xContextMenu->set_sensitive(aIds[i], bDeleteAllowed);
+                    xContextMenu->set_sensitive(sIdentifier, bDeleteAllowed);
                 else
-                    xContextMenu->set_sensitive(aIds[i], bEnabled);
+                    xContextMenu->set_sensitive(sIdentifier, bEnabled);
             }
 
             // the point that was clicked on

@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace chart { class ControllerLockHelper; }
 

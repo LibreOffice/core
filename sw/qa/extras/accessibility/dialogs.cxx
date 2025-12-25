@@ -43,14 +43,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSpecialCharactersDialog)
 
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u"©"));
 
-        /* there was a focus issue in this dialog: the table holding the characters always had the
-         * selected element as focused, even when tabbing outside.
-         * Fixed with https://gerrit.libreoffice.org/c/core/+/147660.
-         * Anyway, we still use the target element match API to also exercise it. */
-        auto xChild = AccessibilityTools::getAccessibleObjectForName(
-            dialog.getAccessible(), accessibility::AccessibleRole::PUSH_BUTTON, u"Insert");
-        CPPUNIT_ASSERT(xChild);
-        CPPUNIT_ASSERT(dialog.tabTo(xChild));
+        // close the dialog using the default action to insert the currently selected character
         dialog.postKeyEventAsync(0, awt::Key::RETURN);
 
         Scheduler::ProcessEventsToIdle();
@@ -82,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestSpecialCharactersDialogFocus)
                 dialog.getAccessible(), accessibility::AccessibleRole::TABLE_CELL, u"!"),
             getFocusedObject(dialog.getAccessible()));
 
-        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::PUSH_BUTTON, u"Insert"));
+        // close the dialog using the default action to insert the currently selected character
         dialog.postKeyEventAsync(0, awt::Key::RETURN);
 
         Scheduler::ProcessEventsToIdle();
@@ -102,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestHyperlinkDialog)
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
 
         // Focus the URL box (should be default, but make sure we're on it)
-        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::COMBO_BOX, u"URL:"));
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::COMBO_BOX, u"Link:"));
         // Fill in an address
         dialog.postExtTextEventAsync(u"https://libreoffice.org/"_ustr);
         // Validate the whole dialog

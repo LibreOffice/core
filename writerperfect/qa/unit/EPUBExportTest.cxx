@@ -21,13 +21,15 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/docinfohelper.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <o3tl/string_view.hxx>
+
+#include <libxml/xpathInternals.h>
 
 using namespace ::com::sun::star;
 
@@ -70,7 +72,7 @@ void EPUBExportTest::createDoc(std::u16string_view rFile,
     // Import the bugdoc and export as EPUB.
     loadFromFile(rFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"EPUB"_ustr;
     if (maFilterOptions.isEmpty())
         aMediaDescriptor[u"FilterData"_ustr] <<= rFilterData;

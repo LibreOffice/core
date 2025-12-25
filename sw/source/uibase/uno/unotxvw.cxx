@@ -509,8 +509,9 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 
         const OUString& rEntryText = pEntry->GetText();
         const SwFormatRuby& rAttr = pEntry->GetRubyAttr();
+        sal_Int32 nSequence = pEntry->GetSequence();
 
-        pRet[n].realloc(6);
+        pRet[n].realloc(7);
         PropertyValue* pValues = pRet[n].getArray();
         pValues[0].Name = UNO_NAME_RUBY_BASE_TEXT;
         pValues[0].Value <<= rEntryText;
@@ -525,6 +526,8 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[4].Value <<= !rAttr.GetPosition();
         pValues[5].Name = UNO_NAME_RUBY_POSITION;
         pValues[5].Value <<= rAttr.GetPosition();
+        pValues[6].Name = UNO_NAME_RUBY_SEQUENCE_NUMBER;
+        pValues[6].Value <<= nSequence;
     }
     return aRet;
 }
@@ -593,6 +596,14 @@ void SAL_CALL SwXTextView::setRubyList(
                 sal_Int16 nTmp = 0;
                 if(rProperty.Value >>= nTmp)
                     pEntry->GetRubyAttr().SetPosition( nTmp );
+            }
+            else if (rProperty.Name == UNO_NAME_RUBY_SEQUENCE_NUMBER)
+            {
+                sal_Int32 nTmp = 0;
+                if (rProperty.Value >>= nTmp)
+                {
+                    pEntry->SetSequence(nTmp);
+                }
             }
         }
         aList.push_back(std::move(pEntry));
@@ -894,8 +905,7 @@ void SwXTextViewCursor::collapseToStart()
     if(rSh.HasSelection())
     {
         SwPaM* pShellCursor = rSh.GetCursor();
-        if(*pShellCursor->GetPoint() > *pShellCursor->GetMark())
-            pShellCursor->Exchange();
+        pShellCursor->Normalize();
         pShellCursor->DeleteMark();
         rSh.EnterStdMode();
         rSh.SetSelection(*pShellCursor);
@@ -916,8 +926,7 @@ void SwXTextViewCursor::collapseToEnd()
     if(rSh.HasSelection())
     {
         SwPaM* pShellCursor = rSh.GetCursor();
-        if(*pShellCursor->GetPoint() < *pShellCursor->GetMark())
-            pShellCursor->Exchange();
+        pShellCursor->Normalize(false);
         pShellCursor->DeleteMark();
         rSh.EnterStdMode();
         rSh.SetSelection(*pShellCursor);

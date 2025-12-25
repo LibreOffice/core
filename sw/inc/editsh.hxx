@@ -161,6 +161,8 @@ class SAL_DLLPUBLIC_RTTI SwEditShell : public SwCursorShell
     using SwViewShell::UpdateFields;
     using sw::BroadcastingModify::GetInfo;
 
+    void UpdateSelectionAutoParaDirection();
+
 public:
     /// Edit (all selected ranges).
     void Insert( sal_Unicode, bool bOnlyCurrCursor = false );

@@ -21,7 +21,8 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 
 #include <com/sun/star/report/XReportControlModel.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vector>
 
 namespace rptui

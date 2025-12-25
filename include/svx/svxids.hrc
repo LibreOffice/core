@@ -385,6 +385,7 @@ class XFillGradientItem;
 
 // CAUTION! Range <250 .. 250> used by EditEngine (!)
 
+#define SID_DIAGRAM_TO_GROUP                            ( SID_SVX_START + 252 )
 #define SID_DRAW_TEXT                                   ( SID_SVX_START + 253 )
 #define SID_DRAW_CAPTION                                ( SID_SVX_START + 254 )
 #define SID_DRAW_SELECT                                 ( SID_SVX_START + 255 )
@@ -844,7 +845,7 @@ class XFillGradientItem;
 
 #define SID_ATTR_TRANSFORM_HORI_POSITION                TypedWhichId<SfxInt32Item>( SID_SVX_START + 999 )
 #define SID_ATTR_TRANSFORM_VERT_POSITION                TypedWhichId<SfxInt32Item>( SID_SVX_START + 1000 )
-// Available for use 1001
+#define SID_ALIGN_ANY_START                             ( SID_SVX_START + 1001 )
 #define SID_ALIGN_ANY_LEFT                              ( SID_SVX_START + 1002 )
 #define SID_ALIGN_ANY_HCENTER                           ( SID_SVX_START + 1003 )
 #define SID_ALIGN_ANY_RIGHT                             ( SID_SVX_START + 1004 )
@@ -889,6 +890,7 @@ class XFillGradientItem;
 #define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar
 #define SID_COLOR_SETTINGS                              TypedWhichId<SfxBoolItem>( SID_SVX_START + 1044 )
+#define SID_ALIGN_ANY_END                               ( SID_SVX_START + 1045 )
 
 #define SID_FM_FORM_DESIGN_TOOLS                        TypedWhichId<SfxBoolItem>( SID_SVX_START + 1046 )
 #define SID_DRAWTBX_CS_BASIC                            ( SID_SVX_START + 1047 )
@@ -1112,9 +1114,15 @@ class XFillGradientItem;
 #define SID_CONNECTOR_LINES_CIRCLE_START                ( SID_SVX_START + 1248 )
 #define SID_CONNECTOR_LINES_CIRCLE_END                  ( SID_SVX_START + 1249 )
 #define SID_CONNECTOR_LINES_CIRCLES                     ( SID_SVX_START + 1250 )
+#define SID_ATTR_TEXT_AUTOGROWWIDTH                     ( SID_SVX_START + 1251 )
+#define SID_ATTR_TEXT_AUTOGROWHEIGHT                    ( SID_SVX_START + 1252 )
+#define SID_ATTR_TEXT_LEFTDIST                          ( SID_SVX_START + 1253 )
+#define SID_ATTR_TEXT_RIGHTDIST                         ( SID_SVX_START + 1254 )
+#define SID_ATTR_TEXT_UPPERDIST                         ( SID_SVX_START + 1255 )
+#define SID_ATTR_TEXT_LOWERDIST                         ( SID_SVX_START + 1256 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_SVX_START + 1250 + 1)
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1256 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

@@ -29,8 +29,10 @@
 #include <utility>
 #include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -65,10 +67,12 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/attributelist.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/fontcvt.hxx>
 #include <fasttokenhandler.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -77,6 +81,18 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 #include <RDFaImportHelper.hxx>
+
+// L10nMapper bits to split out ...
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/io/XTextInputStream2.hpp>
+#include <com/sun/star/io/TextInputStream.hpp>
+#include <com/sun/star/container/XMap.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <comphelper/lok.hxx>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 using ::com::sun::star::beans::XPropertySetInfo;
 
@@ -242,6 +258,18 @@ public:
                         else if (24 == year && month == 8)
                         {
                             mnGeneratorVersion = SvXMLImport::LO_248;
+                        }
+                        else if (25 == year && month == 2)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_252;
+                        }
+                        else if (25 == year && month == 8)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_258;
+                        }
+                        else if (26 == year && month == 2)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_262;
                         }
                         else if (0 < year)
                         {
@@ -444,6 +472,164 @@ void SvXMLImport::InitCtor_()
     }
 }
 
+namespace {
+
+    class L10nMapper : public cppu::WeakImplHelper<css::container::XMap>
+    {
+        std::unordered_map<OUString, OUString> maMap;
+
+        L10nMapper() { }
+        virtual ~L10nMapper() override {}
+
+    public:
+        static css::uno::Reference< XMap > load(const uno::Reference<css::embed::XStorage> &xStorage)
+        {
+            try {
+                OUString streamName = u"l10n"_ustr;
+                if (xStorage && xStorage->isStreamElement(streamName))
+                {
+                    auto xIn = xStorage->openStreamElement(streamName, css::embed::ElementModes::READ|css::embed::ElementModes::NOCREATE);
+                    if (!xIn)
+                        return css::uno::Reference< XMap >();
+
+                    auto xInStrm = uno::Reference<css::io::XInputStream>(xIn, UNO_QUERY_THROW);
+
+                    rtl::Reference< L10nMapper > pMap = new L10nMapper();
+
+                    auto xContext = comphelper::getProcessComponentContext();
+
+                    Reference< XTextInputStream2 > xTextStrm;
+                    xTextStrm = css::io::TextInputStream::create(xContext);
+                    xTextStrm->setInputStream(xInStrm);
+                    xTextStrm->setEncoding(u"utf8"_ustr);
+
+                    ::std::vector<OUString> aLocales;
+                    if (comphelper::LibreOfficeKit::isActive())
+                        aLocales = comphelper::LibreOfficeKit::getLanguageTag().getFallbackStrings(true);
+                    else
+                        aLocales = LanguageTag(css::uno::Reference< css::lang::XLocalizable >(
+                                                   css::configuration::theDefaultProvider::get(xContext),
+                                                   css::uno::UNO_QUERY_THROW)->getLocale()).getFallbackStrings(true);
+                    OUString aLocale; // cached best locale match
+
+                    // Format is <opt-prefix|string>\nlocale\t<translated-string>\n<repeat>\n\n
+                    OUString aKeyString;
+                    size_t nLine = 0;
+                    while (!xTextStrm->isEOF())
+                    {
+                        OUString aStr = xTextStrm->readLine();
+                        nLine++;
+                        if (aStr.getLength() < 1 || aStr[0] == '#')
+                        {
+                            aKeyString = "";
+                            continue;
+                        }
+
+                        // Read ',' separated locale list at the start
+                        if (aLocale.isEmpty())
+                        {
+                            auto aFileLocales = comphelper::string::split(aStr, ',');
+
+                            // find and cache the best match
+                            for (const auto &f : aFileLocales)
+                            {
+                                for (const auto &i : aLocales)
+                                {
+                                    if (f == i)
+                                    {
+                                        aLocale = f + u"\t"_ustr;
+                                        break;
+                                    }
+                                }
+                                if (!aLocale.isEmpty())
+                                    break;
+                            }
+                        }
+                        if (aLocale.isEmpty())
+                            ; // Do nothing, we don't have a matching translation
+                        else if (aKeyString.isEmpty())
+                            aKeyString = aStr;
+                        else
+                        {
+                            if (aStr.startsWith(aLocale))
+                            {
+                                auto aValues = comphelper::string::split(aStr, '\t');
+                                if (aValues.size() > 1)
+                                    pMap->maMap[aKeyString] = aValues[1];
+                                else
+                                    pMap->maMap[aKeyString] = OUString::Concat(u"invalid line "_ustr) + OUString::number(nLine);
+                            }
+                        }
+                    }
+
+                    xTextStrm->closeInput();
+
+                    auto xMap = css::uno::Reference< XMap >(pMap);
+
+                    return xMap;
+                }
+            }
+            catch (Exception const&)
+            {
+                DBG_UNHANDLED_EXCEPTION("xmloff.core", "exception getting BuildId");
+            }
+            return css::uno::Reference< XMap >();
+        }
+
+        // XMap
+        virtual Type SAL_CALL getKeyType() override   { return cppu::UnoType<OUString>::get(); };
+        virtual Type SAL_CALL getValueType() override { return cppu::UnoType<OUString>::get(); };
+        virtual void SAL_CALL clear() override { maMap.clear(); }
+        virtual sal_Bool SAL_CALL containsKey( const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual sal_Bool SAL_CALL containsValue( const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+
+        static OUString cleanDomain(const OUString &str)
+        {
+            sal_Int32 idx = str.indexOf('_');
+            if (idx > -1)
+                return str.copy(idx+1);
+            else
+                return str;
+        }
+
+        virtual Any SAL_CALL get( const Any& key ) override
+        {
+            auto it = maMap.find(key.get<OUString>());
+            if (it == maMap.end())
+            {
+                SAL_WARN("xmloff", "Key '" << key << "' with no translation");
+                return css::uno::Any(cleanDomain(key.get<OUString>()));
+            }
+            else
+                return css::uno::Any(it->second);
+        }
+        virtual Any SAL_CALL put( const Any&, const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual Any SAL_CALL remove( const Any& ) override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+
+        // XElementAccess (base)
+        virtual Type SAL_CALL getElementType() override
+        {
+            throw css::uno::RuntimeException(u"not implemented"_ustr);
+        }
+        virtual sal_Bool SAL_CALL hasElements() override
+        {
+            return !maMap.empty();
+        }
+};
+}
+
 SvXMLImport::SvXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
@@ -465,6 +651,7 @@ SvXMLImport::SvXMLImport(
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
     mxParser = xml::sax::FastParser::create( xContext );
+
     setNamespaceHandler( maNamespaceHandler );
     setTokenHandler( xTokenHandler  );
     if ( !bIsNSMapsInitialized )
@@ -596,10 +783,7 @@ void SAL_CALL SvXMLImport::startDocument()
         if (!mxGraphicStorageHandler.is())
         {
             // #99870# Import... instead of Export...
-            mxGraphicStorageHandler.set(
-                GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr, uno::Sequence<uno::Any>(), GetComponentContext()),
-                uno::UNO_QUERY );
+            mxGraphicStorageHandler = SvXMLGraphicHelper::Create(nullptr, SvXMLGraphicHelperMode::Read);
             mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
         }
 
@@ -1075,7 +1259,12 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
-    xInit->initialize( { Any(u"IgnoreMissingNSDecl"_ustr) });
+
+    css::uno::Reference< XMap > xMap = L10nMapper::load(GetSourceStorage());
+    css::uno::Sequence< css::uno::Any > args{
+        css::uno::Any(u"IgnoreMissingNSDecl"_ustr),
+        css::uno::Any(xMap) };
+    xInit->initialize(args);
 }
 
 // XServiceInfo
@@ -1319,7 +1508,10 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const& 
         {
             if (IsPackageURL(rURL))
             {
-                xGraphic = mxGraphicStorageHandler->loadGraphicAtPage(rURL, nPageNum);
+                if (SvXMLGraphicHelper* pGraphicStorageHandler = dynamic_cast<SvXMLGraphicHelper*>(mxGraphicStorageHandler.get()))
+                    xGraphic = pGraphicStorageHandler->loadGraphicAtPage(rURL, nPageNum);
+                else
+                    xGraphic = mxGraphicStorageHandler->loadGraphic(rURL);
             }
             else
             {
@@ -1350,13 +1542,17 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const& 
     return xGraphic;
 }
 
-uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Reference<io::XOutputStream> const & rxOutputStream)
+uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Reference<io::XOutputStream> const & rxOutputStream,
+                                                                     sal_Int32 nPageNum)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
 
     if (mxGraphicStorageHandler.is())
     {
-        xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
+        if (SvXMLGraphicHelper* pGraphicStorageHandler= dynamic_cast<SvXMLGraphicHelper*>(mxGraphicStorageHandler.get()))
+            xGraphic = pGraphicStorageHandler->loadGraphicFromOutputStreamAtPage(rxOutputStream, nPageNum);
+        else
+            xGraphic = mxGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
     }
 
     return xGraphic;

@@ -23,8 +23,10 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/print.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <map>
 
 namespace vcl
@@ -203,7 +205,12 @@ namespace vcl
         DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
         DECL_LINK( ClickHdl, weld::Button&, void );
-        DECL_LINK( SelectHdl, weld::ComboBox&, void );
+        DECL_LINK(SelectPrinterHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectPaperSidesHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectOrientationHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectNupOrderHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectNupPagesHdl, weld::ComboBox&, void);
+        DECL_LINK(SelectPaperSizeHdl, weld::ComboBox&, void);
         DECL_LINK( ActivateHdl, weld::Entry&, bool );
         DECL_LINK( FocusOutHdl, weld::Widget&, void );
         DECL_LINK( SpinModifyHdl, weld::SpinButton&, void );

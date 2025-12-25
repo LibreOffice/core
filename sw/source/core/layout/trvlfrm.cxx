@@ -332,7 +332,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                         nextTextPos.AdjustContent(+1);
                         SwRect nextTextRect;
                         pTextFrame->GetCharRect(nextTextRect, nextTextPos);
-                        SwRectFnSet aRectFnSet(pTextFrame);
+                        SwRectFnSet aRectFnSet(*pTextFrame);
                         if (aRectFnSet.GetTop(aTextRect) ==
                             aRectFnSet.GetTop(nextTextRect)) // same line?
                         {
@@ -762,7 +762,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     const SwFrame* pVertRefFrame = pStart;
     if ( bTableSel && pStTab )
         pVertRefFrame = pStTab;
-    SwRectFnSet aRectFnSet(pVertRefFrame);
+    SwRectFnSet aRectFnSet(*pVertRefFrame);
 
     SwTwips nX = 0;
     if ( bTab )
@@ -1372,7 +1372,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
     if ( aActualSize.Height() > pActual->GetUpper()->getFramePrintArea().Height() )
         aActualSize.setHeight( pActual->GetUpper()->getFramePrintArea().Height() );
 
-    SwRectFnSet aRectFnSet(pActual);
+    SwRectFnSet aRectFnSet(*pActual);
     if ( !pActual->GetPrev() &&
          aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pActual),
                               aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) > 0 )
@@ -1739,7 +1739,7 @@ bool SwFrame::IsHiddenNow() const
 
 void SwFrame::MakeValidZeroHeight()
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     {
         SwFrameAreaDefinition::FramePrintAreaWriteAccess area(*this);
         aRectFnSet.SetHeight(area, 0);
@@ -2243,7 +2243,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
     {
         aEndFrame.Intersection( pEndFrame->GetPaintArea() );
     }
-    SwRectFnSet aRectFnSet(pStartFrame);
+    SwRectFnSet aRectFnSet(*pStartFrame);
     const bool bR2L = pStartFrame->IsRightToLeft();
     const bool bEndR2L = pEndFrame->IsRightToLeft();
     const bool bB2T = pStartFrame->IsVertLRBT();
@@ -2329,7 +2329,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
 
         if( pEnd2Pos )
         {
-            SwRectFnSet fnRectX(pEndFrame);
+            SwRectFnSet fnRectX(*pEndFrame);
             SwRect aTmp( aEndRect );
 
             // BiDi-Portions are swimming against the current.
@@ -2427,7 +2427,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
             aRectFnSet.SetWidth( aStRect, 1 );
         }
 
-        SwRectFnSet fnRectX(pEndFrame);
+        SwRectFnSet fnRectX(*pEndFrame);
         if ( fnRectX.GetWidth(pEnd2Pos->aPortion2) )
         {
             SwRect aTmp( aEndRect );
@@ -2639,7 +2639,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
             Sub( aRegion, aPrvRect );
 
         // At last the endframe...
-        aRectFnSet.Refresh(pEndFrame);
+        aRectFnSet.Refresh(*pEndFrame);
         nTmpTwips = aRectFnSet.GetTop(aEndRect);
         if( aRectFnSet.GetTop(aEndFrame) != nTmpTwips )
         {

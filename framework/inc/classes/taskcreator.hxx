@@ -24,7 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 namespace framework{
 
@@ -51,7 +51,7 @@ class TaskCreator final
                  TaskCreator( css::uno::Reference< css::uno::XComponentContext > xContext );
                  ~TaskCreator(                                                                     );
 
-        css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor );
+        css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor );
 
 }; // class TaskCreator
 

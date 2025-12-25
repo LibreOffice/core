@@ -52,8 +52,6 @@ ScSortParam::~ScSortParam() {}
 
 void ScSortParam::Clear()
 {
-    ScSortKeyState aKeyState;
-
     nCol1=nCol2=nDestCol = 0;
     nRow1=nRow2=nDestRow = 0;
     nSourceTab = 0;
@@ -69,13 +67,8 @@ void ScSortParam::Clear()
     aCollatorLocale = css::lang::Locale();
     aCollatorAlgorithm.clear();
 
-    aKeyState.bDoSort = false;
-    aKeyState.nField = 0;
-    aKeyState.bAscending = true;
-    aKeyState.aColorSortMode = ScColorSortMode::None;
-
     // Initialize to default size
-    maKeyState.assign( DEFSORT, aKeyState );
+    maKeyState.assign(DEFSORT, {});
 }
 
 ScSortParam& ScSortParam::operator=( const ScSortParam& r )
@@ -184,7 +177,6 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
                 key.bDoSort = true;
                 key.nField = group.nField;
                 key.bAscending = rSub.bAscending;
-                key.aColorSortMode = ScColorSortMode::None;
                 maKeyState.push_back(key);
             }
 
@@ -203,7 +195,6 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
                 key.bDoSort = true;
                 key.nField = nThisField;
                 key.bAscending = rOld.maKeyState[i].bAscending;
-                key.aColorSortMode = ScColorSortMode::None;
                 maKeyState.push_back(key);
             }
         }
@@ -224,18 +215,13 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
 
     ScSortKeyState aKeyState;
     aKeyState.bDoSort = true;
-    aKeyState.nField = nCol;
     aKeyState.bAscending = true;
-    aKeyState.aColorSortMode = ScColorSortMode::None;
-
-    maKeyState.push_back( aKeyState );
+    aKeyState.nField = nCol;
+    maKeyState.push_back(aKeyState);
 
     // Set the rest
-    aKeyState.bDoSort = false;
-    aKeyState.nField = 0;
-
-    for (sal_uInt16 i=1; i<GetSortKeyCount(); i++)
-        maKeyState.push_back( aKeyState );
+    for (sal_uInt16 i = 1; i < GetSortKeyCount(); i++)
+        maKeyState.emplace_back();
 }
 
 void ScSortParam::MoveToDest()

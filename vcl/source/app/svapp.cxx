@@ -406,13 +406,23 @@ bool Application::Reschedule( bool i_bAllEvents )
         return false;
     }
     int nOldView = -1;
+    ViewShellDocId nOldDocId(-1);
     if (comphelper::LibreOfficeKit::isActive())
     {
         nOldView = comphelper::LibreOfficeKit::getView();
+        nOldDocId = comphelper::LibreOfficeKit::getDocId();
     }
     bool bRet = ImplYield(false, i_bAllEvents);
     if (comphelper::LibreOfficeKit::isActive())
     {
+        // Yield may have changed the current docId, restore the old value,
+        // (which is cheap). If there is a view to restore this doesn't matter
+        // much, but if there isn't yet, as in the case of loading a new
+        // document, then this ensures that the next view to be created is
+        // created with the expected document id.
+        assert(nOldDocId.get() != -1 && "won't be unset");
+        comphelper::LibreOfficeKit::setDocId(nOldDocId);
+
         int nNewView = comphelper::LibreOfficeKit::getView();
         if (nOldView != -1 && nNewView != -1 && nOldView != nNewView)
         {

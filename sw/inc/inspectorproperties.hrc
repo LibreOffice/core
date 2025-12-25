@@ -235,7 +235,7 @@
 #define RID_PARA_LETTER_SPACING_MIN                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Letter Spacing Minimum")
 #define RID_PARA_LETTER_SPACING_MAX                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Letter Spacing Maximum")
 #define RID_PARA_LINE_SPACING                               NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Line Spacing")
-#define RID_PARA_ORPHANS                                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Orphans")
+#define RID_PARA_ORPHANS                                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Don’t split at beginning (lines)")
 #define RID_PARA_REGISTER_MODE_ACTIVE                       NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Register Mode Active")
 #define RID_PARA_RIGHT_MARGIN                               NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Right Margin")
 #define RID_PARA_RIGHT_MARGIN_RELATIVE                      NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Right Margin Relative")
@@ -249,7 +249,7 @@
 #define RID_PARA_TOP_MARGIN_RELATIVE                        NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Top Margin Relative")
 #define RID_PARA_USER_DEFINED_ATTRIBUTES                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para User Defined Attributes")
 #define RID_PARA_VERT_ALIGNMENT                             NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Vertical Alignment")
-#define RID_PARA_WIDOWS                                     NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Widows")
+#define RID_PARA_WIDOWS                                     NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Don’t split at end (lines)")
 #define RID_PARA_WORD_SPACING_MIN                           NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Word Spacing Minimum")
 #define RID_PARA_WORD_SPACING                               NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Word Spacing")
 #define RID_PARA_WORD_SPACING_MAX                           NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Word Spacing Maximum")
@@ -275,6 +275,7 @@
 #define RID_UNVISITED_CHAR_STYLE_NAME                       NC_("RID_ATTRIBUTE_NAMES_MAP", "Unvisited Char Style Name")
 #define RID_VISITED_CHAR_STYLE_NAME                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Visited Char Style Name")
 #define RID_WRITING_MODE                                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Writing Mode")
+#define RID_WRITING_MODE_AUTOMATIC                          NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Auto Writing Mode")
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

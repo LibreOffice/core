@@ -10,6 +10,7 @@
 #include "rustproduce.hxx"
 #include "rustfile.hxx"
 #include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 #include <sal/log.hxx>
 #include <iostream>
 #include <set>
@@ -1191,7 +1192,7 @@ void RustProducer::generateServiceCreateMethod(
         .endBlock();
 }
 
-OString RustProducer::generateServiceInterfaceModulePath(const OUString& interfaceType)
+OString RustProducer::generateServiceInterfaceModulePath(std::u16string_view interfaceType)
 {
     // Generate proper module path for the interface
     OString interfaceTypeStr = u2b(interfaceType);
@@ -1225,7 +1226,7 @@ void RustProducer::generateServiceExternDeclarations(
         .endBlock();
 }
 
-bool RustProducer::generateTypeCastReturn(RustFile& file, std::string_view resolvedType) const
+bool RustProducer::generateTypeCastReturn(RustFile& file, std::string_view resolvedType)
 {
     if (resolvedType == "boolean")
     {
@@ -1741,7 +1742,7 @@ OString RustProducer::convertRustParameterForFFICall(
         if (isInputOnly)
         {
             // Input string: convert OUString to rtl_uString* using .as_ptr()
-            return OString(paramName) + ".as_ptr()";
+            return OString::Concat(paramName) + ".as_ptr()";
         }
         else
         {
@@ -1758,7 +1759,7 @@ OString RustProducer::convertRustParameterForFFICall(
         if (isInputOnly)
         {
             // Input any: convert Any to uno_Any* using .as_ptr()
-            return OString(paramName) + ".as_ptr()";
+            return OString::Concat(paramName) + ".as_ptr()";
         }
         else
         {
@@ -1775,7 +1776,7 @@ OString RustProducer::convertRustParameterForFFICall(
         if (isInputOnly)
         {
             // Input struct: convert generated struct to void* using .as_ptr()
-            return OString(paramName) + ".as_ptr()";
+            return OString::Concat(paramName) + ".as_ptr()";
         }
         else
         {
@@ -1792,7 +1793,7 @@ OString RustProducer::convertRustParameterForFFICall(
         if (isInputOnly)
         {
             // Input interface: convert generated interface to void* using .as_ptr()
-            return OString(paramName) + ".as_ptr()";
+            return OString::Concat(paramName) + ".as_ptr()";
         }
         else
         {

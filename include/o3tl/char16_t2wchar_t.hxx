@@ -11,7 +11,9 @@
 
 #include <sal/config.h>
 
+#if defined _WIN32
 #include <string_view>
+#endif
 
 namespace o3tl
 {

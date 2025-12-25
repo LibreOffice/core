@@ -110,6 +110,16 @@ extern "C" {
 #endif
 
 
+/** Define macros for swapping between byte orders.
+ */
+#ifndef OSL_SWAPWORD
+#   define OSL_SWAPWORD(w)         OSL_MAKEWORD(OSL_HIBYTE(w),OSL_LOBYTE(w))
+#endif
+#ifndef OSL_SWAPDWORD
+#   define OSL_SWAPDWORD(d)        OSL_MAKEDWORD(OSL_SWAPWORD(OSL_HIWORD(d)),OSL_SWAPWORD(OSL_LOWORD(d)))
+#endif
+
+
 /** Define macros for swapping between host and network byte order.
  */
 #ifdef OSL_BIGENDIAN
@@ -121,22 +131,12 @@ extern "C" {
 #endif
 #else  /* OSL_LITENDIAN */
 #ifndef OSL_NETWORD
-#   define OSL_NETWORD(w)          OSL_MAKEWORD(OSL_HIBYTE(w),OSL_LOBYTE(w))
+#   define OSL_NETWORD(w)          OSL_SWAPWORD(w)
 #endif
 #ifndef OSL_NETDWORD
-#   define OSL_NETDWORD(d)         OSL_MAKEDWORD(OSL_NETWORD(OSL_HIWORD(d)),OSL_NETWORD(OSL_LOWORD(d)))
+#   define OSL_NETDWORD(d)         OSL_SWAPDWORD(d)
 #endif
 #endif /* OSL_BIGENDIAN */
-
-
-/** Define macros for swapping between byte orders.
- */
-#ifndef OSL_SWAPWORD
-#   define OSL_SWAPWORD(w)         OSL_MAKEWORD(OSL_HIBYTE(w),OSL_LOBYTE(w))
-#endif
-#ifndef OSL_SWAPDWORD
-#   define OSL_SWAPDWORD(d)        OSL_MAKEDWORD(OSL_SWAPWORD(OSL_HIWORD(d)),OSL_SWAPWORD(OSL_LOWORD(d)))
-#endif
 
 
 #ifdef __cplusplus

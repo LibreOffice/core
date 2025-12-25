@@ -39,7 +39,7 @@
  </office:master-styles>
  <office:body>
   <office:text>
-   <text:p text:style-name="P1"><text:span text:style-name="T1">vehicula vestibulum est vel ultricies.</text:span></text:p>
+   <text:p text:style-name="P1"><text:span text:style-name="T1">vehicula vestibulum est vel ultricies. Lorem.</text:span></text:p>
   </office:text>
  </office:body>
 </office:document>

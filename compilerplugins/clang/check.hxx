@@ -190,7 +190,7 @@ ContextCheck TypeCheck::Class(llvm::StringRef id)
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
-            return detail::checkRecordDecl(compat::getDecl(t), compat::TagTypeKind::Class, id);
+            return detail::checkRecordDecl(compat::getDecl(t), clang::TagTypeKind::Class, id);
         }
     }
     return ContextCheck();
@@ -201,7 +201,7 @@ ContextCheck TypeCheck::Struct(llvm::StringRef id) const
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
-            return detail::checkRecordDecl(compat::getDecl(t), compat::TagTypeKind::Struct, id);
+            return detail::checkRecordDecl(compat::getDecl(t), clang::TagTypeKind::Struct, id);
         }
     }
     return ContextCheck();
@@ -233,12 +233,12 @@ ContextCheck TypeCheck::Typedef(llvm::StringRef id) const
 
 ContextCheck DeclCheck::Class(llvm::StringRef id) const
 {
-    return detail::checkRecordDecl(decl_, compat::TagTypeKind::Class, id);
+    return detail::checkRecordDecl(decl_, clang::TagTypeKind::Class, id);
 }
 
 ContextCheck DeclCheck::Struct(llvm::StringRef id) const
 {
-    return detail::checkRecordDecl(decl_, compat::TagTypeKind::Struct, id);
+    return detail::checkRecordDecl(decl_, clang::TagTypeKind::Struct, id);
 }
 
 ContextCheck DeclCheck::ClassOrStruct(llvm::StringRef id) const
@@ -252,7 +252,7 @@ ContextCheck DeclCheck::ClassOrStruct(llvm::StringRef id) const
 
 ContextCheck DeclCheck::Union(llvm::StringRef id) const
 {
-    return detail::checkRecordDecl(decl_, compat::TagTypeKind::Union, id);
+    return detail::checkRecordDecl(decl_, clang::TagTypeKind::Union, id);
 }
 
 ContextCheck DeclCheck::Function(llvm::StringRef id) const
@@ -296,13 +296,13 @@ ContextCheck ContextCheck::Namespace(llvm::StringRef id) const
 ContextCheck ContextCheck::Class(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(
-        llvm::dyn_cast_or_null<clang::Decl>(context_), compat::TagTypeKind::Class, id);
+        llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TagTypeKind::Class, id);
 }
 
 ContextCheck ContextCheck::Struct(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(
-        llvm::dyn_cast_or_null<clang::Decl>(context_), compat::TagTypeKind::Struct, id);
+        llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TagTypeKind::Struct, id);
 }
 
 bool isExtraWarnUnusedType(clang::ASTContext const & context, clang::QualType type);

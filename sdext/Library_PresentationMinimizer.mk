@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,PresentationMinimizer,\
     sal \
 	sfx \
 	svt \
+    utl \
 	vcl \
     tl \
 ))
@@ -53,6 +54,7 @@ $(eval $(call gb_Library_add_exception_objects,PresentationMinimizer,\
     sdext/source/minimizer/pppoptimizer \
     sdext/source/minimizer/pppoptimizerdialog \
     sdext/source/minimizer/pppoptimizertoken \
+    sdext/source/minimizer/sdextresid \
 ))
 
 # vim:set noet sw=4 ts=4:

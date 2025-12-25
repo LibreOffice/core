@@ -209,10 +209,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
     // had reduced the shape height.
     loadFromFile(u"tdf153260_VML_trim_export.odt");
 
-    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
-    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
-    skipValidation();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),

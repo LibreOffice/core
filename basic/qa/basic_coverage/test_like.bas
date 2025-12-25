@@ -34,8 +34,19 @@ Sub verify_testLike()
     TestUtil.AssertEqual("a*b" Like "a [*]b", False, "Like9")
     TestUtil.AssertEqual("axxxxxb" Like "a [*]b", False, "Like10")
     TestUtil.AssertEqual("a [xyz" Like "a [[]*", True, "Like11")
+    TestUtil.AssertEqual("ab" + Chr(10) + "cd" Like "a*", True, "tdf#160478")
+    ' Invalid pattern
+    Dim caughtError As Integer
+    On Error GoTo expectedErrorHandler
+    TestUtil.AssertEqual("a [xyz" Like "a [*", 42, "") ' Like must fail, will not reach AssertEqual
+    TestUtil.AssertEqual(caughtError, 93, "tdf#169147") ' Invalid string pattern
 
     Exit Sub
+
+expectedErrorHandler:
+    caughtError = Err
+    Resume Next
+
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testLike", Err, Error$, Erl)
 End Sub

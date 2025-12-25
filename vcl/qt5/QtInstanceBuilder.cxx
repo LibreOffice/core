@@ -129,10 +129,12 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"filter/ui/xsltfilterdialog.ui"_ustr,
         u"modules/BasicIDE/ui/gotolinedialog.ui"_ustr,
         u"modules/BasicIDE/ui/newlibdialog.ui"_ustr,
+        u"modules/scalc/ui/conditionalformatdialog.ui"_ustr,
         u"modules/scalc/ui/definedatabaserangedialog.ui"_ustr,
         u"modules/scalc/ui/deletecells.ui"_ustr,
         u"modules/scalc/ui/deletecontents.ui"_ustr,
         u"modules/scalc/ui/duplicaterecordsdlg.ui"_ustr,
+        u"modules/scalc/ui/fourieranalysisdialog.ui"_ustr,
         u"modules/scalc/ui/gotosheetdialog.ui"_ustr,
         u"modules/scalc/ui/groupbydate.ui"_ustr,
         u"modules/scalc/ui/groupdialog.ui"_ustr,
@@ -141,11 +143,14 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/scalc/ui/insertsheet.ui"_ustr,
         u"modules/scalc/ui/movecopysheet.ui"_ustr,
         u"modules/scalc/ui/optdlg.ui"_ustr,
+        u"modules/scalc/ui/pastespecial.ui"_ustr,
         u"modules/scalc/ui/selectrange.ui"_ustr,
         u"modules/scalc/ui/selectsource.ui"_ustr,
         u"modules/scalc/ui/showsheetdialog.ui"_ustr,
         u"modules/scalc/ui/sortdialog.ui"_ustr,
+        u"modules/scalc/ui/subtotaldialog.ui"_ustr,
         u"modules/scalc/ui/ttestdialog.ui"_ustr,
+        u"modules/scalc/ui/ztestdialog.ui"_ustr,
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
         u"modules/sdraw/ui/dlgsnap.ui"_ustr,
         u"modules/sdraw/ui/insertlayer.ui"_ustr,
@@ -163,10 +168,13 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/smath/ui/spacingdialog.ui"_ustr,
         u"modules/spropctrlr/ui/taborder.ui"_ustr,
         u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr,
+        u"modules/swriter/ui/autoformattable.ui"_ustr,
+        u"modules/swriter/ui/bibliographyentry.ui"_ustr,
         u"modules/swriter/ui/captiondialog.ui"_ustr,
         u"modules/swriter/ui/captionoptions.ui"_ustr,
         u"modules/swriter/ui/columndialog.ui"_ustr,
         u"modules/swriter/ui/columnwidth.ui"_ustr,
+        u"modules/swriter/ui/createauthorentry.ui"_ustr,
         u"modules/swriter/ui/editcategories.ui"_ustr,
         u"modules/swriter/ui/endnotepage.ui"_ustr,
         u"modules/swriter/ui/footendnotedialog.ui"_ustr,
@@ -182,9 +190,11 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/swriter/ui/renameobjectdialog.ui"_ustr,
         u"modules/swriter/ui/rowheight.ui"_ustr,
         u"modules/swriter/ui/splittable.ui"_ustr,
+        u"modules/swriter/ui/stringinput.ui"_ustr,
         u"modules/swriter/ui/testmailsettings.ui"_ustr,
         u"modules/swriter/ui/watermarkdialog.ui"_ustr,
         u"modules/swriter/ui/wordcount.ui"_ustr,
+        u"modules/swriter/ui/wrapdialog.ui"_ustr,
         u"sfx/ui/documentpropertiesdialog.ui"_ustr,
         u"sfx/ui/editdurationdialog.ui"_ustr,
         u"sfx/ui/helpmanual.ui"_ustr,
@@ -255,15 +265,20 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"filter/ui/pdfsignpage.ui"_ustr,
         u"filter/ui/pdfuserinterfacepage.ui"_ustr,
         u"filter/ui/pdfviewpage.ui"_ustr,
+        u"modules/scalc/ui/conditionalentry.ui"_ustr,
         u"modules/scalc/ui/sortcriteriapage.ui"_ustr,
         u"modules/scalc/ui/sortkey.ui"_ustr,
         u"modules/scalc/ui/sortoptionspage.ui"_ustr,
         u"modules/scalc/ui/statisticsinfopage.ui"_ustr,
+        u"modules/scalc/ui/subtotalgrppage.ui"_ustr,
+        u"modules/scalc/ui/subtotaloptionspage.ui"_ustr,
         u"modules/simpress/ui/annotationtagmenu.ui"_ustr,
-        u"modules/swriter/ui/optcaptionpage.ui"_ustr,
+        u"modules/swriter/ui/bibliofragment.ui"_ustr,
         u"modules/swriter/ui/columnpage.ui"_ustr,
+        u"modules/swriter/ui/optcaptionpage.ui"_ustr,
         u"modules/swriter/ui/printoptionspage.ui"_ustr,
         u"modules/swriter/ui/statisticsinfopage.ui"_ustr,
+        u"modules/swriter/ui/wrappage.ui"_ustr,
         u"sfx/ui/custominfopage.ui"_ustr,
         u"sfx/ui/descriptioninfopage.ui"_ustr,
         u"sfx/ui/documentfontspage.ui"_ustr,
@@ -323,8 +338,7 @@ std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUStrin
 
 std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    return weld_dialog(m_xBuilder->getDialogId());
 }
 
 std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId)
@@ -596,12 +610,6 @@ std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUSt
             xRet = std::make_unique<QtInstanceSpinButton>(pSpinBox);
     });
     return xRet;
-}
-
-std::unique_ptr<weld::MetricSpinButton>
-QtInstanceBuilder::weld_metric_spin_button(const OUString& rId, FieldUnit eUnit)
-{
-    return std::make_unique<weld::MetricSpinButton>(weld_spin_button(rId), eUnit);
 }
 
 std::unique_ptr<weld::FormattedSpinButton>

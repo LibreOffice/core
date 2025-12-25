@@ -37,6 +37,12 @@ public:
         {
             return true;
         }
+        if (expr->getLambdaClass()->isDependentType())
+        {
+            // When the lambda appears within template code, the list of implicit captures can oddly
+            // be empty, so filter those out here:
+            return true;
+        }
         report(DiagnosticsEngine::Warning, "unused capture-default", expr->getCaptureDefaultLoc())
             << expr->getSourceRange();
         return true;

@@ -28,7 +28,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wall.hxx>
@@ -222,13 +222,13 @@ SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
 
 OUString SmPrintOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label4"_ustr, u"label5"_ustr, u"label1"_ustr, u"label6"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -237,7 +237,7 @@ OUString SmPrintOptionsTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"sizenormal"_ustr, u"sizescaled"_ustr, u"sizezoomed"_ustr };
@@ -245,10 +245,10 @@ OUString SmPrintOptionsTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
@@ -473,14 +473,16 @@ public:
 
 IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
-    SaveDefaultsQuery aQuery(m_xDialog.get());
-    if (aQuery.run() == RET_YES)
-    {
-        auto* config = SmModule::get()->GetConfig();
-        SmFormat aFmt(config->GetStandardFormat());
-        WriteTo( aFmt );
-        config->SetStandardFormat(aFmt);
-    }
+    auto pQuery = std::make_shared<SaveDefaultsQuery>(m_xDialog.get());
+    weld::DialogController::runAsync(pQuery, [this](sal_Int32 nResult) {
+        if (nResult == RET_YES)
+        {
+            auto* config = SmModule::get()->GetConfig();
+            SmFormat aFmt(config->GetStandardFormat());
+            WriteTo( aFmt );
+            config->SetStandardFormat(aFmt);
+        }
+    });
 }
 
 SmFontSizeDialog::SmFontSizeDialog(weld::Window* pParent)
@@ -566,24 +568,29 @@ IMPL_LINK(SmFontTypeDialog, MenuSelectHdl, const OUString&, rIdent, void)
 
     if (pActiveListBox)
     {
-        SmFontDialog aFontDialog(m_xDialog.get(), pFontListDev, bHideCheckboxes);
+        auto pFontDialog = std::make_shared<SmFontDialog>(m_xDialog.get(), pFontListDev, bHideCheckboxes);
 
-        pActiveListBox->WriteTo(aFontDialog);
-        if (aFontDialog.run() == RET_OK)
-            pActiveListBox->ReadFrom(aFontDialog);
+        pActiveListBox->WriteTo(*pFontDialog);
+        weld::DialogController::runAsync(pFontDialog, [pFontDialog, pActiveListBox](sal_Int32 nResult) {
+            if (nResult == RET_OK)
+                pActiveListBox->ReadFrom(*pFontDialog);
+        });
     }
 }
 
 IMPL_LINK_NOARG(SmFontTypeDialog, DefaultButtonClickHdl, weld::Button&, void)
 {
-    SaveDefaultsQuery aQuery(m_xDialog.get());
-    if (aQuery.run() == RET_YES)
-    {
-        auto* config = SmModule::get()->GetConfig();
-        SmFormat aFmt(config->GetStandardFormat());
-        WriteTo( aFmt );
-        config->SetStandardFormat(aFmt, true);
-    }
+
+    auto pQuery = std::make_shared<SaveDefaultsQuery>(m_xDialog.get());
+    weld::DialogController::runAsync(pQuery, [this](sal_Int32 nResult) {
+        if (nResult == RET_YES)
+        {
+            auto* config = SmModule::get()->GetConfig();
+            SmFormat aFmt(config->GetStandardFormat());
+            WriteTo( aFmt );
+            config->SetStandardFormat(aFmt, true);
+        }
+    });
 }
 
 SmFontTypeDialog::SmFontTypeDialog(weld::Window* pParent, OutputDevice *pFntListDevice)
@@ -760,14 +767,16 @@ IMPL_LINK(SmDistanceDialog, MenuSelectHdl, const OUString&, rId, void)
 
 IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
-    SaveDefaultsQuery aQuery(m_xDialog.get());
-    if (aQuery.run() == RET_YES)
-    {
-        auto* config = SmModule::get()->GetConfig();
-        SmFormat aFmt(config->GetStandardFormat());
-        WriteTo( aFmt );
-        config->SetStandardFormat( aFmt );
-    }
+    auto pQuery = std::make_shared<SaveDefaultsQuery>(m_xDialog.get());
+    weld::DialogController::runAsync(pQuery, [this](sal_Int32 nResult) {
+        if (nResult == RET_YES)
+        {
+            auto* config = SmModule::get()->GetConfig();
+            SmFormat aFmt(config->GetStandardFormat());
+            WriteTo( aFmt );
+            config->SetStandardFormat( aFmt );
+        }
+    });
 }
 
 IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, weld::Toggleable&, rCheckBox, void )
@@ -1009,14 +1018,16 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
 
 IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
-    SaveDefaultsQuery aQuery(m_xDialog.get());
-    if (aQuery.run() == RET_YES)
-    {
-        auto* config = SmModule::get()->GetConfig();
-        SmFormat aFmt(config->GetStandardFormat());
-        WriteTo( aFmt );
-        config->SetStandardFormat(aFmt);
-    }
+    auto pQuery = std::make_shared<SaveDefaultsQuery>(m_xDialog.get());
+    weld::DialogController::runAsync(pQuery, [this](sal_Int32 nResult) {
+        if (nResult == RET_YES)
+        {
+            auto* config = SmModule::get()->GetConfig();
+            SmFormat aFmt(config->GetStandardFormat());
+            WriteTo( aFmt );
+            config->SetStandardFormat(aFmt);
+        }
+    });
 }
 
 SmAlignDialog::SmAlignDialog(weld::Window* pParent)
@@ -1704,7 +1715,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, weld::ComboBox&, rComboBox, void )
     SelectStyle(m_xStyles->get_active_text());
 }
 
-IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet&, void)
 {
     sal_UCS4 cChar = m_xCharsetDisplay->GetSelectCharacter();
 

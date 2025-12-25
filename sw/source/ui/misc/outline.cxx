@@ -629,7 +629,15 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, NumberSelect, weld::ComboBox&, void)
         if(m_nActLevel & nMask)
         {
             SwNumFormat aNumFormat(m_pNumRule->Get(i));
+            SvxNumType nOldNumberType = aNumFormat.GetNumberingType();
             aNumFormat.SetNumberingType(nNumberType);
+            if (nOldNumberType == SVX_NUM_NUMBER_NONE && nNumberType != SVX_NUM_NUMBER_NONE
+                && aNumFormat.GetLabelFollowedBy() == SvxNumberFormat::NOTHING)
+            {
+                // Transitioning from "no" numbering, also set the followed by setting to the
+                // default from "empty".
+                aNumFormat.SetLabelFollowedBy(SvxNumberFormat::LISTTAB);
+            }
             // ensure that HasListFormat
             aNumFormat.SetListFormat(aNumFormat.GetPrefix(), aNumFormat.GetSuffix(), i);
             m_pNumRule->Set(i, aNumFormat);

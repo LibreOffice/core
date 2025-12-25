@@ -97,15 +97,16 @@ void SvxBkgTabPage::Reset(const SfxItemSet* pItemSet)
 {
     if (m_xTblLBox && m_xTblLBox->get_visible())
     {
+        SetActiveTableDestinationBrushItem();
         if (m_nActPos == -1) // initial reset
         {
-            m_nActPos = 0;
-            if (const SfxUInt16Item* pDestItem = pItemSet->GetItemIfSet(SID_BACKGRND_DESTINATION, false))
-                m_nActPos = pDestItem->GetValue();
-            m_xTblLBox->set_active(m_nActPos);
+            int nActPos = 0;
+            if (const SfxUInt16Item* pDestItem
+                = pItemSet->GetItemIfSet(SID_BACKGRND_DESTINATION, false))
+                nActPos = pDestItem->GetValue();
+            m_xTblLBox->set_active(nActPos);
+            TblDestinationHdl_Impl(*m_xTblLBox);
         }
-        SetActiveTableDestinationBrushItem();
-        return;
     }
     else if (m_bCharBackColor)
     {

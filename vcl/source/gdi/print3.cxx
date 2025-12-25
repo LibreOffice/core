@@ -33,7 +33,7 @@
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <printdlg.hxx>
 #include <salinst.hxx>
@@ -236,15 +236,25 @@ public:
             size = maMultiPage.aPaperSize;
         else
             size = i_rPageSize;
+
+        bool bSwap = false;
+        const bool bSizeIsLandscape = size.Width() > size.Height();
         if(mbOrientationFromUser)
         {
-            if ( (meUserOrientation == Orientation::Portrait && size.Width() > size.Height()) ||
-                 (meUserOrientation == Orientation::Landscape && size.Width() < size.Height()) )
-            {
-                // coverity[swapped_arguments : FALSE] - this is in the correct order
-                size = Size( size.Height(), size.Width() );
-            }
+            bSwap = (bSizeIsLandscape && Orientation::Portrait == meUserOrientation)
+                    || (!bSizeIsLandscape && Orientation::Landscape == meUserOrientation);
         }
+        else if (mbPapersizeFromUser || mbPapersizeFromSetup) // automatic orientation
+        {
+            const bool bDocumentPageIsLandscape = i_rPageSize.Width() > i_rPageSize.Height();
+            bSwap = bDocumentPageIsLandscape != bSizeIsLandscape;
+        }
+        if (bSwap)
+        {
+            // coverity[swapped_arguments : FALSE] - this is in the correct order
+            size = Size(size.Height(), size.Width());
+        }
+
         return size;
     }
     PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
@@ -1188,6 +1198,17 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
             o_rMtf.WindStart();
             tools::Long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
             tools::Long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
+
+            // if the printout is larger than the paper: instead of centering, start at the top
+            const bool bHeigher = aPageSize.aSize.Height() > aPaperSize.Height();
+            if (aPageSize.bFullPaper && bHeigher)
+            {
+                // try to cram as much of the content onto the page as possible
+                Point aOffset(mpImplData->mxPrinter->GetPageOffset());
+                if (aPageSize.aSize.Height() - aPaperSize.Height() > aOffset.Y() * 2)
+                    nDY = -aOffset.Y();
+            }
+
             o_rMtf.Move( nDX, nDY, mpImplData->mxPrinter->GetDPIX(), mpImplData->mxPrinter->GetDPIY() );
             o_rMtf.WindStart();
             o_rMtf.SetPrefSize( aPaperSize );

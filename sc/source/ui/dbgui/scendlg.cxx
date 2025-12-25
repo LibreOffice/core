@@ -23,7 +23,7 @@
 #include <svx/colorbox.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <global.hxx>

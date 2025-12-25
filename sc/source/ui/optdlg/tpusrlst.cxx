@@ -23,7 +23,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 
@@ -189,13 +189,13 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 
 OUString ScTpUserLists::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"listslabel"_ustr, u"entrieslabel"_ustr, u"copyfromlabel"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString buttons[] = { u"new"_ustr, u"discard"_ustr, u"add"_ustr, u"modify"_ustr, u"delete"_ustr, u"copy"_ustr };
@@ -203,10 +203,10 @@ OUString ScTpUserLists::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
@@ -573,7 +573,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
         {
             sal_Int32 nSelList = mxLbLists->get_selected_index();
 
-            OSL_ENSURE( nSelList != -1 , "Modify without List :-/" );
+            assert(nSelList != -1 && "Modify without List :-/");
 
             if ( !theEntriesStr.isEmpty() )
             {

@@ -104,7 +104,7 @@
     <string name="unable_to_save">Hindi ma-save ang file</string>
     <string name="UNO_commands_string_parent_value_hint">Halaga ng Magulang</string>
     <string name="action_exportToPDF">I-export sa PDF</string>
-    <string name="action_print">Print</string>
+    <string name="action_print">i-Print</string>
     <string name="unable_to_export_pdf">Hindi ma-export sa pdf</string>
     <string name="slide">Slide</string>
     <string name="tabhost_character">Karakter</string>

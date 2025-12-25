@@ -20,7 +20,8 @@
 #pragma once
 
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <scdllapi.h>
 #include "csvcontrol.hxx"
 #include "csvruler.hxx"

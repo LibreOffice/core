@@ -20,19 +20,20 @@
 #include "passworddlg.hxx"
 #include <strings.hrc>
 
+#include <comphelper/string.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 
 PasswordDialog::PasswordDialog(weld::Window* pParent,
     task::PasswordRequestMode nDialogMode, const std::locale& rResLocale,
-    const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
+    const OUString& aDocURL, bool bIsPasswordToModify, bool bIsSimplePasswordRequest)
     : GenericDialogController(pParent, u"uui/ui/password.ui"_ustr, u"PasswordDialog"_ustr)
     , m_xFTPassword(m_xBuilder->weld_label(u"newpassFT"_ustr))
     , m_xEDPassword(m_xBuilder->weld_entry(u"newpassEntry"_ustr))
@@ -42,6 +43,8 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     , nMinLen(1)
     , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rResLocale))
 {
+    // Disable the OK button until something has been entered in the password field
+    m_xOKBtn->set_sensitive(false);
     // tdf#115964 we can be launched before the parent has resized to its final size
     m_xDialog->set_centered_on_parent(true);
 
@@ -60,7 +63,6 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     }
 
     // default settings for enter password or reenter passwd...
-    OUString aTitle(Translate::get(STR_TITLE_ENTER_PASSWORD, rResLocale));
     m_xFTConfirmPassword->hide();
     m_xEDConfirmPassword->hide();
     m_xPass[1]->hide();
@@ -71,47 +73,82 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
     {
-        aTitle = Translate::get(STR_TITLE_CREATE_PASSWORD, rResLocale);
-
+        m_xDialog->set_title(Translate::get(STR_TITLE_CREATE_PASSWORD, rResLocale));
         m_xFTConfirmPassword->set_label(Translate::get(STR_CONFIRM_SIMPLE_PASSWORD, rResLocale));
 
         m_xFTConfirmPassword->show();
         m_xEDConfirmPassword->show();
         m_xFTConfirmPassword->set_sensitive(true);
         m_xEDConfirmPassword->set_sensitive(true);
+        m_xPass[1]->show();
     }
 
-    m_xDialog->set_title(aTitle);
+    auto xOpenLabel = m_xBuilder->weld_label(u"openPasswordLabel"_ustr);
+    auto xEditLabel = m_xBuilder->weld_label(u"editPasswordLabel"_ustr);
 
-    TranslateId pStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
-    OUString aMessage(Translate::get(pStrId, rResLocale));
+    xOpenLabel->set_visible(!bIsPasswordToModify);
+    xEditLabel->set_visible(bIsPasswordToModify);
+
+    OUString aMessage(Translate::get(STR_ENTER_PASSWORD_TO_OPEN, rResLocale));
+
     INetURLObject url(aDocURL);
 
-    // tdf#66553 - add file name to title bar for password managers
-    OUString aFileName = url.getName(INetURLObject::LAST_SEGMENT, true,
+    // Append filename and product name to the title for password manager compatibility
+    OUString sFileName = url.getName(INetURLObject::LAST_SEGMENT, true,
                                      INetURLObject::DecodeMechanism::Unambiguous);
-    if (!aFileName.isEmpty())
-        aFileName += " - " + utl::ConfigManager::getProductName();
-    m_xDialog->set_title(aTitle + " - " + aFileName);
+    if (!sFileName.isEmpty())
+    {
+        const OUString sFinalTitle = Translate::get(STR_TITLE_FULL_FORMAT, rResLocale)
+            .replaceAll(u"%TITLE", m_xDialog->get_title())
+            .replaceAll(u"%FILENAME", sFileName)
+            .replaceAll(u"%PRODUCTNAME", utl::ConfigManager::getProductName());
 
-    auto aUrl = url.HasError()
-        ? aDocURL : url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
-    aMessage += m_xFTPassword->escape_ui_str(aUrl);
-    m_xFTPassword->set_label(aMessage);
+        m_xDialog->set_title(sFinalTitle);
+    }
+
+    OUString sTooltipTextToShow = url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+
+    if (!url.HasError() && !sTooltipTextToShow.isEmpty())
+    {
+        OUStringBuffer sFileNameBuffer(sFileName);
+        OUString sFileNameShort = comphelper::string::truncateToLength(sFileNameBuffer, 50).makeStringAndClear();
+
+        m_xFTPassword->set_label(aMessage.replaceAll("%s", sFileNameShort));
+        m_xFTPassword->set_tooltip_text(sTooltipTextToShow);
+    }
+    else
+    {
+        m_xFTPassword->set_label(aMessage.replaceAll("%s", aDocURL));
+        m_xFTPassword->set_tooltip_text(aDocURL);
+    }
+    m_xEDPassword->grab_focus();
 
     if (bIsSimplePasswordRequest)
     {
         DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
         m_xFTPassword->set_label(Translate::get(STR_ENTER_SIMPLE_PASSWORD, rResLocale));
+        m_xFTPassword->set_tooltip_text({});
     }
 
+    // This signal handler enables/disables the OK button based on whether the password entry is empty
+    m_xEDPassword->connect_changed(LINK(this, PasswordDialog, EnableOKBtn_Impl));
+
+    EnableOKBtn_Impl(*m_xEDPassword);
+
     m_xOKBtn->connect_clicked(LINK(this, PasswordDialog, OKHdl_Impl));
+}
+
+IMPL_LINK_NOARG(PasswordDialog, EnableOKBtn_Impl, weld::Entry&, void)
+{
+    bool bFirstPasswordHasText = !m_xEDPassword->get_text().isEmpty();
+    m_xOKBtn->set_sensitive(bFirstPasswordHasText);
 }
 
 IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, weld::Button&, void)
 {
     bool bEDPasswdValid = m_xEDPassword->get_text().getLength() >= nMinLen;
-    bool bPasswdMismatch = m_xEDConfirmPassword->get_text() != m_xEDPassword->get_text();
+    bool bPasswdMismatch = m_xEDConfirmPassword->get_visible() && (m_xEDConfirmPassword->get_text() != m_xEDPassword->get_text());
+
     bool bValid = (!m_xEDConfirmPassword->get_visible() && bEDPasswdValid) ||
             (m_xEDConfirmPassword->get_visible() && bEDPasswdValid && !bPasswdMismatch);
 
@@ -121,6 +158,10 @@ IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, weld::Button&, void)
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   aPasswdMismatch));
         xBox->run();
+
+        m_xEDPassword->set_text({});
+        m_xEDConfirmPassword->set_text({});
+        m_xEDPassword->grab_focus();
     }
     else if (bValid)
         m_xDialog->response(RET_OK);

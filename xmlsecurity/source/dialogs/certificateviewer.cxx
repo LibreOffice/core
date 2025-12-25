@@ -334,8 +334,7 @@ void CertificateViewerCertPathTP::ActivatePage()
 
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl, weld::Button&, void)
 {
-    std::unique_ptr<weld::TreeIter> xIter = mxCertPathLB->make_iterator();
-    if (mxCertPathLB->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = mxCertPathLB->get_selected())
     {
         if (mxCertificateViewer)
             mxCertificateViewer->response(RET_OK);
@@ -351,9 +350,8 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, weld::TreeView&, voi
 {
     OUString sStatus;
 
-    std::unique_ptr<weld::TreeIter> xIter = mxCertPathLB->make_iterator();
-    bool bEntry = mxCertPathLB->get_selected(xIter.get());
-    if (bEntry)
+    std::unique_ptr<weld::TreeIter> xIter = mxCertPathLB->get_selected();
+    if (xIter)
     {
         CertPath_UserData* pData = weld::fromId<CertPath_UserData*>(mxCertPathLB->get_id(*xIter));
         if (pData)
@@ -363,7 +361,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, weld::TreeView&, voi
     mxCertStatusML->set_text(sStatus);
 
     bool bSensitive = false;
-    if (bEntry)
+    if (xIter)
     {
         // if has children, so not the last one in the chain
         if (mxCertPathLB->iter_children(*xIter))

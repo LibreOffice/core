@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_pivottable_filters
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_pivottable_filters_test, \
     sc/qa/unit/pivottable_filters_test \
+    sc/qa/unit/PivotTable_FieldsAndItemsExport \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sc_pivottable_filters_test, \

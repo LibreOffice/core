@@ -69,7 +69,7 @@ Reference< XInputStream > createStreamFromFile (
 class TestDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
 {
 private:
-    OUString m_aStr;
+    OUStringBuffer m_aStr;
     std::deque< std::pair<OUString,OUString> > m_aNamespaceStack;
     std::stack<sal_uInt16> m_aCountStack;
 
@@ -78,7 +78,7 @@ private:
 
 public:
     TestDocumentHandler() {}
-    const OUString & getString() const { return m_aStr; }
+    const OUStringBuffer & getString() const { return m_aStr; }
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() override;
@@ -134,7 +134,7 @@ OUString TestDocumentHandler::getNamespace(std::u16string_view sName)
 
 void SAL_CALL TestDocumentHandler::startDocument()
 {
-    m_aStr.clear();
+    m_aStr.setLength(0);
     m_aNamespaceStack.clear();
     m_aNamespaceStack.emplace_back( std::make_pair( u"default"_ustr, OUString() ) );
     m_aCountStack = std::stack<sal_uInt16>();
@@ -148,7 +148,7 @@ void SAL_CALL TestDocumentHandler::endDocument()
 
 void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
 {
-    OUString sAttributes;
+    OUStringBuffer sAttributes;
     m_aCountStack.push(0);
     sal_uInt16 len = xAttribs->getLength();
     for (sal_uInt16 i=0; i<len; i++)
@@ -156,15 +156,15 @@ void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Re
         OUString sAttrValue = xAttribs->getValueByIndex(i);
         OUString sAttrName = canonicalform(xAttribs->getNameByIndex(i), sAttrValue, false);
         if (!sAttrName.isEmpty())
-            sAttributes += sAttrName + sAttrValue;
+            sAttributes.append(sAttrName + sAttrValue);
     }
-    m_aStr += canonicalform(aName, u""_ustr, true) + sAttributes;
+    m_aStr.append(canonicalform(aName, u""_ustr, true) + sAttributes);
 }
 
 
 void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 {
-    m_aStr += canonicalform(aName, u""_ustr, true);
+    m_aStr.append(canonicalform(aName, u""_ustr, true));
     sal_uInt16 nPopQty = m_aCountStack.top();
     for (sal_uInt16 i=0; i<nPopQty; i++)
         m_aNamespaceStack.pop_back();
@@ -174,19 +174,19 @@ void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 
 void SAL_CALL TestDocumentHandler::characters( const OUString& aChars )
 {
-    m_aStr += aChars;
+    m_aStr.append(aChars);
 }
 
 
 void SAL_CALL TestDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
 {
-    m_aStr += aWhitespaces;
+    m_aStr.append(aWhitespaces);
 }
 
 
 void SAL_CALL TestDocumentHandler::processingInstruction( const OUString& aTarget, const OUString& aData )
 {
-    m_aStr += aTarget + aData;
+    m_aStr.append(aTarget + aData);
 }
 
 
@@ -386,11 +386,11 @@ void XMLImportTest::parse()
 
         source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
         m_xParser->parseStream(source);
-        const OUString rParserStr = m_xDocumentHandler->getString();
+        const OUString rParserStr = m_xDocumentHandler->getString().toString();
 
         source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
         m_xLegacyFastParser->parseStream(source);
-        const OUString rLegacyFastParserStr = m_xDocumentHandler->getString();
+        const OUString rLegacyFastParserStr = m_xDocumentHandler->getString().toString();
 
         CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
         // OString o = OUStringToOString( Str, RTL_TEXTENCODING_ASCII_US );
@@ -415,11 +415,11 @@ void XMLImportTest::testMissingNamespaceDeclaration()
 
             source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
             m_xParser->parseStream(source);
-            const OUString rParserStr = m_xDocumentHandler->getString();
+            const OUString rParserStr = m_xDocumentHandler->getString().toString();
 
             source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
             m_xLegacyFastParser->parseStream(source);
-            const OUString rLegacyFastParserStr = m_xDocumentHandler->getString();
+            const OUString rLegacyFastParserStr = m_xDocumentHandler->getString().toString();
 
             CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
         }

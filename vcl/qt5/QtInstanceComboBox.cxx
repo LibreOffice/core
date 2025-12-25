@@ -118,7 +118,7 @@ int QtInstanceComboBox::get_active() const
     return nCurrentIndex;
 }
 
-void QtInstanceComboBox::set_active(int nPos)
+void QtInstanceComboBox::do_set_active(int nPos)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pComboBox->setCurrentIndex(nPos); });
@@ -168,7 +168,7 @@ OUString QtInstanceComboBox::get_active_id() const
     return sId;
 }
 
-void QtInstanceComboBox::set_active_id(const OUString& rId)
+void QtInstanceComboBox::do_set_active_id(const OUString& rId)
 {
     SolarMutexGuard g;
 

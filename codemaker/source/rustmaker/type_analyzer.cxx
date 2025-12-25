@@ -162,7 +162,7 @@ void TypeAnalyzer::insertDependency(TypeInfo& typeInfo, std::u16string_view unoT
         && sort != codemaker::UnoType::Sort::Float && sort != codemaker::UnoType::Sort::Double
         && sort != codemaker::UnoType::Sort::Char && sort != codemaker::UnoType::Sort::String
         && sort != codemaker::UnoType::Sort::Type && sort != codemaker::UnoType::Sort::Any
-        && baseType.indexOf('.') != sal_Int32(std::string::npos))
+        && baseType.indexOf('.') >= 0)
     {
         typeInfo.namespaces.insert(extractNamespace(baseTypeU));
     }

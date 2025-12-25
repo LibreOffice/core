@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name expander -->
       <column type="GdkPixbuf"/>
       <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -118,6 +120,7 @@
                     <property name="vexpand">True</property>
                     <property name="model">liststore1</property>
                     <property name="pixbuf-column">0</property>
+                    <property name="tooltip-column">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ctlFavoriteswin-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="fontworkgallerydialog|extended_tip|ctlFavoriteWin">Select a Fontwork style and click OK to insert the Fontwork into your document. Double-click or Ctrl (Command) + double-click the Fontwork in your document to enter text edit mode and change the text.</property>

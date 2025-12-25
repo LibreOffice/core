@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
@@ -165,7 +166,7 @@ private:
     bool checkForWriteWhenUsingCollectionType(const CXXMethodDecl* calleeMethodDecl);
     bool IsPassedByNonConst(const VarDecl* fieldDecl, const Stmt* child, CallerWrapper callExpr,
                             CalleeWrapper calleeFunctionDecl);
-    compat::optional<CalleeWrapper> getCallee(CallExpr const*);
+    std::optional<CalleeWrapper> getCallee(CallExpr const*);
 
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
     // we store the parent function on the way down the AST.
@@ -933,7 +934,7 @@ bool UnusedVarsGlobal::IsPassedByNonConst(const VarDecl* varDecl, const Stmt* ch
     return false;
 }
 
-compat::optional<CalleeWrapper> UnusedVarsGlobal::getCallee(CallExpr const* callExpr)
+std::optional<CalleeWrapper> UnusedVarsGlobal::getCallee(CallExpr const* callExpr)
 {
     FunctionDecl const* functionDecl = callExpr->getDirectCallee();
     if (functionDecl)
@@ -951,7 +952,7 @@ compat::optional<CalleeWrapper> UnusedVarsGlobal::getCallee(CallExpr const* call
         }
     }
 
-    return compat::optional<CalleeWrapper>();
+    return std::optional<CalleeWrapper>();
 }
 
 loplugin::Plugin::Registration<UnusedVarsGlobal> X("unusedvarsglobal", false);

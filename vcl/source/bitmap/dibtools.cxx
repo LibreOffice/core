@@ -520,12 +520,12 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     }
     else
     {
-        if (rHeader.nV5RedMask > 0)
+        if (bTCMask && BITFIELDS == rHeader.nCompression)
+        {
             nRMask = rHeader.nV5RedMask;
-        if (rHeader.nV5GreenMask > 0)
             nGMask = rHeader.nV5GreenMask;
-        if (rHeader.nV5BlueMask > 0)
             nBMask = rHeader.nV5BlueMask;
+        }
 
         const tools::Long nWidth(rHeader.nWidth);
         const tools::Long nHeight(rHeader.nHeight);
@@ -1570,27 +1570,17 @@ bool ImplWriteDIB(
     if(!aSizePix.Width() || !aSizePix.Height())
         return false;
 
-    BitmapScopedReadAccess pAcc(rSource);
     const SvStreamEndian nOldFormat(rOStm.GetEndian());
     const sal_uInt64 nOldPos(rOStm.Tell());
 
     rOStm.SetEndian(SvStreamEndian::LITTLE);
 
-    if (pAcc)
+    if (BitmapScopedReadAccess pAcc{ rSource })
     {
-        if(bFileHeader)
-        {
-            if(ImplWriteDIBFileHeader(rOStm, *pAcc))
-            {
-                bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, bCompressed);
-            }
-        }
-        else
+        if (!bFileHeader || ImplWriteDIBFileHeader(rOStm, *pAcc))
         {
             bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, bCompressed);
         }
-
-        pAcc.reset();
     }
 
     if(!bRet)

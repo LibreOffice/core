@@ -15,7 +15,6 @@
 
 #include "config_clang.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 #include "pluginhandler.hxx"
 
@@ -319,7 +318,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
     llvm::TimeTraceScope mainTimeScope("LOPluginMain", StringRef(""));
     if( context.getDiagnostics().hasErrorOccurred())
         return;
-    if (compat::ends_with(mainFileName, ".ii"))
+    if (mainFileName.ends_with(".ii"))
     {
         report(DiagnosticsEngine::Fatal,
             "input file has suffix .ii: \"%0\"\nhighly suspicious, probably ccache generated, this will break warning suppressions; export CCACHE_CPP2=1 to prevent this") << mainFileName;
@@ -354,11 +353,11 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         const char* pathWarning = NULL;
         bool bSkip = false;
         StringRef const name = e->getName();
-        if( compat::starts_with(name, WORKDIR "/") )
+        if( name.starts_with(WORKDIR "/") )
             pathWarning = "modified source in workdir/ : %0";
-        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && compat::starts_with(name, BUILDDIR "/") )
+        else if( strcmp( SRCDIR, BUILDDIR ) != 0 && name.starts_with(BUILDDIR "/") )
             pathWarning = "modified source in build dir : %0";
-        else if( compat::starts_with(name, SRCDIR "/") )
+        else if( name.starts_with(SRCDIR "/") )
             ; // ok
         else
         {
@@ -430,7 +429,7 @@ static bool MethodsAndNestedClassesComplete(const CXXRecordDecl *RD,
        I != E && Complete; ++I) {
     if (const CXXMethodDecl *M = dyn_cast<CXXMethodDecl>(*I))
       Complete = M->isDefined() || M->isDefaulted() ||
-                 (compat::isPureVirtual(M) && !isa<CXXDestructorDecl>(M));
+                 (M->isPureVirtual() && !isa<CXXDestructorDecl>(M));
     else if (const FunctionTemplateDecl *F = dyn_cast<FunctionTemplateDecl>(*I))
       // If the template function is marked as late template parsed at this
       // point, it has not been instantiated and therefore we have not

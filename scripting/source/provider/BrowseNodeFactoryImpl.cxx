@@ -31,6 +31,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "BrowseNodeFactoryImpl.hxx"
 #include <util/MiscUtils.hxx>
@@ -287,7 +288,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
             css::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
             if( xCurrentController.is() )
             {
-                utl::MediaDescriptor aMD( model->getArgs() );
+                comphelper::SequenceAsHashMap aMD(model->getArgs());
                 bool bDefault = false;
                 bool bHidden  = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN,  bDefault );
                 bool bPreview = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW, bDefault );

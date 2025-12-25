@@ -1133,7 +1133,7 @@ void SvmTest::testBitmapExs()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    // DrawBitmapEx
+    // DrawBitmap
     {
         Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
         {
@@ -1141,30 +1141,30 @@ void SvmTest::testBitmapExs()
             pAccess->Erase(COL_YELLOW);
         }
 
-        pVirtualDev->DrawBitmapEx(Point(1, 1), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(1, 1), Bitmap(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - Scale
+    // DrawBitmap - Scale
     {
         Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_GREEN);
         }
-        pVirtualDev->DrawBitmapEx(Point(5, 0), Size(2, 3), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(5, 0), Size(2, 3), Bitmap(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - Scale - Part
+    // DrawBitmap - Scale - Part
     {
         Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_BLUE);
         }
-        pVirtualDev->DrawBitmapEx(Point(7, 1), Size(2, 2), Point(0, 0), Size(3, 4), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(7, 1), Size(2, 2), Point(0, 0), Size(3, 4), Bitmap(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - 50% transparent
+    // DrawBitmap - 50% transparent
     {
         Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
         AlphaMask aAlpha(Size(4, 4));
@@ -1175,10 +1175,10 @@ void SvmTest::testBitmapExs()
             BitmapScopedWriteAccess pAlphaAccess(aAlpha);
             pAlphaAccess->Erase(Color(127, 127, 127));
         }
-        pVirtualDev->DrawBitmapEx(Point(6, 6), Bitmap(aBitmap, aAlpha));
+        pVirtualDev->DrawBitmap(Point(6, 6), Bitmap(aBitmap, aAlpha));
     }
 
-    // DrawBitmapEx - 1-bit
+    // DrawBitmap - 1-bit
     {
         Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
@@ -1186,10 +1186,10 @@ void SvmTest::testBitmapExs()
             pAccess->Erase(COL_MAGENTA);
         }
         aBitmap.Convert(BmpConversion::N1BitThreshold);
-        pVirtualDev->DrawBitmapEx(Point(0, 6), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(0, 6), Bitmap(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - used to be 4-bit
+    // DrawBitmap - used to be 4-bit
     {
         Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
@@ -1197,10 +1197,10 @@ void SvmTest::testBitmapExs()
             pAccess->Erase(COL_MAGENTA);
         }
         aBitmap.Convert(BmpConversion::N8BitColors);
-        pVirtualDev->DrawBitmapEx(Point(2, 6), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(2, 6), Bitmap(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - 8-bit Color
+    // DrawBitmap - 8-bit Color
     {
         Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
@@ -1208,10 +1208,10 @@ void SvmTest::testBitmapExs()
             pAccess->Erase(COL_MAGENTA);
         }
         aBitmap.Convert(BmpConversion::N8BitColors);
-        pVirtualDev->DrawBitmapEx(Point(0, 8), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(0, 8), Bitmap(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - 8-bit Grey
+    // DrawBitmap - 8-bit Grey
     {
         Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
@@ -1219,7 +1219,7 @@ void SvmTest::testBitmapExs()
             pAccess->Erase(COL_MAGENTA);
         }
         aBitmap.Convert(BmpConversion::N8BitGreys);
-        pVirtualDev->DrawBitmapEx(Point(2, 8), Bitmap(aBitmap, COL_WHITE));
+        pVirtualDev->DrawBitmap(Point(2, 8), Bitmap(aBitmap, COL_WHITE));
     }
 
     {

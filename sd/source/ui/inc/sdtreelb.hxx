@@ -21,7 +21,8 @@
 
 #include <pres.hxx>
 #include <sddllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
@@ -247,7 +248,7 @@ public:
 
     bool get_selected() const
     {
-        return m_xTreeView->get_selected(nullptr);
+        return bool(m_xTreeView->get_selected());
     }
 
     int count_selected_rows() const

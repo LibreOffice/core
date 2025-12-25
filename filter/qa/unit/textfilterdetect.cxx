@@ -19,10 +19,10 @@
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfac.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 
@@ -50,7 +50,7 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428_ignore_xml_declaration)
 {
     uno::Reference<document::XExtendedFilterDetection> xDetect(
         getMultiServiceFactory()->createInstance(
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
             comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
             comphelper::makePropertyValue(u"TypeName"_ustr, u"generic_HTML"_ustr) };
     xDetect->detect(aDescriptor);
-    utl::MediaDescriptor aMediaDesc(aDescriptor);
+    comphelper::SequenceAsHashMap aMediaDesc(aDescriptor);
     OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
     // This was empty, XML declaration caused HTML detect to not handle XHTML.
     CPPUNIT_ASSERT_EQUAL(u"HTML (StarWriter)"_ustr, aFilterName);
@@ -266,9 +266,19 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testMarkdownDetect)
             comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
             comphelper::makePropertyValue(u"TypeName"_ustr, u"generic_Markdown"_ustr) };
     xDetect->detect(aDescriptor);
-    utl::MediaDescriptor aMediaDesc(aDescriptor);
+    comphelper::SequenceAsHashMap aMediaDesc(aDescriptor);
     OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
     CPPUNIT_ASSERT_EQUAL(u"Markdown"_ustr, aFilterName);
+}
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf169154)
+{
+    uno::Sequence<beans::PropertyValue> aParams
+        = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
+
+    // Without the fix in place, this test would fail to load the file in RepairPackage mode
+    loadWithParams(createFileURL(u"tdf169154.doc"), aParams);
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
 }
 }
 

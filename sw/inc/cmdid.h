@@ -176,6 +176,8 @@ class SwUINumRuleItem;
 
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
 
+#define FN_VIEW_REDLINE_RENDER_MODE (FN_VIEW + 30)
+
 #define FN_PRINT_LAYOUT         (FN_VIEW + 37)  /* print layout */
 
 #define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller */
@@ -208,6 +210,8 @@ class SwUINumRuleItem;
 #define FN_RECORD_TRACKED_CHANGES_MENU         (FN_VIEW + 71)  /* Menu for the track changes record modes */
 #define FN_TRACK_CHANGES_IN_THIS_VIEW          (FN_VIEW + 72)  /* Record track changes only in this view */
 #define FN_TRACK_CHANGES_IN_ALL_VIEWS          (FN_VIEW + 73)  /* Record track changes only in all views */
+
+#define FN_VIEW_BASELINE_GRID_VISIBLE (FN_VIEW + 74)  /* Menu for displaying baseline grid */
 
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
@@ -877,6 +881,7 @@ class SwUINumRuleItem;
 #define FN_TEXT_BOX                     (FN_PARAM2+28) /* TextBox Property*/
 #define FN_BOOKMARK_HIDDEN              (FN_PARAM2+29) /* Hidden Property of bookmarks*/
 #define FN_BOOKMARK_CONDITION           (FN_PARAM2+30) /* Condition Property of bookmarks*/
+#define FN_PARAM_BASELINE_GRID_VISIBLE  TypedWhichId<SfxBoolItem>(FN_PARAM2+31) /* Baseline grid visibility */
 
 // Status: not more than 19!
 #define FN_STAT_PAGE                TypedWhichId<SfxStringListItem>(FN_STAT + 1)

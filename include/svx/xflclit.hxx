@@ -17,41 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XFLCLIT_HXX
-#define INCLUDED_SVX_XFLCLIT_HXX
+#pragma once
 
 #include <svx/xcolit.hxx>
 #include <svx/svxdllapi.h>
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                           Fuellattribute
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
 class SVXCORE_DLLPUBLIC XFillColorItem final : public XColorItem
 {
 public:
-            static SfxPoolItem* CreateDefault();
-            DECLARE_ITEM_TYPE_FUNCTION(XFillColorItem)
-            XFillColorItem() : XColorItem() {}
-            XFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
-            XFillColorItem(const OUString& rName, const Color& rTheColor);
+    static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(XFillColorItem)
+    XFillColorItem();
+    XFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
+    XFillColorItem(const OUString& rName, const Color& rTheColor);
 
     virtual XFillColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                  MapUnit eCoreMetric,
-                                  MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper& ) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric,
+                                 OUString &rText, const IntlWrapper& rWrapper) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

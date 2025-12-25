@@ -35,6 +35,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <tools/bigint.hxx>
+#include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -1540,19 +1541,19 @@ bool SvxContourItem::GetPresentation
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem(nId),
-    mColor( COL_BLACK )
+    maColor( COL_BLACK )
 {
 }
 
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
-    mColor( rCol )
+    maColor( rCol )
 {
 }
 
 SvxColorItem::SvxColorItem(Color const& rColor, model::ComplexColor const& rComplexColor, const sal_uInt16 nId)
     : SfxPoolItem(nId)
-    , mColor(rColor)
+    , maColor(rColor)
     , maComplexColor(rComplexColor)
 {
 }
@@ -1566,14 +1567,14 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
-    return mColor == rColorItem.mColor &&
+    return maColor == rColorItem.maColor &&
            maComplexColor == rColorItem.maComplexColor;
 }
 
 size_t SvxColorItem::hashCode() const
 {
     std::size_t seed(0);
-    o3tl::hash_combine(seed, static_cast<sal_Int32>(mColor));
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(maColor));
     o3tl::hash_combine(seed, maComplexColor);
     return seed;
 }
@@ -1585,13 +1586,13 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_COLOR_ALPHA:
         {
-            auto fTransparency = static_cast<double>(255 - mColor.GetAlpha()) * 100 / 255;
+            auto fTransparency = static_cast<double>(255 - maColor.GetAlpha()) * 100 / 255;
             rVal <<= static_cast<sal_Int16>(basegfx::fround(fTransparency));
             break;
         }
         case MID_GRAPHIC_TRANSPARENT:
         {
-            rVal <<= mColor.GetAlpha() == 0;
+            rVal <<= maColor.GetAlpha() == 0;
             break;
         }
         case MID_COLOR_THEME_INDEX:
@@ -1648,7 +1649,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_COLOR_RGB:
         default:
         {
-            rVal <<= mColor;
+            rVal <<= maColor;
             break;
         }
     }
@@ -1668,13 +1669,13 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (bRet)
             {
                 auto fTransparency = static_cast<double>(nTransparency) * 255 / 100;
-                mColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
+                maColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
             }
             return bRet;
         }
         case MID_GRAPHIC_TRANSPARENT:
         {
-            mColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
+            maColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
             return true;
         }
         case MID_COLOR_THEME_INDEX:
@@ -1748,7 +1749,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_COLOR_RGB:
         default:
         {
-            if (!(rVal >>= mColor))
+            if (!(rVal >>= maColor))
                 return false;
         }
         break;
@@ -1769,7 +1770,7 @@ bool SvxColorItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    rText = ::GetColorString( mColor );
+    rText = ::GetColorString( maColor );
     return true;
 }
 
@@ -1779,7 +1780,7 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
     std::stringstream ss;
-    ss << mColor;
+    ss << maColor;
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
 
     OUString aStr;

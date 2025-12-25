@@ -33,7 +33,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/svdpagv.hxx>
@@ -62,6 +62,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <osl/diagnose.h>
 #include <svl/cryptosign.hxx>
+#include <tools/debug.hxx>
 
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>

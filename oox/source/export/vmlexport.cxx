@@ -103,6 +103,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
     // opening a shape container
     SAL_WARN_IF(m_nShapeType != ESCHER_ShpInst_Nil, "oox.vml", "opening shape inside of a shape!");
     m_nShapeType = ESCHER_ShpInst_Nil;
+    m_ShapePath.clear();
     m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
     m_ShapeStyle.setLength(0);
@@ -127,6 +128,7 @@ void VMLExport::CloseContainer()
         // cleanup
         m_nShapeType = ESCHER_ShpInst_Nil;
         m_pShapeAttrList = nullptr;
+        m_ShapePath.clear();
     }
 
     EscherEx::CloseContainer();
@@ -650,9 +652,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                     break;
                             }
                         }
+                        // We set the path attribute in StartShape() because only then do we know what shape we are writing.
                         OString pathString = aPath.makeStringAndClear();
                         if ( !pathString.isEmpty() && pathString != "xe" )
-                            m_pShapeAttrList->add( XML_path, pathString );
+                            m_ShapePath = std::move(pathString);
                     }
                     else
                         SAL_WARN("oox.vml", "unhandled shape path, missing either pVertices or pSegmentInfo.");
@@ -1070,7 +1073,6 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     // note that XML_ID is different from XML_id (although it looks like a LO
                     // implementation distinction without valid justification to me).
-                    // FIXME: XML_ID produces invalid file, see tdf#153183
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }
                 break;
@@ -1469,6 +1471,10 @@ sal_Int32 VMLExport::StartShape()
         m_pShapeAttrList->add( XML_type, sType +
                 "_x0000_t" + OString::number( m_nShapeType ) );
     }
+
+    // path attribute only valid for v:shape
+    if ( nShapeElement == XML_shape && !m_ShapePath.isEmpty())
+        m_pShapeAttrList->add( XML_path, m_ShapePath );
 
     // allow legacy id (which in form controls and textboxes
     // by definition seems to have this otherwise illegal name).

@@ -20,7 +20,8 @@
 #pragma once
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 class PasswordDialog : public weld::GenericDialogController
 {
@@ -35,11 +36,12 @@ class PasswordDialog : public weld::GenericDialogController
 
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(EnableOKBtn_Impl, weld::Entry&, void);
     DECL_LINK(ShowHdl, weld::Toggleable&, void);
 
 public:
     PasswordDialog(weld::Window* pParent, css::task::PasswordRequestMode nDlgMode, const std::locale& rLocale, const OUString& aDocURL,
-                   bool bOpenToModify, bool bIsSimplePasswordRequest);
+                   bool bIsPasswordToModify, bool bIsSimplePasswordRequest);
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
     OUString        GetPassword() const { return m_xEDPassword->get_text(); }

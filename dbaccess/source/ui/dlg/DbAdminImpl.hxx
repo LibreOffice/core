@@ -32,7 +32,7 @@
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <svl/poolitem.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace dbaui
 {

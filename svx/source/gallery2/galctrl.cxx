@@ -360,7 +360,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
             GalleryIconView::drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
         }
 
-        pDev->DrawBitmapEx(aPos, aBitmap);
+        pDev->DrawBitmap(aPos, aBitmap);
     }
 
     SetItemText(nId, aItemTextTitle);

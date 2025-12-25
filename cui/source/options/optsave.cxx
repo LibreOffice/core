@@ -40,7 +40,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
+#include <tools/debug.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <unotools/confignode.hxx>
@@ -222,14 +224,14 @@ std::unique_ptr<SfxTabPage> SvxSaveTabPage::Create(weld::Container* pPage, weld:
 
 OUString SvxSaveTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"autosave_mins"_ustr, u"label3"_ustr,
                           u"label5"_ustr, u"label6"_ustr, u"saveas_label"_ustr,  u"odfwarning_label"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -240,10 +242,10 @@ OUString SvxSaveTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )

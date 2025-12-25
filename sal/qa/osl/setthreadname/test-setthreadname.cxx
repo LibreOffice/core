@@ -43,7 +43,7 @@ void TestThread::run() {
         // On Windows, setting thread names appears to only take effect when the
         // process is being debugged, so attach a debugger now:
         std::cout << "set: ";
-        std::cin.ignore(std::numeric_limits< int >::max(), '\n');
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
 #endif
     setName("TestThread");
@@ -51,7 +51,7 @@ void TestThread::run() {
         // On Linux, the thread name can now be observed with "ps -L"; on
         // Windows, the thread name can now be observed in a debugger.
         std::cout << "stop: ";
-        std::cin.ignore(std::numeric_limits< int >::max(), '\n');
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
 }
 

@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/long.hxx>
 #include <svx/weldeditview.hxx>
 #include <svx/annotation/Annotation.hxx>

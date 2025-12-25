@@ -1183,23 +1183,35 @@ cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
 
 # Paragraph Alignment
+cmd/32/alignend.png cmd/32/alignright.png
+cmd/32/alignstart.png cmd/32/alignleft.png
 cmd/32/centerpara.png cmd/32/alignhorizontalcenter.png
+cmd/32/endpara.png cmd/32/alignright.png
 cmd/32/fontworkalignmentfloater.png cmd/32/alignhorizontalcenter.png
 cmd/32/justifypara.png cmd/32/alignblock.png
 cmd/32/leftpara.png cmd/32/alignleft.png
 cmd/32/rightpara.png cmd/32/alignright.png
+cmd/32/startpara.png cmd/32/alignleft.png
 
+cmd/lc_alignend.png cmd/lc_alignright.png
+cmd/lc_alignstart.png cmd/lc_alignleft.png
 cmd/lc_centerpara.png cmd/lc_alignhorizontalcenter.png
+cmd/lc_endpara.png cmd/lc_alignright.png
 cmd/lc_fontworkalignmentfloater.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_justifypara.png cmd/lc_alignblock.png
 cmd/lc_leftpara.png cmd/lc_alignleft.png
 cmd/lc_rightpara.png cmd/lc_alignright.png
+cmd/lc_startpara.png cmd/lc_alignleft.png
 
+cmd/sc_alignend.png cmd/sc_alignright.png
+cmd/sc_alignstart.png cmd/sc_alignleft.png
 cmd/sc_centerpara.png cmd/sc_alignhorizontalcenter.png
+cmd/sc_endpara.png cmd/sc_alignright.png
 cmd/sc_fontworkalignmentfloater.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_justifypara.png cmd/sc_alignblock.png
 cmd/sc_leftpara.png cmd/sc_alignleft.png
 cmd/sc_rightpara.png cmd/sc_alignright.png
+cmd/sc_startpara.png cmd/sc_alignleft.png
 
 # View
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
@@ -1225,10 +1237,12 @@ cmd/32/cellvertbottom.png cmd/32/alignbottom.png
 cmd/32/cellvertcenter.png cmd/32/alignverticalcenter.png
 cmd/32/cellverttop.png cmd/32/aligntop.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
+cmd/32/commonalignend.png cmd/32/alignright.png
 cmd/32/commonalignhorizontalcenter.png cmd/32/alignhorizontalcenter.png
 cmd/32/commonalignjustified.png cmd/32/alignblock.png
 cmd/32/commonalignleft.png cmd/32/alignleft.png
 cmd/32/commonalignright.png cmd/32/alignright.png
+cmd/32/commonalignstart.png cmd/32/alignleft.png
 cmd/32/commonaligntop.png cmd/32/aligntop.png
 cmd/32/commonalignverticalcenter.png cmd/32/alignverticalcenter.png
 
@@ -1236,10 +1250,12 @@ cmd/lc_cellvertbottom.png cmd/lc_alignbottom.png
 cmd/lc_cellvertcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_cellverttop.png cmd/lc_aligntop.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
+cmd/lc_commonalignend.png cmd/lc_alignright.png
 cmd/lc_commonalignhorizontalcenter.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_commonalignjustified.png cmd/lc_alignblock.png
 cmd/lc_commonalignleft.png cmd/lc_alignleft.png
 cmd/lc_commonalignright.png cmd/lc_alignright.png
+cmd/lc_commonalignstart.png cmd/lc_alignleft.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
 
@@ -1247,10 +1263,12 @@ cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
 cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_cellverttop.png cmd/sc_aligntop.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
+cmd/sc_commonalignend.png cmd/sc_alignright.png
 cmd/sc_commonalignhorizontalcenter.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_commonalignjustified.png cmd/sc_alignblock.png
 cmd/sc_commonalignleft.png cmd/sc_alignleft.png
 cmd/sc_commonalignright.png cmd/sc_alignright.png
+cmd/sc_commonalignstart.png cmd/sc_alignleft.png
 cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
 
@@ -1463,6 +1481,10 @@ cmd/sc_ordercrit.png cmd/sc_datasort.png
 cmd/sc_sortdown.png cmd/sc_sortdescending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
+
+# extension manager
+cmd/sc_extensionmanager.png cmd/sc_insertplugin.png
+cmd/lc_extensionmanager.png cmd/lc_insertplugin.png
 
 # Code
 cmd/32/sourceview.png cmd/32/managexmlsource.png
@@ -2725,3 +2747,13 @@ cmd/sc_formatline-more.png cmd/sc_controlproperties.png
 cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
 cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
 cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
+
+# SwNavigator toolbox functions toolbar
+cmd/sc_objecttitledescription-frames.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-frames.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-images.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-images.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-oleobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-oleobjects.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-drawingobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-drawingobjects.png cmd/lc_objecttitledescription.png

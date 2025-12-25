@@ -17,7 +17,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <svtools/restartdialog.hxx>
 #include <tools/link.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace {
 

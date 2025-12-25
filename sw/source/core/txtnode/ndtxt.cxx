@@ -247,7 +247,7 @@ SwTextNode::SwTextNode( const SwNode& rWhere, SwTextFormatColl *pTextColl, const
     m_bRecalcHiddenCharFlags = true;
 }
 
-SwTextNode::~SwTextNode()
+void SwTextNode::ImplDestroy()
 {
     // delete only removes the pointer not the array elements!
     if ( m_pSwpHints )
@@ -289,6 +289,11 @@ SwTextNode::~SwTextNode()
         ResetAttr(RES_PAGEDESC);
     }
     InvalidateInSwCache();
+}
+
+SwTextNode::~SwTextNode()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwTextNode::FileLoadedInitHints()

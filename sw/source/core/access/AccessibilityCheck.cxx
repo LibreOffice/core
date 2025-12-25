@@ -54,6 +54,7 @@
 #include <svl/fstathelper.hxx>
 #include <osl/file.h>
 #include <unotxdoc.hxx>
+#include <unostyle.hxx>
 
 namespace sw
 {
@@ -2621,8 +2622,8 @@ public:
             OUString sError = rFootnote.IsEndNote() ? SwResId(STR_AVOID_ENDNOTES)
                                                     : SwResId(STR_AVOID_FOOTNOTES);
             sfx::AccessibilityIssueID eIssueID = rFootnote.IsEndNote()
-                                                     ? sfx::AccessibilityIssueID::AVOID_FOOTNOTES
-                                                     : sfx::AccessibilityIssueID::AVOID_ENDNOTES;
+                                                     ? sfx::AccessibilityIssueID::AVOID_ENDNOTES
+                                                     : sfx::AccessibilityIssueID::AVOID_FOOTNOTES;
             auto pIssue = lclAddIssue(m_rIssueCollection, sError, eIssueID,
                                       sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setDoc(*pDoc);
@@ -2647,16 +2648,15 @@ public:
         rtl::Reference<SwXTextDocument> xDoc = pDocShell->GetBaseModel();
         if (!xDoc)
             return;
-        uno::Reference<container::XNameAccess> xStyleFamilies = xDoc->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xStyleFamily(
-            xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+        rtl::Reference<SwXStyleFamilies> xStyleFamilies = xDoc->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xStyleFamily = xStyleFamilies->GetPageStyles();
         if (!xStyleFamily.is())
             return;
         const uno::Sequence<OUString> xStyleFamilyNames = xStyleFamily->getElementNames();
         for (const OUString& rStyleFamilyName : xStyleFamilyNames)
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(
-                xStyleFamily->getByName(rStyleFamilyName), uno::UNO_QUERY);
+            rtl::Reference<SwXBaseStyle> xPropertySet(
+                xStyleFamily->getStyleByName(rStyleFamilyName));
             if (!xPropertySet.is())
                 continue;
             auto aFillStyleContainer = xPropertySet->getPropertyValue(u"FillStyle"_ustr);

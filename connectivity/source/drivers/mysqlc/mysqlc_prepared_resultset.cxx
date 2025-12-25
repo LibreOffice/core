@@ -27,6 +27,8 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <sal/log.hxx>
@@ -218,7 +220,7 @@ uno::Sequence<Type> SAL_CALL OPreparedResultSet::getTypes()
                            cppu::UnoType<XFastPropertySet>::get(),
                            cppu::UnoType<XPropertySet>::get());
 
-    return concatSequences(aTypes.getTypes(), OPreparedResultSet_BASE::getTypes());
+    return comphelper::concatSequences(aTypes.getTypes(), OPreparedResultSet_BASE::getTypes());
 }
 
 sal_Int32 SAL_CALL OPreparedResultSet::findColumn(const OUString& columnName)

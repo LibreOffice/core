@@ -109,7 +109,7 @@ void ImplLayoutArgs::AddFallbackRun(int nMinRunPos, int nEndRunPos, bool bRTL)
 
 bool ImplLayoutArgs::HasFallbackRun() const { return !maFallbackRuns.IsEmpty(); }
 
-static bool IsControlChar(sal_UCS4 cChar)
+static bool IsControlChar(sal_Unicode cChar)
 {
     // C0 control characters
     if ((0x0001 <= cChar) && (cChar <= 0x001F))

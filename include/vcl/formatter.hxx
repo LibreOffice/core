@@ -25,7 +25,6 @@
 #include <tools/solar.h>
 #include <vcl/settings.hxx>
 #include <map>
-#include <memory>
 #include <string_view>
 
 class SvNumberFormatter;

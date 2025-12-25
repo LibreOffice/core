@@ -150,11 +150,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
         loKitThread = new LOKitThread(this);
         loKitThread.start();
 
-        mLayerClient = new GeckoLayerClient(this);
         LayerView layerView = findViewById(R.id.layer_view);
-        mLayerClient.setView(layerView);
+        mLayerClient = new GeckoLayerClient(this, layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
-        mLayerClient.notifyReady();
 
         layerView.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -181,10 +179,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
                 String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
                 toolbarTop.setTitle(displayName);
 
-            } else if (docUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mbReadOnlyDoc = true;
-                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + docUri.getPath());
-                toolbarTop.setTitle(docUri.getLastPathSegment());
             }
             // create a temporary local copy to work with
             boolean copyOK = copyFileToTemp(docUri) && mTempFile != null;
@@ -542,7 +536,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
             .unregisterOnSharedPreferenceChangeListener(this);
 
         LOKitShell.sendCloseEvent();
-        mLayerClient.destroy();
         super.onDestroy();
 
         if (isFinishing()) { // Not an orientation change

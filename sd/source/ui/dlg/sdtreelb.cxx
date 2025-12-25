@@ -21,7 +21,7 @@
 #include <sal/types.h>
 #include <sot/formats.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>
@@ -414,8 +414,8 @@ namespace
 {
     bool CanDragSource(const weld::TreeView& rTreeView)
     {
-        std::unique_ptr<weld::TreeIter> xSource(rTreeView.make_iterator());
-        if (!rTreeView.get_selected(xSource.get()))
+        std::unique_ptr<weld::TreeIter> xSource = rTreeView.get_selected();
+        if (!xSource)
             return false;
 
         std::unique_ptr<weld::TreeIter> xSourceParent(rTreeView.make_iterator(xSource.get()));
@@ -538,8 +538,8 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
         return DND_ACTION_NONE;
 
     // disallow if there is no source entry selected
-    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_rTreeView.get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     // disallow when root is source
@@ -578,8 +578,8 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (!pSource || pSource != &m_rTreeView)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_selected(xSource.get()))
+    std::unique_ptr<weld::TreeIter> xSource = m_rTreeView.get_selected();
+    if (!xSource)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
@@ -782,7 +782,7 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     m_xTreeView->connect_mouse_release(LINK(this, SdPageObjsTLV, MouseReleaseHdl));
     m_xTreeView->connect_editing(LINK(this, SdPageObjsTLV, EditingEntryHdl),
                                  LINK(this, SdPageObjsTLV, EditedEntryHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, SdPageObjsTLV, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, SdPageObjsTLV, CommandHdl));
 
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 28,
                                   m_xTreeView->get_text_height() * 8);
@@ -902,10 +902,17 @@ void SdPageObjsTLV::Select()
 
     if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
         nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
-    else if (m_pDoc->GetSdPageCount(PageKind::Standard) == 1)
+    else
     {
-        // Can not move away the last slide in a document.
-        nDNDActions = DND_ACTION_COPY;
+        // Only for page/slide entry and only if page/slide entry dragging is re-enabled.
+        // Commit 1b031eb1ba6c529ce67ff8f471afee414d64a098 disabled page/slide entry dragging.
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_cursor(xIter.get()) && m_xTreeView->get_iter_depth(*xIter) == 0
+            && m_pDoc->GetSdPageCount(PageKind::Standard) == 1)
+        {
+            // Can not move away the last slide in a document.
+            nDNDActions = DND_ACTION_COPY;
+        }
     }
 
     // object is destroyed by internal reference mechanism

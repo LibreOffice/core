@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/deleter.hxx>
 #include <pausethreadstarting.hxx>
 #include <swthreadmanager.hxx>
 
@@ -37,12 +38,14 @@ SwPauseThreadStarting::SwPauseThreadStarting()
     }
 }
 
-SwPauseThreadStarting::~SwPauseThreadStarting() COVERITY_NOEXCEPT_FALSE
+void SwPauseThreadStarting::ImplDestroy()
 {
     if (mbPausedThreadStarting)
     {
         SwThreadManager::GetThreadManager().ResumeStartingOfThreads();
     }
 }
+
+SwPauseThreadStarting::~SwPauseThreadStarting() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

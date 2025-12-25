@@ -365,18 +365,22 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
                 MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin, aScaleX,
                                  aScaleY);
-
-                if (fCurrentRotate)
-                    aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
-                aStartPoint = Point(basegfx::fround<tools::Long>(aTextTranslate.getX()),
-                                    basegfx::fround<tools::Long>(aTextTranslate.getY()));
-
                 bChangeMapMode = aMapMode != mpOutputDevice->GetMapMode();
                 if (bChangeMapMode)
                 {
                     mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
                     mpOutputDevice->SetRelativeMapMode(aMapMode);
                 }
+
+                basegfx::B2DHomMatrix aFinalTransform(aCombinedTransform
+                                                      * rTextCandidate.getTextTransform());
+                const basegfx::B2DPoint aPoint(aFinalTransform * basegfx::B2DPoint(0.0, 0.0));
+
+                Point aFinalPoint(
+                    basegfx::fround<tools::Long>(aPoint.getX() / aCurrentScaling.getX()),
+                    basegfx::fround<tools::Long>(aPoint.getY() / aCurrentScaling.getY()));
+
+                aStartPoint = Point(aFinalPoint.X() - aOrigin.X(), aFinalPoint.Y() - aOrigin.Y());
             }
             else
             {
@@ -743,12 +747,12 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
                 {
                     if (bPreScaled)
                     {
-                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmap);
+                        mpOutputDevice->DrawBitmap(aOutRectPixel.TopLeft(), aBitmap);
                     }
                     else
                     {
-                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(),
-                                                     aNeededBitmapSizePixel, aBitmap);
+                        mpOutputDevice->DrawBitmap(aOutRectPixel.TopLeft(), aNeededBitmapSizePixel,
+                                                   aBitmap);
                     }
                 }
             }
@@ -768,12 +772,12 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
                 {
                     if (bPreScaled)
                     {
-                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmap);
+                        mpOutputDevice->DrawBitmap(aOutRectPixel.TopLeft(), aBitmap);
                     }
                     else
                     {
-                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(),
-                                                     aNeededBitmapSizePixel, aBitmap);
+                        mpOutputDevice->DrawBitmap(aOutRectPixel.TopLeft(), aNeededBitmapSizePixel,
+                                                   aBitmap);
                     }
                 }
             }
@@ -1124,7 +1128,7 @@ void VclProcessor2D::RenderMarkerArrayPrimitive2D(
         const Point aDiscretePoint(basegfx::fround<tools::Long>(aDiscreteTopLeft.getX()),
                                    basegfx::fround<tools::Long>(aDiscreteTopLeft.getY()));
 
-        mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
+        mpOutputDevice->DrawBitmap(aDiscretePoint + aOrigin, rMarker);
     }
 
     mpOutputDevice->EnableMapMode(bWasEnabled);

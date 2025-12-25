@@ -262,7 +262,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         return xRec;
 
     // Check to see if this shared formula contains any tokens that Excel's shared formula cannot handle.
-    if (maBadTokens.count(pShrdScTokArr) > 0)
+    if (maBadTokens.contains(pShrdScTokArr))
         // Already on the black list. Skip it.
         return xRec;
 
@@ -2831,7 +2831,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom
         XML_defaultRowHeight, OString::number(static_cast<double> (rDefData.mnHeight) / 20.0),
-        XML_customHeight, ToPsz(true),
+        XML_customHeight, ToPsz(rDefData.IsUnsynced()),
         XML_zeroHeight, ToPsz( rDefData.IsHidden() ),
         XML_outlineLevelRow, OString::number(maRowBfr.GetHighestOutlineLevel()),
         XML_outlineLevelCol, OString::number(maColInfoBfr.GetHighestOutlineLevel()) );

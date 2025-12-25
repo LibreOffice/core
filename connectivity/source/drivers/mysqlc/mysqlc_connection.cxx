@@ -119,40 +119,38 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     }
 
     // get user and password for mysql connection
-    const PropertyValue* pIter = info.getConstArray();
-    const PropertyValue* pEnd = pIter + info.getLength();
     OUString aUser, aPass, sUnixSocket, sNamedPipe;
     bool unixSocketPassed = false;
     bool namedPipePassed = false;
 
     m_settings.connectionURL = url;
-    for (; pIter != pEnd; ++pIter)
+    for (const PropertyValue& rPropertyValue : info)
     {
-        if (pIter->Name == "user")
+        if (rPropertyValue.Name == "user")
         {
-            OSL_VERIFY(pIter->Value >>= aUser);
+            OSL_VERIFY(rPropertyValue.Value >>= aUser);
         }
-        else if (pIter->Name == "password")
+        else if (rPropertyValue.Name == "password")
         {
-            OSL_VERIFY(pIter->Value >>= aPass);
+            OSL_VERIFY(rPropertyValue.Value >>= aPass);
         }
-        else if (pIter->Name == "LocalSocket")
+        else if (rPropertyValue.Name == "LocalSocket")
         {
-            OSL_VERIFY(pIter->Value >>= sUnixSocket);
+            OSL_VERIFY(rPropertyValue.Value >>= sUnixSocket);
             unixSocketPassed = !sUnixSocket.isEmpty();
         }
-        else if (pIter->Name == "NamedPipe")
+        else if (rPropertyValue.Name == "NamedPipe")
         {
-            OSL_VERIFY(pIter->Value >>= sNamedPipe);
+            OSL_VERIFY(rPropertyValue.Value >>= sNamedPipe);
             namedPipePassed = !sNamedPipe.isEmpty();
         }
-        else if (pIter->Name == "PublicConnectionURL")
+        else if (rPropertyValue.Name == "PublicConnectionURL")
         {
-            OSL_VERIFY(pIter->Value >>= m_settings.connectionURL);
+            OSL_VERIFY(rPropertyValue.Value >>= m_settings.connectionURL);
         }
-        else if (pIter->Name == "NewURL")
+        else if (rPropertyValue.Name == "NewURL")
         { // legacy name for "PublicConnectionURL"
-            OSL_VERIFY(pIter->Value >>= m_settings.connectionURL);
+            OSL_VERIFY(rPropertyValue.Value >>= m_settings.connectionURL);
         }
     }
 

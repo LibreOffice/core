@@ -2399,11 +2399,11 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
         ScAddress aEndPos = rPos;
         if( bMergedCell )
         {
-            const ScMergeAttr* pMerge = rDoc.GetAttr( rPos, ATTR_MERGE );
-            if( pMerge->GetColMerge() > 1 )
-                aEndPos.IncCol( pMerge->GetColMerge() - 1 );
-            if( pMerge->GetRowMerge() > 1 )
-                aEndPos.IncRow( pMerge->GetRowMerge() - 1 );
+            const ScMergeAttr& rMerge = rDoc.GetAttr( rPos, ATTR_MERGE );
+            if( rMerge.GetColMerge() > 1 )
+                aEndPos.IncCol( rMerge.GetColMerge() - 1 );
+            if( rMerge.GetRowMerge() > 1 )
+                aEndPos.IncRow( rMerge.GetRowMerge() - 1 );
         }
         Point aBotRight = aTopLeft;
         for( SCCOL nCol = rPos.Col(); nCol <= aEndPos.Col(); ++nCol )
@@ -2917,7 +2917,7 @@ void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 
 void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
 {
-    if ( bFlg && pDoc )
+    if (bFlg && pDoc && pDoc->GetChartListenerCollection()) // clip documents don't have it
         pDoc->SetChartListenerCollectionNeedsUpdate( true );
     FmFormModel::SetChanged( bFlg );
 }

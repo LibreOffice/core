@@ -41,7 +41,7 @@
 #include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>

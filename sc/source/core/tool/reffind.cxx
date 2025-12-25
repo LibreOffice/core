@@ -31,7 +31,7 @@ namespace {
 
 // Include colon; addresses in range reference are handled individually.
 const sal_Unicode pDelimiters[] = {
-    '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
+    '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':','\n',0
 };
 
 bool IsText( sal_Unicode c )

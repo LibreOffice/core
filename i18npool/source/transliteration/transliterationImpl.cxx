@@ -494,16 +494,16 @@ TransliterationImpl::equals(
     for (i = 0; i < nLen; ++i, ++p1, ++p2 ) {
         if (*p1 != *p2) {
             // return number of matched code points so far
-            nMatch1 = (i < offset1.getLength()) ? offset1.getConstArray()[i] : i;
-            nMatch2 = (i < offset2.getLength()) ? offset2.getConstArray()[i] : i;
+            nMatch1 = (i < offset1.getLength()) ? offset1[i] : i;
+            nMatch2 = (i < offset2.getLength()) ? offset2[i] : i;
             return false;
         }
     }
     // i==nLen
     if ( tmpStr1.getLength() != tmpStr2.getLength() ) {
         // return number of matched code points so far
-        nMatch1 = (i <= offset1.getLength()) ? offset1.getConstArray()[i-1] + 1 : i;
-        nMatch2 = (i <= offset2.getLength()) ? offset2.getConstArray()[i-1] + 1 : i;
+        nMatch1 = (i <= offset1.getLength()) ? offset1[i-1] + 1 : i;
+        nMatch2 = (i <= offset2.getLength()) ? offset2[i-1] + 1 : i;
         return false;
     } else {
         nMatch1 = nCount1;

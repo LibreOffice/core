@@ -160,6 +160,7 @@ public:
                         SwGetSetExpType nType = SwGetSetExpType::Expr );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
     virtual UIName          GetName() const override;
+    virtual void SetName(const UIName& newName) override;
 
     inline void             SetType(SwGetSetExpType nTyp);
     inline SwGetSetExpType  GetType() const;
@@ -255,6 +256,7 @@ public:
     virtual void                SetPar2(const OUString& rStr) override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline void  SwSetExpField::SetPromptText(const OUString& rStr)
@@ -283,6 +285,10 @@ public:
     SwDoc* GetDoc() const { return mpDoc; }
 };
 
+/// SwField subclass for input fields, which are editable in-place. Typically owned by an
+/// SwFormatField, which is then further owned by SwTextInputField to track its location.
+///
+/// Insert -> Field -> More Fields -> Functions -> Input field on the UI.
 class SW_DLLPUBLIC SwInputField final : public SwField
 {
     mutable OUString maContent;
@@ -410,6 +416,8 @@ public:
     virtual void        SetPar2(const OUString& rStr) override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_SW_INC_EXPFLD_HXX

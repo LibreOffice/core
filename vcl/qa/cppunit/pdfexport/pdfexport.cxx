@@ -17,8 +17,8 @@
 #include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <test/unoapi_test.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
@@ -34,7 +34,7 @@ namespace
 class PdfExportTest : public UnoApiTest
 {
 protected:
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
 
 public:
     PdfExportTest()
@@ -44,6 +44,17 @@ public:
 
     void saveAsPDF(std::u16string_view rFile);
     void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExportNoAssert()
+    {
+        SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+        maMemory.WriteStream(aFile);
+
+        std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+        if (!pPDFium)
+            return nullptr;
+        return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
+    }
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
@@ -360,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExportNoAssert();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -635,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExportNoAssert();
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -1731,8 +1742,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
                                            pName);
                     fontName = pName->GetValue();
                 }
-                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi-Regular"_ostr,
-                                             fontName);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi"_ostr, fontName);
 
                 auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(
                     pObject->Lookup("ToUnicode"_ostr));
@@ -3615,16 +3625,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
     // Make sure the elements inside a formula in a RTL document are exported
     // LTR ( m=750abc ) and not RTL ( m=057cba )
     int nPageObjectCount = pPdfPage->getObjectCount();
-    OUString sText;
+    OUStringBuffer sText;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
             continue;
         OUString sChar = pPageObject->getText(pTextPage);
-        sText += o3tl::trim(sChar);
+        sText.append(o3tl::trim(sChar));
     }
-    CPPUNIT_ASSERT_EQUAL(u"m=750abc"_ustr, sText);
+    CPPUNIT_ASSERT_EQUAL(u"m=750abc"_ustr, sText.toString());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf167659)

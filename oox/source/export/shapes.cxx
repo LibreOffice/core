@@ -51,6 +51,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -227,8 +228,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
         { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
         { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
         { {SO3_SIMPRESS_CLASSID_60}, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },
-        // FIXME: Draw does not appear to have a MSO format export filter?
-//            { {SO3_SDRAW_CLASSID}, "", "", "", "" },
+        { {SO3_SDRAW_CLASSID}, "draw8", "application/vnd.oasis.opendocument.graphics", "LibreOffice.DrawDocument.1", "odg" },
         { {SO3_SCH_CLASSID_60}, "unused", "", "", "" },
         { {SO3_SM_CLASSID_60}, "unused", "", "", "" },
     };
@@ -745,7 +745,8 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
         if (!xNamed)
             continue;
         OUString sSlideName = "#" + xNamed->getName();
-        if (rURL == sSlideName)
+        OUString sApiName = "#page" + OUString::number(i + 1);
+        if (rURL == sSlideName || rURL == sApiName)
         {
             sTarget = "slide" + OUString::number(i + 1) + ".xml";
             break;
@@ -1000,16 +1001,20 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             bool bExtURL = URLTransformer().isExternalURL(sBookmark);
             sBookmark = bExtURL ? sBookmark : lcl_GetTarget(GetFB()->getModel(), sBookmark);
 
-            OUString sRelId
-                = mpFB->addRelation(mpFS->getOutputStream(),
-                                    bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
-                                            : oox::getRelationship(Relationship::SLIDE),
-                                    sBookmark, bExtURL);
+            OUString sRelId;
+            if (!sBookmark.isEmpty())
+            {
+                sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                                           bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                                   : oox::getRelationship(Relationship::SLIDE),
+                                           sBookmark, bExtURL);
+            }
             if (bExtURL)
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
             else
-                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
-                                      XML_action, "ppaction://hlinksldjump");
+                mpFS->singleElementNS(
+                    XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
+                    sBookmark.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
         }
         AddExtLst(pFS, rXPropSet);
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
@@ -1399,10 +1404,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                         && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
 
     if (!xGraphic.is() && !bHasMediaURL)
-    {
         SAL_INFO("oox.shape", "no graphic or media URL found");
-        return;
-    }
 
     FSHelperPtr pFS = GetFS();
     XmlFilterBase* pFB = GetFB();
@@ -1417,11 +1419,14 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
     OUString sDescr, sURL, sBookmark, sPPAction;
+    bool bVisible = true;
 
     if ( GetProperty( xShapeProps, u"Description"_ustr ) )
         mAny >>= sDescr;
     if ( GetProperty( xShapeProps, u"URL"_ustr ) )
         mAny >>= sURL;
+    if ( GetProperty( xShapeProps, u"Visible"_ustr ) )
+        mAny >>= bVisible;
     if (GetProperty(xShapeProps, u"Bookmark"_ustr))
         mAny >>= sBookmark;
     if (GetProperty(xShapeProps, u"OnClick"_ustr))
@@ -1430,7 +1435,8 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                          XML_id,     OString::number(GetNewShapeID(xShape)),
                          XML_name,   GetShapeName(xShape),
-                         XML_descr,  sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()));
+                         XML_descr,  sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()),
+                         XML_hidden, sax_fastparser::UseIf("1", !bVisible));
 
     if (eClickAction != presentation::ClickAction_NONE)
     {
@@ -1478,16 +1484,20 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         bool bExtURL = URLTransformer().isExternalURL(sBookmark);
         sBookmark = bExtURL ? sBookmark : lcl_GetTarget(GetFB()->getModel(), sBookmark);
 
-        OUString sRelId = mpFB->addRelation(mpFS->getOutputStream(),
-                                            bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
-                                                    : oox::getRelationship(Relationship::SLIDE),
-                                            sBookmark, bExtURL);
-
+        OUString sRelId;
+        if (!sBookmark.isEmpty())
+        {
+            sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                                       bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                               : oox::getRelationship(Relationship::SLIDE),
+                                       sBookmark, bExtURL);
+        }
         if (bExtURL)
             mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
         else
             mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
-                                  "ppaction://hlinksldjump");
+                                  sBookmark.isEmpty() ? "ppaction://noaction"
+                                                      : "ppaction://hlinksldjump");
     }
     AddExtLst(pFS, xShapeProps);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
@@ -1933,7 +1943,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
                 lcl_Rotate(nAngle, center, aEndPoint);
                 nAngle *= 60000;
             }
-            sGeometry = sGeometry + OUString::number(aAdjustValueList.size() + 2);
+            sGeometry += OUString::number(aAdjustValueList.size() + 2);
         }
     }
 
@@ -2560,7 +2570,13 @@ void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const Border
             case ::table::BorderLineStyle::DASH_DOT_DOT:
                 sBorderStyle = "sysDashDotDot";
                 break;
+            default:
+                // There is no equivalent so pick something else, since we cannot have empty.
+                // There are very few default styles for pptx.
+                sBorderStyle = "solid";
+                break;
         }
+        assert(!sBorderStyle.isEmpty() && "empty is not a valid value for PPTX");
         mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, sBorderStyle);
         mpFS->endElementNS(XML_a, xml_line_element);
     }
@@ -2824,20 +2840,27 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     uno::Sequence<beans::PropertyValue> grabBag;
     OUString entryName;
-    try
+    uno::Reference<container::XChild> xChild(xObj, uno::UNO_QUERY);
+    if (xChild)
     {
-        uno::Reference<beans::XPropertySet> const xParent(
-            uno::Reference<container::XChild>(xObj, uno::UNO_QUERY_THROW)->getParent(),
-            uno::UNO_QUERY_THROW);
-
-        xParent->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
-
-        entryName = uno::Reference<embed::XEmbedPersist>(xObj, uno::UNO_QUERY_THROW)->getEntryName();
-    }
-    catch (uno::Exception const&)
-    {
-        TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLE2Shape");
-        return *this;
+        uno::Reference<beans::XPropertySet> const xParent(xChild->getParent(), uno::UNO_QUERY);
+        if (xParent)
+        {
+            xParent->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
+            uno::Reference<embed::XEmbedPersist> xEmbedPersist(xObj, uno::UNO_QUERY);
+            if (xEmbedPersist)
+            {
+                // getEntryName() could throw a WrongStateException
+                try
+                {
+                    entryName = xEmbedPersist->getEntryName();
+                }
+                catch (embed::WrongStateException const &)
+                {
+                    TOOLS_WARN_EXCEPTION("oox.shape", "ShapeExport::WriteOLE2Shape");
+                }
+            }
+        }
     }
 
     OUString progID;
@@ -2998,17 +3021,14 @@ ShapeExport& ShapeExport::WriteUnknownShape( const Reference< XShape >& )
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape )
 {
-    return GetNewShapeID( rXShape, GetFB() );
-}
-
-sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape, XmlFilterBase* pFB )
-{
     if( !rXShape.is() )
         return -1;
 
-    sal_Int32 nID = pFB->GetUniqueId();
+    sal_Int32 nID = GetFB()->GetUniqueId();
 
-    (*mpShapeMap)[ rXShape ] = nID;
+    auto it = mpShapeMap->find(rXShape);
+    if (it == mpShapeMap->end())
+        (*mpShapeMap)[rXShape] = nID;
 
     return nID;
 }

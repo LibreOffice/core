@@ -86,7 +86,7 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
             mSurface = createSkSurface(GetWidth() * mScaling, GetHeight() * mScaling);
             break;
         case RenderMetal:
-            mWindowContext = skwindow::MakeGaneshMetalForMac(macWindow, displayParams.build());
+            mWindowContext = skwindow::MakeGaneshMetalForMac(macWindow, displayParams.detach());
             // Like with other GPU contexts, create a proxy offscreen surface (see
             // flushSurfaceToWindowContext()). Here it's additionally needed because
             // it appears that Metal surfaces cannot be read from, which would break things
@@ -414,7 +414,7 @@ std::unique_ptr<skwindow::WindowContext> createMetalWindowContext(bool /*tempora
     skwindow::DisplayParamsBuilder displayParams;
     skwindow::MacWindowInfo macWindow;
     macWindow.fMainView = nullptr;
-    return skwindow::MakeGaneshMetalForMac(macWindow, displayParams.build());
+    return skwindow::MakeGaneshMetalForMac(macWindow, displayParams.detach());
 }
 }
 

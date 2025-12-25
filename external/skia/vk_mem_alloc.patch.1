@@ -2,15 +2,15 @@ diff --git a/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h b/s
 index 1c6212bd47..756175b4e7 100644
 --- a/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h
 +++ b/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h
-@@ -39,7 +39,7 @@
- // VMA outside of Skia, the client should instead tell Skia not to use VMA.
- // Then they should wrap their own instance of VMA into an implementation of
- // Skia's VulkanMemoryAllocator interface, and pass that object into context creation.
+@@ -45,7 +45,7 @@
+ #pragma clang diagnostic ignored "-Wc++98-compat-extra-semi"
+ #endif
+
 -#include "vk_mem_alloc.h"  // NO_G3_REWRITE
 +#include "include/vk_mem_alloc.h"
- #ifdef GR_NEEDED_TO_DEFINE_VULKAN_H
- #undef VULKAN_H_
- #endif
+
+ #if defined(__clang__)
+ #pragma clang diagnostic pop
 diff --git a/third_party/vulkanmemoryallocator/include/LICENSE.txt b/third_party/vulkanmemoryallocator/include/LICENSE.txt
 new file mode 100644
 index 0000000000..dbfe253391

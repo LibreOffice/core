@@ -45,13 +45,13 @@ namespace {
 struct CreateNamedDest {
     OUString maDestName;
     MapMode maParaMapMode;
-    PDFWriter::DestAreaType mnParaDestAreaType;
+    pdf::PDFWriter::DestAreaType mnParaDestAreaType;
     tools::Rectangle maParaRect;
     sal_Int32 mnPage;
 };
 struct CreateDest {
     MapMode maParaMapMode;
-    PDFWriter::DestAreaType mnParaDestAreaType;
+    pdf::PDFWriter::DestAreaType mnParaDestAreaType;
     tools::Rectangle maParaRect;
     sal_Int32 mnPage;
 };
@@ -101,7 +101,7 @@ struct CreateNote {
 };
 
 struct SetPageTransition {
-    PDFWriter::PageTransition maParaPageTransition;
+    pdf::PDFWriter::PageTransition maParaPageTransition;
     sal_uInt32 mnMilliSec;
     sal_Int32 mnPage;
 };
@@ -116,10 +116,10 @@ struct BeginStructureElement { sal_Int32 mnId; };
 struct EndStructureElement{};
 struct SetCurrentStructureElement { sal_Int32 mnStructId; };
 struct SetStructureAttribute {
-    PDFWriter::StructAttribute mParaStructAttribute;
-    PDFWriter::StructAttributeValue mParaStructAttributeValue;
+    pdf::PDFWriter::StructAttribute mParaStructAttribute;
+    pdf::PDFWriter::StructAttributeValue mParaStructAttributeValue;
 };
-struct SetStructureAttributeNumerical { PDFWriter::StructAttribute mParaStructAttribute; sal_Int32 mnId; };
+struct SetStructureAttributeNumerical { pdf::PDFWriter::StructAttribute mParaStructAttribute; sal_Int32 mnId; };
 struct SetStructureBoundingBox { tools::Rectangle mRect; };
 struct SetStructureAnnotIds {
     ::std::vector<sal_Int32> annotIds;
@@ -127,7 +127,7 @@ struct SetStructureAnnotIds {
 struct SetActualText { OUString maText; };
 struct SetAlternateText { OUString maText; };
 struct CreateControl {
-    std::shared_ptr< PDFWriter::AnyWidget > mxControl;
+    std::shared_ptr< pdf::PDFWriter::AnyWidget > mxControl;
 };
 struct BeginGroup {};
 struct EndGroupGfxLink {
@@ -176,7 +176,7 @@ struct PDFLinkDestination
     tools::Rectangle               mRect;
     MapMode                 mMapMode;
     sal_Int32               mPageNr;
-    PDFWriter::DestAreaType mAreaType;
+    pdf::PDFWriter::DestAreaType mAreaType;
 };
 }
 
@@ -203,7 +203,7 @@ struct GlobalSyncData
     {
         mStructParents.push_back(0); // because PDFWriterImpl has a dummy root
     }
-    void PlayGlobalActions( PDFWriter& rWriter );
+    void PlayGlobalActions( pdf::PDFWriter& rWriter );
 };
 
 sal_Int32 GlobalSyncData::GetMappedId(sal_Int32 nLinkId)
@@ -224,7 +224,7 @@ sal_Int32 GlobalSyncData::GetMappedId(sal_Int32 nLinkId)
     return nLinkId;
 }
 
-void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
+void GlobalSyncData::PlayGlobalActions( pdf::PDFWriter& rWriter )
 {
     for (auto const& action : mActions)
     {
@@ -335,7 +335,7 @@ struct PageSyncData
     { mpGlobalData = pGlobal; }
 
     void PushAction( const OutputDevice& rOutDev, PageActionData eAct );
-    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData );
+    bool PlaySyncPageAct( pdf::PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData );
 };
 
 void PageSyncData::PushAction( const OutputDevice& rOutDev, PageActionData eAct )
@@ -351,7 +351,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, PageActionData eAct 
         aSync.nIdx = 0x7fffffff;    // sync not possible
     mActions.emplace_back( std::move(aSync) );
 }
-bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData )
+bool PageSyncData::PlaySyncPageAct( pdf::PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData )
 {
     bool bRet = false;
     if ( !mActions.empty() && ( mActions.front().nIdx == rCurGDIMtfAction ) )
@@ -408,7 +408,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
         }
         else if (std::holds_alternative<CreateControl>(aDataSync.eAct)) {
             const vcl::CreateControl& rCreateControl = std::get<CreateControl>(aDataSync.eAct);
-            std::shared_ptr< PDFWriter::AnyWidget > pControl( rCreateControl.mxControl );
+            std::shared_ptr< pdf::PDFWriter::AnyWidget > pControl( rCreateControl.mxControl );
             SAL_WARN_IF( !pControl, "vcl", "PageSyncData::PlaySyncPageAct: invalid widget!" );
             if ( pControl )
             {
@@ -614,7 +614,7 @@ void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 {
     mbExportNDests = bExportNDests;
 }
-void PDFExtOutDevData::ResetSyncData(PDFWriter *const pWriter)
+void PDFExtOutDevData::ResetSyncData(pdf::PDFWriter *const pWriter)
 {
     if (pWriter != nullptr)
     {
@@ -630,11 +630,11 @@ void PDFExtOutDevData::ResetSyncData(PDFWriter *const pWriter)
     }
     *mpPageSyncData = PageSyncData( mpGlobalSyncData.get() );
 }
-bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx, const GDIMetaFile& rMtf )
+bool PDFExtOutDevData::PlaySyncPageAct( pdf::PDFWriter& rWriter, sal_uInt32& rIdx, const GDIMetaFile& rMtf )
 {
     return mpPageSyncData->PlaySyncPageAct( rWriter, rIdx, rMtf, *this );
 }
-void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
+void PDFExtOutDevData::PlayGlobalActions( pdf::PDFWriter& rWriter )
 {
     mpGlobalSyncData->PlayGlobalActions( rWriter );
 }
@@ -646,7 +646,7 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
 sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const tools::Rectangle& rRect, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back(
-        vcl::CreateNamedDest{ sDestName, mrOutDev.GetMapMode(), PDFWriter::DestAreaType::XYZ, rRect, nPageNr == -1 ? mnPage : nPageNr } );
+        vcl::CreateNamedDest{ sDestName, mrOutDev.GetMapMode(), pdf::PDFWriter::DestAreaType::XYZ, rRect, nPageNr == -1 ? mnPage : nPageNr } );
 
     return mpGlobalSyncData->mCurId++;
 }
@@ -658,7 +658,7 @@ sal_Int32 PDFExtOutDevData::RegisterDest()
 
     return nLinkDestID;
 }
-void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, pdf::PDFWriter::DestAreaType eType )
 {
     OSL_PRECOND( nDestId != -1, "PDFExtOutDevData::DescribeRegisteredDest: invalid destination Id!" );
     PDFLinkDestination aLinkDestination;
@@ -668,7 +668,7 @@ void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const tools::R
     aLinkDestination.mAreaType = eType;
     mpGlobalSyncData->mFutureDestinations[ nDestId ] = std::move(aLinkDestination);
 }
-sal_Int32 PDFExtOutDevData::CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFExtOutDevData::CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, pdf::PDFWriter::DestAreaType eType )
 {
     mpGlobalSyncData->mActions.push_back(
         vcl::CreateDest{ mrOutDev.GetMapMode(), eType, rRect, nPageNr == -1 ? mnPage : nPageNr } );
@@ -737,7 +737,7 @@ sal_Int32 PDFExtOutDevData::CreateNote(const tools::Rectangle& rRect,
         mrOutDev.GetMapMode(), rNote, rRect, rPopupRect, nPageNr == -1 ? mnPage : nPageNr });
     return mpGlobalSyncData->mCurId++;
 }
-void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec )
+void PDFExtOutDevData::SetPageTransition( pdf::PDFWriter::PageTransition eType, sal_uInt32 nMilliSec )
 {
     mpGlobalSyncData->mActions.push_back( vcl::SetPageTransition{ eType, nMilliSec, mnPage } );
 }
@@ -812,11 +812,11 @@ sal_Int32 PDFExtOutDevData::GetCurrentStructureElement() const
     return mpGlobalSyncData->mCurrentStructElement;
 }
 
-void PDFExtOutDevData::SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal )
+void PDFExtOutDevData::SetStructureAttribute( pdf::PDFWriter::StructAttribute eAttr, pdf::PDFWriter::StructAttributeValue eVal )
 {
     mpPageSyncData->PushAction( mrOutDev, vcl::SetStructureAttribute{ eAttr, eVal } );
 }
-void PDFExtOutDevData::SetStructureAttributeNumerical( PDFWriter::StructAttribute eAttr, sal_Int32 nValue )
+void PDFExtOutDevData::SetStructureAttributeNumerical( pdf::PDFWriter::StructAttribute eAttr, sal_Int32 nValue )
 {
     mpPageSyncData->PushAction( mrOutDev, vcl::SetStructureAttributeNumerical { eAttr, nValue } );
 }
@@ -839,7 +839,7 @@ void PDFExtOutDevData::SetAlternateText( const OUString& rText )
     mpPageSyncData->PushAction( mrOutDev, vcl::SetAlternateText{ rText } );
 }
 
-void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType )
+void PDFExtOutDevData::CreateControl( const pdf::PDFWriter::AnyWidget& rControlType )
 {
     mpPageSyncData->PushAction(mrOutDev, vcl::CreateControl{ rControlType.Clone() });
 }

@@ -22,6 +22,7 @@
 #include <fstream>
 
 #include <svx/diagram/datamodel.hxx>
+#include <svx/svdoutl.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sal/log.hxx>
 #include <utility>
@@ -491,6 +492,52 @@ void DiagramData::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 #ifdef DEBUG_OOX_DIAGRAM
     output << "}" << std::endl;
 #endif
+}
+
+bool DiagramData::TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl)
+{
+    // try to get the Point for the associated ID
+    const auto pDataNode = maPointNameMap.find(rDiagramDataModelID);
+    if (pDataNode == maPointNameMap.end())
+        return false;
+
+    // use PresentationAssociationId to get to the text containing Point
+    const OUString& rPresentationAssociationId(pDataNode->second->msPresentationAssociationId);
+    if (rPresentationAssociationId.isEmpty())
+        return false;
+
+    // try to get the text-associated Point
+    const auto pTextNode = maPointNameMap.find(rPresentationAssociationId);
+    if (pTextNode == maPointNameMap.end())
+        return false;
+
+    // check if it has a text node - it should
+    if (!pTextNode->second->msTextBody)
+        return false;
+
+    // access TextBody
+    TextBodyPtr pTextBody(pTextNode->second->msTextBody);
+
+    // now for outliner/source: Do we have data at all?
+    if(0 == rOutl.GetParagraphCount())
+        return false;
+
+    // if yes, use 1st paragraph (for now)
+    const Paragraph* pPara(rOutl.GetParagraph(0));
+    if (nullptr == pPara)
+        return false;
+
+    // extract 1st para as text
+    const OUString aCurrentText(rOutl.GetText(pPara));
+
+    // check if text differs at all
+    if (aCurrentText == pTextBody->msText)
+        return false;
+
+    // do change and return true (change was done)
+    // NOTE: for now only rough text change, attributes are missing and will need to be added
+    pTextBody->msText = aCurrentText;
+    return true;
 }
 
 }

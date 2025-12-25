@@ -9,6 +9,8 @@
 
 #include <SheetViewManager.hxx>
 #include <table.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 namespace sc
 {
@@ -17,7 +19,7 @@ SheetViewManager::SheetViewManager() {}
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 {
     SheetViewID nID(maViews.size());
-    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName()));
+    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName(), nID));
     return nID;
 }
 
@@ -122,7 +124,18 @@ void SheetViewManager::unsyncAllSheetViews()
 OUString SheetViewManager::generateName()
 {
     maNameCounter++;
-    return u"Temp View " + OUString::number(maNameCounter);
+    OUString aTemplate = ScResId(STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE);
+    return aTemplate.replaceAll("%1", OUString::number(maNameCounter));
+}
+
+OUString SheetViewManager::defaultViewName() { return ScResId(STR_SHEET_VIEW_DEFAULT_VIEW_NAME); }
+
+void SheetViewManager::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW nFirstRow,
+                                       SCROW nLastRow)
+{
+    if (!moSortOrder)
+        moSortOrder.emplace();
+    moSortOrder->addOrderIndices(rOrder, nFirstRow, nLastRow);
 }
 }
 

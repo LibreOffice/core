@@ -356,7 +356,7 @@ constexpr ExtensionMap aCalcExtensionMap[] =
     { "xhtml", u"XHTML Calc File"_ustr },
     { "xls",   u"MS Excel 97"_ustr },
     { "xlsm",  u"Calc MS Excel 2007 VBA XML"_ustr },
-    { "xlsx",  u"Calc MS Excel 2007 XML"_ustr },
+    { "xlsx",  u"Calc Office Open XML"_ustr },
     { "png",   u"calc_png_Export"_ustr },
 };
 
@@ -369,10 +369,12 @@ constexpr ExtensionMap aImpressExtensionMap[] =
     { "otp",   u"impress8_template"_ustr },
     { "pdf",   u"impress_pdf_Export"_ustr },
     { "potm",  u"Impress MS PowerPoint 2007 XML Template"_ustr },
+    { "potx",  u"Impress MS PowerPoint 2007 XML Template"_ustr },
     { "pot",   u"MS PowerPoint 97 Vorlage"_ustr },
     { "pptm",  u"Impress MS PowerPoint 2007 XML VBA"_ustr },
+    { "ppts",  u"Impress MS PowerPoint 2007 XML AutoPlay"_ustr },
     { "pptx",  u"Impress MS PowerPoint 2007 XML"_ustr },
-    { "pps",   u"MS PowerPoint 97 Autoplay"_ustr },
+    { "pps",   u"MS PowerPoint 97 AutoPlay"_ustr },
     { "ppt",   u"MS PowerPoint 97"_ustr },
     { "svg",   u"impress_svg_Export"_ustr },
     { "xhtml", u"XHTML Impress File"_ustr },
@@ -2740,6 +2742,9 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* pThis,
                        LibreOfficeKitAnyInputCallback pAnyInputCallback,
                        void* pData);
 
+static void lo_registerFileSaveDialogCallback(LibreOfficeKit* pThis,
+                       LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback);
+
 static void lo_sendDialogEvent(LibreOfficeKit* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
@@ -2789,6 +2794,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setForkedChild = lo_setForkedChild;
         m_pOfficeClass->extractDocumentStructureRequest = lo_extractDocumentStructureRequest;
         m_pOfficeClass->registerAnyInputCallback = lo_registerAnyInputCallback;
+        m_pOfficeClass->registerFileSaveDialogCallback = lo_registerFileSaveDialogCallback;
         m_pOfficeClass->getDocsCount = lo_getDocsCount;
 
         gOfficeClass = m_pOfficeClass;
@@ -2993,7 +2999,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
 
         const int nThisDocumentId = nDocumentIdCounter++;
-        SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
+        comphelper::LibreOfficeKit::setDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
@@ -3006,6 +3012,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
             return nullptr;
         }
+
+        assert(comphelper::LibreOfficeKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
 
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
 
@@ -3291,6 +3299,8 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
 static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath,
                                                 const char* pFilter)
 {
+    SolarMutexGuard aGuard;
+
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
     OUString aURL(getAbsoluteURL(pFilePath));
@@ -3841,7 +3851,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         std::vector<OUString> aFilteredOptionVec;
         bool bTakeOwnership = false;
         bool bCreateFromTemplate = false;
-        MediaDescriptor aSaveMediaDescriptor;
+        comphelper::SequenceAsHashMap aSaveMediaDescriptor;
         for (const auto& rOption : aOptionSeq)
         {
             if (rOption == "TakeOwnership")
@@ -4268,7 +4278,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         return;
     }
 
-#if defined(UNX) && !defined(MACOSX) || defined(_WIN32)
+#if defined(UNX) || defined(_WIN32)
 
     // Painting of zoomed or HiDPI spreadsheets is special, we actually draw everything at 100%,
     // and only set cairo's (or CoreGraphic's, in the iOS case) scale factor accordingly, so that
@@ -4491,34 +4501,37 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
         const OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
 
-        if (!isText)
+        // Check if just switching to another view is enough, that has less side-effects.
+        // Render state is sometimes empty, don't risk it.
+        if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
         {
-            // Check if just switching to another view is enough, that has less side-effects.
-            // Render state is sometimes empty, don't risk it.
-            if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
-            {
-                nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPart, nMode);
+            nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPart, nMode);
 
-                if (nViewId == -1)
-                    nViewId = nOrigViewId; // Couldn't find an alternative view.
-                // else -> We found an alternative view and already switched to that.
-            }
+            if (nViewId == -1)
+                nViewId = nOrigViewId; // Couldn't find an alternative view.
+            // else -> We found an alternative view and already switched to that.
+        }
 
-            // Disable callbacks while we are painting - after setting the view
-            if (nViewId != nOrigViewId)
-                disableViewCallbacks(pDocument, nViewId);
-            else
+        // Disable callbacks while we are painting - after setting the view
+        if (nViewId != nOrigViewId)
+            disableViewCallbacks(pDocument, nViewId);
+        else
+        {
+            // If we are here, we couldn't find an alternative view. We need to check the part and mode.
+            if (!isText)
             {
-                // If we are here, we couldn't find an alternative view. We need to check the part and mode.
                 nOrigPart = doc_getPart(pThis);
                 if (nPart != nOrigPart)
                     doc_setPartImpl(pThis, nPart, false);
-
-                nOrigEditMode = pDoc->getEditMode();
-                if (nOrigEditMode != nMode)
-                    SfxLokHelper::setEditMode(nMode, pDoc);
             }
 
+            nOrigEditMode = pDoc->getEditMode();
+            if (nOrigEditMode != nMode)
+                SfxLokHelper::setEditMode(nMode, pDoc);
+        }
+
+        if (!isText)
+        {
             bPaintTextEdit = (nPart == nOrigPart && nMode == nOrigEditMode);
             pDoc->setPaintTextEdit(bPaintTextEdit);
         }
@@ -4528,22 +4541,25 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         if (!isText)
         {
             pDoc->setPaintTextEdit(true);
+        }
 
-            if (nViewId == nOrigViewId)
+        if (nViewId == nOrigViewId)
+        {
+            // We didn't find an alternative view, set the part and mode back to their initial values if needed.
+            if (nMode != nOrigEditMode)
+                SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
+
+            if (!isText)
             {
-                // We didn't find an alternative view, set the part and mode back to their initial values if needed.
-                if (nMode != nOrigEditMode)
-                    SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
-
                 if (nPart != nOrigPart)
                     doc_setPartImpl(pThis, nOrigPart, false);
             }
-            else
-            {
-                // We found an alternative view and used it. Enable its callbacks again and turn back to our original view.
-                enableViewCallbacks(pDocument, nViewId);
-                doc_setView(pThis, nOrigViewId);
-            }
+        }
+        else
+        {
+            // We found an alternative view and used it. Enable its callbacks again and turn back to our original view.
+            enableViewCallbacks(pDocument, nViewId);
+            doc_setView(pThis, nOrigViewId);
         }
     }
     catch (const std::exception&)
@@ -4734,18 +4750,18 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
         if (!pDocument->maFontsMissing.empty())
         {
-            OString sPayload = "{ \"fontsmissing\": [ "_ostr;
+            OStringBuffer sPayload("{ \"fontsmissing\": [ ");
             bool bFirst = true;
             for (const auto &f : pDocument->maFontsMissing)
             {
                 if (bFirst)
                     bFirst = false;
                 else
-                    sPayload += ", ";
-                sPayload += "\"" + f.toUtf8() + "\"";
+                    sPayload.append(", ");
+                sPayload.append("\"" + f.toUtf8() + "\"");
             }
-            sPayload += " ] }";
-            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.getStr(), pData);
+            sPayload.append(" ] }");
+            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.toString().getStr(), pData);
             pDocument->maFontsMissing.clear();
         }
 
@@ -5017,7 +5033,7 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
         SvMemoryStream aOutStream;
         uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aOutStream);
 
-        utl::MediaDescriptor aMediaDescriptor;
+        comphelper::SequenceAsHashMap aMediaDescriptor;
         switch (doc_getDocumentType(pThis))
         {
             case LOK_DOCTYPE_PRESENTATION:
@@ -5159,6 +5175,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
             sWindowId = sCurrentShellId + "formulabar";
         if (nWindowId == static_cast<unsigned long long int>(-4))
             sWindowId = sCurrentShellId + "addressinputfield";
+        if (nWindowId == static_cast<unsigned long long int>(-5))
+            sWindowId = sCurrentShellId + "quickfind";
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
         if (jsdialog::ExecuteAction(sWindowId, sControlId, aMap))
@@ -5167,6 +5185,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         if (jsdialog::ExecuteAction(sCurrentShellId + "sidebar", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "navigator", sControlId, aMap))
+            return;
+        if (jsdialog::ExecuteAction(sCurrentShellId + "quickfind", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "notebookbar", sControlId, aMap))
             return;
@@ -5586,6 +5606,33 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         hideSidebar();
         return;
     }
+    else if (gImpl && aCommand == ".uno:UICoverage")
+    {
+        for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
+        {
+            if (rPropValue.Name == "Report")
+            {
+                bool report(true);
+                rPropValue.Value >>= report;
+                if (report)
+                {
+                    tools::JsonWriter aJson;
+                    aJson.put("commandName", aCommand);
+                    aJson.put("success", true);
+                    Application::UICoverageReport(aJson);
+                    pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+                }
+            }
+            else if (rPropValue.Name == "Track")
+            {
+                bool track(false);
+                rPropValue.Value >>= track;
+                Application::EnableUICoverage(track);
+            }
+        }
+
+        return;
+    }
 
     if (aCommand != ".uno:Save")
     {
@@ -5767,7 +5814,9 @@ static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
     }
 
     bool bAllyState = false;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
     if (pViewShell)
     {
         bAllyState = pViewShell->GetLOKAccessibilityState();
@@ -6265,6 +6314,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     {
         {"AnchorType", uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
         {"IgnoreComments", uno::Any(true)},
+        // The MIME type is specified explicitly, don't guess.
+        {"SkipDetection", uno::Any(true)},
     }));
     if (!comphelper::dispatchCommand(u".uno:Paste"_ustr, aPropertyValues))
     {
@@ -7885,6 +7936,13 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* /*pThis*/,
     });
 }
 
+static void lo_registerFileSaveDialogCallback(LibreOfficeKit* /*pThis*/,
+                       LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback)
+{
+    SolarMutexGuard aGuard;
+    comphelper::LibreOfficeKit::setFileSaveDialogCallback(pFileSaveDialogCallback);
+}
+
 static int lo_getDocsCount(LibreOfficeKit* /*pThis*/)
 {
     SolarMutexGuard aGuard;
@@ -8329,11 +8387,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     rtl_alloc_preInit(2);
 #endif
 
-    char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST");
-    if (pAllowlist)
-    {
+    if (const char* pAllowlist = ::getenv("LOK_HOST_ALLOWLIST"))
         HostFilter::setAllowedHostsRegex(pAllowlist);
-    }
+
+    if (const char* pHostExemptVerifyHost = ::getenv("LOK_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST"))
+        HostFilter::setAllowedHostsExemptVerifyHost(strncmp(pHostExemptVerifyHost,"1", 1) == 0);
 
     // What stage are we at ?
     if (pThis == nullptr)

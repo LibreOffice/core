@@ -10,17 +10,9 @@
 
 #include <sal/config.h>
 
-#include <rtl/string.hxx>
 #include <tools/link.hxx>
 #include <vcl/salctype.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <test/testdllapi.hxx>
 

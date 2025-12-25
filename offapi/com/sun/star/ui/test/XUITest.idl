@@ -16,6 +16,9 @@ interface XUITest
     boolean executeCommandWithParameters([in] string command,
         [in] com::sun::star::beans::PropertyValues propValues);
 
+    boolean executeCommandForProvider([in] string command,
+        [in] ::com::sun::star::frame::XDispatchProvider xProvider);
+
     boolean executeDialog([in] string command);
 
     XUIObject getTopFocusWindow();
@@ -27,6 +30,12 @@ interface XUITest
         @since LibreOffice 25.8
     */
     XUIObject getWindow([in] ::com::sun::star::awt::XWindow xWindow);
+
+    /** Get the XUIObject for the window that currently has focus.
+
+        @since LibreOffice 26.2
+    */
+    XUIObject getFocusWindow();
 };
 
 }; }; }; }; };

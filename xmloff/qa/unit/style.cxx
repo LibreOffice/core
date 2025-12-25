@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // When saving that document to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure <style:font-face> elements are sorted (by style:name="..."):
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -179,7 +179,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 
     // Save to latest extended. Adapt test, when attribute value "bt-lr" is included in ODF strict.
     {
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
         xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
         // As of Nov 2024, validating against a version other than LATEST is not implemented.
         skipValidation();
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
         // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "page-content-bottom" is included in ODF strict.
     {
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
         // written.
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
     // Save to ODF 1.3 strict.
     {
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "page-content-top" is included in ODF strict.
     {
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
         // written.
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
     // Save to ODF 1.3 strict.
     {
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
         // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf156707)
 {
     loadFromFile(u"tdf156707_text_form_control_borders.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     uno::Reference<drawing::XShape> xShape = getShape(0);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf167358)
 {
     // The file contains label form fields. Labels default to having no border.
     loadFromFile(u"tdf167358_label_form_control_borders.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     uno::Reference<drawing::XShape> xShape = getShape(0);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     loadFromFile(u"MCGR_OldToNew.odg");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     // Examine file markup
     // For compatibility the file should still have the old attributes 'start-color' and 'end-color'
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
     loadFromFile(u"MCGR_OldToNew_opacity.odg");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     // Examine file markup
     // For compatibility the file should still have the old attributes.
@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     loadFromFile(u"MCGR_threeStops.fodt");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
-    saveAndReload(u"draw8"_ustr);
+    saveAndReload(TestFilter::ODG);
 
     // Examine file markup
     // For compatibility the file should still have the old attributes 'start-color' and 'end-color'
@@ -545,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 
     // Save to LATEST; that is extended. Make sure gradient-stop elements have
     // offsets 0 and 1, and border is written as 50%.
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath
         = "/office:document-styles/office:styles/draw:gradient[@draw:name='Gradient_20_1']"_ostr;
@@ -559,7 +559,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, sPath + "/loext:gradient-stop", 0);
     assertXPath(pXmlDoc, sPath, "start-color", u"#ffff00");
@@ -580,7 +580,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
 
     // Save to LATEST, that is extended. Make sure transparency gradient-stop
     //elements are written with offset 0 and 1, and border is written as 40%.
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath = "/office:document-styles/office:styles/draw:opacity[1]"_ostr;
     assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "stop-opacity", u"0.9");
@@ -593,7 +593,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     // Save to ODF 1.3 strict and make sure border, start and end opacity are suitable set.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
 
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, sPath + "/loext:opacity-stop", 0);
     assertXPath(pXmlDoc, sPath, "start", u"0%");
@@ -613,10 +613,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)
     loadFromFile(u"tdf155549_MCGR_AxialGradientCompatible.odt");
 
     //Round-trip through OOXML.
-    // FixMe tdf#153183. Here "Attribute 'ID' is not allowed to appear in element 'v:rect'".
-    skipValidation();
-    saveAndReload(u"Office Open XML Text"_ustr);
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::DOCX);
+    saveAndReload(TestFilter::ODT);
 
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -645,10 +643,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialTransparencyCompatible)
     loadFromFile(u"tdf155549_MCGR_AxialTransparencyCompatible.odt");
 
     //Round-trip through OOXML.
-    // FixMe tdf#153183, and error in charSpace and in CharacterSet
-    //skipValidation();
-    saveAndReload(u"Office Open XML Text"_ustr);
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::DOCX);
+    saveAndReload(TestFilter::ODT);
 
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));

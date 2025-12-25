@@ -22,23 +22,35 @@ public:
     {
     }
 
-    virtual void setUp() override {}
+    void setUp() override {}
 
     void testSimpleRoot();
     void testSpecialChars();
+    void testAttributes();
+    void testStartAndEndDocument();
 
     CPPUNIT_TEST_SUITE(XmlWriterTest);
     CPPUNIT_TEST(testSimpleRoot);
     CPPUNIT_TEST(testSpecialChars);
+    CPPUNIT_TEST(testAttributes);
+    CPPUNIT_TEST(testStartAndEndDocument);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void XmlWriterTest::testStartAndEndDocument()
+{
+    SvMemoryStream aMemoryStream;
+    tools::XmlWriter aWriter(&aMemoryStream);
+    CPPUNIT_ASSERT(aWriter.startDocument());
+    CPPUNIT_ASSERT(!aWriter.startDocument());
+}
 
 void XmlWriterTest::testSimpleRoot()
 {
     SvMemoryStream aMemoryStream;
 
     tools::XmlWriter aWriter(&aMemoryStream);
-    aWriter.startDocument(0, false);
+    CPPUNIT_ASSERT(aWriter.startDocument(0, false));
     aWriter.startElement("test");
     aWriter.endElement();
     aWriter.endDocument();
@@ -53,15 +65,32 @@ void XmlWriterTest::testSpecialChars()
     SvMemoryStream aMemoryStream;
 
     tools::XmlWriter aWriter(&aMemoryStream);
-    aWriter.startDocument(0, false);
+    CPPUNIT_ASSERT(aWriter.startDocument(0, false));
     aWriter.startElement("test");
-    aWriter.content("<>"_ostr);
+    aWriter.content("<>");
     aWriter.endElement();
     aWriter.endDocument();
 
     aMemoryStream.Seek(0);
     OString aString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
     CPPUNIT_ASSERT_EQUAL("<test>&lt;&gt;</test>"_ostr, aString);
+}
+
+void XmlWriterTest::testAttributes()
+{
+    SvMemoryStream aMemoryStream;
+
+    tools::XmlWriter aWriter(&aMemoryStream);
+    CPPUNIT_ASSERT(aWriter.startDocument(0, false));
+    aWriter.startElement("test");
+    aWriter.attribute("c", std::string_view("c"));
+    aWriter.attribute("d", std::u16string_view(u"d"));
+    aWriter.endElement();
+    aWriter.endDocument();
+
+    aMemoryStream.Seek(0);
+    OString aString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+    CPPUNIT_ASSERT_EQUAL("<test c=\"c\" d=\"d\"/>"_ostr, aString);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XmlWriterTest);

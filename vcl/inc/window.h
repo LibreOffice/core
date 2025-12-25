@@ -253,6 +253,7 @@ public:
     std::vector<Link<VclWindowEvent&,void>> maChildEventListeners;
     int mnChildEventListenersIteratingCount;
     std::set<Link<VclWindowEvent&,void>> maChildEventListenersDeleted;
+    Link<const CommandEvent&, bool> maCommandHdl;
     Link<vcl::Window&, bool> maHelpRequestHdl;
     Link<vcl::Window&, bool> maMnemonicActivateHdl;
     Link<tools::JsonWriter&, void> maDumpAsPropertyTreeHdl;

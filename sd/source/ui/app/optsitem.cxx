@@ -527,7 +527,6 @@ void SdOptionsGrid::SetDefaults()
     SetUseGridSnap( false );
     SetSynchronize( true );
     SetGridVisible( false );
-    SetEqualGrid( true );
 }
 
 void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
@@ -590,7 +589,6 @@ bool SdOptionsGrid::ReadData( const Any* pValues )
     if( pValues[4].hasValue() ) SetUseGridSnap( *o3tl::doAccess<bool>(pValues[ 4 ]) );
     if( pValues[5].hasValue() ) SetSynchronize( *o3tl::doAccess<bool>(pValues[ 5 ]) );
     if( pValues[6].hasValue() ) SetGridVisible( *o3tl::doAccess<bool>(pValues[ 6 ]) );
-    if( pValues[7].hasValue() ) SetEqualGrid( *o3tl::doAccess<bool>(pValues[ 7 ]) );
 
     return true;
 }
@@ -604,7 +602,6 @@ bool SdOptionsGrid::WriteData( Any* pValues ) const
     pValues[ 4 ] <<= IsUseGridSnap();
     pValues[ 5 ] <<= IsSynchronize();
     pValues[ 6 ] <<= IsGridVisible();
-    pValues[ 7 ] <<= IsEqualGrid();
 
     return true;
 }
@@ -619,7 +616,6 @@ SdOptionsGridItem::SdOptionsGridItem( SdOptions const * pOpts ) :
     SvxGridItem( SID_ATTR_GRID_OPTIONS )
 {
     SetSynchronize( pOpts->IsSynchronize() );
-    SetEqualGrid( pOpts->IsEqualGrid() );
 
     SetFieldDrawX( pOpts->GetFieldDrawX() );
     SetFieldDrawY( pOpts->GetFieldDrawY() );
@@ -638,7 +634,6 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetUseGridSnap( GetUseGridSnap() );
     pOpts->SetSynchronize( GetSynchronize() );
     pOpts->SetGridVisible( GetGridVisible() );
-    pOpts->SetEqualGrid( GetEqualGrid() );
 }
 
 /*************************************************************************

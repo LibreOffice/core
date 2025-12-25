@@ -29,7 +29,6 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <layact.hxx>
-#include <flyfrm.hxx>
 #include <ftnfrm.hxx>
 #include <osl/diagnose.h>
 
@@ -230,7 +229,6 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 sal_uInt32 nToPageNum( 0 );
                 // #i43913#
                 bool bDummy( false );
-                bool bPageHasFlysAnchoredBelowThis(false);
                 // see how SwObjectFormatter::FormatObjsAtFrame_() checks
                 // "pPageFrameOfAnchor == &mrPageFrame" - only caller relevant for
                 // this subclass
@@ -238,8 +236,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition( *GetCollectedObj( nIdx ),
                                               GetPageFrame(),
                                               IsCollectedAnchoredAtMaster( nIdx ),
-                                              nToPageNum, bDummy,
-                                              bPageHasFlysAnchoredBelowThis))
+                                              nToPageNum, bDummy))
                 {
                     // #i49987# - consider, that anchor frame
                     // could already been marked to move forward.
@@ -251,10 +248,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     {
                         if ( nMovedFwdToPageNum < nToPageNum )
                         {
-                            if (!bPageHasFlysAnchoredBelowThis)
-                            {
-                                SwLayouter::RemoveMovedFwdFrame(rDoc, mrAnchorTextFrame);
-                            }
+                            SwLayouter::RemoveMovedFwdFrame(rDoc, mrAnchorTextFrame);
                         }
                         else
                             bInsert = false;
@@ -263,11 +257,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     {
                         // Indicate that anchor text frame has to move forward and
                         // invalidate its position to force a re-format.
-                        if (!bPageHasFlysAnchoredBelowThis)
-                        {
-                            SwLayouter::InsertMovedFwdFrame(rDoc,
-                                    mrAnchorTextFrame, nToPageNum);
-                        }
+                        SwLayouter::InsertMovedFwdFrame(rDoc, mrAnchorTextFrame, nToPageNum);
                         mrAnchorTextFrame.InvalidatePos();
 
                         // Indicate restart of the layout process
@@ -369,14 +359,13 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         sal_uInt32 nToPageNum( 0 );
         // #i43913#
         bool bInFollow( false );
-        bool bPageHasFlysAnchoredBelowThis(false);
         SwAnchoredObject* pObj = nullptr;
         if ( !mrAnchorTextFrame.IsFollow() )
         {
             pObj = GetFirstObjWithMovedFwdAnchor(
                     // #i35017# - constant name has changed
                     text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
-                    nToPageNum, bInFollow, bPageHasFlysAnchoredBelowThis );
+                    nToPageNum, bInFollow );
         }
         // #i35911#
         if ( pObj && pObj->HasClearedEnvironment() )
@@ -398,21 +387,15 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                 {
                     if ( nTmpToPageNum < pAnchorPageFrame->GetPhyPageNum() )
                     {
-                        if (!bPageHasFlysAnchoredBelowThis)
-                        {
-                            SwLayouter::RemoveMovedFwdFrame(rDoc, mrAnchorTextFrame);
-                        }
+                        SwLayouter::RemoveMovedFwdFrame(rDoc, mrAnchorTextFrame);
                     }
                     else
                         bInsert = false;
                 }
                 if ( bInsert )
                 {
-                    if (!bPageHasFlysAnchoredBelowThis)
-                    {
-                        SwLayouter::InsertMovedFwdFrame(rDoc, mrAnchorTextFrame,
-                               pAnchorPageFrame->GetPhyPageNum());
-                    }
+                    SwLayouter::InsertMovedFwdFrame(rDoc, mrAnchorTextFrame,
+                                                    pAnchorPageFrame->GetPhyPageNum());
                     mrAnchorTextFrame.InvalidatePos();
                     bSuccess = false;
                     InvalidatePrevObjs( *pObj );
@@ -532,8 +515,7 @@ void SwObjectFormatterTextFrame::InvalidateFollowObjs( SwAnchoredObject& _rAncho
 SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
                                     const sal_Int16 _nWrapInfluenceOnPosition,
                                     sal_uInt32& _noToPageNum,
-                                    bool& _boInFollow,
-                                    bool& o_rbPageHasFlysAnchoredBelowThis)
+                                    bool& _boInFollow)
 {
     // #i35017# - constant names have changed
     OSL_ENSURE( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
@@ -560,8 +542,7 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
             if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition( *GetCollectedObj( i ),
                                           GetPageFrame(),
                                           IsCollectedAnchoredAtMaster( i ),
-                                          _noToPageNum, _boInFollow,
-                                          o_rbPageHasFlysAnchoredBelowThis) )
+                                          _noToPageNum, _boInFollow ) )
             {
                 pRetAnchoredObj = pAnchoredObj;
                 break;
@@ -572,40 +553,6 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
     return pRetAnchoredObj;
 }
 
-static SwRowFrame const* FindTopLevelRowFrame(SwFrame const*const pFrame)
-{
-    SwRowFrame * pRow = const_cast<SwFrame*>(pFrame)->FindRowFrame();
-    if (!pRow)
-        return nullptr;
-    // looks like SwTabFrame has mbInfTab = true so go up 2 levels
-    while (pRow->GetUpper()->GetUpper()->IsInTab())
-    {
-        pRow = pRow->GetUpper()->GetUpper()->FindRowFrame();
-    }
-    return pRow;
-}
-
-static SwContentFrame const* FindFrameInBody(SwAnchoredObject const& rAnchored)
-{
-    SwFrame const*const pAnchor(rAnchored.GetAnchorFrame());
-    assert(pAnchor);
-    if (pAnchor->IsPageFrame() || pAnchor->FindFooterOrHeader())
-    {
-        return nullptr;
-    }
-    if (pAnchor->IsInFly())
-    {
-        return FindFrameInBody(*pAnchor->FindFlyFrame());
-    }
-    if (pAnchor->IsInFootnote())
-    {
-        return pAnchor->FindFootnoteFrame()->GetRef();
-    }
-    assert(pAnchor->IsInDocBody());
-    assert(pAnchor->IsContentFrame());
-    return static_cast<SwContentFrame const*>(pAnchor);
-}
-
 // #i58182#
 // - replace private method by corresponding static public method
 bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
@@ -613,8 +560,7 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                             SwPageFrame const& rFromPageFrame,
                                             const bool _bAnchoredAtMasterBeforeFormatAnchor,
                                             sal_uInt32& _noToPageNum,
-                                            bool& _boInFollow,
-                                            bool& o_rbPageHasFlysAnchoredBelowThis)
+                                            bool& _boInFollow)
 {
     const sal_uInt32 _nFromPageNum(rFromPageFrame.GetPhyPageNum());
     bool bAnchorIsMovedForward( false );
@@ -687,70 +633,6 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                 bAnchorIsMovedForward = true;
                 // #i43913#
                 _boInFollow = true;
-            }
-        }
-    }
-
-    if (bAnchorIsMovedForward)
-    {
-        // tdf#138518 try to determine if there is a fly on page rFromPageFrame
-        // which is anchored in a frame that is "below" the anchor frame
-        // of _rAnchoredObj, such that it should move to the next page before
-        // _rAnchoredObj does
-        if (auto * pObjs = rFromPageFrame.GetSortedObjs())
-        {
-            for (SwAnchoredObject *const pObj : *pObjs)
-            {
-                SwPageFrame const*const pObjAnchorPage(pObj->FindPageFrameOfAnchor());
-                assert(pObjAnchorPage);
-                if ((pObjAnchorPage == &rFromPageFrame
-                        ? _boInFollow // same-page but will move forward
-                        : rFromPageFrame.GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
-                    && pObj->GetFrameFormat()->GetAnchor().GetAnchorId()
-                        != RndStdIds::FLY_AS_CHAR)
-                {
-                    assert(pPageFrameOfAnchor);
-                    if (pPageFrameOfAnchor->GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
-                    {
-                        SAL_INFO("sw.layout", "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next page");
-                        o_rbPageHasFlysAnchoredBelowThis = true;
-                        break;
-                    }
-                    // on same page: check if it's in next-chain in the document body
-                    // (in case both are in the same fly the flag must not be
-                    // set because the whole fly moves at once)
-                    SwContentFrame const*const pInBodyFrameObj(FindFrameInBody(*pObj));
-                    SwContentFrame const*const pInBodyFrameAnchoredObj(FindFrameInBody(_rAnchoredObj));
-                    if (pInBodyFrameObj && pInBodyFrameAnchoredObj)
-                    {
-                        bool isBreakMore(false);
-                        // currently this ignores index of at-char flys
-                        for (SwContentFrame const* pContentFrame = pInBodyFrameAnchoredObj->FindNextCnt();
-                             pContentFrame;
-                             pContentFrame = pContentFrame->FindNextCnt())
-                        {
-                            if (pInBodyFrameObj == pContentFrame)
-                            {
-                                // subsequent cells in a row are not automatically
-                                // "below" and the row could potentially be split
-                                // TODO refine check if needed
-                                if (!pInBodyFrameAnchoredObj->IsInTab()
-                                    || FindTopLevelRowFrame(pInBodyFrameObj)
-                                        != FindTopLevelRowFrame(pInBodyFrameAnchoredObj))
-                                {   // anchored in next chain on same page
-                                    SAL_INFO("sw.layout", "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next chain on same page");
-                                    o_rbPageHasFlysAnchoredBelowThis = true;
-                                    isBreakMore = true;
-                                }
-                                break;
-                            }
-                        }
-                        if (isBreakMore)
-                        {
-                            break;
-                        }
-                    }
-                }
             }
         }
     }

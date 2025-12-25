@@ -72,6 +72,7 @@ public:
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
     virtual UIName GetName() const override;
+    virtual void SetName(const UIName& newName) override;
 
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;

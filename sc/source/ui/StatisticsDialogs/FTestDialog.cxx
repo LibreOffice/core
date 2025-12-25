@@ -39,20 +39,20 @@ TranslateId ScFTestDialog::GetUndoNameId()
     return STR_FTEST_UNDO_NAME;
 }
 
-ScRange ScFTestDialog::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 
     std::unique_ptr<DataRangeIterator> pVariable1Iterator;
-    if (mGroupedBy == BY_COLUMN)
+    if (mGroupedBy == GroupedBy::BY_COLUMN)
         pVariable1Iterator.reset(new DataRangeByColumnIterator(mVariable1Range));
     else
         pVariable1Iterator.reset(new DataRangeByRowIterator(mVariable1Range));
 
     std::unique_ptr<DataRangeIterator> pVariable2Iterator;
-    if (mGroupedBy == BY_COLUMN)
+    if (mGroupedBy == GroupedBy::BY_COLUMN)
         pVariable2Iterator.reset(new DataRangeByColumnIterator(mVariable2Range));
     else
         pVariable2Iterator.reset(new DataRangeByRowIterator(mVariable2Range));

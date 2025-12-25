@@ -11,6 +11,8 @@
 
 #include "FormFieldButton.hxx"
 
+#include <vcl/weld/TreeView.hxx>
+
 class SwEditWin;
 namespace sw::mark
 {

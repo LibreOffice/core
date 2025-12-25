@@ -26,8 +26,6 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/util/Time.hpp>
 
-#include <compare>
-
 namespace com::sun::star::util { struct DateTime; }
 
 /**

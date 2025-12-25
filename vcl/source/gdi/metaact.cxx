@@ -226,7 +226,8 @@ static bool AllowDim(tools::Long nDim)
     static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
-        if (nDim > 0x20000000 || nDim < -0x20000000)
+        constexpr auto numCairoMax(1 << 23);
+        if (nDim > numCairoMax || nDim < -numCairoMax)
         {
             SAL_WARN("vcl", "skipping huge dimension: " << nDim);
             return false;
@@ -242,7 +243,8 @@ static bool AllowPoint(const Point& rPoint)
 
 static bool AllowRect(const tools::Rectangle& rRect)
 {
-    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
+    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight()) &&
+           AllowDim(rRect.GetHeight()) && AllowDim(rRect.GetWidth());
 }
 
 void MetaRectAction::Execute( OutputDevice* pOut )
@@ -521,6 +523,9 @@ MetaPolyPolygonAction::MetaPolyPolygonAction( tools::PolyPolygon aPolyPoly ) :
 
 void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maPolyPoly.GetBoundRect())))
+        return;
+
     pOut->DrawPolyPolygon( maPolyPoly );
 }
 
@@ -979,7 +984,7 @@ MetaBmpExAction::MetaBmpExAction( const Point& rPt, const Bitmap& rBmp ) :
 
 void MetaBmpExAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawBitmapEx( maPt, maBmp );
+    pOut->DrawBitmap( maPt, maBmp );
 }
 
 rtl::Reference<MetaAction> MetaBmpExAction::Clone() const
@@ -1015,7 +1020,7 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
     if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPt, maSz))))
         return;
 
-    pOut->DrawBitmapEx( maPt, maSz, maBmp );
+    pOut->DrawBitmap( maPt, maSz, maBmp );
 }
 
 rtl::Reference<MetaAction> MetaBmpExScaleAction::Clone() const
@@ -1055,7 +1060,7 @@ void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
     if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maDstPt, maDstSz))))
         return;
 
-    pOut->DrawBitmapEx( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp );
+    pOut->DrawBitmap( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp );
 }
 
 rtl::Reference<MetaAction> MetaBmpExScalePartAction::Clone() const
@@ -1714,6 +1719,9 @@ MetaTransparentAction::MetaTransparentAction( tools::PolyPolygon aPolyPoly, sal_
 
 void MetaTransparentAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maPolyPoly.GetBoundRect())))
+        return;
+
     pOut->DrawTransparent( maPolyPoly, mnTransPercent );
 }
 

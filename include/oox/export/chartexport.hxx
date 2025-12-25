@@ -17,18 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
-#define INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
+#pragma once
 
 #include <set>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
-#include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>
@@ -76,6 +74,8 @@ namespace model {
 }
 
 namespace oox::drawingml {
+
+struct LabelPlacementParam;
 
 enum AxesType
 {
@@ -297,6 +297,11 @@ private:
     void outputFontRef(::sax_fastparser::FSHelperPtr pFS,
             sal_Int32 nElTokenId, const model::FontRef& aColor);
 
+    void writeLabelProperties(
+        const css::uno::Reference<css::beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
+        sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
+        bool bIsChartex);
+
 public:
 
     OOX_DLLPUBLIC ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,
@@ -316,7 +321,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

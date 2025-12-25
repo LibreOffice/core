@@ -89,6 +89,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <string>
+#include <tools/XmlWriter.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 #include <libxml/xmlwriter.h>
@@ -96,6 +97,12 @@
 using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
+
+NameOrIndex::NameOrIndex()
+    : SfxStringItem(0)
+{
+    m_nPalIndex = -1;
+}
 
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
     SfxStringItem(_nWhich, OUString()),
@@ -260,25 +267,30 @@ OUString NameOrIndex::CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool*
 
 void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("NameOrIndex"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("isIndex"), BAD_CAST(OString::boolean(IsIndex()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(m_nPalIndex).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("NameOrIndex");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("isIndex", IsIndex());
+    aWriter.attribute("name", GetName());
+    aWriter.attribute("index", GetPalIndex());
+    aWriter.endElement();
 }
 
 SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem(); }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
-    NameOrIndex(_nWhich, nIndex),
-    m_aColor(rTheColor)
+XColorItem::XColorItem()
+    : NameOrIndex()
+{}
+
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor)
+    : NameOrIndex(_nWhich, nIndex)
+    , m_aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor) :
-    NameOrIndex(_nWhich, rName),
-    m_aColor(rTheColor)
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor)
+    : NameOrIndex(_nWhich, rName)
+    , m_aColor(rTheColor)
 {
 }
 
@@ -288,10 +300,10 @@ XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor)
 {
 }
 
-XColorItem::XColorItem(const XColorItem& rItem) :
-    NameOrIndex(rItem),
-    m_aColor(rItem.m_aColor),
-    maComplexColor(rItem.maComplexColor)
+XColorItem::XColorItem(const XColorItem& rItem)
+    : NameOrIndex(rItem)
+    , m_aColor(rItem.m_aColor)
+    , maComplexColor(rItem.maComplexColor)
 {
 }
 
@@ -307,11 +319,17 @@ bool XColorItem::operator==(const SfxPoolItem& rItem) const
             static_cast<const XColorItem&>(rItem).maComplexColor == maComplexColor;
 }
 
-const Color& XColorItem::GetColorValue() const
+Color const& XColorItem::GetColorValue() const
 {
     assert(!IsIndex());
     return m_aColor;
 
+}
+
+void XColorItem::SetColorValue(const Color& rNew)
+{
+    m_aColor = rNew;
+    Detach();
 }
 
 bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId) const
@@ -383,38 +401,32 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
 
 void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XColorItem"));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XColorItem");
     if (Which() == SDRATTR_SHADOWCOLOR)
     {
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWCOLOR"));
+        aWriter.attribute("whichId", "SDRATTR_SHADOWCOLOR");
     }
     else if (Which() == XATTR_FILLCOLOR)
     {
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("XATTR_FILLCOLOR"));
+        aWriter.attribute("whichId", "XATTR_FILLCOLOR");
     }
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aColor"),
-                                BAD_CAST(m_aColor.AsRGBHexString().toUtf8().getStr()));
+    aWriter.attribute("color", m_aColor.AsRGBHexString());
 
     NameOrIndex::dumpAsXml(pWriter);
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("complex-color"));
-
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("scheme-index"),
-                                      BAD_CAST(OString::number(sal_Int16(maComplexColor.getThemeColorType())).getStr()));
-
+    aWriter.startElement("ComplexColor");
+    aWriter.attribute("scheme_index", sal_Int16(maComplexColor.getThemeColorType()));
     for (auto const& rTransform : maComplexColor.getTransformations())
     {
-        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("transformation"));
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"),
-                                      BAD_CAST(OString::number(sal_Int16(rTransform.meType)).getStr()));
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
-                                      BAD_CAST(OString::number(rTransform.mnValue).getStr()));
-        (void)xmlTextWriterEndElement(pWriter);
+        aWriter.startElement("transformation");
+        aWriter.attribute("type", sal_Int16(rTransform.meType));
+        aWriter.attribute("value", rTransform.mnValue);
+        aWriter.endElement();
     }
 
-    (void)xmlTextWriterEndElement(pWriter);
-
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement(); // complex-color
+    aWriter.endElement(); // XColorItem
 }
 
 // --- line attributes ---
@@ -1765,16 +1777,17 @@ bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillStyleItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillStyleItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", sal_Int16(GetValue()));
 
     OUString aPresentation;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
+    aWriter.attribute("presentation", aPresentation);
 
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
@@ -1814,13 +1827,17 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
 
 SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
 
-XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
+XFillColorItem::XFillColorItem()
+    : XColorItem()
+{}
+
+XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor)
+    : XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
 {
 }
 
-XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
+XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor)
+    : XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
 {
 }
 
@@ -1829,13 +1846,8 @@ XFillColorItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillColorItem(*this);
 }
 
-bool XFillColorItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper&
-)   const
+bool XFillColorItem::GetPresentation(SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
+                                     OUString& rText, const IntlWrapper& /*rWrapper*/) const
 {
     rText = GetName();
     return true;
@@ -1964,12 +1976,12 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
 void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillColorItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillColorItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
     XColorItem::dumpAsXml(pWriter);
-
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 boost::property_tree::ptree XFillColorItem::dumpAsJSON() const

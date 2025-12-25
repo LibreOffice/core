@@ -37,6 +37,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -187,8 +188,6 @@ css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedP
                 }
                 mSelectedPages.push_back(xDrawPage);
             }
-            if (!mSelectedPages.empty())
-                return xController;
         }
     }
 
@@ -205,217 +204,215 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 {
     SolarMutexGuard aGuard;
     vcl::Window* pFocusWindow(Application::GetFocusWindow());
-    bool bRet(false);
-
     if(pFocusWindow)
     {
         pFocusWindow->EnterWait();
     }
+    comphelper::ScopeGuard aLeaveWaitGuard(
+        [pFocusWindow]()
+        {
+            if (pFocusWindow)
+                pFocusWindow->LeaveWait();
+        });
 
     if(mxDstDoc.is())
     {
-        // Import. Use an endless loop to have easy exits for error handling
-        while(true)
+        // Import.
+        // use MediaDescriptor to get needed data out of Sequence< PropertyValue >
+        comphelper::SequenceAsHashMap aMediaDescriptor(rDescriptor);
+        uno::Reference<io::XInputStream> xInputStream;
+
+        xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
+
+        if(!xInputStream.is())
         {
-            // use MediaDescriptor to get needed data out of Sequence< PropertyValue >
-            utl::MediaDescriptor aMediaDescriptor(rDescriptor);
-            uno::Reference<io::XInputStream> xInputStream;
+            // we need the InputStream
+            return false;
+        }
 
-            xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
+        // get the DrawPagesSupplier
+        uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxDstDoc, uno::UNO_QUERY );
 
-            if(!xInputStream.is())
+        if(!xDrawPagesSupplier.is())
+        {
+            // we need the DrawPagesSupplier
+            return false;
+        }
+
+        // get the DrawPages
+        uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
+
+        if(!xDrawPages.is())
+        {
+            // we need the DrawPages
+            return false;
+        }
+
+        // check DrawPageCount (there should be one by default)
+        sal_Int32 nDrawPageCount(xDrawPages->getCount());
+
+        if(0 == nDrawPageCount)
+        {
+            // at least one DrawPage should be there - we need that
+            return false;
+        }
+
+        // get that DrawPage
+        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex(0), uno::UNO_QUERY );
+
+        if(!xDrawPage.is())
+        {
+            // we need that DrawPage
+            return false;
+        }
+
+        // get that DrawPage's UNO API implementation
+        SvxDrawPage* pSvxDrawPage(comphelper::getFromUnoTunnel<SvxDrawPage>(xDrawPage));
+
+        if(nullptr == pSvxDrawPage || nullptr == pSvxDrawPage->GetSdrPage())
+        {
+            // we need a SvxDrawPage
+            return false;
+        }
+
+        // get the SvStream to work with
+        std::unique_ptr< SvStream > aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+
+        if (!aStream)
+        {
+            // we need the SvStream
+            return false;
+        }
+
+        // create a GraphicFilter and load the SVG (format already known, thus *could*
+        // be handed over to ImportGraphic - but detection is fast).
+        // As a bonus, zipped data is already detected and handled there
+        GraphicFilter aGraphicFilter;
+        Graphic aGraphic;
+        const ErrCode nGraphicFilterErrorCode(
+            aGraphicFilter.ImportGraphic(aGraphic, u"", *aStream));
+
+        if(ERRCODE_NONE != nGraphicFilterErrorCode)
+        {
+            // SVG import error, cannot continue
+            return false;
+        }
+
+        // get the GraphicPrefSize early to check if we have any content
+        // (the SVG may contain nothing and/or just <g visibility="hidden"> stuff...)
+        const Size aGraphicPrefSize(aGraphic.GetPrefSize());
+
+        if(0 == aGraphicPrefSize.Width() || 0 == aGraphicPrefSize.Height())
+        {
+            // SVG has no displayable content, stop import.
+            // Also possible would be to get the sequence< Primitives >
+            // from aGraphic and check if it is empty.
+            // Possibility to set some error message here to tell
+            // the user what/why loading went wrong, but I do not
+            // know how this could be done here
+            return false;
+        }
+
+        // tdf#118232 Get the sequence of primitives and check if geometry is completely
+        // hidden. If so, there is no need to add a SdrObject at all
+        auto const & rVectorGraphicData(aGraphic.getVectorGraphicData());
+        bool bContainsNoGeometry(false);
+
+        if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getType())
+        {
+            const drawinglayer::primitive2d::Primitive2DContainer aContainer(rVectorGraphicData->getPrimitive2DSequence());
+
+            if(!aContainer.empty())
             {
-                // we need the InputStream
-                break;
-            }
+                bool bAllAreHiddenGeometry(true);
 
-            // get the DrawPagesSupplier
-            uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxDstDoc, uno::UNO_QUERY );
-
-            if(!xDrawPagesSupplier.is())
-            {
-                // we need the DrawPagesSupplier
-                break;
-            }
-
-            // get the DrawPages
-            uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
-
-            if(!xDrawPages.is())
-            {
-                // we need the DrawPages
-                break;
-            }
-
-            // check DrawPageCount (there should be one by default)
-            sal_Int32 nDrawPageCount(xDrawPages->getCount());
-
-            if(0 == nDrawPageCount)
-            {
-                // at least one DrawPage should be there - we need that
-                break;
-            }
-
-            // get that DrawPage
-            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex(0), uno::UNO_QUERY );
-
-            if(!xDrawPage.is())
-            {
-                // we need that DrawPage
-                break;
-            }
-
-            // get that DrawPage's UNO API implementation
-            SvxDrawPage* pSvxDrawPage(comphelper::getFromUnoTunnel<SvxDrawPage>(xDrawPage));
-
-            if(nullptr == pSvxDrawPage || nullptr == pSvxDrawPage->GetSdrPage())
-            {
-                // we need a SvxDrawPage
-                break;
-            }
-
-            // get the SvStream to work with
-            std::unique_ptr< SvStream > aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-
-            if (!aStream)
-            {
-                // we need the SvStream
-                break;
-            }
-
-            // create a GraphicFilter and load the SVG (format already known, thus *could*
-            // be handed over to ImportGraphic - but detection is fast).
-            // As a bonus, zipped data is already detected and handled there
-            GraphicFilter aGraphicFilter;
-            Graphic aGraphic;
-            const ErrCode nGraphicFilterErrorCode(
-                aGraphicFilter.ImportGraphic(aGraphic, u"", *aStream));
-
-            if(ERRCODE_NONE != nGraphicFilterErrorCode)
-            {
-                // SVG import error, cannot continue
-                break;
-            }
-
-            // get the GraphicPrefSize early to check if we have any content
-            // (the SVG may contain nothing and/or just <g visibility="hidden"> stuff...)
-            const Size aGraphicPrefSize(aGraphic.GetPrefSize());
-
-            if(0 == aGraphicPrefSize.Width() || 0 == aGraphicPrefSize.Height())
-            {
-                // SVG has no displayable content, stop import.
-                // Also possible would be to get the sequence< Primitives >
-                // from aGraphic and check if it is empty.
-                // Possibility to set some error message here to tell
-                // the user what/why loading went wrong, but I do not
-                // know how this could be done here
-                break;
-            }
-
-            // tdf#118232 Get the sequence of primitives and check if geometry is completely
-            // hidden. If so, there is no need to add a SdrObject at all
-            auto const & rVectorGraphicData(aGraphic.getVectorGraphicData());
-            bool bContainsNoGeometry(false);
-
-            if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getType())
-            {
-                const drawinglayer::primitive2d::Primitive2DContainer aContainer(rVectorGraphicData->getPrimitive2DSequence());
-
-                if(!aContainer.empty())
+                for(const auto& rCandidate : aContainer)
                 {
-                    bool bAllAreHiddenGeometry(true);
-
-                    for(const auto& rCandidate : aContainer)
+                    if(rCandidate && PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != rCandidate->getPrimitive2DID())
                     {
-                        if(rCandidate && PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != rCandidate->getPrimitive2DID())
-                        {
-                            bAllAreHiddenGeometry = false;
-                            break;
-                        }
-                    }
-
-                    if(bAllAreHiddenGeometry)
-                    {
-                        bContainsNoGeometry = true;
+                        bAllAreHiddenGeometry = false;
+                        break;
                     }
                 }
+
+                if(bAllAreHiddenGeometry)
+                {
+                    bContainsNoGeometry = true;
+                }
             }
-
-            // create a SdrModel-GraphicObject to insert to page
-            SdrPage* pTargetSdrPage(pSvxDrawPage->GetSdrPage());
-            rtl::Reference< SdrGrafObj > aNewSdrGrafObj;
-
-            // tdf#118232 only add an SdrGrafObj when we have Geometry
-            if(!bContainsNoGeometry)
-            {
-                aNewSdrGrafObj =
-                    new SdrGrafObj(
-                        pTargetSdrPage->getSdrModelFromSdrPage(),
-                        aGraphic);
-            }
-
-            // Evtl. adapt the GraphicPrefSize to target-MapMode of target-Model
-            // (should be 100thmm here, but just stay safe by doing the conversion)
-            const MapMode aGraphicPrefMapMode(aGraphic.GetPrefMapMode());
-            const MapUnit eDestUnit(pTargetSdrPage->getSdrModelFromSdrPage().GetItemPool().GetMetric(0));
-            const MapUnit eSrcUnit(aGraphicPrefMapMode.GetMapUnit());
-            Size aGraphicSize(aGraphicPrefSize);
-
-            if (eDestUnit != eSrcUnit)
-            {
-                aGraphicSize = Size(
-                    OutputDevice::LogicToLogic(aGraphicSize.Width(), eSrcUnit, eDestUnit),
-                    OutputDevice::LogicToLogic(aGraphicSize.Height(), eSrcUnit, eDestUnit));
-            }
-
-            // Based on GraphicSize, set size of Page. Do not forget to adapt PageBorders,
-            // but interpret them relative to PageSize so that they do not 'explode/shrink'
-            // in comparison. Use a common scaling factor for hor/ver to not get
-            // asynchronous border distances, though. All in all this will adapt borders
-            // nicely and is based on office-defaults for standard-page-border-sizes.
-            const Size aPageSize(pTargetSdrPage->GetSize());
-            const double fBorderRelation((
-                static_cast< double >(pTargetSdrPage->GetLeftBorder()) / aPageSize.Width() +
-                static_cast< double >(pTargetSdrPage->GetRightBorder()) / aPageSize.Width() +
-                static_cast< double >(pTargetSdrPage->GetUpperBorder()) / aPageSize.Height() +
-                static_cast< double >(pTargetSdrPage->GetLowerBorder()) / aPageSize.Height()) / 4.0);
-            const tools::Long nAllBorder(basegfx::fround<tools::Long>((aGraphicSize.Width() + aGraphicSize.Height()) * fBorderRelation * 0.5));
-
-            // Adapt PageSize and Border stuff. To get all MasterPages and PresObjs
-            // correctly adapted, do not just use
-            //      pTargetSdrPage->SetBorder(...) and
-            //      pTargetSdrPage->SetSize(...),
-            // but ::adaptSizeAndBorderForAllPages
-            // Do use original Size and borders to get as close to original
-            // as possible for better turn-arounds.
-            pTargetSdrPage->getSdrModelFromSdrPage().adaptSizeAndBorderForAllPages(
-                Size(
-                    aGraphicSize.Width(),
-                    aGraphicSize.Height()),
-                nAllBorder,
-                nAllBorder,
-                nAllBorder,
-                nAllBorder);
-
-            // tdf#118232 set pos/size at SdrGraphicObj - use zero position for
-            // better turn-around results
-            if(!bContainsNoGeometry)
-            {
-                aNewSdrGrafObj->SetSnapRect(
-                    tools::Rectangle(
-                        Point(0, 0),
-                        aGraphicSize));
-
-                // insert to page (owner change of SdrGrafObj)
-                pTargetSdrPage->InsertObject(aNewSdrGrafObj.get());
-            }
-
-            // done - set positive result now
-            bRet = true;
-
-            // always leave helper endless loop
-            break;
         }
+
+        // create a SdrModel-GraphicObject to insert to page
+        SdrPage* pTargetSdrPage(pSvxDrawPage->GetSdrPage());
+        rtl::Reference< SdrGrafObj > aNewSdrGrafObj;
+
+        // tdf#118232 only add an SdrGrafObj when we have Geometry
+        if(!bContainsNoGeometry)
+        {
+            aNewSdrGrafObj =
+                new SdrGrafObj(
+                    pTargetSdrPage->getSdrModelFromSdrPage(),
+                    aGraphic);
+        }
+
+        // Evtl. adapt the GraphicPrefSize to target-MapMode of target-Model
+        // (should be 100thmm here, but just stay safe by doing the conversion)
+        const MapMode aGraphicPrefMapMode(aGraphic.GetPrefMapMode());
+        const MapUnit eDestUnit(pTargetSdrPage->getSdrModelFromSdrPage().GetItemPool().GetMetric(0));
+        const MapUnit eSrcUnit(aGraphicPrefMapMode.GetMapUnit());
+        Size aGraphicSize(aGraphicPrefSize);
+
+        if (eDestUnit != eSrcUnit)
+        {
+            aGraphicSize = Size(
+                OutputDevice::LogicToLogic(aGraphicSize.Width(), eSrcUnit, eDestUnit),
+                OutputDevice::LogicToLogic(aGraphicSize.Height(), eSrcUnit, eDestUnit));
+        }
+
+        // Based on GraphicSize, set size of Page. Do not forget to adapt PageBorders,
+        // but interpret them relative to PageSize so that they do not 'explode/shrink'
+        // in comparison. Use a common scaling factor for hor/ver to not get
+        // asynchronous border distances, though. All in all this will adapt borders
+        // nicely and is based on office-defaults for standard-page-border-sizes.
+        const Size aPageSize(pTargetSdrPage->GetSize());
+        const double fBorderRelation((
+            static_cast< double >(pTargetSdrPage->GetLeftBorder()) / aPageSize.Width() +
+            static_cast< double >(pTargetSdrPage->GetRightBorder()) / aPageSize.Width() +
+            static_cast< double >(pTargetSdrPage->GetUpperBorder()) / aPageSize.Height() +
+            static_cast< double >(pTargetSdrPage->GetLowerBorder()) / aPageSize.Height()) / 4.0);
+        const tools::Long nAllBorder(basegfx::fround<tools::Long>((aGraphicSize.Width() + aGraphicSize.Height()) * fBorderRelation * 0.5));
+
+        // Adapt PageSize and Border stuff. To get all MasterPages and PresObjs
+        // correctly adapted, do not just use
+        //      pTargetSdrPage->SetBorder(...) and
+        //      pTargetSdrPage->SetSize(...),
+        // but ::adaptSizeAndBorderForAllPages
+        // Do use original Size and borders to get as close to original
+        // as possible for better turn-arounds.
+        pTargetSdrPage->getSdrModelFromSdrPage().adaptSizeAndBorderForAllPages(
+            Size(
+                aGraphicSize.Width(),
+                aGraphicSize.Height()),
+            nAllBorder,
+            nAllBorder,
+            nAllBorder,
+            nAllBorder);
+
+        // tdf#118232 set pos/size at SdrGraphicObj - use zero position for
+        // better turn-around results
+        if(!bContainsNoGeometry)
+        {
+            aNewSdrGrafObj->SetSnapRect(
+                tools::Rectangle(
+                    Point(0, 0),
+                    aGraphicSize));
+
+            // insert to page (owner change of SdrGrafObj)
+            pTargetSdrPage->InsertObject(aNewSdrGrafObj.get());
+        }
+
+        // done - set positive result now
+        return true;
     }
     else if( mxSrcDoc.is() )
     {
@@ -427,19 +424,26 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         bool bPageProvided = comphelper::LibreOfficeKit::isActive();
         sal_Int32 nPageToExport = -1;
 
-        for( const PropertyValue& rProp : rDescriptor )
+        comphelper::SequenceAsHashMap args(rDescriptor);
+        if (args.contains(u"ConversionRequestOrigin"_ustr))
         {
-            if (rProp.Name == "SelectionOnly")
-            {
-                // #i124608# extract single selection wanted from dialog return values
-                rProp.Value >>= bSelectionOnly;
-                bPageProvided = false;
-            }
-            else if (rProp.Name == "PagePos")
-            {
-                rProp.Value >>= nPageToExport;
+            // when invoked from command line, default to exporting everything (-1)
+            if (args[u"ConversionRequestOrigin"_ustr] == u"CommandLine"_ustr)
                 bPageProvided = true;
-            }
+        }
+
+        if (args.contains(u"PagePos"_ustr))
+        {
+            args[u"PagePos"_ustr] >>= nPageToExport;
+            bPageProvided = true;
+        }
+
+        if (args.contains(u"SelectionOnly"_ustr))
+        {
+            // #i124608# extract single selection wanted from dialog return values
+            args[u"SelectionOnly"_ustr] >>= bSelectionOnly;
+            if (bSelectionOnly)
+                bPageProvided = false;
         }
 
         uno::Reference<frame::XController > xController;
@@ -463,24 +467,23 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                 {
                     sal_Int32 nDPCount = xDrawPages->getCount();
 
-                    sal_Int32 i;
-                    for( i = 0; i < nDPCount; ++i )
+                    for (sal_Int32 i = 0; i < nDPCount; ++i)
                     {
-                        if( nPageToExport != -1 && nPageToExport == i )
+                        if (nPageToExport == i)
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
                             mSelectedPages.push_back(xDrawPage);
                         }
-                        else
+                        else if (nPageToExport == -1)
                         {
                             uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
                             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
-                            bool bIsSlideVisible = true;     // default: true
                             if (xPropSet.is())
                             {
                                 Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
                                 if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"Visible"_ustr))
                                 {
+                                    bool bIsSlideVisible = true;     // default: true
                                     xPropSet->getPropertyValue( u"Visible"_ustr )  >>= bIsSlideVisible;
                                     if (!bIsSlideVisible)
                                         continue;
@@ -506,12 +509,12 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        if(bSelectionOnly && bGotSelection && 0 == maShapeSelection->getCount())
+        if (bGotSelection && 0 == maShapeSelection->getCount())
         {
             // #i124608# export selection, got maShapeSelection but no shape selected -> nothing
             // to export, we are done (maybe return true, but a hint that nothing was done
             // may be useful; it may have happened by error)
-            bRet = false;
+            return false;
         }
         else
         {
@@ -519,7 +522,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
              *  We get all master page that are targeted by at least one draw page.
              *  The master page are put in an unordered set.
              */
-            ObjectSet aMasterPageTargetSet;
+            std::unordered_set<uno::Reference<drawing::XDrawPage>> aMasterPageTargetSet;
             for(const uno::Reference<drawing::XDrawPage> & mSelectedPage : mSelectedPages)
             {
                 uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPage, uno::UNO_QUERY );
@@ -528,24 +531,15 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                     aMasterPageTargetSet.insert( xMasterPageTarget->getMasterPage() );
                 }
             }
-            // Later we move them to an uno::Sequence so we can get them by index
-            mMasterPageTargets.resize( aMasterPageTargetSet.size() );
-            sal_Int32 i = 0;
-            for (auto const& masterPageTarget : aMasterPageTargetSet)
-            {
-                mMasterPageTargets[i++].set(masterPageTarget,  uno::UNO_QUERY);
-            }
+            // Later we move them to a vector so we can get them by index
+            mMasterPageTargets.insert(mMasterPageTargets.end(), aMasterPageTargetSet.begin(),
+                                      aMasterPageTargetSet.end());
 
-            bRet = implExport( rDescriptor );
+            return implExport( rDescriptor );
         }
     }
-    else
-        bRet = false;
 
-    if( pFocusWindow )
-        pFocusWindow->LeaveWait();
-
-    return bRet;
+    return false;
 }
 
 bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor )
@@ -781,7 +775,7 @@ public:
 
 OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {
-    utl::MediaDescriptor aMediaDescriptor(rDescriptor);
+    comphelper::SequenceAsHashMap aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY);
     OUString aRetval;
 

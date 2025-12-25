@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf132783(UITestCase):
 
-   def test_tdf132783(self):
+    def test_tdf132783(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf132783.ods")):
 
             for i in range(5):

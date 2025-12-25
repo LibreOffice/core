@@ -32,7 +32,7 @@ class SAL_NO_VTABLE SAL_LOPLUGIN_ANNOTATE("crosscast") IAnyRefDialog
     : public formula::IControlReferenceHandler
 {
 public:
-    virtual ~IAnyRefDialog() COVERITY_NOEXCEPT_FALSE {}
+    virtual ~IAnyRefDialog() {}
 
     virtual void SetReference(const ScRange& rRef, ScDocument& rDoc) = 0;
     virtual void RefInputStart(formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr) = 0;

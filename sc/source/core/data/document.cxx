@@ -3858,7 +3858,7 @@ bool ScDocument::HasStringCells( const ScRange& rRange ) const
 
 bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
+    sal_uInt32 nValidation = GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA).GetValue();
     if( nValidation )
     {
         const ScValidationData* pData = GetValidationEntry( nValidation );
@@ -3870,7 +3870,7 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 bool ScDocument::HasValidationData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
+    sal_uInt32 nValidation = GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA).GetValue();
     if( nValidation )
     {
         const ScValidationData* pData = GetValidationEntry( nValidation );
@@ -4760,37 +4760,37 @@ void ScDocument::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, S
 
 //  Attribute   ----------------------------------------------------------
 
-const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
+const SfxPoolItem& ScDocument::GetAttr(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
     {
         const SfxPoolItem* pTemp = pTable->GetAttr( nCol, nRow, nWhich );
         if (pTemp)
-            return pTemp;
+            return *pTemp;
         else
         {
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem( nWhich );
+    return mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem(nWhich);
 }
 
-const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+const SfxPoolItem& ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
     {
         const SfxPoolItem* pTemp = pTable->GetAttr( nCol, nRow, nWhich, nStartRow, nEndRow );
         if (pTemp)
-            return pTemp;
+            return *pTemp;
         else
         {
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem( nWhich );
+    return mxPoolHelper->GetDocPool()->GetUserOrPoolDefaultItem(nWhich);
 }
 
-const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const
+const SfxPoolItem& ScDocument::GetAttr(const ScAddress& rPos, sal_uInt16 nWhich) const
 {
     return GetAttr(rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
 }
@@ -5520,7 +5520,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
             SCCOL nOldCol = rStartCol;
             SCROW nOldRow = rStartRow;
             for (nCol=nOldCol; nCol<=nEndCol; nCol++)
-                while (GetAttr(nCol,rStartRow,nTab,ATTR_MERGE_FLAG)->IsVerOverlapped())
+                while (GetAttr(nCol, rStartRow, nTab, ATTR_MERGE_FLAG).IsVerOverlapped())
                     --rStartRow;
 
             //TODO: pass on ?
@@ -5551,7 +5551,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                         SCCOL nTempCol = nOldCol;
                         do
                             --nTempCol;
-                        while (GetAttr(nTempCol,nAttrRow,nTab,ATTR_MERGE_FLAG)->IsHorOverlapped());
+                        while (GetAttr(nTempCol,nAttrRow,nTab,ATTR_MERGE_FLAG).IsHorOverlapped());
                         if (nTempCol < rStartCol)
                             rStartCol = nTempCol;
                     }
@@ -5763,28 +5763,15 @@ void ScDocument::SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const
 
 bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
-    if (pAttr)
-        return pAttr->IsHorOverlapped();
-    else
-    {
-        OSL_FAIL("Overlapped: Attr==0");
-        return false;
-    }
+    return GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG).IsHorOverlapped();
 }
 
 bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab, SCROW* nStartRow, SCROW* nEndRow ) const
 {
     SCROW dummy;
-    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG,
+    const ScMergeFlagAttr& rAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG,
                                             nStartRow ? *nStartRow : dummy, nEndRow ? *nEndRow : dummy );
-    if (pAttr)
-        return pAttr->IsVerOverlapped();
-    else
-    {
-        OSL_FAIL("Overlapped: Attr==0");
-        return false;
-    }
+    return rAttr.IsVerOverlapped();
 }
 
 void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,

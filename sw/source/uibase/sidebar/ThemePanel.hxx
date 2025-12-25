@@ -14,8 +14,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/ColorSets.hxx>
-
-namespace svx { class ThemeColorValueSet; }
+#include <vcl/weld/IconView.hxx>
 
 namespace sw::sidebar
 {
@@ -38,16 +37,13 @@ public:
         boost::property_tree::ptree& /*rState*/) override {};
 
 private:
-    std::unique_ptr<weld::TreeView> mxListBoxFonts;
-    std::unique_ptr<svx::ThemeColorValueSet> mxValueSetColors;
-    std::unique_ptr<weld::CustomWeld> mxValueSetColorsWin;
+    std::unique_ptr<weld::IconView> mxIconViewColors;
     std::unique_ptr<weld::Button> mxApplyButton;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
-    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
-    DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);
+    DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
     void DoubleClickHdl();
-
+    VclPtr<VirtualDevice> CreateImage(const model::ColorSet& rColorSet);
 };
 
 } // end of namespace sw::sidebar

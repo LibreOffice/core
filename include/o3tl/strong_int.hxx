@@ -25,51 +25,13 @@
 #include <cassert>
 #include <type_traits>
 #include <compare>
+#include <concepts>
 #include <config_options.h>
+
+#include <o3tl/safeint.hxx>
 
 namespace o3tl
 {
-
-#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2024
-
-namespace detail {
-
-template<typename T1, typename T2> constexpr
-typename std::enable_if<
-    std::is_signed<T1>::value && std::is_signed<T2>::value, bool>::type
-isInRange(T2 value) {
-    return value >= std::numeric_limits<T1>::min()
-        && value <= std::numeric_limits<T1>::max();
-}
-
-template<typename T1, typename T2> constexpr
-typename std::enable_if<
-    std::is_signed<T1>::value && std::is_unsigned<T2>::value, bool>::type
-isInRange(T2 value) {
-    return value
-        <= static_cast<typename std::make_unsigned<T1>::type>(
-            std::numeric_limits<T1>::max());
-}
-
-template<typename T1, typename T2> constexpr
-typename std::enable_if<
-    std::is_unsigned<T1>::value && std::is_signed<T2>::value, bool>::type
-isInRange(T2 value) {
-    return value >= 0
-        && (static_cast<typename std::make_unsigned<T2>::type>(value)
-            <= std::numeric_limits<T1>::max());
-}
-
-template<typename T1, typename T2> constexpr
-typename std::enable_if<
-    std::is_unsigned<T1>::value && std::is_unsigned<T2>::value, bool>::type
-isInRange(T2 value) {
-    return value <= std::numeric_limits<T1>::max();
-}
-
-}
-
-#endif
 
 ///
 /// Wrap up an integer type so that we prevent accidental conversion to other integer types.
@@ -95,14 +57,11 @@ public:
     explicit constexpr strong_int(int value) : m_value(value) {}
     explicit constexpr strong_int(unsigned int value) : m_value(value) {}
 #else
-    template<typename T> explicit constexpr strong_int(
-        T value,
-        typename std::enable_if<std::is_integral<T>::value, int>::type = 0):
-        m_value(value)
+    template <std::integral I> explicit constexpr strong_int(I value)
+        : m_value(value)
     {
         // catch attempts to pass in out-of-range values early
-        assert(detail::isInRange<UNDERLYING_TYPE>(value)
-               && "out of range");
+        assert(ValidRange<UNDERLYING_TYPE>::isInside(value) && "out of range");
     }
 #endif
     strong_int() : m_value(0) {}

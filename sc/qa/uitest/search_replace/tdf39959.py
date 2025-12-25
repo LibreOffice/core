@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 39959 - Find-and-replace doesn't search all tables anymore
 class tdf39959(UITestCase):
-   def test_tdf39959_find_replace_all_sheets(self):
+    def test_tdf39959_find_replace_all_sheets(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf39959.ods")) as calc_doc:
              # 1. Open a new document
             # 2. Enter "asdf" in A1

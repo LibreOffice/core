@@ -23,11 +23,12 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <utility>
+#include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <bitmaps.hlst>
 
 using namespace drawinglayer::geometry;
@@ -291,6 +292,28 @@ void SfxInfoBarWindow::Layout()
     InterimItemWindow::Layout();
 
     m_bLayingOut = false;
+}
+
+bool SfxInfoBarWindow::EventNotify(NotifyEvent& rEvent)
+{
+    const NotifyEventType nType = rEvent.GetType();
+    if (NotifyEventType::KEYINPUT == nType)
+    {
+        const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
+        switch (rKeyCode.GetCode())
+        {
+            case KEY_TAB:
+            case KEY_SPACE:
+            case KEY_RETURN:
+                // Allow Tab, Space, and Enter to pass through to parent for proper focus handling
+                break;
+            default:
+                // Consume all other keys to prevent document window interaction
+                return true;
+        }
+    }
+
+    return InterimItemWindow::EventNotify(rEvent);
 }
 
 weld::Button& SfxInfoBarWindow::addButton(const OUString* pCommand)

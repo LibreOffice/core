@@ -519,6 +519,8 @@ void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTex
     m_aPaintRect = rPaint;
     m_nSpaceIdx = 0;
     m_pSpaceAdd = nullptr;
+    m_nLetterSpacing = 0;
+    m_nScaleWidth = 0;
     m_pWrongList = nullptr;
     m_pGrammarCheckList = nullptr;
     m_pSmartTags = nullptr;
@@ -531,6 +533,8 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* p
     , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
     , m_pSmartTags( rInf.GetSmartTags() )
     , m_pSpaceAdd( rInf.GetpSpaceAdd() ),
+      m_nLetterSpacing( rInf.GetLetterSpacing() ),
+      m_nScaleWidth( rInf.GetScaleWidth() ),
       m_pBrushItem( rInf.GetBrushItem() ),
       m_aTextFly( rInf.GetTextFly() ),
       m_aPos( rInf.GetPos() ),
@@ -545,6 +549,8 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
     , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
     , m_pSmartTags( rInf.GetSmartTags() )
     , m_pSpaceAdd( rInf.GetpSpaceAdd() ),
+      m_nLetterSpacing( rInf.GetLetterSpacing() ),
+      m_nScaleWidth( rInf.GetScaleWidth() ),
       m_pBrushItem( rInf.GetBrushItem() ),
       m_aTextFly( rInf.GetTextFly() ),
       m_aPos( rInf.GetPos() ),
@@ -788,12 +794,12 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
             aDrawInf.SetSmartTags( bTmpSmart ? m_pSmartTags : nullptr );
 
             // set custom letter spacing (hyphenation hasn't been supported yet)
-            if ( rPor.GetLetterSpacing() != 0 )
-                aDrawInf.SetLetterSpacing( rPor.GetLetterSpacing() / sal_Int32(nLength) );
+            if ( GetLetterSpacing() != 0 )
+                aDrawInf.SetLetterSpacing( GetLetterSpacing() );
 
             // set custom glyph scaling (hyphenation hasn't been supported yet)
             // Note: set 100 percent, too (to reset the setting of the previous line)
-            aDrawInf.SetScaleWidth( rPor.GetScaleWidth() );
+            aDrawInf.SetScaleWidth( GetScaleWidth() );
 
             m_pFnt->DrawText_( aDrawInf );
         }
@@ -1143,8 +1149,7 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     sal_Unicode cChar;
     if( static_cast<const SwArrowPortion&>(rPor).IsLeft() )
     {
-        aRect.Pos().AdjustY(20 - GetAscent() );
-        aRect.Pos().AdjustX(20 );
+        aRect += { 20, 20 - GetAscent() };
         if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
         cChar = CHAR_LEFT_ARROW;
@@ -1153,8 +1158,7 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     {
         if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
-        aRect.Pos().AdjustY( -(aRect.Height() + 20) );
-        aRect.Pos().AdjustX( -(aRect.Width() + 20) );
+        aRect -= { aRect.Width() + 20, aRect.Height() + 20 };
         cChar = CHAR_RIGHT_ARROW;
     }
 
@@ -1847,7 +1851,7 @@ void SwTextFormatInfo::Init()
     m_nExtraDescent = 0;
     m_nSoftHyphPos = TextFrameIndex(0);
     m_nLastBookmarkPos = TextFrameIndex(-1);
-    m_cHookChar = 0;
+    ClearHookChar();
     SetIdx(TextFrameIndex(0));
     SetLen(TextFrameIndex(GetText().getLength()));
     SetPaintOfst(0);
@@ -1964,7 +1968,7 @@ bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout const * pCurr )
 TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                                                 TextFrameIndex const nEnd)
 {
-    m_cHookChar = 0;
+    ClearHookChar();
     TextFrameIndex i = nStart;
 
     // Used for decimal tab handling:
@@ -1995,7 +1999,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         case CH_BREAK:
         case CHAR_ZWSP :
         case CHAR_WJ :
-            m_cHookChar = cPos;
+            SetHookChar( cPos );
             return i;
 
         default:
@@ -2006,7 +2010,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                     OSL_ENSURE( cPos, "Unexpected end of string" );
                     if( cPos ) // robust
                     {
-                        m_cHookChar = cPos;
+                        SetHookChar( cPos );
                         return i;
                     }
                 }
@@ -2024,7 +2028,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
                     {
                         if ( bNumFound )
                         {
-                            m_cHookChar = cPos;
+                            SetHookChar( cPos );
                             SetTabDecimal( cPos );
                             return i;
                         }
@@ -2041,8 +2045,8 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
         {
-            m_cHookChar = GetChar( i );
-            SetTabDecimal( m_cHookChar );
+            SetHookChar( cPos );
+            SetTabDecimal( cPos );
         }
     }
 

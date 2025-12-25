@@ -80,9 +80,10 @@ constexpr OUStringLiteral BUNDLED_PACKAGE_MANAGER = u"bundled";
 
 //                             DialogHelper
 
-DialogHelper::DialogHelper(const uno::Reference< uno::XComponentContext > &xContext,
-                           weld::Dialog* pDialog)
-    : m_pDialog(pDialog)
+DialogHelper::DialogHelper(weld::Widget* pParent, const OUString& rUIFile,
+                           const OUString& rDialogId,
+                           const uno::Reference<uno::XComponentContext>& xContext)
+    : weld::GenericDialogController(pParent, rUIFile, rDialogId)
     , m_nEventID(nullptr)
 {
     m_xContext = xContext;
@@ -108,7 +109,7 @@ bool DialogHelper::continueOnSharedExtension(const uno::Reference<deployment::XP
         const SolarMutexGuard guard;
         incBusy();
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            m_pDialog, VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
+            m_xDialog.get(), VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
         bHadWarning = true;
 
         bool bRet = RET_OK == xBox->run();
@@ -138,8 +139,8 @@ void DialogHelper::openWebBrowser(const OUString& sURL, const OUString& sTitle)
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         incBusy();
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(getFrameWeld(),
-                                                       VclMessageType::Warning, VclButtonsType::Ok, msg));
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(
+            getDialog(), VclMessageType::Warning, VclButtonsType::Ok, msg));
         xErrorBox->set_title(sTitle);
         xErrorBox->run();
         xErrorBox.reset();
@@ -155,9 +156,9 @@ bool DialogHelper::installExtensionWarn(std::u16string_view rExtensionName)
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
         incBusy();
-        std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(getFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok,
-                                                      DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED)));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(
+            getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+            DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED)));
         xWarnBox->run();
         xWarnBox.reset();
         decBusy();
@@ -166,9 +167,9 @@ bool DialogHelper::installExtensionWarn(std::u16string_view rExtensionName)
     }
 
     incBusy();
-    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(getFrameWeld(),
-                                                  VclMessageType::Warning, VclButtonsType::OkCancel,
-                                                  DpResId(RID_STR_WARNING_INSTALL_EXTENSION)));
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+        getDialog(), VclMessageType::Warning, VclButtonsType::OkCancel,
+        DpResId(RID_STR_WARNING_INSTALL_EXTENSION)));
     OUString sText(xInfoBox->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
     xInfoBox->set_primary_text(sText);
@@ -183,7 +184,8 @@ bool DialogHelper::installForAllUsers(bool &bInstallForAll)
 {
     const SolarMutexGuard guard;
     incBusy();
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), u"desktop/ui/installforalldialog.ui"_ustr));
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(getDialog(), u"desktop/ui/installforalldialog.ui"_ustr));
     std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"InstallForAllDialog"_ustr));
     short nRet = xQuery->run();
     xQuery.reset();
@@ -205,9 +207,8 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
 
 //                             ExtMgrDialog
 ExtMgrDialog::ExtMgrDialog(weld::Window* pParent, TheExtensionManager& rManager)
-    : GenericDialogController(pParent, u"desktop/ui/extensionmanager.ui"_ustr,
-                              u"ExtensionManagerDialog"_ustr)
-    , DialogHelper(rManager.getContext(), m_xDialog.get())
+    : DialogHelper(pParent, u"desktop/ui/extensionmanager.ui"_ustr, u"ExtensionManagerDialog"_ustr,
+                   rManager.getContext())
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
     , m_bStartProgress(false)
@@ -553,8 +554,6 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, weld::Button&, void)
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
 {
-    bool bCallClose = true;
-
     //only suggest restart if modified and this is the first close attempt
     if (!m_bClosed && m_rManager.isModified())
     {
@@ -564,14 +563,13 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
         if (dp_misc::office_is_running())
         {
             SolarMutexGuard aGuard;
-            bCallClose = !::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+            svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
                                                           m_xDialog.get(),
                                                           svtools::RESTART_REASON_EXTENSION_INSTALL);
         }
     }
 
-    if (bCallClose)
-        m_xDialog->response(RET_CANCEL);
+    m_xDialog->response(RET_CANCEL);
 }
 
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
@@ -689,7 +687,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, weld::Button&, void)
 
     if ( aFileList.hasElements() )
     {
-        m_rManager.installPackage(aFileList[0]);
+        m_rManager.installPackage(aFileList[0], *this);
     }
 
     decBusy();
@@ -785,9 +783,8 @@ void ExtMgrDialog::Close()
 
 //UpdateRequiredDialog
 UpdateRequiredDialog::UpdateRequiredDialog(weld::Window* pParent, TheExtensionManager& rManager)
-    : GenericDialogController(pParent, u"desktop/ui/updaterequireddialog.ui"_ustr,
-                              u"UpdateRequiredDialog"_ustr)
-    , DialogHelper(rManager.getContext(), m_xDialog.get())
+    : DialogHelper(pParent, u"desktop/ui/updaterequireddialog.ui"_ustr,
+                   u"UpdateRequiredDialog"_ustr, rManager.getContext())
     , m_sCloseText(DpResId(RID_STR_CLOSE_BTN))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
@@ -1189,7 +1186,7 @@ sal_Int16 UpdateRequiredDialogService::execute()
 {
     ::rtl::Reference< ::dp_gui::TheExtensionManager > xManager( TheExtensionManager::get(
                                                               m_xComponentContext) );
-    xManager->createDialog( true );
+    xManager->createDialog(true, {});
     sal_Int16 nRet = xManager->execute();
 
     return nRet;

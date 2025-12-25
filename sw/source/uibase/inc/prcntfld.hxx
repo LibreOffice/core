@@ -19,7 +19,8 @@
 #pragma once
 
 #include <svtools/unitconv.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 #include <swdllapi.h>
 
 class SW_DLLPUBLIC SwPercentField
@@ -32,7 +33,10 @@ class SW_DLLPUBLIC SwPercentField
     sal_Int64 m_nOldSpinSize;
     sal_Int64 m_nOldPageSize;
     sal_Int64 m_nLastPercent;
+    // Re-use the high-precision value,
+    // since re-calculating a value based on the percent may be a bit different because of rounding.
     sal_Int64 m_nLastValue;
+    sal_Int64 m_nLastRefValue;
     sal_uInt16  m_nOldDigits;
     FieldUnit   m_eOldUnit;
     bool m_bLockAutoCalculation; //prevent recalculation of percent values when the
@@ -75,7 +79,7 @@ public:
 
     sal_Int64 Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
-    void ShowPercent(bool bPercent);
+    void ShowPercent(bool bPercent, sal_uInt16 nMaxPercent = 100);
 
     void LockAutoCalculation(bool bLock) {m_bLockAutoCalculation = bLock;}
 };

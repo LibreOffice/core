@@ -24,7 +24,7 @@
 
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/charclass.hxx>
@@ -192,7 +192,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     {
         pData->GetArea( nStartTab, nStartCol,nStartRow, nEndCol,nEndRow );
     }
-    // tdf #168478 - use the previously found range rather than returning an empty one
+    // tdf#168478 - use the previously found range rather than returning an empty one
     else if ( eMode != SC_DB_OLD )
     {
         if ( !bSelected )

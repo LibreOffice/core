@@ -19,7 +19,7 @@
 
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -35,7 +35,9 @@
 #include <basobj.hxx>
 #include <localizationmgr.hxx>
 #include <dlged.hxx>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -229,7 +231,7 @@ BasicManager* FindBasicManager( StarBASIC const * pLib )
     for (auto const& doc : aDocuments)
     {
         BasicManager* pBasicMgr = doc.getBasicManager();
-        OSL_ENSURE( pBasicMgr, "basctl::FindBasicManager: no basic manager for the document!" );
+        SAL_WARN_IF( !pBasicMgr, "basctl.basicide", "basctl::FindBasicManager: no basic manager for the document!" );
         if ( !pBasicMgr )
             continue;
 
@@ -388,7 +390,7 @@ tools::Long HandleBasicError( StarBASIC const * pBasic )
         {
             bool bProtected = false;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-            OSL_ENSURE( aDocument.isValid(), "basctl::HandleBasicError: no document for the given BasicManager!" );
+            SAL_WARN_IF( !aDocument.isValid(), "basctl.basicide", "basctl::HandleBasicError: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
             {
                 const OUString& aOULibName( pBasic->GetName() );

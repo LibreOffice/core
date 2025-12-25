@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
-#define INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -73,7 +72,5 @@ namespace osl
 
     int mkdir(const OString& aPath, mode_t aMode);
 } // end namespace osl
-
-#endif // INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

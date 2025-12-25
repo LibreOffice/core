@@ -21,7 +21,7 @@
 
 #include <i18nutil/transliteration.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SfxItemSet;
 

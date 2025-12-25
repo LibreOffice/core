@@ -145,6 +145,8 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SID_RULER_TEXT_RIGHT_TO_LEFT,
         SID_PARASPACE_INCREASE,
         SID_PARASPACE_DECREASE,
+        SID_ATTR_PARA_ADJUST_START,
+        SID_ATTR_PARA_ADJUST_END,
         0 };
 
     mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );

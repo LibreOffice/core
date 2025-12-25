@@ -99,6 +99,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/configuration,\
     theDefaultProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/cui,\
+    ColorPicker \
     GetCreateDialogFactoryService \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/datatransfer,\
@@ -611,7 +612,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart,\
 	Dim3DDiagram \
 	DonutDiagram \
 	FilledNetDiagram \
-	HistogramDiagram \
 	LineDiagram \
 	NetDiagram \
 	PieDiagram \
@@ -1992,6 +1992,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	TransparencyStyle \
 	XAnyDescriptionAccess \
 	XAxis \
+    XChartColorStyle \
 	XChartDocument \
 	XChartShape \
 	XChartShapeContainer \
@@ -2038,7 +2039,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2/data,\
 	XLabeledDataSequence \
 	XLabeledDataSequence2 \
 	XNumericalDataSequence \
-	XPivotTableDataProvider \
 	XRangeHighlighter \
 	XRangeXMLConversion \
 	XSheetDataProvider \

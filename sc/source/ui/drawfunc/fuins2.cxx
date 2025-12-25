@@ -44,7 +44,7 @@
 #include <scmod.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -83,8 +83,8 @@ namespace
 void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewData* pViewData,
                    const OUString& rRangeParam, bool bRangeIsPivotTable)
 {
-    ScDocShell& rDocShell = pViewData->GetDocShell();
-    ScDocument& rScDoc = rDocShell.GetDocument();
+    ScDocShell* pDocShell = pViewData->GetDocShell();
+    ScDocument& rScDoc = pDocShell->GetDocument();
 
     OUString aRangeString(rRangeParam);
 
@@ -142,7 +142,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 
     xReceiver->attachDataProvider(xDataProvider);
 
-    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getXWeak(rDocShell.GetModel()), uno::UNO_QUERY );
+    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getXWeak(pDocShell->GetModel()), uno::UNO_QUERY );
     xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
     // Same behavior as with old chart: Always assume data series in columns
@@ -234,7 +234,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
     uno::Reference< io::XInputStream > xIconMetaFile;
 
     const sal_uInt16 nSlot = rReq.GetSlot();
-    const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
+    const SfxGlobalNameItem* pNameItem = rReq.GetArg(SID_INSERT_OBJECT);
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         const SvGlobalName& aClassName = pNameItem->GetValue();
@@ -449,18 +449,25 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         }
         else
         {
-            bool bAutomaticMark = false;
-            if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
-            {
-                rViewSh.GetViewData().GetView()->MarkDataArea();
-                bAutomaticMark = true;
-            }
-
-            ScMarkData aMultiMark(std::move(aMark));
-            aMultiMark.MarkToMulti();
-
             ScRangeList aRanges;
-            aMultiMark.FillRangeListWithMarks( &aRanges, false );
+            if (aMark.IsMarked() || aMark.IsMultiMarked())
+            {
+                ScMarkData aMultiMark(std::move(aMark));
+                aMultiMark.MarkToMulti();
+                aMultiMark.FillRangeListWithMarks(&aRanges, false);
+            }
+            else
+            {
+                ScViewData& rViewData = rViewSh.GetViewData();
+                SCTAB nTab = rViewData.CurrentTabForData();
+                SCCOL nStartCol = rViewData.GetCurX();
+                SCROW nStartRow = rViewData.GetCurY();
+                SCCOL nEndCol = nStartCol;
+                SCROW nEndRow = nStartRow;
+                rViewData.GetDocument().GetDataArea(nTab, nStartCol, nStartRow, nEndCol, nEndRow,
+                                                    true, false);
+                aRanges = ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
+            }
             OUString aStr;
             aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, rDocument, rDocument.GetAddressConvention() );
             aRangeString = aStr;
@@ -474,9 +481,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                     aPositionRange.ExtendTo( aRanges[ i ] );
                 }
             }
-
-            if(bAutomaticMark)
-                rViewSh.GetViewData().GetView()->Unmark();
         }
     }
 
@@ -524,8 +528,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     }
 
     ScViewData& rData = rViewSh.GetViewData();
-    ScDocShell& rScDocSh = rData.GetDocShell();
-    ScDocument& rScDoc   = rScDocSh.GetDocument();
+    ScDocShell* pScDocSh = rData.GetDocShell();
+    ScDocument& rScDoc   = pScDocSh->GetDocument();
     bool bUndo (rScDoc.IsUndoEnabled());
 
     if( pReqArgs )
@@ -566,14 +570,14 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             {
                 if (bUndo)
                 {
-                    rScDocSh.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoInsertTab>( rScDocSh, nNewTab,
+                    pScDocSh->GetUndoManager()->AddUndoAction(
+                        std::make_unique<ScUndoInsertTab>( *pScDocSh, nNewTab,
                                              true/*bAppend*/, aTabName ) );
                 }
 
-                rScDocSh.Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
+                pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
                 rViewSh.SetTabNo( nNewTab, true );
-                rScDocSh.PostPaintExtras();            //! done afterwards ???
+                pScDocSh->PostPaintExtras();            //! done afterwards ???
             }
             else
             {

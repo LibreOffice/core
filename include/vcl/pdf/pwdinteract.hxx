@@ -11,7 +11,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 namespace vcl::pdf
 {

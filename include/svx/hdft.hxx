@@ -21,7 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <svx/pagectrl.hxx>
 #include <svx/svxdllapi.h>
@@ -57,8 +58,8 @@ protected:
 
     SvxHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId);
 
-    sal_uInt16       nId;
-    std::unique_ptr<SfxItemSet> pBBSet;
+    sal_uInt16       m_nId;
+    std::unique_ptr<SfxItemSet> m_pBBSet;
     bool            mbDisableQueryBox : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
 

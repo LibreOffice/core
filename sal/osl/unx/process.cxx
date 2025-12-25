@@ -438,7 +438,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     char szImagePath[PATH_MAX] = "";
     if (!image.isEmpty()
         && (UnicodeToText(
-                szImagePath, SAL_N_ELEMENTS(szImagePath), image.getStr(),
+                szImagePath, std::size(szImagePath), image.getStr(),
                 image.getLength())
             == 0))
     {

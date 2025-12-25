@@ -55,7 +55,7 @@
 
 #include <bitmaps.hlst>
 
-#define PAGE_SIZE 30
+#define MAX_ITEMS_PER_PAGE 30
 
 using namespace css;
 using ::com::sun::star::uno::Reference;
@@ -262,7 +262,7 @@ void LoadImage(std::u16string_view rPreviewFile, const AdditionsItem& rCurrentIt
     //white background since images come with a white border
     xVirDev->SetBackground(Wallpaper(COL_WHITE));
     xVirDev->Erase();
-    xVirDev->DrawBitmapEx(Point(aThumbSize.Width() / 2 - aBmpSize.Width() / 2, Margin), aBmp);
+    xVirDev->DrawBitmap(Point(aThumbSize.Width() / 2 - aBmpSize.Width() / 2, Margin), aBmp);
     rCurrentItem.m_xImageScreenshot->set_image(xVirDev.get());
     xVirDev.disposeAndClear();
 }
@@ -447,7 +447,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     m_xButtonShowMore->connect_clicked(LINK(this, AdditionsDialog, ShowMoreHdl));
     m_xButtonClose->connect_clicked(LINK(this, AdditionsDialog, CloseButtonHdl));
 
-    m_nMaxItemCount = PAGE_SIZE; // Dialog initialization item count
+    m_nMaxItemCount = MAX_ITEMS_PER_PAGE; // Dialog initialization item count
     m_nCurrentListItemCount = 0; // First, there is no item on the list.
 
     OUString sTag = sAdditionsTag;
@@ -582,7 +582,7 @@ void AdditionsDialog::RefreshUI()
         m_pSearchThread->StopExecution();
     ClearList();
     m_nCurrentListItemCount = 0;
-    m_nMaxItemCount = PAGE_SIZE;
+    m_nMaxItemCount = MAX_ITEMS_PER_PAGE;
     m_pSearchThread = new SearchAndParseThread(this, false);
     m_pSearchThread->launch();
 }
@@ -740,7 +740,7 @@ IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
 IMPL_LINK_NOARG(AdditionsDialog, ShowMoreHdl, weld::Button&, void)
 {
     m_xButtonShowMore->set_visible(false);
-    m_nMaxItemCount += PAGE_SIZE;
+    m_nMaxItemCount += MAX_ITEMS_PER_PAGE;
     if (m_pSearchThread.is())
         m_pSearchThread->StopExecution();
     m_pSearchThread = new SearchAndParseThread(this, false);

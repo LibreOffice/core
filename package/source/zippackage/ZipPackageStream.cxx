@@ -371,11 +371,10 @@ bool ZipPackageStream::ParsePackageRawStream()
     {
         if ( GetOwnSeekStream()->readBytes ( aHeader, 4 ) == 4 )
         {
-            const sal_Int8 *pHeader = aHeader.getConstArray();
-            sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
-                                 ( pHeader [1] & 0xFF ) << 8  |
-                                 ( pHeader [2] & 0xFF ) << 16 |
-                                 ( pHeader [3] & 0xFF ) << 24;
+            sal_uInt32 nHeader = ( aHeader [0] & 0xFF )       |
+                                 ( aHeader [1] & 0xFF ) << 8  |
+                                 ( aHeader [2] & 0xFF ) << 16 |
+                                 ( aHeader [3] & 0xFF ) << 24;
             if ( nHeader == n_ConstHeader )
             {
                 // this is one of our god-awful, but extremely devious hacks, everyone cheer

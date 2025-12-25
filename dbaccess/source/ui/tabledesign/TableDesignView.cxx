@@ -43,6 +43,9 @@ OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent)
     , m_xFieldDescParent(m_xBuilder->weld_container(u"fielddesc"_ustr))
     , m_xFieldDescWin(new OTableFieldDescWin(m_xFieldDescParent.get(), pParent))
 {
+    // Set an ID on the edit control to make it easier to do UI testing
+    m_xEditorCtrl->set_id("DBTableEditor");
+
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
     m_xFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
@@ -253,6 +256,12 @@ void OTableDesignView::GetFocus()
 {
     if ( GetEditorCtrl() )
         GetEditorCtrl()->GrabFocus();
+}
+
+void OTableDesignView::FlushModifiedData()
+{
+    if ( OTableFieldDescWin* pDescWin = GetDescWin() )
+        pDescWin->FlushModifiedData();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

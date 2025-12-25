@@ -606,18 +606,22 @@ void OQueryTableView::createNewConnection()
         SelectConn( pConn );
 }
 
-bool OQueryTableView::RemoveConnection(VclPtr<OTableConnection>& rConnection, bool /*_bDelete*/)
+bool OQueryTableView::RemoveConnection(VclPtr<OTableConnection>& rConnection, bool bDelete)
 {
     VclPtr<OQueryTableConnection> xConnection(static_cast<OQueryTableConnection*>(rConnection.get()));
 
     // we don't want that our connection will be deleted, we put it in the undo manager
     bool bRet = OJoinTableView::RemoveConnection(rConnection, false);
 
-    // add undo action
-    addUndoAction(this,
-                  std::make_unique<OQueryDelTabConnUndoAction>(this),
-                  xConnection.get(),
-                  true);
+    // Don’t add an undo action if the connection isn’t to be deleted because the action will
+    // effectively take ownership of it and end up deleting it. See tdf#99619
+    if (bDelete)
+    {
+        addUndoAction(this,
+                      std::make_unique<OQueryDelTabConnUndoAction>(this),
+                      xConnection.get(),
+                      true);
+    }
 
     return bRet;
 }

@@ -18,10 +18,4 @@ pub mod rtl_string;
 pub mod sal_types;
 pub mod type_ffi;
 
-// Include unit tests
-#[cfg(test)]
-mod tests {
-    mod integration_tests;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

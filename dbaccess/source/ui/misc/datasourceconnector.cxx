@@ -33,7 +33,7 @@
 #include <utility>
 #include <vcl/mnemonic.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <strings.hrc>

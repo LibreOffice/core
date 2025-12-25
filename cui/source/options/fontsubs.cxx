@@ -25,6 +25,7 @@
 #include <svtools/fontsubstconfig.hxx>
 #include "fontsubs.hxx"
 #include <helpids.h>
+#include <rtl/ustrbuf.hxx>
 
 /*********************************************************************/
 /*                                                                   */
@@ -148,13 +149,13 @@ std::unique_ptr<SfxTabPage> SvxFontSubstTabPage::Create( weld::Container* pPage,
 
 OUString SvxFontSubstTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label4"_ustr, u"label2"_ustr, u"label3"_ustr, u"label1"_ustr, u"label8"_ustr, u"label9"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"usetable"_ustr, u"nonpropfontonly"_ustr };
@@ -162,10 +163,10 @@ OUString SvxFontSubstTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )

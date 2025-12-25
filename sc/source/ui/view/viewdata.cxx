@@ -763,15 +763,39 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
-ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
+ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh)
+    : ScViewData(nullptr, &rDocSh, pViewSh)
+{
+}
+
+ScViewData::ScViewData(ScDocument& rDoc)
+    : ScViewData(&rDoc, nullptr, nullptr)
+{
+}
+
+static ScViewOptions DefaultOptions()
+{
+    ScViewOptions aOptions;
+    aOptions.SetOption(sc::ViewOption::GRID, true);
+    aOptions.SetOption(sc::ViewOption::SYNTAX, false);
+    aOptions.SetOption(sc::ViewOption::HEADER, true);
+    aOptions.SetOption(sc::ViewOption::TABCONTROLS, true);
+    aOptions.SetOption(sc::ViewOption::VSCROLL, true);
+    aOptions.SetOption(sc::ViewOption::HSCROLL, true);
+    aOptions.SetOption(sc::ViewOption::OUTLINER, true);
+    return aOptions;
+}
+
+// Either pDoc or pDocSh must be valid
+ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh) :
         nPPTX(0.0),
         nPPTY(0.0),
-        mrDocShell   ( rDocSh ),
-        mrDoc       (rDocSh.GetDocument()),
-        maMarkData  (mrDoc.GetSheetLimits()),
-        maHighlightData (mrDoc.GetSheetLimits()),
+        maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
+        maHighlightData (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
+        pDocShell   ( pDocSh ),
+        mrDoc       (pDocSh ? pDocSh->GetDocument() : *pDoc),
         pView       ( pViewSh ),
-        maOptions   (mrDoc.GetViewOptions()),
+        maOptions   (pDocSh ? pDocSh->GetDocument().GetViewOptions() : DefaultOptions()),
         pSpellingView ( nullptr ),
         aLogicMode  ( MapUnit::Map100thMM ),
         eDefZoomType( SvxZoomType::PERCENT ),
@@ -807,6 +831,7 @@ ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
         nFormulaBarLines(1),
         m_nLOKPageUpDownOffset( 0 )
 {
+    assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
     maMarkData.SelectOneTable(0); // Sync with nTabNo
 
     aScrSize = Size( o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::px),
@@ -837,7 +862,7 @@ ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh) :
     CalcPPT();
 }
 
-ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
+ScViewData::~ScViewData()
 {
     KillEditView();
 }
@@ -2778,15 +2803,15 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, tools::Long& rSizeYPix ) const
 {
     SCTAB nCurrentTab = CurrentTabForData();
-    const ScMergeAttr* pMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
-    if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
+    const ScMergeAttr& rMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
+    if ( rMerge.GetColMerge() > 1 || rMerge.GetRowMerge() > 1 )
     {
         tools::Long nOutWidth = 0;
         tools::Long nOutHeight = 0;
-        SCCOL nCountX = pMerge->GetColMerge();
+        SCCOL nCountX = rMerge.GetColMerge();
         for (SCCOL i=0; i<nCountX; i++)
             nOutWidth += ToPixel(mrDoc.GetColWidth(nX + i, nCurrentTab), nPPTX);
-        SCROW nCountY = pMerge->GetRowMerge();
+        SCROW nCountY = rMerge.GetRowMerge();
 
         for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
         {
@@ -2816,13 +2841,13 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, 
 bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, tools::Long& rSizeXTwips, tools::Long& rSizeYTwips) const
 {
     SCTAB nCurrentTab = CurrentTabForData();
-    const ScMergeAttr* pMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
-    SCCOL nCountX = pMerge->GetColMerge();
+    const ScMergeAttr& rMerge = mrDoc.GetAttr(nX, nY, nCurrentTab, ATTR_MERGE);
+    SCCOL nCountX = rMerge.GetColMerge();
     if (!nCountX)
         nCountX = 1;
     rSizeXTwips = mrDoc.GetColWidth(nX, nX + nCountX - 1, nCurrentTab);
 
-    SCROW nCountY = pMerge->GetRowMerge();
+    SCROW nCountY = rMerge.GetRowMerge();
     if (!nCountY)
         nCountY = 1;
     rSizeYTwips = mrDoc.GetRowHeight(nY, nY + nCountY - 1, nCurrentTab);
@@ -2929,9 +2954,9 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
     if ( !(bRepair && ( bHOver || bVOver )) )
         return;
 
-    const ScMergeAttr* pMerge = mrDoc.GetAttr(rPosX, rPosY, nCurrentTab, ATTR_MERGE);
-    if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
-         ( bVOver && pMerge->GetRowMerge() <= 1 ) )
+    const ScMergeAttr& rMerge = mrDoc.GetAttr(rPosX, rPosY, nCurrentTab, ATTR_MERGE);
+    if ( ( bHOver && rMerge.GetColMerge() <= 1 ) ||
+         ( bVOver && rMerge.GetRowMerge() <= 1 ) )
     {
         OSL_FAIL("merge error found");
 
@@ -2939,7 +2964,8 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
         SCCOL nEndCol = mrDoc.MaxCol();
         SCROW nEndRow = mrDoc.MaxRow();
         mrDoc.ExtendMerge(0, 0, nEndCol, nEndRow, nCurrentTab, true);
-        mrDocShell.PostPaint(ScRange(0, 0, nCurrentTab, mrDoc.MaxCol(), mrDoc.MaxRow(), nCurrentTab),
+        if (pDocShell)
+            pDocShell->PostPaint(ScRange(0, 0, nCurrentTab, mrDoc.MaxCol(), mrDoc.MaxRow(), nCurrentTab),
                                  PaintPartFlags::Grid);
     }
 }
@@ -3175,7 +3201,7 @@ void ScViewData::SetScreen( const tools::Rectangle& rVisArea )
 
 ScDocFunc& ScViewData::GetDocFunc() const
 {
-    return mrDocShell.GetDocFunc();
+    return pDocShell->GetDocFunc();
 }
 
 SfxBindings& ScViewData::GetBindings()
@@ -3259,7 +3285,8 @@ void ScViewData::CalcPPT()
     double nOldPPTX = nPPTX;
     double nOldPPTY = nPPTY;
     nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(GetZoomX());
-    nPPTX = nPPTX / mrDocShell.GetOutputFactor();   // Factor is printer to screen
+    if (pDocShell)
+        nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Factor is printer to screen
     nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(GetZoomY());
 
     //  if detective objects are present,
@@ -3529,7 +3556,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 Point& rSplitPos = rTabSett.maSplitPos;
                 rSplitPos = Point( bHSplit ? nExHSplitPos : 0, bVSplit ? nExVSplitPos : 0 );
                 rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MapUnit::MapTwip ) );
-                rSplitPos.setX( static_cast<tools::Long>(static_cast<double>(rSplitPos.X()) / mrDocShell.GetOutputFactor()) );
+                if ( pDocShell )
+                    rSplitPos.setX( static_cast<tools::Long>(static_cast<double>(rSplitPos.X()) / pDocShell->GetOutputFactor()) );
             }
             else if( bFrozen )
             {
@@ -3658,9 +3686,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                                 rTabSett.maSplitPos, MapMode( MapUnit::MapTwip ) );  //! Zoom?
                 // the test for use of printer metrics for text formatting here
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
-                if (ScModule::get()->GetInputOptions().GetTextWysiwyg())
+                if (pDocShell && ScModule::get()->GetInputOptions().GetTextWysiwyg())
                 {
-                    double nFactor = mrDocShell.GetOutputFactor();
+                    double nFactor = pDocShell->GetOutputFactor();
                     aPixel.setX( static_cast<tools::Long>( aPixel.X() * nFactor + 0.5 ) );
                 }
 
@@ -3999,7 +4027,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             maOptions.SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if (sName == SC_WINDOWSTATE)
         {
-            rSetting.Value >>= msOldWindowState;
+            // ignored
         }
         else
         {
@@ -4078,7 +4106,7 @@ void ScViewData::UpdateInputHandler( bool bForce )
 
 bool ScViewData::IsOle() const
 {
-    return mrDocShell.IsOle();
+    return pDocShell && pDocShell->IsOle();
 }
 
 bool ScViewData::UpdateFixX( SCTAB nTab ) // true = value changed
@@ -4465,5 +4493,9 @@ sc::SheetViewID ScViewData::GetSheetViewIDForSheet(SCTAB nTab) const
     return maTabData[nTab]->mnSheetViewID;
 }
 
+std::shared_ptr<sc::SheetViewManager> ScViewData::GetCurrentSheetViewManager() const
+{
+    return GetDocument().GetSheetViewManager(GetTabNumber());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5,4 +5,4 @@ https://downloads.mariadb.com/Connectors/c/
 
 configs/ generated like this:
 
-cmake -DWITH_CURL=OFF -DWITH_SSL=OFF -DWITH_UNIT_TESTS=OFF -DWITH_DYNCOL=OFF .../workdir/UnpackedTarball/mariadb-connector-c/
+(cd workdir/UnpackedTarball/mariadb-connector-c/ && cmake -DWITH_CURL=OFF -DWITH_SSL=OFF -DWITH_UNIT_TESTS=OFF -DWITH_DYNCOL=OFF)

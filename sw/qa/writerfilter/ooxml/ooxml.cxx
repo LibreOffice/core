@@ -25,6 +25,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
+#include <tabfrm.hxx>
 
 using namespace ::com::sun::star;
 
@@ -145,6 +146,30 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPos)
     // - Actual  : 243
     // i.e. the vertical position of D was too big.
     CPPUNIT_ASSERT_LESSEQUAL(static_cast<SwTwips>(1), nDiff);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableWafterRowHeight)
+{
+    // Given a document with a table, 2 rows, 2nd row's height is 12pt:
+    // When laying out that document:
+    createSwDoc("table-wafter-row-height.docx");
+
+    // Then make sure that <w:gridAfter> / <w:wAfter> doesn't increase the row height:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage = pLayout->GetLower()->DynCastPageFrame();
+    auto pBeforeTableFrame = pPage->FindFirstBodyContent()->DynCastTextFrame();
+    auto pTabFrame = pBeforeTableFrame->GetNext()->DynCastTabFrame();
+    const SwFrame* pRow1Frame = pTabFrame->Lower();
+    assert(pRow1Frame);
+    const SwFrame* pRow2Frame = pRow1Frame->GetNext();
+    SwTwips nRow2Height = pRow2Frame->getFrameArea().Height();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 240
+    // - Actual  : 580
+    // i.e. the row height was too large, should be exactly 12 points (11 points from line spacing,
+    // 1 point for the border).
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(240), nRow2Height);
 }
 }
 

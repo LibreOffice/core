@@ -14,8 +14,7 @@ $(eval $(call gb_Library_set_warnings_disabled,skia))
 $(eval $(call gb_Library_use_unpacked,skia,skia))
 
 $(eval $(call gb_Library_use_clang,skia))
-#This currently results in all sorts of compile complaints
-#$(eval $(call gb_Library_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
+$(eval $(call gb_Library_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
 
 $(eval $(call gb_Library_add_defs,skia,\
     -DSKIA_IMPLEMENTATION=1 \
@@ -126,6 +125,7 @@ $(eval $(call gb_Library_set_include,skia,\
     $$(INCLUDE) \
     -I$(gb_UnpackedTarball_workdir)/skia \
     -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/src/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/include/ \
     -I$(gb_UnpackedTarball_workdir)/skia/src/gpu/vk/vulkanmemoryallocator/ \
@@ -318,6 +318,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkColorPalette \
     UnpackedTarball/skia/src/codec/SkExif \
     UnpackedTarball/skia/src/codec/SkGainmapInfo \
+    UnpackedTarball/skia/src/codec/SkHdrMetadata \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkPixmapUtils \
@@ -482,6 +483,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPaintPriv \
     UnpackedTarball/skia/src/core/SkPath \
     UnpackedTarball/skia/src/core/SkPathBuilder \
+    UnpackedTarball/skia/src/core/SkPathData \
+    UnpackedTarball/skia/src/core/SkPathDump \
     UnpackedTarball/skia/src/core/SkPathEffect \
     UnpackedTarball/skia/src/core/SkPathIter \
     UnpackedTarball/skia/src/core/SkPathMeasure \
@@ -490,6 +493,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPathRawShapes \
     UnpackedTarball/skia/src/core/SkPathRef \
     UnpackedTarball/skia/src/core/SkPathUtils \
+    UnpackedTarball/skia/src/core/SkPath_editing \
+    UnpackedTarball/skia/src/core/SkPath_pathref \
     UnpackedTarball/skia/src/core/SkPath_serial \
     UnpackedTarball/skia/src/core/SkPixelRef \
     UnpackedTarball/skia/src/core/SkPixmap \

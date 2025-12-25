@@ -287,30 +287,45 @@ void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
     // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
 }
 
+// Check for animated primitives.
 void ViewObjectContact::checkForPrimitive2DAnimations()
 {
-    // remove old one
-    mpPrimitiveAnimation.reset();
-
-    // check for animated primitives
-    if(mxPrimitive2DSequence.empty())
-        return;
-
-    const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
-    const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
-
-    if(bTextAnimationAllowed || bGraphicAnimationAllowed)
+    // Somewhat odd structure here, because we are trying to avoid deleting and re-allocating the mpPrimitiveAnimation
+    // object, because we might be inside a call from the Scheduler, in which case we will be deleting an object
+    // on the call stack.
+    // Yes, this does still leave a possible situation where the user could turn animations off while we are
+    // animating and we could crash. I don't have a better solution right now.
+    //
+    drawinglayer::primitive2d::Primitive2DContainer aNewAnimatedPrimitives;
+    if(!mxPrimitive2DSequence.empty())
     {
-        AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
-            bTextAnimationAllowed, bGraphicAnimationAllowed);
-        aAnimatedExtractor.process(mxPrimitive2DSequence);
+        const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
+        const bool bGraphicAnimationAllowed(GetObjectContact().IsGraphicAnimationAllowed());
 
-        if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
+        if(bTextAnimationAllowed || bGraphicAnimationAllowed)
         {
-            // derived primitiveList is animated, setup new PrimitiveAnimation
-            mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.extractPrimitive2DSequence()) );
+            AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
+                bTextAnimationAllowed, bGraphicAnimationAllowed);
+            aAnimatedExtractor.process(mxPrimitive2DSequence);
+
+            if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
+            {
+                // derived primitiveList is animated, setup new PrimitiveAnimation
+                aNewAnimatedPrimitives = aAnimatedExtractor.extractPrimitive2DSequence();
+            }
         }
     }
+    if (!aNewAnimatedPrimitives.empty())
+    {
+        // derived primitiveList is animated, setup new PrimitiveAnimation
+        if (mpPrimitiveAnimation)
+            mpPrimitiveAnimation->SetPrimitives(std::move(aNewAnimatedPrimitives));
+        else
+            mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, std::move(aNewAnimatedPrimitives)) );
+    }
+    else
+        // remove old one
+        mpPrimitiveAnimation.reset();
 }
 
 void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
@@ -517,7 +532,9 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         // check for animated stuff
         const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
-        const_cast< ViewObjectContact* >(this)->maObjectRange.reset();
+        // always update object range when PrimitiveSequence changes
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+        const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
     }
 
     // return current Primitive2DContainer

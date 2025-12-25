@@ -176,7 +176,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/svxruler \
     svx/source/dialog/swframeexample \
     svx/source/dialog/swframeposstrings \
-    svx/source/dialog/ThemeColorValueSet \
     svx/source/dialog/ThemeDialog \
     svx/source/dialog/ThemeColorEditDialog \
     svx/source/dialog/txencbox \
@@ -249,7 +248,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/shapes/DefaultShapesPanel \
     svx/source/sidebar/shapes/ShapesUtil \
     svx/source/sidebar/textcolumns/TextColumnsPropertyPanel \
-    svx/source/sidebar/tools/ValueSetWithTextControl \
     svx/source/stbctrls/pszctrl \
     svx/source/stbctrls/insctrl \
     svx/source/stbctrls/selctrl \

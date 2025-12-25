@@ -154,20 +154,24 @@ void CSVDataProvider::Import()
     mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(),
         [this]() { this->ImportFinished(); }, std::vector(mrDataSource.getDataTransformation()));
-    mxCSVFetchThread->launch();
 
     if (mbDeterministic)
     {
         SolarMutexReleaser aReleaser;
-        mxCSVFetchThread->join();
+        mxCSVFetchThread->execute();
 
         // tdf#165658 An exception may have happened during the parsing of the file.
-        // Since parsing happens in a separate thread, here we need to check if
-        // something wrong happened and then rethrow the exception
+        // CSVFetchThread::execute catches the exception and stores it in case it is running in a
+        // separate thread. Here we need to check if something wrong happened and then rethrow the
+        // exception
         if (mxCSVFetchThread->IsParseError())
         {
             std::rethrow_exception(mxCSVFetchThread->GetLastException());
         }
+    }
+    else
+    {
+        mxCSVFetchThread->launch();
     }
 }
 

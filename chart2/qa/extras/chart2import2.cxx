@@ -942,7 +942,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf166428)
 
     // The attribute table:cell-range-address does not exist in ODF 1.4. and therefore may not be
     // be written.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
     assertXPathNoAttribute(pXmlDoc,
                            "/office:document-content/office:body/office:chart/chart:chart/"

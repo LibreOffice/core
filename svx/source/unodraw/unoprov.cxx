@@ -763,7 +763,6 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap(
         { u"UseBandingRowStyle"_ustr,           OWN_ATTR_TABLETEMPLATE_BANDINGROWS, cppu::UnoType<bool>::get(),0, 0},
         { u"UseBandingColumnStyle"_ustr,        OWN_ATTR_TABLETEMPLATE_BANDINGCOLUMNS, cppu::UnoType<bool>::get(),0, 0},
         { u"ReplacementGraphic"_ustr,           OWN_ATTR_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"ReplacementModel"_ustr,             OWN_ATTR_REPLACEMENT_MODEL, cppu::UnoType<css::lang::XComponent>::get(), css::beans::PropertyAttribute::READONLY, 0},
     };
 
     return aTableShapePropertyMap_Impl;

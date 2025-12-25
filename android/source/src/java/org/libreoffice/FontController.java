@@ -254,14 +254,12 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
         RecyclerView recyclerView = colorPickerLayout.findViewById(R.id.fontColorView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
 
         RecyclerView recyclerView2 = colorPickerLayout.findViewById(R.id.fontColorViewSub);
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(mActivity,4);
-        recyclerView2.setHasFixedSize(true);
         recyclerView2.addItemDecoration(new RecyclerView.ItemDecoration() {
 
             @Override
@@ -317,14 +315,12 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
         RecyclerView recyclerView = backColorPickerLayout.findViewById(R.id.fontColorView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
 
         RecyclerView recyclerView2 = backColorPickerLayout.findViewById(R.id.fontColorViewSub);
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(mActivity,4);
-        recyclerView2.setHasFixedSize(true);
         recyclerView2.addItemDecoration(new RecyclerView.ItemDecoration() {
 
             @Override

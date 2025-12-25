@@ -32,7 +32,7 @@ public class DocumentOverlay {
     private final DocumentOverlayView mDocumentOverlayView;
     private final DocumentOverlayLayer mDocumentOverlayLayer;
 
-    private final long hidePageNumberRectDelayInMilliseconds = 500;
+    private static final long HIDE_PAGE_NUMBER_RECT_DELAY_IN_MILLISECONDS = 500;
 
     /**
      * DocumentOverlayLayer responsibility is to get the changes to the viewport
@@ -69,9 +69,6 @@ public class DocumentOverlay {
     public DocumentOverlay(LibreOfficeMainActivity context, LayerView layerView) {
         mDocumentOverlayView = context.findViewById(R.id.text_cursor_view);
         mDocumentOverlayLayer = new DocumentOverlayLayer();
-        if (mDocumentOverlayView == null) {
-            Log.e(LOGTAG, "Failed to initialize TextCursorLayer - CursorView is null");
-        }
         layerView.addLayer(mDocumentOverlayLayer);
         mDocumentOverlayView.initialize(layerView);
     }
@@ -121,7 +118,7 @@ public class DocumentOverlay {
             public void run() {
                 mDocumentOverlayView.hidePageNumberRect();
             }
-        }, hidePageNumberRectDelayInMilliseconds);
+        }, HIDE_PAGE_NUMBER_RECT_DELAY_IN_MILLISECONDS);
     }
 
     /**

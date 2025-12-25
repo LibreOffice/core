@@ -334,7 +334,6 @@ private:
                    m_nRow == r.m_nRow &&
                    m_bScrolledToReachCell == r.m_bScrolledToReachCell;
         }
-        bool operator!=(const CursorMoveAttempt& r) const { return !(*this == r); }
     };
     std::stack<CursorMoveAttempt>
                     m_aGotoStack;

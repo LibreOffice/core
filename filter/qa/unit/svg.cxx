@@ -20,10 +20,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
+
+#include <libxml/xpathInternals.h>
 
 using namespace ::com::sun::star;
 
@@ -79,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     loadFromFile(u"semi-transparent-line.odg");
 
     // Export it to SVG.
-    save(u"draw_svg_Export"_ustr);
+    save(TestFilter::SVG_DRAW);
 
     // Get the style of the group around the actual <path> element.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -99,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentFillWithTransparentLine)
     loadFromFile(u"semi-transparent-fill.odg");
 
     // Export it to SVG.
-    save(u"draw_svg_Export"_ustr);
+    save(TestFilter::SVG_DRAW);
 
     // Get the style of the group around the actual <path> element.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -128,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     loadFromFile(u"TransparentText.odg");
 
     // Export to SVG.
-    save(u"draw_svg_Export"_ustr);
+    save(TestFilter::SVG_DRAW);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // We expect 2 groups of class "TextShape" that
@@ -170,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
     xShapeProps->setPropertyValue(u"CharTransparence"_ustr, uno::Any(static_cast<sal_Int16>(20)));
 
     // When exporting to SVG:
-    save(u"draw_svg_Export"_ustr);
+    save(TestFilter::SVG_DRAW);
 
     // Then make sure that the two semi-transparent paragraphs have the same X position:
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -199,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
+    comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_svg_Export"_ustr;
     aMediaDescriptor[u"OutputStream"_ustr] <<= xOut;
 
@@ -215,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
     loadFromFile(u"custom-bullet.fodp");
 
     // When exporting that to SVG:
-    save(u"impress_svg_Export"_ustr);
+    save(TestFilter::SVG_IMPRESS);
 
     // Then make sure the bullet glyph is not lost:
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -235,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
     loadFromFile(u"attributeRedefinedTest.odp");
 
     // Export to SVG.
-    save(u"impress_svg_Export"_ustr);
+    save(TestFilter::SVG_IMPRESS);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // We expect four paragraph
@@ -279,7 +281,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     xShapeText->setString(u"A\tB"_ustr);
 
     // When exporting that document to SVG:
-    save(u"impress_svg_Export"_ustr);
+    save(TestFilter::SVG_IMPRESS);
 
     // Then make sure the tab is not lost:
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -296,7 +298,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, textInImage)
     loadFromFile(u"text-in-image.odp");
 
     // Export to SVG.
-    save(u"impress_svg_Export"_ustr);
+    save(TestFilter::SVG_IMPRESS);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -314,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentTextBullet)
     loadFromFile(u"semi-transparent-text-bullet.odg");
 
     // When exporting to SVG:
-    save(u"draw_svg_Export"_ustr);
+    save(TestFilter::SVG_DRAW);
 
     // Then make sure the result is correct:
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -342,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testMapModeText)
     loadFromFile(u"YAxis.odg");
 
     // Export to SVG.
-    save(u"draw_svg_Export"_ustr);
+    save(TestFilter::SVG_DRAW);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -370,7 +372,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf91315)
     // Load a presentation containing RTL text
     loadFromFile(u"tdf91315.fodp");
 
-    save(u"impress_svg_Export"_ustr);
+    save(TestFilter::SVG_IMPRESS);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -385,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf166789)
     // A fit-to-size text
     loadFromFile(u"fit-to-size-text.fodg");
 
-    save(u"impress_svg_Export"_ustr);
+    save(TestFilter::SVG_IMPRESS);
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 

@@ -223,8 +223,8 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
             const Size aOverlaySize(aModule.GetSizePixel());
             ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
             pVirDev->SetOutputSizePixel(aSize);
-            pVirDev->DrawBitmapEx(Point(), aThumbnail);
-            pVirDev->DrawBitmapEx(Point(aSize.Width() - aOverlaySize.Width() - 5,
+            pVirDev->DrawBitmap(Point(), aThumbnail);
+            pVirDev->DrawBitmap(Point(aSize.Width() - aOverlaySize.Width() - 5,
                                         aSize.Height() - aOverlaySize.Height() - 5),
                                   aModule);
             aThumbnail = pVirDev->GetBitmap(Point(), aSize);

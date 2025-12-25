@@ -140,7 +140,7 @@ static void MakeAsMeta(Graphic &rGraphic)
 
     pVDev->EnableOutput( false );
     aMtf.Record( pVDev );
-    pVDev->DrawBitmapEx( Point(), aSize, rGraphic.GetBitmap() );
+    pVDev->DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
@@ -753,7 +753,7 @@ bool ImportEpsGraphic( SvStream & rStream, Graphic & rGraphic)
                                 pVDev->EnableOutput( false );
                                 aMtf.Record( pVDev );
                                 aSize = OutputDevice::LogicToLogic(aSize, MapMode(), MapMode(MapUnit::Map100thMM));
-                                pVDev->DrawBitmapEx( Point(), aSize, vcl::bitmap::CreateFromData(std::move(aBitmap)) );
+                                pVDev->DrawBitmap( Point(), aSize, vcl::bitmap::CreateFromData(std::move(aBitmap)) );
                                 aMtf.Stop();
                                 aMtf.WindStart();
                                 aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));

@@ -101,7 +101,6 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbNoSelection       = true;
     mbDoubleSel         = false;
-    mbScroll            = false;
     mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
@@ -286,7 +285,7 @@ void ValueSet::LoseFocus()
 void ValueSet::Resize()
 {
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
     CustomWidgetController::Resize();
 }
@@ -527,7 +526,7 @@ void ValueSet::QueueReformat()
     queue_resize();
     RecalcScrollBar();
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -601,7 +600,7 @@ void ValueSet::Clear()
     RecalcScrollBar();
 
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -740,7 +739,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     mnSelItemId = nItemId;
     mbNoSelection = false;
 
-    bool bNewOut = !mbFormat && IsReallyVisible() && IsUpdateMode();
+    bool bNewOut = !mbFormat && IsReallyVisible();
     bool bNewLine = false;
 
     if (weld::DrawingArea* pNeedsFormatToScroll = !mnCols ? GetDrawingArea() : nullptr)
@@ -752,7 +751,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     }
 
     // if necessary scroll to the visible area
-    if (mbScroll && nItemId && mnCols)
+    if (nItemId && mnCols)
     {
         sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
         if ( nNewLine < mnFirstLine )
@@ -760,7 +759,8 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             SetFirstLine(nNewLine);
             bNewLine = true;
         }
-        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
+        else if (mnFirstLine + mnVisLines - 1 >= 0
+                 && nNewLine > o3tl::make_unsigned(mnFirstLine + mnVisLines - 1))
         {
             SetFirstLine(static_cast<sal_uInt16>(nNewLine-mnVisLines+1));
             bNewLine = true;
@@ -836,7 +836,7 @@ void ValueSet::SetNoSelection()
     mbNoSelection   = true;
     mbHighlight     = false;
 
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 
@@ -930,8 +930,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
 
     // calculate number of rows
-    mbScroll = false;
-
     auto nOldLines = mnLines;
     // Floor( (M+N-1)/N )==Ceiling( M/N )
     mnLines = (static_cast<tools::Long>(nItemCount) + mnCols - 1) / mnCols;
@@ -959,9 +957,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
 
     bAdjustmentOutOfDate |= nOldVisLines != mnVisLines;
-
-    if (mnLines > mnVisLines)
-        mbScroll = true;
 
     if (mnLines <= mnVisLines)
     {
@@ -1507,7 +1502,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
 
         if (!aBlendFrame.IsEmpty())
         {
-            maVirDev->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+            maVirDev->DrawBitmap(aRect.TopLeft(), aBlendFrame);
         }
     }
 }
@@ -1566,7 +1561,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     pItem->meType  = VALUESETITEM_IMAGE;
     pItem->maImage = rImage;
 
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    if (!mbFormat && IsReallyVisible())
     {
         const tools::Rectangle aRect = ImplGetItemRect(nPos);
         Invalidate(aRect);
@@ -1586,7 +1581,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
     pItem->meType  = VALUESETITEM_COLOR;
     pItem->maColor = rColor;
 
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    if (!mbFormat && IsReallyVisible())
     {
         const tools::Rectangle aRect = ImplGetItemRect(nPos);
         Invalidate( aRect );
@@ -1751,7 +1746,7 @@ void ValueSet::SetEdgeBlending(bool bNew)
         mbEdgeBlending = bNew;
         mbFormat = true;
 
-        if (GetDrawingArea() && IsReallyVisible() && IsUpdateMode())
+        if (GetDrawingArea() && IsReallyVisible())
         {
             Invalidate();
         }
@@ -1874,7 +1869,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
 
     if ( pItem->meType == VALUESETITEM_USERDRAW )
     {
-        if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+        if (!mbFormat && IsReallyVisible())
         {
             const tools::Rectangle aRect = ImplGetItemRect(nPos);
             Invalidate(aRect);
@@ -1913,7 +1908,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
     pItem->maText = rText;
 
-    if (!mbFormat && IsReallyVisible() && IsUpdateMode())
+    if (!mbFormat && IsReallyVisible())
     {
         sal_uInt16 nTempId = mnSelItemId;
 
@@ -1986,7 +1981,7 @@ void ValueSet::SetColor(const Color& rColor)
 {
     maColor  = rColor;
     mbFormat = true;
-    if (IsReallyVisible() && IsUpdateMode())
+    if (IsReallyVisible())
         Invalidate();
 }
 

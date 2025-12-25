@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import os.path
+import os
 from tempfile import TemporaryDirectory
 
 from uitest.framework import UITestCase
@@ -76,8 +76,10 @@ class exportToPDF(UITestCase):
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                self.assertEqual("Sheet1", document.DrawPages[0][0].String)
-                self.assertEqual("Page 1", document.DrawPages[0][1].String)
-                self.assertEqual("Hello World", document.DrawPages[0][2].String)
+               # This test depends on the poppler pdf import
+               if os.getenv('ENABLE_POPPLER') == 'TRUE':
+                    self.assertEqual("Sheet1", document.DrawPages[0][0].String)
+                    self.assertEqual("Page 1", document.DrawPages[0][1].String)
+                    self.assertEqual("Hello World", document.DrawPages[0][2].String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

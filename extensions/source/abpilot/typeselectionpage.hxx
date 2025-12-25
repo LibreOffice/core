@@ -21,7 +21,7 @@
 
 #include "abspage.hxx"
 #include "addresssettings.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace abp
 {

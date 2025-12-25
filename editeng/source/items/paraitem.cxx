@@ -43,6 +43,7 @@
 #include <editeng/forbiddenruleitem.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <editeng/memberids.h>
@@ -409,7 +410,7 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 eVal = - 1;
             ::cppu::enum2int(eVal,rVal);
-            if(eVal >= 0 && eVal <= 4)
+            if(eVal >= 0 && eVal <= 6)
             {
                 SvxAdjust eAdjust = static_cast<SvxAdjust>(eVal);
                 if(MID_LAST_LINE_ADJUST == nMemberId &&
@@ -512,10 +513,12 @@ OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_ADJUST_RIGHT,
         RID_SVXITEMS_ADJUST_BLOCK,
         RID_SVXITEMS_ADJUST_CENTER,
-        RID_SVXITEMS_ADJUST_BLOCKLINE
+        RID_SVXITEMS_ADJUST_BLOCKLINE,
+        RID_SVXITEMS_ADJUST_PARASTART,
+        RID_SVXITEMS_ADJUST_PARAEND
     };
-    static_assert(std::size(RID_SVXITEMS_ADJUST) - 1 == static_cast<size_t>(SvxAdjust::BlockLine), "unexpected size");
-    assert(nPos <= sal_uInt16(SvxAdjust::BlockLine) && "enum overflow!");
+    static_assert(std::size(RID_SVXITEMS_ADJUST) - 1 == static_cast<size_t>(SvxAdjust::ParaEnd), "unexpected size");
+    assert(nPos <= sal_uInt16(SvxAdjust::ParaEnd) && "enum overflow!");
     return EditResId(RID_SVXITEMS_ADJUST[nPos]);
 }
 
@@ -550,7 +553,7 @@ bool SvxWidowsItem::GetPresentation
 
         case SfxItemPresentation::Complete:
         {
-            rText = EditResId(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EditResId(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_WIDOWS_COMPLETE);
             break;
         }
 
@@ -594,7 +597,7 @@ bool SvxOrphansItem::GetPresentation
 
         case SfxItemPresentation::Complete:
         {
-            rText = EditResId(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EditResId(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_ORPHANS_COMPLETE);
             break;
         }
 
@@ -1117,12 +1120,10 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
 
             maTabStops.clear();
-            const style::TabStop* pArr = aSeq.getConstArray();
-            const sal_uInt16 nCount = static_cast<sal_uInt16>(aSeq.getLength());
-            for(sal_uInt16 i = 0; i < nCount ; i++)
+            for (const auto& rTabStop : aSeq)
             {
                 SvxTabAdjust eAdjust = SvxTabAdjust::Default;
-                switch(pArr[i].Alignment)
+                switch (rTabStop.Alignment)
                 {
                 case style::TabAlign_LEFT   : eAdjust = SvxTabAdjust::Left; break;
                 case style::TabAlign_CENTER : eAdjust = SvxTabAdjust::Center; break;
@@ -1130,12 +1131,10 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 case style::TabAlign_DECIMAL: eAdjust = SvxTabAdjust::Decimal; break;
                 default: ;//prevent warning
                 }
-                sal_Unicode cFill = pArr[i].FillChar;
-                sal_Unicode cDecimal = pArr[i].DecimalChar;
-                SvxTabStop aTab( bConvert ? o3tl::toTwips(pArr[i].Position, o3tl::Length::mm100) : pArr[i].Position,
+                SvxTabStop aTab( bConvert ? o3tl::toTwips(rTabStop.Position, o3tl::Length::mm100) : rTabStop.Position,
                                     eAdjust,
-                                    cDecimal,
-                                    cFill );
+                                    rTabStop.DecimalChar,
+                                    rTabStop.FillChar );
                 Insert(aTab);
             }
             break;
@@ -1512,5 +1511,24 @@ bool SvxParaGridItem::GetPresentation(
     return true;
 }
 
+SvxAutoFrameDirectionItem::SvxAutoFrameDirectionItem(bool bValue, const sal_uInt16 nId)
+    : SfxBoolItem(nId, bValue)
+{
+}
+
+SvxAutoFrameDirectionItem* SvxAutoFrameDirectionItem::Clone(SfxItemPool*) const
+{
+    return new SvxAutoFrameDirectionItem(*this);
+}
+
+bool SvxAutoFrameDirectionItem::GetPresentation(SfxItemPresentation /*ePres*/,
+                                                MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
+                                                OUString& rText, const IntlWrapper& /*rIntl*/) const
+{
+    rText = GetValue() ? EditResId(RID_SVXITEMS_AUTOFRAMEDIRECTION_ON)
+                       : EditResId(RID_SVXITEMS_AUTOFRAMEDIRECTION_OFF);
+
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

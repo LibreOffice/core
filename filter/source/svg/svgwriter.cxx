@@ -2433,8 +2433,8 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
             else
             {
                 // else create color stops with 'old' start/endColor
-                aColorStops.emplace_back(0.0, rGradient.GetStartColor().getBColor());
-                aColorStops.emplace_back(1.0, rGradient.GetEndColor().getBColor());
+                aColorStops.addStop(0.0, rGradient.GetStartColor().getBColor());
+                aColorStops.addStop(1.0, rGradient.GetEndColor().getBColor());
             }
 
             // create a basegfx::BGradient with the info to be able to directly
@@ -2919,41 +2919,72 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
 {
     if( rBmp.IsEmpty() )
         return;
-    if( mpEmbeddedBitmapsMap && !mpEmbeddedBitmapsMap->empty())
+    BitmapChecksum nChecksum = rBmp.GetChecksum();
+    if( mpEmbeddedBitmapsMap && mpEmbeddedBitmapsMap->contains( nChecksum ))
     {
-        BitmapChecksum nChecksum = rBmp.GetChecksum();
-        if( mpEmbeddedBitmapsMap->find( nChecksum ) != mpEmbeddedBitmapsMap->end() )
-        {
-            // <use transform="translate(?) scale(?)" xlink:ref="?" >
-            OUString sTransform;
+        // <use transform="translate(?) scale(?)" xlink:ref="?" >
+        OUString sTransform;
 
-            Point aPoint;
-            ImplMap( rPt, aPoint );
-            if( aPoint.X() != 0 || aPoint.Y() != 0 )
-                sTransform = "translate(" + OUString::number( aPoint.X() ) + ", " + OUString::number( aPoint.Y() ) + ")";
+        Point aPoint;
+        ImplMap( rPt, aPoint );
+        if( aPoint.X() != 0 || aPoint.Y() != 0 )
+            sTransform = "translate(" + OUString::number( aPoint.X() ) + ", " + OUString::number( aPoint.Y() ) + ")";
 
-            Size  aSize;
-            ImplMap( rSz, aSize );
+        Size  aSize;
+        ImplMap( rSz, aSize );
 
-            MapMode aSourceMode( MapUnit::MapPixel );
-            Size aPrefSize = OutputDevice::LogicToLogic( rSrcSz, aSourceMode, maTargetMapMode );
-            Fraction aFractionX( aSize.Width(), aPrefSize.Width() );
-            Fraction aFractionY( aSize.Height(), aPrefSize.Height() );
-            double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
-            double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
-            if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
-                sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+        MapMode aSourceMode( MapUnit::MapPixel );
+        Size aPrefSize = OutputDevice::LogicToLogic( rSrcSz, aSourceMode, maTargetMapMode );
+        Fraction aFractionX( aSize.Width(), aPrefSize.Width() );
+        Fraction aFractionY( aSize.Height(), aPrefSize.Height() );
+        double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
+            sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
 
-            if( !sTransform.isEmpty() )
-                mrExport.AddAttribute(aXMLAttrTransform, sTransform);
+        if( !sTransform.isEmpty() )
+            mrExport.AddAttribute(aXMLAttrTransform, sTransform);
 
-            // referenced bitmap template
-            OUString sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
-            mrExport.AddAttribute(aXMLAttrXLinkHRef, sRefId);
+        // referenced bitmap template
+        OUString sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
+        mrExport.AddAttribute(aXMLAttrXLinkHRef, sRefId);
 
-            SvXMLElementExport aRefElem(mrExport, u"use"_ustr, true, true);
-            return;
-        }
+        SvXMLElementExport aRefElem(mrExport, u"use"_ustr, true, true);
+        return;
+    }
+
+    // check if we can re-use another element to avoid exporting this bitmap more than once
+    if( maBitmapElements.contains( nChecksum ))
+    {
+        const tools::Rectangle & rSourceRect = maBitmapElements[nChecksum];
+
+        // <use transform="translate(?) scale(?)" xlink:ref="?" >
+        OUString sTransform;
+
+        Point aPoint;
+        ImplMap( rPt, aPoint );
+        if( aPoint.X() != 0 || aPoint.Y() != 0 )
+            sTransform = "translate(" + OUString::number( rSourceRect.TopLeft().X() - aPoint.X() )
+                        + ", " + OUString::number( rSourceRect.TopLeft().Y() - aPoint.Y() ) + ")";
+
+        Size  aSize;
+        ImplMap( rSz, aSize );
+
+        Fraction aFractionX( aSize.Width(), rSourceRect.GetWidth() );
+        Fraction aFractionY( aSize.Height(), rSourceRect.GetHeight() );
+        double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
+            sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+
+        if( !sTransform.isEmpty() )
+            mrExport.AddAttribute(aXMLAttrTransform, sTransform);
+
+        // referenced bitmap template
+        mrExport.AddAttribute(aXMLAttrXLinkHRef, "#bitmap(" + OUString::number( nChecksum ) + ")");
+
+        SvXMLElementExport aRefElem(mrExport, u"use"_ustr, true, true);
+        return;
     }
 
     Bitmap aBmp( rBmp );
@@ -3042,6 +3073,8 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
     mrExport.AddAttribute(aXMLAttrY, OUString::number(aPt.Y()));
     mrExport.AddAttribute(aXMLAttrWidth, OUString::number(aSz.Width()));
     mrExport.AddAttribute(aXMLAttrHeight, OUString::number(aSz.Height()));
+
+    maBitmapElements[nChecksum] = tools::Rectangle(aPt, aSz);
 
     // If we have a media object (a video), export the video.
     // Also, use the image generated above as the video poster (thumbnail).
@@ -3470,7 +3503,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             aMemStm.ReadDouble(fG);
                             aMemStm.ReadDouble(fB);
 
-                            aColorStops.emplace_back(fOff, basegfx::BColor(fR, fG, fB));
+                            aColorStops.addStop(fOff, basegfx::BColor(fR, fG, fB));
                         }
 
                         // export with real Color Stops

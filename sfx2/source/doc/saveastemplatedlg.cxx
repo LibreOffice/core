@@ -18,7 +18,7 @@
 #include <sfx2/docfilt.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sot/storage.hxx>
 
 #include <com/sun/star/frame/DocumentTemplates.hpp>

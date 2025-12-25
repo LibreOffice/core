@@ -1624,6 +1624,17 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             }
         }
     }
+    else if (pGraphicWritingMode2) // tdf#169122
+    {
+        sal_Int16 eGraphicWritingMode;
+        if (pGraphicWritingMode2->maValue >>= eGraphicWritingMode)
+        {
+            if (pTextWritingMode)
+                pTextWritingMode->mnIndex = -1;
+            if (pControlWritingMode)
+                pControlWritingMode->mnIndex = -1;
+        }
+    }
 
     // do not export visual area for internal ole objects
     if( pOLEIsInternal )

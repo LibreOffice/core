@@ -38,6 +38,18 @@ using namespace ::com::sun::star::document;
 
 using namespace sdr::table;
 
+namespace
+{
+void CreateTitleDescription(SdrObject* pObject, OUStringBuffer& rHtml)
+{
+    rHtml.append("<h2>");
+    rHtml.append(pObject->GetTitle());
+    rHtml.append("</h2>\n\r<p>");
+    rHtml.append(pObject->GetDescription());
+    rHtml.append("</p>\n\r");
+}
+}
+
 void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml)
 {
     if (!pPage || !pOutliner)
@@ -75,6 +87,10 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
                         HtmlExport::WriteOutlinerParagraph(rHtml, pOutliner,
                                                            pObject->GetOutlinerParaObject(), false);
                     }
+                    else
+                    {
+                        CreateTitleDescription(pObject.get(), rHtml);
+                    }
                 }
             }
             break;
@@ -98,6 +114,7 @@ void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuf
             break;
 
             default:
+                CreateTitleDescription(pObject.get(), rHtml);
                 break;
         }
     }

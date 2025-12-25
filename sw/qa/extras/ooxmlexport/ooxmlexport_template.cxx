@@ -14,15 +14,15 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr,
-                          u"MS Word 2007 XML Template"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
 {
-    loadAndReload("sample.dotx");
+    createSwDoc("sample.dotx");
+    saveAndReload(TestFilter::DOTX);
     xmlDocUniquePtr pXmlDocCT = parseExport(u"[Content_Types].xml"_ustr);
 
     // Ensure that document has correct content type

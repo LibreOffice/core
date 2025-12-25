@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 {
     // Load a document that has a shape with a textbox in it. Save it to ODF and reload.
     loadFromFile(u"textbox-loss.docx");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     // Make sure that the shape is still a textbox.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     loadFromFile(u"tdf141301_Extrusion_Skew.odg");
 
     // Prepare use of XPath
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     xMasterPage->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
 
     // Export to ODP:
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     // Check if the 12 colors are written in the XML:
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1356), rCrop.Right);
 
     // Execute ODP export:
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Check that the preview was exported:
@@ -250,10 +250,10 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans2.mnValue);
     }
     {
         uno::Reference<util::XComplexColor> xComplexColor;
@@ -264,10 +264,10 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans2.mnValue);
     }
 }
 
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
 
     checkFillAndLineComplexColors(getShape(0));
 
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     loadFromURL(maTempFile.GetURL());
 
@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 {
     // Given a document that refers to a theme color:
     loadFromFile(u"Reference-ThemeColors-TextAndFill.pptx");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     // Make sure the export result has the theme reference:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -360,10 +360,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTrans2.mnValue);
     }
     {
         uno::Reference<drawing::XShape> xShape(getShape(1));
@@ -377,10 +377,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans1.mnValue);
         auto const& rTrans2 = aComplexColor.getTransformations()[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans2.mnValue);
     }
     {
         uno::Reference<drawing::XShape> xShape(getShape(2));
@@ -394,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5000), rTrans1.mnValue);
     }
 
     // Char color theme
@@ -414,10 +414,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransforms.size());
         auto const& rTrans1 = rTransforms[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), rTrans1.mnValue);
         auto const& rTrans2 = rTransforms[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTrans2.mnValue);
     }
     // Shape 5
     {
@@ -435,10 +435,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransforms.size());
         auto const& rTrans1 = rTransforms[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans1.mnValue);
         auto const& rTrans2 = rTransforms[1];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans2.mnValue);
     }
     // Shape 6
     {
@@ -455,14 +455,14 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
         auto const& rTrans1 = aComplexColor.getTransformations()[0];
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans1.mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5000), rTrans1.mnValue);
     }
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
 {
     loadFromFile(u"ReferenceShapeFill.pptx");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     // check fill color theme
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -476,7 +476,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aComplexColor.getTransformations().size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                          aComplexColor.getTransformations()[0].meType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(7500), aComplexColor.getTransformations()[0].mnValue);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7500),
+                         aComplexColor.getTransformations()[0].mnValue);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
@@ -535,7 +536,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
                               css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible);
 
     // Test, that attribute is written with 'draw' namespace in ODF version LATEST
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -552,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // assert XML.
     pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -573,7 +574,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 
     // save in ODF 1.4 strict and test that new attribute is written.
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
     assertXPath(pXmlDoc,
@@ -583,7 +584,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
     assertXPathNoAttribute(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal-type");
@@ -599,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
                               css::drawing::EnhancedCustomShapeMetalType::MetalODF);
 
     // Test, that attribute is written with 'draw' namespace in ODF version LATEST
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -613,13 +614,13 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
 
     // Test, that export in ODFVER_014 is valid. Needs adaption, when ODF 1.5 comes out.
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // Test, that attribute is written with 'loext' namespace in extended version before ODF 1.4
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // assert XML.
     pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -632,7 +633,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
 
     // Test, that attribute is not written at all in strict version before ODF 1.4
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathNoAttribute(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal-type");
 }
@@ -642,7 +643,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
     Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162691_handle_position.fodt");
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     static constexpr OString sXPath("/office:document-content/office:body/office:text/text:p/"
                                     "draw:custom-shape/draw:enhanced-geometry/draw:handle"_ostr);
     // assert XML.
@@ -656,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, sXPath, "handle-position", u"$0 10800");
     assertXPathNoAttribute(pXmlDoc, sXPath, "handle-position-x");
@@ -668,7 +669,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePolar)
     Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162691_handle_polar.fodt");
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -685,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePolar)
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, sXPath, "handle-position", u"9000 $0");
     assertXPath(pXmlDoc, sXPath, "handle-polar", u"10800 1000");
@@ -727,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -747,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     lcl_assertSpecularityProperty("from doc", xShape);
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -765,7 +766,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 
     // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125%']");
 
@@ -774,7 +775,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
     // As of Nov 2024, validating against a version other than LATEST is not implemented.
     skipValidation();
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-specularity]", 0);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']");
@@ -875,7 +876,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     // TextRotateAngle.
     // This should already catch the format error, but does not, see tdf#149567
     // But reload catches it.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
@@ -912,7 +913,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     xMasterPageProps->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
 
     // save as odg
-    save(u"draw8"_ustr);
+    save(TestFilter::ODG);
 
     // and check the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -976,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, test_scene3d_ooxml_light)
     loadFromFile(u"Scene3d_LightRig_threePt.pptx");
 
     // Without fix this would have failed with validation error.
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_LatheEndAngle)
@@ -1107,26 +1108,33 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     });
 
     loadFromFile(u"two-pages.pdf");
-    // save and reload as odg
-    saveAndReload("draw8");
 
-    // Check that the graphic in the second page of the document is the second page of the pdf
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
-                                                                   uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
-    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xImage.is());
-    uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
-    uno::Reference<graphic::XGraphic> xGraphic;
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+    TestFilter formats[] = { TestFilter::ODG, TestFilter::FODG };
+    // save and reload as odg and fodg
+    for (TestFilter eFormat : formats)
+    {
+        setImportFilterName(eFormat);
+        saveAndReload(eFormat);
 
-    Graphic aGraphic(xGraphic);
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1
-    // - Actual  : -1
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getPageNumber());
+        // Check that the graphic in the second page of the document is the second page of the pdf
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+        uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1),
+                                                     uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xImage.is());
+        uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+
+        Graphic aGraphic(xGraphic);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1
+        // - Actual  : -1
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getPageNumber());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

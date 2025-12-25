@@ -45,7 +45,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr, u"MS Word 97"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr) {}
 };
 
 DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
@@ -60,7 +60,8 @@ DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 {
-    loadAndReload("tdf41542_borderlessPadding.odt");
+    createSwDoc("tdf41542_borderlessPadding.odt");
+    saveAndReload(TestFilter::DOC);
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
@@ -100,13 +101,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128700_relativeTableWidth)
     // This also resulted in a layout loop when flys were allowed to split in footers.
     createSwDoc("tdf128700_relativeTableWidth.doc");
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)
 {
-    loadAndReload("tdf116436_tableBackground.odt");
+    createSwDoc("tdf116436_tableBackground.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -201,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 
     createSwDoc("tdf55427_footnote2endnote.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOC);
     verify(/*bIsExport*/ true);
 }
 
@@ -262,7 +264,8 @@ DECLARE_WW8EXPORT_TEST(testTdf112517_maxSprms, "tdf112517_maxSprms.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108448_endNote)
 {
-    loadAndReload("tdf108448_endNote.odt");
+    createSwDoc("tdf108448_endNote.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
@@ -274,7 +277,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108448_endNote)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106062_nonHangingFootnote)
 {
-    loadAndReload("tdf106062_nonHangingFootnote.odt");
+    createSwDoc("tdf106062_nonHangingFootnote.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -285,7 +289,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106062_nonHangingFootnote)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116570_exportFootnote)
 {
-    loadAndReload("tdf116570_exportFootnote.odt");
+    createSwDoc("tdf116570_exportFootnote.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -306,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageRightRTL)
     };
     createSwDoc("tdf80635_pageRightRTL.doc");
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
@@ -319,7 +324,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
     };
     createSwDoc("tdf80635_marginRightRTL.doc");
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
@@ -336,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
     };
     createSwDoc("tdf80635_marginLeft.doc");
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
@@ -351,7 +356,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageLeft)
     };
     createSwDoc("tdf80635_pageLeft.doc");
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
@@ -390,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107773)
     };
     createSwDoc("tdf107773.doc");
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
@@ -421,7 +426,8 @@ DECLARE_WW8EXPORT_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106174_rtlParaAlign)
 {
-    loadAndReload("tdf106174_rtlParaAlign.docx");
+    createSwDoc("tdf106174_rtlParaAlign.docx");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Another paragraph aligned to right"_ustr), uno::UNO_QUERY);
@@ -532,7 +538,8 @@ DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf70838)
 {
-    loadAndReload("tdf70838.odt");
+    createSwDoc("tdf70838.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwDoc* pDoc = getSwDoc();
@@ -543,7 +550,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf70838)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf70838b_verticalRotation)
 {
-    loadAndReload("tdf70838b_verticalRotation.odt");
+    createSwDoc("tdf70838b_verticalRotation.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwDoc* pDoc = getSwDoc();
@@ -557,7 +565,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf70838b_verticalRotation)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129247)
 {
-    loadAndReload("tdf129247.docx");
+    createSwDoc("tdf129247.docx");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Without the fix in place, the checkbox wouldn't be exported
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -565,7 +574,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129247)
 
 CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
 {
-    loadAndReload("checkbox_control.odt");
+    createSwDoc("checkbox_control.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box anchored as a floating object
@@ -632,7 +642,8 @@ DECLARE_WW8EXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 {
-    loadAndReload("table_cross_reference.odt");
+    createSwDoc("table_cross_reference.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
@@ -790,7 +801,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 {
-    loadAndReload("table_cross_reference_custom_format.odt");
+    createSwDoc("table_cross_reference_custom_format.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
@@ -906,7 +918,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
 
 CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
 {
-    loadAndReload("object_cross_reference.odt");
+    createSwDoc("object_cross_reference.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
@@ -1080,7 +1093,8 @@ DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117503)
 {
-    loadAndReload("tdf117503.docx");
+    createSwDoc("tdf117503.docx");
+    saveAndReload(TestFilter::DOC);
     // This was 3, first page + standard page styles were not merged together
     // on export.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -1107,7 +1121,8 @@ DECLARE_WW8EXPORT_TEST(testTdf117885, "tdf117885.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118133)
 {
-    loadAndReload("tdf118133.docx");
+    createSwDoc("tdf118133.docx");
+    saveAndReload(TestFilter::DOC);
     // This was 0, doc import + doc export resulted in lost image due to broken
     // lazy-loading of tiff images.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), getShape(1)->getSize().Width);
@@ -1139,7 +1154,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When saving that document to DOC and loading it back:
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
 
     // Then make sure the dummy character at the end is filtered out:
     OUString aBodyText = getBodyText();

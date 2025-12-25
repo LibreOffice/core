@@ -19,7 +19,7 @@
 
 #include <scitems.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/bindings.hxx>
 #include <osl/diagnose.h>
 
@@ -226,10 +226,10 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
 
         if (nMovX < 0 && rNewX > 0)
         {
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
-            if (pMergeAttr && pMergeAttr->IsMerged() &&
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
+            if (rMergeAttr.IsMerged() &&
                 nOldX >= rNewX &&
-                nOldX <= rNewX + pMergeAttr->GetRowMerge() - 1)
+                nOldX <= rNewX + rMergeAttr.GetRowMerge() - 1)
                 rNewX = rNewX - 1;
         }
     }
@@ -248,10 +248,10 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
 
         if (nMovY < 0 && rNewY > 0)
         {
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
-            if (pMergeAttr && pMergeAttr->IsMerged() &&
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(rNewX, rNewY, nRefTab, ATTR_MERGE);
+            if (rMergeAttr.IsMerged() &&
                 nOldY >= rNewY &&
-                nOldY <= rNewY + pMergeAttr->GetRowMerge() - 1)
+                nOldY <= rNewY + rMergeAttr.GetRowMerge() - 1)
                 rNewY = rNewY - 1;
         }
     }
@@ -1147,11 +1147,11 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         if (!IsBlockMode())
         {
             InitBlockMode(nOrigX, nOrigY, nTab, true);
-            const ScMergeAttr* pMergeAttr = rDoc.GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE);
-            if (pMergeAttr && pMergeAttr->IsMerged())
+            const ScMergeAttr& rMergeAttr = rDoc.GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE);
+            if (rMergeAttr.IsMerged())
             {
-                nBlockEndX = nOrigX + pMergeAttr->GetColMerge() - 1;
-                nBlockEndY = nOrigY + pMergeAttr->GetRowMerge() - 1;
+                nBlockEndX = nOrigX + rMergeAttr.GetColMerge() - 1;
+                nBlockEndY = nOrigY + rMergeAttr.GetRowMerge() - 1;
             }
         }
 
@@ -1316,7 +1316,7 @@ void ScTabView::SelectAllTables()
         for (SCTAB i=0; i<nCount; i++)
             rMark.SelectTable( i, true );
 
-        aViewData.GetDocShell().PostPaintExtras();
+        aViewData.GetDocShell()->PostPaintExtras();
         SfxBindings& rBind = aViewData.GetBindings();
         rBind.Invalidate( FID_FILL_TAB );
         rBind.Invalidate( FID_TAB_DESELECTALL );
@@ -1333,7 +1333,7 @@ void ScTabView::DeselectAllTables()
     for (SCTAB i=0; i<nCount; i++)
         rMark.SelectTable( i, ( i == nTab ) );
 
-    aViewData.GetDocShell().PostPaintExtras();
+    aViewData.GetDocShell()->PostPaintExtras();
     SfxBindings& rBind = aViewData.GetBindings();
     rBind.Invalidate( FID_FILL_TAB );
     rBind.Invalidate( FID_TAB_DESELECTALL );
@@ -1470,8 +1470,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         if ( nFixPosY != 0 )
                             aWinSize.AdjustHeight(GetGridHeight( SC_SPLIT_TOP ) );
 
-                        ScDocShell& rDocSh = aViewData.GetDocShell();
-                        double nPPTX = ScGlobal::nScreenPPTX / rDocSh.GetOutputFactor();
+                        ScDocShell* pDocSh = aViewData.GetDocShell();
+                        double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
                         double nPPTY = ScGlobal::nScreenPPTY;
 
                         sal_uInt16 nMin = MINZOOM;
@@ -1519,7 +1519,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
                     if ( pStyleSheet )
                     {
-                        ScPrintFunc aPrintFunc( aViewData.GetDocShell(),
+                        ScPrintFunc aPrintFunc( *aViewData.GetDocShell(),
                                                 aViewData.GetViewShell()->GetPrinter(true),
                                                 nCurTab );
 
@@ -1566,7 +1566,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                 aWinSize.setHeight( nOtherHeight );
                         }
 
-                        double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell().GetOutputFactor();
+                        double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell()->GetOutputFactor();
                         double nPPTY = ScGlobal::nScreenPPTY;
 
                         tools::Long nZoomX = static_cast<tools::Long>( aWinSize.Width() * 100 /
@@ -1619,7 +1619,7 @@ void ScTabView::MakeDrawLayer()
     if (pDrawView)
         return;
 
-    aViewData.GetDocShell().MakeDrawLayer();
+    aViewData.GetDocShell()->MakeDrawLayer();
 
     // pDrawView is set per Notify
     OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
@@ -1654,7 +1654,7 @@ void ScTabView::ErrorMessage(TranslateId pGlobStrId)
 
     if (pGlobStrId && pGlobStrId == STR_PROTECTIONERR)
     {
-        if (aViewData.GetDocShell().IsReadOnly())
+        if (aViewData.GetDocShell()->IsReadOnly())
         {
             pGlobStrId = STR_READONLYERR;
         }
@@ -1681,8 +1681,8 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
 
     if (aViewData.IsPagebreakMode())
     {
-        ScDocShell& rDocSh = aViewData.GetDocShell();
-        ScDocument& rDoc = rDocSh.GetDocument();
+        ScDocShell* pDocSh = aViewData.GetDocShell();
+        ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = aViewData.CurrentTabForData();
 
         sal_uInt16 nCount = rDoc.GetPrintRangeCount(nTab);
@@ -1690,7 +1690,7 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
             nCount = 1;
         pNewData.reset( new ScPageBreakData(nCount) );
 
-        ScPrintFunc aPrintFunc( rDocSh, rDocSh.GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
+        ScPrintFunc aPrintFunc( *pDocSh, pDocSh->GetPrinter(), nTab, 0,0,nullptr, nullptr, pNewData.get() );
         // ScPrintFunc fills the PageBreakData in ctor
         if ( nCount > 1 )
         {

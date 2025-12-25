@@ -20,7 +20,9 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <svx/colorwindow.hxx>
-#include "CellLineStyleValueSet.hxx"
+#include <vcl/virdev.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 class SfxDispatcher;
 
@@ -31,16 +33,13 @@ class CellLineStylePopup : public WeldToolbarPopup
 private:
     MenuOrToolMenuButton maToolButton;
     SfxDispatcher* mpDispatcher;
-    std::unique_ptr<CellLineStyleValueSet> mxCellLineStyleValueSet;
-    std::unique_ptr<weld::CustomWeld> mxCellLineStyleValueSetWin;
+    std::unique_ptr<weld::TreeView> mxCellLineStyleTreeView;
     std::unique_ptr<weld::Button> mxPushButtonMoreOptions;
-    OUString maStr[CELL_LINE_STYLE_ENTRIES];
 
-    void Initialize();
-    void SetAllNoSel();
-
-    DECL_LINK(VSSelectHdl, ValueSet*, void);
+    DECL_LINK(StyleSelectHdl, weld::TreeView&, bool);
     DECL_LINK(PBClickHdl, weld::Button&, void);
+
+    VclPtr<VirtualDevice> CreateImage(int nIndex);
 
 public:
     CellLineStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher);

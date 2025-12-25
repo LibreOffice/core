@@ -45,6 +45,7 @@
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <accel.hxx>
 #include <svimpbox.hxx>
+#include <window.h>
 
 #include <set>
 #include <string.h>
@@ -561,6 +562,20 @@ SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
     return pModel->FirstChild(pParent);
 }
 
+sal_uInt32 SvTreeListBox::GetEntryPos(const SvTreeListEntry* pEntry) const
+{
+    sal_uInt32 nPos = 0;
+    SvTreeListEntry* pTmpEntry = First();
+    while (pTmpEntry)
+    {
+        if (pTmpEntry == pEntry)
+            return nPos;
+        pTmpEntry = Next(pTmpEntry);
+        ++nPos;
+    }
+    return 0xffffffff;
+}
+
 // return: all entries copied
 bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
 {
@@ -829,6 +844,15 @@ const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEnt
     assert(pEntryData && "Entry not in View");
     sal_uInt16 nItemPos = pEntry->GetPos(pItem);
     return &pEntryData->GetItem(nItemPos);
+}
+
+OUString SvTreeListBox::GetEntryTooltip(SvTreeListEntry* pEntry) const
+{
+    const OUString sToolTip = aTooltipHdl.Call(pEntry);
+    if (!sToolTip.isEmpty())
+        return sToolTip;
+
+    return pEntry->GetToolTip();
 }
 
 void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntry )
@@ -1569,7 +1593,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     const OUString& rText,
     SvTreeListEntry* pParent,
     bool bChildrenOnDemand, sal_uInt32 nPos,
-    void* pUser
+    OUString* pUser
 )
 {
     nTreeFlags |= SvTreeFlags::MANINS;
@@ -3288,7 +3312,7 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
 
 void SvTreeListBox::Command(const CommandEvent& rCEvt)
 {
-    if (!aPopupMenuHdl.Call(rCEvt))
+    if (!ImplGetWindowImpl()->maCommandHdl.Call(rCEvt))
         pImpl->Command(rCEvt);
     //pass at least alt press/release to parent impl
     if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
@@ -3329,19 +3353,16 @@ void SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
 
 void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    if (aTooltipHdl.IsSet())
+    const Point pos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+    if (SvTreeListEntry* entry = GetEntry(pos))
     {
-        const Point pos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-        if (SvTreeListEntry* entry = GetEntry(pos))
+        const OUString tooltip = GetEntryTooltip(entry);
+        if (!tooltip.isEmpty())
         {
-            const OUString tooltip = GetEntryTooltip(entry);
-            if (!tooltip.isEmpty())
-            {
-                const Size size(GetOutputSizePixel().Width(), GetEntryHeight());
-                tools::Rectangle screenRect(OutputToScreenPixel(GetEntryPosition(entry)), size);
-                Help::ShowQuickHelp(this, screenRect, tooltip);
-                return;
-            }
+            const Size size(GetOutputSizePixel().Width(), GetEntryHeight());
+            tools::Rectangle screenRect(OutputToScreenPixel(GetEntryPosition(entry)), size);
+            Help::ShowQuickHelp(this, screenRect, tooltip);
+            return;
         }
     }
 

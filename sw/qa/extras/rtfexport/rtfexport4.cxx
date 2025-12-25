@@ -41,7 +41,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr)
     {
     }
 };
@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist12)
     };
     createSwDoc("cjklist12.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist13)
     };
     createSwDoc("cjklist13.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist16)
     };
     createSwDoc("cjklist16.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist20)
     };
     createSwDoc("cjklist20.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist21)
     };
     createSwDoc("cjklist21.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist24)
     };
     createSwDoc("cjklist24.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist25)
     };
     createSwDoc("cjklist25.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist30)
     };
     createSwDoc("cjklist30.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist31)
     };
     createSwDoc("cjklist31.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(Test, test148518)
     };
     createSwDoc("FORMDROPDOWN.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(Test, test150269)
     };
     createSwDoc("hidden-linebreaks.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, test129758)
     };
     createSwDoc("tdf129631_lostBorders3.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -310,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(Test, test150382)
     };
     createSwDoc("para-border.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredAtSamePosition)
     };
     createSwDoc("anchor.fodt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify(/*bIsExport*/ true);
 }
 
@@ -380,7 +380,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineInsdel)
     };
     createSwDoc("redline-insdel.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -406,7 +406,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaAdjustDistribute)
     };
     createSwDoc("para-adjust-distribute.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -425,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129574)
     };
     createSwDoc("mw00_table_of_contents_templates.doc");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -437,7 +437,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist34)
     };
     createSwDoc("cjklist34.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -474,7 +474,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146489)
     };
     createSwDoc("tdf146489.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist38)
     };
     createSwDoc("cjklist38.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -513,7 +513,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrCell)
     };
     createSwDoc("btlr-cell.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -531,7 +531,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114303)
     };
     createSwDoc("tdf114303.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -550,7 +550,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlFrame)
     };
     createSwDoc("tbrl-frame.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -569,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     };
     createSwDoc("btlr-frame.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -584,7 +584,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129578_lostBI)
     };
     createSwDoc("tdf129578_lostBI.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -610,7 +610,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129631_lostBorders)
     };
     createSwDoc("tdf129631_lostBorders.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -666,7 +666,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
     };
     createSwDoc("tdf129522_removeShadowStyle.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify(/*bIsExport*/ true);
 }
 
@@ -686,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136587_noStyleName)
     };
     createSwDoc("tdf136587_noStyleName.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlPage)
     };
     createSwDoc("tbrl-page.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -752,14 +752,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116358)
     };
     createSwDoc("tdf116358.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 {
     createSwDoc("gutter-left.rtf");
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     uno::Reference<beans::XPropertySet> xPageStyle;
     getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
     sal_Int32 nGutterMargin{};
@@ -774,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
     createSwDoc("gutter-top.rtf");
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
@@ -812,7 +812,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     createSwDoc("clearing-break.rtf");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
@@ -880,7 +880,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95706)
     };
     createSwDoc("tdf95706.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -899,7 +899,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95706_2)
     };
     createSwDoc("tdf95706_2.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -941,7 +941,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111851)
     };
     createSwDoc("tdf111851.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -988,7 +988,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139948)
     };
     createSwDoc("tdf139948.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1038,7 +1038,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103956)
     };
     createSwDoc("tdf103956.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1064,7 +1064,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148515)
     };
     createSwDoc("tdf148515.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 

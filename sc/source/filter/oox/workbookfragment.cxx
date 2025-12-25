@@ -61,7 +61,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <config_emscripten.h>
 #include <oox/core/fastparser.hxx>
@@ -118,6 +119,7 @@ ContextHandlerRef WorkbookFragment::onCreateContext( sal_Int32 nElement, const A
                 case XLS_TOKEN( pivotCaches ):          return this;
 
                 case XLS_TOKEN( fileSharing ):          getWorkbookSettings().importFileSharing( rAttribs );    break;
+                case XLS_TOKEN( fileVersion ):          getWorkbookSettings().importFileVersion( rAttribs );    break;
                 case XLS_TOKEN( workbookPr ):           getWorkbookSettings().importWorkbookPr( rAttribs );     break;
                 case XLS_TOKEN( calcPr ):               getWorkbookSettings().importCalcPr( rAttribs );         break;
                 case XLS_TOKEN( oleSize ):              getViewSettings().importOleSize( rAttribs );            break;

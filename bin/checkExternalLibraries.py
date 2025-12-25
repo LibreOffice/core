@@ -19,6 +19,7 @@ python_branch = ""
 openssl_branch = ""
 postgres_branch = ""
 mariadb_branch = ""
+rhino_branch = ""
 
 libraryIds = {
     "openssl": 2,
@@ -31,15 +32,45 @@ libraryIds = {
     "zlib": 1,
     "libwebp": 1,
     "libffi": 1,
+    "xz": 1,
     "zstd": 1
 }
 
+libraryNames = {
+    "boost": "boost",
+    "java-websocket": "java-websocket",
+    "phc-winner-argon2": "argon2",
+    "libe-book": "libe-book",
+    "zxcvbn-c": "zxcvbn-c",
+    "libjpeg-turbo": "libjpeg-turbo",
+    "poppler-data": "poppler-data",
+    "libgpg-error": "libgpg-error",
+    "mariadb-connector-c": "mariadb-connector-c",
+    "tiff": "libtiff",
+    "zxing": "zxing-cpp",
+    "liborcus": "orcus",
+    "ltm": "libtommath",
+    "clucene-core": "clucene-core",
+    "lp_solve": "lp_solve",
+    "hsqldb": "hsqldb",
+    "y-crdt": "y-crdt",
+    "sqlite": "sqlite",
+    "reemkufi": "aliftype-reem-kufi-fonts",
+}
+
 def get_current_version(libName):
-    libraryName = libName.replace("_", ".")
-    libraryName = re.sub("[0-9a-f]{5,40}", "", libraryName) #SHA1
-    s = re.search("\d[\d\.]+\d", libraryName )
-    if s:
-        return parse(s.group())
+    if "sqlite" in libName:
+        # 3XXYYZZ -> 3.X.Y.Z
+        s = re.search("(\d{7})", libName )
+        if s:
+            num = str(s.group(1))
+            return parse("{}.{}.{}.{}".format(num[0], num[1:3], num[3:5], num[6:7]))
+    else:
+        libraryName = libName.replace("_", ".")
+        libraryName = re.sub("[0-9a-f]{5,40}", "", libraryName) #SHA1
+        s = re.search("\d[\d\.]+\d", libraryName )
+        if s:
+            return parse(s.group())
 
     return Version("0.0.0")
 
@@ -56,7 +87,7 @@ def get_library_list(fileName):
             continue
 
         # FIXME
-        if "FONT_" in variableName:
+        if "FONT_" in variableName and "REEM" not in variableName:
             continue
 
         libraryName = decodedName.split("=")[1]
@@ -76,49 +107,28 @@ def get_library_list(fileName):
             global mariadb_branch
             mariadb_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
             print("MariaDB is on branch: " + str(mariadb_branch))
+        elif libraryName.startswith("rhino"):
+            global rhino_branch
+            rhino_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
+            print("Rhino is on branch: " + str(rhino_branch))
         libraryList.append(libraryName.lower())
     return libraryList
 
 def get_latest_version(libName):
+    bFound = False
+    for k,v in libraryNames.items():
+        if k in libName:
+            libName = v
+            bFound = True
+            break
 
-    if libName.startswith("boost"):
-        libName = "boost"
-    elif libName.startswith("java-websocket"):
-        libName = "java-websocket"
-    elif libName.startswith("phc-winner-argon2"):
-        libName = "argon2"
-    elif libName.startswith("libe-book"):
-        libName = "libe-book"
-    elif libName.startswith("zxcvbn-c"):
-        libName = "zxcvbn-c"
-    elif libName.startswith("libjpeg-turbo"):
-        libName = "libjpeg-turbo"
-    elif libName.startswith("poppler-data"):
-        libName = "poppler-data"
-    elif libName.startswith("libgpg-error"):
-        libName = "libgpg-error"
-    elif libName.startswith("mariadb-connector-c"):
-        libName = "mariadb-connector-c"
-    elif libName.startswith("postgresql"):
-        libName = "postgresql%20" + str(postgres_branch) + ".x"
-    elif libName.startswith("tiff"):
-        libName = "libtiff"
-    elif libName.startswith("zxing"):
-        libName = "zxing-cpp"
-    elif libName.startswith("liborcus"):
-        libName = "orcus"
-    elif libName.startswith("ltm"):
-        libName = "libtommath"
-    elif "clucene-core" in libName:
-        libName = "clucene-core"
-    elif "lp_solve" in libName:
-        libName = "lp_solve"
-    elif "hsqldb" in libName:
-        libName = "hsqldb"
-    elif re.match("[0-9a-f]{5,40}", libName.split("-")[0]): # SHA1
-        libName = libName.split("-")[1]
-    else:
-        libName = libName.split("-")[0]
+    if not bFound:
+        if libName.startswith("postgresql"):
+            libName = "postgresql%20" + str(postgres_branch) + ".x"
+        elif re.match("[0-9a-f]{5,40}", libName.split("-")[0]): # SHA1
+            libName = libName.split("-")[1]
+        else:
+            libName = libName.split("-")[0]
 
     item = 0
     latest_version = 0
@@ -147,6 +157,12 @@ def get_latest_version(libName):
     elif libName == "mariadb-connector-c":
         for idx, ver in enumerate(json['items'][item]['stable_versions']):
             if ver.startswith(mariadb_branch):
+                latest_version = idx
+                break
+
+    elif libName == "rhino":
+        for idx, ver in enumerate(json['items'][item]['stable_versions']):
+            if ver.startswith(rhino_branch):
                 latest_version = idx
                 break
 

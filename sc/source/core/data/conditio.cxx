@@ -450,7 +450,9 @@ void ScConditionEntry::SetCaseSensitive(bool bSet)
 void ScConditionEntry::CompileAll()
 {
     pFCell1.reset();
+    xRelRefCells1.reset();
     pFCell2.reset();
+    xRelRefCells2.reset();
 }
 
 void ScConditionEntry::CompileXML()
@@ -545,7 +547,11 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
         }
 
         if (aRes.mbReferenceModified || bChangedPos)
-            pFCell1.reset();       // is created again in IsValid
+        {
+            // is created again in IsValid
+            pFCell1.reset();
+            xRelRefCells1.reset();
+        }
     }
 
     if (pFormula2)
@@ -564,7 +570,11 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
         }
 
         if (aRes.mbReferenceModified || bChangedPos)
-            pFCell2.reset();       // is created again in IsValid
+        {
+            // is created again in IsValid
+            pFCell2.reset();
+            xRelRefCells2.reset();
+        }
     }
 
     StartListening();
@@ -576,12 +586,14 @@ void ScConditionEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     {
         pFormula1->AdjustReferenceOnInsertedTab(rCxt, aSrcPos);
         pFCell1.reset();
+        xRelRefCells1.reset();
     }
 
     if (pFormula2)
     {
         pFormula2->AdjustReferenceOnInsertedTab(rCxt, aSrcPos);
         pFCell2.reset();
+        xRelRefCells2.reset();
     }
 
     ScRangeUpdater::UpdateInsertTab(aSrcPos, rCxt);
@@ -593,12 +605,14 @@ void ScConditionEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     {
         pFormula1->AdjustReferenceOnDeletedTab(rCxt, aSrcPos);
         pFCell1.reset();
+        xRelRefCells1.reset();
     }
 
     if (pFormula2)
     {
         pFormula2->AdjustReferenceOnDeletedTab(rCxt, aSrcPos);
         pFCell2.reset();
+        xRelRefCells2.reset();
     }
 
     ScRangeUpdater::UpdateDeleteTab(aSrcPos, rCxt);
@@ -615,6 +629,7 @@ void ScConditionEntry::UpdateMoveTab(sc::RefUpdateMoveTabContext& rCxt)
         if (aRes.mbValueChanged)
             aResFinal.mnTab = aRes.mnTab;
         pFCell1.reset();
+        xRelRefCells1.reset();
     }
 
     if (pFormula2)
@@ -623,6 +638,7 @@ void ScConditionEntry::UpdateMoveTab(sc::RefUpdateMoveTabContext& rCxt)
         if (aRes.mbValueChanged)
             aResFinal.mnTab = aRes.mnTab;
         pFCell2.reset();
+        xRelRefCells2.reset();
     }
 
     if (aResFinal.mnTab != aSrcPos.Tab())
@@ -669,6 +685,12 @@ bool ScConditionEntry::IsEqual( const ScFormatEntry& rOther, bool bIgnoreSrcPos 
     return true;
 }
 
+//static
+std::unique_ptr<ScConditionEntry::RelRefCells> ScConditionEntry::makeRelRefCells()
+{
+    return std::make_unique<RelRefCells>(0x9fff);
+}
+
 void ScConditionEntry::Interpret( const ScAddress& rPos )
 {
     // Create formula cells
@@ -679,16 +701,25 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     // Evaluate formulas
     bool bDirty = false; // 1 and 2 separate?
 
-    std::optional<ScFormulaCell> oTemp;
     ScFormulaCell* pEff1 = pFCell1.get();
     if ( bRelRef1 )
     {
-        if (pFormula1)
-            oTemp.emplace(mrDoc, rPos, *pFormula1);
+        if (!xRelRefCells1)
+            xRelRefCells1 = makeRelRefCells();
+        auto iFind = xRelRefCells1->find(rPos);
+        if (iFind != xRelRefCells1->end())
+            pEff1 = iFind->second.get();
         else
-            oTemp.emplace(mrDoc, rPos);
-        pEff1 = &*oTemp;
-        pEff1->SetFreeFlying(true);
+        {
+            std::unique_ptr<ScFormulaCell> xCell;
+            if (pFormula1)
+                xCell = std::make_unique<ScFormulaCell>(mrDoc, rPos, *pFormula1);
+            else
+                xCell = std::make_unique<ScFormulaCell>(mrDoc, rPos);
+            xCell->SetFreeFlying(true);
+            xCell->StartListeningTo(mrDoc);
+            pEff1 = xRelRefCells1->insert(std::make_pair(rPos, std::move(xCell)))->second.get();
+        }
     }
     if ( pEff1 )
     {
@@ -711,17 +742,26 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             }
         }
     }
-    oTemp.reset();
 
     ScFormulaCell* pEff2 = pFCell2.get(); //@ 1!=2
     if ( bRelRef2 )
     {
-        if (pFormula2)
-            oTemp.emplace(mrDoc, rPos, *pFormula2);
+        if (!xRelRefCells2)
+            xRelRefCells2 = makeRelRefCells();
+        auto iFind = xRelRefCells2->find(rPos);
+        if (iFind != xRelRefCells2->end())
+            pEff2 = iFind->second.get();
         else
-            oTemp.emplace(mrDoc, rPos);
-        pEff2 = &*oTemp;
-        pEff2->SetFreeFlying(true);
+        {
+            std::unique_ptr<ScFormulaCell> xCell;
+            if (pFormula2)
+                xCell = std::make_unique<ScFormulaCell>(mrDoc, rPos, *pFormula2);
+            else
+                xCell = std::make_unique<ScFormulaCell>(mrDoc, rPos);
+            xCell->SetFreeFlying(true);
+            xCell->StartListeningTo(mrDoc);
+            pEff2 = xRelRefCells2->insert(std::make_pair(rPos, std::move(xCell)))->second.get();
+        }
     }
     if ( pEff2 )
     {
@@ -743,7 +783,6 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             }
         }
     }
-    oTemp.reset();
 
     // If IsRunning, the last values remain
     if (bDirty && !bFirstRun)
@@ -1558,14 +1597,45 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument& rDoc ) const
 
 void ScConditionEntry::CalcAll()
 {
-    if (pFCell1 || pFCell2)
+    if (pFCell1 || pFCell2 || xRelRefCells1 || !xRelRefCells2)
     {
         if (pFCell1)
             pFCell1->SetDirty();
+        if (xRelRefCells1)
+        {
+            for (auto& rEntry : *xRelRefCells1)
+                rEntry.second->SetDirty();
+        }
         if (pFCell2)
             pFCell2->SetDirty();
+        if (xRelRefCells2)
+        {
+            for (auto& rEntry : *xRelRefCells2)
+                rEntry.second->SetDirty();
+        }
         pCondFormat->DoRepaint();
     }
+}
+
+OUString ScConditionEntry::getCacheName() const
+{
+    return "ScConditionEntry";
+}
+
+bool ScConditionEntry::dropCaches()
+{
+    xRelRefCells1.reset();
+    xRelRefCells2.reset();
+    return true;
+}
+
+void ScConditionEntry::dumpState(rtl::OStringBuffer& rState)
+{
+    rState.append("\nScConditionEntry:");
+    rState.append("\n\t rel ref cells1: ");
+    rState.append(xRelRefCells1 ? static_cast<sal_Int32>(xRelRefCells1->size()) : 0);
+    rState.append("\n\t rel ref cells2: ");
+    rState.append(xRelRefCells2 ? static_cast<sal_Int32>(xRelRefCells2->size()) : 0);
 }
 
 ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument& rDoc )
@@ -1740,7 +1810,7 @@ void ScCondDateFormatEntry::endRendering()
 }
 
 ScColorFormatCache::ScColorFormatCache(ScDocument& rDoc, const ScRangeList& rRanges) :
-    mrDoc(rDoc)
+    mrDoc(rDoc), maRanges(rRanges)
 {
     if (mrDoc.IsClipOrUndo())
         return;
@@ -2144,8 +2214,29 @@ void ScConditionalFormat::CalcAll()
     }
 }
 
+/// whether rRlist1 contains rRlist2.
+static bool lcl_RangeContains(const ScRangeList& rRlist1, const ScRangeList& rRlist2)
+{
+    for (const auto& rRange: rRlist2)
+    {
+        if (!rRlist1.Contains(rRange))
+            return false;
+    }
+
+    return true;
+}
+
 void ScConditionalFormat::ResetCache() const
 {
+    if (mpCache && &mrDoc == &mpCache->mrDoc && lcl_RangeContains(mpCache->maRanges, maRanges))
+    {
+        // Cache is already listening to a super-set of maRanges.
+        // Don't shrink the range of mpCache yet as it is expensive.
+        // Just clear the cache.
+        mpCache->maValues.clear();
+        return;
+    }
+
     if (!maRanges.empty())
         mpCache = std::make_unique<ScColorFormatCache>(mrDoc, maRanges);
     else

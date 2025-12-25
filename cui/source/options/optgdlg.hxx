@@ -21,6 +21,7 @@
 #include <config_features.h>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class CanvasSettings;
 
@@ -35,9 +36,10 @@ private:
     std::unique_ptr<weld::Widget> m_xPopUpNoHelpImg;
     std::unique_ptr<weld::CheckButton> m_xShowTipOfTheDay;
     std::unique_ptr<weld::Widget> m_xShowTipOfTheDayImg;
-    std::unique_ptr<weld::Widget> m_xFileDlgFrame;
     std::unique_ptr<weld::Widget> m_xFileDlgROImage;
     std::unique_ptr<weld::CheckButton> m_xFileDlgCB;
+    std::unique_ptr<weld::Widget> m_xColorDlgROImage;
+    std::unique_ptr<weld::CheckButton> m_xColorDlgCB;
     std::unique_ptr<weld::CheckButton> m_xDocStatusCB;
     std::unique_ptr<weld::Widget> m_xDocStatusImg;
     std::unique_ptr<weld::Widget> m_xYearFrame;

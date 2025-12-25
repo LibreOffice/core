@@ -97,6 +97,7 @@ public:
     TextSpacing&                        getLineSpacing() { return maLineSpacing; }
     void                                setLineSpacing( const TextSpacing& rLineSpacing ) { maLineSpacing = rLineSpacing; }
 
+    void                                setRestartNumbering( const bool bRestartNumbering ) { mbRestartNumbering = bRestartNumbering; }
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
                                                 const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
@@ -129,6 +130,7 @@ private:
     std::optional< sal_Int32 >      moDefaultTabSize;
     sal_Int16                       mnLevel;
     TextSpacing                     maLineSpacing;
+    bool                            mbRestartNumbering;
 };
 
 }

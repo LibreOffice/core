@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <vcl/customweld.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/weld/customweld.hxx>
 
 // extended page for graphics
 class BmpWindow final : public weld::CustomWidgetController

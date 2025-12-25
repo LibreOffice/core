@@ -29,6 +29,7 @@
 
 #include <canvas/canvastools.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/vector/b2isize.hxx>
 
 
 using namespace ::com::sun::star;

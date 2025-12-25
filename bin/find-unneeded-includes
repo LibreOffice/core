@@ -39,38 +39,6 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         if hdl in toAdd:
             return True
 
-    # Avoid debug STL.
-    debugStl = {
-        "array": ("debug/array", ),
-        "bitset": ("debug/bitset", ),
-        "deque": ("debug/deque", ),
-        "forward_list": ("debug/forward_list", ),
-        "list": ("debug/list", ),
-        "map": ("debug/map.h", "debug/multimap.h"),
-        "set": ("debug/set.h", "debug/multiset.h"),
-        "unordered_map": ("debug/unordered_map", ),
-        "unordered_set": ("debug/unordered_set", ),
-        "vector": ("debug/vector", ),
-    }
-    for k, values in debugStl.items():
-        if include == k:
-            for value in values:
-                if value in toAdd:
-                    return True
-
-    # Avoid proposing to use libstdc++ internal headers.
-    bits = {
-        "exception": "bits/exception.h",
-        "memory": "bits/shared_ptr.h",
-        "functional": "bits/std_function.h",
-        "cmath": "bits/std_abs.h",
-        "ctime": "bits/types/clock_t.h",
-        "cstdint": "bits/stdint-uintn.h",
-    }
-    for k, v in bits.items():
-        if include == k and v in toAdd:
-            return True
-
     # Avoid proposing o3tl fw declaration
     o3tl = {
         "o3tl/typed_flags_set.hxx" : "namespace o3tl { template <typename T> struct typed_flags; }",
@@ -233,6 +201,17 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
         match = re.match("The full include-list for " + fileName, line)
         if match:
             inFull = True
+            continue
+
+        # Check if IWYU considers the header as having correct
+        # list of includes - this would make all exclusions obsolete
+        match = re.match(".*has correct #includes/fwd-decls.*", line)
+        if match:
+            if "excludelist" in moduleRules.keys():
+                excludelistRules = moduleRules["excludelist"]
+                realFileName = os.path.relpath(fileName, os.getcwd())
+                if realFileName in excludelistRules.keys():
+                    print("WARNING:", "File has correct #includes/fwd-decls; all excluded headers can be removed from exclusion list of:", realFileName)
             continue
 
         if inAdd:
@@ -466,7 +445,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors, removefwdd):
+def run_tool(task_queue, failed_files, noexclude, checknamespaces, finderrors, removefwdd):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
@@ -483,8 +462,6 @@ def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, fin
                     print("ERROR: The following command found unused includes:\n" + invocation)
                 else:
                     print("ERROR: The following command found unused forward declarations:\n" + invocation)
-                if not dontstop:
-                    failed_files.append(invocation)
         task_queue.task_done()
     if checknamespaces:
         # Workaround: sometimes running git grep makes the letters typed into the terminal disappear after the script is finished
@@ -503,8 +480,27 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/typelib/") \
             or path.startswith("include/uno/")
 
+# Don't bother with non-linux specific paths,
+# useful for automatically checking headers
+def isNonLinuxPath(path):
+    return path.startswith("avmedia/source/win/") \
+        or path.startswith("avmedia/source/macavf/") \
+        or path.startswith("include/apple_remote/")
 
-def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
+def isNonLinuxFile(path):
+    NonLinuxFiles = (
+        "include/comphelper/windowserrorstring.hxx",
+        "include/comphelper/windowsdebugoutput.hxx",
+        "include/comphelper/windowsStart.hxx",
+        "include/drawinglayer/processor2d/d2dpixelprocessor2d.hxx",
+        "include/static/unoembindhelpers/PrimaryBindings.hxx",
+        "include/version.hrc",
+        "include/vcl/winscheduler.hxx",
+    )
+    if path in NonLinuxFiles:
+        return True
+
+def tidy(compileCommands, paths, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
     return_code = 0
 
     try:
@@ -512,12 +508,12 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors, removefwdd))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, noexclude, checknamespaces, finderrors, removefwdd))
             t.daemon = True
             t.start()
 
         for path in sorted(paths):
-            if isInUnoIncludeFile(path):
+            if isInUnoIncludeFile(path) or isNonLinuxFile(path) or isNonLinuxPath(path):
                 continue
 
             # IWYU fails on these with #error: don't use this in new code
@@ -539,6 +535,13 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
                 # code on Linux.
                 if "assumeFilename" in moduleRules.keys() and not path.endswith("cxx"):
                     assume = moduleRules["assumeFilename"]
+                    # Check for lower level assume file name
+                    if "customAssumeFilenames" in moduleRules:
+                        customAssumeRules = moduleRules["customAssumeFilenames"]
+                        for dirName in customAssumeRules.keys():
+                            if path.startswith(dirName):
+                                assume = customAssumeRules[dirName]
+
                 if assume:
                     assumeAbs = os.path.abspath(assume)
                     compileFile = assumeAbs
@@ -587,8 +590,6 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Check source files for unneeded includes.')
-    parser.add_argument('--continue', action='store_true',
-                    help='Don\'t stop on errors. Useful for periodic re-check of large amount of files')
     parser.add_argument('Files' , nargs='*',
                     help='The files to be checked')
     parser.add_argument('--recursive', metavar='DIR', nargs=1, type=str,
@@ -710,7 +711,7 @@ def main(argv):
                         print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d, headersfwd=args.headersfwd)
+    tidy(compileCommands, paths=list_of_files, noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl, debug=args.d, headersfwd=args.headersfwd)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

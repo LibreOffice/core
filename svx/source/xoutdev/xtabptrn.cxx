@@ -111,7 +111,7 @@ Bitmap XPatternList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
         if(rBitmap.GetSizePixel().Width() >= rSize.Width() && rBitmap.GetSizePixel().Height() >= rSize.Height())
         {
             rBitmap.Scale(rSize);
-            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmap);
+            pVirtualDevice->DrawBitmap(Point(0, 0), rBitmap);
         }
         else
         {
@@ -121,7 +121,7 @@ Bitmap XPatternList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
             {
                 for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                 {
-                    pVirtualDevice->DrawBitmapEx(
+                    pVirtualDevice->DrawBitmap(
                         Point(x, y),
                         rBitmap);
                 }

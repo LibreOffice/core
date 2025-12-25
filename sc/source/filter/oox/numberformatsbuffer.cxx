@@ -60,26 +60,22 @@ namespace {
 struct BuiltinFormat
 {
     sal_Int32           mnNumFmtId;         /// Built-in number format index.
-    const char*         mpcFmtCode;         /// Format string, UTF-8, may be 0 (mnPredefId is used then).
+    OUString            macFmtCode;         /// Format string, may be empty (mnPredefId is used then).
     sal_Int16           mnPredefId;         /// Predefined format index, if mpcFmtCode is 0.
     sal_Int32           mnReuseId;          /// Use this format, if mpcFmtCode is 0 and mnPredefId is -1.
 };
 
 /** Defines a literal built-in number format. */
 #define NUMFMT_STRING( INDEX, FORMATCODE ) \
-    { INDEX, FORMATCODE, -1, -1 }
+    { INDEX, u"" FORMATCODE ""_ustr, -1, -1 }
 
 /** Defines a built-in number format that maps to an own predefined format. */
 #define NUMFMT_PREDEF( INDEX, PREDEFINED ) \
-    { INDEX, nullptr, css::i18n::NumberFormatIndex::PREDEFINED, -1 }
+    { INDEX, {}, css::i18n::NumberFormatIndex::PREDEFINED, -1 }
 
 /** Defines a built-in number format that is the same as the specified in nReuseId. */
 #define NUMFMT_REUSE( INDEX, REUSED_INDEX ) \
-    { INDEX, nullptr, -1, REUSED_INDEX }
-
-/** Terminates a built-in number format table. */
-#define NUMFMT_ENDTABLE() \
-    { -1, nullptr, -1, -1 }
+    { INDEX, {}, -1, REUSED_INDEX }
 
 /** Defines builtin date and time formats 14...22.
     @param SYSTEMDATE  Complete short system date (for formats 14 and 22).
@@ -359,82 +355,82 @@ struct BuiltinFormat
     NUMFMT_ACCOUNTING_OPEN_NUMBER_SYMBOL_CLOSE( 41, SYMBOL, BLINDS, SPACE )
 
 // currency unit characters
-#define UTF8_BAHT           "\340\270\277"
-#define UTF8_COLON          "\342\202\241"
-#define UTF8_CURR_AR_AE     "\330\257.\330\245."
-#define UTF8_CURR_AR_BH     "\330\257.\330\250."
-#define UTF8_CURR_AR_DZ     "\330\257.\330\254."
-#define UTF8_CURR_AR_EG     "\330\254.\331\205."
-#define UTF8_CURR_AR_IQ     "\330\257.\330\271."
-#define UTF8_CURR_AR_JO     "\330\257.\330\247."
-#define UTF8_CURR_AR_KW     "\330\257.\331\203."
-#define UTF8_CURR_AR_LB     "\331\204.\331\204."
-#define UTF8_CURR_AR_LY     "\330\257.\331\204."
-#define UTF8_CURR_AR_MA     "\330\257.\331\205."
-#define UTF8_CURR_AR_OM     "\330\261.\330\271."
-#define UTF8_CURR_AR_QA     "\330\261.\331\202."
-#define UTF8_CURR_AR_SA     "\330\261.\330\263."
-#define UTF8_CURR_AR_SY     "\331\204.\330\263."
-#define UTF8_CURR_AR_TN     "\330\257.\330\252."
-#define UTF8_CURR_AR_YE     "\330\261.\331\212."
-#define UTF8_CURR_BN_IN     "\340\246\237\340\246\276"
-#define UTF8_CURR_FA_IR     "\330\261\331\212\330\247\331\204"
-#define UTF8_CURR_GU_IN     "\340\252\260\340\253\202"
-#define UTF8_CURR_HI_IN     "\340\244\260\340\245\201"
-#define UTF8_CURR_KN_IN     "\340\262\260\340\263\202"
-#define UTF8_CURR_ML_IN     "\340\264\225"
-#define UTF8_CURR_PA_IN     "\340\250\260\340\251\201"
-#define UTF8_CURR_TA_IN     "\340\256\260\340\257\202"
-#define UTF8_CURR_TE_IN     "\340\260\260\340\261\202"
-#define UTF8_DONG           "\342\202\253"
-#define UTF8_EURO           "\342\202\254"
-#define UTF8_POUND_GB       "\302\243"
-#define UTF8_RUFIYAA        "\336\203"
-#define UTF8_SHEQEL         "\342\202\252"
-#define UTF8_TUGRUG         "\342\202\256"
-#define UTF8_WON            "\342\202\251"
-#define UTF8_YEN_CN         "\357\277\245"
-#define UTF8_YEN_JP         "\302\245"
+#define UTF8_BAHT           "฿"
+#define UTF8_COLON          "₡"
+#define UTF8_CURR_AR_AE     "د.إ."
+#define UTF8_CURR_AR_BH     "د.ب."
+#define UTF8_CURR_AR_DZ     "د.ج."
+#define UTF8_CURR_AR_EG     "ج.م."
+#define UTF8_CURR_AR_IQ     "د.ع."
+#define UTF8_CURR_AR_JO     "د.ا."
+#define UTF8_CURR_AR_KW     "د.ك."
+#define UTF8_CURR_AR_LB     "ل.ل."
+#define UTF8_CURR_AR_LY     "د.ل."
+#define UTF8_CURR_AR_MA     "د.م."
+#define UTF8_CURR_AR_OM     "ر.ع."
+#define UTF8_CURR_AR_QA     "ر.ق."
+#define UTF8_CURR_AR_SA     "ر.س."
+#define UTF8_CURR_AR_SY     "ل.س."
+#define UTF8_CURR_AR_TN     "د.ت."
+#define UTF8_CURR_AR_YE     "ر.ي."
+#define UTF8_CURR_BN_IN     "টা"
+#define UTF8_CURR_FA_IR     "ريال"
+#define UTF8_CURR_GU_IN     "રૂ"
+#define UTF8_CURR_HI_IN     "रु"
+#define UTF8_CURR_KN_IN     "ರೂ"
+#define UTF8_CURR_ML_IN     "ക"
+#define UTF8_CURR_PA_IN     "ਰੁ"
+#define UTF8_CURR_TA_IN     "ரூ"
+#define UTF8_CURR_TE_IN     "రూ"
+#define UTF8_DONG           "₫"
+#define UTF8_EURO           "€"
+#define UTF8_POUND_GB       "£"
+#define UTF8_RUFIYAA        "ރ"
+#define UTF8_SHEQEL         "₪"
+#define UTF8_TUGRUG         "₮"
+#define UTF8_WON            "₩"
+#define UTF8_YEN_CN         "￥"
+#define UTF8_YEN_JP         "¥"
 
 // Unicode characters for currency units
-#define UTF8_CCARON_LC      "\304\215"
-#define UTF8_LSTROKE_LC     "\305\202"
+#define UTF8_CCARON_LC      "č"
+#define UTF8_LSTROKE_LC     "ł"
 // Armenian
-#define UTF8_HY_DA_LC       "\325\244"
-#define UTF8_HY_REH_LC      "\326\200"
+#define UTF8_HY_DA_LC       "դ"
+#define UTF8_HY_REH_LC      "ր"
 // Cyrillic
-#define UTF8_CYR_G_LC       "\320\263"
-#define UTF8_CYR_L_LC       "\320\273"
-#define UTF8_CYR_M_LC       "\320\274"
-#define UTF8_CYR_N_LC       "\320\275"
-#define UTF8_CYR_O_LC       "\320\276"
-#define UTF8_CYR_R_LC       "\321\200"
-#define UTF8_CYR_S_LC       "\321\201"
-#define UTF8_CYR_W_LC       "\320\262"
+#define UTF8_CYR_G_LC       "г"
+#define UTF8_CYR_L_LC       "л"
+#define UTF8_CYR_M_LC       "м"
+#define UTF8_CYR_N_LC       "н"
+#define UTF8_CYR_O_LC       "о"
+#define UTF8_CYR_R_LC       "р"
+#define UTF8_CYR_S_LC       "с"
+#define UTF8_CYR_W_LC       "в"
 
 // Japanese/Chinese date/time characters
-#define UTF8_CJ_YEAR        "\345\271\264"
-#define UTF8_CJ_MON         "\346\234\210"
-#define UTF8_CJ_DAY         "\346\227\245"
-#define UTF8_CJ_HOUR        "\346\231\202"
-#define UTF8_CJ_MIN         "\345\210\206"
-#define UTF8_CJ_SEC         "\347\247\222"
+#define UTF8_CJ_YEAR        "年"
+#define UTF8_CJ_MON         "月"
+#define UTF8_CJ_DAY         "日"
+#define UTF8_CJ_HOUR        "時"
+#define UTF8_CJ_MIN         "分"
+#define UTF8_CJ_SEC         "秒"
 
 // Chinese Simplified date/time characters
-#define UTF8_CS_YEAR        "\345\271\264"
-#define UTF8_CS_MON         "\346\234\210"
-#define UTF8_CS_DAY         "\346\227\245"
-#define UTF8_CS_HOUR        "\346\227\266"
-#define UTF8_CS_MIN         "\345\210\206"
-#define UTF8_CS_SEC         "\347\247\222"
+#define UTF8_CS_YEAR        "年"
+#define UTF8_CS_MON         "月"
+#define UTF8_CS_DAY         "日"
+#define UTF8_CS_HOUR        "时"
+#define UTF8_CS_MIN         "分"
+#define UTF8_CS_SEC         "秒"
 
 // Korean date/time characters
-#define UTF8_KO_YEAR        "\353\205\204"
-#define UTF8_KO_MON         "\354\233\224"
-#define UTF8_KO_DAY         "\354\235\274"
-#define UTF8_KO_HOUR        "\354\213\234"
-#define UTF8_KO_MIN         "\353\266\204"
-#define UTF8_KO_SEC         "\354\264\210"
+#define UTF8_KO_YEAR        "년"
+#define UTF8_KO_MON         "월"
+#define UTF8_KO_DAY         "일"
+#define UTF8_KO_HOUR        "시"
+#define UTF8_KO_MIN         "분"
+#define UTF8_KO_SEC         "초"
 
 /** Default number format table. Last parent of all other tables, used for unknown locales. */
 const BuiltinFormat spBuiltinFormats_BASE[] =
@@ -528,8 +524,6 @@ const BuiltinFormat spBuiltinFormats_BASE[] =
     NUMFMT_REUSE(   81, 47 ),
 
     // 82...163 not used, must not occur in a file (Excel may crash)
-
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, U.A.E. */
@@ -537,7 +531,6 @@ const BuiltinFormat spBuiltinFormats_ar_AE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_AE "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Bahrain. */
@@ -545,7 +538,6 @@ const BuiltinFormat spBuiltinFormats_ar_BH[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_BH "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Algeria. */
@@ -553,7 +545,6 @@ const BuiltinFormat spBuiltinFormats_ar_DZ[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_DZ "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Egypt. */
@@ -561,7 +552,6 @@ const BuiltinFormat spBuiltinFormats_ar_EG[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_EG "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Iraq. */
@@ -569,7 +559,6 @@ const BuiltinFormat spBuiltinFormats_ar_IQ[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_IQ "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Jordan. */
@@ -577,7 +566,6 @@ const BuiltinFormat spBuiltinFormats_ar_JO[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_JO "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Kuwait. */
@@ -585,7 +573,6 @@ const BuiltinFormat spBuiltinFormats_ar_KW[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_KW "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Lebanon. */
@@ -593,7 +580,6 @@ const BuiltinFormat spBuiltinFormats_ar_LB[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_LB "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Libya. */
@@ -601,7 +587,6 @@ const BuiltinFormat spBuiltinFormats_ar_LY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_LY "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Morocco. */
@@ -609,7 +594,6 @@ const BuiltinFormat spBuiltinFormats_ar_MA[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_MA "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Oman. */
@@ -617,7 +601,6 @@ const BuiltinFormat spBuiltinFormats_ar_OM[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_OM "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Qatar. */
@@ -625,7 +608,6 @@ const BuiltinFormat spBuiltinFormats_ar_QA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_QA "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Saudi Arabia. */
@@ -633,7 +615,6 @@ const BuiltinFormat spBuiltinFormats_ar_SA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_SA "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Syria. */
@@ -641,7 +622,6 @@ const BuiltinFormat spBuiltinFormats_ar_SY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_SY "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Tunisia. */
@@ -649,7 +629,6 @@ const BuiltinFormat spBuiltinFormats_ar_TN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_TN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Arabic, Yemen. */
@@ -657,7 +636,6 @@ const BuiltinFormat spBuiltinFormats_ar_YE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_YE "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Belarusian, Belarus. */
@@ -666,7 +644,6 @@ const BuiltinFormat spBuiltinFormats_be_BY[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_CYR_R_LC ".\"", "_" UTF8_CYR_R_LC "_.", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Bulgarian, Bulgaria. */
@@ -675,7 +652,6 @@ const BuiltinFormat spBuiltinFormats_bg_BG[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.M.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_CYR_L_LC UTF8_CYR_W_LC "\"", "_" UTF8_CYR_L_LC "_" UTF8_CYR_W_LC, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Bengali, India. */
@@ -683,7 +659,6 @@ const BuiltinFormat spBuiltinFormats_bn_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_BN_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Czech, Czech Republic. */
@@ -692,7 +667,6 @@ const BuiltinFormat spBuiltinFormats_cs_CZ[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"K" UTF8_CCARON_LC "\"", "_K_" UTF8_CCARON_LC, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Danish, Denmark. */
@@ -700,7 +674,6 @@ const BuiltinFormat spBuiltinFormats_da_DK[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"kr\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** German, Austria. */
@@ -708,7 +681,6 @@ const BuiltinFormat spBuiltinFormats_de_AT[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** German, Switzerland. */
@@ -716,7 +688,6 @@ const BuiltinFormat spBuiltinFormats_de_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** German, Germany. */
@@ -724,7 +695,6 @@ const BuiltinFormat spBuiltinFormats_de_DE[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** German, Liechtenstein. */
@@ -732,7 +702,6 @@ const BuiltinFormat spBuiltinFormats_de_LI[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"CHF\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** German, Luxembourg. */
@@ -740,7 +709,6 @@ const BuiltinFormat spBuiltinFormats_de_LU[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Divehi, Maldives. */
@@ -748,7 +716,6 @@ const BuiltinFormat spBuiltinFormats_div_MV[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_NUMBER_SYMBOL_MINUS( "\"" UTF8_RUFIYAA ".\"", "_" UTF8_RUFIYAA "_.", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Greek, Greece. */
@@ -756,7 +723,6 @@ const BuiltinFormat spBuiltinFormats_el_GR[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Australia. */
@@ -764,7 +730,6 @@ const BuiltinFormat spBuiltinFormats_en_AU[] =
 {
     NUMFMT_ALLDATETIMES( "D/MM/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Belize. */
@@ -772,7 +737,6 @@ const BuiltinFormat spBuiltinFormats_en_BZ[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"BZ$\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Canada. */
@@ -780,7 +744,6 @@ const BuiltinFormat spBuiltinFormats_en_CA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Caribbean. */
@@ -788,7 +751,6 @@ const BuiltinFormat spBuiltinFormats_en_CB[] =
 {
     NUMFMT_ALLDATETIMES( "MM/DD/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, United Kingdom. */
@@ -796,7 +758,6 @@ const BuiltinFormat spBuiltinFormats_en_GB[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_POUND_GB, "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Ireland. */
@@ -804,7 +765,6 @@ const BuiltinFormat spBuiltinFormats_en_IE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Jamaica. */
@@ -812,7 +772,6 @@ const BuiltinFormat spBuiltinFormats_en_JM[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "\"J$\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, New Zealand. */
@@ -820,7 +779,6 @@ const BuiltinFormat spBuiltinFormats_en_NZ[] =
 {
     NUMFMT_ALLDATETIMES( "D/MM/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Philippines. */
@@ -828,7 +786,6 @@ const BuiltinFormat spBuiltinFormats_en_PH[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Php\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Trinidad and Tobago. */
@@ -836,7 +793,6 @@ const BuiltinFormat spBuiltinFormats_en_TT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"TT$\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, USA. */
@@ -844,7 +800,6 @@ const BuiltinFormat spBuiltinFormats_en_US[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, South Africa. */
@@ -852,7 +807,6 @@ const BuiltinFormat spBuiltinFormats_en_ZA[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY/MM/DD", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\\R", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** English, Zimbabwe. */
@@ -860,7 +814,6 @@ const BuiltinFormat spBuiltinFormats_en_ZW[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Z$\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Argentina. */
@@ -868,7 +821,6 @@ const BuiltinFormat spBuiltinFormats_es_AR[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "$", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Bolivia. */
@@ -877,7 +829,6 @@ const BuiltinFormat spBuiltinFormats_es_BO[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"$b\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Chile. */
@@ -885,7 +836,6 @@ const BuiltinFormat spBuiltinFormats_es_CL[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Colombia. */
@@ -893,7 +843,6 @@ const BuiltinFormat spBuiltinFormats_es_CO[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Costa Rica. */
@@ -901,7 +850,6 @@ const BuiltinFormat spBuiltinFormats_es_CR[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( UTF8_COLON, "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Dominican Republic. */
@@ -909,7 +857,6 @@ const BuiltinFormat spBuiltinFormats_es_DO[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"RD$\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Ecuador. */
@@ -917,7 +864,6 @@ const BuiltinFormat spBuiltinFormats_es_EC[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Spain. */
@@ -925,7 +871,6 @@ const BuiltinFormat spBuiltinFormats_es_ES[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Guatemala. */
@@ -933,7 +878,6 @@ const BuiltinFormat spBuiltinFormats_es_GT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\Q", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Honduras. */
@@ -942,7 +886,6 @@ const BuiltinFormat spBuiltinFormats_es_HN[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"L.\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Mexico. */
@@ -950,7 +893,6 @@ const BuiltinFormat spBuiltinFormats_es_MX[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Nicaragua. */
@@ -959,7 +901,6 @@ const BuiltinFormat spBuiltinFormats_es_NI[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"C$\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Panama. */
@@ -967,7 +908,6 @@ const BuiltinFormat spBuiltinFormats_es_PA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"B/.\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Peru. */
@@ -975,7 +915,6 @@ const BuiltinFormat spBuiltinFormats_es_PE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"S/.\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Puerto Rico. */
@@ -984,7 +923,6 @@ const BuiltinFormat spBuiltinFormats_es_PR[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Paraguay. */
@@ -992,7 +930,6 @@ const BuiltinFormat spBuiltinFormats_es_PY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Gs\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, El Salvador. */
@@ -1001,7 +938,6 @@ const BuiltinFormat spBuiltinFormats_es_SV[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Uruguay. */
@@ -1009,7 +945,6 @@ const BuiltinFormat spBuiltinFormats_es_UY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"$U\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Spanish, Venezuela. */
@@ -1017,7 +952,6 @@ const BuiltinFormat spBuiltinFormats_es_VE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "Bs", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Estonian, Estonia. */
@@ -1026,7 +960,6 @@ const BuiltinFormat spBuiltinFormats_et_EE[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "D.MM.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"kr\"", "_k_r", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Farsi, Iran. */
@@ -1034,7 +967,6 @@ const BuiltinFormat spBuiltinFormats_fa_IR[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY/MM/DD", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_FA_IR "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Finnish, Finland. */
@@ -1045,7 +977,6 @@ const BuiltinFormat spBuiltinFormats_fi_FI[] =
     NUMFMT_STRING( 10, "0.00\\ %" ),
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Faroese, Faroe Islands. */
@@ -1053,7 +984,6 @@ const BuiltinFormat spBuiltinFormats_fo_FO[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"kr\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** French, Belgium. */
@@ -1061,7 +991,6 @@ const BuiltinFormat spBuiltinFormats_fr_BE[] =
 {
     NUMFMT_ALLDATETIMES( "D/MM/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** French, Canada. */
@@ -1070,7 +999,6 @@ const BuiltinFormat spBuiltinFormats_fr_CA[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "YYYY-MM-DD", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_NUMBER_SYMBOL_CLOSE( "$", "_$", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** French, Switzerland. */
@@ -1078,7 +1006,6 @@ const BuiltinFormat spBuiltinFormats_fr_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** French, France. */
@@ -1087,7 +1014,6 @@ const BuiltinFormat spBuiltinFormats_fr_FR[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** French, Luxembourg. */
@@ -1096,7 +1022,6 @@ const BuiltinFormat spBuiltinFormats_fr_LU[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** French, Monaco. */
@@ -1105,7 +1030,6 @@ const BuiltinFormat spBuiltinFormats_fr_MC[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Galizian, Spain. */
@@ -1113,7 +1037,6 @@ const BuiltinFormat spBuiltinFormats_gl_ES[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Gujarati, India. */
@@ -1121,7 +1044,6 @@ const BuiltinFormat spBuiltinFormats_gu_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_GU_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Hebrew, Israel. */
@@ -1129,7 +1051,6 @@ const BuiltinFormat spBuiltinFormats_he_IL[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( UTF8_SHEQEL, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Hindi, India. */
@@ -1137,7 +1058,6 @@ const BuiltinFormat spBuiltinFormats_hi_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_HI_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Croatian, Bosnia and Herzegowina. */
@@ -1145,7 +1065,6 @@ const BuiltinFormat spBuiltinFormats_hr_BA[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"KM\"", "_K_M", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Croatian, Croatia. */
@@ -1153,7 +1072,6 @@ const BuiltinFormat spBuiltinFormats_hr_HR[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"kn\"", "_k_n", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Hungarian, Hungary. */
@@ -1163,7 +1081,6 @@ const BuiltinFormat spBuiltinFormats_hu_HU[] =
     // MMM is rendered differently in Calc and Excel (see #i41488#)
     NUMFMT_ALLDATETIMES( "YYYY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"Ft\"", "_F_t", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Armenian, Armenia. */
@@ -1171,7 +1088,6 @@ const BuiltinFormat spBuiltinFormats_hy_AM[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_HY_DA_LC UTF8_HY_REH_LC ".\"", "_" UTF8_HY_DA_LC "_" UTF8_HY_REH_LC "_.", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Indonesian, Indonesia. */
@@ -1179,7 +1095,6 @@ const BuiltinFormat spBuiltinFormats_id_ID[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Rp\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Icelandic, Iceland. */
@@ -1187,7 +1102,6 @@ const BuiltinFormat spBuiltinFormats_is_IS[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"kr.\"", "_k_r_.", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Italian, Switzerland. */
@@ -1195,7 +1109,6 @@ const BuiltinFormat spBuiltinFormats_it_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Italian, Italy. */
@@ -1203,7 +1116,6 @@ const BuiltinFormat spBuiltinFormats_it_IT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Georgian, Georgia. */
@@ -1212,7 +1124,6 @@ const BuiltinFormat spBuiltinFormats_ka_GE[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"Lari\"", "_L_a_r_i", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Kazakh, Kazakhstan. */
@@ -1221,7 +1132,6 @@ const BuiltinFormat spBuiltinFormats_kk_KZ[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "\\T", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Kannada, India. */
@@ -1229,7 +1139,6 @@ const BuiltinFormat spBuiltinFormats_kn_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_KN_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Kyrgyz, Kyrgyzstan. */
@@ -1238,7 +1147,6 @@ const BuiltinFormat spBuiltinFormats_ky_KG[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_CYR_S_LC UTF8_CYR_O_LC UTF8_CYR_M_LC "\"", "_" UTF8_CYR_S_LC "_" UTF8_CYR_O_LC "_" UTF8_CYR_M_LC, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Lithuanian, Lithuania. */
@@ -1246,7 +1154,6 @@ const BuiltinFormat spBuiltinFormats_lt_LT[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"Lt\"", "_L_t", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Latvian, Latvia. */
@@ -1255,7 +1162,6 @@ const BuiltinFormat spBuiltinFormats_lv_LV[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "YYYY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "\"Ls\"", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Malayalam, India. */
@@ -1263,7 +1169,6 @@ const BuiltinFormat spBuiltinFormats_ml_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_ML_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Mongolian, Mongolia. */
@@ -1271,7 +1176,6 @@ const BuiltinFormat spBuiltinFormats_mn_MN[] =
 {
     NUMFMT_ALLDATETIMES( "YY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_TUGRUG, "_" UTF8_TUGRUG, "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Malay, Brunei Darussalam. */
@@ -1279,7 +1183,6 @@ const BuiltinFormat spBuiltinFormats_ms_BN[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Malay, Malaysia. */
@@ -1287,7 +1190,6 @@ const BuiltinFormat spBuiltinFormats_ms_MY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\R", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Maltese, Malta. */
@@ -1295,7 +1197,6 @@ const BuiltinFormat spBuiltinFormats_mt_MT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "\"Lm\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Dutch, Belgium. */
@@ -1304,7 +1205,6 @@ const BuiltinFormat spBuiltinFormats_nl_BE[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "D\\/MM\\/YYYY", "D", "\\/", "MMM", "\\/", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Dutch, Netherlands. */
@@ -1312,7 +1212,6 @@ const BuiltinFormat spBuiltinFormats_nl_NL[] =
 {
     NUMFMT_ALLDATETIMES( "D-M-YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Norwegian (Bokmal and Nynorsk), Norway. */
@@ -1321,7 +1220,6 @@ const BuiltinFormat spBuiltinFormats_no_NO[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"kr\"", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Punjabi, India. */
@@ -1329,7 +1227,6 @@ const BuiltinFormat spBuiltinFormats_pa_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_PA_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Polish, Poland. */
@@ -1339,7 +1236,6 @@ const BuiltinFormat spBuiltinFormats_pl_PL[] =
     // MMM is rendered differently in Calc and Excel (see #i72300#)
     NUMFMT_ALLDATETIMES( "YYYY-MM-DD", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"z" UTF8_LSTROKE_LC "\"", "_z_" UTF8_LSTROKE_LC, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Portuguese, Brazil. */
@@ -1347,7 +1243,6 @@ const BuiltinFormat spBuiltinFormats_pt_BR[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "/", "MMM", "/", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"R$\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Portuguese, Portugal. */
@@ -1355,7 +1250,6 @@ const BuiltinFormat spBuiltinFormats_pt_PT[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Romanian, Romania. */
@@ -1364,7 +1258,6 @@ const BuiltinFormat spBuiltinFormats_ro_RO[] =
     // space character is group separator, literal spaces must be quoted (but see #i75367#)
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"lei\"", "_l_e_i", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Russian, Russian Federation. */
@@ -1373,7 +1266,6 @@ const BuiltinFormat spBuiltinFormats_ru_RU[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_CYR_R_LC ".\"", "_" UTF8_CYR_R_LC "_.", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Slovak, Slovakia. */
@@ -1382,7 +1274,6 @@ const BuiltinFormat spBuiltinFormats_sk_SK[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"Sk\"", "_S_k", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Slovenian, Slovenia. */
@@ -1390,7 +1281,6 @@ const BuiltinFormat spBuiltinFormats_sl_SI[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"SIT\"", "_S_I_T", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Swedish, Finland. */
@@ -1401,7 +1291,6 @@ const BuiltinFormat spBuiltinFormats_sv_FI[] =
     NUMFMT_STRING( 10, "0.00\\ %" ),
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Swedish, Sweden. */
@@ -1410,7 +1299,6 @@ const BuiltinFormat spBuiltinFormats_sv_SE[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "YYYY-MM-DD", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"kr\"", "_k_r", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Swahili, Tanzania. */
@@ -1418,7 +1306,6 @@ const BuiltinFormat spBuiltinFormats_sw_TZ[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\S", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Tamil, India. */
@@ -1426,7 +1313,6 @@ const BuiltinFormat spBuiltinFormats_ta_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_TA_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Telugu, India. */
@@ -1434,7 +1320,6 @@ const BuiltinFormat spBuiltinFormats_te_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_TE_IN "\"", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Thai, Thailand. */
@@ -1462,7 +1347,6 @@ const BuiltinFormat spBuiltinFormats_th_TH[] =
     NUMFMT_STRING( 79, "t[h]:mm:ss" ),
     NUMFMT_STRING( 80, "tmm:ss.0" ),
     NUMFMT_STRING( 81, "D/M/E" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Turkish, Turkey. */
@@ -1470,7 +1354,6 @@ const BuiltinFormat spBuiltinFormats_tr_TR[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"TL\"", "_T_L", " " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Tatar, Russian Federation. */
@@ -1479,7 +1362,6 @@ const BuiltinFormat spBuiltinFormats_tt_RU[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_CYR_R_LC ".\"", "_" UTF8_CYR_R_LC "_.", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Ukrainian, Ukraine. */
@@ -1488,7 +1370,6 @@ const BuiltinFormat spBuiltinFormats_uk_UA[] =
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_CYR_G_LC UTF8_CYR_R_LC UTF8_CYR_N_LC ".\"", "_" UTF8_CYR_G_LC "_" UTF8_CYR_R_LC "_" UTF8_CYR_N_LC "_.", "\\ " ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Urdu, Pakistan. */
@@ -1496,7 +1377,6 @@ const BuiltinFormat spBuiltinFormats_ur_PK[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"Rs\"", "" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Vietnamese, Viet Nam. */
@@ -1504,7 +1384,6 @@ const BuiltinFormat spBuiltinFormats_vi_VN[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_DONG, "_" UTF8_DONG, " " ),
-    NUMFMT_ENDTABLE()
 };
 
 // CJK ------------------------------------------------------------------------
@@ -1523,7 +1402,6 @@ const BuiltinFormat spBuiltinFormats_CJK[] =
     NUMFMT_REUSE( 56, 35 ),
     NUMFMT_REUSE( 57, 27 ),
     NUMFMT_REUSE( 58, 28 ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Japanese, Japan. */
@@ -1539,7 +1417,6 @@ const BuiltinFormat spBuiltinFormats_ja_JP[] =
     NUMFMT_TIME_CJK( 32, "h", UTF8_CJ_HOUR, UTF8_CJ_MIN, UTF8_CJ_SEC ),
     NUMFMT_STRING( 34, "YYYY\"" UTF8_CJ_YEAR "\"MM\"" UTF8_CJ_MON "\"" ),
     NUMFMT_STRING( 35, "MM\"" UTF8_CJ_MON "\"DD\"" UTF8_CJ_DAY "\"" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Korean, South Korea. */
@@ -1556,7 +1433,6 @@ const BuiltinFormat spBuiltinFormats_ko_KR[] =
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_STRING( 34, "YYYY\\/MM\\/DD" ),
     NUMFMT_REUSE( 35, 14 ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Chinese, China. */
@@ -1572,7 +1448,6 @@ const BuiltinFormat spBuiltinFormats_zh_CN[] =
     NUMFMT_STRING( 31, "YYYY\"" UTF8_CS_YEAR "\"M\"" UTF8_CS_MON "\"D\"" UTF8_CS_DAY "\"" ),
     NUMFMT_REUSE( 52, 27 ),
     NUMFMT_REUSE( 53, 28 ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Chinese, Hong Kong. */
@@ -1586,7 +1461,6 @@ const BuiltinFormat spBuiltinFormats_zh_HK[] =
     NUMFMT_STRING( 28, "[$-404]D\"" UTF8_CJ_DAY "\"M\"" UTF8_CJ_MON "\"E\"" UTF8_CJ_YEAR "\"" ),
     NUMFMT_STRING( 30, "M/D/YY" ),
     NUMFMT_STRING( 31, "D\"" UTF8_CJ_DAY "\"M\"" UTF8_CJ_MON "\"YYYY\"" UTF8_CJ_YEAR "\"" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Chinese, Macau. */
@@ -1600,7 +1474,6 @@ const BuiltinFormat spBuiltinFormats_zh_MO[] =
     NUMFMT_STRING( 28, "[$-404]D\"" UTF8_CJ_DAY "\"M\"" UTF8_CJ_MON "\"E\"" UTF8_CJ_YEAR "\"" ),
     NUMFMT_STRING( 30, "M/D/YY" ),
     NUMFMT_STRING( 31, "D\"" UTF8_CJ_DAY "\"M\"" UTF8_CJ_MON "\"YYYY\"" UTF8_CJ_YEAR "\"" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Chinese, Singapore. */
@@ -1614,7 +1487,6 @@ const BuiltinFormat spBuiltinFormats_zh_SG[] =
     NUMFMT_STRING( 28, "M\"" UTF8_CS_MON "\"D\"" UTF8_CS_DAY "\"" ),
     NUMFMT_STRING( 30, "M/D/YY" ),
     NUMFMT_STRING( 31, "D\"" UTF8_CS_DAY "\"M\"" UTF8_CS_MON "\"YYYY\"" UTF8_CS_YEAR "\"" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Chinese, Taiwan. */
@@ -1628,164 +1500,163 @@ const BuiltinFormat spBuiltinFormats_zh_TW[] =
     NUMFMT_STRING( 28, "[$-404]E\"" UTF8_CJ_YEAR "\"M\"" UTF8_CJ_MON "\"D\"" UTF8_CJ_DAY "\"" ),
     NUMFMT_STRING( 30, "M/D/YY" ),
     NUMFMT_STRING( 31, "YYYY\"" UTF8_CJ_YEAR "\"M\"" UTF8_CJ_MON "\"D\"" UTF8_CJ_DAY "\"" ),
-    NUMFMT_ENDTABLE()
 };
 
 /** Specifies a built-in number format table for a specific locale. */
 struct BuiltinFormatTable
 {
-    const char*          mpcLocale;          /// The locale for this table.
-    const char*          mpcParent;          /// The locale of the parent table.
-    const BuiltinFormat* mpFormats;         /// The number format table (may be 0, if equal to parent).
+    OUString                       macLocale; /// The locale for this table.
+    OUString                       macParent; /// The locale of the parent table.
+    std::span<const BuiltinFormat> maFormats; /// The number format table (may be 0, if equal to parent).
 };
 
-const BuiltinFormatTable spBuiltinFormatTables[] =
+constexpr BuiltinFormatTable spBuiltinFormatTables[] =
 { //  locale    parent      format table
-    { "*",      "",         spBuiltinFormats_BASE   },  // Base table
-    { "af-ZA",  "*",        spBuiltinFormats_en_ZA  },  // Afrikaans, South Africa
-    { "ar-AE",  "*",        spBuiltinFormats_ar_AE  },  // Arabic, U.A.E.
-    { "ar-BH",  "*",        spBuiltinFormats_ar_BH  },  // Arabic, Bahrain
-    { "ar-DZ",  "*",        spBuiltinFormats_ar_DZ  },  // Arabic, Algeria
-    { "ar-EG",  "*",        spBuiltinFormats_ar_EG  },  // Arabic, Egypt
-    { "ar-IQ",  "*",        spBuiltinFormats_ar_IQ  },  // Arabic, Iraq
-    { "ar-JO",  "*",        spBuiltinFormats_ar_JO  },  // Arabic, Jordan
-    { "ar-KW",  "*",        spBuiltinFormats_ar_KW  },  // Arabic, Kuwait
-    { "ar-LB",  "*",        spBuiltinFormats_ar_LB  },  // Arabic, Lebanon
-    { "ar-LY",  "*",        spBuiltinFormats_ar_LY  },  // Arabic, Libya
-    { "ar-MA",  "*",        spBuiltinFormats_ar_MA  },  // Arabic, Morocco
-    { "ar-OM",  "*",        spBuiltinFormats_ar_OM  },  // Arabic, Oman
-    { "ar-QA",  "*",        spBuiltinFormats_ar_QA  },  // Arabic, Qatar
-    { "ar-SA",  "*",        spBuiltinFormats_ar_SA  },  // Arabic, Saudi Arabia
-    { "ar-SY",  "*",        spBuiltinFormats_ar_SY  },  // Arabic, Syria
-    { "ar-TN",  "*",        spBuiltinFormats_ar_TN  },  // Arabic, Tunisia
-    { "ar-YE",  "*",        spBuiltinFormats_ar_YE  },  // Arabic, Yemen
-    { "be-BY",  "*",        spBuiltinFormats_be_BY  },  // Belarusian, Belarus
-    { "bg-BG",  "*",        spBuiltinFormats_bg_BG  },  // Bulgarian, Bulgaria
-    { "bn-IN",  "*",        spBuiltinFormats_bn_IN  },  // Bengali, India
-    { "ca-ES",  "*",        spBuiltinFormats_es_ES  },  // Catalan, Spain
-    { "cs-CZ",  "*",        spBuiltinFormats_cs_CZ  },  // Czech, Czech Republic
-    { "cy-GB",  "*",        spBuiltinFormats_en_GB  },  // Welsh, United Kingdom
-    { "da-DK",  "*",        spBuiltinFormats_da_DK  },  // Danish, Denmark
-    { "de-AT",  "*",        spBuiltinFormats_de_AT  },  // German, Austria
-    { "de-CH",  "*",        spBuiltinFormats_de_CH  },  // German, Switzerland
-    { "de-DE",  "*",        spBuiltinFormats_de_DE  },  // German, Germany
-    { "de-LI",  "*",        spBuiltinFormats_de_LI  },  // German, Liechtenstein
-    { "de-LU",  "*",        spBuiltinFormats_de_LU  },  // German, Luxembourg
-    { "div-MV", "*",        spBuiltinFormats_div_MV },  // Divehi, Maldives
-    { "el-GR",  "*",        spBuiltinFormats_el_GR  },  // Greek, Greece
-    { "en-AU",  "*",        spBuiltinFormats_en_AU  },  // English, Australia
-    { "en-BZ",  "*",        spBuiltinFormats_en_BZ  },  // English, Belize
-    { "en-CA",  "*",        spBuiltinFormats_en_CA  },  // English, Canada
-    { "en-CB",  "*",        spBuiltinFormats_en_CB  },  // English, Caribbean
-    { "en-GB",  "*",        spBuiltinFormats_en_GB  },  // English, United Kingdom
-    { "en-IE",  "*",        spBuiltinFormats_en_IE  },  // English, Ireland
-    { "en-JM",  "*",        spBuiltinFormats_en_JM  },  // English, Jamaica
-    { "en-NZ",  "*",        spBuiltinFormats_en_NZ  },  // English, New Zealand
-    { "en-PH",  "*",        spBuiltinFormats_en_PH  },  // English, Philippines
-    { "en-TT",  "*",        spBuiltinFormats_en_TT  },  // English, Trinidad and Tobago
-    { "en-US",  "*",        spBuiltinFormats_en_US  },  // English, USA
-    { "en-ZA",  "*",        spBuiltinFormats_en_ZA  },  // English, South Africa
-    { "en-ZW",  "*",        spBuiltinFormats_en_ZW  },  // English, Zimbabwe
-    { "es-AR",  "*",        spBuiltinFormats_es_AR  },  // Spanish, Argentina
-    { "es-BO",  "*",        spBuiltinFormats_es_BO  },  // Spanish, Bolivia
-    { "es-CL",  "*",        spBuiltinFormats_es_CL  },  // Spanish, Chile
-    { "es-CO",  "*",        spBuiltinFormats_es_CO  },  // Spanish, Colombia
-    { "es-CR",  "*",        spBuiltinFormats_es_CR  },  // Spanish, Costa Rica
-    { "es-DO",  "*",        spBuiltinFormats_es_DO  },  // Spanish, Dominican Republic
-    { "es-EC",  "*",        spBuiltinFormats_es_EC  },  // Spanish, Ecuador
-    { "es-ES",  "*",        spBuiltinFormats_es_ES  },  // Spanish, Spain
-    { "es-GT",  "*",        spBuiltinFormats_es_GT  },  // Spanish, Guatemala
-    { "es-HN",  "*",        spBuiltinFormats_es_HN  },  // Spanish, Honduras
-    { "es-MX",  "*",        spBuiltinFormats_es_MX  },  // Spanish, Mexico
-    { "es-NI",  "*",        spBuiltinFormats_es_NI  },  // Spanish, Nicaragua
-    { "es-PA",  "*",        spBuiltinFormats_es_PA  },  // Spanish, Panama
-    { "es-PE",  "*",        spBuiltinFormats_es_PE  },  // Spanish, Peru
-    { "es-PR",  "*",        spBuiltinFormats_es_PR  },  // Spanish, Puerto Rico
-    { "es-PY",  "*",        spBuiltinFormats_es_PY  },  // Spanish, Paraguay
-    { "es-SV",  "*",        spBuiltinFormats_es_SV  },  // Spanish, El Salvador
-    { "es-UY",  "*",        spBuiltinFormats_es_UY  },  // Spanish, Uruguay
-    { "es-VE",  "*",        spBuiltinFormats_es_VE  },  // Spanish, Venezuela
-    { "et-EE",  "*",        spBuiltinFormats_et_EE  },  // Estonian, Estonia
-    { "fa-IR",  "*",        spBuiltinFormats_fa_IR  },  // Farsi, Iran
-    { "fi-FI",  "*",        spBuiltinFormats_fi_FI  },  // Finnish, Finland
-    { "fo-FO",  "*",        spBuiltinFormats_fo_FO  },  // Faroese, Faroe Islands
-    { "fr-BE",  "*",        spBuiltinFormats_fr_BE  },  // French, Belgium
-    { "fr-CA",  "*",        spBuiltinFormats_fr_CA  },  // French, Canada
-    { "fr-CH",  "*",        spBuiltinFormats_fr_CH  },  // French, Switzerland
-    { "fr-FR",  "*",        spBuiltinFormats_fr_FR  },  // French, France
-    { "fr-LU",  "*",        spBuiltinFormats_fr_LU  },  // French, Luxembourg
-    { "fr-MC",  "*",        spBuiltinFormats_fr_MC  },  // French, Monaco
-    { "gl-ES",  "*",        spBuiltinFormats_gl_ES  },  // Galizian, Spain
-    { "gu-IN",  "*",        spBuiltinFormats_gu_IN  },  // Gujarati, India
-    { "he-IL",  "*",        spBuiltinFormats_he_IL  },  // Hebrew, Israel
-    { "hi-IN",  "*",        spBuiltinFormats_hi_IN  },  // Hindi, India
-    { "hr-BA",  "*",        spBuiltinFormats_hr_BA  },  // Croatian, Bosnia and Herzegowina
-    { "hr-HR",  "*",        spBuiltinFormats_hr_HR  },  // Croatian, Croatia
-    { "hu-HU",  "*",        spBuiltinFormats_hu_HU  },  // Hungarian, Hungary
-    { "hy-AM",  "*",        spBuiltinFormats_hy_AM  },  // Armenian, Armenia
-    { "id-ID",  "*",        spBuiltinFormats_id_ID  },  // Indonesian, Indonesia
-    { "is-IS",  "*",        spBuiltinFormats_is_IS  },  // Icelandic, Iceland
-    { "it-CH",  "*",        spBuiltinFormats_it_CH  },  // Italian, Switzerland
-    { "it-IT",  "*",        spBuiltinFormats_it_IT  },  // Italian, Italy
-    { "ka-GE",  "*",        spBuiltinFormats_ka_GE  },  // Georgian, Georgia
-    { "kk-KZ",  "*",        spBuiltinFormats_kk_KZ  },  // Kazakh, Kazakhstan
-    { "kn-IN",  "*",        spBuiltinFormats_kn_IN  },  // Kannada, India
-    { "kok-IN", "*",        spBuiltinFormats_hi_IN  },  // Konkani, India
-    { "ky-KG",  "*",        spBuiltinFormats_ky_KG  },  // Kyrgyz, Kyrgyzstan
-    { "lt-LT",  "*",        spBuiltinFormats_lt_LT  },  // Lithuanian, Lithuania
-    { "lv-LV",  "*",        spBuiltinFormats_lv_LV  },  // Latvian, Latvia
-    { "mi-NZ",  "*",        spBuiltinFormats_en_NZ  },  // Maori, New Zealand
-    { "ml-IN",  "*",        spBuiltinFormats_ml_IN  },  // Malayalam, India
-    { "mn-MN",  "*",        spBuiltinFormats_mn_MN  },  // Mongolian, Mongolia
-    { "mr-IN",  "*",        spBuiltinFormats_hi_IN  },  // Marathi, India
-    { "ms-BN",  "*",        spBuiltinFormats_ms_BN  },  // Malay, Brunei Darussalam
-    { "ms-MY",  "*",        spBuiltinFormats_ms_MY  },  // Malay, Malaysia
-    { "mt-MT",  "*",        spBuiltinFormats_mt_MT  },  // Maltese, Malta
-    { "nb-NO",  "*",        spBuiltinFormats_no_NO  },  // Norwegian Bokmal, Norway
-    { "nl-BE",  "*",        spBuiltinFormats_nl_BE  },  // Dutch, Belgium
-    { "nl-NL",  "*",        spBuiltinFormats_nl_NL  },  // Dutch, Netherlands
-    { "nn-NO",  "*",        spBuiltinFormats_no_NO  },  // Norwegian Nynorsk, Norway
-    { "nso-ZA", "*",        spBuiltinFormats_en_ZA  },  // Northern Sotho, South Africa
-    { "pa-IN",  "*",        spBuiltinFormats_pa_IN  },  // Punjabi, India
-    { "pl-PL",  "*",        spBuiltinFormats_pl_PL  },  // Polish, Poland
-    { "pt-BR",  "*",        spBuiltinFormats_pt_BR  },  // Portuguese, Brazil
-    { "pt-PT",  "*",        spBuiltinFormats_pt_PT  },  // Portuguese, Portugal
-    { "qu-BO",  "*",        spBuiltinFormats_es_BO  },  // Quechua, Bolivia
-    { "qu-EC",  "*",        spBuiltinFormats_es_EC  },  // Quechua, Ecuador
-    { "qu-PE",  "*",        spBuiltinFormats_es_PE  },  // Quechua, Peru
-    { "ro-RO",  "*",        spBuiltinFormats_ro_RO  },  // Romanian, Romania
-    { "ru-RU",  "*",        spBuiltinFormats_ru_RU  },  // Russian, Russian Federation
-    { "sa-IN",  "*",        spBuiltinFormats_hi_IN  },  // Sanskrit, India
-    { "se-FI",  "*",        spBuiltinFormats_fi_FI  },  // Sami, Finland
-    { "se-NO",  "*",        spBuiltinFormats_no_NO  },  // Sami, Norway
-    { "se-SE",  "*",        spBuiltinFormats_sv_SE  },  // Sami, Sweden
-    { "sk-SK",  "*",        spBuiltinFormats_sk_SK  },  // Slovak, Slovakia
-    { "sl-SI",  "*",        spBuiltinFormats_sl_SI  },  // Slovenian, Slovenia
-    { "sv-FI",  "*",        spBuiltinFormats_sv_FI  },  // Swedish, Finland
-    { "sv-SE",  "*",        spBuiltinFormats_sv_SE  },  // Swedish, Sweden
-    { "sw-TZ",  "*",        spBuiltinFormats_sw_TZ  },  // Swahili, Tanzania
-    { "syr-SY", "*",        spBuiltinFormats_ar_SY  },  // Syriac, Syria
-    { "syr-TR", "*",        spBuiltinFormats_tr_TR  },  // Syriac, Turkey
-    { "ta-IN",  "*",        spBuiltinFormats_ta_IN  },  // Tamil, India
-    { "te-IN",  "*",        spBuiltinFormats_te_IN  },  // Telugu, India
-    { "th-TH",  "*",        spBuiltinFormats_th_TH  },  // Thai, Thailand
-    { "tn-ZA",  "*",        spBuiltinFormats_en_ZA  },  // Tswana, South Africa
-    { "tr-TR",  "*",        spBuiltinFormats_tr_TR  },  // Turkish, Turkey
-    { "tt-RU",  "*",        spBuiltinFormats_tt_RU  },  // Tatar, Russian Federation
-    { "uk-UA",  "*",        spBuiltinFormats_uk_UA  },  // Ukrainian, Ukraine
-    { "ur-PK",  "*",        spBuiltinFormats_ur_PK  },  // Urdu, Pakistan
-    { "vi-VN",  "*",        spBuiltinFormats_vi_VN  },  // Vietnamese, Viet Nam
-    { "xh-ZA",  "*",        spBuiltinFormats_en_ZA  },  // Xhosa, South Africa
-    { "zu-ZA",  "*",        spBuiltinFormats_en_ZA  },  // Zulu, South Africa
+    { u"*"_ustr,      u""_ustr,         spBuiltinFormats_BASE   },  // Base table
+    { u"af-ZA"_ustr,  u"*"_ustr,        spBuiltinFormats_en_ZA  },  // Afrikaans, South Africa
+    { u"ar-AE"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_AE  },  // Arabic, U.A.E.
+    { u"ar-BH"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_BH  },  // Arabic, Bahrain
+    { u"ar-DZ"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_DZ  },  // Arabic, Algeria
+    { u"ar-EG"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_EG  },  // Arabic, Egypt
+    { u"ar-IQ"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_IQ  },  // Arabic, Iraq
+    { u"ar-JO"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_JO  },  // Arabic, Jordan
+    { u"ar-KW"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_KW  },  // Arabic, Kuwait
+    { u"ar-LB"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_LB  },  // Arabic, Lebanon
+    { u"ar-LY"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_LY  },  // Arabic, Libya
+    { u"ar-MA"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_MA  },  // Arabic, Morocco
+    { u"ar-OM"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_OM  },  // Arabic, Oman
+    { u"ar-QA"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_QA  },  // Arabic, Qatar
+    { u"ar-SA"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_SA  },  // Arabic, Saudi Arabia
+    { u"ar-SY"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_SY  },  // Arabic, Syria
+    { u"ar-TN"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_TN  },  // Arabic, Tunisia
+    { u"ar-YE"_ustr,  u"*"_ustr,        spBuiltinFormats_ar_YE  },  // Arabic, Yemen
+    { u"be-BY"_ustr,  u"*"_ustr,        spBuiltinFormats_be_BY  },  // Belarusian, Belarus
+    { u"bg-BG"_ustr,  u"*"_ustr,        spBuiltinFormats_bg_BG  },  // Bulgarian, Bulgaria
+    { u"bn-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_bn_IN  },  // Bengali, India
+    { u"ca-ES"_ustr,  u"*"_ustr,        spBuiltinFormats_es_ES  },  // Catalan, Spain
+    { u"cs-CZ"_ustr,  u"*"_ustr,        spBuiltinFormats_cs_CZ  },  // Czech, Czech Republic
+    { u"cy-GB"_ustr,  u"*"_ustr,        spBuiltinFormats_en_GB  },  // Welsh, United Kingdom
+    { u"da-DK"_ustr,  u"*"_ustr,        spBuiltinFormats_da_DK  },  // Danish, Denmark
+    { u"de-AT"_ustr,  u"*"_ustr,        spBuiltinFormats_de_AT  },  // German, Austria
+    { u"de-CH"_ustr,  u"*"_ustr,        spBuiltinFormats_de_CH  },  // German, Switzerland
+    { u"de-DE"_ustr,  u"*"_ustr,        spBuiltinFormats_de_DE  },  // German, Germany
+    { u"de-LI"_ustr,  u"*"_ustr,        spBuiltinFormats_de_LI  },  // German, Liechtenstein
+    { u"de-LU"_ustr,  u"*"_ustr,        spBuiltinFormats_de_LU  },  // German, Luxembourg
+    { u"div-MV"_ustr, u"*"_ustr,        spBuiltinFormats_div_MV },  // Divehi, Maldives
+    { u"el-GR"_ustr,  u"*"_ustr,        spBuiltinFormats_el_GR  },  // Greek, Greece
+    { u"en-AU"_ustr,  u"*"_ustr,        spBuiltinFormats_en_AU  },  // English, Australia
+    { u"en-BZ"_ustr,  u"*"_ustr,        spBuiltinFormats_en_BZ  },  // English, Belize
+    { u"en-CA"_ustr,  u"*"_ustr,        spBuiltinFormats_en_CA  },  // English, Canada
+    { u"en-CB"_ustr,  u"*"_ustr,        spBuiltinFormats_en_CB  },  // English, Caribbean
+    { u"en-GB"_ustr,  u"*"_ustr,        spBuiltinFormats_en_GB  },  // English, United Kingdom
+    { u"en-IE"_ustr,  u"*"_ustr,        spBuiltinFormats_en_IE  },  // English, Ireland
+    { u"en-JM"_ustr,  u"*"_ustr,        spBuiltinFormats_en_JM  },  // English, Jamaica
+    { u"en-NZ"_ustr,  u"*"_ustr,        spBuiltinFormats_en_NZ  },  // English, New Zealand
+    { u"en-PH"_ustr,  u"*"_ustr,        spBuiltinFormats_en_PH  },  // English, Philippines
+    { u"en-TT"_ustr,  u"*"_ustr,        spBuiltinFormats_en_TT  },  // English, Trinidad and Tobago
+    { u"en-US"_ustr,  u"*"_ustr,        spBuiltinFormats_en_US  },  // English, USA
+    { u"en-ZA"_ustr,  u"*"_ustr,        spBuiltinFormats_en_ZA  },  // English, South Africa
+    { u"en-ZW"_ustr,  u"*"_ustr,        spBuiltinFormats_en_ZW  },  // English, Zimbabwe
+    { u"es-AR"_ustr,  u"*"_ustr,        spBuiltinFormats_es_AR  },  // Spanish, Argentina
+    { u"es-BO"_ustr,  u"*"_ustr,        spBuiltinFormats_es_BO  },  // Spanish, Bolivia
+    { u"es-CL"_ustr,  u"*"_ustr,        spBuiltinFormats_es_CL  },  // Spanish, Chile
+    { u"es-CO"_ustr,  u"*"_ustr,        spBuiltinFormats_es_CO  },  // Spanish, Colombia
+    { u"es-CR"_ustr,  u"*"_ustr,        spBuiltinFormats_es_CR  },  // Spanish, Costa Rica
+    { u"es-DO"_ustr,  u"*"_ustr,        spBuiltinFormats_es_DO  },  // Spanish, Dominican Republic
+    { u"es-EC"_ustr,  u"*"_ustr,        spBuiltinFormats_es_EC  },  // Spanish, Ecuador
+    { u"es-ES"_ustr,  u"*"_ustr,        spBuiltinFormats_es_ES  },  // Spanish, Spain
+    { u"es-GT"_ustr,  u"*"_ustr,        spBuiltinFormats_es_GT  },  // Spanish, Guatemala
+    { u"es-HN"_ustr,  u"*"_ustr,        spBuiltinFormats_es_HN  },  // Spanish, Honduras
+    { u"es-MX"_ustr,  u"*"_ustr,        spBuiltinFormats_es_MX  },  // Spanish, Mexico
+    { u"es-NI"_ustr,  u"*"_ustr,        spBuiltinFormats_es_NI  },  // Spanish, Nicaragua
+    { u"es-PA"_ustr,  u"*"_ustr,        spBuiltinFormats_es_PA  },  // Spanish, Panama
+    { u"es-PE"_ustr,  u"*"_ustr,        spBuiltinFormats_es_PE  },  // Spanish, Peru
+    { u"es-PR"_ustr,  u"*"_ustr,        spBuiltinFormats_es_PR  },  // Spanish, Puerto Rico
+    { u"es-PY"_ustr,  u"*"_ustr,        spBuiltinFormats_es_PY  },  // Spanish, Paraguay
+    { u"es-SV"_ustr,  u"*"_ustr,        spBuiltinFormats_es_SV  },  // Spanish, El Salvador
+    { u"es-UY"_ustr,  u"*"_ustr,        spBuiltinFormats_es_UY  },  // Spanish, Uruguay
+    { u"es-VE"_ustr,  u"*"_ustr,        spBuiltinFormats_es_VE  },  // Spanish, Venezuela
+    { u"et-EE"_ustr,  u"*"_ustr,        spBuiltinFormats_et_EE  },  // Estonian, Estonia
+    { u"fa-IR"_ustr,  u"*"_ustr,        spBuiltinFormats_fa_IR  },  // Farsi, Iran
+    { u"fi-FI"_ustr,  u"*"_ustr,        spBuiltinFormats_fi_FI  },  // Finnish, Finland
+    { u"fo-FO"_ustr,  u"*"_ustr,        spBuiltinFormats_fo_FO  },  // Faroese, Faroe Islands
+    { u"fr-BE"_ustr,  u"*"_ustr,        spBuiltinFormats_fr_BE  },  // French, Belgium
+    { u"fr-CA"_ustr,  u"*"_ustr,        spBuiltinFormats_fr_CA  },  // French, Canada
+    { u"fr-CH"_ustr,  u"*"_ustr,        spBuiltinFormats_fr_CH  },  // French, Switzerland
+    { u"fr-FR"_ustr,  u"*"_ustr,        spBuiltinFormats_fr_FR  },  // French, France
+    { u"fr-LU"_ustr,  u"*"_ustr,        spBuiltinFormats_fr_LU  },  // French, Luxembourg
+    { u"fr-MC"_ustr,  u"*"_ustr,        spBuiltinFormats_fr_MC  },  // French, Monaco
+    { u"gl-ES"_ustr,  u"*"_ustr,        spBuiltinFormats_gl_ES  },  // Galizian, Spain
+    { u"gu-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_gu_IN  },  // Gujarati, India
+    { u"he-IL"_ustr,  u"*"_ustr,        spBuiltinFormats_he_IL  },  // Hebrew, Israel
+    { u"hi-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_hi_IN  },  // Hindi, India
+    { u"hr-BA"_ustr,  u"*"_ustr,        spBuiltinFormats_hr_BA  },  // Croatian, Bosnia and Herzegowina
+    { u"hr-HR"_ustr,  u"*"_ustr,        spBuiltinFormats_hr_HR  },  // Croatian, Croatia
+    { u"hu-HU"_ustr,  u"*"_ustr,        spBuiltinFormats_hu_HU  },  // Hungarian, Hungary
+    { u"hy-AM"_ustr,  u"*"_ustr,        spBuiltinFormats_hy_AM  },  // Armenian, Armenia
+    { u"id-ID"_ustr,  u"*"_ustr,        spBuiltinFormats_id_ID  },  // Indonesian, Indonesia
+    { u"is-IS"_ustr,  u"*"_ustr,        spBuiltinFormats_is_IS  },  // Icelandic, Iceland
+    { u"it-CH"_ustr,  u"*"_ustr,        spBuiltinFormats_it_CH  },  // Italian, Switzerland
+    { u"it-IT"_ustr,  u"*"_ustr,        spBuiltinFormats_it_IT  },  // Italian, Italy
+    { u"ka-GE"_ustr,  u"*"_ustr,        spBuiltinFormats_ka_GE  },  // Georgian, Georgia
+    { u"kk-KZ"_ustr,  u"*"_ustr,        spBuiltinFormats_kk_KZ  },  // Kazakh, Kazakhstan
+    { u"kn-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_kn_IN  },  // Kannada, India
+    { u"kok-IN"_ustr, u"*"_ustr,        spBuiltinFormats_hi_IN  },  // Konkani, India
+    { u"ky-KG"_ustr,  u"*"_ustr,        spBuiltinFormats_ky_KG  },  // Kyrgyz, Kyrgyzstan
+    { u"lt-LT"_ustr,  u"*"_ustr,        spBuiltinFormats_lt_LT  },  // Lithuanian, Lithuania
+    { u"lv-LV"_ustr,  u"*"_ustr,        spBuiltinFormats_lv_LV  },  // Latvian, Latvia
+    { u"mi-NZ"_ustr,  u"*"_ustr,        spBuiltinFormats_en_NZ  },  // Maori, New Zealand
+    { u"ml-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_ml_IN  },  // Malayalam, India
+    { u"mn-MN"_ustr,  u"*"_ustr,        spBuiltinFormats_mn_MN  },  // Mongolian, Mongolia
+    { u"mr-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_hi_IN  },  // Marathi, India
+    { u"ms-BN"_ustr,  u"*"_ustr,        spBuiltinFormats_ms_BN  },  // Malay, Brunei Darussalam
+    { u"ms-MY"_ustr,  u"*"_ustr,        spBuiltinFormats_ms_MY  },  // Malay, Malaysia
+    { u"mt-MT"_ustr,  u"*"_ustr,        spBuiltinFormats_mt_MT  },  // Maltese, Malta
+    { u"nb-NO"_ustr,  u"*"_ustr,        spBuiltinFormats_no_NO  },  // Norwegian Bokmal, Norway
+    { u"nl-BE"_ustr,  u"*"_ustr,        spBuiltinFormats_nl_BE  },  // Dutch, Belgium
+    { u"nl-NL"_ustr,  u"*"_ustr,        spBuiltinFormats_nl_NL  },  // Dutch, Netherlands
+    { u"nn-NO"_ustr,  u"*"_ustr,        spBuiltinFormats_no_NO  },  // Norwegian Nynorsk, Norway
+    { u"nso-ZA"_ustr, u"*"_ustr,        spBuiltinFormats_en_ZA  },  // Northern Sotho, South Africa
+    { u"pa-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_pa_IN  },  // Punjabi, India
+    { u"pl-PL"_ustr,  u"*"_ustr,        spBuiltinFormats_pl_PL  },  // Polish, Poland
+    { u"pt-BR"_ustr,  u"*"_ustr,        spBuiltinFormats_pt_BR  },  // Portuguese, Brazil
+    { u"pt-PT"_ustr,  u"*"_ustr,        spBuiltinFormats_pt_PT  },  // Portuguese, Portugal
+    { u"qu-BO"_ustr,  u"*"_ustr,        spBuiltinFormats_es_BO  },  // Quechua, Bolivia
+    { u"qu-EC"_ustr,  u"*"_ustr,        spBuiltinFormats_es_EC  },  // Quechua, Ecuador
+    { u"qu-PE"_ustr,  u"*"_ustr,        spBuiltinFormats_es_PE  },  // Quechua, Peru
+    { u"ro-RO"_ustr,  u"*"_ustr,        spBuiltinFormats_ro_RO  },  // Romanian, Romania
+    { u"ru-RU"_ustr,  u"*"_ustr,        spBuiltinFormats_ru_RU  },  // Russian, Russian Federation
+    { u"sa-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_hi_IN  },  // Sanskrit, India
+    { u"se-FI"_ustr,  u"*"_ustr,        spBuiltinFormats_fi_FI  },  // Sami, Finland
+    { u"se-NO"_ustr,  u"*"_ustr,        spBuiltinFormats_no_NO  },  // Sami, Norway
+    { u"se-SE"_ustr,  u"*"_ustr,        spBuiltinFormats_sv_SE  },  // Sami, Sweden
+    { u"sk-SK"_ustr,  u"*"_ustr,        spBuiltinFormats_sk_SK  },  // Slovak, Slovakia
+    { u"sl-SI"_ustr,  u"*"_ustr,        spBuiltinFormats_sl_SI  },  // Slovenian, Slovenia
+    { u"sv-FI"_ustr,  u"*"_ustr,        spBuiltinFormats_sv_FI  },  // Swedish, Finland
+    { u"sv-SE"_ustr,  u"*"_ustr,        spBuiltinFormats_sv_SE  },  // Swedish, Sweden
+    { u"sw-TZ"_ustr,  u"*"_ustr,        spBuiltinFormats_sw_TZ  },  // Swahili, Tanzania
+    { u"syr-SY"_ustr, u"*"_ustr,        spBuiltinFormats_ar_SY  },  // Syriac, Syria
+    { u"syr-TR"_ustr, u"*"_ustr,        spBuiltinFormats_tr_TR  },  // Syriac, Turkey
+    { u"ta-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_ta_IN  },  // Tamil, India
+    { u"te-IN"_ustr,  u"*"_ustr,        spBuiltinFormats_te_IN  },  // Telugu, India
+    { u"th-TH"_ustr,  u"*"_ustr,        spBuiltinFormats_th_TH  },  // Thai, Thailand
+    { u"tn-ZA"_ustr,  u"*"_ustr,        spBuiltinFormats_en_ZA  },  // Tswana, South Africa
+    { u"tr-TR"_ustr,  u"*"_ustr,        spBuiltinFormats_tr_TR  },  // Turkish, Turkey
+    { u"tt-RU"_ustr,  u"*"_ustr,        spBuiltinFormats_tt_RU  },  // Tatar, Russian Federation
+    { u"uk-UA"_ustr,  u"*"_ustr,        spBuiltinFormats_uk_UA  },  // Ukrainian, Ukraine
+    { u"ur-PK"_ustr,  u"*"_ustr,        spBuiltinFormats_ur_PK  },  // Urdu, Pakistan
+    { u"vi-VN"_ustr,  u"*"_ustr,        spBuiltinFormats_vi_VN  },  // Vietnamese, Viet Nam
+    { u"xh-ZA"_ustr,  u"*"_ustr,        spBuiltinFormats_en_ZA  },  // Xhosa, South Africa
+    { u"zu-ZA"_ustr,  u"*"_ustr,        spBuiltinFormats_en_ZA  },  // Zulu, South Africa
 
-    { "*CJK",   "*",        spBuiltinFormats_CJK    },  // CJK base table
-    { "ja-JP",  "*CJK",     spBuiltinFormats_ja_JP  },  // Japanese, Japan
-    { "ko-KR",  "*CJK",     spBuiltinFormats_ko_KR  },  // Korean, South Korea
-    { "zh-CN",  "*CJK",     spBuiltinFormats_zh_CN  },  // Chinese, China
-    { "zh-HK",  "*CJK",     spBuiltinFormats_zh_HK  },  // Chinese, Hong Kong
-    { "zh-MO",  "*CJK",     spBuiltinFormats_zh_MO  },  // Chinese, Macau
-    { "zh-SG",  "*CJK",     spBuiltinFormats_zh_SG  },  // Chinese, Singapore
-    { "zh-TW",  "*CJK",     spBuiltinFormats_zh_TW  }   // Chinese, Taiwan
+    { u"*CJK"_ustr,   u"*"_ustr,        spBuiltinFormats_CJK    },  // CJK base table
+    { u"ja-JP"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_ja_JP  },  // Japanese, Japan
+    { u"ko-KR"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_ko_KR  },  // Korean, South Korea
+    { u"zh-CN"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_zh_CN  },  // Chinese, China
+    { u"zh-HK"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_zh_HK  },  // Chinese, Hong Kong
+    { u"zh-MO"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_zh_MO  },  // Chinese, Macau
+    { u"zh-SG"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_zh_SG  },  // Chinese, Singapore
+    { u"zh-TW"_ustr,  u"*CJK"_ustr,     spBuiltinFormats_zh_TW  }   // Chinese, Taiwan
 };
 
 } // namespace
@@ -1946,10 +1817,10 @@ void NumberFormat::setFormatCode( std::u16string_view aFmtCode )
     maModel.maFmtCode = sFormat.makeStringAndClear();
 }
 
-void NumberFormat::setFormatCode( const Locale& rLocale, const char* pcFmtCode )
+void NumberFormat::setFormatCode(const Locale& rLocale, const OUString& rcFmtCode)
 {
     maModel.maLocale = rLocale;
-    maModel.maFmtCode = OStringToOUString( std::string_view( pcFmtCode ), RTL_TEXTENCODING_UTF8 );
+    maModel.maFmtCode = rcFmtCode;
     maModel.mnPredefId = -1;
 }
 
@@ -2051,7 +1922,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     typedef ::std::map< OUString, const BuiltinFormatTable* > BuiltinMap;
     BuiltinMap aBuiltinMap;
     for(auto const &rTable : spBuiltinFormatTables)
-        aBuiltinMap[ OUString::createFromAscii(rTable.mpcLocale) ] = &rTable;
+        aBuiltinMap[rTable.macLocale] = &rTable;
 
     // convert locale string to locale struct
     Locale aSysLocale( LanguageTag::convertToLocale( maLocaleStr));
@@ -2069,7 +1940,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         aMIt = aBuiltinMap.find( u"*"_ustr );
     OSL_ENSURE( aMIt != aMEnd, "NumberFormatsBuffer::insertBuiltinFormats - default map not found" );
     // insert all tables into the vector
-    for( ; aMIt != aMEnd; aMIt = aBuiltinMap.find( OUString::createFromAscii( aMIt->second->mpcParent ) ) )
+    for (; aMIt != aMEnd; aMIt = aBuiltinMap.find(aMIt->second->macParent))
         aBuiltinVec.push_back( aMIt->second );
 
     // insert the default formats in the format map (in reverse order from default table to system locale)
@@ -2078,25 +1949,25 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     {
         // do not put the current system locale for default table
         Locale aLocale;
-        if( (*aVIt)->mpcParent[ 0 ] != '\0' && OUString::createFromAscii((*aVIt)->mpcLocale) != maLocaleStr )
+        if (!(*aVIt)->macParent.isEmpty() && (*aVIt)->macLocale != maLocaleStr)
             aLocale = aSysLocale;
-        for( const BuiltinFormat* pBuiltin = (*aVIt)->mpFormats; pBuiltin && (pBuiltin->mnNumFmtId >= 0); ++pBuiltin )
+        for (const BuiltinFormat& rBuiltin : (*aVIt)->maFormats)
         {
-            NumberFormatRef& rxNumFmt = maNumFmts[ pBuiltin->mnNumFmtId ];
+            NumberFormatRef& rxNumFmt = maNumFmts[rBuiltin.mnNumFmtId];
             rxNumFmt = std::make_shared<NumberFormat>( *this );
 
             bool bReuse = false;
-            if( pBuiltin->mpcFmtCode )
-                rxNumFmt->setFormatCode( aLocale, pBuiltin->mpcFmtCode );
-            else if( pBuiltin->mnPredefId >= 0 )
-                rxNumFmt->setPredefinedId( aLocale, pBuiltin->mnPredefId );
+            if (!rBuiltin.macFmtCode.isEmpty())
+                rxNumFmt->setFormatCode(aLocale, rBuiltin.macFmtCode);
+            else if (rBuiltin.mnPredefId >= 0)
+                rxNumFmt->setPredefinedId(aLocale, rBuiltin.mnPredefId);
             else
-                bReuse = pBuiltin->mnReuseId >= 0;
+                bReuse = rBuiltin.mnReuseId >= 0;
 
             if( bReuse )
-                aReuseMap[ pBuiltin->mnNumFmtId ] = pBuiltin->mnReuseId;
+                aReuseMap[rBuiltin.mnNumFmtId] = rBuiltin.mnReuseId;
             else
-                aReuseMap.erase( pBuiltin->mnNumFmtId );
+                aReuseMap.erase(rBuiltin.mnNumFmtId);
         }
     }
 

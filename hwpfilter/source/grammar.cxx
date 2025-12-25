@@ -404,9 +404,9 @@ yynewstate:
     yystacksize = YYMAXDEPTH;
       yyfree_stacks = 1;
       yyss = static_cast<short *>(malloc (yystacksize * sizeof (*yyssp)));
-      memcpy (yyss, yyss1, size * sizeof (*yyssp));
+      std::copy(yyss1, yyss1 + size, yyss);
       yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
-      memcpy (yyvs, yyvs1, size * sizeof (*yyvsp));
+      std::copy(yyvs1, yyvs1 + size, yyvs);
 
       // https://lists.gnu.org/archive/html/bug-bison/2001-11/msg00021.html
       if (yyss1 != yyssa)

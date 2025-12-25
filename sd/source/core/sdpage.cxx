@@ -63,6 +63,7 @@
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -1722,7 +1723,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
     rtl::Reference<SdrObject> pObj;
     while( (pObj = maPresentationShapeList.getNextShape()) )
     {
-        if( aUsedPresentationObjects.count(pObj.get()) == 0 )
+        if (!aUsedPresentationObjects.contains(pObj.get()))
         {
 
             if( pObj->IsEmptyPresObj() )

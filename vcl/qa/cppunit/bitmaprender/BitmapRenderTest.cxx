@@ -62,7 +62,7 @@ void BitmapRenderTest::testTdf104141()
 {
     // Noting, for people who may debug this test, that it is not particularly useful.
     // The GIF we load is 100% transparent, so we are only actually testing that
-    // drawing 100% transparent image with DrawBitmapEx() does not change the output.
+    // drawing 100% transparent image with DrawBitmap() does not change the output.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(400, 400));
     pVDev->SetBackground(Wallpaper(COL_GREEN));
@@ -76,7 +76,7 @@ void BitmapRenderTest::testTdf104141()
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     Bitmap aBitmap = aGraphic.GetBitmap();
-    pVDev->DrawBitmapEx(Point(20, 20), aBitmap);
+    pVDev->DrawBitmap(Point(20, 20), aBitmap);
 
     // Check drawing results: ensure that it contains transparent
     // (greenish) pixels
@@ -99,7 +99,7 @@ void BitmapRenderTest::testTdf113918()
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     Bitmap aBitmap = aGraphic.GetBitmap();
-    pVDev->DrawBitmapEx(Point(0, 0), aBitmap);
+    pVDev->DrawBitmap(Point(0, 0), aBitmap);
 
     // Ensure that image is drawn with white background color from palette
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(21, 21)));
@@ -159,7 +159,7 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x7F, 0x00, 0xFF, 0x00),
                          aBitmap.GetPixelColor(2, 2));
 
-    pVDev->DrawBitmapEx(Point(), aBitmap);
+    pVDev->DrawBitmap(Point(), aBitmap);
 
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetPixel(Point(1, 1)));

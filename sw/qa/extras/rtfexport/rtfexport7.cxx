@@ -38,7 +38,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr)
     {
     }
 };
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureWrapPolygon)
     };
     createSwDoc("picture-wrap-polygon.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -76,13 +76,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113408)
     };
     createSwDoc("tdf113408.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAbi10039)
 {
-    loadAndReload("abi10039.odt");
+    createSwDoc("abi10039.odt");
+    saveAndReload(TestFilter::RTF);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we don't just crash on export, and additionally the shape should not be inline (as it's at-page anchored originally).
@@ -92,7 +93,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAbi10039)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbi10076)
 {
-    loadAndReload("abi10076.odt");
+    createSwDoc("abi10076.odt");
+    saveAndReload(TestFilter::RTF);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // Just make sure that we don't crash after exporting a fully calculated layout.
 }
@@ -121,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEm)
     };
     createSwDoc("em.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -136,13 +138,14 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingFont)
     };
     createSwDoc("numbering-font.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82860)
 {
-    loadAndReload("fdo82860.odt");
+    createSwDoc("fdo82860.odt");
+    saveAndReload(TestFilter::RTF);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that:
@@ -155,7 +158,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82860)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo82858)
 {
-    loadAndReload("fdo82858.docx");
+    createSwDoc("fdo82858.docx");
+    saveAndReload(TestFilter::RTF);
     // This was table::BorderLineStyle::SOLID, exporter failed to write explicit no line when line color was written.
     CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE,
                          getProperty<table::BorderLine2>(getShape(1), u"TopBorder"_ustr).LineStyle);
@@ -176,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104936)
     };
     createSwDoc("tdf104936.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -193,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableRtl)
     };
     createSwDoc("table-rtl.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -214,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumOverrideStart)
     };
     createSwDoc("num-override-start.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -233,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82006)
     };
     createSwDoc("fdo82006.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -248,13 +252,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104081)
     };
     createSwDoc("tdf104081.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 {
-    loadAndReload("tdf88583.odt");
+    createSwDoc("tdf88583.odt");
+    saveAndReload(TestFilter::RTF);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was FillStyle_NONE, as background color was missing from the color table during export.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
@@ -274,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMargmirror)
     };
     createSwDoc("margmirror.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -291,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSautoupd)
     };
     createSwDoc("sautoupd.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -302,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphauto)
     };
     createSwDoc("hyphauto.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -314,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphpar)
     };
     createSwDoc("hyphpar.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -329,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108955)
     };
     createSwDoc("tdf108955.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -349,7 +354,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80708)
     };
     createSwDoc("tdf80708.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -359,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
     // Change the hyperlink, so its URL is empty.
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
     xRun->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(OUString()));
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     SvMemoryStream aMemoryStream;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     aStream.ReadStream(aMemoryStream);
@@ -370,7 +375,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 {
-    loadAndReload("tdf92521.odt");
+    createSwDoc("tdf92521.odt");
+    saveAndReload(TestFilter::RTF);
     // There should be a page break that's in the middle of the document: right after the table.
     // But there wasn't, so this was 1.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -389,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114309)
     };
     createSwDoc("tdf114309.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -408,7 +414,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94043)
     };
     createSwDoc("tdf94043.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -433,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94377)
     };
     createSwDoc("tdf94377.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -456,7 +462,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104079)
     };
     createSwDoc("tdf104079.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -470,7 +476,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBackground)
     };
     createSwDoc("page-background.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -490,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96175)
     };
     createSwDoc("tdf96175.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -506,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedline)
     };
     createSwDoc("redline.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -547,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomDocProps)
     };
     createSwDoc("custom-doc-props.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -572,7 +578,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf65642)
     };
     createSwDoc("tdf65642.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -594,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnlcltr)
     };
     createSwDoc("pgnlcltr.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -616,7 +622,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnucrm)
     };
     createSwDoc("pgnucrm.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -638,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgnlcrm)
     };
     createSwDoc("pgnlcrm.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -665,7 +671,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgndec)
     };
     createSwDoc("pgndec.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -680,14 +686,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98806)
     };
     createSwDoc("tdf98806.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf61901)
 {
     createSwDoc("tdf61901.rtf");
-    save(mpFilter);
+    save(TestFilter::RTF);
     // Test the file directly, as current RTF import gives the correct font name with and without the fix.
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     OString sLine;
@@ -712,7 +718,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103925)
     };
     createSwDoc("tdf103925.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -729,7 +735,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104228)
     };
     createSwDoc("tdf104228.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -751,7 +757,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104085)
     };
     createSwDoc("tdf104085.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -768,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113550)
     };
     createSwDoc("tdf113550.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -796,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLeveljcCenter)
     };
     createSwDoc("leveljc-center.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -809,13 +815,14 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTarget)
     };
     createSwDoc("hyperlink-target.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107620)
 {
-    loadAndReload("tdf107620.docx");
+    createSwDoc("tdf107620.docx");
+    saveAndReload(TestFilter::RTF);
     // This failed, RTF export didn't write the \htmautsp compat flag, the
     // original bugdoc resulting in 2 pages instead of 1.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -844,7 +851,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104937)
     };
     createSwDoc("tdf104937.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -865,7 +872,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112507)
     };
     createSwDoc("tdf112507.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -884,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107480)
     };
     createSwDoc("tdf107480.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -912,7 +919,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermark)
     };
     createSwDoc("watermark.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -930,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153194Compat)
     };
     createSwDoc("page-break-emptyparas.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -948,7 +955,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153194New)
     };
     createSwDoc("page-break-emptyparas-spltpgpar.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -963,7 +970,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153178)
     };
     createSwDoc("tdf153178.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -979,7 +986,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109790)
     };
     createSwDoc("tdf109790.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -995,7 +1002,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211)
     };
     createSwDoc("tdf112211.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1007,7 +1014,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113202)
     };
     createSwDoc("tdf113202.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1056,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156030)
     };
     createSwDoc("tdf156030.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1077,7 +1084,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153195)
     };
     createSwDoc("tdf153195.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1095,7 +1102,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158762)
     };
     createSwDoc("tdf158762.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 

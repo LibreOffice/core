@@ -1687,6 +1687,16 @@ interface DrawView
         ExecMethod = ExecRuler ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_PARA_ADJUST_START
+    [
+        ExecMethod = ExecRuler ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_PARA_ADJUST_END
+    [
+        ExecMethod = ExecRuler ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_POSITION // ole : no, status : ?
     [
         ExecMethod = ExecStatusBar ;
@@ -2918,6 +2928,11 @@ interface DrawView
         ExecMethod = ExecCtrl ;
         StateMethod = GetMenuState ;
     ]
+    SID_DIAGRAM_TO_GROUP
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
     SID_EDIT_DIAGRAM
     [
         ExecMethod = ExecCtrl ;
@@ -2979,6 +2994,36 @@ interface DrawView
         StateMethod = GetAttrState;
     ]
     SID_ATTR_TEXTCOLUMNS_SPACING
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_AUTOGROWWIDTH
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_AUTOGROWHEIGHT
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_LEFTDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_RIGHTDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_UPPERDIST
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_TEXT_LOWERDIST
     [
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;

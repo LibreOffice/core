@@ -28,7 +28,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
@@ -71,6 +71,7 @@
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <editeng/unoprnms.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <svtools/soerr.hxx>
@@ -113,6 +114,7 @@
 #include <list>
 #include <libxml/xmlwriter.h>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <unotools/calendarwrapper.hxx>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -2134,7 +2136,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aRecipient = aRecipient.copy( aMailToStr.getLength() );
                 aModel.AddToAddress( aRecipient );
             }
-            const SfxStringItem* pMailDocType = rReq.GetArg<SfxStringItem>(SID_TYPE_NAME);
+            const SfxStringItem* pMailDocType = rReq.GetArg(SID_TYPE_NAME);
             if ( pMailDocType )
                 aDocType = pMailDocType->GetValue();
 
@@ -2533,7 +2535,16 @@ void SfxViewShell::Activate( bool bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame().GetObjectShell();
         if (const auto xModel = pSh->GetModel())
-            xModel->setCurrentController(GetController());
+        {
+            try
+            {
+                xModel->setCurrentController(GetController());
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("sfx.view", "SfxViewShell::Activate: failed to set current controller");
+            }
+        }
 
         SetCurrentDocument();
     }
@@ -2726,8 +2737,6 @@ void SfxViewShell::SetWindow
     //SfxGetpApp()->GrabFocus( pWindow );
 }
 
-ViewShellDocId SfxViewShell::mnCurrentDocId(0);
-
 SfxViewShell::SfxViewShell
 (
     SfxViewFrame&     rViewFrame,     /*  <SfxViewFrame>, which will be
@@ -2736,7 +2745,7 @@ SfxViewShell::SfxViewShell
 )
 
 :   SfxShell(this)
-,   pImpl( new SfxViewShell_Impl(nFlags, SfxViewShell::mnCurrentDocId) )
+,   pImpl( new SfxViewShell_Impl(nFlags, comphelper::LibreOfficeKit::getDocId()) )
 ,   rFrame(rViewFrame)
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
@@ -3525,6 +3534,25 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
     }
 }
 
+void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
+{
+    SetLOKLanguageTag(rBcp47LanguageTag);
+    SetLOKLocale(rBcp47LanguageTag);
+    mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
+    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
+}
+
+CalendarWrapper& SfxViewShell::GetLOKCalendar()
+{
+    if (!mpCalendar)
+    {
+        mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
+        mpCalendar->loadDefaultCalendar( GetLOKLocale().getLocale() );
+    }
+
+    return *mpCalendar;
+}
+
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
 {
 }
@@ -3547,11 +3575,6 @@ int SfxViewShell::getEditMode() const
 ViewShellId SfxViewShell::GetViewShellId() const
 {
     return pImpl->m_nViewShellId;
-}
-
-void SfxViewShell::SetCurrentDocId(ViewShellDocId nId)
-{
-    mnCurrentDocId = nId;
 }
 
 ViewShellDocId SfxViewShell::GetDocId() const

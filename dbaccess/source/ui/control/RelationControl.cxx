@@ -474,115 +474,52 @@ namespace dbaui
             m_xRightTable->append_text(elem.first);
 
             if (!pInitialLeft)
-            {
                 pInitialLeft = elem.second;
-                m_strCurrentLeft = elem.first;
-            }
             else if (!pInitialRight)
-            {
                 pInitialRight = elem.second;
-                m_strCurrentRight = elem.first;
-            }
         }
 
         if ( !pInitialRight )
-        {
             pInitialRight = pInitialLeft;
-            m_strCurrentRight = m_strCurrentLeft;
-        }
 
         // The corresponding Defs for my Controls
         m_xRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
-        // The table selected in a ComboBox must not be available in the other
-
-        if ( m_pTableMap->size() > 2 )
-        {
-            m_xLeftTable->remove_text(m_strCurrentRight);
-            m_xRightTable->remove_text(m_strCurrentLeft);
-        }
-
         // Select the first one on the left side and on the right side,
         // select the second one
-        m_xLeftTable->set_active_text(m_strCurrentLeft);
-        m_xRightTable->set_active_text(m_strCurrentRight);
+        m_xLeftTable->set_active(0);
+        m_xRightTable->set_active(pInitialRight ? 1 : 0);
 
         m_xLeftTable->grab_focus();
     }
 
     IMPL_LINK(OTableListBoxControl, OnTableChanged, weld::ComboBox&, rListBox, void)
     {
-        OUString strSelected(rListBox.get_active_text());
         OTableWindow* pLeft     = nullptr;
         OTableWindow* pRight    = nullptr;
 
-        // Special treatment: If there are only two tables, we need to switch the other one too when changing in a LB
-        if ( m_pTableMap->size() == 2 )
-        {
-            weld::ComboBox* pOther;
-            if (&rListBox == m_xLeftTable.get())
-                pOther = m_xRightTable.get();
-            else
-                pOther = m_xLeftTable.get();
-            pOther->set_active(1 - pOther->get_active());
-
-            OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
-            OTableWindow* pFirst = aIter->second;
-            ++aIter;
-            OTableWindow* pSecond = aIter->second;
-
-            if (m_xLeftTable->get_active_text() == pFirst->GetName())
-            {
-                pLeft   = pFirst;
-                pRight  = pSecond;
-            }
-            else
-            {
-                pLeft   = pSecond;
-                pRight  = pFirst;
-            }
-        }
+        weld::ComboBox* pOther;
+        if (&rListBox == m_xLeftTable.get())
+            pOther = m_xRightTable.get();
         else
-        {
-            // First we need the TableDef to the Table and with it the TabWin
-            OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(strSelected);
-            OTableWindow* pLoop = nullptr;
-            if( aFind != m_pTableMap->end() )
-                pLoop = aFind->second;
-            OSL_ENSURE(pLoop != nullptr, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
-                // We need to find strSelect, because we filled the ListBoxes with the table names with which we compare now
-            if (&rListBox == m_xLeftTable.get())
-            {
-                // Insert the previously selected Entry on the left side on the right side
-                m_xRightTable->append_text(m_strCurrentLeft);
-                // Remove the currently selected Entry
-                m_xRightTable->remove_text(strSelected);
-                m_strCurrentLeft    = strSelected;
+            pOther = m_xLeftTable.get();
 
-                pLeft = pLoop;
+        // If the same table is selected in the other combobox then make it switch to another table
+        if (rListBox.get_active() == pOther->get_active())
+            pOther->set_active((pOther->get_active() + 1) % m_pTableMap->size());
 
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_xRightTable->get_active_text());
-                OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
-                if ( aIter != m_pTableMap->end() )
-                    pRight = aIter->second;
+        // Find the TableWindow for each selected table name
+        OUString sLeftSelected(m_xLeftTable->get_active_text());
+        OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(sLeftSelected);
+        if( aFind != m_pTableMap->end() )
+            pLeft = aFind->second;
+        OSL_ENSURE(pLeft != nullptr, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
 
-                m_xLeftTable->grab_focus();
-            }
-            else
-            {
-                // Insert the previously selected Entry on the right side on the left side
-                m_xLeftTable->append_text(m_strCurrentRight);
-                // Remove the currently selected Entry
-                m_xLeftTable->remove_text(strSelected);
-                m_strCurrentRight = strSelected;
-
-                pRight = pLoop;
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_xLeftTable->get_active_text());
-                OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
-                if ( aIter != m_pTableMap->end() )
-                    pLeft = aIter->second;
-            }
-        }
+        OUString sRightSelected(m_xRightTable->get_active_text());
+        aFind = m_pTableMap->find(sRightSelected);
+        if( aFind != m_pTableMap->end() )
+            pRight = aFind->second;
+        OSL_ENSURE(pRight != nullptr, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
 
         rListBox.grab_focus();
 

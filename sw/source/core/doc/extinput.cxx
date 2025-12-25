@@ -161,8 +161,17 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             // We have to insert some characters from the saved original text
             nReplace -= nNewLen;
             aIdx += nNewLen;
-            pTNd->ReplaceText( aIdx, nReplace,
-                        m_sOverwriteText.copy( nNewLen, nReplace ));
+
+            // tdf#148991: When an IME is dismissed during overwrite, nNewLen will be 0
+            // and the original text will be contained in m_sOverwriteText. That original
+            // text may be shorter than the replaced text, so clamp the copy range.
+            sal_Int32 nOWLen = m_sOverwriteText.getLength();
+            if (nNewLen <= nOWLen)
+            {
+                sal_Int32 nOWReplace = std::min(nOWLen, nNewLen + nReplace) - nNewLen;
+                pTNd->ReplaceText(aIdx, nReplace, m_sOverwriteText.copy(nNewLen, nOWReplace));
+            }
+
             aIdx = nSttCnt;
             nReplace = nNewLen;
         }

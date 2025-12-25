@@ -761,8 +761,6 @@ public:
             nStateSet |= css::accessibility::AccessibleStateType::SELECTABLE;
             if (m_pController->HasFocus())
                 nStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
-            if (m_pController->IsActive())
-                nStateSet |= css::accessibility::AccessibleStateType::ACTIVE;
             if (m_pController->IsVisible())
                 nStateSet |= css::accessibility::AccessibleStateType::SHOWING;
             if (m_pController->IsReallyVisible())

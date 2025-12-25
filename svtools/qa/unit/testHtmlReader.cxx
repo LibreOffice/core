@@ -50,7 +50,7 @@ class Test : public CppUnit::TestFixture
 {
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf114428)
+CPPUNIT_TEST_FIXTURE(Test, testTdf114428_ignore_xml_declaration)
 {
     SvMemoryStream aStream;
     OString aDocument("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<html>hello</html>"_ostr);

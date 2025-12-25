@@ -29,6 +29,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 
 #include <treeopt.hrc>
 #include <helpids.h>
@@ -324,7 +325,7 @@ constexpr OptionsMapping_Impl OptionsMap_Impl[]
     { u"Writer"_ustr,             u"General"_ustr,              RID_SW_TP_OPTLOAD_PAGE },
     { u"Writer"_ustr,             u"View"_ustr,                 RID_SW_TP_CONTENT_OPT },
     { u"Writer"_ustr,             u"FormattingAids"_ustr,       RID_SW_TP_OPTSHDWCRSR },
-    { u"Writer"_ustr,             u"Grid"_ustr,                 RID_SVXPAGE_GRID },
+    { u"Writer"_ustr,             u"Grids"_ustr,                RID_SVXPAGE_GRID },
     { u"Writer"_ustr,             u"BasicFontsWestern"_ustr,    RID_SW_TP_STD_FONT },
     { u"Writer"_ustr,             u"BasicFontsAsian"_ustr,      RID_SW_TP_STD_FONT_CJK },
     { u"Writer"_ustr,             u"BasicFontsCTL"_ustr,        RID_SW_TP_STD_FONT_CTL },
@@ -1395,7 +1396,7 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                     SID_ATTR_YEAR2000, SID_ATTR_YEAR2000> );
 
-            SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet( SfxGetpApp()->GetPool() );
+            auto aOptSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>( SfxGetpApp()->GetPool() );
             SfxApplication::GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1535,7 +1536,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-            SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aOptSet(SfxGetpApp()->GetPool());
+            auto aOptSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>( SfxGetpApp()->GetPool() );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SfxApplication::SetOptions( aOptSet );

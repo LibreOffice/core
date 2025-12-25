@@ -66,11 +66,13 @@
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/srchdlg.hxx>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <svx/xmlsecctrl.hxx>
 #include <sfx2/viewfac.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>

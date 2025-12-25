@@ -102,13 +102,13 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     sal_Int32 nMinorTicks=0;
 
     if(m_xCB_MinorInner->get_active())
-        nMinorTicks|=CHAXIS_MARK_INNER;
+        AFTicks::setFlagFor(nMinorTicks, AxisTicksAtr::Inner);
     if(m_xCB_MinorOuter->get_active())
-        nMinorTicks|=CHAXIS_MARK_OUTER;
+        AFTicks::setFlagFor(nMinorTicks, AxisTicksAtr::Outer);
     if(m_xCB_TicksInner->get_active())
-        nTicks|=CHAXIS_MARK_INNER;
+        AFTicks::setFlagFor(nTicks, AxisTicksAtr::Inner);
     if(m_xCB_TicksOuter->get_active())
-        nTicks|=CHAXIS_MARK_OUTER;
+        AFTicks::setFlagFor(nTicks, AxisTicksAtr::Outer);
 
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
@@ -209,16 +209,15 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     PlaceLabelsSelectHdl( *m_xLB_PlaceLabels );
 
     // Tick marks
-    tools::Long nTicks = 0, nMinorTicks = 0;
+    sal_Int32 nTicks = 0, nMinorTicks = 0;
     if (const SfxInt32Item* pTicksItem = rInAttrs->GetItemIfSet(SCHATTR_AXIS_TICKS))
         nTicks = pTicksItem->GetValue();
     if (const SfxInt32Item* pHelpTicksItem = rInAttrs->GetItemIfSet(SCHATTR_AXIS_HELPTICKS))
         nMinorTicks = pHelpTicksItem->GetValue();
-
-    m_xCB_TicksInner->set_active(bool(nTicks&CHAXIS_MARK_INNER));
-    m_xCB_TicksOuter->set_active(bool(nTicks&CHAXIS_MARK_OUTER));
-    m_xCB_MinorInner->set_active(bool(nMinorTicks&CHAXIS_MARK_INNER));
-    m_xCB_MinorOuter->set_active(bool(nMinorTicks&CHAXIS_MARK_OUTER));
+    m_xCB_TicksInner->set_active(AFTicks::checkFlagFor(nTicks, AxisTicksAtr::Inner));
+    m_xCB_TicksOuter->set_active(AFTicks::checkFlagFor(nTicks, AxisTicksAtr::Outer));
+    m_xCB_MinorInner->set_active(AFTicks::checkFlagFor(nMinorTicks, AxisTicksAtr::Inner));
+    m_xCB_MinorOuter->set_active(AFTicks::checkFlagFor(nMinorTicks, AxisTicksAtr::Outer));
 
     // Tick position
     if( const SfxInt32Item* pMarkPosItem = rInAttrs->GetItemIfSet( SCHATTR_AXIS_MARK_POSITION, false) )

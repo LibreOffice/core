@@ -815,7 +815,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     }
 
     XPolygon aBestXP;
-    sal_uIntPtr nBestQual=0xFFFFFFFF;
+    sal_uInt64 nBestQual=0xFFFFFFFF;
     SdrEdgeInfoRec aBestInfo;
     bool bAuto1=bCon1 && rCon1.m_bBestVertex;
     bool bAuto2=bCon2 && rCon2.m_bBestVertex;
@@ -852,7 +852,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
                     SdrEscapeDirection nE2 = nA2==0 ? SdrEscapeDirection::RIGHT : nA2==9000 ? SdrEscapeDirection::TOP : nA2==18000 ? SdrEscapeDirection::LEFT : nA2==27000 ? SdrEscapeDirection::BOTTOM : SdrEscapeDirection::SMART;
                     if ((nEsc1&nE1) && (nEsc2&nE2))
                     {
-                        sal_uIntPtr nQual=0;
+                        sal_uInt64 nQual=0;
                         SdrEdgeInfoRec aInfo;
                         if (pInfo!=nullptr) aInfo=*pInfo;
                         XPolygon aXP(ImpCalcEdgeTrack(aPt1,nA1,aBoundRect1,aBewareRect1,aPt2,nA2,aBoundRect2,aBewareRect2,&nQual,&aInfo));
@@ -877,7 +877,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
 
 XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
     const Point& rPt2, tools::Long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
-    sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
+    sal_uInt64* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
     SdrEdgeKind eKind=GetObjectItem(SDRATTR_EDGEKIND).GetValue();
     bool bRts1=nAngle1==0;
@@ -1363,8 +1363,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         cForm = 0;
     }
     if (pnQuality!=nullptr) {
-        sal_uIntPtr nQual=0;
-        sal_uIntPtr nQual0=nQual; // prevent overruns
+        sal_uInt64 nQual=0;
+        sal_uInt64 nQual0=nQual; // prevent overruns
         bool bOverflow = false;
         Point aPt0(aXP1[0]);
         for (sal_uInt16 nPntNum=1; nPntNum<nPointCount; nPntNum++) {
@@ -1378,11 +1378,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         sal_uInt16 nTmp=nPointCount;
         if (cForm=='Z') {
             nTmp=2; // Z shape with good quality (nTmp=2 instead of 4)
-            sal_uIntPtr n1=std::abs(aXP1[1].X()-aXP1[0].X())+std::abs(aXP1[1].Y()-aXP1[0].Y());
-            sal_uIntPtr n2=std::abs(aXP1[2].X()-aXP1[1].X())+std::abs(aXP1[2].Y()-aXP1[1].Y());
-            sal_uIntPtr n3=std::abs(aXP1[3].X()-aXP1[2].X())+std::abs(aXP1[3].Y()-aXP1[2].Y());
+            sal_uInt64 n1=std::abs(aXP1[1].X()-aXP1[0].X())+std::abs(aXP1[1].Y()-aXP1[0].Y());
+            sal_uInt64 n2=std::abs(aXP1[2].X()-aXP1[1].X())+std::abs(aXP1[2].Y()-aXP1[1].Y());
+            sal_uInt64 n3=std::abs(aXP1[3].X()-aXP1[2].X())+std::abs(aXP1[3].Y()-aXP1[2].Y());
             // try to make lines lengths similar
-            sal_uIntPtr nBesser=0;
+            sal_uInt64 nBesser=0;
             n1+=n3;
             n3=n2/4;
             if (n1>=n2) nBesser=6;
@@ -1393,7 +1393,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         }
         if (nTmp>=3) {
             nQual0=nQual;
-            nQual+=static_cast<sal_uIntPtr>(nTmp)*0x01000000;
+            nQual+=static_cast<sal_uInt64>(nTmp)*0x01000000;
             if (nQual<nQual0 || nTmp>15) bOverflow = true;
         }
         if (nPointCount>=2) { // check exit angle again
@@ -1450,7 +1450,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         }
         if (nPointCount<=1) nIntersections++;
         nQual0=nQual;
-        nQual+=static_cast<sal_uIntPtr>(nIntersections)*0x10000000;
+        nQual+=static_cast<sal_uInt64>(nIntersections)*0x10000000;
         if (nQual<nQual0 || nIntersections>15) bOverflow = true;
 
         if (bOverflow || nQual==0xFFFFFFFF) nQual=0xFFFFFFFE;
@@ -2256,7 +2256,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                 sal_uInt16 nGluePointCnt=pGPL==nullptr ? 0 : pGPL->GetCount();
                 sal_uInt16 nGesAnz=nGluePointCnt+9;
                 bool bUserFnd = false;
-                sal_uIntPtr nBestDist=0xFFFFFFFF;
+                sal_uInt64 nBestDist=0xFFFFFFFF;
                 for (sal_uInt16 i=0; i<nGesAnz; i++)
                 {
                     bool bUser=i<nGluePointCnt;
@@ -2294,7 +2294,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     if (bOk && aMouseRect.Contains(aConPos)) {
                         if (bUser) bUserFnd = true;
                         bFnd = true;
-                        sal_uIntPtr nDist=static_cast<sal_uIntPtr>(std::abs(aConPos.X()-rPt.X()))+static_cast<sal_uIntPtr>(std::abs(aConPos.Y()-rPt.Y()));
+                        sal_uInt64 nDist=static_cast<sal_uInt64>(std::abs(aConPos.X()-rPt.X()))+static_cast<sal_uInt64>(std::abs(aConPos.Y()-rPt.Y()));
                         if (nDist<nBestDist) {
                             nBestDist=nDist;
                             aTestCon.m_pSdrObj=pObj;

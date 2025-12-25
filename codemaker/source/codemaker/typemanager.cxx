@@ -25,6 +25,7 @@
 
 #include <codemaker/global.hxx>
 #include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <unoidl/unoidl.hxx>

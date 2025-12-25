@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionShape)
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     // this would assert/crash because the shape was anchored to SwEndNode
-    save(mpFilter);
+    save(TestFilter::ODT);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSetStringDeletesShape)
@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSplitFloatingTable)
     }
 
     // now check that these round-trip as floating tables
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1872,7 +1872,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf71583)
     }
 
     {
-        saveAndReload(u"writer8"_ustr);
+        saveAndReload(TestFilter::ODT);
         checkDocument();
     }
 }

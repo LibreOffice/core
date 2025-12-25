@@ -712,7 +712,7 @@ namespace {
         if (aIter != rLinkIdMap.end())
         {
             sal_Int32 nLinkId = (*aIter).second;
-            rPDFExtOutDevData.SetStructureAttributeNumerical(vcl::PDFWriter::LinkAnnotation, nLinkId);
+            rPDFExtOutDevData.SetStructureAttributeNumerical(vcl::pdf::PDFWriter::LinkAnnotation, nLinkId);
         }
     }
 }
@@ -727,9 +727,9 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
      */
     if ( mpFrameInfo )
     {
-        vcl::PDFWriter::StructAttributeValue eVal;
+        vcl::pdf::PDFWriter::StructAttributeValue eVal;
         const SwFrame* pFrame = &mpFrameInfo->mrFrame;
-        SwRectFnSet aRectFnSet(pFrame);
+        SwRectFnSet aRectFnSet(*pFrame);
 
         bool bPlacement = false;
         bool bWritingMode = false;
@@ -775,7 +775,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 break;
 
             case vcl::pdf::StructElement::TableHeader:
-                mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Scope, vcl::PDFWriter::Column);
+                mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Scope, vcl::pdf::PDFWriter::Column);
                 [[fallthrough]];
             case vcl::pdf::StructElement::TableData:
                 bPlacement =
@@ -832,11 +832,11 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 if (pFrame->IsHeaderFrame() || pFrame->IsFooterFrame())
                 {
                     // ISO 14289-1:2014, Clause: 7.8
-                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
-                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Subtype,
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Type, vcl::pdf::PDFWriter::Pagination);
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Subtype,
                         pFrame->IsHeaderFrame()
-                           ? vcl::PDFWriter::Header
-                           : vcl::PDFWriter::Footer);
+                           ? vcl::pdf::PDFWriter::Header
+                           : vcl::pdf::PDFWriter::Footer);
                 }
             break;
 
@@ -860,50 +860,50 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             eVal = vcl::pdf::StructElement::TableHeader == eType
                 || vcl::pdf::StructElement::TableData == eType
                 || bIsFigureInline
-                       ? vcl::PDFWriter::Inline
-                       : vcl::PDFWriter::Block;
+                       ? vcl::pdf::PDFWriter::Inline
+                       : vcl::pdf::PDFWriter::Block;
 
-            mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::Placement, eVal );
+            mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::Placement, eVal );
         }
 
         if ( bWritingMode )
         {
             eVal =  pFrame->IsVertical() ?
-                    vcl::PDFWriter::TbRl :
+                    vcl::pdf::PDFWriter::TbRl :
                     pFrame->IsRightToLeft() ?
-                    vcl::PDFWriter::RlTb :
-                    vcl::PDFWriter::LrTb;
+                    vcl::pdf::PDFWriter::RlTb :
+                    vcl::pdf::PDFWriter::LrTb;
 
-            if ( vcl::PDFWriter::LrTb != eVal )
-                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::WritingMode, eVal );
+            if ( vcl::pdf::PDFWriter::LrTb != eVal )
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::WritingMode, eVal );
         }
 
         if ( bSpaceBefore )
         {
             nVal = aRectFnSet.GetTopMargin(*pFrame);
             if ( 0 != nVal )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::SpaceBefore, nVal );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::SpaceBefore, nVal );
         }
 
         if ( bSpaceAfter )
         {
             nVal = aRectFnSet.GetBottomMargin(*pFrame);
             if ( 0 != nVal )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::SpaceAfter, nVal );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::SpaceAfter, nVal );
         }
 
         if ( bStartIndent )
         {
             nVal = aRectFnSet.GetLeftMargin(*pFrame);
             if ( 0 != nVal )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::StartIndent, nVal );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::StartIndent, nVal );
         }
 
         if ( bEndIndent )
         {
             nVal = aRectFnSet.GetRightMargin(*pFrame);
             if ( 0 != nVal )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::EndIndent, nVal );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::EndIndent, nVal );
         }
 
         if ( bTextIndent )
@@ -913,7 +913,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent());
             nVal = rFirstLine.ResolveTextFirstLineOffset({});
             if ( 0 != nVal )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::TextIndent, nVal );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::TextIndent, nVal );
         }
 
         if ( bTextAlign )
@@ -926,12 +926,12 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                    (!pFrame->IsRightToLeft() && SvxAdjust::Right == nAdjust) ) )
             {
                 eVal = SvxAdjust::Block == nAdjust ?
-                       vcl::PDFWriter::Justify :
+                       vcl::pdf::PDFWriter::Justify :
                        SvxAdjust::Center == nAdjust ?
-                       vcl::PDFWriter::Center :
-                       vcl::PDFWriter::End;
+                       vcl::pdf::PDFWriter::Center :
+                       vcl::pdf::PDFWriter::End;
 
-                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextAlign, eVal );
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::TextAlign, eVal );
             }
         }
 
@@ -958,13 +958,13 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
         if ( bWidth )
         {
             nVal = aRectFnSet.GetWidth(pFrame->getFrameArea());
-            mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Width, nVal );
+            mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::Width, nVal );
         }
 
         if ( bHeight )
         {
             nVal = aRectFnSet.GetHeight(pFrame->getFrameArea());
-            mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Height, nVal );
+            mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::Height, nVal );
         }
 
         if ( bBox )
@@ -986,13 +986,13 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(pFrame);
                 nVal =  pThisCell->GetTabBox()->getRowSpan();
                 if ( nVal > 1 )
-                    mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::RowSpan, nVal );
+                    mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::RowSpan, nVal );
 
                 // calculate colspan:
                 const SwTabFrame* pTabFrame = pThisCell->FindTabFrame();
                 const SwTable* pTable = pTabFrame->GetTable();
 
-                SwRectFnSet fnRectX(pTabFrame);
+                SwRectFnSet fnRectX(*pTabFrame);
 
                 const TableColumnsMapEntry& rCols(mpPDFExtOutDevData->GetSwPDFState()->m_TableColumnsMap[pTable]);
 
@@ -1006,7 +1006,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 {
                     nVal = std::distance( aLeftIter, aRightIter );
                     if ( nVal > 1 )
-                        mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::ColSpan, nVal );
+                        mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::ColSpan, nVal );
                 }
             }
         }
@@ -1062,44 +1062,44 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             case vcl::pdf::StructElement::RT:
                 {
                     SwRubyPortion const*const pRuby(static_cast<SwRubyPortion const*>(pPor));
-                    vcl::PDFWriter::StructAttributeValue nAlign = {};
+                    vcl::pdf::PDFWriter::StructAttributeValue nAlign = {};
                     switch (pRuby->GetAdjustment())
                     {
                         case text::RubyAdjust_LEFT:
-                            nAlign = vcl::PDFWriter::RStart;
+                            nAlign = vcl::pdf::PDFWriter::RStart;
                             break;
                         case text::RubyAdjust_CENTER:
-                            nAlign = vcl::PDFWriter::RCenter;
+                            nAlign = vcl::pdf::PDFWriter::RCenter;
                             break;
                         case text::RubyAdjust_RIGHT:
-                            nAlign = vcl::PDFWriter::REnd;
+                            nAlign = vcl::pdf::PDFWriter::REnd;
                             break;
                         case text::RubyAdjust_BLOCK:
-                            nAlign = vcl::PDFWriter::RJustify;
+                            nAlign = vcl::pdf::PDFWriter::RJustify;
                             break;
                         case text::RubyAdjust_INDENT_BLOCK:
-                            nAlign = vcl::PDFWriter::RDistribute;
+                            nAlign = vcl::pdf::PDFWriter::RDistribute;
                             break;
                         default:
                             assert(false);
                             break;
                     }
-                    ::std::optional<vcl::PDFWriter::StructAttributeValue> oPos;
+                    ::std::optional<vcl::pdf::PDFWriter::StructAttributeValue> oPos;
                     switch (pRuby->GetRubyPosition())
                     {
                         case RubyPosition::ABOVE:
-                            oPos = vcl::PDFWriter::RBefore;
+                            oPos = vcl::pdf::PDFWriter::RBefore;
                             break;
                         case RubyPosition::BELOW:
-                            oPos = vcl::PDFWriter::RAfter;
+                            oPos = vcl::pdf::PDFWriter::RAfter;
                             break;
                         case RubyPosition::RIGHT:
                             break; // no such thing???
                     }
-                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::RubyAlign, nAlign);
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::RubyAlign, nAlign);
                     if (oPos)
                     {
-                        mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::RubyPosition, *oPos);
+                        mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::RubyPosition, *oPos);
                     }
                 }
                 break;
@@ -1133,20 +1133,20 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             if ( 0 != nVal )
             {
                 nVal = nVal * pPor->Height() / 100;
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::BaselineShift, nVal );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::BaselineShift, nVal );
             }
         }
 
         if ( bTextDecorationType )
         {
             if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() )
-                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Underline );
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::TextDecorationType, vcl::pdf::PDFWriter::Underline );
             if ( LINESTYLE_NONE    != rInf.GetFont()->GetOverline() )
-                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::TextDecorationType, vcl::pdf::PDFWriter::Overline );
             if ( STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() )
-                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::LineThrough );
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::TextDecorationType, vcl::pdf::PDFWriter::LineThrough );
             if ( FontEmphasisMark::NONE != rInf.GetFont()->GetEmphasisMark() )
-                mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
+                mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::TextDecorationType, vcl::pdf::PDFWriter::Overline );
         }
 
         if ( bLanguage )
@@ -1156,7 +1156,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             const LanguageType nDefaultLang(mpPDFExtOutDevData->GetSwPDFState()->m_eLanguageDefault);
 
             if ( nDefaultLang != nCurrentLanguage )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Language, static_cast<sal_uInt16>(nCurrentLanguage) );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(nCurrentLanguage) );
         }
 
         if ( bLinkAttribute )
@@ -1178,7 +1178,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             if (aIter != rNoteIdMap.end())
             {
                 sal_Int32 nNoteId = (*aIter).second;
-                mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::PDFWriter::NoteAnnotation,
+                mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::pdf::PDFWriter::NoteAnnotation,
                                                                    nNoteId);
             }
         }
@@ -1194,39 +1194,39 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             switch (rFormat.GetNumberingType())
             {
                 case css::style::NumberingType::CHARS_UPPER_LETTER:
-                    return vcl::PDFWriter::UpperAlpha;
+                    return vcl::pdf::PDFWriter::UpperAlpha;
                 case css::style::NumberingType::CHARS_LOWER_LETTER:
-                    return vcl::PDFWriter::LowerAlpha;
+                    return vcl::pdf::PDFWriter::LowerAlpha;
                 case css::style::NumberingType::ROMAN_UPPER:
-                    return vcl::PDFWriter::UpperRoman;
+                    return vcl::pdf::PDFWriter::UpperRoman;
                 case css::style::NumberingType::ROMAN_LOWER:
-                    return vcl::PDFWriter::LowerRoman;
+                    return vcl::pdf::PDFWriter::LowerRoman;
                 case css::style::NumberingType::ARABIC:
-                    return vcl::PDFWriter::Decimal;
+                    return vcl::pdf::PDFWriter::Decimal;
                 case css::style::NumberingType::CHAR_SPECIAL:
                     switch (rFormat.GetBulletChar())
                     {
                         case u'\u2022': case u'\uE12C': case u'\uE01E': case u'\uE437':
-                            return vcl::PDFWriter::Disc;
+                            return vcl::pdf::PDFWriter::Disc;
                         case u'\u2218': case u'\u25CB': case u'\u25E6':
-                            return vcl::PDFWriter::Circle;
+                            return vcl::pdf::PDFWriter::Circle;
                         case u'\u25A0': case u'\u25AA': case u'\uE00A':
-                            return vcl::PDFWriter::Square;
+                            return vcl::pdf::PDFWriter::Square;
                         default:
-                            return vcl::PDFWriter::NONE;
+                            return vcl::pdf::PDFWriter::NONE;
                     }
                 default: // the other 50 types
-                    return vcl::PDFWriter::NONE;
+                    return vcl::pdf::PDFWriter::NONE;
             }
         };
 
         // Note: for every level, BeginNumberedListStructureElements() produces
         // a separate List element, so even though in PDF this is limited to
         // the whole List we can just export the current level here.
-        vcl::PDFWriter::StructAttributeValue const value(
+        vcl::pdf::PDFWriter::StructAttributeValue const value(
                 ToPDFListNumbering(pNumRule->Get(rNode.GetActualListLevel())));
         // ISO 14289-1:2014, Clause: 7.6
-        mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::ListNumbering, value);
+        mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::ListNumbering, value);
     }
 }
 
@@ -1432,7 +1432,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             // Footnote frame: Note
 
-            // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
+            // Note: vcl::pdf::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = sal_uInt16(vcl::pdf::StructElement::Note);
             aPDFType = aNoteString;
@@ -1705,7 +1705,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 if ( aIter == rTableColumnsMap.end() )
                 {
-                    SwRectFnSet aRectFnSet(pTabFrame);
+                    SwRectFnSet aRectFnSet(*pTabFrame);
                     TableColumnsMapEntry& rCols = rTableColumnsMap[ pTable ];
 
                     const SwTabFrame* pMasterFrame = pTabFrame->IsFollow() ? pTabFrame->FindMaster( true ) : pTabFrame;
@@ -3326,7 +3326,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
         // Add offset to current page:
         const SwPageFrame* pPageFrame = pTmpFrame->FindPageFrame();
         SwRect aHFLinkRect( rLinkRect );
-        aHFLinkRect.Pos() = pPageFrame->getFrameArea().Pos() + aOffset;
+        aHFLinkRect.Pos(pPageFrame->getFrameArea().Pos() + aOffset);
 
         // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
         // fool it by comparing the position only (the width and height are the

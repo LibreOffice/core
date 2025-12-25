@@ -20,7 +20,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cairo,2))
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/cairo.RGB24_888.patch \
     external/cairo/cairo/san.patch.0 \
-    external/cairo/cairo/libcairo-bundled-soname.patch.1 \
     external/cairo/cairo/cairo-fd-hack.patch.0 \
     external/cairo/cairo/cairo.ofz57493-Timeout.patch.1 \
     external/cairo/cairo/shm-null-deref.patch.1 \
@@ -31,14 +30,25 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/disable-cairo-utilities.patch.1 \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,cairo,\
+    external/cairo/cairo/libcairo-bundled-soname.patch.1 \
+))
+
 ifeq ($(ENABLE_CAIRO_RGBA),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/cairo.GL_RGBA.patch \
 ))
 endif
 
-ifneq (,$(filter MACOSX ANDROID iOS,$(OS)))
+ifneq (,$(filter ANDROID iOS,$(OS)))
 $(eval $(call gb_UnpackedTarball_add_file,cairo,.,external/cairo/cairo/dummy_pkg_config))
 endif
+
+# meson will replace python3 from shebang in build commands with the
+# interpreter it is run with (which is what we want for python=fully-internal
+# case to avoid incompatibilities with the system python version).
+# And while it does so unconditionally on windows, on other platforms that only
+# happens if the command to run doesn't have the executable bit set.
+$(eval $(call gb_UnpackedTarball_set_post_action,cairo,chmod a-x version.py))
 
 # vim: set noet sw=4 ts=4:

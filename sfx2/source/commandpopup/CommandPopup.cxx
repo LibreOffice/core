@@ -86,8 +86,7 @@ void MenuContentHandler::gatherMenuContent(
         aNewContent.m_aMenuLabel = vcl::CommandInfoProvider::GetLabelForCommand(aCommandProperties);
 
         if (!rMenuContent.m_aFullLabelWithPath.isEmpty())
-            aNewContent.m_aFullLabelWithPath
-                = rMenuContent.m_aFullLabelWithPath + aMenuLabelSeparator;
+            aNewContent.m_aFullLabelWithPath += aMenuLabelSeparator;
         aNewContent.m_aFullLabelWithPath += aNewContent.m_aMenuLabel;
         aNewContent.m_aSearchableMenuLabel = toLower(aNewContent.m_aFullLabelWithPath);
 

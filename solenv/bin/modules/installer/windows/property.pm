@@ -115,7 +115,6 @@ sub get_english_language_string
     }
 
     $langstring =~ s/\,\s*$//;
-    $langstring = "(" . $langstring . ")";
 
     return $langstring;
 }
@@ -159,7 +158,7 @@ sub get_productname_for_property_table($$)
     elsif ( $installer::globals::helppack )
     {
         my $langstring = get_english_language_string(); # New: (English, German)
-        $productname = $name . " " . $version . " Help Pack" . " " . $langstring;
+        $productname = $name . " " . $version . " Help Pack:" . " " . $langstring;
     }
 
     # Saving this name in hash $allvariables for further usage

@@ -24,7 +24,7 @@
 #include "csvsplits.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include "AccessibleCsvControl.hxx"
 
 /** Minimum character count for a column in separators mode. */

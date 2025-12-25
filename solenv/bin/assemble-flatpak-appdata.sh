@@ -12,20 +12,21 @@
 #
 # Arguments:
 # $1  pathname, ending in a slash, of the directory into which to put the target
-#     org.libreoffice.LibreOffice.appdata.xml file
+#     $3.appdata.xml file
 # $2  "1" if a <releases> section shall be included in the target
-#     org.libreoffice.LibreOffice.appdata.xml file, "0" if not
+#     $3.appdata.xml file, "0" if not
+# $3  the flatpak ID
 
 set -e
 
-## org.libreoffice.LibreOffice.appdata.xml is manually derived from the various
+## $3.appdata.xml is manually derived from the various
 ## inst/share/metainfo/libreoffice-*.appdata.xml (at least recent GNOME Software
 ## doesn't show more than five screenshots anyway, so restrict to one each from
 ## the five libreoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
-cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
+cat <<EOF >"${1?}${3?}".appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
- <id>org.libreoffice.LibreOffice</id>
+ <id>${3?}</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>MPL-2.0</project_license>
  <name>LibreOffice</name>
@@ -41,7 +42,7 @@ cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
   you can easily share documents with users of other popular office suites
   without worrying about compatibility.</p>
  </description>
- <launchable type="desktop-id">org.libreoffice.LibreOffice.desktop</launchable>
+ <launchable type="desktop-id">${3?}.desktop</launchable>
  <url type="homepage">http://www.libreoffice.org/discover/libreoffice/</url>
  <url type="bugtracker">https://bugs.documentfoundation.org/</url>
  <url type="donation">https://donate.libreoffice.org/</url>
@@ -54,7 +55,7 @@ cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
    <caption>Sample Writer document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
+   <image>https://hub.libreoffice.org/screenshots/calc-01.png</image>
    <caption>Sample Calc document</caption>
   </screenshot>
   <screenshot>
@@ -62,12 +63,16 @@ cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
    <caption>Sample Impress document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
+   <image>https://hub.libreoffice.org/screenshots/draw-01.png</image>
    <caption>Sample Draw document</caption>
   </screenshot>
   <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/base-02.png</image>
+   <image>https://hub.libreoffice.org/screenshots/base-01.png</image>
    <caption>Sample Base document</caption>
+  </screenshot>
+  <screenshot>
+   <image>https://hub.libreoffice.org/screenshots/math-01.png</image>
+   <caption>Sample Math document</caption>
   </screenshot>
  </screenshots>
  <developer_name>The Document Foundation</developer_name>
@@ -83,7 +88,7 @@ EOF
 
 if [ "${2?}" = 1 ]
 then
- cat <<EOF >>"${1?}"org.libreoffice.LibreOffice.appdata.xml
+ cat <<EOF >>"${1?}${3?}".appdata.xml
  <releases>
   <release
     version="${LIBO_VERSION_MAJOR?}.${LIBO_VERSION_MINOR?}.${LIBO_VERSION_MICRO?}.${LIBO_VERSION_PATCH?}"
@@ -92,6 +97,6 @@ then
 EOF
 fi
 
-cat <<\EOF >>"${1?}"org.libreoffice.LibreOffice.appdata.xml
+cat <<\EOF >>"${1?}${3?}".appdata.xml
 </component>
 EOF

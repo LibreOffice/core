@@ -43,6 +43,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
 
     bChgUserColl =
     bReplaceStyles =
+    bReplaceStylesByInput =
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =

@@ -256,6 +256,9 @@ IMPL_STATIC_LINK_NOARG(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool)
 
 IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
     if (NavDocInfo* pInfo = GetDocInfo(); !pInfo || !pInfo->IsActive())
         return false;
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
@@ -276,8 +279,7 @@ void SdNavigatorWin::ExecuteContextMenuAction(std::u16string_view rSelectedPopup
     if (rSelectedPopupEntry == u"rename")
     {
         weld::TreeView& rTreeView = GetObjects().get_treeview();
-        std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-        if (rTreeView.get_selected(xIter.get()))
+        if (std::unique_ptr<weld::TreeIter> xIter = rTreeView.get_selected())
             rTreeView.start_editing(*xIter);
     }
 }

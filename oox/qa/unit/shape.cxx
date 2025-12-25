@@ -168,9 +168,47 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3019), nEdgeLineDelta);
 }
 
-CPPUNIT_TEST_FIXTURE(OoxShapeTest, testStandardConnectors)
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsECMA)
 {
-    loadFromFile(u"standardConnectors.pptx");
+    // This test was created for tdf#149756 tdf#152545
+    // and modified to simply use a template format for tdf#165180
+    loadFromFile(u"tdf165180_standardConnectorsECMA.potx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    sal_Int32 aEdgeValue[] = { -1352, -2457, 2402, // bentConnector5
+                               3977,  0,     0, // bentConnector3
+                               -2899, 0,     0, // bentConnector3
+                               -1260, 4612,  0, // bentConnector4
+                               -1431, -2642, 0, // bentConnector4
+                               3831,  3438,  -1578 }; // bentConnector5
+    sal_Int32 nCount = 0;
+    sal_Int32 nEdgeLineDelta;
+    for (size_t i = 0; i < 10; i++)
+    {
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        bool bConnector = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
+        if (bConnector)
+        {
+            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
+            nCount++;
+            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
+            nCount++;
+            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
+            nCount++;
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsISO29500)
+{
+    loadFromFile(u"tdf165180_standardConnectorsISO29500.potx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -618,10 +656,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(690), aGradient.Angle);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.XOffset);
@@ -642,10 +680,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.40000000000000002));
-        CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(0), 0.40000000000000002));
+        CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aGradient.Angle);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
@@ -666,10 +704,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aGradient.Angle);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
@@ -790,10 +828,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(Color(0xffc000), Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0xc00000), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xffc000), Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xc00000), Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(690), aGradient.Angle);
@@ -822,10 +860,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(Color(0x0083e0), Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0xe6e600), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(Color(0x0083e0), Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xe6e600), Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
@@ -837,10 +875,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
 
         // Transparency is encoded in gray color.
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(COL_GRAY7, Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x4d4d4d), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(COL_GRAY7, Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0x4d4d4d), Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
@@ -874,10 +912,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
@@ -889,10 +927,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
 
         // Transparency is encoded in gray color.
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops.getStopColor(1)));
 
         CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);

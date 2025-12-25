@@ -29,7 +29,8 @@
 #include <basic/sbstar.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svtools/scrolladaptor.hxx>

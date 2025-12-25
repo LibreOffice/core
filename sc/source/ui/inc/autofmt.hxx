@@ -21,7 +21,7 @@
 
 #include <svx/framelinkarray.hxx>
 #include <scdllapi.h>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 namespace com::sun::star::i18n { class XBreakIterator; }
 

@@ -18,7 +18,7 @@ using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
 bool QXPImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                       OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                       OdgGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libqxp::QXPDocument::parse(&rInput, &rGenerator) == libqxp::QXPDocument::RESULT_OK;
 }

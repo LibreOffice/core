@@ -33,6 +33,7 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
@@ -637,7 +638,7 @@ static void implCopyStreamToByteSequence( const Reference< XInputStream >& xStre
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
-        std::copy(readBytes.getConstArray(), readBytes.getConstArray() + static_cast<sal_uInt32>(nRead), bytes.getArray() + nPos);
+        std::copy_n(readBytes.getConstArray(), nRead, bytes.getArray() + nPos);
     }
 }
 
@@ -761,8 +762,8 @@ void DlgEditor::Copy()
             pCombinedData[i] = sal_Int8( n & 0xff );
             n >>= 8;
         }
-        std::copy(DialogModelBytes.getConstArray(), DialogModelBytes.getConstArray() + nDialogDataLen, pCombinedData + 4);
-        std::copy(aResData.getConstArray(), aResData.getConstArray() + nResDataLen, pCombinedData + nResOffset);
+        std::copy_n(DialogModelBytes.getConstArray(), nDialogDataLen, pCombinedData + 4);
+        std::copy_n(aResData.getConstArray(), nResDataLen, pCombinedData + nResOffset);
 
         Sequence< Any > aSeqData
         {
@@ -859,10 +860,10 @@ void DlgEditor::Paste()
             sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
 
             DialogModelBytes.realloc(nDialogDataLen);
-            std::copy(aCombinedData.getConstArray() + 4, aCombinedData.getConstArray() + 4 + nDialogDataLen, DialogModelBytes.getArray());
+            std::copy_n(aCombinedData.getConstArray() + 4, nDialogDataLen, DialogModelBytes.getArray());
 
             aResData.realloc(nResDataLen);
-            std::copy(aCombinedData.getConstArray() + nResOffset, aCombinedData.getConstArray() + nResOffset + nResDataLen, aResData.getArray());
+            std::copy_n(aCombinedData.getConstArray() + nResOffset, nResDataLen, aResData.getArray());
         }
     }
     else
@@ -1158,7 +1159,7 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     aPosOffs.AdjustX(Print::nLeftMargin );
     aPosOffs.AdjustY(Print::nTopMargin );
 
-    pPrinter->DrawBitmapEx( aPosOffs, aOutputSz, aDlg );
+    pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
 
     pPrinter->SetMapMode( aOldMap );
     pPrinter->SetFont( aOldFont );

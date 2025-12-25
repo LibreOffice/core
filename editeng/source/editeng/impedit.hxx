@@ -58,6 +58,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <algorithm>
 #include <functional>
 #include <optional>
 #include <memory>
@@ -139,7 +140,7 @@ struct ImplIMEInfos
     {
         nLen = nInputLength;
         pAttribs.reset(new ExtTextInputAttr[nInputLength]);
-        memcpy(pAttribs.get(), pInputAttributes, nInputLength * sizeof(ExtTextInputAttr));
+        std::copy_n(pInputAttributes, nInputLength, pAttribs.get());
     }
 
     void DestroyAttribs()
@@ -770,7 +771,6 @@ private:
     void                ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, sal_Int32 nIndex);
     static LanguageType ImplCalcDigitLang(LanguageType eCurLang);
     static void         ImplInitDigitMode(OutputDevice& rOutDev, LanguageType eLang);
-    static OUString     convertDigits(std::u16string_view rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang);
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
@@ -1044,6 +1044,7 @@ public:
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
     EditPaM         InsertTab(const EditSelection& rEditSelection);
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
+    void            UpdateAutoParaDirection(const EditSelection& rCurSel);
     bool            UpdateFields();
 
     ErrCode         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );

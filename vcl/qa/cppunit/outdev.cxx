@@ -165,6 +165,95 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawInvertedBitmap)
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
 }
 
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBlackBitmap)
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_RED);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetDrawMode(DrawModeFlags::BlackBitmap);
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMP);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::PUSH, pAction->GetType());
+    auto pPushAction = static_cast<MetaPushAction*>(pAction);
+    bool bLineFillFlag
+        = ((vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR) == pPushAction->GetFlags());
+    CPPUNIT_ASSERT_MESSAGE("Push flags not LINECOLOR | FILLCOLOR", bLineFillFlag);
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineColorAction = static_cast<MetaLineColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pLineColorAction->GetColor());
+
+    pAction = aMtf.GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillColorAction = static_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pFillColorAction->GetColor());
+
+    pAction = aMtf.GetAction(3);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RECT, pAction->GetType());
+    auto pRectAction = static_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
+
+    pAction = aMtf.GetAction(4);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::POP, pAction->GetType());
+
+    // test to see if the color is black
+    Bitmap aBlackBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
+    BitmapScopedReadAccess pReadAccess(aBlackBmp);
+    const BitmapColor aColor = pReadAccess->GetColor(0, 0);
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), aColor);
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawWhiteBitmap)
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetDrawMode(DrawModeFlags::WhiteBitmap);
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMP);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::PUSH, pAction->GetType());
+    auto pPushAction = static_cast<MetaPushAction*>(pAction);
+    bool bLineFillFlag
+        = ((vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR) == pPushAction->GetFlags());
+    CPPUNIT_ASSERT_MESSAGE("Push flags not LINECOLOR | FILLCOLOR", bLineFillFlag);
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineColorAction = static_cast<MetaLineColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pLineColorAction->GetColor());
+
+    pAction = aMtf.GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillColorAction = static_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pFillColorAction->GetColor());
+
+    pAction = aMtf.GetAction(3);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RECT, pAction->GetType());
+    auto pRectAction = static_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
+
+    pAction = aMtf.GetAction(4);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::POP, pAction->GetType());
+
+    // test to see if the color is white
+    Bitmap aWhiteBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
+    BitmapScopedReadAccess pReadAccess(aWhiteBmp);
+    const BitmapColor aColor = pReadAccess->GetColor(0, 0);
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), aColor);
+}
+
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;

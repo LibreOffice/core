@@ -502,16 +502,11 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     if( !(bKillCryptedFiles || bKillUnencryptedFiles) )
         return;
 
-    Sequence< OUString > aElementNames = pImplLib->getElementNames();
-    sal_Int32 nNameCount = aElementNames.getLength();
-    const OUString* pNames = aElementNames.getConstArray();
     OUString aLibDirPath = createAppLibraryFolder( pImplLib, Name );
     try
     {
-        for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+        for (const OUString& aElementName : pImplLib->getElementNames())
         {
-            OUString aElementName = pNames[ i ];
-
             INetURLObject aElementInetObj( aLibDirPath );
             aElementInetObj.insertName( aElementName, false,
                                         INetURLObject::LAST_SEGMENT,
@@ -592,18 +587,13 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
     {
         return false;
     }
-    Sequence< OUString > aElementNames = pLib->getElementNames();
-    sal_Int32 nNameCount = aElementNames.getLength();
-    const OUString* pNames = aElementNames.getConstArray();
 
     bool bLink = pLib->mbLink;
     bool bStorage = xStorage.is() && !bLink;
     if( bStorage )
     {
-        for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+        for (const OUString& aElementName : pLib->getElementNames())
         {
-            OUString aElementName = pNames[ i ];
-
             // Write binary image stream
             SbModule* pMod = pBasicLib->FindModule( aElementName );
             if( pMod )
@@ -709,10 +699,8 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                 aLibDirPath = createAppLibraryFolder( pLib, aName );
             }
 
-            for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+            for (const OUString& aElementName : pLib->getElementNames())
             {
-                OUString aElementName = pNames[ i ];
-
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
                                             INetURLObject::LAST_SEGMENT,
@@ -853,10 +841,6 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         pScriptLib->mbLoadedSource = true;
     }
 
-    Sequence< OUString > aElementNames = pLib->getElementNames();
-    sal_Int32 nNameCount = aElementNames.getLength();
-    const OUString* pNames = aElementNames.getConstArray();
-
     if( bStorage )
     {
         uno::Reference< embed::XStorage > xLibrariesStor;
@@ -879,10 +863,8 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             return false;
         }
 
-        for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+        for (const OUString& aElementName : pLib->getElementNames())
         {
-            OUString aElementName = pNames[ i ];
-
             // Load binary
             if( bLoadBinary )
             {
@@ -976,10 +958,8 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         {
             OUString aLibDirPath = createAppLibraryFolder( pLib, Name );
 
-            for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+            for (const OUString& aElementName : pLib->getElementNames())
             {
-                OUString aElementName = pNames[ i ];
-
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
                     INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );

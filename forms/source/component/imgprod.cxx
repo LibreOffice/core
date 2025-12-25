@@ -324,9 +324,8 @@ void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArgu
 {
     if ( aArguments.getLength() == 1 )
     {
-        css::uno::Any aArg = aArguments.getConstArray()[0];
         OUString aURL;
-        if ( aArg >>= aURL )
+        if (aArguments[0] >>= aURL)
         {
             SetImage( aURL );
         }

@@ -25,8 +25,8 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 
 namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::util { class XNumberFormats; }
@@ -351,7 +351,7 @@ void PivotChartTest::testRoundtrip()
         CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, xLabelDataSequence->getData()[0].get<OUString>());
     }
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     xChartDoc = getPivotChartDocFromSheet(1 );
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -734,26 +734,26 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
 
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xChartDoc->getDataProvider(), UNO_QUERY_THROW);
-    uno::Sequence<chart2::data::PivotTableFieldEntry> aFieldEntries;
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider
+        = dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xChartDoc->getDataProvider().get());
 
-    aFieldEntries = xPivotTableDataProvider->getColumnFields();
+    auto rColFieldEntries = pPivotTableDataProvider->getColumnFields();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"Country"_ustr, aFieldEntries[0].Name);
-    CPPUNIT_ASSERT_EQUAL(u"Type"_ustr, aFieldEntries[1].Name);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rColFieldEntries.size());
+    CPPUNIT_ASSERT_EQUAL(u"Country"_ustr, rColFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Type"_ustr, rColFieldEntries[1].Name);
 
-    aFieldEntries = xPivotTableDataProvider->getRowFields();
+    auto rRowFieldEntries = pPivotTableDataProvider->getRowFields();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"City"_ustr, aFieldEntries[0].Name);
-    CPPUNIT_ASSERT_EQUAL(u"Data"_ustr, aFieldEntries[1].Name);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rRowFieldEntries.size());
+    CPPUNIT_ASSERT_EQUAL(u"City"_ustr, rRowFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Data"_ustr, rRowFieldEntries[1].Name);
 
-    aFieldEntries = xPivotTableDataProvider->getDataFields();
+    auto rDataFieldEntries = pPivotTableDataProvider->getDataFields();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T1"_ustr, aFieldEntries[0].Name);
-    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T2"_ustr, aFieldEntries[1].Name);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rDataFieldEntries.size());
+    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T1"_ustr, rDataFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T2"_ustr, rDataFieldEntries[1].Name);
 
     // Data to column fields
     lclModifyOrientation(xDataPilotDescriptor, u"Data", sheet::DataPilotFieldOrientation_COLUMN);
@@ -766,25 +766,25 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
     lclModifyOrientation(xDataPilotDescriptor, u"Country", sheet::DataPilotFieldOrientation_COLUMN);
 
     // set the XPivotTableDataProvider again as the old one was exchanged
-    xPivotTableDataProvider.set(xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW);
+    pPivotTableDataProvider = dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xChartDoc->getDataProvider().get());
 
-    aFieldEntries = xPivotTableDataProvider->getColumnFields();
+    auto rColFieldEntries2 = pPivotTableDataProvider->getColumnFields();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aFieldEntries.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"Data"_ustr, aFieldEntries[0].Name);
-    CPPUNIT_ASSERT_EQUAL(u"Type"_ustr, aFieldEntries[1].Name);
-    CPPUNIT_ASSERT_EQUAL(u"Country"_ustr, aFieldEntries[2].Name);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rColFieldEntries2.size());
+    CPPUNIT_ASSERT_EQUAL(u"Data"_ustr, rColFieldEntries2[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Type"_ustr, rColFieldEntries2[1].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Country"_ustr, rColFieldEntries2[2].Name);
 
-    aFieldEntries = xPivotTableDataProvider->getRowFields();
+    auto rRowFieldEntries2 = pPivotTableDataProvider->getRowFields();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aFieldEntries.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"City"_ustr, aFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rRowFieldEntries2.size());
+    CPPUNIT_ASSERT_EQUAL(u"City"_ustr, rRowFieldEntries2[0].Name);
 
-    aFieldEntries = xPivotTableDataProvider->getDataFields();
+    auto rDataFieldEntries2 = pPivotTableDataProvider->getDataFields();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T1"_ustr, aFieldEntries[0].Name);
-    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T2"_ustr, aFieldEntries[1].Name);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rDataFieldEntries2.size());
+    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T1"_ustr, rDataFieldEntries2[0].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Sum - Sales T2"_ustr, rDataFieldEntries2[1].Name);
 }
 
 void PivotChartTest::testPivotChartRowFieldInOutlineMode()

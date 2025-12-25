@@ -57,7 +57,7 @@
 #include <comphelper/anytostring.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_dependencydialog.hxx"
@@ -138,7 +138,7 @@ public:
         , m_nCurrentProgress(0)
         {}
 
-    weld::Window* activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr; }
+    weld::Window* activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getDialog() : nullptr; }
 
     void startProgress();
     void stopProgress();
@@ -793,7 +793,7 @@ void ExtensionCmdQueue::Thread::execute()
 
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(currentCmdEnv->activeDialog(),
                                                           VclMessageType::Warning, VclButtonsType::Ok, msg));
-                xBox->set_title(m_rDialogHelper.getFrameWeld()->get_title());
+                xBox->set_title(m_rDialogHelper.getDialog()->get_title());
                 xBox->run();
                 m_rDialogHelper.decBusy();
                 //Continue with installation of the remaining extensions
@@ -905,22 +905,21 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 
     m_rDialogHelper.incBusy();
 
-    std::vector< UpdateData > vData;
-    UpdateDialog aUpdateDialog(m_xContext, m_rDialogHelper.getFrameWeld(),
-                               std::move(vExtensionList), &vData);
+    UpdateDialog aUpdateDialog(m_xContext, m_rDialogHelper.getDialog(), std::move(vExtensionList));
 
     aUpdateDialog.notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
     bool bOk = aUpdateDialog.run() == RET_OK;
     m_rDialogHelper.decBusy();
 
-    if (bOk && !vData.empty())
+    const std::vector<UpdateData>& rUpdateData = aUpdateDialog.getUpdateData();
+    if (bOk && !rUpdateData.empty())
     {
         // If there is at least one directly downloadable extension then we
         // open the install dialog.
         std::vector< UpdateData > dataDownload;
 
-        for (auto const& data : vData)
+        for (auto const& data : rUpdateData)
         {
             if ( data.sWebsiteURL.isEmpty() )
                 dataDownload.push_back(data);
@@ -930,7 +929,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         if ( !dataDownload.empty() )
         {
             m_rDialogHelper.incBusy();
-            UpdateInstallDialog aDlg(m_rDialogHelper.getFrameWeld(), dataDownload, m_xContext);
+            UpdateInstallDialog aDlg(m_rDialogHelper.getDialog(), dataDownload, m_xContext);
             nDialogResult = aDlg.run();
             m_rDialogHelper.decBusy();
             aUpdateDialog.notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
@@ -941,11 +940,11 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         //Now start the webbrowser and navigate to the websites where we get the updates
         if ( RET_OK == nDialogResult )
         {
-            for (auto const& data : vData)
+            for (auto const& data : rUpdateData)
             {
                 if (!data.sWebsiteURL.isEmpty())
                     m_rDialogHelper.openWebBrowser(data.sWebsiteURL,
-                                                   m_rDialogHelper.getFrameWeld()->get_title());
+                                                   m_rDialogHelper.getDialog()->get_title());
             }
         }
     }

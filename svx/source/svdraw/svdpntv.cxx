@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <svx/svdpntv.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdmodel.hxx>

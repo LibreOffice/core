@@ -28,7 +28,7 @@ ScColContainer::ScColContainer( ScSheetLimits const & rSheetLimits, const size_t
         aCols[nCol].reset( new ScColumn(rSheetLimits) );
 }
 
-ScColContainer::~ScColContainer() COVERITY_NOEXCEPT_FALSE
+ScColContainer::~ScColContainer()
 {
     Clear();
 }

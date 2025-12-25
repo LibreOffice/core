@@ -36,10 +36,12 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>

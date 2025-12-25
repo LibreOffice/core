@@ -26,7 +26,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <navipi.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
@@ -198,7 +198,7 @@ ScScenarioWindow::ScScenarioWindow(weld::Builder& rBuilder, const OUString& aQH_
     m_xLbScenario->connect_selection_changed(LINK(this, ScScenarioWindow, SelectHdl));
     m_xLbScenario->connect_row_activated(LINK(this, ScScenarioWindow, DoubleClickHdl));
     m_xLbScenario->connect_key_press(LINK(this, ScScenarioWindow, KeyInputHdl));
-    m_xLbScenario->connect_popup_menu(LINK(this, ScScenarioWindow, ContextMenuHdl));
+    m_xLbScenario->connect_command(LINK(this, ScScenarioWindow, ContextMenuHdl));
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)

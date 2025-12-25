@@ -30,9 +30,10 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>
@@ -108,6 +109,7 @@
 #include <tools/json_writer.hxx>
 
 #include <editeng/editeng.hxx>
+#include <tools/debug.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
@@ -1377,9 +1379,6 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         }
     }
 
-    if (nItem <= 0 || nItem >= m_xWidget->get_count() - 1)
-        return;
-
     SfxObjectShell *pShell = SfxObjectShell::Current();
     if (!pShell)
         return;
@@ -1389,9 +1388,18 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         return;
 
     SfxStyleSheetBase* pStyle = pPool->First(eStyleFamily);
-    while (pStyle && pStyle->GetName() != rStyleName)
+    SfxStyleSheetBase* pDefaultStyle = nullptr;
+    while (pStyle)
+    {
+        if (pStyle->GetName() == rStyleName)
+            break;
+        if (pStyle->GetName() == sDefaultStyle)
+            pDefaultStyle = pStyle;
         pStyle = pPool->Next();
+    }
 
+    if (!pStyle)
+        pStyle = pDefaultStyle;
     if (!pStyle )
         return;
 

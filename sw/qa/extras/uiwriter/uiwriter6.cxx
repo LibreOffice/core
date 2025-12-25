@@ -659,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)
     pWrtShell->Paste(aClipboard);
 
     // Save it as DOCX & load it again
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157937)
@@ -972,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
         pWrtShell->InsertField2(aField);
     }
     // Save it as DOCX & load it again
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -2339,7 +2339,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
     // save document and verify the bookmark scoup
     {
         // save document
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
 
         // load only content.xml
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -3021,7 +3021,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInsertPdf)
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // Save and load cycle
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Assert that we have a replacement graphics
@@ -3057,7 +3057,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143760WrapContourToOff)
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), u"SurroundContour"_ustr));
 
     // Without fix this had failed, because the shape was written to file with contour.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), u"SurroundContour"_ustr));
 }
 
@@ -3081,7 +3081,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHatchFill)
     xDrawPage->add(xShape);
 
     // Save it as DOCX and load it again.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     // tdf#127989 Without fix this had failed, because the background of the hatch was not set as 'no background'.
@@ -3140,7 +3140,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)
 
     // save and reload
     // Before the fix this crashed here and could not reopen.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)
@@ -3158,7 +3158,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)
     xDrawPage->add(xShape);
 
     // Save it as DOCX and load it again.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // Without fix in place, the shape was lost on export.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());

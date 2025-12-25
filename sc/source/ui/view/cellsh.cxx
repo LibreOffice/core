@@ -106,7 +106,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     bool bOnlyNotBecauseOfMatrix;
     bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScDocShell& rDocShell = GetViewData().GetDocShell();
+    ScDocShell* pDocShell = GetViewData().GetDocShell();
     ScMarkData& rMark = GetViewData().GetMarkData();
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
@@ -320,7 +320,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_CURRENTVALIDATION:
             case FID_VALIDATION:
                 {
-                    if ( rDocShell.IsDocShared() )
+                    if ( pDocShell && pDocShell->IsDocShared() )
                     {
                         bDisable = true;
                     }
@@ -359,8 +359,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 
 void ScCellShell::GetCellState( SfxItemSet& rSet )
 {
-    ScDocShell& rDocShell = GetViewData().GetDocShell();
-    ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
+    ScDocShell* pDocShell = GetViewData().GetDocShell();
+    ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
     ScAddress aCursor( GetViewData().GetCurX(), GetViewData().GetCurY(),
                         GetViewData().CurrentTabForData() );
     SfxWhichIter aIter(rSet);
@@ -410,7 +410,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                     else
                     {
                         bDisable = false;
-                        if ( rDocShell.IsDocShared() )
+                        if ( pDocShell && pDocShell->IsDocShared() )
                         {
                             bDisable = true;
                         }
@@ -492,6 +492,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RICHTEXT );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML_SIMPLE );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_12 );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_8 );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_5 );
     }
@@ -636,7 +637,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         SCCOL nCol = GetViewData().GetCurX();
         SCROW nRow = GetViewData().GetCurY();
         SCTAB nTab = GetViewData().CurrentTabForData();
-        ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
+        ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
         if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = true;
 
@@ -697,7 +698,7 @@ void ScCellShell::GetHLinkState( SfxItemSet& rSet )
 void ScCellShell::GetState(SfxItemSet &rSet)
 {
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
-    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScViewData& rData       = GetViewData();
     ScDocument& rDoc        = rData.GetDocument();
     ScMarkData& rMark       = rData.GetMarkData();
@@ -1031,7 +1032,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_COL_OPT_WIDTH:
             case FID_ROW_OPT_HEIGHT:
             case FID_DELETE_CELL:
-                if ( rDoc.IsTabProtected(nTab) || rDocSh.IsReadOnly())
+                if ( rDoc.IsTabProtected(nTab) || pDocSh->IsReadOnly())
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -1089,7 +1090,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 {
                     SfxUInt16Item aWidthItem( FID_COL_WIDTH, rDoc.GetColWidth( nPosX , nTab) );
                     rSet.Put( aWidthItem );
-                    if ( rDocSh.IsReadOnly())
+                    if ( pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich );
 
                     //XXX disable if not conclusive
@@ -1101,7 +1102,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     SfxUInt16Item aHeightItem( FID_ROW_HEIGHT, rDoc.GetRowHeight( nPosY , nTab) );
                     rSet.Put( aHeightItem );
                     //XXX disable if not conclusive
-                    if ( rDocSh.IsReadOnly())
+                    if ( pDocSh->IsReadOnly())
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -1252,7 +1253,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_USE_NAME:
                 {
-                    if ( rDocSh.IsDocShared() )
+                    if ( pDocSh->IsDocShared() )
                         rSet.DisableItem( nWhich );
                     else
                     {
@@ -1268,7 +1269,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_ADD_NAME:
             case SID_DEFINE_COLROWNAMERANGES:
                 {
-                    if ( rDocSh.IsDocShared() )
+                    if ( pDocSh->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1313,14 +1314,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_OPENDLG_CURRENTCONDFRMT:
             case SID_OPENDLG_CURRENTCONDFRMT_MANAGER:
                 {
-                    const SfxPoolItem* pItem = rDoc.GetAttr( nPosX, nPosY, nTab, ATTR_CONDITIONAL );
-                    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+                    const ScCondFormatItem& rCondFormatItem = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_CONDITIONAL);
 
-                    if ( pCondFormatItem->GetCondFormatData().empty() )
+                    if ( rCondFormatItem.GetCondFormatData().empty() )
                         rSet.DisableItem( nWhich );
-                    else if ( pCondFormatItem->GetCondFormatData().size() == 1 )
+                    else if ( rCondFormatItem.GetCondFormatData().size() == 1 )
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT_MANAGER );
-                    else if ( pCondFormatItem->GetCondFormatData().size() > 1 )
+                    else if ( rCondFormatItem.GetCondFormatData().size() > 1 )
                         rSet.DisableItem( SID_OPENDLG_CURRENTCONDFRMT );
                 }
                 break;

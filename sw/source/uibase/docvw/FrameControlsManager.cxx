@@ -21,7 +21,7 @@
 #include <OutlineContentVisibilityWin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <contentcontrolaliasbutton.hxx>
 
 SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :

@@ -113,32 +113,6 @@ namespace
         return bCRFirst; // cross-ref sorts *before*
     }
 
-    // specialise to avoid loplugin:faileddyncast
-    template<>
-    bool lcl_MarkOrderingByStart(const AnnotationMark *const pFirst,
-                                 const AnnotationMark *const pSecond)
-    {
-        SwPosition const& rFirstStart(pFirst->GetMarkStart());
-        SwPosition const& rSecondStart(pSecond->GetMarkStart());
-        if (rFirstStart.GetNode() != rSecondStart.GetNode())
-        {
-            return rFirstStart.GetNode() < rSecondStart.GetNode();
-        }
-        const sal_Int32 nFirstContent = rFirstStart.GetContentIndex();
-        const sal_Int32 nSecondContent = rSecondStart.GetContentIndex();
-        if (nFirstContent != 0 || nSecondContent != 0)
-        {
-            return nFirstContent < nSecondContent;
-        }
-        SwContentNode const*const pFirstNode(rFirstStart.nContent.GetContentNode());
-        SwContentNode const*const pSecondNode(rSecondStart.nContent.GetContentNode());
-        if ((pFirstNode != nullptr) != (pSecondNode != nullptr))
-        {   // consistency with SwPosition::operator<
-            return pSecondNode != nullptr;
-        }
-        return false; // equal
-    }
-
     template<class MarkT>
     bool lcl_MarkOrderingByEnd(const MarkT *const pFirst,
                                const MarkT *const pSecond)
@@ -414,51 +388,51 @@ namespace
 
 static bool IsNavigatorReminder(const MarkBase& rBkmk)
 {
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
     // not using dynamic_cast<> here for performance
-    return (*pMarkTypeInfo == typeid(NavigatorReminder));
+    return (rMarkTypeInfo == typeid(NavigatorReminder));
 }
 
 static bool IsCrossRefBookmark(const sw::mark::MarkBase& rBkmk)
 {
     // not using dynamic_cast<> here for performance
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
-    return (*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
-        || (*pMarkTypeInfo == typeid(CrossRefNumItemBookmark));
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
+    return (rMarkTypeInfo == typeid(CrossRefHeadingBookmark))
+        || (rMarkTypeInfo == typeid(CrossRefNumItemBookmark));
 }
 
 static bool IsAnnotationMark(const sw::mark::MarkBase& rBkmk)
 {
     // not using dynamic_cast<> here for performance
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
-    return (*pMarkTypeInfo == typeid(AnnotationMark));
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
+    return (rMarkTypeInfo == typeid(AnnotationMark));
 }
 
 IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const MarkBase& rBkmk)
 {
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
     // not using dynamic_cast<> here for performance
-    if(*pMarkTypeInfo == typeid(UnoMark))
+    if(rMarkTypeInfo == typeid(UnoMark))
         return MarkType::UNO_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(DdeBookmark))
+    else if(rMarkTypeInfo == typeid(DdeBookmark))
         return MarkType::DDE_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(Bookmark))
+    else if(rMarkTypeInfo == typeid(Bookmark))
         return MarkType::BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
+    else if(rMarkTypeInfo == typeid(CrossRefHeadingBookmark))
         return MarkType::CROSSREF_HEADING_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(CrossRefNumItemBookmark))
+    else if(rMarkTypeInfo == typeid(CrossRefNumItemBookmark))
         return MarkType::CROSSREF_NUMITEM_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(AnnotationMark))
+    else if(rMarkTypeInfo == typeid(AnnotationMark))
         return MarkType::ANNOTATIONMARK;
-    else if(*pMarkTypeInfo == typeid(TextFieldmark))
+    else if(rMarkTypeInfo == typeid(TextFieldmark))
         return MarkType::TEXT_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(CheckboxFieldmark))
+    else if(rMarkTypeInfo == typeid(CheckboxFieldmark))
         return MarkType::CHECKBOX_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(DropDownFieldmark))
+    else if(rMarkTypeInfo == typeid(DropDownFieldmark))
         return MarkType::DROPDOWN_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(DateFieldmark))
+    else if(rMarkTypeInfo == typeid(DateFieldmark))
         return MarkType::DATE_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(NavigatorReminder))
+    else if(rMarkTypeInfo == typeid(NavigatorReminder))
         return MarkType::NAVIGATOR_REMINDER;
     else
     {
@@ -1277,37 +1251,33 @@ namespace sw::mark
         switch(IDocumentMarkAccess::GetType(*pMark))
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
+                if (auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(pMark));
+                    ppBookmark != m_vBookmarks.end())
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(pMark));
-                    if ( ppBookmark != m_vBookmarks.end() )
-                    {
-                        Bookmark* pBookmark = *ppBookmark;
+                    Bookmark* pBookmark = *ppBookmark;
 
-                        if(pBookmark)
-                            pBookmark->sendLOKDeleteCallback();
+                    if(pBookmark)
+                        pBookmark->sendLOKDeleteCallback();
 
-                        m_vBookmarks.erase(ppBookmark);
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
-                    }
+                    m_vBookmarks.erase(ppBookmark);
+                }
+                else
+                {
+                    assert(false &&
+                        "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                 }
                 break;
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
+                if (auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(pMark));
+                    ppBookmark != m_vBookmarks.end())
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(pMark));
-                    if ( ppBookmark != m_vBookmarks.end() )
-                    {
-                        m_vBookmarks.erase(ppBookmark);
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
-                    }
+                    m_vBookmarks.erase(ppBookmark);
+                }
+                else
+                {
+                    assert(false &&
+                        "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                 }
                 break;
 
@@ -1315,22 +1285,20 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
+                if (auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, static_cast<Fieldmark*>(pMark));
+                    ppFieldmark != m_vFieldmarks.end())
                 {
-                    auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, static_cast<Fieldmark*>(pMark));
-                    if ( ppFieldmark != m_vFieldmarks.end() )
-                    {
-                        if(m_pLastActiveFieldmark == *ppFieldmark)
-                            ClearFieldActivation();
+                    if(m_pLastActiveFieldmark == *ppFieldmark)
+                        ClearFieldActivation();
 
-                        m_vFieldmarks.erase(ppFieldmark);
-                        ret.reset(new LazyFieldmarkDeleter(static_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
-                        pMark = nullptr;
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
-                    }
+                    m_vFieldmarks.erase(ppFieldmark);
+                    ret.reset(new LazyFieldmarkDeleter(static_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
+                    pMark = nullptr;
+                }
+                else
+                {
+                    assert(false &&
+                        "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
                 }
                 break;
 

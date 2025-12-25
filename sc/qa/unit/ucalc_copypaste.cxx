@@ -110,15 +110,12 @@ protected:
 
 static ScMF lcl_getMergeFlagOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    const SfxPoolItem& rPoolItem = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE_FLAG);
-    const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
-    return rMergeFlag.GetValue();
+    return rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE_FLAG).GetValue();
 }
 
 static ScAddress lcl_getMergeSizeOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    const SfxPoolItem& rPoolItem = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE);
-    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(rPoolItem);
+    const ScMergeAttr& rMerge = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE);
     return ScAddress(rMerge.GetColMerge(), rMerge.GetRowMerge(), nTab);
 }
 
@@ -1644,14 +1641,12 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     m_pDoc->ApplyAttr(2, 4, srcSheet, aBorderItem);
     m_pDoc->ApplyAttr(2, 5, srcSheet, aBorderItem);
     // Check border precondition
-    pItem = m_pDoc->GetAttr(ScAddress(2, 2, srcSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("SrcSheet.B1 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 2, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
-    pItem = m_pDoc->GetAttr(ScAddress(2, 3, srcSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("SrcSheet.B2 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 3, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
@@ -2446,31 +2441,27 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(2, 2, srcSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 2, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(2, 3, srcSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 3, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(2, 4, srcSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 4, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(2, 5, srcSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 5, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(2, 6, srcSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(2, 6, srcSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -2773,31 +2764,27 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 5, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 5, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -3156,25 +3143,22 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -3412,8 +3396,7 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("D3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("D3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("D3 has no bottom border",
@@ -3427,8 +3410,7 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
 
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
 
     CPPUNIT_ASSERT_MESSAGE("E3 has bottom border",
@@ -3437,8 +3419,7 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("E3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("F3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("F3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("F3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -3446,7 +3427,7 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("F3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("G3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("G3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -3454,8 +3435,7 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("G3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("H3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("H3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("H3 has no bottom border",
@@ -3901,8 +3881,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("D3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("D3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("D3 has no bottom border",
@@ -3911,8 +3890,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("D3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("E3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -3920,8 +3898,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("E3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("F3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("F3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("F3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -3929,8 +3906,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("F3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("G3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("G3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("G3 has no bottom border",
@@ -3939,8 +3915,7 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("G3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("H3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("H3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("H3 has no bottom border",
@@ -4264,31 +4239,27 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 5, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 5, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -4575,25 +4546,22 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -4894,8 +4862,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -4904,25 +4871,22 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     m_pDoc->GetPattern(ScAddress(4, 2, destSheet))->GetItemSet().HasItem(ATTR_BORDER, &pItem);
     CPPUNIT_ASSERT(pItem);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -5223,8 +5187,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -5234,19 +5197,17 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT(pItem);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
 
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -5553,61 +5514,53 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT(!pItem);
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 5, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 5, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
 
-    pItem = m_pDoc->GetAttr(ScAddress(3, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 4, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(7, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(7, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -5910,55 +5863,48 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(!pItem);
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 1, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
 
-    pItem = m_pDoc->GetAttr(ScAddress(3, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 3, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(7, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(7, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -6272,8 +6218,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("D3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("D3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("D3 has no bottom border",
@@ -6287,8 +6232,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
 
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("E3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -6296,8 +6240,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("E3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("F3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("F3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("F3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -6305,7 +6248,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("F3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("G3 has top border", !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("G3 has bottom border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -6313,8 +6256,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("G3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("H3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(7, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("H3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("H3 has no bottom border",
@@ -6639,8 +6581,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     CPPUNIT_ASSERT(!pItem);
 
     // check border, left and right borders were transformed to top and bottom borders
-    pItem = m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("D3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(3, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("D3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("D3 has no bottom border",
@@ -6652,8 +6593,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     m_pDoc->GetPattern(ScAddress(4, 2, destSheet))->GetItemSet().HasItem(ATTR_BORDER, &pItem);
     CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
-    pItem = m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("E3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(4, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("E3 has top border", static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("E3 has bottom border",
                            static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -6661,7 +6601,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("E3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("F3 has top border", !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("F3 has bottom border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetBottom());
@@ -6669,8 +6609,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("F3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT_MESSAGE("G3 has a border", pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(6, 2, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT_MESSAGE("G3 has no top border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT_MESSAGE("G3 has no bottom border",
@@ -6679,14 +6618,12 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
                            !static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT_MESSAGE("G3 has no right border",
                            !static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 3, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 3, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetRight());
-    pItem = m_pDoc->GetAttr(ScAddress(5, 4, destSheet), ATTR_BORDER);
-    CPPUNIT_ASSERT(pItem);
+    pItem = &m_pDoc->GetAttr(ScAddress(5, 4, destSheet), ATTR_BORDER);
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetTop());
     CPPUNIT_ASSERT(!static_cast<const SvxBoxItem*>(pItem)->GetBottom());
     CPPUNIT_ASSERT(static_cast<const SvxBoxItem*>(pItem)->GetLeft());
@@ -9227,18 +9164,12 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
                     return false;
                 }
 
-                const SvxBrushItem* pBrush = mpDoc->GetAttr(aPos, ATTR_BACKGROUND);
-                if (!pBrush)
-                {
-                    std::cerr << aPosStr << ": failed to get brush item from the cell."
-                              << std::endl;
-                    return false;
-                }
+                const SvxBrushItem& rBrush = mpDoc->GetAttr(aPos, ATTR_BACKGROUND);
 
-                if (pBrush->GetColor() != p->maColor)
+                if (rBrush.GetColor() != p->maColor)
                 {
                     Color aExpected = p->maColor;
-                    Color aActual = pBrush->GetColor();
+                    Color aActual = rBrush.GetColor();
                     std::cerr << aPosStr << ": incorrect cell background color: expected=("
                               << static_cast<int>(aExpected.GetRed()) << ","
                               << static_cast<int>(aExpected.GetGreen()) << ","

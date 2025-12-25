@@ -60,6 +60,8 @@
 #include <vcl/scheduler.hxx>
 #include <svl/cryptosign.hxx>
 
+#include <libxml/xpathInternals.h>
+
 using namespace com::sun::star;
 
 /// Testsuite for the document signing feature.
@@ -80,9 +82,9 @@ protected:
     getCertificate(DocumentSignatureManager& rSignatureManager,
                    svl::crypto::SignatureMethodAlgorithm eAlgo);
 #if HAVE_FEATURE_GPGVERIFY
-    SfxObjectShell* assertDocument(const ::CppUnit::SourceLine aSrcLine,
-                                   const OUString& rFilterName, const SignatureState nDocSign,
-                                   const SignatureState nMacroSign, const OUString& sVersion);
+    SfxObjectShell* assertDocument(const ::CppUnit::SourceLine aSrcLine, TestFilter eFilterName,
+                                   const SignatureState nDocSign, const SignatureState nMacroSign,
+                                   const OUString& sVersion);
 #endif
 };
 
@@ -144,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -178,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -214,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"MS Word 2007 XML"_ustr);
+    save(TestFilter::DOCX_2007);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -252,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
     // a stream.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -294,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"MS Word 2007 XML"_ustr);
+    save(TestFilter::DOCX_2007);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -824,7 +826,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     skipValidation();
 
     // Save As
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
@@ -851,7 +853,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     skipValidation();
 
     // Save As
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
@@ -916,7 +918,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
     // Create an empty document, store it to a tempfile and load it as a storage.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -971,7 +973,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 {
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     {
         DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
@@ -1046,7 +1048,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 {
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(u"MS Word 2007 XML"_ustr);
+    save(TestFilter::DOCX_2007);
     {
         DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
@@ -1346,7 +1348,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
     CPPUNIT_ASSERT(pObjectShell);
 
     // export and import again
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -1357,11 +1359,11 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
 #endif
 
 SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine,
-                                            const OUString& rFilterName,
-                                            const SignatureState nDocSign,
+                                            TestFilter eFilterName, const SignatureState nDocSign,
                                             const SignatureState nMacroSign,
                                             const OUString& sVersion)
 {
+    OUString aFilter(TestFilterNames.at(eFilterName));
     std::string sPos = aSrcLine.fileName() + ":" + OString::number(aSrcLine.lineNumber()).getStr();
 
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -1369,7 +1371,7 @@ SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT_MESSAGE(sPos, pObjectShell);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(sPos, rFilterName,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sPos, aFilter,
                                  pObjectShell->GetMedium()->GetFilter()->GetFilterName());
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(sPos, nDocSign, nActual);
@@ -1387,9 +1389,9 @@ SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine
 /// Test if a macro signature from a OTT 1.2 template is preserved for ODT 1.2
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 {
-    const OUString aFormats[] = { u"writer8"_ustr, u"writer8_template"_ustr };
+    const TestFilter aFormats[] = { TestFilter::ODT, TestFilter::OTT };
 
-    for (OUString const& sFormat : aFormats)
+    for (TestFilter eFormat : aFormats)
     {
         const OUString aURL(createFileURL(u"tdf42316_odt12.ott"));
         const OUString sLoadMessage = "loading failed: " + aURL;
@@ -1399,7 +1401,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                        comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // we are a template, and have a valid document and macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::OK,
+        assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::OK,
                        SignatureState::OK, ODFVER_012_TEXT);
 
         // create new document from template
@@ -1408,19 +1410,19 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                                mxComponent.is());
 
         // we are somehow a template (?), and have just a valid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                        SignatureState::OK, ODFVER_012_TEXT);
 
         // FIXME: Error: element "document-signatures" is missing "version" attribute
         skipValidation();
 
-        if (sFormat == "writer8")
+        if (eFormat == TestFilter::ODT)
             // save as new ODT document
-            saveAndReload(sFormat);
+            saveAndReload(eFormat);
         else
         {
             // save as new OTT template
-            save(u"writer8_template"_ustr);
+            save(eFormat);
 
             // load the saved OTT template as-is to validate signatures
             loadWithParams(maTempFile.GetURL(),
@@ -1428,18 +1430,18 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
         }
 
         // the loaded document is a OTT/ODT with a macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), eFormat, SignatureState::NOSIGNATURES,
                        SignatureState::OK, ODFVER_014_TEXT);
 
         // save as new OTT template
-        save(u"writer8_template"_ustr);
+        save(TestFilter::OTT);
 
         // load the template as-is to validate signatures
         loadWithParams(maTempFile.GetURL(),
                        comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // the loaded document is a OTT with a valid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                        SignatureState::OK, ODFVER_014_TEXT);
     }
 }
@@ -1454,7 +1456,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
     loadWithParams(aURL, comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // we are a template, and have a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 
     // create new document from template
@@ -1463,32 +1465,32 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                            mxComponent.is());
 
     // we are somehow a template (?), and have just a valid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new ODT document
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // the loaded document is a 1.2 ODT without any signatures
-    assertDocument(CPPUNIT_SOURCELINE(), u"writer8"_ustr, SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), TestFilter::ODT, SignatureState::NOSIGNATURES,
                    SignatureState::NOSIGNATURES, ODFVER_014_TEXT);
 
     // load the template as-is to validate signatures
     loadWithParams(aURL, comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // we are a template, and have a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new OTT template
-    save(u"writer8_template"_ustr);
+    save(TestFilter::OTT);
 
     // load the template as-is to validate signatures
     loadWithParams(maTempFile.GetURL(),
                    comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // the loaded document is a 1.2 OTT without any signatures
-    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                    SignatureState::NOSIGNATURES, ODFVER_014_TEXT);
 }
 
@@ -1499,9 +1501,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
     Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_011);
 
-    const OUString aFormats[] = { u"writer8"_ustr, u"writer8_template"_ustr };
+    const TestFilter aFormats[] = { TestFilter::ODT, TestFilter::OTT };
 
-    for (OUString const& sFormat : aFormats)
+    for (TestFilter eFormat : aFormats)
     {
         const OUString aURL(createFileURL(u"tdf42316.ott"));
         const OUString sLoadMessage = "loading failed: " + aURL;
@@ -1511,7 +1513,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                        comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // we are a template, and have a non-invalid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
         // create new document from template
@@ -1520,36 +1522,36 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                                mxComponent.is());
 
         // we are somehow a template (?), and have just a valid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
         // FIXME: Error: element "manifest:manifest" is missing "version" attribute
         skipValidation();
 
-        if (sFormat == "writer8")
+        if (eFormat == TestFilter::ODT)
             // save as new ODT document
-            saveAndReload(sFormat);
+            saveAndReload(eFormat);
         else
         {
             // save as new OTT template
-            save(u"writer8_template"_ustr);
+            save(TestFilter::OTT);
 
             // load the saved OTT template as-is to validate signatures
             loadWithParams(maTempFile.GetURL(),
                            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
         }
 
-        assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), eFormat, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
-        save(u"writer8_template"_ustr);
+        save(TestFilter::OTT);
 
         // load the template as-is to validate signatures
         loadWithParams(maTempFile.GetURL(),
                        comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // the loaded document is a OTT with a non-invalid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), TestFilter::OTT, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
     }
 }

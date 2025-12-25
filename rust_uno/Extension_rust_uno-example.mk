@@ -14,13 +14,13 @@ $(eval $(call gb_Extension_add_file,rust_uno-example,platform.components,$(call 
 $(eval $(call gb_Extension_add_files,rust_uno-example,, \
     $(SRCDIR)/rust_uno/example/Addons.xcu \
     $(SRCDIR)/rust_uno/example/ProtocolHandler.xcu \
-    $(SRCDIR)/rust_uno/target/release/librust_uno.so \
+    $(SRCDIR)/rust_uno/target/release/$(if $(filter WNT,$(OS_FOR_BUILD)),rust_uno.dll,librust_uno.so) \
 ))
 
 $(eval $(call gb_Extension_add_libraries,rust_uno-example, \
     rust_uno-example \
 ))
 
-$(SRCDIR)/rust_uno/target/release/librust_uno.so: $(call gb_CustomTarget_get_target,rust_uno/cargo)
+$(SRCDIR)/rust_uno/target/release/$(if $(filter WNT,$(OS_FOR_BUILD)),rust_uno.dll,librust_uno.so): $(call gb_CustomTarget_get_target,rust_uno/cargo)
 
 # vim: set noet sw=4 ts=4:

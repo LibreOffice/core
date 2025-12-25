@@ -18,10 +18,10 @@
 <node oor:name="Office Open XML Spreadsheet" oor:op="replace" >
     <prop oor:name="DetectService"><value>com.sun.star.comp.oox.FormatDetector</value></prop>
     <prop oor:name="URLPattern"/>
-    <prop oor:name="Extensions"><value>xlsx xlsm</value></prop>
+    <prop oor:name="Extensions"><value>xlsx</value></prop>
     <prop oor:name="MediaType"><value>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</value></prop>
-    <prop oor:name="Preferred"><value>false</value></prop>
+    <prop oor:name="Preferred"><value>true</value></prop>
     <prop oor:name="PreferredFilter"><value>Calc Office Open XML</value></prop>
-    <prop oor:name="UIName"><value xml:lang="en-US">Office Open XML Spreadsheet</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Excel 2010–365 Spreadsheet</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

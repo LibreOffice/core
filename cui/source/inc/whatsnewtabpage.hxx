@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <vcl/customweld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class BrandGraphic : public weld::CustomWidgetController
 {

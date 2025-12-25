@@ -53,13 +53,10 @@ namespace dp_gui {
 
 //                             TheExtensionManager
 
-
-TheExtensionManager::TheExtensionManager( uno::Reference< awt::XWindow > xParent,
-                                          const uno::Reference< uno::XComponentContext > &xContext ) :
-    m_xContext( xContext ),
-    m_xParent(std::move( xParent )),
-    m_bModified(false),
-    m_bExtMgrDialogExecuting(false)
+TheExtensionManager::TheExtensionManager(const uno::Reference<uno::XComponentContext>& xContext)
+    : m_xContext(xContext)
+    , m_bModified(false)
+    , m_bExtMgrDialogExecuting(false)
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
     m_xExtensionManager->addModifyListener( this );
@@ -102,23 +99,12 @@ TheExtensionManager::TheExtensionManager( uno::Reference< awt::XWindow > xParent
 
 TheExtensionManager::~TheExtensionManager()
 {
-    if (m_xUpdReqDialog)
-        m_xUpdReqDialog->response(RET_CANCEL);
-    assert(!m_xUpdReqDialog);
-    if (m_xExtMgrDialog)
-    {
-        if (m_bExtMgrDialogExecuting)
-            m_xExtMgrDialog->response(RET_CANCEL);
-        else
-        {
-            m_xExtMgrDialog->Close();
-            m_xExtMgrDialog.reset();
-        }
-    }
-    assert(!m_xExtMgrDialog);
+    Close();
 }
 
-void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
+DialogHelper&
+TheExtensionManager::createDialog(const bool bCreateUpdDlg,
+                                  const css::uno::Reference<css::awt::XWindow>& xParent)
 {
     const SolarMutexGuard guard;
 
@@ -127,19 +113,21 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
         if ( !m_xUpdReqDialog )
         {
             m_xUpdReqDialog.reset(
-                new UpdateRequiredDialog(Application::GetFrameWeld(m_xParent), *this));
+                new UpdateRequiredDialog(Application::GetFrameWeld(xParent), *this));
             m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xUpdReqDialog, *this, m_xContext));
             createPackageList();
         }
+        return *m_xUpdReqDialog;
     }
-    else if ( !m_xExtMgrDialog )
+
+    if (!m_xExtMgrDialog)
     {
-        m_xExtMgrDialog
-            = std::make_shared<ExtMgrDialog>(Application::GetFrameWeld(m_xParent), *this);
+        m_xExtMgrDialog = std::make_shared<ExtMgrDialog>(Application::GetFrameWeld(xParent), *this);
         m_xExecuteCmdQueue.reset(new ExtensionCmdQueue(*m_xExtMgrDialog, *this, m_xContext));
         m_xExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
     }
+    return *m_xExtMgrDialog;
 }
 
 void TheExtensionManager::Show()
@@ -178,12 +166,19 @@ void TheExtensionManager::Close()
     if (m_xExtMgrDialog)
     {
         if (m_bExtMgrDialogExecuting)
+        {
             m_xExtMgrDialog->response(RET_CANCEL);
+        }
         else
+        {
             m_xExtMgrDialog->Close();
+            m_xExtMgrDialog.reset();
+        }
     }
-    else if (m_xUpdReqDialog)
+    assert(!m_xExtMgrDialog);
+    if (m_xUpdReqDialog)
         m_xUpdReqDialog->response(RET_CANCEL);
+    assert(!m_xUpdReqDialog);
 }
 
 sal_Int16 TheExtensionManager::execute()
@@ -238,20 +233,18 @@ void TheExtensionManager::checkUpdates()
     m_xExecuteCmdQueue->checkForUpdates( std::move(vEntries) );
 }
 
-
-bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWarnUser )
+bool TheExtensionManager::installPackage(const OUString& rPackageURL, DialogHelper& rDialog,
+                                         bool bWarnUser)
 {
     if ( rPackageURL.isEmpty() )
         return false;
-
-    createDialog( false );
 
     bool bInstall = true;
     bool bInstallForAll = false;
 
     // DV! missing function is read only repository from extension manager
     if ( !bWarnUser && ! m_xExtensionManager->isReadOnlyRepository( SHARED_PACKAGE_MANAGER ) )
-        bInstall = getDialogHelper()->installForAllUsers( bInstallForAll );
+        bInstall = rDialog.installForAllUsers(bInstallForAll);
 
     if ( !bInstall )
         return false;
@@ -271,20 +264,7 @@ void TheExtensionManager::terminateDialog()
         return;
 
     const SolarMutexGuard guard;
-    if (m_xExtMgrDialog)
-    {
-        if (m_bExtMgrDialogExecuting)
-            m_xExtMgrDialog->response(RET_CANCEL);
-        else
-        {
-            m_xExtMgrDialog->Close();
-            m_xExtMgrDialog.reset();
-        }
-    }
-    assert(!m_xExtMgrDialog);
-    if (m_xUpdReqDialog)
-        m_xUpdReqDialog->response(RET_CANCEL);
-    assert(!m_xUpdReqDialog);
+    Close();
     Application::Quit();
 }
 
@@ -443,20 +423,7 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     if ( dp_misc::office_is_running() )
     {
         const SolarMutexGuard guard;
-        if (m_xExtMgrDialog)
-        {
-            if (m_bExtMgrDialogExecuting)
-                m_xExtMgrDialog->response(RET_CANCEL);
-            else
-            {
-                m_xExtMgrDialog->Close();
-                m_xExtMgrDialog.reset();
-            }
-        }
-        assert(!m_xExtMgrDialog);
-        if (m_xUpdReqDialog)
-            m_xUpdReqDialog->response(RET_CANCEL);
-        assert(!m_xUpdReqDialog);
+        Close();
     }
     s_ExtMgr.clear();
 }
@@ -476,18 +443,7 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     else
     {
         clearModified();
-        if (m_xExtMgrDialog)
-        {
-            if (m_bExtMgrDialogExecuting)
-                m_xExtMgrDialog->response(RET_CANCEL);
-            else
-            {
-                m_xExtMgrDialog->Close();
-                m_xExtMgrDialog.reset();
-            }
-        }
-        if (m_xUpdReqDialog)
-            m_xUpdReqDialog->response(RET_CANCEL);
+        Close();
     }
 }
 
@@ -508,20 +464,16 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     pDialogHelper->checkEntries();
 }
 
-
-::rtl::Reference< TheExtensionManager > TheExtensionManager::get( const uno::Reference< uno::XComponentContext > &xContext,
-                                                                  const uno::Reference< awt::XWindow > &xParent,
-                                                                  const OUString & extensionURL )
+::rtl::Reference<TheExtensionManager>
+TheExtensionManager::get(const uno::Reference<uno::XComponentContext>& xContext)
 {
     if ( s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        if ( !extensionURL.isEmpty() )
-            s_ExtMgr->installPackage( extensionURL, true );
         return s_ExtMgr;
     }
 
-    ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( xParent, xContext ) );
+    ::rtl::Reference<TheExtensionManager> that(new TheExtensionManager(xContext));
 
     const SolarMutexGuard guard;
     if ( ! s_ExtMgr.is() )
@@ -529,9 +481,6 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         s_ExtMgr = std::move(that);
     }
-
-    if ( !extensionURL.isEmpty() )
-        s_ExtMgr->installPackage( extensionURL, true );
 
     return s_ExtMgr;
 }

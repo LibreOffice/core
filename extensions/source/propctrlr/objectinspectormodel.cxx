@@ -108,27 +108,26 @@ namespace pcr
         if ( m_aFactories.hasElements() )
             throw AlreadyInitializedException();
 
-        StlSyntaxSequence< Any > arguments( _arguments );
-        if ( arguments.empty() )
+        if (!_arguments.hasElements())
         {   // constructor: "createDefault()"
             createDefault();
             return;
         }
 
         Sequence< Any > factories;
-        impl_verifyArgument_throw( arguments[0] >>= factories, 1 );
+        impl_verifyArgument_throw(_arguments[0] >>= factories, 1);
 
-        if ( arguments.size() == 1 )
+        if (_arguments.size() == 1)
         {   // constructor: "createWithHandlerFactories( any[] )"
             createWithHandlerFactories( factories );
             return;
         }
 
-        if ( arguments.size() == 3 )
+        if (_arguments.size() == 3)
         {   // constructor: "createWithHandlerFactoriesAndHelpSection( any[], long, long )"
             sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
-            impl_verifyArgument_throw( arguments[1] >>= nMinHelpTextLines, 2 );
-            impl_verifyArgument_throw( arguments[2] >>= nMaxHelpTextLines, 3 );
+            impl_verifyArgument_throw(_arguments[1] >>= nMinHelpTextLines, 2);
+            impl_verifyArgument_throw(_arguments[2] >>= nMaxHelpTextLines, 3);
             createWithHandlerFactoriesAndHelpSection( factories, nMinHelpTextLines, nMaxHelpTextLines );
             return;
         }

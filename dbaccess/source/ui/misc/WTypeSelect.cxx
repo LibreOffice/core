@@ -325,7 +325,7 @@ OWizTypeSelectList::OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
     , m_bPKey(false)
 {
-    m_xControl->connect_popup_menu(LINK(this, OWizTypeSelectList, CommandHdl));
+    m_xControl->connect_command(LINK(this, OWizTypeSelectList, CommandHdl));
 }
 
 bool OWizTypeSelectList::IsPrimaryKeyAllowed() const

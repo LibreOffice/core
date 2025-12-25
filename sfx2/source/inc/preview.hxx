@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 #define INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class SfxObjectShell;
 class GDIMetaFile;

@@ -18,6 +18,8 @@
 
 #include <memory>
 
+#include <libxml/xpathInternals.h>
+
 using namespace ::com::sun::star;
 
 class MathMLExportTest : public UnoApiXmlTest
@@ -61,7 +63,7 @@ void MathMLExportTest::testBlank()
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"x`y~~z"_ustr);
-    save(u"MathML XML (Math)"_ustr);
+    save(TestFilter::MML);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[1]", "width", u"0.5em");
@@ -74,7 +76,7 @@ void MathMLExportTest::testTdf97049()
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"intd {{1 over x} dx}"_ustr);
-    save(u"MathML XML (Math)"_ustr);
+    save(TestFilter::MML);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]", "stretchy", u"true");
@@ -87,7 +89,7 @@ void MathMLExportTest::checkMathVariant(SmDocShell& rDocShell, bool bCapital, bo
 {
     rDocShell.SetText(u"%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} "
                       "%gamma %igamma {ital %gamma} {nitalic %igamma}"_ustr);
-    save(u"MathML XML (Math)"_ustr);
+    save(TestFilter::MML);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     if (bCapital)
@@ -129,7 +131,7 @@ void MathMLExportTest::testMaj()
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(
         u"maj to { \u0661 } from { \U0001EE0A = \u0660 } { \u0661 over \U0001EE0A }"_ustr);
-    save(u"MathML XML (Math)"_ustr);
+    save(TestFilter::MML);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", "stretchy", u"false");
@@ -142,7 +144,7 @@ void MathMLExportTest::testHadd()
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"hadd to { \U0001EE4E } from { \U0001EE4E } \U0001EE4E"_ustr);
-    save(u"MathML XML (Math)"_ustr);
+    save(TestFilter::MML);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mi", u"\U0001EEF1");
@@ -154,7 +156,7 @@ void MathMLExportTest::testTdf158867()
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"1,2 over 2 = 0,65"_ustr);
-    save(u"MathML XML (Math)"_ustr);
+    save(TestFilter::MML);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mfrac/m:mn[1]", u"1,2");

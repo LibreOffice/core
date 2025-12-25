@@ -35,6 +35,7 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <tools/color.hxx>
 
@@ -59,12 +60,22 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back("ComplexColor",
+                  PROP_DATAPOINT_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "FillColor",
                   PROP_DATAPOINT_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back("FillComplexColor",
+                  PROP_DATAPOINT_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "Transparency",
                   PROP_DATAPOINT_TRANSPARENCY,
@@ -161,6 +172,11 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back("BorderComplexColor",
+                  PROP_DATAPOINT_BORDER_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT);
+
     rOutProperties.emplace_back( "BorderStyle",
                   PROP_DATAPOINT_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
@@ -193,6 +209,11 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back("LineComplexColor",
+                  PROP_DATAPOINT_BORDER_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "LineStyle",
                   LinePropertiesHelper::PROP_LINE_STYLE,
@@ -401,6 +422,10 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_COMPLEX_COLOR,
+                  PROP_DATAPOINT_LABEL_BORDER_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT);
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_STYLE,
                   PROP_DATAPOINT_LABEL_FILL_STYLE,
                   cppu::UnoType<drawing::FillStyle>::get(),
@@ -412,6 +437,10 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back(CHART_UNONAME_LABEL_FILL_COMPLEX_COLOR,
+                  PROP_DATAPOINT_LABEL_FILL_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT);
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_BACKGROUND,
                   PROP_DATAPOINT_LABEL_FILL_BACKGROUND,
                   cppu::UnoType<sal_Bool>::get(),

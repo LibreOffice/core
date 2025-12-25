@@ -72,8 +72,8 @@ namespace basegfx
 // BColorStops for a single StartColor @0.0 & EndColor @1.0
 BColorStops::BColorStops(const BColor& rStart, const BColor& rEnd)
 {
-    emplace_back(0.0, rStart);
-    emplace_back(1.0, rEnd);
+    addStop(0.0, rStart);
+    addStop(1.0, rEnd);
 }
 
 /* Helper to grep the correct ColorStop out of
@@ -196,23 +196,24 @@ BColor BColorStops::getInterpolatedBColor(double fPosition, sal_uInt32 nRequeste
     */
 void BColorStops::replaceStartColor(const BColor& rStart)
 {
-    BColorStops::iterator a1stNonStartColor(begin());
+    auto a1stNonStartColorIterator(maStops.begin());
 
     // search for highest existing non-StartColor - CAUTION,
     // there might be none, one or multiple with StopOffset 0.0
-    while (a1stNonStartColor != end() && a1stNonStartColor->getStopOffset() <= 0.0)
-        a1stNonStartColor++;
+    while (a1stNonStartColorIterator != end() && a1stNonStartColorIterator->getStopOffset() <= 0.0)
+        a1stNonStartColorIterator++;
 
     // create new ColorStops by 1st adding new one and then all
     // non-StartColor entries
     BColorStops aNewColorStops;
 
-    aNewColorStops.reserve(size() + 1);
-    aNewColorStops.emplace_back(0.0, rStart);
-    aNewColorStops.insert(aNewColorStops.end(), a1stNonStartColor, end());
+    aNewColorStops.maStops.reserve(size() + 1);
+    aNewColorStops.addStop(0.0, rStart);
+    aNewColorStops.maStops.insert(aNewColorStops.maStops.end(), a1stNonStartColorIterator,
+                                  maStops.end());
 
     // assign & done
-    *this = std::move(aNewColorStops);
+    maStops = std::move(aNewColorStops.maStops);
 }
 
 /* Tooling method that allows to replace the EndColor in a
@@ -225,10 +226,10 @@ void BColorStops::replaceEndColor(const BColor& rEnd)
 {
     // erase all evtl. existing EndColor(s)
     while (!empty() && basegfx::fTools::moreOrEqual(back().getStopOffset(), 1.0))
-        pop_back();
+        removeLastStop();
 
     // add at the end of existing ColorStops
-    emplace_back(1.0, rEnd);
+    addStop(1.0, rEnd);
 }
 
 /* Tooling method to linearly blend the Colors contained in
@@ -260,12 +261,12 @@ void BColorStops::blendToIntensity(double fStartIntensity, double fEndIntensity,
         return;
 
     // blend relative to StopOffset position
-    for (auto& candidate : *this)
+    for (auto& rCandidate : maStops)
     {
-        const double fOffset(candidate.getStopOffset());
+        const double fOffset(rCandidate.getStopOffset());
         const double fIntensity((fStartIntensity * (1.0 - fOffset)) + (fEndIntensity * fOffset));
-        candidate = basegfx::BColorStop(
-            fOffset, basegfx::interpolate(rBlendColor, candidate.getStopColor(), fIntensity));
+        rCandidate = basegfx::BColorStop(
+            fOffset, basegfx::interpolate(rBlendColor, rCandidate.getStopColor(), fIntensity));
     }
 }
 
@@ -309,7 +310,7 @@ void BColorStops::sortAndCorrect()
         //       be somewhere in-between what is allowed
         const BColorStop aEntry(front());
         clear();
-        emplace_back(std::max(0.0, std::min(1.0, aEntry.getStopOffset())), aEntry.getStopColor());
+        addStop(std::max(0.0, std::min(1.0, aEntry.getStopOffset())), aEntry.getStopColor());
 
         // done
         return;
@@ -318,7 +319,7 @@ void BColorStops::sortAndCorrect()
     // start with sorting the input data. Remember that
     // this preserves the order of equal entries, where
     // equal is defined here by offset (see use operator==)
-    std::sort(begin(), end());
+    std::sort(maStops.begin(), maStops.end());
 
     // prepare status values
     size_t write(0);
@@ -330,21 +331,21 @@ void BColorStops::sortAndCorrect()
     for (size_t read(0); read < size(); read++)
     {
         // get offset of entry at read position
-        double fOff((*this)[read].getStopOffset());
+        double fOff = maStops[read].getStopOffset();
 
         if (fOff < 0.0 && read + 1 < size())
         {
             // value < 0.0 and we have a next entry. check for gradient snippet
             // containing 0.0 resp. StartColor
-            const double fOff2((*this)[read + 1].getStopOffset());
+            const double fOff2 = maStops[read + 1].getStopOffset();
 
             if (fOff2 > 0.0)
             {
                 // read is the start of a gradient snippet containing 0.0. Correct
                 // entry to StartColor, interpolate to correct StartColor
-                (*this)[read]
-                    = BColorStop(0.0, basegfx::interpolate((*this)[read].getStopColor(),
-                                                           (*this)[read + 1].getStopColor(),
+                maStops[read]
+                    = BColorStop(0.0, basegfx::interpolate(maStops[read].getStopColor(),
+                                                           maStops[read + 1].getStopColor(),
                                                            (0.0 - fOff) / (fOff2 - fOff)));
 
                 // adapt fOff
@@ -362,16 +363,16 @@ void BColorStops::sortAndCorrect()
         {
             // value < 1.0 and we have a next entry. check for gradient snippet
             // containing 1.0 resp. EndColor
-            const double fOff2((*this)[read + 1].getStopOffset());
+            const double fOff2(maStops[read + 1].getStopOffset());
 
             if (basegfx::fTools::more(fOff2, 1.0))
             {
                 // read is the start of a gradient snippet containing 1.0. Correct
                 // next entry to EndColor, interpolate to correct EndColor
-                (*this)[read + 1]
-                    = BColorStop(1.0, basegfx::interpolate((*this)[read].getStopColor(),
-                                                           (*this)[read + 1].getStopColor(),
-                                                           (1.0 - fOff) / (fOff2 - fOff)));
+                auto nColor = basegfx::interpolate(maStops[read].getStopColor(),
+                                                   maStops[read + 1].getStopColor(),
+                                                   (1.0 - fOff) / (fOff2 - fOff));
+                maStops[read + 1] = BColorStop(1.0, nColor);
 
                 // adapt fOff
                 fOff = 1.0;
@@ -388,12 +389,12 @@ void BColorStops::sortAndCorrect()
         // entry is valid value at read position
         // copy if write target is empty (write at start) or when
         // write target is different to read in color or offset
-        if (0 == write || !((*this)[read] == (*this)[write - 1]))
+        if (0 == write || !(maStops[read] == maStops[write - 1]))
         {
             if (write != read)
             {
                 // copy read to write backwards to close gaps
-                (*this)[write] = (*this)[read];
+                maStops[write] = maStops[read];
             }
 
             // always forward write position
@@ -415,19 +416,19 @@ void BColorStops::sortAndCorrect()
                 // all outside too low, rescue last due to being closest to content
                 const BColor aBackColor(back().getStopColor());
                 clear();
-                emplace_back(0.0, aBackColor);
+                addStop(0.0, aBackColor);
             }
             else // if (basegfx::fTools::more(front().getStopOffset(), 1.0))
             {
                 // all outside too high, rescue first due to being closest to content
                 const BColor aFrontColor(front().getStopColor());
                 clear();
-                emplace_back(1.0, aFrontColor);
+                addStop(1.0, aFrontColor);
             }
         }
         else
         {
-            resize(write);
+            maStops.resize(write);
         }
     }
 }
@@ -485,7 +486,7 @@ bool BColorStops::isSingleColor(BColor& rSingleColor) const
 
     rSingleColor = front().getStopColor();
 
-    for (auto const& rCandidate : *this)
+    for (auto const& rCandidate : maStops)
     {
         if (rCandidate.getStopColor() != rSingleColor)
             return false;
@@ -500,8 +501,8 @@ bool BColorStops::isSingleColor(BColor& rSingleColor) const
 void BColorStops::reverseColorStops()
 {
     // can use std::reverse, but also need to adapt offset(s)
-    std::reverse(begin(), end());
-    for (auto& candidate : *this)
+    std::reverse(maStops.begin(), maStops.end());
+    for (auto& candidate : maStops)
         candidate = BColorStop(1.0 - candidate.getStopOffset(), candidate.getStopColor());
 }
 
@@ -522,13 +523,13 @@ void BColorStops::createSpaceAtStart(double fOffset)
 
     BColorStops aNewStops;
 
-    for (const auto& candidate : *this)
+    for (const auto& candidate : maStops)
     {
-        aNewStops.emplace_back(fOffset + (candidate.getStopOffset() * (1.0 - fOffset)),
-                               candidate.getStopColor());
+        aNewStops.addStop(fOffset + (candidate.getStopOffset() * (1.0 - fOffset)),
+                          candidate.getStopColor());
     }
 
-    *this = std::move(aNewStops);
+    maStops = std::move(aNewStops.maStops);
 }
 
 // removeSpaceAtStart removes fOffset space from start by
@@ -550,16 +551,16 @@ void BColorStops::removeSpaceAtStart(double fOffset)
     BColorStops aNewStops;
     const double fMul(basegfx::fTools::equal(fOffset, 1.0) ? 1.0 : 1.0 / (1.0 - fOffset));
 
-    for (const auto& candidate : *this)
+    for (const auto& candidate : maStops)
     {
         if (basegfx::fTools::moreOrEqual(candidate.getStopOffset(), fOffset))
         {
-            aNewStops.emplace_back((candidate.getStopOffset() - fOffset) * fMul,
-                                   candidate.getStopColor());
+            aNewStops.addStop((candidate.getStopOffset() - fOffset) * fMul,
+                              candidate.getStopColor());
         }
     }
 
-    *this = std::move(aNewStops);
+    maStops = std::move(aNewStops.maStops);
 }
 
 // try to detect if an empty/no-color-change area exists
@@ -631,8 +632,8 @@ void BColorStops::doApplyAxial()
 
     while (aRevCurrColor != rend())
     {
-        aNewColorStops.emplace_back((1.0 - aRevCurrColor->getStopOffset()) * 0.5,
-                                    aRevCurrColor->getStopColor());
+        aNewColorStops.addStop((1.0 - aRevCurrColor->getStopOffset()) * 0.5,
+                               aRevCurrColor->getStopColor());
         aRevCurrColor++;
     }
 
@@ -650,13 +651,13 @@ void BColorStops::doApplyAxial()
     // add gradient stops in non-reverse order, translated and scaled to [0.5 .. 1.0]
     while (aCurrColor != end())
     {
-        aNewColorStops.emplace_back((aCurrColor->getStopOffset() * 0.5) + 0.5,
-                                    aCurrColor->getStopColor());
+        aNewColorStops.addStop((aCurrColor->getStopOffset() * 0.5) + 0.5,
+                               aCurrColor->getStopColor());
         aCurrColor++;
     }
 
     // apply color stops
-    *this = std::move(aNewColorStops);
+    maStops = std::move(aNewColorStops.maStops);
 }
 
 void BColorStops::doApplySteps(sal_uInt16 nStepCount)
@@ -686,7 +687,7 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
             // add start color, but check if it is already there - which is the
             // case from the 2nd segment on due to a new segment starting with
             // the same color as the previous one ended
-            aNewColorStops.push_back(*aColorL);
+            aNewColorStops.addStop(*aColorL);
         }
         if (!basegfx::fTools::equalZero(fDelta))
         {
@@ -708,12 +709,12 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
                     const double fPosition(fStart + fOffsetStep * static_cast<double>(a));
 
                     // add end color of previous sub-segment
-                    aNewColorStops.emplace_back(
+                    aNewColorStops.addStop(
                         fPosition, basegfx::interpolate(rStartColor, rEndColor,
                                                         static_cast<double>(a - 1) * fSingleStep));
 
                     // add start color of current sub-segment
-                    aNewColorStops.emplace_back(
+                    aNewColorStops.addStop(
                         fPosition, basegfx::interpolate(rStartColor, rEndColor,
                                                         static_cast<double>(a) * fSingleStep));
                 }
@@ -721,7 +722,7 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
         }
 
         // always add end color of segment
-        aNewColorStops.push_back(*aColorR);
+        aNewColorStops.addStop(*aColorR);
 
         // next segment
         aColorL++;
@@ -729,7 +730,7 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
     }
 
     // apply the change to color stops
-    *this = std::move(aNewColorStops);
+    maStops = std::move(aNewColorStops.maStops);
 }
 
 void BColorStops::tryToApplyBColorModifierStack(const BColorModifierStack& rBColorModifierStack)
@@ -738,7 +739,7 @@ void BColorStops::tryToApplyBColorModifierStack(const BColorModifierStack& rBCol
         // no content on stack, done
         return;
 
-    for (auto& candidate : *this)
+    for (auto& candidate : maStops)
     {
         candidate = BColorStop(candidate.getStopOffset(),
                                rBColorModifierStack.getModifiedColor(candidate.getStopColor()));
@@ -762,6 +763,21 @@ bool BColorStops::sameSizeAndDistances(const BColorStops& rComp) const
     }
 
     return EntryA == end();
+}
+
+void BColorStops::changeStartAndEnd(BColor const& rStart, BColor const& rEnd)
+{
+    if (size() >= 2)
+    {
+        maStops.front() = BColorStop(maStops.front().getStopOffset(), rStart);
+        maStops.back() = BColorStop(maStops.back().getStopOffset(), rEnd);
+    }
+    else
+    {
+        clear();
+        addStop(0.0, rStart);
+        addStop(1.0, rEnd);
+    }
 }
 
 std::string BGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
@@ -810,8 +826,8 @@ BGradient::BGradient()
     , nIntensEnd(100)
     , nStepCount(0)
 {
-    aColorStops.emplace_back(0.0, BColor(0.0, 0.0, 0.0)); // COL_BLACK
-    aColorStops.emplace_back(1.0, BColor(1.0, 1.0, 1.0)); // COL_WHITE
+    aColorStops.addStop(0.0, BColor(0.0, 0.0, 0.0)); // COL_BLACK
+    aColorStops.addStop(1.0, BColor(1.0, 1.0, 1.0)); // COL_WHITE
 }
 
 BGradient::BGradient(const basegfx::BColorStops& rColorStops, css::awt::GradientStyle eTheStyle,
@@ -839,12 +855,12 @@ bool BGradient::operator==(const BGradient& rGradient) const
             && nStepCount == rGradient.nStepCount);
 }
 
-void BGradient::SetColorStops(const basegfx::BColorStops& rSteps)
+void BGradient::SetColorStops(const basegfx::BColorStops& rStops)
 {
-    aColorStops = rSteps;
+    aColorStops = rStops;
     aColorStops.sortAndCorrect();
     if (aColorStops.empty())
-        aColorStops.emplace_back(0.0, basegfx::BColor());
+        aColorStops.addStop(0.0, basegfx::BColor());
 }
 
 namespace
@@ -972,10 +988,10 @@ void BGradient::tryToApplyStartEndIntensity()
 void BGradient::tryToConvertToAxial()
 {
     if (css::awt::GradientStyle_LINEAR != GetGradientStyle() || 0 != GetBorder()
-        || GetColorStops().empty())
+        || aColorStops.empty())
         return;
 
-    if (!GetColorStops().isSymmetrical())
+    if (!aColorStops.isSymmetrical())
         return;
 
     SetGradientStyle(css::awt::GradientStyle_AXIAL);
@@ -983,13 +999,12 @@ void BGradient::tryToConvertToAxial()
     // Stretch the first half of the color stops to double width
     // and collect them in a new color stops vector.
     BColorStops aAxialColorStops;
-    aAxialColorStops.reserve(std::ceil(GetColorStops().size() / 2.0));
-    BColorStops::const_iterator aIter(GetColorStops().begin());
+    BColorStops::const_iterator aIter(aColorStops.begin());
     while (basegfx::fTools::lessOrEqual(aIter->getStopOffset(), 0.5))
     {
         BColorStop aNextStop(std::clamp((*aIter).getStopOffset() * 2.0, 0.0, 1.0),
                              (*aIter).getStopColor());
-        aAxialColorStops.push_back(aNextStop);
+        aAxialColorStops.addStop(aNextStop);
         ++aIter;
     }
     // Axial gradients have outmost color as last color stop.

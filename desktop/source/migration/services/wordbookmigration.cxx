@@ -188,12 +188,10 @@ static bool IsUserWordbook( const OUString& rFile )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        const Any* pIter = aArguments.getConstArray();
-        const Any* pEnd = pIter + aArguments.getLength();
-        for ( ; pIter != pEnd ; ++pIter )
+        for (const Any& rArg : aArguments)
         {
             beans::NamedValue aValue;
-            *pIter >>= aValue;
+            rArg >>= aValue;
             if ( aValue.Name == "UserData" )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )

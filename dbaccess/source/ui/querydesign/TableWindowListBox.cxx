@@ -51,7 +51,7 @@ OTableWindowListBox::OTableWindowListBox(OTableWindow* pParent)
 {
     m_xTreeView->connect_row_activated(LINK(this, OTableWindowListBox, OnDoubleClick));
     m_xTreeView->connect_visible_range_changed(LINK(this, OTableWindowListBox, ScrollHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, OTableWindowListBox, CommandHdl));
+    m_xTreeView->connect_command(LINK(this, OTableWindowListBox, CommandHdl));
 
     m_xHelper.set(new OJoinExchObj);
     rtl::Reference<TransferDataContainer> xHelper(m_xHelper);

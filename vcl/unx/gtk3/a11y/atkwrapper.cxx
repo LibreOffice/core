@@ -1005,15 +1005,12 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
                 OSL_ASSERT( false );
         }
 
-        static auto func = reinterpret_cast<void(*)(AtkObject*, const gchar*)>(dlsym(nullptr, "atk_object_set_accessible_id"));
-        if (func)
+        css::uno::Reference<css::accessibility::XAccessibleContext2> xContext2(xContext,
+                                                                               css::uno::UNO_QUERY);
+        if (xContext2.is())
         {
-            css::uno::Reference<css::accessibility::XAccessibleContext2> xContext2(xContext, css::uno::UNO_QUERY);
-            if( xContext2.is() )
-            {
-                OString aId = OUStringToOString( xContext2->getAccessibleId(), RTL_TEXTENCODING_UTF8);
-                (*func)(atk_obj, aId.getStr());
-            }
+            OString aId = OUStringToOString(xContext2->getAccessibleId(), RTL_TEXTENCODING_UTF8);
+            atk_object_set_accessible_id(atk_obj, aId.getStr());
         }
 
         // tdf#141197 if we have a sysobj child then include that in the hierarchy

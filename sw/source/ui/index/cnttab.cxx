@@ -24,7 +24,8 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -52,6 +53,7 @@
 #include <fldbas.hxx>
 #include <expfld.hxx>
 #include <unotools.hxx>
+#include <unoidx.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>

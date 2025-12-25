@@ -13,6 +13,7 @@
 #include <QtInstanceContainer.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
@@ -133,8 +134,6 @@ bool QtInstanceWidget::has_focus() const
 
     return getQWidget()->hasFocus();
 }
-
-bool QtInstanceWidget::is_active() const { return has_focus(); }
 
 bool QtInstanceWidget::has_child_focus() const
 {
@@ -275,6 +274,13 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
 
     switch (pEvent->type())
     {
+        case QEvent::ContextMenu:
+        {
+            QContextMenuEvent* pContextMenuEvent = static_cast<QContextMenuEvent*>(pEvent);
+            CommandEvent aCEvt(toPoint(pContextMenuEvent->pos()), CommandEventId::ContextMenu,
+                               pContextMenuEvent->reason() == QContextMenuEvent::Mouse);
+            return signal_command(aCEvt);
+        }
         case QEvent::DragEnter:
         {
             if (!m_pDropTarget)
@@ -352,48 +358,76 @@ void QtInstanceWidget::setFont(vcl::Font rFont)
     GetQtInstance().RunInMainThread([&] { getQWidget()->setFont(toQtFont(rFont)); });
 }
 
-void QtInstanceWidget::setHelpId(QWidget& rWidget, const OUString& rHelpId)
+OUString QtInstanceWidget::getHelpId(QObject& rObject)
+{
+    SolarMutexGuard g;
+
+    OUString sHelpId;
+    GetQtInstance().RunInMainThread([&] {
+        const QVariant aHelpIdVariant = rObject.property(PROPERTY_HELP_ID);
+        if (!aHelpIdVariant.isValid())
+            return;
+
+        assert(aHelpIdVariant.canConvert<QString>());
+        sHelpId = toOUString(aHelpIdVariant.toString());
+    });
+
+    return sHelpId;
+}
+
+void QtInstanceWidget::setHelpId(QObject& rObject, const OUString& rHelpId)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread(
-        [&] { rWidget.setProperty(PROPERTY_HELP_ID, toQString(rHelpId)); });
+        [&] { rObject.setProperty(PROPERTY_HELP_ID, toQString(rHelpId)); });
 }
 
 void QtInstanceWidget::set_help_id(const OUString& rHelpId) { setHelpId(*getQWidget(), rHelpId); }
 
-OUString QtInstanceWidget::get_help_id() const
+OUString QtInstanceWidget::get_help_id() const { return getHelpId(*getQWidget()); }
+
+void QtInstanceWidget::set_hexpand(bool bExpand)
 {
     SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        OUString sHelpId;
-        rQtInstance.RunInMainThread([&] { sHelpId = get_help_id(); });
-        return sHelpId;
-    }
 
-    const QVariant aHelpIdVariant = getQWidget()->property(PROPERTY_HELP_ID);
-    if (!aHelpIdVariant.isValid())
-        return OUString();
-
-    assert(aHelpIdVariant.canConvert<QString>());
-    return toOUString(aHelpIdVariant.toString());
+    GetQtInstance().RunInMainThread([&] {
+        QSizePolicy aSizePolicy = m_pWidget->sizePolicy();
+        aSizePolicy.setHorizontalPolicy(bExpand ? QSizePolicy::Expanding : QSizePolicy::Preferred);
+        m_pWidget->setSizePolicy(aSizePolicy);
+    });
 }
-
-void QtInstanceWidget::set_hexpand(bool) { assert(false && "Not implemented yet"); }
 
 bool QtInstanceWidget::get_hexpand() const
 {
-    assert(false && "Not implemented yet");
-    return true;
+    SolarMutexGuard g;
+
+    bool bExpand = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bExpand = m_pWidget->sizePolicy().horizontalPolicy() == QSizePolicy::Expanding; });
+
+    return bExpand;
 }
 
-void QtInstanceWidget::set_vexpand(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_vexpand(bool bExpand)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QSizePolicy aSizePolicy = m_pWidget->sizePolicy();
+        aSizePolicy.setVerticalPolicy(bExpand ? QSizePolicy::Expanding : QSizePolicy::Preferred);
+        m_pWidget->setSizePolicy(aSizePolicy);
+    });
+}
 
 bool QtInstanceWidget::get_vexpand() const
 {
-    assert(false && "Not implemented yet");
-    return true;
+    SolarMutexGuard g;
+
+    bool bExpand = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bExpand = m_pWidget->sizePolicy().verticalPolicy() == QSizePolicy::Expanding; });
+
+    return bExpand;
 }
 
 void QtInstanceWidget::set_margin_top(int nMargin)

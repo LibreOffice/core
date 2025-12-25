@@ -27,7 +27,8 @@
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/formatter.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 using namespace css::chart2;
 

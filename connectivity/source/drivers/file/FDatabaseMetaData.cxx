@@ -167,23 +167,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     static constexpr OUString aTable = u"TABLE"_ustr;
 
-    bool bTableFound = true;
-    sal_Int32 nLength = types.getLength();
-    if(nLength)
-    {
-        bTableFound = false;
-
-        const OUString* pBegin = types.getConstArray();
-        const OUString* pEnd = pBegin + nLength;
-        for(;pBegin != pEnd;++pBegin)
-        {
-            if(*pBegin == aTable)
-            {
-                bTableFound = true;
-                break;
-            }
-        }
-    }
+    bool bTableFound
+        = !types.hasElements() || std::find(types.begin(), types.end(), aTable) != types.end();
     if(!bTableFound)
         return pResult;
 
@@ -381,23 +366,18 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     if( xTabSup.is())
     {
         Reference< XNameAccess> xNames      = xTabSup->getTables();
-        Sequence< OUString > aNames  = xNames->getElementNames();
-        const OUString* pBegin = aNames.getConstArray();
-        const OUString* pEnd = pBegin + aNames.getLength();
-        for(;pBegin != pEnd;++pBegin)
+        for (const OUString& rName : xNames->getElementNames())
         {
-            if(match(tableNamePattern,*pBegin,'\0'))
+            if (match(tableNamePattern, rName, '\0'))
             {
                 ODatabaseMetaDataResultSet::ORow aRow(8);
 
-                aRow[2] = new ORowSetValueDecorator(*pBegin);
+                aRow[2] = new ORowSetValueDecorator(rName);
                 aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
                 aRow[7] = new ORowSetValueDecorator(u"NO"_ustr);
                 aRows.push_back(aRow);
 
-                Reference< XPropertySet> xTable(
-                    xNames->getByName(*pBegin), css::uno::UNO_QUERY);
-                if(xTable.is())
+                if (auto xTable = xNames->getByName(rName).query<XPropertySet>())
                 {
                     auto pTable = dynamic_cast<OFileTable*>(xTable.get());
                     if(pTable && !pTable->isReadOnly())

@@ -257,7 +257,6 @@ Exc1904::Exc1904( const ScDocument& rDoc )
 {
     const Date& rDate = rDoc.GetFormatTable()->GetNullDate();
     bVal = (rDate == Date( 1, 1, 1904 ));
-    bDateCompatibility = (rDate != Date( 30, 12, 1899 ));
 }
 
 sal_uInt16 Exc1904::GetNum() const
@@ -267,17 +266,10 @@ sal_uInt16 Exc1904::GetNum() const
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
-    bool bISOIEC = ( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 );
+    // dateCompatibility appears to only apply to "strict xml" which we don't export to,
+    // (and seems to only determine whether date1904 is considered or not when in strict mode).
 
-    if( bISOIEC )
-    {
-        rStrm.WriteAttributes(XML_dateCompatibility, ToPsz(bDateCompatibility));
-    }
-
-    if( !bISOIEC || bDateCompatibility )
-    {
-        rStrm.WriteAttributes(XML_date1904, ToPsz(bVal));
-    }
+    rStrm.WriteAttributes(XML_date1904, ToPsz(bVal));
 }
 
 //------------------------------------------------------ class ExcBundlesheet -
@@ -998,7 +990,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
             {
                 SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
                 XclExpAutofilter* pFilter = GetByCol( nCol - aRange.aStart.Col() );
-                auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+                auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
                 bool bIsButtonHidden = !( nFlag & ScMF::Auto );
                 pFilter->SetButtonHidden( bIsButtonHidden );
 
@@ -1017,7 +1009,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
         sal_uInt16 nColId = 0;
         for ( auto nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); nCol++, nColId++ )
         {
-            auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+            auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
             bool bIsButtonHidden = !( nFlag & ScMF::Auto );
             if ( bIsButtonHidden )
             {
@@ -1166,17 +1158,19 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 
         for (const auto & rSortCriteria : maSortCustomList)
         {
+            OString aCustomList = OUStringToOString(std::get<1>(rSortCriteria), RTL_TEXTENCODING_UTF8);
+            const char* pCustomList = aCustomList.isEmpty() ? nullptr : aCustomList.getStr();
             if (std::get<2>(rSortCriteria))
                 rWorksheet->singleElement(XML_sortCondition,
                                           XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
                                                                           std::get<0>(rSortCriteria)),
                                           XML_descending, "1",
-                                          XML_customList, std::get<1>(rSortCriteria));
+                                          XML_customList, pCustomList);
             else
                 rWorksheet->singleElement(XML_sortCondition,
                                           XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
                                                                           std::get<0>(rSortCriteria)),
-                                          XML_customList, std::get<1>(rSortCriteria));
+                                          XML_customList, pCustomList);
         }
 
         rWorksheet->endElement(XML_sortState);

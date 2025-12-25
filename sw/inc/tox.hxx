@@ -564,7 +564,6 @@ public:
 
     SwTOXBase& operator=(const SwTOXBase& rSource);
     void RegisterToTOXType( SwTOXType& rMark );
-    virtual bool IsVisible() const { return true; }
 };
 
 //SwTOXMark

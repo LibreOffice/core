@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="HyperlinkInternetPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -26,18 +26,49 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
+              <object class="GtkLabel" id="indication_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="hyperlinkinternetpage|indication_label">Te_xt:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">indication</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="indication">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="indication-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="target_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="hyperlinkinternetpage|target_label">_URL:</property>
+                <property name="label" translatable="yes" context="hyperlinkinternetpage|target_label">Link:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">target</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -56,37 +87,6 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="target-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|target">Enter a URL for the file that you want to open when you click the hyperlink. If you do not specify a target frame, the file opens in the current document or frame.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="indication_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="hyperlinkinternetpage|indication_label">Te_xt:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">indication</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="indication">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="indication-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
                   </object>
                 </child>
               </object>

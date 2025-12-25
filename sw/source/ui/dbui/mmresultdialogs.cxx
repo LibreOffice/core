@@ -41,7 +41,7 @@
 #include <svtools/sfxecode.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/scheduler.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -997,7 +997,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             {
                 if( pFilter->GetUserData() == FILTER_WW8 && pFilter->CanExport() )
                 {
-                    pSfxFlt = pFilter;
+                    pSfxFlt = std::move(pFilter);
                     break;
                 }
                 pFilter = aIter.Next();

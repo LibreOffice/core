@@ -18,11 +18,16 @@
  */
 #pragma once
 #include <sal/config.h>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <comphelper/interfacecontainer4.hxx>
 #include <memory>
 #include <mutex>
 #include <vector>
+
+namespace com::sun::star::lang
+{
+struct EventObject;
+}
+
 /** */ //for docpp
 namespace comphelper
 {

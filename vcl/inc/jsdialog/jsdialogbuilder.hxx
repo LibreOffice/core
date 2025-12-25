@@ -13,8 +13,10 @@
 #include <jsdialog/jsdialogmessages.hxx>
 #include <jsdialog/jsdialogsender.hxx>
 
+#include <tools/stream.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <salvtables.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -24,6 +26,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+
+#include <comphelper/base64.hxx>
 #include <comphelper/compbase.hxx>
 
 #include <list>
@@ -254,6 +258,29 @@ class SAL_LOPLUGIN_ANNOTATE("crosscast") OnDemandRenderingHandler
 {
 public:
     virtual void render_entry(int pos, int dpix, int dpiy) = 0;
+
+    static bool imageToActionData(const Bitmap& rImage, sal_Int32 nPos,
+                                  jsdialog::ActionDataMap& rMap)
+    {
+        if (rImage.IsEmpty())
+            return false;
+
+        SvMemoryStream aOStm(65535, 65535);
+
+        if (GraphicConverter::Export(aOStm, rImage, ConvertDataFormat::PNG) != ERRCODE_NONE)
+            return false;
+
+        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+                                          aOStm.Tell());
+        OUStringBuffer aBuffer("data:image/png;base64,");
+        ::comphelper::Base64::encode(aBuffer, aSeq);
+
+        rMap[ACTION_TYPE ""_ostr] = "rendered_entry";
+        rMap["pos"_ostr] = OUString::number(nPos);
+        rMap["image"_ostr] = aBuffer;
+
+        return true;
+    }
 };
 
 template <class BaseInstanceClass, class VclClass>
@@ -508,6 +535,8 @@ class JSToggleButton final : public JSWidget<SalInstanceToggleButton, ::PushButt
 public:
     JSToggleButton(JSDialogSender* pSender, ::PushButton* pButton, SalInstanceBuilder* pBuilder,
                    bool bTakeOwnership);
+
+    virtual void do_set_active(bool active) override;
 };
 
 class JSEntry final : public JSWidget<SalInstanceEntry, ::Edit>
@@ -528,7 +557,7 @@ public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
-    virtual void set_active(int pos) override;
+    virtual void do_set_active(int pos) override;
 };
 
 class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>,
@@ -542,8 +571,8 @@ public:
     virtual void remove(int pos) override;
     void set_entry_text_without_notify(const OUString& rText);
     virtual void set_entry_text(const OUString& rText) override;
-    virtual void set_active(int pos) override;
-    virtual void set_active_id(const OUString& rText) override;
+    virtual void do_set_active(int pos) override;
+    virtual void do_set_active_id(const OUString& rText) override;
     virtual bool changed_by_direct_pick() const override;
 
     // OnDemandRenderingHandler
@@ -591,6 +620,9 @@ public:
 
     virtual void do_set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
+
+private:
+    VclPtr<::FormattedField> m_pFmtSpin;
 };
 
 class JSMessageDialog final : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>
@@ -676,25 +708,20 @@ public:
     virtual void do_replace_selection(const OUString& rText) override;
 };
 
-class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
+class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>,
+                         public OnDemandRenderingHandler
 {
 public:
     JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder,
                bool bTakeOwnership);
 
-    using SalInstanceTreeView::set_toggle;
-    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
-    virtual void set_toggle(int pos, TriState eState, int col = -1) override;
+    using weld::TreeView::set_toggle;
     virtual void set_toggle(const weld::TreeIter& rIter, TriState bOn, int col = -1) override;
 
-    using SalInstanceTreeView::set_sensitive;
-    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
-    virtual void set_sensitive(int pos, bool bSensitive, int col = -1) override;
+    using weld::TreeView::set_sensitive;
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
 
-    using SalInstanceTreeView::do_select;
-    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
-    virtual void do_select(int pos) override;
+    virtual void do_select(const weld::TreeIter& rIter) override;
 
     virtual weld::TreeView* get_drag_source() const override;
 
@@ -704,7 +731,7 @@ public:
                            VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                            weld::TreeIter* pRet) override;
 
-    virtual void set_text(int row, const OUString& rText, int col = -1) override;
+    using weld::TreeView::set_text;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr, int col = -1) override;
 
     virtual void expand_row(const weld::TreeIter& rIter) override;
@@ -714,14 +741,15 @@ public:
     void set_cursor_without_notify(const weld::TreeIter& rIter);
     virtual void do_set_cursor(int pos) override;
 
-    using SalInstanceTreeView::do_remove;
-    virtual void do_remove(int pos) override;
     virtual void do_remove(const weld::TreeIter& rIter) override;
 
     virtual void do_clear() override;
 
     void drag_start();
     void drag_end();
+
+    // OnDemandRenderingHandler
+    virtual void render_entry(int pos, int dpix, int dpiy) override;
 };
 
 class JSExpander final : public JSWidget<SalInstanceExpander, ::VclExpander>
@@ -749,8 +777,8 @@ public:
     virtual void insert_separator(int pos, const OUString* pId) override;
 
     virtual void do_clear() override;
-    virtual void do_select(int pos) override;
-    virtual void do_unselect(int pos) override;
+    virtual void do_select(const weld::TreeIter& rIter) override;
+    virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     // OnDemandRenderingHandler
     virtual void render_entry(int pos, int dpix, int dpiy) override;

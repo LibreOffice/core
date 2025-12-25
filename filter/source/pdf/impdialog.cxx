@@ -24,7 +24,7 @@
 #include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sfx2/objsh.hxx>
@@ -1740,7 +1740,7 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, weld::Toggleable&,
     mbOpnLnksRemoveUserState = m_xRbOpnLnksRemove->get_active();
 }
 
-ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrors)
+ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::pdf::PDFWriter::ErrorCode>& rErrors)
     : MessageDialogController(pParent, u"filter/ui/warnpdfdialog.ui"_ustr, u"WarnPDFDialog"_ustr, u"grid"_ustr)
     , m_xErrors(m_xBuilder->weld_tree_view(u"errors"_ustr))
     , m_xExplanation(m_xBuilder->weld_label(u"message"_ustr))
@@ -1754,19 +1754,19 @@ ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFW
     {
         switch(error)
         {
-        case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
+        case vcl::pdf::PDFWriter::Warning_Transparency_Omitted_PDFA:
             m_xErrors->append(FilterResId(STR_WARN_TRANSP_PDFA), FilterResId(STR_WARN_TRANSP_PDFA_SHORT), u"dialog-warning"_ustr);
             break;
-        case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
+        case vcl::pdf::PDFWriter::Warning_Transparency_Omitted_PDF13:
             m_xErrors->append(FilterResId(STR_WARN_TRANSP_VERSION), FilterResId(STR_WARN_TRANSP_VERSION_SHORT), u"dialog-warning"_ustr);
             break;
-        case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
+        case vcl::pdf::PDFWriter::Warning_FormAction_Omitted_PDFA:
             m_xErrors->append(FilterResId(STR_WARN_FORMACTION_PDFA), FilterResId(STR_WARN_FORMACTION_PDFA_SHORT), u"dialog-warning"_ustr);
             break;
-        case vcl::PDFWriter::Warning_Transparency_Converted:
+        case vcl::pdf::PDFWriter::Warning_Transparency_Converted:
             m_xErrors->append(FilterResId(STR_WARN_TRANSP_CONVERTED), FilterResId(STR_WARN_TRANSP_CONVERTED_SHORT), u"dialog-warning"_ustr);
             break;
-        case vcl::PDFWriter::Error_Signature_Failed:
+        case vcl::pdf::PDFWriter::Error_Signature_Failed:
             m_xErrors->append(FilterResId(STR_ERR_PDF_EXPORT_ABORTED), FilterResId(STR_ERR_SIGNATURE_FAILED), u"dialog-error"_ustr);
             break;
         default:

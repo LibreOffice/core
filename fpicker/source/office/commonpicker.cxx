@@ -101,12 +101,10 @@ namespace svt
 
     void OCommonPicker::prepareDialog()
     {
-        if(createPicker())
-        {
-            // set the title
-            if ( !m_aTitle.isEmpty() )
-                m_xDlg->set_title(m_aTitle);
-        }
+        createPicker();
+        // set the title
+        if (!m_aTitle.isEmpty())
+            m_xDlg->set_title(m_aTitle);
     }
 
 
@@ -197,55 +195,50 @@ namespace svt
         }
     }
 
-    bool OCommonPicker::createPicker()
+    void OCommonPicker::createPicker()
     {
-        if ( !m_xDlg )
+        if (m_xDlg)
+            return;
+
+        m_xDlg = implCreateDialog(Application::GetFrameWeld(m_xDialogParent));
+        assert(m_xDlg);
+
+        weld::Dialog* pDlg = m_xDlg->getDialog();
+
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        // synchronize the help id of the dialog without help URL property
+        if ( !m_sHelpURL.isEmpty() )
+        {   // somebody already set the help URL while we had no dialog yet
+            aAccess.setHelpURL(pDlg, m_sHelpURL);
+        }
+        else
         {
-            m_xDlg = implCreateDialog(Application::GetFrameWeld(m_xDialogParent));
-            SAL_WARN_IF( !m_xDlg, "fpicker.office", "OCommonPicker::createPicker: invalid dialog returned!" );
-
-            if ( m_xDlg )
-            {
-                weld::Dialog* pDlg = m_xDlg->getDialog();
-
-                ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
-                // synchronize the help id of the dialog without help URL property
-                if ( !m_sHelpURL.isEmpty() )
-                {   // somebody already set the help URL while we had no dialog yet
-                    aAccess.setHelpURL(pDlg, m_sHelpURL);
-                }
-                else
-                {
-                    m_sHelpURL = aAccess.getHelpURL(pDlg);
-                }
-
-                m_xWindow = pDlg->GetXWindow();
-
-                // add as event listener to the window
-                OSL_ENSURE( m_xWindow.is(), "OCommonPicker::createFileDialog: invalid window component!" );
-                if ( m_xWindow.is() )
-                {
-                    m_xWindowListenerAdapter = new OWeakEventListenerAdapter( this, m_xWindow );
-                        // the adapter will add itself as listener, and forward notifications
-                }
-
-                VclPtr<vcl::Window> xVclDialog(VCLUnoHelper::GetWindow(m_xWindow));
-                if (xVclDialog) // this block is quite possibly unnecessary by now
-                {
-                    // _and_ add as event listener to the parent - in case the parent is destroyed
-                    // before we are disposed, our disposal would access dead VCL windows then...
-                    m_xDialogParent = VCLUnoHelper::GetInterface(xVclDialog->GetParent());
-                    OSL_ENSURE(m_xDialogParent.is() || !xVclDialog->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!");
-                }
-                if ( m_xDialogParent.is() )
-                {
-                    m_xParentListenerAdapter = new OWeakEventListenerAdapter( this, m_xDialogParent );
-                        // the adapter will add itself as listener, and forward notifications
-                }
-            }
+            m_sHelpURL = aAccess.getHelpURL(pDlg);
         }
 
-        return nullptr != m_xDlg;
+        m_xWindow = pDlg->GetXWindow();
+
+        // add as event listener to the window
+        OSL_ENSURE( m_xWindow.is(), "OCommonPicker::createFileDialog: invalid window component!" );
+        if ( m_xWindow.is() )
+        {
+            m_xWindowListenerAdapter = new OWeakEventListenerAdapter( this, m_xWindow );
+                // the adapter will add itself as listener, and forward notifications
+        }
+
+        VclPtr<vcl::Window> xVclDialog(VCLUnoHelper::GetWindow(m_xWindow));
+        if (xVclDialog) // this block is quite possibly unnecessary by now
+        {
+            // _and_ add as event listener to the parent - in case the parent is destroyed
+            // before we are disposed, our disposal would access dead VCL windows then...
+            m_xDialogParent = VCLUnoHelper::GetInterface(xVclDialog->GetParent());
+            OSL_ENSURE(m_xDialogParent.is() || !xVclDialog->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!");
+        }
+        if ( m_xDialogParent.is() )
+        {
+            m_xParentListenerAdapter = new OWeakEventListenerAdapter( this, m_xDialogParent );
+                // the adapter will add itself as listener, and forward notifications
+        }
     }
 
     // XControlAccess functions
@@ -254,11 +247,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            aAccess.setControlProperty( aControlName, aControlProperty, aValue );
-        }
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        aAccess.setControlProperty(aControlName, aControlProperty, aValue);
     }
 
     Any SAL_CALL OCommonPicker::getControlProperty( const OUString& aControlName, const OUString& aControlProperty )
@@ -266,13 +257,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.getControlProperty( aControlName, aControlProperty );
-        }
-
-        return Any();
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.getControlProperty(aControlName, aControlProperty);
     }
 
     // XControlInformation functions
@@ -281,13 +268,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.getSupportedControls( );
-        }
-
-        return Sequence< OUString >();
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.getSupportedControls();
     }
 
     sal_Bool SAL_CALL OCommonPicker::isControlSupported( const OUString& aControlName )
@@ -295,12 +278,8 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            return svt::OControlAccess::isControlSupported( aControlName );
-        }
-
-        return false;
+        createPicker();
+        return svt::OControlAccess::isControlSupported(aControlName);
     }
 
     Sequence< OUString > SAL_CALL OCommonPicker::getSupportedControlProperties( const OUString& aControlName )
@@ -308,13 +287,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.getSupportedControlProperties( aControlName );
-        }
-
-        return Sequence< OUString >();
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.getSupportedControlProperties(aControlName);
     }
 
     sal_Bool SAL_CALL OCommonPicker::isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty )
@@ -322,13 +297,9 @@ namespace svt
         checkAlive();
 
         SolarMutexGuard aGuard;
-        if ( createPicker() )
-        {
-            ::svt::OControlAccess aAccess( m_xDlg.get(), m_xDlg->GetView() );
-            return aAccess.isControlPropertySupported( aControlName, aControlProperty );
-        }
-
-        return false;
+        createPicker();
+        ::svt::OControlAccess aAccess(m_xDlg.get(), m_xDlg->GetView());
+        return aAccess.isControlPropertySupported(aControlName, aControlProperty);
     }
 
 
@@ -415,14 +386,9 @@ namespace svt
         NamedValue      aPairArg;
 
 
-        const Any* pArguments       = _rArguments.getConstArray();
-        const Any* pArgumentsEnd    = _rArguments.getConstArray() + _rArguments.getLength();
-        for (   const Any* pArgument = pArguments;
-                pArgument != pArgumentsEnd;
-                ++pArgument
-            )
+        for (const Any& rArgument : _rArguments)
         {
-            if ( *pArgument >>= aPropArg )
+            if (rArgument >>= aPropArg)
             {
                 if ( aPropArg.Name.isEmpty())
                     continue;
@@ -430,7 +396,7 @@ namespace svt
                 sSettingName = aPropArg.Name;
                 aSettingValue = aPropArg.Value;
             }
-            else if ( *pArgument >>= aPairArg )
+            else if (rArgument >>= aPairArg)
             {
                 if ( aPairArg.Name.isEmpty())
                     continue;
@@ -443,7 +409,7 @@ namespace svt
             else
             {
                 SAL_WARN( "fpicker", "OCommonPicker::initialize: unknown argument type at position "
-                    << (pArguments - _rArguments.getConstArray()));
+                    << (&rArgument - _rArguments.getConstArray()));
                 continue;
             }
 

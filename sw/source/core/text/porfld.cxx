@@ -316,11 +316,11 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 
 bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
 {
-    // Scope wegen aDiffText::DTOR!
     bool bFull = false;
     bool bEOL = false;
     TextFrameIndex const nTextRest = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
     {
+        // Scope for aDiffText::DTOR!
         TextFrameIndex nRest;
         SwFieldSlot aDiffText( &rInf, this );
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
@@ -334,7 +334,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
         if ( m_nNextScriptChg < nFullLen )
         {
             nFullLen = m_nNextScriptChg;
-            rInf.SetHookChar( 0 );
+            rInf.ClearHookChar();
         }
         rInf.SetLen( nFullLen );
 
@@ -1444,7 +1444,7 @@ bool SwJumpFieldPortion::DescribePDFControl(const SwTextPaintInfo& rInf) const
     if (m_nFormat != SwJumpEditFormat::Text)
         return false;
 
-    vcl::PDFWriter::EditWidget aDescriptor;
+    vcl::pdf::PDFWriter::EditWidget aDescriptor;
 
     aDescriptor.Border = true;
     aDescriptor.BorderColor = COL_BLACK;

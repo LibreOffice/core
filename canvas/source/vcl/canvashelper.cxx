@@ -37,9 +37,12 @@
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
@@ -113,6 +116,7 @@ namespace vclcanvas
         mpDevice = nullptr;
         mpProtectedOutDevProvider.reset();
         mpOutDevProvider.reset();
+        mp2ndOutDevProvider.reset();
     }
 
     void CanvasHelper::init( rendering::XGraphicDevice&     rDevice,
@@ -139,6 +143,13 @@ namespace vclcanvas
         mpOutDevProvider = rOutDev;
     }
 
+    void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
+    {
+        mp2ndOutDevProvider = rOutDev;
+        mp2ndOutDevProvider->getOutDev().EnableMapMode( false );
+        mp2ndOutDevProvider->getOutDev().SetAntialiasing( AntialiasingFlags::Enable );
+    }
+
     void CanvasHelper::clear()
     {
         // are we disposed?
@@ -155,6 +166,22 @@ namespace vclcanvas
         rOutDev.SetClipRegion();
         rOutDev.DrawRect( ::tools::Rectangle( Point(),
                                      rOutDev.GetOutputSizePixel()) );
+
+        if( !mp2ndOutDevProvider )
+            return;
+
+        OutputDevice& rOutDev2( mp2ndOutDevProvider->getOutDev() );
+
+        rOutDev2.SetDrawMode( DrawModeFlags::Default );
+        rOutDev2.EnableMapMode( false );
+        rOutDev2.SetAntialiasing( AntialiasingFlags::Enable );
+        rOutDev2.SetLineColor( COL_WHITE );
+        rOutDev2.SetFillColor( COL_WHITE );
+        rOutDev2.SetClipRegion();
+        rOutDev2.DrawRect( ::tools::Rectangle( Point(),
+                                      rOutDev2.GetOutputSizePixel()) );
+        rOutDev2.SetDrawMode( DrawModeFlags::BlackLine | DrawModeFlags::BlackFill | DrawModeFlags::BlackText |
+                              DrawModeFlags::BlackGradient | DrawModeFlags::BlackBitmap );
     }
 
     void CanvasHelper::drawLine( const rendering::XCanvas*      ,
@@ -177,6 +204,9 @@ namespace vclcanvas
                                                       viewState, renderState ) );
         // TODO(F2): alpha
         mpOutDevProvider->getOutDev().DrawLine( aStartPoint, aEndPoint );
+
+        if( mp2ndOutDevProvider )
+            mp2ndOutDevProvider->getOutDev().DrawLine( aStartPoint, aEndPoint );
     }
 
     void CanvasHelper::drawBezier( const rendering::XCanvas*            ,
@@ -215,6 +245,8 @@ namespace vclcanvas
 
         // TODO(F2): alpha
         mpOutDevProvider->getOutDev().DrawPolygon( aPoly );
+        if( mp2ndOutDevProvider )
+            mp2ndOutDevProvider->getOutDev().DrawPolygon( aPoly );
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          ,
@@ -237,6 +269,9 @@ namespace vclcanvas
             if( aBasegfxPolyPoly.isClosed() )
             {
                 mpOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
+
+                if( mp2ndOutDevProvider )
+                    mp2ndOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
             }
             else
             {
@@ -252,6 +287,9 @@ namespace vclcanvas
                 for( sal_uInt16 i=0; i<nSize; ++i )
                 {
                     mpOutDevProvider->getOutDev().DrawPolyLine( aPolyPoly[i] );
+
+                    if( mp2ndOutDevProvider )
+                        mp2ndOutDevProvider->getOutDev().DrawPolyLine( aPolyPoly[i] );
                 }
             }
         }
@@ -366,8 +404,12 @@ namespace vclcanvas
                 const basegfx::B2DPolygon& polygon = aStrokedPolyPoly.getB2DPolygon( i );
                 if( polygon.isClosed()) {
                     mpOutDevProvider->getOutDev().DrawPolygon( polygon );
+                    if( mp2ndOutDevProvider )
+                        mp2ndOutDevProvider->getOutDev().DrawPolygon( polygon );
                 } else {
                     mpOutDevProvider->getOutDev().DrawPolyLine( polygon );
+                    if( mp2ndOutDevProvider )
+                        mp2ndOutDevProvider->getOutDev().DrawPolyLine( polygon );
                 }
             }
         }
@@ -434,6 +476,19 @@ namespace vclcanvas
             {
                 const int nTransPercent( ((255 - nAlpha) * 100 + 128) / 255 );  // normal rounding, no truncation here
                 mpOutDevProvider->getOutDev().DrawTransparent( aPolyPoly, static_cast<sal_uInt16>(nTransPercent) );
+            }
+
+            if( mp2ndOutDevProvider )
+            {
+                // HACK. Normally, CanvasHelper does not care about
+                // actually what mp2ndOutDev is...  well, here we do &
+                // assume a 1bpp target - everything beyond 97%
+                // transparency is fully transparent
+                if( nAlpha > 2 )
+                {
+                    mp2ndOutDevProvider->getOutDev().SetFillColor( COL_BLACK );
+                    mp2ndOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
+                }
             }
         }
 
@@ -518,6 +573,15 @@ namespace vclcanvas
                                             text.Text,
                                             ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
                                             ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
+
+            if( mp2ndOutDevProvider )
+            {
+                mp2ndOutDevProvider->getOutDev().SetLayoutMode( nLayoutMode );
+                mp2ndOutDevProvider->getOutDev().DrawText( aOutpos,
+                                                   text.Text,
+                                                   ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
+                                                   ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
+            }
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
@@ -551,6 +615,9 @@ namespace vclcanvas
                 // TODO(F2): What about the offset scalings?
                 // TODO(F2): alpha
                 pTextLayout->draw( mpOutDevProvider->getOutDev(), aOutpos, viewState, renderState );
+
+                if( mp2ndOutDevProvider )
+                    pTextLayout->draw( mp2ndOutDevProvider->getOutDev(), aOutpos, viewState, renderState );
             }
         }
         else
@@ -615,8 +682,23 @@ namespace vclcanvas
             {
                 // optimized case: identity matrix, or only
                 // translational components.
-                mpOutDevProvider->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
+                mpOutDevProvider->getOutDev().DrawBitmap( vcl::unotools::pointFromB2DPoint( aOutputPos ),
                                                     aBmp );
+
+                if( mp2ndOutDevProvider )
+                {
+                    // HACK. Normally, CanvasHelper does not care about
+                    // actually what mp2ndOutDev is...  well, here we do &
+                    // assume a 1bpp target - everything beyond 97%
+                    // transparency is fully transparent
+                    if( aBmp.HasAlpha() && !SkiaHelper::isVCLSkiaEnabled())
+                    {
+                        BitmapFilter::Filter(aBmp, BitmapAlphaClampFilter(253));
+                    }
+
+                    mp2ndOutDevProvider->getOutDev().DrawBitmap( vcl::unotools::pointFromB2DPoint( aOutputPos ),
+                                                           aBmp );
+                }
 
                 // Returning a cache object is not useful, the XBitmap
                 // itself serves this purpose
@@ -630,6 +712,31 @@ namespace vclcanvas
                 const double fAlpha = bModulateColors ? renderState.DeviceColor[3] : 1.0;
 
                 mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmp, fAlpha );
+                if( mp2ndOutDevProvider )
+                {
+                    if( aBmp.HasAlpha() )
+                    {
+                        // tdf#157790 invert alpha mask
+                        // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+                        // the alpha mask needs to be inverted. Note: when
+                        // testing tdf#157790, this code only gets executed
+                        // when Skia is enabled.
+                        AlphaMask aAlpha( aBmp.CreateAlphaMask() );
+                        aAlpha.Invert();
+                        aBmp = Bitmap( aBmp.CreateColorBitmap(), aAlpha );
+
+                        // HACK. Normally, CanvasHelper does not care about
+                        // actually what mp2ndOutDev is...  well, here we do &
+                        // assume a 1bpp target - everything beyond 97%
+                        // transparency is fully transparent
+                        if( !SkiaHelper::isVCLSkiaEnabled())
+                        {
+                            BitmapFilter::Filter(aBmp, BitmapAlphaClampFilter(253));
+                        }
+                    }
+
+                    mp2ndOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmp );
+                }
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr);
             }
             else
@@ -723,6 +830,28 @@ namespace vclcanvas
                               aPt,
                               aSz,
                               &aGrfAttr);
+
+                if( mp2ndOutDevProvider )
+                {
+                    GraphicObjectSharedPtr p2ndGrfObj = pGrfObj;
+                    if( aBmp.HasAlpha() )
+                    {
+                        // tdf#157790 invert alpha mask
+                        // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+                        // the alpha mask needs to be inverted. Note: when
+                        // testing tdf#157790, this code only gets executed
+                        // when Skia is disabled.
+                        AlphaMask aAlpha( aBmp.CreateAlphaMask() );
+                        aAlpha.Invert();
+                        Bitmap a2ndBmp( aBmp.CreateColorBitmap(), aAlpha );
+                        p2ndGrfObj = std::make_shared<GraphicObject>( a2ndBmp );
+                    }
+
+                    p2ndGrfObj->Draw(mp2ndOutDevProvider->getOutDev(),
+                                  aPt,
+                                  aSz,
+                                  &aGrfAttr);
+                }
 
                 // created GraphicObject, which possibly cached
                 // display bitmap - return cache object, to retain
@@ -912,6 +1041,10 @@ namespace vclcanvas
 
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
+        OutputDevice* p2ndOutDev = nullptr;
+
+        if( mp2ndOutDevProvider )
+            p2ndOutDev = &mp2ndOutDevProvider->getOutDev();
 
         int nAlpha(255);
 
@@ -939,15 +1072,27 @@ namespace vclcanvas
                 case LINE_COLOR:
                     rOutDev.SetLineColor( aColor );
                     rOutDev.SetFillColor();
+                    if( p2ndOutDev )
+                    {
+                        p2ndOutDev->SetLineColor( aColor );
+                        p2ndOutDev->SetFillColor();
+                    }
                     break;
 
                 case FILL_COLOR:
                     rOutDev.SetFillColor( aColor );
                     rOutDev.SetLineColor();
+                    if( p2ndOutDev )
+                    {
+                        p2ndOutDev->SetFillColor( aColor );
+                        p2ndOutDev->SetLineColor();
+                    }
                     break;
 
                 case TEXT_COLOR:
                     rOutDev.SetTextColor( aColor );
+                    if( p2ndOutDev )
+                        p2ndOutDev->SetTextColor( aColor );
                     break;
 
                 default:
@@ -996,6 +1141,9 @@ namespace vclcanvas
 
         rOutDev.SetFont( aVCLFont );
 
+        if( mp2ndOutDevProvider )
+            mp2ndOutDevProvider->getOutDev().SetFont( aVCLFont );
+
         return true;
     }
 
@@ -1019,6 +1167,10 @@ namespace vclcanvas
             if (!rGrf->Draw(mpOutDevProvider->getOutDev(), rPt, rSz, &rAttr))
                 return false;
 
+            // #i80779# Redraw also into mask outdev
+            if (mp2ndOutDevProvider)
+                return rGrf->Draw(mp2ndOutDevProvider->getOutDev(), rPt, rSz, &rAttr);
+
             return true;
         }
     }
@@ -1027,6 +1179,9 @@ namespace vclcanvas
     {
         if (mpOutDevProvider)
             mpOutDevProvider->getOutDev().Flush();
+
+        if  (mp2ndOutDevProvider)
+            mp2ndOutDevProvider->getOutDev().Flush();
     }
 
 }

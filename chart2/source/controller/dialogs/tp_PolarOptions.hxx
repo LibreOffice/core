@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace weld {
     class CheckButton;

@@ -22,10 +22,10 @@
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include "sanedlg.hxx"
@@ -556,7 +556,7 @@ void SaneDlg::InitFields()
         {
             bool bIsSpecial = false;
             for( size_t n = 0; !bIsSpecial &&
-                     n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
+                     n < std::size(ppSpecialOptions); n++ )
             {
                 if( aOption == OUString::createFromAscii(ppSpecialOptions[n]) )
                     bIsSpecial=true;
@@ -944,7 +944,7 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                                       Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     // check for sane values
-    rRenderContext.DrawBitmapEx(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
+    rRenderContext.DrawBitmap(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
 
     DrawDrag(rRenderContext);
 }

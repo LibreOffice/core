@@ -1290,6 +1290,18 @@ interface BaseText
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_ATTR_PARA_ADJUST_START
+    [
+        ExecMethod = ExecParaAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ATTR_PARA_ADJUST_END
+    [
+        ExecMethod = ExecParaAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_ATTR_PARA_LINESPACE_10
     [
         ExecMethod = ExecParaAttr ;

@@ -57,13 +57,15 @@
 #include <svtools/sfxecode.hxx>
 #include <preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
+#include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -399,14 +401,9 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
         std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet().Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
-        css::uno::Sequence< css::beans::PropertyValue > aArgs;
-        TransformItems( SID_OPENDOC, *pNew, aArgs );
-        sal_Int32 nLength = aArgs.getLength();
-        aArgs.realloc( nLength + 1 );
-        auto pArgs = aArgs.getArray();
-        pArgs[nLength].Name = "Title";
-        pArgs[nLength].Value <<= xDoc->GetTitle( SFX_TITLE_DETECT );
-        xModel->attachResource( OUString(), aArgs );
+        comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, *pNew);
+        aArgs[u"Title"_ustr] <<= xDoc->GetTitle(SFX_TITLE_DETECT);
+        xModel->attachResource(OUString(), aArgs.getAsConstPropertyValueList());
     }
 
     return xDoc->GetErrorCode();
@@ -415,7 +412,7 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
 
 void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
-    const SfxStringItem* pFactoryItem = rReq.GetArg<SfxStringItem>(SID_NEWDOCDIRECT);
+    const SfxStringItem* pFactoryItem = rReq.GetArg(SID_NEWDOCDIRECT);
     OUString aFactName;
     if ( pFactoryItem )
         aFactName = pFactoryItem->GetValue();
@@ -449,9 +446,9 @@ void SfxApplication::NewDocDirectState_Impl( SfxItemSet &rSet )
 void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
     // No Parameter from BASIC only Factory given?
-    const SfxStringItem* pTemplNameItem = rReq.GetArg<SfxStringItem>(SID_TEMPLATE_NAME);
-    const SfxStringItem* pTemplFileNameItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
-    const SfxStringItem* pTemplRegionNameItem = rReq.GetArg<SfxStringItem>(SID_TEMPLATE_REGIONNAME);
+    const SfxStringItem* pTemplNameItem = rReq.GetArg(SID_TEMPLATE_NAME);
+    const SfxStringItem* pTemplFileNameItem = rReq.GetArg(SID_FILE_NAME);
+    const SfxStringItem* pTemplRegionNameItem = rReq.GetArg(SID_TEMPLATE_REGIONNAME);
 
     SfxObjectShellLock xDoc;
 
@@ -576,7 +573,7 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
 
     const OUString& aName = rFilter.GetFilterName();
     // We can handle all Excel variants natively.
-    return aName.startsWith("MS Excel");
+    return aName.startsWith("MS Excel") || aName.startsWith("Calc Office Open XML");
 }
 
 }
@@ -584,12 +581,12 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
 void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 {
     OUString aDocService;
-    const SfxStringItem* pDocSrvItem = rReq.GetArg<SfxStringItem>(SID_DOC_SERVICE);
+    const SfxStringItem* pDocSrvItem = rReq.GetArg(SID_DOC_SERVICE);
     if (pDocSrvItem)
         aDocService = pDocSrvItem->GetValue();
 
     sal_uInt16 nSID = rReq.GetSlot();
-    const SfxStringItem* pFileNameItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+    const SfxStringItem* pFileNameItem = rReq.GetArg(SID_FILE_NAME);
     if ( pFileNameItem )
     {
         OUString aCommand( pFileNameItem->GetValue() );
@@ -616,7 +613,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         OUString aFilter;
         std::optional<SfxAllItemSet> pSet;
         OUString aPath;
-        const SfxStringItem* pFolderNameItem = rReq.GetArg<SfxStringItem>(SID_PATH);
+        const SfxStringItem* pFolderNameItem = rReq.GetArg(SID_PATH);
         if ( pFolderNameItem )
             aPath = pFolderNameItem->GetValue();
         else if ( nSID == SID_OPENTEMPLATE )
@@ -627,17 +624,17 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
 
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
-        const SfxBoolItem* pSystemDialogItem = rReq.GetArg<SfxBoolItem>(SID_FILE_DIALOG);
+        const SfxBoolItem* pSystemDialogItem = rReq.GetArg(SID_FILE_DIALOG);
         if ( pSystemDialogItem )
             nDialog = pSystemDialogItem->GetValue() ? SFX2_IMPL_DIALOG_SYSTEM : SFX2_IMPL_DIALOG_OOO;
 
-        const SfxBoolItem* pRemoteDialogItem = rReq.GetArg<SfxBoolItem>(SID_REMOTE_DIALOG);
+        const SfxBoolItem* pRemoteDialogItem = rReq.GetArg(SID_REMOTE_DIALOG);
         if ( pRemoteDialogItem && pRemoteDialogItem->GetValue())
             nDialog = SFX2_IMPL_DIALOG_REMOTE;
 
         sal_Int16 nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION_FILTEROPTIONS;
         FileDialogFlags eDialogFlags = FileDialogFlags::MultiSelection;
-        const SfxBoolItem* pSignPDFItem = rReq.GetArg<SfxBoolItem>(SID_SIGNPDF);
+        const SfxBoolItem* pSignPDFItem = rReq.GetArg(SID_SIGNPDF);
         if (pSignPDFItem && pSignPDFItem->GetValue())
         {
             eDialogFlags |= FileDialogFlags::SignPDF;
@@ -646,7 +643,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         css::uno::Sequence< OUString >  aDenyList;
 
-        const SfxStringListItem* pDenyListItem = rReq.GetArg<SfxStringListItem>(SID_DENY_LIST);
+        const SfxStringListItem* pDenyListItem = rReq.GetArg(SID_DENY_LIST);
         if ( pDenyListItem )
             pDenyListItem->GetStringList( aDenyList );
 
@@ -682,7 +679,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             uno::Reference<task::XInteractionHandler> xWrappedHandler;
 
             // wrap existing handler or create new UUI handler
-            const SfxUnoAnyItem* pInteractionItem = rReq.GetArg<SfxUnoAnyItem>(SID_INTERACTIONHANDLER);
+            const SfxUnoAnyItem* pInteractionItem = rReq.GetArg(SID_INTERACTIONHANDLER);
             if (pInteractionItem)
             {
                 pInteractionItem->GetValue() >>= xWrappedHandler;
@@ -784,16 +781,16 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.RemoveItem( SID_BROWSE );
     }
 
-    const SfxStringItem* pFileName = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+    const SfxStringItem* pFileName = rReq.GetArg(SID_FILE_NAME);
     assert(pFileName && "SID_FILE_NAME is required");
     OUString aFileName = pFileName->GetValue();
 
     OUString aReferer;
-    const SfxStringItem* pRefererItem = rReq.GetArg<SfxStringItem>(SID_REFERER);
+    const SfxStringItem* pRefererItem = rReq.GetArg(SID_REFERER);
     if ( pRefererItem )
         aReferer = pRefererItem->GetValue();
 
-    const SfxStringItem* pFileFlagsItem = rReq.GetArg<SfxStringItem>(SID_OPTIONS);
+    const SfxStringItem* pFileFlagsItem = rReq.GetArg(SID_OPTIONS);
     if ( pFileFlagsItem )
     {
         const OUString aFileFlags = pFileFlagsItem->GetValue().toAsciiUpperCase();
@@ -868,7 +865,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             bool bStartPresentation = false;
             if (pFilter)
             {
-                const SfxUInt16Item* pSlide = rReq.GetArg<SfxUInt16Item>(SID_DOC_STARTPRESENTATION);
+                const SfxUInt16Item* pSlide = rReq.GetArg(SID_DOC_STARTPRESENTATION);
                 if (pSlide
                     && (pFilter->GetWildcard().Matches(u".pptx")
                         || pFilter->GetWildcard().Matches(u".ppt")
@@ -975,7 +972,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     if ( !pTargetFrame )
     {
-        const SfxUnoFrameItem* pUnoFrameItem = rReq.GetArg<SfxUnoFrameItem>(SID_FILLFRAME);
+        const SfxUnoFrameItem* pUnoFrameItem = rReq.GetArg(SID_FILLFRAME);
         if ( pUnoFrameItem )
             xTargetFrame = pUnoFrameItem->GetFrame();
     }
@@ -997,19 +994,19 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     // check if the view must be hidden
     bool bHidden = false;
-    const SfxBoolItem* pHidItem = rReq.GetArg<SfxBoolItem>(SID_HIDDEN);
+    const SfxBoolItem* pHidItem = rReq.GetArg(SID_HIDDEN);
     if ( pHidItem )
         bHidden = pHidItem->GetValue();
 
     // This request is a UI call. We have to set the right values inside the MediaDescriptor
     // for: InteractionHandler, StatusIndicator, MacroExecutionMode and DocTemplate.
     // But we have to look for already existing values or for real hidden requests.
-    const SfxBoolItem* pPreviewItem = rReq.GetArg<SfxBoolItem>(SID_PREVIEW);
+    const SfxBoolItem* pPreviewItem = rReq.GetArg(SID_PREVIEW);
     if (!bHidden && ( !pPreviewItem || !pPreviewItem->GetValue() ) )
     {
-        const SfxUnoAnyItem* pInteractionItem = rReq.GetArg<SfxUnoAnyItem>(SID_INTERACTIONHANDLER);
-        const SfxUInt16Item* pMacroExecItem = rReq.GetArg<SfxUInt16Item>(SID_MACROEXECMODE);
-        const SfxUInt16Item* pDocTemplateItem = rReq.GetArg<SfxUInt16Item>(SID_UPDATEDOCMODE);
+        const SfxUnoAnyItem* pInteractionItem = rReq.GetArg(SID_INTERACTIONHANDLER);
+        const SfxUInt16Item* pMacroExecItem = rReq.GetArg(SID_MACROEXECMODE);
+        const SfxUInt16Item* pDocTemplateItem = rReq.GetArg(SID_UPDATEDOCMODE);
 
         if (!pInteractionItem)
         {
@@ -1024,12 +1021,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     // extract target name
     OUString aTarget;
-    const SfxStringItem* pTargetItem = rReq.GetArg<SfxStringItem>(SID_TARGETNAME);
+    const SfxStringItem* pTargetItem = rReq.GetArg(SID_TARGETNAME);
     if ( pTargetItem )
         aTarget = pTargetItem->GetValue();
     else
     {
-        const SfxBoolItem* pNewViewItem = rReq.GetArg<SfxBoolItem>(SID_OPEN_NEW_VIEW);
+        const SfxBoolItem* pNewViewItem = rReq.GetArg(SID_OPEN_NEW_VIEW);
         if ( pNewViewItem && pNewViewItem->GetValue() )
             aTarget = "_blank" ;
     }
@@ -1056,7 +1053,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     // make URL ready
-    const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+    const SfxStringItem* pURLItem = rReq.GetArg(SID_FILE_NAME);
     aFileName = pURLItem->GetValue();
     if( aFileName.startsWith("#") ) // Mark without URL
     {
@@ -1070,18 +1067,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     // convert items to properties for framework API calls
-    Sequence < PropertyValue > aArgs;
-    TransformItems( SID_OPENDOC, *rReq.GetArgs(), aArgs );
+    comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, *rReq.GetArgs());
     // Any Referer (that was relevant in the above call to
     // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
     // this "open" request is initiated directly by the user:
-    auto pArg = std::find_if(std::cbegin(aArgs), std::cend(aArgs),
-        [](const PropertyValue& rArg) { return rArg.Name == "Referer"; });
-    if (pArg != std::cend(aArgs))
-    {
-        auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(aArgs), pArg));
-        comphelper::removeElementAt(aArgs, nIndex);
-    }
+    aArgs.erase(u"Referer"_ustr);
 
     // TODO/LATER: either remove LinkItem or create an asynchronous process for it
     if( bHidden || pLinkItem || rReq.IsSynchronCall() )
@@ -1092,7 +1082,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         try
         {
-            xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, aArgs );
+            xComp = comphelper::SynchronousDispatch::dispatch(xTargetFrame, aFileName, aTarget, aArgs.getAsConstPropertyValueList());
         }
         catch(const RuntimeException&)
         {
@@ -1119,7 +1109,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
         Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();
         if ( xDisp.is() )
-            xDisp->dispatch( aURL, aArgs );
+            xDisp->dispatch(aURL, aArgs.getAsConstPropertyValueList());
     }
 
     if ( xController.is() )

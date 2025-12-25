@@ -22,22 +22,23 @@
 #include <set>
 #include <vector>
 #include <memory>
-#include <vcl/customweld.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/window.hxx>
 #include <formula/opcode.hxx>
 #include <svx/weldeditview.hxx>
+#include "inputhdl.hxx"
 
 class EditView;
 class ScAccessibleEditLineTextData;
 class ScAccessibleEditObject;
 class ScTextWndGroup;
 class ScInputBarGroup;
-class ScInputHandler;
 class ScTabViewShell;
 
 class ScTextWndBase
@@ -47,7 +48,7 @@ public:
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            SetTextString( const OUString& rString, bool bKitUpdate ) = 0;
     virtual const OUString& GetTextString() const = 0;
-    virtual void            StartEditEngine() = 0;
+    virtual void            StartEditEngine(const ErrorHdl& errorHdl) = 0;
     virtual void            StopEditEngine( bool bAll ) = 0;
     virtual EditView*       GetEditView() const = 0;
     virtual bool            HasEditView() const = 0;
@@ -79,7 +80,7 @@ public:
                         // for function autopilots
     virtual void            MakeDialogEditView() override;
 
-    virtual void            StartEditEngine() override;
+    virtual void            StartEditEngine(const ErrorHdl& errorHdl) override;
     virtual void            StopEditEngine( bool bAll ) override;
 
     virtual void            TextGrabFocus() override;
@@ -132,7 +133,7 @@ private:
 
     void InitEditEngine();
 
-    void UpdateFocus();
+    void UpdateFocus(const ErrorHdl& errorHdl);
 
     rtl::Reference<svt::OStringTransferable> m_xHelper;
 
@@ -222,7 +223,7 @@ public:
     void                    SetNumLines(tools::Long nLines);
     virtual void            SetFormulaMode(bool bSet) override;
     virtual void            SetTextString(const OUString& rString, bool bKitUpdate) override;
-    virtual void            StartEditEngine() override;
+    virtual void            StartEditEngine(const ErrorHdl& errorHdl) override;
     virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
 
@@ -247,7 +248,7 @@ public:
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     void                    SetTextString(const OUString& rString, bool bKitUpdate) override;
-    void                    StartEditEngine() override;
+    void                    StartEditEngine(const ErrorHdl& errorHdl) override;
     virtual EditView*       GetEditView() const override;
     virtual bool            HasEditView() const override;
     Point                   GetCursorScreenPixelPos(bool bBelowLine);

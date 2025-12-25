@@ -297,7 +297,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             if (pSh && pSh->GetItem(SID_COLOR_TABLE))
             {
                 basegfx::BGradient aGradient(createColorStops());
-                aGradient.SetAngle(Degree10(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10));
+                aGradient.SetAngle(Degree10((mxMTRAngle->get_value(FieldUnit::DEGREE) % 360) * 10));
                 aGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(mxGradientStyle->get_active()));
 
                 const XFillGradientItem aXFillGradientItem(mxLbFillAttr->get_active_text(), aGradient);
@@ -806,7 +806,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
     }
 }
 
-void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
+void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const XFillTransparenceItem* pState)
 {
     if (bDisabled)
     {
@@ -817,8 +817,7 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
     {
         if (pState)
         {
-            const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
-            mpTransparenceItem.reset(pItem->Clone());
+            mpTransparenceItem.reset(pState->Clone());
         }
         else
         {
@@ -1089,7 +1088,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     switch(nSID)
     {
         case SID_ATTR_FILL_TRANSPARENCE:
-            updateFillTransparence(bDisabled, bDefaultOrSet, pState);
+            updateFillTransparence(bDisabled, bDefaultOrSet, static_cast<const XFillTransparenceItem*>(pState));
         break;
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
             updateFillFloatTransparence(bDisabled, bDefaultOrSet, pState);
@@ -1372,21 +1371,11 @@ sal_Int32 AreaPropertyPanelBase::GetSelectedTransparencyTypeIndex() const
 
 basegfx::BColorStops AreaPropertyPanelBase::createColorStops()
 {
-    basegfx::BColorStops aColorStops;
+    basegfx::BColorStops aColorStops = maColorStops;
 
-    if (maColorStops.size() >= 2)
-    {
-        aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(),
-                                                  mxLbFillGradFrom->GetSelectEntryColor().getBColor());
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(),
-                                                 mxLbFillGradTo->GetSelectEntryColor().getBColor());
-    }
-    else
-    {
-        aColorStops.emplace_back(0.0, mxLbFillGradFrom->GetSelectEntryColor().getBColor());
-        aColorStops.emplace_back(1.0, mxLbFillGradTo->GetSelectEntryColor().getBColor());
-    }
+    aColorStops.changeStartAndEnd(
+        mxLbFillGradFrom->GetSelectEntryColor().getBColor(),
+        mxLbFillGradTo->GetSelectEntryColor().getBColor());
 
     return aColorStops;
 }

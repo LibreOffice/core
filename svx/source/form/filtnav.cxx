@@ -1062,7 +1062,7 @@ FmFilterNavigator::FmFilterNavigator(vcl::Window* pTopLevel, std::unique_ptr<wel
 
     m_xTreeView->connect_selection_changed(LINK(this, FmFilterNavigator, SelectHdl));
     m_xTreeView->connect_key_press(LINK(this, FmFilterNavigator, KeyInputHdl));
-    m_xTreeView->connect_popup_menu(LINK(this, FmFilterNavigator, PopupMenuHdl));
+    m_xTreeView->connect_command(LINK(this, FmFilterNavigator, PopupMenuHdl));
     m_xTreeView->connect_editing(LINK(this, FmFilterNavigator, EditingEntryHdl),
                                  LINK(this, FmFilterNavigator, EditedEntryHdl));
     m_xTreeView->connect_drag_begin(LINK(this, FmFilterNavigator, DragBeginHdl));
@@ -1247,8 +1247,8 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 IMPL_LINK_NOARG(FmFilterNavigator, SelectHdl, weld::TreeView&, void)
 {
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_selected();
+    if (!xIter)
         return;
 
     FmFilterData* pData = weld::fromId<FmFilterData*>(m_xTreeView->get_id(*xIter));

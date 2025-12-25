@@ -213,6 +213,7 @@ interface TableEditView
     FID_SWITCH_TO_PREVIOUS_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_EXIT_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_SELECT_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CURRENT_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_NORMALVIEWMODE  [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_PAGEBREAKMODE   [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -223,6 +224,7 @@ interface TableEditView
     SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_THEME_DIALOG    [ ExecMethod = Execute; StateMethod = GetState; ]
 
+    SID_NAVIGATOR_SELECT_COMMENT [ ExecMethod = ExecNavigatorWin; ]
 
     // search/replace
     FID_SEARCH_NOW      [ ExecMethod = ExecSearch; StateMethod = NoState;  ]

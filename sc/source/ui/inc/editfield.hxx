@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 /** An edit control that contains a double precision floating-point value. */
 class ScDoubleField

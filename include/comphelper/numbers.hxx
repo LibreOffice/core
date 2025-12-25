@@ -21,11 +21,12 @@
 #define INCLUDED_COMPHELPER_NUMBERS_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::util { class XNumberFormats; }
 namespace com::sun::star::util { class XNumberFormatter; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper
 {

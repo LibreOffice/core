@@ -1452,9 +1452,6 @@ void SAL_CALL SwXTextField::attach(
                 xField.reset(pFNField);
                 if (!m_pImpl->m_pProps->sPar3.isEmpty())
                     pFNField->SetExpansion(m_pImpl->m_pProps->sPar3);
-                uno::Any aFormat;
-                aFormat <<= m_pImpl->m_pProps->nFormat;
-                xField->PutValue( aFormat, FIELD_PROP_FORMAT );
             }
             break;
             case SwServiceType::FieldTypeTemplateName:
@@ -1462,9 +1459,6 @@ void SAL_CALL SwXTextField::attach(
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::TemplateName);
                 xField.reset(new SwTemplNameField(static_cast<SwTemplNameFieldType*>(pFieldType),
                                             static_cast<SwFileNameFormat>(m_pImpl->m_pProps->nFormat)));
-                uno::Any aFormat;
-                aFormat <<= m_pImpl->m_pProps->nFormat;
-                xField->PutValue(aFormat, FIELD_PROP_FORMAT);
             }
             break;
             case SwServiceType::FieldTypeChapter:

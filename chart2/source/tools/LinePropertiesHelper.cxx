@@ -24,18 +24,17 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/color.hxx>
 
-using namespace ::com::sun::star;
-
-using ::com::sun::star::beans::Property;
+using namespace css;
 
 namespace chart
 {
 
 void LinePropertiesHelper::AddPropertiesToVector(
-    std::vector< Property > & rOutProperties )
+    std::vector<beans::Property> & rOutProperties )
 {
     // Line Properties see service drawing::LineProperties
     rOutProperties.emplace_back( "LineStyle",
@@ -63,6 +62,11 @@ void LinePropertiesHelper::AddPropertiesToVector(
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back("LineComplexColor",
+                  PROP_LINE_COMPLEX_COLOR,
+                  cppu::UnoType<util::XComplexColor>::get(),
+                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT | beans::PropertyAttribute::MAYBEVOID);
 
     rOutProperties.emplace_back( "LineTransparence",
                   PROP_LINE_TRANSPARENCE,

@@ -466,6 +466,21 @@ public:
 
     virtual SystemGraphicsData
                             GetGraphicsData() const override;
+
+#if ENABLE_CAIRO_CANVAS
+
+    /// Check whether cairo will work
+    virtual bool                SupportsCairo() const override;
+    /// Create Surface from given cairo surface
+    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    /// Create surface with given dimensions
+    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
+    /// Create Surface for given bitmap data
+    virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const override;
+    virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
+
+#endif // ENABLE_CAIRO_CANVAS
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

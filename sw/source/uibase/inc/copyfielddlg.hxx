@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <condedit.hxx>
 
 class CopyFieldDlg final : public weld::GenericDialogController

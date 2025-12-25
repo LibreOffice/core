@@ -17,6 +17,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
@@ -45,32 +46,6 @@ public:
 ScUiCalcTest2::ScUiCalcTest2()
     : ScModelTestBase(u"sc/qa/unit/uicalc/data"_ustr)
 {
-}
-
-static void lcl_AssertCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr)
-{
-    ScAddress aAddr;
-    sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, rDocSh.GetDocument(),
-                                                 formula::FormulaGrammar::CONV_OOO, nOffset);
-    ScTabViewShell* pViewShell = rDocSh.GetBestViewShell(false);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OUString(OUString::Concat("Incorrect Column in position ") + rStr).toUtf8().getStr(),
-        aAddr.Col(), pViewShell->GetViewData().GetCurX());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OUString(OUString::Concat("Incorrect Row in position ") + rStr).toUtf8().getStr(),
-        aAddr.Row(), pViewShell->GetViewData().GetCurY());
-}
-
-static void lcl_SelectObjectByName(ScTabViewShell& rViewShell, std::u16string_view rObjName)
-{
-    bool bFound = rViewShell.SelectObject(rObjName);
-    CPPUNIT_ASSERT_MESSAGE(
-        OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
-        bFound);
-
-    CPPUNIT_ASSERT(rViewShell.GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount()
-                   != 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
@@ -211,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf119793)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1381), xShape->getPosition().Y);
 
     // Move the shape to the right
-    lcl_SelectObjectByName(*getViewShell(), u"Shape 1");
+    selectObjectByName(u"Shape 1");
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
 
@@ -253,25 +228,25 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131455)
     createScDoc("tdf131455-fixed.ods");
     ScDocShell* pDocSh = getScDocShell();
 
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"A5");
+    checkCurrentCursorPosition(*pDocSh, u"A5");
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"B5");
+    checkCurrentCursorPosition(*pDocSh, u"B5");
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"E5");
+    checkCurrentCursorPosition(*pDocSh, u"E5");
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"F5");
+    checkCurrentCursorPosition(*pDocSh, u"F5");
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"I5");
+    checkCurrentCursorPosition(*pDocSh, u"I5");
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"J5");
+    checkCurrentCursorPosition(*pDocSh, u"J5");
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"M5");
+    checkCurrentCursorPosition(*pDocSh, u"M5");
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
     {
         dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-        lcl_AssertCurrentCursorPosition(*pDocSh, u"N5");
+        checkCurrentCursorPosition(*pDocSh, u"N5");
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getViewShell()->GetViewData().CurrentTabForData());
@@ -279,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131455)
     dispatchCommand(mxComponent, u".uno:JumpToNextTable"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getViewShell()->GetViewData().CurrentTabForData());
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"A4");
+    checkCurrentCursorPosition(*pDocSh, u"A4");
 
     // Go to row 9
     for (size_t i = 0; i < 6; ++i)
@@ -287,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131455)
         dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
     }
 
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"A10");
+    checkCurrentCursorPosition(*pDocSh, u"A10");
 
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, {});
     dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
@@ -295,13 +270,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131455)
     dispatchCommand(mxComponent, u".uno:JumpToPrevTable"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getViewShell()->GetViewData().CurrentTabForData());
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"N5");
+    checkCurrentCursorPosition(*pDocSh, u"N5");
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
     {
         dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-        lcl_AssertCurrentCursorPosition(*pDocSh, u"N5");
+        checkCurrentCursorPosition(*pDocSh, u"N5");
     }
 }
 
@@ -341,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124816)
     // OFFSET() was changed as of tdf#85551 and here result of that test
     // document is now Err:502 instead of 0.
     static constexpr OUString aExpectedResult(u"Err:502"_ustr);
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"D10");
+    checkCurrentCursorPosition(*pDocSh, u"D10");
     CPPUNIT_ASSERT_EQUAL(aExpectedResult, pDoc->GetString(ScAddress(3, 9, 0)));
 
     //Without the fix, it would crash
@@ -491,7 +466,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf159938)
     dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
     ScDocShell* pDocSh = getScDocShell();
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"A4");
+    checkCurrentCursorPosition(*pDocSh, u"A4");
     CPPUNIT_ASSERT_EQUAL(nCol1Width, pDoc->GetColWidth(0, 0));
     CPPUNIT_ASSERT_EQUAL(nCol2Width, pDoc->GetColWidth(1, 0));
     CPPUNIT_ASSERT_EQUAL(nRow1Height, pDoc->GetRowHeight(0, 0));
@@ -512,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf83901)
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
 
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"A3");
+    checkCurrentCursorPosition(*pDocSh, u"A3");
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, {});
     dispatchCommand(mxComponent, u".uno:InsertRowsBefore"_ustr, {});
 
@@ -684,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf138428)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"B1");
+    checkCurrentCursorPosition(*pDocSh, u"B1");
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
@@ -725,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf136113)
     CPPUNIT_ASSERT_EQUAL(tools::Long(18142), pObj->GetSnapRect().Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1709), pObj->GetSnapRect().Top());
 
-    lcl_SelectObjectByName(*getViewShell(), u"Arrow");
+    selectObjectByName(u"Arrow");
 
     // Move the shape up
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
@@ -746,7 +721,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf130614)
     createScDoc("tdf130614.ods");
     ScDocument* pDoc = getScDoc();
 
-    lcl_SelectObjectByName(*getViewShell(), u"Object 1");
+    selectObjectByName(u"Object 1");
 
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
@@ -1116,13 +1091,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf107952)
     // - Expected: 1
     // - Actual  : 3
     // - Incorrect Column in position B1
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"B1");
+    checkCurrentCursorPosition(*pDocSh, u"B1");
 
     goToCell(u"D10"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"B1");
+    checkCurrentCursorPosition(*pDocSh, u"B1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150766)
@@ -1662,20 +1637,105 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf140027)
     goToCell(u"A1"_ustr);
 
     ScDocShell* pDocSh = getScDocShell();
-    lcl_AssertCurrentCursorPosition(*pDocSh, u"A1");
+    checkCurrentCursorPosition(*pDocSh, u"A1");
 
     dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, {});
     dispatchCommand(mxComponent, u".uno:InsertRowsBefore"_ustr, {});
 
     // check we have no any unnecessary flags
     ScDocument* pDoc = getScDoc();
-    auto nFlag = pDoc->GetAttr(0, 0, 1, ATTR_MERGE_FLAG)->GetValue();
+    auto nFlag = pDoc->GetAttr(0, 0, 1, ATTR_MERGE_FLAG).GetValue();
     CPPUNIT_ASSERT_EQUAL(ScMF::NONE, nFlag);
 
     const ScPatternAttr* pPattern = pDoc->GetPattern(1, 0, 1);
     const ScPatternAttr aDefPattern = pPattern->getCellAttributeHelper().getDefaultCellAttribute();
     // check that the default pattern is not changed
     CPPUNIT_ASSERT(ScPatternAttr::areSame(pPattern, &aDefPattern));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testcommand_SetOptimalColumnWidth)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Set columns' width to 10 cm:
+    for (SCCOL col = 0; col <= 4; ++col)
+        pDoc->SetColWidth(col, 0, o3tl::toTwips(10, o3tl::Length::cm));
+
+    // Add strings
+    pDoc->SetString(0, 0, 0, u"WWW"_ustr); // A1
+    pDoc->SetString(1, 0, 0, u"WWW"_ustr); // B1
+    pDoc->SetString(2, 0, 0, u"WWW"_ustr); // C1
+    pDoc->SetString(3, 0, 0, u"WWW"_ustr); // D1
+    pDoc->SetString(4, 0, 0, u"WWW"_ustr); // E1
+    pDoc->SetString(4, 1, 0, u"WWWWW"_ustr); // E2
+    pDoc->SetString(4, 2, 0, u"WWWWWWW"_ustr); // E3
+
+    // Store the initial values of the widths:
+    auto nWidthA = pDoc->GetColWidth(0, 0);
+    auto nWidthB = pDoc->GetColWidth(1, 0);
+    auto nWidthC = pDoc->GetColWidth(2, 0);
+    auto nWidthD = pDoc->GetColWidth(3, 0);
+    auto nWidthE = pDoc->GetColWidth(4, 0);
+
+    auto pViewShell = pDoc->GetDocumentShell()->GetBestViewShell();
+
+    // Select C1:E2:
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(2, 0, 0, 4, 1, 0));
+
+    // .uno:SetOptimalColumnWidth must take selection into account:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)) });
+
+    // Columns A and B must not change width
+    CPPUNIT_ASSERT_EQUAL(nWidthA, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
+
+    // Columns C to E must become narrower
+    CPPUNIT_ASSERT_LESS(nWidthC, pDoc->GetColWidth(2, 0));
+    CPPUNIT_ASSERT_LESS(nWidthD, pDoc->GetColWidth(3, 0));
+    CPPUNIT_ASSERT_LESS(nWidthE, pDoc->GetColWidth(4, 0));
+
+    // Width of column C must be same as D, and smaller than E (in E, a wider string is selected):
+    CPPUNIT_ASSERT_EQUAL(pDoc->GetColWidth(2, 0), pDoc->GetColWidth(3, 0)); // D == C
+    CPPUNIT_ASSERT_GREATER(pDoc->GetColWidth(2, 0), pDoc->GetColWidth(4, 0)); // E > C
+
+    // Store updated width:
+    nWidthE = pDoc->GetColWidth(4, 0);
+
+    // Select E3:
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(4, 2, 0));
+
+    // .uno:SetOptimalColumnWidth must take selection into account:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)) });
+
+    // Width of E must increase (in E, even wider string is selected):
+    CPPUNIT_ASSERT_GREATER(nWidthE, pDoc->GetColWidth(4, 0));
+
+    // Select A1:B1:
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(ScRange(0, 0, 0, 1, 0, 0));
+    // Set width of column E to 10 cm:
+    pDoc->SetColWidth(4, 0, o3tl::toTwips(10, o3tl::Length::cm));
+    // Store it:
+    nWidthE = pDoc->GetColWidth(4, 0);
+
+    // .uno:SetOptimalColumnWidth with Column E must not change widths of columns A:B, only C:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)),
+                      comphelper::makePropertyValue(u"Column"_ustr, sal_uInt16(5)) });
+
+    CPPUNIT_ASSERT_EQUAL(nWidthA, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
+    CPPUNIT_ASSERT_LESS(nWidthE, pDoc->GetColWidth(4, 0));
+
+    // .uno:SetOptimalColumnWidth with Column A must change width of column A:
+    dispatchCommand(mxComponent, u".uno:SetOptimalColumnWidth"_ustr,
+                    { comphelper::makePropertyValue(u"aExtraWidth"_ustr, sal_uInt16(0)),
+                      comphelper::makePropertyValue(u"Column"_ustr, sal_uInt16(1)) });
+
+    CPPUNIT_ASSERT_LESS(nWidthA, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

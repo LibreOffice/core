@@ -25,7 +25,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -151,7 +151,7 @@ GalleryBrowser::GalleryBrowser(
 
     mxThemes->make_sorted();
     mxThemes->connect_selection_changed(LINK(this, GalleryBrowser, SelectThemeHdl));
-    mxThemes->connect_popup_menu(LINK(this, GalleryBrowser, PopupMenuHdl1));
+    mxThemes->connect_command(LINK(this, GalleryBrowser, PopupMenuHdl1));
     mxThemes->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl1));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
 
@@ -184,7 +184,7 @@ GalleryBrowser::GalleryBrowser(
     mxListView->connect_visible_range_changed(LINK(this, GalleryBrowser, VisRowsScrolledHdl));
     mxListView->connect_size_allocate(LINK(this, GalleryBrowser, SizeAllocHdl));
     mxListView->connect_selection_changed(LINK(this, GalleryBrowser, SelectObjectHdl));
-    mxListView->connect_popup_menu(LINK(this, GalleryBrowser, PopupMenuHdl2));
+    mxListView->connect_command(LINK(this, GalleryBrowser, PopupMenuHdl2));
     mxListView->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl2));
     mxListView->connect_row_activated(LINK(this, GalleryBrowser, RowActivatedHdl));
     mxDragDropTargetHelper.reset(new GalleryDragDrop(this, mxListView->get_drop_target()));
@@ -475,7 +475,7 @@ void GalleryBrowser::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 else if( nCurSelectPos )
                     mxThemes->select( nCurSelectPos - 1 );
                 else
-                    mxThemes->select(-1);
+                    mxThemes->unselect_all();
 
                 SelectThemeHdl( *mxThemes );
             }
@@ -1138,7 +1138,7 @@ void GalleryBrowser::UpdateRows(bool bVisibleOnly)
                 GalleryIconView::drawTransparenceBackground(*xDev, aPos, aBitmapSizePixel);
             }
 
-            xDev->DrawBitmapEx(aPos, aBitmap);
+            xDev->DrawBitmap(aPos, aBitmap);
         }
 
         mxListView->set_text(rEntry, sItemTextTitle);
@@ -1216,16 +1216,16 @@ sal_uInt32 GalleryBrowser::ImplGetSelectedItemId( const Point* pSelPos, Point& r
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> xIter = mxListView->make_iterator();
         if( pSelPos )
         {
+            std::unique_ptr<weld::TreeIter> xIter = mxListView->make_iterator();
             if (mxListView->get_dest_row_at_pos(*pSelPos, xIter.get(), false))
                 nRet = mxListView->get_iter_index_in_parent(*xIter) + 1;
             rSelPos = *pSelPos;
         }
         else
         {
-            if (mxListView->get_selected(xIter.get()))
+            if (std::unique_ptr<weld::TreeIter> xIter = mxListView->get_selected())
             {
                 nRet = mxListView->get_iter_index_in_parent(*xIter) + 1;
                 rSelPos = mxListView->get_row_area(*xIter).Center();

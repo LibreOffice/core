@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class watermark(UITestCase):
 
-   def test_insert_watermark(self):
+    def test_insert_watermark(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:Watermark") as xDialog:

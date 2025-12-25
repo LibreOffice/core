@@ -11,7 +11,7 @@
 #define INCLUDED_SVX_COLORBOX_HXX
 
 #include <memory>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/colorwindow.hxx>
 
 class ColorListBox;

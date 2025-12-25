@@ -328,6 +328,8 @@ cmd/sc_datastreamsstop.png cmd/sc_basicstop.png
 # Alignment
 cmd/32/alignvcenter.png cmd/32/alignverticalcenter.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
+cmd/32/commonalignend.png cmd/32/alignright.png
+cmd/32/commonalignstart.png cmd/32/alignleft.png
 cmd/32/commonaligntop.png cmd/32/aligntop.png
 cmd/32/commonalignverticalcenter.png cmd/32/alignverticalcenter.png
 cmd/32/objectalign.png cmd/32/objectalignleft.png
@@ -338,6 +340,8 @@ cmd/32/sectionaligntop.png cmd/32/alignup.png
 
 cmd/lc_alignvcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
+cmd/lc_commonalignend.png cmd/lc_alignright.png
+cmd/lc_commonalignstart.png cmd/lc_alignleft.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_objectalign.png cmd/lc_objectalignleft.png
@@ -348,6 +352,8 @@ cmd/lc_sectionaligntop.png cmd/lc_alignup.png
 
 cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
+cmd/sc_commonalignend.png cmd/sc_alignright.png
+cmd/sc_commonalignstart.png cmd/sc_alignleft.png
 cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_objectalign.png cmd/sc_objectalignleft.png
@@ -1197,22 +1203,34 @@ cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
 
 # Paragraph Alignment
+cmd/32/alignend.png cmd/32/alignright.png
+cmd/32/alignstart.png cmd/32/alignleft.png
+cmd/32/endpara.png cmd/32/alignright.png
 cmd/32/leftpara.png cmd/32/alignleft.png
 cmd/32/centerpara.png cmd/32/alignhorizontalcenter.png
 cmd/32/fontworkalignmentfloater.png cmd/32/alignhorizontalcenter.png
 cmd/32/rightpara.png cmd/32/alignright.png
+cmd/32/startpara.png cmd/32/alignleft.png
 cmd/32/justifypara.png cmd/32/alignblock.png
 
+cmd/lc_alignend.png cmd/lc_alignright.png
+cmd/lc_alignstart.png cmd/lc_alignleft.png
+cmd/lc_endpara.png cmd/lc_alignright.png
 cmd/lc_leftpara.png cmd/lc_alignleft.png
 cmd/lc_centerpara.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_fontworkalignmentfloater.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_rightpara.png cmd/lc_alignright.png
+cmd/lc_startpara.png cmd/lc_alignleft.png
 cmd/lc_justifypara.png cmd/lc_alignblock.png
 
+cmd/sc_alignend.png cmd/sc_alignright.png
+cmd/sc_alignstart.png cmd/sc_alignleft.png
+cmd/sc_endpara.png cmd/sc_alignright.png
 cmd/sc_leftpara.png cmd/sc_alignleft.png
 cmd/sc_centerpara.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_fontworkalignmentfloater.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_rightpara.png cmd/sc_alignright.png
+cmd/sc_startpara.png cmd/sc_alignleft.png
 cmd/sc_justifypara.png cmd/sc_alignblock.png
 
 # Vertical Text Alignment
@@ -2652,3 +2670,13 @@ cmd/sc_formatline-more.png cmd/sc_controlproperties.png
 cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
 cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
 cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
+
+# SwNavigator toolbox functions toolbar
+cmd/sc_objecttitledescription-frames.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-frames.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-images.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-images.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-oleobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-oleobjects.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-drawingobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-drawingobjects.png cmd/lc_objecttitledescription.png

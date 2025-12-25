@@ -61,6 +61,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <utility>
@@ -73,7 +74,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 
 //  namespaces
@@ -1805,7 +1806,7 @@ bool ToolBarManager::IsPluginMode() const
         if ( xModel.is() )
         {
             Sequence< PropertyValue > aSeq = xModel->getArgs();
-            utl::MediaDescriptor aMediaDescriptor( aSeq );
+            comphelper::SequenceAsHashMap aMediaDescriptor(aSeq);
             bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VIEWONLY, false );
         }
     }

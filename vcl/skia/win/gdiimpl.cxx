@@ -30,7 +30,12 @@
 #include <SkTypeface_win.h>
 #include <SkFont.h>
 #include <SkFontMgr.h>
+
+#pragma warning(push)
+#pragma warning(disable : 4100) // "unreferenced formal parameter"
 #include <tools/window/win/WindowContextFactory_win.h>
+#pragma warning(pop)
+
 #include <tools/window/WindowContext.h>
 
 #include <windows.h>
@@ -50,12 +55,8 @@ getDWritePrivateFontCollection(IDWriteFontFace* fontFace)
     sal::systools::COMReference<IDWriteFontFile> fontFile;
     sal::systools::ThrowIfFailed(fontFace->GetFiles(&numberOfFiles, &fontFile), SAL_WHERE);
 
-    static sal::systools::COMReference<IDWriteFactory3> dwriteFactory3 = [] {
-        IDWriteFactory* dwriteFactory = WinSalGraphics::getDWriteFactory();
-        sal::systools::COMReference<IDWriteFactory3> factory3;
-        sal::systools::ThrowIfFailed(dwriteFactory->QueryInterface(&factory3), SAL_WHERE);
-        return factory3;
-    }();
+    static sal::systools::COMReference<IDWriteFactory3> dwriteFactory3(
+        WinSalGraphics::getDWriteFactory(), sal::systools::COM_QUERY_THROW);
 
     static sal::systools::COMReference<IDWriteFontSetBuilder> dwriteFontSetBuilder = [] {
         sal::systools::COMReference<IDWriteFontSetBuilder> builder;
@@ -114,13 +115,13 @@ void WinSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     {
         case RenderRaster:
             mWindowContext
-                = skwindow::MakeRasterForWin(mWinParent.gethWnd(), aDispParamBuilder.build());
+                = skwindow::MakeRasterForWin(mWinParent.gethWnd(), aDispParamBuilder.detach());
             if (mWindowContext)
                 mSurface = mWindowContext->getBackbufferSurface();
             break;
         case RenderVulkan:
             mWindowContext
-                = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), aDispParamBuilder.build());
+                = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), aDispParamBuilder.detach());
             // See flushSurfaceToWindowContext().
             if (mWindowContext)
                 mSurface = createSkSurface(GetWidth(), GetHeight());
@@ -443,7 +444,7 @@ std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool /*tempor
 {
     SkiaZone zone;
     skwindow::DisplayParamsBuilder displayParams;
-    return skwindow::MakeVulkanForWin(nullptr, displayParams.build());
+    return skwindow::MakeVulkanForWin(nullptr, displayParams.detach());
 }
 }
 

@@ -247,9 +247,9 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             PutInOrder(nStartX,nEndX);
             PutInOrder(nStartY,nEndY);
             rDoc.SetEmbedded( ScRange(nStartX,nStartY,nTab, nEndX,nEndY,nTab) );
-            ScDocShell& rDocSh = aViewData.GetDocShell();
-            rDocSh.UpdateOle( aViewData, true );
-            rDocSh.SetDocumentModified();
+            ScDocShell* pDocSh = aViewData.GetDocShell();
+            pDocSh->UpdateOle( aViewData, true );
+            pDocSh->SetDocumentModified();
         }
 
         SCCOL nPaintStartX;
@@ -308,7 +308,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             Color aSelColor(rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL).nColor);
 
             aReferenceMarks[0] = ScInputHandler::GetReferenceMark(
-                aViewData, aViewData.GetDocShell(), nX1, nX2, nY1, nY2, nTab, aSelColor);
+                aViewData, *aViewData.GetDocShell(), nX1, nX2, nY1, nY2, nTab, aSelColor);
 
             ScInputHandler::SendReferenceMarks(pLOKViewShell, aReferenceMarks);
         }
@@ -469,7 +469,7 @@ static tools::Long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW
 
 void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 {
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), eHeaderType, GetViewData().CurrentTabForData());
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), eHeaderType, GetViewData().GetTabNumber());
 
     tools::Long        nDiff;
     bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );

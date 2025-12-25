@@ -13,7 +13,7 @@
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 #include <o3tl/hash_combine.hxx>
-
+#include <dpitemdata.hxx>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -39,17 +39,17 @@ size_t ScDPResultTree::NamePairHash::operator() (const NamePairType& rPair) cons
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::DimensionNode::dump(int nLevel) const
 {
-    string aIndent(nLevel*2, ' ');
+    std::string aIndent(nLevel*2, ' ');
     MembersType::const_iterator it = maChildMembersValueNames.begin(), itEnd = maChildMembersValueNames.end();
     for (; it != itEnd; ++it)
     {
-        cout << aIndent << "member: ";
+        std::cout << aIndent << "member: ";
         const ScDPItemData& rVal = it->first;
         if (rVal.IsValue())
-            cout << rVal.GetValue();
+            std::cout << rVal.GetValue();
         else
-            cout << rVal.GetString();
-        cout << endl;
+            std::cout << rVal.GetString();
+        std::cout << std::endl;
 
         it->second->dump(nLevel+1);
     }
@@ -63,14 +63,14 @@ ScDPResultTree::MemberNode::~MemberNode() {}
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::MemberNode::dump(int nLevel) const
 {
-    string aIndent(nLevel*2, ' ');
+    std::string aIndent(nLevel*2, ' ');
     for (const auto& rValue : maValues)
-        cout << aIndent << "value: " << rValue << endl;
+        std::cout << aIndent << "value: " << rValue << std::endl;
 
     for (const auto& [rName, rxDim] : maChildDimensions)
     {
-        cout << aIndent << "dimension: " << rName << endl;
-        rxDim->dump(nLevel+1);
+        std::cout << aIndent << "dimension: " << rName << std::endl;
+        rxDim.dump(nLevel+1);
     }
 }
 #endif
@@ -260,7 +260,7 @@ double ScDPResultTree::getLeafResult(const css::sheet::DataPilotFieldFilter& rFi
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::dump() const
 {
-    cout << "primary dimension name: " << maPrimaryDimName << endl;
+    std::cout << "primary dimension name: " << maPrimaryDimName << std::endl;
     mpRoot->dump(0);
 }
 #endif

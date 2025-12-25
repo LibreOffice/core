@@ -764,7 +764,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         SdrPageView*    pPV = nullptr;
                         SdrObject* pPickObj2 = PickObj(rPos, getHitTolLog(), pPV);
 
-                        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj )
+                        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj && pPickObj2->GetName() != pObj->GetName() )
                         {
                             // replace object
                             SdrPage* pWorkPage = GetSdrPageView()->GetPage();
@@ -804,6 +804,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             mnAction = DND_ACTION_COPY;
                         }
                         else if( ( mnAction & DND_ACTION_LINK ) && pPickObj2 && pObj &&
+                            pPickObj2->GetName() != pObj->GetName() &&
                             dynamic_cast< const SdrGrafObj *>( pPickObj2 ) ==  nullptr &&
                                 dynamic_cast< const SdrOle2Obj *>( pPickObj2 ) ==  nullptr )
                         {
@@ -1633,6 +1634,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( pOLV )
                 {
+                    // tdf#139269 - prevent text pasting into readonly areas of master views
+                    if (!pPage)
+                        pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());
+
+                    if (pPage && pPage->IsMasterPage() && pOLV->IsReadOnly())
+                        return false;
+
                     pOLV->InsertText( aOUString );
                     return true;
                 }

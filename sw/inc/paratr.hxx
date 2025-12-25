@@ -26,6 +26,7 @@
 #include "swatrset.hxx"
 #include "format.hxx"
 #include "charfmt.hxx"
+#include <editeng/autodiritem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/spltitem.hxx>
@@ -59,7 +60,12 @@ namespace o3tl
     template<> struct typed_flags<sw::ListLevelIndents> : is_typed_flags<sw::ListLevelIndents, 0x03> {};
 }
 
-/** If SwFormatDrop is a Client, it is the CharFormat that describes the font for the
+/**
+   This pool item is in the item set of a text node, for the Drop Caps feature.
+
+   Format -> Paragraph -> Drop Caps on the UI.
+
+   If SwFormatDrop is a Client, it is the CharFormat that describes the font for the
    DropCaps. If it is not a Client, formatting uses the CharFormat of the paragraph.
    If the CharFormat is modified, this change is propagated to the paragraphs
    via the Modify of SwFormatDrop. */
@@ -232,6 +238,8 @@ inline const SvxParaGridItem &SwAttrSet::GetParaGrid(bool bInP) const
     {   return Get( RES_PARATR_SNAPTOGRID, bInP ); }
 inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP) const
     {   return Get( RES_PARATR_CONNECT_BORDER, bInP ); }
+inline const SvxAutoFrameDirectionItem &SwAttrSet::GetAutoFrameDirection(bool bInP) const
+    {   return Get( RES_PARATR_AUTOFRAMEDIR, bInP ); }
 
 // Implementation of paragraph-attributes methods of SwFormat
 inline const SvxLineSpacingItem &SwFormat::GetLineSpacing(bool bInP) const

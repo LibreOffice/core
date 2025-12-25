@@ -76,7 +76,7 @@ auto DefaultToxTabStopTokenHandler::CalcEndStop(SwTextNode const& rNode,
         // in case it's in a header, any frame should do
         SwContentFrame const*const pFrame(rNode.getLayoutFrame(pLayout));
         assert(pFrame); // created in SwTOXBaseSection::Update()
-        SwRectFnSet const fnRect(pFrame->GetUpper());
+        SwRectFnSet const fnRect(*pFrame->GetUpper());
         SwRect rect = pFrame->getFramePrintArea();
         if (fnRect.GetWidth(rect) == 0) // typically it's newly created
         {

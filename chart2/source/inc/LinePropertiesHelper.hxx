@@ -41,6 +41,7 @@ namespace LinePropertiesHelper
         PROP_LINE_DASH,
         PROP_LINE_DASH_NAME, //not in service description
         PROP_LINE_COLOR,
+        PROP_LINE_COMPLEX_COLOR,
         PROP_LINE_TRANSPARENCE,
         PROP_LINE_WIDTH,
         PROP_LINE_JOINT,

@@ -39,7 +39,7 @@ static bool handleEmbeddedSTOFFSpreadsheetObject(const librevenge::RVNGBinaryDat
 bool StarOfficePresentationImportFilter::doImportDocument(weld::Window*,
                                                           librevenge::RVNGInputStream& rInput,
                                                           OdpGenerator& rGenerator,
-                                                          utl::MediaDescriptor&)
+                                                          comphelper::SequenceAsHashMap&)
 {
     return STOFFDocument::STOFF_R_OK == STOFFDocument::parse(&rInput, &rGenerator);
 }

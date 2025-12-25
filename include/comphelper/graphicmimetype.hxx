@@ -16,7 +16,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
-#include <vcl/salctype.hxx>
 
 namespace com::sun::star::graphic
 {
@@ -26,6 +25,12 @@ namespace com::sun::star::io
 {
 class XInputStream;
 }
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+
+enum class ConvertDataFormat;
 
 namespace comphelper
 {

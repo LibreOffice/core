@@ -146,7 +146,7 @@ class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 public:
     HtmlExportTest()
-        : SwModelTestBase(u"/sw/qa/extras/htmlexport/data/"_ustr, u"HTML (StarWriter)"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/htmlexport/data/"_ustr)
     {
     }
 
@@ -210,7 +210,7 @@ void SwHtmlDomExportTest::ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryS
 void SwHtmlDomExportTest::ExportToReqif()
 {
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(u"HTML (StarWriter)"_ustr);
+    save(TestFilter::HTML_WRITER);
 }
 
 void SwHtmlDomExportTest::ExportToHTML()

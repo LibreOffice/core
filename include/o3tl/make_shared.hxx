@@ -10,7 +10,6 @@
 #ifndef INCLUDED_O3TL_MAKE_SHARED_HXX
 #define INCLUDED_O3TL_MAKE_SHARED_HXX
 
-#include <o3tl/deleter.hxx>
 #include <memory>
 #include <type_traits>
 

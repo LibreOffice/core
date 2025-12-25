@@ -12,7 +12,7 @@
 #include <osl/file.hxx>
 #include <sfx2/safemode.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ZipPackageHelper.hxx>
 #include <unotools/configmgr.hxx>

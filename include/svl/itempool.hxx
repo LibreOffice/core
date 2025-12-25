@@ -29,7 +29,6 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
-#include <o3tl/sorted_vector.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 

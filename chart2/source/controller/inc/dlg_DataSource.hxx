@@ -19,7 +19,8 @@
 #pragma once
 
 #include "TabPageNotifiable.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 namespace chart

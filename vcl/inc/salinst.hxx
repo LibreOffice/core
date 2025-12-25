@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <o3tl/sorted_vector.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/dllapi.h>
@@ -81,6 +82,7 @@ private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
+    o3tl::sorted_vector<OUString> m_usedUI;
 
 protected:
     bool m_bSupportsOpenGL = false;
@@ -94,6 +96,8 @@ public:
     virtual ~SalInstance();
 
     bool supportsOpenGL() const { return m_bSupportsOpenGL; }
+
+    o3tl::sorted_vector<OUString>& getUsedUIList() { return m_usedUI; }
 
     //called directly after Application::Init
     virtual void            AfterAppInit() {}

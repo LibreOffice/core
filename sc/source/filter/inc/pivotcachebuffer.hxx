@@ -26,16 +26,12 @@
 
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
-
-namespace com::sun::star {
-    namespace sheet { class XDataPilotField; }
-}
-
 namespace oox::core { class Relations; }
 
 class ScDPSaveDimension;
 class ScDPObject;
 class Date;
+class ScDataPilotFieldObj;
 
 namespace oox::xls {
 
@@ -268,13 +264,13 @@ public:
 
     /** Creates inplace numeric grouping settings. */
     void                convertNumericGrouping(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxDPField ) const;
+                            const rtl::Reference< ScDataPilotFieldObj >& rxDPField ) const;
     /** Creates inplace date grouping settings or a new date group field. */
     OUString     createDateGroupField(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField ) const;
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField ) const;
     /** Creates a new grouped DataPilot field and returns its name. */
     OUString     createParentGroupField(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames ) const;
 

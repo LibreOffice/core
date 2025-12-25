@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 #include <sfx2/objsh.hxx>

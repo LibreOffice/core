@@ -961,20 +961,16 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // border of the cells
-    const SvxBoxItem* pBorder = pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
-    if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
+    const SvxBoxItem& rBorder = pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
+    if (rBorder.GetTop() || rBorder.GetBottom() || rBorder.GetLeft() || rBorder.GetRight())
     {
         aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_style "=\"");
 
         bool bInsertSemicolon = false;
-        aStrTD.append(BorderToStyle("top", pBorder->GetTop(),
-            bInsertSemicolon));
-        aStrTD.append(BorderToStyle("bottom", pBorder->GetBottom(),
-            bInsertSemicolon));
-        aStrTD.append(BorderToStyle("left", pBorder->GetLeft(),
-            bInsertSemicolon));
-        aStrTD.append(BorderToStyle("right", pBorder->GetRight(),
-            bInsertSemicolon));
+        aStrTD.append(BorderToStyle("top", rBorder.GetTop(), bInsertSemicolon));
+        aStrTD.append(BorderToStyle("bottom", rBorder.GetBottom(), bInsertSemicolon));
+        aStrTD.append(BorderToStyle("left", rBorder.GetLeft(), bInsertSemicolon));
+        aStrTD.append(BorderToStyle("right", rBorder.GetRight(), bInsertSemicolon));
 
         aStrTD.append('"');
     }

@@ -13,10 +13,10 @@
 #include <test/unoapi_test.hxx>
 #include <o3tl/numeric.hxx>
 
-#include <unotools/mediadescriptor.hxx>
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
@@ -39,7 +39,7 @@ namespace
 class PDFEncryptionTest : public UnoApiTest
 {
 protected:
-    utl::MediaDescriptor maMediaDescriptor;
+    comphelper::SequenceAsHashMap maMediaDescriptor;
 
 public:
     PDFEncryptionTest()

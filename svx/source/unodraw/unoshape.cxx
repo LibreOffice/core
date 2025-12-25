@@ -56,6 +56,7 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <tools/UnitConversion.hxx>
@@ -1517,7 +1518,6 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
         // with complex spreadsheets. So just ignore it here, in absence of a better fix.
         if (rPropertyName == "FromWordArt" || rPropertyName == "GraphicColorMode" || rPropertyName == "Representation")
         {
-            SAL_WARN("svx", "Ignoring property " << rPropertyName);
             return;
         }
         throw beans::UnknownPropertyException( rPropertyName, getXWeak());

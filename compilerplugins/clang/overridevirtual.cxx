@@ -16,7 +16,6 @@
 
 #include "clang/AST/Attr.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -95,7 +94,7 @@ bool OverrideVirtual::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
             // where "\<NL>" is followed directly by a real token without
             // intervening whitespace, tokens "\<NL>virtual" and "\<NL>{" are
             // reported:
-            if (compat::starts_with(s, "\\\n")) {
+            if (s.starts_with("\\\n")) {
                 s = s.drop_front(2);
             }
             if (parens == 0) {
@@ -121,7 +120,7 @@ bool OverrideVirtual::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
                     addSpace = false;
                 }
                 seenSpace = true;
-            } else if (compat::starts_with(s, "/*") || compat::starts_with(s, "//") || s == "\\") {
+            } else if (s.starts_with("/*") || s.starts_with("//") || s == "\\") {
                 if (!seenSpace) {
                     addSpace = true;
                 }

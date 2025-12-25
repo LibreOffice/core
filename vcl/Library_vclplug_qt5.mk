@@ -118,6 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceGrid \
     vcl/qt5/QtInstanceIconView \
     vcl/qt5/QtInstanceImage \
+    vcl/qt5/QtInstanceItemView \
     vcl/qt5/QtInstanceLabel \
     vcl/qt5/QtInstanceLevelBar \
     vcl/qt5/QtInstanceLinkButton \

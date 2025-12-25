@@ -103,6 +103,7 @@ public:
     SdPage* GetCurrentPage();
 
     void ShowAnnotations(bool bShow);
+    static bool isVisibleAnnotations();
 
 private:
     ViewShellBase& mrBase;

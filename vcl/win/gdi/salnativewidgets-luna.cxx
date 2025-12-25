@@ -642,7 +642,7 @@ static bool drawThemedControl(HDC hDC, ControlType nType, int iPart, int iState,
             if (iState == MPI_HOT || iState == MPI_NORMAL)
                 aBackgroundColor = ThemeColors::GetThemeColors().GetMenuHighlightColor();
             else if (iState == MPI_DISABLEDHOT || MPI_DISABLED)
-                aBackgroundColor = ThemeColors::GetThemeColors().GetDisabledColor();
+                aBackgroundColor = ThemeColors::GetThemeColors().GetMenuColor();
 
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aBackgroundColor.GetRed(),
                                                      aBackgroundColor.GetGreen(),

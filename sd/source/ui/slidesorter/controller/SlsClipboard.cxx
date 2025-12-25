@@ -658,7 +658,13 @@ sal_Int8 Clipboard::AcceptDrop (
             // explicitly set to move or link, and when the source and
             // target models are not the same.
             SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
-            if (pDragTransferable != nullptr
+
+            if (eDropType == DT_PAGE_FROM_NAVIGATOR && pDragTransferable
+                && !pDragTransferable->IsPageTransferable())
+            {
+                nAction = DND_ACTION_NONE;
+            }
+            else if (pDragTransferable != nullptr
                 && pDragTransferable->IsPageTransferable()
                 && ((rEvent.maDragEvent.DropAction
                         & css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT) != 0)

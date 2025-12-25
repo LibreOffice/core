@@ -219,33 +219,49 @@ void ScDPFieldButton::drawPopupButton()
     Size aSize;
     getPopupBoundingBox(aPos, aSize);
 
-    Color aDocColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    Color aAccentColor = svtools::ColorConfig().GetColorValue(svtools::ACCENTCOLOR).nColor;
+    float fScaleFactor = mpOutDev->GetDPIScaleFactor();
 
-    Color aBackgroundColor = mbPopupPressed      ? mrStyle.GetFaceColor()
-                             : mbHasHiddenMember ? aAccentColor
-                                                 : aDocColor;
+    // Button background color
+    Color aFaceColor = mrStyle.GetFaceColor();
+    Color aBackgroundColor
+        = mbHasHiddenMember ? mrStyle.GetHighlightColor()
+                            : mbPopupPressed ? mrStyle.GetShadowColor() : aFaceColor;
+
+    // Button line color
+    mpOutDev->SetLineColor(mrStyle.GetLabelTextColor());
+    // If the document background is light and face color is dark, use ShadowColor instead
+    Color aDocColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    if (aDocColor.IsBright() && aFaceColor.IsDark())
+        mpOutDev->SetLineColor(mrStyle.GetShadowColor());
 
     mpOutDev->SetFillColor(aBackgroundColor);
-    mpOutDev->SetLineColor();
     mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
 
-    const double nVDist = aSize.Height() / 4.0;
-    const double nHDist = aSize.Width() / 10.0;
-    const double fZoom = static_cast<double>(maZoomY);
+    // the arrowhead
+    Color aArrowColor = mbHasHiddenMember ? mrStyle.GetHighlightTextColor() : mrStyle.GetButtonTextColor();
+    // FIXME: HACK: The following DrawPolygon draws twice in lok rtl mode for some reason.
+    // => one at the correct location with fill (possibly no outline)
+    // => and the other at an x offset with outline and without fill
+    // eg. Replacing this with a DrawRect() does not have any such problems.
+    comphelper::LibreOfficeKit::isActive() ? mpOutDev->SetLineColor() : mpOutDev->SetLineColor(aArrowColor);
+    mpOutDev->SetFillColor(aArrowColor);
 
-    aBackgroundColor = mbPopupPressed      ? mrStyle.GetButtonTextColor()
-                       : mbHasHiddenMember ? aDocColor
-                                           : aAccentColor;
-    mpOutDev->SetFillColor(aBackgroundColor);
-    for (int i = 0; i < 3; i++)
+    Point aCenter(aPos.X() + (aSize.Width() / 2), aPos.Y() + (aSize.Height() / 2));
+
+    Size aArrowSize(4 * fScaleFactor, 2 * fScaleFactor);
+
+    tools::Polygon aPoly(3);
+    aPoly.SetPoint(Point(aCenter.X() - aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 0);
+    aPoly.SetPoint(Point(aCenter.X() + aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 1);
+    aPoly.SetPoint(Point(aCenter.X(),                      aCenter.Y() + aArrowSize.Height()), 2);
+    mpOutDev->DrawPolygon(aPoly);
+
+    if (mbHasHiddenMember)
     {
-        tools::Rectangle aRect;
-        aRect.SetTop(aPos.Y() + nVDist * (i + 1));
-        aRect.SetBottom(aPos.Y() + nVDist * (i + 1) + fZoom);
-        aRect.SetLeft(aPos.X() + nHDist + i * 3 * fZoom);
-        aRect.SetRight(aPos.X() + aSize.Width() - nHDist - i * 3 * fZoom);
-        mpOutDev->DrawRect(aRect);
+        // tiny little box to display in presence of hidden member(s).
+        Point aBoxPos(aPos.X() + aSize.Width() - 5 * fScaleFactor, aPos.Y() + aSize.Height() - 5 * fScaleFactor);
+        Size aBoxSize(3 * fScaleFactor, 3 * fScaleFactor);
+        mpOutDev->DrawRect(tools::Rectangle(aBoxPos, aBoxSize));
     }
 }
 

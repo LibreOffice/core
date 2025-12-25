@@ -31,13 +31,13 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry<style::ParagraphAdjust> const pXML_Para_Adjust_Enum[] =
 {
-    { XML_START,        style::ParagraphAdjust_LEFT },
-    { XML_END,          style::ParagraphAdjust_RIGHT },
+    { XML_LEFT,         style::ParagraphAdjust_LEFT },
+    { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
+    { XML_START,        style::ParagraphAdjust_START },
+    { XML_END,          style::ParagraphAdjust_END },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
     { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
     { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
-    { XML_LEFT,         style::ParagraphAdjust_LEFT },
-    { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
     { XML_TOKEN_INVALID, style::ParagraphAdjust(0) }
 };
 

@@ -21,7 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -249,7 +249,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
         pXHatch.reset(new XHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) ));
+                    Degree10(static_cast<sal_Int16>((m_xMtrAngle->get_value(FieldUnit::NONE) % 360) * 10)) ));
     }
     assert( pXHatch && "XHatch couldn't be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
@@ -349,7 +349,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) );
+                    Degree10(static_cast<sal_Int16>((m_xMtrAngle->get_value(FieldUnit::NONE) % 360) * 10)) );
 
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
 
@@ -457,7 +457,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) );
+                    Degree10(static_cast<sal_Int16>((m_xMtrAngle->get_value(FieldUnit::NONE) % 360) * 10)) );
 
     m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
@@ -486,7 +486,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                      GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) );
+                    Degree10(static_cast<sal_Int16>((m_xMtrAngle->get_value(FieldUnit::NONE) % 360) * 10)) );
 
     m_pHatchingList->Replace(std::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 

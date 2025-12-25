@@ -321,7 +321,7 @@ public:
 
     // for Cursortravelling etc.
     SvxIconChoiceCtrlEntry* GoLeftRight( SvxIconChoiceCtrlEntry*, bool bRight );
-    SvxIconChoiceCtrlEntry* GoUpDown( const SvxIconChoiceCtrlEntry*, bool bDown );
+    SvxIconChoiceCtrlEntry* GoUpDown( const SvxIconChoiceCtrlEntry*, bool bDown, bool bWrap = false);
     SvxIconChoiceCtrlEntry* GoPageUpDown( const SvxIconChoiceCtrlEntry*, bool bDown );
 };
 

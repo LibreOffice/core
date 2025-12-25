@@ -15,7 +15,7 @@ class TxtEncExportTest : public SwModelTestBase
 {
 public:
     TxtEncExportTest()
-        : SwModelTestBase(u"/sw/qa/extras/txtencexport/data/"_ustr, u"Text (encoded)"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/txtencexport/data/"_ustr)
     {
     }
 
@@ -40,7 +40,7 @@ CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsNotHidden)
 {
     createSwDoc("bullets.odt");
     setFilterOptions(u"UTF8,,,,"_ustr);
-    save(mpFilter);
+    save(TestFilter::TEXT_ENCODED);
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(
@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsHidden)
 {
     createSwDoc("bullets.odt");
     setFilterOptions(u"UTF8,,,,,false"_ustr);
-    save(mpFilter);
+    save(TestFilter::TEXT_ENCODED);
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(

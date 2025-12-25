@@ -120,10 +120,11 @@
 #include <rtl/math.hxx>
 #include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
+#include <TransitionPreset.hxx>
 
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include "UnoDocumentSettings.hxx"
@@ -1403,6 +1404,11 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
         {
             anim::convertTarget(sTmp, aTemp);
             mrWriter.put("targetElement", sTmp.makeStringAndClear());
+            SdrObject* pObject = getTargetObject(aTemp);
+            if (pObject)
+            {
+                mrWriter.put("title", pObject->GetTitle());
+            }
         }
         nTemp = xAnimate->getSubItem();
         if (nTemp)
@@ -3305,14 +3311,14 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                     case presentation::ClickAction_LASTPAGE :
                     {
                         sal_Int32 nCount = rDoc.GetSdPageCount( PageKind::Standard );
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::PDFWriter::DestAreaType::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
                     case presentation::ClickAction_FIRSTPAGE :
                     {
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::PDFWriter::DestAreaType::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
@@ -3322,7 +3328,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         sal_Int32 nDestPage = rPDFExtOutDevData.GetCurrentPageNumber();
                         if ( nDestPage )
                             nDestPage--;
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::DestAreaType::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
@@ -3333,7 +3339,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         sal_Int32 nLastPage = rDoc.GetSdPageCount( PageKind::Standard ) - 1;
                         if ( nDestPage > nLastPage )
                             nDestPage = nLastPage;
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::DestAreaType::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
@@ -3361,7 +3367,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                                     sal_Int32 nPage = ImplPDFGetBookmarkPage( aBookmark, rDoc );
                                     if ( nPage != -1 )
                                     {
-                                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
+                                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
                                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, actionName);
                                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                                     }
@@ -3642,7 +3648,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 }
                             }
                             presentation::FadeEffect eFe;
-                            vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::PageTransition::Regular;
+                            vcl::pdf::PDFWriter::PageTransition eType = vcl::pdf::PDFWriter::PageTransition::Regular;
                             if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) )
                             {
                                 aAny = xPagePropSet->getPropertyValue( sEffect );
@@ -3652,11 +3658,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     {
                                         case presentation::FadeEffect_HORIZONTAL_LINES :
                                         case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
-                                        case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::PDFWriter::PageTransition::BlindsHorizontal; break;
+                                        case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::pdf::PDFWriter::PageTransition::BlindsHorizontal; break;
 
                                         case presentation::FadeEffect_VERTICAL_LINES :
                                         case presentation::FadeEffect_VERTICAL_CHECKERBOARD :
-                                        case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::PDFWriter::PageTransition::BlindsVertical; break;
+                                        case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::pdf::PDFWriter::PageTransition::BlindsVertical; break;
 
                                         case presentation::FadeEffect_UNCOVER_TO_RIGHT :
                                         case presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
@@ -3664,7 +3670,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         case presentation::FadeEffect_FADE_FROM_UPPERLEFT :
                                         case presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
                                         case presentation::FadeEffect_FADE_FROM_LEFT :
-                                        case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::PDFWriter::PageTransition::WipeLeftToRight; break;
+                                        case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::pdf::PDFWriter::PageTransition::WipeLeftToRight; break;
 
                                         case presentation::FadeEffect_UNCOVER_TO_BOTTOM :
                                         case presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
@@ -3672,7 +3678,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         case presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
                                         case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
                                         case presentation::FadeEffect_FADE_FROM_TOP :
-                                        case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::PDFWriter::PageTransition::WipeTopToBottom; break;
+                                        case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::pdf::PDFWriter::PageTransition::WipeTopToBottom; break;
 
                                         case presentation::FadeEffect_UNCOVER_TO_LEFT :
                                         case presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
@@ -3681,7 +3687,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         case presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
                                         case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
                                         case presentation::FadeEffect_FADE_FROM_RIGHT :
-                                        case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::PDFWriter::PageTransition::WipeRightToLeft; break;
+                                        case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::pdf::PDFWriter::PageTransition::WipeRightToLeft; break;
 
                                         case presentation::FadeEffect_UNCOVER_TO_TOP :
                                         case presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
@@ -3689,22 +3695,22 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         case presentation::FadeEffect_FADE_FROM_LOWERLEFT :
                                         case presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
                                         case presentation::FadeEffect_FADE_FROM_BOTTOM :
-                                        case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::PDFWriter::PageTransition::WipeBottomToTop; break;
+                                        case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::pdf::PDFWriter::PageTransition::WipeBottomToTop; break;
 
-                                        case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::PDFWriter::PageTransition::SplitHorizontalInward; break;
-                                        case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::PDFWriter::PageTransition::SplitHorizontalOutward; break;
+                                        case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::pdf::PDFWriter::PageTransition::SplitHorizontalInward; break;
+                                        case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::pdf::PDFWriter::PageTransition::SplitHorizontalOutward; break;
 
-                                        case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::PDFWriter::PageTransition::SplitVerticalInward; break;
-                                        case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::PDFWriter::PageTransition::SplitVerticalOutward; break;
+                                        case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::pdf::PDFWriter::PageTransition::SplitVerticalInward; break;
+                                        case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::pdf::PDFWriter::PageTransition::SplitVerticalOutward; break;
 
-                                        case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::PageTransition::BoxInward; break;
-                                        case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::PageTransition::BoxOutward; break;
+                                        case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::pdf::PDFWriter::PageTransition::BoxInward; break;
+                                        case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::pdf::PDFWriter::PageTransition::BoxOutward; break;
 
-                                        case presentation::FadeEffect_NONE : eType = vcl::PDFWriter::PageTransition::Regular; break;
+                                        case presentation::FadeEffect_NONE : eType = vcl::pdf::PDFWriter::PageTransition::Regular; break;
 
                                         case presentation::FadeEffect_RANDOM :
                                         case presentation::FadeEffect_DISSOLVE :
-                                        default: eType = vcl::PDFWriter::PageTransition::Dissolve; break;
+                                        default: eType = vcl::pdf::PDFWriter::PageTransition::Dissolve; break;
                                     }
                                 }
                             }
@@ -3741,9 +3747,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     if ( nPage != -1 )
                     {
                         if ( rBookmark.nLinkId != -1 )
-                            pPDFExtOutDevData->SetLinkDest( rBookmark.nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle ) );
+                            pPDFExtOutDevData->SetLinkDest( rBookmark.nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle ) );
                         else
-                            pPDFExtOutDevData->DescribeRegisteredDest( rBookmark.nDestId, aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
+                            pPDFExtOutDevData->DescribeRegisteredDest( rBookmark.nDestId, aPageRect, nPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
                     }
                     else
                         pPDFExtOutDevData->SetLinkURL( rBookmark.nLinkId, rBookmark.aBookmark );
@@ -3945,7 +3951,7 @@ OString SdXImpressDocument::getViewRenderState(SfxViewShell* pViewShell)
     if (pView)
     {
         const SdViewOptions& pVOpt = pView->GetViewOptions();
-        if (mpDoc->GetOnlineSpell())
+        if (mpDoc && mpDoc->GetOnlineSpell())
             aState.append('S');
         if (!ThemeColors::UseOnlyWhiteDocBackground())
         {
@@ -4315,6 +4321,11 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     const Point aPointHMM = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
     SdrView* pDrawView = pViewShell->GetDrawView();
     SdrPageView* pPageView = pDrawView->GetSdrPageView();
+    if (!pPageView)
+    {
+        return;
+    }
+
     SdrPage* pPage = pPageView->GetPage();
     ::sd::Window* pActiveWin = pViewShell->GetActiveWindow();
     if (!pActiveWin)
@@ -4631,10 +4642,16 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
         for (sal_Int32 i = 0; i < nSlideCount; ++i)
         {
             SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(i));
+            SdPage* pPage = SdPage::getImplementation(pSlide);
+            if (!pPage)
+            {
+                SAL_WARN("sd", "slide: " << i << " is disposed, skipping");
+                continue;
+            }
+
             bool bIsVisible = true; // default visible
             pSlide->getPropertyValue("Visible") >>= bIsVisible;
 
-            SdPage* pPage = SdPage::getImplementation(pSlide);
             if (!bIsVisible)
             {
                 auto aSlideNode = aJsonWriter.startStruct();
@@ -4652,21 +4669,18 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("index", i);
                 aJsonWriter.put("uniqueID", pPage->GetUniqueID());
 
-                if (pPage)
-                {
-                    auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
-                    aJsonWriter.put("name", aName);
+                auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
+                aJsonWriter.put("name", aName);
 
-                    if (bAllyState)
+                if (bAllyState)
+                {
+                    OUStringBuffer aHtml;
+                    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+                    if (pOutliner)
                     {
-                        OUStringBuffer aHtml;
-                        SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
-                        if (pOutliner)
-                        {
-                            SdHTMLFilter::ExportPage(pOutliner, pPage, aHtml);
-                            aJsonWriter.put("a11y", aHtml.makeStringAndClear());
-                            pOutliner->Clear();
-                        }
+                        SdHTMLFilter::ExportPage(pOutliner, pPage, aHtml);
+                        aJsonWriter.put("a11y", aHtml.makeStringAndClear());
+                        pOutliner->Clear();
                     }
                 }
 
@@ -4674,7 +4688,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("empty", bIsDrawPageEmpty);
 
                 // Notes
-                SdPage* pNotesPage = pPage ? mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes) : nullptr;
+                SdPage* pNotesPage = mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes);
                 if (pNotesPage)
                 {
                     SdrObject* pItObj = nullptr;
@@ -4686,7 +4700,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         {
                             pItObj = pNotesPage->GetObj(nNote);
 
-                            if (pItObj &&
+                            if (pItObj && pItObj->HasText() &&
                                 (pItObj->GetObjIdentifier() == SdrObjKind::Text
                                  || pItObj->GetObjIdentifier() == SdrObjKind::TitleText
                                  || pItObj->GetObjIdentifier() == SdrObjKind::OutlineText))
@@ -4807,6 +4821,22 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         else
                         {
                             SAL_WARN("sd", "Transition sub-type unknown: " << nTransitionSubtype);
+                        }
+
+                        if (bAllyState)
+                        {
+                            const TransitionPresetList& rList = TransitionPreset::getTransitionPresetList();
+                            auto aTransition = std::find_if(rList.begin(), rList.end(),
+                                                            [nTransitionType,
+                                                             nTransitionSubtype](const TransitionPresetPtr& rxPreset) {
+                                                                return (rxPreset->getTransition() == nTransitionType)
+                                                                    && (rxPreset->getSubtype() == nTransitionSubtype);
+                                                            });
+
+                            if (aTransition != rList.end())
+                            {
+                                aJsonWriter.put("transitionLabel", (*aTransition)->getSetLabel());
+                            }
                         }
 
                         bool nTransitionDirection = false;

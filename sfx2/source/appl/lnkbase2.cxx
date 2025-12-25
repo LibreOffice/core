@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/filedlghelper.hxx>

@@ -11,7 +11,6 @@
 
 #include <cstddef>
 #include <functional>
-#include <type_traits>
 #include <o3tl/concepts.hxx>
 
 namespace o3tl

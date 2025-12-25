@@ -27,7 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <unotools/resmgr.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -112,7 +112,7 @@ class ServiceImpl
     Reference<XComponentContext> const m_xComponentContext;
     std::optional< Reference<awt::XWindow> > /* const */ m_parent;
     std::optional<OUString> m_extensionURL;
-    OUString m_initialTitle;
+    OUString m_sTitle;
     bool m_bShowUpdateOnly;
 
 public:
@@ -178,17 +178,13 @@ css::uno::Sequence< OUString > ServiceImpl::getSupportedServiceNames()
 
 void ServiceImpl::setDialogTitle( OUString const & title )
 {
+    m_sTitle = title;
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
         const SolarMutexGuard guard;
-        ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
-            ::dp_gui::TheExtensionManager::get( m_xComponentContext,
-                                                m_parent ? *m_parent : Reference<awt::XWindow>(),
-                                                m_extensionURL ? *m_extensionURL : OUString() ) );
-        dialog->SetText( title );
+        if (weld::Window* pDialog = dp_gui::TheExtensionManager::s_ExtMgr->getDialog())
+            pDialog->set_title(title);
     }
-    else
-        m_initialTitle = title;
 }
 
 
@@ -240,15 +236,15 @@ void ServiceImpl::startExecuteModal(
 
     {
         const SolarMutexGuard guard;
-        ::rtl::Reference< ::dp_gui::TheExtensionManager > myExtMgr(
-            ::dp_gui::TheExtensionManager::get(
-                m_xComponentContext,
-                m_parent ? *m_parent : Reference<awt::XWindow>(),
-                m_extensionURL ? *m_extensionURL : OUString() ) );
-        myExtMgr->createDialog( false );
-        if (!m_initialTitle.isEmpty()) {
-            myExtMgr->SetText( m_initialTitle );
-            m_initialTitle.clear();
+        rtl::Reference<::dp_gui::TheExtensionManager> myExtMgr(
+            dp_gui::TheExtensionManager::get(m_xComponentContext));
+        DialogHelper& rDialog
+            = myExtMgr->createDialog(false, m_parent ? *m_parent : Reference<awt::XWindow>());
+        if (m_extensionURL)
+            myExtMgr->installPackage(*m_extensionURL, rDialog, true);
+
+        if (!m_sTitle.isEmpty()) {
+            myExtMgr->SetText(m_sTitle);
         }
         if ( m_bShowUpdateOnly )
         {

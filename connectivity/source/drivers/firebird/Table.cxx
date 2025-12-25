@@ -16,6 +16,7 @@
 
 #include <sal/log.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>

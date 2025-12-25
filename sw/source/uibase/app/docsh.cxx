@@ -23,7 +23,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Writer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/jobset.hxx>
@@ -42,6 +42,7 @@
 #include <editeng/flstitem.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <basic/sbmod.hxx>
 #include <osl/diagnose.h>
 #include <node.hxx>
@@ -438,11 +439,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         {
             // No old URL - is this a new document created from a template with embedded DS?
             // Try to get the template URL to reconstruct the embedded data source URL
-            const css::beans::PropertyValues& rArgs = GetMedium()->GetArgs();
-            const auto aURLIter = std::find_if(rArgs.begin(), rArgs.end(),
-                                               [](const auto& v) { return v.Name == "URL"; });
-            if (aURLIter != rArgs.end())
-                aURLIter->Value >>= aURL;
+            aURL = GetMedium()->GetArgs().getUnpackedValueOrDefault(u"URL"_ustr, aURL);
         }
 
         if (!aURL.isEmpty())
@@ -1217,14 +1214,8 @@ void SwDocShell::LoadingFinished()
     auto const args{GetBaseModel()->getArgs2({u"YrsConnect"_ustr})};
 #endif
     // when loading, it is only available from SfxMedium, not SfxBaseModel
-    for (auto const& rArg : GetMedium()->GetArgs())
-    {
-        if (rArg.Name == "YrsConnect")
-        {
-            m_xDoc->getIDocumentState().YrsInitConnector(rArg.Value);
-            break;
-        }
-    }
+    if (css::uno::Any any = GetMedium()->GetArgs().getValue(u"YrsConnect"_ustr); any.hasValue())
+        m_xDoc->getIDocumentState().YrsInitConnector(any);
 #endif
 
     FinishedLoading();

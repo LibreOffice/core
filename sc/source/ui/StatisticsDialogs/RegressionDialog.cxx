@@ -171,9 +171,9 @@ TranslateId ScRegressionDialog::GetUndoNameId()
     return STR_REGRESSION_UNDO_NAME;
 }
 
-ScRange ScRegressionDialog::ApplyOutput(ScDocShell& rDocShell)
+ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, rDocShell, mDocument,
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
     aTemplate.autoReplaceUses3D(mbUse3DAddresses);
@@ -240,7 +240,7 @@ bool ScRegressionDialog::InputRangesValid()
     mVariable1Range.PutInOrder();
     mVariable2Range.PutInOrder();
 
-    bool bGroupedByColumn = mGroupedBy == BY_COLUMN;
+    bool bGroupedByColumn = mGroupedBy == GroupedBy::BY_COLUMN;
 
     bool bYHasSingleDim = (
         (bGroupedByColumn &&
@@ -298,7 +298,7 @@ ScRange ScRegressionDialog::GetDataRange(const ScRange& rRange)
         return rRange;
 
     ScRange aDataRange(rRange);
-    if (mGroupedBy == BY_COLUMN)
+    if (mGroupedBy == GroupedBy::BY_COLUMN)
         aDataRange.aStart.IncRow(1);
     else
         aDataRange.aStart.IncCol(1);
@@ -314,7 +314,7 @@ OUString ScRegressionDialog::GetVariableNameFormula(bool bXVar, size_t nIndex, b
     if (mxWithLabelsCheckBox->get_active())
     {
         ScAddress aAddr(bXVar ? mVariable1Range.aStart : mVariable2Range.aStart);
-        if (mGroupedBy == BY_COLUMN)
+        if (mGroupedBy == GroupedBy::BY_COLUMN)
             aAddr.IncCol(nIndex - 1);
         else
             aAddr.IncRow(nIndex - 1);
@@ -617,7 +617,7 @@ void ScRegressionDialog::WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOu
 void ScRegressionDialog::WritePredictionsWithResiduals(AddressWalkerWriter& rOutput, FormulaTemplate& rTemplate,
                                                        size_t nRegressionIndex)
 {
-    bool bGroupedByColumn = mGroupedBy == BY_COLUMN;
+    bool bGroupedByColumn = mGroupedBy == GroupedBy::BY_COLUMN;
     rOutput.newLine();
     rOutput.push();
 

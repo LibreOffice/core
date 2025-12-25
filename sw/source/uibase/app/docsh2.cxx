@@ -35,7 +35,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -541,11 +541,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( pArgs )
                 {
-                    const SfxStringItem* pTemplateItem = rReq.GetArg<SfxStringItem>(SID_TEMPLATE_NAME);
+                    const SfxStringItem* pTemplateItem = rReq.GetArg(SID_TEMPLATE_NAME);
                     if ( pTemplateItem )
                     {
                         aFileName = pTemplateItem->GetValue();
-                        const SfxInt32Item* pFlagsItem = rReq.GetArg<SfxInt32Item>(SID_TEMPLATE_LOAD);
+                        const SfxInt32Item* pFlagsItem = rReq.GetArg(SID_TEMPLATE_LOAD);
                         if ( pFlagsItem )
                             nFlags = static_cast<SfxTemplateFlags>(o3tl::narrowing<sal_uInt16>(pFlagsItem->GetValue()));
                     }
@@ -925,7 +925,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( pArgs && SfxItemState::SET == pArgs->GetItemState( nWhich, false, &pItem ) )
                 {
                     aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    const SfxStringItem* pTemplItem = SfxItemSet::GetItem<SfxStringItem>(pArgs, SID_TEMPLATE_NAME, false);
+                    const SfxStringItem* pTemplItem = pArgs->GetItem(SID_TEMPLATE_NAME, false);
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();
                 }
@@ -1287,7 +1287,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_NOTEBOOKBAR:
         {
-            const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
+            const SfxStringItem* pFile = rReq.GetArg( SID_NOTEBOOKBAR );
             SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
             SfxBindings& rBindings( pViewShell->GetViewFrame().GetBindings() );
 

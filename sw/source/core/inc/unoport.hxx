@@ -38,12 +38,12 @@
 
 #include <unocrsr.hxx>
 #include "unorefmark.hxx"
-#include "unoidx.hxx"
+#include <unoidx.hxx>
 #include "unofootnote.hxx"
 #include "unometa.hxx"
 #include "unocontentcontrol.hxx"
 #include "unolinebreak.hxx"
-#include "unobookmark.hxx"
+#include <unobookmark.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::text { class XTextField; }

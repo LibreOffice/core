@@ -90,7 +90,6 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
@@ -102,6 +101,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
@@ -1253,10 +1253,11 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         }
 
-        Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xNewDoc->getDataProvider(), uno::UNO_QUERY);
-        if (xPivotTableDataProvider.is() && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+        chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+            dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xNewDoc->getDataProvider().get());
+        if (pPivotTableDataProvider && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
         {
-            OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
+            OUString sPivotTableName = pPivotTableDataProvider->getPivotTableName();
             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE, sPivotTableName);
         }
 

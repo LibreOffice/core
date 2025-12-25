@@ -494,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 
     // Check if both named ranges are hidden after saving and reloading
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
@@ -523,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 
     // Save as ODS and test if the named ranges are still with the correct hidden flag
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
@@ -555,7 +555,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
 
     // Save and reload to test whether the named expressions retain the hidden  where applicable
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
     pNamedRanges = pDoc->GetRangeName();
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
@@ -1322,8 +1322,8 @@ void checkCellValidity(const ScAddress& rValBaseAddr, const ScRange& rRange, con
     SCROW nBRow(rValBaseAddr.Row());
     SCTAB nTab(static_cast<sal_Int32>(rValBaseAddr.Tab()));
     //get from the document the data validation entry we are checking against
-    const SfxUInt32Item* pItem = rDoc.GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA);
-    const ScValidationData* pValData = rDoc.GetValidationEntry(pItem->GetValue());
+    const SfxUInt32Item& rItem = rDoc.GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA);
+    const ScValidationData* pValData = rDoc.GetValidationEntry(rItem.GetValue());
     CPPUNIT_ASSERT(pValData);
 
     //check that each cell in the expected range is associated with the data validation entry
@@ -1331,8 +1331,8 @@ void checkCellValidity(const ScAddress& rValBaseAddr, const ScRange& rRange, con
     {
         for (SCROW j = rRange.aStart.Row(); j <= rRange.aEnd.Row(); ++j)
         {
-            const SfxUInt32Item* pItemTest = rDoc.GetAttr(i, j, nTab, ATTR_VALIDDATA);
-            const ScValidationData* pValDataTest = rDoc.GetValidationEntry(pItemTest->GetValue());
+            const SfxUInt32Item& rItemTest = rDoc.GetAttr(i, j, nTab, ATTR_VALIDDATA);
+            const ScValidationData* pValDataTest = rDoc.GetValidationEntry(rItemTest.GetValue());
             //prevent string operations for occurring unnecessarily
             if (!(pValDataTest && pValData->GetKey() == pValDataTest->GetKey()))
             {

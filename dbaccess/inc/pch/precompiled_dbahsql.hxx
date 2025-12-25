@@ -27,7 +27,7 @@
 #if PCH_LEVEL >= 2
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/embed/ElementModes.hpp>

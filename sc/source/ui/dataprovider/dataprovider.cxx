@@ -154,11 +154,11 @@ void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
     if (!mpDBDataManager)
         return;
 
-    // if no data provider exists, try to create one
-    if (!mpDataProvider)
-        mpDataProvider = DataProviderFactory::getDataProvider(pDoc, *this);
+    // tdf#169541 An existing mpDataProvider might have a corrupted backreference to `this`.
+    // Thus create a new one in any case.
+    mpDataProvider = DataProviderFactory::getDataProvider(pDoc, *this);
 
-    // if we still have not been able to create one, we can not refresh the data
+    // if we have not been able to create one, we can not refresh the data
     if (!mpDataProvider)
         return;
 
@@ -240,7 +240,7 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     aDestRange.aEnd.SetRow(aDestRange.aStart.Row() + nRowSize);
 
     ScMarkData aMark(mpDoc->GetSheetLimits());
-    aMark.SelectTable(0, true);
+    aMark.SelectTable(aDestRange.aStart.Tab(), true);
     mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
     ScDocShell* pDocShell = mpDoc->GetDocumentShell();
     if (pDocShell)

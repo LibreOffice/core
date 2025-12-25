@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
-#include <config_options.h>
 #include <epoxy/gl.h>
 #include <sal/detail/log.h>
 #include <vcl/dllapi.h>

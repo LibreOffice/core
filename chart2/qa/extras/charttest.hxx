@@ -452,11 +452,11 @@ OUString ChartTest::getTitleString( const Reference<chart2::XTitled>& xTitled )
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     const uno::Sequence<uno::Reference<chart2::XFormattedString> > aFSSeq = xTitle->getText();
-    OUString aText;
+    OUStringBuffer aText;
     for (auto const & fs : aFSSeq)
-        aText += fs->getString();
+        aText.append(fs->getString());
 
-    return aText;
+    return aText.makeStringAndClear();
 }
 
 sal_Int32 ChartTest::getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )

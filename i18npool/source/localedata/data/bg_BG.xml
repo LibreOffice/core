@@ -352,7 +352,7 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="true">
       <CurrencyID>BGN</CurrencyID>
       <CurrencySymbol>лв.</CurrencySymbol>
       <BankSymbol>BGN</BankSymbol>
@@ -366,8 +366,7 @@
       <CurrencyName>BGL</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <!-- TODO: switch defaults before 2026-01-01 -->
-    <Currency default="false" usedInCompatibleFormatCodes="false">
+    <Currency default="true" usedInCompatibleFormatCodes="false">
       <CurrencyID>EUR</CurrencyID>
       <CurrencySymbol>€</CurrencySymbol>
       <BankSymbol>EUR</BankSymbol>

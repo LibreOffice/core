@@ -21,7 +21,7 @@ REM ===================================================================== GLOBAL
 Global _SF_		As Variant		&apos;	SF_Root (Basic) object)
 
 &apos;&apos;&apos;	ScriptForge version
-Const SF_Version = &quot;26.2&quot;
+Const SF_Version = &quot;26.8&quot;
 
 &apos;&apos;&apos;	Standard symbolic names for VarTypes
 &apos;				V_EMPTY			= 0
@@ -403,6 +403,11 @@ Dim oDefaultContext As Object
 					Set .GraphicExportFilter = CreateUnoService(&quot;com.sun.star.drawing.GraphicExportFilter&quot;)
 				End If
 				Set _GetUNOService = .GraphicExportFilter
+			Case &quot;GraphicProvider&quot;
+				If IsEmpty(.GraphicProvider) Or IsNull(.GraphicProvider) Then
+					Set .GraphicProvider = CreateUnoService(&quot;com.sun.star.graphic.GraphicProvider&quot;)
+				End If
+				Set _GetUNOService = .GraphicProvider
 			Case &quot;Introspection&quot;
 				If IsEmpty(.Introspection) Or IsNull(.Introspection) Then
 					Set .Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)

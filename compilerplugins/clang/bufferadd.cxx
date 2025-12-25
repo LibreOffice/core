@@ -384,7 +384,7 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
                 // allowlist some known-safe methods
-                if (compat::ends_with(name, "ResId") || name == "GetXMLToken")
+                if (name.ends_with("ResId") || name == "GetXMLToken")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
             }

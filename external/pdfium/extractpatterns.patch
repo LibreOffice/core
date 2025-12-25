@@ -1,0 +1,183 @@
+--- core/fpdfapi/page/cpdf_pattern.h	2025-10-17 15:44:08.393532043 +0100
++++ core/fpdfapi/page/cpdf_pattern.h	2025-10-17 15:44:12.020459390 +0100
+@@ -26,6 +26,7 @@
+   virtual CPDF_ShadingPattern* AsShadingPattern();
+ 
+   const CFX_Matrix& pattern_to_form() const { return pattern_to_form_; }
++  RetainPtr<CPDF_Object> pattern_obj() const { return pattern_obj_; }
+ 
+  protected:
+   CPDF_Pattern(CPDF_Document* doc,
+@@ -35,7 +36,6 @@
+ 
+   // All the getters that return pointers return non-NULL pointers.
+   CPDF_Document* document() const { return document_; }
+-  RetainPtr<CPDF_Object> pattern_obj() const { return pattern_obj_; }
+   const CFX_Matrix& parent_matrix() const { return parent_matrix_; }
+ 
+   void SetPatternToFormMatrix();
+--- fpdfsdk/fpdf_edittext.cpp	2025-10-17 15:44:08.410532151 +0100
++++ fpdfsdk/fpdf_edittext.cpp	2025-10-17 15:55:18.804847559 +0100
+@@ -13,6 +13,9 @@
+ #include "core/fpdfapi/font/cpdf_cidfont.h"
+ #include "core/fpdfapi/font/cpdf_font.h"
+ #include "core/fpdfapi/page/cpdf_docpagedata.h"
++#include "core/fpdfapi/page/cpdf_form.h"
++#include "core/fpdfapi/page/cpdf_pathobject.h"
++#include "core/fpdfapi/page/cpdf_tilingpattern.h"
+ #include "core/fpdfapi/page/cpdf_textobject.h"
+ #include "core/fpdfapi/page/cpdf_textstate.h"
+ #include "core/fpdfapi/parser/cpdf_array.h"
+@@ -834,6 +835,108 @@
+   return FPDFBitmapFromCFXDIBitmap(result_bitmap.Leak());
+ }
+ 
++FPDF_BITMAP
++FPDFPageObj_GetRenderedPattern(CPDF_Pattern& pattern,
++                               CPDF_Document& doc,
++                               CPDF_PageObject& pageObj,
++                               CPDF_Page* optional_page) {
++  CPDF_TilingPattern* pTilingPattern = pattern.AsTilingPattern();
++  if (!pTilingPattern)
++      return nullptr;
++  const std::unique_ptr<CPDF_Form> pPatternForm = pTilingPattern->Load(&pageObj);
++  if (!pPatternForm)
++    return nullptr;
++  RetainPtr<const CPDF_Dictionary> pDict = pattern.pattern_obj()->GetDict();
++  CFX_FloatRect pattern_bbox = pDict->GetRectFor("BBox");
++
++  // `rect` has to use integer values. Round up as needed.
++  const FX_RECT rect = pattern_bbox.GetOuterRect();
++  if (rect.IsEmpty())
++    return nullptr;
++
++  auto result_bitmap = pdfium::MakeRetain<CFX_DIBitmap>();
++  if (!result_bitmap->Create(rect.Width(), rect.Height(),
++                             FXDIB_Format::kBgra)) {
++    return nullptr;
++  }
++  CFX_FloatRect cell_bbox = pattern.pattern_to_form().TransformRect(pattern_bbox);
++  CFX_FloatRect bitmap_rect(0.0f, 0.0f, rect.Width(), rect.Height());
++  CFX_Matrix mtPattern2Bitmap;
++  mtPattern2Bitmap.MatchRect(bitmap_rect, cell_bbox);
++
++  CFX_DefaultRenderDevice bitmap_device;
++  bitmap_device.AttachWithBackdropAndGroupKnockout(
++      result_bitmap, /*pBackdropBitmap=*/nullptr, /*bGroupKnockout=*/true);
++
++  CPDF_RenderOptions options;
++  if (!pTilingPattern->colored())
++    options.SetColorMode(CPDF_RenderOptions::kAlpha);
++  options.GetOptions().bForceHalftone = true;
++
++  CPDF_RenderContext context(&doc, nullptr, nullptr);
++  context.AppendLayer(pPatternForm.get(), mtPattern2Bitmap);
++  context.Render(&bitmap_device, nullptr, &options, nullptr);
++
++  CHECK(!result_bitmap->IsPremultiplied());
++
++  // Caller takes ownership.
++  return FPDFBitmapFromCFXDIBitmap(result_bitmap.Leak());
++}
++
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFPageObj_GetRenderedStrokePattern(FPDF_DOCUMENT document,
++                                     FPDF_PAGE page,
++                                     FPDF_PAGEOBJECT page_object) {
++  CPDF_Document* doc = CPDFDocumentFromFPDFDocument(document);
++  if (!doc)
++    return nullptr;
++
++  CPDF_Page* optional_page = CPDFPageFromFPDFPage(page);
++  if (optional_page && optional_page->GetDocument() != doc)
++    return nullptr;
++
++  CPDF_PageObject* object = CPDFPageObjectFromFPDFPageObject(page_object);
++  if (!object)
++    return nullptr;
++
++  const CPDF_Color* stroke = object->color_state().GetStrokeColor();
++  if (!stroke || !stroke->IsPattern())
++    return nullptr;
++
++  RetainPtr<CPDF_Pattern> pattern = stroke->GetPattern();
++  if (!pattern)
++    return nullptr;
++
++  return FPDFPageObj_GetRenderedPattern(*pattern, *doc, *object, optional_page);
++}
++
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFPageObj_GetRenderedFillPattern(FPDF_DOCUMENT document,
++                                   FPDF_PAGE page,
++                                   FPDF_PAGEOBJECT page_object) {
++  CPDF_Document* doc = CPDFDocumentFromFPDFDocument(document);
++  if (!doc)
++    return nullptr;
++
++  CPDF_Page* optional_page = CPDFPageFromFPDFPage(page);
++  if (optional_page && optional_page->GetDocument() != doc)
++    return nullptr;
++
++  CPDF_PageObject* object = CPDFPageObjectFromFPDFPageObject(page_object);
++  if (!object)
++    return nullptr;
++
++  const CPDF_Color* fill = object->color_state().GetFillColor();
++  if (!fill || !fill->IsPattern())
++    return nullptr;
++
++  RetainPtr<CPDF_Pattern> pattern = fill->GetPattern();
++  if (!pattern)
++    return nullptr;
++
++  return FPDFPageObj_GetRenderedPattern(*pattern, *doc, *object, optional_page);
++}
++
+ FPDF_EXPORT void FPDF_CALLCONV FPDFFont_Close(FPDF_FONT font) {
+   // Take back ownership from caller and release.
+   RetainPtr<CPDF_Font>().Unleak(CPDFFontFromFPDFFont(font));
+--- public/fpdf_edit.h	2025-10-17 15:44:08.415888612 +0100
++++ public/fpdf_edit.h	2025-10-17 15:44:12.022555158 +0100
+@@ -1417,6 +1417,41 @@
+                               float scale);
+ 
+ // Experimental API.
++// Get a bitmap rasterization of the stroke pattern of |page object|.
++// To render correctly, the caller must provide the |document| associated with
++// |page_object|. If there is a |page| associated with |page_object|, the
++// caller should provide that as well.  The returned bitmap will be owned by
++// the caller, and FPDFBitmap_Destroy() must be called on the returned bitmap
++// when it is no longer needed.
++//
++//   document     - handle to a document associated with |page_object|.
++//   page         - handle to an optional page associated with |page_object|.
++//   page_object - handle to a page object.
++//
++// Returns the bitmap or NULL if the stroke is not a pattern or on failure.
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFPageObj_GetRenderedStrokePattern(FPDF_DOCUMENT document,
++                                     FPDF_PAGE page,
++                                     FPDF_PAGEOBJECT page_object);
++
++// Get a bitmap rasterization of the fill pattern of |page object|.
++// To render correctly, the caller must provide the |document| associated with
++// |page_object|. If there is a |page| associated with |page_object|, the
++// caller should provide that as well.  The returned bitmap will be owned by
++// the caller, and FPDFBitmap_Destroy() must be called on the returned bitmap
++// when it is no longer needed.
++//
++//   document     - handle to a document associated with |page_object|.
++//   page         - handle to an optional page associated with |page_object|.
++//   page_object - handle to a page object.
++//
++// Returns the bitmap or NULL if the fill is not a pattern or on failure.
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFPageObj_GetRenderedFillPattern(FPDF_DOCUMENT document,
++                                   FPDF_PAGE page,
++                                   FPDF_PAGEOBJECT page_object);
++
++// Experimental API.
+ // Get the font of a text object.
+ //
+ // text - the handle to the text object.

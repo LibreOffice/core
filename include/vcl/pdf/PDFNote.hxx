@@ -10,11 +10,9 @@
 #pragma once
 
 #include <sal/types.h>
-#include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <vcl/dllapi.h>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>

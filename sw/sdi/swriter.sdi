@@ -679,6 +679,24 @@ SfxBoolItem ControlCodes FN_VIEW_META_CHARS
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem RedlineRenderMode FN_VIEW_REDLINE_RENDER_MODE
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem ConvertTableText FN_CONVERT_TEXT_TABLE
 ()
 [
@@ -3481,7 +3499,9 @@ SfxVoidItem InsertObjectStarMath FN_INSERT_SMA
 ]
 
 SfxVoidItem InsertPagebreak FN_INSERT_PAGEBREAK
-()
+(
+    SfxStringItem PageStyleName FN_PARAM_1
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -9032,4 +9052,20 @@ SfxVoidItem CopyFieldDialog FN_COPY_FIELD
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Edit;
+]
+
+SfxBoolItem BaselineGridVisible FN_VIEW_BASELINE_GRID_VISIBLE
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
 ]

@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.11.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.11.0)" variant="all" version="8.11.0">
-
-    <issue
-        id="ScopedStorage"
-        message="WRITE_EXTERNAL_STORAGE is deprecated (and is not granted) when targeting Android 13+. If you need to write to shared storage, use the `MediaStore.createWriteRequest` intent."
-        errorLine1="    &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/>"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="AndroidManifest.xml"
-            line="9"
-            column="36"/>
-    </issue>
+<issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="false" name="AGP (8.13.1)" variant="all" version="8.13.1">
 
     <issue
         id="ScrollViewSize"
@@ -81,11 +70,11 @@
     <issue
         id="OldTargetApi"
         message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
-        errorLine1="        targetSdkVersion 34"
+        errorLine1="        targetSdkVersion 35"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~">
         <location
             file="build.gradle"
-            line="65"
+            line="63"
             column="9"/>
     </issue>
 
@@ -113,8 +102,8 @@
 
     <issue
         id="GradleDependency"
-        message="A newer version of `compileSdkVersion` than 34 is available: 36"
-        errorLine1="    compileSdk 34"
+        message="A newer version of `compileSdkVersion` than 35 is available: 36"
+        errorLine1="    compileSdk 35"
         errorLine2="    ~~~~~~~~~~~~~">
         <location
             file="build.gradle"
@@ -140,7 +129,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="AndroidManifest.xml"
-            line="109"
+            line="104"
             column="13"/>
     </issue>
 
@@ -151,7 +140,7 @@
         errorLine2="        ^">
         <location
             file="src/java/org/mozilla/gecko/gfx/JavaPanZoomController.java"
-            line="525"
+            line="442"
             column="9"/>
     </issue>
 
@@ -162,7 +151,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~">
         <location
             file="src/java/org/mozilla/gecko/gfx/LayerView.java"
-            line="227"
+            line="188"
             column="36"/>
     </issue>
 
@@ -184,7 +173,7 @@
         errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/mozilla/gecko/gfx/LayerView.java"
-            line="293"
+            line="253"
             column="42"/>
     </issue>
 
@@ -1115,17 +1104,6 @@
     </issue>
 
     <issue
-        id="UnusedResources"
-        message="The resource `R.style.LibreOfficeTheme_NavigationView` appears to be unused"
-        errorLine1="    &lt;style name=&quot;LibreOfficeTheme.NavigationView&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/values/themes.xml"
-            line="17"
-            column="12"/>
-    </issue>
-
-    <issue
         id="UselessParent"
         message="This `ScrollView` layout or its `LinearLayout` parent is unnecessary"
         errorLine1="                        &lt;ScrollView"
@@ -1370,7 +1348,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/libreoffice/ui/LibreOfficeUIActivity.java"
-            line="415"
+            line="397"
             column="13"/>
     </issue>
 
@@ -1392,7 +1370,7 @@
         errorLine2="                   ~~~~~~~~~~~~">
         <location
             file="src/java/org/mozilla/gecko/gfx/LayerView.java"
-            line="115"
+            line="98"
             column="20"/>
     </issue>
 

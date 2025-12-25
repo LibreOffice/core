@@ -121,8 +121,7 @@ namespace pcr
         std::vector<sal_Int16> aRetSelection;
         auto aSelection = m_xEntries->get_selected_rows();
         aRetSelection.reserve(aSelection.size());
-        for (auto row : aSelection)
-            aRetSelection.push_back(row);
+        aRetSelection.insert(aRetSelection.end(), aSelection.begin(), aSelection.end());
         return aRetSelection;
     }
 

@@ -29,12 +29,13 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -159,27 +160,6 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-//  Filter names (like in sclib.cxx)
-
-constexpr OUStringLiteral pFilterSc50 = u"StarCalc 5.0";
-const char pFilterXML[]      = "StarOffice XML (Calc)";
-constexpr OUString pFilterLotus = u"Lotus"_ustr;
-const char pFilterQPro6[]    = "Quattro Pro 6.0";
-const char16_t pFilterExcel4[] = u"MS Excel 4.0";
-const char16_t pFilterEx4Temp[] = u"MS Excel 4.0 Vorlage/Template";
-const char pFilterExcel5[]   = "MS Excel 5.0/95";
-const char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
-const char pFilterExcel95[]  = "MS Excel 95";
-const char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
-const char pFilterExcel97[]  = "MS Excel 97";
-const char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
-constexpr OUString pFilterDBase = u"dBase"_ustr;
-constexpr OUString pFilterDif = u"DIF"_ustr;
-const char16_t pFilterSylk[] = u"SYLK";
-constexpr OUString pFilterHtml = u"HTML (StarCalc)"_ustr;
-constexpr OUString pFilterHtmlWebQ = u"calc_HTML_WebQuery"_ustr;
-const char16_t pFilterRtf[]  = u"Rich Text Format (StarCalc)";
-
 #define ShellClass_ScDocShell
 #include <scslots.hxx>
 
@@ -249,7 +229,7 @@ std::shared_ptr<model::ColorSet> ScDocShell::GetThemeColors()
 void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh && &pViewSh->GetViewData().GetDocShell() == this)
+    if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
         ScModule::get()->InputEnterHandler();
 }
 
@@ -561,6 +541,13 @@ bool ScDocShell::GetRecalcRowHeightsMode()
     }
 
     return bHardRecalc;
+}
+
+bool ScDocShell::ImportFrom(SfxMedium& rMedium,
+                            const css::uno::Reference<css::text::XTextRange>& xInsertPosition)
+{
+    LoadMediumGuard aLoadGuard(m_pDocument.get());
+    return SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 }
 
 bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
@@ -1239,6 +1226,14 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
         rScientificConvert = static_cast<bool>(aTokens[2].toInt32());
 }
 
+void ScDocShell::AddDelayedInfobarEntry(const OUString& sId, const OUString& sPrimaryMessage,
+                                        const OUString& sSecondaryMessage, InfobarType aInfobarType,
+                                        bool bShowCloseButton)
+{
+    m_pImpl->mpDelayedInfobarEntry.push_back(
+        { sId, sPrimaryMessage, sSecondaryMessage, aInfobarType, bShowCloseButton });
+}
+
 bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());
@@ -1276,9 +1271,9 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         if (!bCalc3 && !bCalc4)
             m_pDocument->SetInsertingFromOtherDoc( true );
 
-        if (aFltName == pFilterXML)
+        if (aFltName == SC_SOXML_FILTER_NAME)
             bRet = LoadXML( &rMedium, nullptr );
-        else if (aFltName == pFilterLotus)
+        else if (aFltName == SC_LOTUS_FILTER_NAME)
         {
             OUString sItStr;
             if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS, true ) )
@@ -1308,18 +1303,18 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetRowHeights = true;
         }
-        else if ( aFltName == pFilterExcel4 || aFltName == pFilterExcel5 ||
-                   aFltName == pFilterExcel95 || aFltName == pFilterExcel97 ||
-                   aFltName == pFilterEx4Temp || aFltName == pFilterEx5Temp ||
-                   aFltName == pFilterEx95Temp || aFltName == pFilterEx97Temp )
+        else if ( aFltName == SC_XL4_FILTER_NAME || aFltName == SC_XL5_FILTER_NAME ||
+                   aFltName == SC_XL95_FILTER_NAME || aFltName == SC_XL97_FILTER_NAME ||
+                   aFltName == SC_XL4TMPL_FILTER_NAME || aFltName == SC_XL5TMPL_FILTER_NAME ||
+                   aFltName == SC_XL95TMPL_FILTER_NAME || aFltName == SC_XL97TMPL_FILTER_NAME )
         {
             EXCIMPFORMAT eFormat = EIF_AUTO;
-            if ( aFltName == pFilterExcel4 || aFltName == pFilterEx4Temp )
+            if (aFltName == SC_XL4_FILTER_NAME || aFltName == SC_XL4TMPL_FILTER_NAME)
                 eFormat = EIF_BIFF_LE4;
-            else if ( aFltName == pFilterExcel5 || aFltName == pFilterExcel95 ||
-                      aFltName == pFilterEx5Temp || aFltName == pFilterEx95Temp )
+            else if ( aFltName == SC_XL5_FILTER_NAME || aFltName == SC_XL95_FILTER_NAME ||
+                      aFltName == SC_XL5TMPL_FILTER_NAME || aFltName == SC_XL95TMPL_FILTER_NAME )
                 eFormat = EIF_BIFF5;
-            else if ( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
+            else if (aFltName == SC_XL97_FILTER_NAME || aFltName == SC_XL97TMPL_FILTER_NAME)
                 eFormat = EIF_BIFF8;
 
             MakeDrawLayer(); //! In the filter
@@ -1334,8 +1329,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if (eError == SCWARN_IMPORT_UNKNOWN_ENCRYPTION)
             {
-
-                m_pImpl->mpDelayedInfobarEntry.push_back({ u"UnknownEncryption"_ustr, ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), u""_ustr, InfobarType::INFO, true });
+                AddDelayedInfobarEntry(u"UnknownEncryption"_ustr, ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), u""_ustr, InfobarType::INFO, true);
                 eError = ERRCODE_NONE;
             }
 
@@ -1441,7 +1435,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
         }
-        else if (aFltName == pFilterDBase)
+        else if (aFltName == SC_DBASE_FILTER_NAME)
         {
             OUString sItStr;
             if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
@@ -1460,7 +1454,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             ScDocRowHeightUpdater::TabRanges aRecalcRanges(0, m_pDocument->MaxRow());
             ErrCode eError = DBaseImport( rMedium.GetPhysicalName(),
                     ScGlobal::GetCharsetValue(sItStr), aColWidthParam, aRecalcRanges.maRanges );
-            aRecalcRowRangesArray.push_back(aRecalcRanges);
+            aRecalcRowRangesArray.push_back(std::move(aRecalcRanges));
 
             if (eError != ERRCODE_NONE)
             {
@@ -1476,7 +1470,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
         }
-        else if (aFltName == pFilterDif)
+        else if (aFltName == SC_DIF_FILTER_NAME)
         {
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
@@ -1513,7 +1507,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetSimpleTextColWidths = true;
             bSetRowHeights = true;
         }
-        else if (aFltName == pFilterSylk)
+        else if (aFltName == SC_SYLK_FILTER_NAME)
         {
             ErrCode eError = SCERR_IMPORT_UNKNOWN;
             bool bOverflowRow, bOverflowCol, bOverflowCell;
@@ -1561,7 +1555,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetSimpleTextColWidths = true;
             bSetRowHeights = true;
         }
-        else if (aFltName == pFilterQPro6)
+        else if (aFltName == SC_QPRO6_FILTER_NAME)
         {
             ErrCode eError = ScFormatFilter::Get().ScImportQuattroPro(rMedium.GetInStream(), *m_pDocument);
             if (eError != ERRCODE_NONE)
@@ -1579,7 +1573,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             // wrapping enabled look nicer...
             bSetRowHeights = true;
         }
-        else if (aFltName == pFilterRtf)
+        else if (aFltName == SC_RTF_FILTER_NAME)
         {
             ErrCode eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
@@ -1620,10 +1614,10 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bRet = true;
             }
         }
-        else if (aFltName == pFilterHtml || aFltName == pFilterHtmlWebQ)
+        else if (aFltName == SC_HTML_FILTER_NAME || aFltName == SC_HTML_WEBQ_FILTER_NAME)
         {
             ErrCode eError = SCERR_IMPORT_UNKNOWN;
-            bool bWebQuery = aFltName == pFilterHtmlWebQ;
+            bool bWebQuery = aFltName == SC_HTML_WEBQ_FILTER_NAME;
             if( !rMedium.IsStorage() )
             {
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1819,7 +1813,7 @@ ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
         mrDocShell.SfxObjectShell::SetVisArea( tools::Rectangle() );   // "Normally" worked on => no VisArea.
 }
 
-ScDocShell::PrepareSaveGuard::~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE
+ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
 {
     if (mrDocShell.m_pDocument->HasExternalRefManager())
     {
@@ -1910,10 +1904,7 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
 
     if (pViewShell && bNeedsRehash)
     {
-        bool bAutoSaveEvent = false;
-        utl::MediaDescriptor lArgs(rMedium.GetArgs());
-        lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= bAutoSaveEvent;
-        if (bAutoSaveEvent)
+        if (rMedium.GetArgs().getValue(utl::MediaDescriptor::PROP_AUTOSAVEEVENT) == true)
         {
             // skip saving recovery file instead of showing re-type password dialog window
             SAL_WARN("sc.filter",
@@ -2186,11 +2177,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         ScAddress aPos(nCol, nRow, nTab);
         if ( bTabProtect )
         {
-            const ScProtectionAttr* pProtAttr =
+            const ScProtectionAttr& rProtAttr =
                 m_pDocument->GetAttr( nCol, nRow, nTab, ATTR_PROTECTION );
-            if ( pProtAttr->GetHideCell() ||
+            if ( rProtAttr.GetHideCell() ||
                     ( eType == CELLTYPE_FORMULA && bShowFormulas &&
-                      pProtAttr->GetHideFormula() ) )
+                      rProtAttr.GetHideFormula() ) )
                 eType = CELLTYPE_NONE;  // hide
         }
         bool bForceQuotes = false;
@@ -2288,7 +2279,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         if ( bFixedWidth )
         {
             SvxCellHorJustify eHorJust =
-                m_pDocument->GetAttr( nCol, nRow, nTab, ATTR_HOR_JUSTIFY )->GetValue();
+                m_pDocument->GetAttr( nCol, nRow, nTab, ATTR_HOR_JUSTIFY ).GetValue();
             lcl_ScDocShell_GetFixedWidthString( aString, *m_pDocument, nTab, nCol,
                     !bString, eHorJust );
             rStream.WriteUnicodeOrByteText( aString );
@@ -2456,15 +2447,15 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     bool bRet = false;
     OUString aFltName = rMed.GetFilter()->GetFilterName();
 
-    if (aFltName == pFilterXML)
+    if (aFltName == SC_SOXML_FILTER_NAME)
     {
         //TODO/LATER: this shouldn't happen!
         OSL_FAIL("XML filter in ConvertFrom?!");
         bRet = SaveXML( &rMed, nullptr );
     }
-    else if (aFltName == pFilterExcel5 || aFltName == pFilterExcel95 ||
-             aFltName == pFilterExcel97 || aFltName == pFilterEx5Temp ||
-             aFltName == pFilterEx95Temp || aFltName == pFilterEx97Temp)
+    else if (aFltName == SC_XL5_FILTER_NAME || aFltName == SC_XL95_FILTER_NAME ||
+             aFltName == SC_XL97_FILTER_NAME || aFltName == SC_XL5TMPL_FILTER_NAME ||
+             aFltName == SC_XL95TMPL_FILTER_NAME || aFltName == SC_XL97TMPL_FILTER_NAME)
     {
         weld::WaitObject aWait( GetActiveDialogParent() );
 
@@ -2504,7 +2495,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         if( bDoSave )
         {
             ExportFormatExcel eFormat = ExpBiff5;
-            if( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
+            if (aFltName == SC_XL97_FILTER_NAME || aFltName == SC_XL97TMPL_FILTER_NAME)
                 eFormat = ExpBiff8;
             ErrCode eError = ScFormatFilter::Get().ScExportExcel5( rMed, m_pDocument.get(), eFormat, RTL_TEXTENCODING_MS_1252 );
 
@@ -2547,16 +2538,8 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             // Verbose only from command line, not UI (in case we actually
             // implement that) nor macro filter options.
-            bool bVerbose = false;
-            const css::uno::Sequence<css::beans::PropertyValue> & rArgs = rMed.GetArgs();
-            const auto pProp = std::find_if( rArgs.begin(), rArgs.end(),
-                    [](const css::beans::PropertyValue& rProp) { return rProp.Name == "ConversionRequestOrigin"; });
-            if (pProp != rArgs.end())
-            {
-                OUString aOrigin;
-                pProp->Value >>= aOrigin;
-                bVerbose = (aOrigin == "CommandLine");
-            }
+            bool bVerbose
+                = rMed.GetArgs().getValue(u"ConversionRequestOrigin"_ustr) == u"CommandLine"_ustr;
 
             SCTAB nStartTab;
             SCTAB nCount = m_pDocument->GetTableCount();
@@ -2649,7 +2632,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             }
         }
     }
-    else if (aFltName == pFilterDBase)
+    else if (aFltName == SC_DBASE_FILTER_NAME)
     {
         OUString sCharSet;
         if ( const SfxStringItem* pOptionsItem = rMed.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
@@ -2718,7 +2701,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 SetError(eError);
         }
     }
-    else if (aFltName == pFilterDif)
+    else if (aFltName == SC_DIF_FILTER_NAME)
     {
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
@@ -2747,7 +2730,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                     rMed.SetError(SCWARN_EXPORT_ASCII);
         }
     }
-    else if (aFltName == pFilterSylk)
+    else if (aFltName == SC_SYLK_FILTER_NAME)
     {
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
@@ -2764,7 +2747,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SotClipboardFormatId::SYLK );
         }
     }
-    else if (aFltName == pFilterHtml)
+    else if (aFltName == SC_HTML_FILTER_NAME)
     {
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
@@ -2896,60 +2879,30 @@ bool ScDocShell::PrepareClose( bool bUI )
     return bRet;
 }
 
-OUString ScDocShell::GetOwnFilterName()
-{
-    return pFilterSc50;
-}
-
-const OUString & ScDocShell::GetHtmlFilterName()
-{
-    return pFilterHtml;
-}
-
-const OUString & ScDocShell::GetWebQueryFilterName()
-{
-    return pFilterHtmlWebQ;
-}
-
-const OUString & ScDocShell::GetAsciiFilterName()
-{
-    return SC_TEXT_CSV_FILTER_NAME;
-}
-
-const OUString & ScDocShell::GetLotusFilterName()
-{
-    return pFilterLotus;
-}
-
-const OUString & ScDocShell::GetDBaseFilterName()
-{
-    return pFilterDBase;
-}
-
-const OUString & ScDocShell::GetDifFilterName()
-{
-    return pFilterDif;
-}
-
 bool ScDocShell::HasAutomaticTableName( std::u16string_view rFilter )
 {
     //  sal_True for those filters that keep the default table name
     //  (which is language specific)
 
     return rFilter == SC_TEXT_CSV_FILTER_NAME
-        || rFilter == pFilterLotus
-        || rFilter == pFilterExcel4
-        || rFilter == pFilterEx4Temp
-        || rFilter == pFilterDBase
-        || rFilter == pFilterDif
-        || rFilter == pFilterSylk
-        || rFilter == pFilterHtml
-        || rFilter == pFilterRtf;
+        || rFilter == SC_LOTUS_FILTER_NAME
+        || rFilter == SC_XL4_FILTER_NAME
+        || rFilter == SC_XL4TMPL_FILTER_NAME
+        || rFilter == SC_DBASE_FILTER_NAME
+        || rFilter == SC_DIF_FILTER_NAME
+        || rFilter == SC_SYLK_FILTER_NAME
+        || rFilter == SC_HTML_FILTER_NAME
+        || rFilter == SC_RTF_FILTER_NAME;
 }
 
 std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
 {
     return std::make_unique<ScDocFuncDirect>( *this );
+}
+
+ScDocShell::ScDocShell(const SfxModelFlags i_nSfxCreationFlags, ScDocumentMode docMode)
+    : ScDocShell(i_nSfxCreationFlags, std::make_shared<ScDocument>(docMode, this))
+{
 }
 
 ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shared_ptr<ScDocument>& pDoc ) :

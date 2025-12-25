@@ -160,15 +160,11 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
     // register namespaces
     if( aContext.mxNamespaces.is() )
     {
-        Sequence<OUString> aPrefixes =aContext.mxNamespaces->getElementNames();
-        sal_Int32 nCount = aPrefixes.getLength();
-        const OUString* pPrefixes = aPrefixes.getConstArray();
-        for( sal_Int32 i = 0; i < nCount; i++ )
+        for (const OUString& rNamePrefix : aContext.mxNamespaces->getElementNames())
         {
-            const OUString* pNamePrefix = &pPrefixes[i];
             OUString sNameURL;
-            aContext.mxNamespaces->getByName( *pNamePrefix ) >>= sNameURL;
-            xXPath->registerNS( *pNamePrefix, sNameURL );
+            aContext.mxNamespaces->getByName(rNamePrefix) >>= sNameURL;
+            xXPath->registerNS(rNamePrefix, sNameURL);
         }
     }
 

@@ -22,7 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/printoptions.hxx>
 #include <svtools/restartdialog.hxx>
-
+#include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/printopt.hxx>
@@ -92,13 +92,13 @@ std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container
 
 OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label4"_ustr, u"label6"_ustr, u"label2"_ustr, u"label3"_ustr, u"label1"_ustr, u"label5"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"converttogray"_ustr, u"reducebitmaptrans"_ustr, u"reducebitmap"_ustr, u"reducetrans"_ustr,
@@ -107,7 +107,7 @@ OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"printer"_ustr,
@@ -123,10 +123,10 @@ OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append( pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )

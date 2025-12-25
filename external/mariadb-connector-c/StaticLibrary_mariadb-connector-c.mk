@@ -16,6 +16,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,mariadb-connector-c,mariadb-connecto
 $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 	$$(INCLUDE) \
 	-I$(gb_UnpackedTarball_workdir)/mariadb-connector-c/include \
+	$(if $(filter $(OS),WNT),-I$(gb_UnpackedTarball_workdir)/mariadb-connector-c/win-iconv) \
 ))
 
 # This is needed for MSVC 2008: it somehow finds a dlopen somewhere
@@ -23,15 +24,12 @@ $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 # This macro enables a re-definition to native Win32 APIs in my_global.h.
 $(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-DHAVE_DLOPEN -DHAVE_COMPRESS -D ENABLED_LOCAL_INFILE -D LIBMARIADB -D THREAD -DSQLITE_ENABLE_COLUMN_METADATA=1))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-D_TIMESPEC_DEFINED -DHAVE_STRTOULL -DHAVE_WINCRYPT))
-$(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
-	$$(INCLUDE) \
-	-I$(gb_UnpackedTarball_workdir)/mariadb-connector-c/win-iconv \
-))
-else
 $(eval $(call gb_StaticLibrary_use_external,mariadb-connector-c,openssl_headers))
-$(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-DHAVE_OPENSSL))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-D_TIMESPEC_DEFINED -DHAVE_STRTOULL -DHAVE_WINCRYPT -DHAVE_OPENSSL -DHAVE_TLS))
+else
+$(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-DHAVE_OPENSSL -DHAVE_TLS))
 endif
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
@@ -53,11 +51,12 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_net \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_password \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_pvio \
+	UnpackedTarball/mariadb-connector-c/libmariadb/secure/openssl \
 	UnpackedTarball/mariadb-connector-c/plugins/auth/auth_gssapi_client \
-	UnpackedTarball/mariadb-connector-c/libmariadb/ma_sha1 \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_stmt_codec \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_string \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_time \
+	UnpackedTarball/mariadb-connector-c/libmariadb/ma_tls \
 	UnpackedTarball/mariadb-connector-c/libmariadb/mariadb_async \
 	UnpackedTarball/mariadb-connector-c/libmariadb/mariadb_charset \
 	UnpackedTarball/mariadb-connector-c/libmariadb/mariadb_dyncol \

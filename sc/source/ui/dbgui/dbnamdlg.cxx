@@ -25,7 +25,8 @@
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <reffact.hxx>
@@ -375,7 +376,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl, weld::Button&, void)
     // be created at this point:
     if (!bInvalid)
     {
-        ScDBDocFunc aFunc(m_rViewData.GetDocShell());
+        ScDBDocFunc aFunc(*m_rViewData.GetDocShell());
         aFunc.ModifyAllDBData(aLocalDbCol, aRemoveList);
         response(RET_OK);
     }

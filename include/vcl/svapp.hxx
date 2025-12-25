@@ -45,6 +45,7 @@
 
 
 class Bitmap;
+namespace tools { class JsonWriter; }
 namespace weld
 {
     class Builder;
@@ -84,7 +85,13 @@ namespace com::sun::star::awt {
     class XWindow;
 }
 
-VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
+VCL_DLLPUBLIC OUString LocalizeDigitsInString( const OUString&, LanguageType,
+                                               sal_Int32 nStart, sal_Int32& nLen );
+inline OUString LocalizeDigitsInString( const OUString& sStr, LanguageType eTextLanguage )
+{
+    sal_Int32 nLen = sStr.getLength();
+    return LocalizeDigitsInString(sStr, eTextLanguage, 0, nLen);
+}
 
 enum class SystemWindowFlags {
     NOAUTOMODE    = 0x0001,
@@ -1230,6 +1237,12 @@ public:
 
     /** Determines if safe mode is enabled */
     static bool                 IsSafeModeEnabled();
+
+    /** Collect what .ui files are used*/
+    static void                 EnableUICoverage(bool bEnable);
+
+    /** Report on what .ui files were used*/
+    static void UICoverageReport(tools::JsonWriter& rJson);
 
     ///@}
 

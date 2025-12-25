@@ -10942,10 +10942,8 @@ basegfx::B2IVector::operator=(basegfx::B2ITuple const&)
 basegfx::B3DHomMatrix::decompose(basegfx::B3DTuple&, basegfx::B3DTuple&, basegfx::B3DTuple&, basegfx::B3DTuple&) const
 basegfx::B3DHomMatrix::determinant() const
 basegfx::B3DHomMatrix::isLastLineDefault() const
-basegfx::B3DHomMatrix::operator*=(double)
 basegfx::B3DHomMatrix::operator+=(basegfx::B3DHomMatrix const&)
 basegfx::B3DHomMatrix::operator-=(basegfx::B3DHomMatrix const&)
-basegfx::B3DHomMatrix::operator/=(double)
 basegfx::B3DHomMatrix::rotate(basegfx::B3DTuple const&)
 basegfx::B3DHomMatrix::scale(basegfx::B3DTuple const&)
 basegfx::B3DHomMatrix::shearXY(double, double)

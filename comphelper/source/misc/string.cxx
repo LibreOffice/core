@@ -474,7 +474,7 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         nRHSChunkLen = nRHSLastNonDigitPos - nRHSFirstDigitPos;
 
         //To-Do: Possibly scale down those unicode codepoints that relate to
-        //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
+        //numbers outside of the normal 0-9 range, e.g. see LocalizeDigitsInString in
         //vcl
 
         sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.subView(nLHSFirstDigitPos, nLHSChunkLen));
@@ -511,6 +511,37 @@ bool isdigitAsciiString(std::u16string_view rString)
     return std::all_of(
         rString.data(), rString.data() + rString.size(),
         [](sal_Unicode c){ return rtl::isAsciiDigit(c); });
+}
+
+bool isValidAsciiFilename(std::u16string_view rString)
+{
+    if (rString.empty() || rString[0] == ' ' || rString[rString.size() - 1] == ' ')
+        return false;
+
+    bool bRet = std::all_of(
+        rString.data(), rString.data() + rString.size(),
+        [](sal_Unicode c)
+        {
+            if (!rtl::isAscii(c))
+               return false;
+            switch (c)
+            {
+                case '<':
+                case '>':
+                case ':':
+                case '"':
+                case '\\':
+                case '/':
+                case '?':
+                case '%':
+                case '*':
+                case '|':
+                    return false;
+                default:
+                    return true;
+            }
+        });
+    return bRet;
 }
 
 OUString reverseString(std::u16string_view rStr)

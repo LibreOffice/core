@@ -20,7 +20,8 @@
 #pragma once
 
 #include <connectivity/dbexception.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 namespace dbaui

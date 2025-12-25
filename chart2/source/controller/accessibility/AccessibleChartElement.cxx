@@ -19,6 +19,7 @@
 
 #include "AccessibleChartElement.hxx"
 #include <AccessibleTextHelper.hxx>
+#include <sal/log.hxx>
 #include <ChartModel.hxx>
 #include <ChartController.hxx>
 #include <ObjectIdentifier.hxx>
@@ -47,7 +48,7 @@ AccessibleChartElement::AccessibleChartElement(
 
 AccessibleChartElement::~AccessibleChartElement()
 {
-    OSL_ASSERT(!isAlive());
+    SAL_WARN_IF(isAlive(), "chart2.accessibility", "AccessibleChartElement destroyed while still alive (not disposed)");
 }
 
 // ________ protected ________

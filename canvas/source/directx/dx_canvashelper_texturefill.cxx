@@ -18,7 +18,9 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
+#include <cassert>
 #include <cstdlib>
 #include <memory>
 #include <tuple>
@@ -566,8 +568,9 @@ namespace dxcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    OSL_ASSERT(rValues.maColors.getLength() == rValues.maStops.getLength()
-                               && rValues.maColors.getLength() > 1);
+                    assert(
+                        rValues.maColors.getLength() == rValues.maStops.getLength() && rValues.maColors.getLength() > 1
+                        && "Gradient colors/stops mismatched");
 
                     std::vector< Gdiplus::Color > aColors(rValues.maColors.getLength());
                     std::transform(&rValues.maColors[0],

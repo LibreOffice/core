@@ -31,6 +31,7 @@
 #include <dpnumgroupinfo.hxx>
 #include <columniterator.hxx>
 #include <cellvalue.hxx>
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 #include <comphelper/parallelsort.hxx>
 #include <rtl/math.hxx>
@@ -40,12 +41,9 @@
 #include <unotools/collatorwrapper.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/XmlWriter.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
-
-#if DUMP_PIVOT_TABLE
-#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#endif
 
 // TODO : Threaded pivot cache operation is disabled until we can figure out
 // ways to make the edit engine and number formatter codes thread-safe in a
@@ -1047,13 +1045,15 @@ const ScDPCache::IndexArrayType* ScDPCache::GetFieldIndexArray( size_t nDim ) co
 
 const ScDPCache::ScDPItemDataVec& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
-    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
+    SAL_WARN_IF(!IsValidDimensionIndex(nDim) ,"sc.core", "dimension index out of bound");
+
+    assert(IsValidDimensionIndex(nDim));
     return maFields.at(nDim)->maItems;
 }
 
 sal_uInt32 ScDPCache::GetNumberFormat( tools::Long nDim ) const
 {
-    if ( nDim >= mnColumnCount )
+    if (!IsValidDimensionIndex(nDim))
         return 0;
 
     // TODO: Find a way to determine the dominant number format in presence of
@@ -1063,7 +1063,7 @@ sal_uInt32 ScDPCache::GetNumberFormat( tools::Long nDim ) const
 
 bool ScDPCache::IsDateDimension( tools::Long nDim ) const
 {
-    if (nDim >= mnColumnCount)
+    if (!IsValidDimensionIndex(nDim))
         return false;
 
     ScInterpreterContext& rContext = mrDoc.GetNonThreadedContext();
@@ -1073,7 +1073,11 @@ bool ScDPCache::IsDateDimension( tools::Long nDim ) const
 
 tools::Long ScDPCache::GetDimMemberCount(tools::Long nDim) const
 {
-    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
+    SAL_WARN_IF(!IsValidDimensionIndex(nDim) ,"sc.core", "dimension index out of bound");
+
+    if (!IsValidDimensionIndex(nDim))
+        return 0;
+
     return maFields[nDim]->maItems.size();
 }
 
@@ -1085,6 +1089,11 @@ SCCOL ScDPCache::GetDimensionIndex(std::u16string_view sName) const
             return static_cast<SCCOL>(i-1);
     }
     return -1;
+}
+
+bool ScDPCache::IsValidDimensionIndex(tools::Long nDimensionIndex) const
+{
+    return nDimensionIndex >= 0 && nDimensionIndex < mnColumnCount;
 }
 
 rtl_uString* ScDPCache::InternString( size_t nDim, const OUString& rStr )
@@ -1396,21 +1405,9 @@ sal_Int32 ScDPCache::GetGroupType(tools::Long nDim) const
     return 0;
 }
 
-#if DUMP_PIVOT_TABLE
 
-namespace {
-
-void dumpItems(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
+namespace
 {
-    for (size_t i = 0; i < rItems.size(); ++i)
-        std::cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i], false) << std::endl;
-}
-
-void dumpSourceData(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
-{
-    for (const auto& rIndex : rArray)
-        std::cout << "      '" << rCache.GetFormattedString(nDim, rItems[rIndex], false) << "'" << std::endl;
-}
 
 const char* getGroupTypeName(sal_Int32 nType)
 {
@@ -1427,13 +1424,126 @@ const char* getGroupTypeName(sal_Int32 nType)
         case sheet::DataPilotFieldGroupBy::HOURS:    return pNames[5];
         case sheet::DataPilotFieldGroupBy::MINUTES:  return pNames[6];
         case sheet::DataPilotFieldGroupBy::SECONDS:  return pNames[7];
-        default:
-            ;
     }
 
     return pNames[0];
 }
 
+void dumpItemsAsXml(tools::XmlWriter& rWriter, ScDPCache const& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
+{
+    for (size_t i = 0; i < rItems.size(); ++i)
+    {
+        rWriter.startElement("item");
+        rWriter.attribute("index", i + nOffset);
+        rWriter.attribute("value", rCache.GetFormattedString(nDim, rItems[i], false));
+        rWriter.endElement();
+    }
+}
+
+void dumpSourceDataAsXml(tools::XmlWriter& rWriter, ScDPCache const& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
+{
+    for (const auto& rIndex : rArray)
+    {
+        rWriter.startElement("source_data");
+        rWriter.attribute("value", rCache.GetFormattedString(nDim, rItems[rIndex], false));
+        rWriter.endElement();
+    }
+}
+
+} // end anonymous namespace
+
+void ScDPCache::dumpAsXml(tools::XmlWriter& rWriter) const
+{
+    rWriter.startElement("cache");
+
+    {
+        size_t index = 0;
+        for (const auto& rxField : maFields)
+        {
+            rWriter.startElement("source");
+            const Field& rField = *rxField;
+
+            rWriter.attribute("dimension", GetDimensionName(index));
+            rWriter.attribute("id", index);
+            rWriter.attribute("item_count", rField.maItems.size());
+
+            dumpItemsAsXml(rWriter, *this, index, rField.maItems, 0);
+
+            if (rField.mpGroup)
+            {
+                auto const& rGroup = rField.mpGroup;
+                rWriter.attribute("group_item_count", rGroup->maItems.size());
+                rWriter.attribute("group_type", getGroupTypeName(rGroup->mnGroupType));
+
+                dumpItemsAsXml(rWriter, *this, index, rField.mpGroup->maItems, rField.maItems.size());
+            }
+
+            dumpSourceDataAsXml(rWriter, *this, index, rField.maItems, rField.maData);
+
+            index++;
+            rWriter.endElement();
+        }
+    }
+
+    {
+        size_t index = maFields.size();
+        for (const auto& rxGroupField : maGroupFields)
+        {
+            rWriter.startElement("group");
+            const GroupItems& rGroupitems = *rxGroupField;
+
+            rWriter.attribute("id", index);
+            rWriter.attribute("item_count", rGroupitems.maItems.size());
+            rWriter.attribute("group_type", getGroupTypeName(rGroupitems.mnGroupType) );
+
+            dumpItemsAsXml(rWriter, *this, index, rGroupitems.maItems, 0);
+
+            index++;
+            rWriter.endElement();
+        }
+    }
+
+    {
+        struct { SCROW start; SCROW end; bool empty; } aRange;
+        mdds::flat_segment_tree<SCROW, bool>::const_iterator it = maEmptyRows.begin(), itEnd = maEmptyRows.end();
+        if (it != itEnd)
+        {
+            aRange.start = it->first;
+            aRange.empty = it->second;
+
+            for (++it; it != itEnd; ++it)
+            {
+                aRange.end = it->first-1;
+
+                rWriter.startElement("empty_row");
+                rWriter.attribute("start", aRange.start);
+                rWriter.attribute("end", aRange.end);
+                rWriter.attribute("empty", (aRange.empty ? "yes" : "no"));
+                rWriter.endElement();
+                aRange.start = it->first;
+                aRange.empty = it->second;
+            }
+        }
+    }
+
+    rWriter.endElement();
+}
+
+#if DUMP_PIVOT_TABLE
+
+namespace {
+
+void dumpItems(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
+{
+    for (size_t i = 0; i < rItems.size(); ++i)
+        std::cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i], false) << std::endl;
+}
+
+void dumpSourceData(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
+{
+    for (const auto& rIndex : rArray)
+        std::cout << "      '" << rCache.GetFormattedString(nDim, rItems[rIndex], false) << "'" << std::endl;
+}
 }
 
 void ScDPCache::Dump() const

@@ -60,7 +60,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <editeng/unolingu.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
@@ -395,7 +395,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     UIName sGraphicFormat( SwResId(STR_POOLFRM_GRAPHIC) );
 
-    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
+    const SfxStringItem* pName = rReq.GetArg(SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
 
     // No file pickers in a non-desktop (mobile app) build.
@@ -480,7 +480,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             rReq.AppendItem(SfxStringItem(SID_INSERT_GRAPHIC, pFileDlg->GetPath()));
             rReq.AppendItem(SfxStringItem(FN_PARAM_FILTER, pFileDlg->GetCurrentFilter()));
-            pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
+            pName = rReq.GetArg(SID_INSERT_GRAPHIC);
 
             bool bAsLink = false;
             if(nHtmlMode & HTMLMODE_ON)
@@ -512,7 +512,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     {
         OUString aFileName = pName->GetValue();
         OUString aFilterName;
-        if (const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(FN_PARAM_FILTER))
+        if (const SfxStringItem* pFilter = rReq.GetArg(FN_PARAM_FILTER))
             aFilterName = pFilter->GetValue();
         bool bAsLink = false;
         if (const SfxBoolItem* pAsLink = rReq.GetArg<SfxBoolItem>(FN_PARAM_1))
@@ -1614,6 +1614,8 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ALIGN_ANY_LEFT :
         case SID_ALIGN_ANY_HCENTER  :
         case SID_ALIGN_ANY_RIGHT    :
+        case SID_ALIGN_ANY_START    :
+        case SID_ALIGN_ANY_END      :
         case SID_ALIGN_ANY_JUSTIFIED:
         case SID_ALIGN_ANY_TOP      :
         case SID_ALIGN_ANY_VCENTER  :
@@ -1629,6 +1631,8 @@ void SwView::Execute(SfxRequest &rReq)
                     case SID_ALIGN_ANY_LEFT :       nAlias = SID_ATTR_PARA_ADJUST_LEFT; break;
                     case SID_ALIGN_ANY_HCENTER  :   nAlias = SID_ATTR_PARA_ADJUST_CENTER; break;
                     case SID_ALIGN_ANY_RIGHT    :   nAlias = SID_ATTR_PARA_ADJUST_RIGHT; break;
+                    case SID_ALIGN_ANY_START    :   nAlias = SID_ATTR_PARA_ADJUST_START; break;
+                    case SID_ALIGN_ANY_END      :   nAlias = SID_ATTR_PARA_ADJUST_END; break;
                     case SID_ALIGN_ANY_JUSTIFIED:   nAlias = SID_ATTR_PARA_ADJUST_BLOCK; break;
                     case SID_ALIGN_ANY_TOP      :   nAlias = SID_TABLE_VERT_NONE; break;
                     case SID_ALIGN_ANY_VCENTER  :   nAlias = SID_TABLE_VERT_CENTER; break;

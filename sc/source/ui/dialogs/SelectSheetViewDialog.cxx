@@ -44,27 +44,31 @@ SelectSheetViewDialog::SelectSheetViewDialog(weld::Window* pParent, ScViewData& 
     ScDocument& rDocument = mrViewData.GetDocument();
 
     auto pSheetManager = rDocument.GetSheetViewManager(mrViewData.GetTabNumber());
-
-    m_xEntryTree->freeze();
     m_xEntryTree->clear();
 
+    m_xEntryTree->freeze();
+
     OUString sActiveID = u"-1"_ustr;
-    m_xEntryTree->append(u"-1"_ustr, u"Default View"_ustr);
+    m_xEntryTree->append(u"-1"_ustr, SheetViewManager::defaultViewName());
 
-    sc::SheetViewID nSheetViewID = 0;
-
-    for (auto const& pSheetView : pSheetManager->getSheetViews())
+    if (pSheetManager)
     {
-        if (pSheetView)
+        sc::SheetViewID nSheetViewID = 0;
+
+        for (auto const& pSheetView : pSheetManager->getSheetViews())
         {
-            auto& aEntry = m_aEntries.emplace_back(pSheetView, nSheetViewID);
-            OUString sID = OUString::number(m_aEntries.size() - 1);
-            if (nSheetViewID == mrViewData.GetSheetViewID())
-                sActiveID = sID;
-            m_xEntryTree->append(sID, aEntry.getName());
+            if (pSheetView)
+            {
+                auto& aEntry = m_aEntries.emplace_back(pSheetView, nSheetViewID);
+                OUString sID = OUString::number(m_aEntries.size() - 1);
+                if (nSheetViewID == mrViewData.GetSheetViewID())
+                    sActiveID = sID;
+                m_xEntryTree->append(sID, aEntry.getName());
+            }
+            nSheetViewID++;
         }
-        nSheetViewID++;
     }
+
     m_xEntryTree->thaw();
 
     m_xEntryTree->select_id(sActiveID);

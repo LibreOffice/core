@@ -168,7 +168,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
                 ScopedVclPtrInstance< VirtualDevice > aVDev(  *this  );
                 aVDev->SetBackground( rWallpaper.GetColor() );
                 aVDev->SetOutputSizePixel( Size( nBmpWidth, nBmpHeight ) );
-                aVDev->DrawBitmapEx( Point(), aBmp );
+                aVDev->DrawBitmap( Point(), aBmp );
                 aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
 
@@ -312,12 +312,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
                 {
                     for( tools::Long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
                     {
-                        const Size aSizePx( aBmp.GetSizePixel() );
-                        if( !aBmp.HasAlpha() )
-                            DrawBitmap( Point( nBmpX, nBmpY ), PixelToLogic( aSizePx ), Point(), aSizePx, aBmp, MetaActionType::BMP );
-                        else
-                            DrawBitmapEx(Point( nBmpX, nBmpY ), PixelToLogic(aSizePx), Point(), aSizePx, aBmp,
-                                         MetaActionType::BMPEX);
+                        DrawBitmap(Point( nBmpX, nBmpY), aBmp);
                     }
                 }
                 bDrawn = true;
@@ -379,7 +374,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
             }
         }
 
-        DrawBitmapEx( aPos, aBmp );
+        DrawBitmap( aPos, aBmp );
     }
 
     rWallpaper.ImplSetCachedBitmap( aBmp );

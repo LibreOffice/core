@@ -256,12 +256,14 @@ void HTMLDataProvider::Import()
     mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, mrDataSource.getURL(), mrDataSource.getID(),
             [this]() { this->ImportFinished(); }, std::vector(mrDataSource.getDataTransformation()));
-    mxHTMLFetchThread->launch();
-
     if (mbDeterministic)
     {
         SolarMutexReleaser aReleaser;
-        mxHTMLFetchThread->join();
+        mxHTMLFetchThread->execute();
+    }
+    else
+    {
+        mxHTMLFetchThread->launch();
     }
 }
 

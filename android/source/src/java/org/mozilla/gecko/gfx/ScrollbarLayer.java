@@ -24,7 +24,7 @@ import java.nio.FloatBuffer;
  * Draws a small rect. This is scaled to become a scrollbar.
  */
 public class ScrollbarLayer extends TileLayer {
-    private static String LOGTAG = LayerView.class.getName();
+    private static final String LOGTAG = LayerView.class.getName();
     public static final long FADE_DELAY = 500; // milliseconds before fade-out starts
     private static final float FADE_AMOUNT = 0.03f; // how much (as a percent) the scrollbar should fade per frame
 
@@ -37,7 +37,7 @@ public class ScrollbarLayer extends TileLayer {
     private final Canvas mCanvas;
     private float mOpacity;
 
-    private LayerRenderer mRenderer;
+    private final LayerRenderer mRenderer;
     private int mProgram;
     private int mPositionHandle;
     private int mTextureHandle;

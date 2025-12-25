@@ -2660,6 +2660,23 @@ SfxVoidItem RegenerateDiagram SID_REGENERATE_DIAGRAM
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxVoidItem DiagramToGroup SID_DIAGRAM_TO_GROUP
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem EditDiagram SID_EDIT_DIAGRAM
 ()
 [
@@ -3921,7 +3938,7 @@ SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
 
 
 SfxUInt16Item GrafMode SID_ATTR_GRAF_MODE
-(SfxInt16Item ColorMode FN_PARAM_1)
+(SfxUInt16Item ColorMode FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -3959,7 +3976,7 @@ SfxInt16Item GrafRed SID_ATTR_GRAF_RED
 
 
 SfxUInt16Item GrafTransparence SID_ATTR_GRAF_TRANSPARENCE
-(SfxInt16Item Transparency FN_PARAM_1)
+(SfxUInt16Item Transparency FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -5405,6 +5422,42 @@ SfxVoidItem LeaveGroup SID_LEAVE_GROUP
 
 
 SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SfxBoolItem StartPara SID_ATTR_PARA_ADJUST_START
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SfxBoolItem EndPara SID_ATTR_PARA_ADJUST_END
 
 [
     AutoUpdate = TRUE,
@@ -10989,6 +11042,40 @@ SfxVoidItem CommonAlignRight SID_ALIGN_ANY_RIGHT
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem CommonAlignStart SID_ALIGN_ANY_START
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem CommonAlignEnd SID_ALIGN_ANY_END
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxVoidItem CommonAlignJustified SID_ALIGN_ANY_JUSTIFIED
 ()
 [
@@ -13388,6 +13475,104 @@ SfxInt16Item TextColumnsNumber SID_ATTR_TEXTCOLUMNS_NUMBER
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Format;
 ]
+
+
+SfxBoolItem TextAutoGrowWidth SID_ATTR_TEXT_AUTOGROWWIDTH
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE;
+    GroupId = SfxGroupId::Format;
+]
+
+SfxBoolItem TextAutoGrowHeight SID_ATTR_TEXT_AUTOGROWHEIGHT
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE;
+    GroupId = SfxGroupId::Format;
+]
+
+SdrMetricItem TextLeftDist SID_ATTR_TEXT_LEFTDIST
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SdrMetricItem TextRightDist SID_ATTR_TEXT_RIGHTDIST
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SdrMetricItem TextUpperDist SID_ATTR_TEXT_UPPERDIST
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
+SdrMetricItem TextLowerDist SID_ATTR_TEXT_LOWERDIST
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
 
 SdrMetricItem TextColumnsSpacing SID_ATTR_TEXTCOLUMNS_SPACING
 

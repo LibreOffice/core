@@ -55,20 +55,18 @@ void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInst
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 
-SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const OUString& pFilter)
+SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath)
     : UnoApiXmlTest(pTestDocumentPath)
     , mpXmlBuffer(nullptr)
-    , mpFilter(pFilter)
 {
 }
 
-void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const char* pPassword)
+void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, TestFilter filter)
 {
     maTempFile.EnableKillingFile(false);
-    header();
-    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
+    loadURL(createFileURL(OUString::createFromAscii(filename)));
     verify();
-    saveAndReload(mpFilter, pPassword);
+    saveAndReload(filter);
     verify();
     maTempFile.EnableKillingFile();
 }
@@ -376,8 +374,6 @@ uno::Reference<drawing::XShape> SwModelTestBase::getTextFrameByName(const OUStri
     return xShape;
 }
 
-void SwModelTestBase::header() {}
-
 void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
 {
     // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
@@ -390,23 +386,11 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
     calcLayout();
 }
 
-void SwModelTestBase::saveAndReload(const OUString& pFilter, const char* pPassword)
+void SwModelTestBase::saveAndReload(TestFilter eFilter, const char* pPassword)
 {
-    save(pFilter, pPassword);
+    save(eFilter, pPassword);
 
     loadURL(maTempFile.GetURL(), pPassword);
-}
-
-void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
-{
-    loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
-    save(mpFilter);
-}
-
-void SwModelTestBase::loadAndReload(const char* pName)
-{
-    loadURL(createFileURL(OUString::createFromAscii(pName)));
-    saveAndReload(mpFilter);
 }
 
 int SwModelTestBase::getPages() const

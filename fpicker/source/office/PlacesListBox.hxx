@@ -11,7 +11,8 @@
 #include "iodlg.hxx"
 
 #include <svtools/place.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <vector>
@@ -39,7 +40,7 @@ public:
     ~PlacesListBox();
 
     void AppendPlace( const PlacePtr& pPlace );
-    void RemovePlace( sal_uInt16 nPos );
+    void RemovePlace( int nPos );
     void RemoveSelectedPlace();
     sal_Int32 GetNbEditablePlaces() const { return mnNbEditables;}
     bool IsUpdated();

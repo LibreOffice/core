@@ -25,7 +25,8 @@
 
 #include "doceventnotifier.hxx"
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <basctl/sbxitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/commandevent.hxx>
@@ -248,7 +249,7 @@ public:
     }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pIter = nullptr) const { return m_xControl->make_iterator(pIter); }
     void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const { m_xControl->copy_iterator(rSource, rDest); }
-    bool get_selected(weld::TreeIter* pIter) const { return m_xControl->get_selected(pIter); }
+    std::unique_ptr<weld::TreeIter> get_selected() const { return m_xControl->get_selected(); }
     void select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }
     void unselect(const weld::TreeIter& rIter) { m_xControl->unselect(rIter); }
     void remove(const weld::TreeIter& rIter) { m_xControl->remove(rIter); }

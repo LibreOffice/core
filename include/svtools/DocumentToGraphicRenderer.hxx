@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <vector>
 
 #include <vcl/graph.hxx>

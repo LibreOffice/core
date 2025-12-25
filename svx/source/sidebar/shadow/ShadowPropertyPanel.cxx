@@ -8,6 +8,7 @@
  */
 
 #include "ShadowPropertyPanel.hxx"
+#include <o3tl/untaint.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
@@ -137,7 +138,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl, ColorListBox&, void)
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nVal = mxShadowTransMetric->get_value(FieldUnit::PERCENT);
+    sal_uInt16 nVal =  o3tl::sanitizing_cast<sal_uInt16>(mxShadowTransMetric->get_value(FieldUnit::PERCENT));
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
@@ -177,11 +178,11 @@ void ShadowPropertyPanel::ModifyShadowDistance()
     switch (nAngle)
     {
         case 0: nX = nXY; nY = 0;             break;
-        case 45: nX = nXY; nY = -nXY;         break;
-        case 90: nX = 0; nY = - nXY;          break;
-        case 135: nX = nY = -nXY;             break;
-        case 180: nX = -nXY; nY = 0;          break;
-        case 225: nX = -nXY; nY = nXY;        break;
+        case 45: nX = nXY; nY = o3tl::saturating_toggle_sign(nXY); break;
+        case 90: nX = 0; nY = o3tl::saturating_toggle_sign(nXY); break;
+        case 135: nX = nY = o3tl::saturating_toggle_sign(nXY); break;
+        case 180: nX = o3tl::saturating_toggle_sign(nXY); nY = 0; break;
+        case 225: nX = o3tl::saturating_toggle_sign(nXY); nY = nXY; break;
         case 270: nX = 0; nY = nXY;           break;
         case 315: nX = nY = nXY;              break;
     }

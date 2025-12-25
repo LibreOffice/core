@@ -23,6 +23,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <svx/dbaexchange.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
 #include <comphelper/propmultiplex2.hxx>

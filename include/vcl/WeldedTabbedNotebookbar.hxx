@@ -13,7 +13,8 @@
 #include <config_options.h>
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 /**

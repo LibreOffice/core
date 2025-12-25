@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_feature_opencl.h>
+
 #include "qahelper.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/propertysequence.hxx>
@@ -27,15 +29,17 @@
 #include <editeng/justifyitem.hxx>
 #include <clipcontext.hxx>
 #include <clipparam.hxx>
+#include <rangeutl.hxx>
 #include <refundo.hxx>
 #include <sal/log.hxx>
 #include <svl/gridprinter.hxx>
 #include <sfx2/docfile.hxx>
-#include <undoblk.hxx>
 #include <scdll.hxx>
 #include <scitems.hxx>
 #include <stringutil.hxx>
+#include <tabvwsh.hxx>
 #include <tokenarray.hxx>
+#include <undoblk.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 #include <o3tl/safeint.hxx>
@@ -354,6 +358,33 @@ void ScModelTestBase::executeAutoSum()
     Scheduler::ProcessEventsToIdle();
 }
 
+void ScModelTestBase::selectObjectByName(std::u16string_view rObjName)
+{
+    ScTabViewShell* pViewShell = getViewShell();
+    bool bFound = pViewShell->SelectObject(rObjName);
+    CPPUNIT_ASSERT_MESSAGE(
+        OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
+        bFound);
+
+    CPPUNIT_ASSERT(pViewShell->GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount()
+                   != 0);
+}
+
+void ScModelTestBase::checkCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr)
+{
+    ScAddress aAddr;
+    sal_Int32 nOffset = 0;
+    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, rDocSh.GetDocument(),
+                                                 formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScTabViewShell* pViewShell = rDocSh.GetBestViewShell(false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString(OUString::Concat("Incorrect Column in position ") + rStr).toUtf8().getStr(),
+        aAddr.Col(), pViewShell->GetViewData().GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString(OUString::Concat("Incorrect Row in position ") + rStr).toUtf8().getStr(),
+        aAddr.Row(), pViewShell->GetViewData().GetCurY());
+}
+
 const SdrOle2Obj* ScModelTestBase::getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
 {
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
@@ -626,11 +657,11 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     for ( unsigned int index=0; index<numElems; ++index )
     {
         const std::u16string_view sFileName = aTestValues[ index ].sTestDoc;
-        const OUString sExportType =  aTestValues[ index ].sExportType;
+        TestFilter eExportType =  aTestValues[ index ].eExportType;
         loadFromFile(sFileName);
 
-        if ( !sExportType.isEmpty() )
-            saveAndReload(sExportType);
+        if ( eExportType != TestFilter::NONE )
+            saveAndReload(aTestValues[ index ].eExportType);
 
         ScDocument* pDoc = getScDoc();
 
@@ -658,6 +689,8 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     }
 }
 
+#if HAVE_FEATURE_OPENCL
+
 void ScModelTestBase::enableOpenCL()
 {
     /**
@@ -672,7 +705,9 @@ void ScModelTestBase::disableOpenCL()
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
 }
 
-void ScModelTestBase::initTestEnv(std::u16string_view fileName)
+#endif
+
+void ScModelTestBase::initTestEnv([[maybe_unused]] std::u16string_view fileName)
 {
     // Some documents contain macros, disable them, otherwise
     // the "Error, BASIC runtime error." dialog is prompted
@@ -685,6 +720,7 @@ void ScModelTestBase::initTestEnv(std::u16string_view fileName)
     aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
     args.push_back(aMacroValue);
 
+#if HAVE_FEATURE_OPENCL
     disableOpenCL();
     CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
 
@@ -705,6 +741,7 @@ void ScModelTestBase::initTestEnv(std::u16string_view fileName)
     // Check there are 2 documents
     uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
+#endif // HAVE_FEATURE_OPENCL
 }
 
 ScRange ScUcalcTestBase::insertRangeData(

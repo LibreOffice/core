@@ -57,7 +57,7 @@ typelib_TypeDescriptionReference * Sequence< E >::s_pType = NULL;
 template< class E >
 inline Sequence< E >::Sequence()
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         NULL, 0, cpp_acquire );
@@ -81,7 +81,7 @@ inline Sequence< E >::Sequence(
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
 
     bool success =
     ::uno_type_sequence_construct(
@@ -94,7 +94,7 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
@@ -106,7 +106,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 #if defined LIBO_INTERNAL_ONLY
 template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
     if (!uno_type_sequence_construct(
-            &_pSequence, cppu::getTypeFavourUnsigned(this).getTypeLibType(),
+            &_pSequence, cppu::getTypeFavourUnsigned(static_cast<Sequence const *>(NULL)).getTypeLibType(),
             const_cast<E *>(init.begin()), init.size(), cpp_acquire))
     {
         throw std::bad_alloc();
@@ -119,7 +119,7 @@ inline Sequence< E >::~Sequence()
 {
     if (osl_atomic_decrement( &_pSequence->nRefCount ) == 0)
     {
-        const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+        const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
         uno_type_sequence_destroy(
             _pSequence, rType.getTypeLibType(), cpp_release );
     }
@@ -128,7 +128,7 @@ inline Sequence< E >::~Sequence()
 template< class E >
 inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_assign(
         &_pSequence, rSeq._pSequence, rType.getTypeLibType(), cpp_release );
     return *this;
@@ -148,7 +148,7 @@ inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
         return true;
     if (_pSequence->nElements != rSeq._pSequence->nElements)
         return false;
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     return ::uno_type_equalData(
         const_cast< Sequence * >( this ), rType.getTypeLibType(),
         const_cast< Sequence * >( &rSeq ), rType.getTypeLibType(),
@@ -165,7 +165,7 @@ inline bool Sequence< E >::operator != ( const Sequence & rSeq ) const
 template< class E >
 inline E * Sequence< E >::getArray()
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
@@ -210,7 +210,7 @@ inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,

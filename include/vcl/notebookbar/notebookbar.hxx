@@ -11,7 +11,7 @@
 
 #include <vcl/syswin.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/settings.hxx>
 #include <vector>
 
@@ -26,7 +26,7 @@ friend class NotebookBarContextChangeEventListener;
 public:
     NotebookBar(Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                 const css::uno::Reference<css::frame::XFrame>& rFrame,
-                const NotebookBarAddonsItem& aNotebookBarAddonsItem);
+                std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem);
     virtual ~NotebookBar() override;
     virtual void dispose() override;
 

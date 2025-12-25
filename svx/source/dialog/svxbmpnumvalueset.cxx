@@ -149,19 +149,19 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aRuleFont.SetFillColor(aBackColor);
     css::uno::Sequence< OUString > aBulletSymbols;
 
-    if(ePageType == NumberingPageType::BULLET || ePageType == NumberingPageType::DOCBULLET)
+    if(mePageType == NumberingPageType::BULLET || mePageType == NumberingPageType::DOCBULLET)
     {
         aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
         css::uno::Sequence< OUString > aBulletFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
         aRuleFont.SetFamilyName(aBulletFonts[nIndex]);
         aFont = aRuleFont;
     }
-    else if (ePageType == NumberingPageType::DOCBULLET)
+    else if (mePageType == NumberingPageType::DOCBULLET)
     {
         aRuleFont.SetFamilyName(maCustomBullets[nIndex].second);
         aFont = aRuleFont;
     }
-    else if(ePageType == NumberingPageType::OUTLINE)
+    else if(mePageType == NumberingPageType::OUTLINE)
     {
         aSize.setHeight( nRectHeight/8 );
     }
@@ -170,19 +170,19 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aFont.SetFontSize( aSize );
     pDev->SetFont(aFont);
 
-    if(!pVDev)
+    if(!mpVDev)
     {
         // The lines are only one time in the virtual device, only the outline
         // page is currently done
-        pVDev = VclPtr<VirtualDevice>::Create(*pDev);
-        pVDev->SetMapMode(pDev->GetMapMode());
-        pVDev->EnableRTL( IsRTLEnabled() );
-        pVDev->SetOutputSize( aRectSize );
-        aOrgRect = aRect;
-        pVDev->SetFillColor( aBackColor );
-        pVDev->SetLineColor(COL_LIGHTGRAY);
+        mpVDev = VclPtr<VirtualDevice>::Create(*pDev);
+        mpVDev->SetMapMode(pDev->GetMapMode());
+        mpVDev->EnableRTL( IsRTLEnabled() );
+        mpVDev->SetOutputSize( aRectSize );
+        maOrgRect = aRect;
+        mpVDev->SetFillColor( aBackColor );
+        mpVDev->SetLineColor(COL_LIGHTGRAY);
         // Draw line only once
-        if(ePageType != NumberingPageType::OUTLINE)
+        if(mePageType != NumberingPageType::OUTLINE)
         {
             Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
             Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
@@ -190,21 +190,21 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             {
                 aStart.setY( aBLPos.Y() + nRectHeight  * i / 100 );
                 aEnd.setY( aStart.Y() );
-                pVDev->DrawLine(aStart, aEnd);
+                mpVDev->DrawLine(aStart, aEnd);
                 aStart.setY( aBLPos.Y() + nRectHeight  * (i + 11) / 100 );
                 aEnd.setY( aStart.Y() );
-                pVDev->DrawLine(aStart, aEnd);
+                mpVDev->DrawLine(aStart, aEnd);
             }
         }
     }
     pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
-                        aOrgRect.TopLeft(), aRectSize,
-                        *pVDev );
+                        maOrgRect.TopLeft(), aRectSize,
+                        *mpVDev );
     // Now comes the text
     static constexpr OUStringLiteral sValue(u"Value");
-    if( NumberingPageType::SINGLENUM == ePageType ||
-           NumberingPageType::BULLET == ePageType ||
-           NumberingPageType::DOCBULLET == ePageType)
+    if( NumberingPageType::SINGLENUM == mePageType ||
+           NumberingPageType::BULLET == mePageType ||
+           NumberingPageType::DOCBULLET == mePageType)
     {
         Point aStart(aBLPos.X() + nRectWidth / 9,0);
         for( sal_uInt16 i = 0; i < 3; i++ )
@@ -212,13 +212,13 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             sal_uInt16 nY = 11 + i * 33;
             aStart.setY( aBLPos.Y() + nRectHeight  * nY / 100 );
             OUString sText;
-            if(ePageType == NumberingPageType::BULLET)
+            if(mePageType == NumberingPageType::BULLET)
             {
                 sText = aBulletSymbols[nIndex];
                 aStart.AdjustY( -(pDev->GetTextHeight()/2) );
                 aStart.setX( aBLPos.X() + 5 );
             }
-            else if (ePageType == NumberingPageType::DOCBULLET)
+            else if (mePageType == NumberingPageType::DOCBULLET)
             {
                 sText = maCustomBullets[nIndex].first;
                 aStart.AdjustY( -(pDev->GetTextHeight()/2) );
@@ -226,16 +226,16 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             }
             else
             {
-                if(xFormatter.is() && aNumSettings.getLength() > nIndex)
+                if(mxFormatter.is() && maNumSettings.getLength() > nIndex)
                 {
-                    Sequence<PropertyValue> aLevel = aNumSettings.getConstArray()[nIndex];
+                    Sequence<PropertyValue> aLevel = maNumSettings.getConstArray()[nIndex];
                     try
                     {
                         aLevel.realloc(aLevel.getLength() + 1);
                         PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
                         rValue.Name = sValue;
                         rValue.Value <<= static_cast<sal_Int32>(i + 1);
-                        sText = xFormatter->makeNumberingString( aLevel, aLocale );
+                        sText = mxFormatter->makeNumberingString( aLevel, maLocale );
                     }
                     catch(Exception&)
                     {
@@ -249,19 +249,19 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             pDev->DrawText(aStart, sText);
         }
     }
-    else if(NumberingPageType::OUTLINE == ePageType )
+    else if(NumberingPageType::OUTLINE == mePageType )
     {
         // Outline numbering has to be painted into the virtual device
         // to get correct lines
         // has to be made again
-        pVDev->SetLineColor(aBackColor);
-        pVDev->DrawRect(aOrgRect);
-        tools::Long nStartX = aOrgRect.Left();
-        tools::Long nStartY = aOrgRect.Top();
+        mpVDev->SetLineColor(aBackColor);
+        mpVDev->DrawRect(maOrgRect);
+        tools::Long nStartX = maOrgRect.Left();
+        tools::Long nStartY = maOrgRect.Top();
 
-        if(xFormatter.is() && aOutlineSettings.getLength() > nIndex)
+        if(mxFormatter.is() && maOutlineSettings.getLength() > nIndex)
         {
-            Reference<XIndexAccess> xLevel = aOutlineSettings.getArray()[nIndex];
+            Reference<XIndexAccess> xLevel = maOutlineSettings.getArray()[nIndex];
             try
             {
                 OUString sLevelTexts[5];
@@ -308,7 +308,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     pProperties[1].Value <<= sal_Int32(1);
                     try
                     {
-                        sLevelTexts[i] = xFormatter->makeNumberingString( aProperties, aLocale );
+                        sLevelTexts[i] = mxFormatter->makeNumberingString( aProperties, maLocale );
                     }
                     catch(Exception&)
                     {
@@ -319,8 +319,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     if(!sPrefixes[i].isEmpty() &&
                         sPrefixes[i] != " ")
                     {
-                        pVDev->SetFont(aFont);
-                        pVDev->DrawText(aLeft, sPrefixes[i]);
+                        mpVDev->SetFont(aFont);
+                        mpVDev->DrawText(aLeft, sPrefixes[i]);
                         aLeft.AdjustX(pDev->GetTextWidth(sPrefixes[i]) );
                     }
                     if(aParentNumberings[i])
@@ -330,7 +330,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
                             OUString sTmp = sLevelTexts[nParentLevel] + ".";
-                            lcl_PaintLevel(pVDev,
+                            lcl_PaintLevel(mpVDev,
                                     aNumberingTypes[nParentLevel],
                                     sBulletChars[nParentLevel],
                                     sTmp,
@@ -340,7 +340,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                                     aFont);
                         }
                     }
-                    lcl_PaintLevel(pVDev,
+                    lcl_PaintLevel(mpVDev,
                                     aNumberingTypes[i],
                                     sBulletChars[i],
                                     sLevelTexts[i],
@@ -351,16 +351,16 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     if(!sSuffixes[i].isEmpty() &&
                        !sSuffixes[i].startsWith(" "))
                     {
-                        pVDev->SetFont(aFont);
-                        pVDev->DrawText(aLeft, sSuffixes[i]);
+                        mpVDev->SetFont(aFont);
+                        mpVDev->DrawText(aLeft, sSuffixes[i]);
                         aLeft.AdjustX(pDev->GetTextWidth(sSuffixes[i]) );
                     }
 
                     tools::Long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
                     Point aLineLeft(aLeft.X(), nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
-                    pVDev->SetLineColor(COL_LIGHTGRAY);
-                    pVDev->DrawLine(aLineLeft,  aLineRight);
+                    mpVDev->SetLineColor(COL_LIGHTGRAY);
+                    mpVDev->DrawLine(aLineLeft,  aLineRight);
                 }
 
             }
@@ -381,8 +381,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 #endif
         }
         pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
-                            aOrgRect.TopLeft(), aRectSize,
-                            *pVDev );
+                            maOrgRect.TopLeft(), aRectSize,
+                            *mpVDev );
     }
 
     pDev->SetFont(aOldFont);
@@ -391,8 +391,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 SvxNumValueSet::SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : ValueSet(std::move(pScrolledWindow))
-    , ePageType(NumberingPageType::BULLET)
-    , pVDev(nullptr)
+    , mePageType(NumberingPageType::BULLET)
+    , mpVDev(nullptr)
 {
 }
 
@@ -403,8 +403,8 @@ FactoryFunction SvxNumValueSet::GetUITestFactory() const
 
 void SvxNumValueSet::init(NumberingPageType eType)
 {
-    ePageType = eType;
-    pVDev = nullptr;
+    mePageType = eType;
+    mpVDev = nullptr;
 
     SetColCount( 4 );
     SetLineCount( 2 );
@@ -427,9 +427,9 @@ void SvxNumValueSet::SetNumberingSettings(
     Reference<XNumberingFormatter> const & xFormat,
     const Locale& rLocale   )
 {
-    aNumSettings = aNum;
-    xFormatter = xFormat;
-    aLocale = rLocale;
+    maNumSettings = aNum;
+    mxFormatter = xFormat;
+    maLocale = rLocale;
     if(aNum.getLength() > 8)
             SetStyle( GetStyle()|WB_VSCROLL);
     for ( sal_Int32 i = 0; i < aNum.getLength(); i++ )
@@ -445,12 +445,12 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
             Reference<XNumberingFormatter> const & xFormat,
             const Locale& rLocale)
 {
-    aOutlineSettings = rOutline;
-    xFormatter = xFormat;
-    aLocale = rLocale;
-    if(aOutlineSettings.getLength() > 8)
+    maOutlineSettings = rOutline;
+    mxFormatter = xFormat;
+    maLocale = rLocale;
+    if(maOutlineSettings.getLength() > 8)
         SetStyle( GetStyle() | WB_VSCROLL );
-    for ( sal_Int32 i = 0; i < aOutlineSettings.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < maOutlineSettings.getLength(); i++ )
     {
         InsertItem( i + 1, i );
         if( i < 8 )
@@ -470,27 +470,27 @@ void SvxNumValueSet::SetCustomBullets(const std::vector<std::pair<OUString, OUSt
 
 SvxBmpNumValueSet::SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : SvxNumValueSet(std::move(pScrolledWindow))
-    , aFormatIdle("SvxBmpNumValueSet FormatIdle")
-    , bGrfNotFound(false)
+    , m_aFormatIdle("SvxBmpNumValueSet FormatIdle")
+    , m_bGrfNotFound(false)
 {
 }
 
 void SvxBmpNumValueSet::init()
 {
     SvxNumValueSet::init(NumberingPageType::BITMAP);
-    bGrfNotFound = false;
+    m_bGrfNotFound = false;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
-    aFormatIdle.SetPriority(TaskPriority::LOWEST);
-    aFormatIdle.SetInvokeHandler(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
+    m_aFormatIdle.SetPriority(TaskPriority::LOWEST);
+    m_aFormatIdle.SetInvokeHandler(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
-    aFormatIdle.Stop();
+    m_aFormatIdle.Stop();
 }
 
 void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
@@ -509,7 +509,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
                         &aGraphic))
     {
-        bGrfNotFound = true;
+        m_bGrfNotFound = true;
     }
     else
     {
@@ -526,10 +526,10 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl, Timer *, void)
 {
     // only when a graphics was not there, it needs to be formatted
-    if (bGrfNotFound)
+    if (m_bGrfNotFound)
     {
         SetFormat();
-        bGrfNotFound = false;
+        m_bGrfNotFound = false;
     }
     Invalidate();
 }

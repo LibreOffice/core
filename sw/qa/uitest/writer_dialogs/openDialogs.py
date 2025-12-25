@@ -113,7 +113,7 @@ dialogs = [
     {"command": ".uno:RunMacro", "closeButton": "cancel"},
     {"command": ".uno:ScriptOrganizer", "closeButton": "close"},
     {"command": ".uno:OpenXMLFilterSettings", "closeButton": "close"},
-    {"command": "service:com.sun.star.deployment.ui.PackageManagerDialog", "closeButton": "close"},
+    {"command": ".uno:ExtensionManager", "closeButton": "close"},
     # {"command": ".uno:ConfigureDialog", "closeButton": "cancel"},
         # tested in uitest/writer_tests/customizeDialog.py
     #{"command": ".uno:OptionsTreeDialog", "closeButton": "cancel"},

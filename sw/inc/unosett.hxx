@@ -100,7 +100,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXLineNumberingProperties final : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXLineNumberingProperties final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -115,7 +115,7 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
@@ -186,6 +186,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    SW_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue> getRuleByIndex(sal_Int32 nIndex);
 
     css::uno::Sequence< css::beans::PropertyValue>
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;

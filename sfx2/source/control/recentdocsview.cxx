@@ -22,6 +22,7 @@
 #include <recentdocsview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
@@ -73,16 +74,9 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
     setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
 
-    maFillColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
-    maTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    maHighlightColor = rSettings.GetHighlightColor();
-    maHighlightTextColor = rSettings.GetHighlightTextColor();
-
     mfHighlightTransparence = 0.75;
 
-    UpdateColors();
+    UpdateColors(Application::GetSettings().GetStyleSettings());
 }
 
 RecentDocsView::~RecentDocsView()
@@ -94,6 +88,17 @@ RecentDocsView::~RecentDocsView()
         mpLoadRecentFile->pView = nullptr;
         mpLoadRecentFile = nullptr;
     }
+}
+
+void RecentDocsView::UpdateColors(const StyleSettings& rSettings)
+{
+    ThumbnailView::UpdateColors(rSettings);
+
+    maFillColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
+    maTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
+
+    maHighlightColor = rSettings.GetHighlightColor();
+    maHighlightTextColor = rSettings.GetHighlightTextColor();
 }
 
 bool RecentDocsView::typeMatchesExtension(ApplicationType type, std::u16string_view rExt)
@@ -187,16 +192,41 @@ void RecentDocsView::setFilter(ApplicationType aFilter)
     Reload();
 }
 
-void RecentDocsView::clearUnavailableFiles(){
-    std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
-    for ( size_t i = 0; i < aHistoryList.size(); i++ )
+void RecentDocsView::clearUnavailableFiles()
+{
+    const bool bDoAsk = officecfg::Office::Common::Misc::QueryClearUnavailableDocuments::get();
+    short nresult = RET_YES;
+    if (bDoAsk)
     {
-        const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
-        if ( !comphelper::DirectoryHelper::fileExists(rPickListEntry.sURL) ){
-            SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL, false);
+        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+        auto pDlg = pFact->CreateQueryDialog(
+            Application::GetDefDialogParent(),
+            SfxResId(STR_QUERY_CLR_UNAVAILABLE_DOCS_TITLE),
+            SfxResId(STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT),
+            SfxResId(STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION),
+            true);
+        nresult = pDlg->Execute();
+        if (pDlg->ShowAgain() == false)
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Misc::QueryClearUnavailableDocuments::set(false, xChanges);
+            xChanges->commit();
         }
+        pDlg->disposeOnce();
     }
-    Reload();
+    if ( ! bDoAsk || nresult == RET_YES )
+    {
+        std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
+        for ( size_t i = 0; i < aHistoryList.size(); i++ )
+        {
+            const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+            if ( !comphelper::DirectoryHelper::fileExists(rPickListEntry.sURL) ){
+                SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL, false);
+            }
+        }
+        Reload();
+    }
 }
 
 bool RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -272,7 +302,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     const int nX = (rSize.Width() - aImgSize.Width())/2;
     int nY = (rSize.Height() - 3 * nTextHeight - aImgSize.Height())/2;
     Point aImgPoint(nX, nY);
-    rRenderContext.DrawBitmapEx(aImgPoint, aImgSize, maWelcomeImage);
+    rRenderContext.DrawBitmap(aImgPoint, aImgSize, maWelcomeImage);
 
     nY = nY + aImgSize.Height();
     rRenderContext.DrawText(tools::Rectangle(0, nY + 1 * nTextHeight, rSize.Width(), nY + nTextHeight),

@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 // SdInsertPasteDlg
 class SdInsertPasteDlg final : public weld::GenericDialogController

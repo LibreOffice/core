@@ -21,7 +21,7 @@
 #include <dbaccess/dataview.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include "IClipBoardTest.hxx"
 
 namespace dbaui
@@ -90,6 +90,8 @@ namespace dbaui
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : nullptr; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : nullptr; }
         OTableController&       getController() const { return m_rController; }
+
+        void                    FlushModifiedData();
 
         const css::lang::Locale& getLocale() const { return m_aLocale;}
 

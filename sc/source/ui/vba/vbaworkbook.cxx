@@ -95,23 +95,23 @@ bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< 
                 pProp->Value <<= u"DBF"_ustr;
                 break;
             case excel::XlFileFormat::xlDIF:
-                pProp->Value <<= u"DIF"_ustr;
+                pProp->Value <<= SC_DIF_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlWK3:
-                pProp->Value <<= u"Lotus"_ustr;
+                pProp->Value <<= SC_LOTUS_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlExcel4Workbook:
-                pProp->Value <<= u"MS Excel 4.0"_ustr;
+                pProp->Value <<= SC_XL4_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlExcel5:
-                pProp->Value <<= u"MS Excel 5.0/95"_ustr;
+                pProp->Value <<= SC_XL5_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlHtml:
-                pProp->Value <<= u"HTML (StarCalc)"_ustr;
+                pProp->Value <<= SC_HTML_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlExcel9795:
             default:
-                pProp->Value <<= u"MS Excel 97"_ustr;
+                pProp->Value <<= SC_XL97_FILTER_NAME;
                 break;
         }
     }
@@ -141,27 +141,27 @@ ScVbaWorkbook::getFileFormat(  )
             aFileFormat = excel::XlFileFormat::xlDBF4;
         }
 
-        if ( aFilterName == "DIF" ) {
+        if ( aFilterName == SC_DIF_FILTER_NAME ) {
             aFileFormat = excel::XlFileFormat::xlDIF;
         }
 
-        if ( aFilterName == "Lotus" ) {
+        if ( aFilterName == SC_LOTUS_FILTER_NAME ) {
             aFileFormat = excel::XlFileFormat::xlWK3;
         }
 
-        if ( aFilterName == "MS Excel 4.0" ) {
+        if ( aFilterName == SC_XL4_FILTER_NAME ) {
             aFileFormat = excel::XlFileFormat::xlExcel4Workbook;
         }
 
-        if ( aFilterName == "MS Excel 5.0/95" ) {
+        if ( aFilterName == SC_XL5_FILTER_NAME ) {
             aFileFormat = excel::XlFileFormat::xlExcel5;
         }
 
-        if ( aFilterName == "MS Excel 97" ) {
+        if ( aFilterName == SC_XL97_FILTER_NAME ) {
             aFileFormat = excel::XlFileFormat::xlExcel9795;
         }
 
-        if (aFilterName == "HTML (StarCalc)") {
+        if (aFilterName == SC_HTML_FILTER_NAME) {
             aFileFormat = excel::XlFileFormat::xlHtml;
         }
 
@@ -169,7 +169,7 @@ ScVbaWorkbook::getFileFormat(  )
             aFileFormat = excel::XlFileFormat::xlTemplate;
         }
 
-        if (aFilterName == "StarOffice XML (Calc)") {
+        if (aFilterName == SC_SOXML_FILTER_NAME) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
         if ( aFilterName == "calc8" ) {
@@ -313,7 +313,7 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
     uno::Sequence<  beans::PropertyValue > storeProps{ comphelper::makePropertyValue(
-        u"FilterName"_ustr, u"MS Excel 97"_ustr) };
+        u"FilterName"_ustr, SC_XL97_FILTER_NAME) };
     xStor->storeToURL( aURL, storeProps );
 }
 

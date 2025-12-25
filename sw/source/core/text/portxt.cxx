@@ -309,9 +309,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
         Width( 0 );
         ExtraShrunkWidth( 0 );
         ExtraSpaceSize( 0 );
-        SetLetterSpacing( 0 );
-        SetScaleWidth( 100 );
-        SetScaleWidthSpacing( 0 );
+        SetModifiedWidth( false );
     }
 }
 
@@ -322,9 +320,7 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     Width( 0 );
     ExtraShrunkWidth( 0 );
     ExtraSpaceSize( 0 );
-    SetLetterSpacing( 0 );
-    SetScaleWidth( 100 );
-    SetScaleWidthSpacing( 0 );
+    SetModifiedWidth( false );
     SetLen( TextFrameIndex(0) );
     SetAscent( 0 );
     rInf.SetUnderflow( this );
@@ -352,6 +348,26 @@ void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGues
     if ( nSpaces == 0 )
         return;
 
+    // count zero width characters to calculate correct letter spacing
+    sal_Int32 nZeroWidthCharCount = 0;
+
+    // sum width of the previous portions to calculate real line width
+    SwTwips nStartWidth = 0;
+    SwLineLayout *pLay = rInf.GetRoot();
+    SwLinePortion *pPos = pLay;
+    // first portion isn't redundant, if it's the only portion before the actual one: don't skip it
+    if ( !pPos->GetNextPortion() && (
+            ( pLay->GetLetterSpacing() && pPos->GetLen() ) ||
+            pLay->GetScaleWidth() != 100 ) )
+    {
+        nStartWidth += pPos->PrtWidth();
+    }
+    for (pPos = pPos->GetNextPortion(); pPos; pPos = pPos->GetNextPortion())
+    {
+        if ( pPos->Width() == 0 )
+            nZeroWidthCharCount += sal_Int32(pPos->GetLen());
+        nStartWidth += pPos->PrtWidth();
+    }
     // adjust hyphen: remove hyphen width from the line width, because
     // hyphen mark and optional text of the alternative hyphenation will
     // be in an extra portion
@@ -376,14 +392,26 @@ void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGues
 
     SvxAdjustItem aAdjustItem =
         rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
-    // width of a single expanded space without letter spacing and glyph scaling
-    float fSpaceNormal = ( rInf.GetLineWidth() - nHyphenWidth -
-                    (rInf.GetBreakWidth() - nSpaces * nWidthOf10Spaces/10.0) ) / nSpaces;
+    // width of a single expanded space without letter spacing and glyph scaling,
+    // When nStartWidth is non-zero, i.e. the line contains multiple text portions,
+    // nStartWidth contains the length of the text portions before the last one,
+    // and GetLineWidth() contains the remaining blank space of the line.
+    // When nStartWidth is zero, i.e. the line is a single text portion,
+    // GetLineWidth() contains the line width with the blank space, and GetBreakwidth()
+    // is used for calculating the remaining blank space, except when the last portion
+    // fills the remaining space
+    SwTwips nBreakWidth = rGuess.BreakWidth();
+    float fSpaceNormal = ( nStartWidth + rInf.GetLineWidth() - nHyphenWidth -
+                   ( nStartWidth + nBreakWidth - nSpaces * nWidthOf10Spaces/10.0 ) ) / nSpaces;
+
     // the part to be removed: the previous width minus the maximum allowed space width
     float fExpansionOverMax =
         fSpaceNormal - nWidthOf10Spaces / 10.0 * aAdjustItem.GetPropWordSpacingMaximum() / 100.0;
     ExtraSpaceSize( fExpansionOverMax > 0 ? fExpansionOverMax : 0 );
-    int nLetterCount = sal_Int32(rGuess.BreakPos()) - sal_Int32(rInf.GetIdx());
+
+    sal_Int32 nLetterCount = sal_Int32(rGuess.BreakPos()) -
+            sal_Int32(rInf.GetLineStart()) - nZeroWidthCharCount;
+
     // letter spacing/character to be added or subtracted to get the desired word spacing
     float fLetterSpacingForDesiredWordSpacing =
         nLetterCount > 0 ? (((fSpaceNormal - nWidthOf10Spaces/10.0) * nSpaces) / nLetterCount) : 0;
@@ -400,26 +428,86 @@ void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGues
             nWidthOf10Spaces / 10.0 * aAdjustItem.GetPropLetterSpacingMinimum() / 100.0;
         nLetterSpacing = std::max( fLetterSpacingForDesiredWordSpacing, fMinimumLetterSpacing );
     }
+
+    // don't set letter spacing for multiportion lines, where the last portion
+    // does not continue in the next line, because if it is not fit the line e.g. during typing,
+    // it could result freezing
+    if ( nBreakWidth == 0 )
+        nLetterSpacing = 0;
+
     // full width of the extra (rounded) letter spacing within the line
     // to adjust word spacing in SwTextAdjuster::CalcNewBlock()
-    SetLetterSpacing( SwTwips(nLetterSpacing * nLetterCount) );
-    SetSpaceCount( TextFrameIndex(nSpaces) );
+    if ( aAdjustItem.GetPropLetterSpacingMinimum() != 100 ||
+            aAdjustItem.GetPropLetterSpacingMaximum() != 100 )
+        pLay->SetLetterSpacing(nLetterSpacing);
+    else
+        pLay->SetLetterSpacing(0);
+
+    pLay->SetLetterCount(TextFrameIndex(nLetterCount));
+    pLay->SetSpaceCount(nSpaces);
 
     // limit glyph scaling without optical sizing:
     // apply it only after applying maximum letter spacing
     // TODO: change this after variable font support
-    if ( aAdjustItem.GetPropScaleWidthMaximum() != 100 )
-        SetScaleWidth( 100.0 * ( rInf.GetLineWidth() - nHyphenWidth ) /
-                                         ( rInf.GetBreakWidth() + GetLetterSpacing() ) );
-    if ( GetScaleWidth() > aAdjustItem.GetPropScaleWidthMaximum() )
-        SetScaleWidth( aAdjustItem.GetPropScaleWidthMaximum() );
+    if ( ( aAdjustItem.GetPropScaleWidthMaximum() != 100 ||
+            aAdjustItem.GetPropScaleWidthMinimum() != 100 ) && nStartWidth + nBreakWidth > 0 )
+    {
+        pLay->SetScaleWidth( 100.0 *
+            ( nStartWidth + rInf.GetLineWidth() - nHyphenWidth - nLetterSpacing * nLetterCount ) /
+                         ( nStartWidth + nBreakWidth ) );
+    }
+    else
+    {
+        pLay->SetScaleWidth(100);
+    }
+
+    // set scaling limits
+    if ( pLay->GetScaleWidth() > aAdjustItem.GetPropScaleWidthMaximum() )
+        pLay->SetScaleWidth( aAdjustItem.GetPropScaleWidthMaximum() );
+
+    if ( pLay->GetScaleWidth() < aAdjustItem.GetPropScaleWidthMinimum() )
+        pLay->SetScaleWidth( aAdjustItem.GetPropScaleWidthMinimum() );
+
+    if ( pLay->GetLetterSpacing() < 0 && aAdjustItem.GetPropLetterSpacingMinimum() >= 100 )
+            pLay->SetLetterSpacing(100);
+
+    // fix calculation problem, when letter spacing removed the available space
+    if ( pLay->GetScaleWidth() < 100 && pLay->GetLetterSpacing() > 0 )
+        pLay->SetScaleWidth(100);
+
     // space used by glyph scaling to adjust word spacing
-    if ( aAdjustItem.GetPropScaleWidthMaximum() != 100 )
-        SetScaleWidthSpacing( rInf.GetBreakWidth() * (GetScaleWidth() - 100.0) / 100.0 );
+    if (  ( aAdjustItem.GetPropScaleWidthMaximum() != 100 ||
+            aAdjustItem.GetPropScaleWidthMinimum() != 100 ) &&
+        // no need correction for multiportion lines,
+        // where the portions have got corrected width
+        nStartWidth == 0 )
+    {
+        pLay->SetScaleWidthSpacing( nBreakWidth * (pLay->GetScaleWidth() - 100.0) / 100.0 );
+    }
+    else
+        pLay->SetScaleWidthSpacing(0);
 }
 
 bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 {
+    // restore original portion width without custom letter spacing and scaling
+    SwLineLayout *pLay = rInf.GetRoot();
+    for (SwLinePortion *pPos = pLay; pPos; pPos = pPos->GetNextPortion())
+    {
+        if ( pPos->Width() != 0 && pPos->IsModifiedWidth() && (
+            ( pLay->GetLetterSpacing() && pPos->GetLen() ) || pLay->GetScaleWidth() != 100) )
+        {
+            pPos->Width( ( pPos->Width() - pLay->GetLetterSpacing() * sal_Int32(pPos->GetLen()) )
+                            * 100.0 / pLay->GetScaleWidth() );
+        }
+        pPos->SetModifiedWidth(false);
+    }
+
+    SetModifiedWidth(false);
+    pLay->SetLetterSpacing(0);
+    pLay->SetScaleWidth(100);
+    pLay->SetScaleWidthSpacing(0);
+
     // 5744: If only the hyphen does not fit anymore, we still need to wrap
     // the word, or else return true!
     if( rInf.IsUnderflow() && rInf.GetSoftHyphPos() )
@@ -444,9 +532,6 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
     ExtraShrunkWidth( 0 );
     ExtraSpaceSize( 0 );
-    SetLetterSpacing( 0 );
-    SetScaleWidth( 100 );
-    SetScaleWidthSpacing( 0 );
     std::optional<SwTextGuess> pGuess(std::in_place);
     bool bFull = !pGuess->Guess( *this, rInf, Height() );
 
@@ -454,12 +539,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
     SvxAdjustItem aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
-    bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
+    const bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING);
-    bool bInteropSmartJustify = bFullJustified &&
+    const bool bInteropSmartJustify = bFullJustified &&
             rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
-    bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
+    const bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
                     aAdjustItem.GetPropWordSpacingMinimum() == 100 &&
                     aAdjustItem.GetPropWordSpacingMaximum() == 100 &&
                     aAdjustItem.GetPropScaleWidthMinimum() == 100 &&
@@ -467,11 +552,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     aAdjustItem.GetPropLetterSpacingMinimum() == 0 &&
                     aAdjustItem.GetPropLetterSpacingMaximum() == 0;
     // support old ODT documents, where only JustifyLinesWithShrinking was set
-    bool bOldInterop = bInteropSmartJustify && bNoWordSpacing;
-    bool bWordSpacing = bFullJustified && (!bNoWordSpacing || bOldInterop);
-    bool bWordSpacingMaximum = bWordSpacing && !bOldInterop &&
+    const bool bOldInterop = bInteropSmartJustify && bNoWordSpacing;
+    const bool bWordSpacing = bFullJustified && (!bNoWordSpacing || bOldInterop);
+    const bool bWordSpacingMaximum = bWordSpacing && !bOldInterop &&
            aAdjustItem.GetPropWordSpacingMaximum() > aAdjustItem.GetPropWordSpacing();
-    bool bWordSpacingMinimum = bWordSpacing && ( bOldInterop ||
+    const bool bWordSpacingMinimum = bWordSpacing && ( bOldInterop ||
            aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing() );
 
     if ( ( bInteropSmartJustify || bWordSpacing || bWordSpacingMaximum || bWordSpacingMinimum ) &&
@@ -515,9 +600,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         pGuess->BreakPos() > rInf.GetLineStart();
 
             // calculate available word spacing for letter spacing, and for the word spacing indicator
-            // for single portion lines, TODO: enable letter spacing for multiportion
-            if ( rInf.GetLineStart() == rInf.GetIdx() )
-                SetSpacing(rInf, *pGuess, nRealSpaces, nSpaceWidth);
+            SetSpacing(rInf, *pGuess, nRealSpaces, nSpaceWidth);
 
             // calculate line breaking with desired word spacing, also
             // if the desired word spacing is 100%, but there is a greater
@@ -531,9 +614,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 if ( aAdjustItem.GetPropLetterSpacingMinimum() < 0 || rInf.GetBreakWidth() <= rInf.GetLineWidth() )
                 {
                     fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLine2 * nSpaceWidth/10.0))/nSpacesInLine2;
-                    // TODO: enable letter spacing for multiportion
-                    if ( rInf.GetLineStart() == rInf.GetIdx() )
-                        SetSpacing(rInf, *pGuess, nSpacesInLine2, nSpaceWidth);
+                    SetSpacing(rInf, *pGuess, nSpacesInLine2, nSpaceWidth);
                 }
             }
 
@@ -609,7 +690,6 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     else if ( bOldInterop )
                     {
                         pGuess = std::move(pGuess2);
-                        SetSpaceCount( TextFrameIndex(nSpacesInLineShrink));
                         ExtraSpaceSize(0);
                         bFull = bFull2;
                     }
@@ -617,6 +697,24 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 else
                     // minimum word spacing is not applicable
                     rInf.SetExtraSpace(nOldExtraSpace);
+            }
+
+            // modify non-zero width portions with letter spacing
+            SwLinePortion *pPos = pLay;
+            // skip redundant first portion
+            if ( pPos->GetNextPortion() )
+                pPos = static_cast<SwLinePortion*>(pLay)->GetNextPortion();
+            while( pPos )
+            {
+                // Note: GetLen() can be zero at Italics correction
+                if ( pPos->Width() && !IsModifiedWidth() &&
+                     ( pLay->GetLetterSpacing() || pLay->GetScaleWidth() != 100 ) )
+                {
+                    pPos->Width( pPos->Width() * pLay->GetScaleWidth()/100.0 +
+                            pLay->GetLetterSpacing() * sal_Int32(pPos->GetLen()) );
+                    pPos->SetModifiedWidth(true);
+                }
+                pPos = pPos->GetNextPortion();
             }
 
             if ( pGuess->BreakWidth() != nOldWidth )
@@ -680,6 +778,19 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 rInf.GetRoot()->SetMidHyph( true );
             else
                 rInf.GetRoot()->SetEndHyph( true );
+
+            // modify width of last portion with letter spacing
+            // if it's not a zero-width portion (i.e. a soft hyphen)
+            // Note: GetLen() can be zero at Italics correction
+            pLay = rInf.GetRoot();
+            if ( Width() && !IsModifiedWidth() &&
+                            ( pLay->GetLetterSpacing() || pLay->GetScaleWidth() != 100 ) )
+            {
+                Width( Width() * pLay->GetScaleWidth() / 100.0 +
+                                pLay->GetLetterSpacing() * sal_Int32(GetLen()) );
+
+                SetModifiedWidth(true);
+            }
         }
         // case C1
         // - Footnote portions with fake line start (i.e., not at beginning of line)
@@ -779,6 +890,19 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 if (auto ch = rInf.GetChar(pGuess->BreakStart()); !ch || ch == CH_BREAK)
                     bFull = false; // Keep following SwBreakPortion / para break in the same line
             }
+
+            // modify width of last portion with letter spacing
+            // if it's not a zero-width portion (i.e. a soft hyphen)
+            // Note: GetLen() can be zero at Italics correction
+            pLay = rInf.GetRoot();
+            if ( Width() && !IsModifiedWidth() &&
+                            ( pLay->GetLetterSpacing() || pLay->GetScaleWidth() != 100 ) )
+            {
+                Width( Width() * pLay->GetScaleWidth() / 100.0 +
+                                        pLay->GetLetterSpacing() * sal_Int32(GetLen()) );
+
+                SetModifiedWidth(true);
+            }
         }
         else    // case C2, last exit
             BreakCut( rInf, *pGuess );
@@ -813,9 +937,6 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
         Width( 0 );
         ExtraShrunkWidth( 0 );
         ExtraSpaceSize( 0 );
-        SetLetterSpacing( 0 );
-        SetScaleWidth( 100 );
-        SetScaleWidthSpacing( 0 );
         SetLen( TextFrameIndex(0) );
         SetAscent( 0 );
         SetNextPortion( nullptr );  // ????

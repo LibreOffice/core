@@ -30,6 +30,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
+#include <vcl/EnumContext.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>

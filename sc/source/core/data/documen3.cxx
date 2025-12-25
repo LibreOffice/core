@@ -1517,7 +1517,7 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 
             for ( nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAutoFilter; nCol++ )
             {
-                nFlag = GetAttr( nCol, nRow, nCurTab, ATTR_MERGE_FLAG )->GetValue();
+                nFlag = GetAttr( nCol, nRow, nCurTab, ATTR_MERGE_FLAG ).GetValue();
 
                 if ( !(nFlag & ScMF::Auto) )
                     bHasAutoFilter = false;
@@ -1636,7 +1636,7 @@ void ScDocument::GetDataEntries(
         /*  Try to generate the list from list validation. This part is skipped,
             if bValidation==false, because in that case this function is called to get
             cell values for auto completion on input. */
-        sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
+        sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ).GetValue();
         if( nValidation )
         {
             const ScValidationData* pData = GetValidationEntry( nValidation );
@@ -1832,7 +1832,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     while (!bEnd)
     {
         nAdd = pTable->GetColWidth(nX1, bHiddenAsZero);
-        if (nSize+nAdd <= nTwips+1 && nX1<MaxCol())
+        if (nSize + nAdd < nTwips+1 && nX1 < MaxCol())
         {
             nSize += nAdd;
             ++nX1;
@@ -1864,15 +1864,13 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     nTwips = aPosRect.Top();
 
     SCROW nY1 = 0;
-    // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
-    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MaxRow(), pTable, bHiddenAsZero) && nY1 < MaxRow())
+    if (lcl_AddTwipsWhile(nSize, nTwips+1, nY1, MaxRow(), pTable, bHiddenAsZero) && nY1 < MaxRow())
         ++nY1;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
 
     SCROW nY2 = nY1;
     if (!aPosRect.IsEmpty())
     {
         nTwips = aPosRect.Bottom();
-        // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
         if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MaxRow(), pTable, bHiddenAsZero) && nY2 < MaxRow())
             ++nY2;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
     }
@@ -2094,13 +2092,13 @@ void ScDocument::DoMerge( SCCOL nStartCol, SCROW nStartRow,
 
 void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    const ScMergeAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE );
+    const ScMergeAttr& rAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE );
 
-    if ( pAttr->GetColMerge() <= 1 && pAttr->GetRowMerge() <= 1 )
+    if ( rAttr.GetColMerge() <= 1 && rAttr.GetRowMerge() <= 1 )
         return;
 
-    SCCOL nEndCol = nCol + pAttr->GetColMerge() - 1;
-    SCROW nEndRow = nRow + pAttr->GetRowMerge() - 1;
+    SCCOL nEndCol = nCol + rAttr.GetColMerge() - 1;
+    SCROW nEndRow = nRow + rAttr.GetRowMerge() - 1;
 
     RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
 

@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <helpids.h>
 
 using namespace ::dbaui;

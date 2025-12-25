@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/scopeguard.hxx>
 #include <sal/types.h>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
@@ -57,7 +60,7 @@ namespace
                  ( aFlavor.DataType == CPPUTYPE_OUSTRING ) ) );
     }
 
-void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::ByteSequence_t& aByteSequence )
+void clipDataToByteStream(CLIPFORMAT cf, STGMEDIUM stgmedium, Sequence<sal_Int8>& aByteSequence)
 {
     CStgTransferHelper memTransferHelper;
     LPSTREAM pStream = nullptr;
@@ -125,7 +128,7 @@ void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::
     memTransferHelper.read( aByteSequence.getArray( ), nMemSize );
 }
 
-OUString byteStreamToOUString( CDOTransferable::ByteSequence_t& aByteStream )
+OUString byteStreamToOUString(Sequence<sal_Int8>& aByteStream)
 {
     sal_Int32 nWChars;
     sal_Int32 nMemSize = aByteStream.getLength( );
@@ -142,7 +145,7 @@ OUString byteStreamToOUString( CDOTransferable::ByteSequence_t& aByteStream )
     return OUString( reinterpret_cast< sal_Unicode* >( aByteStream.getArray( ) ), nWChars );
 }
 
-Any byteStreamToAny( CDOTransferable::ByteSequence_t& aByteStream, const Type& aRequestedDataType )
+Any byteStreamToAny(Sequence<sal_Int8>& aByteStream, const Type& aRequestedDataType)
 {
     Any aAny;
 
@@ -245,7 +248,7 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 
     //  get the data from clipboard in a byte stream
 
-    ByteSequence_t clipDataStream;
+    Sequence<sal_Int8> clipDataStream;
 
     try
     {
@@ -386,7 +389,7 @@ LCID CDOTransferable::getLocaleFromClipboard( )
     try
     {
         CFormatEtc fetc = CDataFormatTranslator::getFormatEtcForClipformat( CF_LOCALE );
-        ByteSequence_t aLCIDSeq = getClipboardData( fetc );
+        Sequence<sal_Int8> aLCIDSeq = getClipboardData(fetc);
         lcid = *reinterpret_cast<LCID*>( aLCIDSeq.getArray( ) );
 
         // because of a Win95/98 Bug; there the high word
@@ -419,30 +422,65 @@ void CDOTransferable::tryToGetIDataObjectIfAbsent()
 // in case of failures because nothing should have been
 // allocated etc.
 
-CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
+namespace
 {
+// Uses a fallback to try TYMED_ISTREAM instead of TYMED_HGLOBAL
+HRESULT getClipboardData_impl(const IDataObjectPtr& pDataObject, CFormatEtc& rFormatEtc,
+                              STGMEDIUM& rStgmedium)
+{
+    const HRESULT hr = pDataObject->GetData( rFormatEtc, &rStgmedium );
+    if (SUCCEEDED(hr))
+        return hr;
+
+    const DWORD nOrigTymed = rFormatEtc.getTymed();
+
+    // in case of failure to get a WMF metafile handle, try to get a memory block
+    if( ( CF_METAFILEPICT == rFormatEtc.getClipformat() ) &&
+        ( TYMED_MFPICT ==  nOrigTymed) )
+    {
+        rFormatEtc.setTymed(TYMED_HGLOBAL);
+        // Do not overwrite original error
+        HRESULT hr2 = pDataObject->GetData(rFormatEtc, &rStgmedium);
+        if (SUCCEEDED(hr2))
+            return hr2;
+    }
+
+    if (nOrigTymed == TYMED_HGLOBAL)
+    {
+        // Handle type is not memory, try stream.
+        rFormatEtc.setTymed(TYMED_ISTREAM);
+        HRESULT hr2 = pDataObject->GetData(rFormatEtc, &rStgmedium);
+        if (SUCCEEDED(hr2))
+            return hr2;
+    }
+
+    if (rFormatEtc.getClipformat() == CF_BITMAP && nOrigTymed != TYMED_GDI)
+    {
+        // Try GDI
+        rFormatEtc.setTymed(TYMED_GDI);
+        HRESULT hr2 = pDataObject->GetData(rFormatEtc, &rStgmedium);
+        if (SUCCEEDED(hr2))
+            return hr2;
+    }
+
+    return hr; // original error
+}
+}
+
+Sequence<sal_Int8> CDOTransferable::getClipboardData(CFormatEtc& aFormatEtc)
+{
+    CFormatEtc aLocalFormatEtc(aFormatEtc);
     STGMEDIUM stgmedium;
     tryToGetIDataObjectIfAbsent();
     if (!m_rDataObject.is()) // Maybe we are shutting down, and clipboard is already destroyed?
         throw RuntimeException();
-    HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
+    HRESULT hr = getClipboardData_impl(m_rDataObject, aLocalFormatEtc, stgmedium);
 
-    // in case of failure to get a WMF metafile handle, try to get a memory block
-    if( FAILED( hr ) &&
-        ( CF_METAFILEPICT == aFormatEtc.getClipformat() ) &&
-        ( TYMED_MFPICT == aFormatEtc.getTymed() ) )
+    if (FAILED(hr) && aFormatEtc.getClipformat() == CF_DIB)
     {
-        CFormatEtc aTempFormat( aFormatEtc );
-        aTempFormat.setTymed( TYMED_HGLOBAL );
-        hr = m_rDataObject->GetData( aTempFormat, &stgmedium );
-    }
-
-    if (FAILED(hr) && aFormatEtc.getTymed() == TYMED_HGLOBAL)
-    {
-        // Handle type is not memory, try stream.
-        CFormatEtc aTempFormat(aFormatEtc);
-        aTempFormat.setTymed(TYMED_ISTREAM);
-        hr = m_rDataObject->GetData(aTempFormat, &stgmedium);
+        aLocalFormatEtc = aFormatEtc;
+        aLocalFormatEtc.setClipformat(CF_BITMAP);
+        hr = getClipboardData_impl(m_rDataObject, aLocalFormatEtc, stgmedium);
     }
 
     if ( FAILED( hr ) )
@@ -460,44 +498,36 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
             throw RuntimeException( );
     }
 
-    ByteSequence_t byteStream;
+    comphelper::ScopeGuard stgMediumReleaser([&stgmedium] { ReleaseStgMedium(&stgmedium); });
+    Sequence<sal_Int8> byteStream;
 
     try
     {
-        if ( CF_ENHMETAFILE == aFormatEtc.getClipformat() )
+        if (CF_ENHMETAFILE == aLocalFormatEtc.getClipformat())
             byteStream = WinENHMFPictToOOMFPict( stgmedium.hEnhMetaFile );
-        else if (CF_HDROP == aFormatEtc.getClipformat())
+        else if (CF_HDROP == aLocalFormatEtc.getClipformat())
             byteStream = CF_HDROPToFileList(stgmedium.hGlobal);
-        else if ( CF_BITMAP == aFormatEtc.getClipformat() )
-        {
+        else if (CF_BITMAP == aLocalFormatEtc.getClipformat())
             byteStream = WinBITMAPToOOBMP(stgmedium.hBitmap);
-            if( aFormatEtc.getTymed() == TYMED_GDI &&
-                ! stgmedium.pUnkForRelease )
-            {
-                DeleteObject(stgmedium.hBitmap);
-            }
-        }
         else
         {
-            clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
+            clipDataToByteStream(aLocalFormatEtc.getClipformat(), stgmedium, byteStream);
 
             // format conversion if necessary
             // #i124085# DIBV5 should not happen currently, but keep as a hint here
-            if(CF_DIBV5 == aFormatEtc.getClipformat() || CF_DIB == aFormatEtc.getClipformat())
+            if (CF_DIBV5 == aLocalFormatEtc.getClipformat()
+                || CF_DIB == aLocalFormatEtc.getClipformat())
             {
                 byteStream = WinDIBToOOBMP(byteStream);
             }
-            else if(CF_METAFILEPICT == aFormatEtc.getClipformat())
+            else if (CF_METAFILEPICT == aLocalFormatEtc.getClipformat())
             {
                 byteStream = WinMFPictToOOMFPict(byteStream);
             }
         }
-
-        ReleaseStgMedium( &stgmedium );
     }
     catch( CStgTransferHelper::CStgTransferException& )
     {
-        ReleaseStgMedium( &stgmedium );
         throw IOException( );
     }
 
@@ -506,7 +536,7 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
 
 OUString CDOTransferable::synthesizeUnicodeText( )
 {
-    ByteSequence_t aTextSequence;
+    Sequence<sal_Int8> aTextSequence;
     CFormatEtc     fetc;
     LCID           lcid = getLocaleFromClipboard( );
     sal_uInt32     cpForTxtCnvt = 0;

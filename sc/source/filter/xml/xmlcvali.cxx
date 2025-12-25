@@ -247,6 +247,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
 
 sheet::ValidationAlertStyle ScXMLContentValidationContext::GetAlertStyle() const
 {
+    if (IsXMLToken(sErrorMessageType, XML_REJECT))
+        return sheet::ValidationAlertStyle_NONE;
     if (IsXMLToken(sErrorMessageType, XML_MACRO))
         return sheet::ValidationAlertStyle_MACRO;
     if (IsXMLToken(sErrorMessageType, XML_STOP))

@@ -31,7 +31,7 @@
 #include <svx/ruler.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/event.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <swtypes.hxx>
 #include <cmdid.h>

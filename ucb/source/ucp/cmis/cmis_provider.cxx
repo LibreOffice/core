@@ -60,23 +60,17 @@ ContentProvider::queryContent(
 
 libcmis::Session* ContentProvider::getSession( const OUString& sBindingUrl, const OUString& sUsername )
 {
-    libcmis::Session* pSession = nullptr;
-    std::map< std::pair< OUString, OUString >, libcmis::Session* >::iterator it
-            = m_aSessionCache.find( std::pair< OUString, OUString >( sBindingUrl, sUsername ) );
+    auto it = m_aSessionCache.find(std::make_pair(sBindingUrl, sUsername));
     if ( it != m_aSessionCache.end( ) )
     {
-        pSession = it->second;
+        return it->second;
     }
-    return pSession;
+    return nullptr;
 }
 
 void ContentProvider::registerSession( const OUString& sBindingUrl, const OUString& sUsername, libcmis::Session* pSession )
 {
-    m_aSessionCache.insert( std::pair< std::pair< OUString, OUString >, libcmis::Session* >
-                            (
-                                std::pair< OUString, OUString >( sBindingUrl, sUsername ),
-                                pSession
-                            ) );
+    m_aSessionCache.emplace(std::make_pair(sBindingUrl, sUsername), pSession);
 }
 
 ContentProvider::ContentProvider(

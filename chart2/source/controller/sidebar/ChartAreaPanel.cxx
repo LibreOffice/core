@@ -454,7 +454,7 @@ void ChartAreaPanel::updateData()
     {
         sal_uInt16 nFillTransparence = 0;
         xPropSet->getPropertyValue(u"FillTransparence"_ustr) >>= nFillTransparence;
-        SfxUInt16Item aTransparenceItem(0, nFillTransparence);
+        XFillTransparenceItem aTransparenceItem(nFillTransparence);
         updateFillTransparence(false, true, &aTransparenceItem);
     }
 

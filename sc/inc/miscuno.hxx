@@ -107,7 +107,7 @@ public:
 };
 
 //  new (uno 3) variant
-class ScNameToIndexAccess final : public cppu::WeakImplHelper<
+class SC_DLLPUBLIC ScNameToIndexAccess final : public cppu::WeakImplHelper<
                                 css::container::XIndexAccess,
                                 css::lang::XServiceInfo >
 {
@@ -134,7 +134,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-class ScUnoHelpFunctions
+class SC_DLLPUBLIC ScUnoHelpFunctions
 {
 public:
     static bool             GetBoolProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
@@ -152,8 +152,8 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
 
-    SC_DLLPUBLIC static bool        GetBoolFromAny( const css::uno::Any& aAny );
-    SC_DLLPUBLIC static sal_Int16   GetInt16FromAny( const css::uno::Any& aAny );
+    static bool        GetBoolFromAny( const css::uno::Any& aAny );
+    static sal_Int16   GetInt16FromAny( const css::uno::Any& aAny );
     static sal_Int32        GetInt32FromAny( const css::uno::Any& aAny );
     static sal_Int32        GetEnumFromAny( const css::uno::Any& aAny );
 

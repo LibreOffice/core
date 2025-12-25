@@ -28,6 +28,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace pcr
 {
@@ -364,8 +365,8 @@ namespace pcr
         void            SetTextValue(const OUString& rText);
         OUString        GetTextValue() const;
 
-        void            SetStringListValue( const StlSyntaxSequence< OUString >& _rStrings );
-        StlSyntaxSequence< OUString >
+        void            SetStringListValue( const css::uno::Sequence< OUString >& _rStrings );
+        css::uno::Sequence<OUString>
                         GetStringListValue() const;
 
         DECL_LINK(ButtonHandler, weld::Button&, void);

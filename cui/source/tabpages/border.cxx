@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -533,8 +534,6 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     m_xWndPresets->connect_selection_changed( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     m_xWndPresets->connect_focus_out(LINK(this, SvxBorderTabPage, FocusOutPresets_Impl));
     m_xWndShadows->connect_selection_changed( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
-    m_xWndPresets->connect_query_tooltip( LINK( this, SvxBorderTabPage, QueryTooltipPreHdl ) );
-    m_xWndShadows->connect_query_tooltip( LINK( this, SvxBorderTabPage, QueryTooltipSdwHdl ) );
 
     FillIconViews();
     FillLineListBox_Impl();
@@ -1238,24 +1237,6 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, weld::IconView&, void)
     m_xLbShadowColor->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SvxBorderTabPage, QueryTooltipPreHdl, const weld::TreeIter&, iter, OUString)
-{
-    const OUString sId = m_xWndPresets->get_id(iter);
-    if (!sId.isEmpty())
-        return GetPresetName(sId.toInt32());
-
-    return OUString();
-}
-
-IMPL_LINK(SvxBorderTabPage, QueryTooltipSdwHdl, const weld::TreeIter&, iter, OUString)
-{
-    const OUString sId = m_xWndShadows->get_id(iter);
-    if (!sId.isEmpty())
-        return GetShadowTypeName(sId.toInt32());
-
-    return OUString();
-}
-
 IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
 {
     const NamedColor& aNamedColor = rColorBox.GetSelectedEntry();
@@ -1453,8 +1434,9 @@ void SvxBorderTabPage::FillPresetIV()
         OUString sId = OUString::number(nIdx);
         Bitmap aPreviewBitmap = GetPreviewAsBitmap(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
         m_xWndPresets->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
-        m_xWndPresets->set_item_accessible_name(m_xWndPresets->n_children() - 1,
-                                                GetPresetName(nIdx));
+        const OUString sPresetName = GetPresetName(nIdx);
+        m_xWndPresets->set_item_accessible_name(m_xWndPresets->n_children() - 1, sPresetName);
+        m_xWndPresets->set_item_tooltip_text(m_xWndPresets->n_children() - 1, sPresetName);
     }
 
     // show the control
@@ -1472,8 +1454,9 @@ void SvxBorderTabPage::FillShadowIV()
         OUString sId = OUString::number(nIdx);
         Bitmap aPreviewBitmap = GetPreviewAsBitmap(m_aShadowImgVec[nIdx-1]);
         m_xWndShadows->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
-        m_xWndShadows->set_item_accessible_name(m_xWndShadows->n_children() - 1,
-                                                GetShadowTypeName(nIdx));
+        const OUString sShadowTypeName = GetShadowTypeName(nIdx);
+        m_xWndShadows->set_item_accessible_name(m_xWndShadows->n_children() - 1, sShadowTypeName);
+        m_xWndShadows->set_item_tooltip_text(m_xWndShadows->n_children() - 1, sShadowTypeName);
     }
 
     // show the control

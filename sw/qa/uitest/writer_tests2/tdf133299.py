@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf133299(UITestCase):
 
-   def test_tdf133299(self):
+    def test_tdf133299(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             text = document.getText()
             cursor = text.createTextCursor()

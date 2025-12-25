@@ -257,7 +257,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( css::uno::Sequence< Property
     Sequence< ::sal_Int8 > aData;
     constexpr sal_Int32 nLen = SAL_N_ELEMENTS( header );
     if ( ( nLen != xInputStream->readBytes( aData, nLen ) )
-            || ( memcmp( static_cast<void const *>(header), static_cast<void const *>(aData.getConstArray()), nLen ) != 0 ) )
+            || !std::equal(aData.begin(), aData.end(), header ) )
         sTypeName.clear();
 
     return sTypeName;

@@ -30,7 +30,7 @@
 #include <svl/imageitm.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <strings.hrc>

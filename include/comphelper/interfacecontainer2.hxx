@@ -23,11 +23,10 @@
 
 #include <vector>
 
-#include <com/sun/star/lang/EventObject.hpp>
-
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/comphelperdllapi.h>
 
+namespace com::sun::star::lang { struct EventObject; }
 namespace com::sun::star::uno { class XInterface; }
 namespace osl { class Mutex; }
 

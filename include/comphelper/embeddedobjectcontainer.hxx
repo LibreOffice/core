@@ -19,8 +19,6 @@
 #ifndef INCLUDED_COMPHELPER_EMBEDDEDOBJECTCONTAINER_HXX
 #define INCLUDED_COMPHELPER_EMBEDDEDOBJECTCONTAINER_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
 
 #include <rtl/ustring.hxx>
@@ -33,6 +31,8 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper
 {

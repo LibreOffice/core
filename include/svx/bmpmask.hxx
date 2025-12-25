@@ -30,6 +30,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <memory>
 
 namespace vcl { class Window; }

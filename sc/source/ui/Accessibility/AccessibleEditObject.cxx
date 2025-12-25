@@ -545,7 +545,7 @@ OutputDevice* ScAccessibleEditControlObject::GetOutputDeviceForView()
 ScAccessibleEditLineObject::ScAccessibleEditLineObject(ScTextWnd* pTextWnd)
     : ScAccessibleEditControlObject(pTextWnd, ScAccessibleEditObject::EditLine)
 {
-    // tdf#141769 set this early so its always available, even before the on-demand
+    // tdf#141769 set this early so it's always available, even before the on-demand
     // editview is created
     mpTextWnd = pTextWnd;
 }

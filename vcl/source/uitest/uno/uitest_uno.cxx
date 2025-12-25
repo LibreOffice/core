@@ -39,9 +39,15 @@ public:
     sal_Bool SAL_CALL executeCommandWithParameters(const OUString& rCommand,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs) override;
 
+    sal_Bool SAL_CALL executeCommandForProvider(
+        const OUString& rCommand,
+        const css::uno::Reference<css::frame::XDispatchProvider>& xProvider) override;
+
     sal_Bool SAL_CALL executeDialog(const OUString& rCommand) override;
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
+
+    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getFocusWindow() override;
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getFloatWindow() override;
 
@@ -74,6 +80,14 @@ sal_Bool SAL_CALL UITestUnoObj::executeCommandWithParameters(const OUString& rCo
     return UITest::executeCommandWithParameters(rCommand,rArgs);
 }
 
+sal_Bool SAL_CALL UITestUnoObj::executeCommandForProvider(
+    const OUString& rCommand,
+    const css::uno::Reference<css::frame::XDispatchProvider>& xProvider)
+{
+    SolarMutexGuard aGuard;
+    return UITest::executeCommandForProvider(rCommand, xProvider);
+}
+
 sal_Bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
@@ -86,6 +100,15 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocus
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
     if (!pObj)
         throw css::uno::RuntimeException(u"UITest::getFocusTopWindow did not find a window"_ustr);
+    return new UIObjectUnoObj(std::move(pObj));
+}
+
+css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFocusWindow()
+{
+    SolarMutexGuard aGuard;
+    std::unique_ptr<UIObject> pObj = UITest::getFocusWindow();
+    if (!pObj)
+        throw css::uno::RuntimeException(u"UITest::getFocusWindow did not find a window"_ustr);
     return new UIObjectUnoObj(std::move(pObj));
 }
 

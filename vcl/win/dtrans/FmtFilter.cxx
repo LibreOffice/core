@@ -29,6 +29,7 @@
 #include <shlguid.h>
 #include <objidl.h>
 #include <shellapi.h>
+#include <win/scoped_gdi.hxx>
 
 #include <string>
 #include <sstream>
@@ -183,9 +184,8 @@ HENHMETAFILE OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePic
 Sequence< sal_Int8 > WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
     OSL_ENSURE(o3tl::make_unsigned(aWinDIB.getLength()) > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
-    Sequence< sal_Int8 > ooBmpStream;
+    Sequence< sal_Int8 > ooBmpStream(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));
 
-    ooBmpStream.realloc(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));
     const BITMAPINFOHEADER* pBmpInfoHdr = reinterpret_cast< const BITMAPINFOHEADER* >(aWinDIB.getConstArray());
     BITMAPFILEHEADER* pBmpFileHdr = reinterpret_cast< BITMAPFILEHEADER* >(ooBmpStream.getArray());
     const DWORD nSizeInfoOrV5(pBmpInfoHdr->biSize > sizeof(BITMAPINFOHEADER) ? sizeof(BITMAPV5HEADER) : sizeof(BITMAPINFOHEADER));
@@ -398,41 +398,29 @@ css::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal)
 
 Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
 {
-    Sequence< sal_Int8 > ooBmpStream;
-
-    SIZE aBmpSize;
-    if( GetBitmapDimensionEx( aHBMP, &aBmpSize ) )
+    if (BITMAP bm{}; GetObjectW(aHBMP, sizeof(bm), &bm))
     {
-        // fill bitmap info header
-        size_t nDataBytes = 4 * aBmpSize.cy * aBmpSize.cy;
+        size_t nDataBytes = ((bm.bmWidth * bm.bmBitsPixel + 31) / 32) * 4 * bm.bmHeight;
         Sequence< sal_Int8 > aBitmapStream(
             sizeof(BITMAPINFO) +
             nDataBytes
             );
-        PBITMAPINFOHEADER pBmp = reinterpret_cast<PBITMAPINFOHEADER>(aBitmapStream.getArray());
-        pBmp->biSize = sizeof( BITMAPINFOHEADER );
-        pBmp->biWidth  = aBmpSize.cx;
-        pBmp->biHeight = aBmpSize.cy;
-        pBmp->biPlanes = 1;
-        pBmp->biBitCount = 32;
-        pBmp->biCompression = BI_RGB;
-        pBmp->biSizeImage = static_cast<DWORD>(nDataBytes);
-        pBmp->biXPelsPerMeter = 1000;
-        pBmp->biYPelsPerMeter = 1000;
-        pBmp->biClrUsed = 0;
-        pBmp->biClrImportant = 0;
-        if( GetDIBits( nullptr, // DC, 0 is a default GC, basically that of the desktop
-                       aHBMP,
-                       0, aBmpSize.cy,
-                       aBitmapStream.getArray() + sizeof(BITMAPINFO),
-                       reinterpret_cast<LPBITMAPINFO>(pBmp),
-                       DIB_RGB_COLORS ) )
+        PBITMAPINFO pBmp = reinterpret_cast<PBITMAPINFO>(aBitmapStream.getArray());
+        pBmp->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        pBmp->bmiHeader.biWidth = bm.bmWidth;
+        pBmp->bmiHeader.biHeight = bm.bmHeight;
+        pBmp->bmiHeader.biPlanes = 1;
+        pBmp->bmiHeader.biBitCount = bm.bmBitsPixel;
+        pBmp->bmiHeader.biCompression = BI_RGB;
+
+        ScopedHDC hdc(CreateCompatibleDC(nullptr));
+        if (GetDIBits(hdc.get(), aHBMP, 0, bm.bmHeight, pBmp + 1, pBmp, DIB_RGB_COLORS))
         {
-            ooBmpStream = WinDIBToOOBMP( aBitmapStream );
+            return WinDIBToOOBMP(aBitmapStream);
         }
     }
 
-    return ooBmpStream;
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

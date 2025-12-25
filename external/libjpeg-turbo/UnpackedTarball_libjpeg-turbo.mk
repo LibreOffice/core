@@ -19,7 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libjpeg-turbo, \
 ))
 
 # jconfigint.h and jconfig.h generated via
-# cmake -DENABLE_STATIC:BOOL=ON -DENABLE_SHARED:BOOL=NO -DWITH_JAVA:BOOL=OFF -DWITH_TURBOJPEG:BOOL=OFF -DWITH_SIMD:BOOL=ON
+# (cd workdir/UnpackedTarball/libjpeg-turbo && cmake -DENABLE_STATIC:BOOL=ON -DENABLE_SHARED:BOOL=NO -DWITH_JAVA:BOOL=OFF -DWITH_TURBOJPEG:BOOL=OFF -DWITH_SIMD:BOOL=ON)
 # and then tweaking
 
 $(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,src/jconfigint.h,external/libjpeg-turbo/jconfigint.h))

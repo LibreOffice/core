@@ -276,7 +276,7 @@ void ScOrcusAutoFilter::commit()
 
     for (SCCOL nCol = mnCol1; nCol <= mnCol2; ++nCol)
     {
-        auto nFlag = rDoc.GetAttr(nCol, mnRow1, mnTab, ATTR_MERGE_FLAG)->GetValue();
+        auto nFlag = rDoc.GetAttr(nCol, mnRow1, mnTab, ATTR_MERGE_FLAG).GetValue();
         rDoc.ApplyAttr(nCol, mnRow1, mnTab, ScMergeFlagAttr(nFlag | ScMF::Auto));
     }
 }

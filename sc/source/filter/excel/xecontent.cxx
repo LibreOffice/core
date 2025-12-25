@@ -1163,7 +1163,7 @@ const char* getTimePeriodString( condformat::ScCondFormatDateType eType )
         case condformat::YESTERDAY:
             return "yesterday";
         case condformat::TOMORROW:
-            return "yesterday";
+            return "tomorrow";
         case condformat::THISWEEK:
             return "thisWeek";
         case condformat::LASTWEEK:

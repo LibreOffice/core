@@ -3422,7 +3422,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                             //  date/time identification
 
                             sal_uLong nIndex = static_cast<sal_uLong>(rDoc.GetAttr(
-                                        aIter.GetPos(), ATTR_VALUE_FORMAT)->GetValue());
+                                        aIter.GetPos(), ATTR_VALUE_FORMAT).GetValue());
                             SvNumFormatType nTyp = rDoc.GetFormatTable()->GetType(nIndex);
                             if ((nTyp == SvNumFormatType::DATE) || (nTyp == SvNumFormatType::TIME) ||
                                     (nTyp == SvNumFormatType::DATETIME))

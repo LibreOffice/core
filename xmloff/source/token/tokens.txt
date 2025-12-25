@@ -2127,6 +2127,7 @@ wrap-contour
 wrap-contour-mode
 wrap-option
 writing-mode
+writing-mode-automatic
 www
 x
 x1
@@ -2218,6 +2219,7 @@ horizontal-checkerboard
 notify-on-update-of-ranges
 byte
 macro
+reject
 location
 application
 symbol-image

@@ -22,7 +22,9 @@
 #include <codemaker/codemaker.hxx>
 #include <codemaker/commoncpp.hxx>
 #include <codemaker/global.hxx>
+#include <codemaker/unotype.hxx>
 #include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
 
 #include "skeletoncommon.hxx"
 #include "skeletoncpp.hxx"

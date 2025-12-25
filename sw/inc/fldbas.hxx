@@ -257,6 +257,7 @@ public:
 
     /// Only in derived classes.
     virtual UIName        GetName() const;
+    virtual void SetName(const UIName& newName);
     virtual std::unique_ptr<SwFieldType> Copy() const = 0;
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );

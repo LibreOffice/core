@@ -37,19 +37,27 @@ struct ScQueryParam;
 class SdrObject;
 class ScPostIt;
 
+/** Sort by which color */
 enum class ScColorSortMode {
     None,
     TextColor,
     BackgroundColor
 };
 
+/** Sort key state defines one way how to sort the range.
+ *
+ * A range of values can be sorted in multiple way, each column a different way.
+ *
+ * For example: sort column A ascending and if the column when there are same values, define that those should be
+ * sorted descending usign the column C.
+ **/
 struct ScSortKeyState
 {
-    SCCOLROW nField;
-    bool     bDoSort;
-    bool     bAscending;
-    ScColorSortMode aColorSortMode;
-    Color    aColorSortColor;
+    SCCOLROW nField = 0;
+    bool bDoSort = false;
+    bool bAscending = true;
+    ScColorSortMode aColorSortMode = ScColorSortMode::None;
+    Color aColorSortColor;
 };
 
 /** Struct to hold non-data extended area, used with
@@ -144,8 +152,7 @@ struct SC_DLLPUBLIC ScSortParam
     SCTAB       nDestTab;
     SCCOL       nDestCol;
     SCROW       nDestRow;
-    ::std::vector<ScSortKeyState>
-                maKeyState;
+    std::vector<ScSortKeyState> maKeyState;
     css::lang::Locale aCollatorLocale;
     OUString    aCollatorAlgorithm;
     sal_uInt16  nCompatHeader;

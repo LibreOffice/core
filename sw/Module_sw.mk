@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_check_targets,sw,\
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sw_uwriter) \
+    CppunitTest_sw_cjk \
     CppunitTest_sw_rtfexport \
     CppunitTest_sw_rtfexport2 \
     CppunitTest_sw_rtfexport3 \
@@ -103,6 +104,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlexport23 \
     CppunitTest_sw_ooxmlexport24 \
     CppunitTest_sw_ooxmlexport25 \
+    CppunitTest_sw_ooxmlexport26 \
     CppunitTest_sw_ooxmlexport_de_locale \
     CppunitTest_sw_ooxmlexport_template \
     CppunitTest_sw_ooxmlfieldexport \
@@ -144,6 +146,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_layoutwriter3 \
     CppunitTest_sw_layoutwriter4 \
     CppunitTest_sw_layoutwriter5 \
+    CppunitTest_sw_layoutwriter6 \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_mailmerge2 \
     CppunitTest_sw_globalfilter \

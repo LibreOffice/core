@@ -370,9 +370,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
                 awt::Size aSize(nSymbolWidth, nSymbolHeight);
                 std::vector<ViewLegendSymbol> aNewEntries
                     = pSeriesPlotter->createSymbols(aSize, m_xTarget, m_xComponentContext);
-
-                for (auto const& rSymbol : aNewEntries)
-                    aSymbols.push_back(rSymbol);
+                aSymbols.insert(aSymbols.end(), aNewEntries.begin(), aNewEntries.end());
             }
         }
     }

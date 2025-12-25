@@ -25,6 +25,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <connectivity/statementcomposer.hxx>
 
 namespace sdbtools

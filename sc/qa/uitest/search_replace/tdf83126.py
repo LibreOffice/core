@@ -13,7 +13,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class tdf83126(UITestCase):
 
-   def test_tdf132097(self):
+    def test_tdf132097(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

@@ -63,6 +63,8 @@ class UITestCase(unittest.TestCase):
     def signalHandler(self, signum, frame):
         if self.getConnection():
             self.getConnection().kill()
+        self.resetSignalHandler()
+        raise Exception(f"Caught signal {signum}")
 
     def setSignalHandler(self):
         signal.signal(signal.SIGABRT, self.signalHandler)
@@ -71,9 +73,9 @@ class UITestCase(unittest.TestCase):
         signal.signal(signal.SIGILL, self.signalHandler)
 
     def resetSignalHandler(self):
-        signal.signal(signal.SIGABRT, signal.SIG_IGN)
-        signal.signal(signal.SIGSEGV, signal.SIG_IGN)
-        signal.signal(signal.SIGTERM, signal.SIG_IGN)
-        signal.signal(signal.SIGILL, signal.SIG_IGN)
+        signal.signal(signal.SIGABRT, signal.SIG_DFL)
+        signal.signal(signal.SIGSEGV, signal.SIG_DFL)
+        signal.signal(signal.SIGTERM, signal.SIG_DFL)
+        signal.signal(signal.SIGILL, signal.SIG_DFL)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

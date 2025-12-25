@@ -11,6 +11,8 @@
 
 #include "QtInstanceWindow.hxx"
 
+#include <vcl/weld/DialogController.hxx>
+
 #include <QtWidgets/QAbstractButton>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QPushButton>

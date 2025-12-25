@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, type_text
 
 class tdf137513(UITestCase):
 
-   def test_tdf137513(self):
+    def test_tdf137513(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommand(".uno:InsertTable?Columns:short=2&Rows:short=2")
@@ -35,15 +35,15 @@ class tdf137513(UITestCase):
             self.assertEqual(2, len(xListBox.getChild('0').getChildren()))
             self.assertEqual("Default Paragraph Style\t", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
             self.assertEqual("Table Contents\t", get_state_as_dict(xListBox.getChild('0').getChild('1'))['Text'])
-            self.assertEqual(155, len(xListBox.getChild('0').getChild('0').getChildren()))
+            self.assertEqual(156, len(xListBox.getChild('0').getChild('0').getChildren()))
 
             xTableContent = xListBox.getChild('0').getChild('1')
             self.assertEqual(5, len(xTableContent.getChildren()))
             self.assertEqual("Follow Style\tTable Contents", get_state_as_dict(xTableContent.getChild('0'))['Text'])
-            self.assertEqual("Para Line Number Count\tFalse", get_state_as_dict(xTableContent.getChild('1'))['Text'])
-            self.assertEqual("Para Line Number Start Value\t0", get_state_as_dict(xTableContent.getChild('2'))['Text'])
-            self.assertEqual("Para Orphans\t0", get_state_as_dict(xTableContent.getChild('3'))['Text'])
-            self.assertEqual("Para Widows\t0", get_state_as_dict(xTableContent.getChild('4'))['Text'])
+            self.assertEqual("Para Don’t split at beginning (lines)\t0", get_state_as_dict(xTableContent.getChild('1'))['Text'])
+            self.assertEqual("Para Don’t split at end (lines)\t0", get_state_as_dict(xTableContent.getChild('2'))['Text'])
+            self.assertEqual("Para Line Number Count\tFalse", get_state_as_dict(xTableContent.getChild('3'))['Text'])
+            self.assertEqual("Para Line Number Start Value\t0", get_state_as_dict(xTableContent.getChild('4'))['Text'])
 
             xParDirFormatting = xListBox.getChild('1')
 

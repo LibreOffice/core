@@ -19,8 +19,9 @@
 
 #include "optchart.hxx"
 #include <svx/SvxColorValueSet.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
@@ -89,6 +90,66 @@ void SvxDefaultColorOptPage::FillBoxChartColorLB()
     m_xLbChartColors->thaw();
 }
 
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl, weld::TreeView&, void)
+{
+    auto nIndex = m_xLbChartColors->get_selected_index();
+    if (nIndex == -1)
+        return;
+
+    Color& rColor(aColorList[nIndex]);
+
+    XColorListRef xColorList;
+    for (sal_uInt16 nPalettePos = 0, nPaletteCount = aPaletteManager.GetPaletteCount();
+         nPalettePos < nPaletteCount; ++nPalettePos)
+    {
+        aPaletteManager.SetPalette(nPalettePos, true /*bPosOnly*/);
+
+        if (/*custom palette*/ nPalettePos == 0 ||
+            /*theme colors palette*/ aPaletteManager.IsThemePaletteSelected() ||
+            /*document colors palette*/ nPalettePos == aPaletteManager.GetPaletteCount() - 1)
+        {
+            aPaletteManager.ReloadColorSet(*m_xValSetColorBox);
+
+            for (size_t nItemPos = 0, nItemCount = m_xValSetColorBox->GetItemCount();
+                 nItemPos < nItemCount; nItemPos++)
+            {
+                auto nItemId = m_xValSetColorBox->GetItemId(nItemPos);
+                if (m_xValSetColorBox->GetItemColor(nItemId) == rColor)
+                {
+                    m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
+                    SelectPaletteLbHdl(*m_xLbPaletteSelector);
+
+                    m_xValSetColorBox->SelectItem(nItemId);
+
+                    return;
+                }
+            }
+        }
+        else
+        {
+            xColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+                XPropertyListType::Color, aPaletteManager.GetSelectedPalettePath()));
+            if (!xColorList->Load())
+                continue;
+
+            auto nPos = xColorList->GetIndexOfColor(rColor);
+            if (nPos == -1)
+                continue;
+
+            m_xLbPaletteSelector->set_active_text(aPaletteManager.GetPaletteName());
+            SelectPaletteLbHdl(*m_xLbPaletteSelector);
+
+            m_xValSetColorBox->SelectItem(m_xValSetColorBox->GetItemId(nPos));
+
+            return;
+        }
+    }
+
+    // color not found in any palette
+    m_xLbPaletteSelector->set_active_text(OUString());
+    m_xValSetColorBox->Clear();
+}
+
 SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/optchartcolorspage.ui"_ustr, u"OptChartColorsPage"_ustr, &rInAttrs)
     , m_xLbChartColors(m_xBuilder->weld_tree_view(u"colors"_ustr))
@@ -100,6 +161,9 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
     , m_xValSetColorBoxWin(new weld::CustomWeld(*m_xBuilder, u"table"_ustr, *m_xValSetColorBox))
 {
     m_xLbChartColors->set_size_request(-1, m_xLbChartColors->get_height_rows(16));
+
+    m_xLbChartColors->connect_selection_changed(
+        LINK(this, SvxDefaultColorOptPage, LbChartColorsSelectionChangedHdl));
 
     if (officecfg::Office::Chart::DefaultColor::Series::isReadOnly())
     {
@@ -145,6 +209,7 @@ void SvxDefaultColorOptPage::Construct()
     FillPaletteLB();
 
     m_xLbChartColors->select( 0 );
+    LbChartColorsSelectionChangedHdl(*m_xLbChartColors);
 }
 
 std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs )
@@ -154,13 +219,13 @@ std::unique_ptr<SfxTabPage> SvxDefaultColorOptPage::Create( weld::Container* pPa
 
 OUString SvxDefaultColorOptPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label20"_ustr, u"label1"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString buttons[] = { u"add"_ustr, u"delete"_ustr, u"default"_ustr };
@@ -168,10 +233,10 @@ OUString SvxDefaultColorOptPage::GetAllStrings()
     for (const auto& btn : buttons)
     {
         if (const auto pString = m_xBuilder->weld_button(btn))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )

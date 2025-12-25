@@ -38,7 +38,7 @@ class PopupWindowControllerImpl
 {
 public:
     PopupWindowControllerImpl();
-    ~PopupWindowControllerImpl() COVERITY_NOEXCEPT_FALSE;
+    ~PopupWindowControllerImpl();
 
     void SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox );
     void SetFloatingWindow();
@@ -53,7 +53,7 @@ PopupWindowControllerImpl::PopupWindowControllerImpl()
 {
 }
 
-PopupWindowControllerImpl::~PopupWindowControllerImpl() COVERITY_NOEXCEPT_FALSE
+PopupWindowControllerImpl::~PopupWindowControllerImpl()
 {
     SetPopupWindow(nullptr,nullptr);
     SetFloatingWindow();

@@ -21,6 +21,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <svx/deflt3d.hxx>
 #include <svx/svdmodel.hxx>
+#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>

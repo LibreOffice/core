@@ -381,7 +381,7 @@ namespace pcr
         for (auto const& slaveHandler : m_aSlaveHandlers)
         {
             // TODO: make this cheaper (cache it?)
-            const StlSyntaxSequence< OUString > aThisHandlersActuatingProps( slaveHandler->getActuatingProperties() );
+            const Sequence<OUString> aThisHandlersActuatingProps(slaveHandler->getActuatingProperties());
             for (const auto & aThisHandlersActuatingProp : aThisHandlersActuatingProps)
             {
                 if ( aThisHandlersActuatingProp == _rActuatingPropertyName )

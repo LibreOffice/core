@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf91762(UITestCase):
 
-   def test_tdf91762(self):
+    def test_tdf91762(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

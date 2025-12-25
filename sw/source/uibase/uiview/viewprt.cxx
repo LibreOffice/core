@@ -25,7 +25,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/paperinf.hxx>
 #include <sfx2/dispatch.hxx>
@@ -206,7 +206,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         case SID_PRINTDOCDIRECT:
         {
             SwWrtShell* pSh = &GetWrtShell();
-            const SfxBoolItem* pSilentItem = rReq.GetArg<SfxBoolItem>(SID_SILENT);
+            const SfxBoolItem* pSilentItem = rReq.GetArg(SID_SILENT);
             bool bSilent = pSilentItem && pSilentItem->GetValue();
             const SfxBoolItem* pPrintFromMergeItem = rReq.GetArg<SfxBoolItem>(FN_QRY_MERGE);
             if(pPrintFromMergeItem)

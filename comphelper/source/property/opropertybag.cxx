@@ -205,7 +205,7 @@ namespace comphelper
             // check whether the type is allowed, everything else will be checked
             // by m_aDynamicProperties
             if (!m_aAllowedTypes.empty()
-                && m_aAllowedTypes.find(aProperty.Type) == m_aAllowedTypes.end())
+                && !m_aAllowedTypes.contains(aProperty.Type))
                 throw IllegalArgumentException(u"not in list of allowed types"_ustr, *this, 1);
 
             m_aDynamicProperties.addVoidProperty(aProperty.Name, aProperty.Type, findFreeHandle(),
@@ -310,7 +310,7 @@ namespace comphelper
             // by m_aDynamicProperties
             const Type& aPropertyType = _rInitialValue.getValueType();
             if (_rInitialValue.hasValue() && !m_aAllowedTypes.empty()
-                && m_aAllowedTypes.find(aPropertyType) == m_aAllowedTypes.end())
+                && !m_aAllowedTypes.contains(aPropertyType))
                 throw IllegalTypeException(OUString(), *this);
 
             m_aDynamicProperties.addProperty(_rName, findFreeHandle(), _nAttributes,

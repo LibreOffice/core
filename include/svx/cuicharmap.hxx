@@ -18,15 +18,15 @@
  */
 #pragma once
 
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/charmapcontainer.hxx>
 #include <svl/itemset.hxx>
 #include <svx/charmap.hxx>
 #include <svx/searchcharmap.hxx>
 #include <svx/ucsubset.hxx>
-#include <sfx2/charwin.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -41,7 +41,6 @@ private:
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     OUString m_sText;
     tools::Long mnY;
-    bool mbCenter;
     vcl::Font m_aFont;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
@@ -55,7 +54,6 @@ public:
     vcl::Font const& GetFont() const { return m_aFont; }
     void SetText(const OUString& rText);
     OUString const& GetText() const { return m_sText; }
-    void SetCentered(bool bCenter) { mbCenter = bCenter; }
 
     Size get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 };
@@ -95,7 +93,7 @@ private:
     };
 
     // inserts the character that is currently selected in the given SvxShowCharSet
-    void insertSelectedCharacter(const SvxShowCharSet* pCharSet);
+    void insertSelectedCharacter(const SvxShowCharSet& rCharSet);
 
     static void fillAllSubsets(weld::ComboBox& rListBox);
 
@@ -103,7 +101,7 @@ private:
 
     void insertCharToDoc(const OUString& sChar);
 
-    void setFavButtonState(std::u16string_view sTitle, std::u16string_view rFont);
+    void setFavButtonState(const OUString& sTitle, const OUString& rFont);
 
     void setCharName(sal_UCS4 nDecimalValue);
 
@@ -111,16 +109,17 @@ private:
 
     DECL_DLLPRIVATE_LINK(FontSelectHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(SubsetSelectHdl, weld::ComboBox&, void);
-    DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(ReturnKeypressOnCharHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(FavClickHdl, SvxShowCharSet*, void);
-    DECL_DLLPRIVATE_LINK(SearchCharHighlightHdl, SvxShowCharSet*, void);
+    DECL_DLLPRIVATE_LINK(CharActivateHdl, const CharAndFont&, void);
+    DECL_DLLPRIVATE_LINK(CharDoubleClickHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(CharPreSelectHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(ReturnKeypressOnCharHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(FavClickHdl, SvxShowCharSet&, void);
+    DECL_DLLPRIVATE_LINK(SearchCharHighlightHdl, SvxShowCharSet&, void);
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(HexCodeChangeHdl, weld::Entry&, void);
-    DECL_DLLPRIVATE_LINK(CharClickHdl, SvxCharView*, void);
+    DECL_DLLPRIVATE_LINK(CharFocusHdl, const CharAndFont&, void);
     DECL_DLLPRIVATE_LINK(InsertClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(FavSelectHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SearchUpdateHdl, weld::Entry&, void);

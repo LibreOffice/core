@@ -25,6 +25,11 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/sfxstatuslistener.hxx>
+#include <vcl/weld/IconView.hxx>
+
+// pair of id and name, name can be translated to other language
+typedef std::pair<OUString, OUString> StylePreviewDescriptor;
+typedef std::vector<StylePreviewDescriptor> StylePreviewList;
 
 class StylesPreviewWindow_Base;
 
@@ -59,10 +64,10 @@ class StyleItemController
     static constexpr unsigned LEFT_MARGIN = 8;
 
     SfxStyleFamily m_eStyleFamily;
-    std::pair<OUString, OUString> m_aStyleName;
+    StylePreviewDescriptor m_aStyleName;
 
 public:
-    StyleItemController(std::pair<OUString, OUString> aStyleName);
+    StyleItemController(StylePreviewDescriptor aStyleName);
 
     void Paint(vcl::RenderContext& rRenderContext);
 
@@ -105,8 +110,8 @@ protected:
     rtl::Reference<StyleStatusListener> m_xStatusListener;
     std::unique_ptr<StylePoolChangeListener> m_pStylePoolChangeListener;
 
-    std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
-    std::vector<std::pair<OUString, OUString>> m_aAllStyles;
+    StylePreviewList m_aDefaultStyles;
+    StylePreviewList m_aAllStyles;
 
     OUString m_sSelectedStyle;
 
@@ -116,15 +121,14 @@ protected:
     DECL_LINK(GetPreviewImage, const weld::encoded_image_query&, bool);
 
 public:
-    StylesPreviewWindow_Base(weld::Builder& xBuilder,
-                             std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
+    StylesPreviewWindow_Base(weld::Builder& xBuilder, StylePreviewList& rDefaultStyles,
                              const css::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
-    static Bitmap GetCachedPreview(const std::pair<OUString, OUString>& rStyle);
-    static OString GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle);
+    static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle);
+    static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle);
 
 private:
     void UpdateStylesList();
@@ -135,8 +139,7 @@ private:
 class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPreviewWindow_Base
 {
 public:
-    StylesPreviewWindow_Impl(vcl::Window* pParent,
-                             std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
+    StylesPreviewWindow_Impl(vcl::Window* pParent, StylePreviewList& rDefaultStyles,
                              const css::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Impl();
 

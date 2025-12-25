@@ -164,9 +164,9 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     sal_uInt16 nIdx = pItem->GetValue();
     bool bToggle = false;
-    if( nIdx == sal_uInt16(0xFFFF) )
+    if( nIdx == BULLET_TOGGLE )
     {
-        // If the nIdx is (sal_uInt16)0xFFFF, means set bullet status to on/off
+        // Set bullet status to on/off
         nIdx = 1;
         bToggle = true;
     }
@@ -206,7 +206,13 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
             {
                 if(nActNumLvl & nMask)
                 {
-                    const SvxNumberFormat& aFmt(aTmpRule.GetLevel(i));
+                    SvxNumberFormat aFmt(aTmpRule.GetLevel(i));
+                    if (nSId == FN_SVX_SET_BULLET)
+                    {
+                        // If changing to a bullet, then make its format and indent has a good
+                        // default, similar to what the master page offers:
+                        SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(i, aFmt);
+                    }
                     pNumRule->SetLevel(i, aFmt);
                 }
                 nMask <<= 1;

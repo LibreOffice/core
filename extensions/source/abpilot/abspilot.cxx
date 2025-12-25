@@ -26,7 +26,7 @@
 #include "admininvokationpage.hxx"
 #include "tableselectionpage.hxx"
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 #include "abpfinalpage.hxx"
 #include "fieldmappingpage.hxx"

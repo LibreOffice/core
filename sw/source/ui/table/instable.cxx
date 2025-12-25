@@ -134,80 +134,37 @@ void SwInsTableDlg::InitAutoTableFormat()
     m_xTableTable.reset(new SwTableAutoFormatTable(SwModule::get()->GetAutoFormatTable()));
 
     // Add "- none -" style autoformat table.
-    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone); // Insert to listbox
+    std::unique_ptr<SwTableAutoFormat> pNoneStyle(
+        new SwTableAutoFormat(TableStyleName(SwViewShell::GetShellRes()->aStrNone)));
+    pNoneStyle->DisableAll();
+    m_xTableTable->InsertAutoFormat(0, std::move(pNoneStyle));
 
-    // Add other styles of autoformat tables.
-    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size());
-            i < nCount; i++)
+    for (size_t i = 0; i < m_xTableTable->size(); i++)
     {
-        SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
-        m_xLbFormat->append_text(rFormat.GetName().toString());
-        if (m_xTAutoFormat && rFormat.GetName() == m_xTAutoFormat->GetName())
-            m_lbIndex = i;
+        m_xLbFormat->append_text((*m_xTableTable)[i].GetName().toString());
     }
 
-    // Change this min variable if you add autotable manually.
-    minTableIndexInLb = 1;
-    maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(m_xTableTable->size());
-    // 1 means default table style
-    // unfortunately when the table has a style sw/qa/uitest/writer_tests4/tdf115573.py fails
-    // because tables that have pre-applied style resets the style of the elements in their cells
-    // when a new row is inserted and the ui test above relies on that.
-    m_lbIndex = 0;
-    m_xLbFormat->select(m_lbIndex);
-    m_tbIndex = lbIndexToTableIndex(m_lbIndex);
+    m_xLbFormat->select(0);
 
     SelFormatHdl( *m_xLbFormat );
-}
-
-sal_uInt8 SwInsTableDlg::lbIndexToTableIndex( const sal_uInt8 listboxIndex )
-{
-    if( minTableIndexInLb != maxTableIndexInLb &&
-            minTableIndexInLb <= listboxIndex &&
-            listboxIndex < maxTableIndexInLb )
-    {
-        return listboxIndex - minTableIndexInLb;
-    }
-
-    return 255;
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
     // Get index of selected item from the listbox
-    m_lbIndex = static_cast<sal_uInt8>(m_xLbFormat->get_selected_index());
-    m_tbIndex = lbIndexToTableIndex( m_lbIndex );
-
-    // To understand this index mapping, look InitAutoTableFormat function to
-    // see how listbox item is implemented.
-    if( m_tbIndex < 255 )
-        m_aWndPreview.NotifyChange( (*m_xTableTable)[m_tbIndex] );
-    else
-    {
-        SwTableAutoFormat aTmp( TableStyleName(SwViewShell::GetShellRes()->aStrNone) );
-        aTmp.DisableAll();
-
-        m_aWndPreview.NotifyChange( aTmp );
-    }
+    size_t styleIdx = m_xLbFormat->get_selected_index();
+    m_aWndPreview.NotifyChange((*m_xTableTable)[styleIdx]);
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 {
-    if( m_tbIndex < 255 )
-        m_pShell->SetTableStyle((*m_xTableTable)[m_tbIndex]);
+    size_t styleIdx = m_xLbFormat->get_selected_index();
+    m_pShell->SetTableStyle((*m_xTableTable)[styleIdx]);
 
-    if( m_tbIndex < 255 )
-    {
-        if( m_xTAutoFormat )
-            *m_xTAutoFormat = (*m_xTableTable)[ m_tbIndex ];
-        else
-            m_xTAutoFormat.reset(new SwTableAutoFormat( (*m_xTableTable)[ m_tbIndex ] ));
-    }
+    if( m_xTAutoFormat )
+        *m_xTAutoFormat = (*m_xTableTable)[styleIdx];
     else
-    {
-        m_xTAutoFormat.reset(new SwTableAutoFormat( TableStyleName(SwViewShell::GetShellRes()->aStrNone) ));
-        m_xTAutoFormat->DisableAll();
-    }
+        m_xTAutoFormat.reset(new SwTableAutoFormat((*m_xTableTable)[styleIdx]));
 
     m_xDialog->response(RET_OK);
 }

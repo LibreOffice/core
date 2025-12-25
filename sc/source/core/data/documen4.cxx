@@ -841,7 +841,7 @@ ScConditionalFormat* ScDocument::GetCondFormat(
                             SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     sal_uInt32 nIndex = 0;
-    const ScCondFormatIndexes& rCondFormats = GetAttr(nCol, nRow, nTab, ATTR_CONDITIONAL)->GetCondFormatData();
+    const ScCondFormatIndexes& rCondFormats = GetAttr(nCol, nRow, nTab, ATTR_CONDITIONAL).GetCondFormatData();
 
     if(!rCondFormats.empty())
         nIndex = rCondFormats[0];

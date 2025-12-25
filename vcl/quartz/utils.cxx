@@ -94,7 +94,7 @@ OUString NSStringArrayToOUString(NSArray* array)
         result = result + sep + OUString::fromUtf8([[array objectAtIndex:i] UTF8String]);
         sep = ",";
     }
-    result = result + "]";
+    result += "]";
     return result;
 }
 
@@ -107,7 +107,7 @@ OUString NSDictionaryKeysToOUString(NSDictionary* dict)
         result = result + sep + OUString::fromUtf8([key UTF8String]);
         sep = ",";
     }
-    result = result + "}";
+    result += "}";
     return result;
 }
 

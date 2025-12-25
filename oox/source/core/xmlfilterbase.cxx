@@ -28,6 +28,7 @@
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -63,6 +64,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
 #include <tools/urlobj.hxx>
@@ -88,7 +90,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using utl::MediaDescriptor;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
@@ -291,7 +292,7 @@ void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css
 
 void XmlFilterBase::importDocumentProperties()
 {
-    MediaDescriptor aMediaDesc( getMediaDescriptor() );
+    comphelper::SequenceAsHashMap aMediaDesc(getMediaDescriptor());
     Reference< XInputStream > xInputStream;
     Reference< XComponentContext > xContext = getComponentContext();
     rtl::Reference< ::oox::core::FilterDetect > xDetector( new ::oox::core::FilterDetect( xContext ) );
@@ -570,6 +571,15 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
     return OUString();
 }
 
+static bool lcl_isValidDate(const util::DateTime& rTime)
+{
+    if (rTime.Year == 0)
+        return false;
+
+    // MS Office reports document as corrupt if core.xml contains any Year <= 1600 or > 9999
+    return rTime.Year > 1600  && rTime.Year < 10000;
+}
+
 static void
 writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, std::u16string_view sValue )
 {
@@ -608,6 +618,31 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTi
 }
 
 static void
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const util::DateTimeWithTimezone& rTime )
+{
+    if (rTime.Timezone == 0)
+    {
+        writeElement(pDoc, nXmlElement, rTime.DateTimeInTZ);
+        return;
+    }
+
+    if( rTime.DateTimeInTZ.Year == 0 )
+        return;
+
+    if ( ( nXmlElement >> 16 ) != XML_dcterms )
+        pDoc->startElement(nXmlElement);
+    else
+        pDoc->startElement(nXmlElement, FSNS(XML_xsi, XML_type), "dcterms:W3CDTF");
+
+    OStringBuffer aStr;
+    sax::Converter::convertDateTime(aStr, rTime.DateTimeInTZ, &rTime.Timezone);
+
+    pDoc->write( aStr );
+
+    pDoc->endElement( nXmlElement );
+}
+
+static void
 writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OUString >& aItems )
 {
     if( !aItems.hasElements() )
@@ -640,21 +675,12 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         = bRemovePersonalInfo
           && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo);
 
-    // Although the spec says that ISOIEC_29500_2008 must use the "officedocument" URI,
-    // in MS errata they admit that DOCX just uses the old "package" URI from ECMA_376_1ST_EDITION.
-
-    OUString sValue;
-    const bool bDocx = dynamic_cast<text::XTextDocument*>(rSelf.getModel().get());
-    if (!bDocx && rSelf.getVersion() == oox::core::ISOIEC_29500_2008)
-    {
-        // The lowercase "officedocument" is intentional and according to the spec
-        // (although most other places are written "officeDocument")
-        sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
-    }
-    else
-        sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
-
-    rSelf.addRelation( sValue, u"docProps/core.xml" );
+    // Although the spec says that ISOIEC_29500_2008 must use the "officedocument" URI for core.xml,
+    // MS errata admits that MS Office just uses the old "package" URI from ECMA_376_1ST_EDITION.
+    // Tested with Office 2024 - and even "Strict Open XML" uses "package".
+    rSelf.addRelation(
+        u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"_ustr,
+        u"docProps/core.xml");
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
             u"docProps/core.xml"_ustr,
             u"application/vnd.openxmlformats-package.core-properties+xml"_ustr );
@@ -694,7 +720,9 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     }
     if (!bRemoveUserInfo)
     {
-        writeElement(pCoreProps, FSNS(XML_dcterms, XML_created), xProperties->getCreationDate());
+        const util::DateTime aCreateDate = xProperties->getCreationDate();
+        if (lcl_isValidDate(aCreateDate))
+            writeElement(pCoreProps, FSNS(XML_dcterms, XML_created), aCreateDate);
         writeElement(pCoreProps, FSNS(XML_dc, XML_creator), xProperties->getAuthor());
     }
     writeElement( pCoreProps, FSNS( XML_dc, XML_description ),      xProperties->getDescription() );
@@ -712,9 +740,13 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     if (!bRemoveUserInfo)
     {
         writeElement(pCoreProps, FSNS(XML_cp, XML_lastModifiedBy), xProperties->getModifiedBy());
-        writeElement(pCoreProps, FSNS(XML_cp, XML_lastPrinted), xProperties->getPrintDate());
-        writeElement(pCoreProps, FSNS(XML_dcterms, XML_modified),
-                     xProperties->getModificationDate());
+        const util::DateTime aPrintDate = xProperties->getPrintDate();
+        if (lcl_isValidDate(aPrintDate))
+            writeElement(pCoreProps, FSNS(XML_cp, XML_lastPrinted), aPrintDate);
+
+        const util::DateTime aModifyDate = xProperties->getModificationDate();
+        if (lcl_isValidDate(aModifyDate))
+            writeElement(pCoreProps, FSNS(XML_dcterms, XML_modified), aModifyDate);
     }
     if (!bRemovePersonalInfo)
     {
@@ -953,6 +985,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     util::Date aDate;
                     util::Duration aDuration;
                     util::DateTime aDateTime;
+                    util::DateTimeWithTimezone aDateTimeTZ;
                     if ( rProp.Value >>= num )
                     {
                         // i4 - 4-byte signed integer
@@ -972,6 +1005,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     }
                     else if ( rProp.Value >>= aDateTime )
                             writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime );
+                    else if ( rProp.Value >>= aDateTimeTZ )
+                            writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTimeTZ );
                     else
                         //no other options
                         OSL_FAIL( "XMLFilterBase::writeCustomProperties unsupported value type!" );
@@ -999,7 +1034,7 @@ void XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperti
 
 // protected ------------------------------------------------------------------
 
-Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
+Reference< XInputStream > XmlFilterBase::implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const
 {
     /*  Get the input stream directly from the media descriptor, or decrypt the
         package again. The latter is needed e.g. when the document is reloaded.
@@ -1008,10 +1043,10 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
     return xDetector->extractUnencryptedPackage( rMediaDesc );
 }
 
-Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDescriptor ) const
+Reference<XStream> XmlFilterBase::implGetOutputStream( comphelper::SequenceAsHashMap& rMediaDescriptor ) const
 {
     const Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
-                                        MediaDescriptor::PROP_ENCRYPTIONDATA,
+                                        utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
                                         Sequence< NamedValue >() );
 
     if (aMediaEncData.getLength() == 0)
@@ -1024,12 +1059,12 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
     }
 }
 
-bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
+bool XmlFilterBase::implFinalizeExport(comphelper::SequenceAsHashMap& rMediaDescriptor)
 {
     bool bRet = true;
 
     const Sequence< NamedValue > aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
-                                        MediaDescriptor::PROP_ENCRYPTIONDATA,
+                                        utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
                                         Sequence< NamedValue >() );
 
     if (aMediaEncData.getLength())

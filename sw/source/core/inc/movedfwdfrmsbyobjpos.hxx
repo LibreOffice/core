@@ -51,6 +51,10 @@ class SwMovedFwdFramesByObjPos
         bool DoesRowContainMovedFwdFrame( const SwRowFrame& _rRowFrame ) const;
 
         void Clear() { maMovedFwdFrames.clear(); };
+
+        size_t Count() const { return maMovedFwdFrames.size(); }
+
+        void InvalidateAll();
 };
 
 #endif

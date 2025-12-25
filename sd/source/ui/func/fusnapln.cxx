@@ -57,7 +57,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     bool    bCreateNew = true;
 
     // Get index of snap line or snap point from the request.
-    const SfxUInt32Item* pHelpLineIndex = rReq.GetArg<SfxUInt32Item>(ID_VAL_INDEX);
+    const SfxUInt32Item* pHelpLineIndex = rReq.GetArg(ID_VAL_INDEX);
     if (pHelpLineIndex != nullptr)
     {
         nHelpLine = static_cast<sal_uInt16>(pHelpLineIndex->GetValue());

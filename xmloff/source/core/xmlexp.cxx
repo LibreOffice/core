@@ -52,6 +52,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/XMLSettingsExportContext.hxx>
@@ -1270,10 +1271,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             {
                 if (!mxGraphicStorageHandler.is())
                 {
-                    mxGraphicStorageHandler.set(
-                        getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        u"com.sun.star.comp.Svx.GraphicExportHelper"_ustr, uno::Sequence<uno::Any>(), getComponentContext()),
-                        uno::UNO_QUERY );
+                    mxGraphicStorageHandler = SvXMLGraphicHelper::Create(nullptr, SvXMLGraphicHelperMode::Write);
                     bOwnGraphicResolver = mxGraphicStorageHandler.is();
                 }
 

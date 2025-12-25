@@ -82,54 +82,6 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar
 
 OFieldDescControl::~OFieldDescControl()
 {
-    dispose();
-}
-
-void OFieldDescControl::dispose()
-{
-    // Destroy children
-    DeactivateAggregate( tpDefault );
-    DeactivateAggregate( tpRequired );
-    DeactivateAggregate( tpTextLen );
-    DeactivateAggregate( tpNumType );
-    DeactivateAggregate( tpScale );
-    DeactivateAggregate( tpLength );
-    DeactivateAggregate( tpFormat );
-    DeactivateAggregate( tpAutoIncrement );
-    DeactivateAggregate( tpBoolDefault );
-    DeactivateAggregate( tpColumnName );
-    DeactivateAggregate( tpType );
-    DeactivateAggregate( tpAutoIncrementValue );
-    m_pHelp = nullptr;
-    m_pLastFocusWindow = nullptr;
-    m_pActFocusWindow = nullptr;
-    m_xDefaultText.reset();
-    m_xRequiredText.reset();
-    m_xAutoIncrementText.reset();
-    m_xTextLenText.reset();
-    m_xNumTypeText.reset();
-    m_xLengthText.reset();
-    m_xScaleText.reset();
-    m_xFormatText.reset();
-    m_xBoolDefaultText.reset();
-    m_xColumnNameText.reset();
-    m_xTypeText.reset();
-    m_xAutoIncrementValueText.reset();
-    m_xRequired.reset();
-    m_xNumType.reset();
-    m_xAutoIncrement.reset();
-    m_xDefault.reset();
-    m_xTextLen.reset();
-    m_xLength.reset();
-    m_xScale.reset();
-    m_xFormatSample.reset();
-    m_xBoolDefault.reset();
-    m_xColumnName.reset();
-    m_xType.reset();
-    m_xAutoIncrementValue.reset();
-    m_xFormat.reset();
-    m_xContainer.reset();
-    m_xBuilder.reset();
 }
 
 OUString OFieldDescControl::BoolStringPersistent(std::u16string_view rUIString) const
@@ -894,10 +846,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     if (m_xDefault)
-    {
         m_xDefault->set_text(getControlDefault(pFieldDescr));
-        m_xDefault->save_value();
-    }
 
     if (m_xBoolDefault)
     {
@@ -937,10 +886,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     if (m_xTextLen)
-    {
         m_xTextLen->set_text(OUString::number(pFieldDescr->GetPrecision()));
-        m_xTextLen->save_value();
-    }
 
     if( m_xNumType )
     {
@@ -989,6 +935,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     // Enable/disable Controls
     bool bRead(IsReadOnly());
 
+    // Save the values that we loaded so we can detect any changes
+    iterateControls([] (OWidgetBase* pWidget)
+    {
+        if (pWidget)
+            pWidget->save_value();
+        return false;
+    });
+
     SetReadOnly( bRead );
 }
 
@@ -996,67 +950,18 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, weld::Widget&, rControl, void )
 {
     OUString strHelpText;
 
-    if (m_xTextLen && &rControl == m_xTextLen->GetWidget())
+    bool bFoundControl = iterateControls([&](OWidgetBase* pWidget)
     {
-        m_xTextLen->save_value();
-        strHelpText = m_xTextLen->GetHelp();
-    }
-    else if (m_xLength && &rControl == m_xLength->GetWidget())
-    {
-        m_xLength->save_value();
-        strHelpText = m_xLength->GetHelp();
-    }
-    else if (m_xScale && &rControl == m_xScale->GetWidget())
-    {
-        m_xScale->save_value();
-        strHelpText = m_xScale->GetHelp();
-    }
-    else if (m_xColumnName && &rControl == m_xColumnName->GetWidget())
-    {
-        m_xColumnName->save_value();
-        strHelpText = m_xColumnName->GetHelp();
-    }
-    else if (m_xDefault && &rControl == m_xDefault->GetWidget())
-    {
-        m_xDefault->save_value();
-        strHelpText = m_xDefault->GetHelp();
-    }
-    else if (m_xFormatSample && &rControl == m_xFormatSample->GetWidget())
-    {
-        m_xFormatSample->save_value();
-        strHelpText = m_xFormatSample->GetHelp();
-    }
-    else if (m_xAutoIncrementValue && &rControl == m_xAutoIncrementValue->GetWidget())
-    {
-        m_xAutoIncrementValue->save_value();
-        strHelpText = m_xAutoIncrementValue->GetHelp();
-    }
-    else if (m_xRequired && &rControl == m_xRequired->GetWidget())
-    {
-        m_xRequired->save_value();
-        strHelpText = m_xRequired->GetHelp();
-    }
-    else if (m_xNumType && &rControl == m_xNumType->GetWidget())
-    {
-        m_xNumType->save_value();
-        strHelpText = m_xNumType->GetHelp();
-    }
-    else if (m_xAutoIncrement && &rControl == m_xAutoIncrement->GetWidget())
-    {
-        m_xAutoIncrement->save_value();
-        strHelpText = m_xAutoIncrement->GetHelp();
-    }
-    else if (m_xBoolDefault && &rControl == m_xBoolDefault->GetWidget())
-    {
-        m_xBoolDefault->save_value();
-        strHelpText = m_xBoolDefault->GetHelp();
-    }
-    else if (m_xType && &rControl == m_xType->GetWidget())
-    {
-        m_xType->save_value();
-        strHelpText = m_xType->GetHelp();
-    }
-    else if (m_xFormat && &rControl == m_xFormat.get())
+        if (pWidget && &rControl == pWidget->GetWidget())
+        {
+            strHelpText = pWidget->GetHelp();
+            return true;
+        }
+        else
+            return false;
+    });
+
+    if (!bFoundControl && m_xFormat && &rControl == m_xFormat.get())
         strHelpText = DBA_RES(STR_HELP_FORMAT_BUTTON);
 
     if (!strHelpText.isEmpty() && m_pHelp)
@@ -1069,35 +974,33 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, weld::Widget&, rControl, void )
 
 IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )
 {
-    if (m_xLength && &rControl == m_xLength->GetWidget() && m_xLength->get_value_changed_from_saved())
-        CellModified(-1, m_xLength->GetPos());
-    else if (m_xTextLen && &rControl == m_xTextLen->GetWidget() && m_xTextLen->get_value_changed_from_saved())
-        CellModified(-1, m_xTextLen->GetPos());
-    else if (m_xScale && &rControl == m_xScale->GetWidget() && m_xScale->get_value_changed_from_saved())
-        CellModified(-1, m_xScale->GetPos());
-    else if (m_xColumnName && &rControl == m_xColumnName->GetWidget() && m_xColumnName->get_value_changed_from_saved())
-        CellModified(-1, m_xColumnName->GetPos());
-    else if (m_xDefault && &rControl == m_xDefault->GetWidget() && m_xDefault->get_value_changed_from_saved())
+    bool bFoundControl = iterateControls([&](OWidgetBase* pWidget)
     {
-        CellModified(-1, m_xDefault->GetPos());
+        if (pWidget && &rControl == pWidget->GetWidget())
+        {
+            if (pWidget->get_value_changed_from_saved())
+                CellModified(-1, pWidget->GetPos());
+            return true;
+        }
+        else
+            return false;
+    });
+
+    if (bFoundControl && m_xDefault && &rControl == m_xDefault->GetWidget())
         UpdateFormatSample(pActFieldDescr);
-    }
-    else if (m_xFormatSample && &rControl == m_xFormatSample->GetWidget() && m_xFormatSample->get_value_changed_from_saved())
-        CellModified(-1, m_xFormatSample->GetPos());
-    else if (m_xAutoIncrementValue && &rControl == m_xAutoIncrementValue->GetWidget() && m_xAutoIncrementValue->get_value_changed_from_saved())
-        CellModified(-1, m_xAutoIncrementValue->GetPos());
-    else if (m_xRequired && &rControl == m_xRequired->GetWidget() && m_xRequired->get_value_changed_from_saved())
-        CellModified(-1, m_xRequired->GetPos());
-    else if (m_xNumType && &rControl == m_xNumType->GetWidget() && m_xNumType->get_value_changed_from_saved())
-        CellModified(-1, m_xNumType->GetPos());
-    else if (m_xAutoIncrement && &rControl == m_xAutoIncrement->GetWidget() && m_xAutoIncrement->get_value_changed_from_saved())
-        CellModified(-1, m_xAutoIncrement->GetPos());
-    else if (m_xBoolDefault && &rControl == m_xBoolDefault->GetWidget() && m_xBoolDefault->get_value_changed_from_saved())
-        CellModified(-1, m_xBoolDefault->GetPos());
-    else if (m_xType && &rControl == m_xType->GetWidget() && m_xType->get_value_changed_from_saved())
-        CellModified(-1, m_xType->GetPos());
 
     implFocusLost(&rControl);
+}
+
+void OFieldDescControl::FlushModifiedData()
+{
+    iterateControls([&](OWidgetBase* pWidget)
+    {
+        if (pWidget && pWidget->get_value_changed_from_saved())
+            CellModified(-1, pWidget->GetPos());
+
+        return false;
+    });
 }
 
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )

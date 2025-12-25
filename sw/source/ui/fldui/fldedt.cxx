@@ -206,12 +206,12 @@ SfxTabPage* SwFieldEditDlg::CreatePage(SwFieldGroup nGroup)
                 xTabPage = SwFieldDokInfPage::Create(get_content_area(), this, pSet);
             }
             break;
-#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case SwFieldGroup::Database:
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             xTabPage = SwFieldDBPage::Create(get_content_area(), this, nullptr);
             static_cast<SwFieldDBPage*>(xTabPage.get())->SetWrtShell(*m_pSh);
-            break;
 #endif
+            break;
         case SwFieldGroup::UserVariable:
             xTabPage = SwFieldVarPage::Create(get_content_area(), this, nullptr);
             break;
@@ -300,6 +300,10 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
     SwFieldPage* pTabPage = static_cast<SwFieldPage*>(GetTabPage());
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
     SwField *pCurField = rMgr.GetCurField();
+    if (!pCurField)
+    {
+        return;
+    }
 
     if (pCurField->GetTypeId() == SwFieldTypesEnum::DocumentInfo)
         comphelper::dispatchCommand(u".uno:SetDocumentProperties"_ustr, {});

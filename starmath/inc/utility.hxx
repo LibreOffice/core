@@ -25,7 +25,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
 #include <deque>

@@ -26,6 +26,10 @@ Sub verify_testMid()
     TestUtil.AssertEqual(Mid(start:=6, string:="LibreOffice" ),            "Office", "Mid() with 2 keyword names" )
     TestUtil.AssertEqual(Mid(length:=5, start:=1, string:="LibreOffice" ), "Libre",  "Mid() with 3 keyword names" )
 
+    ' tdf#162711 - VBASupport requires banker’s rounding for integer conversions
+    TestUtil.AssertEqual(Mid("abc", 2.5, 1), "b", "Mid(""abc"", 2.5, 1)")
+    TestUtil.AssertEqual(Mid("abcd", 3.5, 1), "d", "Mid(""abcd"", 3.5, 1)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testMid", Err, Error$, Erl)

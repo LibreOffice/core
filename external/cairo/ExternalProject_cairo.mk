@@ -99,7 +99,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			$(if $(debug),-Dstrip=false,-Dstrip=true) \
 			$(if $(filter -fsanitize=%,$(CC)),-Db_lundef=false) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-Ddefault_library=static,-Ddefault_library=shared) \
-			$(if $(filter EMSCRIPTEN ANDROID iOS,$(OS)),-Dxlib=disabled -Dxcb=disabled,$(if $(filter TRUE,$(DISABLE_GUI)),-Dxlib=disabled -Dxcb=disabled,-Dxlib=enabled -Dxcb=enabled)) \
+			$(if $(filter EMSCRIPTEN ANDROID iOS MACOSX,$(OS)),-Dxlib=disabled -Dxcb=disabled,$(if $(filter TRUE,$(DISABLE_GUI)),-Dxlib=disabled -Dxcb=disabled,-Dxlib=enabled -Dxcb=enabled)) \
 			$(if $(filter iOS,$(OS)),-Dquartz=enabled) \
 			$(if $(filter iOS,$(OS)),-Dfreetype=disabled,-Dfreetype=enabled -Dfontconfig=enabled) \
 			-Dgtk_doc=false -Dtests=disabled \
@@ -108,6 +108,12 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
 			$(if $(verbose),--verbose) \
+			$(if $(filter MACOSX,$(OS)), \
+				&& install_name_tool -id @__________________________________________________OOO/libcairo-lo.2.dylib \
+					$(gb_UnpackedTarball_workdir)/cairo/builddir/src/libcairo-lo.2.dylib \
+				&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+					$(gb_UnpackedTarball_workdir)/cairo/builddir/src/libcairo-lo.2.dylib \
+			) \
 	)
 	$(call gb_Trace_EndRange,cairo,EXTERNAL)
 

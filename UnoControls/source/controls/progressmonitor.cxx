@@ -40,9 +40,9 @@ using namespace ::com::sun::star::awt;
 using ::std::vector;
 
 constexpr OUString CONTROLNAME_TEXT = u"Text"_ustr;   // identifier the control in container
-constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar";
-constexpr OUStringLiteral CONTROLNAME_BUTTON = u"Button";
-constexpr OUStringLiteral DEFAULT_BUTTONLABEL = u"Abbrechen";
+constexpr OUString CONTROLNAME_PROGRESSBAR = u"ProgressBar"_ustr;
+constexpr OUString CONTROLNAME_BUTTON = u"Button"_ustr;
+constexpr OUString DEFAULT_BUTTONLABEL = u"Abbrechen"_ustr;
 
 namespace unocontrols {
 

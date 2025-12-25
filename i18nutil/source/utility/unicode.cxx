@@ -1026,6 +1026,23 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "sa-Tutg"_ostr;
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 78)
+        case USCRIPT_BERIA_ERFE:
+            sRet = "zag-Berf"_ostr;
+            break;
+        case USCRIPT_SIDETIC:
+            sRet = "xsd-Sidt"_ostr;
+            break;
+        case USCRIPT_TAI_YO:
+            sRet = "tyj-Tayo"_ostr;
+            break;
+        case USCRIPT_TOLONG_SIKI:
+            sRet = "kru-Tols"_ostr;
+            break;
+        case USCRIPT_TRADITIONAL_HAN_WITH_LATIN:
+            sRet = "zh-Hntl"_ostr;
+            break;
+#endif
     }
     return sRet;
 }

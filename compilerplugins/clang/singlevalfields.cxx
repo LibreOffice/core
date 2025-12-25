@@ -19,6 +19,7 @@
 #include "plugin.hxx"
 
 #include "clang/AST/ParentMapContext.h"
+#include "llvm/ADT/StringExtras.h"
 
 /**
 Look for fields that are only ever assigned a single constant value.
@@ -291,7 +292,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
         if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
            return;
         if (methodDecl && methodDecl->getIdentifier()
-            && (compat::starts_with(methodDecl->getName(), "Clone") || compat::starts_with(methodDecl->getName(), "clone")))
+            && (methodDecl->getName().starts_with("Clone") || methodDecl->getName().starts_with("clone")))
            return;
         auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(parentFunction);
         if (cxxConstructorDecl && cxxConstructorDecl->isCopyOrMoveConstructor())
@@ -572,7 +573,7 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     }
     APSInt x1;
     if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
-        return compat::toString(x1, 10);
+        return llvm::toString(x1, 10);
     if (isa<CXXNullPtrLiteralExpr>(arg))
         return "0";
     return "?";

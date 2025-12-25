@@ -11,8 +11,11 @@
 
 #include <sal/config.h>
 
+#include <o3tl/intcmp.hxx>
+
 #include <algorithm>
 #include <cassert>
+#include <concepts>
 #include <limits>
 #include <type_traits>
 
@@ -62,13 +65,11 @@ template <typename T> inline constexpr T saturating_sub(T a, T b)
     }
 }
 
-template<typename T> inline
-typename std::enable_if<std::is_signed<T>::value, T>::type saturating_toggle_sign(
-    T a)
+template <std::signed_integral T> inline constexpr T saturating_toggle_sign(T a)
 {
     if (a == std::numeric_limits<T>::min())
         return std::numeric_limits<T>::max();
-    return a * -1;
+    return -a;
 }
 
 // TODO: reimplement using ckd_add/ckd_sub/ckd_mul from <stdckdint.h>, when C23 is part of C++
@@ -90,7 +91,7 @@ template<typename T> inline bool checked_sub(T a, T b, T& result)
     return !msl::utilities::SafeSubtract(a, b, result);
 }
 
-#elif (defined __GNUC__ && !defined __clang__) || (__has_builtin(__builtin_mul_overflow) && !(defined ANDROID && defined __clang__) && !(defined(__clang__) && (defined(__arm__) || defined(__i386__))))
+#elif (defined __GNUC__ && !defined __clang__) || (__has_builtin(__builtin_mul_overflow) && !(defined(__clang__) && (defined(ANDROID) || defined(__arm__) || defined(__i386__))))
 // 32-bit clang fails with undefined reference to `__mulodi4'
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
@@ -111,7 +112,7 @@ template<typename T> inline bool checked_sub(T a, T b, T& result)
 #else
 
 //https://www.securecoding.cert.org/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
-template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bool>::type checked_multiply(T a, T b, T& result)
+template<std::signed_integral T> inline bool checked_multiply(T a, T b, T& result)
 {
   if (a > 0) {  /* a is positive */
     if (b > 0) {  /* a and b are positive */
@@ -141,7 +142,7 @@ template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bo
 }
 
 //https://www.securecoding.cert.org/confluence/display/c/INT30-C.+Ensure+that+unsigned+integer+operations+do+not+wrap
-template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, bool>::type checked_multiply(T a, T b, T& result)
+template<std::unsigned_integral T> inline bool checked_multiply(T a, T b, T& result)
 {
     if (b && a > std::numeric_limits<T>::max() / b) {
         return true;/* Handle error */
@@ -153,7 +154,7 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
 }
 
 //https://www.securecoding.cert.org/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
-template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bool>::type checked_add(T a, T b, T& result)
+template<std::signed_integral T> inline bool checked_add(T a, T b, T& result)
 {
     if (((b > 0) && (a > (std::numeric_limits<T>::max() - b))) ||
         ((b < 0) && (a < (std::numeric_limits<T>::min() - b)))) {
@@ -166,7 +167,7 @@ template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bo
 }
 
 //https://www.securecoding.cert.org/confluence/display/c/INT30-C.+Ensure+that+unsigned+integer+operations+do+not+wrap
-template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, bool>::type checked_add(T a, T b, T& result)
+template<std::unsigned_integral T> inline bool checked_add(T a, T b, T& result)
 {
     if (std::numeric_limits<T>::max() - a < b) {
         return true;/* Handle error */
@@ -178,7 +179,7 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
 }
 
 //https://www.securecoding.cert.org/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
-template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bool>::type checked_sub(T a, T b, T& result)
+template<std::signed_integral T> inline bool checked_sub(T a, T b, T& result)
 {
     if ((b > 0 && a < std::numeric_limits<T>::min() + b) ||
         (b < 0 && a > std::numeric_limits<T>::max() + b)) {
@@ -191,7 +192,7 @@ template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bo
 }
 
 //https://www.securecoding.cert.org/confluence/display/c/INT30-C.+Ensure+that+unsigned+integer+operations+do+not+wrap
-template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, bool>::type checked_sub(T a, T b, T& result)
+template<std::unsigned_integral T> inline bool checked_sub(T a, T b, T& result)
 {
     if (a < b) {
         return true;
@@ -204,22 +205,19 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
 
 #endif
 
-template<typename T> constexpr std::enable_if_t<std::is_signed_v<T>, std::make_unsigned_t<T>>
-make_unsigned(T value)
+template <std::signed_integral T> constexpr std::make_unsigned_t<T> make_unsigned(T value)
 {
     assert(value >= 0);
     return value;
 }
 
-template<typename T1, typename T2> constexpr std::enable_if_t<std::is_unsigned_v<T1>, T1>
-clamp_to_unsigned(T2 value) {
-    if constexpr (std::is_unsigned_v<T2>) {
-        // coverity[dead_error_line] - suppress warning for template
-        return value <= std::numeric_limits<T1>::max() ? value : std::numeric_limits<T1>::max();
-    } else {
-        static_assert(std::is_signed_v<T2>);
-        return value < 0 ? 0 : clamp_to_unsigned<T1>(make_unsigned(value));
-    }
+template <std::unsigned_integral T1, std::integral T2> constexpr T1 clamp_to_unsigned(T2 value)
+{
+    if (IntCmp(value) < IntCmp(std::numeric_limits<T1>::min()))
+        return std::numeric_limits<T1>::min();
+    if (IntCmp(value) > IntCmp(std::numeric_limits<T1>::max()))
+        return std::numeric_limits<T1>::max();
+    return value;
 }
 
 // An implicit conversion from T2 to T1, useful in places where an explicit conversion from T2 to
@@ -229,51 +227,27 @@ template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return val
 
 // A helper for taking care of signed/unsigned comparisons in constant bounds case
 // Should avoid Coverity warnings like "cid#1618764 Operands don't affect result"
-template <typename I, I Min = std::template numeric_limits<I>::min(),
-                      I Max = std::template numeric_limits<I>::max(),
-                      std::enable_if_t<std::is_integral_v<I> && (Min <= 0) && (Max > 0), int> = 0>
+template <std::integral I, I Min = std::template numeric_limits<I>::min(),
+                           I Max = std::template numeric_limits<I>::max()>
+    requires(Min <= 0 && Max > 0)
 struct ValidRange
 {
-    using SI = std::make_signed_t<I>;
-    using UI = std::make_unsigned_t<I>;
-
-    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
-    static constexpr bool isAbove(I2 n)
+    template <std::integral I2> static constexpr bool isAbove(I2 n)
     {
-        using UI2 = std::make_unsigned_t<I2>;
-        if constexpr (static_cast<UI2>(std::numeric_limits<I2>::max()) <= static_cast<UI>(Max))
-            return false;
-        else if constexpr (std::is_signed_v<I> == std::is_signed_v<I2>)
-            return n > Max;
-        else if constexpr (std::is_signed_v<I>) // I2 is unsigned
-            return n > static_cast<UI>(Max);
-        else // I is unsigned, I2 is signed
-            return n > 0 && static_cast<UI2>(n) > Max;
+        return IntCmp(n) > IntCmp(Max);
     }
 
-    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
-    static constexpr bool isBelow(I2 n)
+    template <std::integral I2> static constexpr bool isBelow(I2 n)
     {
-        using SI2 = std::make_signed_t<I2>;
-        if constexpr (static_cast<SI2>(std::numeric_limits<I2>::min()) >= static_cast<SI>(Min))
-            return false; // Covers all I2 unsigned
-        else if constexpr (std::is_signed_v<I> == std::is_signed_v<I2>)
-            return n < Min;
-        else // I is unsigned, I2 is signed
-            return n < 0;
+        return IntCmp(n) < IntCmp(Min);
     }
 
-    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
-    static constexpr bool isOutside(I2 n)
+    template <std::integral I2> static constexpr bool isOutside(I2 n)
     {
         return isAbove(n) || isBelow(n);
     }
 
-    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
-    static constexpr bool isInside(I2 n)
-    {
-        return !isOutside(n);
-    }
+    template <std::integral I2> static constexpr bool isInside(I2 n) { return !isOutside(n); }
 };
 
 }

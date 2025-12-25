@@ -30,7 +30,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sax/fastattribs.hxx>
-
+#include <oox/core/xmlfilterbase.hxx>
 #include <sal/log.hxx>
 
 using namespace ::oox::core;
@@ -133,9 +133,13 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             return new EffectPropertiesContext(*this, mrTextCharacterProperties.getEffectProperties());
         break;
         case A_TOKEN( highlight ):  // CT_Color
-            return new ColorContext(*this, mrTextCharacterProperties.maHighlightColor);
+            return new ColorContext(*this,
+                    &mrTextCharacterProperties.maHighlightOOXColor,
+                    &mrTextCharacterProperties.maHighlightColor);
         case W_TOKEN( highlight ):
-            mrTextCharacterProperties.maHighlightColor = rAttribs.getHighlightColor(W_TOKEN(val));
+            mrTextCharacterProperties.maHighlightOOXColor = rAttribs.getHighlightColor(W_TOKEN(val));
+            mrTextCharacterProperties.maHighlightColor =
+                mrTextCharacterProperties.maHighlightOOXColor.createComplexColor(getFilter().getGraphicHelper(), 0);
             break;
         // EG_TextUnderlineLine
         case A_TOKEN( uLnTx ):      // CT_TextUnderlineLineFollowText
@@ -150,7 +154,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             mrTextCharacterProperties.moUnderlineFillFollowText = true;
         break;
         case A_TOKEN( uFill ):      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
-            return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor );
+            return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor, nullptr);
 
         // CT_FontCollection
         case A_TOKEN( latin ):      // CT_TextFont
@@ -238,7 +242,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             {
                 oox::drawingml::Color theColor;
                 theColor.setSrgbClr(colorAttrib.value());
-                mrTextCharacterProperties.maUnderlineColor = std::move(theColor);
+                mrTextCharacterProperties.maUnderlineColor = theColor.getComplexColor();
             }
             break;
         }

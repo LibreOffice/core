@@ -49,19 +49,21 @@ namespace {
 class TextParagraphContext : public ContextHandler2
 {
 public:
-    TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara );
+    TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara, uint16_t& rListNumberingMask );
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 protected:
     TextParagraph& mrParagraph;
+    uint16_t& mrListNumberingMask;
 };
 
 }
 
-TextParagraphContext::TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara )
+TextParagraphContext::TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara, uint16_t& rListNumberingMask )
 : ContextHandler2( rParent )
 , mrParagraph( rPara )
+, mrListNumberingMask( rListNumberingMask )
 {
     mbEnableTrimSpace = false;
 }
@@ -94,7 +96,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         case A_TOKEN( pPr ):
         case W_TOKEN( pPr ):
             mrParagraph.setHasProperties();
-            return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties() );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties(), &mrListNumberingMask );
         case A_TOKEN( endParaRPr ):
             return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );
         case W_TOKEN( sdt ):
@@ -177,6 +179,7 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
 TextBodyContext::TextBodyContext( ContextHandler2Helper const & rParent, TextBody& rTextBody )
 : ContextHandler2( rParent )
 , mrTextBody( rTextBody )
+, mListNumberingMask(0)
 {
 }
 
@@ -201,7 +204,7 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
             return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
         case A_TOKEN( p ):          // CT_TextParagraph
         case W_TOKEN( p ):
-            return new TextParagraphContext( *this, mrTextBody.addParagraph() );
+            return new TextParagraphContext( *this, mrTextBody.addParagraph(), mListNumberingMask );
         case W_TOKEN( sdt ):
         case W_TOKEN( sdtContent ):
             return this;

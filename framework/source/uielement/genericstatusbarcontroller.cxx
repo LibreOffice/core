@@ -40,14 +40,14 @@ namespace framework
 GenericStatusbarController::GenericStatusbarController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rxFrame,
-    const Reference< ui::XStatusbarItem >& rxItem,
+    const rtl::Reference<StatusbarItem>& rpItem,
     AddonStatusbarItemData *pItemData )
     : svt::StatusbarController( rxContext, rxFrame, OUString(), 0 )
     , m_bEnabled( false )
     , m_bOwnerDraw( false )
     , m_pItemData( pItemData )
 {
-    m_xStatusbarItem = rxItem;
+    m_xStatusbarItem = rpItem;
     if ( m_xStatusbarItem.is() )
     {
         assert(m_aCommandURL.pData);

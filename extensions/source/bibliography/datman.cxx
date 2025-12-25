@@ -46,7 +46,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include "datman.hxx"
 #include "bibresid.hxx"
 #include "bibmod.hxx"

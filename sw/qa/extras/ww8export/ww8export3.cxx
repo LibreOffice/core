@@ -42,7 +42,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr, u"MS Word 97"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr)
     {
     }
 };
@@ -191,7 +191,7 @@ DECLARE_WW8EXPORT_TEST(testGutterLeft, "gutter-left.doc")
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
     createSwDoc("gutter-top.doc");
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
@@ -221,7 +221,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128501)
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeDescriptor->getShapeType());
 
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOC);
     xShapeDescriptor = getShape(1);
     // Without the fix in place, this test would have failed with
     // - Expected: FrameShape
@@ -248,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
                                                                 uno::UNO_QUERY);
     xTextContentAppend->appendTextContent(xFootnote, {});
 
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     xFootnotesSupplier.set(mxComponent, uno::UNO_QUERY);
     sal_uInt16 nExpected = style::NumberingType::ARABIC_ZERO;
     auto nActual = getProperty<sal_uInt16>(xFootnotesSupplier->getFootnoteSettings(), u"NumberingType"_ustr);
@@ -278,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
                                                                 uno::UNO_QUERY);
     xTextContentAppend->appendTextContent(xFootnote, {});
 
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     xFootnotesSupplier.set(mxComponent, uno::UNO_QUERY);
     sal_uInt16 nExpected = style::NumberingType::SYMBOL_CHICAGO;
     auto nActual = getProperty<sal_uInt16>(xFootnotesSupplier->getFootnoteSettings(), u"NumberingType"_ustr);
@@ -316,7 +316,8 @@ DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138302_restartNumbering)
 {
-    loadAndReload("tdf138302_restartNumbering.odt");
+    createSwDoc("tdf138302_restartNumbering.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
@@ -341,7 +342,8 @@ DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122460_header)
 {
-    loadAndReload("tdf122460_header.odt");
+    createSwDoc("tdf122460_header.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
     uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
@@ -408,7 +410,8 @@ DECLARE_WW8EXPORT_TEST(testTdf135672_tableGrows, "tdf135672_tableGrows.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
 {
-    loadAndReload("tdf79435_legacyInputFields.docx");
+    createSwDoc("tdf79435_legacyInputFields.docx");
+    saveAndReload(TestFilter::DOC);
     //using .docx input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(5), 4), u"Bookmark"_ustr);
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
@@ -462,7 +465,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134264)
 {
-    loadAndReload("tdf134264.docx");
+    createSwDoc("tdf134264.docx");
+    saveAndReload(TestFilter::DOC);
     // Without the fix in place, ADDRESSBLOCK fields would have been lost after RT
     CPPUNIT_ASSERT_EQUAL(u"MF"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u"M19"_ustr, getParagraph(2)->getString());
@@ -503,7 +507,8 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134948)
 {
-    loadAndReload("tdf134948.odt");
+    createSwDoc("tdf134948.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Only 1 paragraph", 1, getParagraphs());
@@ -511,7 +516,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134948)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132726)
 {
-    loadAndReload("tdf132726.odt");
+    createSwDoc("tdf132726.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"What sentence has a yellow background? "_ustr);
@@ -523,7 +529,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132726)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement)
 {
-    loadAndReload("tdf127316_autoEscapement.odt");
+    createSwDoc("tdf127316_autoEscapement.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, u"Normal text "_ustr), u"CharEscapement"_ustr), 0);
@@ -537,7 +544,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement2)
 {
-    loadAndReload("tdf127316_autoEscapement2.odt");
+    createSwDoc("tdf127316_autoEscapement2.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, u"Base1"_ustr), u"CharEscapement"_ustr), 0);
@@ -551,7 +559,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120412_proportionalEscapement)
 {
-    loadAndReload("tdf120412_proportionalEscapement.odt");
+    createSwDoc("tdf120412_proportionalEscapement.odt");
+    saveAndReload(TestFilter::DOC);
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 2, u"Base"_ustr), u"CharEscapement"_ustr), 0);
     // Import was limiting to 100%. And export based the position on the original height, not the proportional height.
@@ -571,7 +580,8 @@ DECLARE_WW8EXPORT_TEST(testTdf116194, "tdf116194.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121111_fillStyleNone)
 {
-    loadAndReload("tdf121111_fillStyleNone.docx");
+    createSwDoc("tdf121111_fillStyleNone.docx");
+    saveAndReload(TestFilter::DOC);
     uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Numbering - First level"_ustr),
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(Color(0xb8cce4), getProperty<Color>(xStyle, u"ParaBackColor"_ustr));//R:184 G:204 B:228
@@ -584,7 +594,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121111_fillStyleNone)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128608_fillStyleNoneB)
 {
-    loadAndReload("tdf128608_fillStyleNoneB.odt");
+    createSwDoc("tdf128608_fillStyleNoneB.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xText(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xText, u"ParaBackColor"_ustr));
@@ -633,7 +644,8 @@ DECLARE_WW8EXPORT_TEST(testTdf123433_fillStyleStop, "tdf123433_fillStyleStop.doc
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127862_pageFillStyle)
 {
-    loadAndReload("tdf127862_pageFillStyle.odt");
+    createSwDoc("tdf127862_pageFillStyle.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
@@ -657,7 +669,8 @@ DECLARE_WW8EXPORT_TEST(testTdf128608_tableParaBackColor, "tdf128608_tableParaBac
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117217_largeTableBackgrounds)
 {
-    loadAndReload("tdf117217_largeTableBackgrounds.odt");
+    createSwDoc("tdf117217_largeTableBackgrounds.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -671,7 +684,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117217_largeTableBackgrounds)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf94009_zeroPgMargin)
 {
-    loadAndReload("tdf94009_zeroPgMargin.odt");
+    createSwDoc("tdf94009_zeroPgMargin.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> defaultStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                      uno::UNO_QUERY);
@@ -695,7 +709,8 @@ DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf1207
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 {
-    loadAndReload("tdf129522_removeShadowStyle.odt");
+    createSwDoc("tdf129522_removeShadowStyle.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
     uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName(u"Shadow"_ustr), uno::UNO_QUERY_THROW);
@@ -786,7 +801,8 @@ DECLARE_WW8EXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126708emf)
 {
-    loadAndReload("tdf126708_containsemf.odt");
+    createSwDoc("tdf126708_containsemf.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xShape = getShape(1);
@@ -806,7 +822,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126708emf)
 
 CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 {
-    loadAndReload("btlr-frame.odt");
+    createSwDoc("btlr-frame.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -870,7 +887,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     // Then make sure the section's gutter is still RTL:
     // Without the accompanying fix in place, this test would have failed as the SPRM was missing.
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     verify();
 }
 
@@ -982,7 +999,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104239_chapterNumberTortureTest)
 
     createSwDoc("tdf104239_chapterNumberTortureTest.doc");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOC);
     verify(/*bIsExport*/ true);
 }
 
@@ -1053,7 +1070,8 @@ DECLARE_WW8EXPORT_TEST(testTdf134570, "tdf134570.doc")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136814)
 {
-    loadAndReload("tdf136814.odt");
+    createSwDoc("tdf136814.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nBorderDistance = static_cast<sal_Int32>(106);
@@ -1071,7 +1089,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79186_noLayoutInCell)
     // Note: there is no direct equivalent layout for this in MSO format,
     // so there has to be some give and take as the most suitable choice is selected.
 
-    loadAndReload("tdf79186_noLayoutInCell.odt");
+    createSwDoc("tdf79186_noLayoutInCell.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     // CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -1123,14 +1142,15 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     createSwDoc("clearing-break.doc");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142840)
 {
-    loadAndReload("tdf142840.odt");
+    createSwDoc("tdf142840.odt");
+    saveAndReload(TestFilter::DOC);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);

@@ -307,6 +307,10 @@ class MarkdownReader final : public Reader
 {
     friend class SwReader;
     virtual ErrCodeMsg Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+
+    /// Parse FilterOptions passed to the importer.
+    void SetupFilterOptions(SwDoc& rDoc);
+
 public:
     MarkdownReader(): Reader() {}
 };

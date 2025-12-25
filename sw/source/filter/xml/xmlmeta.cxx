@@ -80,22 +80,21 @@ enum SvXMLTokenMapAttrs
 struct statistic {
     SvXMLTokenMapAttrs token;
     const char* name;
-    sal_uInt16 SwDocStat::* target16;
-    sal_uLong  SwDocStat::* target32; /* or 64, on LP64 platforms */
+    sal_uInt32  SwDocStat::* target32;
 };
 
 }
 
-const struct statistic s_stats [] = {
-    { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTable, nullptr  },
-    { XML_TOK_META_STAT_IMAGE, "ImageCount",     &SwDocStat::nGrf, nullptr  },
-    { XML_TOK_META_STAT_OLE,   "ObjectCount",    &SwDocStat::nOLE, nullptr  },
-    { XML_TOK_META_STAT_PAGE,  "PageCount",      nullptr, &SwDocStat::nPage },
-    { XML_TOK_META_STAT_PARA,  "ParagraphCount", nullptr, &SwDocStat::nPara },
-    { XML_TOK_META_STAT_WORD,  "WordCount",      nullptr, &SwDocStat::nWord },
-    { XML_TOK_META_STAT_CHAR,  "CharacterCount", nullptr, &SwDocStat::nChar },
-    { XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR,  "NonWhitespaceCharacterCount", nullptr, &SwDocStat::nCharExcludingSpaces },
-    { XML_TOK_META_STAT_END,   nullptr,                nullptr, nullptr                 }
+const struct statistic s_stats[] = {
+    { XML_TOK_META_STAT_TABLE,                 "TableCount",                    &SwDocStat::nTable },
+    { XML_TOK_META_STAT_IMAGE,                 "ImageCount",                    &SwDocStat::nGrf   },
+    { XML_TOK_META_STAT_OLE,                   "ObjectCount",                   &SwDocStat::nOLE   },
+    { XML_TOK_META_STAT_PAGE,                  "PageCount",                     &SwDocStat::nPage  },
+    { XML_TOK_META_STAT_PARA,                  "ParagraphCount",                &SwDocStat::nPara  },
+    { XML_TOK_META_STAT_WORD,                  "WordCount",                     &SwDocStat::nWord  },
+    { XML_TOK_META_STAT_CHAR,                  "CharacterCount",                &SwDocStat::nChar  },
+    { XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR, "NonWhitespaceCharacterCount",    &SwDocStat::nCharExcludingSpaces },
+    { XML_TOK_META_STAT_END,                   nullptr,                         nullptr            }
 };
 
 void SwXMLImport::SetStatistics(
@@ -117,13 +116,8 @@ void SwXMLImport::SetStatistics(
             if (rStat.Name.equalsAscii(pStat->name)) {
                 sal_Int32 val = 0;
                 if (rStat.Value >>= val) {
-                    if (pStat->target16 != nullptr) {
-                        aDocStat.*(pStat->target16)
-                            = o3tl::narrowing<sal_uInt16> (val);
-                    } else {
-                        aDocStat.*(pStat->target32)
-                            = static_cast<sal_uInt32> (val);
-                    }
+                    aDocStat.*(pStat->target32)
+                        = static_cast<sal_uInt32> (val);
                     nTokens |= pStat->token;
                 } else {
                     OSL_FAIL("SwXMLImport::SetStatistics: invalid entry");

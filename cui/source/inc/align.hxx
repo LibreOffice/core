@@ -42,7 +42,8 @@ enum VerticalAlign {
 #include <svtools/valueset.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/frmdirlbox.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxJustifyMethodItem;
 

@@ -382,7 +382,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
 }
 
 TextParagraphProperties::TextParagraphProperties()
-: mnLevel( 0 )
+: mnLevel( 0 ), mbRestartNumbering( false )
 {
 }
 
@@ -407,6 +407,8 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
         moParaAdjust = rSourceProps.moParaAdjust;
     if( rSourceProps.maLineSpacing.bHasValue )
         maLineSpacing = rSourceProps.maLineSpacing;
+    if( rSourceProps.mbRestartNumbering )
+        mbRestartNumbering = rSourceProps.mbRestartNumbering;
 }
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
@@ -420,7 +422,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     if ( maBulletList.mnNumberingType.hasValue() )
     {
         maBulletList.mnNumberingType >>= nNumberingType;
-        aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, getLevel() );
+        if (aPropSet.hasProperty(PROP_NumberingLevel))
+            aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, getLevel() );
     }
     else if ( pMasterBuList && pMasterBuList->mnNumberingType.hasValue() )
         pMasterBuList->mnNumberingType >>= nNumberingType;
@@ -494,6 +497,9 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     }
     if ( noParaLeftMargin )
         aPropSet.setProperty( PROP_ParaLeftMargin, *noParaLeftMargin);
+    else // Use 0 as default left margin
+        aPropSet.setProperty<sal_Int32>(PROP_ParaLeftMargin, 0);
+
     if ( noFirstLineIndentation )
     {
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
@@ -530,6 +536,11 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     else
     {
         aPropSet.setProperty( PROP_ParaLineSpacing, css::style::LineSpacing( css::style::LineSpacingMode::PROP, 100 ));
+    }
+
+    if ( mbRestartNumbering )
+    {
+        aPropSet.setProperty( PROP_ParaIsNumberingRestart, true);
     }
 }
 

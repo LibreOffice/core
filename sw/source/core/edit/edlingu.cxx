@@ -233,8 +233,7 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
     }
 
     pCursor = m_pSh->GetCursor();
-    if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-        pCursor->Exchange();
+    pCursor->Normalize();
 
     m_oStart.emplace(*pCursor->GetPoint());
     m_oEnd.emplace(*pCursor->GetMark());
@@ -319,8 +318,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         {
             pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
-            if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-                pCursor->Exchange();
+            pCursor->Normalize();
             m_oStart.emplace( *pCursor->GetPoint() );
             m_oEnd.emplace( *pCursor->GetMark() );
             m_oCurr.emplace( *m_oStart );
@@ -382,8 +380,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         {
             pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
-            if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-                pCursor->Exchange();
+            pCursor->Normalize();
             m_oStart.emplace( *pCursor->GetPoint() );
             m_oEnd.emplace( *pCursor->GetMark() );
             m_oCurr.emplace( *m_oStart );
@@ -482,8 +479,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         {
             pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
-            if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-                pCursor->Exchange();
+            pCursor->Normalize();
             m_oEnd.emplace( *pCursor->End() );
             pCursor->SetMark();
             --GetCursorCnt();
@@ -600,8 +596,7 @@ void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
 {
     SwPaM *pCursor = GetCursor();
     MakeFindRange( eStart, eEnd, pCursor );
-    if( *pCursor->GetPoint() > *pCursor->GetMark() )
-        pCursor->Exchange();
+    pCursor->Normalize();
 }
 
 void SwEditShell::SpellStart(
@@ -1336,8 +1331,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         {
             pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
-            if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-                pCursor->Exchange();
+            pCursor->Normalize();
             m_oStart.emplace( *pCursor->GetPoint() );
             m_oEnd.emplace( *pCursor->GetMark() );
             m_oCurr.emplace( *m_oStart );
@@ -1353,10 +1347,8 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         // To fill the spell portions the beginning of the sentence has to be found
         SwPaM *pCursor = pMySh->GetCursor();
         // set the mark to the right if necessary
-        if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-            pCursor->Exchange();
+        pCursor->Normalize();
         // the cursor has to be collapsed on the left to go to the start of the sentence - if sentence ends inside of the error
-        pCursor->DeleteMark();
         pCursor->SetMark();
         bool bStartSent = pMySh->GoStartSentence();
         SpellContentPositions aDeletedRedlines = lcl_CollectDeletedRedlines(pMySh);
@@ -1373,10 +1365,8 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         // save the end position of the error to continue from here
         SwPosition aSaveStartPos = *pCursor->End();
         // determine the end of the current sentence
-        if ( *pCursor->GetPoint() < *pCursor->GetMark() )
-            pCursor->Exchange();
+        pCursor->Normalize(false);
         // again collapse to start marking after the end of the error
-        pCursor->DeleteMark();
         pCursor->SetMark();
 
         pMySh->GoEndSentence();
@@ -1415,8 +1405,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
                 pMySh->GetDoc()->Spell(*pCursor, m_xSpeller, nullptr, nullptr, false,
                                        pMySh->GetLayout())
                     >>= xSpellRet;
-                if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-                    pCursor->Exchange();
+                pCursor->Normalize();
                 m_oCurr.emplace( *pCursor->GetPoint() );
                 m_oCurrX.emplace( *pCursor->GetMark() );
 
@@ -1452,8 +1441,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
             // go to the end of sentence as the grammar check returned it
             // at this time the Point is behind the grammar error
             // and the mark points to the sentence end as
-            if ( *pCursor->GetPoint() < *pCursor->GetMark() )
-                pCursor->Exchange();
+            pCursor->Normalize(false);
         }
 
         // the part between the last error and the end of the sentence has to be added
@@ -1562,8 +1550,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
     else
     {
         SwPaM *pCursor = GetSh()->GetCursor();
-        if ( *pCursor->GetPoint() > *pCursor->GetMark() )
-            pCursor->Exchange();
+        pCursor->Normalize();
         // save the start and end positions
         SwPosition aStart(*pCursor->GetPoint());
         SwPosition aEnd(*pCursor->GetMark());

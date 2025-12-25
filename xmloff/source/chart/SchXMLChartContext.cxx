@@ -29,7 +29,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -48,7 +48,7 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -56,6 +56,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -68,7 +69,7 @@ namespace
 {
 
 void lcl_setRoleAtLabeledSequence(
-    const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq,
+    const uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq,
     const OUString &rRole )
 {
     // set role of sequence
@@ -276,12 +277,13 @@ void setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, O
 
                         if (xProvider.is())
                         {
-                            if (bHasDataPilotSource)
+                            chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider = bHasDataPilotSource ?
+                                    dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xProvider.get()) : nullptr;
+                            if (pPivotTableDataProvider)
                             {
-                                Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xProvider, uno::UNO_QUERY);
-                                xPivotTableDataProvider->setPivotTableName(sDataPilotSource);
+                                pPivotTableDataProvider->setPivotTableName(sDataPilotSource);
                                 xDataReceiver->attachDataProvider(xProvider);
-                                bHasOwnData = !xPivotTableDataProvider->hasPivotTable();
+                                bHasOwnData = !pPivotTableDataProvider->hasPivotTable();
                             }
                             else
                             {
@@ -691,10 +693,9 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         OUString aChartOleObjectName;
         if( xNewDoc.is() )
         {
-            utl::MediaDescriptor aMediaDescriptor( xNewDoc->getArgs() );
+            comphelper::SequenceAsHashMap aMediaDescriptor(xNewDoc->getArgs());
 
-            utl::MediaDescriptor::const_iterator aIt(
-                aMediaDescriptor.find( u"HierarchicalDocumentName"_ustr));
+            auto aIt(aMediaDescriptor.find(u"HierarchicalDocumentName"_ustr));
             if( aIt != aMediaDescriptor.end() )
             {
                 aChartOleObjectName = (*aIt).second.get< OUString >();

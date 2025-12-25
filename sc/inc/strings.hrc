@@ -448,6 +448,10 @@
 
 #define STR_CONTENT_WITH_UNKNOWN_ENCRYPTION NC_("STR_CONTENT_WITH_UNKNOWN_ENCRYPTION", "Document contains DRM content that is encrypted with an unknown encryption method. Only the un-encrypted content will be shown.")
 
+#define STR_TRACK_CHANGES_INFOBAR_TITLE NC_("STR_TRACK_CHANGES_INFOBAR_TITLE", "Track Changes")
+#define STR_DOCUMENT_HAS_CHANGES NC_("STR_DOCUMENT_HAS_CHANGES", "Document contains tracked changes and recording is enabled.")
+#define STR_DOCUMENT_TRACKS_CHANGES NC_("STR_DOCUMENT_TRACKS_CHANGES", "Recording of changes is enabled.")
+
 #define STR_AUTOCALC_OFF                            NC_("STR_AUTOCALC_OFF", "AutoCalculate: Off\nClick to enable.")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

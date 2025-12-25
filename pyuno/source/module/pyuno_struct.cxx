@@ -188,7 +188,7 @@ static int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
     try
     {
         Runtime runtime;
-        Any val= runtime.pyObject2Any(value, ACCEPT_UNO_ANY);
+        Any val= runtime.pyObject2Any(value);
 
         OUString attrName( OUString::createFromAscii( name ) );
         {

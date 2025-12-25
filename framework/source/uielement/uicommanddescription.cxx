@@ -452,15 +452,8 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
             if ( m_xGenericUICommands.is() )
             {
                 // Create concat list of supported user interface commands of the module
-                Sequence< OUString > aGenericNameSeq = m_xGenericUICommands->getElementNames();
-                sal_uInt32 nCount1 = aNameSeq.getLength();
-                sal_uInt32 nCount2 = aGenericNameSeq.getLength();
-
-                aNameSeq.realloc( nCount1 + nCount2 );
-                OUString* pNameSeq = aNameSeq.getArray();
-                const OUString* pGenericSeq = aGenericNameSeq.getConstArray();
-                for ( sal_uInt32 i = 0; i < nCount2; i++ )
-                    pNameSeq[nCount1+i] = pGenericSeq[i];
+                aNameSeq = comphelper::concatSequences(aNameSeq,
+                                                       m_xGenericUICommands->getElementNames());
             }
 
             return aNameSeq;

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAX_TEST_SAX_FACTORY_HXX
-#define INCLUDED_SAX_TEST_SAX_FACTORY_HXX
+#pragma once
 
 #include <rtl/strbuf.hxx>
 
@@ -74,7 +73,5 @@ Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw();
             return; \
         }\
         ((void)0)
-
-#endif // INCLUDED_SAX_TEST_SAX_FACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

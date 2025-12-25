@@ -27,6 +27,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xgrscit.hxx>
 #include <cuitabarea.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <unotools/pathoptions.hxx>
 
@@ -273,17 +274,17 @@ bool SvxAreaTabPage::FillItemSet_Impl( SfxItemSet* rAttrs)
 
 OUString SvxAreaTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString toggleButton[] = { u"btnnone"_ustr,    u"btncolor"_ustr, u"btngradient"_ustr,     u"btnbitmap"_ustr,
                                 u"btnpattern"_ustr, u"btnhatch"_ustr, u"btnusebackground"_ustr };
 
     for (const auto& toggle : toggleButton)
     {
         if (const auto pString = m_xBuilder->weld_toggle_button(toggle))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )

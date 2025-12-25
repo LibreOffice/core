@@ -19,8 +19,17 @@
 
 #include <SqlNameEdit.hxx>
 
+#include <core_resource.hxx>
+
 namespace dbaui
 {
+    OWidgetBase::OWidgetBase(weld::Widget *pWidget, TranslateId pHelpId, short nPosition)
+        : m_pWidget(pWidget)
+        , m_strHelpText(DBA_RES(pHelpId))
+        , m_nPos(nPosition)
+    {
+    }
+
     static bool isCharOk(sal_Unicode _cChar,bool _bFirstChar, std::u16string_view _sAllowedChars)
     {
         return  (

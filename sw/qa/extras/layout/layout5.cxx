@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf92714_TOC_pageBreak)
     SfxDispatcher& rDispatcher = *pView->GetViewFrame().GetDispatcher();
     rDispatcher.Execute(FN_REMOVE_CUR_TOX);
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
@@ -1124,7 +1124,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf121509)
     aNewAnch.SetAnchor(aCursor.Start());
     CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
 
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     // The second part: check if the reloaded doc has flys inside a fly
     // FIXME: if we use 'saveAndReload' or 'loadFromURL' here, it fails with
@@ -1913,7 +1913,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167526)
     }
 
     // DOCX roundtrip:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // check layout
     {
@@ -2029,7 +2029,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167540)
     verify_me();
 
     // DOCX roundtrip:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     verify_me();
 }
@@ -2113,6 +2113,224 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf72341GrowAllScripts)
         = getXPath(pXmlDoc, "//SwLineLayout/SwMultiPortion[2]", "width").toInt32();
 
     CPPUNIT_ASSERT_GREATER(nWidthAlephInitial, nWidthAlephResized);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168858)
+{
+    // Both test documents have no content outside of hidden sections.
+    // Each test checks, that the document loads OK, sections in the document load with correct
+    // conditions, the layout has nothing except a section on a single page, and the section is
+    // hidden (height is 0). The test repeats after save-and-reload. FODT format is used for save,
+    // because for ODT, the schema check fails for unknown "text:is-hidden" attribute in section
+    // (used as cache; written in XMLSectionExport::ExportRegularSectionStart; handled on import
+    // in XMLSectionImportContext::ProcessAttributes).
+
+    // 1. A single section, with a condition that hides it
+    {
+        createSwDoc("tdf168858_single_hidden_section.fodt");
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        // Before the fix, this was "0", because the condition was set to not hide the last section:
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 1']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 1']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 1']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 1']/body/*[2]", "section");
+        assertXPath(pXmlDoc, "//page['pass 1']/body/section", "formatName", u"abc");
+        // Before the fix, this was 276 - i.e., the frame wasn't hidden:
+        assertXPath(pXmlDoc, "//page['pass 1']/body/section/infos/bounds", "height", u"0");
+    }
+    {
+        saveAndReload(TestFilter::FODT);
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 2']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 2']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 2']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 2']/body/*[2]", "section");
+        assertXPath(pXmlDoc, "//page['pass 2']/body/section", "formatName", u"abc");
+        assertXPath(pXmlDoc, "//page['pass 2']/body/section/infos/bounds", "height", u"0");
+    }
+
+    // 2. A conditionally hidden section inside another hidden section
+    {
+        createSwDoc("tdf168858_nested_hidden_section.fodt");
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+        aSect = xTextSections->getByName(u"def"_ustr);
+        // Before the fix, this was "0", because the condition was set to not hide the last section:
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 3']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 3']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 3']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 3']/body/*[2]", "section");
+        // The inner section replaces the whole area of the outer section, so there's no frame for
+        // the outer section:
+        assertXPath(pXmlDoc, "//page['pass 3']/body/section", "formatName", u"def");
+        // Even before the fix, this was hidden:
+        assertXPath(pXmlDoc, "//page['pass 3']/body/section/infos/bounds", "height", u"0");
+    }
+    {
+        saveAndReload(TestFilter::FODT);
+        Scheduler::ProcessEventsToIdle(); // Recalculate conditions
+        auto xTextSections
+            = mxComponent.queryThrow<text::XTextSectionsSupplier>()->getTextSections();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextSections->getElementNames().getLength());
+
+        auto aSect = xTextSections->getByName(u"abc"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+        aSect = xTextSections->getByName(u"def"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"\"\" EQ \"\""_ustr, getProperty<OUString>(aSect, u"Condition"_ustr));
+
+        auto pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//page['pass 4']", 1);
+        assertXPathChildren(pXmlDoc, "//page['pass 4']/body", 2);
+        assertXPathNodeName(pXmlDoc, "//page['pass 4']/body/*[1]", "infos");
+        assertXPathNodeName(pXmlDoc, "//page['pass 4']/body/*[2]", "section");
+        // The inner section replaces the whole area of the outer section, so there's no frame for
+        // the outer section:
+        assertXPath(pXmlDoc, "//page['pass 4']/body/section", "formatName", u"def");
+        assertXPath(pXmlDoc, "//page['pass 4']/body/section/infos/bounds", "height", u"0");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718)
+{
+    // A 13-line field as the lone content of a paragraph in a two-column section:
+    createSwDoc("multiline-field-in-columnar-section.fodt");
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+
+    // The problem was, that layout refused to split the multiline field across the columns, which
+    // resulted in a layout loop, ending up in a new page creation, where that section had height
+    // equal to zero (invisible). The interesting part is, that splitting of the field, which is
+    // reasonable, is later undone currently; but that is a separate issue (related to orphan and
+    // widow control).
+
+    // Check that there is only one page, it has the leading paragraph, the section, and the
+    // trailing paragraph:
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPathChildren(pXmlDoc, "//page/body", 4);
+    assertXPathNodeName(pXmlDoc, "//page/body/*[1]", "infos");
+    assertXPathNodeName(pXmlDoc, "//page/body/*[2]", "txt");
+    assertXPathNodeName(pXmlDoc, "//page/body/*[3]", "section");
+    assertXPathNodeName(pXmlDoc, "//page/body/*[4]", "txt");
+
+    // Check that the section's height is not zero (which it was before the fix). Currently, in my
+    // testing it is 3588. This height is likely to change at some point, when the split will not
+    // be undone, and lines 8-13 of the field will end up in column 2; then it will be around 1932:
+    auto height = getXPath(pXmlDoc, "//page/body/section/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1500), height);
+    CPPUNIT_ASSERT_LESS(sal_Int32(4000), height);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169158)
+{
+    // A table with vertical-align="middle" in a fly anchored at page:
+    createSwDoc("cell-vertical-align-middle-in-fly-at-page.fodt");
+    auto pXmlDoc = parseLayoutDump(); // Intentionally no Scheduler::ProcessEventsToIdle
+
+    // The problem was, that layout didn't reformat objects at page, when the non-default
+    // alignment invalidated cells in tables in at-page fly in SwContentNotify::ImplDestroy.
+
+    // Check that the text in the cell is aligned correctly:
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page/anchored/fly/tab/row/cell/infos/bounds", "top", u"1985");
+    // Without the fix, this would fail with
+    // - Expected: 2698
+    // - Actual  : 2043
+    assertXPath(pXmlDoc, "//page/anchored/fly/tab/row/cell/txt/infos/bounds", "top", u"2698");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169320)
+{
+    // A list with one item hidden by usual hidden text property, and another having a hidden
+    // paragraph mark:
+    createSwDoc("tdf169320-list_item_hidden_by_para_mark.fodt");
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//body/txt", 5);
+
+    // This node has a redline
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[1]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[1]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[1]", u"item 1 added text");
+    assertXPath(pXmlDoc, "//body/txt[1]//SwFieldPortion", "expand", u"1.");
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[2]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[2]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[2]", u"item 2");
+    assertXPath(pXmlDoc, "//body/txt[2]//SwFieldPortion", "expand", u"2.");
+
+    // Compare the layout structure of a hidden paragraph (txt[3]) to a merged one (txt[5]).
+
+    // This is hidden:
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getXPath(pXmlDoc, "//body/txt[3]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[3]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[3]", u"item 3");
+    assertXPath(pXmlDoc, "//body/txt[3]//SwFieldPortion", 0);
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[4]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[4]/merged", 0);
+    assertXPathContent(pXmlDoc, "//body/txt[4]", u"subitem 3.1");
+    assertXPath(pXmlDoc, "//body/txt[4]//SwFieldPortion", "expand", u"3.1");
+
+    // This is merged:
+    CPPUNIT_ASSERT_GREATER(sal_Int32(200),
+                           getXPath(pXmlDoc, "//body/txt[5]/infos/bounds", "height").toInt32());
+    assertXPath(pXmlDoc, "//body/txt[5]/merged", 1);
+    assertXPathContent(pXmlDoc, "//body/txt[5]", u"item 4subitem 4.1");
+    // Without a fix, this was "3.2[4.1]":
+    assertXPath(pXmlDoc, "//body/txt[5]//SwFieldPortion", "expand", u"4.1");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf33687)
+{
+    // A ToC in linked frames, on a First Page followed by a Standard page:
+    createSwDoc("ToC-in-linked-frame-on-first-page-style.fodt");
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 5);
+
+    // Check that the ToC text flows to the second frame:
+
+    // First frame
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly", "formatName", u"Frame1");
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section", 2);
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section[1]", "formatName",
+                u"TOC1_Head");
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section[1]/txt", 1);
+    // Before the fix, this was 60:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/anchored/fly/section[2]/txt", 36);
+
+    // Second frame
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly", "formatName", u"Frame2");
+    // Before the fix, there was no section in this frame, because ToC didn't flow here:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly/section", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly/section[1]/txt", 24);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -32,6 +32,7 @@
 #include <queryentry.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/XmlWriter.hxx>
 
 #include <vector>
 
@@ -206,6 +207,12 @@ void ScSheetDPData::ReloadCacheTable()
 {
     aCacheTable.clear();
     CreateCacheTable();
+}
+
+void ScSheetDPData::dumpAsXml(tools::XmlWriter& rWriter) const
+{
+    rWriter.startElement("sheet_data");
+    rWriter.endElement();
 }
 
 #if DUMP_PIVOT_TABLE

@@ -25,11 +25,9 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/drawingml/theme.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

@@ -39,6 +39,7 @@
 #include <svx/GenericDropDownFieldDialog.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
@@ -82,6 +83,48 @@
 #include <memory>
 
 using namespace com::sun::star;
+
+void ScViewFunc::PasteFromExcelClip(ScDocument& rClipDoc, SCTAB nSrcTab, SCCOL nPosX, SCROW nPosY,
+                                    const Point* pLogicPos, bool bAllowDialogs)
+{
+    ScRange aSource;
+    const ScExtDocOptions* pExtOpt = rClipDoc.GetExtDocOptions();
+    const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings(nSrcTab) : nullptr;
+    if (pTabSett && pTabSett->maUsedArea.IsValid())
+    {
+        aSource = pTabSett->maUsedArea;
+        // ensure correct sheet indexes
+        aSource.aStart.SetTab(nSrcTab);
+        aSource.aEnd.SetTab(nSrcTab);
+        // don't use selection area: if cursor is moved in Excel after Copy, selection
+        // represents the new cursor position and not the copied area
+    }
+    else
+    {
+        // Biff12 goes here
+        SCCOL nFirstCol, nLastCol;
+        SCROW nFirstRow, nLastRow;
+        if (rClipDoc.GetDataStart(nSrcTab, nFirstCol, nFirstRow))
+            rClipDoc.GetCellArea(nSrcTab, nLastCol, nLastRow);
+        else
+        {
+            nFirstCol = nLastCol = 0;
+            nFirstRow = nLastRow = 0;
+        }
+        aSource = ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab);
+    }
+
+    if (pLogicPos)
+    {
+        // position specified (Drag&Drop) - change selection
+        MoveCursorAbs(nPosX, nPosY, SC_FOLLOW_NONE, false, false);
+        Unmark();
+    }
+
+    rClipDoc.SetClipArea(aSource);
+    PasteFromClip(InsertDeleteFlags::ALL, &rClipDoc, ScPasteFunc::NONE, false,
+                  false, false, INS_NONE, InsertDeleteFlags::NONE, bAllowDialogs);
+}
 
 bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
@@ -151,7 +194,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             aDescAny <<= aProperties;
             SfxUnoAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
-            ScDocShell& rDocSh = GetViewData().GetDocShell();
+            ScDocShell* pDocSh = GetViewData().GetDocShell();
             SCTAB nTab = GetViewData().CurrentTabForData();
 
             ClickCursor(nPosX, nPosY, false);               // set cursor position
@@ -159,7 +202,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             //  Creation of database area "Import1" isn't here, but in the DocShell
             //  slot execute, so it can be added to the undo action
 
-            ScDBData* pDBData = rDocSh.GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, ScGetDBSelection::Keep );
+            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, ScGetDBSelection::Keep );
             OUString sTarget;
             if (pDBData)
                 sTarget = pDBData->GetName();
@@ -290,6 +333,29 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             bRet = true;
         }
     }
+    else if (nFormatId == SotClipboardFormatId::BIFF_12)
+    {
+        if (auto xStm = aDataHelper.GetInputStream(nFormatId, {}))
+        {
+            SfxFilterMatcher aMatcher(ScDocShell::Factory().GetFilterContainer()->GetName());
+            if (auto pFilter = aMatcher.GetFilter4ClipBoardId(SotClipboardFormatId::BIFF_12))
+            {
+                ScDocShellRef pClipShell(new ScDocShell(SfxModelFlags::NONE, SCDOCMODE_CLIP));
+                SCTAB nSrcTab = 0;
+                pClipShell->GetDocument().ResetClip(&rDoc, nSrcTab);
+                auto pMed = std::make_unique<SfxMedium>();
+                pMed->GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, uno::Any(xStm)));
+                pMed->SetFilter(pFilter);
+
+                if (pClipShell->DoLoad(pMed.release()))
+                {
+                    PasteFromExcelClip(pClipShell->GetDocument(), nSrcTab, nPosX, nPosY, pLogicPos,
+                                       bAllowDialogs);
+                    bRet = true;
+                }
+            }
+        }
+    }
     else if ( (nFormatId == SotClipboardFormatId::BIFF_5) || (nFormatId == SotClipboardFormatId::BIFF_8) )
     {
         //  do excel import into a clipboard document
@@ -306,45 +372,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, &aInsDoc, EIF_AUTO );
             if ( eErr == ERRCODE_NONE )
             {
-                ScRange aSource;
-                const ScExtDocOptions* pExtOpt = aInsDoc.GetExtDocOptions();
-                const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings( nSrcTab ) : nullptr;
-                if( pTabSett && pTabSett->maUsedArea.IsValid() )
-                {
-                    aSource = pTabSett->maUsedArea;
-                    // ensure correct sheet indexes
-                    aSource.aStart.SetTab( nSrcTab );
-                    aSource.aEnd.SetTab( nSrcTab );
-// don't use selection area: if cursor is moved in Excel after Copy, selection
-// represents the new cursor position and not the copied area
-                }
-                else
-                {
-                    OSL_FAIL("no dimension");   //! possible?
-                    SCCOL nFirstCol, nLastCol;
-                    SCROW nFirstRow, nLastRow;
-                    if ( aInsDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
-                        aInsDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
-                    else
-                    {
-                        nFirstCol = nLastCol = 0;
-                        nFirstRow = nLastRow = 0;
-                    }
-                    aSource = ScRange( nFirstCol, nFirstRow, nSrcTab,
-                                        nLastCol, nLastRow, nSrcTab );
-                }
-
-                if ( pLogicPos )
-                {
-                    // position specified (Drag&Drop) - change selection
-                    MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, false, false );
-                    Unmark();
-                }
-
-                aInsDoc.SetClipArea( aSource );
-                PasteFromClip( InsertDeleteFlags::ALL, &aInsDoc,
-                                ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
-                                bAllowDialogs );
+                PasteFromExcelClip(aInsDoc, nSrcTab, nPosX, nPosY, pLogicPos, bAllowDialogs);
                 bRet = true;
             }
         }
@@ -599,7 +627,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
 
             if (xStm.is())
             {
-                xObj = GetViewData().GetDocShell().GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+                xObj = GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
             }
             else
             {
@@ -618,7 +646,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
                     // for example whether the object should be an iconified one
                     xObj = aInfo.Object;
                     if ( xObj.is() )
-                        GetViewData().GetDocShell().GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                        GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                 }
                 catch( uno::Exception& )
                 {}

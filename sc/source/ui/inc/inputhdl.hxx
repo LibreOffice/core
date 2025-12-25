@@ -51,6 +51,8 @@ class VclWindowEvent;
 namespace vcl { class Window; }
 struct ReferenceMark;
 
+typedef std::function<void(ScTabViewShell*, TranslateId)> ErrorHdl;
+
 //  ScInputHandler
 
 class ScInputHandler final
@@ -142,8 +144,8 @@ private:
      *                   table EditEngine.
      * @return true if the new edit mode has been started.
      */
-    bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
-                                ScEditEngineDefaulter* pTopEngine );
+    bool            StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
+                               ScEditEngineDefaulter* pTopEngine, const ErrorHdl& errorHdl);
     void            RemoveSelection();
     bool            StartsLikeFormula( std::u16string_view rStr ) const;
     void            UpdateFormulaMode();
@@ -182,8 +184,9 @@ public:
                     ScInputHandler();
                     ~ScInputHandler();
 
-    void            SetMode( ScInputMode eNewMode, const OUString* pInitText = nullptr,
-                             ScEditEngineDefaulter* pTopEngine = nullptr );
+    void            SetMode(ScInputMode eNewMode, const OUString* pInitText = nullptr,
+                            ScEditEngineDefaulter* pTopEngine = nullptr,
+                            const ErrorHdl& errorHdl = ScInputHandler::ErrorMessage);
     void            StartOrToggleEditMode();
     bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
     bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
@@ -297,6 +300,8 @@ public:
     static ReferenceMark GetReferenceMark( const ScViewData& rViewData, ScDocShell& rDocSh,
                                     tools::Long nX1, tools::Long nX2, tools::Long nY1, tools::Long nY2,
                                     tools::Long nTab, const Color& rColor );
+
+    static void ErrorMessage(ScTabViewShell* pActiveViewShell, TranslateId errorMessage);
 
     void            LOKPasteFunctionData(const OUString& rFunctionName);
 };

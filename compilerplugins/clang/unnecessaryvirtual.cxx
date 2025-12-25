@@ -13,7 +13,6 @@
 #include <set>
 #include <unordered_set>
 #include "config_clang.h"
-#include "compat.hxx"
 #include "plugin.hxx"
 #include <fstream>
 
@@ -167,7 +166,7 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
        {
            const CXXMethodDecl *overriddenMethod = *iter;
            // we only care about the first level override to establish that a virtual qualifier was useful.
-           if (compat::isPureVirtual(overriddenMethod)
+           if (overriddenMethod->isPureVirtual()
                || overriddenMethod->size_overridden_methods() == 0)
            {
                std::string aOverriddenNiceName = niceName(overriddenMethod);

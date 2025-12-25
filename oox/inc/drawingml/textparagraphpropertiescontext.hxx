@@ -33,16 +33,27 @@ class TextParagraphPropertiesContext final : public ::oox::core::ContextHandler2
 public:
     TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttributes,
-            TextParagraphProperties& rTextParagraphProperties );
+            TextParagraphProperties& rTextParagraphProperties,
+            uint16_t* pListNumberingMask = nullptr);
     virtual ~TextParagraphPropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    // Returns True iff we're tracking numbered lists, and we were not already in a numbered list at this level
+    bool markListNumbered();
+    void markListUnnumbered();
+
     TextParagraphProperties& mrTextParagraphProperties;
     BulletList&     mrBulletList;
     std::vector< css::style::TabStop >  maTabList;
     std::shared_ptr< BlipFillProperties > mxBlipProps;
+
+    // A pointer to an integer mask where we track the list status
+    // If bit 'n' is 1 then we're in a numbered list at that level
+    // (n=0 is what pptx calls level 1)
+    uint16_t*              mpListNumberingMask;
+    bool                   mbHaveNum;
 };
 
 }

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_BACKTRACE_H
-#define INCLUDED_SAL_OSL_UNX_BACKTRACE_H
+#pragma once
 
 #include <config_features.h>
 
@@ -42,8 +41,6 @@ void backtrace_symbols_fd( void **buffer, int size, int fd );
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif
-
 #endif
 
 #endif

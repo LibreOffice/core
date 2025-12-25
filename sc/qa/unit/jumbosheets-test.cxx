@@ -66,21 +66,21 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void testRoundtripColumn2000(const char* name, const char* format);
-    void testRoundtripNamedRanges(const char* name, const char* format);
+    void testRoundtripColumn2000(const char* name, TestFilter eFormat);
+    void testRoundtripNamedRanges(const char* name, TestFilter eFormat);
 };
 
 void ScJumboSheetsTest::testRoundtripColumn2000Ods()
 {
-    testRoundtripColumn2000("ods/value-in-column-2000.ods", "calc8");
+    testRoundtripColumn2000("ods/value-in-column-2000.ods", TestFilter::ODS);
 }
 
 void ScJumboSheetsTest::testRoundtripColumn2000Xlsx()
 {
-    testRoundtripColumn2000("xlsx/value-in-column-2000.xlsx", "Calc Office Open XML");
+    testRoundtripColumn2000("xlsx/value-in-column-2000.xlsx", TestFilter::XLSX);
 }
 
-void ScJumboSheetsTest::testRoundtripColumn2000(const char* name, const char* format)
+void ScJumboSheetsTest::testRoundtripColumn2000(const char* name, TestFilter eFormat)
 {
     createScDoc(name);
     {
@@ -94,7 +94,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(const char* name, const char* fo
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(0, 0, 0));
     }
 
-    saveAndReload(OUString::createFromAscii(format));
+    saveAndReload(eFormat);
     {
         ScDocument* pDoc = getScDoc();
         // Check again.
@@ -116,7 +116,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
         CPPUNIT_ASSERT_EQUAL(u"=SUM(C:C)"_ustr, pDoc->GetFormula(1, 0, 0));
     }
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     {
         ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
@@ -137,7 +137,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
 {
     createScDoc("ods/sum-whole-column-row.ods");
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     {
         ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
@@ -149,7 +149,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
     }
 }
 
-void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, const char* format)
+void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, TestFilter eFormat)
 {
     createScDoc(name);
 
@@ -171,7 +171,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, const char* f
         }
     }
 
-    saveAndReload(OUString::createFromAscii(format));
+    saveAndReload(eFormat);
     {
         ScDocument* pDoc = getScDoc();
         for (const auto& range : ranges)
@@ -185,12 +185,12 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, const char* f
 
 void ScJumboSheetsTest::testRoundtripNamedRangesOds()
 {
-    testRoundtripNamedRanges("ods/ranges-column-2000.ods", "calc8");
+    testRoundtripNamedRanges("ods/ranges-column-2000.ods", TestFilter::ODS);
 }
 
 void ScJumboSheetsTest::testRoundtripNamedRangesXlsx()
 {
-    testRoundtripNamedRanges("ods/ranges-column-2000.ods", "Calc Office Open XML");
+    testRoundtripNamedRanges("ods/ranges-column-2000.ods", TestFilter::XLSX);
 }
 
 void ScJumboSheetsTest::testNamedRangeNameConflict()

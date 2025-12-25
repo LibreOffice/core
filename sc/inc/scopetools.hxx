@@ -72,7 +72,7 @@ class DelayFormulaGroupingSwitch
 
 public:
     DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay);
-    ~DelayFormulaGroupingSwitch() COVERITY_NOEXCEPT_FALSE;
+    ~DelayFormulaGroupingSwitch();
     void reset();
 };
 

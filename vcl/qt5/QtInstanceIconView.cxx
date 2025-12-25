@@ -17,11 +17,8 @@
 #include <QtGui/QHelpEvent>
 #include <QtWidgets/QToolTip>
 
-// role used for the ID in the QStandardItem
-constexpr int ROLE_ID = Qt::UserRole + 1000;
-
 QtInstanceIconView::QtInstanceIconView(QListView* pListView)
-    : QtInstanceWidget(pListView)
+    : QtInstanceItemView(pListView, *pListView->model())
     , m_pListView(pListView)
 {
     assert(m_pListView);
@@ -101,71 +98,14 @@ void QtInstanceIconView::insert_separator(int, const OUString*)
     assert(false && "Not implemented yet");
 }
 
-OUString QtInstanceIconView::get_selected_id() const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
-        if (aSelectedIndexes.empty())
-            return;
-
-        QVariant aIdData = aSelectedIndexes.first().data(ROLE_ID);
-        if (aIdData.canConvert<QString>())
-            sId = toOUString(aIdData.toString());
-    });
-
-    return sId;
-}
-
-void QtInstanceIconView::do_clear()
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] { m_pModel->clear(); });
-}
-
 int QtInstanceIconView::count_selected_items() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
-}
-
-OUString QtInstanceIconView::get_selected_text() const
-{
-    assert(false && "Not implemented yet");
-    return OUString();
-}
-
-OUString QtInstanceIconView::get_id(int nPos) const
-{
     SolarMutexGuard g;
 
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(modelIndex(nPos), ROLE_ID);
-        if (aRoleData.canConvert<QString>())
-            sId = toOUString(aRoleData.toString());
-    });
+    int nSelected = 0;
+    GetQtInstance().RunInMainThread([&] { nSelected = m_pSelectionModel->selectedRows().count(); });
 
-    return sId;
-}
-
-void QtInstanceIconView::do_select(int nPos)
-{
-    SolarMutexGuard g;
-    GetQtInstance().RunInMainThread(
-        [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
-}
-
-void QtInstanceIconView::do_unselect(int nPos)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Deselect);
-    });
+    return nSelected;
 }
 
 void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)
@@ -189,16 +129,6 @@ void QtInstanceIconView::set_text(int nPos, const OUString& rText)
     });
 }
 
-void QtInstanceIconView::set_id(int nPos, const OUString& rId)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(nPos);
-        m_pModel->setData(aIndex, toQString(rId), ROLE_ID);
-    });
-}
-
 void QtInstanceIconView::set_item_accessible_name(int nPos, const OUString& rName)
 {
     SolarMutexGuard g;
@@ -209,50 +139,25 @@ void QtInstanceIconView::set_item_accessible_name(int nPos, const OUString& rNam
     });
 }
 
-void QtInstanceIconView::do_remove(int) { assert(false && "Not implemented yet"); }
-
-tools::Rectangle QtInstanceIconView::get_rect(int) const
-{
-    assert(false && "Not implemented yet");
-    return tools::Rectangle();
-}
-
-std::unique_ptr<weld::TreeIter> QtInstanceIconView::make_iterator(const weld::TreeIter*) const
-{
-    assert(false && "Not implemented yet");
-    return nullptr;
-}
-
-bool QtInstanceIconView::get_selected(weld::TreeIter*) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
-bool QtInstanceIconView::get_cursor(weld::TreeIter*) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
-void QtInstanceIconView::do_set_cursor(const weld::TreeIter& rIter)
+void QtInstanceIconView::set_item_tooltip_text(int nPos, const OUString& rToolTip)
 {
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->setCurrentIndex(modelIndex(rIter), QItemSelectionModel::NoUpdate);
+        QModelIndex aIndex = modelIndex(nPos);
+        m_pModel->setData(aIndex, toQString(rToolTip), Qt::ToolTipRole);
     });
 }
 
-bool QtInstanceIconView::get_iter_first(weld::TreeIter&) const
+tools::Rectangle QtInstanceIconView::get_rect(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
-}
+    SolarMutexGuard g;
 
-OUString QtInstanceIconView::get_id(const weld::TreeIter& rIter) const
-{
-    return get_id(position(rIter));
+    tools::Rectangle aRect;
+    GetQtInstance().RunInMainThread(
+        [&] { aRect = toRectangle(m_pListView->visualRect(modelIndex(rIter))); });
+
+    return aRect;
 }
 
 OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
@@ -270,33 +175,10 @@ OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
     return sText;
 }
 
-bool QtInstanceIconView::iter_next_sibling(weld::TreeIter&) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
 void QtInstanceIconView::do_scroll_to_item(const weld::TreeIter& rIter)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pListView->scrollTo(modelIndex(rIter)); });
-}
-
-void QtInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIter&)>&)
-{
-    assert(false && "Not implemented yet");
-}
-
-void QtInstanceIconView::select_all()
-{
-    SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pListView->selectAll(); });
-}
-
-void QtInstanceIconView::unselect_all()
-{
-    SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pListView->clearSelection(); });
 }
 
 int QtInstanceIconView::n_children() const
@@ -307,19 +189,6 @@ int QtInstanceIconView::n_children() const
     GetQtInstance().RunInMainThread([&] { nChildren = m_pModel->rowCount(); });
 
     return nChildren;
-}
-
-QModelIndex QtInstanceIconView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
-
-QModelIndex QtInstanceIconView::modelIndex(const weld::TreeIter& rIter) const
-{
-    return modelIndex(position(rIter));
-}
-
-int QtInstanceIconView::position(const weld::TreeIter& rIter)
-{
-    QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
-    return aModelIndex.row();
 }
 
 bool QtInstanceIconView::handleToolTipEvent(const QHelpEvent& rHelpEvent)

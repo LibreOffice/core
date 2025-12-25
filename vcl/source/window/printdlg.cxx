@@ -37,7 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/windowstate.hxx>
 
 #include <bitmaps.hlst>
@@ -180,7 +180,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         // currently not sure when using just ::DrawBitmap with
         // a defined size or ::DrawOutDev
         aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
-        rRenderContext.DrawBitmapEx(aOffset, aPreviewBitmap);
+        rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
     }
 
     tools::Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
@@ -679,12 +679,12 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     mxBorderCB->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
 
     // setup select hdl
-    mxPrinters->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
-    mxPaperSidesBox->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
-    mxNupPagesBox->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
-    mxOrientationBox->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
-    mxNupOrderBox->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
-    mxPaperSizeBox->connect_changed( LINK( this, PrintDialog, SelectHdl ) );
+    mxPrinters->connect_changed(LINK(this, PrintDialog, SelectPrinterHdl));
+    mxPaperSidesBox->connect_changed(LINK(this, PrintDialog, SelectPaperSidesHdl));
+    mxNupPagesBox->connect_changed(LINK(this, PrintDialog, SelectNupPagesHdl));
+    mxOrientationBox->connect_changed(LINK(this, PrintDialog, SelectOrientationHdl));
+    mxNupOrderBox->connect_changed(LINK(this, PrintDialog, SelectNupOrderHdl));
+    mxPaperSizeBox->connect_changed(LINK(this, PrintDialog, SelectPaperSizeHdl));
 
     // setup modify hdl
     mxPageEdit->connect_activate( LINK( this, PrintDialog, ActivateHdl ) );
@@ -961,7 +961,13 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     {
         PrinterController::PageSize aPageSize =
             maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
-        aCurPageSize = aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+
+        if (mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC)
+        {
+            aCurPageSize
+                = aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+        }
+
         if( ! aPageSize.bFullPaper )
         {
             const MapMode aMapMode( MapUnit::Map100thMM );
@@ -1959,97 +1965,99 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
 
 }
 
-IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
+IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
 {
-    if (&rBox == mxPrinters.get())
+    if (!isPrintToFile())
     {
-        if ( !isPrintToFile() )
-        {
-            OUString aNewPrinter(rBox.get_active_text());
-            // set new printer
-            maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
-            maPController->resetPrinterOptions( false  );
-            // invalidate page cache and start fresh
-            maPController->invalidatePageCache();
-            maFirstPageSize = Size();
+        OUString aNewPrinter(mxPrinters->get_active_text());
+        // set new printer
+        maPController->setPrinter(VclPtrInstance<Printer>(aNewPrinter));
+        maPController->resetPrinterOptions(false);
+        // invalidate page cache and start fresh
+        maPController->invalidatePageCache();
+        maFirstPageSize = Size();
 
-            updateOrientationBox();
-            updatePageSize(mxOrientationBox->get_active());
-
-            // update text fields
-            mxOKButton->set_label(maPrintText);
-            updatePrinterText();
-            updateNup(false);
-            setPaperSizes();
-            maUpdatePreviewIdle.Start();
-        }
-        else // print to file
-        {
-            // use the default printer or FIXME: the last used one?
-            maPController->setPrinter( VclPtrInstance<Printer>( Printer::GetDefaultPrinterName() ) );
-            mxOKButton->set_label(maPrintToFileText);
-            maPController->resetPrinterOptions( true );
-
-            setPaperSizes();
-            updateOrientationBox();
-            updatePageSize(mxOrientationBox->get_active());
-            maUpdatePreviewIdle.Start();
-        }
-
-        setupPaperSidesBox();
-
-        // Related: tdf#159995 changing a listbox's active item does not
-        // trigger an update to the preview so force an update to the
-        // preview by calling each active listbox's select handler after
-        // changing the active printer.
-        if ( mxOrientationBox->get_sensitive() )
-            LINK( this, PrintDialog, SelectHdl ).Call( *mxOrientationBox );
-        if ( mxPaperSizeBox->get_sensitive() )
-            LINK( this, PrintDialog, SelectHdl ).Call( *mxPaperSizeBox );
-    }
-    else if ( &rBox == mxPaperSidesBox.get() )
-    {
-        DuplexMode eDuplex = static_cast<DuplexMode>(mxPaperSidesBox->get_active() + 1);
-        maPController->getPrinter()->SetDuplexMode( eDuplex );
-    }
-    else if( &rBox == mxOrientationBox.get() )
-    {
-        int nOrientation = mxOrientationBox->get_active();
-        if ( nOrientation != ORIENTATION_AUTOMATIC )
-            setPaperOrientation( static_cast<Orientation>( nOrientation - 1 ), true );
-
-        updatePageSize(nOrientation);
-        updateNup( false );
-    }
-    else if ( &rBox == mxNupOrderBox.get() )
-    {
-        updateNup();
-    }
-    else if( &rBox == mxNupPagesBox.get() )
-    {
-        if( !mxPagesBtn->get_active() )
-            mxPagesBtn->set_active(true);
-        updatePageSize(mxOrientationBox->get_active());
-        updateNupFromPages( false );
-    }
-    else if ( &rBox == mxPaperSizeBox.get() )
-    {
-        VclPtr<Printer> aPrt( maPController->getPrinter() );
-        PaperInfo aInfo = aPrt->GetPaperInfo( rBox.get_active() );
-        aInfo.doSloppyFit(true);
-        mePaper = aInfo.getPaper();
-
-        if ( mePaper == PAPER_USER )
-            aPrt->SetPaperSizeUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
-        else
-            aPrt->SetPaper( mePaper );
-
-        maPController->setPaperSizeFromUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
-
+        updateOrientationBox();
         updatePageSize(mxOrientationBox->get_active());
 
-        maUpdatePreviewNoCacheIdle.Start();
+        // update text fields
+        mxOKButton->set_label(maPrintText);
+        updatePrinterText();
+        updateNup(false);
+        setPaperSizes();
+        maUpdatePreviewIdle.Start();
     }
+    else // print to file
+    {
+        // use the default printer or FIXME: the last used one?
+        maPController->setPrinter(VclPtrInstance<Printer>(Printer::GetDefaultPrinterName()));
+        mxOKButton->set_label(maPrintToFileText);
+        maPController->resetPrinterOptions(true);
+
+        setPaperSizes();
+        updateOrientationBox();
+        updatePageSize(mxOrientationBox->get_active());
+        maUpdatePreviewIdle.Start();
+    }
+
+    setupPaperSidesBox();
+
+    // Related: tdf#159995 changing a listbox's active item does not
+    // trigger an update to the preview so force an update to the
+    // preview by calling each active listbox's select handler after
+    // changing the active printer.
+    if (mxOrientationBox->get_sensitive())
+        SelectOrientationHdl(*mxOrientationBox);
+    if (mxPaperSizeBox->get_sensitive())
+        SelectPaperSizeHdl(*mxPaperSizeBox);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectPaperSidesHdl, weld::ComboBox&, void)
+{
+    DuplexMode eDuplex = static_cast<DuplexMode>(mxPaperSidesBox->get_active() + 1);
+    maPController->getPrinter()->SetDuplexMode(eDuplex);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectOrientationHdl, weld::ComboBox&, void)
+{
+    int nOrientation = mxOrientationBox->get_active();
+    if (nOrientation != ORIENTATION_AUTOMATIC)
+        setPaperOrientation(static_cast<Orientation>(nOrientation - 1), true);
+
+    updatePageSize(nOrientation);
+    updateNup(false);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectNupOrderHdl, weld::ComboBox&, void)
+{
+    updateNup();
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectNupPagesHdl, weld::ComboBox&, void)
+{
+    if (!mxPagesBtn->get_active())
+        mxPagesBtn->set_active(true);
+    updatePageSize(mxOrientationBox->get_active());
+    updateNupFromPages(false);
+}
+
+IMPL_LINK_NOARG(PrintDialog, SelectPaperSizeHdl, weld::ComboBox&, void)
+{
+    VclPtr<Printer> aPrt(maPController->getPrinter());
+    PaperInfo aInfo = aPrt->GetPaperInfo(mxPaperSizeBox->get_active());
+    aInfo.doSloppyFit(true);
+    mePaper = aInfo.getPaper();
+
+    if (mePaper == PAPER_USER)
+        aPrt->SetPaperSizeUser(Size(aInfo.getWidth(), aInfo.getHeight()));
+    else
+        aPrt->SetPaper(mePaper);
+
+    maPController->setPaperSizeFromUser(Size(aInfo.getWidth(), aInfo.getHeight()));
+
+    updatePageSize(mxOrientationBox->get_active());
+
+    maUpdatePreviewNoCacheIdle.Start();
 }
 
 IMPL_LINK_NOARG(PrintDialog, MetricSpinModifyHdl, weld::MetricSpinButton&, void)

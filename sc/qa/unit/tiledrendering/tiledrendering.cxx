@@ -1787,7 +1787,7 @@ struct SheetDimData
                 continue;
 
             bool bBooleanValue = rEntry.aKey != "sizes";
-            OString aExpectedEncoding;
+            OStringBuffer aExpectedEncoding;
             bool bFirst = true;
             for (const auto& rSpan : rEntry.rSpanList)
             {
@@ -1795,15 +1795,15 @@ struct SheetDimData
                 if (bBooleanValue && bFirst)
                     nVal = static_cast<size_t>(!!nVal);
                 if (!bBooleanValue || bFirst)
-                    aExpectedEncoding += OString::number(nVal) + ":";
-                aExpectedEncoding += OString::number(rSpan.nEnd) + " ";
+                    aExpectedEncoding.append(OString::number(nVal) + ":");
+                aExpectedEncoding.append(OString::number(rSpan.nEnd) + " ");
                 bFirst = false;
             }
 
             // Get the tree's value for the property key ("sizes"/"hidden"/"filtered").
             OString aTreeValue(rTree.get<std::string>(rEntry.aKey.getStr()));
 
-            CPPUNIT_ASSERT_EQUAL(aExpectedEncoding, aTreeValue);
+            CPPUNIT_ASSERT_EQUAL(aExpectedEncoding.toString(), aTreeValue);
         }
     }
 };
@@ -2084,8 +2084,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
 
     // Set Wrap text in A3
     pDoc->ApplyAttr(0, 2, 0, ScLineBreakCell(true));
-    const ScLineBreakCell* pItem = pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK);
-    CPPUNIT_ASSERT(pItem->GetValue());
+    const ScLineBreakCell& rItem = pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK);
+    CPPUNIT_ASSERT(rItem.GetValue());
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2533,7 +2533,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     loadFromFile(u"validity.xlsx");
 
     // .uno:Save modifies the original file, make a copy first
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -2980,7 +2980,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     loadFromFile(u"invalidate-on-save.ods");
 
     // .uno:Save modifies the original file, make a copy first
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -3139,7 +3139,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
 
     {
         uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
-        save(u"calc8"_ustr); // .ODS
+        save(TestFilter::ODS); // .ODS
     }
     xmlDocUniquePtr pSettingsXml = parseExport(u"settings.xml"_ustr);
     // Multi-user export: don't save every user's view into the exported file
@@ -3147,7 +3147,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     // Use view's logic (not technical) zoom level for export
     assertXPathContent(pSettingsXml, "//config:config-item[@config:name='ZoomValue'][1]", u"150");
 
-    save(u"Calc Office Open XML"_ustr); // .XLSX
+    save(TestFilter::XLSX); // .XLSX
     xmlDocUniquePtr pSheet1Xml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     // Use view's logic (not technical) zoom level for export
     assertXPath(pSheet1Xml, "//x:sheetViews/x:sheetView", "zoomScale", u"150");
@@ -3479,7 +3479,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
 
         // save and reopen
         // .uno:Save modifies the original file, make a copy first
-        saveAndReload(u"Calc MS Excel 2007 VBA XML"_ustr);
+        saveAndReload(TestFilter::XLSM);
 
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
@@ -3653,6 +3653,58 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPivotFilterPosition)
     // We should have the autofilter position callback.
     auto it = aView.m_aStateChanges.find("PivotTableFilterInfo");
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLOKLanguageStatus)
+{
+    ScModelObj* pModelObj = createDoc("pivotfr.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // view #1
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(pView1);
+    CPPUNIT_ASSERT(pView);
+
+    {
+        // Pivot table is in the same sheet and first data row starts at A17.
+        pView->SetCursor(0, 16);
+        dispatchCommand(mxComponent, u".uno:RecalcPivotTable"_ustr, {});
+
+        // Document language is French(France), which the view must inherit.
+        CPPUNIT_ASSERT_EQUAL(u"janv."_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    }
+
+    {
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Language", uno::Any(u"Default_Spanish (Spain)"_ustr) },
+            }));
+        dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
+
+        // Pivot table is in the same sheet and first data row starts at A17.
+        pView->SetCursor(0, 16);
+        dispatchCommand(mxComponent, u".uno:RecalcPivotTable"_ustr, {});
+
+        // view language is now Spanish(Spain)
+        CPPUNIT_ASSERT_EQUAL(u"ene"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    }
+
+    {
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Language", uno::Any(u"Default_English (USA)"_ustr) },
+            }));
+        dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
+
+        // Pivot table is in the same sheet and first data row starts at A17.
+        pView->SetCursor(0, 16);
+        dispatchCommand(mxComponent, u".uno:RecalcPivotTable"_ustr, {});
+
+        // view language is now English(USA).
+        CPPUNIT_ASSERT_EQUAL(u"Jan"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

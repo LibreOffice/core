@@ -46,7 +46,11 @@ public:
         : Thread( "WebDavTickerThread" ), m_bFinish( false ),
           m_rLockStore( rLockStore ) {}
 
-    void finish() { m_bFinish = true; }
+    void finish()
+    {
+        m_bFinish = true;
+        m_rLockStore.m_aCondition.notify_all(); // Wake up the TickerThread
+    }
 
 private:
 
@@ -76,8 +80,8 @@ void TickerThread::execute()
         else
         {
             // Wait until the next deadline or a notification
-            m_rLockStore.m_aCondition.wait_for(aGuard, sleep_duration,
-                [this] { return !m_rLockStore.m_aLockInfoMap.empty() || m_bFinish; });
+            // coverity[wait_not_in_locked_loop : SUPPRESS] - a spurious wakeup is ok
+            m_rLockStore.m_aCondition.wait_for(aGuard, sleep_duration);
         }
     }
 

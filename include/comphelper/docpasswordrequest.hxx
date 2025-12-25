@@ -21,10 +21,11 @@
 #define INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
 
 #include <comphelper/comphelperdllapi.h>
-#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+
+namespace com::sun::star::task { enum class PasswordRequestMode; }
 
 namespace comphelper {
 

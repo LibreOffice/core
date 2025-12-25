@@ -874,7 +874,7 @@ ScCellTextObj::ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP) :
 {
 }
 
-ScCellTextObj::~ScCellTextObj() COVERITY_NOEXCEPT_FALSE
+ScCellTextObj::~ScCellTextObj()
 {
 }
 

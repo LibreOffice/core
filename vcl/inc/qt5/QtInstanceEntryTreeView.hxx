@@ -11,6 +11,8 @@
 
 #include "QtInstanceContainer.hxx"
 
+#include <vcl/weld/EntryTreeView.hxx>
+
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTreeView>
 

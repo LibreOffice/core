@@ -27,7 +27,7 @@
 #include <wrtsh.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <IDocumentSettingAccess.hxx>

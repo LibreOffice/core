@@ -164,6 +164,9 @@ bool SwEditShell::Delete(bool const isArtificialSelection, bool goLeft)
             DeleteSel(rPaM, isArtificialSelection, goLeft, &bUndo);
         }
 
+        // tdf#162120: Automatically adjust paragraph directions after delete
+        UpdateSelectionAutoParaDirection();
+
         // If undo container then close here
         if( bUndo )
         {
@@ -177,7 +180,7 @@ bool SwEditShell::Delete(bool const isArtificialSelection, bool goLeft)
         bRet = RemoveParagraphMetadataFieldAtCursor();
         if (!bRet)
         {
-            InfoReadOnlyDialog(false);
+            InfoReadOnlyDialog(true);
         }
     }
 

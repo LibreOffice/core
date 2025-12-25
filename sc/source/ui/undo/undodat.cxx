@@ -87,7 +87,7 @@ void ScUndoDoOutline::Undo()
 
     // sheet has to be switched over (#46952#)!
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -125,7 +125,7 @@ void ScUndoDoOutline::Redo()
 
     // sheet has to be switched over (#46952#)!
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -186,7 +186,7 @@ void ScUndoMakeOutline::Undo()
 
     rDoc.SetOutlineTable( nTab, pUndoTable.get() );
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -291,7 +291,7 @@ void ScUndoOutlineLevel::Undo()
             true /* bGroups */, nTab);
     pViewShell->UpdateScrollBars();
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -310,7 +310,7 @@ void ScUndoOutlineLevel::Redo()
 
     // sheet has to be switched on or off before this (#46952#) !!!
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -391,7 +391,7 @@ void ScUndoOutlineBlock::Undo()
             true /* bGroups */, nTab);
     pViewShell->UpdateScrollBars();
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -483,7 +483,7 @@ void ScUndoRemoveAllOutlines::Undo()
 
     pViewShell->UpdateScrollBars();
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -510,7 +510,7 @@ void ScUndoRemoveAllOutlines::Redo()
     // sheet has to be switched over (#46952#)!
 
     SCTAB nTab = aBlockStart.Tab();
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -579,7 +579,7 @@ void ScUndoAutoOutline::Undo()
         pViewShell->UpdateScrollBars();
     }
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -599,7 +599,7 @@ void ScUndoAutoOutline::Redo()
     SCTAB nTab = aBlockStart.Tab();
     // sheet has to be switched on or off before this (#46952#) !!!
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -709,7 +709,7 @@ void ScUndoSubTotals::Undo()
     if (xUndoDB)
         rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -727,7 +727,7 @@ void ScUndoSubTotals::Redo()
 
     BeginRedo();
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -863,7 +863,7 @@ void ScUndoQuery::Undo()
 
     DoSdrUndoAction( pDrawUndo.get(), &rDoc );
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -911,7 +911,7 @@ void ScUndoQuery::Redo()
 
     BeginRedo();
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -1174,7 +1174,7 @@ void ScUndoImportData::Undo()
         ScUndoUtil::MarkSimpleBlock( rDocShell, nCol1, nRow1, nTable, nCol2, nRow2, nTable );
     }
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -1246,7 +1246,7 @@ void ScUndoImportData::Redo()
         ScUndoUtil::MarkSimpleBlock( rDocShell, nCol1, nRow1, nTable, nCol2, nRow2, nTable );
     }
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -1411,7 +1411,7 @@ void ScUndoRepeatDB::Undo()
             false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
             false /* bGroups */, nTab);
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -1431,7 +1431,7 @@ void ScUndoRepeatDB::Redo()
 
     SCTAB nTab = aBlockStart.Tab();
 
-    SCTAB nVisTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
@@ -1518,12 +1518,7 @@ void ScUndoDataPilot::Undo()
             if (xOldDPObject)
             {
                 //  restore old settings
-                xOldDPObject->WriteSourceDataTo( *pDocObj );
-                ScDPSaveData* pData = xOldDPObject->GetSaveData();
-                if (pData)
-                    pDocObj->SetSaveData(*pData);
-                pDocObj->SetOutRange(xOldDPObject->GetOutRange());
-                xOldDPObject->WriteTempDataTo( *pDocObj );
+                *pDocObj = *xOldDPObject;
             }
             else
             {
@@ -1689,7 +1684,7 @@ void ScUndoConsolidate::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nViewTab = pViewShell->GetViewData().CurrentTabForData();
+        SCTAB nViewTab = pViewShell->GetViewData().GetTabNumber();
         if ( nViewTab != nTab )
             pViewShell->SetTabNo( nTab );
     }
@@ -1706,7 +1701,7 @@ void ScUndoConsolidate::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nViewTab = pViewShell->GetViewData().CurrentTabForData();
+        SCTAB nViewTab = pViewShell->GetViewData().GetTabNumber();
         if ( nViewTab != aParam.nTab )
             pViewShell->SetTabNo( aParam.nTab );
     }

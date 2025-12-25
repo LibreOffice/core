@@ -25,9 +25,6 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-#include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
-
 namespace svtools{
 enum ColorConfigEntry : int
 {
@@ -43,6 +40,7 @@ enum ColorConfigEntry : int
     SMARTTAGS     ,
     SHADOWCOLOR         ,
     WRITERTEXTGRID      ,
+    WRITERBASELINEGRID  ,
     WRITERFIELDSHADINGS ,
     WRITERIDXSHADINGS         ,
     WRITERDIRECTCURSOR        , // unused
@@ -153,6 +151,7 @@ namespace {
         { std::u16string_view(u"SmartTags"), false },
         { std::u16string_view(u"Shadow"), true },
         { std::u16string_view(u"WriterTextGrid"), false },
+        { std::u16string_view(u"WriterBaselineGrid"), false },
         { std::u16string_view(u"WriterFieldShadings"), true },
         { std::u16string_view(u"WriterIdxShadings"), true },
         { std::u16string_view(u"WriterDirectCursor"), true },

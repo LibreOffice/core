@@ -187,9 +187,9 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_ThemeColor)
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(7500), rTrans[1].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7500), rTrans[1].mnValue);
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans[1].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(2500), rTrans[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2500), rTrans[0].mnValue);
         }
     }
     // Check colors of 'heart' shape

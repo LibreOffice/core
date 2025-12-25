@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/colibre/cmd/ -->
   <object class="GtkMenu" id="Menu 3d">
@@ -102,7 +102,7 @@
       <object class="GtkMenuItem" id="Menu-Extension-PackageManagerDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
+        <property name="action_name">.uno:ExtensionManager</property>
       </object>
     </child>
   </object>
@@ -2063,7 +2063,7 @@
       <object class="GtkMenuItem" id="MenuTools-PackageManagerDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
+        <property name="action_name">.uno:ExtensionManager</property>
       </object>
     </child>
     <child>

@@ -23,7 +23,6 @@
 #include <map>
 #include <vector>
 #include <svtools/svtdllapi.h>
-#include <rtl/ref.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/link.hxx>
 #include <tools/fract.hxx>

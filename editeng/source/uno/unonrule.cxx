@@ -72,6 +72,8 @@ const o3tl::enumarray<SvxAdjust, sal_Int16> aSvxToUnoAdjust
     text::HoriOrientation::FULL,
     text::HoriOrientation::CENTER,
     text::HoriOrientation::FULL,
+    text::HoriOrientation::LEFT,
+    text::HoriOrientation::RIGHT,
     text::HoriOrientation::LEFT
 };
 

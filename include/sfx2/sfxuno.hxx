@@ -22,6 +22,8 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
+#include <comphelper/sequenceashashmap.hxx>
+
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
@@ -35,10 +37,8 @@ SFX2_DLLPUBLIC void TransformParameters(            sal_uInt16                  
                                     SfxAllItemSet&                                      aSet        ,
                             const   SfxSlot*                                            pSlot = nullptr   );
 
-SFX2_DLLPUBLIC void TransformItems(         sal_uInt16                                  nSlotId     ,
-                            const   SfxItemSet&                                         aSet        ,
-                                    css::uno::Sequence< css::beans::PropertyValue >&    seqArgs     ,
-                            const   SfxSlot*                            pSlot = nullptr   );
+SFX2_DLLPUBLIC comphelper::SequenceAsHashMap
+TransformItems(sal_uInt16 nSlotId, const SfxItemSet& aSet, const SfxSlot* pSlot = nullptr);
 
 bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 

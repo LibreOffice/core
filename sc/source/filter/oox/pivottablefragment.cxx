@@ -184,8 +184,20 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
                 case XLS_TOKEN(formats):
                     return this;
                 case XLS_TOKEN(pivotTableStyleInfo):
-                    mrPivotTable.putToInteropGrabBag(u"pivotTableStyleInfo"_ustr, rAttribs);
+                {
+                    OUString aName = rAttribs.getXString(XML_name, OUString());
+                    if (!aName.isEmpty())
+                    {
+                        auto& rStyleInfo = mrPivotTable.getStyleInfo();
+                        rStyleInfo.maName = aName;
+                        rStyleInfo.mbShowRowHeaders = rAttribs.getBool(XML_showRowHeaders, false);
+                        rStyleInfo.mbShowColHeaders = rAttribs.getBool(XML_showColHeaders, false);
+                        rStyleInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, false);
+                        rStyleInfo.mbShowColStripes = rAttribs.getBool(XML_showColStripes, false);
+                        rStyleInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, false);
+                    }
                     break;
+                }
             }
         break;
 

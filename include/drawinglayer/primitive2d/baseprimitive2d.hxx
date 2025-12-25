@@ -118,7 +118,7 @@ namespace drawinglayer::primitive2d
     for view-independent primitives which are defined by not using ViewInformation2D
     in their get2DDecomposition/getB2DRange implementations.
 */
-class DRAWINGLAYERCORE_DLLPUBLIC BasePrimitive2D : public salhelper::SimpleReferenceObject
+class DRAWINGLAYERCORE_DLLPUBLIC BasePrimitive2D : public cppu::OWeakObject
 {
     bool mbVisible = true;
 

@@ -29,7 +29,7 @@
 #include <svx/svxids.hrc>
 #include <svx/strarray.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <sdattr.hrc>
@@ -241,13 +241,13 @@ SdTpOptionsContents::~SdTpOptionsContents() {}
 
 OUString SdTpOptionsContents::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -256,10 +256,10 @@ OUString SdTpOptionsContents::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SdTpOptionsContents::FillItemSet(SfxItemSet*)
@@ -540,7 +540,7 @@ DeactivateRC SdTpOptionsMisc::DeactivatePage(SfxItemSet* pActiveSet)
 
 OUString SdTpOptionsMisc::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"newdoclbl"_ustr, u"label4"_ustr,   u"label6"_ustr, u"tabstoplabel"_ustr,
                           u"label1"_ustr,    u"label7"_ustr,   u"label2"_ustr, u"label5"_ustr,
                           u"label8"_ustr,    u"widthlbl"_ustr, u"info1"_ustr,  u"heightlbl"_ustr,
@@ -549,7 +549,7 @@ OUString SdTpOptionsMisc::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -560,10 +560,10 @@ OUString SdTpOptionsMisc::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SdTpOptionsMisc::FillItemSet(SfxItemSet* rAttrs)

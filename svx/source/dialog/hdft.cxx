@@ -35,6 +35,7 @@
 #include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -124,7 +125,7 @@ SvxFooterPage::SvxFooterPage(weld::Container* pPage, weld::DialogController* pCo
 
 SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SfxTabPage(pPage, pController, u"svx/ui/headfootformatpage.ui"_ustr, u"HFFormatPage"_ustr, &rSet)
-    , nId(nSetId)
+    , m_nId(nSetId)
     , mbDisableQueryBox(false)
     , mbEnableDrawingLayerFillStyles(false)
     , m_xCntSharedBox(m_xBuilder->weld_check_button(u"checkSameLR"_ustr))
@@ -148,7 +149,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     m_bIsCalc = dynamic_cast<const SfxBoolItem*>(pExt1) && dynamic_cast<const SfxBoolItem*>(pExt2);
 
     //swap header <-> footer in UI
-    if (nId == SID_ATTR_PAGE_FOOTERSET)
+    if (m_nId == SID_ATTR_PAGE_FOOTERSET)
     {
         m_xContainer->set_help_id(u"svx/ui/headfootformatpage/FFormatPage"_ustr);
         m_xFrame->set_label(SvxResId(RID_SVXSTR_FOOTER));
@@ -276,22 +277,22 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     aSet.Put( aLR );
 
     SvxULSpaceItem aUL( nWULSpace );
-    if ( nId == SID_ATTR_PAGE_HEADERSET )
+    if ( m_nId == SID_ATTR_PAGE_HEADERSET )
         aUL.SetLower( static_cast<sal_uInt16>(nDist) );
     else
         aUL.SetUpper( static_cast<sal_uInt16>(nDist) );
     aSet.Put( aUL );
 
     // Background and border?
-    if (pBBSet)
+    if (m_pBBSet)
     {
-        aSet.Put(*pBBSet);
+        aSet.Put(*m_pBBSet);
     }
     else
     {
         const SfxPoolItem* pItem;
 
-        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(m_nId), false, &pItem))
         {
             const SfxItemSet* _pSet = &(static_cast< const SvxSetItem* >(pItem)->GetItemSet());
 
@@ -327,7 +328,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // Flush the SetItem
-    SvxSetItem aSetItem( TypedWhichId<SvxSetItem>(GetWhich( nId )), aSet );
+    SvxSetItem aSetItem( TypedWhichId<SvxSetItem>(GetWhich( m_nId )), aSet );
     rSet->Put( aSetItem );
 
     return true;
@@ -346,7 +347,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = nullptr;
 
-    if ( SfxItemState::SET == rSet->GetItemState( GetWhich(nId), false,
+    if ( SfxItemState::SET == rSet->GetItemState( GetWhich(m_nId), false,
                                             reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -373,7 +374,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
             }
 
 
-            if ( nId == SID_ATTR_PAGE_HEADERSET )
+            if ( m_nId == SID_ATTR_PAGE_HEADERSET )
             {   // Header
                 SetMetricValue( *m_xDistEdit, rUL.GetLower(), eUnit );
                 SetMetricValue( *m_xHeightEdit, rSize.GetSize().Height() - rUL.GetLower(), eUnit );
@@ -478,7 +479,7 @@ void SvxHFPage::TurnOn(const weld::Toggleable* pBox)
         if (!mbDisableQueryBox && pBox && m_xTurnOnBox->get_saved_state() == TRISTATE_TRUE)
         {
             short nResult;
-            if (nId == SID_ATTR_PAGE_HEADERSET)
+            if (m_nId == SID_ATTR_PAGE_HEADERSET)
             {
                 DeleteHeaderDialog aDlg(GetFrameWeld());
                 nResult = aDlg.run();
@@ -522,7 +523,7 @@ IMPL_LINK(SvxHFPage, TurnOnHdl, weld::Toggleable&, rBox, void)
 
 IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 {
-    if(!pBBSet)
+    if(!m_pBBSet)
     {
         // Use only the necessary items for border and background
         const sal_uInt16 nOuter(GetWhich(SID_ATTR_BORDER_OUTER));
@@ -531,14 +532,14 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
         if(mbEnableDrawingLayerFillStyles)
         {
-            pBBSet.reset(new SfxItemSetFixed
+            m_pBBSet.reset(new SfxItemSetFixed
                             <XATTR_FILL_FIRST, XATTR_FILL_LAST,      // DrawingLayer FillStyle definitions
                              SID_COLOR_TABLE, SID_PATTERN_LIST> // XPropertyLists for Color, Gradient, Hatch and Graphic fills
                             (*GetItemSet().GetPool()));
             // Keep it valid
-            pBBSet->MergeRange(nOuter, nOuter);
-            pBBSet->MergeRange(nInner, nInner);
-            pBBSet->MergeRange(nShadow, nShadow);
+            m_pBBSet->MergeRange(nOuter, nOuter);
+            m_pBBSet->MergeRange(nInner, nInner);
+            m_pBBSet->MergeRange(nShadow, nShadow);
 
             // copy items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -557,7 +558,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
                 if(pItem)
                 {
-                    pBBSet->Put(*pItem);
+                    m_pBBSet->Put(*pItem);
                 }
                 else
                 {
@@ -569,22 +570,22 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
         {
             const sal_uInt16 nBrush(GetWhich(SID_ATTR_BRUSH));
 
-            pBBSet.reset( new SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>
+            m_pBBSet.reset( new SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>
                             (*GetItemSet().GetPool()) );
             // Keep it valid
-            pBBSet->MergeRange(nBrush, nBrush);
-            pBBSet->MergeRange(nOuter, nOuter);
-            pBBSet->MergeRange(nInner, nInner);
-            pBBSet->MergeRange(nShadow, nShadow);
+            m_pBBSet->MergeRange(nBrush, nBrush);
+            m_pBBSet->MergeRange(nOuter, nOuter);
+            m_pBBSet->MergeRange(nInner, nInner);
+            m_pBBSet->MergeRange(nShadow, nShadow);
         }
 
         const SfxPoolItem* pItem;
 
-        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(m_nId), false, &pItem))
         {
             // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
             // SID_ATTR_PAGE_FOOTERSET exists, use its content
-            pBBSet->Put(static_cast<const SvxSetItem*>(pItem)->GetItemSet());
+            m_pBBSet->Put(static_cast<const SvxSetItem*>(pItem)->GetItemSet());
         }
         else
         {
@@ -594,14 +595,14 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                 // XFillStyleItem to drawing::FillStyle_NONE which is the same as in the style
                 // initialization. This needs to be done since the pool default for
                 // XFillStyleItem is drawing::FillStyle_SOLID
-                pBBSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
+                m_pBBSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
         }
 
         if(SfxItemState::SET == GetItemSet().GetItemState(nInner, false, &pItem))
         {
             // The set InfoItem is always required
-            pBBSet->Put(*pItem);
+            m_pBBSet->Put(*pItem);
         }
     }
 
@@ -609,7 +610,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
         GetFrameWeld(),
-        *pBBSet,
+        *m_pBBSet,
         mbEnableDrawingLayerFillStyles));
 
     pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult) {
@@ -621,7 +622,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
             {
                 if(!IsInvalidItem(pItem))
                 {
-                    pBBSet->Put(*pItem);
+                    m_pBBSet->Put(*pItem);
                 }
             }
 
@@ -632,18 +633,18 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                 {
                     // create FillAttributes directly from DrawingLayer FillStyle entries
                     aFillAttributes =
-                        std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(*pBBSet);
+                        std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(*m_pBBSet);
                 }
                 else
                 {
                     const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
 
-                    if (pBBSet->GetItemState(nWhich) == SfxItemState::SET)
+                    if (m_pBBSet->GetItemState(nWhich) == SfxItemState::SET)
                     {
                         // create FillAttributes from SvxBrushItem
                         const SvxBrushItem& rItem
-                            = static_cast<const SvxBrushItem&>(pBBSet->Get(nWhich));
-                        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*pBBSet->GetPool());
+                            = static_cast<const SvxBrushItem&>(m_pBBSet->Get(nWhich));
+                        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*m_pBBSet->GetPool());
 
                         setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                         aFillAttributes =
@@ -651,7 +652,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                     }
                 }
 
-                if (SID_ATTR_PAGE_HEADERSET == nId)
+                if (SID_ATTR_PAGE_HEADERSET == m_nId)
                 {
                     //m_aBspWin.SetHdColor(rItem.GetColor());
                     m_aBspWin.setHeaderFillAttributes(aFillAttributes);
@@ -671,7 +672,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
 void SvxHFPage::UpdateExample()
 {
-    if ( nId == SID_ATTR_PAGE_HEADERSET )
+    if ( m_nId == SID_ATTR_PAGE_HEADERSET )
     {
         m_aBspWin.SetHeader( m_xTurnOnBox->get_active() );
         m_aBspWin.SetHdHeight( GetCoreValue( *m_xHeightEdit, MapUnit::MapTwip ) );
@@ -884,7 +885,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                     = static_cast<const SfxBoolItem*>(&rHeaderSet.Get(nSidAttrPageSharedFirst));
             if (pSharedFirst)
             {
-                if (SID_ATTR_PAGE_HEADERSET == nId || m_bIsCalc)
+                if (SID_ATTR_PAGE_HEADERSET == m_nId || m_bIsCalc)
                     bActivatedFirstShared = pSharedFirst->GetValue();
                 else
                     oNonActivatedFirstShared = pSharedFirst->GetValue();
@@ -898,7 +899,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     {
         m_aBspWin.SetHeader( false );
 
-        if ( SID_ATTR_PAGE_HEADERSET == nId )
+        if ( SID_ATTR_PAGE_HEADERSET == m_nId )
         {
             m_xCntSharedBox->set_sensitive(false);
             m_xCntSharedFirstBox->set_sensitive(false);
@@ -933,7 +934,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                     = static_cast<const SfxBoolItem*>(&rFooterSet.Get(nSidAttrPageSharedFirst));
             if (pSharedFirst)
             {
-                if (SID_ATTR_PAGE_FOOTERSET == nId || m_bIsCalc)
+                if (SID_ATTR_PAGE_FOOTERSET == m_nId || m_bIsCalc)
                     bActivatedFirstShared = pSharedFirst->GetValue();
                 else
                     oNonActivatedFirstShared = pSharedFirst->GetValue();
@@ -947,7 +948,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     {
         m_aBspWin.SetFooter( false );
 
-        if ( SID_ATTR_PAGE_FOOTERSET == nId )
+        if ( SID_ATTR_PAGE_FOOTERSET == m_nId )
         {
             m_xCntSharedBox->set_sensitive(false);
             m_xCntSharedFirstBox->set_sensitive(false);
@@ -1006,7 +1007,7 @@ void SvxHFPage::RangeHdl()
     tools::Long nMin;
     tools::Long nMax;
 
-    if ( nId == SID_ATTR_PAGE_HEADERSET )
+    if ( m_nId == SID_ATTR_PAGE_HEADERSET )
     {
         nHHeight = nHeight;
         nHDist   = nDist;
@@ -1027,7 +1028,7 @@ void SvxHFPage::RangeHdl()
     tools::Long nW  = m_aBspWin.GetSize().Width();
 
     // Borders
-    if ( nId == SID_ATTR_PAGE_HEADERSET )
+    if ( m_nId == SID_ATTR_PAGE_HEADERSET )
     {
         // Header
         nMin = ( nH - nBB - nBT ) / 5; // 20%

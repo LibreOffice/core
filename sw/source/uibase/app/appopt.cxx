@@ -103,7 +103,8 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             FN_PARAM_WRTSHELL, FN_PARAM_WRTSHELL,
             FN_PARAM_SHADOWCURSOR, FN_PARAM_SHADOWCURSOR,
             FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
-            FN_PARAM_FMT_AIDS_AUTOCOMPL, FN_PARAM_FMT_AIDS_AUTOCOMPL>
+            FN_PARAM_FMT_AIDS_AUTOCOMPL, FN_PARAM_FMT_AIDS_AUTOCOMPL,
+            FN_PARAM_BASELINE_GRID_VISIBLE, FN_PARAM_BASELINE_GRID_VISIBLE>
         aRet(GetPool());
 
     aRet.Put( SwDocDisplayItem( aViewOpt ) );
@@ -201,6 +202,9 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     aGridItem.SetFieldDivisionY( aViewOpt.GetDivisionY());
 
     aRet.Put(aGridItem);
+
+    // Baseline grid options
+    aRet.Put( SfxBoolItem(FN_PARAM_BASELINE_GRID_VISIBLE, aViewOpt.IsBaselineGridVisible()));
 
     // Options for PrintTabPage
     const SwPrintData* pOpt = GetPrtOptions(!bTextDialog);
@@ -372,6 +376,16 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
+    // Baseline grid options
+    if( const SfxBoolItem* pItem = rSet.GetItemIfSet( FN_PARAM_BASELINE_GRID_VISIBLE, false ))
+    {
+        aViewOpt.SetBaselineGridVisible(pItem->GetValue());
+        if(pBindings)
+        {
+            pBindings->Invalidate(FN_VIEW_BASELINE_GRID_VISIBLE);
+        }
+    }
+
     // Interpret Writer Printer Options
     if( const SwAddPrinterItem* pAddPrinterAttr = rSet.GetItemIfSet( FN_PARAM_ADDPRINTER, false ) )
     {
@@ -454,9 +468,15 @@ std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, weld::Conta
             break;
         }
         case RID_SW_TP_HTML_OPTGRID_PAGE:
-        case RID_SVXPAGE_GRID:
             xRet = SvxGridTabPage::Create(pPage, pController, rSet);
         break;
+        case RID_SVXPAGE_GRID:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+            xRet = (*fnCreatePage)( pPage, pController, &rSet );
+            break;
+        }
 
         case RID_SW_TP_STD_FONT:
         case RID_SW_TP_STD_FONT_CJK:

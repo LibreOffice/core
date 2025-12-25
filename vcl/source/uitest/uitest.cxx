@@ -44,6 +44,17 @@ bool UITest::executeCommandWithParameters(const OUString& rCommand,
     return comphelper::dispatchCommand(rCommand,lNewArgs);
 }
 
+bool UITest::executeCommandForProvider(
+    const OUString& rCommand,
+    const css::uno::Reference< css::frame::XDispatchProvider >& xProvider)
+{
+    return comphelper::dispatchCommand(
+        rCommand,
+        xProvider,
+        {{u"SynchronMode"_ustr, -1, css::uno::Any(true),
+          css::beans::PropertyState_DIRECT_VALUE}});
+}
+
 bool UITest::executeDialog(const OUString& rCommand)
 {
     return comphelper::dispatchCommand(
@@ -63,6 +74,18 @@ std::unique_ptr<UIObject> UITest::getFocusTopWindow()
     }
 
     return pSVData->maFrameData.mpFirstFrame->GetUITestFactory()(pSVData->maFrameData.mpFirstFrame);
+}
+
+std::unique_ptr<UIObject> UITest::getFocusWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVWinData& rWinData = *pSVData->mpWinData;
+
+    VclPtr<vcl::Window> pFocusWin = rWinData.mpFocusWin;
+    if (pFocusWin)
+        return pFocusWin->GetUITestFactory()(pFocusWin);
+
+    return nullptr;
 }
 
 std::unique_ptr<UIObject> UITest::getFloatWindow()

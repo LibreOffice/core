@@ -21,7 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/print.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <envimg.hxx>
 #include <envlop.hxx>

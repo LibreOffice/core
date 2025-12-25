@@ -3995,11 +3995,13 @@ void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > &
     xField->setLast( mnLast );
 }
 
-
 void UnoNumericFieldControl::textChanged( const awt::TextEvent& e )
 {
-    uno::Reference < awt::XNumericField >  xField( getPeer(), uno::UNO_QUERY );
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), uno::Any(xField->getValue()), false );
+    uno::Reference<awt::XVclWindowPeer> xPeer(getPeer(), UNO_QUERY);
+    const OUString& sPropertyName = GetPropertyName(BASEPROPERTY_VALUE_DOUBLE);
+    // tdf#168788 for consistency with UnoFormattedFieldControl, use getProperty
+    // instead of getValue so an empty string can be represented as empty Any
+    ImplSetPropertyValue(sPropertyName, xPeer->getProperty(sPropertyName), false);
 
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
@@ -4217,8 +4219,11 @@ void UnoCurrencyFieldControl::createPeer( const uno::Reference< awt::XToolkit > 
 
 void UnoCurrencyFieldControl::textChanged( const awt::TextEvent& e )
 {
-    uno::Reference < awt::XCurrencyField >  xField( getPeer(), uno::UNO_QUERY );
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), uno::Any(xField->getValue()), false );
+    uno::Reference<awt::XVclWindowPeer> xPeer(getPeer(), UNO_QUERY);
+    const OUString& sPropertyName = GetPropertyName(BASEPROPERTY_VALUE_DOUBLE);
+    // tdf#168788 for consistency with UnoFormattedFieldControl, use getProperty
+    // instead of getValue so an empty string can be represented as empty Any
+    ImplSetPropertyValue(sPropertyName, xPeer->getProperty(sPropertyName), false);
 
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );

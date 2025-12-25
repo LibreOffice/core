@@ -933,19 +933,6 @@
           <value>3</value>
         </prop>
       </group>
-      <group oor:name="SnapGrid">
-        <info>
-          <desc>Contains the specifications of the snap grid.</desc>
-        </info>
-        <prop oor:name="Size" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Impress - Grid - [Section] Snap grid -->
-          <info>
-            <desc>Indicates whether to synchronize grid and snap-grid.</desc>
-            <label>Size to grid</label>
-          </info>
-          <value>true</value>
-        </prop>
-      </group>
     </group>
     <group oor:name="Print">
       <info>

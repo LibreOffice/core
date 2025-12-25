@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <o3tl/untaint.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
@@ -161,9 +162,10 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xPopUpNoHelpImg(m_xBuilder->weld_widget(u"lockpopupnohelp"_ustr))
     , m_xShowTipOfTheDay(m_xBuilder->weld_check_button(u"cbShowTipOfTheDay"_ustr))
     , m_xShowTipOfTheDayImg(m_xBuilder->weld_widget(u"lockcbShowTipOfTheDay"_ustr))
-    , m_xFileDlgFrame(m_xBuilder->weld_widget(u"filedlgframe"_ustr))
     , m_xFileDlgROImage(m_xBuilder->weld_widget(u"lockimage"_ustr))
     , m_xFileDlgCB(m_xBuilder->weld_check_button(u"filedlg"_ustr))
+    , m_xColorDlgROImage(m_xBuilder->weld_widget(u"locksystemcolordialogs"_ustr))
+    , m_xColorDlgCB(m_xBuilder->weld_check_button(u"systemcolordialogs"_ustr))
     , m_xDocStatusCB(m_xBuilder->weld_check_button(u"docstatus"_ustr))
     , m_xDocStatusImg(m_xBuilder->weld_widget(u"lockdocstatus"_ustr))
     , m_xYearFrame(m_xBuilder->weld_widget(u"yearframe"_ustr))
@@ -217,14 +219,14 @@ std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( weld::Container* pPage, weld
 
 OUString OfaMiscTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label4"_ustr, u"label5"_ustr, u"yearslabel"_ustr,
                           u"toyear"_ustr, u"label8"_ustr, u"label9"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -234,13 +236,13 @@ OUString OfaMiscTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     if (const auto pString = m_xBuilder->weld_button(u"assocfiles"_ustr))
-        sAllStrings += pString->get_label() + " ";
+        sAllStrings.append(pString->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
@@ -257,6 +259,12 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     if ( m_xShowTipOfTheDay->get_state_changed_from_saved() )
     {
         officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_xShowTipOfTheDay->get_active(), batch);
+        bModified = true;
+    }
+
+    if (m_xColorDlgCB->get_state_changed_from_saved())
+    {
+        officecfg::Office::Common::Misc::UseSystemColorDialog::set(!m_xColorDlgCB->get_active(), batch);
         bModified = true;
     }
 
@@ -329,15 +337,17 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xShowTipOfTheDayImg->set_visible(!bEnable);
     m_xShowTipOfTheDay->save_state();
 
-    if (!lcl_HasSystemFilePicker())
-        m_xFileDlgFrame->hide();
-    else
-    {
-        bEnable = !officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
-        m_xFileDlgCB->set_sensitive(bEnable);
-        m_xFileDlgROImage->set_visible(!bEnable);
-    }
-    m_xFileDlgCB->set_active(!officecfg::Office::Common::Misc::UseSystemFileDialog::get());
+    bEnable = !officecfg::Office::Common::Misc::UseSystemColorDialog::isReadOnly();
+    m_xColorDlgCB->set_sensitive(bEnable);
+    m_xColorDlgROImage->set_visible(!bEnable);
+    m_xColorDlgCB->set_active(!officecfg::Office::Common::Misc::UseSystemColorDialog::get());
+    m_xColorDlgCB->save_state();
+
+    const bool bReadOnly = officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
+    bEnable = !bReadOnly && lcl_HasSystemFilePicker();
+    m_xFileDlgCB->set_sensitive(bEnable);
+    m_xFileDlgROImage->set_visible(bReadOnly);
+    m_xFileDlgCB->set_active(!lcl_HasSystemFilePicker() || !officecfg::Office::Common::Misc::UseSystemFileDialog::get());
     m_xFileDlgCB->save_state();
 
     bEnable = !officecfg::Office::Common::Print::PrintingModifiesDocument::isReadOnly();
@@ -648,7 +658,7 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 
 OUString OfaViewTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label16"_ustr, u"label1"_ustr,      u"label6"_ustr,       u"label15"_ustr,
                           u"label14"_ustr, u"label8"_ustr,      u"label9"_ustr,       u"label4"_ustr, u"label12"_ustr,
                           u"label2"_ustr,  u"skiaenabled"_ustr, u"skiadisabled"_ustr, u"label5"_ustr, u"aafrom"_ustr };
@@ -656,7 +666,7 @@ OUString OfaViewTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -665,12 +675,12 @@ OUString OfaViewTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xSkiaLog->get_label() + " " + m_xRunGPTests->get_label() + " ";
+    sAllStrings.append(m_xSkiaLog->get_label() + " " + m_xRunGPTests->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -702,7 +712,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xAAPointLimit->get_value_changed_from_saved())
     {
-        sal_Int64 i = m_xAAPointLimit->get_value(FieldUnit::PIXEL);
+        sal_Int16 i = o3tl::sanitizing_cast<sal_Int16>(m_xAAPointLimit->get_value(FieldUnit::PIXEL));
         officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::set(i, batch);
         bAppearanceChanged = true;
     }
@@ -1070,7 +1080,7 @@ std::unique_ptr<SfxTabPage> OfaLanguagesTabPage::Create( weld::Container* pPage,
 
 OUString OfaLanguagesTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[]
         = { u"label1"_ustr, u"label4"_ustr,          u"label7"_ustr, u"localesettingFT"_ustr, u"defaultcurrency"_ustr,
             u"label6"_ustr, u"dataaccpatterns"_ustr, u"label2"_ustr, u"western"_ustr,         u"label3"_ustr };
@@ -1078,7 +1088,7 @@ OUString OfaLanguagesTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[]
@@ -1087,10 +1097,10 @@ OUString OfaLanguagesTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )

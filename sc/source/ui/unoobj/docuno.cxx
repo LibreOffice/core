@@ -1087,8 +1087,8 @@ bool ScModelObj::isMimeTypeSupported()
 
 static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
 {
-    ScDocShell& rDocSh = pViewData->GetDocShell();
-    ScDocument& rDoc = rDocSh.GetDocument();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
     const SfxPoolItem& rItem(rDoc.getCellAttributeHelper().getDefaultCellAttribute().GetItem(ATTR_BACKGROUND));
     const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
     const Color& rColor = rBackground.GetColor();
@@ -2716,7 +2716,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
         tools::Rectangle aBound( Point(), pDev->GetOutputSize());
 
-        ScViewData aViewData(*rDoc.GetDocumentShell(), nullptr);
+        ScViewData aViewData(rDoc);
 
         aViewData.SetTabNo( aRange.aStart.Tab() );
         aViewData.SetScreen( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row() );

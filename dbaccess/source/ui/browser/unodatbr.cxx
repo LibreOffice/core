@@ -92,7 +92,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 
@@ -2469,9 +2469,7 @@ bool SbaTableQueryBrowser::implSelect(const OUString& _rDataSourceName, const OU
 IMPL_LINK_NOARG(SbaTableQueryBrowser, OnSelectionChange, LinkParamNone*, void)
 {
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-    std::unique_ptr<weld::TreeIter> xSelection(rTreeView.make_iterator());
-    if (!rTreeView.get_selected(xSelection.get()))
-        xSelection.reset();
+    std::unique_ptr<weld::TreeIter> xSelection = rTreeView.get_selected();
     implSelect(xSelection.get());
 }
 
@@ -3512,8 +3510,8 @@ Any SbaTableQueryBrowser::getCurrentSelection(weld::TreeView& rControl) const
     if (&rTreeView != &rControl)
         return Any();
 
-    std::unique_ptr<weld::TreeIter> xSelected(rTreeView.make_iterator());
-    if (!rTreeView.get_selected(xSelected.get()))
+    std::unique_ptr<weld::TreeIter> xSelected = rTreeView.get_selected();
+    if (!xSelected)
         return Any();
 
     NamedDatabaseObject aSelectedObject;

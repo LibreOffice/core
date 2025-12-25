@@ -30,7 +30,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
@@ -38,6 +38,7 @@
 #include <svx/strings.hrc>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/theme.hxx>
 #include <oox/dump/pptxdumper.hxx>
 #include <drawingml/table/tablestylelistfragmenthandler.hxx>
 #include <oox/helper/graphichelper.hxx>

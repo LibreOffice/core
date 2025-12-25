@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/optgrid.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 /**
  * Option-Tab-Page: Snap

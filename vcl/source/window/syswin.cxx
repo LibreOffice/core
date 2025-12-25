@@ -27,6 +27,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
@@ -919,7 +920,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
 
 void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
                                   const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                  const NotebookBarAddonsItem& aNotebookBarAddonsItem,
+                                  std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem,
                                   bool bReloadNotebookbar)
 {
     mbInSetNoteBookBar = true;
@@ -927,7 +928,7 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
     if (rUIXMLDescription != maNotebookBarUIFile || bReloadNotebookbar)
     {
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())
-            ->SetNotebookBar(rUIXMLDescription, rFrame, aNotebookBarAddonsItem);
+            ->SetNotebookBar(rUIXMLDescription, rFrame, std::move(pNotebookBarAddonsItem));
         maNotebookBarUIFile = rUIXMLDescription;
         if(GetNotebookBar())
             GetNotebookBar()->SetSystemWindow(this);

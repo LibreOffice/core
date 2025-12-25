@@ -23,6 +23,7 @@
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/export/shapes.hxx>
 #include <unotools/securityoptions.hxx>
+#include <xmloff/autolayout.hxx>
 #include "epptbase.hxx"
 
 using ::sax_fastparser::FSHelperPtr;
@@ -123,7 +124,9 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
+    static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
+                             const css::uno::Reference<css::drawing::XShape>& rXShape,
+                             sal_Int32 nDiagramId);
 
     /** Create a new placeholder index for a master placeholder shape
 
@@ -145,7 +148,7 @@ private:
 
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
-    LayoutInfo mLayoutInfo[OOXML_LAYOUT_SIZE];
+    LayoutInfo mLayoutInfo[AUTOLAYOUT_END];
     // Pairs of masters and layouts as used by Impress
     std::vector<std::pair<SdrPage*, sal_Int32>> maMastersLayouts;
     // For each Impress master, which master will represent it on the exported file (SAL_MAX_UINT32 if not in an equivalency group)
@@ -159,7 +162,7 @@ private:
     sal_uInt32 mnAnimationNodeIdMax;
     sal_uInt32 mnThemeIdMax;
 
-    sal_uInt32 mnDiagramId;
+    sal_Int32 mnDiagramId;
 
     std::vector<OUString> maRelId;
 

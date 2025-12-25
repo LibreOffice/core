@@ -25,6 +25,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
+#include <tools/debug.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -1182,7 +1183,8 @@ css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
         }
         else
         {
-            SAL_WARN_IF(aAny.hasValue(), "sd", "SvxShape::GetAnyForItem() Returnvalue has wrong Type!");
+            SAL_WARN_IF(aAny.hasValue(), "sd", "SvxShape::GetAnyForItem() Return value has wrong type, expected "
+                << pEntry->aType << " but got " << aAny.getValueType());
         }
     }
 

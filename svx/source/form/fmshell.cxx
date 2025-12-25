@@ -26,7 +26,7 @@
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
 #include <svl/intitem.hxx>
@@ -444,7 +444,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
         {
-            const SfxBoolItem* pGrabFocusItem = rReq.GetArg<SfxBoolItem>(SID_FM_TOGGLECONTROLFOCUS);
+            const SfxBoolItem* pGrabFocusItem = rReq.GetArg(SID_FM_TOGGLECONTROLFOCUS);
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
@@ -556,7 +556,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
-            const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(SID_FM_SHOW_PROPERTIES);
+            const SfxBoolItem* pShowItem = rReq.GetArg(SID_FM_SHOW_PROPERTIES);
             bool bShow = true;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();
@@ -597,7 +597,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame().ToggleChildWindow(nSlot);
+            // request may explicitly request to show/hide these
+            // so may or may not result in a ToggleChildWindow
+            GetViewShell()->GetViewFrame().ChildWindowExecute(rReq);
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:

@@ -23,7 +23,7 @@ class TxtExportTest : public SwModelTestBase
 {
 public:
     TxtExportTest()
-        : SwModelTestBase(u"/sw/qa/extras/txtexport/data/"_ustr, u"Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/txtexport/data/"_ustr)
     {
     }
 
@@ -55,7 +55,7 @@ protected:
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testBullets)
 {
     createSwDoc("bullets.odt");
-    save(mpFilter);
+    save(TestFilter::TEXT);
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testBullets)
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf120574_utf8bom)
 {
     createSwDoc("UTF8BOMCRLF.txt");
-    save(mpFilter);
+    save(TestFilter::TEXT);
     std::vector<char> aMemStream = readMemoryStream<char>();
     OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
     CPPUNIT_ASSERT_EQUAL(u8"\uFEFFAB\r\nCD\r\n"_ostr, aData);
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf120574_utf8bom)
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf120574_utf16lebom)
 {
     createSwDoc("UTF16LEBOMCRLF.txt");
-    save(mpFilter);
+    save(TestFilter::TEXT);
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
     OUString aData(aMemStream.data(), aMemStream.size());
     CPPUNIT_ASSERT_EQUAL(u"\uFEFFAB\r\nCD\r\n"_ustr, aData);
@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf120574_utf16lebom)
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf142669_utf8)
 {
     createSwDoc("UTF8CRLF.txt");
-    save(mpFilter);
+    save(TestFilter::TEXT);
     std::vector<char> aMemStream = readMemoryStream<char>();
     OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
     CPPUNIT_ASSERT_EQUAL(u8"AB\r\nCD\r\n"_ostr, aData);
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf142669_utf8)
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testTdf142669_utf16le)
 {
     createSwDoc("UTF16LECRLF.txt");
-    save(mpFilter);
+    save(TestFilter::TEXT);
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
     OUString aData(aMemStream.data(), aMemStream.size());
     CPPUNIT_ASSERT_EQUAL(u"AB\r\nCD\r\n"_ustr, aData);
@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
     xText->insertString(xCursor, u"bar"_ustr, /*bAbsorb=*/false);
 
     // When exporting to plain text:
-    save(mpFilter);
+    save(TestFilter::TEXT);
 
     // Then make sure that the newline is not lost:
     OString aActual = readExportedFile();

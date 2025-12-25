@@ -20,10 +20,14 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/lang/EventObject.hpp>
 #include <comphelper/interfacecontainer3.hxx>
 #include <memory>
 #include <vector>
+
+namespace com::sun::star::lang
+{
+struct EventObject;
+}
 
 namespace comphelper
 {

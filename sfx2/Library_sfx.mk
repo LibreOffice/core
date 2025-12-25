@@ -165,8 +165,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailviewacc \
     sfx2/source/control/thumbnailviewitemacc \
     sfx2/source/control/thumbnailview \
+    sfx2/source/control/charmapcontainer \
     sfx2/source/control/charmapcontrol \
-    sfx2/source/control/charwin \
     sfx2/source/control/unoctitm \
     sfx2/source/devtools/DevelopmentToolChildWindow \
     sfx2/source/devtools/DevelopmentToolDockingWindow \
@@ -189,6 +189,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/bluthsnd \
     sfx2/source/dialog/mgetempl \
     sfx2/source/dialog/navigat \
+    sfx2/source/dialog/quickfind \
     sfx2/source/dialog/newstyle \
     sfx2/source/dialog/partwnd \
     sfx2/source/dialog/passwd \

@@ -231,9 +231,9 @@ public:
     SAL_DLLPRIVATE void setWps(bool bWps);
     bool                getWps() const { return mbWps;}
     SAL_DLLPRIVATE void setTextBox(bool bTextBox);
-    const css::uno::Sequence<css::beans::PropertyValue> &
-                        getDiagramDoms() const { return maDiagramDoms; }
-    void                setDiagramDoms(const css::uno::Sequence<css::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
+
+    // access to DiagramHelper
+    AdvancedDiagramHelper* getDiagramHelper() const { return mpDiagramHelper; }
     SAL_DLLPRIVATE css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
@@ -310,7 +310,6 @@ protected:
                             ShapeIdMap* pShapeMap,
                             const basegfx::B2DHomMatrix& aTransformation );
 
-    SAL_DLLPRIVATE void keepDiagramCompatibilityInfo();
     SAL_DLLPRIVATE void convertSmartArtToMetafile( ::oox::core::XmlFilterBase const& rFilterBase );
 
     SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape >
@@ -429,8 +428,6 @@ private:
     LinkedTxbxAttr                  maLinkedTxbxAttr;
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
     bool                            mbHasCustomPrompt; // indicates that it's not a generic placeholder
-
-    css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
 
     /// Z-Order.
     sal_Int32 mnZOrder = 0;

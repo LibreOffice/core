@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
-#define INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
 #include <unordered_set>
-#include <unordered_map>
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -168,6 +166,5 @@ namespace formula
     };
 
 }
-#endif // INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

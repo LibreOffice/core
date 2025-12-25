@@ -54,7 +54,7 @@ SvxFontWorkControllerItem::SvxFontWorkControllerItem
 
     SfxControllerItem( _nId, rBindings ),
 
-    rFontWorkDlg( rDlg )
+    m_rFontWorkDlg( rDlg )
 {
 }
 
@@ -70,7 +70,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextStyleItem* pStateItem =
                                 dynamic_cast<const XFormTextStyleItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextStyleItem expected");
-            rFontWorkDlg.SetStyle_Impl(pStateItem);
+            m_rFontWorkDlg.SetStyle_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_ADJUST:
@@ -78,7 +78,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextAdjustItem* pStateItem =
                                 dynamic_cast<const XFormTextAdjustItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextAdjustItem expected");
-            rFontWorkDlg.SetAdjust_Impl(pStateItem);
+            m_rFontWorkDlg.SetAdjust_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_DISTANCE:
@@ -86,7 +86,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextDistanceItem* pStateItem =
                                 dynamic_cast<const XFormTextDistanceItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextDistanceItem expected");
-            rFontWorkDlg.SetDistance_Impl(pStateItem);
+            m_rFontWorkDlg.SetDistance_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_START:
@@ -94,7 +94,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextStartItem* pStateItem =
                                 dynamic_cast<const XFormTextStartItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextStartItem expected");
-            rFontWorkDlg.SetStart_Impl(pStateItem);
+            m_rFontWorkDlg.SetStart_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_MIRROR:
@@ -102,7 +102,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextMirrorItem* pStateItem =
                                 dynamic_cast<const XFormTextMirrorItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextMirrorItem expected");
-            rFontWorkDlg.SetMirror_Impl(pStateItem);
+            m_rFontWorkDlg.SetMirror_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_HIDEFORM:
@@ -110,7 +110,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextHideFormItem* pStateItem =
                                 dynamic_cast<const XFormTextHideFormItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextHideFormItem expected");
-            rFontWorkDlg.SetShowForm_Impl(pStateItem);
+            m_rFontWorkDlg.SetShowForm_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_OUTLINE:
@@ -118,7 +118,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextOutlineItem* pStateItem =
                                 dynamic_cast<const XFormTextOutlineItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextOutlineItem expected");
-            rFontWorkDlg.SetOutline_Impl(pStateItem);
+            m_rFontWorkDlg.SetOutline_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHADOW:
@@ -126,7 +126,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextShadowItem* pStateItem =
                                 dynamic_cast<const XFormTextShadowItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextShadowItem expected");
-            rFontWorkDlg.SetShadow_Impl(pStateItem);
+            m_rFontWorkDlg.SetShadow_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHDWCOLOR:
@@ -134,7 +134,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextShadowColorItem* pStateItem =
                                 dynamic_cast<const XFormTextShadowColorItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextShadowColorItem expected");
-            rFontWorkDlg.SetShadowColor_Impl(pStateItem);
+            m_rFontWorkDlg.SetShadowColor_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHDWXVAL:
@@ -142,7 +142,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextShadowXValItem* pStateItem =
                                 dynamic_cast<const XFormTextShadowXValItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextShadowXValItem expected");
-            rFontWorkDlg.SetShadowXVal_Impl(pStateItem);
+            m_rFontWorkDlg.SetShadowXVal_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHDWYVAL:
@@ -150,7 +150,7 @@ void SvxFontWorkControllerItem::StateChangedAtToolBoxControl( sal_uInt16 /*nSID*
             const XFormTextShadowYValItem* pStateItem =
                                 dynamic_cast<const XFormTextShadowYValItem*>( pItem );
             DBG_ASSERT(pStateItem || pItem == nullptr, "XFormTextShadowYValItem expected");
-            rFontWorkDlg.SetShadowYVal_Impl(pStateItem);
+            m_rFontWorkDlg.SetShadowYVal_Impl(pStateItem);
             break;
         }
     }
@@ -178,12 +178,12 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
                                      SfxChildWindow *pCW,
                                      vcl::Window* _pParent)
     : SfxDockingWindow(pBindinx, pCW, _pParent, u"DockingFontwork"_ustr, u"svx/ui/dockingfontwork.ui"_ustr)
-    , rBindings(*pBindinx)
-    , aInputIdle("SvxFontWorkDialog Input")
-    , nSaveShadowX(0)
-    , nSaveShadowY(0)
-    , nSaveShadowAngle(450)
-    , nSaveShadowSize (100)
+    , m_rBindings(*pBindinx)
+    , m_aInputIdle("SvxFontWorkDialog Input")
+    , m_nSaveShadowX(0)
+    , m_nSaveShadowY(0)
+    , m_nSaveShadowAngle(450)
+    , m_nSaveShadowSize (100)
     , m_xTbxStyle(m_xBuilder->weld_toolbar(u"style"_ustr))
     , m_xTbxAdjust(m_xBuilder->weld_toolbar(u"adjust"_ustr))
     , m_xMtrFldDistance(m_xBuilder->weld_metric_spin_button(u"distance"_ustr, FieldUnit::CM))
@@ -199,17 +199,17 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
 
     ApplyImageList();
 
-    pCtrlItems[0] = new SvxFontWorkControllerItem(SID_FORMTEXT_STYLE, *this, rBindings);
-    pCtrlItems[1] = new SvxFontWorkControllerItem(SID_FORMTEXT_ADJUST, *this, rBindings);
-    pCtrlItems[2] = new SvxFontWorkControllerItem(SID_FORMTEXT_DISTANCE, *this, rBindings);
-    pCtrlItems[3] = new SvxFontWorkControllerItem(SID_FORMTEXT_START, *this, rBindings);
-    pCtrlItems[4] = new SvxFontWorkControllerItem(SID_FORMTEXT_MIRROR, *this, rBindings);
-    pCtrlItems[5] = new SvxFontWorkControllerItem(SID_FORMTEXT_HIDEFORM, *this, rBindings);
-    pCtrlItems[6] = new SvxFontWorkControllerItem(SID_FORMTEXT_OUTLINE, *this, rBindings);
-    pCtrlItems[7] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHADOW, *this, rBindings);
-    pCtrlItems[8] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWCOLOR, *this, rBindings);
-    pCtrlItems[9] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWXVAL, *this, rBindings);
-    pCtrlItems[10] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWYVAL, *this, rBindings);
+    m_pCtrlItems[0] = new SvxFontWorkControllerItem(SID_FORMTEXT_STYLE, *this, m_rBindings);
+    m_pCtrlItems[1] = new SvxFontWorkControllerItem(SID_FORMTEXT_ADJUST, *this, m_rBindings);
+    m_pCtrlItems[2] = new SvxFontWorkControllerItem(SID_FORMTEXT_DISTANCE, *this, m_rBindings);
+    m_pCtrlItems[3] = new SvxFontWorkControllerItem(SID_FORMTEXT_START, *this, m_rBindings);
+    m_pCtrlItems[4] = new SvxFontWorkControllerItem(SID_FORMTEXT_MIRROR, *this, m_rBindings);
+    m_pCtrlItems[5] = new SvxFontWorkControllerItem(SID_FORMTEXT_HIDEFORM, *this, m_rBindings);
+    m_pCtrlItems[6] = new SvxFontWorkControllerItem(SID_FORMTEXT_OUTLINE, *this, m_rBindings);
+    m_pCtrlItems[7] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHADOW, *this, m_rBindings);
+    m_pCtrlItems[8] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWCOLOR, *this, m_rBindings);
+    m_pCtrlItems[9] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWXVAL, *this, m_rBindings);
+    m_pCtrlItems[10] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWYVAL, *this, m_rBindings);
 
     m_xTbxStyle->connect_clicked(LINK(this, SvxFontWorkDialog, SelectStyleHdl_Impl));
     m_xTbxAdjust->connect_clicked(LINK(this, SvxFontWorkDialog, SelectAdjustHdl_Impl));
@@ -222,7 +222,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     m_xMtrFldShadowY->connect_value_changed( aLink );
 
     // Set System metric
-    const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
+    const FieldUnit eDlgUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     SetFieldUnit(*m_xMtrFldDistance, eDlgUnit, true);
     SetFieldUnit(*m_xMtrFldTextStart, eDlgUnit, true);
     SetFieldUnit(*m_xMtrFldShadowX, eDlgUnit, true);
@@ -246,8 +246,8 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
 
     m_xShadowColorLB->SetSelectHdl( LINK(this, SvxFontWorkDialog, ColorSelectHdl_Impl) );
 
-    aInputIdle.SetPriority(TaskPriority::LOWEST);
-    aInputIdle.SetInvokeHandler(LINK(this, SvxFontWorkDialog, InputTimeoutHdl_Impl));
+    m_aInputIdle.SetPriority(TaskPriority::LOWEST);
+    m_aInputIdle.SetInvokeHandler(LINK(this, SvxFontWorkDialog, InputTimeoutHdl_Impl));
 }
 
 SvxFontWorkDialog::~SvxFontWorkDialog()
@@ -257,7 +257,7 @@ SvxFontWorkDialog::~SvxFontWorkDialog()
 
 void SvxFontWorkDialog::dispose()
 {
-    for (SvxFontWorkControllerItem* pCtrlItem : pCtrlItems)
+    for (SvxFontWorkControllerItem* pCtrlItem : m_pCtrlItems)
         pCtrlItem->dispose();
     m_xTbxStyle.reset();
     m_xTbxAdjust.reset();
@@ -466,7 +466,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             if ( pItem->GetValue() == XFormTextShadow::Normal )
             {
                 sId = "vertical";
-                const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
+                const FieldUnit eDlgUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
 
                 m_xMtrFldShadowX->set_unit( eDlgUnit );
                 m_xMtrFldShadowX->set_digits(2);
@@ -488,11 +488,11 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 
                 if ( bRestoreValues )
                 {
-                    SetMetricValue(*m_xMtrFldShadowX, nSaveShadowX, MapUnit::Map100thMM);
-                    SetMetricValue(*m_xMtrFldShadowY, nSaveShadowY, MapUnit::Map100thMM);
+                    SetMetricValue(*m_xMtrFldShadowX, m_nSaveShadowX, MapUnit::Map100thMM);
+                    SetMetricValue(*m_xMtrFldShadowY, m_nSaveShadowY, MapUnit::Map100thMM);
 
-                    XFormTextShadowXValItem aXItem( nSaveShadowX );
-                    XFormTextShadowYValItem aYItem( nSaveShadowY );
+                    XFormTextShadowXValItem aXItem( m_nSaveShadowX );
+                    XFormTextShadowYValItem aYItem( m_nSaveShadowY );
 
                     GetBindings().GetDispatcher()->ExecuteList(
                         SID_FORMTEXT_SHDWXVAL, SfxCallMode::RECORD,
@@ -517,10 +517,10 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 
                 if ( bRestoreValues )
                 {
-                    m_xMtrFldShadowX->set_value(nSaveShadowAngle, FieldUnit::NONE);
-                    m_xMtrFldShadowY->set_value(nSaveShadowSize, FieldUnit::NONE);
-                    XFormTextShadowXValItem aXItem(nSaveShadowAngle);
-                    XFormTextShadowYValItem aYItem(nSaveShadowSize);
+                    m_xMtrFldShadowX->set_value(m_nSaveShadowAngle, FieldUnit::NONE);
+                    m_xMtrFldShadowY->set_value(m_nSaveShadowSize, FieldUnit::NONE);
+                    XFormTextShadowXValItem aXItem(m_nSaveShadowAngle);
+                    XFormTextShadowYValItem aYItem(m_nSaveShadowSize);
                     GetBindings().GetDispatcher()->ExecuteList(
                         SID_FORMTEXT_SHDWXVAL, SfxCallMode::RECORD,
                         { &aXItem, &aYItem });
@@ -675,13 +675,13 @@ IMPL_LINK(SvxFontWorkDialog, SelectShadowHdl_Impl, const OUString&, rId, void)
 
         if (m_sLastShadowTbxId == "vertical")
         {
-            nSaveShadowX = GetCoreValue(*m_xMtrFldShadowX, MapUnit::Map100thMM);
-            nSaveShadowY = GetCoreValue(*m_xMtrFldShadowY, MapUnit::Map100thMM);
+            m_nSaveShadowX = GetCoreValue(*m_xMtrFldShadowX, MapUnit::Map100thMM);
+            m_nSaveShadowY = GetCoreValue(*m_xMtrFldShadowY, MapUnit::Map100thMM);
         }
         else if (m_sLastShadowTbxId == "slant")
         {
-            nSaveShadowAngle = m_xMtrFldShadowX->get_value(FieldUnit::NONE);
-            nSaveShadowSize  = m_xMtrFldShadowY->get_value(FieldUnit::NONE);
+            m_nSaveShadowAngle = m_xMtrFldShadowX->get_value(FieldUnit::NONE);
+            m_nSaveShadowSize  = m_xMtrFldShadowY->get_value(FieldUnit::NONE);
         }
         m_sLastShadowTbxId = rId;
 
@@ -697,7 +697,7 @@ IMPL_LINK(SvxFontWorkDialog, SelectShadowHdl_Impl, const OUString&, rId, void)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl, weld::MetricSpinButton&, void)
 {
-    aInputIdle.Start();
+    m_aInputIdle.Start();
 }
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimeoutHdl_Impl, Timer*, void)
@@ -705,7 +705,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimeoutHdl_Impl, Timer*, void)
     // Possibly set the Metric system again. This should be done with a
     // listen, this is however not possible at the moment due to compatibility
     // issues.
-    const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
+    const FieldUnit eDlgUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     if( eDlgUnit != m_xMtrFldDistance->get_unit() )
     {
         SetFieldUnit(*m_xMtrFldDistance, eDlgUnit, true);

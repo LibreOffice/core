@@ -41,5 +41,9 @@ public class SettingsActivity extends FragmentActivity {
             }
         }
     }
+
+    public static boolean hasSettings() {
+        return BuildConfig.ALLOW_EDITING;
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,10 +21,16 @@
 #define INCLUDED_CONNECTIVITY_SQLERROR_HXX
 
 #include <config_options.h>
-#include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <rtl/ustring.hxx>
+
 #include <optional>
 #include <memory>
+
+namespace com::sun::star::sdbc { class SQLException; }
+namespace com::sun::star::uno { class Type; }
+namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace connectivity
 {

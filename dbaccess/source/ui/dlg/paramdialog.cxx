@@ -24,7 +24,7 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>

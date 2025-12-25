@@ -48,8 +48,8 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     private boolean mInitialized = false;
 
     private List<RectF> mSelections = new ArrayList<RectF>();
-    private List<RectF> mScaledSelections = new ArrayList<RectF>();
-    private Paint mSelectionPaint = new Paint();
+    private final List<RectF> mScaledSelections = new ArrayList<RectF>();
+    private final Paint mSelectionPaint = new Paint();
     private boolean mSelectionsVisible;
 
     private GraphicSelection mGraphicSelection;
@@ -126,9 +126,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
             return;
         }
         mCursor.mPosition = position;
-
-        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
-        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+        reposition();
     }
 
     /**
@@ -137,9 +135,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
      */
     public void changeSelections(List<RectF> selectionRects) {
         mSelections = selectionRects;
-
-        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
-        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+        reposition();
     }
 
     /**
@@ -152,9 +148,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
 
         mGraphicSelection.mRectangle = rectangle;
-
-        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
-        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+        reposition();
     }
 
     public void repositionWithViewport(float x, float y, float zoom) {
@@ -187,6 +181,12 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
 
         invalidate();
+    }
+
+    private void reposition()
+    {
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
+        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
     /**
@@ -460,9 +460,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
 
         RectUtils.assign(handle.mDocumentPosition, position);
-
-        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
-        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+        reposition();
     }
 
     /**
@@ -523,8 +521,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         RectUtils.assign(mCalcSelectionBox.mDocumentPosition, cellCursorRect);
         mCalcSelectionBox.setVisible(true);
 
-        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
-        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+        reposition();
 
         // show selection on headers
         if (!mCalcHeadersController.pendingRowOrColumnSelectionToShowUp()) {

@@ -29,8 +29,8 @@ FuConstUnoControl::FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin,
     , nInventor(SdrInventor::Unknown)
     , nIdentifier(SdrObjKind::NONE)
 {
-    const SfxUInt32Item* pInventorItem = rReq.GetArg<SfxUInt32Item>(SID_FM_CONTROL_INVENTOR);
-    const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
+    const SfxUInt32Item* pInventorItem = rReq.GetArg(SID_FM_CONTROL_INVENTOR);
+    const SfxUInt16Item* pIdentifierItem = rReq.GetArg(SID_FM_CONTROL_IDENTIFIER);
     if( pInventorItem )
         nInventor = static_cast<SdrInventor>(pInventorItem->GetValue());
     if( pIdentifierItem )

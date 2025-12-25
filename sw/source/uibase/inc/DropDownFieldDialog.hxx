@@ -19,7 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DROPDOWNFIELDDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DROPDOWNFIELDDIALOG_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SwDropDownField;
 class SwField;
@@ -43,7 +45,6 @@ class DropDownFieldDialog final : public weld::GenericDialogController
     DECL_LINK(EditHdl, weld::Button&, void);
     DECL_LINK(PrevHdl, weld::Button&, void);
     DECL_LINK(NextHdl, weld::Button&, void);
-    void    Apply();
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 public:
     DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &rSh,
@@ -51,6 +52,7 @@ public:
     virtual ~DropDownFieldDialog() override;
     bool PrevButtonPressed() const;
     bool NextButtonPressed() const;
+    void Apply();
     virtual short run() override
     {
         short nRet = GenericDialogController::run();

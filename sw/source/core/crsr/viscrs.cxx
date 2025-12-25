@@ -19,7 +19,7 @@
 
 #include <config_feature_desktop.h>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <viewopt.hxx>
@@ -142,7 +142,7 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
 
 }
 
-::std::pair<SwRect, bool> SwVisibleCursor::SetPos()
+SwRect SwVisibleCursor::SetPos()
 {
     SwRect aRect;
     tools::Long nTmpY = m_rState.m_aCursorHeight.getY();
@@ -152,16 +152,16 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
         m_aTextCursor.SetOrientation( 900_deg10 );
         aRect = SwRect( m_rState.m_aCharRect.Pos(),
            Size( m_rState.m_aCharRect.Height(), nTmpY ) );
-        aRect.Pos().setX(aRect.Pos().getX() + m_rState.m_aCursorHeight.getX());
+        aRect.SetPosX(aRect.Pos().getX() + m_rState.m_aCursorHeight.getX());
         if (m_rState.IsOverwriteCursor())
-            aRect.Pos().setY(aRect.Pos().getY() + aRect.Width());
+            aRect.SetPosY(aRect.Pos().getY() + aRect.Width());
     }
     else
     {
         m_aTextCursor.SetOrientation();
         aRect = SwRect( m_rState.m_aCharRect.Pos(),
            Size( m_rState.m_aCharRect.Width(), nTmpY ) );
-        aRect.Pos().setY(aRect.Pos().getY() + m_rState.m_aCursorHeight.getX());
+        aRect.SetPosY(aRect.Pos().getY() + m_rState.m_aCursorHeight.getX());
     }
 
     // check if cursor should show the current cursor bidi level
@@ -214,16 +214,14 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
         m_pCursorShell->IsSelection() )
         aRect.Width( 0 );
 
-    bool bIsCursorPosChanged = m_aTextCursor.GetPos() != aRect.Pos();
-
     m_aTextCursor.SetSize( aRect.SSize() );
     m_aTextCursor.SetPos( aRect.Pos() );
-    return { aRect, bIsCursorPosChanged };
+    return aRect;
 }
 
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
-    auto const [aRect, bIsCursorPosChanged] {SetPos()};
+    const SwRect aRect = SetPos();
 
     if (SfxViewShell* pNotifyViewShell = comphelper::LibreOfficeKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
     {
@@ -231,7 +229,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         sal_uInt16 nPage, nVirtPage;
         // bCalcFrame=false is important to avoid calculating the layout when
         // we're in the middle of doing that already.
-        const_cast<SwCursorShell*>(m_pCursorShell)->GetPageNum(nPage, nVirtPage, /*bAtCursorPos=*/true, /*bCalcFrame=*/false);
+        m_pCursorShell->GetPageNum(nPage, nVirtPage, /*bAtCursorPos=*/true, /*bCalcFrame=*/false);
         if (nPage != m_nPageLastTime)
         {
             m_nPageLastTime = nPage;
@@ -255,7 +253,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
-        else if ( bIsCursorPosChanged || m_pCursorShell->IsTableMode())
+        else
         {
             SfxLokHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
                 *pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
@@ -970,7 +968,7 @@ void SwShellCursor::FillRects()
         if (SwVisibleCursor *const pVisibleCursor{GetShell()->FindVisibleCursorForPeer(*this)})
         {
             // use OutDev.GetSettings().GetStyleSettings().GetCursorSize() as width?
-            auto [cursorRect, _] {pVisibleCursor->SetPos()};
+            auto cursorRect{ pVisibleCursor->SetPos() };
             if (cursorRect.IsEmpty())
             {
                 cursorRect.Width(20);

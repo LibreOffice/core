@@ -174,7 +174,7 @@ void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHi
     m_pPreviewControl->RequestStylesListUpdate();
 }
 
-StyleItemController::StyleItemController(std::pair<OUString, OUString> aStyleName)
+StyleItemController::StyleItemController(StylePreviewDescriptor aStyleName)
     : m_eStyleFamily(SfxStyleFamily::Para)
     , m_aStyleName(std::move(aStyleName))
 {
@@ -436,12 +436,12 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 }
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
-    weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
+    weld::Builder& xBuilder, StylePreviewList& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : m_xFrame(xFrame)
     , m_xStylesView(xBuilder.weld_icon_view(u"stylesview"_ustr))
     , m_aUpdateTask(*this)
-    , m_aDefaultStyles(std::move(rDefaultStyles))
+    , m_aDefaultStyles(rDefaultStyles)
 {
     StylePreviewCache::RegisterClient();
 
@@ -520,7 +520,10 @@ void StylesPreviewWindow_Base::Select(const OUString& rStyleName)
 
 void StylesPreviewWindow_Base::UpdateSelection()
 {
-    for (std::vector<std::pair<OUString, OUString>>::size_type i = 0; i < m_aAllStyles.size(); ++i)
+    if (!m_xStylesView || !m_xStylesView->n_children())
+        return;
+
+    for (StylePreviewList::size_type i = 0; i < m_aAllStyles.size(); ++i)
     {
         if (m_aAllStyles[i].first == m_sSelectedStyle || m_aAllStyles[i].second == m_sSelectedStyle)
         {
@@ -565,7 +568,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     const weld::TreeIter& rIter = std::get<1>(rQuery);
     OUString sStyleId(m_xStylesView->get_id(rIter));
     OUString sStyleName(m_xStylesView->get_text(rIter));
-    OString sBase64Png(GetCachedPreviewJson(std::pair<OUString, OUString>(sStyleId, sStyleName)));
+    OString sBase64Png(GetCachedPreviewJson(StylePreviewDescriptor(sStyleId, sStyleName)));
     if (sBase64Png.isEmpty())
         return false;
 
@@ -575,7 +578,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-Bitmap StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
+Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.second);
     if (aFound != StylePreviewCache::Get().end())
@@ -595,7 +598,7 @@ Bitmap StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUSt
     }
 }
 
-OString StylesPreviewWindow_Base::GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle)
+OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle)
 {
     auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.second);
     if (aJsonFound != StylePreviewCache::GetJson().end())
@@ -607,6 +610,36 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const std::pair<OUString,
     return sResult;
 }
 
+namespace
+{
+inline void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                                 SfxStyleSearchBits eBits)
+{
+    if (!pPool)
+        return;
+
+    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, eBits);
+
+    SfxStyleSheetBase* pStyle = xIter->First();
+
+    while (pStyle)
+    {
+        const OUString sName(pStyle->GetName());
+
+        // do not duplicate
+        const auto aFound = std::find_if(
+            rAllStyles.begin(), rAllStyles.end(), [sName](const StylePreviewDescriptor& element) {
+                return element.first == sName || element.second == sName;
+            });
+
+        if (aFound == rAllStyles.end())
+            rAllStyles.push_back(StylePreviewDescriptor(sName, sName));
+
+        pStyle = xIter->Next();
+    }
+}
+}
+
 void StylesPreviewWindow_Base::UpdateStylesList()
 {
     m_aAllStyles = m_aDefaultStyles;
@@ -615,20 +648,13 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     SfxStyleSheetBasePool* pStyleSheetPool = nullptr;
 
     if (pDocShell)
+    {
         pStyleSheetPool = pDocShell->GetStyleSheetPool();
 
-    if (pStyleSheetPool)
-    {
-        auto xIter = pStyleSheetPool->CreateIterator(SfxStyleFamily::Para,
-                                                     SfxStyleSearchBits::UserDefined);
-
-        SfxStyleSheetBase* pStyle = xIter->First();
-
-        while (pStyle)
+        if (pStyleSheetPool)
         {
-            OUString sName(pStyle->GetName());
-            m_aAllStyles.push_back(std::pair<OUString, OUString>(sName, sName));
-            pStyle = xIter->Next();
+            lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+                                 SfxStyleSearchBits::Favourite | SfxStyleSearchBits::UserDefined);
         }
     }
 
@@ -651,11 +677,11 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
-    vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>&& rDefaultStyles,
+    vcl::Window* pParent, StylePreviewList& rDefaultStyles,
     const css::uno::Reference<css::frame::XFrame>& xFrame)
     : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
-    , StylesPreviewWindow_Base(*m_xBuilder, std::move(rDefaultStyles), xFrame)
+    , StylesPreviewWindow_Base(*m_xBuilder, rDefaultStyles, xFrame)
 {
     SetOptimalSize();
 }

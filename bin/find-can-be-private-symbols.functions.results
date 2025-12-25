@@ -32,6 +32,7 @@ BasicManager::SetLibraryContainerInfo(LibraryContainerInfo const&)
 BasicManager::~BasicManager()
 BigInt::BigInt(unsigned int)
 BigInt::operator%=(BigInt const&)
+BitmapAlphaClampFilter::execute(BitmapEx const&) const
 BitmapBasicMorphologyFilter::filter(Bitmap const&) const
 BitmapColorQuantizationFilter::execute(BitmapEx const&) const
 BitmapConvolutionMatrixFilter::execute(BitmapEx const&) const
@@ -10465,10 +10466,8 @@ basegfx::B2IVector::operator*=(basegfx::B2DHomMatrix const&)
 basegfx::B2IVector::operator=(basegfx::B2ITuple const&)
 basegfx::B3DHomMatrix::determinant() const
 basegfx::B3DHomMatrix::isLastLineDefault() const
-basegfx::B3DHomMatrix::operator*=(double)
 basegfx::B3DHomMatrix::operator+=(basegfx::B3DHomMatrix const&)
 basegfx::B3DHomMatrix::operator-=(basegfx::B3DHomMatrix const&)
-basegfx::B3DHomMatrix::operator/=(double)
 basegfx::B3DHomMatrix::rotate(basegfx::B3DTuple const&)
 basegfx::B3DHomMatrix::scale(basegfx::B3DTuple const&)
 basegfx::B3DHomMatrix::translate(basegfx::B3DTuple const&)

@@ -425,29 +425,29 @@ void SwTextFrame::SwapWidthAndHeight()
         if ( ! mbIsSwapped )
         {
             const tools::Long nPrtOfstX = aPrt.Pos().X();
-            aPrt.Pos().setX( aPrt.Pos().Y() );
+            aPrt.SetPosX(aPrt.Pos().Y());
 
             if( IsVertLR() )
             {
-                aPrt.Pos().setY( nPrtOfstX );
+                aPrt.SetPosY(nPrtOfstX);
             }
             else
             {
-                aPrt.Pos().setY( getFrameArea().Width() - ( nPrtOfstX + aPrt.Width() ) );
+                aPrt.SetPosY(getFrameArea().Width() - (nPrtOfstX + aPrt.Width()));
             }
         }
         else
         {
             const tools::Long nPrtOfstY = aPrt.Pos().Y();
-            aPrt.Pos().setY( aPrt.Pos().X() );
+            aPrt.SetPosY(aPrt.Pos().X());
 
             if( IsVertLR() )
             {
-                aPrt.Pos().setX( nPrtOfstY );
+                aPrt.SetPosX(nPrtOfstY);
             }
             else
             {
-                aPrt.Pos().setX( getFrameArea().Height() - ( nPrtOfstY + aPrt.Height() ) );
+                aPrt.SetPosX(getFrameArea().Height() - (nPrtOfstY + aPrt.Height()));
             }
         }
 
@@ -1732,7 +1732,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
                         {
                             bRet = false;
                             // set needed data structure values for object positioning
-                            SwRectFnSet aRectFnSet(&_rFrame);
+                            SwRectFnSet aRectFnSet(_rFrame);
                             SwRect aLastCharRect( _rFrame.getFrameArea() );
                             aRectFnSet.SetWidth( aLastCharRect, 1 );
                             _pAnchoredObj->maLastCharRect = aLastCharRect;
@@ -3402,7 +3402,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     aOldFrame = pFrame->getFrameArea();
     aOldPrt = pFrame->getFramePrintArea();
 
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     SwTwips nLower = aRectFnSet.GetBottomMargin(*pFrame);
 
     {
@@ -3501,7 +3501,7 @@ bool SwTextFrame::WouldFit(SwTwips &rMaxHeight, bool &bSplit, bool bTst, bool bM
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::WouldFit with swapped frame" );
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     if( IsLocked() )
         return false;
@@ -3692,7 +3692,7 @@ SwTwips SwTextFrame::CalcFitToContent()
     if ( IsRightToLeft() )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Pos().AdjustX(nOldFrameWidth - nPageWidth );
+        aFrm.SetPosX(aFrm.Pos().X() + nOldFrameWidth - nPageWidth);
     }
 
     TextFrameLockGuard aLock( this );
@@ -3712,7 +3712,7 @@ SwTwips SwTextFrame::CalcFitToContent()
         // i#25422 objects anchored as character in RTL
         if ( IsRightToLeft() )
         {
-            aFrm.Pos() = aOldFramePos;
+            aFrm.Pos(aOldFramePos);
         }
     }
 
@@ -4213,7 +4213,7 @@ SwScriptInfo* SwTextFrame::GetScriptInfo()
 static SwTwips lcl_CalcFlyBasePos( const SwTextFrame& rFrame, SwRect aFlyRect,
                             SwTextFly const & rTextFly )
 {
-    SwRectFnSet aRectFnSet(&rFrame);
+    SwRectFnSet aRectFnSet(rFrame);
     SwTwips nRet = rFrame.IsRightToLeft() ?
                    aRectFnSet.GetRight(rFrame.getFrameArea()) :
                    aRectFnSet.GetLeft(rFrame.getFrameArea());
@@ -4264,7 +4264,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     if (!GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_FLY_OFFSETS))
         return;
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     SwRect aFlyRect( getFrameArea().Pos() + getFramePrintArea().Pos(), getFramePrintArea().SSize() );
 

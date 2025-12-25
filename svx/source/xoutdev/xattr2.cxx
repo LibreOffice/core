@@ -22,7 +22,9 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <osl/diagnose.h>
+#include <o3tl/hash_combine.hxx>
 #include <i18nutil/unicode.hxx>
+#include <sal/log.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/xlinjoit.hxx>
@@ -49,6 +51,8 @@
 #include <comphelper/lok.hxx>
 
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, nLineTransparence)
@@ -317,8 +321,9 @@ css::drawing::LineCap XLineCapItem::GetValue() const
 }
 
 XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
-    SfxUInt16Item(XATTR_FILLTRANSPARENCE, nFillTransparence)
+    SfxPoolItem(XATTR_FILLTRANSPARENCE), m_nValue(nFillTransparence)
 {
+    assert(m_nValue <= 100);
 }
 
 XFillTransparenceItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
@@ -352,12 +357,72 @@ bool XFillTransparenceItem::GetPresentation
 
 void XFillTransparenceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillTransparenceItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillTransparenceItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
+boost::property_tree::ptree XFillTransparenceItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    aTree.put("state", GetValue());
+    return aTree;
+}
+
+// virtual
+bool XFillTransparenceItem::operator ==(const SfxPoolItem & rItem) const
+{
+    assert(SfxPoolItem::operator==(rItem));
+    return m_nValue == static_cast<const XFillTransparenceItem *>(&rItem)->m_nValue;
+}
+
+// virtual
+bool XFillTransparenceItem::supportsHashCode() const
+{
+    return true;
+}
+
+// virtual
+bool XFillTransparenceItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+{
+    rVal <<= m_nValue;
+    return true;
+}
+
+// virtual
+bool XFillTransparenceItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
+{
+    if (rVal >>= m_nValue)
+    {
+        assert(m_nValue <= 100);
+        return true;
+    }
+    // Legacy: for a long time, XFillTransparenceItem::PutValue accepted sal_Int32; play safe and accept
+    // if someone passes that
+    if (sal_Int32 nValue; rVal >>= nValue)
+    {
+        SAL_WARN("svl.items", "Passing sal_uInt16 in sal_Int32!");
+        SAL_WARN_IF(nValue < 0 || nValue > SAL_MAX_UINT16, "svl.items",
+                    "Overflow in UInt16 value!");
+        m_nValue = static_cast<sal_uInt16>(nValue);
+        assert(m_nValue <= 100);
+        return true;
+    }
+    SAL_WARN("svl.items", "XFillTransparenceItem::PutValue - Wrong type!");
+    return false;
+}
+
+
+// virtual
+size_t XFillTransparenceItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, m_nValue);
+    return seed;
+}
 
 XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, nShdwTransparence)
@@ -419,10 +484,11 @@ bool XFillBmpTileItem::GetPresentation
 
 void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpTileItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBmpTileItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 
@@ -451,10 +517,11 @@ bool XFillBmpPosItem::GetPresentation
 
 void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpPosItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<int>(GetValue())).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBmpPosItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", sal_Int32(GetValue()));
+    aWriter.endElement();
 }
 
 
@@ -608,10 +675,11 @@ bool XFillBmpStretchItem::GetPresentation
 
 void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBmpStretchItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBmpStretchItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem(sal_Int32 nOffPosX)
@@ -677,10 +745,11 @@ bool XFillBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUni
 
 void XFillBackgroundItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBackgroundItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillBackgroundItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 XFillUseSlideBackgroundItem::XFillUseSlideBackgroundItem( bool bFill ) :
@@ -702,10 +771,11 @@ bool XFillUseSlideBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/
 
 void XFillUseSlideBackgroundItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillUseSlideBackgroundItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("XFillUseSlideBackgroundItem");
+    aWriter.attribute("whichId", Which());
+    aWriter.attribute("value", GetValue());
+    aWriter.endElement();
 }
 
 

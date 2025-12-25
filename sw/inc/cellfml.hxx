@@ -56,6 +56,7 @@ public:
     void SetLastTableBox( const SwTableBox* pBox )    { m_pLastTableBox = pBox; }
 };
 
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class SW_DLLPUBLIC SwTableFormula
 {
 typedef void (SwTableFormula::*FnScanFormula)( const SwTable&, OUStringBuffer&,
@@ -145,6 +146,7 @@ public:
     // are all boxes valid which this formula relies on?
     bool HasValidBoxes() const;
     static sal_uInt16 GetLnPosInTable( const SwTable& rTable, const SwTableBox* pBox );
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

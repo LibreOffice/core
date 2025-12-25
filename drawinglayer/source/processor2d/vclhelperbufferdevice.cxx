@@ -169,10 +169,10 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                         if (bCandidateOkay)
                         {
                             // found and candidate are valid
-                            const sal_uLong aSquare(aFound->buf->GetOutputWidthPixel()
-                                                    * aFound->buf->GetOutputHeightPixel());
-                            const sal_uLong aCandidateSquare(a->buf->GetOutputWidthPixel()
-                                                             * a->buf->GetOutputHeightPixel());
+                            const tools::Long aSquare(aFound->buf->GetOutputWidthPixel()
+                                                      * aFound->buf->GetOutputHeightPixel());
+                            const tools::Long aCandidateSquare(a->buf->GetOutputWidthPixel()
+                                                               * a->buf->GetOutputHeightPixel());
 
                             if (aCandidateSquare < aSquare)
                             {
@@ -313,10 +313,10 @@ void doSpeedCompare(double fTrans, const Bitmap& rContent, const tools::Rectangl
     // numbers are pretty small
     for (a = 0; a < nRepeat; a++)
     {
-        // "Former" method using a temporary AlphaMask & DrawBitmapEx
+        // "Former" method using a temporary AlphaMask & DrawBitmap
         sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
         const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-        rOutDev.DrawBitmapEx(rDestPixel.TopLeft(), Bitmap(rContent, aAlphaMask));
+        rOutDev.DrawBitmap(rDestPixel.TopLeft(), Bitmap(rContent, aAlphaMask));
     }
 
     // get intermediate time
@@ -487,7 +487,7 @@ void impBufferDevice::paint(double fTrans)
 #endif
 
         Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), Bitmap(aContent, aAlphaMask));
+        mrOutDev.DrawBitmap(maDestPixel.TopLeft(), Bitmap(aContent, aAlphaMask));
     }
     else if (0.0 != fTrans)
     {
@@ -549,10 +549,10 @@ void impBufferDevice::paint(double fTrans)
             }
             else
             {
-                // "Former" method using a temporary AlphaMask & DrawBitmapEx
+                // "Former" method using a temporary AlphaMask & DrawBitmap
                 sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
                 const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), Bitmap(aContent, aAlphaMask));
+                mrOutDev.DrawBitmap(maDestPixel.TopLeft(), Bitmap(aContent, aAlphaMask));
             }
         }
     }

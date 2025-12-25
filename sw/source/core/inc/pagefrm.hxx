@@ -38,6 +38,7 @@ class SwAnchoredObject;
 namespace sw {
     class VirtPageNumHint;
 }
+class SwTextFormatColl;
 
 enum class SwPageFrameInvFlags : sal_uInt8
 {
@@ -81,6 +82,8 @@ class SW_DLLPUBLIC SwPageFrame final: public SwFootnoteBossFrame
     bool m_bInvalidAutoCmplWrds :1; // Update auto complete word list
     bool m_bInvalidWordCount    :1;
     bool m_bHasGrid             :1; // Grid for Asian layout
+    mutable bool m_bInAtPageFlyFormatting : 1 = false;
+    mutable bool m_bInvalidAtPageFly : 1 = false; // Disambiguate at-page invalidation
 
     static const sal_Int8 snShadowPxWidth;
 
@@ -171,6 +174,14 @@ public:
     // Sends a Prepare() to all ContentFrames caused by a changed register template
     void PrepareRegisterChg();
 
+    /** Computes height / ascent values used for register-true formatting.
+        @param[in]  pFormat     The paragraph format from which to derive the register-true parameters.
+        @param[out] rRegHeight  The computed text height for register-true formatting.
+        @param[out] rRegAscent  The computed text ascent for register-true formatting.
+    */
+    void ComputeRegister(const SwTextFormatColl* pFormat, sal_uInt16& rRegHeight,
+                         sal_uInt16& rRegAscent) const;
+
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrames>
     // - return value not needed any more
@@ -187,6 +198,9 @@ public:
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) const;
     bool HasGrid() const { return m_bHasGrid; }
+
+    /// Paints the baseline grid based on the reference style defined by the page line-spacing.
+    void PaintBaselineGrid( OutputDevice& rOututDevice ) const;
 
     void PaintDecorators( ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
@@ -229,6 +243,7 @@ public:
     inline void ValidateSmartTags() const;
     inline void ValidateAutoCompleteWords() const;
     inline void ValidateWordCount() const;
+    void ValidateAtPageFly() const { m_bInvalidAtPageFly = false; }
     inline bool IsInvalid() const;
     inline bool IsInvalidFly() const;
     bool IsRightShadowNeeded() const;
@@ -242,6 +257,8 @@ public:
     bool IsInvalidSmartTags() const { return m_bInvalidSmartTags; }
     bool IsInvalidAutoCompleteWords() const { return m_bInvalidAutoCmplWrds; }
     bool IsInvalidWordCount() const { return m_bInvalidWordCount; }
+    bool IsInvalidAtPageFly() const { return m_bInvalidAtPageFly; }
+    void SetInAtPageFlyFormatting(bool val) const { m_bInAtPageFlyFormatting = val; }
 
     /** SwPageFrame::GetDrawBackgroundColor
 
@@ -373,6 +390,8 @@ inline const SwContentFrame *SwPageFrame::FindLastBodyContent() const
 inline void SwPageFrame::InvalidateFlyLayout() const
 {
     const_cast<SwPageFrame*>(this)->m_bInvalidFlyLayout = true;
+    if (m_bInAtPageFlyFormatting)
+        m_bInvalidAtPageFly = true;
 }
 inline void SwPageFrame::InvalidateFlyContent() const
 {

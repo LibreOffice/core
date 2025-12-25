@@ -17,7 +17,7 @@
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>
 #include <svtools/miscopt.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <map>
 
@@ -61,8 +61,6 @@ public:
 
     void dispose();
     ~ToolbarUnoDispatcher();
-
-    void Select(const OUString& rCommand) { SelectHdl(rCommand); }
 };
 
 #endif

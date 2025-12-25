@@ -19,6 +19,7 @@
 
 #include "AccessibleChartShape.hxx"
 
+#include <sal/log.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
@@ -61,7 +62,7 @@ AccessibleChartShape::AccessibleChartShape(
 
 AccessibleChartShape::~AccessibleChartShape()
 {
-    OSL_ASSERT(!isAlive());
+    SAL_WARN_IF(isAlive(), "chart2.accessibility", "AccessibleChartShape destroyed while still alive");
 
     if ( m_pAccShape.is() )
     {

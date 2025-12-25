@@ -387,6 +387,16 @@ interface FormTextAttributeShell
         ExecMethod = ExecuteTextAttribute;
         StateMethod = GetTextAttributeState;
     ]
+    SID_ATTR_PARA_ADJUST_START
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_END
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
     SID_SET_SUPER_SCRIPT
     [
         ExecMethod = ExecuteTextAttribute;

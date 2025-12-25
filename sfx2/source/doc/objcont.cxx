@@ -25,7 +25,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/fileurl.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/style.hxx>
 
 #include <svl/intitem.hxx>
@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/datetime.hxx>
+#include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <rtl/uri.hxx>

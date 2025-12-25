@@ -44,6 +44,7 @@
 #include <svx/svxids.hrc>
 #include <svx/fontworkbar.hxx>
 #include <svx/fontworkgallery.hxx>
+#include <tools/debug.hxx>
 
 
 using namespace ::svx;

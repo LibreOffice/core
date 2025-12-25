@@ -16,7 +16,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class multipleOperations(UITestCase):
 
-   def test_multiple_operations_one_variable(self):
+    def test_multiple_operations_one_variable(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
@@ -59,7 +59,7 @@ class multipleOperations(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 4, 9).getValue(), 26000)
             self.assertEqual(get_cell_by_position(document, 0, 4, 10).getValue(), 30000)
 
-   def test_multiple_operations_several_formulas(self):
+    def test_multiple_operations_several_formulas(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")

@@ -18,10 +18,12 @@
  */
 
 #include <oox/helper/attributelist.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <sax/fastattribs.hxx>
 #include <oox/token/tokenmap.hxx>
 #include <o3tl/string_view.hxx>

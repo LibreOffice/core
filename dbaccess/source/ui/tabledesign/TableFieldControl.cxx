@@ -39,14 +39,8 @@ OTableFieldControl::OTableFieldControl(weld::Container* pParent, OTableDesignHel
 {
 }
 
-void OTableFieldControl::dispose()
-{
-    m_xView.reset();
-}
-
 OTableFieldControl::~OTableFieldControl()
 {
-    dispose();
 }
 
 void OTableFieldControl::CellModified(sal_Int32 nRow, sal_uInt16 nColId )

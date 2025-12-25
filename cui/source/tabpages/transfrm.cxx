@@ -37,6 +37,7 @@
 #include <svx/anchorid.hxx>
 #include <svl/rectitem.hxx>
 #include <swpossizetabpage.hxx>
+#include <tools/debug.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/fieldvalues.hxx>
 

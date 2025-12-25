@@ -1371,6 +1371,11 @@ sal_Int32 SwXTextSections::getCount()
 
 uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 {
+    return Any(css::uno::Reference<css::text::XTextSection>(getSwTextSectionByIndex(nIndex)));
+}
+
+rtl::Reference<SwXTextSection> SwXTextSections::getSwTextSectionByIndex(sal_Int32 nIndex)
+{
     if (nIndex < 0)
         throw IndexOutOfBoundsException();
     size_t nIndex2 = nIndex;
@@ -1383,19 +1388,25 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         if( !rSectFormats[i]->IsInNodesArr())
             nIndex2++;
         else if (nIndex2 == i)
-            return Any(css::uno::Reference<css::text::XTextSection>(
-                SwXTextSection::CreateXTextSection(rSectFormats[i])));
+            return SwXTextSection::CreateXTextSection(rSectFormats[i]);
     }
     throw IndexOutOfBoundsException();
 }
 
 uno::Any SwXTextSections::getByName(const OUString& rName)
 {
-    SolarMutexGuard aGuard;
+    rtl::Reference< SwXTextSection > xSect = getSwTextSectionByName(rName);
     uno::Any aRet;
+    aRet <<= uno::Reference< XTextSection >(xSect);
+    return aRet;
+}
+
+rtl::Reference<SwXTextSection> SwXTextSections::getSwTextSectionByName(const OUString& rName)
+{
+    SolarMutexGuard aGuard;
 
     SwSectionFormats& rFormats = GetDoc().GetSections();
-    uno::Reference< XTextSection >  xSect;
+    rtl::Reference< SwXTextSection >  xSect;
     for(size_t i = 0; i < rFormats.size(); ++i)
     {
         SwSectionFormat* pFormat = rFormats[i];
@@ -1403,14 +1414,13 @@ uno::Any SwXTextSections::getByName(const OUString& rName)
             && (rName == pFormat->GetSection()->GetSectionName()))
         {
             xSect = SwXTextSection::CreateXTextSection(pFormat);
-            aRet <<= xSect;
             break;
         }
     }
     if(!xSect.is())
         throw NoSuchElementException();
 
-    return aRet;
+    return xSect;
 }
 
 uno::Sequence< OUString > SwXTextSections::getElementNames()
@@ -1526,6 +1536,11 @@ sal_Int32 SwXBookmarks::getCount()
 
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
 {
+    return uno::Any(uno::Reference< text::XTextContent >(getBookmarkByIndex(nIndex)));
+}
+
+rtl::Reference<SwXBookmark> SwXBookmarks::getBookmarkByIndex(sal_Int32 nIndex)
+{
     SolarMutexGuard aGuard;
     auto& rDoc = GetDoc();
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
@@ -1541,9 +1556,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
         {
             if (count == nIndex)
             {
-                const rtl::Reference< SwXBookmark > xRef =
-                    SwXBookmark::CreateXBookmark(rDoc, *ppMark);
-                return uno::Any(uno::Reference< text::XTextContent >(xRef));
+                return SwXBookmark::CreateXBookmark(rDoc, *ppMark);
             }
             ++count; // only count real bookmarks
         }

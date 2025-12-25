@@ -185,7 +185,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                         xPropSet->setPropertyValue( sPropLabel, uno::Any(rName) );
                                     }
 
-                                    OUString aTmp = INetURLObject::GetAbsURL( rViewData.GetDocShell().GetMedium()->GetBaseURL(), rURL );
+                                    OUString aTmp = INetURLObject::GetAbsURL( rViewData.GetDocShell()->GetMedium()->GetBaseURL(), rURL );
                                     xPropSet->setPropertyValue( sPropTargetURL, uno::Any(aTmp) );
 
                                     if( !rTarget.isEmpty() && xInfo->hasPropertyByName( sPropTargetFrame ) )
@@ -199,7 +199,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                     }
 
                                     //! Undo ???
-                                    rViewData.GetDocShell().SetDocumentModified();
+                                    rViewData.GetDocShell()->SetDocumentModified();
                                     bDone = true;
                                 }
                             }
@@ -276,6 +276,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_REGENERATE_DIAGRAM:
+        case SID_DIAGRAM_TO_GROUP:
         case SID_EDIT_DIAGRAM:
             {
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -293,7 +294,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                             pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
-                        else // SID_EDIT_DIAGRAM
+                        else if (SID_EDIT_DIAGRAM == nSlotId)
                         {
                             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                             vcl::Window* pWin = rViewData.GetActiveWin();
@@ -306,6 +307,12 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     pDlg->disposeOnce();
                                 }
                             );
+                        }
+                        else // SID_DIAGRAM_TO_GROUP
+                        {
+                            pView->UnmarkAll();
+                            pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                            pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
                     }
                 }
@@ -516,7 +523,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             {
                                 if (nResult == RET_OK)
                                 {
-                                    ScDocShell& rDocSh = rViewData.GetDocShell();
+                                    ScDocShell* pDocSh = rViewData.GetDocShell();
                                     OUString aNewName = pDlg->GetName();
 
                                     if (aNewName != pSelected->GetName())
@@ -545,8 +552,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                                             if(!aPersistName.isEmpty())
                                             {
-                                                rDocSh.GetUndoManager()->AddUndoAction(
-                                                    std::make_unique<ScUndoRenameObject>(rDocSh, aPersistName, pSelected->GetName(), aNewName));
+                                                pDocSh->GetUndoManager()->AddUndoAction(
+                                                    std::make_unique<ScUndoRenameObject>(*pDocSh, aPersistName, pSelected->GetName(), aNewName));
                                             }
                                         }
 
@@ -555,8 +562,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     }
 
                                     // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                                    rDocSh.GetDocument().SetChartListenerCollectionNeedsUpdate( true );
-                                    rDocSh.SetDrawModified();
+                                    pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
+                                    pDocSh->SetDrawModified();
                                 }
                                 pDlg->disposeOnce();
                             }
@@ -591,7 +598,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             {
                                 if (nResult == RET_OK)
                                 {
-                                    ScDocShell& rDocSh = rViewData.GetDocShell();
+                                    ScDocShell* pDocSh = rViewData.GetDocShell();
 
                                     // handle Title and Description
                                     pSelected->SetTitle(pDlg->GetTitle());
@@ -599,8 +606,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     pSelected->SetDecorative(pDlg->IsDecorative());
 
                                     // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                                    rDocSh.GetDocument().SetChartListenerCollectionNeedsUpdate( true );
-                                    rDocSh.SetDrawModified();
+                                    pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
+                                    pDocSh->SetDrawModified();
                                 }
                                 pDlg->disposeOnce();
                             }

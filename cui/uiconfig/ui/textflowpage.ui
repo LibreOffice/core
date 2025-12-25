@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">9</property>
@@ -898,11 +898,11 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkOrphan">
-                <property name="label" translatable="yes" context="textflowpage|checkOrphan">No split at _beginning of paragraph</property>
+                <property name="label" translatable="yes" context="textflowpage|checkOrphan">Don’t split at _beginning of paragraph</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="textflowpage|checkOrphan">Number of lines, that will be kept together at the beginning of the paragraph (orphan control).</property>
+                <property name="tooltip-text" translatable="yes" context="textflowpage|checkOrphan">Minimum number of lines in a paragraph before a page break.</property>
                 <property name="margin-start">12</property>
                 <property name="use-underline">True</property>
                 <property name="inconsistent">True</property>
@@ -923,11 +923,11 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkWidow">
-                <property name="label" translatable="yes" context="textflowpage|checkWidow">No split at _end of paragraph</property>
+                <property name="label" translatable="yes" context="textflowpage|checkWidow">Don’t split at _end of paragraph</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="textflowpage|checkOrphan">Number of lines, that will be kept together at the end of the paragraph (widow control).</property>
+                <property name="tooltip-text" translatable="yes" context="textflowpage|checkWidow">Minimum number of lines in a paragraph in the first page after the break.</property>
                 <property name="margin-start">12</property>
                 <property name="use-underline">True</property>
                 <property name="inconsistent">True</property>

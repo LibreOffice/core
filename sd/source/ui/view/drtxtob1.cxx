@@ -64,6 +64,7 @@
 #include <futempl.hxx>
 #include <DrawDocShell.hxx>
 #include <futext.hxx>
+#include <fuolbull.hxx>
 #include <editeng/colritem.hxx>
 
 #include <memory>
@@ -406,7 +407,13 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 }
 
                 if (!bMasterPage)
-                    pOLV->ToggleBullets();
+                {
+                    // Set all levels of the list, so later increase/decrease of the list level
+                    // works, too.
+                    SfxUInt16Item aItem(FN_SVX_SET_BULLET, FuBulletAndPosition::BULLET_TOGGLE);
+                    mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
+                        FN_SVX_SET_BULLET, SfxCallMode::RECORD, { &aItem });
+                }
                 else
                 {
                     //Resolves: fdo#78151 in master pages if we toggle bullets on
@@ -591,6 +598,8 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                     case SID_ATTR_PARA_ADJUST_CENTER:  eAdjst = SvxAdjust::Center;  eAnchor = SDRTEXTHORZADJUST_CENTER;  goto SET_ADJUST;
                     case SID_ATTR_PARA_ADJUST_RIGHT:  eAdjst = SvxAdjust::Right;  eAnchor = SDRTEXTHORZADJUST_RIGHT;  goto SET_ADJUST;
                     case SID_ATTR_PARA_ADJUST_BLOCK:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_BLOCK;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_START:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_LEFT;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_END:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_RIGHT;  goto SET_ADJUST;
 SET_ADJUST:
                     {
                         aNewAttr.Put(SvxAdjustItem(eAdjst, EE_PARA_JUST));
@@ -740,7 +749,9 @@ SET_ADJUST:
             else if (nSlot == SID_ATTR_PARA_ADJUST_LEFT ||
                 nSlot == SID_ATTR_PARA_ADJUST_CENTER ||
                 nSlot == SID_ATTR_PARA_ADJUST_RIGHT ||
-                nSlot == SID_ATTR_PARA_ADJUST_BLOCK)
+                nSlot == SID_ATTR_PARA_ADJUST_BLOCK ||
+                nSlot == SID_ATTR_PARA_ADJUST_START ||
+                nSlot == SID_ATTR_PARA_ADJUST_END )
             {
                 SvxAdjust eAdjst;
                 SdrTextHorzAdjust eAnchor;
@@ -752,6 +763,12 @@ SET_ADJUST:
                 }
                 else if (nSlot == SID_ATTR_PARA_ADJUST_RIGHT) {
                     eAdjst = SvxAdjust::Right;  eAnchor = SDRTEXTHORZADJUST_RIGHT;
+                }
+                else if (nSlot == SID_ATTR_PARA_ADJUST_START) {
+                    eAdjst = SvxAdjust::ParaStart;  eAnchor = SDRTEXTHORZADJUST_LEFT;
+                }
+                else if (nSlot == SID_ATTR_PARA_ADJUST_END) {
+                    eAdjst = SvxAdjust::ParaEnd;  eAnchor = SDRTEXTHORZADJUST_RIGHT;
                 }
                 else {
                     eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_BLOCK;

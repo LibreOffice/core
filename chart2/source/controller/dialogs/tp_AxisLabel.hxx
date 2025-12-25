@@ -21,6 +21,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
 #include <tools/degree.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <TextDirectionListBox.hxx>
 
 namespace weld {

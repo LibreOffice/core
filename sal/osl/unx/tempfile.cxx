@@ -69,7 +69,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
  ******************************************************************/
 
 const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-const int  COUNT_OF_LETTERS = SAL_N_ELEMENTS(LETTERS) - 1;
+const int  COUNT_OF_LETTERS = std::ssize(LETTERS) - 1;
 
 #define RAND_NAME_LENGTH 6
 

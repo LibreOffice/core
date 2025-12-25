@@ -112,6 +112,11 @@ sub get_feature_display
     # No program module visible.
     if ( $onefeature->{'gid'} eq "gid_Module_Prg" )  { $display = "0"; }
 
+    # hide en-US languagepack/always install it (unless using commandline arguments)
+    # mar-updater would add new languages that could be picked by default if the en-US fallback
+    # is not available/wasn't installed originally. (see tdf#164070)
+    $display = "0" if($onefeature->{'gid'} eq "gid_Module_Langpack_Root_en_US");
+
     # making all feature invisible in Language packs and in Help packs!
     if ( $installer::globals::languagepack || $installer::globals::helppack ) { $display = "0"; }
 

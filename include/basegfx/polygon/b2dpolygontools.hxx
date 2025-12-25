@@ -22,10 +22,7 @@
 #include <vector>
 #include <functional>
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
@@ -34,6 +31,10 @@
 
 
 namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DPoint; }
+namespace basegfx { class B2DVector; }
+namespace basegfx { class B3DPolygon; }
+namespace basegfx { class B3DHomMatrix; }
 
 // Definitions for the cut flags used from the findCut methods
 enum class CutFlagValue

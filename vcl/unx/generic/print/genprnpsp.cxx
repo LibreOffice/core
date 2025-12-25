@@ -40,6 +40,7 @@
 
 #include <comphelper/fileurl.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -56,7 +57,7 @@
 #include <printerinfomanager.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <strings.hrc>
 #include <unx/genprn.h>
 #include <unx/geninst.h>
@@ -142,9 +143,9 @@ namespace
     }
 }
 
-static int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
+static int PtTo10Mu( int nPoints ) { return o3tl::convert(nPoints, o3tl::Length::pt, o3tl::Length::mm100); }
 
-static int TenMuToPt( int nUnits ) { return static_cast<int>((static_cast<double>(nUnits)/35.27777778)+0.5); }
+static int TenMuToPt( int nUnits ) { return o3tl::convert(nUnits, o3tl::Length::mm100, o3tl::Length::pt); }
 
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
@@ -797,12 +798,12 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     i_rController.jobStarted();
 
     // setup PDFWriter context
-    vcl::PDFWriter::PDFWriterContext aContext;
-    aContext.Version            = vcl::PDFWriter::PDFVersion::PDF_1_4;
+    vcl::pdf::PDFWriter::PDFWriterContext aContext;
+    aContext.Version            = vcl::pdf::PDFWriter::PDFVersion::PDF_1_4;
     aContext.Tagged             = false;
     aContext.DocumentLocale     = Application::GetSettings().GetLanguageTag().getLocale();
     aContext.ColorMode          = i_rController.getPrinter()->GetPrinterOptions().IsConvertToGreyscales()
-    ? vcl::PDFWriter::DrawGreyscale : vcl::PDFWriter::DrawColor;
+    ? vcl::pdf::PDFWriter::DrawGreyscale : vcl::pdf::PDFWriter::DrawColor;
 
     // prepare doc info
     aContext.DocumentInfo.Title              = i_rJobName;
@@ -810,10 +811,10 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     aContext.DocumentInfo.Producer           = i_rAppName;
 
     // define how we handle metafiles in PDFWriter
-    vcl::PDFWriter::PlayMetafileContext aMtfContext;
+    vcl::pdf::PDFWriter::PlayMetafileContext aMtfContext;
     aMtfContext.m_bOnlyLosslessCompression = true;
 
-    std::shared_ptr<vcl::PDFWriter> xWriter;
+    std::shared_ptr<vcl::pdf::PDFWriter> xWriter;
     std::vector< PDFPrintFile > aPDFFiles;
     VclPtr<Printer> xPrinter( i_rController.getPrinter() );
     int nAllPages = i_rController.getFilteredPageCount();
@@ -881,12 +882,12 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 aContext.URL = aPDFUrl;
 
                 // create and initialize PDFWriter
-                xWriter = std::make_shared<vcl::PDFWriter>( aContext, uno::Reference< beans::XMaterialHolder >() );
+                xWriter = std::make_shared<vcl::pdf::PDFWriter>( aContext, uno::Reference< beans::XMaterialHolder >() );
             }
 
             xWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
                               TenMuToPt( aNewParm.maPageSize.Height() ),
-                              vcl::PDFWriter::Orientation::Portrait );
+                              vcl::pdf::PDFWriter::Orientation::Portrait );
 
             xWriter->PlayMetafile( aPageFile, aMtfContext );
         }

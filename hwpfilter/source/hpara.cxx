@@ -20,9 +20,6 @@
 #include <memory>
 #include "precompile.h"
 
-
-#include <comphelper/newarray.hxx>
-
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hpara.h"
@@ -113,7 +110,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         pshape->pagebreak = etcflag;
     }
 
-    linfo.reset(::comphelper::newArray_null<LineInfo>(nline));
+    linfo.reset(new (std::nothrow) LineInfo[nline]);
     for (ii = 0; ii < nline; ii++)
     {
         linfo[ii].Read(hwpf, this);

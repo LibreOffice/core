@@ -24,6 +24,7 @@
 
 #include <sal/types.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
@@ -1859,6 +1860,12 @@ void Window::LoseFocus()
     CompatNotify( aNEvt );
 }
 
+void Window::SetCommandHdl(const Link<const CommandEvent&, bool>& rLink)
+{
+    if (mpWindowImpl)
+        mpWindowImpl->maCommandHdl = rLink;
+}
+
 void Window::SetHelpHdl(const Link<vcl::Window&, bool>& rLink)
 {
     if (mpWindowImpl) // may be called after dispose
@@ -1923,6 +1930,9 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
+    if (mpWindowImpl && mpWindowImpl->maCommandHdl.Call(rCEvt))
+        return;
+
     CallEventListeners( VclEventId::WindowCommand, const_cast<CommandEvent *>(&rCEvt) );
 
     NotifyEvent aNEvt( NotifyEventType::COMMAND, this, &rCEvt );
@@ -3365,6 +3375,7 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("type", GetTypeName());
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
+    rJsonWriter.put("canFocus", bool(GetStyle() & WB_TABSTOP));
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 
@@ -3387,6 +3398,9 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 sal_Int32 nWidth = pChild->get_grid_width();
                 if (nWidth > 1)
                     rJsonWriter.put("width", nWidth);
+                sal_Int32 nHeight = pChild->get_grid_height();
+                if (nHeight > 1)
+                    rJsonWriter.put("height", nHeight);
             }
             pChild = pChild->mpWindowImpl->mpNext;
         }

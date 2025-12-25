@@ -84,6 +84,15 @@ QWidget* QtBuilder::get_by_name(const OUString& rId)
     return nullptr;
 }
 
+OUString QtBuilder::getDialogId()
+{
+    for (const std::pair<const OUString, QWidget*>& rEntry : m_aWidgets)
+        if (qobject_cast<QDialog*>(rEntry.second))
+            return rEntry.first;
+
+    return OUString();
+}
+
 void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
                                              const std::vector<ComboBoxTextItem>& rItems)
 {
@@ -261,6 +270,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         pListView->setModel(new QStandardItemModel(pListView));
         pListView->setViewMode(QListView::IconMode);
         pListView->setMovement(QListView::Static);
+        setItemViewProperties(*pListView, rMap);
         pObject = pListView;
     }
     else if (sName == u"GtkImage")
@@ -416,6 +426,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         pTreeView->setModel(pProxyModel);
         pTreeView->setHeaderHidden(!extractHeadersVisible(rMap));
         pTreeView->setRootIsDecorated(extractShowExpanders(rMap));
+        setItemViewProperties(*pTreeView, rMap);
         pObject = pTreeView;
     }
     else if (sName == u"GtkTreeViewColumn")
@@ -964,6 +975,13 @@ void QtBuilder::setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps)
     aIt = rProps.find(u"visibility"_ustr);
     if (aIt != rProps.end() && !toBool(aIt->second))
         rLineEdit.setEchoMode(QLineEdit::Password);
+}
+
+void QtBuilder::setItemViewProperties(QAbstractItemView& rIconView, stringmap& rProps)
+{
+    auto aIt = rProps.find(u"activate-on-single-click"_ustr);
+    if (aIt != rProps.end() && toBool(aIt->second))
+        QtInstanceItemView::enableActivateOnSingleClick(rIconView);
 }
 
 void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)

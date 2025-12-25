@@ -33,7 +33,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdundo.hxx>

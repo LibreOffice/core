@@ -60,7 +60,7 @@
 #include <utility>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <xmloff/autolayout.hxx>
 #include <sfx2/objsh.hxx>
@@ -889,7 +889,8 @@ namespace {
                 pOut->SetPaperSize(aNotesSize);
                 pOut->SetUpdateLayout(true);
                 pOut->Clear();
-                pOut->SetText(*pNotesObj->GetOutlinerParaObject());
+                if (OutlinerParaObject* pOutlinerParaObject = pNotesObj->GetOutlinerParaObject())
+                    pOut->SetText(*pOutlinerParaObject);
 
                 bool bAutoGrow = pNotesObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
 
@@ -2523,7 +2524,8 @@ private:
                     pOut->SetPaperSize(nNotesObjSize);
                     pOut->SetUpdateLayout(true);
                     pOut->Clear();
-                    pOut->SetText(*pNotesObj->GetOutlinerParaObject());
+                    if (OutlinerParaObject* pOutlinerParaObject = pNotesObj->GetOutlinerParaObject())
+                        pOut->SetText(*pOutlinerParaObject);
 
                     sal_Int32 nFirstPageBottomMargin = 0;
                     ::tools::Long nNotesHeight = nNotesObjSize.Height();

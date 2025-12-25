@@ -2227,6 +2227,7 @@ namespace xmloff::token {
         TOKEN( "wrap-contour-mode",               XML_WRAP_CONTOUR_MODE ),
         TOKEN( "wrap-option",                     XML_WRAP_OPTION ),
         TOKEN( "writing-mode",                    XML_WRITING_MODE ),
+        TOKEN( "writing-mode-automatic",          XML_WRITING_MODE_AUTOMATIC ),
         TOKEN( "www",                             XML_WWW ),
         TOKEN( "x",                               XML_X ),
         TOKEN( "x1",                              XML_X1 ),
@@ -2327,6 +2328,7 @@ namespace xmloff::token {
 
         TOKEN( "byte",                             XML_BYTE ),
         TOKEN( "macro",                            XML_MACRO ),
+        TOKEN( "reject",                          XML_REJECT ),
         TOKEN( "location",                        XML_LOCATION ),
         TOKEN( "application",                     XML_APPLICATION ),
 

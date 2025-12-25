@@ -629,7 +629,6 @@ cairo_t* CairoCommon::createTmpCompatibleCairoContext() const
 
 void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
 {
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     if (cairo_surface_get_content(cairo_get_target(cr)) != CAIRO_CONTENT_ALPHA)
     {
         cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0,
@@ -639,6 +638,7 @@ void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
     {
         double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
         cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     }
 }
 
@@ -945,6 +945,19 @@ void CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
         || fTransparency >= 1.0)
     {
         return;
+    }
+
+    static const bool bFuzzing = comphelper::IsFuzzing();
+    if (bFuzzing)
+    {
+        const basegfx::B2DRange aRange(rPolyPolygon.getB2DRange());
+        if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
+            || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
+        {
+            SAL_WARN("vcl.gdi", "drawPolyPolygon, skipping suspicious range of: "
+                                    << aRange << " for fuzzing performance");
+            return;
+        }
     }
 
     if (!bHasLine)

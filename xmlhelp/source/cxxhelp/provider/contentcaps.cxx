@@ -160,8 +160,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 {
     // Supported commands
 
-#define COMMAND_COUNT 5
-
     static const ucb::CommandInfo aCommandInfoTable[] =
     {
         // Required commands
@@ -193,7 +191,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     };
 
     return uno::Sequence< ucb::CommandInfo >(
-        aCommandInfoTable, COMMAND_COUNT );
+        aCommandInfoTable, std::size(aCommandInfoTable) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

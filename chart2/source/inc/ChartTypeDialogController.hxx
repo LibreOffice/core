@@ -27,7 +27,8 @@
 #include "ThreeDHelper.hxx"
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star::beans
 {
@@ -171,20 +172,6 @@ public:
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
     virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
-};
-
-class HistogramChartDialogController final : public ChartTypeDialogController
-{
-public:
-    HistogramChartDialogController();
-    virtual ~HistogramChartDialogController() override;
-
-    virtual OUString getName() override;
-    virtual OUString getImage() override;
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
-                                 const ChartTypeParameter& rParameter) override;
-    virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 };
 
 class PieChartDialogController final : public ChartTypeDialogController

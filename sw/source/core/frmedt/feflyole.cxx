@@ -30,6 +30,7 @@
 #include <ndole.hxx>
 #include <swcli.hxx>
 #include <docsh.hxx>
+#include <view.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -106,7 +107,7 @@ bool SwFEShell::FinishOLEObj()                      // Server is terminated
             IsCheckForOLEInCaption() )
             SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
 
-        if (const SwDocShell* pShell = GetDoc()->GetDocShell())
+        if (SwDocShell* pShell = GetDoc()->GetDocShell())
         {
             // enable update of the link preview
             comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
@@ -123,6 +124,7 @@ bool SwFEShell::FinishOLEObj()                      // Server is terminated
 
             // return back original value of the "update of the link preview" flag
             rEmbeddedObjectContainer.setUserAllowsLinkUpdate(aUserAllowsLinkUpdate);
+            pShell->GetView()->SelectShell();
         }
     }
     return bRet;

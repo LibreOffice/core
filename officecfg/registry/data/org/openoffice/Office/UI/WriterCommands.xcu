@@ -231,7 +231,7 @@
           <value xml:lang="en-US">Reject</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reject Track Change</value>
+          <value xml:lang="en-US">Reject Tracked Change</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Reject Change</value>
@@ -245,7 +245,7 @@
           <value xml:lang="en-US">Reject and Move to Next</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Reject Track Change and select the next one</value>
+          <value xml:lang="en-US">Reject Tracked Change and select the next one</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -292,7 +292,7 @@
           <value xml:lang="en-US">Accept</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Accept Track Change</value>
+          <value xml:lang="en-US">Accept Tracked Change</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Accept Change</value>
@@ -306,7 +306,7 @@
           <value xml:lang="en-US">Accept and Move to Next</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Accept Track Change and select the next one</value>
+          <value xml:lang="en-US">Accept Tracked Change and select the next one</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -342,7 +342,7 @@
           <value xml:lang="en-US">Next</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Next Track Change</value>
+          <value xml:lang="en-US">Next Tracked Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -353,7 +353,7 @@
           <value xml:lang="en-US">Pr~evious</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Previous Track Change</value>
+          <value xml:lang="en-US">Previous Tracked Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -375,7 +375,7 @@
           <value xml:lang="en-US">~Record</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Record Track Changes</value>
+          <value xml:lang="en-US">Record Tracked Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -383,10 +383,10 @@
       </node>
       <node oor:name=".uno:TrackChangesBar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Track Changes Functions</value>
+          <value xml:lang="en-US">Change-Tracking Functions</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show Track Changes Functions</value>
+          <value xml:lang="en-US">Show Change-Tracking Functions</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -394,13 +394,13 @@
       </node>
       <node oor:name=".uno:ShowTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Show Track Changes</value>
+          <value xml:lang="en-US">Show Tracked Changes</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Show</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show track changes</value>
+          <value xml:lang="en-US">Show tracked changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -515,7 +515,7 @@
           <value xml:lang="en-US">~Comment...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Track Change Comment</value>
+          <value xml:lang="en-US">Insert Comment for Tracked Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -542,7 +542,7 @@
           <value xml:lang="en-US">~Manage...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Manage Track Changes</value>
+          <value xml:lang="en-US">Manage Tracked Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3358,7 +3358,7 @@
       </node>
       <node oor:name=".uno:AcceptTrackedChanges-more" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Manage Track Changes</value>
+          <value xml:lang="en-US">Manage Tracked Changes</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:AcceptTrackedChanges</value>
@@ -3570,6 +3570,28 @@
       <node oor:name=".uno:LibreLogo-translate" oor:op="replace" install:module="librelogo">
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:GridsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Gr~ids and Helplines</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:GridMenu</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:BaselineGridVisible" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Display ~Baseline Grid</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Display the baseline grid for page line-spacing</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

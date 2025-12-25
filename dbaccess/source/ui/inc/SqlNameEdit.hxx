@@ -19,8 +19,9 @@
 #pragma once
 
 #include <svtools/editbrowsebox.hxx>
+#include <unotools/resmgr.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace dbaui
 {
@@ -72,17 +73,20 @@ namespace dbaui
     {
     private:
         weld::Widget* m_pWidget;
+        OUString m_strHelpText;
+        short m_nPos;
+
     public:
-        OWidgetBase(weld::Widget *pWidget)
-            : m_pWidget(pWidget)
-        {
-        }
+        OWidgetBase(weld::Widget *pWidget, TranslateId pHelpId, short nPosition);
 
         void hide() { m_pWidget->hide(); }
         void show() { m_pWidget->show(); }
         void set_sensitive(bool bSensitive) { m_pWidget->set_sensitive(bSensitive); }
 
         weld::Widget* GetWidget() { return m_pWidget; }
+
+        short GetPos() const { return m_nPos; }
+        const OUString& GetHelp() const { return m_strHelpText; }
 
         virtual bool get_value_changed_from_saved() const = 0;
         virtual void save_value() = 0;
@@ -99,8 +103,9 @@ namespace dbaui
         DECL_LINK(ModifyHdl, weld::Entry&, void);
 
     public:
-        OSQLNameEntry(std::unique_ptr<weld::Entry> xEntry, const OUString& _rAllowedChars = OUString())
-            : OWidgetBase(xEntry.get())
+        OSQLNameEntry(std::unique_ptr<weld::Entry> xEntry, const OUString& _rAllowedChars,
+                      TranslateId pHelpId, short nPosition)
+            : OWidgetBase(xEntry.get(), pHelpId, nPosition)
             , OSQLNameChecker(_rAllowedChars)
             , m_xEntry(std::move(xEntry))
         {

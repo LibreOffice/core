@@ -392,10 +392,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
             {
                 throw RuntimeException( "Attribute " + attrName + " unknown" );
             }
-            callable = PyUNO_callable_new (
-                me->members->xInvocation,
-                attrName,
-                ACCEPT_UNO_ANY);
+            callable = PyUNO_callable_new ( me->members->xInvocation, attrName );
             paras = args;
         }
         else
@@ -1446,7 +1443,7 @@ static int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     try
     {
         Runtime runtime;
-        Any val= runtime.pyObject2Any(value, ACCEPT_UNO_ANY);
+        Any val= runtime.pyObject2Any(value);
 
         OUString attrName( OUString::createFromAscii( name ) );
         {
@@ -1515,6 +1512,22 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
                     result = (op == Py_EQ ? Py_True : Py_False);
                     Py_INCREF(result);
                     return result;
+                }
+            }
+        }
+        else if (PyObject_IsInstance(
+                     that, getClass(u"com.sun.star.uno.XInterface"_ustr, runtime).get()))
+        {
+            // `self` could be an Adapter of `that`:
+            if (css::uno::Reference<css::lang::XUnoTunnel> tunnel;
+                reinterpret_cast<PyUNO *>(self)->members->wrappedObject >>= tunnel)
+            {
+                if (auto const adapter = comphelper::getFromUnoTunnel<Adapter>(tunnel)) {
+                    if (adapter->getWrappedObject().get() == that) {
+                        result = (op == Py_EQ ? Py_True : Py_False);
+                        Py_INCREF(result);
+                        return result;
+                    }
                 }
             }
         }

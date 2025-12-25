@@ -24,7 +24,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include "postithelper.hxx"
 #include "swrect.hxx"
@@ -215,10 +215,11 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         void        SetSizePixel( const Size& rNewSize ) override;
 
+        void UpdateMenu();
+
         DECL_DLLPRIVATE_LINK(ModifyHdl, LinkParamNone*, void);
         DECL_DLLPRIVATE_LINK(ScrollHdl, weld::ScrolledWindow&, void);
         DECL_DLLPRIVATE_LINK(DeleteHdl, void*, void);
-        DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
         DECL_DLLPRIVATE_LINK(SelectHdl, const OUString&, void);
         DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_DLLPRIVATE_LINK(MouseMoveHdl, const MouseEvent&, bool);

@@ -562,7 +562,7 @@ void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
         Point aBitmapPos(aMySize.Width() - aBitmapSize.Width(),  aMySize.Height() - aBitmapSize.Height());
 
         // draw it
-        rRenderContext.DrawBitmapEx( aBitmapPos, m_pImpl->getPicture() );
+        rRenderContext.DrawBitmap( aBitmapPos, m_pImpl->getPicture() );
     }
 
     // draw the headline

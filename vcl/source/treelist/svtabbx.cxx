@@ -23,6 +23,7 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -98,6 +99,13 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     {
                         auto aColumn = rJsonWriter.startStruct();
                         rJsonWriter.put("text", pStringItem->GetText());
+
+                        SvLBoxTab* pTab = pTabListBox->GetTab( pEntry, &rItem );
+                        if ( pTab )
+                            rJsonWriter.put("editable", pTab->IsEditable());
+
+                        if (pStringItem->IsCustomRender())
+                            rJsonWriter.put("customEntryRenderer", true);
                     }
                 }
                 else if (rItem.GetType() == SvLBoxItemType::ContextBmp)
@@ -294,13 +302,13 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions, MapUni
 
 SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                         bool /*bChildrenOnDemand*/,
-                                        sal_uInt32 nPos, void* pUserData )
+                                        sal_uInt32 nPos, OUString* pUserData )
 {
     return InsertEntryToColumn( rText, pParent, nPos, 0xffff, pUserData );
 }
 
 SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeListEntry* pParent,sal_uInt32 nPos,sal_uInt16 nCol,
-    void* pUser )
+    OUString* pUser )
 {
     OUString aStr;
     if( nCol != 0xffff )
@@ -379,20 +387,6 @@ OUString SvTabListBox::GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const
             aResult = static_cast<const SvLBoxString&>(rStr).GetText();
     }
     return aResult;
-}
-
-sal_uInt32 SvTabListBox::GetEntryPos( const SvTreeListEntry* pEntry ) const
-{
-    sal_uInt32 nPos = 0;
-    SvTreeListEntry* pTmpEntry = First();
-    while( pTmpEntry )
-    {
-        if ( pTmpEntry == pEntry )
-            return nPos;
-        pTmpEntry = Next( pTmpEntry );
-        ++nPos;
-    }
-    return 0xffffffff;
 }
 
 // static
@@ -576,7 +570,7 @@ bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol
 }
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const OUString& rStr, SvTreeListEntry* pParent, sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData )
+    const OUString& rStr, SvTreeListEntry* pParent, sal_uInt32 nPos, sal_uInt16 nCol, OUString* pUserData )
 {
     SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, pParent, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();

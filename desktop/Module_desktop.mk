@@ -46,10 +46,16 @@ $(eval $(call gb_Module_add_targets,desktop,\
         Pagein_impress \
         Pagein_writer \
     ) \
-    $(if $(filter-out WNT,$(OS)),CustomTarget_soffice) \
+    $(if $(filter MACOSX,$(OS)),CustomTarget_soffice) \
 ))
 
-ifeq ($(USING_X11),TRUE)
+ifneq (,$(filter-out EMSCRIPTEN HAIKU MACOSX WNT,$(OS)))
+$(eval $(call gb_Module_add_targets,desktop,\
+    Package_soffice_sh \
+))
+endif
+
+ifeq ($(USING_X11), TRUE)
 $(eval $(call gb_Module_add_targets,desktop,\
     Package_sbase_sh \
     Package_scalc_sh \
@@ -57,7 +63,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_simpress_sh \
     Package_smath_sh \
     Package_swriter_sh \
-    Package_soffice_sh \
 ))
 endif
 endif # DESKTOP

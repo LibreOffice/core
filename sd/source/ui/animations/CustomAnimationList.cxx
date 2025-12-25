@@ -37,7 +37,7 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -453,7 +453,7 @@ CustomAnimationList::CustomAnimationList(std::unique_ptr<weld::TreeView> xTreeVi
     mxTreeView->set_selection_mode(SelectionMode::Multiple);
     mxTreeView->connect_selection_changed(LINK(this, CustomAnimationList, SelectHdl));
     mxTreeView->connect_key_press(LINK(this, CustomAnimationList, KeyInputHdl));
-    mxTreeView->connect_popup_menu(LINK(this, CustomAnimationList, CommandHdl));
+    mxTreeView->connect_command(LINK(this, CustomAnimationList, CommandHdl));
     mxTreeView->connect_row_activated(LINK(this, CustomAnimationList, DoubleClickHdl));
     mxTreeView->connect_expanding(LINK(this, CustomAnimationList, ExpandHdl));
     mxTreeView->connect_collapsing(LINK(this, CustomAnimationList, CollapseHdl));
@@ -1015,8 +1015,7 @@ void CustomAnimationList::Select()
 
 IMPL_LINK_NOARG(CustomAnimationList, PostExpandHdl, void*, void)
 {
-    std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-    if (mxTreeView->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_selected())
     {
         for (bool bChild = mxTreeView->iter_children(*xEntry); bChild; bChild = mxTreeView->iter_next_sibling(*xEntry))
         {
@@ -1180,7 +1179,7 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
-    if (!mxTreeView->get_selected(nullptr))
+    if (!mxTreeView->get_selected())
         return false;
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), u"modules/simpress/ui/effectmenu.ui"_ustr));

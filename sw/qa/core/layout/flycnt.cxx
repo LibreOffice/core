@@ -738,7 +738,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
     // When layout is calculated during PDF export:
     // Then make sure that finishes without errors:
     // This crashed, due to a stack overflow in layout code.
-    save(u"writer_pdf_Export"_ustr);
+    save(TestFilter::PDF_WRITER);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)

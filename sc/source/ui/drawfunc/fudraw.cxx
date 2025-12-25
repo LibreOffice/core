@@ -438,7 +438,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                bool bReadOnly = rViewData.GetDocShell().IsReadOnly();
+                bool bReadOnly = rViewData.GetDocShell()->IsReadOnly();
 
                 if(!rKEvt.GetKeyCode().IsMod1() && !bReadOnly)
                 {

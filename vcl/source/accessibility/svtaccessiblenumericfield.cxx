@@ -22,6 +22,7 @@
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <vcl/vclevent.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;

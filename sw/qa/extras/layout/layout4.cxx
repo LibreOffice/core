@@ -1019,7 +1019,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf147666)
     dispatchCommand(mxComponent, u".uno:GoToEndOfPara"_ustr, {});
     dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     sal_Int32 nNonInsertedViewTop = getXPathContent(parseExport(u"settings.xml"_ustr),
                                                     "//config:config-item[@config:name='ViewTop']")
                                         .toInt32();
@@ -1030,7 +1030,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf147666)
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     sal_Int32 nInsertedViewTop = getXPathContent(parseExport(u"settings.xml"_ustr),
                                                  "//config:config-item[@config:name='ViewTop']")
                                      .toInt32();

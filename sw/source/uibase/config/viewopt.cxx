@@ -53,6 +53,7 @@ SwViewColors::SwViewColors() :
     m_aLinksColor(COL_BLUE),
     m_aVisitedLinksColor(COL_RED),
     m_aTextGridColor(COL_LIGHTGRAY),
+    m_aBaselineGridColor(COL_GRAY7),
     m_aSpellColor(COL_LIGHTRED),
     m_aGrammarColor(COL_LIGHTBLUE),
     m_aSmarttagColor(COL_LIGHTMAGENTA),
@@ -97,6 +98,7 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
         m_nAppearanceFlags |= ViewOptFlags::Shadow;
 
     m_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
+    m_aBaselineGridColor = rConfig.GetColorValue(svtools::WRITERBASELINEGRID).nColor;
 
     m_aSpellColor = rConfig.GetColorValue(svtools::SPELL).nColor;
     m_aGrammarColor = rConfig.GetColorValue(svtools::GRAMMAR).nColor;
@@ -142,6 +144,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && m_bShowPlaceHolderFields == rOpt.m_bShowPlaceHolderFields
             && m_bIdle == rOpt.m_bIdle
             && m_nDefaultAnchor == rOpt.m_nDefaultAnchor
+            && m_eRedlineRenderMode == rOpt.m_eRedlineRenderMode
 #ifdef DBG_UTIL
             // correspond to the statements in ui/config/cfgvw.src
             && m_bTest1 == rOpt.IsTest1()
@@ -226,6 +229,7 @@ SwViewOption::SwViewOption() :
     m_nPagePreviewRow( 1 ),
     m_nPagePreviewCol( 2 ),
     m_nShadowCursorFillMode( SwFillMode::Tab ),
+    m_eRedlineRenderMode(SwRedlineRenderMode::Standard),
     m_bReadonly(false),
     m_bStarOneSetting(false),
     m_bIsPagePreview(false),
@@ -307,6 +311,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
+    m_eRedlineRenderMode = rVOpt.m_eRedlineRenderMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
@@ -354,6 +359,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
     m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
+    m_eRedlineRenderMode = rVOpt.m_eRedlineRenderMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
@@ -473,6 +479,11 @@ const Color& SwViewOption::GetTextGridColor() const
     return m_aColorConfig.m_aTextGridColor;
 }
 
+const Color& SwViewOption::GetBaselineGridColor() const
+{
+    return m_aColorConfig.m_aBaselineGridColor;
+}
+
 const Color& SwViewOption::GetSpellColor() const
 {
     return m_aColorConfig.m_aSpellColor;
@@ -579,6 +590,14 @@ bool SwViewOption::IsIgnoreProtectedArea()
     return gIgnoreProtectedArea.get();
 }
 
+bool SwViewOption::IsAllowDragDropText()
+{
+    if (comphelper::IsFuzzing())
+        return true;
+    static comphelper::ConfigurationListenerProperty<bool> gAllowDragDrop(getWCOptionListener(), u"AllowDragDrop"_ustr);
+    return gAllowDragDrop.get();
+}
+
 void SwViewOption::SyncLayoutRelatedViewOptions(const SwViewOption& rOpt)
 {
     SetFieldName(rOpt.IsFieldName());
@@ -610,6 +629,11 @@ void SwViewOption::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwViewOption"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     m_nCoreOptions.dumpAsXml(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("redline-render-mode"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::number(static_cast<int>(m_eRedlineRenderMode)).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -709,6 +733,10 @@ void ViewOptFlags1::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bGridVisible"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(bGridVisible).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bBaselineGridVisible"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(bBaselineGridVisible).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bOnlineSpell"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),

@@ -30,6 +30,7 @@
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/debug.hxx>
 
 #include <connect.hxx>
 

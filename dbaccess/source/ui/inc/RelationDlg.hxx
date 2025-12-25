@@ -19,7 +19,8 @@
 #pragma once
 
 #include <memory>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
 #include "RelationControl.hxx"

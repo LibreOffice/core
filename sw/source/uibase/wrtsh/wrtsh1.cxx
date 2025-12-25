@@ -498,7 +498,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
                 {
                     SwRect aArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() );
-                    aArea.Pos() += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
+                    aArea += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
                     MapMode aMapMode( MapUnit::MapTwip );
                     Size aSize = xObj.GetSize( &aMapMode );
                     aArea.Width( aSize.Width() );
@@ -664,6 +664,16 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     rEmbeddedObjectContainer.setUserAllowsLinkUpdate(bSaveUserAllowsLinkUpdate);
 
     return bActivate;
+}
+
+bool SwWrtShell::IsOLEMath() {
+    svt::EmbeddedObjectRef& xRef = GetOLEObject();
+    OSL_ENSURE( xRef.is(), "OLE not found" );
+
+    const auto classId = xRef->getClassID();
+    if ( SotExchange::IsMath(classId) )
+        return true;
+    return false;
 }
 
 // The current selected OLE object will be loaded with the
@@ -911,7 +921,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     else
     {
         aArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() );
-        aArea.Pos() += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
+        aArea += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
     }
 
     if ( bUseObjectSize )
@@ -2335,7 +2345,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
     bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == SwFieldIds::Postit);
     if (bNew || GetView().GetPostItMgr()->IsAnswer() || comphelper::LibreOfficeKit::isActive())
     {
-        const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg<SvxPostItAuthorItem>(SID_ATTR_POSTIT_AUTHOR);
+        const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg(SID_ATTR_POSTIT_AUTHOR);
         OUString sAuthor;
         if ( pAuthorItem )
             sAuthor = pAuthorItem->GetValue();
@@ -2346,13 +2356,13 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             sAuthor = mod->GetRedlineAuthor(nAuthor);
         }
 
-        const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+        const SvxPostItTextItem* pTextItem = rReq.GetArg(SID_ATTR_POSTIT_TEXT);
         OUString sText;
         if ( pTextItem )
             sText = pTextItem->GetValue();
 
         std::optional<OutlinerParaObject> oTextPara;
-        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg(SID_ATTR_POSTIT_HTML))
         {
             SwDocShell* pDocSh = GetView().GetDocShell();
             Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
@@ -2390,9 +2400,9 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         SwInsertField_Data aData(SwFieldTypesEnum::Postit, 0, sAuthor, sText, 0);
 
         {
-            SvxPostItIdItem const*const pParentParaIdItem{rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_PARENTPARAID)};
-            SvxPostItIdItem const*const pParentPostItIdItem{rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_PARENTPOSTITID)};
-            SfxStringItem const*const pParentNameItem{rReq.GetArg<SfxStringItem>(SID_ATTR_POSTIT_PARENTNAME)};
+            SvxPostItIdItem const*const pParentParaIdItem{rReq.GetArg(SID_ATTR_POSTIT_PARENTPARAID)};
+            SvxPostItIdItem const*const pParentPostItIdItem{rReq.GetArg(SID_ATTR_POSTIT_PARENTPOSTITID)};
+            SfxStringItem const*const pParentNameItem{rReq.GetArg(SID_ATTR_POSTIT_PARENTNAME)};
             if (pParentParaIdItem && pParentPostItIdItem && pParentNameItem)
             {
                 aData.m_oParentId.emplace(pParentParaIdItem->GetValue().toUInt32(),
@@ -2540,7 +2550,7 @@ void SwWrtShell::MakeOutlineLevelsVisible(const int nLevel)
         {
             SwNodeIndex aIdx(*pNode, +1);
             // Make the outline paragraph frame
-            MakeFrames(*GetDoc(), *pNode, aIdx.GetNode());
+            ::MakeFrames(*GetDoc(), *pNode, aIdx.GetNode(), true);
             // Make the outline content visible but don't set the outline visible attribute and
             // don't make outline content made visible not visible that have outline visible
             // attribute false. Visibility will be taken care of when
@@ -2655,7 +2665,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
     {
         // reset the index marker and make frames
         aIdx.Assign(*pSttNd, +1);
-        MakeFrames(*GetDoc(), aIdx.GetNode(), *pEndNd);
+        ::MakeFrames(*GetDoc(), aIdx.GetNode(), *pEndNd, true);
 
         if (bSetAttrOutlineVisibility)
         {

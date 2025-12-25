@@ -40,7 +40,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <unodraw.hxx>
 
 #include <iostream>
@@ -64,7 +63,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, uno::Refere
     , mnProgressLastPos(0)
     , mnProgressCurrentPos(0)
     , mnProgressEndPos(0)
-    , m_rBaseURL(utl::MediaDescriptor(rDescriptor).getUnpackedValueOrDefault(u"DocumentBaseURL"_ustr, OUString()))
+    , m_rBaseURL(comphelper::SequenceAsHashMap(rDescriptor).getUnpackedValueOrDefault(u"DocumentBaseURL"_ustr, OUString()))
     , maMediaDescriptor(rDescriptor)
     , mxGraphicMapper(graphic::GraphicMapper::create(mpStream->getContext()))
 {
@@ -438,7 +437,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
     StatusIndicatorGuard aStatusIndicatorGuard(mxStatusIndicator);
 
-    if (utl::MediaDescriptor(maMediaDescriptor).getUnpackedValueOrDefault(u"ReadGlossaries"_ustr, false))
+    if (comphelper::SequenceAsHashMap(maMediaDescriptor).getUnpackedValueOrDefault(u"ReadGlossaries"_ustr, false))
     {
         resolveFastSubStream(rStream, OOXMLStream::StreamType_t::GLOSSARY);
         return;

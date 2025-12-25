@@ -41,7 +41,8 @@ static bool handleEmbeddedSTOFFWriterSpreadsheetObject(const librevenge::RVNGBin
 
 bool StarOfficeWriterImportFilter::doImportDocument(weld::Window* pParent,
                                                     librevenge::RVNGInputStream& rInput,
-                                                    OdtGenerator& rGenerator, utl::MediaDescriptor&)
+                                                    OdtGenerator& rGenerator,
+                                                    comphelper::SequenceAsHashMap&)
 {
     STOFFDocument::Kind docKind = STOFFDocument::STOFF_K_UNKNOWN;
     const STOFFDocument::Confidence confidence

@@ -21,11 +21,11 @@
 #define INCLUDED_SVX_FRMSEL_HXX
 
 #include <memory>
-#include <vcl/customweld.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/framebordertype.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class Color;
 

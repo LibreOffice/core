@@ -9,9 +9,7 @@
 
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
-#include <comphelper/base64.hxx>
 #include <iconview.hxx>
-#include <utility>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -26,8 +24,7 @@
 #include <memory>
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/stream.hxx>
-#include <vcl/cvtgrf.hxx>
+
 #include <wizdlg.hxx>
 #include <jsdialog/enabled.hxx>
 
@@ -189,7 +186,8 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
 
     m_aParentDialog = pRoot->GetParentWithLOKNotifier();
 
-    bool bIsNavigatorPanel = jsdialog::isBuilderEnabledForNavigator(rUIFile);
+    bool bIsDockingWindow = jsdialog::isBuilderEnabledForNavigator(rUIFile)
+                            || jsdialog::isBuilderEnabledForQuickFind(rUIFile);
 
     // builder for Panel, PanelLayout, and DockingWindow
     // get SidebarDockingWindow, or SwNavigatorWin as m_aContentWindow
@@ -198,7 +196,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
     //      Panel        : 7 levels up from pRoot
     //      DockingWindow: 3 levels up from pRoot
     unsigned nLevelsUp = 100; // limit
-    if (bIsNavigatorPanel)
+    if (bIsDockingWindow)
         nLevelsUp = 3;
 
     if (nLevelsUp > 0)
@@ -210,7 +208,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
         m_aContentWindow = pRoot;
         for (unsigned i = 0; i < nLevelsUp && m_aContentWindow; i++)
         {
-            if (!bIsNavigatorPanel && m_aContentWindow->get_id() == "Deck")
+            if (!bIsDockingWindow && m_aContentWindow->get_id() == "Deck")
                 nLevelsUp = i + 3;
 
             // Useful to check if any panel doesn't appear
@@ -572,7 +570,7 @@ JSInstanceBuilder::weld_scrolled_window(const OUString& id, bool bUserManagedScr
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OUString& id)
 {
     Control* pLabel = m_xBuilder->get<Control>(id);
-    auto pWeldWidget = std::make_unique<JSLabel>(this, pLabel, this, false);
+    auto pWeldWidget = pLabel ? std::make_unique<JSLabel>(this, pLabel, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -1216,6 +1214,12 @@ JSToggleButton::JSToggleButton(JSDialogSender* pSender, ::PushButton* pButton,
 {
 }
 
+void JSToggleButton::do_set_active(bool active)
+{
+    SalInstanceToggleButton::do_set_active(active);
+    sendUpdate();
+}
+
 JSEntry::JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
     : JSWidget<SalInstanceEntry, ::Edit>(pSender, pEntry, pBuilder, bTakeOwnership)
@@ -1256,9 +1260,9 @@ void JSListBox::remove(int pos)
     sendUpdate();
 }
 
-void JSListBox::set_active(int pos)
+void JSListBox::do_set_active(int pos)
 {
-    SalInstanceComboBoxWithoutEdit::set_active(pos);
+    SalInstanceComboBoxWithoutEdit::do_set_active(pos);
     sendUpdate();
 }
 
@@ -1297,12 +1301,12 @@ void JSComboBox::set_entry_text(const OUString& rText)
     sendAction(std::move(pMap));
 }
 
-void JSComboBox::set_active(int pos)
+void JSComboBox::do_set_active(int pos)
 {
     if (pos == get_active())
         return;
 
-    SalInstanceComboBoxWithEdit::set_active(pos);
+    SalInstanceComboBoxWithEdit::do_set_active(pos);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     (*pMap)[ACTION_TYPE ""_ostr] = "select";
@@ -1310,10 +1314,10 @@ void JSComboBox::set_active(int pos)
     sendAction(std::move(pMap));
 }
 
-void JSComboBox::set_active_id(const OUString& rStr)
+void JSComboBox::do_set_active_id(const OUString& rStr)
 {
     sal_uInt16 nPos = find_id(rStr);
-    set_active(nPos);
+    do_set_active(nPos);
 }
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }
@@ -1331,20 +1335,9 @@ void JSComboBox::render_entry(int pos, int dpix, int dpiy)
 
     Bitmap aImage = pDevice->GetBitmap(Point(0, 0), aRenderSize);
 
-    SvMemoryStream aOStm(65535, 65535);
-    if (GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
-    {
-        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                          aOStm.Tell());
-        OUStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-
-        std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-        (*pMap)[ACTION_TYPE ""_ostr] = "rendered_entry";
-        (*pMap)["pos"_ostr] = OUString::number(pos);
-        (*pMap)["image"_ostr] = aBuffer;
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    if (OnDemandRenderingHandler::imageToActionData(aImage, pos, *pMap))
         sendAction(std::move(pMap));
-    }
 }
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
@@ -1412,12 +1405,19 @@ JSFormattedSpinButton::JSFormattedSpinButton(JSDialogSender* pSender, ::Formatte
                                              SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceFormattedSpinButton, ::FormattedField>(pSender, pSpin, pBuilder,
                                                                  bTakeOwnership)
+    , m_pFmtSpin(pSpin)
 {
 }
 
 void JSFormattedSpinButton::do_set_text(const OUString& rText)
 {
-    SalInstanceFormattedSpinButton::do_set_text(rText);
+    if (!m_pFmtSpin)
+        return;
+
+    disable_notify_events();
+    m_pFmtSpin->SetValueFromString(rText);
+    enable_notify_events();
+
     sendUpdate();
 }
 
@@ -1686,40 +1686,10 @@ JSTreeView::JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTreeView,
 {
 }
 
-void JSTreeView::set_toggle(int pos, TriState eState, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
-
-    while (pEntry && pos--)
-        pEntry = m_xTreeView->Next(pEntry);
-
-    if (pEntry)
-    {
-        SalInstanceTreeView::set_toggle(pEntry, eState, col);
-        signal_toggled(iter_col(SalInstanceTreeIter(pEntry), col));
-
-        sendUpdate();
-    }
-}
-
 void JSTreeView::set_toggle(const weld::TreeIter& rIter, TriState bOn, int col)
 {
     SalInstanceTreeView::set_toggle(rIter, bOn, col);
     sendUpdate();
-}
-
-void JSTreeView::set_sensitive(int pos, bool bSensitive, int col)
-{
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
-
-    while (pEntry && pos--)
-        pEntry = m_xTreeView->Next(pEntry);
-
-    if (pEntry)
-    {
-        SalInstanceTreeView::set_sensitive(pEntry, bSensitive, col);
-        sendUpdate();
-    }
 }
 
 void JSTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col)
@@ -1728,28 +1698,14 @@ void JSTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int
     sendUpdate();
 }
 
-void JSTreeView::do_select(int pos)
+void JSTreeView::do_select(const weld::TreeIter& rIter)
 {
-    assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
-    if (pos == -1 || (pos == 0 && n_children() == 0))
-        m_xTreeView->SelectAll(false);
-    else
-    {
-        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
-
-        while (pEntry && pos--)
-            pEntry = m_xTreeView->Next(pEntry);
-
-        if (pEntry)
-        {
-            m_xTreeView->Select(pEntry, true);
-            m_xTreeView->MakeVisible(pEntry);
-        }
-    }
+    SalInstanceTreeView::do_select(rIter);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     (*pMap)[ACTION_TYPE ""_ostr] = "select";
-    (*pMap)["position"_ostr] = OUString::number(pos);
+    (*pMap)["position"_ostr] = OUString::number(m_xTreeView->GetEntryPos(rVclIter.iter));
     sendAction(std::move(pMap));
 }
 
@@ -1792,21 +1748,9 @@ void JSTreeView::do_insert(const weld::TreeIter* pParent, int pos, const OUStrin
     sendUpdate();
 }
 
-void JSTreeView::set_text(int row, const OUString& rText, int col)
-{
-    SalInstanceTreeView::set_text(row, rText, col);
-    sendUpdate();
-}
-
 void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int col)
 {
     SalInstanceTreeView::set_text(rIter, rStr, col);
-    sendUpdate();
-}
-
-void JSTreeView::do_remove(int pos)
-{
-    SalInstanceTreeView::do_remove(pos);
     sendUpdate();
 }
 
@@ -1862,6 +1806,29 @@ void JSTreeView::collapse_row(const weld::TreeIter& rIter)
         sendUpdate();
 }
 
+void JSTreeView::render_entry(int pos, int dpix, int dpiy)
+{
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetDPIX(96.0 * dpix / 100);
+    pDevice->SetDPIY(96.0 * dpiy / 100);
+
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntryAtAbsPos(pos);
+    if (!pEntry)
+    {
+        return;
+    }
+
+    Size aRenderSize = signal_custom_get_size(*pDevice, get_id(pos));
+    pDevice->SetOutputSize(aRenderSize);
+    m_xTreeView->DrawCustomEntry(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), *pEntry);
+
+    Bitmap aImage = pDevice->GetBitmap(Point(0, 0), aRenderSize);
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    if (OnDemandRenderingHandler::imageToActionData(aImage, pos, *pMap))
+        sendAction(std::move(pMap));
+}
+
 JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceExpander, ::VclExpander>(pSender, pExpander, pBuilder, bTakeOwnership)
@@ -1906,19 +1873,20 @@ void JSIconView::do_clear()
     sendUpdate();
 }
 
-void JSIconView::do_select(int pos)
+void JSIconView::do_select(const weld::TreeIter& rIter)
 {
-    SalInstanceIconView::do_select(pos);
+    SalInstanceIconView::do_select(rIter);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     (*pMap)[ACTION_TYPE ""_ostr] = "select";
-    (*pMap)["position"_ostr] = OUString::number(pos);
+    (*pMap)["position"_ostr] = OUString::number(m_xIconView->GetEntryPos(rVclIter.iter));
     sendAction(std::move(pMap));
 }
 
-void JSIconView::do_unselect(int pos)
+void JSIconView::do_unselect(const weld::TreeIter& rIter)
 {
-    SalInstanceIconView::do_unselect(pos);
+    SalInstanceIconView::do_unselect(rIter);
     sendUpdate();
 }
 

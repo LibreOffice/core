@@ -95,13 +95,13 @@ void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
 
 OUString ScTpPrintOptions::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"suppressCB"_ustr, u"forceBreaksCB"_ustr, u"printCB"_ustr };
@@ -109,10 +109,10 @@ OUString ScTpPrintOptions::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool ScTpPrintOptions::FillItemSet( SfxItemSet* rCoreAttrs )

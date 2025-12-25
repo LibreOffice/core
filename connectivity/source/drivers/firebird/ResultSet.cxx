@@ -24,6 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/standardsqlstate.hxx>
 #include <propertyids.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

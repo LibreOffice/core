@@ -38,8 +38,8 @@ critical for building LibreOffice:
     which shouldn't export anything more than a few registration
     symbols.
 
-- `flatpak-manifest.in`
+- `flatpak-external-tarballs.json.in`
 
-    This file is copied manually to https://github.com/flathub/org.libreoffice.LibreOffice/blob/master/org.libreoffice.LibreOffice.json
+    This file is processed by solenv/bin/generate-flatpak-manifest.sh and the result copied manually to https://github.com/flathub/org.libreoffice.LibreOffice/blob/master/external-tarballs.json
     The `flatpak/build.sh` in the LO `dev-tools` repository is obsolete.
 

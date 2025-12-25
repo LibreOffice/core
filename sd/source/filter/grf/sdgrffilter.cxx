@@ -21,7 +21,7 @@
 
 #include <utility>
 #include <vcl/errinf.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -260,38 +260,16 @@ bool SdGRFFilter::Export()
                 {
                     rtl::Reference< SdGRFFilter_ImplInteractionHdl > xInteractionHandler;
 
-                    beans::PropertyValues aArgs;
-                    TransformItems( SID_SAVEASDOC, rSet, aArgs );
+                    comphelper::SequenceAsHashMap aArgs = TransformItems(SID_SAVEASDOC, rSet);
 
                     static constexpr OUString sFilterName( u"FilterName"_ustr );
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
-                    bool    bFilterNameFound = false;
-                    for ( auto& rArg : asNonConstRange(aArgs) )
+                    aArgs[sFilterName] <<= sShortName;
+                    if (auto xHdl = aArgs.getValue(u"InteractionHandler"_ustr).query<task::XInteractionHandler>())
                     {
-                        OUString& rStr = rArg.Name;
-                        if ( rStr == sFilterName )
-                        {
-                            bFilterNameFound = true;
-                            rArg.Value <<= sShortName;
-                        }
-                        else if ( rStr == "InteractionHandler" )
-                        {
-                            uno::Reference< task::XInteractionHandler > xHdl;
-                            if ( rArg.Value >>= xHdl )
-                            {
-                                xInteractionHandler = new SdGRFFilter_ImplInteractionHdl( xHdl );
-                                rArg.Value <<= uno::Reference< task::XInteractionHandler >(xInteractionHandler);
-                            }
-                        }
-                    }
-                    if ( !bFilterNameFound )
-                    {
-                        sal_Int32 nCount = aArgs.getLength();
-                        aArgs.realloc( nCount + 1 );
-                        auto pArgs = aArgs.getArray();
-                        pArgs[ nCount ].Name = sFilterName;
-                        pArgs[ nCount ].Value <<= sShortName;
+                        xInteractionHandler = new SdGRFFilter_ImplInteractionHdl(xHdl);
+                        aArgs[u"InteractionHandler"_ustr] <<= uno::Reference<task::XInteractionHandler>(xInteractionHandler);
                     }
 
                     // take selection if needed
@@ -310,7 +288,7 @@ bool SdGRFFilter::Export()
                         }
                     }
                     xExporter->setSourceDocument( xSource );
-                    bRet = xExporter->filter( aArgs );
+                    bRet = xExporter->filter(aArgs.getAsConstPropertyValueList());
                     if ( !bRet && xInteractionHandler.is() )
                         SdGRFFilter::HandleGraphicFilterError(
                             xInteractionHandler->GetErrorCode(),

@@ -409,7 +409,8 @@ public:
 
     css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(OUString const& rURL,
                                                                  sal_Int32 nPageNum = -1);
-    css::uno::Reference<css::graphic::XGraphic> loadGraphicFromBase64(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream);
+    css::uno::Reference<css::graphic::XGraphic> loadGraphicFromBase64(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream,
+                                                                      sal_Int32 nPageNum = -1);
 
     css::uno::Reference< css::io::XOutputStream > GetStreamForGraphicObjectURLFromBase64() const;
 
@@ -555,6 +556,9 @@ public:
     static const sal_uInt16 LO_76 = 76 | LO_flag;
     static const sal_uInt16 LO_242 = 80 | LO_flag;
     static const sal_uInt16 LO_248 = 81 | LO_flag;
+    static const sal_uInt16 LO_252 = 82 | LO_flag;
+    static const sal_uInt16 LO_258 = 83 | LO_flag;
+    static const sal_uInt16 LO_262 = 84 | LO_flag;
     static const sal_uInt16 LO_New = 100 | LO_flag;
     static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
 

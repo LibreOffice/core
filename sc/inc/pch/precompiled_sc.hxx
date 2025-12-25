@@ -127,7 +127,7 @@
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <comphelper/errcode.hxx>
 #include <vcl/event.hxx>
@@ -154,7 +154,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
 #include <vcl/wintypes.hxx>

@@ -37,6 +37,7 @@
 #include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
+#include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <utility>
@@ -315,8 +316,9 @@ void SAL_CALL TitleWrapper::removeEventListener(
 
 void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue )
 {
-    OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
-                nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
+    SAL_WARN_IF( nHandle < FAST_PROPERTY_ID_START_CHAR_PROP ||
+                 nHandle >= CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP,
+                 "chart2", "Handle out of range" );
 
     Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
@@ -338,8 +340,9 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
 void TitleWrapper::setFastCharacterPropertyValue(
     sal_Int32 nHandle, const Any& rValue )
 {
-    OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
-                nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
+    SAL_WARN_IF( nHandle < FAST_PROPERTY_ID_START_CHAR_PROP ||
+                 nHandle >= CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP,
+                 "chart2", "Handle out of range" );
 
     Reference< chart2::XTitle > xTitle( getTitleObject() );
     if( !xTitle.is())

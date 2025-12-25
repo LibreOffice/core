@@ -1751,6 +1751,60 @@ End Function	&apos;	SFDocuments.SF_Document.XStyle
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
+Public Function _ConvertRectangle(ByRef poRect As Object _
+										, ByVal piTargetUnit As Integer _
+										) As Object
+&apos;&apos;&apos;	Convert the X, Y, Width, Height dimensions expressed in 1/100mm units to a Rectangle expressed in pixels,
+&apos;&apos;&apos;	or vice-versa
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poRect: a com.sun.star.awt.Rectangle
+&apos;&apos;&apos;		piTargetUnit: a com.sun.star.util.MeasureUnit constant
+&apos;&apos;&apos;			Only PIXEL and MM_100TH are admitted.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A com.sun.star.awt.Rectangle object after conversion of the position and size
+&apos;&apos;&apos;		Negative input values are not converted but set to zero
+
+Dim oComp As Object							&apos;	Component window com.sun.star.awt.XWindow
+Dim oPoint As New com.sun.star.awt.Point	&apos;	The input position
+Dim oSize As New com.sun.star.awt.Size		&apos;	The input size
+Dim oRect As New com.sun.star.awt.Rectangle	&apos;	Return value
+
+Try:
+	Set oComp = _Component.CurrentController.ComponentWindow
+
+	With poRect
+		&apos;	Point part
+		If .X &gt; 0 Then oPoint.X = .X Else oPoint.X = 0
+		If .Y &gt; 0 Then oPoint.Y = .Y Else oPoint.Y = 0
+		If piTargetUnit = com.sun.star.util.MeasureUnit.MM_100TH Then
+			Set oPoint = oComp.convertPointToLogic(oPoint, piTargetUnit)
+		Else
+			Set oPoint = oComp.convertPointToPixel(oPoint, com.sun.star.util.MeasureUnit.MM_100TH)
+		End If
+
+		&apos;	Size part
+		If .Width &gt; 0 Then oSize.Width = .Width Else oSize.Width = 0
+		If .Height &gt; 0 Then oSize.Height = .Height Else oSize.Height = 0
+		If piTargetUnit = com.sun.star.util.MeasureUnit.MM_100TH Then
+			Set oSize = oComp.convertSizeToLogic(oSize, piTargetUnit)
+		Else
+			Set oSize = oComp.convertSizeToPixel(oSize, com.sun.star.util.MeasureUnit.MM_100TH)
+		End If
+	End With
+
+	With oRect
+		.X = oPoint.X
+		.Y = oPoint.Y
+		.Width = oSize.Width
+		.Height = oSize.Height
+	End With
+
+Finally:
+	Set _ConvertRectangle = oRect
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Document._ConvertRectangle
+
+REM -----------------------------------------------------------------------------
 Private Function _FileIdent() As String
 &apos;&apos;&apos;	Returns a file identification from the information that is currently available
 &apos;&apos;&apos;	Useful e.g. for display in error messages

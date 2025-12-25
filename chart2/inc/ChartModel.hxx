@@ -71,6 +71,7 @@ class SvNumberFormatter;
 class SvNumberFormatsSupplierObj;
 
 class UnoChartStyle;
+class UnoChartColorStyle;
 
 namespace model { class Theme; }
 
@@ -191,6 +192,7 @@ private:
     std::optional<css::util::DateTime> m_aNullDate;
 
     rtl::Reference<UnoChartStyle> m_aStyles;
+    rtl::Reference<UnoChartColorStyle> m_aColorStyles;
 
 private:
     //private methods
@@ -386,6 +388,7 @@ public:
     virtual css::uno::Reference< css::chart2::XChartTypeManager > SAL_CALL
         getChartTypeManager() override;
     virtual css::uno::Reference< css::chart2::XChartStyle> SAL_CALL getStyles() override;
+    virtual css::uno::Reference< css::chart2::XChartColorStyle> SAL_CALL getColorStyles() override;
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
         getPageBackground() override;
 

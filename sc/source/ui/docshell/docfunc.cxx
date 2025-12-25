@@ -28,7 +28,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdocapt.hxx>
@@ -893,8 +893,8 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
     if (bApi)
         NotifyInputHandler( rPos );
 
-    const SfxUInt32Item* pItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
-    const ScValidationData* pData = rDoc.GetValidationEntry(pItem->GetValue());
+    const SfxUInt32Item& rItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
+    const ScValidationData* pData = rDoc.GetValidationEntry(rItem.GetValue());
     if (pData)
     {
         ScRefCellValue aCell(rDoc, rPos);
@@ -1169,7 +1169,7 @@ bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCel
 void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if ( !(pViewSh && &pViewSh->GetViewData().GetDocShell() == &rDocShell) )
+    if ( !(pViewSh && pViewSh->GetViewData().GetDocShell() == &rDocShell) )
         return;
 
     ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
@@ -4276,11 +4276,15 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
         pBindings->Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
         pBindings->Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
         pBindings->Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_START );
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_END );
         // pseudo slots for Format menu
         pBindings->Invalidate( SID_ALIGN_ANY_HDEFAULT );
         pBindings->Invalidate( SID_ALIGN_ANY_LEFT );
         pBindings->Invalidate( SID_ALIGN_ANY_HCENTER );
         pBindings->Invalidate( SID_ALIGN_ANY_RIGHT );
+        pBindings->Invalidate( SID_ALIGN_ANY_START );
+        pBindings->Invalidate( SID_ALIGN_ANY_END );
         pBindings->Invalidate( SID_ALIGN_ANY_JUSTIFIED );
     }
 

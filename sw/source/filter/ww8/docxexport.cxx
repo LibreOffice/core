@@ -97,6 +97,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1072,32 +1073,31 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> voi
     {
         rpFS->singleElementNS(XML_w, XML_noLeading);
     }
-    // Do not justify lines with manual break
-    if (rIDSA.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
-    {
-        rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
-    }
     // tdf#88908 adjust CJK-context normal spaces to half of an ideographic space
     if (rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES))
     {
         rpFS->singleElementNS(XML_w, XML_balanceSingleByteDoubleByteWidth);
     }
+    if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE))
+        rpFS->singleElementNS(XML_w, XML_ulTrailSpace);
+    // Do not justify lines with manual break
+    if (rIDSA.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
+    {
+        rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
+    }
     // tdf#146515 export "Use printer metrics for document formatting"
     if (!rIDSA.get(DocumentSettingId::USE_VIRTUAL_DEVICE))
         rpFS->singleElementNS(XML_w, XML_usePrinterMetrics);
-
+    if (rIDSA.get(DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT))
+    {
+        rpFS->singleElementNS(XML_w, XML_adjustLineHeightInTable);
+    }
     if (rIDSA.get(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES))
     {
         // Map the DoNotBreakWrappedTables compat flag to <w:doNotBreakWrappedTables>.
         rpFS->singleElementNS(XML_w, XML_doNotBreakWrappedTables);
     }
-    if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE))
-        rpFS->singleElementNS(XML_w, XML_ulTrailSpace);
 
-    if (rIDSA.get(DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT))
-    {
-        rpFS->singleElementNS(XML_w, XML_adjustLineHeightInTable);
-    }
 }
 
 void DocxExport::WriteSettings()
@@ -1213,14 +1213,13 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS(XML_w, XML_displayBackgroundShape);
     }
 
-    // Track Changes
-    if ( !m_aSettings.revisionView )
-        pFS->singleElementNS( XML_w, XML_revisionView,
-            FSNS( XML_w, XML_insDel ), "0",
-            FSNS( XML_w, XML_formatting ), "0" );
+    // Embed Fonts
+    if( m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
+        pFS->singleElementNS(XML_w, XML_embedTrueTypeFonts);
 
-    if ( m_aSettings.trackRevisions )
-        pFS->singleElementNS(XML_w, XML_trackRevisions);
+    // Embed System Fonts
+    if( m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_SYSTEM_FONTS ))
+        pFS->singleElementNS(XML_w, XML_embedSystemFonts);
 
     // Mirror Margins
     if(isMirroredMargin())
@@ -1230,19 +1229,6 @@ void DocxExport::WriteSettings()
     {
         pFS->singleElementNS(XML_w, XML_gutterAtTop);
     }
-
-    // Embed Fonts
-    if( m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
-        pFS->singleElementNS(XML_w, XML_embedTrueTypeFonts);
-
-    // Embed System Fonts
-    if( m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_SYSTEM_FONTS ))
-        pFS->singleElementNS(XML_w, XML_embedSystemFonts);
-
-    // Default Tab Stop
-    if( m_aSettings.defaultTabStop != 0 )
-        pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
-            OString::number(m_aSettings.defaultTabStop) );
 
     // export current mail merge database and table names
     SwDBData aData = m_rDoc.GetDBData();
@@ -1264,61 +1250,22 @@ void DocxExport::WriteSettings()
         pFS->endElementNS( XML_w, XML_mailMerge );
     }
 
-    // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
-    // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
-    pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
+    // Track Changes
+    if ( !m_aSettings.revisionView )
+        pFS->singleElementNS( XML_w, XML_revisionView,
+            FSNS( XML_w, XML_insDel ), "0",
+            FSNS( XML_w, XML_formatting ), "0" );
 
-    // Hyphenation details set depending on default style, otherwise on body style
-    SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
-    if (!pColl || !pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false))
-        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT, /*bRegardLanguage=*/false);
-    const SvxHyphenZoneItem* pZoneItem;
-    bool bHyphenationKeep = false;
-    bool bHyphenationZone = false;
-    if (pColl && (pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false)))
-    {
-        if (pZoneItem->IsNoCapsHyphenation())
-            pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
+    if ( m_aSettings.trackRevisions )
+        pFS->singleElementNS(XML_w, XML_trackRevisions);
 
-        if ( sal_Int16 nHyphenZone = pZoneItem->GetTextHyphenZone() )
-        {
-            pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
-                                         OString::number(nHyphenZone));
-            bHyphenationZone = true;
-        }
-
-        if ( sal_Int16 nMaxHyphens = pZoneItem->GetMaxHyphens() )
-            pFS->singleElementNS(XML_w, XML_consecutiveHyphenLimit, FSNS(XML_w, XML_val),
-                                         OString::number(nMaxHyphens));
-
-        if ( pZoneItem->IsKeep() && pZoneItem->GetKeepType() )
-            bHyphenationKeep = true;
-    }
-
-    // export 0, if hyphenation zone is not defined (otherwise it would be the default 360 twips)
-    if ( !bHyphenationZone )
-        pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val), "0");
-
-    // Even and Odd Headers
-    if( m_aSettings.evenAndOddHeaders )
-        pFS->singleElementNS(XML_w, XML_evenAndOddHeaders);
-
-    // Has Footnotes
-    if( m_pAttrOutput->HasFootnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_rDoc.GetFootnoteInfo(), XML_footnote );
-
-    // Has Endnotes
-    if( m_pAttrOutput->HasEndnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_rDoc.GetEndNoteInfo(), XML_endnote );
-
-    // Has themeFontLang information
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
+    bool bReadOnlyStatusUnchanged = true;
     bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
     bool bWriterWantsToProtectForm = false;
     bool bWriterWantsToProtectRedline = false;
     bool bHasDummyRedlineProtectionKey = false;
-    bool bReadOnlyStatusUnchanged = true;
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     if ( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
          m_pSections->DocumentIsProtected() )
     {
@@ -1334,157 +1281,218 @@ void DocxExport::WriteSettings()
             bWriterWantsToProtect = bWriterWantsToProtectRedline = true;
     }
 
-    bool bHasCompatibilityMode = false;
+    comphelper::SequenceAsHashMap aGrabBagPropMap;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
         m_xTextDoc->getPropertyValue( aGrabBagName ) >>= propList;
+        aGrabBagPropMap = comphelper::SequenceAsHashMap(propList);
+    }
 
-        for (const auto& rProp : propList)
+    // write w:documentProtection
+    if (uno::Sequence< beans::PropertyValue > rAttributeList;
+        aGrabBagPropMap.getValue("DocumentProtection") >>= rAttributeList)
+    {
+        if (rAttributeList.hasElements())
         {
-            if ( rProp.Name == "ThemeFontLangProps" )
+            rtl::Reference<sax_fastparser::FastAttributeList> xAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+            bool bIsProtectionTrackChanges = false;
+            // if grabbag protection is not enforced, allow Writer protection to override
+            bool bEnforced = false;
+            for (const auto& rAttribute : rAttributeList)
             {
-                uno::Sequence< beans::PropertyValue > themeFontLangProps;
-                rProp.Value >>= themeFontLangProps;
-                OUString aValues[3];
-                for (const auto& rThemeFontLangProp : themeFontLangProps)
+                static DocxStringTokenMap const aTokens[] =
                 {
-                    if( rThemeFontLangProp.Name == "val" )
-                        rThemeFontLangProp.Value >>= aValues[0];
-                    else if( rThemeFontLangProp.Name == "eastAsia" )
-                        rThemeFontLangProp.Value >>= aValues[1];
-                    else if( rThemeFontLangProp.Name == "bidi" )
-                        rThemeFontLangProp.Value >>= aValues[2];
-                }
-                pFS->singleElementNS( XML_w, XML_themeFontLang,
-                                      FSNS( XML_w, XML_val ), aValues[0],
-                                      FSNS( XML_w, XML_eastAsia ), aValues[1],
-                                      FSNS( XML_w, XML_bidi ), aValues[2] );
-            }
-            else if ( rProp.Name == "CompatSettings" )
-            {
-                pFS->startElementNS(XML_w, XML_compat);
+                    { "edit",                XML_edit },
+                    { "enforcement",         XML_enforcement },
+                    { "formatting",          XML_formatting },
+                    { "cryptProviderType",   XML_cryptProviderType },
+                    { "cryptAlgorithmClass", XML_cryptAlgorithmClass },
+                    { "cryptAlgorithmType",  XML_cryptAlgorithmType },
+                    { "cryptAlgorithmSid",   XML_cryptAlgorithmSid },
+                    { "cryptSpinCount",      XML_cryptSpinCount },
+                    { "hash",                XML_hash },
+                    { "salt",                XML_salt },
+                    { nullptr, 0 }
+                };
 
-                WriteCompat(m_rDoc, pFS);
-
-                uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
-                rProp.Value >>= aCompatSettingsSequence;
-
-                for (const auto& rCompatSetting : aCompatSettingsSequence)
+                if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
                 {
-                    uno::Sequence< beans::PropertyValue > aCompatSetting;
-                    rCompatSetting.Value >>= aCompatSetting;
-                    OUString aName;
-                    OUString aUri;
-                    OUString aValue;
-
-                    for (const auto& rPropVal : aCompatSetting)
-                    {
-                        if( rPropVal.Name == "name" )
-                            rPropVal.Value >>= aName;
-                        else if( rPropVal.Name == "uri" )
-                            rPropVal.Value >>= aUri;
-                        else if( rPropVal.Name == "val" )
-                            rPropVal.Value >>= aValue;
-                    }
-                    if ( aName == "compatibilityMode" )
-                    {
-                        bHasCompatibilityMode = true;
-                        aValue = OUString::number(getWordCompatibilityMode());
-                    }
-
-                    pFS->singleElementNS( XML_w, XML_compatSetting,
-                        FSNS( XML_w, XML_name ), aName,
-                        FSNS( XML_w, XML_uri ),  aUri,
-                        FSNS( XML_w, XML_val ),  aValue);
-                }
-
-                if ( !bHasCompatibilityMode )
-                {
-                    pFS->singleElementNS( XML_w, XML_compatSetting,
-                        FSNS( XML_w, XML_name ), "compatibilityMode",
-                        FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
-                        FSNS( XML_w, XML_val ),  OString::number(getWordCompatibilityMode()));
-                    bHasCompatibilityMode = true;
-                }
-
-                pFS->endElementNS( XML_w, XML_compat );
-            }
-            else if (rProp.Name == "DocumentProtection")
-            {
-                uno::Sequence< beans::PropertyValue > rAttributeList;
-                rProp.Value >>= rAttributeList;
-
-                if (rAttributeList.hasElements())
-                {
-                    rtl::Reference<sax_fastparser::FastAttributeList> xAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
-                    bool bIsProtectionTrackChanges = false;
-                    // if grabbag protection is not enforced, allow Writer protection to override
-                    bool bEnforced = false;
-                    for (const auto& rAttribute : rAttributeList)
-                    {
-                        static DocxStringTokenMap const aTokens[] =
-                        {
-                            { "edit",                XML_edit },
-                            { "enforcement",         XML_enforcement },
-                            { "formatting",          XML_formatting },
-                            { "cryptProviderType",   XML_cryptProviderType },
-                            { "cryptAlgorithmClass", XML_cryptAlgorithmClass },
-                            { "cryptAlgorithmType",  XML_cryptAlgorithmType },
-                            { "cryptAlgorithmSid",   XML_cryptAlgorithmSid },
-                            { "cryptSpinCount",      XML_cryptSpinCount },
-                            { "hash",                XML_hash },
-                            { "salt",                XML_salt },
-                            { nullptr, 0 }
-                        };
-
-                        if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
-                        {
-                            OUString sValue = rAttribute.Value.get<OUString>();
-                            xAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
-                            if ( nToken == XML_edit && sValue == "trackedChanges" )
-                                bIsProtectionTrackChanges = true;
-                            else if ( nToken == XML_edit && sValue == "readOnly" )
-                            {
-                                // Ignore the case where read-only was not enforced, but now is. That is handled by _MarkAsFinal
-                                bReadOnlyStatusUnchanged = pDocShell->IsSecurityOptOpenReadOnly();
-                            }
-                            else if ( nToken == XML_enforcement )
-                                bEnforced = sValue.toBoolean();
-                        }
-                    }
-
-                    // we have document protection from input DOCX file
-                    if ( !bEnforced )
-                    {
-                        // Leave as an un-enforced suggestion if Writer doesn't want to set any enforcement
-                        bUseGrabBagProtection = !bWriterWantsToProtect;
-                    }
+                    OUString sValue = rAttribute.Value.get<OUString>();
+                    if (nToken == XML_cryptAlgorithmSid && sValue.isEmpty())
+                        ; // ignore, empty is not valid OOXML
                     else
+                        xAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
+                    if ( nToken == XML_edit && sValue == "trackedChanges" )
+                        bIsProtectionTrackChanges = true;
+                    else if ( nToken == XML_edit && sValue == "readOnly" )
                     {
-                        // Check if the grabbag protection is still valid
-                        // In the case of change tracking protection, we didn't modify it
-                        // and in the case of read-only, we didn't modify it.
-                        bUseGrabBagProtection = (!bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey)
-                                                && bReadOnlyStatusUnchanged;
+                        // Ignore the case where read-only was not enforced, but now is. That is handled by _MarkAsFinal
+                        bReadOnlyStatusUnchanged = pDocShell->IsSecurityOptOpenReadOnly();
                     }
-
-                    if ( bUseGrabBagProtection )
-                    {
-                        pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
-                    }
-
+                    else if ( nToken == XML_enforcement )
+                        bEnforced = sValue.toBoolean();
                 }
             }
-            else if (rProp.Name == "HyphenationZone")
+
+            // we have document protection from input DOCX file
+            if ( !bEnforced )
             {
-                sal_Int16 nHyphenationZone = *o3tl::doAccess<sal_Int16>(rProp.Value);
-                if (nHyphenationZone > 0)
-                    pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
-                                         OString::number(nHyphenationZone));
+                // Leave as an un-enforced suggestion if Writer doesn't want to set any enforcement
+                bUseGrabBagProtection = !bWriterWantsToProtect;
+            }
+            else
+            {
+                // Check if the grabbag protection is still valid
+                // In the case of change tracking protection, we didn't modify it
+                // and in the case of read-only, we didn't modify it.
+                bUseGrabBagProtection = (!bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey)
+                                        && bReadOnlyStatusUnchanged;
+            }
+
+            if ( bUseGrabBagProtection )
+            {
+                pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+            }
+
+        }
+    }
+    if ( !bUseGrabBagProtection )
+    {
+        // Protect form - highest priority
+        // Section-specific write protection
+        if ( bWriterWantsToProtectForm )
+        {
+            // we have form protection from Writer or from input ODT file
+
+            pFS->singleElementNS(XML_w, XML_documentProtection,
+                FSNS(XML_w, XML_edit), "forms",
+                FSNS(XML_w, XML_enforcement), "true");
+        }
+        // Protect Change Tracking - next priority
+        else if ( bWriterWantsToProtectRedline )
+        {
+            // we have change tracking protection from Writer or from input ODT file
+
+            pFS->singleElementNS(XML_w, XML_documentProtection,
+                FSNS(XML_w, XML_edit), "trackedChanges",
+                FSNS(XML_w, XML_enforcement), "1");
+        }
+    }
+
+    // Default Tab Stop
+    if( m_aSettings.defaultTabStop != 0 )
+        pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
+            OString::number(m_aSettings.defaultTabStop) );
+
+    // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
+    // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
+    pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
+
+    // Hyphenation details set depending on default style, otherwise on body style
+    SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    if (!pColl || !pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false))
+        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT, /*bRegardLanguage=*/false);
+    const SvxHyphenZoneItem* pZoneItem = nullptr;
+    bool bHyphenationKeep = false;
+    bool bHyphenationZone = false;
+    if (pColl)
+        pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false);
+    if (pZoneItem)
+    {
+        if ( sal_Int16 nMaxHyphens = pZoneItem->GetMaxHyphens() )
+            pFS->singleElementNS(XML_w, XML_consecutiveHyphenLimit, FSNS(XML_w, XML_val),
+                                         OString::number(nMaxHyphens));
+        if ( sal_Int16 nHyphenZone = pZoneItem->GetTextHyphenZone() )
+        {
+            pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
+                                         OString::number(nHyphenZone));
+            bHyphenationZone = true;
+        }
+    }
+    if (!bHyphenationZone)
+    {
+        sal_Int16 nHyphenationZone;
+        if (aGrabBagPropMap.getValue("HyphenationZone") >>= nHyphenationZone)
+        {
+            if (nHyphenationZone > 0)
+            {
+                pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
+                                     OString::number(nHyphenationZone));
+                bHyphenationZone = true;
             }
         }
+    }
+    // export 0, if hyphenation zone is not defined (otherwise it would be the default 360 twips)
+    if ( !bHyphenationZone )
+        pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val), "0");
+    if (pZoneItem && pZoneItem->IsNoCapsHyphenation())
+        pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
+    if (pZoneItem && pZoneItem->IsKeep() && pZoneItem->GetKeepType() )
+        bHyphenationKeep = true;
+
+    // Even and Odd Headers
+    if( m_aSettings.evenAndOddHeaders )
+        pFS->singleElementNS(XML_w, XML_evenAndOddHeaders);
+
+    // Has Footnotes
+    if( m_pAttrOutput->HasFootnotes())
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, m_rDoc.GetFootnoteInfo(), XML_footnote );
+
+    // Has Endnotes
+    if( m_pAttrOutput->HasEndnotes())
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_rDoc.GetEndNoteInfo(), XML_endnote );
+
+    bool bHasCompatibilityMode = false;
+
+    // write w:compat
+    if (uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
+        aGrabBagPropMap.getValue("CompatSettings") >>= aCompatSettingsSequence)
+    {
+        pFS->startElementNS(XML_w, XML_compat);
+
+        WriteCompat(m_rDoc, pFS);
+
+        for (const auto& rCompatSetting : aCompatSettingsSequence)
+        {
+            uno::Sequence< beans::PropertyValue > aCompatSetting;
+            rCompatSetting.Value >>= aCompatSetting;
+            OUString aName;
+            OUString aUri;
+            OUString aValue;
+
+            for (const auto& rPropVal : aCompatSetting)
+            {
+                if( rPropVal.Name == "name" )
+                    rPropVal.Value >>= aName;
+                else if( rPropVal.Name == "uri" )
+                    rPropVal.Value >>= aUri;
+                else if( rPropVal.Name == "val" )
+                    rPropVal.Value >>= aValue;
+            }
+            if ( aName == "compatibilityMode" )
+            {
+                bHasCompatibilityMode = true;
+                aValue = OUString::number(getWordCompatibilityMode());
+            }
+
+            pFS->singleElementNS( XML_w, XML_compatSetting,
+                FSNS( XML_w, XML_name ), aName,
+                FSNS( XML_w, XML_uri ),  aUri,
+                FSNS( XML_w, XML_val ),  aValue);
+        }
+
+        if ( !bHasCompatibilityMode )
+        {
+            pFS->singleElementNS( XML_w, XML_compatSetting,
+                FSNS( XML_w, XML_name ), "compatibilityMode",
+                FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
+                FSNS( XML_w, XML_val ),  OString::number(getWordCompatibilityMode()));
+            bHasCompatibilityMode = true;
+        }
+
+        pFS->endElementNS( XML_w, XML_compat );
     }
     if ( !bHasCompatibilityMode )
     {
@@ -1530,29 +1538,27 @@ void DocxExport::WriteSettings()
         pFS->endElementNS( XML_w, XML_compat );
     }
 
+    // write w:docVars
     WriteDocVars(pFS);
 
-    if ( !bUseGrabBagProtection )
+    // write w:themeFontLang
+    if (uno::Sequence< beans::PropertyValue > themeFontLangProps;
+        aGrabBagPropMap.getValue("ThemeFontLangProps") >>= themeFontLangProps)
     {
-        // Protect form - highest priority
-        // Section-specific write protection
-        if ( bWriterWantsToProtectForm )
+        OUString aValues[3];
+        for (const auto& rThemeFontLangProp : themeFontLangProps)
         {
-            // we have form protection from Writer or from input ODT file
-
-            pFS->singleElementNS(XML_w, XML_documentProtection,
-                FSNS(XML_w, XML_edit), "forms",
-                FSNS(XML_w, XML_enforcement), "true");
+            if( rThemeFontLangProp.Name == "val" )
+                rThemeFontLangProp.Value >>= aValues[0];
+            else if( rThemeFontLangProp.Name == "eastAsia" )
+                rThemeFontLangProp.Value >>= aValues[1];
+            else if( rThemeFontLangProp.Name == "bidi" )
+                rThemeFontLangProp.Value >>= aValues[2];
         }
-        // Protect Change Tracking - next priority
-        else if ( bWriterWantsToProtectRedline )
-        {
-            // we have change tracking protection from Writer or from input ODT file
-
-            pFS->singleElementNS(XML_w, XML_documentProtection,
-                FSNS(XML_w, XML_edit), "trackedChanges",
-                FSNS(XML_w, XML_enforcement), "1");
-        }
+        pFS->singleElementNS( XML_w, XML_themeFontLang,
+                              FSNS( XML_w, XML_val ), aValues[0],
+                              FSNS( XML_w, XML_eastAsia ), aValues[1],
+                              FSNS( XML_w, XML_bidi ), aValues[2] );
     }
 
     // finish settings.xml

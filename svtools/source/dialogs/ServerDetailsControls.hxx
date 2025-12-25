@@ -15,7 +15,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace com :: sun :: star :: awt { class XWindow; }
 
@@ -54,6 +54,7 @@ class DetailsContainer
         virtual void setPassword( const OUString& ) { };
 
         virtual bool enableUserCredentials( ) { return true; };
+        virtual bool enablePassword() { return enableUserCredentials(); }
 
     protected:
         void notifyChange( );
@@ -126,6 +127,7 @@ class CmisDetailsContainer final : public DetailsContainer
         CmisDetailsContainer(PlaceEditDialog* pDialog, OUString sBinding);
 
         virtual void set_visible( bool bShow ) override;
+        virtual bool enablePassword() override;
         virtual INetURLObject getUrl( ) override;
         virtual bool setUrl( const INetURLObject& rUrl ) override;
         virtual void setUsername( const OUString& rUsername ) override;

@@ -903,10 +903,15 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                         if (!xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                         {
                             bKeepRotation = true;
-                            xShapeProps->setPropertyValue
-                                (getPropertyName(PROP_TEXT_RANGE),
-                                 uno::Any
-                                 (m_rDomainMapper.GetCurrentTextRange()));
+                            try
+                            {
+                                xShapeProps->setPropertyValue(getPropertyName(PROP_TEXT_RANGE),
+                                    uno::Any(m_rDomainMapper.GetCurrentTextRange()));
+                            }
+                            catch (lang::IllegalArgumentException const&)
+                            {
+                                SAL_WARN("writerfilter", "GraphicImport::lcl_attribute: cannot set anchor");
+                            }
                         }
 
                         awt::Size aSize(m_xShape->getSize());

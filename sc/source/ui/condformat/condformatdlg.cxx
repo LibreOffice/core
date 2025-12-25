@@ -264,6 +264,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
     if(itr == maEntries.end())
         return;
 
+    const bool bFocused = pBox->has_focus();
     sal_Int32 nPos = pBox->get_active();
     switch(nPos)
     {
@@ -314,6 +315,10 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
             break;
 
     }
+
+    if (bFocused)
+        (*itr)->GetTypeComboBox().grab_focus();
+
     Thaw();
     RecalcAll();
 }
@@ -620,11 +625,11 @@ void ScCondFormatDlg::OkPressed()
         if(pFormat)
         {
             auto& rRangeList = pFormat->GetRange();
-            mrViewData.GetDocShell().GetDocFunc().ReplaceConditionalFormat(mnKey,
+            mrViewData.GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
                     std::move(pFormat), maPos.Tab(), rRangeList);
         }
         else
-            mrViewData.GetDocShell().GetDocFunc().ReplaceConditionalFormat(mnKey,
+            mrViewData.GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
                     nullptr, maPos.Tab(), ScRangeList());
     }
     else

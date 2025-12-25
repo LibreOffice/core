@@ -19,7 +19,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <uiitems.hxx>
 #include <document.hxx>

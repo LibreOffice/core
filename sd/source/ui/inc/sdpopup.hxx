@@ -20,7 +20,8 @@
 #pragma once
 
 #include <i18nlangtag/lang.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SvxFieldData;
 

@@ -1459,6 +1459,7 @@ public:
     virtual bool IsChart() const { return false; }
     virtual bool IsStarMath() const { return false; }
 
+    SAL_DLLPRIVATE void SetCommandHdl(const Link<const CommandEvent&, bool>& rLink);
     SAL_DLLPRIVATE void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
     SAL_DLLPRIVATE void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);

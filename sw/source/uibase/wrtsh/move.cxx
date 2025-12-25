@@ -473,7 +473,7 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
     //Place the cursor at the target position; remember that no target
     //position is longer on the stack.
     //The new visible region is to be determined beforehand.
-    aTmpArea.Pos().AdjustY(lOffset );
+    aTmpArea.SetPosY(aTmpArea.Pos().Y() + lOffset);
     if( aTmpArea.Contains(m_aDest) )
     {
         if( bSelect )
@@ -531,7 +531,7 @@ bool SwWrtShell::PopCursor(bool bUpdate, bool bSelect)
             // If a predecessor is on the stack,
             // use the flag for a valid position.
         SwRect aTmpArea(VisArea());
-        aTmpArea.Pos().AdjustY( -(m_pCursorStack->lOffset) );
+        aTmpArea.SetPosY(aTmpArea.Pos().Y() - m_pCursorStack->lOffset);
         if( aTmpArea.Contains( m_pCursorStack->aDocPos ) )
         {
             if( bSelect )

@@ -74,7 +74,7 @@ public:
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 {
     loadFromFile(u"transparent-text.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 {
     loadFromFile(u"tdf131082.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -199,16 +199,16 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
         = model::gradient::getColorStopsFromUno(aTransparence.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(5), aColorStops.size());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00, aColorStops[0].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.19, aColorStops[1].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.35, aColorStops[2].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.58, aColorStops[3].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, aColorStops[4].getStopOffset(), 1E-3);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x9e9e9e), Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(Color(0x363636), Color(aColorStops[2].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[3].getStopColor()));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[4].getStopColor()));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00, aColorStops.getStopOffset(0), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.19, aColorStops.getStopOffset(1), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.35, aColorStops.getStopOffset(2), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.58, aColorStops.getStopOffset(3), 1E-3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, aColorStops.getStopOffset(4), 1E-3);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x9e9e9e), Color(aColorStops.getStopColor(1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x363636), Color(aColorStops.getStopColor(2)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(3)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(4)));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     // was lost on import.
     verify(mxComponent);
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
     // was lost on export.
@@ -343,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     // rectangle of the shape. Error was, that the export uses a path size which included the
     // control points.
     loadFromFile(u"tdf142605_CurveSize.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     auto xPage = xDrawPagesSupplier->getDrawPages()->getByIndex(0);
@@ -435,10 +435,12 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
+                             aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
                              aComplexColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000),
+                             aComplexColor.getTransformations()[1].mnValue);
     }
 }
 
@@ -519,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrans[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans[0].mnValue);
         }
     }
 }
@@ -548,9 +550,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTrans[0].mnValue);
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans[1].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans[1].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000), rTrans[1].mnValue);
         }
 
         CPPUNIT_ASSERT(xShape->getPropertyValue(u"LineComplexColor"_ustr) >>= xComplexColor);
@@ -562,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(5000), rTrans[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5000), rTrans[0].mnValue);
         }
     }
     // check line and fill theme color of shape2
@@ -588,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans[0].meType);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(7500), rTrans[0].mnValue);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7500), rTrans[0].mnValue);
         }
     }
 }

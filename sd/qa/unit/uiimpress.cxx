@@ -80,8 +80,6 @@ public:
     }
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
-    void typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr);
-    void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey);
     void insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
@@ -97,23 +95,6 @@ void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
     sal_uInt16 nPageNumber;
     xPropertySet->getPropertyValue(u"Number"_ustr) >>= nPageNumber;
     CPPUNIT_ASSERT_EQUAL(nNum, nPageNumber);
-}
-
-void SdUiImpressTest::typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey)
-{
-    rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nKey);
-    rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nKey);
-    Scheduler::ProcessEventsToIdle();
-}
-
-void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr)
-{
-    for (const char16_t c : rStr)
-    {
-        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        rImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
-        Scheduler::ProcessEventsToIdle();
-    }
 }
 
 void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr,
@@ -1186,6 +1167,38 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, tdf139269_prevent_pasting_into_readonly_master_objects)
+{
+    createSdImpressDoc();
+
+    insertStringToObject(0, u"Test", /*bUseEscape*/ false);
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+
+    // Use tab key to select the first object and try to type something to go
+    // into edit mode although it's not possible to add text to it
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeKey(pXImpressDocument, KEY_TAB);
+    typeString(pXImpressDocument, u"test");
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
+    CPPUNIT_ASSERT(xMasterPages.is());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xMasterPages->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Click to edit the title text format
+    // - Actual  : Click to edit the title text formatTest
+    CPPUNIT_ASSERT_EQUAL(u"Click to edit the title text format"_ustr, xShape->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
 {
     createSdImpressDoc();
@@ -1321,6 +1334,44 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     dispatchCommand(mxComponent, u".uno:MovePageLast"_ustr, {});
     checkCurrentPageNumber(3);
     CPPUNIT_ASSERT_EQUAL(u"Test 2"_ustr, pViewShell->GetActualPage()->GetName());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf68320_hidden_pages_total_slide_count)
+{
+    createSdImpressDoc();
+
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:HideSlide"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    checkCurrentPageNumber(3);
+
+    insertStringToObject(0, u"Pages: ", /*bUseEscape*/ false);
+
+    dispatchCommand(mxComponent, u".uno:InsertPagesField"_ustr, {});
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeString(pXImpressDocument, u"/");
+
+    dispatchCommand(mxComponent, u".uno:InsertPageField"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
+
+    // Paste as Unformatted text in order to get the field's values
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(2),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Pages: 3/3
+    // - Actual  : Pages: 2/3
+    CPPUNIT_ASSERT_EQUAL(u"Pages: 3/3"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
@@ -1563,10 +1614,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     const basegfx::BColorStops& rColorStops(aGradient.GetColorStops());
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(0.0, rColorStops[0].getStopOffset());
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(rColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(rColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(0.0, rColorStops.getStopOffset(0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(rColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops.getStopOffset(1), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(rColorStops.getStopColor(1)));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
@@ -1798,10 +1849,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aComplexColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000),
+                             aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
                              aComplexColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aComplexColor.getTransformations()[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000),
+                             aComplexColor.getTransformations()[1].mnValue);
     }
 }
 
@@ -1846,10 +1899,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000),
+                             aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
                              aComplexColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
+                             aComplexColor.getTransformations()[1].mnValue);
     }
 }
 
@@ -1913,7 +1968,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)
     // Type something, getting into text editing mode (appending) automatically
     insertStringToObject(1, u"Foo Bar", /*bUseEscape*/ false);
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     xDrawPagesSupplier.set(mxComponent, uno::UNO_QUERY);
     xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -1963,7 +2018,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     dispatchCommand(mxComponent, u".uno:OutlineFont"_ustr, {});
 
     // Save it as PPTX and load it again.
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
@@ -2080,6 +2135,103 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)
                          xShape->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
     CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr,
                          xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
+{
+    // Given a document with a shape, 2nd paragraph is a numbering:
+    createSdImpressDoc("odp/num-to-bullet.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pShape = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    // When turning the numbering to a bullet:
+    // Start text edit:
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeString(pImpressDocument, u"x");
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    // Do the switch:
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    // End text edit:
+    typeKey(pImpressDocument, KEY_ESCAPE);
+
+    // Then make sure we switch to a bullet and not toggle off the numbering:
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(1, xShape),
+                                                   uno::UNO_QUERY);
+    // Check that list level is 1 & level 1 numbering type is a bullet:
+    sal_Int16 nNumberingLevel{};
+    xParagraph->getPropertyValue(u"NumberingLevel"_ustr) >>= nNumberingLevel;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. list level was -1 (toggle off) instead of switch to bullet.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
+    uno::Reference<container::XIndexAccess> xNumberingRules;
+    xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+    comphelper::SequenceAsHashMap aNumberingRule(xNumberingRules->getByIndex(1));
+    sal_Int16 nNumberingType = 0;
+    aNumberingRule[u"NumberingType"_ustr] >>= nNumberingType;
+    // Bullet and not numbering (ARABIC):
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHAR_SPECIAL, nNumberingType);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
+{
+    // Given a document with a shape, last paragraph is has a bullet:
+    createSdImpressDoc("odp/bullet-off-on.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pShape = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    // When turning the bullet off & then back on again:
+    // Start text edit:
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    typeString(pImpressDocument, u"x");
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    // Toggle off:
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    // Toggle on:
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    // End text edit:
+    typeKey(pImpressDocument, KEY_ESCAPE);
+
+    // Then make sure the result is Level 1 from the master page:
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // 5th, last paragraph.
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(4, xShape),
+                                                   uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNumberingRules;
+    xParagraph->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+    // Level 1.
+    comphelper::SequenceAsHashMap aNumberingRule(xNumberingRules->getByIndex(0));
+    sal_Int32 nLeftMargin = 0;
+    aNumberingRule[u"LeftMargin"_ustr] >>= nLeftMargin;
+    sal_Int32 nFirstLineOffset = 0;
+    aNumberingRule[u"FirstLineOffset"_ustr] >>= nFirstLineOffset;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 300
+    // - Actual  : 0
+    // i.e. the indent was 0cm, even if Level1 and Level2 had other values.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(300), nLeftMargin + nFirstLineOffset);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

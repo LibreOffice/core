@@ -17,8 +17,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/fodfexport/data/"_ustr,
-                          u"OpenDocument Text Flat XML"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/fodfexport/data/"_ustr)
     {
     }
 };
@@ -30,7 +29,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    save(u"OpenDocument Text Flat XML"_ustr);
+    save(TestFilter::FODT);
     // Test that an image which is written in svm format (image/x-vclgraphic)
     // is accompanied by a png fallback graphic.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -47,7 +46,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    save(u"OpenDocument Text Flat XML"_ustr);
+    save(TestFilter::FODT);
     // Same as testTdf113696, but with a writer image instead of a draw image
     // (they use different code paths).
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -83,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvgImageRoundtrip)
 
     createSwDoc("SvgImageTest.fodt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::FODT);
     verify();
 }
 

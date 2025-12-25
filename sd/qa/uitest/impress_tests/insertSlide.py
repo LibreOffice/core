@@ -13,7 +13,7 @@ from uitest.framework import UITestCase
 
 class insertSlide(UITestCase):
 
-   def test_insert_slide(self):
+    def test_insert_slide(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -28,7 +28,7 @@ class insertSlide(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
             self.assertEqual(len(document.DrawPages), 1)  #nr. of pages
 
-   def test_tdf85360_insert_4th_slide(self):
+    def test_tdf85360_insert_4th_slide(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

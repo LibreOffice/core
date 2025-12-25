@@ -61,6 +61,7 @@ struct ViewOptFlags1
     bool bSnap : 1;
     bool bSynchronize : 1;
     bool bGridVisible : 1;
+    bool bBaselineGridVisible : 1;
     bool bOnlineSpell : 1;
     bool bTreatSubOutlineLevelsAsContent : 1;
     bool bShowInlineTooltips : 1; //tooltips on tracked changes
@@ -104,6 +105,7 @@ struct ViewOptFlags1
         , bSnap(false)
         , bSynchronize(false)
         , bGridVisible(false)
+        , bBaselineGridVisible(false)
         , bOnlineSpell(false)
         , bTreatSubOutlineLevelsAsContent(false)
         , bShowInlineTooltips(false)
@@ -146,6 +148,7 @@ struct ViewOptFlags1
             && bSnap == rOther.bSnap
             && bSynchronize == rOther.bSynchronize
             && bGridVisible == rOther.bGridVisible
+            && bBaselineGridVisible == rOther.bBaselineGridVisible
             && bOnlineSpell == rOther.bOnlineSpell
             && bTreatSubOutlineLevelsAsContent == rOther.bTreatSubOutlineLevelsAsContent
             && bShowInlineTooltips == rOther.bShowInlineTooltips
@@ -231,6 +234,7 @@ struct SwViewColors
             && m_aLinksColor == rOther.m_aLinksColor
             && m_aVisitedLinksColor == rOther.m_aVisitedLinksColor
             && m_aTextGridColor == rOther.m_aTextGridColor
+            && m_aBaselineGridColor == rOther.m_aBaselineGridColor
             && m_aSpellColor == rOther.m_aSpellColor
             && m_aGrammarColor == rOther.m_aGrammarColor
             && m_aSmarttagColor == rOther.m_aSmarttagColor
@@ -251,6 +255,7 @@ struct SwViewColors
     Color m_aLinksColor;
     Color m_aVisitedLinksColor;
     Color m_aTextGridColor;
+    Color m_aBaselineGridColor;
     Color m_aSpellColor;     // mark color of online spell checking
     Color m_aGrammarColor;
     Color m_aSmarttagColor;
@@ -261,6 +266,19 @@ struct SwViewColors
     Color m_aShadowColor;
     Color m_aHeaderFooterMarkColor;
     ViewOptFlags m_nAppearanceFlags;
+};
+
+/// View option to determine if some of the redlines should be omitted during rendering or not.
+///
+/// This is exposed on the LOK API, don't reorder the names.
+enum class SwRedlineRenderMode
+{
+    /// Normal rendering.
+    Standard,
+    /// Special handling of inserts to ~omit them / paint with small saturation.
+    OmitInserts,
+    /// Special handling of deletes to ~omit them / paint with small saturation.
+    OmitDeletes,
 };
 
 class SwViewOption
@@ -281,6 +299,7 @@ class SwViewOption
     sal_uInt8         m_nPagePreviewRow;            // Page Preview Row/Columns.
     sal_uInt8         m_nPagePreviewCol;            // Page Preview Row/Columns.
     SwFillMode        m_nShadowCursorFillMode;      // FillMode for ShadowCursor.
+    SwRedlineRenderMode m_eRedlineRenderMode;
     bool              m_bReadonly : 1;              // Readonly-Doc.
     bool              m_bStarOneSetting : 1;        // Prevent from UI automatics (no scrollbars in readonly documents).
     bool              m_bIsPagePreview : 1;         // The preview mustn't print field/footnote/... shadings.
@@ -555,6 +574,15 @@ public:
     void SetGridVisible( bool b )
     { m_nCoreOptions.bGridVisible = b; }
 
+    bool IsBaselineGridVisible() const
+    {
+        return m_nCoreOptions.bBaselineGridVisible;
+    }
+    void SetBaselineGridVisible( bool bVisible )
+    {
+        m_nCoreOptions.bBaselineGridVisible = bVisible;
+    }
+
     bool IsOnlineSpell() const
     {
         return m_nCoreOptions.bOnlineSpell;
@@ -609,6 +637,8 @@ public:
         { SetCore2Option(b, ViewOptCoreFlags2::CursorInProt); }
 
     static bool IsIgnoreProtectedArea();
+
+    static bool IsAllowDragDropText();
 
     bool IsPDFExport() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::PdfExport); }
@@ -864,6 +894,9 @@ public:
     SwFillMode      GetShdwCursorFillMode() const { return m_nShadowCursorFillMode; }
     void            SetShdwCursorFillMode( SwFillMode nMode ) { m_nShadowCursorFillMode = nMode; };
 
+    SwRedlineRenderMode GetRedlineRenderMode() const { return m_eRedlineRenderMode; }
+    void SetRedlineRenderMode(SwRedlineRenderMode eMode) { m_eRedlineRenderMode = eMode; };
+
     bool        IsShowPlaceHolderFields() const { return m_bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(bool bSet) { m_bShowPlaceHolderFields = bSet; }
 
@@ -875,6 +908,7 @@ public:
     const Color& GetLinksColor() const;
     const Color& GetVisitedLinksColor() const;
     const Color& GetTextGridColor() const;
+    const Color& GetBaselineGridColor() const;
     const Color& GetSpellColor() const;
     const Color& GetGrammarColor() const;
     const Color& GetSmarttagColor() const;

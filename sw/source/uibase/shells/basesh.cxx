@@ -377,7 +377,14 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
-                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable, true);
+
+                    // See if detection should be used.
+                    bool bSkipDetection = false;
+                    const SfxBoolItem* pSkipDetection = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
+                    if (pSkipDetection)
+                        bSkipDetection = pSkipDetection->GetValue();
+
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable, !bSkipDetection);
 
                     if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
                         rSh.EnterSelFrameMode();
@@ -3159,9 +3166,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
         if( pArgs && pArgs->Count() >= 2 )
         {
-            const SfxStringItem* pName = _rRequest.GetArg<SfxStringItem>(FN_INSERT_TABLE);
-            const SfxUInt16Item* pCols = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_COLUMN);
-            const SfxUInt16Item* pRows = _rRequest.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_ROW);
+            const SfxStringItem* pName = _rRequest.GetArg(FN_INSERT_TABLE);
+            const SfxUInt16Item* pCols = _rRequest.GetArg(SID_ATTR_TABLE_COLUMN);
+            const SfxUInt16Item* pRows = _rRequest.GetArg(SID_ATTR_TABLE_ROW);
             const SfxInt32Item* pFlags = _rRequest.GetArg<SfxInt32Item>(FN_PARAM_1);
             const SfxStringItem* pAuto = _rRequest.GetArg<SfxStringItem>(FN_PARAM_2);
 

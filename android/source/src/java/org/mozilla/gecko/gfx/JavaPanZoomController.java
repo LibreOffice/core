@@ -30,7 +30,7 @@ import java.lang.StrictMath;
  */
 class JavaPanZoomController
         extends GestureDetector.SimpleOnGestureListener
-        implements PanZoomController, SimpleScaleGestureDetector.SimpleScaleGestureListener
+        implements SimpleScaleGestureDetector.SimpleScaleGestureListener
 {
     private static final String LOGTAG = "GeckoPanZoomController";
 
@@ -68,19 +68,13 @@ class JavaPanZoomController
         PINCHING,       /* nth touch-start, where n > 1. this mode allows pan and zoom */
         ANIMATED_ZOOM,  /* animated zoom to a new rect */
         BOUNCE,         /* in a bounce animation */
-
-        WAITING_LISTENERS, /* a state halfway between NOTHING and TOUCHING - the user has
-                        put a finger down, but we don't yet know if a touch listener has
-                        prevented the default actions yet. we still need to abort animations. */
     }
 
     private final PanZoomTarget mTarget;
-    private final SubdocumentScrollHelper mSubscroller;
     private final Axis mX;
     private final Axis mY;
     private final TouchEventHandler mTouchEventHandler;
-    private Thread mMainThread;
-    private LibreOfficeMainActivity mContext;
+    private final LibreOfficeMainActivity mContext;
 
     /* The timer that handles flings or bounces. */
     private Timer mAnimationTimer;
@@ -100,20 +94,13 @@ class JavaPanZoomController
         PAN_THRESHOLD = 1/16f * LOKitShell.getDpi(view.getContext());
         MAX_SCROLL = 0.075f * LOKitShell.getDpi(view.getContext());
         mTarget = target;
-        mSubscroller = new SubdocumentScrollHelper();
-        mX = new AxisX(mSubscroller);
-        mY = new AxisY(mSubscroller);
-        mTouchEventHandler = new TouchEventHandler(view.getContext(), view, this);
+        mX = new AxisX();
+        mY = new AxisY();
+        mTouchEventHandler = new TouchEventHandler(view.getContext(), this);
 
-        mMainThread = mContext.getMainLooper().getThread();
         checkMainThread();
 
         setState(PanZoomState.NOTHING);
-    }
-
-    public void destroy() {
-        mSubscroller.destroy();
-        mTouchEventHandler.destroy();
     }
 
     private static float easeOut(float t) {
@@ -135,7 +122,7 @@ class JavaPanZoomController
 
     // for debugging bug 713011; it can be taken out once that is resolved.
     private void checkMainThread() {
-        if (mMainThread != Thread.currentThread()) {
+        if (mContext.getMainLooper().getThread() != Thread.currentThread()) {
             // log with full stack trace
             Log.e(LOGTAG, "Uh-oh, we're running on the wrong thread!", new Exception());
         }
@@ -163,63 +150,6 @@ class JavaPanZoomController
         case MotionEvent.ACTION_CANCEL: return handleTouchCancel(event);
         }
         return false;
-    }
-
-    /** This function MUST be called on the UI thread */
-    public void notifyDefaultActionPrevented(boolean prevented) {
-        mTouchEventHandler.handleEventListenerAction(!prevented);
-    }
-
-    /** This function must be called from the UI thread. */
-    public void abortAnimation() {
-        checkMainThread();
-        // this happens when gecko changes the viewport on us or if the device is rotated.
-        // if that's the case, abort any animation in progress and re-zoom so that the page
-        // snaps to edges. for other cases (where the user's finger(s) are down) don't do
-        // anything special.
-        switch (mState) {
-        case FLING:
-            mX.stopFling();
-            mY.stopFling();
-            // fall through
-        case BOUNCE:
-        case ANIMATED_ZOOM:
-            // the zoom that's in progress likely makes no sense any more (such as if
-            // the screen orientation changed) so abort it
-            setState(PanZoomState.NOTHING);
-            // fall through
-        case NOTHING:
-            // Don't do animations here; they're distracting and can cause flashes on page
-            // transitions.
-            synchronized (mTarget.getLock()) {
-                mTarget.setViewportMetrics(getValidViewportMetrics());
-                mTarget.forceRedraw();
-            }
-            break;
-        }
-    }
-
-    /** This function must be called on the UI thread. */
-    void startingNewEventBlock(MotionEvent event, boolean waitingForTouchListeners) {
-        checkMainThread();
-        mSubscroller.cancel();
-        if (waitingForTouchListeners && (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
-            // this is the first touch point going down, so we enter the pending state
-            // setting the state will kill any animations in progress, possibly leaving
-            // the page in overscroll
-            setState(PanZoomState.WAITING_LISTENERS);
-        }
-    }
-
-    /** This function must be called on the UI thread. */
-    void preventedTouchFinished() {
-        checkMainThread();
-        if (mState == PanZoomState.WAITING_LISTENERS) {
-            // if we enter here, we just finished a block of events whose default actions
-            // were prevented by touch listeners. Now there are no touch points left, so
-            // we need to reset our state and re-bounce because we might be in overscroll
-            bounce();
-        }
     }
 
     /** This must be called on the UI thread. */
@@ -255,7 +185,6 @@ class JavaPanZoomController
         case FLING:
         case BOUNCE:
         case NOTHING:
-        case WAITING_LISTENERS:
             startTouch(event.getX(0), event.getY(0), event.getEventTime());
             return false;
         case TOUCHING:
@@ -281,7 +210,6 @@ class JavaPanZoomController
         switch (mState) {
         case FLING:
         case BOUNCE:
-        case WAITING_LISTENERS:
             // should never happen
             Log.e(LOGTAG, "Received impossible touch move while in " + mState);
             // fall through
@@ -328,7 +256,6 @@ class JavaPanZoomController
         switch (mState) {
         case FLING:
         case BOUNCE:
-        case WAITING_LISTENERS:
             // should never happen
             Log.e(LOGTAG, "Received impossible touch end while in " + mState);
             // fall through
@@ -363,16 +290,6 @@ class JavaPanZoomController
 
     private boolean handleTouchCancel(MotionEvent event) {
         cancelTouch();
-
-        if (mState == PanZoomState.WAITING_LISTENERS) {
-            // we might get a cancel event from the TouchEventHandler while in the
-            // WAITING_LISTENERS state if the touch listeners prevent-default the
-            // block of events. at this point being in WAITING_LISTENERS is equivalent
-            // to being in NOTHING with the exception of possibly being in overscroll.
-            // so here we don't want to do anything right now; the overscroll will be
-            // corrected in preventedTouchFinished().
-            return false;
-        }
 
         // ensure we snap back if we're overscrolled
         bounce();
@@ -565,10 +482,8 @@ class JavaPanZoomController
         if (FloatUtils.fuzzyEquals(displacement.x, 0.0f) && FloatUtils.fuzzyEquals(displacement.y, 0.0f)) {
             return;
         }
-        if (! mSubscroller.scrollBy(displacement)) {
-            synchronized (mTarget.getLock()) {
-                scrollBy(displacement.x, displacement.y);
-            }
+        synchronized (mTarget.getLock()) {
+            scrollBy(displacement.x, displacement.y);
         }
     }
 
@@ -605,8 +520,8 @@ class JavaPanZoomController
          * The viewport metrics that represent the start and end of the bounce-back animation,
          * respectively.
          */
-        private ImmutableViewportMetrics mBounceStartMetrics;
-        private ImmutableViewportMetrics mBounceEndMetrics;
+        private final ImmutableViewportMetrics mBounceStartMetrics;
+        private final ImmutableViewportMetrics mBounceEndMetrics;
 
         BounceRunnable(ImmutableViewportMetrics startMetrics, ImmutableViewportMetrics endMetrics) {
             mBounceStartMetrics = startMetrics;
@@ -684,7 +599,7 @@ class JavaPanZoomController
                  * coast smoothly to a stop when not. In other words, require a greater velocity to
                  * maintain the fling once we enter overscroll.
                  */
-                float threshold = (overscrolled && !mSubscroller.scrolling() ? STOPPED_THRESHOLD : FLING_STOPPED_THRESHOLD);
+                float threshold = (overscrolled ? STOPPED_THRESHOLD : FLING_STOPPED_THRESHOLD);
                 if (getVelocity() >= threshold) {
                     mContext.getDocumentOverlay().showPageNumberRect();
                     // we're still flinging
@@ -724,7 +639,6 @@ class JavaPanZoomController
     private ImmutableViewportMetrics getValidViewportMetrics(ImmutableViewportMetrics viewportMetrics) {
         /* First, we adjust the zoom factor so that we can make no overscrolled area visible. */
         float zoomFactor = viewportMetrics.zoomFactor;
-        RectF pageRect = viewportMetrics.getPageRect();
         RectF viewport = viewportMetrics.getViewport();
 
         float focusX = viewport.width() / 2.0f;
@@ -785,7 +699,6 @@ class JavaPanZoomController
     }
 
     private class AxisX extends Axis {
-        AxisX(SubdocumentScrollHelper subscroller) { super(subscroller); }
         @Override
         public float getOrigin() { return getMetrics().viewportRectLeft; }
         @Override
@@ -797,7 +710,6 @@ class JavaPanZoomController
     }
 
     private class AxisY extends Axis {
-        AxisY(SubdocumentScrollHelper subscroller) { super(subscroller); }
         @Override
         public float getOrigin() { return getMetrics().viewportRectTop; }
         @Override
@@ -1007,8 +919,6 @@ class JavaPanZoomController
      * pixels.
      */
     boolean animatedZoomTo(RectF zoomToRect) {
-        final float startZoom = getMetrics().zoomFactor;
-
         RectF viewport = getMetrics().getViewport();
         // 1. adjust the aspect ratio of zoomToRect to match that of the current viewport,
         // enlarging as necessary (if it gets too big, it will get shrunk in the next step).
@@ -1067,20 +977,5 @@ class JavaPanZoomController
 
         bounce(finalMetrics, PanZoomState.ANIMATED_ZOOM);
         return true;
-    }
-
-    /** This function must be called from the UI thread. */
-    public void abortPanning() {
-        checkMainThread();
-        bounce();
-    }
-
-    public void setOverScrollMode(int overscrollMode) {
-        mX.setOverScrollMode(overscrollMode);
-        mY.setOverScrollMode(overscrollMode);
-    }
-
-    public int getOverScrollMode() {
-        return mX.getOverScrollMode();
     }
 }

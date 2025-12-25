@@ -1668,8 +1668,6 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
     case HTML_CHRFMT_VALUE:
         {
-            OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
-                    "Not a character style after all" );
             const SwFormatCharFormat& rChrFormat = rItem.StaticWhichCast(RES_TXTATR_CHARFMT);
             const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
 
@@ -1690,8 +1688,6 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
     case HTML_AUTOFMT_VALUE:
         {
-            OSL_ENSURE( RES_TXTATR_AUTOFMT == rItem.Which(),
-                    "Not an automatic style, after all" );
             const SwFormatAutoFormat& rAutoFormat = rItem.StaticWhichCast(RES_TXTATR_AUTOFMT);
             const std::shared_ptr<SfxItemSet>& pSet = rAutoFormat.GetStyleHandle();
             if( pSet )
@@ -1703,8 +1699,6 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         // A foreground color as a paragraph attribute is only exported if
         // it is not the same as the default color.
         {
-            OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
-                    "Not a foreground color, after all" );
             Color aColor( rItem.StaticWhichCast(RES_CHRATR_COLOR).GetValue() );
             if( COL_AUTO == aColor )
                 aColor = COL_BLACK;
@@ -1714,8 +1708,6 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
     case HTML_DROPCAP_VALUE:
         {
-            OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
-                    "Not a drop cap, after all" );
             const SwFormatDrop& rDrop = rItem.StaticWhichCast(RES_PARATR_DROP);
             nEnd = nStart + rDrop.GetChars();
             if (!m_bOutStyles)
@@ -3361,6 +3353,7 @@ const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_SNAPTOGRID*/          nullptr, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  nullptr, // new
 /* RES_PARATR_OUTLINELEVEL */       nullptr,
+/* RES_PARATR_AUTOFRAMEDIR */       nullptr,
 /* RES_PARATR_RSID */               nullptr,
 /* RES_PARATR_GRABBAG */            nullptr,
 

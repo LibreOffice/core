@@ -170,7 +170,7 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp,
     mbMap = bOldMap;
 }
 
-bool Printer::DrawTransformBitmapExDirect(
+bool Printer::DrawTransformedBitmap(
     const basegfx::B2DHomMatrix& /*aFullTransform*/,
     const Bitmap& /*rBitmap*/,
     double /*fAlpha*/)
@@ -189,7 +189,7 @@ bool Printer::TransformAndReduceBitmapExToTargetRange(
     return true;
 }
 
-void Printer::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
+void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                 Bitmap& rBmp )
 {

@@ -41,22 +41,16 @@
 #include <osl/diagnose.h>
 
     // No inline cause we need the function pointers
-tools::Long SwFrame::GetTopMargin() const
-    { return getFramePrintArea().Top(); }
-tools::Long SwFrame::GetBottomMargin() const
-    { return getFrameArea().Height() -getFramePrintArea().Height() -getFramePrintArea().Top(); }
-tools::Long SwFrame::GetLeftMargin() const
-    { return getFramePrintArea().Left(); }
+tools::Long SwFrame::GetLeftMargin() const { return getFramePrintArea().Left(); }
 tools::Long SwFrame::GetRightMargin() const
-    { return getFrameArea().Width() - getFramePrintArea().Width() - getFramePrintArea().Left(); }
-tools::Long SwFrame::GetPrtLeft() const
-    { return getFrameArea().Left() + getFramePrintArea().Left(); }
-tools::Long SwFrame::GetPrtBottom() const
-    { return getFrameArea().Top() + getFramePrintArea().Height() + getFramePrintArea().Top(); }
-tools::Long SwFrame::GetPrtRight() const
-    { return getFrameArea().Left() + getFramePrintArea().Width() + getFramePrintArea().Left(); }
-tools::Long SwFrame::GetPrtTop() const
-    { return getFrameArea().Top() + getFramePrintArea().Top(); }
+    { return getFrameArea().Width() - getFramePrintArea().Width() - GetLeftMargin(); }
+tools::Long SwFrame::GetPrtLeft() const { return getFrameArea().Left() + GetLeftMargin(); }
+tools::Long SwFrame::GetPrtRight() const { return GetPrtLeft() + getFramePrintArea().Width(); }
+tools::Long SwFrame::GetTopMargin() const { return getFramePrintArea().Top(); }
+tools::Long SwFrame::GetBottomMargin() const
+    { return getFrameArea().Height() - getFramePrintArea().Height() - GetTopMargin(); }
+tools::Long SwFrame::GetPrtTop() const { return getFrameArea().Top() + GetTopMargin(); }
+tools::Long SwFrame::GetPrtBottom() const { return GetPrtTop() + getFramePrintArea().Height(); }
 
 bool SwFrame::SetMinLeft( tools::Long nDeadline )
 {
@@ -113,17 +107,17 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustY(pPrv->getFrameArea().Height() );
+        aFrm.SetPosY(aFrm.Pos().Y() + pPrv->getFrameArea().Height());
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
+        aFrm += pUp->getFramePrintArea().Pos();
     }
 
     if( bNotify )
     {
-        aFrm.Pos().AdjustY(1 );
+        aFrm.SetPosY(aFrm.Pos().Y() + 1);
     }
 }
 
@@ -134,18 +128,18 @@ void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustX( -(aFrm.Width()) );
+        aFrm.SetPosX(aFrm.Pos().X() - aFrm.Width());
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
-        aFrm.Pos().AdjustX(pUp->getFramePrintArea().Width() - aFrm.Width() );
+        aFrm += pUp->getFramePrintArea().Pos();
+        aFrm.SetPosX(aFrm.Pos().X() + pUp->getFramePrintArea().Width() - aFrm.Width());
     }
 
     if( bNotify )
     {
-        aFrm.Pos().AdjustX( -1 );
+        aFrm.SetPosX(aFrm.Pos().X() - 1);
     }
 }
 
@@ -156,17 +150,17 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustX(pPrv->getFrameArea().Width() );
+        aFrm.SetPosX(aFrm.Pos().X() + pPrv->getFrameArea().Width());
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
-        aFrm.Pos() += pUp->getFramePrintArea().Pos();
+        aFrm += pUp->getFramePrintArea().Pos();
     }
 
     if( bNotify )
     {
-        aFrm.Pos().AdjustX(1 );
+        aFrm.SetPosX(aFrm.Pos().X() + 1);
     }
 }
 
@@ -597,7 +591,7 @@ SwRect SwFrame::GetPaintArea() const
     // NEW TABLES
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrame() ? GetUpper()->getFrameArea() : getFrameArea();
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     tools::Long nRight = aRectFnSet.GetRight(aRect);
     tools::Long nLeft  = aRectFnSet.GetLeft(aRect);
     const SwFrame* pTmp = this;
@@ -700,7 +694,7 @@ SwRect SwFrame::GetPaintArea() const
 |*/
 SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
     tools::Long nLeft = aRectFnSet.GetLeft(getFrameArea());
     tools::Long nWidth = aRectFnSet.GetWidth(getFrameArea());
     tools::Long nPrtLeft = aRectFnSet.GetLeft(getFramePrintArea());

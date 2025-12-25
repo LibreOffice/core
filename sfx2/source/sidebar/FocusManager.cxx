@@ -26,7 +26,7 @@
 #include <sidebar/TitleBar.hxx>
 #include <utility>
 #include <vcl/event.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace sfx2::sidebar {
 

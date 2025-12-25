@@ -48,64 +48,24 @@ int SvxSearchCharSet::LastInView() const
 
 bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
 {
-    vcl::KeyCode aCode = rKEvt.GetKeyCode();
-
-    if (aCode.GetModifier())
-        return false;
-
-    int tmpSelected = mnSelectedIndex;
-
-    bool bRet = true;
-
-    switch (aCode.GetCode())
+    switch (rKEvt.GetKeyCode().GetCode())
     {
         case KEY_RETURN:
-            return SvxShowCharSet::KeyInput(rKEvt);
         case KEY_SPACE:
-            maDoubleClkHdl.Call(this);
-            return true;
         case KEY_LEFT:
-            --tmpSelected;
-            break;
         case KEY_RIGHT:
-            ++tmpSelected;
-            break;
         case KEY_UP:
-            tmpSelected -= COLUMN_COUNT;
-            break;
         case KEY_DOWN:
-            tmpSelected += COLUMN_COUNT;
-            break;
         case KEY_PAGEUP:
-            tmpSelected -= ROW_COUNT * COLUMN_COUNT;
-            break;
         case KEY_PAGEDOWN:
-            tmpSelected += ROW_COUNT * COLUMN_COUNT;
-            break;
         case KEY_HOME:
-            tmpSelected = 0;
-            break;
         case KEY_END:
-            tmpSelected = getMaxCharCount() - 1;
-            break;
-        case KEY_TAB:   // some fonts have a character at these unicode control codes
+        case KEY_TAB:
         case KEY_ESCAPE:
-            bRet = false;
-            tmpSelected = - 1;  // mark as invalid
-            break;
+            return SvxShowCharSet::KeyInput(rKEvt);
         default:
-            tmpSelected = -1;
-            bRet = false;
-            break;
+            return false;
     }
-
-    if ( tmpSelected >= 0 )
-    {
-        SelectIndex( tmpSelected, true );
-        maPreSelectHdl.Call( this );
-    }
-
-    return bRet;
 }
 
 void SvxSearchCharSet::SelectCharacter( const Subset* sub )
@@ -130,7 +90,7 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
         SelectIndex( 0 );
     else
         SelectIndex( nMapIndex );
-    maHighHdl.Call(this);
+    maHighHdl.Call(*this);
     // move selected item to top row if not in focus
     //TO.DO aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
     Invalidate();
@@ -269,9 +229,9 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
 #endif
-        maSelectHdl.Call(this);
+        maSelectHdl.Call(*this);
     }
-    maHighHdl.Call( this );
+    maHighHdl.Call(*this);
 }
 
 SvxSearchCharSet::~SvxSearchCharSet()

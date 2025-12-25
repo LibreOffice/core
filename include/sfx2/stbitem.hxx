@@ -67,7 +67,6 @@ public:
     virtual void               SAL_CALL acquire() noexcept override;
     virtual void               SAL_CALL release() noexcept override;
 
-protected:
     // XEventListener
     using svt::StatusbarController::disposing;
 
@@ -91,6 +90,7 @@ protected:
     virtual void SAL_CALL click( const css::awt::Point& aPos ) override;
     virtual void SAL_CALL doubleClick( const css::awt::Point& aPos ) override;
 
+protected:
     // Old sfx2 interface
     virtual void    StateChangedAtStatusBarControl( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );

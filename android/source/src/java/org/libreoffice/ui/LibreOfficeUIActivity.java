@@ -9,13 +9,10 @@
 
 package org.libreoffice.ui;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
@@ -24,8 +21,6 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -121,8 +116,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
 
     private static final int REQUEST_CODE_OPEN_FILECHOOSER = 12345;
 
-    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 0;
-
     private Animation fabOpenAnimation;
     private Animation fabCloseAnimation;
     private boolean isFabMenuOpen = false;
@@ -158,17 +151,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
                 }
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.i(LOGTAG, "no permission to read external storage - asking for permission");
-            ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                PERMISSION_WRITE_EXTERNAL_STORAGE);
-        }
     }
 
     public void createUI() {
@@ -309,6 +291,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
+
+        final MenuItem settingsItem = menu.findItem(R.id.action_settings);
+        final boolean enableSettingsItem = SettingsActivity.hasSettings();
+        settingsItem.setVisible(enableSettingsItem);
+        settingsItem.setEnabled(enableSettingsItem);
 
         return true;
     }

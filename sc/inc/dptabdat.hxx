@@ -48,6 +48,7 @@ class ScDPDimension;
 class ScDPLevel;
 class ScDPInitState;
 class ScDocument;
+namespace tools { class XmlWriter; }
 
 /**
  * Base class that abstracts different data source types of a datapilot
@@ -132,6 +133,7 @@ public:
     virtual sal_Int32                GetSourceDim( sal_Int32 nDim );
     virtual sal_Int32                Compare( sal_Int32 nDim, sal_Int32 nDataId1, sal_Int32 nDataId2);
 
+    virtual void dumpAsXml(tools::XmlWriter& rWriter) const;
 #if DUMP_PIVOT_TABLE
     virtual void Dump() const;
 #endif

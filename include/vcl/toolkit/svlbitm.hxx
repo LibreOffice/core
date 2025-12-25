@@ -103,7 +103,8 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvLBoxString : public SvLBoxItem
 private:
     bool mbEmphasized;
     bool mbCustom;
-    double mfAlign;
+    TxtAlign meAlign;
+
 protected:
     OUString maText;
 
@@ -119,12 +120,13 @@ public:
 
     virtual int CalcWidth(const SvTreeListBox* pView) const override;
 
-    void Align(double fAlign) { mfAlign = fAlign; }
+    void Align(TxtAlign eAlign) { meAlign = eAlign; }
 
     void Emphasize(bool bEmphasize) { mbEmphasized = bEmphasize; }
     bool IsEmphasized() const { return mbEmphasized; }
 
     void SetCustomRender() { mbCustom = true; }
+    bool IsCustomRender() const { return mbCustom; }
 
     const OUString& GetText() const
     {

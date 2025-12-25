@@ -25,6 +25,7 @@
 #include <stringlistitem.hxx>
 #include <svl/stritem.hxx>
 #include <strings.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <sqlmessage.hxx>

@@ -102,6 +102,7 @@ Private Const DUPLICATESHEETERROR	=	&quot;DUPLICATESHEETERROR&quot;
 Private Const OFFSETADDRESSERROR	=	&quot;OFFSETADDRESSERROR&quot;
 Private Const CALCFORMNOTFOUNDERROR	=	&quot;CALCFORMNOTFOUNDERROR&quot;
 Private Const DUPLICATECHARTERROR	=	&quot;DUPLICATECHARTERROR&quot;
+Private Const DUPLICATESHAPEERROR	=	&quot;DUPLICATESHAPEERROR&quot;
 Private Const RANGEEXPORTERROR		=	&quot;RANGEEXPORTERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
@@ -480,7 +481,7 @@ Public Function AlignRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;		Alignment: a string combining 1 or 2 of next characters (other characters are ignored):
 &apos;&apos;&apos;			L	align Left
 &apos;&apos;&apos;			R	align Right
-&apos;&apos;&apos;			C	Center gorizontally
+&apos;&apos;&apos;			C	Center horizontally
 &apos;&apos;&apos;			B	align Bottom
 &apos;&apos;&apos;			M	center vertically (Middle)
 &apos;&apos;&apos;			T	align Top
@@ -641,84 +642,9 @@ Public Function Charts(Optional ByVal SheetName As Variant _
 &apos;&apos;&apos;		Dim oChart As Object
 &apos;&apos;&apos;		Set oChart = oDoc.Charts(&quot;SheetX&quot;, &quot;myChart&quot;)
 
-Dim vCharts As Variant				&apos;	Return value when array of chart names
-Dim oChart As Object				&apos;	Return value when new chart instance
-Dim oSheet As Object				&apos;	Alias of SheetName as reference
-Dim oDrawPage As Object				&apos;	com.sun.star.drawing.XDrawPage
-Dim oNextShape As Object			&apos;	com.sun.star.drawing.XShape
-Dim sChartName As String			&apos;	Some chart name
-Dim lCount As Long					&apos;	Counter for charts among all drawing objects
-Dim i As Long
-Const cstChartShape = &quot;com.sun.star.drawing.OLE2Shape&quot;
-
-Const cstThisSub = &quot;SFDocuments.Calc.Charts&quot;
-Const cstSubArgs = &quot;SheetName, [ChartName=&quot;&quot;&quot;&quot;]&quot;
-
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	vCharts = Array()
-
-Check:
-	If IsMissing(ChartName) Or IsEmpty(ChartName) Then ChartName = &quot;&quot;
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not _IsStillAlive(True) Then GoTo Finally
-		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING) Then GoTo Finally
-	End If
-
 Try:
-	&apos;	Because the user can change it constantly, the list of valid charts has to be rebuilt at each time
-	&apos;	Explore charts starting from the draw page
-	Set oSheet = _Component.getSheets.getByName(SheetName)
-	Set oDrawPage = oSheet.getDrawPage()
-	vCharts = Array()
-	Set oChart = Nothing
-	lCount = -1
-	For i = 0 To oDrawPage.Count - 1
-		Set oNextShape = oDrawPage.getByIndex(i)
-		if oNextShape.supportsService(cstChartShape) Then		&apos;	Ignore other shapes
-			sChartName = oNextShape.Name										&apos;	User-defined name
-			If Len(sChartName) = 0 Then sChartName = oNextShape.PersistName		&apos;	Internal name
-			&apos;	Is chart found ?
-			If Len(ChartName) &gt; 0 Then
-				If ChartName = sChartName Then
-					Set oChart = New SF_Chart
-					With oChart
-						Set .[Me] = oChart
-						Set .[_Parent] = [Me]
-						._SheetName = SheetName
-						._DrawIndex = i
-						._ChartName = ChartName
-						._PersistentName = oNextShape.PersistName
-						Set ._Shape = oNextShape
-						Set ._Chart = oSheet.getCharts().getByName(._PersistentName)
-						Set ._ChartObject = ._Chart.EmbeddedObject
-						Set ._Diagram = ._ChartObject.Diagram
-					End With
-					Exit For
-				End If
-			End If
-			&apos;	Build stack of chart names
-			lCount = lCount + 1
-			If UBound(vCharts) &lt; 0 Then
-				vCharts = Array(sChartName)
-			Else
-				ReDim Preserve vCharts(0 To UBound(vCharts) + 1)
-				vCharts(lCount) = sChartName
-			End If
-		End If
-	Next i
+	Charts = _Shapes(SheetName, ChartName, _IsChart := True)
 
-	&apos;	Raise error when chart not found
-	If Len(ChartName) &gt; 0 And IsNull(oChart) Then
-		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING, vCharts, True) Then GoTo Finally
-	End If
-
-Finally:
-	If Len(ChartName) = 0 Then Charts = vCharts Else Set Charts = oChart
-	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
-	Exit Function
-Catch:
-	GoTo Finally
 End Function    &apos;   SFDocuments.SF_Calc.Charts
 
 REM -----------------------------------------------------------------------------
@@ -1457,7 +1383,7 @@ Try:
 	&apos;	Create the chart and get ihe corresponding chart instance
 	oSheet.getCharts.addNewByName(ChartName, oRectangle, Array(oRange.XCellRange.RangeAddress), ColumnHeader, RowHeader)
 	Set oChart = Charts(SheetName, ChartName)
-	oChart._Shape.Name = ChartName		&apos;	Both user-defined and internal names match ChartName
+	oChart.[_Super]._Shape.Name = ChartName		&apos;	Both user-defined and internal names match ChartName
 	oChart._Diagram.Wall.FillColor = RGB(255, 255, 255)		&apos;	Align on background color set by the user interface by default
 
 Finally:
@@ -1668,6 +1594,112 @@ Finally:
 Catch:
 	GoTo Finally
 End Function    &apos;   SFDocuments.SF_Calc.CreatePivotTable
+
+REM -----------------------------------------------------------------------------
+Public Function CreateShapeFromFile(Optional ByVal ShapeName As Variant _
+									, Optional ByVal ImageFile As Variant _
+									, Optional ByVal Range As Variant _
+									, Optional AsLink As Variant _
+							) As Variant
+&apos;&apos;&apos; Return a new Shape/image class instance
+&apos;&apos;&apos;		- positioned on and anchored to the given range
+&apos;&apos;&apos;		- sized according to the image original size
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ShapeName: The user-defined name of the new Shape
+&apos;&apos;&apos;		ImageFile: The input file in the SF_FileSystem notation
+&apos;&apos;&apos;		Range: The top-left position of the new shape.
+&apos;&apos;&apos;			May be a cell range, but only the top-left cell will be considered
+&apos;&apos;&apos;			Default = top-left cell of the current selection
+&apos;&apos;&apos;		AsLink: When True (default = False), the file is not embedded in the document
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A new Shape service instance or Nothing when failed
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DUPLICATESHAPEERROR		A Shape with the same name exists already in the given sheet
+&apos;&apos;&apos;		UNKNOWNFILEERROR		The image file could not be located in the file system
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim oShape As Object
+&apos;&apos;&apos;		Set oShape = oDoc.CreateShapeFromFile(&quot;myShape&quot;, &quot;C:\Image.png&quot;, &quot;~.D5&quot;, AsLink := True)
+
+Dim oShape As Object				&apos;	Return value
+Dim oXShape As Object				&apos;	com.sun.star.comp.sc.ScShapeObj
+Dim vShapes As Variant				&apos;	List of pre-existing shapes
+Dim oDrawPage As Object				&apos;	com.sun.star.drawing.XDrawPage
+Dim oProvider As Object				&apos;	com.sun.star.graphic.GraphicProvider
+Dim oRange As _Address				&apos;	A parsed range
+Dim oPosition As New com.sun.star.awt.Point		&apos;	Shape target position
+Dim oSize As New com.sun.star.awt.Size			&apos;	Shape target size
+Dim FSO As Object					:	Set FSO = ScriptForge.SF_FileSystem
+Dim sImageFile As String			&apos;	Alias of ImageFile
+
+Const cstThisSub = &quot;SFDocuments.Calc.CreateShapeFromFile&quot;
+Const cstSubArgs = &quot;ShapeName, ImageFile, [Range=&quot;&quot;~.~&quot;&quot;], [AsLink=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oShape = Nothing
+
+Check:
+	If IsMissing(Range) Or IsEmpty(Range) Then Range = &quot;~.~&quot;
+	If IsMissing(AsLink) Or IsEmpty(AsLink) Then AsLink = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ShapeName, &quot;ShapeName&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._ValidateFile(ImageFile, &quot;ImageFile&quot;) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(AsLink, &quot;AsLink&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+	&apos;	Does the input file exist ?
+	If Not FSO.FileExists(ImageFile) Then GoTo CatchNotExists
+	sImageFile = FSO._ConvertToUrl(ImageFile)
+
+	&apos;	Is the range a valid address ?
+	Set oRange = _ParseAddress(Range)
+
+	&apos;	No names conflict ?
+	vShapes = Shapes(oRange.SheetName)
+	If ScriptForge.SF_Array.Contains(vShapes, ShapeName, CaseSensitive := True) Then GoTo CatchDuplicate
+
+Try:
+	&apos;	Initialize the new shape
+	Set oDrawPage = oRange.XSpreadsheet.getDrawPage()
+	Set oPosition = oRange.XCellRange.Position
+
+	Set oProvider = ScriptForge.SF_Utils._GetUnoService(&quot;GraphicProvider&quot;)
+	Set oXShape = _Component.createInstance(&quot;com.sun.star.drawing.GraphicObjectShape&quot;)
+	With oXShape
+		.Name = ShapeName
+		.Graphic = oProvider.queryGraphic(Array( _
+						ScriptForge.SF_Utils._MakePropertyValue(&quot;URL&quot;, sImageFile) _
+						, ScriptForge.SF_Utils._MakePropertyValue(&quot;LoadAsLink&quot;, AsLink) _
+						))
+		.setPosition(oPosition)
+	End With
+	oDrawPage.add(oXShape)
+
+	&apos;	Size according to original image size
+	oSize.Width = CLng(oXShape.Graphic.Size100thMM.Width)
+	oSize.Height = CLng(oXShape.Graphic.Size100thMM.Height)
+	oXShape.setSize(oSize)
+
+	&apos;	Anchor the image to the top-left cell of the range
+	oXShape.Anchor = oRange.XCellRange.getCellByPosition(0, 0)
+
+	&apos;	Create the Shape and get the corresponding Shape instance
+	Set oShape = Shapes(oRange.SheetName, ShapeName)
+
+Finally:
+	Set CreateShapeFromFile = oShape
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchDuplicate:
+	ScriptForge.SF_Exception.RaiseFatal(DUPLICATESHAPEERROR, &quot;ShapeName&quot;, ShapeName, &quot;SheetName&quot;, oRange.SheetName, &quot;Document&quot;, [_Super]._FileIdent())
+	GoTo Finally
+CatchNotExists:
+	ScriptForge.SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;ImageFile&quot;, ImageFile)
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.CreateShapeFromFile
 
 REM -----------------------------------------------------------------------------
 Public Function DAvg(Optional ByVal Range As Variant) As Double
@@ -2698,6 +2730,7 @@ Public Function Methods() As Variant
 					, &quot;CopyToCell&quot; _
 					, &quot;CopyToRange&quot; _
 					, &quot;CreateChart&quot; _
+					, &quot;CreateShapeFromFile&quot; _
 					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DecorateFont&quot; _
@@ -2727,6 +2760,7 @@ Public Function Methods() As Variant
 					, &quot;SetCellStyle&quot; _
 					, &quot;SetFormula&quot; _
 					, &quot;SetValue&quot; _
+					, &quot;Shapes&quot; _
 					, &quot;ShiftDown&quot; _
 					, &quot;ShiftLeft&quot; _
 					, &quot;ShiftRight&quot; _
@@ -3711,6 +3745,26 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Calc.SetValue
+
+REM -----------------------------------------------------------------------------
+Public Function Shapes(Optional ByVal SheetName As Variant _
+							, Optional ByVal ShapeName As Variant _
+							) As Variant
+&apos;&apos;&apos; Return either the list of shapes present in the given sheet or a shape object
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		SheetName: The name of an existing sheet
+&apos;&apos;&apos;		ShapeName: The user-defined name of the targeted shape or the zero-length string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		When ShapeName = &quot;&quot;, return the list of the shapes present in the sheet,
+&apos;&apos;&apos;		otherwise, return a new shape service instance
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim oShape As Object
+&apos;&apos;&apos;		Set oShape = oDoc.Shapes(&quot;SheetX&quot;, &quot;myShape&quot;)
+
+Try:
+	Shapes = _Shapes(SheetName, ShapeName, _IsChart := False)
+
+End Function    &apos;   SFDocuments.SF_Calc.Shapes
 
 REM -----------------------------------------------------------------------------
 Public Function ShiftDown(Optional ByVal Range As Variant _
@@ -5385,10 +5439,10 @@ Try:
 	Set oXRange = _ParseAddress(psRange).XCellRange
 
 	&apos;	Initialize the range area
-	With oRect
+	With oRect						&apos;	All units in 1/100mm
 		.X = oXRange.Position.X
 		.Y = oXRange.Position.Y
-		.Width = oXRange.Size.Width			&apos;	Size is in 1/100mm
+		.Width = oXRange.Size.Width
 		.Height = oXRange.Size.Height
 	End With
 
@@ -5460,6 +5514,126 @@ Try:
 Finally:
 	Exit Sub
 End Sub	&apos;	SFDocuments.SF_Calc._RestoreSelections
+
+REM -----------------------------------------------------------------------------
+Public Function _Shapes(Optional ByVal SheetName As Variant _
+							, Optional ByVal ShapeName As Variant _
+							, Optional ByVal _IsChart As Variant _
+							) As Variant
+&apos;&apos;&apos; Return either the list of shapes present in the given sheet or a shape object
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		SheetName: The name of an existing sheet
+&apos;&apos;&apos;		ShapeName: The user-defined name of the targeted shape or the zero-length string
+&apos;&apos;&apos;		_IsChart: When True , only shapes containing a chart are considered,
+&apos;&apos;&apos;				 when False (default), all shapes are considered, except those containing a chart
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		When ShapeName = &quot;&quot;, return the list of the shapes present in the sheet,
+&apos;&apos;&apos;		otherwise, return a new shape or chart service instance
+
+Dim vShapes As Variant				&apos;	Return value when array of shape/chart names
+Dim oChart As Object				&apos;	A new chart instance
+Dim oShape As Object				&apos;	A new shape instance. Is the superclass of a chart instance when _IsChart = True
+Dim oSheet As Object				&apos;	Alias of SheetName as reference
+Dim oDrawPage As Object				&apos;	com.sun.star.drawing.XDrawPage
+Dim oNextShape As Object			&apos;	com.sun.star.drawing.XShape
+Dim sShapeName As String			&apos;	Some shape/chart name
+Dim lCount As Long					&apos;	Counter for shapes among all drawing objects
+Static oSession As Object			&apos;	Session service
+Dim i As Long
+Const cstChartShape = &quot;com.sun.star.drawing.OLE2Shape&quot;
+
+Dim cstThisSub As String	:	cstThisSub = &quot;SFDocuments.Calc.&quot; &amp; Iif(_IsChart, &quot;Charts&quot;, &quot;Shapes&quot;)
+Dim cstSubArgs As String	:	cstSubArgs = &quot;SheetName, [&quot; &amp; Iif(_IsChart, &quot;ChartName&quot;, &quot;ShapeName&quot;) &amp; &quot;=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vShapes = Array()
+
+Check:
+	If IsMissing(ShapeName) Or IsEmpty(ShapeName) Then ShapeName = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ShapeName, Iif(_IsChart, &quot;ChartName&quot;, &quot;ShapeName&quot;), V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Because the user can change it constantly, the list of valid shapes has to be rebuilt at each time
+	Set oSheet = _Component.getSheets.getByName(SheetName)
+	Set oDrawPage = oSheet.getDrawPage()
+	vShapes = Array()
+	lCount = -1
+
+	&apos;	Explore shapes starting from the sheet draw page
+	For i = 0 To oDrawPage.Count - 1
+
+		Set oShape = Nothing
+		Set oChart = Nothing
+
+		Set oNextShape = oDrawPage.getByIndex(i)
+		sShapeName = oNextShape.Name										&apos;	User-defined name
+		If Len(sShapeName) = 0 Then
+			If IsNull(oSession) Then Set oSession = CreateScriptService(&quot;ScriptForge.Session&quot;)
+			If oSession.HasUnoProperty(oNextShape, &quot;PersistName&quot;) Then sShapeName = oNextShape.PersistName		&apos;	Internal name
+		End If
+
+		&apos;	Make anyway a SF_Shape instance, when name fits
+		If Len(ShapeName) &gt; 0 And Len(sShapeName) &gt; 0 And ShapeName = sShapeName Then
+			Set oShape = New SF_Shape
+			With oShape
+				Set .[Me] = oShape
+				Set .[_Parent] = [Me]
+				._SheetName = SheetName
+				._DrawIndex = i
+				._ShapeName = ShapeName
+				Set ._Shape = oNextShape
+				._IsChart = _IsChart
+				._Initialize()
+			End With
+
+			&apos;	Retain charts only
+			If _IsChart And oNextShape.supportsService(cstChartShape) Then
+				Set oChart = New SF_Chart
+				With oChart
+					Set .[Me] = oChart
+					Set .[_Parent] = [Me]
+					._SheetName = SheetName
+					._ChartName = ShapeName
+					._PersistentName = oNextShape.PersistName
+					Set ._Chart = oSheet.getCharts().getByName(._PersistentName)
+					Set ._ChartObject = ._Chart.EmbeddedObject
+					Set ._Diagram = ._ChartObject.Diagram
+				End With
+				&apos;	Make the SF_Shape superclass: a chart is a subclass of a shape
+				Set oChart.[_Super] = oShape
+			End If
+			Exit For
+
+		End If
+
+		&apos;	Build stack of shape names when shape or chart not found
+		If IsNull(oShape) And Len(sShapeName) &gt; 0 Then
+			lCount = lCount + 1
+			If UBound(vShapes) &lt; 0 Then
+				vShapes = Array(sShapeName)
+			Else
+				ReDim Preserve vShapes(0 To UBound(vShapes) + 1)
+				vShapes(lCount) = sShapeName
+			End If
+		End If
+	Next i
+
+	&apos;	Raise error when shape/chart not found
+	If Len(ShapeName) &gt; 0 And IsNull(oShape) Then
+		If Not ScriptForge.SF_Utils._Validate(ShapeName, Iif(_IsChart, &quot;ChartName&quot;, &quot;ShapeName&quot;), V_STRING, vShapes, True) Then GoTo Finally
+	End If
+
+Finally:
+	If Len(ShapeName) = 0 Then _Shapes = vShapes Else Set _Shapes = Iif(_IsChart, oChart, oShape)
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc._Shapes
 
 REM -----------------------------------------------------------------------------
 Private Function _ValidateSheet(Optional ByRef pvSheetName As Variant _

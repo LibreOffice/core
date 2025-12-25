@@ -18,7 +18,7 @@
 #include <rangenam.hxx>
 
 #include <unotools/charclass.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/link.hxx>
 
 void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)

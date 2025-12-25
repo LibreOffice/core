@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SVX_LINKWARN_HXX
 #define INCLUDED_SVX_LINKWARN_HXX
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxLinkWarningDialog final : public weld::MessageDialogController

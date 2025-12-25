@@ -122,10 +122,10 @@ diff --git a/crypto/rsa/rsa_ossl.c b/crypto/rsa/rsa_ossl.c
 index 1e56c6d38c..4f2af3167c 100644
 --- a/crypto/rsa/rsa_ossl.c
 +++ b/crypto/rsa/rsa_ossl.c
-@@ -30,7 +30,7 @@
-                            BN_CTX *ctx);
- static int rsa_ossl_init(RSA *rsa);
- static int rsa_ossl_finish(RSA *rsa);
+@@ -36,7 +36,7 @@
+ #ifdef S390X_MOD_EXP
+ static int rsa_ossl_s390x_mod_exp(BIGNUM *r0, const BIGNUM *i, RSA *rsa,
+                                 BN_CTX *ctx);
 -static RSA_METHOD rsa_pkcs1_ossl_meth = {
 +static const RSA_METHOD rsa_pkcs1_ossl_meth = {
      "OpenSSL PKCS#1 RSA",

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <vector>
@@ -43,7 +42,6 @@
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
-#include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <vcl/graph.hxx>
 #include <salhelper/simplereferenceobject.hxx>

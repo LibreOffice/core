@@ -20,8 +20,6 @@
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
-#include <cassert>
-#include <utility>
 
 
 class SVL_DLLPUBLIC SfxStringItem: public SfxPoolItem

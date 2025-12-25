@@ -32,17 +32,28 @@ gb_CppunitTest_coredumpctl_run := $(SYSTEMD_RUN) --scope --user --unit="$$LIBO_T
 endif
 
 ifneq ($(strip $(CPPUNITTRACE)),)
+# sneak (a) setting the LD_LIBRARY_PATH, and (b) setting malloc debug flags, into the debugger command line
+gb_CppunitTest_CommonEnvVars := \
+	$(if $(PYTHONWARNINGS),PYTHONWARNINGS=$(PYTHONWARNINGS)) \
+	$(gb_CppunitTest_malloc_check)
+gb_CppunitTest_EnvVars := $(gb_CppunitTest_CPPTESTPRECOMMAND) \
+	$(gb_CppunitTest_CommonEnvVars)
+gb_PythonTest_EnvVars := $(gb_PythonTest_PRECOMMAND) \
+	$(gb_CppunitTest_CommonEnvVars)
 ifneq ($(filter gdb,$(CPPUNITTRACE)),)
-# sneak (a) setting the LD_LIBRARY_PATH, and (b) setting malloc debug flags, into the "gdb --args" command line
 gb_CppunitTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
+	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" \
+	$(foreach var,$(gb_CppunitTest_EnvVars),-ex "set environment $(subst =, ,$(var))") \
+	$(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 gb_PythonTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_PythonTest_PRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
+	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" \
+	$(foreach var,$(gb_PythonTest_EnvVars),-ex "set environment $(subst =, ,$(var))") \
+	$(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(subst lldb,\
-	lldb -o "env $(gb_CppunitTest_CPPTESTPRECOMMAND)" $(gb_CppunitTest_malloc_check),\
+	lldb $(foreach var,$(gb_CppunitTest_EnvVars),-o "env $(var)"),\
 	$(CPPUNITTRACE))
 gb_PythonTest_GDBTRACE := $(gb_CppunitTest_GDBTRACE)
 else

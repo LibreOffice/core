@@ -83,6 +83,9 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
         nPageToDuplicate = rDocument.DuplicatePage(nPageToDuplicate);
     }
 
+    bool bAllPagesSameSize(false);
+    Size aMasterSizeHMM;
+
     for (vcl::PDFGraphicResult const& rPDFGraphicResult : aGraphics)
     {
         const Graphic& rGraphic = rPDFGraphicResult.GetGraphic();
@@ -98,6 +101,13 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
 
         // Make the page size match the rendered image.
         pPage->SetSize(aSizeHMM);
+        if (nPageNumber == 0)
+        {
+            aMasterSizeHMM = aSizeHMM;
+            bAllPagesSameSize = true;
+        }
+        else
+            bAllPagesSameSize &= aMasterSizeHMM == aSizeHMM;
 
         rtl::Reference<SdrGrafObj> pSdrGrafObj
             = new SdrGrafObj(rModel, rGraphic, tools::Rectangle(Point(), aSizeHMM));
@@ -240,6 +250,13 @@ static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
         }
         pPage->setLinkAnnotations(rPDFGraphicResult.GetLinksInfo());
     }
+
+    if (SdPage* pPage = bAllPagesSameSize ? rDocument.GetSdPage(0, PageKind::Standard) : nullptr)
+    {
+        SdPage& rMasterPage = static_cast<SdPage&>(pPage->TRG_GetMasterPage());
+        rMasterPage.SetSize(aMasterSizeHMM);
+    }
+
     rDocument.setLock(bWasLocked);
     rDocument.EnableUndo(bSavedUndoEnabled);
     return true;

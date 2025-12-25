@@ -24,7 +24,7 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <map>
 
 namespace pcr

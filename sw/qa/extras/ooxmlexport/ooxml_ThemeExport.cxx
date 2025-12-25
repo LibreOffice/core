@@ -16,7 +16,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -33,7 +33,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePortionLevelCharColor_ODF,
     auto const& rTransforms = aComplexColor.getTransformations();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTransforms[0].mnValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testThemePortionLevelCharColor_DOCX,
@@ -48,7 +48,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePortionLevelCharColor_DOCX,
     auto const& rTransforms = aComplexColor.getTransformations();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTransforms[0].mnValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderColor.docx")
@@ -63,7 +63,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderColo
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTransforms[0].mnValue);
     }
     {
         auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
@@ -73,7 +73,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderColo
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), rTransforms[0].mnValue);
     }
 
     CPPUNIT_ASSERT(isPropertyVoid(xParagraph, u"LeftBorderComplexColor"_ustr));
@@ -92,7 +92,7 @@ DECLARE_OOXMLEXPORT_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeCo
     auto const& rTransforms = aComplexColor.getTransformations();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTransforms[0].meType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2509), rTransforms[0].mnValue);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2509), rTransforms[0].mnValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgroundColor.docx")
@@ -107,7 +107,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgr
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTransforms[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTransforms[0].mnValue);
     }
 
     {
@@ -120,7 +120,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgr
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTransforms[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTransforms[0].mnValue);
     }
 
     {
@@ -133,7 +133,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgr
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), rTransforms[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), rTransforms[0].mnValue);
     }
 }
 

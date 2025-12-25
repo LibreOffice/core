@@ -25,7 +25,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>

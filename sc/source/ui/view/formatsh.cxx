@@ -24,6 +24,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
@@ -124,7 +125,7 @@ ScFormatShell::ScFormatShell(ScViewData& rData) :
     ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
 
     SetPool( &pTabViewShell->GetPool() );
-    SfxUndoManager* pMgr = rViewData.GetSfxDocShell().GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if (pMgr && !rViewData.GetDocument().IsUndoEnabled())
     {
@@ -142,9 +143,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const sal_uInt16  nSlotId = rReq.GetSlot();
 
-    ScDocShell&         rDocSh      = GetViewData().GetDocShell();
+    ScDocShell*         pDocSh      = GetViewData().GetDocShell();
     ScTabViewShell*     pTabViewShell= GetViewData().GetViewShell();
-    ScDocument&         rDoc        = rDocSh.GetDocument();
+    ScDocument&         rDoc        = pDocSh->GetDocument();
     SfxStyleSheetBasePool*  pStylePool  = rDoc.GetStyleSheetPool();
 
     if (nSlotId == SID_STYLE_PREVIEW)
@@ -215,7 +216,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         if (pArgs && pArgs->GetItemState(nSlotId, false, &pItem) == SfxItemState::SET)
         {
             const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-            SfxClassificationHelper aHelper(rDocSh.getDocProperties());
+            SfxClassificationHelper aHelper(pDocSh->getDocProperties());
             auto eType = SfxClassificationPolicyType::IntellectualProperty;
             if (const SfxStringItem* pNameItem = pArgs->GetItemIfSet(SID_TYPE_NAME, false))
             {
@@ -619,6 +620,8 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_START );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_END );
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNRIGHT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
@@ -633,6 +636,8 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
     rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
     rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_START );
+    rBindings.Invalidate( SID_ALIGN_ANY_END );
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
     rBindings.Invalidate( SID_ALIGN_ANY_VDEFAULT );
     rBindings.Invalidate( SID_ALIGN_ANY_TOP );
@@ -943,10 +948,19 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
             case SID_BACKGROUND_COLOR:
                 {
+                    Color aColor(COL_TRANSPARENT);
+                    if (auto pObjectShell = pTabViewShell->GetObjectShell())
+                    {
+                        const std::optional<NamedColor> oColor
+                            = pObjectShell->GetRecentColor(SID_BACKGROUND_COLOR);
+                        if (oColor.has_value())
+                            aColor = (*oColor).getComplexColor().getFinalColor();
+                    }
+
                     SvxBrushItem aBrushItem(
-                                     pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );
-                    aBrushItem.SetColor( COL_TRANSPARENT );
-                    pTabViewShell->ApplyAttr( aBrushItem, false );
+                        pTabViewShell->GetSelectionPattern()->GetItem(ATTR_BACKGROUND));
+                    aBrushItem.SetColor(aColor);
+                    pTabViewShell->ApplyAttr(aBrushItem, false);
                 }
                 break;
 

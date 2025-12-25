@@ -122,6 +122,12 @@ namespace sdr::animation
                 prepareNextEvent();
         }
 
+        void PrimitiveAnimation::SetPrimitives(drawinglayer::primitive2d::Primitive2DContainer&& rAnimatedPrimitives)
+        {
+            // called from ViewObjectContact::checkForPrimitive2DAnimations
+            maAnimatedPrimitives = std::move(rAnimatedPrimitives);
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

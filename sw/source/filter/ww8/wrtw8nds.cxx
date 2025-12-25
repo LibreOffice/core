@@ -455,7 +455,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
                         if( SfxItemState::SET == aIter.GetItemState( false, &pItem ))
                         {
                             if (nWhichId == nFontId)
-                                pFont = &(item_cast<SvxFontItem>(*pItem));
+                                pFont = &pItem->StaticWhichCast(nFontId);
                             else if (nWhichId == RES_CHRATR_GRABBAG)
                                 pGrabBag = pItem;
                             else
@@ -478,14 +478,11 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
      aExportSet which a SwCharFormat would override, we can't rely on word doing
      this for us like writer does
     */
-    const SwFormatCharFormat *pCharFormatItem =
-        HasItem< SwFormatCharFormat >( aRangeItems, RES_TXTATR_CHARFMT );
-    if ( pCharFormatItem )
+    if (const SwFormatCharFormat* pCharFormatItem = HasItem(aRangeItems, RES_TXTATR_CHARFMT))
+    {
         ClearOverridesFromSet( *pCharFormatItem, aExportSet );
 
-    // check toggle properties in DOCX output
-    if (pCharFormatItem)
-    {
+        // check toggle properties in DOCX output
         handleToggleProperty(aExportSet, *pCharFormatItem);
     }
 

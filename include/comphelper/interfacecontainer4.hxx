@@ -20,7 +20,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <o3tl/cow_wrapper.hxx>
 #include <cassert>
@@ -30,6 +29,10 @@
 namespace com::sun::star::uno
 {
 class XInterface;
+}
+namespace com::sun::star::lang
+{
+struct EventObject;
 }
 
 namespace comphelper

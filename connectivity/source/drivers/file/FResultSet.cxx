@@ -1473,11 +1473,9 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
             {
                 aSelectIters.emplace(aIter,true);
                 sal_Int32 nSelectColumnPos = aIter - _rxColumns->begin() + 1;
-                const OUString* pBegin = aSelectColumns.getConstArray();
-                const OUString* pEnd   = pBegin + aSelectColumns.getLength();
-                for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+                for (sal_Int32 i = 0; i < aSelectColumns.getLength(); ++i)
                 {
-                    if ( aCase(*pBegin, sSelectColumnRealName) )
+                    if (aCase(aSelectColumns[i], sSelectColumnRealName))
                     {
                         // the getXXX methods are 1-based ...
                         sal_Int32 nTableColumnPos = i + 1;

@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_es,\
 	CustomTarget/i18npool/localedata/localedata_es_SV \
 	CustomTarget/i18npool/localedata/localedata_es_UY \
 	CustomTarget/i18npool/localedata/localedata_es_VE \
+	CustomTarget/i18npool/localedata/localedata_ext_ES \
 	CustomTarget/i18npool/localedata/localedata_gl_ES \
 	CustomTarget/i18npool/localedata/localedata_oc_ES_aranes \
 ))

@@ -25,7 +25,8 @@
 
 #include "impldde.hxx"
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sot/exchange.hxx>
 #include <rtl/ustring.hxx>
 

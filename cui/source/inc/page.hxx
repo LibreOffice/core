@@ -26,6 +26,7 @@
 #include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
 #include <vcl/print.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 // class SvxPageDescPage -------------------------------------------------
 /*

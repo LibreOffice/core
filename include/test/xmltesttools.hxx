@@ -13,19 +13,13 @@
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
 
-#include <libxml/xmlwriter.h>
-#include <libxml/tree.h>
 #include <libxml/xpath.h>
-#include <libxml/xpathInternals.h>
-#include <libxml/parserInternals.h>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/mtfxmldump.hxx>
 #include <test/xmldocptr.hxx>
-
-#include <cppunit/TestAssert.h>
 
 #include <string_view>
 #include <vector>
@@ -36,7 +30,8 @@ public:
     /// Return xmlDocPtr representation of the XML stream read from pStream.
     static xmlDocUniquePtr parseXmlStream(SvStream* pStream);
 
-    static xmlDocUniquePtr dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile);
+    static xmlDocUniquePtr dumpAndParse(const MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile);
+    static xmlDocUniquePtr dumpAndParse(const GDIMetaFile& rGDIMetaFile); // using default dumper
 
 protected:
     XmlTestTools();

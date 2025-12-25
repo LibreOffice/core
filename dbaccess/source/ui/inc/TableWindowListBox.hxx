@@ -20,6 +20,7 @@
 
 #include <vcl/transfer.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include "callbacks.hxx"
 
 namespace dbaui

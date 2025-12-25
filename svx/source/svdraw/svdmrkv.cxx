@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
+#include <tools/debug.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
@@ -986,6 +987,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 );
 
             aExtraInfo.append(", \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
+            aExtraInfo.append(", \"isDiagram\": " + OString::boolean(pO->isDiagram()));
 
             if (mpMarkedObj && !pOtherShell)
             {
@@ -1107,7 +1109,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
                                                 Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
                                                 Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                                                OString sPolygonElem("<polygon points=\\\""_ostr);
+                                                OStringBuffer sPolygonElem("<polygon points=\\\"");
                                                 for (sal_uInt32 nIndex = 0; nIndex < nPolySize; ++nIndex)
                                                 {
                                                     const basegfx::B2DPoint aB2Point = aPolygon.getB2DPoint(nIndex);
@@ -1116,10 +1118,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                     if (mbNegativeX)
                                                         aPoint.setX(-aPoint.X());
                                                     if (nIndex > 0)
-                                                        sPolygonElem += " ";
-                                                    sPolygonElem += aPoint.toString();
+                                                        sPolygonElem.append(" ");
+                                                    sPolygonElem.append(aPoint.toString());
                                                 }
-                                                sPolygonElem += R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem";
+                                                sPolygonElem.append(R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem");
 
                                                 OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
                                                     OString::number(aSelection.GetWidth() / 100.0) +
@@ -1209,12 +1211,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                         selectedNode = &others;
                     }
                     std::string sKind = std::to_string(kind);
-                    boost::optional< boost::property_tree::ptree& > kindNode = selectedNode->get_child_optional(sKind.c_str());
+                    boost::optional< boost::property_tree::ptree& > kindNode = selectedNode->get_child_optional(sKind);
                     if (!kindNode)
                     {
                         boost::property_tree::ptree newChild;
                         newChild.push_back(node);
-                        selectedNode->add_child(sKind.c_str(), newChild);
+                        selectedNode->add_child(sKind, newChild);
                     }
                     else
                         kindNode.get().push_back(node);
@@ -1227,14 +1229,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 responseJSON.add_child("kinds", nodes);
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, responseJSON, /*pretty=*/ false);
-                handleArrayStr = ", \"handles\":"_ostr;
-                handleArrayStr = handleArrayStr + aStream.str().c_str();
+                handleArrayStr = OString::Concat(", \"handles\":") + aStream.view();
                 if (bConnectorSelection)
                 {
                     aStream.str("");
                     boost::property_tree::write_json(aStream, aGluePointsTree, /*pretty=*/ false);
-                    handleArrayStr = handleArrayStr + ", \"GluePoints\":";
-                    handleArrayStr = handleArrayStr + aStream.str().c_str();
+                    handleArrayStr += OString::Concat(", \"GluePoints\":") + aStream.view();
                 }
             }
 
@@ -1277,9 +1277,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     aExtraInfo.append(", \"ObjectRectangles\": "_ostr + objectRectangles);
                 }
 
-                aExtraInfo.append(handleArrayStr
-                    + "}");
-                sSelectionText += ", " + aExtraInfo;
+                sSelectionText += ", " + aExtraInfo + handleArrayStr + "}";
             }
         }
 

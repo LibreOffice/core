@@ -111,6 +111,8 @@ QPalette QtCustomStyle::GetMenuPalette()
                   toQColor(aThemeColors.GetDisabledTextColor()));
     aPal.setColor(QPalette::ButtonText, toQColor(aThemeColors.GetMenuTextColor()));
     aPal.setColor(QPalette::WindowText, toQColor(aThemeColors.GetMenuTextColor()));
+    aPal.setColor(QPalette::Disabled, QPalette::WindowText,
+                  toQColor(aThemeColors.GetDisabledTextColor()));
     aPal.setColor(QPalette::Button, toQColor(aThemeColors.GetButtonColor()));
     aPal.setColor(QPalette::Disabled, QPalette::ButtonText,
                   toQColor(aThemeColors.GetDisabledTextColor()));

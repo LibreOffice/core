@@ -149,11 +149,11 @@ private:
     OString convertUnoTypeToCpp(std::u16string_view unoType) const;
     std::string convertTemplateArguments(const std::string& unoType) const;
     OString getCppTypeName(std::u16string_view unoType) const;
-    OString getTypedParameterType(
-        std::u16string_view unoType,
-        unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const;
-    OString getStructGetterReturnType(std::u16string_view unoType) const;
-    OString getStructSetterParameterType(std::u16string_view unoType) const;
+    static OString
+    getTypedParameterType(std::u16string_view unoType,
+                          unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction);
+    static OString getStructGetterReturnType(std::u16string_view unoType);
+    static OString getStructSetterParameterType(std::u16string_view unoType);
     OString getRustFFITypeName(std::u16string_view unoType) const;
     static OString mapUnoPrimitiveToSal(std::u16string_view unoType);
     OUString resolveTypedef(std::u16string_view unoType) const;

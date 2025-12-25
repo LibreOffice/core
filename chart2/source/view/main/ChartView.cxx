@@ -86,7 +86,6 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -99,6 +98,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <svl/itempool.hxx>
 #include <svl/ctloptions.hxx>
 #include <comphelper/classids.hxx>
@@ -1214,8 +1214,9 @@ void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
                        ChartModel& rModel,
                        awt::Rectangle& rRemainingSpace)
 {
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
-    if (!xPivotTableDataProvider.is())
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(rModel.getDataProvider().get());
+    if (!pPivotTableDataProvider)
         return;
 
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
@@ -1224,18 +1225,18 @@ void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
 
     tools::Long x = 0;
 
-    if (xPivotTableDataProvider->getPageFields().hasElements())
+    if (!pPivotTableDataProvider->getPageFields().empty())
     {
         x = 0;
 
-        const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getPageFields();
+        const std::vector<chart2::data::PivotTableFieldEntry>& aPivotFieldEntries = pPivotTableDataProvider->getPageFields();
         for (css::chart2::data::PivotTableFieldEntry const & rPageFieldEntry : aPivotFieldEntries)
         {
             VButton aButton;
             aButton.init(xPageShapes);
             awt::Point aNewPosition(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
             sal_Int32 nDimensionIndex = rPageFieldEntry.DimensionIndex;
-            OUString aFieldOutputDescription = xPivotTableDataProvider->getFieldOutputDescription(nDimensionIndex);
+            OUString aFieldOutputDescription = pPivotTableDataProvider->getFieldOutputDescription(nDimensionIndex);
             aButton.setLabel(rPageFieldEntry.Name + " | " + aFieldOutputDescription);
             aButton.setCID("FieldButton.Page." + OUString::number(nDimensionIndex));
             aButton.setPosition(aNewPosition);
@@ -1252,11 +1253,11 @@ void lcl_createButtons(const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes,
 
     aSize = awt::Size(3000, 700); // size of the button
 
-    if (!xPivotTableDataProvider->getRowFields().hasElements())
+    if (pPivotTableDataProvider->getRowFields().empty())
         return;
 
     x = 200;
-    const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getRowFields();
+    const std::vector<chart2::data::PivotTableFieldEntry>& aPivotFieldEntries = pPivotTableDataProvider->getRowFields();
     for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : aPivotFieldEntries)
     {
         VButton aButton;

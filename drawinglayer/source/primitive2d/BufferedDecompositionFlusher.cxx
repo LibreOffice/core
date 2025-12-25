@@ -90,28 +90,36 @@ void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionPrimiti
 {
     std::unique_lock l(maMutex);
     if (!mbShutdown)
-        maRegistered1.insert(const_cast<BufferedDecompositionPrimitive2D*>(p));
+    {
+        unotools::WeakReference<BufferedDecompositionPrimitive2D> xRef(
+            const_cast<BufferedDecompositionPrimitive2D*>(p));
+        maRegistered1.insert({ p, std::move(xRef) });
+    }
 }
 
 void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionGroupPrimitive2D* p)
 {
     std::unique_lock l(maMutex);
     if (!mbShutdown)
-        maRegistered2.insert(const_cast<BufferedDecompositionGroupPrimitive2D*>(p));
+    {
+        unotools::WeakReference<BufferedDecompositionGroupPrimitive2D> xRef(
+            const_cast<BufferedDecompositionGroupPrimitive2D*>(p));
+        maRegistered2.insert({ p, std::move(xRef) });
+    }
 }
 
 void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionPrimitive2D* p)
 {
     std::unique_lock l(maMutex);
     if (!mbShutdown)
-        maRegistered1.erase(const_cast<BufferedDecompositionPrimitive2D*>(p));
+        maRegistered1.erase(p);
 }
 
 void BufferedDecompositionFlusher::removeImpl(const BufferedDecompositionGroupPrimitive2D* p)
 {
     std::unique_lock l(maMutex);
     if (!mbShutdown)
-        maRegistered2.erase(const_cast<BufferedDecompositionGroupPrimitive2D*>(p));
+        maRegistered2.erase(p);
 }
 
 void SAL_CALL BufferedDecompositionFlusher::run()
@@ -129,9 +137,12 @@ void SAL_CALL BufferedDecompositionFlusher::run()
                 break;
             for (auto it = maRegistered1.begin(); it != maRegistered1.end();)
             {
-                if (aNow - (*it)->maLastAccess.load() > std::chrono::seconds(10))
+                rtl::Reference<BufferedDecompositionPrimitive2D> xPrimitive = it->second.get();
+                if (!xPrimitive)
+                    it = maRegistered1.erase(it);
+                else if (aNow - xPrimitive->maLastAccess.load() > std::chrono::seconds(10))
                 {
-                    aRemoved1.push_back(*it);
+                    aRemoved1.push_back(std::move(xPrimitive));
                     it = maRegistered1.erase(it);
                 }
                 else
@@ -139,9 +150,12 @@ void SAL_CALL BufferedDecompositionFlusher::run()
             }
             for (auto it = maRegistered2.begin(); it != maRegistered2.end();)
             {
-                if (aNow - (*it)->maLastAccess.load() > std::chrono::seconds(10))
+                rtl::Reference<BufferedDecompositionGroupPrimitive2D> xPrimitive = it->second.get();
+                if (!xPrimitive)
+                    it = maRegistered2.erase(it);
+                else if (aNow - xPrimitive->maLastAccess.load() > std::chrono::seconds(10))
                 {
-                    aRemoved2.push_back(*it);
+                    aRemoved2.push_back(std::move(xPrimitive));
                     it = maRegistered2.erase(it);
                 }
                 else
@@ -153,23 +167,38 @@ void SAL_CALL BufferedDecompositionFlusher::run()
             // some parts of skia do not take kindly to being accessed from multiple threads
             osl::Guard<comphelper::SolarMutex> aGuard(comphelper::SolarMutex::get());
 
-            for (const auto& r : aRemoved1)
-                r->setBuffered2DDecomposition(nullptr);
-            for (const auto& r : aRemoved2)
-                r->setBuffered2DDecomposition(Primitive2DContainer{});
+            for (const auto& xPrim : aRemoved1)
+            {
+                xPrim->setBuffered2DDecomposition(nullptr);
+            }
+            for (const auto& xPrim : aRemoved2)
+            {
+                xPrim->setBuffered2DDecomposition(Primitive2DContainer{});
+            }
+
+            // Clear these while under the SolarMutex, just in case we are the sole surviving reference,
+            // and we might trigger destruction of related vcl resources.
+            aRemoved1.clear();
+            aRemoved2.clear();
         }
 
-        wait(TimeValue(2, 0));
+        {
+            std::unique_lock l(maMutex);
+            maDelayOrTerminate.wait_for(l, std::chrono::seconds(2), [this] { return mbShutdown; });
+        }
     }
 }
 
 /// Only called by FlusherDeinit
 void BufferedDecompositionFlusher::onTeardown()
 {
-    std::unique_lock l2(maMutex);
-    mbShutdown = true;
-    maRegistered1.clear();
-    maRegistered2.clear();
+    {
+        std::unique_lock l2(maMutex);
+        mbShutdown = true;
+        maRegistered1.clear();
+        maRegistered2.clear();
+    }
+    maDelayOrTerminate.notify_all();
 }
 
 } // end of namespace drawinglayer::primitive2d

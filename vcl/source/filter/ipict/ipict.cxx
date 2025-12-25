@@ -1824,7 +1824,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x0091: { // BitsRgn
@@ -1832,7 +1832,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x0092:   // Reserved (n Bytes)
@@ -1851,7 +1851,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x0099: { // PackBitsRgn
@@ -1859,7 +1859,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x009a: { // DirectBitsRect
@@ -1867,7 +1867,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x009b: { // DirectBitsRgn
@@ -1875,7 +1875,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x009c:   // Reserved (n Bytes)

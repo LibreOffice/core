@@ -460,7 +460,8 @@ public:
         SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
 
         // Check if we are rendering an object that is valid to render (exists, and not empty)
-        if (pObject == nullptr || pObject->IsEmptyPresObj())
+        if (pObject == nullptr
+            || (pObject->IsEmptyPresObj() && !(pObject->HasFillStyle() || pObject->HasLineStyle())))
             return;
 
         SdrPage* pPage = pObject->getSdrPageFromSdrObject();

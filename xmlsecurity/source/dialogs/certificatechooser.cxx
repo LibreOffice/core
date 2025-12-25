@@ -27,6 +27,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <comphelper/lok.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>
 
@@ -321,15 +322,14 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_X509_NSS_NEWLINE) + nssPath);
 #endif // _WIN32
     }
-    OUString loadedCertsLabel = XsResId(STR_LOADED_CERTS_BASE
-                                        );
+    OUStringBuffer loadedCertsLabel(XsResId(STR_LOADED_CERTS_BASE));
     for (size_t label_i=0; label_i<seqLoadedCertsLabels.size(); label_i++)
     {
         if (label_i > 0)
-            loadedCertsLabel += ", ";
-        loadedCertsLabel += seqLoadedCertsLabels[label_i];
+            loadedCertsLabel.append(", ");
+        loadedCertsLabel.append(seqLoadedCertsLabels[label_i]);
     }
-    m_xFTLoadedCerts->set_label(loadedCertsLabel);
+    m_xFTLoadedCerts->set_label(loadedCertsLabel.toString());
     m_xFTLoadedCerts->set_visible(true);
 
     m_xCertLB->thaw();

@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGCONTROL_HXX
 
 #include <svtools/toolbarmenu.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace svx {
 #define SPACING_NOCUSTOM                0

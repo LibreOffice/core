@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_DRAWINGML_HXX
-#define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
+#pragma once
 
 #include <map>
 #include <stack>
@@ -36,7 +35,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -280,6 +278,17 @@ public:
     void writeSvgExtension(OUString const& rSvgRelId);
 };
 
+struct WriteRunInput
+{
+    bool bIsField = false;
+    bool bCheckDirect = false;
+    bool bOverridingCharHeight = false;
+    sal_Int32 nCharHeight = -1;
+    sal_Int16 nScriptType = css::i18n::ScriptType::LATIN;
+    bool bUseTextSchemeColors = false;
+    css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
+};
+
 class DrawingML
 {
 
@@ -380,7 +389,7 @@ public:
     void WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID );
 
     bool WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
-    bool WriteSchemeColor(OUString const& rPropertyName, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    bool WriteSchemeColor(OUString const& rPropertyName, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false);
 
     void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
@@ -483,10 +492,8 @@ public:
     void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
                    const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
-    void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
-                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                             sal_Int16 nScriptType = css::i18n::ScriptType::LATIN,
-                             const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet = {});
+
+    void WriteRunProperties(const css::uno::Reference< css::beans::XPropertySet >& rRun, sal_Int32 nElement, WriteRunInput& rRunInput);
 
     void WritePresetShape( const OString& pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     OOX_DLLPUBLIC void WritePresetShape( const OString& pShape );
@@ -509,7 +516,8 @@ public:
     OOX_DLLPUBLIC void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
-    OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
+    OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
+                                    sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
     void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
                           const css::uno::Reference<css::io::XOutputStream>& xOutStream,
                           std::u16string_view sGrabBagProperyName, int nDiagramId);
@@ -532,7 +540,7 @@ public:
 
     static ::Color ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
-    static const char* GetAlignment( css::style::ParagraphAdjust nAlignment );
+    static const char* GetAlignment( css::style::ParagraphAdjust nAlignment, bool bPlaceHolder = false );
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
@@ -548,7 +556,5 @@ public:
 
 }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

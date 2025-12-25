@@ -11,7 +11,8 @@
 
 #include <sal/config.h>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ScDocShell;
 class SvtURLBox;

@@ -22,10 +22,10 @@
 
 #include <config_options.h>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
+namespace com::sun::star::lang { struct EventObject; }
 namespace com::sun::star::view { class XSelectionSupplier; }
 
 //= selection helper classes

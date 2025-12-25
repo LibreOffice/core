@@ -17,7 +17,7 @@ import os.path
 class save_readonly_with_password(UITestCase):
 
     #Bug 144374 - Writer: FILESAVE to DOCX as read-only with additional password protection for editing not working
-   def test_save_to_docx(self):
+    def test_save_to_docx(self):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf144374-tmp.docx")
 
@@ -58,7 +58,7 @@ class save_readonly_with_password(UITestCase):
 
                 self.assertFalse(document.isReadonly())
 
-   def test_save_to_odt(self):
+    def test_save_to_odt(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "readonly_with_password_tmp.odt")

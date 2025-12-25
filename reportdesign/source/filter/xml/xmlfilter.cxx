@@ -45,6 +45,7 @@
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
@@ -355,11 +356,9 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             Sequence< PropertyValue > aComponent;
             rProp.Value >>= aComponent;
-            const PropertyValue* pComponentIter = aComponent.getConstArray();
-            const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
-            pComponentIter = std::find_if(pComponentIter, pComponentEnd,
+            auto pComponentIter = std::find_if(aComponent.begin(), aComponent.end(),
                 [](const PropertyValue& rComponent) { return rComponent.Name == "ActiveConnection"; });
-            if (pComponentIter != pComponentEnd)
+            if (pComponentIter != aComponent.end())
             {
                 uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value, uno::UNO_QUERY);
                 xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);
@@ -421,7 +420,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             { u"BaseURI"_ustr,    0,    cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { u"StreamRelPath"_ustr, 0, cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
         };
-        utl::MediaDescriptor aDescriptor(rDescriptor);
+        comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString()) );
         assert(!sVal.isEmpty()); // needed for relative URLs

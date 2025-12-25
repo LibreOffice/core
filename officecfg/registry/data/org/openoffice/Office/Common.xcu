@@ -402,6 +402,8 @@
     </node>
   </node>
   <node oor:name="Misc">
+    <prop oor:name="UseSystemColorDialog">
+    </prop>
     <prop oor:name="UseSystemFileDialog">
     </prop>
     <prop oor:name="UseSystemPrintDialog" install:module="macosx">

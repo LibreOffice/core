@@ -126,10 +126,15 @@ void ScValidationDlg::EndDialog(int nResponse)
     ScValidationDlgBase::EndDialog(nResponse);
 }
 
-ScValidationDlg::~ScValidationDlg()
+void ScValidationDlg::ImplDestroy()
 {
     if (m_bOwnRefHdlr)
         RemoveRefDlg(false);
+}
+
+ScValidationDlg::~ScValidationDlg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , const ScDocument& rDoc )
@@ -775,6 +780,8 @@ ScTPValidationError::ScTPValidationError(weld::Container* pPage, weld::DialogCon
     , m_xBtnSearch(m_xBuilder->weld_button(u"browseBtn"_ustr))
     , m_xEdtTitle(m_xBuilder->weld_entry(u"erroralert_title"_ustr))
     , m_xFtError(m_xBuilder->weld_label(u"errormsg_label"_ustr))
+    , m_xFtTitle(m_xBuilder->weld_label(u"title_label"_ustr))
+    , m_xFtAction(m_xBuilder->weld_label(u"action_label"_ustr))
     , m_xEdError(m_xBuilder->weld_text_view(u"errorMsg"_ustr))
 {
     m_xEdError->set_size_request(m_xEdError->get_approximate_digit_width() * 40, m_xEdError->get_height_rows(12));
@@ -787,6 +794,7 @@ ScTPValidationError::~ScTPValidationError()
 
 void ScTPValidationError::Init()
 {
+    m_xTsbShow->connect_toggled(LINK(this, ScTPValidationError, ToggleErrorMessage));
     m_xLbAction->connect_changed(LINK(this, ScTPValidationError, SelectActionHdl));
     m_xBtnSearch->connect_clicked(LINK( this, ScTPValidationError, ClickSearchHdl));
 
@@ -836,14 +844,26 @@ bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
     return true;
 }
 
+IMPL_LINK_NOARG(ScTPValidationError, ToggleErrorMessage, weld::Toggleable&, void)
+{
+    SelectActionHdl(*m_xLbAction);
+}
+
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, weld::ComboBox&, void)
 {
+    bool const bEnable(m_xTsbShow->get_active());
+
     ScValidErrorStyle eStyle = static_cast<ScValidErrorStyle>(m_xLbAction->get_active());
     bool bMacro = ( eStyle == SC_VALERR_MACRO );
+    bool bNone = ( eStyle == SC_VALERR_NONE );
 
-    m_xBtnSearch->set_sensitive( bMacro );
-    m_xFtError->set_sensitive( !bMacro );
-    m_xEdError->set_sensitive( !bMacro );
+    m_xFtTitle->set_sensitive( bEnable && !bNone );
+    m_xLbAction->set_sensitive(bEnable);
+    m_xFtAction->set_sensitive(bEnable);
+    m_xEdtTitle->set_sensitive( bEnable && !bNone );
+    m_xBtnSearch->set_sensitive( bEnable && bMacro);
+    m_xFtError->set_sensitive( bEnable && !bMacro && !bNone );
+    m_xEdError->set_sensitive( bEnable && !bMacro && !bNone );
 }
 
 IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, weld::Button&, void)

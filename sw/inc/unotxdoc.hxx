@@ -120,6 +120,7 @@ class SvXMLEmbeddedObjectHelper;
 class SwXFieldmark;
 class SwXSection;
 class SwXFieldMaster;
+class SwXDocumentIndex;
 class SvNumberFormatsSupplierObj;
 namespace com::sun::star::frame { class XController; }
 
@@ -499,6 +500,13 @@ public:
     /// @see vcl::ITiledRenderable::supportsCommand().
     bool supportsCommand(std::u16string_view rCommand) override;
 
+    /// @see vcl::ITiledRenderable::getEditMode().
+    int getEditMode() override;
+    /// @see vcl::ITiledRenderable::setEditMode().
+    void setEditMode(int nEditMode) override;
+    /// @see vcl::ITiledRenderable::getPartInfo().
+    OUString getPartInfo(int nPart) override;
+
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
@@ -522,6 +530,7 @@ public:
     rtl::Reference<SwXFieldMaster> createFieldMaster(std::u16string_view sServiceName);
     rtl::Reference<SwXTextField> createTextField(std::u16string_view sServiceName);
     rtl::Reference<SwXFieldmark> createFieldmark(std::u16string_view sServiceName);
+    rtl::Reference<SwXDocumentIndex> createDocumentIndex(std::u16string_view sServiceName);
     /// returns either SwXDocumentIndex or SwXTextSection
     rtl::Reference<SwXSection> createSection(std::u16string_view rObjectType);
     rtl::Reference<SwXDocumentSettings> createDocumentSettings();
@@ -546,6 +555,10 @@ public:
     rtl::Reference< SwXRedlines > getSwRedlines();
     rtl::Reference<SwXTextFieldTypes> getSwTextFields();
     rtl::Reference<SwXTextFrames> getSwTextFrames();
+    rtl::Reference<SwXTextSections> getSwTextSections();
+    rtl::Reference<SwXChapterNumbering> getSwChapterNumberingRules();
+    rtl::Reference< SwXLineNumberingProperties > getSwLineNumberingProperties();
+    rtl::Reference< SwXBookmarks > getSwBookmarks();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

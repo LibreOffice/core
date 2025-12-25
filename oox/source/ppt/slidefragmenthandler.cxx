@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <oox/drawingml/theme.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -57,10 +58,13 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
-    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"vmlDrawing" );
-    if( !aVMLDrawingFragmentPath.isEmpty() )
-        getFilter().importFragment( new oox::vml::DrawingFragment(
-            getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
+    OUString aVMLPath = getFragmentPathFromFirstTypeFromOfficeDoc(u"vmlDrawing");
+    if (aVMLPath.isEmpty())
+        aVMLPath = getFragmentPathFromFirstTypeFromOfficeDoc(u"legacyDrawing");
+
+    if (!aVMLPath.isEmpty())
+        getFilter().importFragment(
+            new oox::vml::DrawingFragment(getFilter(), aVMLPath, *pPersistPtr->getDrawing()));
 }
 
 SlideFragmentHandler::~SlideFragmentHandler()
@@ -182,7 +186,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
                 ? std::make_shared<FillProperties>( *pFillProperties )
                 : std::make_shared<FillProperties>();
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
-            ContextHandlerRef ret = new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() );
+            ContextHandlerRef ret = new ColorContext(*this, &mpSlidePersistPtr->getBackgroundColor());
             return ret;
         }
         break;

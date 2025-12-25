@@ -490,8 +490,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 
     AcceleratorCache::TKeyList lSecondaryKeys = impl_getCFG(false).getAllKeys(); //get keys from SecondaryKeys set
     lKeys.reserve(lKeys.size()+lSecondaryKeys.size());
-    for (auto const& secondaryKey : lSecondaryKeys)
-        lKeys.push_back(secondaryKey);
+    lKeys.insert(lKeys.end(), lSecondaryKeys.begin(), lSecondaryKeys.end());
 
     return comphelper::containerToSequence(lKeys);
 }
@@ -651,8 +650,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     AcceleratorCache::TKeyList lKeys  = rPrimaryCache.getKeysByCommand(sCommand);
 
     AcceleratorCache::TKeyList lSecondaryKeys = rSecondaryCache.getKeysByCommand(sCommand);
-    for (auto const& secondaryKey : lSecondaryKeys)
-        lKeys.push_back(secondaryKey);
+    lKeys.insert(lKeys.end(), lSecondaryKeys.begin(), lSecondaryKeys.end());
 
     return comphelper::containerToSequence(lKeys);
 }

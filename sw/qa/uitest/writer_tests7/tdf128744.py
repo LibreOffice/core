@@ -15,7 +15,7 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf128744(UITestCase):
 
-   def test_tdf128744(self):
+    def test_tdf128744(self):
         # load the sample file
         with self.ui_test.load_file(get_url_for_data_file("tdf128744.docx")):
 

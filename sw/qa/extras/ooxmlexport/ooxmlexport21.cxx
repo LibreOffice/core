@@ -37,7 +37,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -63,12 +63,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161631)
 
     createSwDoc("tdf161631.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 8
+    skipValidation();
+
     // test with 2 properties: font size, italic (toggle)
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
@@ -443,7 +446,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf43767_caseMapNumbering)
 
     createSwDoc("tdf43767_caseMapNumbering.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
@@ -462,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156105_percentSuffix)
 
     createSwDoc("tdf156105_percentSuffix.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
@@ -563,6 +566,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 317
+    skipValidation();
+
     // given an in-table, group-shape vertically aligned -1.35 cm (above) the top page margin
     // (which is actually forced to layoutInCell, so that turns into 1.35cm above the cell margin)
 
@@ -683,6 +689,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 11
+    skipValidation();
+
     // given a compat12 VML document with wrap-through blue rect that doesn't mention allowInCell
 
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
@@ -768,7 +777,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
 CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
 {
     // given a document with a comment and 5 replies
-    loadAndSave("tdf160814_commentOrder.docx");
+    createSwDoc("tdf160814_commentOrder.docx");
+    save(TestFilter::DOCX);
 
     // make sure the order of the comments is imported and exported correctly
     xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
@@ -785,7 +795,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     auto pBatch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
     pBatch->commit();
-    loadAndSave("personalmetadata.docx");
+    createSwDoc("personalmetadata.docx");
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template", 0);
@@ -801,7 +812,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     // 2. Remove personal information, keep user information
     officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
     pBatch->commit();
-    loadAndSave("personalmetadata.docx");
+    createSwDoc("personalmetadata.docx");
+    save(TestFilter::DOCX);
 
     pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template", 0);
@@ -820,10 +832,25 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169072_illegalDates)
+{
+    // Given a document that MS Word reports as corrupt
+    createSwDoc("tdf169072_illegalDates.docx");
+    save(TestFilter::DOCX);
+
+    // Date Years MUST be greater than 1600 and less than 10,000
+    // so by dropping invalid entries, we have a document that MS Word can now cleanly open
+    xmlDocUniquePtr pXmlCore = parseExport(u"docProps/core.xml"_ustr);
+    assertXPathContent(pXmlCore, "/cp:coreProperties/dcterms:created", u"9999-10-10T13:07:54Z");
+    assertXPathContent(pXmlCore, "/cp:coreProperties/dcterms:modified", u"1601-01-01T13:09:08Z");
+    assertXPath(pXmlCore, "/cp:coreProperties/cp:lastPrinted", 0); // was 1600-12-31T00:00:52Z
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
 {
     // 1. Check we have the original edit time info
-    loadAndSave("personalmetadata.docx");
+    createSwDoc("personalmetadata.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 1);
 
@@ -833,7 +860,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
     pBatch->commit();
 
     // 2. Check edit time info is removed
-    loadAndSave("personalmetadata.docx");
+    createSwDoc("personalmetadata.docx");
+    save(TestFilter::DOCX);
     pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
 
@@ -882,7 +910,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126533_pageBitmap)
 
     createSwDoc("tdf126533_pageBitmap.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
@@ -900,6 +928,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     //Unit test for bug fix in tdf#154369
     // Docx file contains ordered list formatted with Heading 1 style, font color set as Accent 1 from theme
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -921,7 +952,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testScreenTip)
 {
-    loadAndSave("tdf159897.docx");
+    createSwDoc("tdf159897.docx");
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
@@ -935,12 +967,14 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)
     // Before the fix, this failed an assertion like this:
     // Assertion failed: isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m),
     // file C:\lo\core\include\o3tl/unit_conversion.hxx, line 75
-    loadAndSave("cloud.docx");
+    createSwDoc("cloud.docx");
+    save(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf161509)
 {
-    loadAndReload("special_styles.docx");
+    createSwDoc("special_styles.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
 
@@ -1089,7 +1123,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
 {
     // This must not crash on save; without the fix, it would fail with
     // "Assertion failed: vector subscript out of range"
-    loadAndSave("too_many_styles.odt");
+    createSwDoc("too_many_styles.odt");
+    save(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128460)
@@ -1112,7 +1147,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128460)
     createSwDoc("tdf128460.odt");
     verify();
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // Without the fix in place, the third ASSERT fails with
     // Expected: text
     // Actual:
@@ -1131,7 +1166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
     xText->insertString(xCursor, u"test"_ustr, false);
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
@@ -1146,7 +1181,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
     xText->insertString(xCursor, u"more testing"_ustr, false);
 
     // Save again
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     xNameAccess = packages::zip::ZipFileAccess::createWithURL(
         comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -1163,20 +1198,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
 CPPUNIT_TEST_FIXTURE(Test, testTdf89731)
 {
     // Without the fix in place this crashes on opening
-    loadAndSave("tdf89731.docx");
+    createSwDoc("tdf89731.docx");
+    save(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf61309)
 {
     // Don't crash on import
-    loadAndSave("tdf61309.docx");
+    createSwDoc("tdf61309.docx");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
 {
     // Without the fix in place this hangs (and eventually OOMs) on opening
-    loadAndSave("tdf162746.docx");
+    createSwDoc("tdf162746.docx");
+    save(TestFilter::DOCX);
     // tdf#162781: test the page body table vertical offset and width
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Without the fix, this would be 0 - i.e., the page body table didn't shift down
@@ -1190,7 +1228,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
 CPPUNIT_TEST_FIXTURE(Test, testTdf61000)
 {
     // Without the fix in place this crashes on opening
-    loadAndSave("tdf61000.docx");
+    createSwDoc("tdf61000.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     assertXPath(pXmlDoc,
                 "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:numFmt",
@@ -1205,7 +1244,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf61000)
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
 {
-    loadAndSave("comment_with_children.odt");
+    createSwDoc("comment_with_children.odt");
+    save(TestFilter::DOCX);
     // commentsExtended should exist
     xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
     CPPUNIT_ASSERT(pXmlCommExt);
@@ -1236,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
     }
 
     // Test also after save-and-reload:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xModifiable = mxComponent.queryThrow<util::XModifiable>();
         CPPUNIT_ASSERT(!xModifiable->isModified());
@@ -1245,7 +1285,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf164065)
 {
-    loadAndSave("tdf164065.docx");
+    createSwDoc("tdf164065.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1272,8 +1317,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164474)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     }
 
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // Test also after save-and-reload:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     {
         auto xTextTablesSupplier(mxComponent.queryThrow<text::XTextTablesSupplier>());
         auto xTables(xTextTablesSupplier->getTextTables().queryThrow<container::XIndexAccess>());
@@ -1294,35 +1342,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf164176, "tdf164176.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPresentation.indexOf("_x000a_"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
-{
-    createSwDoc("UnderlineTrailingSpace.docx");
-    {
-        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xSettings(
-            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
-                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
-    }
-
-    // Test also after save-and-reload:
-    saveAndReload(u"Office Open XML Text"_ustr);
-    {
-        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xSettings(
-            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
-                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
-    }
-
-    // Check that the compat setting is exported in OOXML
-    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:ulTrailSpace");
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf165059_moveFromTo)
 {
-    loadAndSave("tdf165059_broken.docx");
+    createSwDoc("tdf165059_broken.docx");
+    save(TestFilter::DOCX);
     // Without the fix, exported contains w:move* outside of move ranges
     // Outside move range tags ins/del are valid
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");

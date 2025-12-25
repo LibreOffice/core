@@ -10,6 +10,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/basrdll.hxx>
+#include <comphelper/errcode.hxx>
 #include <cppunit/extensions/HelperMacros.h>
 
 namespace

@@ -18,7 +18,9 @@
  */
 
 #include <swpossizetabpage.hxx>
+#include <o3tl/untaint.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/svddef.hxx>
 #include <svx/sxcecitm.hxx>
@@ -248,14 +250,14 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     eUnit = pPool->GetMetric( nWhich );
     nLineLen = static_cast<const SdrCaptionLineLenItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_xMF_LENGTH, nLineLen, eUnit );
-    nLineLen = m_xMF_LENGTH->get_value(FieldUnit::NONE);
+    nLineLen = o3tl::sanitizing_cast<sal_Int32>(m_xMF_LENGTH->get_value(FieldUnit::NONE));
 
     //------- distance to box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
     nGap = static_cast<const SdrCaptionGapItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_xMF_SPACING, nGap, eUnit );
-    nGap = m_xMF_SPACING->get_value(FieldUnit::NONE);
+    nGap = o3tl::sanitizing_cast<sal_Int32>(m_xMF_SPACING->get_value(FieldUnit::NONE));
 
     nCaptionType = rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ).GetValue();
     bFitLineLen = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();

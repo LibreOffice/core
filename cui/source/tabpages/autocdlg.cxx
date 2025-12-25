@@ -26,6 +26,8 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -68,11 +70,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
 
     if ( _pSet )
     {
-        const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(_pSet, SID_AUTO_CORRECT_DLG, false);
+        const SfxBoolItem* pItem = _pSet->GetItem<SfxBoolItem>(SID_AUTO_CORRECT_DLG, false);
         if ( pItem && pItem->GetValue() )
             bShowSWOptions = true;
 
-        const SfxBoolItem* pItem2 = SfxItemSet::GetItem<SfxBoolItem>(_pSet, SID_OPEN_SMARTTAGOPTIONS, false);
+        const SfxBoolItem* pItem2 = _pSet->GetItem<SfxBoolItem>(SID_OPEN_SMARTTAGOPTIONS, false);
         if ( pItem2 && pItem2->GetValue() )
             bOpenSmartTagOptions = true;
     }
@@ -520,9 +522,12 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= pOpt->bCreateTable != bCheck;
     pOpt->bCreateTable = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_SECOND) == TRISTATE_TRUE;
+    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bReplaceStyles != bCheck;
     pOpt->bReplaceStyles = bCheck;
+    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_SECOND) == TRISTATE_TRUE;
+    bModified |= pOpt->bReplaceStylesByInput != bCheck;
+    pOpt->bReplaceStylesByInput = bCheck;
 
     bCheck = m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bChgToEnEmDash != bCheck;
@@ -595,7 +600,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     CreateEntry(sBulletsAfterSpace,  CBCOL_SECOND);
     CreateEntry(sBorder,            CBCOL_SECOND);
     CreateEntry(sTable,             CBCOL_SECOND);
-    CreateEntry(sReplaceTemplates,  CBCOL_SECOND);
+    CreateEntry(sReplaceTemplates,  CBCOL_BOTH);
     CreateEntry(sDeleteEmptyPara,   CBCOL_FIRST );
     CreateEntry(sUserStyle,         CBCOL_FIRST );
     CreateEntry(sBullet.replaceFirst("%1", sByInputBulletChar), CBCOL_FIRST);
@@ -625,7 +630,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_xCheckLB->set_toggle(APPLY_NUMBERING_AFTER_SPACE, pOpt->bSetNumRuleAfterSpace ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(INSERT_BORDER, pOpt->bSetBorder ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(CREATE_TABLE, pOpt->bCreateTable ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStylesByInput ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(DEL_EMPTY_NODE, pOpt->bDelEmptyNode ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_toggle(REPLACE_USER_COLL, pOpt->bChgUserColl ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_toggle(REPLACE_BULLETS, pOpt->bChgEnumNum ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
@@ -1122,8 +1128,10 @@ bool OfaAutocorrReplacePage::NewDelHdl(const weld::Widget* pBtn)
 
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
 {
-    std::unique_ptr<weld::TreeIter> xFirstSel(m_xReplaceTLB->make_iterator());
-    bool bFirstSelIterSet = m_xReplaceTLB->get_selected(xFirstSel.get());
+    std::unique_ptr<weld::TreeIter> xFirstSel = m_xReplaceTLB->get_selected();
+    bool bFirstSelIterSet = bool(xFirstSel);
+    if (!xFirstSel)
+        xFirstSel = m_xReplaceTLB->make_iterator();
     bool bShort = &rEdt == m_xShortED.get();
     const OUString rEntry = rEdt.get_text();
     const OUString rRepString = m_xReplaceED->get_text();
@@ -1166,7 +1174,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
             });
             if( !bFound )
             {
-                m_xReplaceTLB->select(-1);
+                m_xReplaceTLB->unselect_all();
                 bFirstSelIterSet = false;
                 m_xNewReplacePB->set_label(sNew);
                 if( bReplaceEditChanged )

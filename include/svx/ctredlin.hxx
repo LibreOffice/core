@@ -27,7 +27,9 @@
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
 #include <tools/time.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 
 namespace utl {
@@ -78,25 +80,25 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable
 {
 private:
-    std::unique_ptr<comphelper::string::NaturalStringSorter> xSorter;
-    std::unique_ptr<weld::TreeView> xWriterTreeView;
-    std::unique_ptr<weld::TreeView> xCalcTreeView;
-    weld::TreeView* pTreeView;
+    std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
+    std::unique_ptr<weld::TreeView> m_xWriterTreeView;
+    std::unique_ptr<weld::TreeView> m_xCalcTreeView;
+    weld::TreeView* m_pTreeView;
 
     weld::ComboBox* m_pSortByComboBox;
 
-    sal_uInt16      nDatePos;
-    bool            bAuthor;
-    bool            bDate;
-    bool            bComment;
-    bool            bSorted;
-    SvxRedlinDateMode nDaTiMode;
-    DateTime        aDaTiFirst;
-    DateTime        aDaTiLast;
-    DateTime        aDaTiFilterFirst;
-    DateTime        aDaTiFilterLast;
-    OUString        aAuthor;
-    std::unique_ptr<utl::TextSearch> pCommentSearcher;
+    sal_uInt16      m_nDatePos;
+    bool            m_bAuthor;
+    bool            m_bDate;
+    bool            m_bComment;
+    bool            m_bSorted;
+    SvxRedlinDateMode m_nDaTiMode;
+    DateTime        m_aDaTiFirst;
+    DateTime        m_aDaTiLast;
+    DateTime        m_aDaTiFilterFirst;
+    DateTime        m_aDaTiFilterLast;
+    OUString        m_aAuthor;
+    std::unique_ptr<utl::TextSearch> m_pCommentSearcher;
 
     int ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter& rRight);
 
@@ -105,8 +107,8 @@ public:
                    std::unique_ptr<weld::TreeView> xCalcControl,
                    weld::ComboBox* pSortByControl);
 
-    weld::TreeView& GetWidget() { return *pTreeView; }
-    bool IsSorted() const { return bSorted; }
+    weld::TreeView& GetWidget() { return *m_pTreeView; }
+    bool IsSorted() const { return m_bSorted; }
 
     ~SvxRedlinTable();
 
@@ -155,10 +157,10 @@ namespace weld
 /// Tabpage with the filter text entries etc.
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
 {
-    Link<SvxTPFilter*,void>  aReadyLink;
-    Link<SvxTPFilter*,void>  aRefLink;
+    Link<SvxTPFilter*,void>  m_aReadyLink;
+    Link<SvxTPFilter*,void>  m_aRefLink;
 
-    bool                   bModified;
+    bool                   m_bModified;
 
     SvxRedlinTable* m_pRedlinTable;
     std::unique_ptr<weld::CheckButton> m_xCbDate;
@@ -245,11 +247,11 @@ public:
 
     weld::ComboBox* GetLbAction() { return m_xLbAction.get(); }
 
-    void            SetReadyHdl( const Link<SvxTPFilter*,void>& rLink ) { aReadyLink= rLink; }
+    void            SetReadyHdl( const Link<SvxTPFilter*,void>& rLink ) { m_aReadyLink= rLink; }
 
 
     // Methods for Calc {
-    void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { aRefLink = rLink; }
+    void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { m_aRefLink = rLink; }
 
     void            Enable( bool bEnable = true );
     // } Methods for Calc
@@ -259,22 +261,22 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView final : public SvxTPage
 {
 private:
-    Link<SvxTPView*,void>          AcceptClickLk;
-    Link<SvxTPView*,void>          AcceptAllClickLk;
-    Link<SvxTPView*,void>          RejectClickLk;
-    Link<SvxTPView*,void>          RejectAllClickLk;
-    Link<SvxTPView*,void>          UndoClickLk;
+    Link<SvxTPView*,void>          m_AcceptClickLk;
+    Link<SvxTPView*,void>          m_AcceptAllClickLk;
+    Link<SvxTPView*,void>          m_RejectClickLk;
+    Link<SvxTPView*,void>          m_RejectAllClickLk;
+    Link<SvxTPView*,void>          m_UndoClickLk;
 
-    Link<SvxTPView*,void> SortByComboBoxChangedLk;
+    Link<SvxTPView*,void> m_SortByComboBoxChangedLk;
 
-    bool bEnableAccept;
-    bool bEnableAcceptAll;
-    bool bEnableReject;
-    bool bEnableRejectAll;
-    bool bEnableUndo;
+    bool m_bEnableAccept;
+    bool m_bEnableAcceptAll;
+    bool m_bEnableReject;
+    bool m_bEnableRejectAll;
+    bool m_bEnableUndo;
 
-    bool bEnableClearFormat;
-    bool bEnableClearFormatAll;
+    bool m_bEnableClearFormat;
+    bool m_bEnableClearFormatAll;
 
     std::unique_ptr<weld::Button> m_xAccept;
     std::unique_ptr<weld::Button> m_xReject;
@@ -305,19 +307,19 @@ public:
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo();
 
-    void            SetAcceptClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptClickLk = rLink; }
+    void            SetAcceptClickHdl( const Link<SvxTPView*,void>& rLink ) { m_AcceptClickLk = rLink; }
 
-    void            SetAcceptAllClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptAllClickLk = rLink; }
+    void            SetAcceptAllClickHdl( const Link<SvxTPView*,void>& rLink ) { m_AcceptAllClickLk = rLink; }
 
-    void            SetRejectClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectClickLk = rLink; }
+    void            SetRejectClickHdl( const Link<SvxTPView*,void>& rLink ) { m_RejectClickLk = rLink; }
 
-    void            SetRejectAllClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectAllClickLk = rLink; }
+    void            SetRejectAllClickHdl( const Link<SvxTPView*,void>& rLink ) { m_RejectAllClickLk = rLink; }
 
-    void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { UndoClickLk = rLink; }
+    void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { m_UndoClickLk = rLink; }
 
     void SetSortByComboBoxChangedHdl(const Link<SvxTPView*, void>& rLink)
     {
-        SortByComboBoxChangedLk = rLink;
+        m_SortByComboBoxChangedLk = rLink;
     }
 
     virtual void    ActivatePage() override;

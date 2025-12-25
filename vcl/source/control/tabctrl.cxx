@@ -19,9 +19,11 @@
 
 #include <sal/config.h>
 
+#include <vcl/builder.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
@@ -1127,23 +1129,24 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         const bool bPaneWithHeader = mbShowTabs && rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::TabPaneWithHeader);
         tools::Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
 
-        if (!mpTabCtrlData->maItemList.empty())
-        {
-            tools::Long nLeft = LONG_MAX;
-            tools::Long nRight = 0;
-            for (const auto &item : mpTabCtrlData->maItemList)
-            {
-                if (!item.m_bVisible)
-                    continue;
-                nRight = std::max(nRight, item.maRect.Right());
-                nLeft = std::min(nLeft, item.maRect.Left());
-            }
-            aHeaderRect.SetLeft(nLeft);
-            aHeaderRect.SetRight(nRight);
-        }
-
         if (bPaneWithHeader)
+        {
             aRect.SetTop(0);
+            if (!mpTabCtrlData->maItemList.empty())
+            {
+                tools::Long nLeft = LONG_MAX;
+                tools::Long nRight = 0;
+                for (const auto &item : mpTabCtrlData->maItemList)
+                {
+                    if (!item.m_bVisible)
+                        continue;
+                    nRight = std::max(nRight, item.maRect.Right());
+                    nLeft = std::min(nLeft, item.maRect.Left());
+                }
+                aHeaderRect.SetLeft(nLeft);
+                aHeaderRect.SetRight(nRight);
+            }
+        }
 
         const TabPaneValue aTabPaneValue(aHeaderRect, pCurItem ? pCurItem->maRect : tools::Rectangle());
 

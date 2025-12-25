@@ -28,9 +28,10 @@
 #include <indexfieldscontrol.hxx>
 #include <indexcollection.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <osl/diagnose.h>
 
 namespace dbaui
@@ -275,9 +276,9 @@ namespace dbaui
 
     void DbaIndexDialog::OnDropIndex(bool _bConfirm)
     {
-        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
+        std::unique_ptr<weld::TreeIter> xSelected = m_xIndexList->get_selected();
         // the selected index
-        if (!m_xIndexList->get_selected(xSelected.get()))
+        if (!xSelected)
             return;
 
         // let the user confirm the drop
@@ -351,8 +352,8 @@ namespace dbaui
     void DbaIndexDialog::OnRenameIndex()
     {
         // the selected iterator
-        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
-        if (!m_xIndexList->get_selected(xSelected.get()))
+        std::unique_ptr<weld::TreeIter> xSelected = m_xIndexList->get_selected();
+        if (!xSelected)
             return;
 
         // save the changes made 'til here
@@ -375,10 +376,7 @@ namespace dbaui
     void DbaIndexDialog::OnResetIndex()
     {
         // the selected index
-        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
-        // the selected index
-        if (!m_xIndexList->get_selected(xSelected.get()))
-            xSelected.reset();
+        std::unique_ptr<weld::TreeIter> xSelected = m_xIndexList->get_selected();
         OSL_ENSURE(xSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
         if (!xSelected)
             return;
@@ -437,11 +435,7 @@ namespace dbaui
         }
 
         // the currently selected entry
-        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
-        // the selected index
-        if (!m_xIndexList->get_selected(xSelected.get()))
-            xSelected.reset();
-
+        std::unique_ptr<weld::TreeIter> xSelected = m_xIndexList->get_selected();
         OSL_ENSURE(xSelected && m_xPreviousSelection && xSelected->equal(*m_xPreviousSelection), "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
         sal_Int32 nResponse = RET_NO;
@@ -663,9 +657,7 @@ namespace dbaui
         if (m_bEditingActive)
             m_xIndexList->end_editing();
 
-        std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
-        if (!m_xIndexList->get_selected(xSelected.get()))
-            xSelected.reset();
+        std::unique_ptr<weld::TreeIter> xSelected = m_xIndexList->get_selected();
 
         // commit the old data
         if (m_xPreviousSelection && (!xSelected || !m_xPreviousSelection->equal(*xSelected)))

@@ -2460,8 +2460,8 @@ void ScInterpreter::ScCell()
             sal_Unicode c = 0;
             if (aCell.hasString())
             {
-                const SvxHorJustifyItem* pJustAttr = mrDoc.GetAttr( aCellPos, ATTR_HOR_JUSTIFY );
-                switch( pJustAttr->GetValue() )
+                const SvxHorJustifyItem& rJustAttr = mrDoc.GetAttr( aCellPos, ATTR_HOR_JUSTIFY );
+                switch( rJustAttr.GetValue() )
                 {
                     case SvxCellHorJustify::Standard:
                     case SvxCellHorJustify::Left:
@@ -2475,8 +2475,8 @@ void ScInterpreter::ScCell()
         }
         else if( aInfoType == "PROTECT" )
         {   // 1 = cell locked
-            const ScProtectionAttr* pProtAttr = mrDoc.GetAttr( aCellPos, ATTR_PROTECTION );
-            PushInt( pProtAttr->GetProtection() ? 1 : 0 );
+            const ScProtectionAttr& rProtAttr = mrDoc.GetAttr( aCellPos, ATTR_PROTECTION );
+            PushInt( rProtAttr.GetProtection() ? 1 : 0 );
         }
 
 // *** FORMATTING ***

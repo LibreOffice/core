@@ -37,6 +37,7 @@ public:
 private:
     TextBody&           mrTextBody;
     ShapePtr            mpShapePtr;
+    uint16_t            mListNumberingMask;
 };
 
 // CT_RegularTextRun

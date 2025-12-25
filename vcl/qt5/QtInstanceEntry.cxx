@@ -186,7 +186,16 @@ void QtInstanceEntry::copy_clipboard() { assert(false && "Not implemented yet");
 
 void QtInstanceEntry::paste_clipboard() { assert(false && "Not implemented yet"); }
 
-void QtInstanceEntry::set_alignment(TxtAlign) { assert(false && "Not implemented yet"); }
+void QtInstanceEntry::set_alignment(TxtAlign eXAlign)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const Qt::Alignment eAlign
+            = (m_pLineEdit->alignment() & Qt::AlignVertical_Mask) | toQtAlignment(eXAlign);
+        m_pLineEdit->setAlignment(eAlign);
+    });
+}
 
 void QtInstanceEntry::handleTextChanged()
 {

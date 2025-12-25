@@ -268,11 +268,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testWrapAndShrinkXLSXML)
 
     for (const auto& rC : aChecks)
     {
-        const ScLineBreakCell* pLB = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_LINEBREAK);
-        CPPUNIT_ASSERT_EQUAL(pLB->GetValue(), rC.bWrapText);
+        const ScLineBreakCell& rLB = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_LINEBREAK);
+        CPPUNIT_ASSERT_EQUAL(rLB.GetValue(), rC.bWrapText);
 
-        const ScShrinkToFitCell* pSTF = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_SHRINKTOFIT);
-        CPPUNIT_ASSERT_EQUAL(pSTF->GetValue(), rC.bShrinkToFit);
+        const ScShrinkToFitCell& rSTF = pDoc->GetAttr(rC.nCol, rC.nRow, 0, ATTR_SHRINKTOFIT);
+        CPPUNIT_ASSERT_EQUAL(rSTF.GetValue(), rC.bShrinkToFit);
     }
 }
 
@@ -550,6 +550,31 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testActiveXCheckboxXLSX)
 
     // Check state of the checkbox
     sal_Int16 nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
+
+    saveAndReload(TestFilter::XLSX);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, UNO_QUERY_THROW);
+    xIA_DrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(0), UNO_QUERY_THROW);
+    xControlShape.set(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
+
+    sal_Int16 nStyle;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nStyle;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nStyle); // 3d
+
+    nColor = COL_TRANSPARENT;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
+    // without the fix, this was COL_WHITE
+    CPPUNIT_ASSERT_EQUAL(Color(0x316ac5), nColor);
+
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
+    //CPPUNIT_ASSERT_EQUAL(Color(0xD4D0C8), nColor);
+
     xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 }
@@ -1693,7 +1718,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf98657)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/tdf88821.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1704,7 +1729,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821_2)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/tdf88821-2.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1716,7 +1741,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821_2)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf103960)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/tdf103960.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1903,10 +1928,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
         const basegfx::BColorStops& rColorStops(rGradientItem.GetGradientValue().GetColorStops());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, rColorStops[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, rColorStops.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops.getStopColor(1)));
 
         SdrCaptionObj* const pCaptionH9 = checkCaption(*pDoc, ScAddress(7, 8, 0), false);
 
@@ -1917,10 +1942,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
         const basegfx::BColorStops& rColorStops2(rGradientItem2.GetGradientValue().GetColorStops());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops2.size());
-        CPPUNIT_ASSERT_EQUAL(0.0, rColorStops2[0].getStopOffset());
-        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops2[0].getStopColor()));
-        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops2[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(0.0, rColorStops2.getStopOffset(0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops2.getStopColor(0)));
+        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2.getStopOffset(1), 1.0));
+        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops2.getStopColor(1)));
     }
 
     {
@@ -1994,6 +2019,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf82984_zip64XLSXImport)
 {
     // Without the fix in place, it would have crashed at import time
     createScDoc("xlsx/tdf82984_zip64XLSXImport.xlsx");
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf168979_colorPercentileScales)
+{
+    // Without the fix in place, it would have crashed at import time
+    createScDoc("ods/tdf168979.ods");
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf108188_pagestyle)

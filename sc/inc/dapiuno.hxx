@@ -126,6 +126,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
+class ScDataPilotFieldsObj;
+
 //  ScDataPilotDescriptorBase is never instantiated directly
 class SAL_DLLPUBLIC_RTTI ScDataPilotDescriptorBase : public cppu::WeakImplHelper<
                                     css::sheet::XDataPilotDescriptor,
@@ -191,6 +193,9 @@ public:
                             SAL_CALL getDataLayoutField() override;
 
                             // XServiceInfo is in derived classes
+
+    SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldsObj> getScDataPilotFields();
+    SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj> getScDataLayoutField();
 };
 
 class ScDataPilotDescriptor final : public ScDataPilotDescriptorBase
@@ -364,6 +369,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+    SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj> getScDataPilotFieldObjByIndex( sal_Int32 nIndex );
+    SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj> getScDataPilotFieldObjByName( const OUString& aName );
+
 private:
     rtl::Reference<ScDataPilotFieldObj> GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
     rtl::Reference<ScDataPilotFieldObj> GetObjectByName_Impl( const OUString& rName ) const;
@@ -383,7 +391,7 @@ typedef ::cppu::WeakImplHelper
 ScDataPilotFieldObjImpl;
 
 /** Implementation of a single DataPilot field. */
-class ScDataPilotFieldObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
+class SAL_DLLPUBLIC_RTTI ScDataPilotFieldObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldObjImpl
 {
 public:
                         ScDataPilotFieldObj(
@@ -398,7 +406,7 @@ public:
     virtual             ~ScDataPilotFieldObj() override;
 
                             // XNamed
-    virtual OUString SAL_CALL getName() override;
+    SC_DLLPUBLIC virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL   setName(const OUString& aName) override;
 
                             // XPropertySet
@@ -456,6 +464,11 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    SC_DLLPUBLIC rtl::Reference< ScDataPilotFieldObj >
+        createNameGroup(const std::vector< OUString >& aItems);
+    SC_DLLPUBLIC rtl::Reference< ScDataPilotFieldObj >
+        createScDateGroup(const css::sheet::DataPilotFieldGroupInfo& rInfo);
 
 private:
     css::uno::Reference< css::container::XIndexAccess >

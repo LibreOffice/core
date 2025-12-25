@@ -173,7 +173,7 @@ SwTwips SwAnchoredObject::GetRelCharY( const SwFrame* pFrame ) const
 
 void SwAnchoredObject::AddLastCharY( tools::Long nDiff )
 {
-    maLastCharRect.Pos().AdjustY(nDiff );
+    maLastCharRect.SetPosY(maLastCharRect.Pos().Y() + nDiff);
 }
 
 void SwAnchoredObject::ResetLastCharRectHeight()
@@ -263,7 +263,7 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
 
     // check positioning and alignment for invalidation of position
     {
-        SwRectFnSet aRectFnSet(&_rAnchorCharFrame);
+        SwRectFnSet aRectFnSet(_rAnchorCharFrame);
         // determine positioning and alignment
         const SwFrameFormat* pObjFormat = GetFrameFormat();
         SwFormatVertOrient aVert( pObjFormat->GetVertOrient() );

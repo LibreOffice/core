@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
 #include "helper/qahelper.hxx"
 
 #include <formulacell.hxx>
@@ -45,8 +46,8 @@ public:
     }
 
 protected:
-    void testCeilingFloor(const OUString& sFormatType);
-    void testFunctionsExcel2010(const OUString& sFormatType);
+    void testCeilingFloor(TestFilter eFormatType);
+    void testFunctionsExcel2010(TestFilter eFormatType);
 };
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testBordersExchangeXLSX)
@@ -221,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testBordersExchangeXLSX)
 
     createScDoc("ods/test_borders_export.ods");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     ScDocument* pDoc = getScDoc();
 
     for (size_t nCol = 0; nCol < nMaxCol; ++nCol)
@@ -342,9 +343,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                 return false;
             }
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            for (const auto& rCheck : aChecks)
             {
-                sal_uInt16 nActId = aChecks[i].mnActionId;
+                sal_uInt16 nActId = rCheck.mnActionId;
                 const ScChangeAction* pAction = pCT->GetAction(nActId);
                 if (!pAction)
                 {
@@ -352,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                     return false;
                 }
 
-                if (pAction->GetType() != aChecks[i].meType)
+                if (pAction->GetType() != rCheck.meType)
                 {
                     std::cerr << "Unexpected action type for action number " << nActId << "."
                               << std::endl;
@@ -360,9 +361,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                 }
 
                 const ScBigRange& rRange = pAction->GetBigRange();
-                ScBigRange aCheck(aChecks[i].mnStartCol, aChecks[i].mnStartRow,
-                                  aChecks[i].mnStartTab, aChecks[i].mnEndCol, aChecks[i].mnEndRow,
-                                  aChecks[i].mnEndTab);
+                ScBigRange aCheck(rCheck.mnStartCol, rCheck.mnStartRow, rCheck.mnStartTab,
+                                  rCheck.mnEndCol, rCheck.mnEndRow, rCheck.mnEndTab);
 
                 if (!checkRange(pAction->GetType(), aCheck, rRange))
                 {
@@ -377,7 +377,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                     case SC_CAT_INSERT_ROWS:
                     {
                         const ScChangeActionIns* p = static_cast<const ScChangeActionIns*>(pAction);
-                        if (p->IsEndOfList() != aChecks[i].mbRowInsertedAtBottom)
+                        if (p->IsEndOfList() != rCheck.mbRowInsertedAtBottom)
                         {
                             std::cerr << "Unexpected end-of-list flag for action number " << nActId
                                       << "." << std::endl;
@@ -460,7 +460,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
     bool bGood = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed (xls).", bGood);
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
     pDoc = getScDoc();
     bGood = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xls).", bGood);
@@ -484,7 +484,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
     aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed (xlsx).", bGood);
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
     bGood = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xlsx).", bGood);
@@ -509,7 +509,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
             }
 
             const char* pNames[] = { "Green", "Red", "Blue", "Yellow" };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); ++i)
+            for (size_t i = 0; i < std::size(pNames); ++i)
             {
                 OUString aExpected = OUString::createFromAscii(pNames[i]);
                 if (aExpected != aTabNames[i])
@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
                 0x00FFFF00, // yellow
             };
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aXclColors); ++i)
+            for (size_t i = 0; i < std::size(aXclColors); ++i)
             {
                 if (aXclColors[i] != rDoc.GetTabBgColor(i))
                 {
@@ -548,7 +548,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
         CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bRes);
     }
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     ScDocument* pDoc = getScDoc();
     bool bRes = aTest.checkContent(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Failed on the content check after reload.", bRes);
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf133487)
 {
     createScDoc("fods/shapes_foreground_background.fods");
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -704,7 +704,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
         CPPUNIT_ASSERT_MESSAGE("Content check on the original document failed.", bRes);
     }
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
 
     // Check the content of the reloaded. This should be identical.
     ScDocument* pDoc = getScDoc();
@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
     }
 
     // Save and reload, and check the content again.
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
     pDoc->CalcAll(); // Recalculate to flush all cached results.
@@ -865,7 +865,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaStringResultExportXLSX)
         CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
     }
     // Reload and check again.
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     ScDocument* pDoc = getScDoc();
 
     bool bRes = aTest.checkContent(*pDoc);
@@ -952,7 +952,7 @@ void testCeilingFloor_Impl(ScDocument& rDoc)
 }
 }
 
-void ScExportTest3::testFunctionsExcel2010(const OUString& sFormatType)
+void ScExportTest3::testFunctionsExcel2010(TestFilter eFormatType)
 {
     createScDoc("xlsx/functions-excel-2010.xlsx");
 
@@ -961,7 +961,7 @@ void ScExportTest3::testFunctionsExcel2010(const OUString& sFormatType)
 
     testFunctionsExcel2010_Impl(*pDoc);
 
-    saveAndReload(sFormatType);
+    saveAndReload(eFormatType);
     pDoc = getScDoc();
     pDoc->CalcAll(); // perform hard re-calculation.
 
@@ -970,17 +970,20 @@ void ScExportTest3::testFunctionsExcel2010(const OUString& sFormatType)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010XLSX)
 {
-    testFunctionsExcel2010(u"Calc Office Open XML"_ustr);
+    testFunctionsExcel2010(TestFilter::XLSX);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010XLS)
 {
-    testFunctionsExcel2010(u"MS Excel 97"_ustr);
+    testFunctionsExcel2010(TestFilter::XLS);
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010ODS) { testFunctionsExcel2010("calc8"); }
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testFunctionsExcel2010ODS)
+{
+    testFunctionsExcel2010(TestFilter::ODS);
+}
 
-void ScExportTest3::testCeilingFloor(const OUString& sFormatType)
+void ScExportTest3::testCeilingFloor(TestFilter eFormatType)
 {
     createScDoc("xlsx/ceiling-floor.xlsx");
 
@@ -989,28 +992,25 @@ void ScExportTest3::testCeilingFloor(const OUString& sFormatType)
 
     testCeilingFloor_Impl(*pDoc);
 
-    saveAndReload(sFormatType);
+    saveAndReload(eFormatType);
     pDoc = getScDoc();
     pDoc->CalcAll(); // perform hard re-calculation.
 
     testCeilingFloor_Impl(*pDoc);
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorXLSX)
-{
-    testCeilingFloor(u"Calc Office Open XML"_ustr);
-}
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorXLSX) { testCeilingFloor(TestFilter::XLSX); }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorXLS) { testCeilingFloor(u"MS Excel 97"_ustr); }
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorXLS) { testCeilingFloor(TestFilter::XLS); }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorODS) { testCeilingFloor(u"calc8"_ustr); }
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorODS) { testCeilingFloor(TestFilter::ODS); }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testCeilingFloorODSToXLSX)
 {
     // tdf#100011 - Cannot open sheet containing FLOOR/CEILING functions by MS Excel, after export to .xlsx
     createScDoc("ods/ceiling-floor.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/workbook.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
     // Load document and export it to a temporary file
     createScDoc("xlsx/customxml.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"customXml/item1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     xmlDocUniquePtr pRelsDoc = parseExport(u"customXml/_rels/item1.xml.rels"_ustr);
@@ -1040,7 +1040,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
 
     // tdf#161453: ensure E1's wrap text attribute was round-tripped
     ScDocument* pDoc = getScDoc();
-    CPPUNIT_ASSERT(pDoc->GetAttr(4, 0, 0, ATTR_LINEBREAK)->GetValue());
+    CPPUNIT_ASSERT(pDoc->GetAttr(4, 0, 0, ATTR_LINEBREAK).GetValue());
 }
 
 #ifdef _WIN32
@@ -1058,7 +1058,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testRelativePathsODS)
 {
     createScDoc("ods/fdo79305.ods");
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
@@ -1103,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetProtectionODS)
 
     testSheetProtection_Impl(*pDoc);
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pDoc = getScDoc();
 
@@ -1112,8 +1112,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetProtectionODS)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport)
 {
-    std::vector<OUString> aFilterNames{ u"calc8"_ustr, u"MS Excel 97"_ustr,
-                                        u"Calc Office Open XML"_ustr };
+    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
 
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {
@@ -1121,7 +1120,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport)
         createScDoc("ods/document_with_two_images.ods");
 
         const OString sFailedMessage
-            = OString::Concat("Failed on filter: ") + aFilterNames[i].toUtf8();
+            = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
 
         // Export the document and import again for a check
         saveAndReload(aFilterNames[i]);
@@ -1178,7 +1177,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSupBookVirtualPathXLS)
 {
     createScDoc("xls/external-ref.xls");
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -1195,15 +1194,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSupBookVirtualPathXLS)
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT)
 {
     // Problem was with linked images
-    std::vector<OUString> aFilterNames{ u"calc8"_ustr, u"MS Excel 97"_ustr,
-                                        u"Calc Office Open XML"_ustr };
+    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
 
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {
         // Load the original file with one image
         createScDoc("ods/document_with_linked_graphic.ods");
         const OString sFailedMessage
-            = OString::Concat("Failed on filter: ") + aFilterNames[i].toUtf8();
+            = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
 
         // Export the document and import again for a check
         saveAndReload(aFilterNames[i]);
@@ -1216,7 +1214,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT)
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage != nullptr);
         SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject != nullptr);
-        if (aFilterNames[i] == "Calc Office Open XML")
+        if (aFilterNames[i] == TestFilter::XLSX)
         {
             // FIXME: tdf#152036
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !pObject->IsLinkedGraphic());
@@ -1234,15 +1232,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID)
 {
-    std::vector<OUString> aFilterNames{ u"calc8"_ustr, u"MS Excel 97"_ustr,
-                                        u"Calc Office Open XML"_ustr };
+    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
 
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {
         createScDoc("ods/images_with_special_IDs.ods");
 
         const OString sFailedMessage
-            = OString::Concat("Failed on filter: ") + aFilterNames[i].toUtf8();
+            = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
 
         // Export the document and import again for a check
         saveAndReload(aFilterNames[i]);
@@ -1297,14 +1294,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testAbsNamedRangeHTML)
 {
-    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
+    setImportFilterName(TestFilter::HTML_CALC_WEBQUERY);
     createScDoc("html/numberformat.html");
     ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
 
     //reset import filter
-    setImportFilterName(u"calc8"_ustr);
-    saveAndReload(u"calc8"_ustr);
+    setImportFilterName(TestFilter::ODS);
+    saveAndReload(TestFilter::ODS);
     pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
 
@@ -1320,7 +1317,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf80149)
     createScDoc("csv/tdf80149.csv");
     ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
 
@@ -1346,7 +1343,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetLocalRangeNameXLS)
     createScDoc("xls/named-ranges-local.xls");
     ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
     pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
 
@@ -1368,7 +1365,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testRelativeNamedExpressionsXLS)
     createScDoc("ods/tdf113991_relativeNamedRanges.ods");
     ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
     pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
 
@@ -1398,7 +1395,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTextBoxHyperlinkXLSX)
 {
     createScDoc("xlsx/textbox-hyperlink.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1412,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testFontSizeXLSX)
 {
     createScDoc("xlsx/fontSize.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     OUString fontSize = getXPath(
@@ -1425,9 +1422,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCharacterKerningSpaceXLSX)
 {
     createScDoc("xlsx/textbox-CharKerningSpace.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1443,7 +1440,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCondensedCharacterSpaceXLSX)
 {
     createScDoc("xlsx/textbox-CondensedCharacterSpace.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1459,7 +1456,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTextUnderlineColorXLSX)
 {
     createScDoc("xlsx/underlineColor.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     // Make sure the underline type is double line
@@ -1491,7 +1488,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetRunParagraphPropertyXLSX)
 {
     createScDoc("xlsx/TextColor.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/sharedStrings.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1503,7 +1500,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespaceXLSX)
 {
     createScDoc("xlsx/preserve-whitespace.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/sharedStrings.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si/x:t", "space", u"preserve");
@@ -1513,7 +1510,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespace2XLSX)
 {
     createScDoc("xlsx/preserve_space.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/sharedStrings.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si[1]/x:t", "space", u"preserve");
@@ -1522,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespace2XLSX)
     // tdf#158460: ensure B1 is NOT set to wrap text, so Excel keeps displaying as single line
     SCTAB nTab = 0;
     SCROW nRow = 0;
-    CPPUNIT_ASSERT(!getScDoc()->GetAttr(1, nRow, nTab, ATTR_LINEBREAK)->GetValue());
+    CPPUNIT_ASSERT(!getScDoc()->GetAttr(1, nRow, nTab, ATTR_LINEBREAK).GetValue());
     // Without the fix, this wrapped to two lines high (841). It should be 1 line high (529).
     int nHeight = convertTwipToMm100(getScDoc()->GetRowHeight(nRow, nTab, false));
     CPPUNIT_ASSERT_LESS(600, nHeight);
@@ -1557,7 +1554,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testHiddenShapeXLSX)
     CPPUNIT_ASSERT_MESSAGE("Drawing object should not be visible.", !pObj->IsVisible());
     CPPUNIT_ASSERT_MESSAGE("Drawing object should not be printable.", !pObj->IsPrintable());
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDocXml = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
     assertXPath(pDocXml, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden",
@@ -1568,7 +1565,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testShapeAutofitXLSX)
 {
     createScDoc("xlsx/testShapeAutofit.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1582,7 +1579,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testHyperlinkXLSX)
 {
     createScDoc("xlsx/hyperlink.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/_rels/drawing1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target", u"#Sheet2!A1");
@@ -1656,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     aNDataEnd = pNData->maEnd;
 
     // Save the document and load again to check anchor persist
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // There are two cell-anchored objects on the first sheet.
     pDoc = getScDoc();
@@ -1721,7 +1718,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testMoveCellAnchoredShapesODS)
     aNDataEnd = pNData->maEnd;
 
     // Save the document and load again to check anchor persist
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // There are two cell-anchored objects on the first sheet.
     pDoc = getScDoc();
@@ -1805,7 +1802,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLegacyCellAnchoredRotatedShape)
         // test save and reload
         // for some reason having this test in subsequent_export-test.cxx causes
         // a core dump in editeng ( so moved to here )
-        saveAndReload(u"calc8"_ustr);
+        saveAndReload(TestFilter::ODS);
         pDoc = getScDoc();
         impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
     }
@@ -1830,7 +1827,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLegacyCellAnchoredRotatedShape)
         pDoc->SetDrawPageSize(0); // trigger recalcpos
         impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
         // test save and reload
-        saveAndReload(u"calc8"_ustr);
+        saveAndReload(TestFilter::ODS);
         pDoc = getScDoc();
         impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
     }
@@ -1852,7 +1849,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testLegacyCellAnchoredRotatedShape)
         // test import
         impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
         // test save and reload
-        saveAndReload(u"calc8"_ustr);
+        saveAndReload(TestFilter::ODS);
         pDoc = getScDoc();
         impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
     }
@@ -1862,7 +1859,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf113646)
 {
     createScDoc("ods/tdf113646.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -1874,7 +1871,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testDateStandardfilterXLSX)
     // XLSX Roundtripping standard filter with date
     createScDoc("ods/tdf142607.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1911,7 +1908,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137576_Measureline)
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 5200), aEnd, 1);
 
     // Save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
 
     // Get shape
@@ -1958,7 +1955,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137044_CoverHiddenRows)
     pDoc->SetRowHidden(4, 5, 0, true);
 
     // Save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
 
     // Get shape
@@ -1999,7 +1996,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137020_FlipVertical)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectFlip, 1);
 
     // Save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     pDoc = getScDoc();
 
     // Get shape
@@ -2017,9 +2014,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137020_FlipVertical)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf82254_csv_bom)
 {
-    setImportFilterName(SC_TEXT_CSV_FILTER_NAME);
+    setImportFilterName(TestFilter::CSV);
     createScDoc("csv/testTdf82254-csv-bom.csv");
-    saveAndReload(SC_TEXT_CSV_FILTER_NAME);
+    saveAndReload(TestFilter::CSV);
     ScDocShell* pDocSh = getScDocShell();
     SvStream* pStream = pDocSh->GetMedium()->GetInStream();
 

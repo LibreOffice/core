@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>

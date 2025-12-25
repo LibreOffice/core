@@ -410,8 +410,8 @@ void ScConflictsDlg::HandleListBoxSelection()
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
     bool bSelEntry = rTreeView.get_cursor(xEntry.get());
     if (!bSelEntry)
-        bSelEntry = rTreeView.get_selected(xEntry.get());
-    if (!bSelEntry)
+        xEntry = rTreeView.get_selected();
+    if (!xEntry)
         return;
 
     bool bSelectHandle = rTreeView.is_selected(*xEntry);
@@ -496,8 +496,8 @@ void ScConflictsDlg::SetConflictAction(const weld::TreeIter& rRootEntry, ScConfl
 void ScConflictsDlg::KeepHandler(bool bMine)
 {
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    if (!rTreeView.get_selected(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_selected();
+    if (!xEntry)
         return;
 
     while (rTreeView.get_iter_depth(*xEntry))

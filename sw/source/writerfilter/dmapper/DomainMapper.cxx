@@ -78,11 +78,11 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/escapementitem.hxx>
 #include <filter/msfilter/util.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include "TextEffectsHandler.hxx"
 #include "ThemeColorHandler.hxx"
@@ -95,6 +95,7 @@
 #include <tools/UnitConversion.hxx>
 #include <unotxdoc.hxx>
 #include <unostyle.hxx>
+#include <unosett.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -115,7 +116,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             rtl::Reference<SwXTextDocument> const& xModel,
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
-                            utl::MediaDescriptor const & rMediaDesc) :
+                            comphelper::SequenceAsHashMap const & rMediaDesc) :
     LoggedProperties("DomainMapper"),
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),
@@ -1592,6 +1593,51 @@ static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl&
     return bExchangeLeftRight;
 }
 
+// If there is a deferred page break applied to this framed paragraph,
+// create a dummy paragraph without extra properties,
+// so that the anchored frame will be on the correct page (similar to shapes).
+void DomainMapper::HandleFramedParagraphPageBreak(PropertyMapPtr pContext)
+{
+    bool bBreakTypeIsSet = pContext->isSet(PROP_BREAK_TYPE);
+    if (!bBreakTypeIsSet)
+    {
+        if (!pContext->isSet(PROP_PARA_STYLE_NAME))
+        {
+            return;
+        }
+
+        OUString sStyleName;
+        pContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
+        if (sStyleName.isEmpty() || !GetStyleSheetTable())
+        {
+            return;
+        }
+
+        StyleSheetEntryPtr pStyle
+            = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sStyleName);
+        if (!pStyle || !pStyle->m_pProperties)
+        {
+            return;
+        }
+
+        bBreakTypeIsSet = pStyle->m_pProperties->isSet(PROP_BREAK_TYPE);
+    }
+    if (!bBreakTypeIsSet)
+    {
+        return;
+    }
+
+    pContext->Erase(PROP_BREAK_TYPE);
+
+    lcl_startParagraphGroup();
+    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
+    lcl_startCharacterGroup();
+    sal_Unicode const sBreak[] = { 0x0d };
+    lcl_utext(sBreak, 1);
+    lcl_endCharacterGroup();
+    lcl_endParagraphGroup();
+}
+
 void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 {
     // These SPRM's are not specific to any section, so it's expected that there is no context yet.
@@ -2637,6 +2683,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 if (pThemeColorHandler->mnIndex >= 0)
                 {
+                    auto aBuf = OUString::number(pThemeColorHandler->mnColor, 16);
+                    m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"val"_ustr, OUString(RepeatedUChar('0', 6 - aBuf.length) + aBuf));
                     m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"themeColor"_ustr, aThemeColorName.get<OUString>());
                     if (pThemeColorHandler->mnTint > 0)
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"themeTint"_ustr, aThemeColorTint.get<OUString>());
@@ -2717,7 +2765,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         //apply settings at XLineNumberingProperties
         try
         {
-            uno::Reference< beans::XPropertySet > xLineNumberingPropSet = m_pImpl->GetTextDocument()->getLineNumberingProperties();
+            rtl::Reference< SwXLineNumberingProperties > xLineNumberingPropSet = m_pImpl->GetTextDocument()->getSwLineNumberingProperties();
             if( aSettings.nInterval == 0 )
                 xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_IS_ON ), uno::Any(false) );
             else
@@ -2748,21 +2796,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
         if( pContext )
         {
-            // If there is a deferred page break applied to this framed paragraph,
-            // create a dummy paragraph without extra properties,
-            // so that the anchored frame will be on the correct page (similar to shapes).
-            if (pContext->isSet(PROP_BREAK_TYPE))
-            {
-                pContext->Erase(PROP_BREAK_TYPE);
-
-                lcl_startParagraphGroup();
-                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
-                lcl_startCharacterGroup();
-                sal_Unicode const sBreak[] = { 0x0d };
-                lcl_utext(sBreak, 1);
-                lcl_endCharacterGroup();
-                lcl_endParagraphGroup();
-            }
+            HandleFramedParagraphPageBreak(pContext);
 
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
             if (pParaContext)
@@ -4594,6 +4628,9 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
     {
         if (bNewLine)
         {
+            if (!m_pImpl->m_pSdtHelper->isFieldStartRangeSet())
+                m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+
             m_pImpl->m_pSdtHelper->createPlainTextControl();
             finishParagraph();
             return;
@@ -4609,12 +4646,21 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
             m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             return;
         }
-        if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_checkbox"_ustr) ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_text"_ustr) ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_dataBinding"_ustr) ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_citation"_ustr) ||
-                (m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_id"_ustr) &&
-                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
+        const SdtControlType aControlType = m_pImpl->m_pSdtHelper->getControlType();
+        if (aControlType != SdtControlType::unsupported && aControlType != SdtControlType::unknown
+            && m_pImpl->m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
+        {
+            m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+        }
+        else if ((m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_checkbox"_ustr)
+                  || m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_text"_ustr)
+                  || m_pImpl->m_pSdtHelper->containedInInteropGrabBag(
+                      u"ooxml:CT_SdtPr_dataBinding"_ustr)
+                  || m_pImpl->m_pSdtHelper->containedInInteropGrabBag(
+                      u"ooxml:CT_SdtPr_citation"_ustr)
+                  || (m_pImpl->m_pSdtHelper->containedInInteropGrabBag(u"ooxml:CT_SdtPr_id"_ustr)
+                      && m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1))
+                 && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
         {
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER);
 
@@ -4623,20 +4669,15 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 pContext = m_pImpl->GetTopFieldContext()->getProperties();
 
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-            if (m_pImpl->GetSdtStarts().empty()
-                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown
-                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::comboBox))
-            {
-                pContext->Insert(PROP_SDTPR, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
-            }
+            pContext->Insert(PROP_SDTPR, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
         }
         else
         {
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             if (m_pImpl->GetSdtStarts().empty()
-                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown
-                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::comboBox
-                    && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::richText))
+                || (aControlType != SdtControlType::dropDown
+                    && aControlType != SdtControlType::comboBox
+                    && aControlType != SdtControlType::richText))
             {
                 m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
                         uno::Any(aGrabBag), true, PARA_GRAB_BAG);

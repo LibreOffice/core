@@ -36,7 +36,7 @@
 #include <vcl/errinf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/frame.hxx>

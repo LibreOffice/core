@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class ScViewOptions;
 

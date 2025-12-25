@@ -121,6 +121,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl, weld::Button&, voi
 IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, weld::Button&, rButton, void)
 {
     auto nPos = m_xFieldsLB->get_selected_index();
+    assert(nPos != -1 && "nothing selected");
     auto nOldPos = nPos;
     OUString aTemp = m_xFieldsLB->get_text(nPos);
     m_xFieldsLB->remove(nPos);

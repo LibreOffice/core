@@ -28,6 +28,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <viewsh.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 using namespace ::comphelper;

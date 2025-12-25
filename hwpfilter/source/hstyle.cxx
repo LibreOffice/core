@@ -19,8 +19,6 @@
 
 #include "precompile.h"
 
-#include <comphelper/newarray.hxx>
-
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hstyle.h"
@@ -125,7 +123,7 @@ void HWPStyle::Read(HWPFile& hwpf)
     ParaShape pshape;
 
     hwpf.Read2b(&nstyles, 1);
-    style = ::comphelper::newArray_null<hwpfilter::StyleData>(nstyles);
+    style = new (std::nothrow) hwpfilter::StyleData[nstyles];
     if (!style)
         return;
 

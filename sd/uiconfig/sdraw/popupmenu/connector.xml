@@ -18,6 +18,7 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:ConnectorAttributes"/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
+  <menu:menuitem menu:id=".uno:FontWork"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:ObjectAlign"/>
   <menu:menu menu:id=".uno:ArrangeMenu">

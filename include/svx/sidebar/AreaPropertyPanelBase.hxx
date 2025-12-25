@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANELBASE_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANELBASE_HXX
+#pragma once
 
 #include <memory>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
@@ -35,6 +34,7 @@
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class ToolbarUnoDispatcher;
 class XFillFloatTransparenceItem;
@@ -91,7 +91,7 @@ public:
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) = 0;
     virtual void setFillUseBackground(const XFillStyleItem* pStyleItem, const XFillUseSlideBackgroundItem& rItem) = 0;
 
-    void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const XFillTransparenceItem* pState);
     void updateFillFloatTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillStyle(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillGradient(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
@@ -154,7 +154,7 @@ protected:
     OUString  maImgLinear;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
-    std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
+    std::unique_ptr< XFillTransparenceItem >        mpTransparenceItem;
 
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops maColorStops;
@@ -181,7 +181,5 @@ protected:
 };
 
 } // end of namespace svx::sidebar
-
-#endif // INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

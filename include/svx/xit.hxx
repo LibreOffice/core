@@ -17,47 +17,55 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XIT_HXX
-#define INCLUDED_SVX_XIT_HXX
+#pragma once
 
 #include <svl/stritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svxdllapi.h>
 #include <unotools/resmgr.hxx>
 
-/************************************************************************/
-
 class SfxItemPool;
 class NameOrIndex;
 
-typedef bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
-
-
+typedef std::function<bool(const NameOrIndex*, const NameOrIndex*)> SvxCompareValueFunc;
 
 class SVXCORE_DLLPUBLIC NameOrIndex : public SfxStringItem
 {
-    sal_Int32    m_nPalIndex;
+    sal_Int32 m_nPalIndex;
 
 protected:
-    void    Detach()    { m_nPalIndex = -1; }
+    void Detach()
+    {
+        m_nPalIndex = -1;
+    }
 
 public:
-            DECLARE_ITEM_TYPE_FUNCTION(NameOrIndex)
-            NameOrIndex() : SfxStringItem(0) { m_nPalIndex = -1; }
-            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, sal_Int32 nIndex);
-            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, const OUString& rName);
-            NameOrIndex(const NameOrIndex& rNameOrIndex);
+    DECLARE_ITEM_TYPE_FUNCTION(NameOrIndex)
+    NameOrIndex();
+    NameOrIndex(TypedWhichId<NameOrIndex> nWhich, sal_Int32 nIndex);
+    NameOrIndex(TypedWhichId<NameOrIndex> nWhich, const OUString& rName);
+    NameOrIndex(const NameOrIndex& rNameOrIndex);
 
-    virtual bool         operator==(const SfxPoolItem& rItem) const override;
+    virtual bool operator==(const SfxPoolItem& rItem) const override;
     virtual NameOrIndex* Clone(SfxItemPool* pPool = nullptr) const override;
+
     // Marked as false since the SfxStringItem superclass supports hashing, but
     // this class has not been checked for safety under hashing yet.
-    virtual bool         supportsHashCode() const override { return false; }
+    virtual bool supportsHashCode() const override { return false; }
 
-            OUString const & GetName() const              { return GetValue();   }
-            void         SetName(const OUString& rName) { SetValue(rName);     }
-            bool         IsIndex() const          { return (m_nPalIndex >= 0); }
-            sal_Int32    GetPalIndex() const { return m_nPalIndex; }
+    OUString const & GetName() const
+    {
+        return GetValue();
+    }
+    void SetName(const OUString& rName)
+    {
+        SetValue(rName);
+    }
+    bool IsIndex() const
+    {
+        return (m_nPalIndex >= 0);
+    }
+    sal_Int32 GetPalIndex() const { return m_nPalIndex; }
 
     /** this checks if the given NameOrIndex item has a unique name for its value.
         The returned String is a unique name for an item with this value in both given pools.
@@ -67,7 +75,5 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

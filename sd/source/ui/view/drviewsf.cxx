@@ -345,6 +345,38 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 Invalidate(nSlotId);
             }
             break;
+            case SID_ATTR_PARA_ADJUST_START:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
+                if ( eAdj == SvxAdjust::Left)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, true ) );
+                }
+
+                bAttr = true;
+
+                Invalidate(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_ADJUST_END:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
+                if ( eAdj == SvxAdjust::Left)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, true ) );
+                }
+
+                bAttr = true;
+
+                Invalidate(nSlotId);
+            }
+            break;
             case SID_ATTR_PARA_LRSPACE:
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
@@ -467,6 +499,33 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 const sal_uInt16 nActWhich = nSlotId == SID_ATTR_TEXTCOLUMNS_NUMBER
                                                     ? SDRATTR_TEXTCOLUMNS_NUMBER
                                                     : SDRATTR_TEXTCOLUMNS_SPACING;
+                rSet.Put(aAttrs.Get(nActWhich).CloneSetWhich(nSlotId));
+            }
+            break;
+
+            case SID_ATTR_TEXT_AUTOGROWWIDTH:
+            case SID_ATTR_TEXT_AUTOGROWHEIGHT:
+            {
+                SfxItemSet aAttrs(GetDoc()->GetPool());
+                mpDrawView->GetAttributes(aAttrs);
+                const sal_uInt16 nActWhich = nSlotId == SID_ATTR_TEXT_AUTOGROWWIDTH
+                                                    ? SDRATTR_TEXT_AUTOGROWWIDTH
+                                                    : SDRATTR_TEXT_AUTOGROWHEIGHT;
+                rSet.Put(aAttrs.Get(nActWhich).CloneSetWhich(nSlotId));
+            }
+            break;
+            case SID_ATTR_TEXT_LEFTDIST:
+            case SID_ATTR_TEXT_RIGHTDIST:
+            case SID_ATTR_TEXT_UPPERDIST:
+            case SID_ATTR_TEXT_LOWERDIST:
+            {
+                SfxItemSet aAttrs(GetDoc()->GetPool());
+                mpDrawView->GetAttributes(aAttrs);
+                const sal_uInt16 nActWhich =
+                    nSlotId == SID_ATTR_TEXT_LEFTDIST   ? SDRATTR_TEXT_LEFTDIST :
+                    nSlotId == SID_ATTR_TEXT_RIGHTDIST  ? SDRATTR_TEXT_RIGHTDIST :
+                    nSlotId == SID_ATTR_TEXT_UPPERDIST  ? SDRATTR_TEXT_UPPERDIST :
+                                                        SDRATTR_TEXT_LOWERDIST;
                 rSet.Put(aAttrs.Get(nActWhich).CloneSetWhich(nSlotId));
             }
             break;

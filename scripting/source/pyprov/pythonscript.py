@@ -26,7 +26,6 @@ import time
 import ast
 import platform
 from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
-from urllib.parse import unquote
 
 from com.sun.star.uno import RuntimeException
 from com.sun.star.lang import IllegalArgumentException
@@ -688,7 +687,7 @@ class DirBrowseNode(unohelper.Base, XBrowseNode):
                 if i.endswith(".py"):
                     log.debug("adding filenode " + i)
                     browseNodeList.append(FileBrowseNode(self.provCtx, i, i[i.rfind("/") + 1 : len(i) - 3]))
-                elif self.provCtx.sfa.isFolder(i) and not i.endswith("/pythonpath"):
+                elif self.provCtx.sfa.isFolder(i) and not (i.endswith("/pythonpath") or i.endswith("/__pycache__")):
                     log.debug("adding DirBrowseNode " + i)
                     browseNodeList.append(DirBrowseNode(self.provCtx, i[i.rfind("/") + 1 : len(i)], i))
             return tuple(browseNodeList)
@@ -976,12 +975,10 @@ class PythonScript(unohelper.Base, XScript):
 
 def expandUri(uri):
     if uri.startswith("vnd.sun.star.expand:"):
-        uri = uri.replace("vnd.sun.star.expand:", "", 1)
-        uri = (
-            uno.getComponentContext()
-            .getByName("/singletons/com.sun.star.util.theMacroExpander")
-            .expandMacros(unquote(uri))
-        )
+        ctx = uno.getComponentContext()
+        fac = ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory", ctx)
+        ref = fac.parse(uri)
+        uri = ref.expand(ctx.getValueByName("/singletons/com.sun.star.util.theMacroExpander"))
     if uri.startswith("file:"):
         uri = uno.absolutize("", uri)  # necessary to get rid of .. in uri
     return uri

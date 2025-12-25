@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkDialog" id="InsertCaptionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -366,6 +366,11 @@
                           <object class="GtkDrawingArea" id="preview">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="preview-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="insertcaption|preview-atkobject">Preview</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

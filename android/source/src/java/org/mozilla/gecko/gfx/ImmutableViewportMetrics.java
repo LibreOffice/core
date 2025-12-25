@@ -148,14 +148,6 @@ public class ImmutableViewportMetrics {
             zoomFactor);
     }
 
-    public ImmutableViewportMetrics setZoomFactor(float newZoomFactor) {
-        return new ImmutableViewportMetrics(
-            pageRectLeft, pageRectTop, pageRectRight, pageRectBottom,
-            cssPageRectLeft, cssPageRectTop, cssPageRectRight, cssPageRectBottom,
-            viewportRectLeft, viewportRectTop, viewportRectRight, viewportRectBottom,
-            newZoomFactor);
-    }
-
     public ImmutableViewportMetrics offsetViewportBy(float dx, float dy) {
         return setViewportOrigin(viewportRectLeft + dx, viewportRectTop + dy);
     }

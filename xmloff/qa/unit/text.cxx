@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
     xField->setPropertyValue(u"Resolved"_ustr, uno::Any(true));
     xField->setPropertyValue(u"ParentName"_ustr, uno::Any(u"parent_comment_name"_ustr));
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     xTextDocument.set(mxComponent, uno::UNO_QUERY);
     xParaEnumAccess.set(xTextDocument->getText(), uno::UNO_QUERY);
     xParaEnum = xParaEnumAccess->createEnumeration();
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When invoking ODT export + import on it:
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // Without the accompanying fix in place, this test would have resulted in an assertion failure,
     // as LocalURL was mapped to XML_TOKEN_INVALID.
 
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When invoking ODT export + import on it:
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     // Then make sure that URL, TargetURL and UseTargetURL are preserved and independent:
     xTextDocument.set(mxComponent, uno::UNO_QUERY);
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), nNumberingLevel);
 
     // Test the export as well:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure we save the style's numbering level:
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     loadFromFile(u"list-id.fodt");
 
     // When storing that document as ODF:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure that unreferenced xml:id="..." attributes are not written:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId2)
     // When storing that document as ODF:
     // Without the fix in place, automatic validation would fail with:
     // Error: "list123456789012345" is referenced by an IDREF, but not defined.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     xTextDocument.set(mxComponent.queryThrow<css::text::XTextDocument>());
     xParaEnumAccess.set(xTextDocument->getText().queryThrow<css::container::XEnumerationAccess>());
@@ -347,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
     xParaProps->setPropertyValue(u"NumberingStyleName"_ustr, css::uno::Any(u"Numbering ABC"_ustr));
 
     // When storing that document as ODF:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Make sure that xml:id="..." gets written for para 1, as it'll be continued in para 3.
@@ -388,7 +388,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdOnRestart)
     CPPUNIT_ASSERT_EQUAL(list_id, xPara->getPropertyValue(u"ListId"_ustr).get<OUString>());
 
     // When storing that document as ODF:
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     xTextDocument.set(mxComponent, uno::UNO_QUERY_THROW);
     xParaEnumAccess.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
@@ -437,7 +437,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -506,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
     // Body frame width is 16cm.
     xStyle->setPropertyValue(u"Width"_ustr, uno::Any(static_cast<sal_Int32>(20000)));
 
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Without the accompanying fix in place, this failed with:
@@ -536,7 +536,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
     xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure that we still export a non-zero size:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -565,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -627,7 +627,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -714,7 +714,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -799,7 +799,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -857,7 +857,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -923,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -978,7 +978,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1120,7 +1120,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthRedline)
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     // When saving to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure that a non-zero size is written to the output:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1159,7 +1159,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     xPageProps->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
 
     // Export to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Check if the 12 colors are written in the XML:
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -1197,7 +1197,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
     xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
 
     // When saving to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure we write a floating table, not a textframe containing a table:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1254,7 +1254,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParagraphScopedTabDistance)
         xPropSet->getPropertyValue(u"ParaTabStopDefaultDistance"_ustr).get<sal_Int32>());
 
     // Save the imported file to test the export too
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
 
     // Then make sure we write the tab-stop-distance
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1295,7 +1295,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDeleteThenFormatOdtExport)
     loadFromFile(u"del-then-format.docx");
 
     // When exporting that to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure <text:changed-region> not only has the <text:format-change> child, but also an
     // <text:deletion> one, with text:
@@ -1316,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharPropsExport)
     loadFromFile(u"redline-format-char-props.docx");
 
     // When exporting that to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure <text:format-change> refers to an autostyle that describes those old char
     // props:
@@ -1361,7 +1361,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharStyleExport)
     loadFromFile(u"format-char-style-change.docx");
 
     // When exporting the document to ODT:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure the style name is encoded:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -1383,7 +1383,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharPropsStrictExport)
     loadFromFile(u"redline-format-char-props.docx");
 
     // When exporting the document to ODT strict:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
 
     // Then make sure no loext attribute is written:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);

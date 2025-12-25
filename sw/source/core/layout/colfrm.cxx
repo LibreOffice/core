@@ -323,7 +323,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         return;
     }
 
-    SwRectFnSet fnRect(this);
+    SwRectFnSet fnRect(*this);
 
     //If we have a pointer or we have to configure an attribute, we set the
     //column widths in any case. Otherwise we check if a configuration is needed.

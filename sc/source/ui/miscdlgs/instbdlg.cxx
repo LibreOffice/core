@@ -25,7 +25,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <docsh.hxx>
 #include <viewdata.hxx>
@@ -93,7 +93,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
         m_xEdName->set_sensitive(false);
     }
 
-    bool bShared = rViewData.GetDocShell().IsDocShared();
+    bool bShared = rViewData.GetDocShell() && rViewData.GetDocShell()->IsDocShared();
 
     if ( !bFromFile || bShared )
     {

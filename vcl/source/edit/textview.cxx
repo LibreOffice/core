@@ -34,7 +34,7 @@
 #include <vcl/inputctx.hxx>
 
 #include <svl/undo.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>

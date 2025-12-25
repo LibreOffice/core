@@ -187,7 +187,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 {
     ScViewData& rViewData   = GetViewData();
     ScDocument& rDoc        = rViewData.GetDocument();
-    ScDocShell& rDocShell   = rViewData.GetDocShell();
+    ScDocShell* pDocShell   = rViewData.GetDocShell();
     ScMarkData& rMark       = rViewData.GetMarkData();
     SCCOL       nPosX       = rViewData.GetCurX();
     SCROW       nPosY       = rViewData.GetCurY();
@@ -207,8 +207,9 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
         {
             case FID_CHG_COMMENT:
                 {
+                    ScDocShell* pDocSh = GetViewData().GetDocShell();
                     ScAddress aPos( nPosX, nPosY, nTab );
-                    if ( rDocShell.IsReadOnly() || !rDocShell.GetChangeAction(aPos) || rDocShell.IsDocShared() )
+                    if ( pDocSh->IsReadOnly() || !pDocSh->GetChangeAction(aPos) || pDocSh->IsDocShared() )
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -217,7 +218,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_ADD_PRINTAREA:
             case SID_DEFINE_PRINTAREA:
                 {
-                    if ( rDocShell.IsDocShared() )
+                    if ( pDocShell && pDocShell->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -225,7 +226,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_DELETE_PRINTAREA:
-                if ( rDocShell.IsDocShared() )
+                if ( pDocShell && pDocShell->IsDocShared() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -235,7 +236,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_STATUS_PAGESTYLE:
             case SID_HFEDIT:
-                GetViewData().GetDocShell().GetStatePageStyle( rSet, nTab );
+                GetViewData().GetDocShell()->GetStatePageStyle( rSet, nTab );
                 break;
 
             case SID_SEARCH_ITEM:
@@ -253,7 +254,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     SearchOptionFlags nOptions = SearchOptionFlags::ALL;
 
                     // No replacement if ReadOnly
-                    if (GetViewData().GetDocShell().IsReadOnly() || IsCurrentLokViewReadOnly())
+                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
                         nOptions &= ~SearchOptionFlags( SearchOptionFlags::REPLACE | SearchOptionFlags::REPLACE_ALL );
                     rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(nOptions) ) );
                 }
@@ -275,7 +276,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_CURRENTDOC:
-                rSet.Put( SfxStringItem( nWhich, GetViewData().GetDocShell().GetTitle() ) );
+                rSet.Put( SfxStringItem( nWhich, GetViewData().GetDocShell()->GetTitle() ) );
                 break;
 
             case FID_TOGGLEINPUTLINE:
@@ -402,7 +403,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_SELECT_SHEET_VIEW:
             case FID_EXIT_SHEET_VIEW:
                 {
-                    if (GetViewData().GetDocShell().IsReadOnly() || IsCurrentLokViewReadOnly())
+                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -412,7 +413,11 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     }
                 }
                 break;
-
+            case FID_CURRENT_SHEET_VIEW:
+                {
+                    rSet.Put(SfxInt32Item(FID_CURRENT_SHEET_VIEW, GetViewData().GetSheetViewID()));
+                }
+                break;
             case FID_NORMALVIEWMODE:
             case FID_PAGEBREAKMODE:
                 // always handle both slots - they exclude each other
@@ -430,7 +435,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_PROTECT_DOC:
                 {
-                    if ( rDocShell.IsDocShared() )
+                    if ( pDocShell && pDocShell->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -443,7 +448,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_PROTECT_TABLE:
                 {
-                    if ( rDocShell.IsDocShared() )
+                    if ( pDocShell && pDocShell->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -506,7 +511,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_CHG_SHOW:
                 {
-                    if ( rDoc.GetChangeTrack() == nullptr || ( rDocShell.IsDocShared() ) )
+                    if ( rDoc.GetChangeTrack() == nullptr || ( pDocShell && pDocShell->IsDocShared() ) )
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -515,7 +520,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     if(
                        ( !rDoc.GetChangeTrack() && !rThisFrame.HasChildWindow(FID_CHG_ACCEPT) )
                        ||
-                       ( rDocShell.IsDocShared() )
+                       ( pDocShell && pDocShell->IsDocShared() )
                       )
                     {
                         rSet.DisableItem( nWhich);
@@ -530,7 +535,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_FORMATPAGE:
                 // in protected tables
-                if ( rDocShell.IsReadOnly() || rDocShell.IsDocShared() )
+                if ( pDocShell && ( pDocShell->IsReadOnly() || pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -540,7 +545,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_READONLY_MODE:
-                rSet.Put( SfxBoolItem( nWhich, GetViewData().GetDocShell().IsReadOnly() ) );
+                rSet.Put( SfxBoolItem( nWhich, GetViewData().GetDocShell()->IsReadOnly() ) );
                 break;
 
             case FID_TAB_DESELECTALL:
@@ -679,7 +684,7 @@ bool ScTabViewShell::IsRefInputMode() const
                 const ScViewData& rViewData = GetViewData();
                 ScDocument& rDoc = rViewData.GetDocument();
                 const ScAddress aPos( rViewData.GetCurPos() );
-                const sal_uInt32 nIndex = rDoc.GetAttr(aPos, ATTR_VALUE_FORMAT )->GetValue();
+                const sal_uInt32 nIndex = rDoc.GetAttr(aPos, ATTR_VALUE_FORMAT ).GetValue();
                 const SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nIndex);
                 if (nType == SvNumFormatType::TEXT)
                 {
@@ -752,10 +757,10 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         if (rDoc.IsTabProtected(nTab))
         {
-            const ScProtectionAttr* pProt = rDoc.GetAttr( nPosX,nPosY,nTab,
+            const ScProtectionAttr& rProt = rDoc.GetAttr( nPosX,nPosY,nTab,
                                                            ATTR_PROTECTION);
-            bHideFormula = pProt->GetHideFormula();
-            bHideAll     = pProt->GetHideCell();
+            bHideFormula = rProt.GetHideFormula();
+            bHideAll     = rProt.GetHideCell();
         }
 
         if (!bHideAll)
@@ -860,32 +865,32 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
             // This will work only if .uno:ModifiedStatus message will be removed from
             // the mechanism that keeps in the message queue only last message of
             // a particular status even if the values are different.
-            if (SfxBindings* pBindings = GetViewData().GetDocShell().GetViewBindings())
+            if (SfxBindings* pBindings = GetViewData().GetDocShell()->GetViewBindings())
                 pBindings->Update(SID_DOC_MODIFIED);
         }
     }
 
-    if ( GetViewData().GetDocShell().IsDocShared() )
+    if ( GetViewData().GetDocShell()->IsDocShared() )
     {
-        GetViewData().GetDocShell().SetDocumentModified();
+        GetViewData().GetDocShell()->SetDocumentModified();
     }
 
     // otherwise as normal
-    GetViewData().GetDocShell().ExecuteSlot( rReq );
+    GetViewData().GetDocShell()->ExecuteSlot( rReq );
 }
 
 void ScTabViewShell::GetSaveState( SfxItemSet& rSet )
 {
-    SfxShell& rDocSh = GetViewData().GetDocShell();
+    SfxShell* pDocSh = GetViewData().GetDocShell();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while( nWhich )
     {
-        if ( nWhich != SID_SAVEDOC || !GetViewData().GetDocShell().IsDocShared() )
+        if ( nWhich != SID_SAVEDOC || !GetViewData().GetDocShell()->IsDocShared() )
         {
             // get state from DocShell
-            rDocSh.GetSlotState( nWhich, nullptr, &rSet );
+            pDocSh->GetSlotState( nWhich, nullptr, &rSet );
         }
         nWhich = aIter.NextWhich();
     }
@@ -965,8 +970,8 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
     SfxBindings&        rBindings   = GetViewData().GetBindings();
     const SCTAB         nCurTab     = GetViewData().CurrentTabForData();
-    ScDocShell&         rDocSh      = GetViewData().GetDocShell();
-    ScDocument&         rDoc        = rDocSh.GetDocument();
+    ScDocShell*         pDocSh      = GetViewData().GetDocShell();
+    ScDocument&         rDoc        = pDocSh->GetDocument();
     ScMarkData&         rMark       = GetViewData().GetMarkData();
     ScModule*           pScMod      = ScModule::get();
     SdrObject*          pEditObject = GetDrawView()->GetTextEditObject();
@@ -1028,13 +1033,13 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         case SID_STYLE_APPLY:
         {
             const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_APPLY_STYLE);
-            const SfxStringItem* pFamilyItem = rReq.GetArg<SfxStringItem>(SID_STYLE_FAMILYNAME);
+            const SfxStringItem* pFamilyItem = rReq.GetArg(SID_STYLE_FAMILYNAME);
             if ( pFamilyItem && pNameItem )
             {
                 try
                 {
                     css::uno::Reference< css::container::XNameAccess > xStyles;
-                    css::uno::Reference< css::container::XNameAccess > xCont = rDocSh.GetModel()->getStyleFamilies();
+                    css::uno::Reference< css::container::XNameAccess > xCont = pDocSh->GetModel()->getStyleFamilies();
                     xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
                     css::uno::Reference< css::beans::XPropertySet > xInfo;
                     xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
@@ -1203,7 +1208,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                         if ( bUndo )
                         {
                             OUString aUndo = ScResId( STR_UNDO_EDITCELLSTYLE );
-                            rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
+                            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
                             bListAction = true;
                         }
 
@@ -1260,7 +1265,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                             if ( bUndo )
                             {
                                 OUString aUndo = ScResId( STR_UNDO_EDITCELLSTYLE );
-                                rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
+                                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
                                 bListAction = true;
                             }
 
@@ -1296,13 +1301,13 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     {
                         if ( rDoc.RemovePageStyleInUse( pStyleSheet->GetName() ) )
                         {
-                            ScPrintFunc( rDocSh, GetPrinter(true), nCurTab ).UpdatePages();
+                            ScPrintFunc( *pDocSh, GetPrinter(true), nCurTab ).UpdatePages();
                             rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                             rBindings.Invalidate( FID_RESET_PRINTZOOM );
                         }
                         pStylePool->Remove( pStyleSheet );
                         rBindings.Invalidate( SID_STYLE_FAMILY4 );
-                        rDocSh.SetDocumentModified();
+                        pDocSh->SetDocumentModified();
                         bAddUndo = true;
                         rReq.Done();
                     }
@@ -1317,7 +1322,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     {
                         pStyleSheet->SetHidden( nSlotId == SID_STYLE_HIDE );
                         rBindings.Invalidate( SID_STYLE_FAMILY4 );
-                        rDocSh.SetDocumentModified();
+                        pDocSh->SetDocumentModified();
                         rReq.Done();
                     }
                 }
@@ -1338,16 +1343,16 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                             if ( aOldName != aStyleName )
                             {
                                 rDoc.SetPageStyle( rTab, aStyleName );
-                                ScPrintFunc( rDocSh, GetPrinter(true), rTab ).UpdatePages();
+                                ScPrintFunc( *pDocSh, GetPrinter(true), rTab ).UpdatePages();
                                 if( !pUndoAction )
-                                    pUndoAction.reset(new ScUndoApplyPageStyle( rDocSh, aStyleName ));
+                                    pUndoAction.reset(new ScUndoApplyPageStyle( *pDocSh, aStyleName ));
                                 pUndoAction->AddSheetAction( rTab, aOldName );
                             }
                         }
                         if( pUndoAction )
                         {
-                            rDocSh.GetUndoManager()->AddUndoAction( std::move(pUndoAction) );
-                            rDocSh.SetDocumentModified();
+                            pDocSh->GetUndoManager()->AddUndoAction( std::move(pUndoAction) );
+                            pDocSh->SetDocumentModified();
                             rBindings.Invalidate( SID_STYLE_FAMILY4 );
                             rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                             rBindings.Invalidate( FID_RESET_PRINTZOOM );
@@ -1378,11 +1383,11 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         // Adopt attribute
                         pStyleSheet->GetItemSet().Put( aAttrSet );
-                        rDocSh.SetDocumentModified();
+                        pDocSh->SetDocumentModified();
 
                         // If being used -> Update
                         if ( bUsed )
-                            ScPrintFunc( rDocSh, GetPrinter(true), nInTab ).UpdatePages();
+                            ScPrintFunc( *pDocSh, GetPrinter(true), nInTab ).UpdatePages();
 
                         xNewData->InitFromStyle( pStyleSheet );
                         bAddUndo = true;
@@ -1408,7 +1413,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     {
                         pStylePool->Remove( pStyleSheet );
                         InvalidateAttribs();
-                        rDocSh.SetDocumentModified();
+                        pDocSh->SetDocumentModified();
                         nRetMask = sal_uInt16(true);
                         bAddUndo = true;
                         rReq.Done();
@@ -1467,7 +1472,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     if ( bUndo )
                     {
                         OUString aUndo = ScResId( STR_UNDO_EDITGRAPHICSTYLE );
-                        rDocSh.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
+                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
                         bListAction = true;
                     }
 
@@ -1518,8 +1523,8 @@ void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyl
                         bool bStyleToMarked, bool bListAction,
                         SdrObject* pEditObject, ESelection aSelection)
 {
-    ScDocShell&     rDocSh      = GetViewData().GetDocShell();
-    ScDocument&     rDoc        = rDocSh.GetDocument();
+    ScDocShell*     pDocSh      = GetViewData().GetDocShell();
+    ScDocument&     rDoc        = pDocSh->GetDocument();
     SfxStyleFamily  eFam = pStyleSheet->GetFamily();
     VclPtr<SfxAbstractTabDialog> pDlg;
     bool bPage = false;
@@ -1560,7 +1565,7 @@ void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyl
                 std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
                     ScTabViewShell::MakeNumberInfoItem(rDoc, GetViewData()));
 
-                rDocSh.PutItem( *pNumberInfoItem );
+                pDocSh->PutItem( *pNumberInfoItem );
                 bPage = false;
 
                 // Definitely a SvxBoxInfoItem with Table = sal_False in set:
@@ -1622,8 +1627,8 @@ void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
                         sal_uInt16& rnRetMask, std::shared_ptr<SfxItemSet> xOldSet, const sal_uInt16 nSlotId,
                         bool& rbAddUndo, ScStyleSaveData& rNewData, std::u16string_view aOldName)
 {
-    ScDocShell&     rDocSh = GetViewData().GetDocShell();
-    ScDocument&     rDoc = rDocSh.GetDocument();
+    ScDocShell*     pDocSh = GetViewData().GetDocShell();
+    ScDocument&     rDoc = pDocSh->GetDocument();
     SfxBindings&    rBindings = GetViewData().GetBindings();
     SfxStyleSheetBasePool* pStylePool = rDoc.GetStyleSheetPool();
     SfxStyleFamily  eFam = pStyleSheet->GetFamily();
@@ -1705,12 +1710,12 @@ void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
                 GetScDrawView()->InvalidateAttribs();
             }
 
-            rDocSh.SetDocumentModified();
+            pDocSh->SetDocumentModified();
 
             if ( SfxStyleFamily::Para == eFam )
             {
                 ScTabViewShell::UpdateNumberFormatter(
-                        *( rDocSh.GetItem(SID_ATTR_NUMBERFORMAT_INFO) ));
+                        *( pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO) ));
 
                 UpdateStyleSheetInUse( pStyleSheet );
                 InvalidateAttribs();
@@ -1728,7 +1733,7 @@ void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
         {
             // If in the meantime something was painted with the
             // temporary changed item set
-            rDocSh.PostPaintGridAll();
+            pDocSh->PostPaintGridAll();
         }
     }
 }
@@ -1740,13 +1745,13 @@ void ScTabViewShell::ExecuteStyleEditPost(SfxRequest& rReq, SfxStyleSheetBase* p
                         bool bStyleToMarked, bool bListAction,
                         SdrObject* pEditObject, ESelection aSelection)
 {
-    ScDocShell&     rDocSh = GetViewData().GetDocShell();
+    ScDocShell*     pDocSh = GetViewData().GetDocShell();
 
     rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
 
     if ( bAddUndo && bUndo)
-        rDocSh.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoModifyStyle>( rDocSh, eFamily, rOldData, rNewData ) );
+        pDocSh->GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoModifyStyle>( *pDocSh, eFamily, rOldData, rNewData ) );
 
     if ( bStyleToMarked )
     {
@@ -1765,7 +1770,7 @@ void ScTabViewShell::ExecuteStyleEditPost(SfxRequest& rReq, SfxStyleSheetBase* p
     }
 
     if ( bListAction )
-        rDocSh.GetUndoManager()->LeaveListAction();
+        pDocSh->GetUndoManager()->LeaveListAction();
 
     // The above call to ScEndTextEdit left us in an inconsistent state:
     // Text editing isn't active, but the text edit shell still is. And we

@@ -43,7 +43,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <algorithm>
 
 constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";
@@ -75,7 +75,6 @@ bool FindWeakRef::operator () (uno::WeakReference< deployment::XPackage >  const
 
 Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
                         const PackageState eState, const bool bReadOnly ) :
-    m_bActive( false ),
     m_bLocked( bReadOnly ),
     m_bHasOptions( false ),
     m_bUser( false ),
@@ -286,18 +285,21 @@ void ExtensionBox::CalcActiveHeight(const tools::Long nPos)
         m_nActiveHeight += 2;
 }
 
-tools::Rectangle ExtensionBox::GetActiveEntryRect() const
+tools::Rectangle ExtensionBox::GetEntryRect(tools::Long nIndex) const
 {
-    assert(m_nActive >= 0 && "No active entry");
+    const ::osl::MutexGuard aGuard(m_entriesMutex);
 
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
+    tools::Long nY = -m_nTopIndex;
+    if (m_nActive >= 0 && nIndex > m_nActive)
+        nY += (nIndex - 1) * m_nStdHeight + m_nActiveHeight;
+    else
+        nY += nIndex * m_nStdHeight;
+    Point aStart(0, nY);
 
-    Size aSize( GetOutputSizePixel() );
-    aSize.setHeight(m_nActiveHeight);
+    Size aSize(GetOutputSizePixel());
+    aSize.setHeight(nIndex == m_nActive ? m_nActiveHeight : m_nStdHeight);
 
-    Point aPos(0, -m_nTopIndex + m_nActive * m_nStdHeight);
-
-    return tools::Rectangle( aPos, aSize );
+    return tools::Rectangle(aStart, aSize);
 }
 
 void ExtensionBox::DeleteRemoved()
@@ -333,14 +335,12 @@ void ExtensionBox::selectEntry(const tools::Long nPos)
             if ( nPos == m_nActive )
                 return;
 
-            m_vEntries[ m_nActive ]->m_bActive = false;
             m_nActive = -1;
         }
 
         if ( ( nPos >= 0 ) && ( o3tl::make_unsigned(nPos) < m_vEntries.size() ) )
         {
             m_nActive = nPos;
-            m_vEntries[ nPos ]->m_bActive = true;
 
             if ( IsReallyVisible() )
             {
@@ -363,11 +363,11 @@ void ExtensionBox::selectEntry(const tools::Long nPos)
 }
 
 void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
-                           const TEntry_Impl& rEntry)
+                           const TEntry_Impl& rEntry, bool bActive)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if (rEntry->m_bActive)
+    if (bActive)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else if ((rEntry->m_eState != PackageState::REGISTERED)
              && (rEntry->m_eState != PackageState::NOT_AVAILABLE))
@@ -375,7 +375,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
     else
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 
-    if (rEntry->m_bActive)
+    if (bActive)
     {
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
@@ -453,7 +453,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
     OUString sDescription;
     if (!rEntry->m_sErrorText.isEmpty())
     {
-        if (rEntry->m_bActive)
+        if (bActive)
             sDescription = rEntry->m_sErrorText + "\n" + rEntry->m_sDescription;
         else
             sDescription = rEntry->m_sErrorText;
@@ -462,7 +462,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
         sDescription = rEntry->m_sDescription;
 
     aPos.AdjustY(aTextHeight );
-    if (rEntry->m_bActive)
+    if (bActive)
     {
         tools::Long nExtraHeight = 0;
 
@@ -525,44 +525,40 @@ void ExtensionBox::RecalcAll()
 
     SetupScrollBar();
 
-    if (m_nActive >= 0)
+    if (m_nActive >= 0 && m_bAdjustActive)
     {
-        tools::Rectangle aEntryRect = GetActiveEntryRect();
+        m_bAdjustActive = false;
 
-        if ( m_bAdjustActive )
+        // If the top of the selected entry isn't visible, make it visible
+        tools::Rectangle aEntryRect = GetEntryRect(m_nActive);
+        if (aEntryRect.Top() < 0)
         {
-            m_bAdjustActive = false;
-
-            // If the top of the selected entry isn't visible, make it visible
-            if ( aEntryRect.Top() < 0 )
-            {
-                m_nTopIndex += aEntryRect.Top();
-                aEntryRect.Move( 0, -aEntryRect.Top() );
-            }
-
-            // If the bottom of the selected entry isn't visible, make it visible even if now the top
-            // isn't visible any longer ( the buttons are more important )
-            Size aOutputSize = GetOutputSizePixel();
-            if ( aEntryRect.Bottom() > aOutputSize.Height() )
-            {
-                m_nTopIndex += ( aEntryRect.Bottom() - aOutputSize.Height() );
-                aEntryRect.Move( 0, -( aEntryRect.Bottom() - aOutputSize.Height() ) );
-            }
-
-            // If there is unused space below the last entry but all entries don't fit into the box,
-            // move the content down to use the whole space
-            const tools::Long nTotalHeight = GetTotalHeight();
-            if ( m_bHasScrollBar && ( aOutputSize.Height() + m_nTopIndex > nTotalHeight ) )
-            {
-                tools::Long nOffset = m_nTopIndex;
-                m_nTopIndex = nTotalHeight - aOutputSize.Height();
-                nOffset -= m_nTopIndex;
-                aEntryRect.Move( 0, nOffset );
-            }
-
-            if ( m_bHasScrollBar )
-                m_xScrollBar->vadjustment_set_value( m_nTopIndex );
+            m_nTopIndex += aEntryRect.Top();
+            aEntryRect.Move(0, -aEntryRect.Top());
         }
+
+        // If the bottom of the selected entry isn't visible, make it visible even if now the top
+        // isn't visible any longer ( the buttons are more important )
+        Size aOutputSize = GetOutputSizePixel();
+        if (aEntryRect.Bottom() > aOutputSize.Height())
+        {
+            m_nTopIndex += (aEntryRect.Bottom() - aOutputSize.Height());
+            aEntryRect.Move(0, -(aEntryRect.Bottom() - aOutputSize.Height()));
+        }
+
+        // If there is unused space below the last entry but all entries don't fit into the box,
+        // move the content down to use the whole space
+        const tools::Long nTotalHeight = GetTotalHeight();
+        if (m_bHasScrollBar && (aOutputSize.Height() + m_nTopIndex > nTotalHeight))
+        {
+            tools::Long nOffset = m_nTopIndex;
+            m_nTopIndex = nTotalHeight - aOutputSize.Height();
+            nOffset -= m_nTopIndex;
+            aEntryRect.Move(0, nOffset);
+        }
+
+        if (m_bHasScrollBar)
+            m_xScrollBar->vadjustment_set_value(m_nTopIndex);
     }
 
     m_bNeedsRecalc = false;
@@ -620,17 +616,12 @@ void ExtensionBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     if ( m_bNeedsRecalc )
         RecalcAll();
 
-    Point aStart( 0, -m_nTopIndex );
-    Size aSize(GetOutputSizePixel());
-
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
-    for (auto const& entry : m_vEntries)
+    for (tools::Long i = 0; i < GetEntryCount(); ++i)
     {
-        aSize.setHeight( entry->m_bActive ? m_nActiveHeight : m_nStdHeight );
-        tools::Rectangle aEntryRect( aStart, aSize );
-        DrawRow(rRenderContext, aEntryRect, entry);
-        aStart.AdjustY(aSize.Height() );
+        const bool bActive = i == m_nActive;
+        DrawRow(rRenderContext, GetEntryRect(i), GetEntryData(i), bActive);
     }
 }
 
@@ -743,6 +734,8 @@ bool ExtensionBox::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if ( !rMEvt.IsLeft() )
         return false;
+
+    GrabFocus();
 
     if (rMEvt.IsMod1() && m_nActive >= 0)
         selectEntry(ExtensionBox::ENTRY_NOTFOUND);   // Selecting a not existing entry will deselect the current one

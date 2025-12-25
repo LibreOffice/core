@@ -22,9 +22,9 @@
 
 #include <utility>
 #include <vcl/bitmap.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #if OSL_DEBUG_LEVEL >= 2
 #include <sidebar/Tools.hxx>
@@ -55,7 +55,7 @@ public:
     {
         rRenderContext.SetBackground(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
         rRenderContext.Erase();
-        rRenderContext.DrawBitmapEx(Point(0, 0), maGrip);
+        rRenderContext.DrawBitmap(Point(0, 0), maGrip);
     }
 };
 

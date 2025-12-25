@@ -302,6 +302,7 @@ class SvxZoomItem;
 #define FN_INVERT_BACKGROUND                (SID_SFX_START + 1749)
 #define SID_MACROMANAGER                    (SID_SFX_START + 1750)
 #define SID_EXPORTDIRECTORY                 TypedWhichId<SfxStringItem>(SID_SFX_START + 1751)
+#define SID_EXTENSION_MANAGER               TypedWhichId<SfxStringItem>(SID_SFX_START + 1752)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   TypedWhichId<SfxBoolItem>(SID_SFX_START + 520)
@@ -597,6 +598,7 @@ class SvxZoomItem;
 #define SID_HYPERLINK_SETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 362)
 #define SID_INFOBAR                         (SID_SVX_START + 365)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)
+#define SID_QUICKFIND                       (SID_SVX_START + 367)
 #define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
 #define SID_ZOOM_PREV                       (SID_SVX_START + 403)
 #define SID_INET_DLG                        (SID_SVX_START + 416)

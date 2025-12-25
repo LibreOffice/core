@@ -19,7 +19,6 @@
 
 #include "config_clang.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -34,7 +33,7 @@ bool isJniFunction(NamedDecl const * decl) {
         return false;
     }
     auto const id = decl->getIdentifier();
-    return id != nullptr && compat::starts_with(id->getName(), "Java_");
+    return id != nullptr && id->getName().starts_with("Java_");
 }
 
 class ReservedId:
@@ -147,7 +146,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
     }
     auto filename = getFilenameOfLocation(spelLoc);
     if (loplugin::hasPathnamePrefix(filename, SRCDIR "/bridges/source/cpp_uno/")
-        && (compat::ends_with(filename, "abi.hxx") || compat::ends_with(filename, "share.hxx")))
+        && (filename.ends_with("abi.hxx") || filename.ends_with("share.hxx")))
     {
         return true;
     }

@@ -29,7 +29,7 @@
 #include <vcl/sound.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>
@@ -186,7 +186,7 @@ static uno::Reference< ucb::XSimpleFileAccess3 > const & getFileAccess()
 
 void SbRtl_CreateObject(StarBASIC * pBasic, SbxArray & rPar, bool)
 {
-    if( rPar.Count() < 2 )
+    if( rPar.Count() != 2 )
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     OUString aClass(rPar.Get(1)->GetOUString());
@@ -275,7 +275,7 @@ void SbRtl_Cos(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Atn(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     SbxVariableRef pArg = rPar.Get(1);
@@ -312,7 +312,7 @@ void SbRtl_Asc(StarBASIC *, SbxArray & rPar, bool)
 
 static void implChr( SbxArray& rPar, bool bChrW )
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     SbxVariableRef pArg = rPar.Get(1);
@@ -694,7 +694,7 @@ void SbRtl_SendKeys(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Exp(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     double aDouble = rPar.Get(1)->GetDouble();
@@ -2517,8 +2517,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                     }
                     else
                     {
-                        OUString aFile
-                            = rRTLData.aDirSeq.getConstArray()[rRTLData.nCurDirPos++];
+                        OUString aFile = rRTLData.aDirSeq[rRTLData.nCurDirPos++];
 
                         if( bCompatibility )
                         {
@@ -4270,38 +4269,34 @@ void SbRtl_DumpAllObjects(StarBASIC * pBasic, SbxArray & rPar, bool)
 
 void SbRtl_FileExists(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() == 2)
-    {
-        OUString aStr = rPar.Get(1)->GetOUString();
-        bool bExists = false;
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-        if( hasUno() )
+    OUString aStr = rPar.Get(1)->GetOUString();
+    bool bExists = false;
+
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
+            try
             {
-                try
-                {
-                    bExists = xSFI->exists( aStr );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
+                bExists = xSFI->exists( aStr );
+            }
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
             }
         }
-        else
-        {
-            DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPath( aStr ), aItem );
-            bExists = (nRet == FileBase::E_None);
-        }
-        rPar.Get(0)->PutBool(bExists);
     }
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        DirectoryItem aItem;
+        FileBase::RC nRet = DirectoryItem::get( getFullPath( aStr ), aItem );
+        bExists = (nRet == FileBase::E_None);
     }
+    rPar.Get(0)->PutBool(bExists);
 }
 
 void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)

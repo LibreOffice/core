@@ -21,6 +21,7 @@
 
 #include <vcl/idle.hxx>
 #include <svx/ctredlin.hxx>
+#include <vcl/weld/DialogController.hxx>
 
 #include "docsh.hxx"
 

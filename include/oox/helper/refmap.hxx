@@ -64,70 +64,35 @@ public:
 
     /** Calls the passed functor for every contained object, automatically
         skips all elements that are empty references. */
-    template< typename FunctorType >
-    void                forEach( const FunctorType& rFunctor ) const
-                        {
-                            std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
-                        }
+    template <typename FunctorType> void forEach(const FunctorType& rFunctor) const
+    {
+        forEachWithKey([&rFunctor](const key_type&, ObjType& rObj) { rFunctor(rObj); });
+    }
 
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
-    template< typename FuncType >
-    void                forEachMem( FuncType pFunc ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2 >
-    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
-    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
-                        {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
-                        }
-
-
-    /** Calls the passed functor for every contained object. Passes the key as
-        first argument and the object reference as second argument to rFunctor. */
-    template< typename FunctorType >
-    void                forEachWithKey( const FunctorType& rFunctor ) const
-                        {
-                            std::for_each( this->begin(), this->end(), ForEachFunctorWithKey< FunctorType >( rFunctor ) );
-                        }
+    template <typename FuncType, typename... T> void forEachMem(FuncType pFunc, T&&... args) const
+    {
+        forEach([pFunc, &args...](ObjType& rObj) { (rObj.*pFunc)(args...); });
+    }
 
     /** Calls the passed member function of ObjType on every contained object.
         Passes the object key as argument to the member function. */
-    template< typename FuncType >
-    void                forEachMemWithKey( FuncType pFunc ) const
-                        {
-                            forEachWithKey( ::std::bind( pFunc, std::placeholders::_2, std::placeholders::_1 ) );
-                        }
-
+    template <typename FuncType> void forEachMemWithKey(FuncType pFunc) const
+    {
+        forEachWithKey([pFunc](const key_type& rKey, ObjType& rObj) { (rObj.*pFunc)(rKey); });
+    }
 
 private:
-    template< typename FunctorType >
-    struct ForEachFunctor
+    template <typename F> void forEachWithKey(const F& f) const
     {
-        FunctorType         maFunctor;
-        explicit     ForEachFunctor( FunctorType aFunctor ) : maFunctor(std::move( aFunctor )) {}
-        void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( *rValue.second ); }
-    };
-
-    template< typename FunctorType >
-    struct ForEachFunctorWithKey
-    {
-        FunctorType         maFunctor;
-        explicit     ForEachFunctorWithKey( FunctorType aFunctor ) : maFunctor(std::move( aFunctor )) {}
-        void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( rValue.first, *rValue.second ); }
-    };
+        std::for_each(this->begin(), this->end(),
+                      [&f](const value_type& rValue)
+                      {
+                          if (rValue.second)
+                              f(rValue.first, *rValue.second);
+                      });
+    }
 
     const mapped_type* getRef(const key_type& rKey) const
     {

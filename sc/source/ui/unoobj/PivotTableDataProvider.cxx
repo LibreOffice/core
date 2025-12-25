@@ -718,27 +718,27 @@ uno::Reference<sheet::XRangeSelection> SAL_CALL PivotTableDataProvider::getRange
 
 // XPivotTableDataProvider ========================================================
 
-uno::Sequence<chart2::data::PivotTableFieldEntry> PivotTableDataProvider::getColumnFields()
+const std::vector<chart2::data::PivotTableFieldEntry>& PivotTableDataProvider::getColumnFields() const
 {
-    return comphelper::containerToSequence(m_aColumnFields);
+    return m_aColumnFields;
 }
 
-uno::Sequence<chart2::data::PivotTableFieldEntry> PivotTableDataProvider::getRowFields()
+const std::vector<chart2::data::PivotTableFieldEntry>& PivotTableDataProvider::getRowFields() const
 {
-    return comphelper::containerToSequence(m_aRowFields);
+    return m_aRowFields;
 }
 
-uno::Sequence<chart2::data::PivotTableFieldEntry> PivotTableDataProvider::getPageFields()
+const std::vector<chart2::data::PivotTableFieldEntry>& PivotTableDataProvider::getPageFields() const
 {
-    return comphelper::containerToSequence(m_aPageFields);
+    return m_aPageFields;
 }
 
-uno::Sequence<chart2::data::PivotTableFieldEntry> PivotTableDataProvider::getDataFields()
+const std::vector<chart2::data::PivotTableFieldEntry>& PivotTableDataProvider::getDataFields() const
 {
-    return comphelper::containerToSequence(m_aDataFields);
+    return m_aDataFields;
 }
 
-OUString PivotTableDataProvider::getPivotTableName()
+const OUString & PivotTableDataProvider::getPivotTableName() const
 {
     return m_sPivotTableName;
 }
@@ -751,7 +751,7 @@ void PivotTableDataProvider::setPivotTableName(const OUString& sPivotTableName)
         m_sPivotTableName = sPivotTableName;
 }
 
-sal_Bool PivotTableDataProvider::hasPivotTable()
+bool PivotTableDataProvider::hasPivotTable() const
 {
     if (m_sPivotTableName.isEmpty())
         return false;
@@ -798,11 +798,11 @@ uno::Reference<css::chart2::data::XDataSequence>
     return assignFirstCategoriesToDataSequence();
 }
 
-OUString PivotTableDataProvider::getFieldOutputDescription(sal_Int32 nDimensionIndex)
+OUString PivotTableDataProvider::getFieldOutputDescription(sal_Int32 nDimensionIndex) const
 {
     if (nDimensionIndex < 0)
         return OUString();
-    return m_aFieldOutputDescriptionMap[size_t(nDimensionIndex)];
+    return m_aFieldOutputDescriptionMap.at(size_t(nDimensionIndex));
 }
 
 // XModifyBroadcaster ========================================================

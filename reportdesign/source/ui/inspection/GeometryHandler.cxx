@@ -68,7 +68,7 @@
 #include <tools/fldunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <core_resource.hxx>
 #include <stringarray.hrc>
@@ -875,20 +875,14 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
     return aOut;
 }
 
-beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
+beans::Property GeometryHandler::getProperty(std::u16string_view PropertyName)
 {
-    uno::Sequence< beans::Property > aProps = getSupportedProperties();
-    const beans::Property* pIter = aProps.getConstArray();
-    const beans::Property* pEnd  = pIter + aProps.getLength();
-    const beans::Property* pFind = ::std::find_if(pIter, pEnd,
-            [&PropertyName] (const beans::Property& x) -> bool {
-                return x.Name == PropertyName;
-            });
-    if ( pFind == pEnd )
-        return beans::Property();
-    return *pFind;
+    for (const beans::Property& rProperty : getSupportedProperties())
+        if (rProperty.Name == PropertyName)
+            return rProperty;
+    return {};
 }
-uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,const TranslateId* pResId,const uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName )
+uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,const TranslateId* pResId,const uno::Any& _aValue,const OUString& _sConstantName,std::u16string_view PropertyName )
 {
     std::vector<OUString> aList;
     for (const TranslateId* pItem = pResId; *pItem; ++pItem)

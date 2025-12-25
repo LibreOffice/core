@@ -77,7 +77,7 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf152335)
 {
     createSdImpressDoc("pptx/tdf152335.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDocTheme = parseExport(u"ppt/theme/theme1.xml"_ustr);
     assertXPathChildren(
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf152335)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149803)
 {
     createSdImpressDoc("pptx/tdf149803.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp", "useBgFill", u"1");
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149803)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149311)
 {
     createSdImpressDoc("odp/tdf149311.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pRelsDoc = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
 
@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149311)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149128)
 {
     createSdImpressDoc("odp/tdf149128.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn", "id",
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149128)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf66228)
 {
     createSdImpressDoc("odp/tdf66228.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:spPr/a:prstGeom", "prst",
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf66228)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf147919)
 {
     createSdImpressDoc("odp/tdf147919.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp[1]/p:spPr/a:prstGeom", "prst",
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf147919)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf130165)
 {
     createSdImpressDoc("pptx/tdf146223.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld", "showMasterSp", u"0");
@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf130165)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124781)
 {
     createSdImpressDoc("odp/tdf124781.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:r[2]/a:rPr", "baseline",
@@ -222,10 +222,26 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124781)
                 u"-8000");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf168786_ppt_to_pptx_internal_link_to_nowhere)
+{
+    createSdImpressDoc("ppt/tdf168786.ppt");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
+                u"ppaction://noaction");
+
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
+                u"ppaction://noaction");
+
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
+                u"ppaction://noaction");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf144914)
 {
     createSdImpressDoc("pptx/tdf144616.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:nvSpPr/p:cNvPr/a:hlinkClick", "action",
@@ -265,7 +281,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf144914)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124232)
 {
     createSdImpressDoc("pptx/tdf141704.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick", "action",
@@ -305,7 +321,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124232)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf143624)
 {
     createSdImpressDoc("pptx/tdf143624.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presProps.xml"_ustr);
 
@@ -325,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf142648)
     uno::Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
     xNamed->setName(u"#Slide 1"_ustr);
 
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pRelsDoc = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
 
@@ -336,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf142648)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf47365)
 {
     createSdImpressDoc("pptx/loopNoPause.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presProps.xml"_ustr);
 
@@ -348,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf47365)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf125071)
 {
     createSdImpressDoc("pptx/tdf125071.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
 
@@ -359,7 +375,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf125071)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf54037)
 {
     createSdImpressDoc("pptx/tdf54037.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     xmlDocUniquePtr pRelsDoc = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
@@ -377,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf54037)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf127237)
 {
     createSdImpressDoc("pptx/tdf127237.pptx");
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     const SdrPage* pPage = GetPage(1);
     CPPUNIT_ASSERT(pPage != nullptr);
@@ -396,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf127237)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc887230)
 {
     createSdImpressDoc("pptx/bnc887230.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -410,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc887230)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_1)
 {
     createSdImpressDoc("pptx/bnc870233_1.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -434,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_1)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_2)
 {
     createSdImpressDoc("pptx/bnc870233_2.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -470,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testN828390_4)
     bool bPassed = false;
     createSdImpressDoc("n828390_4.odp");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     {
@@ -508,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testN828390_5)
 {
     createSdImpressDoc("n828390_5.odp");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     {
@@ -592,7 +608,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPlaceholderFillAndOutlineExport)
             aLineStyle = xShpProps->getPropertyValue(u"LineStyle"_ustr);
             aLineColor = xShpProps->getPropertyValue(u"LineColor"_ustr);
 
-            saveAndReload(u"Impress Office Open XML"_ustr);
+            saveAndReload(TestFilter::PPTX);
             continue;
         }
         else
@@ -619,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo71961)
 {
     createSdImpressDoc("fdo71961.odp");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     const SdrPage* pPage = GetPage(1);
 
     // Export to .pptx changes all text frames to custom shape objects, which obey TextWordWrap property
@@ -648,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testN828390)
     bool bPassed = false;
     createSdImpressDoc("pptx/n828390.pptx");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     {
@@ -671,7 +687,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testN828390)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc880763)
 {
     createSdImpressDoc("pptx/bnc880763.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -696,7 +712,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc880763)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc862510_5)
 {
     createSdImpressDoc("pptx/bnc862510_5.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -717,7 +733,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc862510_5)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc822347_EmptyBullet)
 {
     createSdImpressDoc("bnc822347_EmptyBullet.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -747,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc822347_EmptyBullet)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo90607)
 {
     createSdImpressDoc("fdo90607.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(1));
@@ -760,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo90607)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo83751)
 {
     createSdImpressDoc("pptx/fdo83751.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
         mxComponent, uno::UNO_QUERY);
@@ -776,7 +792,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo83751)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testFdo79731)
 {
     createSdImpressDoc("fdo79731.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
@@ -789,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTableCellFillProperties)
     createSdImpressDoc("odp/Table_with_Cell_Fill.odp");
 
     // Export the document and import again for a check
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -819,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTableCellFillProperties)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletStartNumber)
 {
     createSdImpressDoc("pptx/n90255.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
@@ -834,7 +850,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletStartNumber)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testLineStyle)
 {
     createSdImpressDoc("pptx/lineStyle.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     SdrObject const* pShape = pPage->GetObj(0);
@@ -860,7 +876,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf134862)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong paragraph WritingMode", text::WritingMode2::RL_TB,
                                  nWritingMode);
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -877,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRightToLeftParaghraph)
 {
     createSdImpressDoc("pptx/rightToLeftParagraph.pptx");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Get first paragraph
@@ -894,7 +910,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTextboxWithHyperlink)
 {
     createSdImpressDoc("pptx/hyperlinktest.pptx");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Get first paragraph
@@ -918,7 +934,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf136911)
 {
     createSdImpressDoc("ppt/tdf136911.ppt");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Get second paragraph
@@ -942,7 +958,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletColor)
 {
     createSdImpressDoc("pptx/bulletColor.pptx");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -959,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletColor)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletCharAndFont)
 {
     createSdImpressDoc("odp/bulletCharAndFont.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
@@ -988,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletCharAndFont)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletMarginAndIndentation)
 {
     createSdImpressDoc("pptx/bulletMarginAndIndent.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -1010,7 +1026,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testParaMarginAndindentation)
 {
     createSdImpressDoc("pptx/paraMarginAndIndentation.pptx");
 
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     // Get first paragraph
@@ -1029,7 +1045,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testParaMarginAndindentation)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCellLeftAndRightMargin)
 {
     createSdImpressDoc("pptx/n90223.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     sal_Int32 nLeftMargin, nRightMargin;
 
     const SdrPage* pPage = GetPage(1);
@@ -1067,7 +1083,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCellLeftAndRightMargin)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testMergedCells)
 {
     createSdImpressDoc("odp/cellspan.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     const SdrPage* pPage = GetPage(1);
 
     sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -1084,7 +1100,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testMergedCells)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTableCellBorder)
 {
     createSdImpressDoc("pptx/n90190.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
 
@@ -1128,7 +1144,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTableCellBorder)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf111884)
 {
     createSdImpressDoc("pptx/tdf111884.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     const SdrPage* pPage = GetPage(1);
     SdrObject const* pShape = pPage->GetObj(2);
@@ -1142,7 +1158,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf112633)
 {
     // Load document and export it to a temporary file
     createSdImpressDoc("pptx/tdf112633.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     xmlDocUniquePtr pRelsDoc = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
@@ -1172,7 +1188,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf112633)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128952)
 {
     createSdImpressDoc("pptx/tdf128952.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
@@ -1185,7 +1201,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128952)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf127090)
 {
     createSdImpressDoc("pptx/tdf127090.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
@@ -1196,7 +1212,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCustomXml)
 {
     // Load document and export it to a temporary file
     createSdImpressDoc("pptx/customxml.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"customXml/item1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1217,7 +1233,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
 {
     // Load document and export it to a temporary file.
     createSdImpressDoc("pptx/tdf94238.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
@@ -1248,19 +1264,19 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.39000000000000001));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x8b8b8b), Color(aColorStops[2].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 0.39000000000000001));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(1)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(2), 1.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x8b8b8b), Color(aColorStops.getStopColor(2)));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPictureTransparency)
 {
     // Load document and export it to a temporary file.
     createSdImpressDoc("odp/image_transparency.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
@@ -1278,7 +1294,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPictureTransparency)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf125554)
 {
     createSdImpressDoc("pptx/tdf125554.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<beans::XPropertySet> xShape = getShapeFromPage(0, 0);
     uno::Any aFillTransparenceGradientName
@@ -1307,7 +1323,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripOwnLineStyles)
     }
 
     // Save to pptx, reload and compare the LineDash values
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocpptx.is());
     uno::Reference<drawing::XDrawPage> xPagepptx(xDocpptx->getDrawPages()->getByIndex(0),
@@ -1334,7 +1350,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripPrstDash)
 {
     // load and save document, compare prstDash values in saved document with original.
     createSdImpressDoc("pptx/presetDashDot.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     const OUString sOriginal[]
         = { u"dash"_ustr,          u"dashDot"_ustr,      u"dot"_ustr,     u"lgDash"_ustr,
@@ -1372,7 +1388,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testDashOnHairline)
 {
     // load and save document, make sure the custDash has 11 child elements.
     createSdImpressDoc("odp/tdf127267DashOnHairline.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds", 11);
@@ -1383,13 +1399,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationNonMediaShape)
     createSdImpressDoc("pptx/narration-non-media-shape.pptx");
     // Without the accompanying fix in place, this test would have failed,
     // beans::UnknownPropertyException was thrown.
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCustomshapeBitmapfillSrcrect)
 {
     createSdImpressDoc("pptx/customshape-bitmapfill-srcrect.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
@@ -1420,7 +1436,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCustomshapeBitmapfillSrcrect)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkBitmapFill)
 {
     createSdImpressDoc("odp/tdf100348_FontworkBitmapFill.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Make sure the fontwork shape has a blip bitmap fill and a colored outline.
     // Without the patch, fill and outline were black.
@@ -1433,7 +1449,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkBitmapFill)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkGradientGlow)
 {
     createSdImpressDoc("odp/tdf100348_FontworkGradientGlow.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Make sure the fontwork shape has a gradient fill and a colored glow.
     // Without the patch, fill was black and no glow applied.
@@ -1448,7 +1464,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf100348FontworkGradientGlow)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345FullTransparentGradient)
 {
     createSdImpressDoc("odp/tdf128345_FullTransparentGradient.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Make sure the shape has no fill. Without the patch, fill was solid red.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -1458,7 +1474,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345FullTransparentGradient)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientLinear)
 {
     createSdImpressDoc("odp/tdf128345_GradientLinear.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Make sure the shape has a lin fill. Without the patch, fill was solid red.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -1478,7 +1494,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientLinear)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientRadial)
 {
     createSdImpressDoc("odp/tdf128345_GradientRadial.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Make sure the shape has transparency. In OOXML alpha means 'opacity' with default
     // 100000 for full opak, so only the full transparency with val 0 should be written.
@@ -1496,7 +1512,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientAxial)
     // Without the patch, symmetric linear gradient with full transparence outside and
     // full opak in the middle were imported as full transparent.
     createSdImpressDoc("odp/tdf128345_GradientAxial.odp");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<beans::XPropertySet> xShapePropSet(getShapeFromPage(0, 0));
 
     awt::Gradient2 aTransparenceGradient;
@@ -1507,19 +1523,19 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientAxial)
         = model::gradient::getColorStopsFromUno(aTransparenceGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[2].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops.getStopOffset(0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops.getStopColor(0)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(1), 0.5));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops.getStopColor(1)));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops.getStopOffset(2), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops.getStopColor(2)));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aTransparenceGradient.Style);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf134969TransparencyOnColorGradient)
 {
     createSdImpressDoc("odp/tdf134969_TransparencyOnColorGradient.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     // Make sure the shape has a transparency in gradient stops.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
@@ -1534,7 +1550,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf134969TransparencyOnColorGradien
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testArcTo)
 {
     createSdImpressDoc("pptx/arc-validiert.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     static constexpr const char* sPath("//a:custGeom/a:pathLst/a:path/a:arcTo");
@@ -1547,7 +1563,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testArcTo)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationMimeType)
 {
     createSdImpressDoc("pptx/narration.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: audio/mp4
@@ -1610,7 +1626,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationMimeType)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf150316)
 {
     createSdImpressDoc("odp/tdf150316.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:pPr", "indent", u"-343080");
@@ -1619,7 +1635,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf150316)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf140865Wordart3D)
 {
     createSdImpressDoc("pptx/tdf140865Wordart3D.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // without the fix in place a:sp3d was lost on round trip, and so extrusion was lost.
@@ -1639,7 +1655,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf140865Wordart3D)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124457)
 {
     createSdImpressDoc("pptx/tdf124457.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
@@ -1657,7 +1673,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf124457)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf143126)
 {
     createSdImpressDoc("pptx/tdf143126.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presProps.xml"_ustr);
 
@@ -1669,7 +1685,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf143126)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf143129)
 {
     createSdImpressDoc("pptx/tdf143129.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presProps.xml"_ustr);
 
@@ -1680,7 +1696,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf143129)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf118045)
 {
     createSdImpressDoc("odp/tdf118045.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:lnSpc/a:spcPct", "val",
@@ -1690,7 +1706,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf118045)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf137675)
 {
     createSdImpressDoc("pptx/tdf137675.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "fill",
@@ -1700,7 +1716,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf137675)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf151134)
 {
     createSdImpressDoc("pptx/tdf151134.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "lIns", u"91440");

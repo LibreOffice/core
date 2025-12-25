@@ -419,7 +419,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
 {
     if (rRedactionTarget.sType == RedactionTargetType::REDACTION_TARGET_IMAGE)
     {
-        searchImagesInMetaFile(rMtf, aRedactionRectangles, xComponent);
+        searchImagesInMetaFile(rMtf, aRedactionRectangles);
         return;
     }
 
@@ -483,16 +483,9 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
 }
 
 void SfxRedactionHelper::searchImagesInMetaFile(
-    const GDIMetaFile& rMtf, std::vector<::tools::Rectangle>& aRedactionRectangles,
-    const uno::Reference<XComponent>& xComponent)
+    const GDIMetaFile& rMtf, std::vector<::tools::Rectangle>& aRedactionRectangles)
 {
-    OutputDevice* pOutputDevice
-        = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
-    pOutputDevice->Push(::vcl::PushFlags::ALL);
-
-    MetaAction* pCurrAct;
-
-    for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct;
+    for (MetaAction* pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct;
          pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
     {
         tools::Rectangle aImageRect;

@@ -19,6 +19,7 @@
 
 
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/vector/b2isize.hxx>
 #include <osl/diagnose.h>
 
 #include "implbitmapcanvas.hxx"

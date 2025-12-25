@@ -107,8 +107,8 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, weld::Button&, void)
         {
             if (nResult == RET_OK)
             {
-                const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-                const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
+                const SfxStringItem* pItem = SfxItemSet::GetItem(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
+                const SvxFontItem* pFontItem = SfxItemSet::GetItem(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
                 if ( pItem )
                 {
                     m_xNumberCharEdit->set_text(pItem->GetValue());

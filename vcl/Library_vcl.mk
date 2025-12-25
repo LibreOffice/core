@@ -69,6 +69,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \
     salhelper \
+    sax \
     sot \
     svl \
     tl \
@@ -168,6 +169,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/brdwin \
     vcl/source/window/bufferdevice \
     vcl/source/window/accessibility \
+    vcl/source/window/colorpicker \
     vcl/source/window/legacyaccessibility \
     vcl/source/window/clipping \
     vcl/source/window/stacking \
@@ -188,6 +190,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/DocWindow \
     vcl/source/window/event \
     vcl/source/window/floatwin \
+    vcl/source/window/hexcolorcontrol \
     $(if $(ENABLE_WASM_STRIP_SPLASH),,vcl/source/window/introwin) \
     vcl/source/window/keycod \
     vcl/source/window/keyevent \
@@ -260,6 +263,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/spinfld \
     vcl/source/control/tabctrl \
     vcl/source/control/throbber \
+    vcl/source/control/verticaltabctrl \
     vcl/source/control/wizardmachine \
     vcl/source/edit/IdleFormatter \
     vcl/source/edit/vclmedit \
@@ -387,6 +391,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bitmappaint \
     vcl/source/bitmap/BitmapArithmeticBlendFilter \
     vcl/source/bitmap/BitmapShadowFilter \
+    vcl/source/bitmap/BitmapAlphaClampFilter \
     vcl/source/bitmap/BitmapBasicMorphologyFilter \
     vcl/source/bitmap/BitmapDarkenBlendFilter \
     vcl/source/bitmap/BitmapLightenBlendFilter \
@@ -469,8 +474,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/unohelp \
     vcl/source/app/vclevent \
     vcl/source/app/watchdog \
-    vcl/source/app/weldutils \
     vcl/source/app/winscheduler \
+    vcl/source/components/ColorPicker \
     vcl/source/components/dtranscomp \
     vcl/source/components/fontident \
     vcl/source/filter/bmp/BmpReader \
@@ -566,6 +571,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/pdfbuildin_fonts \
     vcl/source/pdf/pdfextoutdevdata \
     vcl/source/pdf/pdfwriter \
+    vcl/source/pdf/pdfwriterimpl_utils \
+    vcl/source/pdf/PDFPage \
     vcl/source/pdf/pdfwriter_impl2 \
     vcl/source/pdf/pdfwriter_impl \
     vcl/source/uitest/logger \
@@ -575,6 +582,14 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/uitest/uitest \
     vcl/source/uitest/uno/uiobject_uno \
     vcl/source/uitest/uno/uitest_uno \
+    vcl/source/weld/Builder \
+    vcl/source/weld/DialogController \
+    vcl/source/weld/EntryTreeView \
+    vcl/source/weld/IconView \
+    vcl/source/weld/ItemView \
+    vcl/source/weld/MetricSpinButton \
+    vcl/source/weld/TreeView \
+    vcl/source/weld/weldutils \
     vcl/backendtest/outputdevice/bitmap \
     vcl/backendtest/outputdevice/clip \
     vcl/backendtest/outputdevice/common \

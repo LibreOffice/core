@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class insertFootEndnote(UITestCase):
 
-   def test_insert_foot_endnote(self):
+    def test_insert_foot_endnote(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
 #Automatic - Footnote

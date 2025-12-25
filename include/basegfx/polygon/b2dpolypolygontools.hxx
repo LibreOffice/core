@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
@@ -30,8 +28,11 @@ namespace com::sun::star::drawing { struct PolyPolygonBezierCoords; }
 
 namespace basegfx
 {
+    class B2DPoint;
     class B2DPolyPolygon;
     class B2DRange;
+    class B3DHomMatrix;
+    class B3DPolyPolygon;
 }
 
 namespace basegfx::utils

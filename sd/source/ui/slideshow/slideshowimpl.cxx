@@ -75,7 +75,7 @@
 #include <vcl/ColorDialog.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

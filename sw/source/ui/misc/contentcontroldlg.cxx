@@ -19,7 +19,7 @@
 
 #include <contentcontroldlg.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/cuicharmap.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>

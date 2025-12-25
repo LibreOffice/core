@@ -264,9 +264,12 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
         xSeekable->seek( 0 );
         m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xContext, std::u16string_view(), xStream->getInputStream() );
 
-        if ( !m_aFilterName.isEmpty()
-          && ( m_aFilterName == "Calc MS Excel 2007 XML" || m_aFilterName == "Impress MS PowerPoint 2007 XML" || m_aFilterName == "MS Word 2007 XML"
-              || m_aFilterName == "MS Excel 97 Vorlage/Template" || m_aFilterName == "MS Word 97 Vorlage" ) )
+        if (!m_aFilterName.isEmpty()
+            && (m_aFilterName == "Calc MS Excel 2007 XML"
+                || m_aFilterName == "Impress MS PowerPoint 2007 XML"
+                || m_aFilterName == "MS Word 2007 XML"
+                || m_aFilterName == "MS Excel 97 Vorlage/Template"
+                || m_aFilterName == "MS Word 97 Vorlage" || m_aFilterName == "draw8"))
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
                 m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, m_xContext),

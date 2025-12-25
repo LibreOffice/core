@@ -13,7 +13,10 @@
 #include <functional>
 
 #include <comphelper/comphelperdllapi.h>
+#include <o3tl/strong_int.hxx>
 #include <rtl/ustring.hxx>
+
+typedef o3tl::strong_int<int, struct ViewShellDocIdTag> ViewShellDocId;
 
 class LanguageTag;
 namespace com::sun::star::awt
@@ -147,12 +150,26 @@ setAnyInputCallback(const std::function<bool(void*, int)>& pAnyInputCallback, vo
                     const std::function<int()>& pMostUrgentPriorityGetter);
 COMPHELPER_DLLPUBLIC bool anyInput();
 
+COMPHELPER_DLLPUBLIC void setFileSaveDialogCallback(
+    const std::function<void(const char*, char*, size_t)>& pFileSaveDialogCallback);
+COMPHELPER_DLLPUBLIC bool fileSaveDialog(const OUString& rSuggested, OUString& rResult);
+
 // These allow setting callbacks, so that set/get of a LOK view is possible even in code that is
 // below sfx2.
 COMPHELPER_DLLPUBLIC void setViewSetter(const std::function<void(int)>& pViewSetter);
 COMPHELPER_DLLPUBLIC void setView(int nView);
 COMPHELPER_DLLPUBLIC void setViewGetter(const std::function<int()>& pViewGetter);
 COMPHELPER_DLLPUBLIC int getView();
+
+/// Set the current DocId, which is used by Mobile LOKit to
+/// load multiple documents and yet identify the views of each.
+/// There are events that are fired while creating a new view,
+/// and if we don't have a DocId, we can't know which other views
+/// within the same document (if any) should get those events.
+/// By setting this static value, we are able to set the DocId
+/// of each SfxViewShell at construction time.
+COMPHELPER_DLLPUBLIC void setDocId(ViewShellDocId nDocId);
+COMPHELPER_DLLPUBLIC ViewShellDocId getDocId();
 
 COMPHELPER_DLLPUBLIC void
 setInitialClientVisibleArea(const css::awt::Rectangle& rClientVisibleArea);

@@ -139,12 +139,6 @@ OUString Annotation::GetTextImpl(const std::unique_lock<std::mutex>& g)
     return xText->getString();
 }
 
-void Annotation::SetText(OUString const& rText)
-{
-    std::unique_lock g(m_aMutex);
-    SetTextImpl(rText, g);
-}
-
 void Annotation::SetTextImpl(OUString const& rText, const std::unique_lock<std::mutex>& g)
 {
     uno::Reference<text::XText> xText(getTextRangeImpl(g));

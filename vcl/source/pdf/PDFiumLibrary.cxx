@@ -17,6 +17,7 @@
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
+#include <fpdf_transformpage.h>
 #include <fpdf_save.h>
 #include <fpdf_signature.h>
 #include <fpdf_formfill.h>
@@ -299,6 +300,22 @@ public:
     PDFSegmentType getType() const override;
 };
 
+class PDFiumClipPathImpl final : public PDFiumClipPath
+{
+private:
+    FPDF_CLIPPATH mpClipPath;
+
+    PDFiumClipPathImpl(const PDFiumClipPathImpl&) = delete;
+    PDFiumClipPathImpl& operator=(const PDFiumClipPathImpl&) = delete;
+
+public:
+    PDFiumClipPathImpl(FPDF_CLIPPATH pClipPath);
+
+    int getPathCount() override;
+    int getPathSegmentCount(int nPathIndex) override;
+    std::unique_ptr<PDFiumPathSegment> getPathSegment(int nPathIndex, int nSegmentIndex) override;
+};
+
 class PDFiumAnnotationImpl final : public PDFiumAnnotation
 {
 private:
@@ -418,21 +435,44 @@ public:
     OUString getFontName() override;
     OUString getBaseFontName() override;
     int getFontAngle() override;
-    PDFiumFont getFont() override;
-    bool getFontData(PDFiumFont font, std::vector<uint8_t>& rData) override;
-    bool getFontToUnicode(PDFiumFont font, std::vector<uint8_t>& rData) override;
-    bool getIsEmbedded(PDFiumFont font) override;
-    bool getFontProperties(FontWeight& weight) override;
+    std::unique_ptr<PDFiumFont> getFont() override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
+    std::unique_ptr<PDFiumBitmap> getRenderedFillPattern(PDFiumDocument& rDoc,
+                                                         PDFiumPage& rPage) override;
     Color getStrokeColor() override;
     double getStrokeWidth() override;
+    std::unique_ptr<PDFiumBitmap> getRenderedStrokePattern(PDFiumDocument& rDoc,
+                                                           PDFiumPage& rPage) override;
     // Path
     int getPathSegmentCount() override;
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index) override;
     Size getImageSize(PDFiumPage& rPage) override;
     std::unique_ptr<PDFiumBitmap> getImageBitmap() override;
     bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) override;
+
+    // ClipPath
+    std::unique_ptr<PDFiumClipPath> getClipPath() override;
+};
+
+class PDFiumFontImpl final : public PDFiumFont
+{
+private:
+    FPDF_FONT mpFont;
+
+    PDFiumFontImpl(const PDFiumFontImpl&) = delete;
+    PDFiumFontImpl& operator=(const PDFiumFontImpl&) = delete;
+
+public:
+    PDFiumFontImpl(FPDF_FONT pFont);
+
+    bool getFontData(std::vector<uint8_t>& rData) const override;
+    bool getFontToUnicode(std::vector<uint8_t>& rData) const override;
+    bool getIsEmbedded() const override;
+
+    sal_uInt32 getGlyphIndexFromCharCode(const sal_uInt32 nCharCode) const override;
+
+    sal_Int32 getFontDictObjNum() const override;
 };
 
 class PDFiumSearchHandleImpl final : public PDFiumSearchHandle
@@ -537,7 +577,7 @@ public:
                 addLineFeed = true;
             }
         }
-        return aResult.toString();
+        return aResult.makeStringAndClear();
     }
 };
 
@@ -1246,68 +1286,57 @@ int PDFiumPageObjectImpl::getFontAngle()
     return nFontAngle;
 }
 
-PDFiumFont PDFiumPageObjectImpl::getFont() { return FPDFTextObj_GetFont(mpPageObject); }
-
-bool PDFiumPageObjectImpl::getFontData(PDFiumFont font, std::vector<uint8_t>& rData)
+std::unique_ptr<PDFiumFont> PDFiumPageObjectImpl::getFont()
 {
-    FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
+    std::unique_ptr<PDFiumFont> pPDFiumFont;
+    if (FPDF_FONT pFont = FPDFTextObj_GetFont(mpPageObject))
+        pPDFiumFont = std::make_unique<PDFiumFontImpl>(pFont);
+    return pPDFiumFont;
+}
+
+PDFiumFontImpl::PDFiumFontImpl(FPDF_FONT pFont)
+    : mpFont(pFont)
+{
+}
+
+bool PDFiumFontImpl::getFontData(std::vector<uint8_t>& rData) const
+{
     size_t buflen(0);
-    bool bOk = FPDFFont_GetFontData(pFontObject, nullptr, 0, &buflen);
+    bool bOk = FPDFFont_GetFontData(mpFont, nullptr, 0, &buflen);
     if (!bOk)
     {
         SAL_WARN("vcl.filter", "PDFiumImpl: failed to get font data");
         return false;
     }
     rData.resize(buflen);
-    bOk = FPDFFont_GetFontData(pFontObject, rData.data(), rData.size(), &buflen);
+    bOk = FPDFFont_GetFontData(mpFont, rData.data(), rData.size(), &buflen);
     assert(bOk && rData.size() == buflen);
     return bOk;
 }
 
-bool PDFiumPageObjectImpl::getFontToUnicode(PDFiumFont font, std::vector<uint8_t>& rData)
+bool PDFiumFontImpl::getFontToUnicode(std::vector<uint8_t>& rData) const
 {
-    FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
-
     size_t buflen(0);
-    bool bOk = FPDFFont_GetToUnicodeContent(pFontObject, nullptr, 0, &buflen);
+    bool bOk = FPDFFont_GetToUnicodeContent(mpFont, nullptr, 0, &buflen);
     if (!bOk)
     {
         SAL_WARN("vcl.filter", "PDFiumImpl: failed to get font data");
         return false;
     }
     rData.resize(buflen);
-    bOk = FPDFFont_GetToUnicodeContent(pFontObject, rData.data(), rData.size(), &buflen);
+    bOk = FPDFFont_GetToUnicodeContent(mpFont, rData.data(), rData.size(), &buflen);
     assert(bOk && rData.size() == buflen);
     return bOk;
 }
 
-bool PDFiumPageObjectImpl::getIsEmbedded(PDFiumFont font)
+bool PDFiumFontImpl::getIsEmbedded() const { return FPDFFont_GetIsEmbedded(mpFont) == 1; }
+
+sal_uInt32 PDFiumFontImpl::getGlyphIndexFromCharCode(const sal_uInt32 nCharCode) const
 {
-    FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
-    return FPDFFont_GetIsEmbedded(pFontObject) == 1;
+    return FPDFFont_GetGlyphIndexFromCharCode(mpFont, nCharCode);
 }
 
-bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
-{
-    // FPDFFont_GetWeight turns out not to be that useful. It seems to just
-    // reports what explicit "FontWeight" feature is mentioned in the PDF font,
-    // which is an optional property.
-    // So pull the font data and analyze it directly. Though the font might not
-    // have an OS/2 table so we may end up eventually inferring the weight from
-    // the style name.
-    PDFiumFont font = getFont();
-    if (!font)
-        return false;
-    std::vector<uint8_t> aData;
-    if (!getFontData(font, aData))
-        return false;
-    if (!EmbeddedFontsManager::analyzeTTF(aData.data(), aData.size(), weight))
-    {
-        SAL_WARN("vcl.filter", "PDFiumImpl: failed to analyzeTTF");
-        return false;
-    }
-    return true;
-}
+sal_Int32 PDFiumFontImpl::getFontDictObjNum() const { return FPDFFont_GetFontDictObjNum(mpFont); }
 
 PDFTextRenderMode PDFiumPageObjectImpl::getTextRenderMode()
 {
@@ -1356,6 +1385,17 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObjectImpl::getPathSegment(int inde
     return pPDFiumPathSegment;
 }
 
+std::unique_ptr<PDFiumClipPath> PDFiumPageObjectImpl::getClipPath()
+{
+    std::unique_ptr<PDFiumClipPath> pPDFiumClipPath;
+    FPDF_CLIPPATH pClipPath = FPDFPageObj_GetClipPath(mpPageObject);
+    if (pClipPath)
+    {
+        pPDFiumClipPath = std::make_unique<PDFiumClipPathImpl>(pClipPath);
+    }
+    return pPDFiumClipPath;
+}
+
 Size PDFiumPageObjectImpl::getImageSize(PDFiumPage& rPage)
 {
     FPDF_IMAGEOBJ_METADATA aMeta;
@@ -1368,6 +1408,36 @@ std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getImageBitmap()
 {
     std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
     FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(mpPageObject);
+    if (pBitmap)
+    {
+        pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
+    }
+    return pPDFiumBitmap;
+}
+
+std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getRenderedStrokePattern(PDFiumDocument& rDoc,
+                                                                             PDFiumPage& rPage)
+{
+    auto& rDocImpl = static_cast<PDFiumDocumentImpl&>(rDoc);
+    auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
+    std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+    FPDF_BITMAP pBitmap = FPDFPageObj_GetRenderedStrokePattern(
+        rDocImpl.getPointer(), rPageImpl.getPointer(), mpPageObject);
+    if (pBitmap)
+    {
+        pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
+    }
+    return pPDFiumBitmap;
+}
+
+std::unique_ptr<PDFiumBitmap> PDFiumPageObjectImpl::getRenderedFillPattern(PDFiumDocument& rDoc,
+                                                                           PDFiumPage& rPage)
+{
+    auto& rDocImpl = static_cast<PDFiumDocumentImpl&>(rDoc);
+    auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
+    std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+    FPDF_BITMAP pBitmap = FPDFPageObj_GetRenderedFillPattern(rDocImpl.getPointer(),
+                                                             rPageImpl.getPointer(), mpPageObject);
     if (pBitmap)
     {
         pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
@@ -1447,6 +1517,31 @@ PDFSegmentType PDFiumPathSegmentImpl::getType() const
     return static_cast<PDFSegmentType>(FPDFPathSegment_GetType(mpPathSegment));
 }
 
+PDFiumClipPathImpl::PDFiumClipPathImpl(FPDF_CLIPPATH pClipPath)
+    : mpClipPath(pClipPath)
+{
+}
+
+int PDFiumClipPathImpl::getPathCount() { return FPDFClipPath_CountPaths(mpClipPath); }
+
+int PDFiumClipPathImpl::getPathSegmentCount(int nPathIndex)
+{
+    return FPDFClipPath_CountPathSegments(mpClipPath, nPathIndex);
+}
+
+std::unique_ptr<PDFiumPathSegment> PDFiumClipPathImpl::getPathSegment(int nPathIndex,
+                                                                      int nSegmentIndex)
+{
+    std::unique_ptr<PDFiumPathSegment> pPDFiumPathSegment;
+    FPDF_PATHSEGMENT pPathSegment
+        = FPDFClipPath_GetPathSegment(mpClipPath, nPathIndex, nSegmentIndex);
+    if (pPathSegment)
+    {
+        pPDFiumPathSegment = std::make_unique<PDFiumPathSegmentImpl>(pPathSegment);
+    }
+    return pPDFiumPathSegment;
+}
+
 PDFiumFormHandle::PDFiumFormHandle(FPDF_FORMHANDLE pHandle)
     : mpHandle(pHandle)
 {
@@ -1517,6 +1612,14 @@ Bitmap PDFiumBitmapImpl::createBitmapFromBuffer()
 
     switch (eFormat)
     {
+        case vcl::pdf::PDFBitmapType::Gray:
+        {
+            aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N8_BPP,
+                             &Bitmap::GetGreyPalette(256));
+            ReadRawDIB(aBitmap, getBuffer(), ScanlineFormat::N8BitPal, nHeight, nStride);
+        }
+        break;
+
         case vcl::pdf::PDFBitmapType::BGR:
         {
             aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);

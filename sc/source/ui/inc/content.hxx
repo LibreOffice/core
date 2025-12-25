@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <address.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>
@@ -146,6 +147,7 @@ public:
     void    SetManualDoc(const OUString& rName);
     void    SelectDoc(const OUString& rName);
     void    SelectEntryByName(const ScContentId nRoot, std::u16string_view rName);
+    void    BringCommentToAttention(sal_uInt16 nCommentId);
 
     /** Applies the navigator settings to the listbox. */
     void ApplyNavigatorSettings();

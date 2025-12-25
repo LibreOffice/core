@@ -83,8 +83,13 @@ private:
     // and the layouting stuff
     bool mbSelfCreated;
 
+    // set to true if the model contained here for the Diagram was
+    // modified
+    bool mbModified; // false
+
 protected:
-    void anchorToSdrObjGroup(SdrObjGroup& rTarget);
+    // remember associated SdrObjGroup
+    SdrObjGroup* mpAssociatedSdrObjGroup;
 
 public:
     IDiagramHelper(bool bSelfCreated);
@@ -118,7 +123,22 @@ public:
     bool isSelfCreated() const { return mbSelfCreated; }
     void setSelfCreated() { mbSelfCreated = true; }
 
+    // connect/disconnect to/from Group
+    void connectToSdrObjGroup(SdrObjGroup& rTarget);
+    void disconnectFromSdrObjGroup();
+
+    // modified state of this local model. Needs to be set to know
+    // how to do correct export
+    bool isModified() const { return mbModified; }
+    void setModified() { mbModified = true; }
+
+    // react on changes to objects identified by DiagramDataModelID, returns true if a change was done
+    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) = 0;
+
     static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);
+
+    // access to PropertyValues
+    virtual css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const = 0;
 };
 
 }} // end of namespace

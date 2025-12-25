@@ -18,7 +18,7 @@ dnl cspell:ignoreRegExp / -isystem /
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[26.2.0.0.alpha0+],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[26.8.0.0.alpha0+],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -1077,7 +1077,11 @@ cygwin*|wsl*)
     ;;
 
 darwin*) # macOS
-    using_freetype_fontconfig=no
+    if test "$enable_headless" != "yes"; then
+        using_freetype_fontconfig=no
+    else
+        using_freetype_fontconfig=yes
+    fi
     using_x11=no
     build_skia=yes
     enable_pagein=no
@@ -1934,6 +1938,11 @@ AC_ARG_ENABLE(gen,
          Per default auto-enabled when X11 is used.]),
 ,test "${test_gen}" = no -o "${enable_gen+set}" = set || enable_gen=yes)
 
+AC_ARG_ENABLE(headless,
+    AS_HELP_STRING([--enable-headless],
+        [Enable headless plugin (svp) even on macOS.]),
+,using_headless_plugin=yes)
+
 AC_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
         [Disable use of X11 or Wayland to reduce dependencies (e.g. for building LibreOfficeKit).]),
@@ -2145,11 +2154,6 @@ AC_ARG_WITH(product-name,
     AS_HELP_STRING([--with-product-name='My Own Office Suite'],
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
-
-libo_FUZZ_ARG_ENABLE(community-flavor,
-    AS_HELP_STRING([--disable-community-flavor],
-        [Disable the Community branding.]),
-,)
 
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
@@ -2500,6 +2504,11 @@ AC_ARG_WITH(external-thes-dir,
         [Specify external thesaurus dir.]),
 ,)
 
+AC_ARG_WITH(system-sqlite3,
+    AS_HELP_STRING([--with-system-sqlite3],
+        [Use sqlite3 already on system.]),,
+    [with_system_sqlite3="$with_system_libs"])
+
 AC_ARG_WITH(system-zlib,
     AS_HELP_STRING([--with-system-zlib],
         [Use zlib already on system.]),,
@@ -2530,6 +2539,11 @@ AC_ARG_WITH(system-libxml,
         [Use libxml/libxslt already on system.]),,
     [with_system_libxml=auto])
 
+AC_ARG_WITH(system-lzma,
+    AS_HELP_STRING([--with-system-lzma],
+        [Use lzma already on system.]),,
+    [with_system_lzma="$with_system_libs"])
+
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
@@ -2549,6 +2563,11 @@ AC_ARG_WITH(system-abseil,
     AS_HELP_STRING([--with-system-abseil],
         [Use the abseil libraries already on system.]),,
     [with_system_abseil="$with_system_libs"])
+
+AC_ARG_WITH(system-afdko,
+    AS_HELP_STRING([--with-system-afdko],
+        [Use system AKDKO (only needed for pdfium based PDF import.)]),,
+    [with_system_afdko="$with_system_libs"])
 
 AC_ARG_WITH(system-openjpeg,
     AS_HELP_STRING([--with-system-openjpeg],
@@ -3218,14 +3237,6 @@ else
     ENABLE_HARDENING_FLAGS=TRUE
 fi
 AC_SUBST(ENABLE_HARDENING_FLAGS)
-
-AC_MSG_CHECKING([whether to build a Community flavor])
-if test -z "$enable_community_flavor" -o "$enable_community_flavor" = "yes"; then
-    AC_DEFINE(HAVE_FEATURE_COMMUNITY_FLAVOR)
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
 
 dnl ===================================================================
 dnl Test whether to sign Windows Build
@@ -4399,6 +4410,8 @@ map_vs_year_to_version()
     case $1 in
     2022)
         vsversion=17;;
+    2026)
+        vsversion=18;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -4524,6 +4537,9 @@ find_msvc()
             vcyear=2022
             vctoolset=v143
             ;;
+        18.0)
+            vcyear=2026
+            vctoolset=v145
         esac
         vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
 
@@ -4691,7 +4707,7 @@ if test "$_os" = "WINNT"; then
         # are always "better", we list them in reverse chronological order.
 
         case "$vcnumwithdot" in
-        16.0 | 17.0 | 17.14)
+        16.0 | 17.0 | 17.14 | 18.0)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
@@ -4776,7 +4792,6 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 AC_SUBST(COM_IS_CLANG)
 
 CLANGVER=
-CLANG_16=
 if test "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether Clang is new enough])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
@@ -4800,19 +4815,15 @@ if test "$COM_IS_CLANG" = TRUE; then
         CLANG_FULL_VERSION=`echo __clang_version__ | $CC $my_args -`
         CLANGVER=`echo $clang_version \
             | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
-        if test "$CLANGVER" -ge 120000; then
+        if test "$CLANGVER" -ge 180000; then
             AC_MSG_RESULT([yes ($clang_version)])
         else
-            AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 12])
-        fi
-        if test "$CLANGVER" -ge 160000; then
-            CLANG_16=TRUE
+            AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 18])
         fi
         AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
         AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
     fi
 fi
-AC_SUBST(CLANG_16)
 
 SHOWINCLUDES_PREFIX=
 if test "$_os" = WINNT; then
@@ -5049,11 +5060,7 @@ check_use_ld()
     use_ld_path=${1#*:}
     if test "$use_ld_path" != "$1"; then
         if test "$COM_IS_CLANG" = TRUE; then
-            if test "$CLANGVER" -ge 120000; then
-                use_ld="${use_ld} --ld-path=${use_ld_path}"
-            else
-                use_ld="-fuse-ld=${use_ld_path}"
-            fi
+            use_ld="${use_ld} --ld-path=${use_ld_path}"
         else
             # I tried to use gcc's '-B<path>' and a directory + symlink setup in
             # $BUILDDIR, but libtool always filtered-out that option, so gcc wouldn't
@@ -6323,6 +6330,7 @@ if test "$cross_compiling" = "yes"; then
         LIBWEBP
         LIBXML2
         LIBXSLT
+        LZMA
         MDDS
         MESON
         NATIVE
@@ -6332,6 +6340,7 @@ if test "$cross_compiling" = "yes"; then
         REPORTBUILDER
         SCRIPTING
         SKIA
+        SQLITE3
         ZLIB
         ZSTD
         ZXCVBN
@@ -8909,16 +8918,6 @@ if test "$COM_IS_CLANG" = "TRUE"; then
     else
         compiler_plugins=no
     fi
-    if test "$compiler_plugins" != no -a "$my_apple_clang" != yes; then
-        if test "$CLANGVER" -lt 120001; then
-            if test "$compiler_plugins" = yes; then
-                AC_MSG_ERROR(
-                    [Clang $CLANGVER is too old to build compiler plugins; need >= 12.0.1.])
-            else
-                compiler_plugins=no
-            fi
-        fi
-    fi
     if test "$compiler_plugins" != "no"; then
         dnl The prefix where Clang resides, override to where Clang resides if
         dnl using a source build:
@@ -9013,8 +9012,9 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             if test -n "$COMPILER_PLUGINS"; then
                 if test -z "$CLANGSYSINCLUDE"; then
                     if test -n "$LLVM_CONFIG"; then
-                        # Path to the clang system headers (no idea if there's a better way to get it).
-                        CLANGSYSINCLUDE=$($LLVM_CONFIG --libdir)/clang/$($LLVM_CONFIG --version | sed 's/git\|svn//')/include
+                        # Extract path to the clang system headers (no idea if there's a better way to get it).
+                        CLANGSYSMAJORVERSION=$($LLVM_CONFIG --version|awk -F. {'print $1'})
+                        CLANGSYSINCLUDE=$(ls -d $($LLVM_CONFIG --libdir)/clang/$CLANGSYSMAJORVERSION*/include)
                     fi
                 fi
             fi
@@ -9068,14 +9068,6 @@ AC_SUBST(LD_PLUGIN)
 
 AC_CHECK_FUNCS(posix_fallocate, HAVE_POSIX_FALLOCATE=YES, [HAVE_POSIX_FALLOCATE=NO])
 AC_SUBST(HAVE_POSIX_FALLOCATE)
-
-JITC_PROCESSOR_TYPE=""
-if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
-    # IBMs JDK needs this...
-    JITC_PROCESSOR_TYPE=6
-    export JITC_PROCESSOR_TYPE
-fi
-AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
     for i in $PKGFORMAT; do
@@ -10349,9 +10341,12 @@ if test "$with_system_libxml" = "auto"; then
     Emscripten)
         with_system_libxml=no
         ;;
+    Darwin)
+        with_system_libxml=yes
+        ;;
     *)
         if test "$enable_fuzzers" != "yes"; then
-            with_system_libxml=yes
+            with_system_libxml="$with_system_libs"
         else
             with_system_libxml=no
         fi
@@ -10660,7 +10655,7 @@ fi
 if test \( "$cross_compiling" = yes -a -z "$PYTHON_FOR_BUILD" \) -o "$enable_python" = internal; then
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
-    PYTHON_VERSION_MINOR=12
+    PYTHON_VERSION_MINOR=13
     PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.11
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
@@ -11511,7 +11506,7 @@ fi
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
-ICU_MAJOR=77
+ICU_MAJOR=78
 ICU_MINOR=1
 ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
 ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib -licuuc"
@@ -12525,7 +12520,7 @@ if test "$test_gtk3" = yes -a "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" =
         add_warning 'Non-system cairo combined with gtk3 is known to cause trouble (eg. broken image in the splashscreen). Use --with-system-cairo unless you know what you are doing.'
     fi
     : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.20 gmodule-no-export-2.0 glib-2.0 >= 2.38 atk >= 2.28.1 cairo)
+    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.24 gmodule-no-export-2.0 glib-2.0 >= 2.38 atk >= 2.36 cairo)
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK3_CFLAGS="$GTK3_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     FilterLibs "${GTK3_LIBS}"
@@ -12941,8 +12936,32 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
     # Only used by the pdf import code that uses pdfium
     # which doesn't currently have --with-system support
     if test "$ENABLE_PDFIMPORT" = "TRUE"; then
-        BUILD_TYPE="$BUILD_TYPE AFDKO"
         AC_DEFINE(HAVE_FEATURE_AFDKO)
+        AC_MSG_CHECKING([which AFDKO to use])
+        if test "$with_system_afdko" = "yes"; then
+            SYSTEM_AFDKO=TRUE
+            AC_MSG_RESULT([external])
+            AC_PATH_PROGS(TX, tx)
+            if test -z "$TX"; then
+                AC_MSG_ERROR([install 'tx' from Adobe Font Development Kit for OpenType (AFDKO)])
+            fi
+            AC_PATH_PROGS(MAKEOTF, makeotfexe makeotf)
+            if test -z "$MAKEOTF"; then
+                AC_MSG_ERROR([install 'makeotf' from Adobe Font Development Kit for OpenType (AFDKO)])
+            fi
+            AC_PATH_PROGS(MERGEFONTS, mergefonts)
+            if test -z "$MERGEFONTS"; then
+                AC_MSG_ERROR([install 'mergefonts' from Adobe Font Development Kit for OpenType (AFDKO)])
+            fi
+            AC_DEFINE(USE_AFDKO_PROGRAMS)
+            AC_DEFINE_UNQUOTED(TX,"$TX")
+            AC_DEFINE_UNQUOTED(MAKEOTF,"$MAKEOTF")
+            AC_DEFINE_UNQUOTED(MERGEFONTS,"$MERGEFONTS")
+        else
+            AC_MSG_RESULT([internal])
+            BUILD_TYPE="$BUILD_TYPE AFDKO"
+        fi
+        AC_SUBST(SYSTEM_AFDKO)
     fi
 fi
 AC_SUBST(SYSTEM_OPENJPEG2)
@@ -14473,6 +14492,22 @@ AC_SUBST(BZIP2_CFLAGS)
 AC_SUBST(BZIP2_LIBS)
 
 dnl ===================================================================
+dnl Test whether we need lzma for internal python
+dnl ===================================================================
+if test $enable_python = internal; then
+    BUILD_TYPE="$BUILD_TYPE LZMA"
+    libo_CHECK_SYSTEM_MODULE([lzma], [LZMA], [lzma])
+fi
+
+dnl ===================================================================
+dnl Test whether we need sqlite3 for internal python (no needed on macOS)
+dnl ===================================================================
+if test "$_os" != "Darwin" -a $enable_python = internal; then
+    BUILD_TYPE="$BUILD_TYPE SQLITE3"
+    libo_CHECK_SYSTEM_MODULE([sqlite3], [SQLITE3], [sqlite3])
+fi
+
+dnl ===================================================================
 dnl Test whether to enable extension update
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable extension update])
@@ -15177,6 +15212,7 @@ AC_SUBST(MSGUNIQ)
 # check that the list is valid
 for lang in $WITH_LANG; do
     test "$lang" = "ALL" && continue
+    test "$lang" = "qtz" && ALL_LANGS="$ALL_LANGS qtz" && continue
     # need to check for the exact string, so add space before and after the list of all languages
     for vl in $ALL_LANGS; do
         if test "$vl" = "$lang"; then
@@ -16155,7 +16191,7 @@ AC_CONFIG_LINKS([include:include])
 
 if test -n "$WSL_ONLY_AS_HELPER"; then
     # while we configure in linux, we actually compile in "cygwin" (close enough at least)
-    build=$host
+    build=$build_cpu-$host_vendor-$host_os
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
     PathFormat "$BUILDDIR"
@@ -16215,6 +16251,7 @@ AC_CONFIG_FILES([vs-code.code-workspace.template:.vscode/vs-code-template.code-w
                -e '/defaultProfile/s#Cygwin#Git Bash#' vs-code.code-workspace.template
     fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
 
+AC_CONFIG_HEADERS([config_host/config_afdko.h])
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
 AC_CONFIG_HEADERS([config_host/config_buildconfig.h])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])

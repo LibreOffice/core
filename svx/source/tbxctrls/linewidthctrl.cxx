@@ -24,6 +24,7 @@
 #include <svx/svxids.hrc>
 #include <svx/xlnwtit.hxx>
 #include <svx/linectrl.hxx>
+#include <tools/debug.hxx>
 #include "linemetricbox.hxx"
 
 using namespace ::com::sun::star;

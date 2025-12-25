@@ -22,7 +22,7 @@
 
 #include <string_view>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <envlop.hxx>
 
 class SwTextFormatColl;

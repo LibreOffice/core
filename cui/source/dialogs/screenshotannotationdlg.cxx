@@ -39,13 +39,13 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

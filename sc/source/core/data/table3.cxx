@@ -64,6 +64,7 @@
 #include <drwlayer.hxx>
 #include <queryevaluator.hxx>
 #include <scopetools.hxx>
+#include <SheetViewManager.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -1801,6 +1802,20 @@ void ScTable::Sort(
                 pUndo->maSortRange = ScRange(rSortParam.nCol1, nRow1, nTab, rSortParam.nCol2, nLastRow, nTab);
                 pUndo->maDataAreaExtras.mnStartRow = nRow1;
                 pUndo->maOrderIndices = pArray->GetOrderIndices();
+            }
+
+            bool bAutoFilter = GetDoc().HasAutoFilter(rSortParam.nCol1, nRow1, GetTab());
+            if (bAutoFilter)
+            {
+                if (IsSheetViewHolder())
+                {
+                    auto pSheetView = mpSheetViewFor->GetSheetViewManager()->get(mnSheetViewID);
+                    pSheetView->addOrderIndices(pArray->GetOrderIndices(), nRow1, nLastRow);
+                }
+                else
+                {
+                    GetSheetViewManager()->addOrderIndices(pArray->GetOrderIndices(), nRow1, nLastRow);
+                }
             }
         }
     }

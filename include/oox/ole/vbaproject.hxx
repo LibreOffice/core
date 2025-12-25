@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_OLE_VBAPROJECT_HXX
 #define INCLUDED_OOX_OLE_VBAPROJECT_HXX
 
-#include <functional>
 #include <map>
 #include <string_view>
 

@@ -32,6 +32,7 @@
 
 #include <DrawController.hxx>
 #include <SlideSorterViewShell.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <ViewShellBase.hxx>
 #include <o3tl/safeint.hxx>
@@ -62,7 +63,7 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
     , mxSidebar(std::move(xSidebar))
 {
     mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
-    mxPreviewIconView->connect_mouse_press(LINK(this, MasterPagesSelector, MousePressHdl));
+    mxPreviewIconView->connect_command(LINK(this, MasterPagesSelector, CommandHdl));
     mxPreviewIconView->connect_query_tooltip(LINK(this, MasterPagesSelector, QueryTooltipHdl));
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
@@ -129,23 +130,30 @@ IMPL_LINK_NOARG(MasterPagesSelector, MasterPageSelected, weld::IconView&, bool)
     return true;
 }
 
-IMPL_LINK(MasterPagesSelector, MousePressHdl, const MouseEvent&, rMEvet, bool)
+IMPL_LINK(MasterPagesSelector, CommandHdl, const CommandEvent&, rEvent, bool)
 {
-    if (!rMEvet.IsRight())
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    const Point& pPos = rMEvet.GetPosPixel();
-    for (int i = 0; i < mxPreviewIconView->n_children(); i++)
+    Point aPos;
+    if (rEvent.IsMouseEvent())
     {
-        const ::tools::Rectangle aRect = mxPreviewIconView->get_rect(i);
-        if (aRect.Contains(pPos))
-        {
-            mxPreviewIconView->select(i);
-            ShowContextMenu(pPos);
-            break;
-        }
+        aPos = rEvent.GetMousePosPixel();
+        std::unique_ptr<weld::TreeIter> pIter = mxPreviewIconView->get_item_at_pos(aPos);
+        if (!pIter)
+            return false;
+        mxPreviewIconView->select(*pIter);
     }
-    return false;
+    else
+    {
+        std::unique_ptr<weld::TreeIter> pSelected = mxPreviewIconView->get_selected();
+        if (!pSelected)
+            return false;
+        aPos = mxPreviewIconView->get_rect(*pSelected).Center();
+    }
+
+    ShowContextMenu(aPos);
+    return true;
 }
 
 IMPL_LINK(MasterPagesSelector, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
@@ -478,7 +486,7 @@ VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
     const Size aSize(aPreviewBitmap.GetSizePixel());
     pVDev->SetOutputSizePixel(aSize);
-    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
+    pVDev->DrawBitmap(aNull, aPreviewBitmap);
 
     return pVDev;
 }

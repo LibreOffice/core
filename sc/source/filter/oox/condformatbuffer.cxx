@@ -1352,11 +1352,20 @@ private:
     static size_t hashCode(const CondFormat& r)
     {
         std::size_t seed(0);
-        // note that we deliberately skip the maRanges field, because, if necessary, we will merge
-        // new entries into that field.
+        o3tl::hash_combine(seed, hashCode(r.maModel.maRanges));
         o3tl::hash_combine(seed, r.maModel.mbPivot);
         for (const auto & rPair : r.maRules)
             o3tl::hash_combine(seed, hashCode(*rPair.second));
+        return seed;
+    }
+    static size_t hashCode(const ScRangeList& rRangeList)
+    {
+        std::size_t seed(0);
+        for (const ScRange & rRange : rRangeList)
+        {
+            o3tl::hash_combine(seed, rRange.aStart);
+            o3tl::hash_combine(seed, rRange.aEnd);
+        }
         return seed;
     }
     static size_t hashCode(const CondFormatRule& r)
@@ -1396,8 +1405,8 @@ struct CondFormatEquals
     {
         if (lhs.get() == rhs.get())
             return true;
-        // note that we deliberately skip the maRanges field, because, if necessary, we will merge
-        // new entries into that field.
+        if (lhs->maModel.maRanges != rhs->maModel.maRanges)
+            return false;
         if (lhs->maModel.mbPivot != rhs->maModel.mbPivot)
             return false;
         auto it1 = lhs->maRules.begin();

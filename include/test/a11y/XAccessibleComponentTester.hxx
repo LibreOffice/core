@@ -25,8 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-#include <test/a11y/AccessibilityTools.hxx>
-
 class OOO_DLLPUBLIC_TEST XAccessibleComponentTester
 {
 private:

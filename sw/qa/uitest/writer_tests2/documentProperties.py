@@ -14,7 +14,7 @@ from uitest.uihelper.common import select_pos
 
 class documentProperties(UITestCase):
 
-   def assert_custom_properties(self, dialog, bIsFirstItemVisible):
+    def assert_custom_properties(self, dialog, bIsFirstItemVisible):
         for i in range(6):
             aExpected = 'false'
             if bIsFirstItemVisible and i == 0:
@@ -28,7 +28,7 @@ class documentProperties(UITestCase):
             self.assertEqual(aExpected, get_state_as_dict(xValueEdit)['ReallyVisible'])
             self.assertEqual(aExpected, get_state_as_dict(xRemoveBtn)['ReallyVisible'])
 
-   def test_open_documentProperties_writer(self):
+    def test_open_documentProperties_writer(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
                 xResetBtn = xDialog.getChild("reset")

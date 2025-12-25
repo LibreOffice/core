@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/attributelist.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -31,7 +32,7 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
     : mxContext(std::move(xContext))
 {
     // Extract the output stream from the descriptor.
-    utl::MediaDescriptor aMediaDesc(rDescriptor);
+    comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
     auto xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT,
                                                         uno::Reference<io::XStream>());
     const sal_Int32 nOpenMode = embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;

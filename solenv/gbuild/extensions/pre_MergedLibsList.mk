@@ -19,6 +19,7 @@ gb_MERGE_LIBRARY_LIST := \
 	canvasfactory \
 	canvastools \
 	chart2 \
+	chart2api \
 	comphelper \
 	configmgr \
 	cppcanvas \

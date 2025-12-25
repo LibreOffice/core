@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/builder.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -26,7 +27,7 @@
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
 #include <framework/addonsoptions.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vector>
 #include <unordered_map>
 #include <vcl/WeldedTabbedNotebookbar.hxx>
@@ -322,7 +323,7 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
         {
             eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
         }
-        catch (css::frame::UnknownModuleException& e)
+        catch (css::uno::Exception& e)
         {
             SAL_WARN("sfx.appl", "SfxNotebookBar::IsActive(): " + e.Message);
             return false;
@@ -473,10 +474,14 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             //Addons For Notebookbar
             std::vector<Image> aImageValues;
             std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
-            NotebookBarAddonsItem aNotebookBarAddonsItem;
-            NotebookbarAddonValues(aImageValues , aExtensionValues);
-            aNotebookBarAddonsItem.aAddonValues = std::move(aExtensionValues);
-            aNotebookBarAddonsItem.aImageValues = std::move(aImageValues);
+            std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem;
+            if (!bIsLOK)
+            {
+                pNotebookBarAddonsItem = std::make_unique<NotebookBarAddonsItem>();
+                NotebookbarAddonValues(aImageValues , aExtensionValues);
+                pNotebookBarAddonsItem->aAddonValues = std::move(aExtensionValues);
+                pNotebookBarAddonsItem->aImageValues = std::move(aImageValues);
+            }
 
             if (bIsLOK)
             {
@@ -499,7 +504,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
                 comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
 
-                pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, aNotebookBarAddonsItem);
+                pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, std::move(pNotebookBarAddonsItem));
                 rViewData.m_pNotebookBar = pNotebookBar;
                 assert(pNotebookBar->IsWelded());
 
@@ -524,7 +529,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             RemoveListeners(pSysWindow);
 
-            pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
+            pSysWindow->SetNotebookBar(aBuf, xFrame, std::move(pNotebookBarAddonsItem), bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
 

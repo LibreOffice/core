@@ -16,7 +16,8 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/link.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/ui/XSidebar.hpp>
 

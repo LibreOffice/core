@@ -15,6 +15,7 @@
 
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <svl/outstrm.hxx>
@@ -27,7 +28,7 @@ sal_Bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>&
 {
     bool bReturn = false;
 
-    utl::MediaDescriptor aMediaDesc = aDescriptor;
+    comphelper::SequenceAsHashMap aMediaDesc = aDescriptor;
 
     // Actually get the SwRootFrame to call dumpAsXml
     auto pXTextDocument = comphelper::getFromUnoTunnel<SwXTextDocument>(m_xSourceDocument);

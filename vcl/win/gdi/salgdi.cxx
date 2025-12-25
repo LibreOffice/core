@@ -342,7 +342,7 @@ void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 }
 
 // static
-IDWriteFactory* WinSalGraphics::getDWriteFactory()
+const sal::systools::COMReference<IDWriteFactory>& WinSalGraphics::getDWriteFactory()
 {
     static sal::systools::COMReference<IDWriteFactory> pDWriteFactory(
         []()
@@ -358,7 +358,7 @@ IDWriteFactory* WinSalGraphics::getDWriteFactory()
             }
             return pResult;
         }());
-    return pDWriteFactory.get();
+    return pDWriteFactory;
 }
 
 // static

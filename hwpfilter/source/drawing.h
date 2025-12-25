@@ -26,8 +26,6 @@
 
 #include <osl/diagnose.h>
 
-#include <comphelper/newarray.hxx>
-
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hiodev.h"
@@ -583,8 +581,7 @@ int cmd, void * /*argp*/, int /*argv*/)
                 return OBJRET_FILE_ERROR;
             if (hdo->u.freeform.npt)
             {
-                hdo->u.freeform.pt =
-                    ::comphelper::newArray_null<ZZPoint>(hdo->u.freeform.npt);
+                hdo->u.freeform.pt = new (std::nothrow) ZZPoint[hdo->u.freeform.npt];
                 if (hdo->u.freeform.pt == nullptr)
                 {
                     hdo->u.freeform.npt = 0;

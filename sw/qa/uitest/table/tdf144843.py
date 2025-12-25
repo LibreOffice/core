@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf144843(UITestCase):
 
-   def test_tdf144843(self):
+    def test_tdf144843(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.xUITest.executeCommand(".uno:InsertTable?Columns:short=2&Rows:short=2")

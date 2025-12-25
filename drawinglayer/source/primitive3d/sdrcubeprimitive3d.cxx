@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/primitive3d/sdrcubeprimitive3d.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

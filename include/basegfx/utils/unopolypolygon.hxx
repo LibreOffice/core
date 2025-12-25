@@ -22,12 +22,13 @@
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <o3tl/safeint.hxx>
+
+namespace com::sun::star::rendering { enum class FillRule; }
 
 namespace basegfx::unotools
 {

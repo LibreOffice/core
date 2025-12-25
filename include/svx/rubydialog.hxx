@@ -23,9 +23,9 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
+#include <vcl/weld/customweld.hxx>
 
 class SvxRubyDialog;
 class RubyPreview final : public weld::CustomWidgetController

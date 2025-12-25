@@ -24,6 +24,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 #include <unotools/pathoptions.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 // forward ---------------------------------------------------------------
 struct OptPath_Impl;

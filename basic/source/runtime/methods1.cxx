@@ -1567,8 +1567,7 @@ void SbRtl_MonthName(StarBASIC *, SbxArray & rPar, bool)
     if( nParCount == 3 )
         bAbbreviate = rPar.Get(2)->GetBool();
 
-    const CalendarItem2* pCalendarItems = aMonthSeq.getConstArray();
-    const CalendarItem2& rItem = pCalendarItems[nVal - 1];
+    const CalendarItem2& rItem = aMonthSeq[nVal - 1];
 
     OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString(aRetStr);
@@ -1625,8 +1624,7 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
         }
     }
 
-    const CalendarItem2* pCalendarItems = aDaySeq.getConstArray();
-    const CalendarItem2& rItem = pCalendarItems[nDay - 1];
+    const CalendarItem2& rItem = aDaySeq[nDay - 1];
 
     OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString(aRetStr);
@@ -1657,18 +1655,18 @@ void SbRtl_Weekday(StarBASIC *, SbxArray & rPar, bool)
 
 namespace {
 
-enum Interval
+enum class Interval
 {
-    INTERVAL_YYYY,
-    INTERVAL_Q,
-    INTERVAL_M,
-    INTERVAL_Y,
-    INTERVAL_D,
-    INTERVAL_W,
-    INTERVAL_WW,
-    INTERVAL_H,
-    INTERVAL_N,
-    INTERVAL_S
+    YYYY,
+    Q,
+    M,
+    Y,
+    D,
+    W,
+    WW,
+    H,
+    N,
+    S
 };
 
 struct IntervalInfo
@@ -1685,16 +1683,16 @@ static IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
 {
     static IntervalInfo const aIntervalTable[] =
     {
-        { INTERVAL_YYYY, "yyyy", 0.0,           false }, // Year
-        { INTERVAL_Q,    "q",    0.0,           false }, // Quarter
-        { INTERVAL_M,    "m",    0.0,           false }, // Month
-        { INTERVAL_Y,    "y",    1.0,           true  }, // Day of year
-        { INTERVAL_D,    "d",    1.0,           true  }, // Day
-        { INTERVAL_W,    "w",    1.0,           true  }, // Weekday
-        { INTERVAL_WW,   "ww",   7.0,           true  }, // Week
-        { INTERVAL_H,    "h",    1.0 /    24.0, true  }, // Hour
-        { INTERVAL_N,    "n",    1.0 /  1440.0, true  }, // Minute
-        { INTERVAL_S,    "s",    1.0 / 86400.0, true  }  // Second
+        { Interval::YYYY, "yyyy", 0.0,           false }, // Year
+        { Interval::Q,    "q",    0.0,           false }, // Quarter
+        { Interval::M,    "m",    0.0,           false }, // Month
+        { Interval::Y,    "y",    1.0,           true  }, // Day of year
+        { Interval::D,    "d",    1.0,           true  }, // Day
+        { Interval::W,    "w",    1.0,           true  }, // Weekday
+        { Interval::WW,   "ww",   7.0,           true  }, // Week
+        { Interval::H,    "h",    1.0 /    24.0, true  }, // Hour
+        { Interval::N,    "n",    1.0 /  1440.0, true  }, // Minute
+        { Interval::S,    "s",    1.0 / 86400.0, true  }  // Second
     };
     auto const pred = [&rStringCode](const IntervalInfo &aInterval) {
             return rStringCode.equalsIgnoreAsciiCaseAscii(aInterval.mStringCode);
@@ -1705,13 +1703,6 @@ static IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
             return intervalIter;
     }
     return nullptr;
-}
-
-static void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
-{
-    rnDay   = implGetDateDay( dDate );
-    rnMonth = implGetDateMonth( dDate );
-    rnYear  = implGetDateYear( dDate );
 }
 
 /** Limits a date to valid dates within tools' class Date capabilities.
@@ -1767,12 +1758,13 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
         double dHoursMinutesSeconds = dDate - floor( dDate );
 
         bool bOk = true;
-        sal_Int16 nYear, nMonth, nDay;
+        sal_Int16 nDay = implGetDateDay(dDate);
+        sal_Int16 nMonth = implGetDateMonth(dDate);
+        sal_Int16 nYear = implGetDateYear(dDate);
         sal_Int16 nTargetYear16 = 0, nTargetMonth = 0;
-        implGetDayMonthYear( nYear, nMonth, nDay, dDate );
         switch( pInfo->meInterval )
         {
-            case INTERVAL_YYYY:
+            case Interval::YYYY:
             {
                 sal_Int32 nTargetYear = lNumber + nYear;
                 nTargetYear16 = limitDate( nTargetYear, nMonth, nDay );
@@ -1781,15 +1773,15 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
                 bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, SbDateCorrection::TruncateToMonth, dNewDate );
                 break;
             }
-            case INTERVAL_Q:
-            case INTERVAL_M:
+            case Interval::Q:
+            case Interval::M:
             {
                 bool bNeg = (lNumber < 0);
                 if( bNeg )
                     lNumber = -lNumber;
                 sal_Int32 nYearsAdd;
                 sal_Int16 nMonthAdd;
-                if( pInfo->meInterval == INTERVAL_Q )
+                if( pInfo->meInterval == Interval::Q )
                 {
                     nYearsAdd = lNumber / 4;
                     nMonthAdd = static_cast<sal_Int16>( 3 * (lNumber % 4) );
@@ -1866,14 +1858,14 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
     double dRet = 0.0;
     switch( pInfo->meInterval )
     {
-        case INTERVAL_YYYY:
+        case Interval::YYYY:
         {
             sal_Int16 nYear1 = implGetDateYear( dDate1 );
             sal_Int16 nYear2 = implGetDateYear( dDate2 );
             dRet = nYear2 - nYear1;
             break;
         }
-        case INTERVAL_Q:
+        case Interval::Q:
         {
             sal_Int16 nYear1 = implGetDateYear( dDate1 );
             sal_Int16 nYear2 = implGetDateYear( dDate2 );
@@ -1884,7 +1876,7 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
             dRet = nQGes2 - nQGes1;
             break;
         }
-        case INTERVAL_M:
+        case Interval::M:
         {
             sal_Int16 nYear1 = implGetDateYear( dDate1 );
             sal_Int16 nYear2 = implGetDateYear( dDate2 );
@@ -1895,20 +1887,20 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
             dRet = nMonthGes2 - nMonthGes1;
             break;
         }
-        case INTERVAL_Y:
-        case INTERVAL_D:
+        case Interval::Y:
+        case Interval::D:
         {
             double dDays1 = floor( dDate1 );
             double dDays2 = floor( dDate2 );
             dRet = dDays2 - dDays1;
             break;
         }
-        case INTERVAL_W:
-        case INTERVAL_WW:
+        case Interval::W:
+        case Interval::WW:
         {
             double dDays1 = floor( dDate1 );
             double dDays2 = floor( dDate2 );
-            if( pInfo->meInterval == INTERVAL_WW )
+            if( pInfo->meInterval == Interval::WW )
             {
                 sal_Int16 nFirstDay = 1;    // Default
                 if( nParCount >= 5 )
@@ -1947,17 +1939,17 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
             dRet = ( dDiff >= 0 ) ? floor( dDiff / 7.0 ) : -floor( -dDiff / 7.0 );
             break;
         }
-        case INTERVAL_H:
+        case Interval::H:
         {
             dRet = RoundImpl( 24.0 * (dDate2 - dDate1) );
             break;
         }
-        case INTERVAL_N:
+        case Interval::N:
         {
             dRet = RoundImpl( 1440.0 * (dDate2 - dDate1) );
             break;
         }
-        case INTERVAL_S:
+        case Interval::S:
         {
             dRet = RoundImpl( 86400.0 * (dDate2 - dDate1) );
             break;
@@ -2056,22 +2048,22 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
     sal_Int32 nRet = 0;
     switch( pInfo->meInterval )
     {
-        case INTERVAL_YYYY:
+        case Interval::YYYY:
         {
             nRet = implGetDateYear( dDate );
             break;
         }
-        case INTERVAL_Q:
+        case Interval::Q:
         {
             nRet = 1 + (implGetDateMonth( dDate ) - 1) / 3;
             break;
         }
-        case INTERVAL_M:
+        case Interval::M:
         {
             nRet = implGetDateMonth( dDate );
             break;
         }
-        case INTERVAL_Y:
+        case Interval::Y:
         {
             sal_Int16 nYear = implGetDateYear( dDate );
             double dBaseDate;
@@ -2079,12 +2071,12 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
             nRet = 1 + sal_Int32( dDate - dBaseDate );
             break;
         }
-        case INTERVAL_D:
+        case Interval::D:
         {
             nRet = implGetDateDay( dDate );
             break;
         }
-        case INTERVAL_W:
+        case Interval::W:
         {
             bool bFirstDay = false;
             sal_Int16 nFirstDay = 1;    // Default
@@ -2096,7 +2088,7 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
             nRet = implGetWeekDay( dDate, bFirstDay, nFirstDay );
             break;
         }
-        case INTERVAL_WW:
+        case Interval::WW:
         {
             sal_Int16 nFirstDay = 1;    // Default
             if( nParCount >= 4 )
@@ -2130,17 +2122,17 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
             }
             break;
         }
-        case INTERVAL_H:
+        case Interval::H:
         {
             nRet = implGetHour( dDate );
             break;
         }
-        case INTERVAL_N:
+        case Interval::N:
         {
             nRet = implGetMinute( dDate );
             break;
         }
-        case INTERVAL_S:
+        case Interval::S:
         {
             nRet = implGetSecond( dDate );
             break;

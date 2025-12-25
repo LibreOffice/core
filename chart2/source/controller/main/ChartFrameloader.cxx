@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 namespace chart
 {
@@ -81,9 +82,9 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     uno::Reference< frame::XModel >         xModel;
     bool bHaveLoadedModel = false;
 
-    utl::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
+    comphelper::SequenceAsHashMap aMediaDescriptor(rMediaDescriptor);
     {
-        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_MODEL));
+        auto aIt(aMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL));
         if( aIt != aMediaDescriptor.end())
         {
             xModel.set( (*aIt).second.get< uno::Reference< frame::XModel > >());
@@ -119,7 +120,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
 
     try
     {
-        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_URL));
+        auto aIt(aMediaDescriptor.find(utl::MediaDescriptor::PROP_URL));
         if( aIt != aMediaDescriptor.end())
         {
             OUString aURL( (*aIt).second.get< OUString >());
@@ -136,7 +137,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
                 {
                     aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= aURL;
                 }
-                aMediaDescriptor.addInputStream();
+                utl::MediaDescriptor::addInputStream(aMediaDescriptor);
                 uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
                 aMediaDescriptor >> aCompleteMediaDescriptor;
                 apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );

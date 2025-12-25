@@ -52,10 +52,8 @@ private:
     SwTwips m_nExtraBlankWidth = 0;    // width of spaces after the break
     SwTwips m_nExtraShrunkWidth = 0;   // width of not shrunk line
     SwTwips m_nExtraSpaceSize = 0;     // extra space over normal space width
-    SwTwips m_nLetterSpacing = 0;      // letter spacing, TODO: add better resolution
-    TextFrameIndex m_nSpaceCount;      // space count for letter spacing
-    SwTwips m_nScaleWidth = 100;       // glyph scaling (good resolution to limit font generation)
-    float m_fScaleWidthSpacing = 0.0;  // extra space filled by glyph scaling
+    bool m_bModifiedWidth = false;     // applied custom letter spacing and scale width
+    TextFrameIndex m_nLetterCount = TextFrameIndex(0); // letter count for multi-portion lines
 
     std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
 
@@ -84,14 +82,10 @@ public:
     void ExtraShrunkWidth(const SwTwips nNew) { m_nExtraShrunkWidth = nNew; }
     SwTwips ExtraSpaceSize() const { return m_nExtraSpaceSize; }
     void ExtraSpaceSize(const SwTwips nNew) { m_nExtraSpaceSize = nNew; }
-    SwTwips GetLetterSpacing() const { return m_nLetterSpacing; }
-    void SetLetterSpacing(const SwTwips nNew) { m_nLetterSpacing = nNew; }
-    TextFrameIndex GetSpaceCount() const { return m_nSpaceCount; }
-    SwTwips GetScaleWidth() const { return m_nScaleWidth; }
-    void SetScaleWidth(const SwTwips nNew) { m_nScaleWidth = nNew; }
-    float GetScaleWidthSpacing() const { return m_fScaleWidthSpacing; }
-    void SetScaleWidthSpacing(const float fNew) { m_fScaleWidthSpacing = fNew; }
-    void SetSpaceCount(TextFrameIndex const nSpaceCount) { m_nSpaceCount = nSpaceCount; }
+    bool IsModifiedWidth() const { return m_bModifiedWidth; }
+    void SetModifiedWidth(const bool bNew) { m_bModifiedWidth = bNew; }
+    TextFrameIndex GetLetterCount() const { return m_nLetterCount; }
+    void SetLetterCount(TextFrameIndex const nLetterCount) { m_nLetterCount = nLetterCount; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
     const std::optional<SwLinePortionLayoutContext> & GetLayoutContext() const { return m_nLayoutContext; }
@@ -209,10 +203,8 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     m_nExtraBlankWidth = rPortion.m_nExtraBlankWidth;
     m_nExtraShrunkWidth = rPortion.m_nExtraShrunkWidth;
     m_nExtraSpaceSize = rPortion.m_nExtraSpaceSize;
-    m_nLetterSpacing = rPortion.m_nLetterSpacing;
-    m_nSpaceCount = rPortion.m_nSpaceCount;
-    m_nScaleWidth = rPortion.m_nScaleWidth;
-    m_fScaleWidthSpacing = rPortion.m_fScaleWidthSpacing;
+    m_bModifiedWidth = rPortion.m_bModifiedWidth;
+    m_nLetterCount = rPortion.m_nLetterCount;
     m_nLayoutContext = rPortion.m_nLayoutContext;
     return *this;
 }
@@ -230,10 +222,8 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth),
     m_nExtraShrunkWidth(rPortion.m_nExtraShrunkWidth),
     m_nExtraSpaceSize(rPortion.m_nExtraSpaceSize),
-    m_nLetterSpacing(rPortion.m_nLetterSpacing),
-    m_nSpaceCount(rPortion.m_nSpaceCount),
-    m_nScaleWidth(rPortion.m_nScaleWidth),
-    m_fScaleWidthSpacing(rPortion.m_fScaleWidthSpacing),
+    m_bModifiedWidth(rPortion.m_bModifiedWidth),
+    m_nLetterCount(rPortion.m_nLetterCount),
     m_nLayoutContext(rPortion.m_nLayoutContext)
 {
 }

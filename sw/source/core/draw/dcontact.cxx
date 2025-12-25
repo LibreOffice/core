@@ -906,7 +906,7 @@ void SwDrawContact::NotifyBackgroundOfAllVirtObjs(const tools::Rectangle* pOldBo
             if( pOldBoundRect && pPage )
             {
                 SwRect aOldRect( *pOldBoundRect );
-                aOldRect.Pos() += pDrawVirtObj->GetOffset();
+                aOldRect += pDrawVirtObj->GetOffset();
                 if( aOldRect.HasArea() )
                     ::Notify_Background( pDrawVirtObj, pPage,
                                          aOldRect, PrepareHint::FlyFrameLeave,true);

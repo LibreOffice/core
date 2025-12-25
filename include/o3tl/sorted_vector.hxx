@@ -15,7 +15,6 @@
 #include <cassert>
 #include <functional>
 #include <iterator>
-#include <memory>
 #include <type_traits>
 
 namespace o3tl
@@ -222,9 +221,9 @@ public:
         return (ret.second) ? ret.first : m_vector.end();
     }
 
-    size_type count(const Value& v) const
+    bool contains(const Value& v) const
     {
-        return find(v) != end() ? 1 : 0;
+        return find(v) != end();
     }
 
     bool operator==(const sorted_vector & other) const

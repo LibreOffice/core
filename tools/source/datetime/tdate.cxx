@@ -70,7 +70,7 @@ sal_uInt16 Date::GetDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear )
 sal_Int32 Date::GetAsNormalizedDays() const
 {
     // This is a very common datum we often calculate from.
-    if (mnDate == 18991230) // 1899-12-30
+    if (mnDate == 1899'12'30)
     {
         assert(GetDay() == 30 && GetMonth() == 12 && GetYear() == 1899);
         constexpr sal_Int32 nullDays = comphelper::date::convertDateToDays(30, 12, 1899);

@@ -23,6 +23,8 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
+#include <sfx2/stbitem.hxx>
 
 namespace rptui
 {
@@ -30,7 +32,7 @@ namespace rptui
     class OStatusbarController : public ::svt::StatusbarController,
                                  public OStatusbarController_BASE
     {
-        css::uno::Reference< css::frame::XStatusbarController >  m_rController;
+        rtl::Reference<SfxStatusBarControl> m_pControl;
         sal_uInt16      m_nSlotId;
         sal_uInt16      m_nId;
     public:

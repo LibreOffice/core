@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 using namespace ::com::sun::star;

@@ -22,7 +22,11 @@
 #define INCLUDED_SVX_FONTWORKGALLERY_HXX
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/IconView.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <map>
 #include <vector>
 
@@ -54,8 +58,6 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
     SdrModel*           mpDestModel;
 
     std::vector<Bitmap> maFavoritesHorizontal;
-    // mapping between item ID and item title
-    std::map<OUString, OUString> maIdToTitleMap;
 
     std::unique_ptr<weld::IconView> maCtlFavorites;
     std::unique_ptr<weld::Button> mxOKButton;
@@ -68,7 +70,6 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
 
     DECL_DLLPRIVATE_LINK(DoubleClickFavoriteHdl, weld::IconView&, bool);
     DECL_DLLPRIVATE_LINK(ClickOKHdl, weld::Button&, void );
-    DECL_DLLPRIVATE_LINK(QueryTooltipHandler, const weld::TreeIter&, OUString);
 
 public:
     FontWorkGalleryDialog(weld::Window* pParent, SdrView& rView,

@@ -22,6 +22,7 @@
 #include <svx/relfld.hxx>
 #include <svx/paraprev.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 class SvxLineSpacingItem;
 
@@ -128,7 +129,9 @@ class SvxParaAlignTabPage : public SfxTabPage
 
     // alignment
     std::unique_ptr<weld::RadioButton> m_xLeft;
+    std::unique_ptr<weld::RadioButton> m_xStart;
     std::unique_ptr<weld::RadioButton> m_xRight;
+    std::unique_ptr<weld::RadioButton> m_xEnd;
     std::unique_ptr<weld::RadioButton> m_xCenter;
     std::unique_ptr<weld::RadioButton> m_xJustify;
     std::unique_ptr<weld::Label> m_xLeftBottom;
@@ -149,6 +152,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xVertAlignSdr;
 
     std::unique_ptr<svx::FrameDirectionListBox>  m_xTextDirectionLB;
+    std::unique_ptr<weld::CheckButton> m_xAutoTextDirectionCB;
 
     /// word spacing
     std::unique_ptr<weld::Label> m_xLabelWordSpacing;

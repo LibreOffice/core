@@ -98,18 +98,6 @@ public:
     virtual void        EndDialog(sal_Int32 nResult) = 0;
 };
 
-class AbstractColorPickerDialog : virtual public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractColorPickerDialog() override = default;
-
-public:
-    virtual void SetColor(const Color& rColor) = 0;
-    virtual Color GetColor() const = 0;
-
-    virtual weld::Dialog* GetDialog() const = 0;
-};
-
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 {
 protected:
@@ -188,9 +176,6 @@ public:
     static VclAbstractDialogFactory* Create();
     // The Id is an implementation detail of the factory
     virtual VclPtr<VclAbstractDialog> CreateVclDialog(weld::Window* pParent, sal_uInt32 nId) = 0;
-
-    virtual VclPtr<AbstractColorPickerDialog>
-    CreateColorPickerDialog(weld::Window* pParent, Color nColor, vcl::ColorPickerMode eMode) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) = 0;

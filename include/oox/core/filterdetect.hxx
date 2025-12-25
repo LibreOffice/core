@@ -24,9 +24,7 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
@@ -38,7 +36,7 @@ namespace com::sun::star {
     namespace uno { class XComponentContext; }
 }
 
-namespace utl { class MediaDescriptor; }
+namespace comphelper { class SequenceAsHashMap; }
 
 namespace oox { class AttributeList; }
 
@@ -79,6 +77,7 @@ public:
 
 private:
     void parseSettings(const AttributeList& rAttribs);
+    void parseWorkbook(const AttributeList& rAttribs);
     void                parseRelationship( const AttributeList& rAttribs );
 
     OUString            getFilterNameFromContentType( std::u16string_view rContentType, std::u16string_view rFileName );
@@ -128,7 +127,7 @@ public:
         its input stream is returned.
      */
     css::uno::Reference< css::io::XInputStream >
-                        extractUnencryptedPackage( utl::MediaDescriptor& rMediaDesc ) const;
+                        extractUnencryptedPackage( comphelper::SequenceAsHashMap& rMediaDesc ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

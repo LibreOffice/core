@@ -11,7 +11,9 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <unordered_set>
@@ -35,7 +37,6 @@ struct ScCheckListMember
     double                   mnValue; // number value of filter condition
     bool                     mbVisible;
     bool                     mbMarked;
-    bool                     mbCheck;
     bool                     mbHiddenByOtherFilter;
     bool                     mbDate;
     bool                     mbLeaf;
@@ -150,7 +151,7 @@ public:
     void addMember(const OUString& rName, const double nVal, bool bVisible, bool bHiddenByOtherFilter,
                    bool bValue = false);
     void clearMembers();
-    size_t initMembers(int nMaxMemberWidth = -1, bool bUnlock=false);
+    size_t initMembers(int nMaxMemberWidth = -1, bool bCheckMarkedEntries = false);
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
@@ -288,7 +289,6 @@ private:
     std::unique_ptr<weld::Popover> mxPopover;
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::TreeView> mxMenu;
-    std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<weld::Widget> mxNonMenu;
     std::unique_ptr<weld::Label> mxFieldsComboLabel;
     std::unique_ptr<weld::ComboBox> mxFieldsCombo;

@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <memory>
 #include <oox/dllapi.h>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>

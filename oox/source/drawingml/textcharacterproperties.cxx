@@ -54,6 +54,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maComplexThemeFont.assignIfUsed( rSourceProps.maComplexThemeFont );
     maSymbolFont.assignIfUsed( rSourceProps.maSymbolFont );
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
+    maHighlightOOXColor.assignIfUsed( rSourceProps.maHighlightOOXColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     assignIfUsed( moLang, rSourceProps.moLang );
     assignIfUsed( moHeight, rSourceProps.moHeight );
@@ -113,12 +114,12 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
     if ( maFillProperties.moFillType.has_value() )
     {
-        Color aColor = maFillProperties.getBestSolidColor();
+        Color aOOXColor = maFillProperties.getBestSolidColor();
         bool bContoured = false;
 
         // noFill doesn't exist for characters. Map noFill to 99% transparency
         if (maFillProperties.moFillType.value() == XML_noFill)
-            aColor.addTransformation(XML_alpha, 1000);
+            aOOXColor.addTransformation(XML_alpha, 1000);
 
         // tdf#137438 Emulate text outline color/transparency.
         // If the outline color dominates, then use it as the text color.
@@ -131,15 +132,15 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
             // tdf#127696 If the text color is white (and the outline color doesn't dominate),
             //            then this is contoured text in LO.
-            if (nLineTransparency < aColor.getTransparency()
-                || (bContoured = aColor.getColor(rFilter.getGraphicHelper()) == COL_WHITE))
-                aColor = std::move(aLineColor);
+            if (nLineTransparency < aOOXColor.getTransparency()
+                || (bContoured = aOOXColor.getColor(rFilter.getGraphicHelper()) == COL_WHITE))
+                aOOXColor = std::move(aLineColor);
         }
-        rPropMap.setProperty(PROP_CharColor, aColor.getColor(rFilter.getGraphicHelper()));
+        rPropMap.setProperty(PROP_CharColor, aOOXColor.getColor(rFilter.getGraphicHelper()));
 
         // set theme color
-        model::ComplexColor aComplexColor = aColor.getComplexColor();
-        sal_Int32 nToken = Color::getColorMapToken(aColor.getSchemeColorName());
+        model::ComplexColor aComplexColor = aOOXColor.getComplexColor();
+        sal_Int32 nToken = Color::getColorMapToken(aOOXColor.getSchemeColorName());
         if (nToken != -1)
         {
             rFilter.getGraphicHelper().getSchemeColorToken(nToken);
@@ -149,14 +150,14 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty(PROP_CharComplexColor, model::color::createXComplexColor(aComplexColor));
         rPropMap.setProperty(PROP_CharContoured, bContoured);
 
-        if (aColor.hasTransparency())
+        if (aOOXColor.hasTransparency())
         {
-            const auto nTransparency = aColor.getTransparency();
+            const auto nTransparency = aOOXColor.getTransparency();
             rPropMap.setProperty(PROP_CharTransparence, nTransparency);
 
             // WORKAROUND: Fully transparent white has the same value as COL_AUTO, avoid collision
             if (nTransparency == 100
-                && aColor.getColor(rFilter.getGraphicHelper()).GetRGBColor() == COL_AUTO.GetRGBColor())
+                && aOOXColor.getColor(rFilter.getGraphicHelper()).GetRGBColor() == COL_AUTO.GetRGBColor())
                 rPropMap.setProperty(PROP_CharColor, ::Color(ColorTransparency, 0xFFFFFFFE));
         }
     }
@@ -214,9 +215,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( moUnderline.has_value() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap.setProperty( PROP_CharUnderlineHasColor, true);
-        rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getColor( rFilter.getGraphicHelper() ));
-        model::ComplexColor aComplexColor = maUnderlineColor.getComplexColor();
-        rPropMap.setProperty( PROP_CharUnderlineComplexColor, model::color::createXComplexColor(aComplexColor));
+        rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getRGBColor());
+        rPropMap.setProperty( PROP_CharUnderlineComplexColor, model::color::createXComplexColor(maUnderlineColor));
     }
     else
     {
@@ -224,11 +224,10 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharUnderlineColor, sal_Int32(-1));
     }
 
-    if (maHighlightColor.isUsed() && maHighlightColor.getTransparency() != 100)
+    if (maHighlightColor.isUsed() && !maHighlightColor.isTransparent())
     {
-        rPropMap.setProperty(PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
-        model::ComplexColor aComplexColor = maHighlightColor.getComplexColor();
-        rPropMap.setProperty(PROP_CharBackgroundComplexColor, model::color::createXComplexColor(aComplexColor));
+        rPropMap.setProperty(PROP_CharBackColor, maHighlightOOXColor.getColor( rFilter.getGraphicHelper() ));
+        rPropMap.setProperty(PROP_CharBackgroundComplexColor, model::color::createXComplexColor(maHighlightColor));
     }
     else
         rPropMap.setProperty( PROP_CharBackColor, sal_Int32(-1));

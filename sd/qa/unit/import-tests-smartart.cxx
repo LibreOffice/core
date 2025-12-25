@@ -22,6 +22,7 @@
 #include <svx/svdogrp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1062,15 +1063,19 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInteropGrabBag)
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xGroup, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aGrabBagSeq;
-    xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBagSeq;
-    comphelper::SequenceAsHashMap aGrabBag(aGrabBagSeq);
-    CPPUNIT_ASSERT(aGrabBag.find(u"OOXData"_ustr) != aGrabBag.end());
-    CPPUNIT_ASSERT(aGrabBag.find(u"OOXLayout"_ustr) != aGrabBag.end());
-    CPPUNIT_ASSERT(aGrabBag.find(u"OOXStyle"_ustr) != aGrabBag.end());
-    CPPUNIT_ASSERT(aGrabBag.find(u"OOXColor"_ustr) != aGrabBag.end());
-    CPPUNIT_ASSERT(aGrabBag.find(u"OOXDrawing"_ustr) != aGrabBag.end());
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xGroup);
+    CPPUNIT_ASSERT(nullptr != pObj);
+    CPPUNIT_ASSERT(pObj->isDiagram());
+
+    const std::shared_ptr<svx::diagram::IDiagramHelper>& rIDiagramHelper(pObj->getDiagramHelper());
+    // const AdvancedDiagramHelper* pHelper(dynamic_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get()));
+    CPPUNIT_ASSERT(rIDiagramHelper);
+
+    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXData").Value.hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXLayout").Value.hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXStyle").Value.hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXColor").Value.hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value.hasValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackground)
@@ -1458,7 +1463,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFillColorList)
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf134221)
 {
     createSdImpressDoc("pptx/smartart-tdf134221.pptx");
-    saveAndReload(u"Impress Office Open XML"_ustr);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShapeB = findChildShapeByText(xGroup, u"B"_ustr);
     CPPUNIT_ASSERT(xShapeB.is());

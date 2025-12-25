@@ -46,7 +46,7 @@ using namespace ::com::sun::star::uno;
 class ScExportTest : public ScModelTestBase
 {
 protected:
-    void testExcelCellBorders(const OUString& sFormatType);
+    void testExcelCellBorders(TestFilter eFormatType);
 
 public:
     ScExportTest()
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testExport)
 
     pDoc->SetValue(0, 0, 0, 1.0);
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pDoc = getScDoc();
     double aVal = pDoc->GetValue(0, 0, 0);
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testDefaultFontHeight)
     pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_CJK_FONT_HEIGHT));
     pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_CTL_FONT_HEIGHT));
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pDoc = getScDoc();
     pPool = pDoc->GetPool();
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf139167)
 {
     createScDoc("xlsx/tdf139167.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFontColorWithMultipleAttributesDefined)
 
     createScDoc("xlsx/tdf113271.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -132,7 +132,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf139394)
 {
     createScDoc("xlsx/tdf139394.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testExtCondFormatXLSX)
 {
     createScDoc("xlsx/tdf139021.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf90104)
 {
     createScDoc("xlsx/tdf90104.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
 
     createScDoc("xlsx/tdf111876.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/_rels/sheet1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pDoc);
     OUString sTarget = getXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target");
@@ -229,8 +229,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testPasswordExport)
 {
-    std::vector<OUString> aFilterNames{ u"calc8"_ustr, u"MS Excel 97"_ustr,
-                                        u"Calc Office Open XML"_ustr };
+    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
 
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {
@@ -258,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf134332)
 
     ASSERT_DOUBLES_EQUAL(238.0, pDoc->GetValue(ScAddress(0, 10144, 0)));
 
-    saveAndReload(u"calc8"_ustr, /*pPassword*/ "test");
+    saveAndReload(TestFilter::ODS, /*pPassword*/ "test");
 
     // Without the fixes in place, it would have failed here
     pDoc = getScDoc();
@@ -271,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf99856_dataValidationTest)
 {
     createScDoc("ods/tdf99856_dataValidationTest.ods");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
     const ScValidationData* pData = pDoc->GetValidationEntry(2);
@@ -299,7 +298,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF16LErtlSHA1)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "//office:spreadsheet[@table:structure-protected='true' and "
@@ -326,7 +325,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA1)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "//office:spreadsheet[@table:structure-protected='true' and "
@@ -353,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256ODF12)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
@@ -382,7 +381,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256W3C)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
@@ -411,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_XL_SHA1)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
@@ -433,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormatExportODS)
 {
     createScDoc("ods/formats.ods");
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -445,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCommentExportXLSX)
     //tdf#104729 FILESAVE OpenOffice do not save author of the comment during export to .xlsx
     createScDoc("ods/comment.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pComments = parseExport(u"xl/comments1.xml"_ustr);
     CPPUNIT_ASSERT(pComments);
 
@@ -486,7 +485,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCommentExportXLSX_2_XLSX)
 
     pNote->ShowCaption(aPosC9, true);
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pComments = parseExport(u"xl/comments1.xml"_ustr);
     CPPUNIT_ASSERT(pComments);
 
@@ -505,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCustomColumnWidthExportXLSX)
     //tdf#100946 FILESAVE Excel on macOS ignored column widths in XLSX last saved by LO
     createScDoc("ods/custom_column_width.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -577,7 +576,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testXfDefaultValuesXLSX)
     //tdf#70565 FORMATTING: User Defined Custom Formatting is not applied during importing XLSX documents
     createScDoc("xlsx/xf_default_values.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -629,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
         // FIXME: Error: unexpected attribute "loext:scale-to-X"
         skipValidation();
 
-        saveAndReload(u"calc8"_ustr);
+        saveAndReload(TestFilter::ODS);
         pDoc = getScDoc();
 
         // check XML
@@ -649,7 +648,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
         // export ODF 1.2 Extended
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_012_EXTENDED);
 
-        saveAndReload(u"calc8"_ustr);
+        saveAndReload(TestFilter::ODS);
         pDoc = getScDoc();
 
         // check XML
@@ -669,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
         // export ODF 1.2
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_012);
 
-        save(u"calc8"_ustr);
+        save(TestFilter::ODS);
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
@@ -697,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColumnWidthResaveXLSX)
     // Test if after resave .xlsx file, columns width is identical with previous one
     createScDoc("xlsx/different-column-width-excel2010.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -763,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColumnWidthExportFromODStoXLSX)
     // Export to .xlsx and compare column width with the .ods
     // We expect that column width from .ods will be exactly the same as imported from .xlsx
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     pDoc = getScDoc();
 
@@ -796,7 +795,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testOutlineExportXLSX)
     //tdf#51524  FILESAVE .xlsx and.xls looses width information for hidden/collapsed grouped columns
     createScDoc("ods/outline.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -940,7 +939,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testAllRowsHiddenXLSX)
 {
     createScDoc("xlsx/tdf105840_allRowsHidden.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr", "zeroHeight", u"true");
@@ -952,7 +951,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testHiddenEmptyRowsXLSX)
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
     createScDoc("ods/hidden-empty-rows.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -968,7 +967,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testHiddenEmptyColsODS)
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
     createScDoc("ods/tdf128895_emptyHiddenCols.ods");
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pSheet = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "//table:table/table:table-column[2]");
@@ -980,7 +979,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testLandscapeOrientationXLSX)
     //tdf#48767 - Landscape page orientation is not loaded from .xlsx format with MS Excel, after export with Libre Office
     createScDoc("ods/hidden-empty-rows.ods");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -1013,7 +1012,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963)
     // The error was, that the property "TotalsRow" was not written to ods at all.
     // With fix it is written as calcext:contains-footer.
     {
-        saveAndReload(u"calc8"_ustr);
+        saveAndReload(TestFilter::ODS);
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xDocPropSet(xDoc, UNO_QUERY_THROW);
         uno::Reference<container::XNameAccess> xNameAccess(
@@ -1047,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963_ODF)
     // Save to ODF 1.3 extended.
     // Adapt to a concrete version when attribute contains-footer is available in ODF strict.
     // Make sure attribute is written in calcext namespace
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/"
@@ -1056,7 +1055,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963_ODF)
     // Save to ODF 1.3 strict. Make sure attribute is not written.
     // Adapt to ODF 1.4 strict, when it is available.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-    save(u"calc8"_ustr); // this saves to .ods not to .fods
+    save(TestFilter::ODS); // this saves to .ods not to .fods
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/"
@@ -1078,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162177_EastersundayODF14)
 
     // Verify that saving to ODF1.3 produces ORG.OPENOFFICE.EASTERSUNDAY
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-    save(u"calc8"_ustr); // this saves to .ods not to .fods
+    save(TestFilter::ODS); // this saves to .ods not to .fods
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     const OString sPath = "/office:document-content/office:body/office:spreadsheet/table:table/"
                           "table:table-row/table:table-cell"_ostr;
@@ -1086,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162177_EastersundayODF14)
 
     // Verify that saving to ODF1.4 produces EASTERSUNDAY
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_014);
-    save(u"calc8"_ustr); // this saves to .ods not to .fods
+    save(TestFilter::ODS); // this saves to .ods not to .fods
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, sPath, "formula", u"of:=EASTERSUNDAY(2024)");
 }
@@ -1117,16 +1116,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport)
         // additionally there is effectively a default row height ( 5.29 mm ). So we test the
         // unset rows at the end of the document to ensure the effective xlsx default height
         // is set there too.
-        { u"xlsx/miscrowheights.xlsx", u"Calc Office Open XML"_ustr, SAL_N_ELEMENTS(DfltRowData),
-          DfltRowData },
+        { u"xlsx/miscrowheights.xlsx", TestFilter::XLSX, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
         // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
-        { u"xlsx/miscrowheights.xlsx", u"MS Excel 97"_ustr, SAL_N_ELEMENTS(DfltRowData),
-          DfltRowData },
+        { u"xlsx/miscrowheights.xlsx", TestFilter::XLS, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
         // Checks that repeated rows ( of various heights ) remain set after export ( to xlsx )
-        { u"ods/miscemptyrepeatedrowheights.ods", u"Calc Office Open XML"_ustr,
+        { u"ods/miscemptyrepeatedrowheights.ods", TestFilter::XLSX,
           SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
         // Checks that repeated rows ( of various heights ) remain set after export ( to xls )
-        { u"ods/miscemptyrepeatedrowheights.ods", u"MS Excel 97"_ustr,
+        { u"ods/miscemptyrepeatedrowheights.ods", TestFilter::XLS,
           SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
     miscRowHeightsTest(aTestValues, SAL_N_ELEMENTS(aTestValues));
@@ -1220,7 +1217,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testNamedRangeBugfdo62729)
     pDoc->DeleteTab(0);
     //should be still a single named range
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     pDoc = getScDoc();
 
@@ -1234,7 +1231,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testBuiltinRangesXLSX)
 {
     createScDoc("xlsx/built-in_ranges.xlsx");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pDoc = parseExport(u"xl/workbook.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1639,7 +1636,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
     }
 
     // Now, save and reload this document.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     {
         ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.",
@@ -1659,7 +1656,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
     }
 
     // Reload the doc again, and check the content of B2 and B4.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     {
         ScDocument* pDoc = getScDoc();
         ScFieldEditEngine* pEE = &pDoc->GetEditEngine();
@@ -1725,7 +1722,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
     }
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
 
     pEditText = pDoc->GetEditText(ScAddress(1, 1, 0));
@@ -1755,7 +1752,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextCellFormatXLSX)
 {
     createScDoc("xls/cellformat.xls");
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
@@ -1794,7 +1791,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaRefSheetNameODS)
                                      pDoc->GetFormula(1, 1, 0));
     }
     // Now, save and reload this document.
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     ScDocument* pDoc = getScDoc();
     pDoc->CalcAll();
@@ -1835,7 +1832,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellValuesExportODS)
         pDoc->SetString(ScAddress(0, 7, 0), u"=$A$6"_ustr); //A8
     }
     // save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.",
                            pDoc->GetTableCount() > 0);
@@ -1890,7 +1887,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellNoteExportODS)
         CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
     }
     // save and reload
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
     ScDocument* pDoc = getScDoc();
 
     aPos.SetRow(0); // Move back to A1.
@@ -1922,7 +1919,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellNoteExportXLS)
         CPPUNIT_ASSERT(pDoc->HasNote(ScAddress(0, 2, 2)));
     }
     // save and reload as XLS.
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
     {
         ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("This document should have 3 sheets.", SCTAB(3),
@@ -1972,7 +1969,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testInlineArrayXLS)
 {
     createScDoc("xls/inline-array.xls");
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -1990,7 +1987,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testEmbeddedChartODS)
 {
     createScDoc("xls/embedded-chart.xls");
 
-    save(u"calc8"_ustr);
+    save(TestFilter::ODS);
 
     xmlDocUniquePtr pDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
@@ -2005,7 +2002,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testEmbeddedChartXLS)
 {
     createScDoc("xls/embedded-chart.xls");
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -2030,7 +2027,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellAnchoredGroupXLS)
 {
     createScDoc("xls/cell-anchored-group.xls");
 
-    saveAndReload(u"calc8"_ustr);
+    saveAndReload(TestFilter::ODS);
 
     // the document contains a group anchored on the first cell, make sure it's there in the right place
     ScDocument* pDoc = getScDoc();
@@ -2053,7 +2050,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaReferenceXLS)
 {
     createScDoc("xls/formula-reference.xls");
 
-    saveAndReload(u"MS Excel 97"_ustr);
+    saveAndReload(TestFilter::XLS);
 
     ScDocument* pDoc = getScDoc();
 
@@ -2079,7 +2076,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testSheetProtectionXLSX)
 {
     createScDoc("xlsx/ProtecteSheet1234Pass.xlsx");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
     const ScTableProtection* pTabProtect = pDoc->GetTabProtection(0);
@@ -2100,7 +2097,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testSheetProtectionXLSB)
 {
     createScDoc("xlsb/tdf108017_calcProtection.xlsb");
 
-    saveAndReload(u"Calc Office Open XML"_ustr);
+    saveAndReload(TestFilter::XLSX);
 
     ScDocument* pDoc = getScDoc();
     const ScTableProtection* pTabProtect = pDoc->GetTabProtection(0);
@@ -2136,7 +2133,7 @@ const char* toBorderName(SvxBorderLineStyle eStyle)
 }
 }
 
-void ScExportTest::testExcelCellBorders(const OUString& sFormatType)
+void ScExportTest::testExcelCellBorders(TestFilter eFormatType)
 {
     static const struct
     {
@@ -2172,7 +2169,7 @@ void ScExportTest::testExcelCellBorders(const OUString& sFormatType)
         }
     }
 
-    saveAndReload(sFormatType);
+    saveAndReload(eFormatType);
     ScDocument* pDoc = getScDoc();
     for (auto const[nRow, eStyle, nWidth] : aChecks)
     {
@@ -2188,13 +2185,13 @@ void ScExportTest::testExcelCellBorders(const OUString& sFormatType)
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLS)
 {
     createScDoc("xls/cell-borders.xls");
-    testExcelCellBorders(u"MS Excel 97"_ustr);
+    testExcelCellBorders(TestFilter::XLS);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLSX)
 {
     createScDoc("xlsx/cell-borders.xlsx");
-    testExcelCellBorders(u"Calc Office Open XML"_ustr);
+    testExcelCellBorders(TestFilter::XLSX);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf155368)
@@ -2205,7 +2202,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf155368)
 
     dispatchCommand(mxComponent, u".uno:WrapText"_ustr, {});
 
-    save(u"Calc Office Open XML"_ustr);
+    save(TestFilter::XLSX);
 
     xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pStyles);

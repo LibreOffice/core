@@ -43,7 +43,7 @@ namespace
 class HtmlImportTest : public SwModelTestBase
 {
     public:
-        HtmlImportTest() : SwModelTestBase(u"sw/qa/extras/htmlimport/data/"_ustr, u"HTML (StarWriter)"_ustr) {}
+        HtmlImportTest() : SwModelTestBase(u"sw/qa/extras/htmlimport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testOutlineLevel)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfBr)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-br.xhtml");
     // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf80194_subscript)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-table.xhtml");
     // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
     // Load a table with xhtmlns=reqif-xhtml filter param.
@@ -463,7 +463,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf118579)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-page-style.xhtml");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: Standard, Actual  : HTML'.
@@ -475,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 class SwHtmlOptionsImportTest : public SwModelTestBase
 {
     public:
-        SwHtmlOptionsImportTest() : SwModelTestBase(u"/sw/qa/extras/htmlimport/data/"_ustr, u"HTML (StarWriter)"_ustr) {}
+        SwHtmlOptionsImportTest() : SwModelTestBase(u"/sw/qa/extras/htmlimport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
@@ -523,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImg)
     // Given an XHTML with an <object> (containing GIF) and an inner <object> (containing PNG, to be
     // ignored):
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("ole-img.xhtml");
 
     // Then make sure the result is a single Writer image:
@@ -542,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImgSvg)
     // Given an XHTML with an <object> (containing SVG) and an inner <object> (containing PNG, to be
     // ignored):
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("ole-img-svg.xhtml");
 
     // Then make sure the result is a single Writer image:
@@ -579,7 +579,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
     // Given an XHTML with an <object> (containing non-image, non-OLE2 data) and an inner <object>
     // (containing PNG):
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("ole-data.xhtml");
 
     // Then make sure the result is a single clickable Writer image:
@@ -600,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData2)
 {
     // Given an XHTML with 2 objects: the first has a link, the second does not have:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("ole-data2.xhtml");
 
     // Then make sure that the second image doesn't have a link set:

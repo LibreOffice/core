@@ -37,6 +37,8 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxPoolItem
     bool    bRight     : 1;
     bool    bCenter    : 1;
     bool    bBlock     : 1;
+    bool    bStart     : 1;
+    bool    bEnd       : 1;
 
     // only active when bBlock
     bool    bOneBlock : 1;
@@ -103,6 +105,8 @@ public:
         bRight = eType == SvxAdjust::Right;
         bCenter = eType == SvxAdjust::Center;
         bBlock = eType == SvxAdjust::Block;
+        bStart = eType == SvxAdjust::ParaStart;
+        bEnd = eType == SvxAdjust::ParaEnd;
     }
 
     SvxAdjust GetLastBlock() const
@@ -135,6 +139,10 @@ public:
             eRet = SvxAdjust::Center;
         else if ( bBlock )
             eRet = SvxAdjust::Block;
+        else if ( bStart )
+            eRet = SvxAdjust::ParaStart;
+        else if ( bEnd )
+            eRet = SvxAdjust::ParaEnd;
         return eRet;
     }
 

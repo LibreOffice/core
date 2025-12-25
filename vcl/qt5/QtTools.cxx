@@ -29,14 +29,32 @@
 #include <tools/stream.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 
+#include <QtCore/QBuffer>
 #include <QtGui/QImage>
 
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
+
+Qt::Alignment toQtAlignment(TxtAlign eAlign)
+{
+    switch (eAlign)
+    {
+        case TxtAlign::Left:
+            return Qt::AlignLeft;
+        case TxtAlign::Center:
+            return Qt::AlignHCenter;
+        case TxtAlign::Right:
+            return Qt::AlignRight;
+        default:
+            assert(false && "unhandled TxtAlign value");
+            return Qt::AlignLeft;
+    }
+}
 
 Qt::CheckState toQtCheckState(TriState eTristate)
 {
@@ -277,6 +295,24 @@ QImage toQImage(const Image& rImage)
     }
 
     return aImage;
+}
+
+Image toImage(const QImage& rImage)
+{
+    if (rImage.isNull())
+        return {};
+
+    QByteArray aByteArray;
+    QBuffer aBuffer(&aByteArray);
+    aBuffer.open(QIODevice::WriteOnly);
+    rImage.save(&aBuffer, "PNG");
+
+    Bitmap aBitmap;
+    SvMemoryStream aMemoryStream(aByteArray.data(), aByteArray.size(), StreamMode::READ);
+    vcl::PngImageReader aReader(aMemoryStream);
+    assert(aReader.read(aBitmap));
+
+    return Image(aBitmap);
 }
 
 QFont toQtFont(const vcl::Font& rVclFont)

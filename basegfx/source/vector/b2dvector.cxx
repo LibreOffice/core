@@ -20,6 +20,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <cassert>
 
 namespace basegfx

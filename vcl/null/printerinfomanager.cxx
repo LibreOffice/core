@@ -41,7 +41,6 @@ PrinterInfoManager& PrinterInfoManager::get()
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
-    m_pQueueInfo( nullptr ),
     m_eType( eType ),
     m_aSystemDefaultPaper( "A4" )
 {
@@ -70,7 +69,8 @@ void PrinterInfoManager::listPrinters( ::std::vector< OUString >& rVector ) cons
     rVector.clear();
 }
 
-const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrinter */ ) const
+const PrinterInfo& PrinterInfoManager::getPrinterInfo(
+    [[maybe_unused]] const OUString& /* rPrinter */ ) const
 {
     static PrinterInfo aEmptyInfo;
 
@@ -79,7 +79,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrint
     return aEmptyInfo;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, std::string_view /* pToken */ ) const
+bool PrinterInfoManager::checkFeatureToken( [[maybe_unused]] const OUString& /* rPrinterName */, [[maybe_unused]] std::string_view /* pToken */ ) const
 {
     (void) this;
 

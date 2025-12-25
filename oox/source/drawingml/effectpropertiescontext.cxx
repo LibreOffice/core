@@ -105,7 +105,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
                 rEffect.mbRotateWithShape = rAttribs.getBool(XML_rotWithShape, true); // boolean, default "true"
                 pColor = &rEffect.maColor;
             }
-            return new ColorContext(*this, mrEffectProperties.m_Effects[nPos]->moColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
         }
         break;
         case A_TOKEN( innerShdw ):
@@ -126,7 +126,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
                 rEffect.mnDirection = rAttribs.getInteger(XML_dir, 0); // ST_PositiveFixedAngle, default 0
                 pColor = &rEffect.maColor;
             }
-            return new ColorContext(*this, mrEffectProperties.m_Effects[nPos]->moColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
         }
         break;
         case A_TOKEN( glow ):
@@ -143,7 +143,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
                 rEffect.mnRadius = rAttribs.getInteger(XML_rad, 0); //ST_PositiveCoordinate, default 0
                 pColor = &rEffect.maColor;
             }
-            return new ColorContext(*this, mrEffectProperties.maGlow.moGlowColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.maGlow.moGlowColor, pColor);
 
         }
         case A_TOKEN( softEdge ):
@@ -186,7 +186,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
 
                 pColor = &rEffect.maColor;
             }
-            return new ColorContext(*this, mrEffectProperties.m_Effects[nPos]->moColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
         }
         case A_TOKEN( blur ):
         {
@@ -202,7 +202,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
                 rEffect.mbGrow = rAttribs.getBool(XML_grow, true); // boolean, default true
                 pColor = &rEffect.maColor;
             }
-            return new ColorContext(*this, mrEffectProperties.m_Effects[nPos]->moColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
         }
         break;
     }

@@ -24,7 +24,7 @@ The numbering of the ScriptForge versions is identical with the numbering used b
      - complete FileSystem and TextStream classes for file and directory handling, and text files read & write
      - detailed context information: platform, operating system, special directories, ...
      - interconnection of Basic and Python modules
-     - easy access to and management of actual windows  and documents
+     - easy access to and management of actual windows, documents and their content
      - read/write access to data contained in databases
      - management of forms and their controls (Base, Calc, Writer)
      - specific modules for
@@ -33,12 +33,13 @@ The numbering of the ScriptForge versions is identical with the numbering used b
            + static or dynamic, modal or non-modal dialogs and their controls
            + toolbars and their buttons
            + usual menus, context and popup menus
-           + automate unit testing of Basic scripts
+           + automated unit testing of Basic scripts
 - The corresponding unit tests grouped in a QA library
 - The user documentation as a set of LibreOffice Help pages
+- Easy-to-understand examples in the TDF Wiki
 
 ## Extensibility
-The implemented modules and classes will be invoked from user scripts as **"Services"**. A generic constructor of those services has been designed for that purpose:
+The implemented modules and classes may be invoked from user scripts as **"Services"**. A generic constructor of those services has been designed for that purpose:
 ```
     CreateScriptService("servicename"[, arg0, arg1, ...])
 ```
@@ -58,6 +59,7 @@ Above mechanisms make ScriptForge an easily extensible ecosystem combining a cor
     - Platform
     - Region
     - Session
+    - SharedMemory
     - String
     - TextStream
     - Timer
@@ -77,6 +79,7 @@ Above mechanisms make ScriptForge an easily extensible ecosystem combining a cor
     - Form
     - FormControl
     - FormDocument
+    - Shape
     - Writer
 - UnitTests
     - UnitTest
@@ -105,6 +108,15 @@ Above mechanisms make ScriptForge an easily extensible ecosystem combining a cor
 <br>[https://cgit.freedesktop.org/libreoffice/core/tree/wizards/source](URL)
 
 ## Change log
+
+### 26.2
+  * The new  ***session**.GetRangeFromCalc()* method reads the values contained in a given range located in a given Calc file. The file does not need to be open.
+  * The new **ScriptForge.Sharedmemory** service implements the mechanisms to manage persistent memory storage across Basic and/or Python scripts. In event-driven scripting one can often benefit from having variables still being available when the next script is triggered, probably due to a user action. And this, especially, in Basic + Python mixed environments.
+  * The *scriptforge.pyi* stub file, which is a great support when editing python scripts with PyCharm or VSCode, has its syntax upgraded to Python ≥ 3.10. Older typing features are now superseded by more modern alternatives.
+  * The *AccessibleContext* UNO API is gradually being deprecated. A serious code revisit was needed. More details in [tdf#168409](https://bugs.documentfoundation.org/show_bug.cgi?id=168409).
+  * The ***calc**.ColorizeRange()* method accepts now negative values in the background and foreground arguments to reset them to their default value.
+  * The new **SFDocuments.Shape** service is focused on the description of shapes/images/drawing objects stored (in the current release) only in Calc documents. Next methods are implemented : shape.*Anchor()*, shape.*ExportToFile()*, shape.*Pick()*, shape.*Resize()* and shape.*Rotate()* about any pivot point.
+
 
 ### 25.8
   * The new *XRectangle(range)* property (**Calc** service) returns the coordinates (in pixels) on the screen where the given range is located. This opens the door to effective use of popup menus. See [Wiki: popup menu](https://wiki.documentfoundation.org/Macros/ScriptForge/PopupMenuExample).

@@ -213,14 +213,8 @@ component_wrapper_get_position (AtkComponent   *component,
                 aPos = pComponent->getLocationOnScreen();
             else if (coord_type == ATK_XY_WINDOW)
                 aPos = lcl_getLocationInWindow(component, pComponent);
-#if ATK_CHECK_VERSION(2, 30, 0)
             else if (coord_type == ATK_XY_PARENT)
-#else
-            // ATK_XY_PARENT added in ATK 2.30, so can't use the constant here
-            else
-#endif
                 aPos = pComponent->getLocation();
-#if ATK_CHECK_VERSION(2, 30, 0)
             else
             {
                 SAL_WARN("vcl.gtk",
@@ -228,7 +222,6 @@ component_wrapper_get_position (AtkComponent   *component,
                              << coord_type);
                 return;
             }
-#endif
 
             *x = aPos.X;
             *y = aPos.Y;

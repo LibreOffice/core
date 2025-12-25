@@ -28,6 +28,7 @@
 #include <svx/xflbckit.hxx>
 #include <svx/sdshtitm.hxx>
 #include <svx/xfltrit.hxx>
+#include <o3tl/untaint.hxx>
 #include <cuitabarea.hxx>
 #include <svl/intitem.hxx>
 
@@ -93,7 +94,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
+    sal_uInt16 nPos = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
     rXFSet.Put(XFillTransparenceItem(nPos));
 
     // preview
@@ -244,11 +245,11 @@ std::unique_ptr<SfxTabPage> SvxTransparenceTabPage::Create(weld::Container* pPag
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
 {
     const SfxPoolItem* pGradientItem = nullptr;
-    const SfxPoolItem* pLinearItem = nullptr;
+    const XFillTransparenceItem* pLinearItem = nullptr;
     SfxItemState eStateGradient(rOutAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
     SfxItemState eStateLinear(rOutAttrs.GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
     bool bGradActive = (eStateGradient == SfxItemState::SET && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled());
-    bool bLinearActive = (eStateLinear == SfxItemState::SET && static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue() != 0);
+    bool bLinearActive = (eStateLinear == SfxItemState::SET && pLinearItem->GetValue() != 0);
 
     bool bGradUsed = (eStateGradient == SfxItemState::INVALID);
     bool bLinearUsed = (eStateLinear == SfxItemState::INVALID);
@@ -260,7 +261,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrTransparent->get_sensitive())
     {
         // linear transparence
-        sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
+        sal_uInt16 nPos = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
         if (m_xMtrTransparent->get_value_changed_from_saved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
@@ -511,24 +512,13 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
 
 basegfx::BColorStops SvxTransparenceTabPage::createColorStops()
 {
-    basegfx::BColorStops aColorStops;
     basegfx::BColor aStartBColor(m_xMtrTrgrStartValue->get_value(FieldUnit::PERCENT) / 100.0);
     aStartBColor.clamp();
     basegfx::BColor aEndBColor(m_xMtrTrgrEndValue->get_value(FieldUnit::PERCENT) / 100.0);
     aEndBColor.clamp();
 
-    if(maColorStops.size() >= 2)
-    {
-        aColorStops = maColorStops;
-        aColorStops.front() = basegfx::BColorStop(maColorStops.front().getStopOffset(), aStartBColor);
-        aColorStops.back() = basegfx::BColorStop(maColorStops.back().getStopOffset(), aEndBColor);
-    }
-    else
-    {
-        aColorStops.emplace_back(0.0, aStartBColor);
-        aColorStops.emplace_back(1.0, aEndBColor);
-    }
-
+    basegfx::BColorStops aColorStops = maColorStops;
+    aColorStops.changeStartAndEnd(aStartBColor, aEndBColor);
     return aColorStops;
 }
 

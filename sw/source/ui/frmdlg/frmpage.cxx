@@ -724,6 +724,9 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     m_xRelWidthCB->connect_toggled(aLk2);
     m_xRelHeightCB->connect_toggled(aLk2);
 
+    m_xRelWidthRelationLB->connect_changed(LINK(this, SwFramePage, RelRelationClickHdl));
+    m_xRelHeightRelationLB->connect_changed(LINK(this, SwFramePage, RelRelationClickHdl));
+
     m_xAutoWidthCB->connect_toggled(LINK(this, SwFramePage, AutoWidthClickHdl));
     m_xAutoHeightCB->connect_toggled(LINK(this, SwFramePage, AutoHeightClickHdl));
 
@@ -1279,8 +1282,10 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             aSz.SetHeightPercentRelation(text::RelOrientation::PAGE_FRAME);
     }
 
-    bool bValueModified = m_xWidthED->get_value_changed_from_saved() ||
-                          m_xHeightED->get_value_changed_from_saved();
+    bool bValueModified = m_xWidthED->get_value_changed_from_saved()
+                          || m_xHeightED->get_value_changed_from_saved()
+                          || m_xRelWidthRelationLB->get_value_changed_from_saved()
+                          || m_xRelHeightRelationLB->get_value_changed_from_saved();
     bool bCheckChanged = m_xRelWidthCB->get_state_changed_from_saved() ||
                          m_xRelHeightCB->get_state_changed_from_saved() ||
                          m_xFixedRatioCB->get_state_changed_from_saved();
@@ -1856,8 +1861,7 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
         {
             //FillItemSet doesn't set the anchor into the set when it matches
             //the original. But for the other pages we need the current anchor.
-            SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
-                                : getFrameDlgParentShell();
+            SwWrtShell* pSh = getFrameDlgParentShell();
             if (pSh)
             {
                 RndStdIds eAnchorId = GetAnchor();
@@ -1881,17 +1885,13 @@ IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::Toggleable&, rBtn, void )
 {
     if (&rBtn == m_xRelWidthCB.get())
     {
-        m_xWidthED->ShowPercent(rBtn.get_active());
+        m_xWidthED->ShowPercent(rBtn.get_active(), MAX_PERCENT_WIDTH);
         m_xRelWidthRelationLB->set_sensitive(rBtn.get_active());
-        if (rBtn.get_active())
-            m_xWidthED->get()->set_max(MAX_PERCENT_WIDTH, FieldUnit::NONE);
     }
     else // rBtn == m_xRelHeightCB.get()
     {
-        m_xHeightED->ShowPercent(rBtn.get_active());
+        m_xHeightED->ShowPercent(rBtn.get_active(), MAX_PERCENT_WIDTH);
         m_xRelHeightRelationLB->set_sensitive(rBtn.get_active());
-        if (rBtn.get_active())
-            m_xHeightED->get()->set_max(MAX_PERCENT_HEIGHT, FieldUnit::NONE);
     }
 
     RangeModifyHdl();  // correct the values again
@@ -1902,6 +1902,10 @@ IMPL_LINK( SwFramePage, RelSizeClickHdl, weld::Toggleable&, rBtn, void )
         ModifyHdl(*m_xHeightED->get());
 }
 
+IMPL_LINK_NOARG(SwFramePage, RelRelationClickHdl, weld::ComboBox&, void)
+{
+    RangeModifyHdl();
+}
 // range check
 IMPL_LINK_NOARG(SwFramePage, RangeModifyClickHdl, weld::Toggleable&, void)
 {
@@ -1954,6 +1958,11 @@ void SwFramePage::RangeModifyHdl()
 
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
+
+    if (m_xRelWidthRelationLB->get_active() == 1)
+        aVal.bEntirePageWidth = true;
+    if (m_xRelHeightRelationLB->get_active() == 1)
+        aVal.bEntirePageHeight = true;
 
     aMgr.ValidateMetrics(aVal, mpToCharContentPos, true);   // one time, to get reference values for percental values
 
@@ -2830,7 +2839,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         if (m_bVert)
             nMirrorFlags |= BmpMirrorFlags::Horizontal;
         aTmpBmp.Mirror(nMirrorFlags);
-        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, aTmpBmp);
+        rRenderContext.DrawBitmap(aPntPos, aPntSz, aTmpBmp);
     }
     else if (m_bGraphic)  //draw unmirrored preview graphic
     {
@@ -2838,7 +2847,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
     else    //draw unmirrored stock sample image
     {
-        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, m_aBmp);
+        rRenderContext.DrawBitmap(aPntPos, aPntSz, m_aBmp);
     }
 }
 

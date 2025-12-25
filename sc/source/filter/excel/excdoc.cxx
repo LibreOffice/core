@@ -852,13 +852,22 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             FSNS(XML_xmlns, XML_xr6), rStrm.getNamespaceURL(OOX_NS(xr6)),
             FSNS(XML_xmlns, XML_xr10), rStrm.getNamespaceURL(OOX_NS(xr10)),
             FSNS(XML_xmlns, XML_xr2), rStrm.getNamespaceURL(OOX_NS(xr2)) );
-    rWorkbook->singleElement( XML_fileVersion,
-            XML_appName, "Calc"
+
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttrListFileVersion
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+    pAttrListFileVersion->add(XML_appName, "Calc");
+    std::optional<sal_Int16> oLow = GetExtDocOptions().GetDocSettings().moLowestEdited;
+    if (rStrm.getVersion() == oox::core::ECMA_376_1ST_EDITION
+        && (!oLow.has_value() || oLow > 4))
+    {
+        oLow = 4; // when saving as MS Excel 2007, set the corresponding lowestEdited-by version
+    }
+    if (oLow.has_value())
+        pAttrListFileVersion->add(XML_lowestEdited, OString::number(*oLow));
             // OOXTODO: XML_codeName
             // OOXTODO: XML_lastEdited
-            // OOXTODO: XML_lowestEdited
             // OOXTODO: XML_rupBuild
-    );
+    rWorkbook->singleElement(XML_fileVersion, pAttrListFileVersion);
 
     if (bHasPasswordHash)
         rWorkbook->singleElement(XML_fileSharing,

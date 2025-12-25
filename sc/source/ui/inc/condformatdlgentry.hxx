@@ -11,7 +11,8 @@
 
 #include <conditio.hxx>
 #include <formula/funcutl.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fntctrl.hxx>
 
@@ -74,6 +75,7 @@ public:
     virtual ~ScCondFrmtEntry();
 
     void Show() { mxGrid->show(); }
+    weld::ComboBox& GetTypeComboBox() { return *mxLbType; }
 
     void set_grid_top_attach(int nAttach);
     int get_preferred_height() const { return mxBorder->get_preferred_size().Height(); }

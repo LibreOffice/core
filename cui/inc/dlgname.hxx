@@ -19,7 +19,9 @@
 #pragma once
 
 #include <vcl/formatter.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 /// Dialog for editing a name
 class SvxNameDialog final : public weld::GenericDialogController

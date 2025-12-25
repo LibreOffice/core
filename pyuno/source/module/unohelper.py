@@ -183,10 +183,6 @@ def fileUrlToSystemPath( url ):
     "returns a system path (determined by the system, the python interpreter is running on)"
     return pyuno.fileUrlToSystemPath( url )
 
-def absolutize( path, relativeUrl ):
-    "returns an absolute file url from the given urls"
-    return pyuno.absolutize( path, relativeUrl )
-
 def getComponentFactoryHelper( implementationName, smgr, regKey, seqEntries ):
     for x in seqEntries:
         if x.implName == implementationName:

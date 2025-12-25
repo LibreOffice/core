@@ -59,6 +59,8 @@ public:
         // TODO this file has a boatload of buffer appends' and I don't feel like fixing them all now
         if (fn == SRCDIR "/vcl/source/pdf/pdfwriter_impl.cxx")
             return false;
+        if (fn == SRCDIR "/vcl/source/pdf/pdfwriterimpl_utils.cxx")
+            return false;
         return true;
     }
 
@@ -475,7 +477,7 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
                 // allowlist some known-safe methods
-                if (compat::ends_with(name, "ResId") || name == "GetXMLToken")
+                if (name.ends_with("ResId") || name == "GetXMLToken")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
             }

@@ -215,19 +215,6 @@ namespace
 
         return Bitmap( aSolid, aMask );
     }
-
-    OUString convertToLocalizedNumerals(std::u16string_view rStr,
-        LanguageType eTextLanguage)
-    {
-        OUStringBuffer aBuf(rStr);
-        for (sal_Int32 i = 0; i < aBuf.getLength(); ++i)
-        {
-            sal_Unicode nChar = aBuf[i];
-            if (nChar >= '0' && nChar <= '9')
-                aBuf[i] = GetLocalizedChar(nChar, eTextLanguage);
-        }
-        return aBuf.makeStringAndClear();
-    }
 }
 
 namespace cppcanvas::internal
@@ -2437,7 +2424,7 @@ namespace cppcanvas::internal
                         OUString sText = pAct->GetText();
 
                         if (rVDev.GetDigitLanguage())
-                            sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
+                            sText = LocalizeDigitsInString(sText, rVDev.GetDigitLanguage());
 
                         const sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
 
@@ -2459,7 +2446,7 @@ namespace cppcanvas::internal
                         OUString sText = pAct->GetText();
 
                         if (rVDev.GetDigitLanguage())
-                            sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
+                            sText = LocalizeDigitsInString(sText, rVDev.GetDigitLanguage());
 
                         const sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
 
@@ -2539,7 +2526,7 @@ namespace cppcanvas::internal
                         OUString sText = pAct->GetText();
 
                         if (rVDev.GetDigitLanguage())
-                            sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
+                            sText = LocalizeDigitsInString(sText, rVDev.GetDigitLanguage());
 
                         const sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
 

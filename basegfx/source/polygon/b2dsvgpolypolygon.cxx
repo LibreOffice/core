@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

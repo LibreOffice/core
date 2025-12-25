@@ -32,14 +32,14 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 // TODO: the re-import doesn't work just yet, but that isn't a regression...
 CPPUNIT_TEST_FIXTURE(Test, testFlyInFly)
 {
     createSwDoc("ooo39250-1-min.rtf");
-    save(mpFilter);
+    save(TestFilter::DOCX);
     // check that anchor of text frame is in other text frame
     uno::Reference<text::XTextContent> const xAnchored(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAnchored.is());
@@ -57,6 +57,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125778_lostPageBreakTOX, "tdf125778_lostPageBrea
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
 }
 
@@ -109,7 +112,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155690, "tdf155690.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
-    loadAndReload("tdf121374_sectionHF.odt");
+    createSwDoc("tdf121374_sectionHF.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"FooterText"_ustr);
     CPPUNIT_ASSERT_EQUAL( u"footer"_ustr, xFooterText->getString() );
@@ -120,7 +128,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF2)
 {
-    loadAndReload("tdf121374_sectionHF2.doc");
+    createSwDoc("tdf121374_sectionHF2.doc");
+    saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"HeaderText"_ustr);
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
@@ -128,7 +137,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF2)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121666_lostPage)
 {
-    loadAndSave("tdf121666_lostPage.docx");
+    createSwDoc("tdf121666_lostPage.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", u"page");
     // The second page break is exported too.
@@ -150,13 +160,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140182_extraPagebreak, "tdf140182_extraPagebreak
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
 {
-    loadAndSave("tdf121659_loseColumnBrNextToShape.docx");
+    createSwDoc("tdf121659_loseColumnBrNextToShape.docx");
+    save(TestFilter::DOCX);
     // The third paragraph contains a manual column break and a shape.
     // The column break was moved into the shape during the first import
     // (messing also the shape position), and eliminated during the second import,
     // losing the 2-column text layout. As a workaround, split the paragraph
     // moving the column break into the fourth paragraph instead of losing it.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     bool bBreakOnPara3 = getProperty<style::BreakType>(getParagraph(3), u"BreakType"_ustr) == style::BreakType_COLUMN_BEFORE;
     bool bBreakOnPara4 = getProperty<style::BreakType>(getParagraph(4), u"BreakType"_ustr) == style::BreakType_COLUMN_BEFORE;
     CPPUNIT_ASSERT(bBreakOnPara3 || bBreakOnPara4);
@@ -164,6 +175,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     OUString listId;
     OUString listStyle;
     {
@@ -184,11 +198,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr));
-        // different numbering style
-        OUString listStyle3;
-        CPPUNIT_ASSERT(xPara->getPropertyValue(u"NumberingStyleName"_ustr) >>= listStyle3);
-        CPPUNIT_ASSERT(listStyle3.startsWith("WWNum"));
-        CPPUNIT_ASSERT(listStyle3 != listStyle);
         // but same list
         CPPUNIT_ASSERT_EQUAL(u"1.1.3"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
@@ -280,11 +289,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
-        // different numbering style
-        OUString listStyle2;
-        CPPUNIT_ASSERT(xPara->getPropertyValue(u"NumberingStyleName"_ustr) >>= listStyle2);
-        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
-        CPPUNIT_ASSERT(listStyle2 != listStyle);
         // restarted numeration due to override
         CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
@@ -316,11 +320,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
     }
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(11), uno::UNO_QUERY);
-        // different numbering style
-        OUString listStyle2;
-        CPPUNIT_ASSERT(xPara->getPropertyValue(u"NumberingStyleName"_ustr) >>= listStyle2);
-        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
-        CPPUNIT_ASSERT(listStyle2 != listStyle);
         // numeration is continued
         CPPUNIT_ASSERT_EQUAL(u"3"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
@@ -384,7 +383,8 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement)
 {
-    loadAndReload("tdf127316_autoEscapement.odt");
+    createSwDoc("tdf127316_autoEscapement.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This should be roughly .8*35% of the ORIGINAL(non-reduced) size. However, during export the
     // proportional height has to be changed into direct formatting, which then changes the relative percent.
@@ -427,7 +427,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99602_charStyleSubscript2)
 {
-    loadAndReload("tdf99602_charStyleSubscript2.odt");
+    createSwDoc("tdf99602_charStyleSubscript2.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
     // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
@@ -489,6 +490,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
@@ -522,6 +526,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=1 (no goofy exception)
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
@@ -539,7 +546,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
 
 CPPUNIT_TEST_FIXTURE(Test, tdf123912_protectedForm)
 {
-    loadAndReload("tdf123912_protectedForm.odt");
+    createSwDoc("tdf123912_protectedForm.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Compatibility: Protect form", true,
@@ -563,7 +571,8 @@ DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testDateControl)
 {
-    loadAndReload("empty-date-control.odt");
+    createSwDoc("empty-date-control.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that we exported the empty date control correctly
     // Date form field is converted to date content control.
@@ -595,7 +604,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDateControl)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121867)
 {
-    loadAndReload("tdf121867.odt");
+    createSwDoc("tdf121867.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwEditShell* pEditShell = getSwDocShell()->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);
@@ -635,7 +645,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInputListExport)
     uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
 
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
     OUString aPortionType;
@@ -671,7 +681,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 {
-    loadAndReload("tdf116371.odt");
+    createSwDoc("tdf116371.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -684,7 +695,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameSizeExport)
 {
-    loadAndSave("floating-tables-anchor.docx");
+    createSwDoc("floating-tables-anchor.docx");
+    save(TestFilter::DOCX);
     // Make sure the table width is 4000
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tblPr/w:tblW", "w", u"4000");
@@ -692,6 +704,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameSizeExport)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // Visibility of shapes wasn't imported/exported, for now base printable property on that, too
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_MESSAGE("First shape should be visible.", getProperty<bool>(xShape, u"Visible"_ustr));
@@ -730,7 +745,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTextInput)
 {
-    loadAndSave("textinput.odt");
+    createSwDoc("textinput.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -831,13 +847,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 
     createSwDoc("tdf123460.docx");
     verify();
-    saveAndReload(mpFilter);
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 {
-    loadAndSave("tdf123460.docx");
+    createSwDoc("tdf123460.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -853,7 +878,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 //tdf#125298: fix charlimit restrictions in bookmarknames and field references if they contain non-ascii characters
 CPPUNIT_TEST_FIXTURE(Test, testTdf125298)
 {
-    loadAndSave("tdf125298_crossreflink_nonascii_charlimit.docx");
+    createSwDoc("tdf125298_crossreflink_nonascii_charlimit.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // check whether test file keeps non-ascii values or not
     OUString bookmarkName1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name");
@@ -899,7 +925,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlFrameVml)
     // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     xTextFrame.set(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextFrame.is());
 
@@ -910,7 +936,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTbrlFrameVml)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119037)
 {
-    loadAndSave("tdf119037.odt");
+    createSwDoc("tdf119037.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
@@ -968,7 +995,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119037)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125657)
 {
-    loadAndSave("tdf125657.docx");
+    createSwDoc("tdf125657.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     auto checkAttrIsInt = [&](const char* sAttrName) {
@@ -1002,7 +1030,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf78657)
 {
-    loadAndSave("tdf78657_picture_hyperlink.docx");
+    createSwDoc("tdf78657_picture_hyperlink.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pXmlRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/wp:docPr/a:hlinkClick", 1);
@@ -1012,7 +1041,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78657)
 
 CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 {
-    loadAndReload("btlr-frame.odt");
+    createSwDoc("btlr-frame.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
@@ -1025,7 +1055,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125518)
 {
-    loadAndSave("tdf125518.odt");
+    createSwDoc("tdf125518.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1067,7 +1098,8 @@ DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131594)
 {
-    loadAndSave("tdf131594.docx");
+    createSwDoc("tdf131594.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // lnNumType should not be exported if w:countBy="0"
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:lnNumType", 0);
@@ -1075,7 +1107,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131594)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121663)
 {
-    loadAndSave("tdf121663.docx");
+    createSwDoc("tdf121663.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // auto distance of line numbering is 0.5 cm
     assertXPath(pXmlDoc, "//w:lnNumType", "distance", u"283");
@@ -1083,6 +1116,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121663)
 
 DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
 
     uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(1), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
@@ -1190,7 +1225,8 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127116)
 {
-    loadAndSave("tdf127116.odt");
+    createSwDoc("tdf127116.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1202,7 +1238,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127116)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127339)
 {
-    loadAndSave("tdf127339.docx");
+    createSwDoc("tdf127339.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='#bookmark']", "TargetMode");
@@ -1210,7 +1247,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127339)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127362)
 {
-    loadAndSave("tdf127362.odt");
+    createSwDoc("tdf127362.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1224,7 +1262,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127362)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127605)
 {
-    loadAndSave("tdf127605.odt");
+    createSwDoc("tdf127605.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1236,7 +1275,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127605)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127732)
 {
-    loadAndSave("internal_hyperlink_frame.odt");
+    createSwDoc("internal_hyperlink_frame.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1248,7 +1288,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127732)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127733)
 {
-    loadAndSave("internal_hyperlink_ole.odt");
+    createSwDoc("internal_hyperlink_ole.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1261,7 +1302,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127733)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127734)
 {
-    loadAndSave("internal_hyperlink_region.odt");
+    createSwDoc("internal_hyperlink_region.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1272,7 +1314,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127734)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127735)
 {
-    loadAndSave("internal_hyperlink_table.odt");
+    createSwDoc("internal_hyperlink_table.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1283,7 +1326,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127735)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123628)
 {
-    loadAndSave("tdf123628.odt");
+    createSwDoc("tdf123628.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1305,7 +1349,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSizeImport)
 {
-    loadAndSave("tdf142693_hugePaperSizeImport.docx");
+    createSwDoc("tdf142693_hugePaperSizeImport.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", u"90369");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", u"104372");
@@ -1313,7 +1358,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSizeImport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
 {
-    loadAndSave("tdf127925.odt");
+    createSwDoc("tdf127925.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FollowedHyperlink']/w:name", "val", u"FollowedHyperlink");
@@ -1321,7 +1367,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 {
-    loadAndSave("tdf127579.odt");
+    createSwDoc("tdf127579.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", u"Hyperlink");
@@ -1329,7 +1376,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
 {
-    loadAndReload("tdf128304.odt");
+    createSwDoc("tdf128304.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;

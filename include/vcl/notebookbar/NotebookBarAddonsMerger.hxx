@@ -27,14 +27,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <vector>
+#include "NotebookBarAddonsItem.hxx"
 
 class Menu;
-
-struct NotebookBarAddonsItem
-{
-    std::vector<Image> aImageValues;
-    std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>> aAddonValues;
-};
 
 struct AddonNotebookBarItem
 {

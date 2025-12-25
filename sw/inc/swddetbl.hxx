@@ -42,6 +42,7 @@ public:
 
 private:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    void ImplDestroy();
 };
 
 inline const SwDDEFieldType* SwDDETable::GetDDEFieldType() const

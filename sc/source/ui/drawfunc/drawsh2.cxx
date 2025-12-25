@@ -70,7 +70,7 @@ ScDrawShell::ScDrawShell( ScViewData& rData ) :
             pFrame->GetFrame().GetController(),
             vcl::EnumContext::Context::Cell);
     SetPool( &rViewData.GetScDrawView()->GetModel().GetItemPool() );
-    SfxUndoManager* pMgr = rViewData.GetSfxDocShell().GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
@@ -195,6 +195,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_ALIGN_ANY_LEFT );
         rSet.DisableItem( SID_ALIGN_ANY_HCENTER );
         rSet.DisableItem( SID_ALIGN_ANY_RIGHT );
+        rSet.DisableItem( SID_ALIGN_ANY_START );
+        rSet.DisableItem( SID_ALIGN_ANY_END );
         rSet.DisableItem( SID_ALIGN_ANY_TOP );
         rSet.DisableItem( SID_ALIGN_ANY_VCENTER );
         rSet.DisableItem( SID_ALIGN_ANY_BOTTOM );
@@ -282,6 +284,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         if (!pObj->isDiagram())
         {
             rSet.DisableItem( SID_REGENERATE_DIAGRAM );
+            rSet.DisableItem( SID_DIAGRAM_TO_GROUP );
             rSet.DisableItem( SID_EDIT_DIAGRAM );
         }
     }

@@ -34,7 +34,7 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include "hsqlimport.hxx"
 #include "parseschema.hxx"

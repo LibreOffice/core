@@ -23,6 +23,7 @@
 #include <unordered_map>
 #include <comphelper/extract.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <sal/log.hxx>
 
 
@@ -196,10 +197,11 @@ bool SfxBoolItem::GetPresentation(SfxItemPresentation,
 
 void SfxBoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxBoolItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValueTextByVal(m_bValue).toUtf8().getStr()));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxBoolItem");
+    aWriter.attribute("value", GetValueTextByVal(m_bValue));
     SfxPoolItem::dumpAsXml(pWriter);
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 // virtual

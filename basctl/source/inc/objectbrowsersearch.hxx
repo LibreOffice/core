@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace basctl
 {

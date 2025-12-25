@@ -16,7 +16,7 @@ OUString JSInstanceBuilder::getMapIdFromWindowId() const
 {
     if (m_sTypeOfJSON == "sidebar" || m_sTypeOfJSON == "notebookbar"
         || m_sTypeOfJSON == "formulabar" || m_sTypeOfJSON == "addressinputfield"
-        || m_sTypeOfJSON == "navigator")
+        || m_sTypeOfJSON == "navigator" || m_sTypeOfJSON == "quickfind")
     {
         return OUString::number(m_nWindowId) + m_sTypeOfJSON;
     }
@@ -43,7 +43,7 @@ void JSInstanceBuilder::RememberWidget(OUString sId, weld::Widget* pWidget)
         {
             unsigned long long int nIndex = nNotRepeatIndex++;
             // found duplicated it -> add some number to the id and apply to the widget
-            sId = sId + OUString::number(nIndex);
+            sId += OUString::number(nIndex);
             SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
             assert(pSalWidget && "can only be a SalInstanceWidget");
             vcl::Window* pVclWidget = pSalWidget->getWidget();

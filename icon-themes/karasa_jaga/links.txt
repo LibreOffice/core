@@ -26,7 +26,9 @@ cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
 cmd/32/advancedmode.png cmd/32/toggleobjectrotatemode.png
+cmd/32/alignend.png cmd/32/alignright.png
 cmd/32/alignframemenu.png cmd/32/objectalign.png
+cmd/32/alignstart.png cmd/32/alignleft.png
 cmd/32/alignvcenter.png cmd/32/alignverticalcenter.png
 cmd/32/anchormenu.png cmd/32/toggleanchortype.png
 cmd/32/ar/bulletliststyle.png cmd/rltb/32/defaultbullet.png
@@ -77,10 +79,12 @@ cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/addons.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
+cmd/32/commonalignend.png cmd/32/alignright.png
 cmd/32/commonalignhorizontalcenter.png cmd/32/alignhorizontalcenter.png
 cmd/32/commonalignjustified.png cmd/32/alignblock.png
 cmd/32/commonalignleft.png cmd/32/alignleft.png
 cmd/32/commonalignright.png cmd/32/alignright.png
+cmd/32/commonalignstart.png cmd/32/alignleft.png
 cmd/32/commonaligntop.png cmd/32/aligntop.png
 cmd/32/commonalignverticalcenter.png cmd/32/alignverticalcenter.png
 cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
@@ -119,6 +123,7 @@ cmd/32/editregion.png cmd/32/insertsection.png
 cmd/32/editselectmenu.png cmd/32/selecttables.png
 cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
 cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
+cmd/32/endpara.png cmd/32/alignright.png
 cmd/32/es/italic.png cmd/32/de/italic.png
 cmd/32/es/numberformatdecdecimals.png cmd/32/de/numberformatdecdecimals.png
 cmd/32/es/numberformatdecimal.png cmd/32/de/numberformatdecimal.png
@@ -461,6 +466,7 @@ cmd/32/square.png cmd/32/basicshapes.quadrat.png
 cmd/32/square_rounded.png cmd/32/basicshapes.round-quadrat.png
 cmd/32/starchartdialog.png cmd/32/drawchart.png
 cmd/32/starshapes.png cmd/32/starshapes.star5.png
+cmd/32/startpara.png cmd/32/alignleft.png
 cmd/32/stylewatercanmode cmd/32/styleapply.png
 cmd/32/sv/bold.png cmd/32/de/bold.png
 cmd/32/sv/italic.png cmd/32/de/italic.png
@@ -711,7 +717,9 @@ cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
+cmd/lc_alignend.png cmd/lc_alignright.png
 cmd/lc_alignframemenu.png cmd/lc_objectalign.png
+cmd/lc_alignstart.png cmd/lc_alignleft.png
 cmd/lc_alignvcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/lc_arrangeframemenu.png cmd/lc_bringtofront.png
@@ -752,10 +760,12 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_addons.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
+cmd/lc_commonalignend.png cmd/lc_alignright.png
 cmd/lc_commonalignhorizontalcenter.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_commonalignjustified.png cmd/lc_alignblock.png
 cmd/lc_commonalignleft.png cmd/lc_alignleft.png
 cmd/lc_commonalignright.png cmd/lc_alignright.png
+cmd/lc_commonalignstart.png cmd/lc_alignleft.png
 cmd/lc_commonaligntop.png cmd/lc_aligntop.png
 cmd/lc_commonalignverticalcenter.png cmd/lc_alignverticalcenter.png
 cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
@@ -794,9 +804,11 @@ cmd/lc_editregion.png cmd/lc_insertsection.png
 cmd/lc_editselectmenu.png cmd/lc_selecttables.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
+cmd/lc_endpara.png cmd/lc_alignright.png
 cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/lc_exportasgraphic.png cmd/lc_graphic.png
 cmd/lc_exportasmenu.png cmd/lc_exportto.png
+cmd/lc_extensionmanager.png cmd/lc_addons.png
 cmd/lc_extrusionsurfacefloater.png cmd/lc_cube.png
 cmd/lc_extrusiontoggle.png cmd/lc_convertinto3d.png
 cmd/lc_fielddialog.png cmd/lc_fields.png
@@ -1037,6 +1049,7 @@ cmd/lc_square.png cmd/lc_basicshapes.quadrat.png
 cmd/lc_square_rounded.png cmd/lc_basicshapes.round-quadrat.png
 cmd/lc_starchartdialog.png cmd/lc_drawchart.png
 cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
+cmd/lc_startpara.png cmd/lc_alignleft.png
 cmd/lc_stylewatercanmode cmd/lc_styleapply.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
@@ -1130,7 +1143,9 @@ cmd/sc_adddatefield.png cmd/sc_datefield.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
+cmd/sc_alignend.png cmd/sc_alignright.png
 cmd/sc_alignframemenu.png cmd/sc_objectalign.png
+cmd/sc_alignstart.png cmd/sc_alignleft.png
 cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
@@ -1171,10 +1186,12 @@ cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_addons.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
+cmd/sc_commonalignend.png cmd/sc_alignright.png
 cmd/sc_commonalignhorizontalcenter.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_commonalignjustified.png cmd/sc_alignblock.png
 cmd/sc_commonalignleft.png cmd/sc_alignleft.png
 cmd/sc_commonalignright.png cmd/sc_alignright.png
+cmd/sc_commonalignstart.png cmd/sc_alignleft.png
 cmd/sc_commonaligntop.png cmd/sc_aligntop.png
 cmd/sc_commonalignverticalcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
@@ -1213,10 +1230,12 @@ cmd/sc_editregion.png cmd/sc_insertsection.png
 cmd/sc_editselectmenu.png cmd/sc_selecttables.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
+cmd/sc_endpara.png cmd/sc_alignright.png
 cmd/sc_endnotedialog.png cmd/sc_footnotedialog.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png
 cmd/sc_exportasgraphic.png cmd/sc_graphic.png
 cmd/sc_exportasmenu.png cmd/sc_exportto.png
+cmd/sc_extensionmanager.png cmd/sc_addons.png
 cmd/sc_extrusionsurfacefloater.png cmd/sc_cube.png
 cmd/sc_extrusiontoggle.png cmd/sc_convertinto3d.png
 cmd/sc_fielddialog.png cmd/sc_fields.png
@@ -1460,6 +1479,7 @@ cmd/sc_starchartdialog.png cmd/sc_drawchart.png
 cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
 cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
 cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
+cmd/sc_startpara.png cmd/sc_alignleft.png
 cmd/sc_stylewatercanmode cmd/sc_styleapply.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
@@ -2073,3 +2093,13 @@ vcl/res/radio5.png vcl/res/radio3.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
 xmlsecurity/res/notcertificate_16.png svx/res/notcertificate_16.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
+
+# SwNavigator toolbox functions toolbar
+cmd/sc_objecttitledescription-frames.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-frames.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-images.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-images.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-oleobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-oleobjects.png cmd/lc_objecttitledescription.png
+cmd/sc_objecttitledescription-drawingobjects.png cmd/sc_objecttitledescription.png
+cmd/lc_objecttitledescription-drawingobjects.png cmd/lc_objecttitledescription.png

@@ -384,7 +384,6 @@ public:
     {
         return maLinkAnnotations;
     }
-    bool hasLinkAnnotations() const { return !maLinkAnnotations.empty(); }
 
     bool Equals(const SdPage&) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;

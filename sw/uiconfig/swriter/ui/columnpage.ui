@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">20</property>
@@ -878,6 +878,11 @@
                 <property name="can-focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pageexample-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="columnpage|pageexample-atkobject">Preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -890,6 +895,11 @@
                 <property name="can-focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="frameexample-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="columnpage|frameexample-atkobject">Preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>

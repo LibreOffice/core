@@ -72,11 +72,11 @@
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <desktop/crashreport.hxx>
 #include <vcl/threadex.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
@@ -237,7 +237,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
 #if HAVE_FEATURE_JAVA
         std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
-        utl::MediaDescriptor aDescriptor(aArgs);
+        comphelper::SequenceAsHashMap aDescriptor(aArgs);
         bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
         if (bOnMainThread)
         {
@@ -1182,6 +1182,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
 
         { u"CharBackgroundExt", { PayloadType::IsActivePayload, true } },
         { u"ControlCodes", { PayloadType::IsActivePayload, true } },
+        { u"RedlineRenderMode", { PayloadType::IsActivePayload, true } },
         { u"DefaultBullet", { PayloadType::IsActivePayload, true } },
         { u"DefaultNumbering", { PayloadType::IsActivePayload, true } },
         { u"Italic", { PayloadType::IsActivePayload, true } },

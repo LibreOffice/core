@@ -96,6 +96,8 @@ inline QDate toQDate(const Date& rDate)
 
 inline Date toDate(const QDate& rDate) { return Date(rDate.day(), rDate.month(), rDate.year()); }
 
+Qt::Alignment toQtAlignment(TxtAlign eAlign);
+
 Qt::CheckState toQtCheckState(TriState eTristate);
 TriState toVclTriState(Qt::CheckState eTristate);
 
@@ -166,6 +168,7 @@ sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons);
 MouseEvent toVclMouseEvent(QMouseEvent& rEvent);
 
 QImage toQImage(const Image& rImage);
+Image toImage(const QImage& rImage);
 
 QFont toQtFont(const vcl::Font& rVclFont);
 

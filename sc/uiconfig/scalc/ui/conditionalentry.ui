@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkScrolledWindow" id="border">
     <property name="visible">True</property>
     <property name="can-focus">True</property>
@@ -57,6 +57,200 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=3 n-rows=4 -->
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="column-spacing">12</property>
+                <property name="column-homogeneous">True</property>
+                <child>
+                  <object class="GtkComboBoxText" id="type">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <items>
+                      <item translatable="yes" context="conditionalentry|type">All Cells</item>
+                      <item translatable="yes" context="conditionalentry|type">Cell value</item>
+                      <item translatable="yes" context="conditionalentry|type">Formula is</item>
+                      <item translatable="yes" context="conditionalentry|type">Date is</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                    <property name="height">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="typeis">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <items>
+                      <item translatable="yes" context="conditionalentry|typeis">is equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is less than</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is greater than</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is less than or equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is greater than or equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is between</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not between</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is duplicate</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not duplicate</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in top N elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in bottom N elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in top N percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in bottom N percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is above average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is below average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is above or equal average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is below or equal average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is error</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not error</item>
+                      <item translatable="yes" context="conditionalentry|typeis">begins with</item>
+                      <item translatable="yes" context="conditionalentry|typeis">ends with</item>
+                      <item translatable="yes" context="conditionalentry|typeis">contains</item>
+                      <item translatable="yes" context="conditionalentry|typeis">does not contain</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="datetype">
+                    <property name="can-focus">False</property>
+                    <items>
+                      <item translatable="yes" context="conditionalentry|datetype">Today</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Yesterday</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Tomorrow</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last 7 days</item>
+                      <item translatable="yes" context="conditionalentry|datetype">This week</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last week</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Next week</item>
+                      <item translatable="yes" context="conditionalentry|datetype">This month</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last month</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Next month</item>
+                      <item translatable="yes" context="conditionalentry|datetype">This year</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last year</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Next year</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="colorformat">
+                    <property name="can-focus">False</property>
+                    <items>
+                      <item translatable="yes" context="conditionalentry|colorformat">Color Scale (2 Entries)</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Color Scale (3 Entries)</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Data Bar</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Icon Set</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="formula">
+                    <property name="can-focus">True</property>
+                    <property name="no-show-all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=2 n-rows=1 -->
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkEntry" id="val1">
+                        <property name="can-focus">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="width-chars">5</property>
+                        <property name="truncate-multiline">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="val2">
+                        <property name="can-focus">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="width-chars">5</property>
+                        <property name="truncate-multiline">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="iconsettype">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <items>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Gray Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Flags</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Traffic Lights 1</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Traffic Lights 2</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Signs</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Symbols 1</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Symbols 2</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Smileys</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Stars</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Triangles</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Colored Smileys</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Gray Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Circles Red to Black</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Ratings</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Traffic Lights</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Gray Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Ratings</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Quarters</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Boxes</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -342,200 +536,6 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=3 n-rows=4 -->
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="column-spacing">12</property>
-                <property name="column-homogeneous">True</property>
-                <child>
-                  <object class="GtkComboBoxText" id="typeis">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <items>
-                      <item translatable="yes" context="conditionalentry|typeis">is equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is less than</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is greater than</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is less than or equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is greater than or equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is not equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is between</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is not between</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is duplicate</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is not duplicate</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is in top N elements</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is in bottom N elements</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is in top N percent</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is in bottom N percent</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is above average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is below average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is above or equal average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is below or equal average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is error</item>
-                      <item translatable="yes" context="conditionalentry|typeis">is not error</item>
-                      <item translatable="yes" context="conditionalentry|typeis">begins with</item>
-                      <item translatable="yes" context="conditionalentry|typeis">ends with</item>
-                      <item translatable="yes" context="conditionalentry|typeis">contains</item>
-                      <item translatable="yes" context="conditionalentry|typeis">does not contain</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="datetype">
-                    <property name="can-focus">False</property>
-                    <items>
-                      <item translatable="yes" context="conditionalentry|datetype">Today</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Yesterday</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Tomorrow</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Last 7 days</item>
-                      <item translatable="yes" context="conditionalentry|datetype">This week</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Last week</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Next week</item>
-                      <item translatable="yes" context="conditionalentry|datetype">This month</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Last month</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Next month</item>
-                      <item translatable="yes" context="conditionalentry|datetype">This year</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Last year</item>
-                      <item translatable="yes" context="conditionalentry|datetype">Next year</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="colorformat">
-                    <property name="can-focus">False</property>
-                    <items>
-                      <item translatable="yes" context="conditionalentry|colorformat">Color Scale (2 Entries)</item>
-                      <item translatable="yes" context="conditionalentry|colorformat">Color Scale (3 Entries)</item>
-                      <item translatable="yes" context="conditionalentry|colorformat">Data Bar</item>
-                      <item translatable="yes" context="conditionalentry|colorformat">Icon Set</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="formula">
-                    <property name="can-focus">True</property>
-                    <property name="no-show-all">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="truncate-multiline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="type">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <items>
-                      <item translatable="yes" context="conditionalentry|type">All Cells</item>
-                      <item translatable="yes" context="conditionalentry|type">Cell value</item>
-                      <item translatable="yes" context="conditionalentry|type">Formula is</item>
-                      <item translatable="yes" context="conditionalentry|type">Date is</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkEntry" id="val1">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="width-chars">5</property>
-                        <property name="truncate-multiline">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="val2">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="width-chars">5</property>
-                        <property name="truncate-multiline">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="iconsettype">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <items>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Arrows</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Gray Arrows</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Flags</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Traffic Lights 1</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Traffic Lights 2</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Signs</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Symbols 1</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Symbols 2</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Smileys</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Stars</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Triangles</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">3 Colored Smileys</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">4 Arrows</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">4 Gray Arrows</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">4 Circles Red to Black</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">4 Ratings</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">4 Traffic Lights</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">5 Arrows</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">5 Gray Arrows</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">5 Ratings</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">5 Quarters</item>
-                      <item translatable="yes" context="conditionalentry|iconsettype">5 Boxes</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>

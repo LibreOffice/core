@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <dlgname.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 
@@ -56,9 +56,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogControl
     rTreeView.show();
 
     rTreeView.connect_selection_changed(LINK(this, SvxMenuConfigPage, SelectMenuEntry));
-    rTreeView.connect_popup_menu(LINK(this, SvxMenuConfigPage, ContentContextMenuHdl));
+    rTreeView.connect_command(LINK(this, SvxMenuConfigPage, ContentContextMenuHdl));
 
-    m_xFunctions->get_widget().connect_popup_menu(
+    m_xFunctions->get_widget().connect_command(
         LINK(this, SvxMenuConfigPage, FunctionContextMenuHdl));
 
     m_xGearBtn->connect_selected(LINK(this, SvxMenuConfigPage, GearHdl));

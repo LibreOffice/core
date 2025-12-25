@@ -834,8 +834,8 @@ void CuiConfigGroupListBox::GroupSelected()
     All functions/macros are displayed in the functionlistbox.
 */
 {
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xIter.get()))
+    std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_selected();
+    if (!xIter)
         return;
 
     SfxGroupInfo_Impl *pInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter));
@@ -1173,7 +1173,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     m_xCommands->connect_changed( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     m_xCommands->connect_row_activated( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
-    m_xCommands->connect_popup_menu( LINK( this, SvxScriptSelectorDialog, ContextMenuHdl ) );
+    m_xCommands->connect_command( LINK( this, SvxScriptSelectorDialog, ContextMenuHdl ) );
 
     m_xOKButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
     m_xCancelButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
@@ -1294,8 +1294,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
 {
     OUString result;
 
-    std::unique_ptr<weld::TreeIter> xIter = m_xCommands->make_iterator();
-    if (m_xCommands->get_selected(xIter.get()))
+    if (std::unique_ptr<weld::TreeIter> xIter = m_xCommands->get_selected())
     {
         SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter));
         if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
@@ -1317,9 +1316,9 @@ SvxScriptSelectorDialog::SaveLastUsedMacro()
     OUString sMacroInfo;
     sMacroInfo = m_xCommands->get_selected_text();
     weld::TreeView& xCategories = m_xCategories->get_widget();
-    std::unique_ptr<weld::TreeIter> xIter = xCategories.make_iterator();
+    std::unique_ptr<weld::TreeIter> xIter = xCategories.get_selected();
 
-    if (!xCategories.get_selected(xIter.get()))
+    if (!xIter)
         return;
 
     do

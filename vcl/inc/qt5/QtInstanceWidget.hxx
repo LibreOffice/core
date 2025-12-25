@@ -15,7 +15,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QMessageBox>
 #include "QtTools.hxx"
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <string_view>
 #include <rtl/ustring.hxx>
 #include <vcl/sysdata.hxx>
@@ -50,8 +50,6 @@ public:
 
     virtual bool has_focus() const override;
 
-    virtual bool is_active() const override;
-
     virtual bool has_child_focus() const override;
 
     virtual void show() override;
@@ -80,11 +78,11 @@ public:
 
     virtual OUString get_help_id() const override;
 
-    virtual void set_hexpand(bool) override;
+    virtual void set_hexpand(bool bExpand) override;
 
     virtual bool get_hexpand() const override;
 
-    virtual void set_vexpand(bool) override;
+    virtual void set_vexpand(bool bExpand) override;
 
     virtual bool get_vexpand() const override;
 
@@ -182,7 +180,9 @@ public:
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 
     void setFont(vcl::Font rFont);
-    static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
+
+    static OUString getHelpId(QObject& rObject);
+    static void setHelpId(QObject& rObject, const OUString& rHelpId);
 
 protected:
     virtual bool handleToolTipEvent(const QHelpEvent& rHelpEvent);

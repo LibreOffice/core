@@ -53,7 +53,7 @@ public:
 
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
-    IDWriteFontFace* GetDWFontFace() const;
+    const sal::systools::COMReference<IDWriteFontFace>& GetDWFontFace() const;
 
 private:
     explicit WinFontInstance(const WinFontFace&, const vcl::font::FontSelectPattern&);

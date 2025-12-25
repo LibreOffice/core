@@ -34,7 +34,7 @@
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
 					<li>
-						<p id="macxiOSX" xml:lang="en-US">macOS 10.15 (Catalina) or higher</p>
+						<p id="macxiOSX" xml:lang="en-US">macOS 11 (Big Sur) or higher</p>
 					</li>
 				</ul>
 			</div>
@@ -61,11 +61,11 @@
 				<p id="s2we11" xml:lang="en-US">This "stand-alone" ${PRODUCTNAME} installer is provided for users in need of previews, having special needs, and for out-of-the-ordinary cases.</p>
 				<ul>
 					<li>
-						<p id="s2we35" xml:lang="en-US">Linux Kernel version 3.10 or higher;</p>
+						<p id="s2we35" xml:lang="en-US">Linux Kernel version 4.18 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s253we" xml:lang="en-US">glibc2 version 2.17 or higher;</p>
+						<p id="s253we" xml:lang="en-US">glibc2 version 2.27 or higher;</p>
 					</li>
 
 					<li>
@@ -73,14 +73,14 @@
 					</li>
 
 					<li>
-						<p id="s256we" xml:lang="en-US">GTK version 3.20 or higher;</p>
+						<p id="s256we" xml:lang="en-US">GTK version 3.24 and ATK version 2.36 or higher;</p>
 					</li>
 
 					<li>
-						<p id="wd2dff" xml:lang="en-US">Gnome 3.18 or higher, with the at-spi2 1.32 package (required for support for assistive technology [AT] tools), or another compatible GUI (such as KDE, among others).</p>
+						<p id="wd2dff" xml:lang="en-US">GNOME, or another compatible desktop environment (such as KDE Plasma, among others).</p>
 					</li>
 				</ul>
-				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and there may be different installation options (KDE vs Gnome, etc.) available from the same Linux vendor. Some distributions ship with their own “native” version of ${PRODUCTNAME}, which may have different features from this community-supplied version of ${PRODUCTNAME}. In many cases, you can install the community-supplied ${PRODUCTNAME} alongside a native version. However, you may prefer to remove the “native” version before installing this community-supplied version. For details on how to do that, please consult the user help resources provided by your particular Linux vendor.</p>
+				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and there may be different installation options (KDE vs GNOME, etc.) available from the same Linux vendor. Some distributions ship with their own “native” version of ${PRODUCTNAME}, which may have different features from this community-supplied version of ${PRODUCTNAME}. In many cases, you can install the community-supplied ${PRODUCTNAME} alongside a native version. However, you may prefer to remove the “native” version before installing this community-supplied version. For details on how to do that, please consult the user help resources provided by your particular Linux vendor.</p>
 				<p class="note" id="Linuxi4a" xml:lang="en-US">It is a recommended best practice to back-up your system and data before you remove or install software.</p>
 			</div>
 			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system, and please ensure that read, write and run access rights have been granted. Close all other programs before starting the installation process.</p>

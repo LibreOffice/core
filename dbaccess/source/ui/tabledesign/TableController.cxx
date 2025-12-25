@@ -52,7 +52,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <algorithm>
@@ -81,7 +81,7 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 
 // number of columns when creating it from scratch
-#define NEWCOLS        128
+constexpr sal_Int32 NEWCOLS = 128;
 
 namespace
 {
@@ -510,8 +510,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/)
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return false;
-    if ( getView() )
-        static_cast<OTableDesignView*>(getView())->GrabFocus();
+    if ( OTableDesignView* pView = static_cast<OTableDesignView*>(getView()) )
+        pView->FlushModifiedData();
     bool bCheck = true;
     if ( isModified() )
     {

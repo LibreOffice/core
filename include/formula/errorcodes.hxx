@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_ERRORCODES_HXX
-#define INCLUDED_FORMULA_ERRORCODES_HXX
+#pragma once
 
 #include <sal/mathconf.h>
 #include <sal/types.h>
@@ -184,7 +183,5 @@ inline bool isPublishedFormulaError( FormulaError nErr )
     }
     return false;
 }
-
-#endif // INCLUDED_FORMULA_ERRORCODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

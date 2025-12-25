@@ -15,6 +15,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/relfld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace sw::sidebar
 {

@@ -10,14 +10,14 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 
-from libreoffice.uno.propertyvalue import mkPropertyValues
+from libreoffice.uno.propertyvalue import mkPropertyValues, convert_property_values_to_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
 
 class formatBulletsNumbering(UITestCase):
 
-   def test_bullets_and_numbering_change_bullet(self):
+    def test_bullets_and_numbering_change_bullet(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             # Set the "black down-pointing triangle" bullet in the third item
@@ -56,7 +56,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(get_state_as_dict(xDecText)["Text"], "9660")
 
 
-   def test_bullets_and_numbering_dialog_tab_position(self):
+    def test_bullets_and_numbering_dialog_tab_position(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Millimeter"):
@@ -90,7 +90,7 @@ class formatBulletsNumbering(UITestCase):
 
 
 
-   def test_bullets_and_numbering_dialog_tab_position2(self):
+    def test_bullets_and_numbering_dialog_tab_position2(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
@@ -108,7 +108,7 @@ class formatBulletsNumbering(UITestCase):
 
 
 
-   def test_bullets_and_numbering_dialog_tab_customize(self):
+    def test_bullets_and_numbering_dialog_tab_customize(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
@@ -170,7 +170,7 @@ class formatBulletsNumbering(UITestCase):
 
 
 
-   def test_bullets_and_numbering_tab_move(self):
+    def test_bullets_and_numbering_tab_move(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Millimeter"):
@@ -201,7 +201,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(indentValue == indentValue3 , True)
 
 
-   def test_bullets_and_numbering_button_move(self):
+    def test_bullets_and_numbering_button_move(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             with change_measurement_unit(self, "Millimeter"):
@@ -230,7 +230,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(indentValue == indentValue3 , True)
 
 
-   def test_bullets_and_numbering_selection(self):
+    def test_bullets_and_numbering_selection(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
             # Test Bullet Page
@@ -287,22 +287,56 @@ class formatBulletsNumbering(UITestCase):
                 select_pos(xTabs, "3")
                 xGraphicPage = xDialog.getChild("PickGraphicPage")
                 xselector = xGraphicPage.getChild("valueset")
-                self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "92")
-                # Select element num 22
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "22"}))
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "21")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "22")
-                # Select element num 73
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "73"}))
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "72")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "73")
+                self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "25")
+                # Select element num 12
+                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "12"}))
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "11")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "12")
+                # Select element num 23
+                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "23"}))
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "22")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "23")
 
 
-   def test_bullets_and_numbering_document_bullet_list(self):
+    def test_bullets_and_numbering_document_bullet_list(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             self.xUITest.executeCommand(".uno:DefaultBullet")
             # Without the fix in place, this test would have crashed here
             self.xUITest.executeCommand(".uno:DocumentBulletList")
 
+    def test_bullets_and_numbering_bullet_from_smp(self):
+        with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+
+            # Change the bullet to U+1F431 CAT FACE. This is a character outside of the basic
+            # multilingual plane which means that it can’t be stored in a single sal_Unicode
+            # variable. Verifies tdf#166488
+            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
+                # Select the BulletPage's selector
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xBulletPage = xDialog.getChild("PickBulletPage")
+                xSelector = xBulletPage.getChild("valueset")
+
+                # Select element number 1
+                xSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
+                self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "1")
+                xChangeBulletBtn = xBulletPage.getChild("changeBulletBtn")
+                with self.ui_test.execute_blocking_action(xChangeBulletBtn.executeAction, args=('CLICK', ())) as xCharSetDialog:
+                    # Select the DejaVu Sans font because that should contain the character
+                    xFontName = xCharSetDialog.getChild("fontlb")
+                    xFontName.executeAction("SET", mkPropertyValues({"TEXT": "DejaVu Sans"}))
+                    # Use the hex entry to select the character
+                    xHexText = xCharSetDialog.getChild("hexvalue")
+                    xHexText.executeAction("SET", mkPropertyValues({"TEXT": "1F431"}))
+                    # Check that the character was selected by checking the name
+                    xCharName = xCharSetDialog.getChild("charname")
+                    self.assertEqual(get_state_as_dict(xCharName)["Text"], "CAT FACE")
+
+            # Check that the numbering level was updated for the paragraph in the document
+            xDocCursor = xComponent.getText().createTextCursor()
+            xNumberingRules = xDocCursor.getPropertyValue("NumberingRules")
+            xNumberingLevel = xNumberingRules.getByIndex(0)
+            self.assertEqual(convert_property_values_to_dict(xNumberingLevel)["BulletChar"],
+                             "\U0001F431")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

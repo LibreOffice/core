@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf154543(UITestCase):
 
-   def test_tdf154543_reset_snap_to_grid_parent(self):
+    def test_tdf154543_reset_snap_to_grid_parent(self):
 
         with self.ui_test.create_doc_in_start_center("writer"):
 

@@ -10,7 +10,7 @@ from os import path, walk
 
 if __name__ == '__main__':
 
-    ignoredPackages = ["dbm", "curses", "test", "tkinter", "turtledemo", "sqlite3", "idlelib"]
+    ignoredPackages = ["curses", "test", "tkinter", "turtledemo", "idlelib"]
 
     coreDir = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
     pythonDir = path.join(coreDir, "workdir/UnpackedTarball/python3")
@@ -46,13 +46,9 @@ if __name__ == '__main__':
 
     for k,v in sorted(subDirDict.items()):
         print()
-        if k == "Lib/msilib":
-            print("ifeq (WNT,$(OS))")
-        print("$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/{},\\".format(k.lower()))
+        print("$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/{},\\".format(k.replace("Lib", "lib", 3)))
         for fileName in sorted(v):
             print("\t{} \\".format(fileName))
         print("))")
-        if k == "Lib/msilib":
-            print("endif")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
     // Save it to a DOCX and load it back.
     // Exporting change tracking of the row wasn't supported.
     // Also Manage Changes for the import.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -1025,7 +1025,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -1104,10 +1104,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
     assertXPath(pXmlDoc, "//page[1]//body/tab");
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
 
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // Save it to a DOCX and load it back.
     // Exporting change tracking of the cell wasn't supported.
     // Also Manage Changes for the import.
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
@@ -1152,7 +1155,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155341_RedlineTableColumnInsertionW
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 3);
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pDoc = getSwDoc();
 
     // reject the insertion of the hidden content of the cell
@@ -1228,7 +1231,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // Save it and load it back.
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     pDoc = getSwDoc();
 
     // reject the deletion of the content of the first cell
@@ -1343,7 +1346,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
     dispatchCommand(mxComponent, u".uno:InsertRowsAfter"_ustr, {});
 
     // save it to DOCX
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
@@ -1527,7 +1530,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
     CPPUNIT_ASSERT(pEditShell->GetRedlineCount() > 0);
 
     // save it to DOCX
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

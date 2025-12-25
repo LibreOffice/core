@@ -18,7 +18,7 @@ ImageViewerDialog::ImageViewerDialog(weld::Dialog* pParent, Bitmap aBitmap, cons
     aBitmap.Scale(Size(300, 300), BmpScaleFlag::Fast);
     ScopedVclPtr<VirtualDevice> m_pVirDev = m_xDisplayImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBitmap.GetSizePixel());
-    m_pVirDev->DrawBitmapEx(Point(0, 0), aBitmap);
+    m_pVirDev->DrawBitmap(Point(0, 0), aBitmap);
     m_xDisplayImage->set_image(m_pVirDev.get());
     m_pVirDev.disposeAndClear();
 }

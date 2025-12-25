@@ -724,7 +724,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
     SwRect aRect;
     if ( pSize )
     {
-        aRect.Pos()  = rPt;
+        aRect.Pos(rPt);
         aRect.SSize( *pSize );
     }
 

@@ -26,7 +26,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>

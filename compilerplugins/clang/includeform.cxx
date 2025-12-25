@@ -29,13 +29,7 @@ private:
     void InclusionDirective(
         SourceLocation HashLoc, Token const & IncludeTok, StringRef,
         bool IsAngled, CharSourceRange FilenameRange,
-#if CLANG_VERSION >= 160000
         OptionalFileEntryRef File,
-#elif CLANG_VERSION >= 150000
-        Optional<FileEntryRef> File,
-#else
-        FileEntry const * File,
-#endif
         StringRef SearchPath, StringRef, clang::Module const *,
 #if CLANG_VERSION >= 190000
         bool,

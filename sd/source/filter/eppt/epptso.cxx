@@ -93,16 +93,20 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
         Size            aPrefSize( rGraphic.GetPrefSize() );
         Bitmap          aBmp( rGraphic.GetBitmap() );
 
-        if ( rGraphicSize.Width() && rGraphicSize.Height() )
+        const auto nGraphicWidth = rGraphicSize.Width();
+        const auto nGraphicHeight = rGraphicSize.Height();
+        if (nGraphicWidth && nGraphicHeight)
         {
-            if (aPrefSize.IsEmpty())
+            const auto nPrefWidth = aPrefSize.Width();
+            const auto nPrefHeight = aPrefSize.Height();
+            if (!nPrefWidth || !nPrefHeight)
             {
                 aBmp.Scale(aPrefSize);
             }
             else
             {
-                double          fQ1 = static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height());
-                double          fQ2 = static_cast<double>(rGraphicSize.Width()) / static_cast<double>(rGraphicSize.Height());
+                double          fQ1 = static_cast<double>(nPrefWidth) / static_cast<double>(nPrefHeight);
+                double          fQ2 = static_cast<double>(nGraphicWidth) / static_cast<double>(nGraphicHeight);
                 double          fXScale = 1;
                 double          fYScale = 1;
 
@@ -114,8 +118,8 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
                 if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
                 {
                     aBmp.Scale( fXScale, fYScale );
-                    rGraphicSize = Size( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
-                                     static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
+                    rGraphicSize = Size( static_cast<sal_Int32>(static_cast<double>(nGraphicWidth) / fXScale + 0.5 ),
+                                     static_cast<sal_Int32>(static_cast<double>(nGraphicHeight) / fYScale + 0.5 ) );
 
                     aMappedGraphic = Graphic( aBmp );
                     aGraphicObject.SetGraphic(aMappedGraphic);

@@ -21,7 +21,8 @@
 
 #include <sal/config.h>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <deque>
 #include <string_view>
 

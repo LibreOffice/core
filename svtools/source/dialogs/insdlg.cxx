@@ -208,6 +208,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
         { SotClipboardFormatId::HTML_SIMPLE,         STR_FORMAT_ID_HTML_SIMPLE },
         { SotClipboardFormatId::BIFF_5,              STR_FORMAT_ID_BIFF_5 },
         { SotClipboardFormatId::BIFF_8,              STR_FORMAT_ID_BIFF_8 },
+        { SotClipboardFormatId::BIFF_12,             STR_FORMAT_ID_BIFF_12 },
         { SotClipboardFormatId::SYLK,                STR_FORMAT_ID_SYLK },
         { SotClipboardFormatId::LINK,                STR_FORMAT_ID_LINK },
         { SotClipboardFormatId::DIF,                 STR_FORMAT_ID_DIF },

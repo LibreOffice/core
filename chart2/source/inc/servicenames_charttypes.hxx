@@ -26,8 +26,6 @@ inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BAR
     = u"com.sun.star.chart2.BarChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_COLUMN
     = u"com.sun.star.chart2.ColumnChartType"_ustr;
-inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM
-    = u"com.sun.star.chart2.HistogramChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_LINE
     = u"com.sun.star.chart2.LineChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_SCATTER

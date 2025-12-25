@@ -42,7 +42,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr)
     {
     }
 };
@@ -60,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100961_fixedDateTime)
     };
     createSwDoc("tdf100961_fixedDateTime.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108949)
     };
     createSwDoc("tdf108949_footnoteCharFormat.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141964_numId0)
     };
     createSwDoc("tdf141964_numId0.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -121,7 +121,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108949_footnote)
     };
     createSwDoc("tdf108949_footnote.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130817)
     };
     createSwDoc("tdf130817.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154129_transparentFrame)
     };
     createSwDoc("tdf154129_transparentFrame.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137683_charHighlightNone)
     };
     createSwDoc("tdf137683_charHighlightNone.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)
     };
     createSwDoc("tdf116436_tableBackground.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify(/*bIsExport*/ true);
 }
 
@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164945)
     };
     createSwDoc("noparaborder.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -237,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122589_firstSection)
     };
     createSwDoc("tdf122589_firstSection.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -253,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104035)
     };
     createSwDoc("tdf104035.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectFliph)
     };
     createSwDoc("graphic-object-fliph.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114333)
     };
     createSwDoc("tdf114333.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -308,7 +308,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115180)
     };
     createSwDoc("tdf115180.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -322,7 +322,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116841)
     };
     createSwDoc("tdf116841.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117268)
     };
     createSwDoc("tdf117268.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117505)
                              getProperty<sal_Int32>(xFirstPage, u"HeaderHeight"_ustr));
     }
     // When saving to rtf:
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     {
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -402,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117505)
 CPPUNIT_TEST_FIXTURE(Test, testTdf112520)
 {
     createSwDoc("tdf112520.docx");
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
 
     // Assert that the white shape is on top of the yellow one.
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(getShape(2), u"FillColor"_ustr));
@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedHyperlink)
     // assertion failed
     // - Expression: xComponent.is()
     // i.e. the RTF output was not well-formed, loading failed.
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     // Then make sure both hyperlinks are have the correct URLs.
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
@@ -472,7 +472,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121623)
     };
     createSwDoc("tdf121623.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf66543)
     };
     createSwDoc("tdf66543.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUlw)
     };
     createSwDoc("ulw.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122455)
     };
     createSwDoc("tdf122455.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -528,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125719_case_1)
     };
     createSwDoc("tdf125719_case_1.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125719_case_2)
     };
     createSwDoc("tdf125719_case_2.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -560,7 +560,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTabs)
     };
     createSwDoc("tabs.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123703)
     };
     createSwDoc("tdf123703.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -589,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123703_stshfdbch)
     };
     createSwDoc("tdf123703_stshfdbch.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123703_compatible)
     };
     createSwDoc("tdf123703_compatible.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -618,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128428_monospaced)
     };
     createSwDoc("tdf128428_monospaced.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -630,7 +630,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128428_compatible_monospaced)
     };
     createSwDoc("tdf128428_compatible_monospaced.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -642,7 +642,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128428_dntblnsbdb)
     };
     createSwDoc("tdf128428_dntblnsbdb.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -657,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     }
 
     // When saving to rtf:
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     // Then make sure \nobrkwrptbl is not written:
     SwDoc* pDoc = getSwDoc();
@@ -681,7 +681,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     // Then make sure the section's gutter is still RTL:
     // Without the accompanying fix in place, this test would have failed as \rtlgutter was missing.
     verify();
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -712,7 +712,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     }
 
     // When saving that document to RTF:
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     // Then make sure that the border distance is negative, so the first line of body text appears
     // on top of the page border:
@@ -747,7 +747,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127806)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(600), aSize.Height);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), aSize.Width);
 
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     CPPUNIT_ASSERT_EQUAL(1, getShapes()); // FIXME: We lost one shape on export, that's sucks
 
     xImage = getShape(1);
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148578)
     };
     createSwDoc("tdf148578.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInvalidParagraphStyle)
     };
     createSwDoc("invalidParagraphStyle.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -812,7 +812,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152784_1)
     };
     createSwDoc("tdf152784_1.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -844,7 +844,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
     xFrame->setPropertyValue(u"RightMargin"_ustr, uno::Any(static_cast<sal_Int32>(71)));
 
     // When saving to RTF:
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     // Then make sure the floating table is there & has the expected properties:
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -909,7 +909,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverRTFExport)
     }
 
     // When saving to RTF:
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
 
     // Then make sure that the overlap=never markup is written:
     SwDoc* pDoc = getSwDoc();
@@ -931,7 +931,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158409)
     };
     createSwDoc("tdf158409.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -957,7 +957,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLegalNumbering)
 
     createSwDoc("listWithLgl.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 

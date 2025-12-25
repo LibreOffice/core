@@ -53,6 +53,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configuration.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/securityoptions.hxx>
@@ -1084,14 +1085,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             else if ( prop.Value >>= aOutFramePropsTyped )
             {
                 aOutFrameProps.realloc( aOutFramePropsTyped.getLength() );
-                uno::Any* pProp = aOutFrameProps.getArray();
-                for (   const beans::NamedValue* pTypedProp = aOutFramePropsTyped.getConstArray();
-                        pTypedProp != aOutFramePropsTyped.getConstArray() + aOutFramePropsTyped.getLength();
-                        ++pTypedProp, ++pProp
-                    )
-                {
-                    *pProp <<= *pTypedProp;
-                }
+                std::transform(aOutFramePropsTyped.begin(), aOutFramePropsTyped.end(),
+                               aOutFrameProps.getArray(), [](const beans::NamedValue& rTypedProp)
+                               { return uno::Any(rTypedProp); });
                 m_xDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
             }
             else
@@ -1312,7 +1308,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
         throw lang::DisposedException(); // TODO
 
     bool AutoSaveEvent = false;
-    utl::MediaDescriptor lArgs(lObjArgs);
+    comphelper::SequenceAsHashMap lArgs(lObjArgs);
     lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
 
     if ( m_nObjectState == -1 )

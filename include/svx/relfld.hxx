@@ -21,7 +21,8 @@
 
 #include <tools/fldunit.hxx>
 #include <svtools/unitconv.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxRelativeField

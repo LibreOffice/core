@@ -20,18 +20,24 @@ namespace
 
 constexpr auto IgnoredList
     = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/simpress/ui/tabviewbar.ui" },
         { u"modules/swriter/ui/annotation.ui" },
         { u"sfx/ui/deck.ui" },
+        { u"sfx/ui/extrabutton.ui" },
         { u"sfx/ui/infobar.ui" },
         { u"sfx/ui/tabbar.ui" },
         { u"sfx/ui/tabbarcontents.ui" },
         { u"svt/ui/scrollbars.ui" },
+        { u"svt/ui/tabbuttons.ui" }, // Calc -> sheet tabs on the bottom
+        { u"svt/ui/tabbuttonsmirrored.ui" }, // as above
         { u"svx/ui/measurewidthbar.ui" },
         { u"svx/ui/selectionmenu.ui" },
         { u"svx/ui/stylemenu.ui" },
-        { u"svt/ui/tabbuttons.ui" },
         { u"svx/ui/toolbarpopover.ui" },
         { u"modules/scalc/ui/dropmenu.ui"}, // Calc -> Navigator -> right click
+        { u"modules/sdraw/ui/navigatorcontextmenu.ui" }, // Impress -> Navigator -> right click
+        { u"modules/swriter/ui/navigatorcontextmenu.ui" }, // Writer -> Navigator -> right click
+        { u"sfx/ui/quickfind.ui" },
     });
 
 // ========== MOBILE DIALOGS ================================================= //
@@ -59,6 +65,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/colorpage.ui" },
         { u"cui/ui/colorpickerdialog.ui" },
         { u"cui/ui/croppage.ui" },
+        { u"cui/ui/diagramdialog.ui" },
         { u"cui/ui/effectspage.ui" },
         { u"cui/ui/eventassigndialog.ui" },
         { u"cui/ui/fontfeaturesdialog.ui" },
@@ -186,6 +193,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/sortoptionspage.ui" },
         { u"modules/scalc/ui/sparklinedialog.ui" },
         { u"modules/scalc/ui/standardfilterdialog.ui" },
+        { u"modules/scalc/ui/statisticsinfopage.ui" },
         { u"modules/scalc/ui/textimportcsv.ui" },
         { u"modules/scalc/ui/ttestdialog.ui" },
         { u"modules/scalc/ui/ungroupdialog.ui" },
@@ -205,7 +213,6 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/bulletsandnumbering.ui" },
         { u"modules/swriter/ui/captionoptions.ui" },
         { u"modules/swriter/ui/characterproperties.ui" },
-        { u"modules/swriter/ui/charurlpage.ui" },
         { u"modules/swriter/ui/columndialog.ui" },
         { u"modules/swriter/ui/columnpage.ui" },
         { u"modules/swriter/ui/contentcontroldlg.ui" },
@@ -238,6 +245,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/paradialog.ui" },
         { u"modules/swriter/ui/picturedialog.ui" },
         { u"modules/swriter/ui/picturepage.ui" },
+        { u"modules/swriter/ui/renameobjectdialog.ui" },
         { u"modules/swriter/ui/sectionpage.ui" },
         { u"modules/swriter/ui/sortdialog.ui" },
         { u"modules/swriter/ui/splittable.ui" },
@@ -393,6 +401,7 @@ constexpr auto PopupList
 constexpr auto MenuList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"sfx/ui/stylecontextmenu.ui" },
+        { u"modules/simpress/ui/mastermenu.ui" },
         { u"modules/simpress/ui/layoutmenu.ui" }
     });
 
@@ -456,6 +465,8 @@ constexpr auto SidebarList
         { u"svx/ui/sidebarpossize.ui" },
         { u"svx/ui/sidebarshadow.ui" },
         { u"svx/ui/sidebarstylespanel.ui" },
+        { u"svx/ui/sidebartextcolumnspanel.ui" },
+        { u"svx/ui/sidebartexteffect.ui" },
         { u"svx/ui/sidebartextpanel.ui" }
     });
 
@@ -467,11 +478,19 @@ constexpr auto NavigatorList
         { u"modules/simpress/ui/navigatorpanel.ui"}
 });
 
+// ========== QUICKFIND ================================================= //
+constexpr auto QuickFindList
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/swriter/ui/sidebarquickfind.ui" },
+});
+
+
 // ========== NOTEBOOKBAR ================================================= //
 
 constexpr auto NotebookbarList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"modules/scalc/ui/numberbox.ui" },
+        { u"modules/scalc/ui/sheetviewbox.ui" },
         { u"svx/ui/fontnamebox.ui" },
         { u"svx/ui/fontsizebox.ui" },
         { u"svx/ui/stylespreview.ui" },
@@ -590,6 +609,11 @@ bool isBuilderEnabledForNavigator(std::u16string_view rUIFile)
         return isInMap(NavigatorList, rUIFile);
 }
 
+bool isBuilderEnabledForQuickFind(std::u16string_view rUIFile)
+{
+    return isInMap(QuickFindList, rUIFile);
+}
+
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
 {
     return isInMap(NotebookbarList, rUIFile);
@@ -604,6 +628,17 @@ bool isBuilderEnabledForFormulabar(std::u16string_view rUIFile)
 {
     return isInMap(FormulabarList, rUIFile);
 }
+
+bool completeWriterDialogList(const o3tl::sorted_vector<OUString>& entries)
+{
+    for (const auto& entry : SwriterDialogList)
+    {
+        if (!entries.contains(OUString(entry)))
+            return false;
+    }
+    return true;
+}
+
 } // end of jsdialog
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -169,7 +169,7 @@ namespace svt
         void prepareDialog();
 
     protected:
-                bool    createPicker();
+        void createPicker();
 
         /** handle a single argument from the XInitialization::initialize method
 

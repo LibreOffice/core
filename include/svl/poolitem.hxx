@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <vector>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
@@ -309,6 +308,7 @@ enum class SfxItemType : sal_uInt16
     Svx3DTextureProjectionXItemType,
     Svx3DTextureProjectionYItemType,
     SvxAdjustItemType,
+    SvxAutoFrameDirectionItemType,
     SvxAutoKernItemType,
     SvxB3DVectorItemType,
     SvxBitmapListItemType,
@@ -749,7 +749,7 @@ public:
     std::unique_ptr<SfxPoolItem> CloneSetWhich( sal_uInt16 nNewWhich ) const;
     template<class T> std::unique_ptr<T> CloneSetWhich( TypedWhichId<T> nId ) const
     {
-        return std::unique_ptr<T>(static_cast<T*>(CloneSetWhich(sal_uInt16(nId)).release()));
+        return std::unique_ptr<T>(&CloneSetWhich(sal_uInt16(nId)).release()->StaticWhichCast(nId));
     }
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }

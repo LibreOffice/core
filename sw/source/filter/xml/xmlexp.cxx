@@ -30,7 +30,7 @@
 #include <sax/tools/converter.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svddef.hxx>
 #include <tools/UnitConversion.hxx>

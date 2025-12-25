@@ -121,6 +121,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="NoteTransparency" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Indicates whether temporary comments on hover are transparent.</desc>
+            <label>Comment transparency</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="FormulaMark" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>
@@ -808,14 +815,6 @@
             <label>Snap to grid</label>
           </info>
           <value>false</value>
-        </prop>
-        <prop oor:name="SizeToGrid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
-          <info>
-            <desc>Specifies whether the snap grid is matched with the main grid.</desc>
-            <label>Size to grid</label>
-          </info>
-          <value>true</value>
         </prop>
         <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->

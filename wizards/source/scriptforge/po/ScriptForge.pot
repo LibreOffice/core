@@ -7,14 +7,14 @@
 #  *** are part of the LibreOffice project.                          ***
 #  *********************************************************************
 #  
-#  ScriptForge Release 26.2
+#  ScriptForge Release 26.8
 #  -----------------------
 #  
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2025-08-04 11:05:34\n"
+"POT-Creation-Date: 2025-12-24 15:13:45\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -163,23 +163,6 @@ msgctxt "CALCFUNC"
 msgid  ""
 "The Calc '%1' function encountered an error. Either the given "
 "function does not exist or its arguments are invalid."
-msgstr ""
-
-#. SF_Chart.ExportToFile error message
-#. %1: An identifier
-#. %2: A file name
-#. %3: An identifier
-#. %4: True or False
-#. 
-#, kde-format
-msgctxt "CHARTEXPORT"
-msgid  ""
-"The chart could not be exported.\n"
-"Either the destination file must not be overwritten, or it has a "
-"read-only attribute set.\n"
-"\n"
-"%1 = '%2'\n"
-"%3 = %4"
 msgstr ""
 
 #. SF_DialogControl property setting
@@ -414,6 +397,24 @@ msgid  ""
 "Note that the comparison between keys is NOT case-sensitive.\n"
 "\n"
 "« %1 » = %2"
+msgstr ""
+
+#. SF_Calc CreateShapeFromFile
+#. %1: An identifier
+#. %2: A string
+#. %3: An identifier
+#. %4: A string
+#. %5: An identifier
+#. %6: A file name
+#, kde-format
+msgctxt "DUPLICATESHAPE"
+msgid  ""
+"A shape with the same name exists already in the sheet.\n"
+"\n"
+"« %1 » = %2\n"
+"« %3 » = %4\n"
+"« %5 » = %6\n"
+""
 msgstr ""
 
 #. SF_Calc InsertSheet
@@ -779,6 +780,23 @@ msgid  ""
 "function and its return value can be a good starting point.\n"
 "\n"
 "« %1 » = %2"
+msgstr ""
+
+#. SF_Shape.ExportToFile error message
+#. %1: An identifier
+#. %2: A file name
+#. %3: An identifier
+#. %4: True or False
+#. 
+#, kde-format
+msgctxt "SHAPEEXPORT"
+msgid  ""
+"The shape could not be exported.\n"
+"Either the destination file must not be overwritten, or it has a "
+"read-only attribute set.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
 msgstr ""
 
 #. SF_Database can't interpret SQL statement

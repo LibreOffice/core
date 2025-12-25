@@ -65,6 +65,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/file.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
@@ -125,36 +126,36 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
     static const struct
     {
         std::u16string_view sInput, sDump;
-        OUString sExportType;
+        TestFilter sExportType;
     } aFilesToCompare[]
-        = { { u"odp/shapes-test.odp", u"xml/shapes-test_page", u""_ustr },
-            { u"fdo47434.pptx", u"xml/fdo47434_", u""_ustr },
-            { u"n758621.ppt", u"xml/n758621_", u""_ustr },
-            { u"fdo64586.ppt", u"xml/fdo64586_", u""_ustr },
+        = { { u"odp/shapes-test.odp", u"xml/shapes-test_page", TestFilter::NONE },
+            { u"fdo47434.pptx", u"xml/fdo47434_", TestFilter::NONE },
+            { u"n758621.ppt", u"xml/n758621_", TestFilter::NONE },
+            { u"fdo64586.ppt", u"xml/fdo64586_", TestFilter::NONE },
 
             // needed to adapt this, the border parameter is no longer
             // exported with MCGRs due to oox neither needing nor
             // supporting it with now freely definable gradients
-            { u"n819614.pptx", u"xml/n819614_", u""_ustr },
+            { u"n819614.pptx", u"xml/n819614_", TestFilter::NONE },
 
-            { u"n820786.pptx", u"xml/n820786_", u""_ustr },
-            { u"n762695.pptx", u"xml/n762695_", u""_ustr },
-            { u"n593612.pptx", u"xml/n593612_", u""_ustr },
-            { u"fdo71434.pptx", u"xml/fdo71434_", u""_ustr },
-            { u"n902652.pptx", u"xml/n902652_", u""_ustr },
-            { u"tdf90403.pptx", u"xml/tdf90403_", u""_ustr },
-            { u"tdf90338.odp", u"xml/tdf90338_", u"Impress Office Open XML"_ustr },
-            { u"tdf92001.odp", u"xml/tdf92001_", u"Impress Office Open XML"_ustr },
+            { u"n820786.pptx", u"xml/n820786_", TestFilter::NONE },
+            { u"n762695.pptx", u"xml/n762695_", TestFilter::NONE },
+            { u"n593612.pptx", u"xml/n593612_", TestFilter::NONE },
+            { u"fdo71434.pptx", u"xml/fdo71434_", TestFilter::NONE },
+            { u"n902652.pptx", u"xml/n902652_", TestFilter::NONE },
+            { u"tdf90403.pptx", u"xml/tdf90403_", TestFilter::NONE },
+            { u"tdf90338.odp", u"xml/tdf90338_", TestFilter::PPTX },
+            { u"tdf92001.odp", u"xml/tdf92001_", TestFilter::PPTX },
 // GCC -mfpmath=387 rounding issues in lclPushMarkerProperties
 // (oox/source/drawingml/lineproperties.cxx); see mail sub-thread starting at
 // <https://lists.freedesktop.org/archives/libreoffice/2016-September/
 // 075211.html> "Re: Test File: sc/qa/unit/data/functions/fods/chiinv.fods:
 // fails with Assertion" for how "-mfpmath=sse -msse2" would fix that:
 #if !(defined LINUX && defined X86)
-            { u"tdf100491.pptx", u"xml/tdf100491_", u""_ustr },
+            { u"tdf100491.pptx", u"xml/tdf100491_", TestFilter::NONE },
 #endif
-            { u"tdf109317.pptx", u"xml/tdf109317_", u"impress8"_ustr },
-            // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", "Impress Office Open XML" }, // Example
+            { u"tdf109317.pptx", u"xml/tdf109317_", TestFilter::ODP },
+            // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", TestFilter::PPTX }, // Example
           };
 
     for (int i = 0; i < static_cast<int>(SAL_N_ELEMENTS(aFilesToCompare)); ++i)
@@ -163,7 +164,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
             = -1; // index of test we want to update; supposedly only when the test is created
 
         loadFromFile(aFilesToCompare[i].sInput);
-        if (!aFilesToCompare[i].sExportType.isEmpty())
+        if (aFilesToCompare[i].sExportType != TestFilter::NONE)
             saveAndReload(aFilesToCompare[i].sExportType);
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                        uno::UNO_QUERY_THROW);
@@ -347,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf154363)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nGlueId);
     }
 
-    saveAndReload(u"Impress MS PowerPoint 2007 XML"_ustr);
+    saveAndReload(TestFilter::PPTX_2007);
     {
         uno::Reference<beans::XPropertySet> xConnector1(getShapeFromPage(1, 0), uno::UNO_SET_THROW);
         uno::Reference<beans::XPropertySet> xConnector2(getShapeFromPage(3, 0), uno::UNO_SET_THROW);

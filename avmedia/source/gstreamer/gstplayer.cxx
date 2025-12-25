@@ -70,8 +70,29 @@ class MissingPluginInstallerThread: public salhelper::Thread {
 public:
     MissingPluginInstallerThread(): Thread("MissingPluginInstaller") {}
 
+    void launchIfNotJoined() {
+        std::scoped_lock g(mutex_);
+        if (!joined_) {
+            launch();
+        }
+    }
+
+    void joinIfCreated() {
+        {
+            std::scoped_lock g(mutex_);
+            joined_ = true;
+        }
+        join(); // if not yet created, join() does nothing
+    }
+
 private:
+    using salhelper::Thread::launch;
+    using salhelper::Thread::join;
+
     void execute() override;
+
+    std::mutex mutex_;
+    bool joined_ = false;
 };
 
 
@@ -156,7 +177,7 @@ void MissingPluginInstaller::report(
         launch = currentThread_;
     }
     if (join.is()) {
-        join->join();
+        join->joinIfCreated();
     }
     launch->acquire();
     Application::PostUserEvent(
@@ -209,7 +230,7 @@ void MissingPluginInstaller::detach(Player const * source) {
     }
     if (join.is()) {
         // missing cancellability of gst_install_plugins_sync
-        join->join();
+        join->joinIfCreated();
     }
 }
 
@@ -238,7 +259,7 @@ IMPL_STATIC_LINK(MissingPluginInstaller, launchUi, void *, p, void)
         // loop), and hopefully fine to call gst_is_missing_plugin_message and
         // gst_missing_plugin_message_get_installer_detail before calling
         // gst_pb_utils_init
-    ref->launch();
+    ref->launchIfNotJoined();
 }
 
 

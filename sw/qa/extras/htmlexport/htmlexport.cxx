@@ -58,10 +58,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo81276)
         CPPUNIT_ASSERT(abs(sal_Int32(500) - getProperty<sal_Int32>(xStyle, u"BottomMargin"_ustr))
                        < 10);
     };
-    setImportFilterName(mpFilter);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("fdo81276.html");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 }
 
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo62336)
     // The problem was essentially a crash during table export as docx/rtf/html
     // If calc-layout is enabled, the crash does not occur, that's why loadFromFile/save is used
     loadFromFile(u"fdo62336.docx");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
@@ -91,10 +91,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
         CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), getProperty<Color>(xCell, u"BackColor"_ustr));
     };
 
-    setImportFilterName(mpFilter);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("fdo86857.html");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 }
 
@@ -143,14 +143,14 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testCharacterBorder)
     };
     createSwDoc("charborder.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImages)
 {
     createSwDoc("textAndImage.docx");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
 {
     createSwDoc("textAndImage.docx");
     setFilterOptions(u"SkipImages"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)
 {
     createSwDoc("skipimage-embedded.doc");
     setFilterOptions(u"SkipImages"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     // Embedded spreadsheet was exported as image, so content was lost. Make
     // sure it's exported as HTML instead.
@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbeddedDocument)
 {
     createSwDoc("skipimage-embedded-document.docx");
     setFilterOptions(u"SkipImages"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     // Similar to testSkipImagesEmbedded, but with an embedded Writer object,
     // not a Calc one, and this time OOXML, not WW8.
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbeddedDocument)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportImageProperties)
 {
     createSwDoc("HTMLImage.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportImageProperties)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportCheckboxRadioButtonState)
 {
     createSwDoc("checkbox-radiobutton.doc");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -274,7 +274,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportCheckboxRadioButtonState)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportUrlEncoding)
 {
     createSwDoc("tdf76291.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportUrlEncoding)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportInternalUrl)
 {
     createSwDoc("tdf90905.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -298,7 +298,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportInternalUrl)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportImageBulletList)
 {
     createSwDoc("tdf66822.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportImageBulletList)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf83890)
 {
     createSwDoc("tdf83890.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf83890)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExtbChars)
 {
     createSwWebDoc("extb.html");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     OUString aExpected(u"\U00024b62"_ustr);
     // Assert that UTF8 encoded non-BMP Unicode character is correct
     uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
@@ -362,7 +362,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExtbChars)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testNormalImageExport)
 {
     createSwDoc("textAndImage.docx");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -377,7 +377,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testEmbedImagesEnabled)
 {
     createSwDoc("textAndImage.docx");
     setFilterOptions(u"EmbedImages"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -396,7 +396,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTML)
 {
     createSwWebDoc("hello.html");
     setFilterOptions(u"XHTML"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     OString aExpected("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML"_ostr);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
@@ -414,10 +414,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTML)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfParagraph)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-p.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -465,11 +465,11 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
     };
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole-data.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 }
 
@@ -516,11 +516,11 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
     };
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole-img.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 
     // "type" attribute was missing for the inner <object> element.
@@ -577,10 +577,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-jpg-img.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -593,10 +593,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfJpgImg)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-table.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
@@ -619,7 +619,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfTable2)
 {
     createSwDoc("reqif-table2.odt");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -659,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTMLUseCSS)
 {
     createSwDoc("xhtml-css.odt");
     setFilterOptions(u"XHTML"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -674,10 +674,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTMLUseCSS)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfList)
 {
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-list.xhtml");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -718,11 +718,11 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
     };
 
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole2.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 
     // Check that the replacement graphic is exported at RTF level.
@@ -762,18 +762,18 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2Odg)
         CPPUNIT_ASSERT(xObject->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));
     };
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("reqif-ole-odg.xhtml");
     verify();
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::HTML_WRITER);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testList)
 {
     createSwWebDoc("list.html");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -786,7 +786,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testList)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTransparentImage)
 {
     createSwDoc("transparent-image.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOleNodataReqIf)
 {
     createSwDoc("reqif-ole-nodata.odt");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     // This failed, io::IOException was thrown during the filter() call.
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
@@ -837,7 +837,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testNoLangReqIf)
 {
     createSwDoc("reqif-no-lang.odt");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
@@ -848,7 +848,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testNoLangReqIf)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShade)
 {
     createSwDoc("field-shade.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -866,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShade)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf132739)
 {
     createSwDoc("tdf132739.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -881,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShadeReqIf)
 {
     createSwDoc("field-shade-reqif.odt");
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
 
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -898,7 +898,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShadeReqIf)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf126879)
 {
     createSwDoc("tdf126879.odt");
-    save(mpFilter);
+    save(TestFilter::HTML_WRITER);
     static constexpr OString aExpected("<!DOCTYPE html>"_ostr);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -1044,7 +1044,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
 
     // Now import this back and check the ODT result.
     ImportFromReqif(maTempFile.GetURL());
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
@@ -1067,7 +1067,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
     ImportFromReqif(createFileURL(u"paint-ole.xhtml"));
 
     // Save it as ODT to inspect the result of the OLE1 -> OLE2 conversion.
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());

@@ -25,6 +25,8 @@
 #include <helpids.h>
 #include <mediamisc.hxx>
 
+#include <com/sun/star/media/ZoomLevel.hpp>
+
 constexpr sal_Int32 AVMEDIA_DB_RANGE = -40;
 constexpr double AVMEDIA_LINEINCREMENT = 1.0;
 constexpr double AVMEDIA_PAGEINCREMENT = 10.0;

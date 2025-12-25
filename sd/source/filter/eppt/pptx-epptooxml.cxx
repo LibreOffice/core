@@ -26,6 +26,7 @@
 #include "epptooxml.hxx"
 #include <oox/export/shapes.hxx>
 #include <svx/svdlayer.hxx>
+#include <xmloff/autolayout.hxx>
 #include <unokywds.hxx>
 #include <osl/file.hxx>
 
@@ -38,12 +39,14 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -85,6 +88,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/ColorSets.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
@@ -232,20 +236,25 @@ struct PPTXLayoutInfo
 
 }
 
-const PPTXLayoutInfo aLayoutInfo[OOXML_LAYOUT_SIZE] =
+// the function 'SlidePersist::getLayoutFromValueToken()'
+// likely needs to be updated after any changes here
+// unsupported PPTX layouts: txAndMedia, twoColTx, twoTxTwoObj,
+//  twoObjAndObj, objTx, picTx, secHead, objOnly, objAndTwoObj,
+//  mediaAndTx, dgm, cust
+const PPTXLayoutInfo aLayoutInfo[] =
 {
     { 0, "Title Slide", "title" },
     { 1, "Title and text", "tx" },
     { 2, "Title and chart", "chart" },
     { 3, "Title, text on left, text on right", "twoObj" },
     { 4, "Title, text on left and chart on right", "txAndChart" },
+    { 20, "Blank Slide", "blank" },
     { 6, "Title, text on left, clip art on right", "txAndClipArt" },
-    { 6, "Title, text on left, media on right", "txAndMedia" },
     { 7, "Title, chart on left and text on right", "chartAndTx" },
     { 8, "Title and table", "tbl" },
     { 9, "Title, clipart on left, text on right", "clipArtAndTx" },
     { 10, "Title, text on left, object on right", "txAndObj" },
-    { 1, "Title and object", "obj" },
+    {  1, "Title and object", "obj" },
     { 12, "Title, text on left, two objects on right", "txAndTwoObj" },
     { 13, "Title, object on left, text on right", "objAndTx" },
     { 14, "Title, object on top, text on bottom", "objOverTx" },
@@ -255,22 +264,23 @@ const PPTXLayoutInfo aLayoutInfo[OOXML_LAYOUT_SIZE] =
     { 18, "Title and four objects", "fourObj" },
     { 19, "Title Only", "titleOnly" },
     { 20, "Blank Slide", "blank" },
-    { 21, "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
-    { 22, "Vertical title on right, vertical text on left", "vertTitleAndTx" },
-    { 23, "Title and vertical text body", "vertTx" },
-    { 24, "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
-    { 20, "Title, two objects each with text", "twoTxTwoObj" },
-    { 15, "Title, two objects on left, one object on right", "twoObjAndObj" },
-    { 20, "Title, object and caption text", "objTx" },
-    { 20, "Title, picture, and caption text", "picTx" },
-    { 20, "Section header title and subtitle text", "secHead" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" },
+    { 27, "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
+    { 28, "Vertical title on right, vertical text on left", "vertTitleAndTx" },
+    { 29, "Title and vertical text body", "vertTx" },
+    { 30, "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
+    { 20, "Blank Slide", "blank" },
     { 32, "Object only", "objOnly" },
-    { 12, "Title, one object on left, two objects on right", "objAndTwoObj" },
-    { 20, "Title, media on left, text on right", "mediaAndTx" },
-    { 34, "Title, 6 Content", "blank" }, // not defined in OOXML => blank
-    { 2, "Title and diagram", "dgm" },
-    { 0, "Custom layout defined by user", "cust" },
+    { 20, "Blank Slide", "blank" },
+    { 20, "Blank Slide", "blank" }
 };
+static_assert(std::size(aLayoutInfo) == AUTOLAYOUT_END,
+              "aLayoutInfo must have a corresponding item for each AUTOLAYOUT");
 
 PowerPointShapeExport::PowerPointShapeExport(FSHelperPtr pFS, ShapeHashMap* pShapeMap,
         PowerPointExport* pFB)
@@ -497,9 +507,12 @@ bool PowerPointExport::exportDocument()
 
     exportPPT(aProperties);
 
+    // clamp to minimum values supported by PPTX
+    sal_Int64 nDestPageWidth = std::max(sal_Int64(914400), PPTtoEMU(maDestPageSize.Width));
+    sal_Int64 nDestPageHeight = std::max(sal_Int64(914400), PPTtoEMU(maDestPageSize.Height));
     mPresentationFS->singleElementNS(XML_p, XML_sldSz,
-                                     XML_cx, OString::number(PPTtoEMU(maDestPageSize.Width)),
-                                     XML_cy, OString::number(PPTtoEMU(maDestPageSize.Height)));
+                                     XML_cx, OString::number(nDestPageWidth),
+                                     XML_cy, OString::number(nDestPageHeight));
     // for some reason if added before slides list it will not load the slides (alas with error reports) in mso
     mPresentationFS->singleElementNS(XML_p, XML_notesSz,
                                      XML_cx, OString::number(PPTtoEMU(maNotesPageSize.Width)),
@@ -947,6 +960,12 @@ void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Referen
 
     if (aFillStyle == FillStyle_NONE ||
             aFillStyle == FillStyle_HATCH)
+        return;
+
+    // For BITMAP fill style, check if graphic is valid before writing bgPr
+    if (aFillStyle == FillStyle_BITMAP
+        && (!ImplGetPropertyValue(rXPropSet, u"FillBitmap"_ustr)
+            || !mAny.has<uno::Reference<graphic::XGraphic>>()))
         return;
 
     pFS->startElementNS(XML_p, XML_bg);
@@ -1951,7 +1970,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         Reference<XNamed> xNamed(mXDrawPage, UNO_QUERY);
         if (xNamed.is())
             aSlideName = xNamed->getName();
-        for (int i = 0; i < OOXML_LAYOUT_SIZE; ++i)
+        for (int i = 0; i < AUTOLAYOUT_END; ++i)
         {
             if (mLayoutInfo[i].mnFileIdArray.size() > nPageNum
                 && mLayoutInfo[i].mnFileIdArray[nPageNum] > 0)
@@ -2330,7 +2349,12 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
-            const bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+            bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+
+            // check if it was modified. For now, since we have no ppt export for Diagram,
+            // do not export as Diagram, that would be empty if the GrabBag was deleted
+            if (bIsDiagram && pDiagramCandidate->getDiagramHelper()->isModified())
+                bIsDiagram = false;
 
             if (bIsDiagram)
                 WriteDiagram(pFS, aDML, mXShape, mnDiagramId++);
@@ -2456,9 +2480,12 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     }
     mpFS->endElementNS(XML_p, XML_spPr);
 
-    bool bWritePropertiesAsLstStyles = bUsePlaceholderIndex || ePlaceholder == Title
-                                       || ePlaceholder == Subtitle || ePlaceholder == Outliner;
-    WriteTextBox(xShape, XML_p, bWritePropertiesAsLstStyles);
+    bool bWritePropertiesAsLstStyles
+        = (mePageType == PageType::MASTER)
+          && (ePlaceholder == Title || ePlaceholder == Subtitle || ePlaceholder == Outliner);
+
+    WriteTextBox(xShape, XML_p,
+                 bUsePlaceholderIndex || bWritePropertiesAsLstStyles);
 
     mpFS->endElementNS(XML_p, XML_sp);
 
@@ -2798,10 +2825,32 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
     if (!xAudioStream.is())
         return;
 
-    int nLastSlash = sUrl.lastIndexOf('/');
-    sName = sUrl.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
+    sName = INetURLObject::decode(sUrl, INetURLObject::DecodeMechanism::ToIUri, RTL_TEXTENCODING_UTF8);
+    int nLastSlash = sName.lastIndexOf('/');
+    sName = sName.copy(nLastSlash >= 0 ? nLastSlash + 1 : 0);
 
-    OUString sPath = "../media/" + sName;
+    // MS PowerPoint reports a corrupt file if the media name contains non-ascii characters
+    OUString sAsciiName;
+    if (comphelper::string::isValidAsciiFilename(sName))
+        sAsciiName = sName;
+    else
+    {
+        // create an ASCII name - using a hash to try and keep it unique and yet non-random
+        comphelper::Hash aHash(comphelper::HashType::MD5);
+        sal_Int32 nBytesToRead = std::clamp<sal_Int32>(xAudioStream->available(), 0, 32000);
+        uno::Sequence<sal_Int8> aTempBuf(nBytesToRead);
+        if ((nBytesToRead = xAudioStream->readBytes(aTempBuf, nBytesToRead)))
+            aHash.update(aTempBuf.getConstArray(), nBytesToRead);
+        else // safety fallback: use the name to create a hash: should never happen
+        {
+            const OString sUtf(OUStringToOString(sName, RTL_TEXTENCODING_UTF8));
+            aHash.update(sUtf.getStr(), sUtf.getLength());
+        }
+        sAsciiName
+            = "audio_" + OUString::fromUtf8(comphelper::hashToString(aHash.finalize())) + ".wav";
+    }
+
+    OUString sPath = "../media/" + sAsciiName;
     sRelId = addRelation(pFS->getOutputStream(),
                         oox::getRelationship(Relationship::AUDIO), sPath);
 
@@ -2834,11 +2883,15 @@ OUString PowerPointExport::getImplementationName()
     return u"com.sun.star.comp.Impress.oox.PowerPointExport"_ustr;
 }
 
-void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)
+void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
+                                    const css::uno::Reference<css::drawing::XShape>& rXShape,
+                                    sal_Int32 nDiagramId)
 {
-    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId));
+    sal_Int32 nShapeId = rDML.GetNewShapeID(rXShape);
+    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId) + " with Shape Id "
+                            + OUString::number(nShapeId));
     pFS->startElementNS(XML_p, XML_graphicFrame);
-    rDML.WriteDiagram(rXShape, nDiagramId);
+    rDML.WriteDiagram(rXShape, nDiagramId, nShapeId);
     pFS->endElementNS(XML_p, XML_graphicFrame);
 }
 
@@ -2946,15 +2999,6 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
         else
         {
             pPage = &SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage();
-        }
-        for (sal_uInt32 i = 0; i < mnMasterPages; i++)
-        {
-            if (maMastersLayouts[i].first == pPage)
-            {
-                if (maEquivalentMasters[i] < mnMasterPages)
-                    pPage = maMastersLayouts[maEquivalentMasters[i]].first;
-                break;
-            }
         }
         SdPage* pMasterPage = dynamic_cast<SdPage*>(pPage);
         if (SdrObject* pMasterFooter

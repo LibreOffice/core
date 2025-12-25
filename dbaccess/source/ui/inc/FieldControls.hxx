@@ -26,20 +26,13 @@ namespace dbaui
 
     class OPropColumnEditCtrl : public OSQLNameEntry
     {
-        short                m_nPos;
-        OUString             m_strHelpText;
     public:
         OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry, OUString const & _rAllowedChars, TranslateId pHelpId, short nPosition);
-
-        short GetPos() const { return m_nPos; }
-        const OUString& GetHelp() const { return m_strHelpText; }
     };
 
     class OPropEditCtrl : public OWidgetBase
     {
         std::unique_ptr<weld::Entry> m_xEntry;
-        short                m_nPos;
-        OUString             m_strHelpText;
 
     public:
         OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, TranslateId pHelpId, short nPosition);
@@ -50,16 +43,11 @@ namespace dbaui
 
         virtual void save_value() override { m_xEntry->save_value(); }
         virtual bool get_value_changed_from_saved() const override { return m_xEntry->get_value_changed_from_saved(); }
-
-        short GetPos() const { return m_nPos; }
-        const OUString& GetHelp() const { return m_strHelpText; }
     };
 
     class OPropNumericEditCtrl : public OWidgetBase
     {
         std::unique_ptr<weld::SpinButton> m_xSpinButton;
-        short     m_nPos;
-        OUString  m_strHelpText;
 
     public:
         OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, TranslateId pHelpId, short nPosition);
@@ -75,17 +63,12 @@ namespace dbaui
         void set_range(int nMin, int nMax) { m_xSpinButton->set_range(nMin, nMax); }
         int get_value() const { return m_xSpinButton->get_value(); }
 
-        short GetPos() const { return m_nPos; }
-        const OUString& GetHelp() const { return m_strHelpText; }
-
         void set_editable(bool bEditable) { m_xSpinButton->set_editable(bEditable); }
     };
 
     class OPropListBoxCtrl : public OWidgetBase
     {
         std::unique_ptr<weld::ComboBox> m_xComboBox;
-        short     m_nPos;
-        OUString  m_strHelpText;
 
     public:
         OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, TranslateId pHelpId, short nPosition);
@@ -110,9 +93,6 @@ namespace dbaui
         void append_text(const OUString &rText) { m_xComboBox->append_text(rText); }
         void remove_text(const OUString &rText) { m_xComboBox->remove_text(rText); }
         int find_text(const OUString &rText) const { return m_xComboBox->find_text(rText); }
-
-        short GetPos() const { return m_nPos; }
-        const OUString& GetHelp() const { return m_strHelpText; }
     };
 
 }

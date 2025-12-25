@@ -12,6 +12,8 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <vcl/idle.hxx>
+#include <condition_variable>
+#include <mutex>
 
 //IdleTask class to add a low priority Idle task
 class VCL_DLLPUBLIC IdleTask
@@ -27,6 +29,11 @@ public:
 
 private:
     DECL_LINK(FlipFlag, Timer*, void);
+
+    // Mutex and condition variable used to signal flag
+    std::mutex mFlagMutex;
+    std::condition_variable mFlagCv;
+
     bool flag;
     Idle maIdle{ "testtool IdleTask" };
 };

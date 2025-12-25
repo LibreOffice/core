@@ -45,11 +45,7 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,pyuno, \
-    PythonTest_pyuno_pytests_testssl \
-    PythonTest_pyuno_pytests_testbz2 \
-    PythonTest_pyuno_pytests_testpip \
-    PythonTest_pyuno_pytests_testsetuptools \
-    PythonTest_pyuno_pytests_testvenv \
+    PythonTest_pyuno_pytests_testimports \
 ))
 
 endif # !SYSTEM_PYTHON
@@ -57,6 +53,7 @@ endif # !SYSTEM_PYTHON
 $(eval $(call gb_Module_add_subsequentcheck_targets,pyuno, \
     PythonTest_pyuno_pytests_testcollections \
     PythonTest_pyuno_pytests_insertremovecells \
+    $(if $(ENABLE_EMBINDTEST_UNO),PythonTest_pyuno_pytests_embindtest) \
 ))
 
 endif # DISABLE_PYTHON

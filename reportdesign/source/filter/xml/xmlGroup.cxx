@@ -73,6 +73,14 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                 case XML_ELEMENT(REPORT, XML_SORT_ASCENDING):
                     m_xGroup->setSortAscending(IsXMLToken(aIter, XML_TRUE));
                     break;
+                case XML_ELEMENT(REPORT, XML_SORT_EXPRESSION):
+                    {
+                        // Use the explicit sort field as the group's expression
+                        OUString sExpr = aIter.toString();
+                        if (sExpr.indexOf("INT_count") == -1)// for backward compatibility
+                            m_xGroup->setExpression(sExpr);
+                    }
+                    break;
                 case XML_ELEMENT(REPORT, XML_GROUP_EXPRESSION):
                     {
                         OUString sValue = aIter.toString();
@@ -138,7 +146,21 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
-                                    sExpression = sExpression.copy(std::string_view("INT_count_").size());
+                                    // sExpression can be either:
+                                    //  - "INT_count_<digits>_<Field>" (new)
+                                    //  - "INT_count_<Field>"          (legacy)
+                                    const OUString aPrefix = u"INT_count_"_ustr;
+                                    const sal_Int32 nStart = aPrefix.getLength();
+                                    const sal_Int32 nEnd = sExpression.indexOf(u'_', nStart);
+                                    const sal_Int32 nDigitsOfInterval = (nEnd >= 0 && nEnd > nStart)
+                                        ? (nEnd - nStart) : 0;
+
+                                    // Cut after prefix; if digits found, also skip the following '_'
+                                    sal_Int32 nCut = nStart;
+                                    if (nDigitsOfInterval > 0 && nEnd >= 0)
+                                        nCut = nEnd + 1;
+                                    if (nCut <= sExpression.getLength())
+                                        sExpression = sExpression.copy(nCut);
                                     OUString sInterval = sCompleteFormula.getToken(1,'/');
                                     sInterval = sInterval.getToken(0,')');
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
@@ -146,10 +168,13 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
 
                                 m_xGroup->setGroupOn(nGroupOn);
 
+                                // Drop only the reference name; keep functions for export
                                 _rImport.removeFunction(sValue);
-                                sValue = sExpression;
+
+                                // Only set expression from fallback if not already provided via sort-expression
+                                if (m_xGroup->getExpression().isEmpty())
+                                    m_xGroup->setExpression(sExpression);
                             }
-                            m_xGroup->setExpression(sValue);
                         }
                     }
                     break;

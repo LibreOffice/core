@@ -42,16 +42,22 @@ requires(sizeof(T) == sizeof(char)) void attributeBase64_impl(xmlTextWriterPtr w
 
 struct XmlWriterImpl
 {
+    SvStream* mpStream = nullptr;
+    xmlTextWriterPtr mpWriter = nullptr;
+    bool mbWriteXmlHeader = true;
+    bool mbExternalXmlWriter = false;
+
     XmlWriterImpl(SvStream* pStream)
         : mpStream(pStream)
-        , mpWriter(nullptr)
-        , mbWriteXmlHeader(true)
     {
     }
 
-    SvStream* mpStream;
-    xmlTextWriterPtr mpWriter;
-    bool mbWriteXmlHeader;
+    XmlWriterImpl(xmlTextWriterPtr pWriter)
+        : mpWriter(pWriter)
+        , mbWriteXmlHeader(false)
+        , mbExternalXmlWriter(true)
+    {
+    }
 };
 
 XmlWriter::XmlWriter(SvStream* pStream)
@@ -59,29 +65,41 @@ XmlWriter::XmlWriter(SvStream* pStream)
 {
 }
 
+XmlWriter::XmlWriter(xmlTextWriterPtr pWriter)
+    : mpImpl(std::make_unique<XmlWriterImpl>(pWriter))
+{
+}
+
 XmlWriter::~XmlWriter()
 {
-    if (mpImpl && mpImpl->mpWriter != nullptr)
+    if (mpImpl)
         endDocument();
 }
 
 bool XmlWriter::startDocument(sal_Int32 nIndent, bool bWriteXmlHeader)
 {
+    if (mpImpl->mpWriter)
+        return false;
+
     mpImpl->mbWriteXmlHeader = bWriteXmlHeader;
     xmlCharEncodingHandlerPtr pEncodingHandler = xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8);
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback,
                                                               mpImpl->mpStream, pEncodingHandler);
     mpImpl->mpWriter = xmlNewTextWriter(xmlOutBuffer);
-    if (mpImpl->mpWriter == nullptr)
+    if (!mpImpl->mpWriter)
         return false;
     xmlTextWriterSetIndent(mpImpl->mpWriter, nIndent);
     if (mpImpl->mbWriteXmlHeader)
         (void)xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
+
     return true;
 }
 
 void XmlWriter::endDocument()
 {
+    if (!mpImpl->mpWriter || mpImpl->mbExternalXmlWriter)
+        return;
+
     if (mpImpl->mbWriteXmlHeader)
         (void)xmlTextWriterEndDocument(mpImpl->mpWriter);
     xmlFreeTextWriter(mpImpl->mpWriter);
@@ -120,11 +138,11 @@ void XmlWriter::attributeBase64(const char* pName, std::vector<char> const& rVal
     attributeBase64_impl(mpImpl->mpWriter, pName, rValueInBytes.data(), rValueInBytes.size());
 }
 
-void XmlWriter::attribute(const char* name, const OString& value)
+void XmlWriter::attribute(const char* name, std::string_view value)
 {
     xmlChar* xmlName = BAD_CAST(name);
-    xmlChar* xmlValue = BAD_CAST(value.getStr());
-    (void)xmlTextWriterWriteAttribute(mpImpl->mpWriter, xmlName, xmlValue);
+    (void)xmlTextWriterWriteFormatAttribute(mpImpl->mpWriter, xmlName, "%.*s", int(value.size()),
+                                            value.data());
 }
 
 void XmlWriter::attribute(const char* name, std::u16string_view value)
@@ -142,10 +160,9 @@ void XmlWriter::attributeDouble(const char* name, const double aNumber)
     attribute(name, OString::number(aNumber));
 }
 
-void XmlWriter::content(const OString& sValue)
+void XmlWriter::content(std::string_view value)
 {
-    xmlChar* xmlValue = BAD_CAST(sValue.getStr());
-    (void)xmlTextWriterWriteString(mpImpl->mpWriter, xmlValue);
+    (void)xmlTextWriterWriteFormatString(mpImpl->mpWriter, "%.*s", int(value.size()), value.data());
 }
 
 void XmlWriter::content(std::u16string_view sValue)

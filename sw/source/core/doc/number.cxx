@@ -475,6 +475,9 @@ SwNumRule::SwNumRule( UIName aNm,
         {
             pFormat = new SwNumFormat;
             pFormat->SetNumberingType(SVX_NUM_NUMBER_NONE);
+            // SVX_NUM_NUMBER_NONE with the default SvxNumberFormat::LISTTAB would lead to an
+            // unexpected leading tab for the DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY case.
+            pFormat->SetLabelFollowedBy(SvxNumberFormat::NOTHING);
             pFormat->SetIncludeUpperLevels( MAXLEVEL );
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
@@ -1021,14 +1024,14 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
 OUString SwNumRule::MakeParagraphStyleListString() const
 {
-    OUString aParagraphStyleListString;
+    OUStringBuffer aParagraphStyleListString;
     for (const auto& rParagraphStyle : maParagraphStyleList)
     {
         if (!aParagraphStyleListString.isEmpty())
-            aParagraphStyleListString += ", ";
-        aParagraphStyleListString += rParagraphStyle->GetName().toString();
+            aParagraphStyleListString.append(", ");
+        aParagraphStyleListString.append(rParagraphStyle->GetName().toString());
     }
-    return aParagraphStyleListString;
+    return aParagraphStyleListString.toString();
 }
 
 /** Copy method of SwNumRule

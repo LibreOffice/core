@@ -1406,6 +1406,12 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             rSrcNds.Copy_( aRg, *pSttNd->EndOfSectionNode() );
             rSrcFormat.GetDoc().GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, *pSttNd);
             // TODO: investigate calling CopyWithFlyInFly?
+
+            if( GetIDocumentUndoRedo().DoesUndo() )
+            {
+                GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoCopyHeaderFooter>(*this, *pSttNd, rDestFormat.GetName()) );
+            }
+
             SwPaM const source(aRg.aStart, aRg.aEnd);
             SwPosition dest(*pSttNd);
             sw::CopyBookmarks(source, dest);

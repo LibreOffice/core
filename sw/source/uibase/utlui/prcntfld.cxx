@@ -26,6 +26,7 @@ SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     , m_nOldMin(0)
     , m_nLastPercent(-1)
     , m_nLastValue(-1)
+    , m_nLastRefValue(-1)
     , m_nOldDigits(m_pField->get_digits())
     , m_eOldUnit(FieldUnit::NONE)
     , m_bLockAutoCalculation(false)
@@ -55,7 +56,7 @@ static sal_Int64 UpscaleTwoDecimalPlaces(sal_Int64 nCurrentWidth, int nOldDigits
     return nCurrentWidth;
 }
 
-void SwPercentField::ShowPercent(bool bPercent)
+void SwPercentField::ShowPercent(bool bPercent, sal_uInt16 nMaxPercent)
 {
     if ((bPercent && m_pField->get_unit() == FieldUnit::PERCENT)
         || (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
@@ -77,13 +78,14 @@ void SwPercentField::ShowPercent(bool bPercent)
         sal_Int64 nCurrentWidth
             = vcl::ConvertValue(m_nOldMin, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
         nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
+        assert(nCurrentWidth >= SAL_MIN_INT64 / 10 && nCurrentWidth <= SAL_MAX_INT64 / 10);
 
         // round to 0.5 percent
         int nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
 
-        m_pField->set_range(std::max(1, nPercent), 100, FieldUnit::NONE);
+        m_pField->set_range(std::max(1, nPercent), nMaxPercent, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
-        if (nOldValue != m_nLastValue)
+        if (nOldValue != m_nLastValue || m_nRefValue != m_nLastRefValue)
         {
             nCurrentWidth
                 = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
@@ -92,6 +94,7 @@ void SwPercentField::ShowPercent(bool bPercent)
             m_pField->set_value(nPercent, FieldUnit::NONE);
             m_nLastPercent = nPercent;
             m_nLastValue = nOldValue;
+            m_nLastRefValue = m_nRefValue;
         }
         else
             m_pField->set_value(m_nLastPercent, FieldUnit::NONE);
@@ -107,11 +110,12 @@ void SwPercentField::ShowPercent(bool bPercent)
         m_pField->set_range(m_nOldMin, m_nOldMax, FieldUnit::NONE);
         m_pField->set_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
 
-        if (nOldPercent != m_nLastPercent)
+        if (nOldPercent != m_nLastPercent || m_nRefValue != m_nLastRefValue)
         {
             set_value(nOldValue, m_eOldUnit);
             m_nLastPercent = nOldPercent;
             m_nLastValue = nOldValue;
+            m_nLastRefValue = m_nRefValue;
         }
         else
             set_value(m_nLastValue, m_eOldUnit);
@@ -137,6 +141,7 @@ void SwPercentField::set_value(sal_Int64 nNewValue, FieldUnit eInUnit)
             nCurrentWidth = vcl::ConvertValue(nValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
         }
         nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
+        assert(nCurrentWidth >= SAL_MIN_INT64 / 10 && nCurrentWidth <= SAL_MAX_INT64 / 10);
         nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
         m_pField->set_value(nPercent, FieldUnit::NONE);
     }
@@ -236,6 +241,7 @@ sal_Int64 SwPercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit
         else
             nCurrentWidth = vcl::ConvertValue(nValue, 0, m_nOldDigits, eInUnit, FieldUnit::TWIP);
         nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
+        assert(nCurrentWidth >= SAL_MIN_INT64 / 10 && nCurrentWidth <= SAL_MAX_INT64 / 10);
         // Round to 0.5 percent
         return m_nRefValue ? (((nCurrentWidth * 1000) / m_nRefValue + 5) / 10) : 0;
     }

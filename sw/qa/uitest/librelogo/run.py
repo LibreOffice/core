@@ -16,26 +16,26 @@ from com.sun.star.awt.FontStrikeout import NONE as __Strikeout_NONE__
 from com.sun.star.awt.FontStrikeout import SINGLE as __Strikeout_SINGLE__
 
 class LibreLogoTest(UITestCase):
-   LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
+    LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"
 
-   def createMasterScriptProviderFactory(self):
-       xServiceManager = self.xContext.ServiceManager
-       return xServiceManager.createInstanceWithContext(
-           "com.sun.star.script.provider.MasterScriptProviderFactory",
-           self.xContext)
+    def createMasterScriptProviderFactory(self):
+        xServiceManager = self.xContext.ServiceManager
+        return xServiceManager.createInstanceWithContext(
+            "com.sun.star.script.provider.MasterScriptProviderFactory",
+            self.xContext)
 
-   def getScript(self, command):
-       xMasterScriptProviderFactory = self.createMasterScriptProviderFactory()
-       document = self.ui_test.get_component()
-       xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(document)
-       xScript = xScriptProvider.getScript(self.LIBRELOGO_PATH %command)
-       self.assertIsNotNone(xScript, "xScript was not loaded")
-       return xScript
+    def getScript(self, command):
+        xMasterScriptProviderFactory = self.createMasterScriptProviderFactory()
+        document = self.ui_test.get_component()
+        xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(document)
+        xScript = xScriptProvider.getScript(self.LIBRELOGO_PATH %command)
+        self.assertIsNotNone(xScript, "xScript was not loaded")
+        return xScript
 
-   def logo(self, command):
+    def logo(self, command):
         self.xUITest.executeCommand(self.LIBRELOGO_PATH %command)
 
-   def test_librelogo(self):
+    def test_librelogo(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -100,7 +100,7 @@ x 3 ; draw only a few levels
 # disable unreliable test. Depending on how busy the machine is, this may produce 3 or 4
 #            self.assertEqual(len(document.DrawPage), 3)
 
-   def check_label(self, hasCustomLock):
+    def check_label(self, hasCustomLock):
         sLock = "CLEARSCREEN "
         if hasCustomLock:
             sLock = sLock + "SLEEP -1 "
@@ -313,10 +313,10 @@ x 3 ; draw only a few levels
             c.goRight(1, False)
             self.assertEqual(c.CharFontName, "Linux Biolinum G:smcp")
 
-   def test_LABEL(self):
+    def test_LABEL(self):
         self.check_label(False)
 
-   def test_custom_lock(self):
+    def test_custom_lock(self):
         self.check_label(True)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

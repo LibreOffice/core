@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <iterator>
 #include "helper/qahelper.hxx"
 
 #include <conditio.hxx>
@@ -328,11 +329,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
         CPPUNIT_ASSERT(nIndex0 != nPastedKey);
         CPPUNIT_ASSERT_EQUAL(nIndex1, nPastedKey);
 
-        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+        const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, rCondFormatItem.GetCondFormatData().front());
     }
 
     // Now paste next to the previous range (immediately below)
@@ -355,11 +354,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
         CPPUNIT_ASSERT(nIndex1 != nPastedKey);
         CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
 
-        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+        const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, rCondFormatItem.GetCondFormatData().front());
     }
 
     // Now paste next to the previous range (immediately to the right)
@@ -382,11 +379,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
         CPPUNIT_ASSERT(nIndex1 != nPastedKey);
         CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
 
-        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+        const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, rCondFormatItem.GetCondFormatData().front());
     }
 
     m_pDoc->DeleteTab(0);
@@ -485,11 +480,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
         CPPUNIT_ASSERT(nIndex0 != nPastedKey);
         CPPUNIT_ASSERT_EQUAL(nIndex1, nPastedKey);
 
-        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+        const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, rCondFormatItem.GetCondFormatData().front());
     }
 
     // Now paste next to the previous range (immediately below)
@@ -512,11 +505,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
         CPPUNIT_ASSERT(nIndex1 != nPastedKey);
         CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
 
-        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+        const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, rCondFormatItem.GetCondFormatData().front());
     }
 
     // Now paste next to the previous range (immediately to the right)
@@ -539,11 +530,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
         CPPUNIT_ASSERT(nIndex1 != nPastedKey);
         CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
 
-        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+        const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, rCondFormatItem.GetCondFormatData().front());
     }
 
     m_pDoc->DeleteTab(0);
@@ -578,12 +567,10 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPaste)
     aRangeList.Join(aTargetRange);
     CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
     CPPUNIT_ASSERT_EQUAL(nIndex, pPastedFormat->GetKey());
-    const SfxPoolItem* pItem = m_pDoc->GetAttr( 7, 7, 0, ATTR_CONDITIONAL );
-    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+    const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(7, 7, 0, ATTR_CONDITIONAL);
 
-    CPPUNIT_ASSERT(pCondFormatItem);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rCondFormatItem.GetCondFormatData().front());
 
     m_pDoc->DeleteTab(0);
 }
@@ -618,12 +605,10 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCell)
     aRangeList.Join(aTargetRange);
     CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
     CPPUNIT_ASSERT_EQUAL(nIndex, pPastedFormat->GetKey());
-    const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, 4, 0, ATTR_CONDITIONAL );
-    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+    const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(4, 4, 0, ATTR_CONDITIONAL);
 
-    CPPUNIT_ASSERT(pCondFormatItem);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front() );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rCondFormatItem.GetCondFormatData().front() );
 
     m_pDoc->DeleteTab(0);
 }
@@ -662,12 +647,10 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCellToRange)
             CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
             sal_uInt32 nPastedKey = pPastedFormat->GetKey();
             CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
-            const SfxPoolItem* pItem = m_pDoc->GetAttr( nCol, nRow, 0, ATTR_CONDITIONAL );
-            const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+            const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(nCol, nRow, 0, ATTR_CONDITIONAL);
 
-            CPPUNIT_ASSERT(pCondFormatItem);
-            CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-            CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front() );
+            CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+            CPPUNIT_ASSERT_EQUAL(nIndex, rCondFormatItem.GetCondFormatData().front() );
         }
     }
 
@@ -702,12 +685,10 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCellIntoSameFormatRa
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
     CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
     CPPUNIT_ASSERT_EQUAL(nIndex, pPastedFormat->GetKey());
-    const SfxPoolItem* pItem = m_pDoc->GetAttr(2, 2, 0, ATTR_CONDITIONAL);
-    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+    const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(2, 2, 0, ATTR_CONDITIONAL);
 
-    CPPUNIT_ASSERT(pCondFormatItem);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rCondFormatItem.GetCondFormatData().front());
 
     m_pDoc->DeleteTab(0);
 }
@@ -819,12 +800,10 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSheet)
     const ScRangeList& rRange = rFormat.GetRange();
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,1,3,3,1)), rRange);
     sal_uInt32 nKey = rFormat.GetKey();
-    const SfxPoolItem* pItem = m_pDoc->GetAttr( 2, 2, 1, ATTR_CONDITIONAL );
-    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+    const ScCondFormatItem& rCondFormatItem = m_pDoc->GetAttr(2, 2, 1, ATTR_CONDITIONAL);
 
-    CPPUNIT_ASSERT(pCondFormatItem);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL( nKey, pCondFormatItem->GetCondFormatData().front() );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rCondFormatItem.GetCondFormatData().size());
+    CPPUNIT_ASSERT_EQUAL( nKey, rCondFormatItem.GetCondFormatData().front() );
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -858,11 +837,11 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testIconSet)
         { 2.0, 2 },
         { 3.0, 1 }
     };
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for(const auto& rTest : aTests)
     {
-        m_pDoc->SetValue(0,0,0,aTests[i].nVal);
+        m_pDoc->SetValue(0,0,0,rTest.nVal);
         std::unique_ptr<ScIconSetInfo> pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
-        CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
+        CPPUNIT_ASSERT_EQUAL(rTest.nIndex, pInfo->nIconIndex);
     }
 
     delete pEntry;
@@ -1519,6 +1498,74 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testConditionStyleInMergedCell)
     rFunc.ReplaceConditionalFormat(nOldFormat, std::move(pFormat), 0, rRangeList);
 
     CPPUNIT_ASSERT_EQUAL(true, aListener.mbPaintAllMergedCell);
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCondformat, testWholeSheetCondFormatCopyPaste)
+{
+    // cool#13378
+    // Without the fix, this test will cause OOM and crash.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    auto pFormat = std::make_unique<ScConditionalFormat>(1, *m_pDoc);
+    ScRangeList aRangeList(ScRange(0, 0, 0, m_pDoc->MaxCol(), m_pDoc->MaxRow(), 0));
+    pFormat->SetRange(aRangeList);
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, u"=42"_ustr, u""_ustr,
+            *m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(std::move(pFormat));
+
+    // Copy row 1:1
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0, 0, 0, m_pDoc->MaxCol(), 0, 0), &aClipDoc);
+
+    // Paste to row 4:4
+    pasteFromClip(m_pDoc, ScRange(0, 3, 0, m_pDoc->MaxCol(), 3, 0), &aClipDoc);
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCondformat, testTdf168943)
+{
+    m_pDoc->InsertTab(0, u"test"_ustr);
+
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        // Initial state: no conditional format, so attribute must be default
+        CPPUNIT_ASSERT(IsDefaultItem(&m_pDoc->GetAttr(0, nRow, 0, ATTR_CONDITIONAL)));
+    }
+
+    auto pEntry = new ScCondFormatEntry(ScConditionMode::Direct, u"=42"_ustr, {}, *m_pDoc,
+                                        ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
+
+    auto pFormat = std::make_unique<ScConditionalFormat>(0, *m_pDoc);
+    pFormat->AddEntry(pEntry);
+    ScRange aRange(0, 0, 0, 0, 5, 0);
+    pFormat->SetRange(aRange);
+    auto key = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    m_pDoc->AddCondFormatData(aRange, 0, key);
+
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        // The attribute must be set
+        CPPUNIT_ASSERT(!IsDefaultItem(&m_pDoc->GetAttr(0, nRow, 0, ATTR_CONDITIONAL)));
+    }
+
+    ScConditionalFormatList* pNewList = new ScConditionalFormatList();
+    m_xDocShell->GetDocFunc().SetConditionalFormatList(pNewList, 0);
+
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        // Check if respective attribute has been correctly cleared.
+        // Before the fix, this failed, because ScConditionalFormatList::RemoveFromDocument, called
+        // from SetConditionalFormatList, got a non-multimarked single-contiguous-range mark, and
+        // ScTable::Apply was not prepared for such marks, so did nothing.
+        CPPUNIT_ASSERT(IsDefaultItem(&m_pDoc->GetAttr(0, nRow, 0, ATTR_CONDITIONAL)));
+    }
 
     m_pDoc->DeleteTab(0);
 }

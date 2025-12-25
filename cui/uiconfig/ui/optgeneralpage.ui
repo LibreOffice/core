@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1583</property>
     <property name="upper">9857</property>
@@ -134,13 +134,13 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="filedlgframe">
+      <object class="GtkFrame" id="customdialogsframe">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=1 -->
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="grid4">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -149,7 +149,7 @@
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="filedlg">
-                <property name="label" translatable="yes" context="optgeneralpage|filedlg">_Use %PRODUCTNAME dialogs</property>
+                <property name="label" translatable="yes" context="optgeneralpage|filedlg">_Use %PRODUCTNAME open/save dialogs</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -174,13 +174,40 @@
                 <property name="top-attach">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkImage" id="locksystemcolordialogs">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="systemcolordialogs">
+                <property name="label" translatable="yes" context="optgeneralpage|filedlg">U_se %PRODUCTNAME color dialog</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="label">
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optgeneralpage|label2">Open/Save Dialogs</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label2">Dialogs</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

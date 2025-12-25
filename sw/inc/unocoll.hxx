@@ -41,6 +41,7 @@ struct SvEventDescription;
 class SwXFootnote;
 class SwXTextSection;
 class SwXTextTable;
+class SwXBookmark;
 
 const SvEventDescription* sw_GetSupportedMacroItems();
 
@@ -303,7 +304,7 @@ cppu::WeakImplHelper
     css::lang::XServiceInfo
 > SwXFramesBaseClass;
 
-class SwXFrames : public SwXFramesBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
     const FlyCntType    m_eType;
@@ -313,7 +314,7 @@ public:
     SwXFrames(SwDoc* pDoc, FlyCntType eSet);
 
     //XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual SW_DLLPUBLIC css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -373,7 +374,7 @@ public:
 
 };
 
-class SwXTextSections final : public SwCollectionBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXTextSections final : public SwCollectionBaseClass,
                         public SwUnoCollection
 {
     virtual ~SwXTextSections() override;
@@ -397,6 +398,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    SW_DLLPUBLIC rtl::Reference<SwXTextSection> getSwTextSectionByName(const OUString& Name);
+    rtl::Reference<SwXTextSection> getSwTextSectionByIndex(sal_Int32 nIndex);
 };
 
 class SwXBookmarks final : public SwCollectionBaseClass,
@@ -424,6 +428,7 @@ class SwXBookmarks final : public SwCollectionBaseClass,
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+        rtl::Reference<SwXBookmark> getBookmarkByIndex(sal_Int32 nIndex);
 };
 
 class SwXNumberingRulesCollection final : public cppu::WeakImplHelper

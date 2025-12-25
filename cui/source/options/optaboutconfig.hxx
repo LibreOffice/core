@@ -13,7 +13,9 @@
 
 #include <dlgname.hxx>
 #include <i18nutil/searchopt.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <vector>
 

@@ -77,9 +77,9 @@ std::unique_ptr<SfxTabPage> SchOptionTabPage::Create(weld::Container* pPage, wel
 bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     if(m_xRbtAxis2->get_active())
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_SECONDARY_Y));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,AFAxix::toNum(AxisAtr::SecondaryY)));
     else
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,AFAxix::toNum(AxisAtr::PrimaryY)));
 
     if(m_xMTGap->get_visible())
         rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( m_xMTGap->get_value(FieldUnit::PERCENT))));
@@ -117,8 +117,8 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     m_xRbtAxis2->set_active(false);
     if (const SfxInt32Item* pAxisItem = rInAttrs->GetItemIfSet(SCHATTR_AXIS))
     {
-        tools::Long nVal = pAxisItem->GetValue();
-        if(nVal==CHART_AXIS_SECONDARY_Y)
+        sal_Int32 nVal = pAxisItem->GetValue();
+        if(nVal==AFAxix(AxisAtr::SecondaryY))
         {
             m_xRbtAxis2->set_active(true);
             m_xRbtAxis1->set_active(false);

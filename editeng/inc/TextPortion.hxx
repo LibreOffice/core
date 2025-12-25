@@ -24,6 +24,7 @@
 #include <tools/long.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <algorithm>
 #include <string.h>
 #include <memory>
 #include <utility>
@@ -74,7 +75,7 @@ struct ExtraPortionInfo
         if (pDXArray)
         {
             pOrgDXArray.reset(new double[nLen]);
-            memcpy(pOrgDXArray.get(), pDXArray, nLen * sizeof(double));
+            std::copy_n(pDXArray, nLen, pOrgDXArray.get());
         }
         else
             pOrgDXArray.reset();

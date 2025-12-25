@@ -24,9 +24,9 @@
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
 #include <utility>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/customweld.hxx>
 
 #include <officecfg/Office/Common.hxx>
 

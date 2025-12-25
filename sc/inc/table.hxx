@@ -290,7 +290,7 @@ friend class sc::FormulaGroupAreaListener;
 public:
                 ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
-                ~ScTable() COVERITY_NOEXCEPT_FALSE;
+                ~ScTable();
                 ScTable(const ScTable&) = delete;
     ScTable&    operator=(const ScTable&) = delete;
 
@@ -1213,6 +1213,8 @@ public:
 
 private:
 
+    void ImplDestroy();
+
     void FillFormulaVertical(
         const ScFormulaCell& rSrcCell,
         SCCOLROW& rInner, SCCOL nCol, SCROW nRow1, SCROW nRow2,
@@ -1517,6 +1519,12 @@ void ScTable::Apply(const ScMarkData& rMark, SCCOL nCol, ApplyDataFunc apply)
         SCROW nTop, nBottom;
         while (aMultiIter.Next(nTop, nBottom))
             apply(rCol, nTop, nBottom);
+    }
+    else if (rMark.IsMarked())
+    {
+        const ScRange& aRange = rMark.GetMarkArea();
+        if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
+            apply(GetColumnData(nCol), aRange.aStart.Row(), aRange.aEnd.Row());
     }
 }
 

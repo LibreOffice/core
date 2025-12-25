@@ -127,15 +127,15 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
                 }
             }
         }
-        const SfxBoolItem* pItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
-        if (pItem->GetValue() || entireColumnOrRowSelected)
+        const SfxBoolItem& rItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
+        if (rItem.GetValue() || entireColumnOrRowSelected)
         {
             pTabViewShell->OnLOKSetWidthOrHeight(nThisCol, true);
             pTabViewShell->OnLOKSetWidthOrHeight(nThisRow, false);
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 pTabViewShell, true /* bColumns */, true /* bRows */, true /* bSizes*/,
-                true /* bHidden */, true /* bFiltered */, true /* bGroups */, nThisTab);
+                true /* bHidden */, true /* bFiltered */, true /* bGroups */, rViewData.GetTabNumber());
         }
     }
     pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???

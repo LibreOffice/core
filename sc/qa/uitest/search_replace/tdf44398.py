@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 44398 - : Find, replace, regular expression bug
 class tdf44398(UITestCase):
-   def test_tdf44398_find_replace_regexp(self):
+    def test_tdf44398_find_replace_regexp(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
@@ -50,7 +50,7 @@ class tdf44398(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "123456")
 
 
-   def test_tdf44398_find_replace_regexp_string(self):
+    def test_tdf44398_find_replace_regexp_string(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

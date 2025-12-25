@@ -31,6 +31,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>

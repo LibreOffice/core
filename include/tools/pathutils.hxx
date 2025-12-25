@@ -21,11 +21,9 @@
 
 #include <sal/config.h>
 
-#include <string>
-#include <string_view>
-
 #if defined(_WIN32)
 #include <cstddef>
+#include <string>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 

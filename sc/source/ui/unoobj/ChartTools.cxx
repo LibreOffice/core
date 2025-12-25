@@ -12,9 +12,9 @@
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -25,10 +25,10 @@ namespace sctools {
 
 namespace {
 
-uno::Reference<chart2::data::XPivotTableDataProvider>
+chart2api::AbstractPivotTableDataProvider*
 getPivotTableDataProvider(const SdrOle2Obj* pOleObject)
 {
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider = nullptr;
 
     const uno::Reference<embed::XEmbeddedObject>& xObject = pOleObject->GetObjRef();
     if (xObject.is())
@@ -36,20 +36,20 @@ getPivotTableDataProvider(const SdrOle2Obj* pOleObject)
         uno::Reference<chart2::XChartDocument> xChartDoc(xObject->getComponent(), uno::UNO_QUERY);
         if (xChartDoc.is())
         {
-            xPivotTableDataProvider.set(uno::Reference<chart2::data::XPivotTableDataProvider>(
-                                            xChartDoc->getDataProvider(), uno::UNO_QUERY));
+            pPivotTableDataProvider = dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(
+                                            xChartDoc->getDataProvider().get());
         }
     }
-    return xPivotTableDataProvider;
+    return pPivotTableDataProvider;
 }
 
 OUString getAssociatedPivotTableName(const SdrOle2Obj* pOleObject)
 {
     OUString aPivotTableName;
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
-    xPivotTableDataProvider.set(getPivotTableDataProvider(pOleObject));
-    if (xPivotTableDataProvider.is())
-        aPivotTableName = xPivotTableDataProvider->getPivotTableName();
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider
+        = getPivotTableDataProvider(pOleObject);
+    if (pPivotTableDataProvider)
+        aPivotTableName = pPivotTableDataProvider->getPivotTableName();
     return aPivotTableName;
 }
 
@@ -82,12 +82,12 @@ SdrOle2Obj* ChartIterator::next()
         {
             SdrOle2Obj* pOleObject = static_cast<SdrOle2Obj*>(pObject);
 
-            uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
-            xPivotTableDataProvider.set(getPivotTableDataProvider(pOleObject));
+            chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider
+                = getPivotTableDataProvider(pOleObject);
 
-            if (xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::PIVOT_TABLE)
+            if (pPivotTableDataProvider && m_eChartSourceType == ChartSourceType::PIVOT_TABLE)
                 return pOleObject;
-            else if (!xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::CELL_RANGE)
+            else if (!pPivotTableDataProvider && m_eChartSourceType == ChartSourceType::CELL_RANGE)
                 return pOleObject;
         }
         pObject = m_oIterator->Next();

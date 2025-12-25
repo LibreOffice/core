@@ -24,8 +24,8 @@
 #include <attrib.hxx>
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 
 enum ScHFEntryId
 {

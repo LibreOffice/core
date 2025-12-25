@@ -19,8 +19,11 @@
 
 #pragma once
 
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <stddef.h>
+
+namespace basegfx { class B2DPoint; }
+namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DPolygon; }
 
 namespace basegfx::utils
 {

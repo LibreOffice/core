@@ -21,6 +21,7 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
@@ -36,7 +37,6 @@
 #include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
-using utl::MediaDescriptor;
 
 namespace {
 
@@ -85,12 +85,12 @@ StorageFilterDetect::~StorageFilterDetect() {}
 
 OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    MediaDescriptor aMediaDesc( rDescriptor );
+    comphelper::SequenceAsHashMap aMediaDesc(rDescriptor);
     OUString aTypeName;
 
     try
     {
-        uno::Reference< io::XInputStream > xInStream( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
+        uno::Reference< io::XInputStream > xInStream( aMediaDesc[utl::MediaDescriptor::PROP_INPUTSTREAM], uno::UNO_QUERY );
         if ( !xInStream.is() )
             return OUString();
 
@@ -117,12 +117,12 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         packages::zip::ZipIOException aZipException;
         // We don't do any type detection on broken packages (f.e. because it might be impossible),
         // so for repairing we'll use the requested type, which was detected by the flat detection.
-        OUString aRequestedTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
+        OUString aRequestedTypeName = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
         if ( ( aWrap.TargetException >>= aZipException ) && !aRequestedTypeName.isEmpty() )
         {
             // The package is a broken one.
             INetURLObject aParser(
-                aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString()));
+                aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL, OUString()));
             OUString aDocumentTitle = aParser.getName(INetURLObject::LAST_SEGMENT, true,
                                                       INetURLObject::DecodeMechanism::WithCharset);
             bool bRepairPackage = aMediaDesc.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false);
@@ -130,7 +130,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
             if (!bRepairPackage && aMediaDesc.getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
             {
                 uno::Reference< task::XInteractionHandler > xInteraction =
-                    aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER, uno::Reference< task::XInteractionHandler >() );
+                    aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_INTERACTIONHANDLER, uno::Reference< task::XInteractionHandler >() );
 
                 if ( xInteraction.is() )
                 {
@@ -152,8 +152,8 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
                 aTypeName = aRequestedTypeName;
                 // lok: we want to overwrite file in jail, so don't use template flag
                 const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
-                aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
-                aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
+                aMediaDesc[utl::MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
+                aMediaDesc[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
                 aMediaDesc[u"RepairPackage"_ustr] <<= true;
             }
 

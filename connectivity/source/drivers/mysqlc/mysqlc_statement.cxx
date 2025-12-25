@@ -26,6 +26,7 @@
 #include "mysqlc_statement.hxx"
 #include "mysqlc_general.hxx"
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -80,12 +81,12 @@ Sequence<Type> SAL_CALL OCommonStatement::getTypes()
                                    cppu::UnoType<XFastPropertySet>::get(),
                                    cppu::UnoType<XPropertySet>::get());
 
-    return concatSequences(aTypes.getTypes(), OCommonStatement_IBase::getTypes());
+    return comphelper::concatSequences(aTypes.getTypes(), OCommonStatement_IBase::getTypes());
 }
 
 Sequence<Type> SAL_CALL OStatement::getTypes()
 {
-    return concatSequences(OStatement_BASE::getTypes(), OCommonStatement::getTypes());
+    return comphelper::concatSequences(OStatement_BASE::getTypes(), OCommonStatement::getTypes());
 }
 
 void SAL_CALL OCommonStatement::cancel()

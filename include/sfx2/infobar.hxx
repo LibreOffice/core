@@ -83,6 +83,7 @@ public:
                      bool bShowCloseButton);
     Size DoLayout();
     virtual void Layout() override;
+    virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual ~SfxInfoBarWindow() override;
     virtual void dispose() override;
 

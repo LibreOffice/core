@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBANEWFONT_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBANEWFONT_HXX
+#pragma once
 
 #include <ooo/vba/msforms/XNewFont.hpp>
 #include <vbahelper/vbahelper.hxx>
@@ -51,7 +50,5 @@ public:
 private:
     css::uno::Reference<css::beans::XPropertySet> mxProps;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

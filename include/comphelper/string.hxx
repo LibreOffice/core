@@ -26,7 +26,6 @@
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
@@ -34,6 +33,7 @@
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::i18n { class XCollator; }
 namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 // OUString helper functions that are not widespread or mature enough to
 // go into the stable URE API:
@@ -374,6 +374,15 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
                     true otherwise, including for empty string
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
+
+/** Determine if an OUString contains only valid ASCII filename characters
+
+    @param rString  An OUString
+
+    @return false   if empty string, or string contains any characters that are not allowed
+                    in any target operating system or target file system
+ */
+COMPHELPER_DLLPUBLIC bool isValidAsciiFilename(std::u16string_view rString);
 
 /** Sanitize an OUString to not have invalid surrogates
 

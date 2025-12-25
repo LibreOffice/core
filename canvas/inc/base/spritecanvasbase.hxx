@@ -23,6 +23,7 @@
 #include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <base/integerbitmapbase.hxx>
 #include <base/bitmapcanvasbase.hxx>
+#include <sal/log.hxx>
 #include <spriteredrawmanager.hxx>
 
 namespace com::sun::star::rendering { class XAnimation; }
@@ -143,7 +144,8 @@ namespace canvas
         // SpriteSurface
         virtual void showSprite( const Sprite::Reference& rSprite ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            SAL_WARN_IF( !rSprite.is(), "canvas", "rSprite is null in showSprite()" );
+
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -152,7 +154,7 @@ namespace canvas
 
         virtual void hideSprite( const Sprite::Reference& rSprite ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            SAL_WARN_IF( !rSprite.is(), "canvas", "rSprite is null in hideSprite()" );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -164,7 +166,7 @@ namespace canvas
                                  const ::basegfx::B2DPoint&     rNewPos,
                                  const ::basegfx::B2DVector&    rSpriteSize ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            SAL_WARN_IF( !rSprite.is(), "canvas", "rSprite is null in moveSprite()" );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -175,7 +177,7 @@ namespace canvas
                                    const ::basegfx::B2DPoint&   rPos,
                                    const ::basegfx::B2DRange&   rUpdateArea ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            SAL_WARN_IF( !rSprite.is(), "canvas", "rSprite is null in updateSprite()" );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

@@ -79,9 +79,10 @@ class exportToPDF(UITestCase):
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                self.assertEqual("", document.DrawPages[0][0].String)
-                self.assertEqual(" ", document.DrawPages[0][1].String)
-                self.assertEqual(" ", document.DrawPages[0][2].String)
-                self.assertEqual("Hello World", document.DrawPages[0][3].String)
+                if os.getenv('ENABLE_POPPLER') == 'TRUE':
+                    self.assertEqual("", document.DrawPages[0][0].String)
+                    self.assertEqual(" ", document.DrawPages[0][1].String)
+                    self.assertEqual(" ", document.DrawPages[0][2].String)
+                    self.assertEqual("Hello World", document.DrawPages[0][3].String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

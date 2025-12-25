@@ -332,11 +332,11 @@ void SbiCodeGen::Save()
                         }
                         if( pPar->IsParamArray() )
                         {
-                            nUserData |= PARAM_INFO_PARAMARRAY;
+                            ParamInfoFlag::setFlagFor(nUserData, ParamInfo::ParamArray);
                         }
                         if( pPar->IsWithBrackets() )
                         {
-                            nUserData |= PARAM_INFO_WITHBRACKETS;
+                            ParamInfoFlag::setFlagFor(nUserData, ParamInfo::WithBrackets);
                         }
                         SbxParamInfo* pParam = nullptr;
                         if( nUserData )

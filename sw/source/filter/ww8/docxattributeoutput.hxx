@@ -835,6 +835,8 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pLRSpaceAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
+    std::optional<double> m_oFontSize;
+    bool m_bCharPostureWritten;
     std::shared_ptr<SwContentControl> m_pContentControl;
     /// If the current SDT around runs should be ended before the current run.
     bool m_bEndCharSdt;

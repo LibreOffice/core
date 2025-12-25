@@ -284,11 +284,10 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( nCnt )
         {
             xArray = new SbxArray;
-            const Any *pArgs = aScriptEvent.Arguments.getConstArray();
             for( sal_Int32 i = 0; i < nCnt; i++ )
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-                unoToSbxValue( xVar.get(), pArgs[i] );
+                unoToSbxValue(xVar.get(), aScriptEvent.Arguments[i]);
                 xArray->Put(xVar.get(), sal::static_int_cast<sal_uInt32>(i + 1));
             }
         }
@@ -326,29 +325,21 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
         OSL_ENSURE( xDlgLibContNameAccess.is(), "implFindDialogLibForDialog: no lib container for the given dialog!" );
         if( xDlgLibContNameAccess.is() )
         {
-            Sequence< OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
-            const OUString* pLibNames = aLibNames.getConstArray();
-            sal_Int32 nLibNameCount = aLibNames.getLength();
-
-            for( sal_Int32 iLib = 0 ; iLib < nLibNameCount ; iLib++ )
+            for (const OUString& rLibName : xDlgLibContNameAccess->getElementNames())
             {
-                if ( !xDlgLibContNameAccess->isLibraryLoaded( pLibNames[ iLib ] ) )
+                if (!xDlgLibContNameAccess->isLibraryLoaded(rLibName))
                     // if the library isn't loaded, then the dialog cannot originate from this lib
                     continue;
 
-                Any aDlgLibAny = xDlgLibContNameAccess->getByName( pLibNames[ iLib ] );
+                Any aDlgLibAny = xDlgLibContNameAccess->getByName(rLibName);
 
                 Reference< XNameContainer > xDlgLibNameCont( aDlgLibAny, UNO_QUERY );
                 OSL_ENSURE( xDlgLibNameCont.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
                 if( xDlgLibNameCont.is() )
                 {
-                    Sequence< OUString > aDlgNames = xDlgLibNameCont->getElementNames();
-                    const OUString* pDlgNames = aDlgNames.getConstArray();
-                    sal_Int32 nDlgNameCount = aDlgNames.getLength();
-
-                    for( sal_Int32 iDlg = 0 ; iDlg < nDlgNameCount ; iDlg++ )
+                    for (const OUString& rDlgName : xDlgLibNameCont->getElementNames())
                     {
-                        Any aDlgAny = xDlgLibNameCont->getByName( pDlgNames[ iDlg ] );
+                        Any aDlgAny = xDlgLibNameCont->getByName(rDlgName);
                         if( aDlgAny == rDlgAny )
                         {
                             aRetDlgLib = xDlgLibNameCont;

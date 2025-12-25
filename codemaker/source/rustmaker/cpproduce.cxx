@@ -2311,7 +2311,7 @@ OString CppProducer::getCppTypeName(std::u16string_view unoType) const
 
 OString CppProducer::getTypedParameterType(
     std::u16string_view unoType,
-    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction)
 {
     // Handle string types with typed parameters
     if (unoType == u"string")
@@ -2377,7 +2377,7 @@ OString CppProducer::getTypedParameterType(
     return "void*"_ostr;
 }
 
-OString CppProducer::getStructGetterReturnType(std::u16string_view unoType) const
+OString CppProducer::getStructGetterReturnType(std::u16string_view unoType)
 {
     // Struct getters return a pointer to the member data (like output parameters)
     // Use the same logic as getTypedParameterType with direction = OUT
@@ -2411,7 +2411,7 @@ OString CppProducer::getStructGetterReturnType(std::u16string_view unoType) cons
     return "void*"_ostr;
 }
 
-OString CppProducer::getStructSetterParameterType(std::u16string_view unoType) const
+OString CppProducer::getStructSetterParameterType(std::u16string_view unoType)
 {
     // Struct setters take the value to set (like input parameters)
     // Use the same logic as getTypedParameterType with direction = IN

@@ -14,6 +14,7 @@
 #include <string_view>
 
 #include <vcl/skia/SkiaHelper.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #if !HAVE_FEATURE_SKIA
 
@@ -75,23 +76,20 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <include/encode/SkPngEncoder.h>
 #include <ganesh/SkSurfaceGanesh.h>
 #if defined _MSC_VER
+#pragma warning(push)
 #pragma warning(disable : 4100) // "unreferenced formal parameter"
 #pragma warning(disable : 4324) // "structure was padded due to alignment specifier"
 #endif
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#endif
-#if defined __GNUC__ && !defined __clang__
+#if defined __GNUC__ || defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 #include <src/image/SkImage_Base.h>
-#if defined __GNUC__ && !defined __clang__
+#if defined __GNUC__ || defined __clang__
 #pragma GCC diagnostic pop
 #endif
-#if defined __clang__
-#pragma clang diagnostic pop
+#if defined _MSC_VER
+#pragma warning(pop)
 #endif
 
 #include <fstream>
@@ -125,12 +123,12 @@ OUString readLog()
 {
     SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::READ);
 
-    OUString sResult;
+    OUStringBuffer sResult;
     OStringBuffer sLine;
     while (logFile.ReadLine(sLine))
-        sResult += OStringToOUString(sLine, RTL_TEXTENCODING_UTF8) + "\n";
+        sResult.append(OStringToOUString(sLine, RTL_TEXTENCODING_UTF8) + "\n");
 
-    return sResult;
+    return sResult.toString();
 }
 
 uint32_t vendorId = 0;

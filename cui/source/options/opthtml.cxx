@@ -21,6 +21,7 @@
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
 #include "opthtml.hxx"
+#include <rtl/ustrbuf.hxx>
 
 
 OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
@@ -83,14 +84,14 @@ std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( weld::Container* pPage, weld
 
 OUString OfaHtmlTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr,  u"label2"_ustr,  u"label3"_ustr,  u"size1FT"_ustr, u"size2FT"_ustr,
                           u"size3FT"_ustr, u"size4FT"_ustr, u"size5FT"_ustr, u"size6FT"_ustr, u"size7FT"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"numbersenglishus"_ustr, u"unknowntag"_ustr,     u"ignorefontnames"_ustr, u"starbasic"_ustr,
@@ -99,10 +100,10 @@ OUString OfaHtmlTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )

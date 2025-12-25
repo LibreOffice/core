@@ -76,7 +76,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/useroptions.hxx>
@@ -1124,17 +1124,15 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
-    const SfxBoolItem* pRecommendReadOnly = SfxItemSet::GetItem<SfxBoolItem>(&*pDialogParams, SID_RECOMMENDREADONLY, false);
+    const SfxBoolItem* pRecommendReadOnly = pDialogParams->GetItem(SID_RECOMMENDREADONLY, false);
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
-    const SfxBoolItem* pSignWithDefaultKey = SfxItemSet::GetItem<SfxBoolItem>(&*pDialogParams, SID_GPGSIGN, false);
+    const SfxBoolItem* pSignWithDefaultKey = pDialogParams->GetItem(SID_GPGSIGN, false);
     m_bSignWithDefaultSignature = (pSignWithDefaultKey && pSignWithDefaultKey->GetValue());
     pDialogParams->ClearItem( SID_GPGSIGN );
 
-    uno::Sequence< beans::PropertyValue > aPropsFromDialog;
-    TransformItems( nSlotID, *pDialogParams, aPropsFromDialog );
-    GetMediaDescr() << aPropsFromDialog;
+    GetMediaDescr() = TransformItems(nSlotID, *pDialogParams);
 
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
@@ -1719,6 +1717,19 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     {
         OUString aFileName;
         aFileNameIter->second >>= aFileName;
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // In the LOK case, we didn't actually display any dialog yet, so invoke a callback if
+            // that's set.
+            OUString aNewURI;
+            if (comphelper::LibreOfficeKit::fileSaveDialog(aFileName, aNewURI))
+            {
+                if (aNewURI.isEmpty())
+                    return false;
+                aFileName = aNewURI;
+            }
+        }
+
         aURL.SetURL( aFileName );
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "Illegal URL!" );
 

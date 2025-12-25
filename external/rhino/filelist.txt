@@ -251,6 +251,10 @@ src/org/mozilla/javascript/debug/DebugFrame.java
 src/org/mozilla/javascript/debug/DebuggableObject.java
 src/org/mozilla/javascript/debug/DebuggableScript.java
 src/org/mozilla/javascript/debug/Debugger.java
+src/org/mozilla/javascript/dtoa/Decimal.java
+src/org/mozilla/javascript/dtoa/DecimalFormatter.java
+src/org/mozilla/javascript/dtoa/DoubleFormatter.java
+src/org/mozilla/javascript/dtoa/MathUtils.java
 src/org/mozilla/javascript/jdk18/VMBridge_jdk18.java
 src/org/mozilla/javascript/json/JsonParser.java
 src/org/mozilla/javascript/optimizer/Block.java
@@ -311,12 +315,7 @@ src/org/mozilla/javascript/typedarrays/NativeUint16Array.java
 src/org/mozilla/javascript/typedarrays/NativeUint32Array.java
 src/org/mozilla/javascript/typedarrays/NativeUint8Array.java
 src/org/mozilla/javascript/typedarrays/NativeUint8ClampedArray.java
-src/org/mozilla/javascript/v8dtoa/CachedPowers.java
-src/org/mozilla/javascript/v8dtoa/DiyFp.java
 src/org/mozilla/javascript/v8dtoa/DoubleConversion.java
-src/org/mozilla/javascript/v8dtoa/DoubleHelper.java
-src/org/mozilla/javascript/v8dtoa/FastDtoa.java
-src/org/mozilla/javascript/v8dtoa/FastDtoaBuilder.java
 src/org/mozilla/javascript/xml/XMLLib.java
 src/org/mozilla/javascript/xml/XMLObject.java
 src/org/mozilla/javascript/xmlimpl/Namespace.java

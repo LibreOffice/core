@@ -1963,6 +1963,8 @@ void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );
 tools::Long GetListFirstLineIndent(const SwNumFormat &rFormat);
+bool AreListsDifferentForExport(SwNumRule const& rRule1, SwNumRule const& rRule2);
+bool AreListLevelsDifferentForExport(SwNumFormat const& rFormat1, SwNumFormat const& rFormat2);
 OUString BookmarkToWriter(std::u16string_view rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,

@@ -33,7 +33,7 @@
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
@@ -378,11 +378,14 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
 {
     if ( eErrorStyle == SC_VALERR_MACRO ) {
         DoMacro(rPos, rInput, nullptr, pParent);
+        callback(true);
         return;
     }
 
-    if (!bShowError)
+    if (eErrorStyle == SC_VALERR_NONE) {
+        callback(true);
         return;
+    }
 
     //  Output error message
 
@@ -399,11 +402,15 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
     {
         case SC_VALERR_INFO:
             eType = VclMessageType::Info;
-            eStyle = VclButtonsType::OkCancel;
+            eStyle = VclButtonsType::Ok;
             break;
         case SC_VALERR_WARNING:
             eType = VclMessageType::Warning;
             eStyle = VclButtonsType::OkCancel;
+            break;
+        case SC_VALERR_STOP:
+            eType = VclMessageType::Error;
+            eStyle = VclButtonsType::Cancel;
             break;
         default:
             break;
@@ -416,9 +423,6 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
 
     switch (eErrorStyle)
     {
-        case SC_VALERR_INFO:
-            xBox->set_default_response(RET_OK);
-            break;
         case SC_VALERR_WARNING:
             xBox->set_default_response(RET_CANCEL);
             break;
@@ -426,8 +430,8 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
             break;
     }
 
-    xBox->runAsync(xBox, [this, callback](sal_Int32 result)
-                   { callback(eErrorStyle == SC_VALERR_STOP || result == RET_CANCEL); });
+    xBox->runAsync(xBox, [callback](sal_Int32 result)
+                   { callback(result == RET_CANCEL); });
 }
 
 bool ScValidationData::IsDataValidCustom(

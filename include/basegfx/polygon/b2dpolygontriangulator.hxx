@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 #include <vector>
 
 namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DPolygon; }
 
 namespace basegfx::triangulator
 {

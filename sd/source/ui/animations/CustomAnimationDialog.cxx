@@ -39,7 +39,7 @@
 #include <i18nutil/unicode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 
 #include <svtools/ctrltool.hxx>
@@ -542,7 +542,7 @@ IMPL_LINK(SdRotationPropertyBox, implMenuSelectHdl, const OUString&, rIdent, voi
 {
     auto nValue = mxMetric->get_value(FieldUnit::DEGREE);
     bool bDirection = nValue >= 0;
-    nValue = (nValue < 0 ? -nValue : nValue);
+    if (nValue < 0) nValue = o3tl::saturating_toggle_sign(nValue);
 
     if (rIdent == "clockwise")
         bDirection = true;

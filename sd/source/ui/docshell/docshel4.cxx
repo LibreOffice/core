@@ -49,6 +49,7 @@
 #include <vcl/syswin.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <tools/debug.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -403,9 +404,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)
 {
     const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
-    if (aFilterName == "Impress MS PowerPoint 2007 XML" ||
-        aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" ||
-        aFilterName == "Impress MS PowerPoint 2007 XML VBA")
+    const bool bIsPowerPointECMA = aFilterName.startsWith("Impress MS PowerPoint 2007 XML");
+    const bool bIsPowerPointISO29500 = aFilterName.startsWith("Impress Office Open XML"); // 2010+
+    if (bIsPowerPointECMA || bIsPowerPointISO29500)
     {
         // As this is a MSFT format, we should use the "MS Compat"
         // mode for spacing before and after paragraphs.
@@ -420,10 +421,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
         mpDoc->SetSummationOfParagraphs();
-    }
 
-    if (aFilterName == "Impress MS PowerPoint 2007 XML")
-    {
+        // tdf#149756 tdf#152545
         // This is a "MS Compact" mode for connectors.
         // The Libreoffice uses bounding rectangle of connected shapes but
         // MSO uses snap rectangle when calculate the edge track.
@@ -435,13 +434,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // tdf#168010: PowerPoint ignores empty trailing lines in autoshrink text when scaling font
         // (same as Impress), but takes into account in layout:
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout, true);
-    }
 
-    if (aFilterName == "Impress MS PowerPoint 2007 XML" ||
-        aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" ||
-        aFilterName == "Impress MS PowerPoint 2007 XML VBA" ||
-        aFilterName == "Impress Office Open XML")
-    {
+        // tdf#96389
         // We need to be able to set the default tab size for each text object.
         // This is possible at the moment only for the whole document. See
         // TextParagraphPropertiesContext constructor. So default tab width

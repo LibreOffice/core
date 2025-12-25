@@ -21,7 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/fntctrl.hxx>
@@ -335,6 +336,10 @@ class SwShdwCursorOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::Frame> m_xFmtAidsAutoComplFrame;
     std::unique_ptr<weld::CheckButton> m_xEncloseWithCharactersCB;
     std::unique_ptr<weld::Widget> m_xEncloseWithCharactersImg;
+
+    std::unique_ptr<weld::Frame> m_xDragDropFrame;
+    std::unique_ptr<weld::CheckButton> m_xDragDropCB;
+    std::unique_ptr<weld::Widget> m_xDragDropImg;
 
     std::unique_ptr<weld::CheckButton> m_xTextBoundariesCB;
     std::unique_ptr<weld::CheckButton> m_xSectionBoundariesCB;

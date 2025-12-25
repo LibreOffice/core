@@ -22,16 +22,11 @@
 
 #include <svdata.hxx>
 
-void IntroWindow::ImplInitIntroWindowData()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpIntroWindow = this;
-}
-
 IntroWindow::IntroWindow()
     : WorkWindow(WindowType::INTROWINDOW)
 {
-    ImplInitIntroWindowData();
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mpIntroWindow = this;
     WorkWindow::ImplInit(nullptr, WB_INTROWIN);
 }
 

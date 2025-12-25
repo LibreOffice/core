@@ -773,17 +773,18 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, DoubleClickHdl_Impl, weld::TreeView&, boo
 
 IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
 {
-    if (!m_xPrefBox->get_selected(m_xScratchIter.get()))
+    std::unique_ptr<weld::TreeIter> pSelected = m_xPrefBox->get_selected();
+    if (!pSelected)
         return;
 
-    UserData* pUserData = weld::fromId<UserData*>(m_xPrefBox->get_id(*m_xScratchIter));
+    UserData* pUserData = weld::fromId<UserData*>(m_xPrefBox->get_id(*pSelected));
     if (!pUserData || !pUserData->bIsPropertyPath || pUserData->bIsReadOnly)
         return;
 
     //if selection is a node
-    OUString sPropertyName = m_xPrefBox->get_text(*m_xScratchIter, 1);
-    OUString sPropertyType = m_xPrefBox->get_text(*m_xScratchIter, 2);
-    OUString sPropertyValue = m_xPrefBox->get_text(*m_xScratchIter, 3);
+    OUString sPropertyName = m_xPrefBox->get_text(*pSelected, 1);
+    OUString sPropertyType = m_xPrefBox->get_text(*pSelected, 2);
+    OUString sPropertyValue = m_xPrefBox->get_text(*pSelected, 3);
 
     auto pProperty
         = std::make_shared<Prop_Impl>(pUserData->sPropertyPath, sPropertyName, Any(sPropertyValue));
@@ -966,9 +967,9 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             pUserData->aPropertyValue = pProperty->Value;
 
             //update listbox value.
-            m_xPrefBox->set_text(*m_xScratchIter, sPropertyType, 2);
-            m_xPrefBox->set_text(*m_xScratchIter, sDialogValue, 3);
-            m_xPrefBox->set_text_emphasis(*m_xScratchIter, true, -1);
+            m_xPrefBox->set_text(*pSelected, sPropertyType, 2);
+            m_xPrefBox->set_text(*pSelected, sDialogValue, 3);
+            m_xPrefBox->set_text_emphasis(*pSelected, true, -1);
             //update m_prefBoxEntries
             auto it = std::find_if(
                 m_prefBoxEntries.begin(), m_prefBoxEntries.end(),

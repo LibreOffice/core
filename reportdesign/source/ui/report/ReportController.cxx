@@ -53,6 +53,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -104,6 +105,7 @@
 #include <svx/flagsdef.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
+#include <tools/debug.hxx>
 
 #include <core_resource.hxx>
 #include <DesignView.hxx>
@@ -856,6 +858,8 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_ATTR_PARA_ADJUST_CENTER:
         case SID_ATTR_PARA_ADJUST_RIGHT:
         case SID_ATTR_PARA_ADJUST_BLOCK:
+        case SID_ATTR_PARA_ADJUST_START:
+        case SID_ATTR_PARA_ADJUST_END:
             impl_fillState_nothrow(PROPERTY_PARAADJUST,aReturn);
             if ( aReturn.bEnabled )
             {
@@ -876,6 +880,12 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                             break;
                         case style::ParagraphAdjust_CENTER:
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_CENTER;
+                            break;
+                        case style::ParagraphAdjust_START:
+                            aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_START;
+                            break;
+                        case style::ParagraphAdjust_END:
+                            aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_END;
                             break;
                         default: break;
                     }
@@ -1494,6 +1504,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_ATTR_PARA_ADJUST_CENTER:
         case SID_ATTR_PARA_ADJUST_RIGHT:
         case SID_ATTR_PARA_ADJUST_BLOCK:
+        case SID_ATTR_PARA_ADJUST_START:
+        case SID_ATTR_PARA_ADJUST_END:
             {
                 style::ParagraphAdjust eParagraphAdjust = style::ParagraphAdjust_LEFT;
                 switch(_nId)
@@ -1510,6 +1522,12 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     case SID_ATTR_PARA_ADJUST_BLOCK:
                         eParagraphAdjust = style::ParagraphAdjust_BLOCK;
                         break;
+                    case SID_ATTR_PARA_ADJUST_START:
+                        eParagraphAdjust = style::ParagraphAdjust_START;
+                        break;
+                    case SID_ATTR_PARA_ADJUST_END:
+                        eParagraphAdjust = style::ParagraphAdjust_END;
+                        break;
                 }
                 impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::Any(static_cast<sal_Int16>(eParagraphAdjust)),aArgs);
 
@@ -1517,6 +1535,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_CENTER);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_RIGHT);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_BLOCK);
+                InvalidateFeature(SID_ATTR_PARA_ADJUST_START);
+                InvalidateFeature(SID_ATTR_PARA_ADJUST_END);
             }
             break;
         case SID_CHAR_DLG:
@@ -1663,7 +1683,7 @@ void OReportController::impl_initialize( const ::comphelper::NamedValueCollectio
             m_xFormatter.set(util::NumberFormatter::create(m_xContext), UNO_QUERY_THROW);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
-            utl::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
+            comphelper::SequenceAsHashMap aDescriptor(m_xReportDefinition->getArgs());
             OUString sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(u"HierarchicalDocumentName"_ustr,OUString());
 
             if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )
@@ -1813,6 +1833,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( u".uno:CenterPara"_ustr,                SID_ATTR_PARA_ADJUST_CENTER,    CommandGroup::FORMAT );
     implDescribeSupportedFeature( u".uno:RightPara"_ustr,                 SID_ATTR_PARA_ADJUST_RIGHT,     CommandGroup::FORMAT );
     implDescribeSupportedFeature( u".uno:JustifyPara"_ustr,               SID_ATTR_PARA_ADJUST_BLOCK,     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:StartPara"_ustr,                 SID_ATTR_PARA_ADJUST_START,     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( u".uno:EndPara"_ustr,                   SID_ATTR_PARA_ADJUST_END,       CommandGroup::FORMAT );
 
     implDescribeSupportedFeature( u".uno:FontHeight"_ustr,                SID_ATTR_CHAR_FONTHEIGHT,       CommandGroup::FORMAT );
     implDescribeSupportedFeature( u".uno:CharFontName"_ustr,              SID_ATTR_CHAR_FONT,             CommandGroup::FORMAT );
@@ -3949,14 +3971,12 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
     if ( !xSection.is() )
         return;
 
-    const beans::PropertyValue* pIter = _aArgs.getConstArray();
-    const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
-    const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter, pEnd,
+    const beans::PropertyValue* pKeyModifier = ::std::find_if(_aArgs.begin(), _aArgs.end(),
         [] (const beans::PropertyValue& x) -> bool {
             return x.Name == "KeyModifier";
         });
     sal_Int16 nKeyModifier = 0;
-    if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
+    if ( pKeyModifier == _aArgs.end() || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
     {
         Sequence< PropertyValue > aCreateArgs;
         getDesignView()->unmarkAllObjects();

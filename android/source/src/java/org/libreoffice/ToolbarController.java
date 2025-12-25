@@ -11,6 +11,7 @@ package org.libreoffice;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,19 +44,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
 
         mMainMenu = mToolbarTop.getMenu();
         clipboardManager = (ClipboardManager)mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-    }
-
-    private void enableMenuItem(final int menuItemId, final boolean enabled) {
-        LOKitShell.getMainHandler().post(new Runnable() {
-            public void run() {
-                MenuItem menuItem = mMainMenu.findItem(menuItemId);
-                if (menuItem != null) {
-                    menuItem.setEnabled(enabled);
-                } else {
-                    Log.e(LOGTAG, "MenuItem not found.");
-                }
-            }
-        });
     }
 
     public void setEditModeOn(boolean enabled) {
@@ -239,34 +227,30 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     void setupToolbars() {
         if (LibreOfficeMainActivity.isExperimentalMode()) {
             boolean enableSaveEntry = !LibreOfficeMainActivity.isReadOnlyMode() && mContext.hasLocationForSave();
-            enableMenuItem(R.id.action_save, enableSaveEntry);
+            setItemVisible(R.id.action_save, enableSaveEntry);
             if (LibreOfficeMainActivity.isReadOnlyMode()) {
                 // show message in case experimental mode is enabled (i.e. editing is supported in general),
                 // but current document is readonly
                 Toast.makeText(mContext, mContext.getString(R.string.readonly_file), Toast.LENGTH_LONG).show();
             }
         } else {
-            hideItem(R.id.action_save);
+            setItemVisible(R.id.action_save, false);
         }
-        mMainMenu.findItem(R.id.action_parts).setVisible(mContext.isDrawerEnabled());
+        setItemVisible(R.id.action_parts, mContext.isDrawerEnabled());
+
+        final boolean enablePrint = mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PRINTING);
+        setItemVisible(R.id.action_print, enablePrint);
+
+        setItemVisible(R.id.action_settings, SettingsActivity.hasSettings());
     }
 
-    public void showItem(final int item){
+    public void setItemVisible(final int item, boolean visible) {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                mMainMenu.findItem(item).setVisible(true);
-
-            }
-        });
-    }
-
-    public void hideItem(final int item){
-        LOKitShell.getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                mMainMenu.findItem(item).setVisible(false);
-
+                final MenuItem menuItem = mMainMenu.findItem(item);
+                menuItem.setEnabled(visible);
+                menuItem.setVisible(visible);
             }
         });
     }

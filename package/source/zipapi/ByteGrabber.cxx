@@ -111,10 +111,7 @@ sal_uInt16 ByteGrabber::ReadUInt16()
         if (xStream->readBytes(aSequence, 2) != 2)
             return 0;
 
-        const sal_Int8 *pSequence = aSequence.getConstArray();
-        return static_cast <sal_uInt16>
-               ( (pSequence[0] & 0xFF)
-                 | (pSequence[1] & 0xFF) << 8);
+        return static_cast<sal_uInt16>((aSequence[0] & 0xFF) | (aSequence[1] & 0xFF) << 8);
     }
 }
 
@@ -136,12 +133,11 @@ sal_uInt32 ByteGrabber::ReadUInt32()
         if (xStream->readBytes(aSequence, 4) != 4)
             return 0;
 
-        const sal_Int8 *pSequence = aSequence.getConstArray();
         return static_cast < sal_uInt32 >
-                ( (pSequence[0] & 0xFF)
-              | ( pSequence[1] & 0xFF ) << 8
-              | ( pSequence[2] & 0xFF ) << 16
-              | ( pSequence[3] & 0xFF ) << 24 );
+                ( (aSequence[0] & 0xFF)
+              | ( aSequence[1] & 0xFF ) << 8
+              | ( aSequence[2] & 0xFF ) << 16
+              | ( aSequence[3] & 0xFF ) << 24 );
     }
 }
 
@@ -166,15 +162,14 @@ sal_uInt64 ByteGrabber::ReadUInt64()
         if (xStream->readBytes(aSequence, 8) != 8)
             return 0;
 
-        const sal_Int8 *pSequence = aSequence.getConstArray();
-        return  static_cast<sal_uInt64>(pSequence[0] & 0xFF)
-              | static_cast<sal_uInt64>(pSequence[1] & 0xFF) << 8
-              | static_cast<sal_uInt64>(pSequence[2] & 0xFF) << 16
-              | static_cast<sal_uInt64>(pSequence[3] & 0xFF) << 24
-              | static_cast<sal_uInt64>(pSequence[4] & 0xFF) << 32
-              | static_cast<sal_uInt64>(pSequence[5] & 0xFF) << 40
-              | static_cast<sal_uInt64>(pSequence[6] & 0xFF) << 48
-              | static_cast<sal_uInt64>(pSequence[7] & 0xFF) << 56;
+        return  static_cast<sal_uInt64>(aSequence[0] & 0xFF)
+              | static_cast<sal_uInt64>(aSequence[1] & 0xFF) << 8
+              | static_cast<sal_uInt64>(aSequence[2] & 0xFF) << 16
+              | static_cast<sal_uInt64>(aSequence[3] & 0xFF) << 24
+              | static_cast<sal_uInt64>(aSequence[4] & 0xFF) << 32
+              | static_cast<sal_uInt64>(aSequence[5] & 0xFF) << 40
+              | static_cast<sal_uInt64>(aSequence[6] & 0xFF) << 48
+              | static_cast<sal_uInt64>(aSequence[7] & 0xFF) << 56;
     }
 }
 

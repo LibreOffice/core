@@ -158,10 +158,16 @@ void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
                          FormattingStatus& rChange)
 {
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
+    const SwNodeIndex* pContentIdx = rFlyContent.GetContentIdx();
+    if (!pContentIdx)
+    {
+        return;
+    }
+    SwNodeOffset nStart = pContentIdx->GetIndex() + 1;
     Graphic aGraphic;
     OUString aGraphicURL;
-    if (rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType() == SwNodeType::Grf)
+    SwNodeType eNodeType = rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType();
+    if (eNodeType == SwNodeType::Grf)
     {
         SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
         aGraphic = pGrfNode->GetGraphic();
@@ -181,12 +187,23 @@ void ApplyFlyFrameFormat(const SwFlyFrameFormat& rFrameFormat, SwMDWriter& rWrt,
             aGraphicURL = "data:" + aGraphicInBase64;
         }
     }
-    else
+    else if (eNodeType == SwNodeType::Ole)
     {
         SwOLENode* pOLENode = rWrt.m_pDoc->GetNodes()[nStart]->GetOLENode();
-        assert(pOLENode->GetGraphic());
+        if (!pOLENode->GetGraphic())
+        {
+            return;
+        }
+
+        // Assume that the graphic of OLE objects is never linked.
         aGraphic = *pOLENode->GetGraphic();
-        // TODO fill aGraphicURL with the right info
+        OUString aGraphicInBase64;
+        if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64))
+        {
+            return;
+        }
+
+        aGraphicURL = "data:" + aGraphicInBase64;
     }
 
     const OUString& rBaseURL = rWrt.GetBaseURL();

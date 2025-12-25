@@ -23,7 +23,6 @@
 #include <config_options.h>
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 
 #include <cppuhelper/weakref.hxx>
@@ -34,6 +33,7 @@
 #include <vector>
 
 namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper{
 

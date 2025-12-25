@@ -183,7 +183,7 @@ TextApiObject* TextApiObject::getImplementation(const css::uno::Reference<css::t
 }
 
 TextAPIEditSource::TextAPIEditSource(const TextAPIEditSource& rSource)
-    : SvxEditSource(*this)
+    : SvxEditSource(rSource)
     , mpHolder(rSource.mpHolder) // shallow copy; uses internal refcounting
 {
 }

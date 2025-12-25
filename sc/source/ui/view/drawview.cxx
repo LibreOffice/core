@@ -41,6 +41,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <tools/debug.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
@@ -83,7 +84,7 @@ void ScDrawView::Construct()
 
     bool bEx = rViewData.GetViewShell()->IsDrawSelMode();
     bool bProt = rDoc.IsTabProtected( nViewTab ) ||
-                 rViewData.GetSfxDocShell().IsReadOnly();
+                 rViewData.GetSfxDocShell()->IsReadOnly();
 
     SdrLayer* pLayer;
     SdrLayerAdmin& rAdmin = GetModel().GetLayerAdmin();
@@ -174,6 +175,8 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_START );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_END );
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
     rBindings.Invalidate( SID_ALIGNRIGHT );
@@ -197,6 +200,8 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
     rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_START );
+    rBindings.Invalidate( SID_ALIGN_ANY_END );
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
@@ -227,7 +232,7 @@ void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
 
     //  repaint is done in SetLayer
 
-    rViewData.GetDocShell().SetDrawModified();
+    rViewData.GetDocShell()->SetDrawModified();
 
     //  check mark list now instead of later in a timer
     CheckMarked();
@@ -695,7 +700,7 @@ void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
     if ( pFound->GetLayer() == SC_LAYER_BACK &&
             !rViewData.GetViewShell()->IsDrawSelMode() &&
             !rDoc.IsTabProtected( nTab ) &&
-            !rViewData.GetSfxDocShell().IsReadOnly() )
+            !rViewData.GetSfxDocShell()->IsReadOnly() )
     {
         SdrLayer* pLayer = GetModel().GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
@@ -755,7 +760,7 @@ bool ScDrawView::SelectObject( std::u16string_view rName )
         if ( pFound->GetLayer() == SC_LAYER_BACK &&
                 !rViewData.GetViewShell()->IsDrawSelMode() &&
                 !rDoc.IsTabProtected( nTab ) &&
-                !rViewData.GetSfxDocShell().IsReadOnly() )
+                !rViewData.GetSfxDocShell()->IsReadOnly() )
         {
             LockBackgroundLayer(false);
         }
@@ -834,9 +839,9 @@ void ScDrawView::DeleteMarked()
     if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        ScDocShell& rDocShell = rViewData.GetDocShell();
-        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        bool bUndo = pDrawLayer && pUndoMgr && rDoc.IsUndoEnabled();
+        ScDocShell* pDocShell = rViewData.GetDocShell();
+        SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
+        bool bUndo = pDrawLayer && pDocShell && pUndoMgr && rDoc.IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
         std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( pCaptData->maStart );
@@ -853,9 +858,10 @@ void ScDrawView::DeleteMarked()
             pNote.reset();
             // add the undo action for the note
             if( bUndo )
-                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+                pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
             // repaint the cell to get rid of the note marker
-            rDocShell.PostPaintCell( pCaptData->maStart );
+            if( pDocShell )
+                pDocShell->PostPaintCell( pCaptData->maStart );
             // done, return now to skip call of FmFormView::DeleteMarked()
             return;
         }
@@ -1067,8 +1073,8 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
 std::unique_ptr<SdrUndoManager> ScDrawView::createLocalTextUndoManager()
 {
     std::unique_ptr<SdrUndoManager> pUndoManager(new SdrUndoManager);
-    ScDocShell& rDocShell = rViewData.GetDocShell();
-    pUndoManager->SetDocShell(&rDocShell);
+    ScDocShell* pDocShell = rViewData.GetDocShell();
+    pUndoManager->SetDocShell(pDocShell);
     return pUndoManager;
 }
 

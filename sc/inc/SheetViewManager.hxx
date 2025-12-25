@@ -28,6 +28,8 @@ private:
     std::vector<std::shared_ptr<SheetView>> maViews;
     sal_Int32 maNameCounter = 0;
 
+    std::optional<SortOrderReverser> moSortOrder;
+
     bool isValidSheetViewID(SheetViewID nID) const
     {
         return nID >= 0 && o3tl::make_unsigned(nID) < maViews.size();
@@ -63,6 +65,11 @@ public:
     SheetViewID getPreviousSheetView(SheetViewID nID);
 
     void unsyncAllSheetViews();
+
+    static OUString defaultViewName();
+
+    std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
+    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
 };
 }
 

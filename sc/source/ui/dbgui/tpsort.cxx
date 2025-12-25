@@ -20,7 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -392,8 +392,7 @@ sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 {
     // Extend local SortParam copy
-    const ScSortKeyState atempKeyState = { 0, false, true, ScColorSortMode::None, Color() };
-    aSortData.maKeyState.push_back( atempKeyState );
+    aSortData.maKeyState.emplace_back(); // insert default key state
 
     // Add Sort Key Item
     ++nSortKeyCount;
@@ -720,15 +719,16 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     if (!pDlg)
         return;
 
+    //tdf#168905 If sort by row, then include affects boundary columns.
     if (aSortData.bByRow)
-    {
-        m_xBtnIncComments->set_label(aStrCommentsRowLabel);
-        m_xBtnIncImages->set_label(aStrImgRowLabel);
-    }
-    else
     {
         m_xBtnIncComments->set_label(aStrCommentsColLabel);
         m_xBtnIncImages->set_label(aStrImgColLabel);
+    }
+    else
+    {
+        m_xBtnIncComments->set_label(aStrCommentsRowLabel);
+        m_xBtnIncImages->set_label(aStrImgRowLabel);
     }
 }
 

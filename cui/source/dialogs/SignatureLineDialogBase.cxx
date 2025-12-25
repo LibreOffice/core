@@ -11,7 +11,7 @@
 
 #include <utility>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 using namespace css;
 using namespace css::uno;

@@ -31,183 +31,6 @@
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
-void OutputDevice::DrawBitmapEx( const Point& rDestPt,
-                                 const Bitmap& rBitmap )
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if( !rBitmap.HasAlpha() )
-    {
-        DrawBitmap(rDestPt, rBitmap);
-        return;
-    }
-
-    const Size aSizePx = rBitmap.GetSizePixel();
-    DrawBitmapEx(rDestPt, PixelToLogic(aSizePx), Point(), aSizePx, rBitmap,
-                 MetaActionType::BMPEX);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                 const Bitmap& rBitmap )
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if ( !rBitmap.HasAlpha() )
-    {
-        DrawBitmap(rDestPt, rDestSize, rBitmap);
-        return;
-    }
-
-    DrawBitmapEx(rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(),
-                 rBitmap, MetaActionType::BMPEXSCALE);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const Bitmap& rBitmap)
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if ( !rBitmap.HasAlpha() )
-    {
-        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel,
-                   rBitmap);
-        return;
-    }
-
-    DrawBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap,
-                 MetaActionType::BMPEXSCALEPART);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const Bitmap& rBitmap, const MetaActionType nAction )
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if( !rBitmap.HasAlpha() )
-    {
-        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap);
-        return;
-    }
-
-    if (RasterOp::Invert == meRasterOp)
-    {
-        DrawRect(tools::Rectangle(rDestPt, rDestSize));
-        return;
-    }
-
-    Bitmap aBmp(vcl::drawmode::GetBitmap(rBitmap, GetDrawMode()));
-
-    if (mpMetaFile)
-    {
-        switch(nAction)
-        {
-            case MetaActionType::BMPEX:
-                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, aBmp));
-                break;
-
-            case MetaActionType::BMPEXSCALE:
-                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmp));
-                break;
-
-            case MetaActionType::BMPEXSCALEPART:
-                mpMetaFile->AddAction(new MetaBmpExScalePartAction(rDestPt, rDestSize,
-                                                                   rSrcPtPixel, rSrcSizePixel, aBmp));
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    if (!IsDeviceOutputNecessary())
-        return;
-
-    if (!mpGraphics && !AcquireGraphics())
-        return;
-
-    if (mbInitClipRegion)
-        InitClipRegion();
-
-    if (mbOutputClipped)
-        return;
-
-    DrawDeviceBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp);
-}
-
-void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                     Bitmap& rBitmap )
-{
-    assert(!is_double_buffered_window());
-
-    if (rBitmap.HasAlpha())
-    {
-        DrawDeviceAlphaBitmap(rBitmap,
-                              rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
-        return;
-    }
-
-    if (rBitmap.IsEmpty())
-        return;
-
-    SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(),
-                       rSrcSizePixel.Height(), ImplLogicXToDevicePixel(rDestPt.X()),
-                       ImplLogicYToDevicePixel(rDestPt.Y()),
-                       ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                       ImplLogicHeightToDevicePixel(rDestSize.Height()));
-
-    const BmpMirrorFlags nMirrFlags = AdjustTwoRect(aPosAry, rBitmap.GetSizePixel());
-
-    if (!(aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight))
-        return;
-
-    if (nMirrFlags != BmpMirrorFlags::NONE)
-        rBitmap.Mirror(nMirrFlags);
-
-    const SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
-
-    assert(!rBitmap.HasAlpha()
-            && "I removed some code here that will need to be restored");
-
-    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *this);
-}
-
-bool OutputDevice::DrawTransformBitmapExDirect(
-        const basegfx::B2DHomMatrix& aFullTransform,
-        const Bitmap& rBitmap,
-        double fAlpha)
-{
-    assert(!is_double_buffered_window());
-
-    // try to paint directly
-    const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
-    const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
-    const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
-    SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
-
-    return mpGraphics->DrawTransformedBitmap(
-        aNull,
-        aTopX,
-        aTopY,
-        *pSalSrcBmp,
-        fAlpha,
-        *this);
-};
-
 bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
         const basegfx::B2DHomMatrix& aFullTransform,
         basegfx::B2DRange &aVisibleRange,
@@ -339,7 +162,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     if ( mbInitClipRegion )
         InitClipRegion();
 
-    const bool bMetafile(nullptr != mpMetaFile);
     /*
        tdf#135325 typically in these OutputDevice methods, for the in
        record-to-metafile case the  MetaFile is already written to before the
@@ -349,7 +171,7 @@ void OutputDevice::DrawTransformedBitmapEx(
        recording to a metafile. It's typical to record with a device of nominal
        size and play back later against something of a totally different size.
      */
-    if (mbOutputClipped && !bMetafile)
+    if (mbOutputClipped && !mpMetaFile)
         return;
 
 #ifdef DO_TIME_TEST
@@ -366,8 +188,8 @@ void OutputDevice::DrawTransformedBitmapEx(
     Bitmap bitmap = rBitmap;
 
     const bool bInvert(RasterOp::Invert == meRasterOp);
-    const bool bBitmapChangedColor(mnDrawMode & DrawModeFlags::GrayBitmap);
-    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
+    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
+    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !mpMetaFile);
     // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
     // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
     // ImplGetDeviceTransformation declaration
@@ -378,7 +200,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     {
         if(bTryDirectPaint)
         {
-            if(DrawTransformBitmapExDirect(aFullTransform, bitmap, fAlpha))
+            if (DrawTransformedBitmap(aFullTransform, bitmap, fAlpha))
             {
                 // we are done
                 return;
@@ -393,8 +215,8 @@ void OutputDevice::DrawTransformedBitmapEx(
     }
 
     // If the backend's implementation is known to not need any optimizations here, pass to it directly.
-    // With most backends it's more performant to try to simplify to DrawBitmapEx() first.
-    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmap))
+    // With most backends it's more performant to try to simplify to DrawBitmap() first.
+    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformedBitmap(aFullTransform, bitmap))
         return;
 
     // decompose matrix to check rotation and shear
@@ -408,7 +230,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     if(!bRotated && !bSheared && !bMirroredX && !bMirroredY)
     {
-        // with no rotation, shear or mirroring it can be mapped to DrawBitmapEx
+        // with no rotation, shear or mirroring it can be mapped to DrawBitmap
         // do *not* execute the mirroring here, it's done in the fallback
         // #i124580# the correct DestSize needs to be calculated based on MaxXY values
         Point aDestPt(basegfx::fround<tools::Long>(aTranslate.getX()), basegfx::fround<tools::Long>(aTranslate.getY()));
@@ -416,14 +238,14 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
         const Point aOrigin = GetMapMode().GetOrigin();
-        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             aDestPt.Move(aOrigin.getX(), aOrigin.getY());
             EnableMapMode(false);
         }
 
-        DrawBitmapEx(aDestPt, aDestSize, bitmap);
-        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        DrawBitmap(aDestPt, aDestSize, bitmap);
+        if (!mpMetaFile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
             aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
@@ -432,13 +254,13 @@ void OutputDevice::DrawTransformedBitmapEx(
     }
 
     // Try the backend's implementation before resorting to the slower fallback here.
-    if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmap))
+    if (bTryDirectPaint && DrawTransformedBitmap(aFullTransform, bitmap))
         return;
 
     // take the fallback when no rotate and shear, but mirror (else we would have done this above)
     if(!bRotated && !bSheared)
     {
-        // with no rotation or shear it can be mapped to DrawBitmapEx
+        // with no rotation or shear it can be mapped to DrawBitmap
         // do *not* execute the mirroring here, it's done in the fallback
         // #i124580# the correct DestSize needs to be calculated based on MaxXY values
         const Point aDestPt(basegfx::fround<tools::Long>(aTranslate.getX()), basegfx::fround<tools::Long>(aTranslate.getY()));
@@ -446,7 +268,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
 
-        DrawBitmapEx(aDestPt, aDestSize, bitmap);
+        DrawBitmap(aDestPt, aDestSize, bitmap);
         return;
     }
 
@@ -466,7 +288,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const double fOrigAreaScaled(fOrigArea * 1.44);
     double fMaximumArea(std::clamp(fOrigAreaScaled, 1000000.0, 4500000.0));
 
-    if(!bMetafile)
+    if(!mpMetaFile)
     {
         if ( !TransformAndReduceBitmapExToTargetRange( aFullTransform, aVisibleRange, fMaximumArea ) )
             return;
@@ -554,7 +376,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         basegfx::fround<tools::Long>(aVisibleRange.getMaxX()) - aDestPt.X(),
         basegfx::fround<tools::Long>(aVisibleRange.getMaxY()) - aDestPt.Y());
 
-    DrawBitmapEx(aDestPt, aDestSize, aTransformed);
+    DrawBitmap(aDestPt, aDestSize, aTransformed);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

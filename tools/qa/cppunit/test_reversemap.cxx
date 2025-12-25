@@ -12,6 +12,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 
@@ -68,7 +69,7 @@ namespace
         sal_Int32 nLength = aAllChars.size();
         CPPUNIT_ASSERT_EQUAL(sOrigText.getLength(), nLength);
 
-        OUString sFinalText;
+        OUStringBuffer sFinalText;
 
         //Split up in chunks of the same encoding returned by
         //getBestMSEncodingByChar, convert to it, and back
@@ -81,7 +82,7 @@ namespace
             if (eCurrEncoding != ePrevEncoding)
             {
                 OString aChunk(pStr+nChunkStart, i-nChunkStart, ePrevEncoding);
-                sFinalText += OStringToOUString(aChunk, ePrevEncoding);
+                sFinalText.append(OStringToOUString(aChunk, ePrevEncoding));
                 nChunkStart = i;
             }
             ePrevEncoding = eCurrEncoding;
@@ -89,11 +90,11 @@ namespace
         if (nChunkStart < 255)
         {
             OString aChunk(pStr+nChunkStart, 255-nChunkStart, ePrevEncoding);
-            sFinalText += OStringToOUString(aChunk, ePrevEncoding);
+            sFinalText.append(OStringToOUString(aChunk, ePrevEncoding));
         }
 
         //Final text should be the same as original
-        CPPUNIT_ASSERT_EQUAL(sOrigText, sFinalText);
+        CPPUNIT_ASSERT_EQUAL(sOrigText, sFinalText.toString());
     }
 
     void Test::test1252()

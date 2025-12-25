@@ -53,6 +53,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -289,7 +290,7 @@ OUString getName(const Reference< XInterface > & xDoc)
     Reference< XModel > xModel( xDoc, UNO_QUERY );
     if (!xModel)
         return OUString();
-    utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
+    comphelper::SequenceAsHashMap aMediaDesc(xModel->getArgs());
     OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
     if (aDocService == "com.sun.star.text.TextDocument")
         return u"Writer"_ustr;
@@ -627,7 +628,7 @@ bool DispatchWatcher::executeDispatchRequests(
                                 Reference< XModel > xModel( xDoc, UNO_QUERY );
                                 if ( xModel.is() )
                                 {
-                                    utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
+                                    comphelper::SequenceAsHashMap aMediaDesc(xModel->getArgs());
                                     aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
                                 }
                                 aFilter = impl_GuessFilter( aOutFile, aDocService );

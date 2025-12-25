@@ -934,7 +934,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
 
     loadFromFile(u"TESTRDFA.odt");
     verify(/*bIsExport*/ false);
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     verify(/*bIsExport*/ true);
 }
 
@@ -1474,7 +1474,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     CPPUNIT_ASSERT_STATEMENT_EQUAL(aMFStatements[0], aVector[6]);
     CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoobar_FooBarFoo, aVector[7]);
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     xDocumentMetadataAccess.set(mxComponent, uno::UNO_QUERY);
     xRepo = xDocumentMetadataAccess->getRDFRepository();

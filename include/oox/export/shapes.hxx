@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_SHAPES_HXX
-#define INCLUDED_OOX_EXPORT_SHAPES_HXX
+#pragma once
 
-#include <cstddef>
 #include <memory>
 #include <string_view>
 #include <unordered_map>
@@ -34,7 +32,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sax/fshelper.hxx>
-#include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
 
 namespace com::sun::star {
@@ -201,13 +198,10 @@ public:
     void WriteTableCellBorders(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
     sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
-    sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ::oox::core::XmlFilterBase* pFB );
     sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );
     static sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ShapeHashMap* pShapeMap );
 };
 
 }
-
-#endif // INCLUDED_OOX_EXPORT_SHAPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

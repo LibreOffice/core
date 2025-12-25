@@ -38,13 +38,13 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 {
-    loadAndReload("page-graphic-background.odt");
-    validate(maTempFile.GetFileName(), mpFilter);
+    createSwDoc("page-graphic-background.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
@@ -56,7 +56,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomProperties)
 {
-    loadAndSave("custom-properties.docx");
+    createSwDoc("custom-properties.docx");
+    save(TestFilter::DOCX);
     // tdf#133377  tdf#103987 FILESAVE XLSX: Make sure the custom/core/application
     // file properties are stored correctly after roundtrip to .docx
 
@@ -161,11 +162,10 @@ CPPUNIT_TEST_FIXTURE(Test, testZoom)
 
     createSwDoc("zoom.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     // Validation test: order of elements were wrong.
-    validate(maTempFile.GetFileName(), mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
@@ -180,8 +180,8 @@ CPPUNIT_TEST_FIXTURE(Test, testZoom)
 
 CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
 {
-    loadAndReload("empty.odt");
-    validate(maTempFile.GetFileName(), mpFilter);
+    createSwDoc("empty.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
@@ -251,15 +251,14 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo38244)
 
     createSwDoc("fdo38244.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
-    validate(maTempFile.GetFileName(), mpFilter);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 {
-    loadAndReload("comments-nested.odt");
-    validate(maTempFile.GetFileName(), mpFilter);
+    createSwDoc("comments-nested.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), u"TextField"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Outer"_ustr, getProperty<OUString>(xOuter, u"Content"_ustr));
@@ -270,20 +269,27 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 
 CPPUNIT_TEST_FIXTURE(Test, testMathEscape)
 {
-    loadAndReload("math-escape.docx");
+    createSwDoc("math-escape.docx");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(u"\\{ \\[ \\] \\( \\) \\}"_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
 
 // Saving left and right for parentheses when importing not from the m:t tag (docx)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158023Export)
 {
-    loadAndReload("tdf158023_export.docx");
+    createSwDoc("tdf158023_export.docx");
+
+    // FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(u"left [ right ] left ( right ) left lbrace  right rbrace"_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo51034)
 {
-    loadAndReload("fdo51034.odt");
+    createSwDoc("fdo51034.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
     CPPUNIT_ASSERT_EQUAL(u"http://Www.google.com/#a"_ustr, getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
@@ -336,7 +342,8 @@ DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testMathMso2k7)
 {
-    loadAndReload("math-mso2k7.docx");
+    createSwDoc("math-mso2k7.docx");
+    saveAndReload(TestFilter::DOCX);
     CHECK_FORMULA(u"A \"=\" \u03C0 {r} ^ {2}"_ustr, getFormula(getRun(getParagraph(1), 1)));
     // TODO check the stack/binom difference
     //    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
@@ -434,7 +441,8 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTable)
 {
-    loadAndReload("table.odt");
+    createSwDoc("table.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we write qFormat for well-known style names.
     xmlDocUniquePtr pXmlDocCT = parseExport(u"word/styles.xml"_ustr);
@@ -517,7 +525,12 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo51550)
 {
-    loadAndReload("fdo51550.odt");
+    createSwDoc("fdo51550.odt");
+
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that we lacked the fallback to export the replacement
@@ -558,7 +571,8 @@ DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTextFrames)
 {
-    loadAndReload("textframes.odt");
+    createSwDoc("textframes.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The frames were simply missing, so let's check if all 3 frames were imported back.
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
@@ -600,6 +614,9 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -624,7 +641,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testCellBtlr)
 {
-    loadAndSave("cell-btlr.docx");
+    createSwDoc("cell-btlr.docx");
+    save(TestFilter::DOCX);
     /*
      * The problem was that the exporter didn't mirror the workaround of the
      * importer, regarding the btLr text direction: the <w:textDirection
@@ -665,7 +683,8 @@ DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo48557)
 {
-    loadAndReload("fdo48557.odt");
+    createSwDoc("fdo48557.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Inner margins of the textframe wasn't exported.
@@ -706,7 +725,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo64826)
     // 'Track-Changes' (Track Revisions) wasn't exported.
     createSwDoc("fdo64826.docx");
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, u"RecordChanges"_ustr));
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, u"RecordChanges"_ustr));
     // 'Show-Changes' should not be exported - default is true.
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
@@ -722,6 +741,9 @@ DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65265, "fdo65265.docx")
 {
+    // FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
     // Redline (tracked changes) of text formatting were not exported
     uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);
     uno::Reference<text::XTextRange> xParagraph2 = getParagraph(2);
@@ -847,7 +869,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66543)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          getProperty<sal_Int32>(getParagraph( 1 ), u"ParaLineNumberStartValue"_ustr));
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          getProperty<sal_Int32>(getParagraph( 1 ), u"ParaLineNumberStartValue"_ustr));
 
@@ -858,7 +880,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66543)
 
 CPPUNIT_TEST_FIXTURE(Test, testN822175)
 {
-    loadAndReload("n822175.odt");
+    createSwDoc("n822175.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -891,7 +914,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo58577)
 {
-    loadAndReload("fdo58577.odt");
+    createSwDoc("fdo58577.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The second frame was simply missing, so let's check if both frames were imported back.
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
@@ -899,7 +923,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58577)
 
 CPPUNIT_TEST_FIXTURE(Test, testBnc581614)
 {
-    loadAndReload("bnc581614.doc");
+    createSwDoc("bnc581614.doc");
+    saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
 }
@@ -933,7 +958,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
 {
-    loadAndSave("page-borders-export-case-2.docx");
+    createSwDoc("page-borders-export-case-2.docx");
+    save(TestFilter::DOCX);
     // The problem was that the exporter didn't mirror the workaround of the
     // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
     // and the inner nodes like <w:top w:space="24" ... />
@@ -955,7 +981,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBorderSpacingExportCase2)
 
 CPPUNIT_TEST_FIXTURE(Test, testGrabBag)
 {
-    loadAndSave("grabbag.docx");
+    createSwDoc("grabbag.docx");
+    save(TestFilter::DOCX);
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
@@ -985,7 +1012,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo60990)
 {
-    loadAndReload("fdo60990.odt");
+    createSwDoc("fdo60990.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The shape had no background, no paragraph adjust and no font color.
@@ -1141,7 +1169,8 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, NoFillAttrInImagedata)
 {
-    loadAndSave("NoFillAttrInImagedata.docx");
+    createSwDoc("NoFillAttrInImagedata.docx");
+    save(TestFilter::DOCX);
     //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'. The
     //source file has v:fill and no v:imagedata. Same should be in the file written by LO.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1168,7 +1197,8 @@ DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf162070Export)
 {
-    loadAndReload("tdf162070_export.docx");
+    createSwDoc("tdf162070_export.docx");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(u"{P} rsub {\"abs\"} \"~\" {B} rsub {0} \u00B2"_ustr,
                          getFormula(getRun(getParagraph(1), 1)));
 }

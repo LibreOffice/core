@@ -28,6 +28,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <tools/debug.hxx>
 #include <tools/svborder.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

@@ -20,7 +20,6 @@
 #define INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
 
 #include <com/sun/star/script/XDefaultProperty.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XReturnInteger.hpp>
 #include <rtl/ustring.hxx>

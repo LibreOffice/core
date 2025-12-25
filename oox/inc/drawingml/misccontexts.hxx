@@ -24,6 +24,7 @@
 
 #include <drawingml/fillproperties.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 namespace oox::drawingml
 {
@@ -33,7 +34,7 @@ class SolidFillContext final : public ColorContext
 {
 public:
     explicit SolidFillContext(::oox::core::ContextHandler2Helper const & rParent,
-        FillProperties& rFillProps, model::SolidFill* pSolidFill);
+        FillProperties& rFillProps, ::model::SolidFill* pSolidFill);
     ~SolidFillContext();
 };
 
@@ -44,7 +45,7 @@ class GradientFillContext final : public ::oox::core::ContextHandler2
 public:
     explicit GradientFillContext(::oox::core::ContextHandler2Helper const & rParent,
         const ::oox::AttributeList& rAttribs, GradientFillProperties& rGradientProps,
-        model::GradientFill* pGradientFill);
+        ::model::GradientFill* pGradientFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -52,7 +53,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    model::GradientFill* mpGradientFill;
+    ::model::GradientFill* mpGradientFill;
     GradientFillProperties& mrGradientProps;
 };
 
@@ -62,7 +63,7 @@ class PatternFillContext final : public ::oox::core::ContextHandler2
 public:
     explicit PatternFillContext(::oox::core::ContextHandler2Helper const& rParent,
                             const ::oox::AttributeList& rAttribs, PatternFillProperties& rPatternProps,
-                            model::PatternFill* pPatternFill);
+                            ::model::PatternFill* pPatternFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -70,7 +71,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    model::PatternFill* mpPatternFill;
+    ::model::PatternFill* mpPatternFill;
     PatternFillProperties& mrPatternProps;
 };
 
@@ -103,7 +104,7 @@ public:
     explicit            BlipExtensionContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
                                 BlipFillProperties& rBlipProps,
-                                model::BlipFill* pBlipFill);
+                                ::model::BlipFill* pBlipFill);
     virtual             ~BlipExtensionContext() override;
 
     virtual ::oox::core::ContextHandlerRef
@@ -113,7 +114,7 @@ public:
 
 private:
     BlipFillProperties& mrBlipProps;
-    model::BlipFill* mpBlipFill;
+    ::model::BlipFill* mpBlipFill;
 };
 
 
@@ -144,7 +145,7 @@ class ColorChangeContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit ColorChangeContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs,
-                            BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill);
+                            BlipFillProperties& rBlipProps, ::model::BlipFill* pBlipFill);
     virtual ~ColorChangeContext() override;
 
     virtual ::oox::core::ContextHandlerRef
@@ -153,7 +154,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    model::BlipFill* mpBlipFill;
+    ::model::BlipFill* mpBlipFill;
     BlipFillProperties& mrBlipProps;
     bool mbUseAlpha;
 };
@@ -164,7 +165,7 @@ class BlipContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit BlipContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs,
-                        BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill);
+                        BlipFillProperties& rBlipProps, ::model::BlipFill* pBlipFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -172,7 +173,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    model::BlipFill* mpBlipFill;
+    ::model::BlipFill* mpBlipFill;
     BlipFillProperties& mrBlipProps;
 };
 
@@ -181,7 +182,7 @@ class BlipFillContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit BlipFillContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs,
-                            BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill);
+                            BlipFillProperties& rBlipProps, ::model::BlipFill* pBlipFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -189,7 +190,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    model::BlipFill* mpBlipFill;
+    ::model::BlipFill* mpBlipFill;
     BlipFillProperties& mrBlipProps;
 };
 
@@ -213,11 +214,11 @@ public:
                             sal_Int32 nElement,
                             const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps,
-                            model::FillStyle* pFillStyle);
+                            ::model::FillStyle* pFillStyle);
 
 private:
     FillProperties& mrFillProps;
-    model::FillStyle maFillStyle;
+    ::model::FillStyle maFillStyle;
 };
 
 /** Context handler for elements that contain a fill property element
@@ -232,11 +233,12 @@ class SimpleFillPropertiesContext final : private FillProperties, public FillPro
 public:
     explicit            SimpleFillPropertiesContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
-                            Color& rColor );
+                            ::model::ComplexColor& rColor, Color *pOOXColor);
     virtual             ~SimpleFillPropertiesContext() override;
 
 private:
-    Color&              mrColor;
+    ::model::ComplexColor& mrColor;
+    Color* mpOOXColor;
 };
 
 } // namespace oox::drawingml

@@ -19,8 +19,15 @@ ToolBoxItemUIObject::~ToolBoxItemUIObject() {}
 
 StringMap ToolBoxItemUIObject::get_state()
 {
-    StringMap aMap{ { u"Enabled"_ustr, OUString::boolean(m_pToolBox->IsItemEnabled(m_nId)) },
-                    { u"Text"_ustr, m_pToolBox->GetItemText(m_nId) } };
+    const tools::Rectangle aRect = m_pToolBox->GetItemRect(m_nId);
+    StringMap aMap{
+        { u"Enabled"_ustr, OUString::boolean(m_pToolBox->IsItemEnabled(m_nId)) },
+        { u"Text"_ustr, m_pToolBox->GetItemText(m_nId) },
+        { u"X"_ustr, OUString::number(aRect.getX()) },
+        { u"Y"_ustr, OUString::number(aRect.getY()) },
+        { u"Width"_ustr, OUString::number(aRect.GetWidth()) },
+        { u"Height"_ustr, OUString::number(aRect.GetHeight()) },
+    };
 
     return aMap;
 }

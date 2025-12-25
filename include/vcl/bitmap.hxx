@@ -24,17 +24,16 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <tools/degree.hxx>
-#include <tools/helpers.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <config_vclplug.h>
 
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <algorithm>
 #include <memory>
 
 class AlphaMask;
@@ -717,6 +716,10 @@ public:
 
     /// Dumps the pixels as PNG in bitmap.png.
     void DumpAsPng(const char* pFileName = nullptr) const;
+
+#if USE_HEADLESS_CODE
+    void* tryToGetCairoSurface() const;
+#endif
 
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);

@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <tools/long.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <osx/osxvcltypes.h>
 
@@ -148,10 +149,8 @@ class AquaSalPrinter : public SalPrinter
     AquaSalPrinter& operator=(const AquaSalPrinter&) = delete;
 };
 
-const double fPtTo100thMM = 35.27777778;
+inline int PtTo10Mu( double nPoints ) { return std::round(o3tl::convert(nPoints, o3tl::Length::pt, o3tl::Length::mm100)); }
 
-inline int PtTo10Mu( double nPoints ) { return static_cast<int>((nPoints*fPtTo100thMM)+0.5); }
-
-inline double TenMuToPt( double nUnits ) { return floor((nUnits/fPtTo100thMM)+0.5); }
+inline double TenMuToPt( double nUnits ) { return std::round(o3tl::convert(nUnits, o3tl::Length::mm100, o3tl::Length::pt)); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

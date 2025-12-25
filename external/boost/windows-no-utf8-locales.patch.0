@@ -2,9 +2,9 @@ Don't ever attempt to initialise a std::locale with a UTF-8 locale on Windows -*
 
 --- libs/locale/src/std/std_backend.cpp
 +++ libs/locale/src/std/std_backend.cpp
-@@ -138,10 +138,14 @@
-                 } else
-                     name_ = "C";
+@@ -143,10 +143,14 @@
+                 }
+ 
              } else {
 +#if !defined(BOOST_WINDOWS)
                  if(loadable(lid)) {

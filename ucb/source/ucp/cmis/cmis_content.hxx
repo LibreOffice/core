@@ -54,11 +54,16 @@ namespace ucbhelper
 
 namespace cmis
 {
-
+inline constexpr OUString CMIS_REPO_TYPE = u"application/vnd.libreoffice.cmis-repository"_ustr;
 inline constexpr OUString CMIS_FILE_TYPE = u"application/vnd.libreoffice.cmis-file"_ustr;
 inline constexpr OUString CMIS_FOLDER_TYPE = u"application/vnd.libreoffice.cmis-folder"_ustr;
 
 class ContentProvider;
+libcmis::Session* createSession(const css::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
+                                ContentProvider& rProvider, const URL& rURL,
+                                const OUString& rContentId,
+                                const css::uno::Reference<css::ucb::XContent>& xContext);
+
 class Content : public ::ucbhelper::ContentImplHelper,
                 public css::ucb::XContentCreator,
                 public ChildrenProvider

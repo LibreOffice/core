@@ -161,7 +161,7 @@ void fillStruct(
             {
                 state.setInitialised(OUMemberName);
                 state.setUsed(pyMemberName);
-                Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
+                Any a = runtime.pyObject2Any( element );
                 inv->setValue( OUMemberName, a );
             }
         }
@@ -174,7 +174,7 @@ void fillStruct(
             const OUString aMemberName (pCompType->ppMemberNames[i]);
             state.setInitialised(aMemberName, tupleIndex);
             PyObject *element = PyTuple_GetItem( initializer, tupleIndex );
-            Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
+            Any a = runtime.pyObject2Any( element );
             inv->setValue( aMemberName, a );
         }
     }

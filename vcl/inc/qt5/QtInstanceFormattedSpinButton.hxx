@@ -12,7 +12,7 @@
 #include "QtDoubleSpinBox.hxx"
 #include "QtInstanceEntry.hxx"
 
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 class QtInstanceFormattedSpinButton : public QtInstanceEntry,
                                       public virtual weld::FormattedSpinButton

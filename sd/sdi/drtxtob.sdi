@@ -156,6 +156,20 @@ shell TextObjectBar
 //      AutoUpdate;
     ]
 
+    SID_ATTR_PARA_ADJUST_START  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      AutoUpdate;
+    ]
+
+    SID_ATTR_PARA_ADJUST_END  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      AutoUpdate;
+    ]
+
     SID_ATTR_PARA_LEFT_TO_RIGHT // ole : ?, status : ?
     [
         ExecMethod = Execute;

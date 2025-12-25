@@ -373,7 +373,7 @@ Cell::Cell(
     }
 }
 
-Cell::~Cell() COVERITY_NOEXCEPT_FALSE
+Cell::~Cell()
 {
     dispose();
 }
@@ -955,10 +955,12 @@ Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry*
             aAny >>= nValue;
             aAny <<= static_cast<sal_Int16>(nValue);
         }
+        else if( pMap->aType == ::cppu::UnoType<css::table::BorderLine>::get()
+                 && aAny.getValueType() == ::cppu::UnoType<css::table::BorderLine2>::get() )
+            ; // do not warn for valid case
         else
-        {
-            OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
-        }
+            SAL_WARN("svx", "GetAnyForItem() Return value has wrong type for property " << pMap->aName
+                        << ", expected " << pMap->aType << " but have " << aAny.getValueType());
     }
 
     return aAny;

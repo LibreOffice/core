@@ -22,14 +22,15 @@ namespace model
 {
 enum class ColorType
 {
-    Unused,
-    RGB,
-    CRGB,
-    HSL,
-    Theme,
-    Palette,
-    System,
-    Placeholder
+    Unused, /// Color is not used, or undefined.
+    RGB, /// Absolute RGB (r/g/b: 0...255).
+    CRGB, /// Relative RGB (r/g/b: 0...100000)
+    HSL, /// HSL (hue: 0...21600000, sat/lum: 0...100000).
+    Theme, /// Color from scheme.
+    Palette, /// Color from application defined palette.
+    System, /// Color from system palette.
+    Placeholder, /// Placeholder color in theme style lists.
+    Finalized /// Finalized RGB color.
 };
 
 enum class SystemColorType
@@ -106,6 +107,18 @@ public:
         return meType == model::ColorType::Theme && meThemeColorType != ThemeColorType::Unknown;
     }
 
+    bool isUsed() const
+    {
+        return !(meType == ColorType::Unused
+                 || (meType == ColorType::System && meSystemColorType == SystemColorType::Unused));
+    }
+
+    void assignIfUsed(const ComplexColor& rColor)
+    {
+        if (rColor.isUsed())
+            *this = rColor;
+    }
+
     ThemeColorUsage getThemeColorUsage() const { return meThemeColorUsage; }
     void setThemeColorUsage(ThemeColorUsage eThemeColorUsage)
     {
@@ -129,17 +142,9 @@ public:
         maTransformations = rTransformations;
     }
 
-    void addTransformation(Transformation const& rTransform)
-    {
-        maTransformations.push_back(rTransform);
-    }
+    void addTransformation(Transformation const& rTransform);
 
-    void removeTransformations(TransformationType eType)
-    {
-        std::erase_if(maTransformations, [eType](Transformation const& rTransform) {
-            return rTransform.meType == eType;
-        });
-    }
+    void removeTransformations(TransformationType eType);
 
     void clearTransformations() { maTransformations.clear(); }
 
@@ -147,113 +152,40 @@ public:
     double getGreen() const { return mnComponent2; }
     double getBlue() const { return mnComponent3; }
 
-    void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB)
-    {
-        mnComponent1 = nR;
-        mnComponent2 = nG;
-        mnComponent3 = nB;
-        meType = ColorType::CRGB;
-    }
+    void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB);
 
-    Color getRGB() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
+    void setRGB(double r, double g, double b);
 
-    void setColor(Color const& rColor)
-    {
-        mnComponent1 = rColor.GetRed();
-        mnComponent2 = rColor.GetGreen();
-        mnComponent3 = rColor.GetBlue();
-        maFinalColor = rColor;
-        meType = ColorType::RGB;
-    }
+    void getRGB(double& r, double& g, double& b);
 
-    void setRGB(sal_Int32 nRGB)
-    {
-        ::Color aColor(ColorTransparency, nRGB);
-        setColor(aColor);
-    }
+    Color getRGB() const;
 
-    void setHSL(sal_Int32 nH, sal_Int32 nS, sal_Int32 nL)
-    {
-        mnComponent1 = nH;
-        mnComponent2 = nS;
-        mnComponent3 = nL;
-        meType = ColorType::HSL;
-    }
+    void setColor(Color const& rColor);
 
-    void setSystemColor(SystemColorType eSystemColorType, sal_Int32 nRGB)
-    {
-        maLastColor = ::Color(ColorTransparency, nRGB);
-        meSystemColorType = eSystemColorType;
-        meType = ColorType::System;
-    }
+    void setRGB(sal_Int32 nRGB);
+
+    void setHSL(sal_Int32 nH, sal_Int32 nS, sal_Int32 nL);
+
+    void setSystemColor(SystemColorType eSystemColorType, sal_Int32 nRGB);
+
+    bool isOpaque() const;
+
+    bool isTransparent() const;
 
     void setThemePlaceholder() { meType = ColorType::Placeholder; }
 
-    void setThemeColor(ThemeColorType eType)
-    {
-        meThemeColorType = eType;
-        meType = ColorType::Theme;
-    }
+    void setThemeColor(ThemeColorType eType);
 
-    bool operator==(const ComplexColor& rComplexColor) const
-    {
-        return meType == rComplexColor.meType && mnComponent1 == rComplexColor.mnComponent1
-               && mnComponent2 == rComplexColor.mnComponent2
-               && mnComponent3 == rComplexColor.mnComponent3
-               && meSystemColorType == rComplexColor.meSystemColorType
-               && maLastColor == rComplexColor.maLastColor
-               && meThemeColorType == rComplexColor.meThemeColorType
-               && maTransformations.size() == rComplexColor.maTransformations.size()
-               && std::equal(maTransformations.begin(), maTransformations.end(),
-                             rComplexColor.maTransformations.begin());
-    }
+    bool operator==(const ComplexColor& rComplexColor) const;
 
     /** Applies the defined transformations to the input color */
-    Color applyTransformations(Color const& rColor) const
-    {
-        Color aColor(rColor);
-
-        for (auto const& rTransform : maTransformations)
-        {
-            switch (rTransform.meType)
-            {
-                case TransformationType::Tint:
-                    aColor.ApplyTintOrShade(rTransform.mnValue);
-                    break;
-                case TransformationType::Shade:
-                    aColor.ApplyTintOrShade(-rTransform.mnValue);
-                    break;
-                case TransformationType::LumMod:
-                    aColor.ApplyLumModOff(rTransform.mnValue, 0);
-                    break;
-                case TransformationType::LumOff:
-                    aColor.ApplyLumModOff(10000, rTransform.mnValue);
-                    break;
-                default:
-                    break;
-            }
-        }
-        return aColor;
-    }
+    Color applyTransformations(Color const& rColor) const;
 
     void setFinalColor(Color const& rColor) { maFinalColor = rColor; }
 
     Color const& getFinalColor() const { return maFinalColor; }
 
-    std::size_t getHash() const
-    {
-        std::size_t seed = 0;
-        o3tl::hash_combine(seed, meType);
-        o3tl::hash_combine(seed, mnComponent1);
-        o3tl::hash_combine(seed, mnComponent2);
-        o3tl::hash_combine(seed, mnComponent3);
-        o3tl::hash_combine(seed, meSystemColorType);
-        o3tl::hash_combine(seed, sal_uInt32(maLastColor));
-        for (auto const& rTransform : maTransformations)
-            o3tl::hash_combine(seed, rTransform);
-        o3tl::hash_combine(seed, sal_uInt32(maFinalColor));
-        return seed;
-    }
+    std::size_t getHash() const;
 
     static model::ComplexColor createRGB(Color const& rColor)
     {

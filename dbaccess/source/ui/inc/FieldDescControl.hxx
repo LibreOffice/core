@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include "IClipBoardTest.hxx"
 #include "QEnumTypes.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -123,7 +124,16 @@ namespace dbaui
 
         bool                IsFocusInEditableWidget() const;
 
-        void                dispose();
+        // Call func on all of the controls or stop early if one of them returns true
+        template <class Func> bool iterateControls(Func func)
+        {
+            return func(m_xAutoIncrement.get()) || func(m_xAutoIncrementValue.get())
+                || func(m_xBoolDefault.get()) || func(m_xColumnName.get()) || func(m_xDefault.get())
+                || func(m_xFormatSample.get()) || func(m_xLength.get()) || func(m_xNumType.get())
+                || func(m_xRequired.get()) || func(m_xScale.get()) || func(m_xTextLen.get())
+                || func(m_xType.get());
+        }
+
     protected:
         void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
         OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
@@ -156,6 +166,8 @@ namespace dbaui
     public:
         OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl();
+
+        void                FlushModifiedData();
 
         void                DisplayData(OFieldDescription* pFieldDescr );
 

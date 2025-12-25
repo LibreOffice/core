@@ -81,7 +81,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -1153,7 +1153,7 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndex
 
     m_xBookmarksPB->connect_clicked( LINK(this, BookmarksTabPage_Impl, OpenHdl));
     m_xBookmarksBox->connect_row_activated(LINK(this, BookmarksTabPage_Impl, DoubleClickHdl));
-    m_xBookmarksBox->connect_popup_menu(LINK(this, BookmarksTabPage_Impl, CommandHdl));
+    m_xBookmarksBox->connect_command(LINK(this, BookmarksTabPage_Impl, CommandHdl));
     m_xBookmarksBox->connect_key_press(LINK(this, BookmarksTabPage_Impl, KeyInputHdl));
 
     // load bookmarks from configuration

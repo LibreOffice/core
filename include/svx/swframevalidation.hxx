@@ -54,6 +54,8 @@ struct SvxSwFrameValidation
     sal_Int32 nMaxHeight;
 
     Size    aPercentSize;   // Size for 100% value
+    bool bEntirePageWidth = false;
+    bool bEntirePageHeight = false;
 
     SvxSwFrameValidation() :
         nAnchorType(RndStdIds::FLY_AT_PARA),

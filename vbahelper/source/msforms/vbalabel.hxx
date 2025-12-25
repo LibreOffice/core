@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
+
+#pragma once
+
 #include <ooo/vba/msforms/XLabel.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 
@@ -49,6 +50,5 @@ public:
     // XDefaultProperty
     OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
 };
-#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

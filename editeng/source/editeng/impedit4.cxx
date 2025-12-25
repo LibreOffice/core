@@ -3221,12 +3221,11 @@ short ImpEditEngine::ReplaceTextOnly(
 {
     // Change text without losing the attributes
     sal_Int32 nCharsAfterTransliteration = rOffsets.getLength();
-    const sal_Int32* pOffsets = rOffsets.getConstArray();
     short nDiffs = 0;
     for ( sal_Int32 n = 0; n < nCharsAfterTransliteration; n++ )
     {
         sal_Int32 nCurrentPos = nCurrentStart+n;
-        sal_Int32 nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
+        sal_Int32 nDiff = (nCurrentPos - nDiffs) - rOffsets[n];
 
         if ( !nDiff )
         {

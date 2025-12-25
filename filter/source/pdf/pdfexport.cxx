@@ -109,7 +109,7 @@ PDFExport::~PDFExport()
 }
 
 
-bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
+bool PDFExport::ExportSelection( vcl::pdf::PDFWriter& rPDFWriter,
     Reference< css::view::XRenderable > const & rRenderable,
     const Any& rSelection,
     const StringRangeEnumerator& rRangeEnum,
@@ -387,7 +387,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
     INetURLObject   aURL( rFile );
     bool        bRet = false;
 
-    std::set< vcl::PDFWriter::ErrorCode > aErrors;
+    std::set< vcl::pdf::PDFWriter::ErrorCode > aErrors;
 
     if( aURL.GetProtocol() != INetProtocol::File )
     {
@@ -454,7 +454,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             rtl::Reference<VCLXDevice>  xDevice(new VCLXDevice);
             OUString                    aPageRange;
             Any                         aSelection;
-            vcl::PDFWriter::PDFWriterContext aContext;
+            vcl::pdf::PDFWriter::PDFWriterContext aContext;
             OUString aOpenPassword, aPermissionPassword;
             Reference< beans::XMaterialHolder > xEnc;
             Sequence< beans::NamedValue > aPreparedPermissionPassword;
@@ -521,9 +521,6 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         " " +
                         utl::ConfigManager::getAboutBoxProductVersion() +
                         " (" + arch + ")"
-#if HAVE_FEATURE_COMMUNITY_FLAVOR
-                        " / LibreOffice Community"
-#endif
                         ;
             }
 
@@ -760,24 +757,24 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
             default:
             case 0:
-                aContext.Version = vcl::PDFWriter::PDFVersion::Default;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::Default;
                 break;
             case 1:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_1;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_A_1;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = true;  // does not allow transparencies
                 bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 2:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_2;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_A_2;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
                 bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 3:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_3;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_A_3;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
                 bEncrypt = false;               // no encryption
@@ -785,23 +782,23 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 break;
             case 4:
                 // TODO - determine what is allowed for PDFA/4
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_4;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_A_4;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
                 bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 15:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_5;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_1_5;
                 break;
             case 16:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_6;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_1_6;
                 break;
             case 17:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_7;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_1_7;
                 break;
             case 20:
-                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_2_0;
+                aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_2_0;
                 break;
             }
 
@@ -835,32 +832,32 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
                 default:
                 case 0:
-                    aContext.PDFDocumentMode = vcl::PDFWriter::ModeDefault;
+                    aContext.PDFDocumentMode = vcl::pdf::PDFWriter::ModeDefault;
                     break;
                 case 1:
-                    aContext.PDFDocumentMode = vcl::PDFWriter::UseOutlines;
+                    aContext.PDFDocumentMode = vcl::pdf::PDFWriter::UseOutlines;
                     break;
                 case 2:
-                    aContext.PDFDocumentMode = vcl::PDFWriter::UseThumbs;
+                    aContext.PDFDocumentMode = vcl::pdf::PDFWriter::UseThumbs;
                     break;
             }
             switch( nPDFDocumentAction )
             {
                 default:
                 case 0:
-                    aContext.PDFDocumentAction = vcl::PDFWriter::ActionDefault;
+                    aContext.PDFDocumentAction = vcl::pdf::PDFWriter::ActionDefault;
                     break;
                 case 1:
-                    aContext.PDFDocumentAction = vcl::PDFWriter::FitInWindow;
+                    aContext.PDFDocumentAction = vcl::pdf::PDFWriter::FitInWindow;
                     break;
                 case 2:
-                    aContext.PDFDocumentAction = vcl::PDFWriter::FitWidth;
+                    aContext.PDFDocumentAction = vcl::pdf::PDFWriter::FitWidth;
                     break;
                 case 3:
-                    aContext.PDFDocumentAction = vcl::PDFWriter::FitVisible;
+                    aContext.PDFDocumentAction = vcl::pdf::PDFWriter::FitVisible;
                     break;
                 case 4:
-                    aContext.PDFDocumentAction = vcl::PDFWriter::ActionZoom;
+                    aContext.PDFDocumentAction = vcl::pdf::PDFWriter::ActionZoom;
                     aContext.Zoom = nZoom;
                     break;
             }
@@ -869,23 +866,23 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
                 default:
                 case 0:
-                    aContext.PageLayout = vcl::PDFWriter::DefaultLayout;
+                    aContext.PageLayout = vcl::pdf::PDFWriter::DefaultLayout;
                     break;
                 case 1:
-                    aContext.PageLayout = vcl::PDFWriter::SinglePage;
+                    aContext.PageLayout = vcl::pdf::PDFWriter::SinglePage;
                     break;
                 case 2:
-                    aContext.PageLayout = vcl::PDFWriter::Continuous;
+                    aContext.PageLayout = vcl::pdf::PDFWriter::Continuous;
                     break;
                 case 3:
-                    aContext.PageLayout = vcl::PDFWriter::ContinuousFacing;
+                    aContext.PageLayout = vcl::pdf::PDFWriter::ContinuousFacing;
                     break;
             }
 
             aContext.FirstPageLeft = false;
 
             // check if PDF/A, which does not allow encryption
-            if( aContext.Version != vcl::PDFWriter::PDFVersion::PDF_A_1 )
+            if( aContext.Version != vcl::pdf::PDFWriter::PDFVersion::PDF_A_1 )
             {
                 // set check for permission change password
                 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
@@ -957,17 +954,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             switch( nFormsFormat )
             {
                 case 1:
-                    aContext.SubmitFormat = vcl::PDFWriter::PDF;
+                    aContext.SubmitFormat = vcl::pdf::PDFWriter::PDF;
                     break;
                 case 2:
-                    aContext.SubmitFormat = vcl::PDFWriter::HTML;
+                    aContext.SubmitFormat = vcl::pdf::PDFWriter::HTML;
                     break;
                 case 3:
-                    aContext.SubmitFormat = vcl::PDFWriter::XML;
+                    aContext.SubmitFormat = vcl::pdf::PDFWriter::XML;
                     break;
                 default:
                 case 0:
-                    aContext.SubmitFormat = vcl::PDFWriter::FDF;
+                    aContext.SubmitFormat = vcl::pdf::PDFWriter::FDF;
                     break;
             }
             aContext.AllowDuplicateFieldNames = bAllowDuplicateFieldNames;
@@ -986,31 +983,31 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 default:
                     // default: URI, without fragment conversion (the bookmark in PDF may not work)
                 case 0:
-                    aContext.DefaultLinkAction = vcl::PDFWriter::URIAction;
+                    aContext.DefaultLinkAction = vcl::pdf::PDFWriter::URIAction;
                     break;
                 case 1:
                     // view PDF through the reader application
                     aContext.ForcePDFAction = true;
-                    aContext.DefaultLinkAction = vcl::PDFWriter::LaunchAction;
+                    aContext.DefaultLinkAction = vcl::pdf::PDFWriter::LaunchAction;
                     break;
                 case 2:
                     // view PDF through an Internet browser
-                    aContext.DefaultLinkAction = vcl::PDFWriter::URIActionDestination;
+                    aContext.DefaultLinkAction = vcl::pdf::PDFWriter::URIActionDestination;
                     break;
                 case 3:
                     // do not emit Link annotations for external links
-                    aContext.DefaultLinkAction = vcl::PDFWriter::RemoveExternalLinks;
+                    aContext.DefaultLinkAction = vcl::pdf::PDFWriter::RemoveExternalLinks;
                     break;
                 }
                 aContext.ConvertOOoTargetToPDFTarget = bConvertOOoTargetToPDFTarget;
 
                 // check for Link Launch action, not allowed on PDF/A-1
                 // this code chunk checks when the filter is called from scripting
-                if( aContext.Version == vcl::PDFWriter::PDFVersion::PDF_A_1 &&
-                    aContext.DefaultLinkAction == vcl::PDFWriter::LaunchAction )
+                if( aContext.Version == vcl::pdf::PDFWriter::PDFVersion::PDF_A_1 &&
+                    aContext.DefaultLinkAction == vcl::pdf::PDFWriter::LaunchAction )
                 {
                     // force the similar allowed URI action
-                    aContext.DefaultLinkAction = vcl::PDFWriter::URIActionDestination;
+                    aContext.DefaultLinkAction = vcl::pdf::PDFWriter::URIActionDestination;
                     // and remove the remote goto action forced on PDF file
                     aContext.ForcePDFAction = false;
                 }
@@ -1026,7 +1023,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.UseReferenceXObject = bUseReferenceXObject;
 
             // all context data set, time to create the printing device
-            vcl::PDFWriter aPDFWriter( aContext, xEnc );
+            vcl::pdf::PDFWriter aPDFWriter( aContext, xEnc );
             OutputDevice*  pOut = aPDFWriter.GetReferenceDevice();
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
@@ -1281,7 +1278,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFEr
 } // end anonymous namespace
 
 
-void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors )
+void PDFExport::showErrors( const std::set< vcl::pdf::PDFWriter::ErrorCode >& rErrors )
 {
     if( ! rErrors.empty() && mxIH.is() )
     {
@@ -1293,7 +1290,7 @@ void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors
 }
 
 
-void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
+void PDFExport::ImplExportPage( vcl::pdf::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
     //Rectangle(Point, Size) creates a rectangle off by 1, use Rectangle(long, long, long, long) instead
     basegfx::B2DPolygon aSize(tools::Polygon(tools::Rectangle(0, 0, rMtf.GetPrefSize().Width(), rMtf.GetPrefSize().Height())).getB2DPolygon());
@@ -1304,7 +1301,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     rWriter.NewPage( aRangePDF.getWidth(), aRangePDF.getHeight() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
-    vcl::PDFWriter::PlayMetafileContext aCtx;
+    vcl::pdf::PDFWriter::PlayMetafileContext aCtx;
     GDIMetaFile aMtf;
     if( mbRemoveTransparencies )
     {
@@ -1345,7 +1342,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 }
 
 
-void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
+void PDFExport::ImplWriteWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize )
 {
     vcl::Font aFont( maWatermarkFontName, Size( 0, moWatermarkFontHeight ? *moWatermarkFontHeight : 3*rPageSize.Height()/4 ) );
     aFont.SetItalic( ITALIC_NONE );
@@ -1408,8 +1405,8 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     sal_Int32 const id = rWriter.EnsureStructureElement();
     rWriter.InitStructureElement(id, vcl::pdf::StructElement::NonStructElement, ::std::u16string_view());
     rWriter.BeginStructureElement(id);
-    rWriter.SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
-    rWriter.SetStructureAttribute(vcl::PDFWriter::Subtype, vcl::PDFWriter::Watermark);
+    rWriter.SetStructureAttribute(vcl::pdf::PDFWriter::Type, vcl::pdf::PDFWriter::Pagination);
+    rWriter.SetStructureAttribute(vcl::pdf::PDFWriter::Subtype, vcl::pdf::PDFWriter::Watermark);
     // HACK: this should produce *nothing* itself but is necessary to output
     // the Artifact tag here, not inside the XObject
     rWriter.DrawPolyLine({});
@@ -1459,7 +1456,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     rWriter.Pop();
 }
 
-void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
+void PDFExport::ImplWriteTiledWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize )
 {
     OUString watermark = msTiledWatermark;
     // Maximum number of characters in one line.
@@ -1506,8 +1503,8 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     sal_Int32 const id = rWriter.EnsureStructureElement();
     rWriter.InitStructureElement(id, vcl::pdf::StructElement::NonStructElement, ::std::u16string_view());
     rWriter.BeginStructureElement(id);
-    rWriter.SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
-    rWriter.SetStructureAttribute(vcl::PDFWriter::Subtype, vcl::PDFWriter::Watermark);
+    rWriter.SetStructureAttribute(vcl::pdf::PDFWriter::Type, vcl::pdf::PDFWriter::Pagination);
+    rWriter.SetStructureAttribute(vcl::pdf::PDFWriter::Subtype, vcl::pdf::PDFWriter::Watermark);
     // HACK: this should produce *nothing* itself but is necessary to output
     // the Artifact tag here, not inside the XObject
     rWriter.DrawPolyLine({});

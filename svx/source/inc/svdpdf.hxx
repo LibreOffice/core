@@ -78,23 +78,10 @@ struct EmbeddedFontInfo
     FontWeight eFontWeight;
 };
 
-// A description of such a final font as LibreOffice sees it
-// e.g. "Name SemiBold"
-struct OfficeFontInfo
-{
-    OUString sFontName;
-    FontWeight eFontWeight;
-};
-
 // Helper Class to import PDF
 class ImpSdrPdfImport final
 {
     std::vector<rtl::Reference<SdrObject>> maTmpList;
-
-    std::map<vcl::pdf::PDFiumFont, OfficeFontInfo> maImportedFonts;
-    std::map<OUString, SubSetInfo> maDifferentSubsetsForFont;
-    // map of PostScriptName->Merged Font File for that font
-    std::map<OUString, EmbeddedFontInfo> maEmbeddedFonts;
 
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle maScaleRect;
@@ -103,11 +90,13 @@ class ImpSdrPdfImport final
     std::unique_ptr<SfxItemSet> mpFillAttr;
     std::unique_ptr<SfxItemSet> mpTextAttr;
     SdrModel* mpModel;
+    std::shared_ptr<ImportedFontMap> mxImportedFonts;
     SdrLayerID mnLayer;
-    Color maOldLineColor;
     sal_Int32 mnLineWidth;
     static constexpr css::drawing::LineCap gaLineCap = css::drawing::LineCap_BUTT;
     XDash maDash;
+    std::optional<Color> moFillColor;
+    std::optional<Bitmap> moFillPattern;
 
     bool mbMov;
     bool mbSize;
@@ -124,9 +113,6 @@ class ImpSdrPdfImport final
     bool mbNoLine;
     bool mbNoFill;
 
-    // clipregion
-    basegfx::B2DPolyPolygon maClip;
-
     std::unique_ptr<vcl::pdf::PDFiumDocument> mpPdfDocument;
     int mnPageCount;
     double mdPageHeightPts;
@@ -142,21 +128,25 @@ class ImpSdrPdfImport final
 
     std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
-    // check for clip and evtl. fill maClip
-    void checkClip();
-    bool isClip() const;
+    Color getStrokeColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                         std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage);
+    Color getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                       std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage);
 
     void ImportPdfObject(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                         std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                          std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                          int nPageObjectIndex);
     void ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                     int nPageObjectIndex);
     void ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                      int nPageObjectIndex);
     void ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                    int nPageObjectIndex);
+                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage, int nPageObjectIndex);
     void ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
                     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                     int nPageObjectIndex);
     void InsertTextObject(const Point& rPos, const Size& rSize, const OUString& rStr,
@@ -167,20 +157,30 @@ class ImpSdrPdfImport final
     void InsertObj(SdrObject* pObj, bool bScale = true);
     void MapScaling();
 
+    void appendSegmentsToPolyPoly(
+        basegfx::B2DPolyPolygon& rPolyPoly,
+        const std::vector<std::unique_ptr<vcl::pdf::PDFiumPathSegment>>& rPathSegments,
+        const basegfx::B2DHomMatrix& rPathMatrix);
+
+    basegfx::B2DPolyPolygon GetClip(const std::unique_ptr<vcl::pdf::PDFiumClipPath>& rClipPath,
+                                    const basegfx::B2DHomMatrix& rPathMatrix,
+                                    const basegfx::B2DHomMatrix& rTransform);
+
     // #i73407# reformulation to use new B2DPolygon classes
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     void DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
 
-    void CollectFonts();
+    static ImportedFontMap CollectFonts(sal_Int64 nPrefix, vcl::pdf::PDFiumDocument& rPdfDocument);
 
     sal_Int64 getPrefix() const { return reinterpret_cast<sal_Int64>(this); }
 
-    static EmbeddedFontInfo convertToOTF(sal_Int64 prefix, SubSetInfo& rSubSetInfo,
+    static EmbeddedFontInfo convertToOTF(sal_Int64 nPrefix, SubSetInfo& rSubSetInfo,
                                          const OUString& fileUrl, const OUString& fontName,
                                          const OUString& baseFontName,
                                          std::u16string_view fontFileName,
-                                         const std::vector<uint8_t>& toUnicodeData);
+                                         const std::vector<uint8_t>& toUnicodeData,
+                                         const vcl::pdf::PDFiumFont& font);
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrPdfImport(const ImpSdrPdfImport&) = delete;

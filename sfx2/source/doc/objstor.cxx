@@ -72,6 +72,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/securityoptions.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/memorystream.hxx>
@@ -88,7 +89,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <basic/modsizeexceeded.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
@@ -196,7 +197,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
     bool bResult = false;
     if ( pSet )
     {
-        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionDataItem = pSet->GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionDataItem )
         {
             pEncryptionDataItem->GetValue() >>= o_rEncryptionData;
@@ -204,7 +205,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
         }
         else
         {
-            const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_PASSWORD, false);
+            const SfxStringItem* pPasswordItem = pSet->GetItem(SID_PASSWORD, false);
             if ( pPasswordItem )
             {
                 o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordItem->GetValue() );
@@ -507,14 +508,9 @@ bool SfxObjectShell::DoInitNew()
         if ( xModel.is() )
         {
             SfxItemSet &rSet = GetMedium()->GetItemSet();
-            uno::Sequence< beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, rSet, aArgs );
-            sal_Int32 nLength = aArgs.getLength();
-            aArgs.realloc( nLength + 1 );
-            auto pArgs = aArgs.getArray();
-            pArgs[nLength].Name = "Title";
-            pArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
-            xModel->attachResource( OUString(), aArgs );
+            comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rSet);
+            aArgs[u"Title"_ustr] <<= GetTitle(SFX_TITLE_DETECT);
+            xModel->attachResource(OUString(), aArgs.getAsConstPropertyValueList());
             if (!comphelper::IsFuzzing())
                 impl_addToModelCollection(xModel);
         }
@@ -1239,8 +1235,7 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
                                 if ( rSet.GetItemState( SID_FILTER_NAME ) < SfxItemState::SET )
                                     rSet.Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
 
-                                Sequence< PropertyValue > rProperties;
-                                TransformItems( SID_OPENDOC, rSet, rProperties );
+                                Sequence<PropertyValue> rProperties = TransformItems(SID_OPENDOC, rSet).getAsConstPropertyValueList();
                                 rtl::Reference<RequestFilterOptions> pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
 
                                 rHandler->handle( pFORequest );
@@ -1581,7 +1576,8 @@ bool SfxObjectShell::SaveTo_Impl
         pMedium->DisableUnlockWebDAV();
         bStoreToSameLocation = true;
 
-        if ( pMedium->DocNeedsFileDateCheck() )
+        const bool bDocNeedsFileDateCheck = pMedium->DocNeedsFileDateCheck();
+        if (bDocNeedsFileDateCheck)
         {
             rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
             if (rMedium.GetErrorCode() == ERRCODE_ABORT)
@@ -1700,6 +1696,13 @@ bool SfxObjectShell::SaveTo_Impl
             }
         }
         pMedium->DisableUnlockWebDAV(false);
+        if (bDocNeedsFileDateCheck)
+        {
+            // If we have already fetched 'DateModified' (via GetInitFileDate) then in
+            // this overwrite scenario that cached date is no longer necessarily true.
+            // Fetch it again on next demand.
+            pMedium->ClearInitFileDateCache();
+        }
     }
     else
     {
@@ -1805,7 +1808,7 @@ bool SfxObjectShell::SaveTo_Impl
         bool const bPasswdProvided(aEncryptionData.getLength() != 0);
         pFilter = rMedium.GetFilter();
 
-        const SfxStringItem *pVersionItem = !rMedium.IsInCheckIn()? SfxItemSet::GetItem<SfxStringItem>(pSet, SID_DOCINFO_COMMENTS, false): nullptr;
+        const SfxStringItem *pVersionItem = !rMedium.IsInCheckIn()? SfxItemSet::GetItem(pSet, SID_DOCINFO_COMMENTS, false): nullptr;
         OUString aTmpVersionURL;
 
         if ( bOk )
@@ -1885,7 +1888,7 @@ bool SfxObjectShell::SaveTo_Impl
             if ( bOk && pVersionItem && !rMedium.IsInCheckIn() )
             {
                 // store a version also
-                const SfxStringItem *pAuthorItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_DOCINFO_AUTHOR, false);
+                const SfxStringItem *pAuthorItem = SfxItemSet::GetItem(pSet, SID_DOCINFO_AUTHOR, false);
 
                 // version comment
                 util::RevisionTag aInfo;
@@ -2471,11 +2474,10 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
             if ( xModel.is() )
             {
                 const OUString& aURL {pNewMed->GetOrigURL()};
-                uno::Sequence< beans::PropertyValue > aMediaDescr;
-                TransformItems( SID_OPENDOC, pNewMed->GetItemSet(), aMediaDescr );
+                comphelper::SequenceAsHashMap aMediaDescr = TransformItems(SID_OPENDOC, pNewMed->GetItemSet());
                 try
                 {
-                    xModel->attachResource( aURL, aMediaDescr );
+                    xModel->attachResource(aURL, aMediaDescr.getAsConstPropertyValueList());
                 }
                 catch( uno::Exception& )
                 {}
@@ -2630,56 +2632,25 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
             xImporter->setTargetDocument( xComp );
 
-            uno::Sequence < beans::PropertyValue > lDescriptor;
             rMedium.GetItemSet().Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
-            TransformItems( SID_OPENDOC, rMedium.GetItemSet(), lDescriptor );
+            comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rMedium.GetItemSet());
 
-            css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
-            css::beans::PropertyValue * pNewValue = aArgs.getArray();
-            const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
             static constexpr OUString sInputStream ( u"InputStream"_ustr  );
 
-            bool bHasInputStream = false;
-            bool bHasBaseURL = false;
-            sal_Int32 nEnd = lDescriptor.getLength();
+            if (!aArgs.contains(sInputStream))
+                aArgs[sInputStream] <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
 
-            for ( sal_Int32 i = 0; i < nEnd; i++ )
-            {
-                pNewValue[i] = pOldValue[i];
-                if ( pOldValue [i].Name == sInputStream )
-                    bHasInputStream = true;
-                else if ( pOldValue[i].Name == "DocumentBaseURL" )
-                    bHasBaseURL = true;
-            }
-
-            if ( !bHasInputStream )
-            {
-                aArgs.realloc ( ++nEnd );
-                auto pArgs = aArgs.getArray();
-                pArgs[nEnd-1].Name = sInputStream;
-                pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
-            }
-
-            if ( !bHasBaseURL )
-            {
-                aArgs.realloc ( ++nEnd );
-                auto pArgs = aArgs.getArray();
-                pArgs[nEnd-1].Name = "DocumentBaseURL";
-                pArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
-            }
+            if (!aArgs.contains(u"DocumentBaseURL"_ustr))
+                aArgs[u"DocumentBaseURL"_ustr] <<= rMedium.GetBaseURL();
 
             if (xInsertPosition.is()) {
-                aArgs.realloc( nEnd += 2 );
-                auto pArgs = aArgs.getArray();
-                pArgs[nEnd-2].Name = "InsertMode";
-                pArgs[nEnd-2].Value <<= true;
-                pArgs[nEnd-1].Name = "TextInsertModeRange";
-                pArgs[nEnd-1].Value <<= xInsertPosition;
+                aArgs[u"InsertMode"_ustr] <<= true;
+                aArgs[u"TextInsertModeRange"_ustr] <<= xInsertPosition;
             }
 
             // #i119492# During loading, some OLE objects like chart will be set
             // modified flag, so needs to reset the flag to false after loading
-            bool bRtn = xLoader->filter(aArgs);
+            bool bRtn = xLoader->filter(aArgs.getAsConstPropertyValueList());
             const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
             for ( const auto& rName : aNames )
             {
@@ -2811,101 +2782,39 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
 
-        css::uno::Sequence < css::beans::PropertyValue > aOldArgs;
         SfxItemSet& rItems = rMedium.GetItemSet();
-        TransformItems( SID_SAVEASDOC, rItems, aOldArgs );
-
-        const css::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
-        css::uno::Sequence < css::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
-        css::beans::PropertyValue * pNewValue = aArgs.getArray();
 
         // put in the REAL file name, and copy all PropertyValues
-        static constexpr OUString sOutputStream ( u"OutputStream"_ustr  );
-        static constexpr OUString sStream ( u"StreamForOutput"_ustr  );
-        bool bHasOutputStream = false;
-        bool bHasStream = false;
-        bool bHasBaseURL = false;
-        bool bHasFilterName = false;
-        bool bIsRedactMode = false;
-        bool bIsPreview = false;
-        sal_Int32 nEnd = aOldArgs.getLength();
+        comphelper::SequenceAsHashMap aNewArgs = TransformItems(SID_SAVEASDOC, rItems);
+        const comphelper::SequenceAsHashMap& aMediumArgs(rMedium.GetArgs());
 
-        for ( sal_Int32 i = 0; i < nEnd; i++ )
-        {
-            pNewValue[i] = pOldValue[i];
-            if ( pOldValue[i].Name == "FileName" )
-                pNewValue[i].Value <<= rMedium.GetName();
-            else if ( pOldValue[i].Name == sOutputStream )
-                bHasOutputStream = true;
-            else if ( pOldValue[i].Name == sStream )
-                bHasStream = true;
-            else if ( pOldValue[i].Name == "DocumentBaseURL" )
-                bHasBaseURL = true;
-            else if( pOldValue[i].Name == "FilterName" )
-                bHasFilterName = true;
-        }
+        if (aNewArgs.contains(u"FileName"_ustr))
+            aNewArgs[u"FileName"_ustr] <<= rMedium.GetName();
 
-        const css::uno::Sequence<css::beans::PropertyValue>& rMediumArgs = rMedium.GetArgs();
-        for ( sal_Int32 i = 0; i < rMediumArgs.getLength(); i++ )
-        {
-            if( rMediumArgs[i].Name == "IsPreview" )
-                rMediumArgs[i].Value >>= bIsPreview;
-        }
+        if (aMediumArgs.getUnpackedValueOrDefault(u"IsPreview"_ustr, false))
+            aNewArgs[u"IsPreview"_ustr] <<= true;
+
+        if (aMediumArgs.contains(u"ConversionRequestOrigin"_ustr))
+            aNewArgs[u"ConversionRequestOrigin"_ustr] = aMediumArgs.getValue(u"ConversionRequestOrigin"_ustr);
 
         // FIXME: Handle this inside TransformItems()
         if (rItems.GetItemState(SID_IS_REDACT_MODE) == SfxItemState::SET)
-            bIsRedactMode = true;
+            aNewArgs[u"IsRedactMode"_ustr] <<= true;
 
-        if ( !bHasOutputStream )
-        {
-            aArgs.realloc ( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = sOutputStream;
-            pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
-        }
+        if (!aNewArgs.contains(u"OutputStream"_ustr))
+            aNewArgs[u"OutputStream"_ustr] <<= uno::Reference<io::XOutputStream>(new utl::OOutputStreamWrapper(*rMedium.GetOutStream()));
 
         // add stream as well, for OOX export and maybe others
-        if ( !bHasStream )
-        {
-            aArgs.realloc ( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = sStream;
-            pArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
-        }
+        if (!aNewArgs.contains(u"StreamForOutput"_ustr))
+            aNewArgs[u"StreamForOutput"_ustr] <<= uno::Reference<io::XStream>(new utl::OStreamWrapper(*rMedium.GetOutStream()));
 
-        if ( !bHasBaseURL )
-        {
-            aArgs.realloc ( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "DocumentBaseURL";
-            pArgs[nEnd-1].Value <<= rMedium.GetBaseURL( true );
-        }
+        if (!aNewArgs.contains(u"DocumentBaseURL"_ustr))
+            aNewArgs[u"DocumentBaseURL"_ustr] <<= rMedium.GetBaseURL(true);
 
-        if( !bHasFilterName )
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "FilterName";
-            pArgs[nEnd-1].Value <<= aFilterName;
-        }
+        if (!aNewArgs.contains(u"FilterName"_ustr))
+            aNewArgs[u"FilterName"_ustr] <<= aFilterName;
 
-        if (bIsRedactMode)
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "IsRedactMode";
-            pArgs[nEnd-1].Value <<= bIsRedactMode;
-        }
-
-        if (bIsPreview)
-        {
-            aArgs.realloc( ++nEnd );
-            auto pArgs = aArgs.getArray();
-            pArgs[nEnd-1].Name = "IsPreview";
-            pArgs[nEnd-1].Value <<= bIsPreview;
-        }
-
-        return xFilter->filter( aArgs );
+        return xFilter->filter(aNewArgs.getAsConstPropertyValueList());
         }
         catch (const css::uno::RuntimeException&)
         {
@@ -2981,6 +2890,20 @@ bool SfxObjectShell::ConvertTo
     return false;
 }
 
+static Any getItemSetInteractionHandler(const SfxItemSet& rItemSet)
+{
+    if (const SfxUnoAnyItem *pItem = rItemSet.GetItemIfSet(SID_INTERACTIONHANDLER, false))
+        return pItem->GetValue();
+    return Any();
+}
+
+static void setItemSetInteractionHandler(SfxItemSet& rItemSet, const Any& rOriginalInteract)
+{
+    if (rOriginalInteract.hasValue())
+        rItemSet.Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, rOriginalInteract));
+    else
+        rItemSet.ClearItem(SID_INTERACTIONHANDLER);
+}
 
 bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 {
@@ -3024,21 +2947,14 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
 
     // Save the original interaction handler
-    Any aOriginalInteract;
-    if (const SfxUnoAnyItem *pItem = pRetrMedium->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false))
-    {
-        aOriginalInteract = pItem->GetValue();
-#ifndef NDEBUG
-        // The original pRetrMedium and potential replacement pMediumTmp have the same interaction handler at this point
-        const SfxUnoAnyItem *pMediumItem = pMediumTmp->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false);
-        assert(pMediumItem && pMediumItem->GetValue() == aOriginalInteract);
-#endif
-    }
+    Any aOriginalInteract = getItemSetInteractionHandler(pRetrMedium->GetItemSet());
+    // The original pRetrMedium and potential replacement pMediumTmp have the same interaction handler at this point
+    assert(getItemSetInteractionHandler(pMediumTmp->GetItemSet()) == aOriginalInteract);
 
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
     css::uno::Reference< XInteractionHandler > xInteract;
-    const SfxUnoAnyItem* pxInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pArgs, SID_INTERACTIONHANDLER, false);
+    const SfxUnoAnyItem* pxInteractionItem = pArgs->GetItem(SID_INTERACTIONHANDLER, false);
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
         pMediumTmp->GetItemSet().Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any( xInteract ) ) );
 
@@ -3051,10 +2967,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     {
         bSaved = true;
 
-        if (aOriginalInteract.hasValue())
-            pMediumTmp->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, aOriginalInteract));
-        else
-            pMediumTmp->GetItemSet().ClearItem(SID_INTERACTIONHANDLER);
+        setItemSetInteractionHandler(pMediumTmp->GetItemSet(), aOriginalInteract);
         pMediumTmp->GetItemSet().ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         SetError(pMediumTmp->GetErrorCode());
@@ -3080,10 +2993,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         // reconnect to object storage
         DoSaveCompleted();
 
-        if (aOriginalInteract.hasValue())
-            pRetrMedium->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, aOriginalInteract));
-        else
-            pRetrMedium->GetItemSet().ClearItem(SID_INTERACTIONHANDLER);
+        setItemSetInteractionHandler(pRetrMedium->GetItemSet(), aOriginalInteract);
         pRetrMedium->GetItemSet().ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         delete pMediumTmp;
@@ -3209,12 +3119,18 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 #endif
 
-    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName,
-                         rItemSet, rArgs))
+    // Save the original interaction handler
+    Any aOriginalInteract = getItemSetInteractionHandler(GetMedium()->GetItemSet());
+
+    bool bResult = PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName,
+                                    rItemSet, rArgs);
+
+    setItemSetInteractionHandler(GetMedium()->GetItemSet(), aOriginalInteract);
+
+    if (bResult)
     {
         // Update Data on media
         SfxItemSet& rSet = GetMedium()->GetItemSet();
-        rSet.ClearItem( SID_INTERACTIONHANDLER );
         rSet.ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         rSet.ClearItem( SID_PATH );
 
@@ -3721,9 +3637,7 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         return true;
     }
 
-    bool AutoSaveEvent = false;
-    utl::MediaDescriptor lArgs(rMedium.GetArgs());
-    lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
+    bool AutoSaveEvent = rMedium.GetArgs().getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_AUTOSAVEEVENT, false);
 
     if ( pImpl->mxObjectContainer )
     {

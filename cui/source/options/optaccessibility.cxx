@@ -22,6 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <unotools/resmgr.hxx>
 #include <dialmgr.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace
 {
@@ -113,7 +114,7 @@ std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(weld::Contain
 
 OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label13"_ustr,
                           u"animationframelabel"_ustr, u"animatedgraphiclabel"_ustr, u"animatedtextlabel"_ustr,
                           u"animatedotherslabel"_ustr, u"label11"_ustr };
@@ -121,7 +122,7 @@ OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"textselinreadonly"_ustr,
@@ -130,10 +131,10 @@ OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )

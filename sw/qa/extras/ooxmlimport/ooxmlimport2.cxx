@@ -14,6 +14,8 @@
 #include <postmac.h>
 #endif
 
+#include <iterator>
+
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
@@ -22,6 +24,8 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -51,7 +55,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlimport/data/"_ustr, u"Office Open XML Text"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlimport/data/"_ustr)
     {
     }
 };
@@ -765,7 +769,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158023Import)
     createSwDoc("tdf158023_import.docx");
     verify();
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verifyReload();
 }
 
@@ -960,7 +964,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
     static constexpr OUString pLabel5 = u"\uF0D1\uF031\uF032b"_ustr;
     const OUString sFootnoteLabels[]
         = { OUString(u'\xF0A7'), u"1"_ustr, u"2"_ustr, OUString(u'\xF020'), pLabel5 };
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(SAL_N_ELEMENTS(sFootnoteLabels)), nCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(std::size(sFootnoteLabels)), nCount);
 
     pWrtShell->GotoPrevFootnoteAnchor();
     nCount--;
@@ -1333,6 +1337,86 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154370)
         CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf168567)
+{
+    createSwDoc("tdf168567.docx");
+
+    // Access the first table in the doc
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xRows = xTable->getRows();
+    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
+
+    sal_Int32 nLastRow = xRows->getCount() - 1;
+
+    // Check if all cells in the last row contain `Content Controls`(SDTs)
+    for (sal_Int32 col = 0; col < xTable->getColumns()->getCount(); col++)
+    {
+        uno::Reference<text::XText> xCell(xCellRange->getCellByPosition(col, nLastRow),
+                                          uno::UNO_QUERY);
+
+        uno::Reference<container::XEnumerationAccess> xParaAccess(xCell, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xParaAccess->createEnumeration();
+
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                 uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+
+        // Check if it's a content control
+        // Without the fix the last cell will result false
+        OUString aPortionType;
+        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInvalidRefNumPara)
+{
+    // A document with a bookmark which name starts with "__RefNumPara__", somewhere in the
+    // middle of a paragraph text. Before the fix, importing it failed an assert:
+    createSwDoc("__RefNumPara__.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169173)
+{
+    createSwDoc("tdf169173.docx");
+
+    // Access the first table in the doc
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
+
+    // Get the last row first column in the table
+    uno::Reference<text::XText> xCell(
+        xCellRange->getCellByPosition(0, xTable->getRows()->getCount() - 1), uno::UNO_QUERY);
+
+    uno::Reference<container::XEnumerationAccess> xParaAccess(xCell, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParaAccess->createEnumeration();
+
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+
+    // Block level SDTs are imported as ComboBox
+    OUString aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"TextField"_ustr, aPortionType);
+    uno::Reference<text::XTextField> xField;
+    xTextPortion->getPropertyValue(u"TextField"_ustr) >>= xField;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xField, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 } // end of anonymous namespace

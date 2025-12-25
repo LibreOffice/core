@@ -612,9 +612,15 @@ Color CalcColor( double nVal, double nVal1, const Color& rCol1, double nVal2, co
  * @param rVector sorted vector of the array
  * @param fPercentile percentile
  */
-double GetPercentile( const std::vector<double>& rArray, double fPercentile )
+std::optional<double> GetPercentile( const std::vector<double>& rArray, double fPercentile )
 {
-    assert(!rArray.empty());
+    if (rArray.empty())
+    {
+        // An empty getValues() is invalid for COLORSCALE_PERCENTILE.
+        SAL_WARN("sc", "empty COLORSCALE_PERCENTILE");
+        return std::optional<double>();
+    }
+
     SAL_WARN_IF(fPercentile < 0, "sc", "negative percentile");
     if (fPercentile < 0)
         return rArray.front();
@@ -638,7 +644,7 @@ double GetPercentile( const std::vector<double>& rArray, double fPercentile )
 
 }
 
-double ScColorScaleFormat::CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& itr) const
+std::optional<double> ScColorScaleFormat::CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& itr) const
 {
     switch((*itr)->GetType())
     {
@@ -688,11 +694,16 @@ std::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) cons
         return std::optional<Color>();
 
     ScColorScaleEntries::const_iterator itr = begin();
-    double nValMin = CalcValue(nMin, nMax, itr);
+
+    std::optional<double> aValMin = CalcValue(nMin, nMax, itr);
     Color rColMin = (*itr)->GetColor();
     ++itr;
-    double nValMax = CalcValue(nMin, nMax, itr);
+    std::optional<double> aValMax = CalcValue(nMin, nMax, itr);
     Color rColMax = (*itr)->GetColor();
+
+    if (!aValMin || !aValMax)
+        return std::optional<Color>();
+    double nValMin(*aValMin), nValMax(*aValMax);
 
     // tdf#155321 for the last percentile value, use always the end of the color scale,
     // i.e. not the first possible color in the case of repeating values
@@ -704,7 +715,7 @@ std::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) cons
         rColMin = rColMax;
         nValMin = !bEqual ? nValMax : nValMax - 1;
         rColMax = (*itr)->GetColor();
-        nValMax = CalcValue(nMin, nMax, itr);
+        nValMax = *CalcValue(nMin, nMax, itr);
         ++itr;
     }
 
@@ -902,7 +913,7 @@ void ScDataBarFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     mpFormatData->mpLowerLimit->UpdateMoveTab(rCxt);
 }
 
-double ScDataBarFormat::getMin(double nMin, double nMax) const
+std::optional<double> ScDataBarFormat::getMin(double nMin, double nMax) const
 {
     switch(mpFormatData->mpLowerLimit->GetType())
     {
@@ -929,7 +940,7 @@ double ScDataBarFormat::getMin(double nMin, double nMax) const
     return mpFormatData->mpLowerLimit->GetValue();
 }
 
-double ScDataBarFormat::getMax(double nMin, double nMax) const
+std::optional<double> ScDataBarFormat::getMax(double nMin, double nMax) const
 {
     switch(mpFormatData->mpUpperLimit->GetType())
     {
@@ -963,8 +974,13 @@ std::unique_ptr<ScDataBarInfo> ScDataBarFormat::GetDataBarInfo(const ScAddress& 
 
     double nValMin = getMinValue();
     double nValMax = getMaxValue();
-    double nMin = getMin(nValMin, nValMax);
-    double nMax = getMax(nValMin, nValMax);
+    std::optional<double> aMin = getMin(nValMin, nValMax);
+    std::optional<double> aMax = getMax(nValMin, nValMax);
+    if (!aMin || !aMax)
+        return nullptr;
+
+    double nMin(*aMin), nMax(*aMax);
+
     double nMinLength = mpFormatData->mnMinLength;
     double nMaxLength = mpFormatData->mnMaxLength;
 
@@ -1188,7 +1204,7 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
     int i = 0;
     while(itr != end())
     {
-        nValRef = CalcValue(nMin, nMax, itr);
+        nValRef = *CalcValue(nMin, nMax, itr);
         if (Compare(nVal, nValRef, itr))
         {
             nIndex = i;
@@ -1316,7 +1332,7 @@ double ScIconSetFormat::GetMaxValue() const
     }
 }
 
-double ScIconSetFormat::CalcValue(double nMin, double nMax, const ScIconSetFormat::const_iterator& itr) const
+std::optional<double> ScIconSetFormat::CalcValue(double nMin, double nMax, const ScIconSetFormat::const_iterator& itr) const
 {
     switch ((*itr)->GetType())
     {

@@ -11,7 +11,9 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/IconView.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unordered_map>
 
 class LOKTrigger
@@ -21,9 +23,17 @@ public:
 
     static void trigger_changed(weld::Entry& rEdit) { rEdit.signal_changed(); }
 
+    static void trigger_activated(weld::Entry& rEdit) { rEdit.signal_activated(); }
+
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
     static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_selection_changed(); }
+
+    static void trigger_editing_done(weld::TreeView& rTreeView,
+                                     const weld::TreeView::iter_string& rIterText)
+    {
+        rTreeView.signal_editing_done(rIterText);
+    }
 
     static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
 
@@ -46,7 +56,7 @@ public:
 
     static void trigger_popup_menu(weld::TreeView& rTreeView, const CommandEvent& rCommand)
     {
-        rTreeView.signal_popup_menu(rCommand);
+        rTreeView.signal_command(rCommand);
     }
 
     static void trigger_activated(weld::Menu& rMenu, const OUString& rIdent)
@@ -127,9 +137,9 @@ public:
         rWidget.m_aKeyReleaseHdl.Call(rEvent);
     }
 
-    static void command(const weld::DrawingArea& rArea, const CommandEvent& rCmd)
+    static void command(weld::DrawingArea& rArea, const CommandEvent& rCmd)
     {
-        rArea.m_aCommandHdl.Call(rCmd);
+        rArea.signal_command(rCmd);
     }
 
     static void enter_page(const weld::Notebook& rNotebook, const OUString& rPage)
@@ -155,6 +165,7 @@ typedef std::unordered_map<OString, OUString> ActionDataMap;
 
 VCL_DLLPUBLIC void SendNavigatorForView(const sal_uInt64 nShellId);
 VCL_DLLPUBLIC void SendSidebarForView(const sal_uInt64 nShellId);
+VCL_DLLPUBLIC void SendQuickFindForView(const sal_uInt64 nShellId);
 
 /// execute action on a widget
 VCL_DLLPUBLIC bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget,

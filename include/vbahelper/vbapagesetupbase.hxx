@@ -19,10 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBAPAGESETUPBASE_HXX
 #define INCLUDED_VBAHELPER_VBAPAGESETUPBASE_HXX
 
-#include <exception>
-
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <ooo/vba/XPageSetupBase.hpp>
 #include <sal/types.h>
 #include <vbahelper/vbadllapi.h>

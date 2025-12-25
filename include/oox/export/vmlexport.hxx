@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
-#define INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <editeng/outlobj.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <oox/dllapi.h>
@@ -90,6 +88,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
 
     /// Remember the shape type.
     sal_uInt32 m_nShapeType;
+
+    /// Remember the value of the path attribute for the shape xml element.
+    OString m_ShapePath;
 
     /// Remember the shape flags.
     ShapeFlag m_nShapeFlags;
@@ -201,7 +202,5 @@ private:
 
 
 } // namespace oox::vml
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

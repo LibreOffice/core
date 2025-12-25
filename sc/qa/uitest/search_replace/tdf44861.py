@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 44861 - EDITING: result 'Find&Replace All' wrong for particular Regular Expression
 class tdf44861(UITestCase):
-   def test_tdf44861_find_replaceAll_regexp(self):
+    def test_tdf44861_find_replaceAll_regexp(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf44861.ods")) as calc_doc:
             # 2. ctrl-h, in dialog
             # Search: ([0-9]{2})([0-9]{2})

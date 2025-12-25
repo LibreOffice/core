@@ -380,6 +380,11 @@ class ScBulkBroadcast
     ScBulkBroadcast & operator =(ScBulkBroadcast const &) = delete;
     ScBulkBroadcast & operator =(ScBulkBroadcast &&) = delete;
 
+    void ImplDestroy()
+    {
+        if (pBASM)
+            pBASM->LeaveBulkBroadcast( mnHintId );
+    }
 public:
     explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p, SfxHintId nHintId ) :
         pBASM(p),
@@ -388,10 +393,9 @@ public:
         if (pBASM)
             pBASM->EnterBulkBroadcast();
     }
-    ~ScBulkBroadcast() COVERITY_NOEXCEPT_FALSE
+    ~ScBulkBroadcast()
     {
-        if (pBASM)
-            pBASM->LeaveBulkBroadcast( mnHintId );
+        suppress_fun_call_w_exception(ImplDestroy());
     }
 };
 

@@ -30,7 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 
 #include <svx/unomodel.hxx>
 

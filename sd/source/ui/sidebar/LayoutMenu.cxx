@@ -152,14 +152,12 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     (void) rDocumentShell;
 
     mxLayoutIconView->connect_item_activated(LINK(this, LayoutMenu, LayoutSelected));
-    mxLayoutIconView->connect_mouse_press(LINK(this, LayoutMenu, MousePressHdl));
-    mxLayoutIconView->connect_query_tooltip(LINK(this, LayoutMenu, QueryTooltipHdl));
+    mxLayoutIconView->connect_command(LINK(this, LayoutMenu, CommandHdl));
     InvalidateContent();
 
     Link<::sdtools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink);
 
-    mxLayoutIconView->set_help_id(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     mxLayoutIconView->set_accessible_name(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link<const OUString&,void> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
@@ -227,48 +225,33 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return css::ui::LayoutSize(nPreferredHeight, nPreferredHeight, nPreferredHeight);
 }
 
-IMPL_LINK(LayoutMenu, MousePressHdl, const MouseEvent&, rMEvet, bool)
+IMPL_LINK(LayoutMenu, CommandHdl, const CommandEvent&, rEvent, bool)
 {
-    if (!rMEvet.IsRight())
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    const Point& pPos = rMEvet.GetPosPixel();
-    for (int i = 0; i < mxLayoutIconView->n_children(); i++)
+    Point aPos;
+    if (rEvent.IsMouseEvent())
     {
-        const ::tools::Rectangle aRect = mxLayoutIconView->get_rect(i);
-        if (aRect.Contains(pPos))
-        {
-            bInContextMenuOperation = true;
-            mxLayoutIconView->select(i);
-            ShowContextMenu(pPos);
-            bInContextMenuOperation = false;
-            break;
-        }
+        aPos = rEvent.GetMousePosPixel();
+        std::unique_ptr<weld::TreeIter> pIter = mxLayoutIconView->get_item_at_pos(aPos);
+        if (!pIter)
+            return false;
+        mxLayoutIconView->select(*pIter);
     }
-    return false;
-}
-
-IMPL_LINK(LayoutMenu, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
-{
-    const OUString sId = mxLayoutIconView->get_id(iter);
-
-    if (!sId.isEmpty())
+    else
     {
-        AutoLayout aLayout = static_cast<AutoLayout>(sId.toInt32());
-        auto aResId = GetStringResourceIdForLayout(aLayout);
-        return aResId ? SdResId(aResId) : OUString();
+        std::unique_ptr<weld::TreeIter> pSelected = mxLayoutIconView->get_selected();
+        if (!pSelected)
+            return false;
+        aPos = mxLayoutIconView->get_rect(*pSelected).Center();
     }
 
-    return OUString();
-}
+    bInContextMenuOperation = true;
+    ShowContextMenu(aPos);
+    bInContextMenuOperation = false;
 
-TranslateId LayoutMenu::GetStringResourceIdForLayout(AutoLayout aLayout) const
-{
-    auto it = maLayoutToStringMap.find(aLayout);
-    if (it != maLayoutToStringMap.end())
-        return it->second;
-
-    return TranslateId();
+    return true;
 }
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
@@ -446,7 +429,7 @@ VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
     const Size aSize(aPreviewBitmap.GetSizePixel());
     pVDev->SetOutputSizePixel(aSize);
-    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
+    pVDev->DrawBitmap(aNull, aPreviewBitmap);
 
     return pVDev;
 }
@@ -532,8 +515,9 @@ void LayoutMenu::Fill()
                 {
                     Bitmap aPreviewBitmap = GetPreviewAsBitmap(aImg);
                     mxLayoutIconView->insert(id, &sLayoutName, &sId, &aPreviewBitmap, nullptr);
+                    mxLayoutIconView->set_item_accessible_name(id, sLayoutName);
+                    mxLayoutIconView->set_item_tooltip_text(id, sLayoutName);
                 }
-                maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;
 
                 if (maPreviewSize.Width() == 0)
                     maPreviewSize = aImg.GetSizePixel();
@@ -548,12 +532,6 @@ void LayoutMenu::Fill()
 void LayoutMenu::Clear()
 {
     mxLayoutIconView->clear();
-    maLayoutToStringMap.clear();
-}
-
-IMPL_LINK(LayoutMenu, OnPopupEnd, const OUString&, sCommand, void)
-{
-    MenuSelect(sCommand);
 }
 
 void LayoutMenu::ShowContextMenu(const Point& pPos)
@@ -563,9 +541,9 @@ void LayoutMenu::ShowContextMenu(const Point& pPos)
 
     // Setup the menu.
     ::tools::Rectangle aRect(pPos, Size(1, 1));
-    mxMenu.reset();
-    mxMenuBuilder = Application::CreateBuilder(mxLayoutIconView.get(), u"modules/simpress/ui/layoutmenu.ui"_ustr);
-    mxMenu = mxMenuBuilder->weld_menu(u"menu"_ustr);
+    std::unique_ptr<weld::Builder> xMenuBuilder = Application::CreateBuilder(
+        mxLayoutIconView.get(), u"modules/simpress/ui/layoutmenu.ui"_ustr);
+    std::unique_ptr<weld::Menu> xMenu = xMenuBuilder->weld_menu(u"menu"_ustr);
 
     // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
     // the document is read-only.
@@ -573,10 +551,9 @@ void LayoutMenu::ShowContextMenu(const Point& pPos)
     const SfxItemState aState (
         mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, aResult));
     if (aState == SfxItemState::DISABLED)
-        mxMenu->set_sensitive(u"insert"_ustr, false);
+        xMenu->set_sensitive(u"insert"_ustr, false);
 
-    mxMenu->connect_activate(LINK(this, LayoutMenu, OnPopupEnd));
-    mxMenu->popup_at_rect(mxLayoutIconView.get(), aRect);
+    MenuSelect(xMenu->popup_at_rect(mxLayoutIconView.get(), aRect));
 }
 
 void LayoutMenu::MenuSelect(const OUString& rIdent)
@@ -615,8 +592,6 @@ void LayoutMenu::HandleMenuSelect(std::u16string_view rIdent)
         // shell.
         InsertPageWithLayout(GetSelectedAutoLayout());
     }
-    mxMenu.reset();
-    mxMenuBuilder.reset();
 }
 
 // Selects an appropriate layout of the slide inside control.

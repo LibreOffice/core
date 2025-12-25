@@ -83,6 +83,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/zcodec/zcodec \
     tools/source/xml/XmlWriter \
     tools/source/xml/XmlWalker \
+    tools/source/xml/XPath \
 ))
 
 ifneq ($(SYSTEM_LIBFIXMATH),TRUE)

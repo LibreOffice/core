@@ -245,7 +245,7 @@ public:
     };
 
     ScColumn(ScSheetLimits const &);
-    ~ScColumn() COVERITY_NOEXCEPT_FALSE;
+    ~ScColumn();
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyAttrArray);
 
@@ -271,7 +271,7 @@ public:
 
     void        Delete( SCROW nRow );
     void        DeleteContent( SCROW nRow, bool bBroadcast = true );
-    void        FreeAll();
+    void        ImplDestroy();
     void        FreeNotes();
     void        Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
 

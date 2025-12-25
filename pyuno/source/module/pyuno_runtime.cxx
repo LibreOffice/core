@@ -516,6 +516,24 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             // the exception base functions want to have an "args" tuple,
             // which contains the message
             PyObject_SetAttrString( ret.get(), "args", args.get() );
+            PyRef excType, excValue, excTraceback;
+            PyErr_Fetch(
+                reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject **>(&excValue),
+                reinterpret_cast<PyObject **>(&excTraceback));
+#if defined SAL_LOG_INFO
+            if (excType.is()) {
+                OUString more;
+                if (excValue.is()) {
+                    PyRef valueRep(PyObject_Repr(excValue.get()), SAL_NO_ACQUIRE);
+                    more = ": " + pyString2ustring(valueRep.get());
+                }
+                PyRef typeRep(PyObject_Repr(excType.get()), SAL_NO_ACQUIRE);
+                SAL_INFO(
+                    "pyuno.runtime",
+                    "setting exception args raised Python exception "
+                        << pyString2ustring(typeRep.get()) << more);
+            }
+#endif
         }
         return ret;
     }
@@ -606,8 +624,7 @@ lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
 {
     OUStringBuffer buf("Couldn't convert ");
     PyRef reprString( PyObject_Str(o), SAL_NO_ACQUIRE );
-    buf.appendAscii( PyUnicode_AsUTF8(reprString.get()) );
-    buf.append(" to a UNO type");
+    buf.append(pyString2ustring(reprString.get()) + " to a UNO type");
     if (pWrapped)
     {
         buf.append("; caught exception: " + *pWrapped);
@@ -645,7 +662,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
     return true;
 }
 
-Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
+Any Runtime::pyObject2Any(const PyRef & source) const
 {
     if (!impl || !impl->cargo->valid)
     {
@@ -709,7 +726,7 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
         auto sRange = asNonConstRange(s);
         for (Py_ssize_t i = 0; i < PyTuple_Size (o); i++)
         {
-            sRange[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
+            sRange[i] = pyObject2Any (PyTuple_GetItem (o, i) );
         }
         a <<= s;
     }
@@ -720,7 +737,7 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
         auto sRange = asNonConstRange(s);
         for (Py_ssize_t i = 0; i < l; i++)
         {
-            sRange[i] = pyObject2Any (PyList_GetItem (o, i), mode );
+            sRange[i] = pyObject2Any (PyList_GetItem (o, i) );
         }
         a <<= s;
     }
@@ -780,13 +797,6 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
         }
         else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
         {
-            if( ACCEPT_UNO_ANY != mode )
-            {
-                throw RuntimeException(
-                    u"uno.Any instance not accepted during method call, "
-                    "use uno.invoke instead"_ustr );
-            }
-
             a = pyObject2Any( PyRef( PyObject_GetAttrString( o , "value" ), SAL_NO_ACQUIRE) );
             Type t;
             pyObject2Any( PyRef( PyObject_GetAttrString( o, "type" ), SAL_NO_ACQUIRE ) ) >>= t;

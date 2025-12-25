@@ -531,6 +531,7 @@ private:
 
 #ifdef DBG_UTIL
     void dumpCellProperties();
+    void dumpPivotTable();
     void dumpColumnInformationPixel();
     void dumpColumnInformationHmm();
     void dumpGraphicInformation();

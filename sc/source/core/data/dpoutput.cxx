@@ -71,12 +71,6 @@
 #include <iostream>
 
 using namespace com::sun::star;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::sheet::DataPilotTablePositionData;
-using ::com::sun::star::sheet::DataPilotTableResultData;
 
 #define SC_DP_FRAME_INNER_BOLD      20
 #define SC_DP_FRAME_OUTER_BOLD      40
@@ -444,7 +438,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
     if (!xLevel.is())
         return uno::Sequence<sheet::MemberResult>();
 
-    uno::Reference<sheet::XMembersSupplier> xMSupplier(xLevel, UNO_QUERY);
+    uno::Reference<sheet::XMembersSupplier> xMSupplier(xLevel, uno::UNO_QUERY);
     if (!xMSupplier.is())
         return uno::Sequence<sheet::MemberResult>();
 
@@ -458,7 +452,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
     {
         xNA->getByName(rName);
 
-        uno::Reference<beans::XPropertySet> xMemPS(xNA->getByName(rName), UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMemPS(xNA->getByName(rName), uno::UNO_QUERY);
         if (!xMemPS.is())
             continue;
 
@@ -564,7 +558,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                             if ( xLevNam.is() && xLevRes.is() )
                             {
                                 OUString aName = xLevNam->getName();
-                                Reference<XPropertySet> xPropSet(xLevel, UNO_QUERY);
+                                uno::Reference<beans::XPropertySet> xPropSet(xLevel, uno::UNO_QUERY);
                                 // Caption equals the field name by default.
                                 // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
                                 // LayoutName is new and may not be present in external implementation
@@ -1488,7 +1482,7 @@ sal_Int32 ScDPOutput::GetRowFieldCompact(SCCOL nColQuery, SCROW nRowQuery) const
     return -1;
 }
 
-void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
+void ScDPOutput::GetPositionData(const ScAddress& rPos, sheet::DataPilotTablePositionData& rPosData)
 {
     using namespace ::com::sun::star::sheet;
 
@@ -1510,10 +1504,10 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             std::vector<DataPilotFieldFilter> aFilters;
             GetDataResultPositionData(aFilters, rPos);
 
-            DataPilotTableResultData aResData;
+            sheet::DataPilotTableResultData aResData;
             aResData.FieldFilters = comphelper::containerToSequence(aFilters);
             aResData.DataFieldIndex = 0;
-            Reference<beans::XPropertySet> xPropSet(mxSource, UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropSet(mxSource, uno::UNO_QUERY);
             if (xPropSet.is())
             {
                 sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
@@ -1598,7 +1592,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
 bool ScDPOutput::GetDataResultPositionData(std::vector<sheet::DataPilotFieldFilter>& rFilters, const ScAddress& rPos)
 {
     // Check to make sure there is at least one data field.
-    Reference<beans::XPropertySet> xPropSet(mxSource, UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(mxSource, uno::UNO_QUERY);
     if (!xPropSet.is())
         return false;
 

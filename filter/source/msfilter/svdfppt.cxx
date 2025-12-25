@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/debug.hxx>
 #include <tools/UnitConversion.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
@@ -5591,7 +5592,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nDestinationInstance ) ) // Font size in Point
     {
-        sal_uInt32 nHeight = rManager.ScalePoint( nVal );
+        constexpr sal_uInt32 MIN_FONT_HEIGHT_PT = 1;
+        sal_uInt32 nHeight = rManager.ScalePoint(std::max(nVal, MIN_FONT_HEIGHT_PT));
+
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
@@ -6168,10 +6171,12 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
     if ( !nIsBullet2 )
     {
+        // The margin value can't be greater than 51206400 Emu, which is 142240 MM100 ([ISO/IEC 29500-1] 20.1.10.72)
+        sal_uInt32 nMaxMarginVal = 142240;
         auto const nAbsLSpace = convertMasterUnitToMm100(_nTextOfs);
         auto const nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(_nBulletOfs);
         aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(-nFirstLineOffset));
-        aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nAbsLSpace));
+        aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nAbsLSpace > nMaxMarginVal ? 0 : nAbsLSpace));
     }
     rSet.Put( aLRSpaceItem );
 

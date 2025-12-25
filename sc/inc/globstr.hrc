@@ -588,6 +588,9 @@
 #define STR_SENSITIVITY_SHADOWPRICE             NC_("STR_SENSITIVITY_SHADOWPRICE", "Shadow Price")
 #define STR_SENSITIVITY_RHS                     NC_("STR_SENSITIVITY_RHS", "Constraint R.H. Side")
 #define STD_ERR_CSV_PARSE                       NC_("STD_ERR_CSV_PARSE", "An error occurred while parsing the CSV file.")
+#define STR_DATAPROVIDER_NODATABASERANGE        NC_("STR_DATAPROVIDER_NODATABASERANGE", "A Database Range is missing.")
+#define STR_SHEET_VIEW_DEFAULT_VIEW_NAME        NC_("STR_SHEET_VIEW_DEFAULT_VIEW_NAME", "Default View")
+#define STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE  NC_("STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE", "Temporary View %1")
 
 #endif
 

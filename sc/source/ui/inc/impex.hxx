@@ -95,7 +95,7 @@ public:
     ScImportExport( ScDocument&, const OUString& );   // Range/cell input
     SC_DLLPUBLIC ScImportExport( ScDocument&, const ScAddress& );
     SC_DLLPUBLIC ScImportExport( ScDocument&, const ScRange& );
-    SC_DLLPUBLIC ~ScImportExport() COVERITY_NOEXCEPT_FALSE;
+    SC_DLLPUBLIC ~ScImportExport();
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
     void SetFilterOptions( const OUString& rFilterOptions );

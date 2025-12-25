@@ -19,11 +19,8 @@
 #ifndef INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 #define INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 
-#include <exception>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <ooo/vba/XDocumentBase.hpp>

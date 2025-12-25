@@ -5,12 +5,9 @@
 
 package org.mozilla.gecko.gfx;
 
-import android.util.Log;
 import android.view.View;
 
 import org.mozilla.gecko.util.FloatUtils;
-
-import java.util.Map;
 
 /**
  * This class represents the physics for one axis of movement (i.e. either
@@ -18,71 +15,38 @@ import java.util.Map;
  * like displacement, velocity, viewport dimensions, etc. pertaining to
  * a particular axis.
  */
-abstract class Axis {
-    private static final String LOGTAG = "GeckoAxis";
 
-    private static final String PREF_SCROLLING_FRICTION_SLOW = "ui.scrolling.friction_slow";
-    private static final String PREF_SCROLLING_FRICTION_FAST = "ui.scrolling.friction_fast";
-    private static final String PREF_SCROLLING_MAX_EVENT_ACCELERATION = "ui.scrolling.max_event_acceleration";
-    private static final String PREF_SCROLLING_OVERSCROLL_DECEL_RATE = "ui.scrolling.overscroll_decel_rate";
-    private static final String PREF_SCROLLING_OVERSCROLL_SNAP_LIMIT = "ui.scrolling.overscroll_snap_limit";
-    private static final String PREF_SCROLLING_MIN_SCROLLABLE_DISTANCE = "ui.scrolling.min_scrollable_distance";
+abstract class Axis {
 
     // This fraction of velocity remains after every animation frame when the velocity is low.
-    private static float FRICTION_SLOW;
+    private static final float FRICTION_SLOW = getFrameAdjustedFriction(0.85f);
     // This fraction of velocity remains after every animation frame when the velocity is high.
-    private static float FRICTION_FAST;
+    private static final float FRICTION_FAST = getFrameAdjustedFriction(0.97f);
     // Below this velocity (in pixels per frame), the friction starts increasing from FRICTION_FAST
     // to FRICTION_SLOW.
-    private static float VELOCITY_THRESHOLD;
-    // The maximum velocity change factor between events, per ms, in %.
-    // Direction changes are excluded.
-    private static float MAX_EVENT_ACCELERATION;
-
-    // The rate of deceleration when the surface has overscrolled.
-    private static float OVERSCROLL_DECEL_RATE;
-    // The percentage of the surface which can be overscrolled before it must snap back.
-    private static float SNAP_LIMIT;
-
-    // The minimum amount of space that must be present for an axis to be considered scrollable,
-    // in pixels.
-    private static float MIN_SCROLLABLE_DISTANCE;
-
-    private static float getFloatPref(Map<String, Integer> prefs, String prefName, int defaultValue) {
-        Integer value = (prefs == null ? null : prefs.get(prefName));
-        return (float)(value == null || value < 0 ? defaultValue : value) / 1000f;
-    }
-
-    private static int getIntPref(Map<String, Integer> prefs, String prefName, int defaultValue) {
-        Integer value = (prefs == null ? null : prefs.get(prefName));
-        return (value == null || value < 0 ? defaultValue : value);
-    }
 
     static final float MS_PER_FRAME = 4.0f;
     private static final float FRAMERATE_MULTIPLIER = (1000f/60f) / MS_PER_FRAME;
+    private static final float VELOCITY_THRESHOLD = 10 / FRAMERATE_MULTIPLIER;
+    // The maximum velocity change factor between events, per ms, in %.
+    // Direction changes are excluded.
+    private static final float MAX_EVENT_ACCELERATION = 0.012f;
+
+    // The rate of deceleration when the surface has overscrolled.
+    private static final float OVERSCROLL_DECEL_RATE = getFrameAdjustedFriction(0.04f);
+    // The percentage of the surface which can be overscrolled before it must snap back.
+    private static final float SNAP_LIMIT = 0.3f;
+
+    // The minimum amount of space that must be present for an axis to be considered scrollable,
+    // in pixels.
+    private static final float MIN_SCROLLABLE_DISTANCE = 0.5f;
+
 
     //  The values we use for friction are based on a 16.6ms frame, adjust them to MS_PER_FRAME:
     //  FRICTION^1 = FRICTION_ADJUSTED^(16/MS_PER_FRAME)
     //  FRICTION_ADJUSTED = e ^ ((ln(FRICTION))/FRAMERATE_MULTIPLIER)
     static float getFrameAdjustedFriction(float baseFriction) {
         return (float)Math.pow(Math.E, (Math.log(baseFriction) / FRAMERATE_MULTIPLIER));
-    }
-
-    static void setPrefs(Map<String, Integer> prefs) {
-        FRICTION_SLOW = getFrameAdjustedFriction(getFloatPref(prefs, PREF_SCROLLING_FRICTION_SLOW, 850));
-        FRICTION_FAST = getFrameAdjustedFriction(getFloatPref(prefs, PREF_SCROLLING_FRICTION_FAST, 970));
-        VELOCITY_THRESHOLD = 10 / FRAMERATE_MULTIPLIER;
-        MAX_EVENT_ACCELERATION = getFloatPref(prefs, PREF_SCROLLING_MAX_EVENT_ACCELERATION, 12);
-        OVERSCROLL_DECEL_RATE = getFrameAdjustedFriction(getFloatPref(prefs, PREF_SCROLLING_OVERSCROLL_DECEL_RATE, 40));
-        SNAP_LIMIT = getFloatPref(prefs, PREF_SCROLLING_OVERSCROLL_SNAP_LIMIT, 300);
-        MIN_SCROLLABLE_DISTANCE = getFloatPref(prefs, PREF_SCROLLING_MIN_SCROLLABLE_DISTANCE, 500);
-        Log.i(LOGTAG, "Prefs: " + FRICTION_SLOW + "," + FRICTION_FAST + "," + VELOCITY_THRESHOLD + ","
-                + MAX_EVENT_ACCELERATION + "," + OVERSCROLL_DECEL_RATE + "," + SNAP_LIMIT + "," + MIN_SCROLLABLE_DISTANCE);
-    }
-
-    static {
-        // set the scrolling parameters to default values on startup
-        setPrefs(null);
     }
 
     private enum FlingStates {
@@ -97,8 +61,6 @@ abstract class Axis {
         PLUS,       // Overscrolled in the positive direction
         BOTH,       // Overscrolled in both directions (page is zoomed to smaller than screen)
     }
-
-    private final SubdocumentScrollHelper mSubscroller;
 
     private int mOverscrollMode; /* Default to only overscrolling if we're allowed to scroll in a direction */
     private float mFirstTouchPos;           /* Position of the first touch event on the current drag. */
@@ -116,13 +78,8 @@ abstract class Axis {
     protected abstract float getPageStart();
     protected abstract float getPageLength();
 
-    Axis(SubdocumentScrollHelper subscroller) {
-        mSubscroller = subscroller;
+    Axis() {
         mOverscrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS;
-    }
-
-    public void setOverScrollMode(int overscrollMode) {
-        mOverscrollMode = overscrollMode;
     }
 
     public int getOverScrollMode() {
@@ -207,12 +164,6 @@ abstract class Axis {
      * possible and this axis has not been scroll locked while panning. Otherwise, returns false.
      */
     boolean scrollable() {
-        // If we're scrolling a subdocument, ignore the viewport length restrictions (since those
-        // apply to the top-level document) and only take into account axis locking.
-        if (mSubscroller.scrolling()) {
-            return !mScrollingDisabled;
-        }
-
         // if we are axis locked, return false
         if (mScrollingDisabled) {
             return false;
@@ -248,7 +199,7 @@ abstract class Axis {
     }
 
     void startFling(boolean stopped) {
-        mDisableSnap = mSubscroller.scrolling();
+        mDisableSnap = false;
 
         if (stopped) {
             mFlingState = FlingStates.STOPPED;
@@ -260,12 +211,6 @@ abstract class Axis {
     /* Advances a fling animation by one step. */
     boolean advanceFling() {
         if (mFlingState != FlingStates.FLINGING) {
-            return false;
-        }
-        if (mSubscroller.scrolling() && !mSubscroller.lastScrollSucceeded()) {
-            // if the subdocument stopped scrolling, it's because it reached the end
-            // of the subdocument. we don't do overscroll on subdocuments, so there's
-            // no point in continuing this fling.
             return false;
         }
 

@@ -390,7 +390,7 @@ static void GetTextAreaOutline(
                             aSingleCharacterUnion.Union( aCharacterData.aBoundRect );
                         }
                     }
-                    rParagraph.vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back(std::move(aCharacterData));
                 }
                 for ( auto& rCharacter : rParagraph.vCharacters )
                 {
@@ -413,7 +413,7 @@ static void GetTextAreaOutline(
                 FWCharacterData aCharacterData;
                 if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, aDXArray ) )
                 {
-                    rParagraph.vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back(std::move(aCharacterData));
                 }
                 else
                 {
@@ -453,7 +453,7 @@ static void GetTextAreaOutline(
                     }
 
 
-                    rParagraph.vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back(std::move(aCharacterData));
                 }
             }
 

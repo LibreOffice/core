@@ -201,7 +201,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
         const SwFrame *pOldUp = GetUpper();
 #endif
 
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         SwTwips nOldBottom = aRectFnSet.GetBottom(GetUpper()->getFrameArea());
         SwTwips nMyPos = aRectFnSet.GetTop(getFrameArea());
 
@@ -424,7 +424,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
     // AdjustFrame is called with a swapped frame during
     // formatting but the frame is not swapped during FormatEmpty
     SwSwapIfSwapped swap( this );
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     // The Frame's size variable is incremented by Grow or decremented by Shrink.
     // If the size cannot change, nothing should happen!
@@ -867,7 +867,7 @@ void SwTextFrame::SetOffset_(TextFrameIndex const nNewOfst)
 bool SwTextFrame::CalcPreps()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(), "SwTextFrame::CalcPreps with swapped frame" );
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
@@ -1385,7 +1385,9 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             if (!bLoneAsCharAnchoredObj
                 && (bHasVisibleNumRule
                     || (nStrLen > TextFrameIndex(0)
-                        && (nEnd != rLine.GetStart() || rInf.GetRest())))
+                        && (nEnd != rLine.GetStart() || rInf.GetRest()
+                            // tdf#164718: Multiline field?
+                            || rLine.GetCurr()->IsRest())))
                )
             {
                 SplitFrame( nEnd );
@@ -1596,11 +1598,8 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
 
     // Due to performance reasons we set rReformat to COMPLETE_STRING in Init()
     // In this case we adjust rReformat
-    if( rReformat.Len() > nStrLen )
-        rReformat.Len() = nStrLen;
-
-    if( rReformat.Start() + rReformat.Len() > nStrLen )
-        rReformat.Len() = nStrLen - rReformat.Start();
+    if (auto nMax = nStrLen - rReformat.Start(); rReformat.Len() > nMax)
+        rReformat.Len() = nMax;
 
     SwTwips nOldBottom;
     if( GetOffset() && !IsFollow() )
@@ -2102,7 +2101,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
     // The previous state is saved here and restored after returning.
     SwTextFrameFormatScopeGuard stSg{ pRenderContext, this };
 
-    SwRectFnSet aRectFnSet(this);
+    SwRectFnSet aRectFnSet(*this);
 
     CalcAdditionalFirstLineOffset();
 

@@ -540,24 +540,17 @@ WinFontFace::GetVariations(const LogicalFontInstance& rFont) const
     if (!mxVariations)
     {
         mxVariations.emplace();
-        auto pDWFontFace = static_cast<const WinFontInstance&>(rFont).GetDWFontFace();
-        if (pDWFontFace)
+        sal::systools::COMReference<IDWriteFontFace5> xDWFontFace5(
+            static_cast<const WinFontInstance&>(rFont).GetDWFontFace(), sal::systools::COM_QUERY);
+        if (xDWFontFace5 && xDWFontFace5->HasVariations())
         {
-            sal::systools::COMReference<IDWriteFontFace5> xDWFontFace5;
-            auto hr = pDWFontFace->QueryInterface(__uuidof(IDWriteFontFace5),
-                                                  reinterpret_cast<void**>(&xDWFontFace5));
-            if (SUCCEEDED(hr) && xDWFontFace5->HasVariations())
+            std::vector<DWRITE_FONT_AXIS_VALUE> aAxisValues(xDWFontFace5->GetFontAxisValueCount());
+            auto hr = xDWFontFace5->GetFontAxisValues(aAxisValues.data(), aAxisValues.size());
+            if (SUCCEEDED(hr))
             {
-                std::vector<DWRITE_FONT_AXIS_VALUE> aAxisValues(
-                    xDWFontFace5->GetFontAxisValueCount());
-                hr = xDWFontFace5->GetFontAxisValues(aAxisValues.data(), aAxisValues.size());
-                if (SUCCEEDED(hr))
-                {
-                    mxVariations->reserve(aAxisValues.size());
-                    for (auto& rAxisValue : aAxisValues)
-                        mxVariations->push_back(
-                            { OSL_NETDWORD(rAxisValue.axisTag), rAxisValue.value });
-                }
+                mxVariations->reserve(aAxisValues.size());
+                for (auto& rAxisValue : aAxisValues)
+                    mxVariations->push_back({ OSL_NETDWORD(rAxisValue.axisTag), rAxisValue.value });
             }
         }
     }
@@ -1244,7 +1237,7 @@ bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& 
     return true;
 }
 
-IDWriteFontFace* WinFontInstance::GetDWFontFace() const
+const sal::systools::COMReference<IDWriteFontFace>& WinFontInstance::GetDWFontFace() const
 {
     if (!mxDWFontFace)
     {

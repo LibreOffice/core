@@ -380,6 +380,14 @@ bool ImplSdPPTImport::Import()
 
                                     nPropCount /= 6;    // 6 properties per hyperlink
 
+                                    // if a PPT contains internal links we can get the following SubAddresses
+                                    // "-1,-1,NEXT" | "-1,-1,PREV" | "-1,-1,FIRST" | "-1,-1,LAST"
+                                    static const std::map<OUString, OUString> aInternalLinks
+                                        = { { "NEXT", "nextslide" },
+                                            { "PREV", "previousslide" },
+                                            { "FIRST", "firstslide" },
+                                            { "LAST", "lastslide" } };
+
                                     for ( i = 0; i < nPropCount; i++ )
                                     {
                                         SdHyperlinkEntry aHyperlink;
@@ -489,9 +497,19 @@ bool ImplSdPPTImport::Import()
                                                     aHyperlink.aConvSubString = SdResId( STR_PAGE ) + " " + mrDoc.CreatePageNumValue( static_cast<sal_uInt16>(nPageNumber) + 1 );
                                                 }
                                             } else {
-                                                // if sub address is given but not internal, use it as it is
-                                                if ( aHyperlink.aConvSubString.isEmpty() )
+                                                // check for internal slide links
+                                                OUString aToken(OStringToOUString(
+                                                    aStringAry[2], RTL_TEXTENCODING_UTF8));
+
+                                                auto it = aInternalLinks.find(aToken);
+                                                if (it != aInternalLinks.end())
                                                 {
+                                                    aHyperlink.aConvSubString
+                                                        = "action?jump=" + it->second;
+                                                }
+                                                else if (aHyperlink.aConvSubString.isEmpty())
+                                                {
+                                                    // if sub address is given but not internal, use it as it is
                                                     aHyperlink.aConvSubString = aString;
                                                 }
                                             }

@@ -175,7 +175,7 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     pDev->SetLineColor();
 
     if ( aWallpaper.IsBitmap() )
-        pDev->DrawBitmapEx( aPos, aSize, aWallpaper.GetBitmap() );
+        pDev->DrawBitmap( aPos, aSize, aWallpaper.GetBitmap() );
     else
     {
         if( aWallpaper.GetColor() == COL_AUTO )

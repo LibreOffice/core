@@ -550,11 +550,11 @@ void writeRectangle(tools::XmlWriter& rWriter, tools::Rectangle const& rRectangl
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
     if (rRectangle.IsWidthEmpty())
-        rWriter.attribute("right", "empty"_ostr);
+        rWriter.attribute("right", "empty");
     else
         rWriter.attribute("right", rRectangle.Right());
     if (rRectangle.IsHeightEmpty())
-        rWriter.attribute("bottom", "empty"_ostr);
+        rWriter.attribute("bottom", "empty");
     else
         rWriter.attribute("bottom", rRectangle.Bottom());
 }
@@ -658,7 +658,7 @@ void MetafileXmlDump::filterAllActionTypes()
     maFilter.fill(true);
 }
 
-void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
+void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream) const
 {
     tools::XmlWriter aWriter(&rStream);
     aWriter.startDocument();
@@ -670,7 +670,7 @@ void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
     aWriter.endDocument();
 }
 
-void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter)
+void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter) const
 {
     const MapMode& aMtfMapMode = rMetaFile.GetPrefMapMode();
     rWriter.attribute("mapunit", convertMapUnitToString(aMtfMapMode.GetMapUnit()));
@@ -1582,7 +1582,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             default:
             {
                 rWriter.startElement(sCurrentElementTag);
-                rWriter.attribute("note", "not implemented in xml dump"_ostr);
+                rWriter.attribute("note", "not implemented in xml dump");
                 rWriter.endElement();
             }
             break;

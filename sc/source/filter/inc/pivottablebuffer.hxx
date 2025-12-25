@@ -23,6 +23,7 @@
 #include "PivotTableFormat.hxx"
 #include "stylesbuffer.hxx"
 #include <rtl/ref.hxx>
+#include <dpobject.hxx>
 
 namespace com::sun::star {
     namespace sheet { class XDataPilotDescriptor; }
@@ -139,19 +140,17 @@ public:
     void                importPTReferenceItem( SequenceInputStream& rStrm );
 
     /** Finalizes the field after import, creates grouping and other settings. */
-    void                finalizeImport(
-                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc );
+    void finalizeImport(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc);
     /** Finalizes the grouped date field after import. */
     void                finalizeDateGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             sal_Int32 nBaseFieldIdx );
     /** Finalizes the grouped field after import. */
     void                finalizeParentGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
-    void                finalizeImportBasedOnCache(
-                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc);
+    void finalizeImportBasedOnCache(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc);
 
     /** Returns the name of the DataPilot field in the fields collection. */
     const OUString& getDPFieldName() const { return maDPFieldName; }
@@ -169,7 +168,7 @@ public:
 
 private:
     /** Converts dimension and other settings for row, column, page, or hidden fields. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         convertRowColPageField( sal_Int32 nAxis );
 
 private:
@@ -299,9 +298,6 @@ public:
     void                importPageField( const AttributeList& rAttribs );
     /** Reads the settings of a field located in the data dimension from the dataField element. */
     void                importDataField( const AttributeList& rAttribs );
-    /** Puts the attributes to the named grab bag value. */
-    void putToInteropGrabBag(const OUString& sName, const AttributeList& rAttribs);
-
     /** Reads global pivot table settings from the PTDEFINITION record. */
     void                importPTDefinition( SequenceInputStream& rStrm );
     /** Reads the location of the pivot table from the PTLOCATION record. */
@@ -327,22 +323,22 @@ public:
     void                finalizeFieldsImport();
     /** Creates all date group fields for the specified cache field after import. */
     void                finalizeDateGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             sal_Int32 nBaseFieldIdx );
     /** Creates all grouped fields for the specified cache field after import. */
     void                finalizeParentGroupingImport(
-                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
+                            const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
 
     /** Returns the associated data pilot field for the specified pivot table field. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         getDataPilotField( const OUString& rFieldName ) const;
     /** Returns the associated data pilot field for the specified pivot table field. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         getDataPilotField( sal_Int32 nFieldIdx ) const;
     /** Returns the data layout field used to store all data fields in row/col dimension. */
-    css::uno::Reference< css::sheet::XDataPilotField >
+    rtl::Reference< ScDataPilotFieldObj >
                         getDataLayoutField() const;
 
     /** Returns the cache field with the specified index. */
@@ -354,7 +350,7 @@ public:
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;
 
     ScDPObject* getDPObject() { return mpDPObject; }
-
+    sc::PivotTableStyleInfo& getStyleInfo() { return maStyleInfo; }
 private:
     typedef RefVector< PivotTableField >        PivotTableFieldVector;
     typedef RefVector< PivotTableFilter >       PivotTableFilterVector;
@@ -386,7 +382,7 @@ private:
     PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
     rtl::Reference< ScDataPilotDescriptorBase > // css::sheet::XDataPilotDescriptor
                           mxDPDescriptor;     /// Descriptor of the DataPilot object.
-    std::map<OUString, css::uno::Any> maInteropGrabBag;
+    sc::PivotTableStyleInfo maStyleInfo;
 
 };
 

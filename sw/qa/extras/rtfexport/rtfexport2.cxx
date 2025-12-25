@@ -40,7 +40,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr)
     {
     }
 };
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45553)
     };
     createSwDoc("fdo45553.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN192129)
     };
     createSwDoc("n192129.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45543)
     auto verify = [this]() { CPPUNIT_ASSERT_EQUAL(u"この文書は"_ustr, getBodyText()); };
     createSwDoc("fdo45543.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo42465)
     auto verify = [this]() { CPPUNIT_ASSERT_EQUAL(u"kód"_ustr, getBodyText()); };
     createSwDoc("fdo42465.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45187)
     };
     createSwDoc("fdo45187.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -163,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN750757)
     };
     createSwDoc("n750757.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45563)
     };
     createSwDoc("fdo45563.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo43965)
     };
     createSwDoc("fdo43965.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN751020)
     };
     createSwDoc("n751020.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79384)
     };
     createSwDoc("fdo79384.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47326)
     };
     createSwDoc("fdo47326.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo46955)
     };
     createSwDoc("fdo46955.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81892)
     };
     createSwDoc("fdo81892.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -327,7 +327,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45394)
     };
     createSwDoc("fdo45394.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48104)
     auto verify = [this]() { CPPUNIT_ASSERT_EQUAL(2, getPages()); };
     createSwDoc("fdo48104.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47107)
     };
     createSwDoc("fdo47107.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44176)
     };
     createSwDoc("fdo44176.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -386,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo39053)
     };
     createSwDoc("fdo39053.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -408,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48356)
     };
     createSwDoc("fdo48356.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -431,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48023)
 
     createSwDoc("fdo48023.rtf");
     verify();
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48876)
     };
     createSwDoc("fdo48876.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48193)
     auto verify = [this]() { CPPUNIT_ASSERT_EQUAL(u"foo1bar"_ustr, getBodyText()); };
     createSwDoc("fdo48193.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -479,7 +479,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
 
     createSwDoc("fdo44211.rtf");
     verify();
-    saveAndReload(u"Rich Text Format"_ustr);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -506,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48037)
     };
     createSwDoc("fdo48037.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -518,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47764)
     };
     createSwDoc("fdo47764.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -534,7 +534,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo38786)
     };
     createSwDoc("fdo38786.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -547,7 +547,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN757651)
     };
     createSwDoc("n757651.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -566,7 +566,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49501)
     };
     createSwDoc("fdo49501.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49271)
     };
     createSwDoc("fdo49271.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -590,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo50539)
     };
     createSwDoc("fdo50539.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -605,7 +605,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo50665)
     };
     createSwDoc("fdo50665.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -626,7 +626,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49659)
     };
     createSwDoc("fdo49659.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -645,7 +645,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo46966)
     };
     createSwDoc("fdo46966.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -660,7 +660,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76633)
     };
     createSwDoc("fdo76633.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48033)
     };
     createSwDoc("fdo48033.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -724,7 +724,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53594)
     };
     createSwDoc("fdo53594.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -736,7 +736,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo36089)
     };
     createSwDoc("fdo36089.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -745,7 +745,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48446)
     auto verify = [this]() { getParagraph(1, u"\u0418\u043C\u044F"_ustr); };
     createSwDoc("fdo48446.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -758,7 +758,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47495)
     };
     createSwDoc("fdo47495.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -770,7 +770,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAllGapsWord)
     };
     createSwDoc("all_gaps_word.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52389)
     };
     createSwDoc("fdo52389.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -802,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49655)
     };
     createSwDoc("fdo49655.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -821,7 +821,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62805)
     };
     createSwDoc("fdo62805.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -834,7 +834,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52475)
     };
     createSwDoc("fdo52475.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -847,7 +847,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo55493)
     };
     createSwDoc("fdo55493.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -910,7 +910,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69384)
     };
     createSwDoc("fdo69384-paste.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -959,7 +959,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShptxtPard)
     };
     createSwDoc("shptxt-pard.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -984,7 +984,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoDhgt)
     };
     createSwDoc("do-dhgt.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -997,7 +997,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDplinehollow)
     };
     createSwDoc("dplinehollow.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1012,7 +1012,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLeftmarginDefault)
     };
     createSwDoc("leftmargin-default.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1024,7 +1024,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDppolyline)
     };
     createSwDoc("dppolyline.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1040,7 +1040,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo56512)
     };
     createSwDoc("fdo56512.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1057,7 +1057,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52989)
     };
     createSwDoc("fdo52989.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1074,7 +1074,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo54473)
     };
     createSwDoc("fdo54473.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1086,7 +1086,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49934)
     };
     createSwDoc("fdo49934.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1099,7 +1099,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo57886)
     };
     createSwDoc("fdo57886.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1116,7 +1116,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58076)
     };
     createSwDoc("fdo58076.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1131,7 +1131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo57678)
     };
     createSwDoc("fdo57678.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1143,7 +1143,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo54612)
     };
     createSwDoc("fdo54612.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1160,7 +1160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58933)
     };
     createSwDoc("fdo58933.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1182,7 +1182,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44053)
     };
     createSwDoc("fdo44053.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1194,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48440)
     };
     createSwDoc("fdo48440.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1206,7 +1206,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58646line)
     };
     createSwDoc("fdo58646line.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1218,7 +1218,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78502)
     };
     createSwDoc("fdo78502.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1230,7 +1230,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58646)
     };
     createSwDoc("fdo58646.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1245,7 +1245,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59419)
     };
     createSwDoc("fdo59419.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1261,7 +1261,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHexCRLF)
     };
     createSwDoc("hexcrlf.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1274,7 +1274,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58076_2)
     };
     createSwDoc("fdo58076-2.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1303,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59638)
     };
     createSwDoc("fdo59638.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1326,7 +1326,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo60722)
     };
     createSwDoc("fdo60722.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1349,7 +1349,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoDhgtOld)
     };
     createSwDoc("do-dhgt-old.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1364,7 +1364,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo61909)
     };
     createSwDoc("fdo61909.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1385,7 +1385,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62288)
     };
     createSwDoc("fdo62288.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1402,7 +1402,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37716)
     };
     createSwDoc("fdo37716.rtf");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
     verify();
 }
 
@@ -1410,7 +1410,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo51916)
 {
     // Complex nested table caused a crash.
     createSwDoc("fdo51916.rtf");
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::RTF);
 }
 
 } // end of anonymous namespace

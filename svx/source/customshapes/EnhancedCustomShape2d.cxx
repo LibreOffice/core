@@ -57,6 +57,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <cstdlib>
@@ -2820,15 +2821,15 @@ void EnhancedCustomShape2d::AdaptObjColor(
 
             if ( nColorCount || 0.0 != dBrightness )
             {
-                basegfx::BColorStops aColorStops(aBGradient.GetColorStops());
-                for (auto& candidate : aColorStops)
+                basegfx::BColorStops aColorStops;
+                for (auto const& candidate : aBGradient.GetColorStops())
                 {
-                    candidate = basegfx::BColorStop(
-                        candidate.getStopOffset(),
-                        GetColorData(
+                    basegfx::BColor aBColor = GetColorData(
                             Color(candidate.getStopColor()),
                             nColorCount ? std::min(nColorIndex, nColorCount-1) : nColorIndex,
-                            dBrightness ).getBColor());
+                            dBrightness).getBColor();
+
+                    aColorStops.addStop(candidate.getStopOffset(), aBColor);
                 }
                 aBGradient.SetColorStops(aColorStops);
             }

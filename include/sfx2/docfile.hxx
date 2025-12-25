@@ -52,6 +52,7 @@ class XModel;
 }
 namespace ucbhelper { class Content; }
 namespace svl::crypto { class SigningContext; }
+namespace comphelper { class SequenceAsHashMap; }
 
 class SvKeyValueIterator;
 class SfxFilter;
@@ -133,7 +134,7 @@ public:
 
     SfxItemSet&         GetItemSet() const;
     void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-    const css::uno::Sequence<css::beans::PropertyValue> & GetArgs() const;
+    const comphelper::SequenceAsHashMap& GetArgs() const;
     void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
     void                ReOpen();
@@ -143,7 +144,12 @@ public:
 
     void                CheckFileDate( const css::util::DateTime& aInitDate );
     [[nodiscard]] bool  DocNeedsFileDateCheck() const;
+    // Returns the 'DateModified' of the URLObject. With bIgnoreOldValue of
+    // false returns previously cached value. If true, or no cached value
+    // available, fetches it anew.
     css::util::DateTime const & GetInitFileDate( bool bIgnoreOldValue );
+    // Clear a previously cached 'DateModified' cache.
+    void ClearInitFileDateCache();
 
     css::uno::Reference< css::ucb::XContent > GetContent() const;
     const OUString& GetPhysicalName() const;

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/color.hxx>
 #include <memory>
@@ -28,6 +27,7 @@ namespace com::sun::star::rendering
 {
     class  XPolyPolygon2D;
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
 /* Definition of tools::PolyPolygon interface */

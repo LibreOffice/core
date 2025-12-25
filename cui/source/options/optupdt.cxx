@@ -197,21 +197,20 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 
 static inline OUString WrapString(const OUString& aStr)
 {
-    OUString sResult;
-    OUString sPos;
+    OUStringBuffer sResult;
     int nPos = 0;
     for (int i = 0; i < aStr.getLength(); i++)
     {
-        sPos = aStr.subView(i, 1);
-        sResult += sPos;
-        if ((nPos > 50) && (sPos == ";"))
+        std::u16string_view sPos = aStr.subView(i, 1);
+        sResult.append(sPos);
+        if ((nPos > 50) && (sPos == u";"))
         {
-            sResult += "\n";
+            sResult.append("\n");
             nPos = 0;
         }
         nPos++;
     }
-    return sResult;
+    return sResult.toString();
 }
 
 void SvxOnlineUpdateTabPage::UpdateUserAgent()
@@ -249,14 +248,14 @@ std::unique_ptr<SfxTabPage> SvxOnlineUpdateTabPage::Create( weld::Container* pPa
 
 OUString SvxOnlineUpdateTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr,        u"lastchecked"_ustr, u"neverchecked"_ustr,    u"labeldest"_ustr,
                           u"destpathlabel"_ustr, u"labelagent"_ustr,  u"useragent_label"_ustr, u"useragent_changed"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"autocheck"_ustr, u"autodownload"_ustr, u"extrabits"_ustr };
@@ -264,7 +263,7 @@ OUString SvxOnlineUpdateTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"everyday"_ustr, u"everyweek"_ustr, u"everymonth"_ustr };
@@ -272,13 +271,13 @@ OUString SvxOnlineUpdateTabPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     // some buttons are not included
-    sAllStrings += m_xPrivacyPolicyButton->get_label() + " ";
+    sAllStrings.append(m_xPrivacyPolicyButton->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )

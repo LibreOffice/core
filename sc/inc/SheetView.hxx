@@ -12,11 +12,37 @@
 #include "scdllapi.h"
 #include "types.hxx"
 #include <rtl/ustring.hxx>
+#include "SheetViewTypes.hxx"
+#include <optional>
 
 class ScTable;
 
 namespace sc
 {
+/** Stores the sort order and can reverse the sorting of rows (unsorting). */
+struct SC_DLLPUBLIC SortOrderReverser
+{
+public:
+    SCROW mnFirstRow;
+    SCROW mnLastRow;
+    std::vector<SCCOLROW> maOrder;
+
+    /** Reverse the sort for the input row and output the unsorted row.
+     *
+     * Uses the sort order. The row must be between range of [first row, last row]
+     * or it will return the input row without modification.
+     **/
+    SCROW unsort(SCROW nRow) const;
+    SCROW resort(SCROW nRow) const;
+
+    /** Adds or combines the order indices.
+     *
+     * Adds the indices if none are present, or combines the indices if the order indices
+     * were already added previously.
+     **/
+    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
+};
+
 /** Stores information of a sheet view.
  *
  * A sheet view is a special view of a sheet that can be filtered and sorted
@@ -29,11 +55,15 @@ private:
     bool mbSynced = true;
     OUString maName;
 
+    std::optional<SortOrderReverser> moSortOrder;
+    SheetViewID mnID;
+
 public:
-    SheetView(ScTable* pTable, OUString const& rName);
+    SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID);
 
     ScTable* getTablePointer() const;
     SCTAB getTableNumber() const;
+    SheetViewID getID() const { return mnID; }
 
     OUString const& GetName() { return maName; }
 
@@ -45,6 +75,15 @@ public:
 
     /** Is the sheet view synced with its default view. */
     bool isSynced() const { return mbSynced; }
+
+    std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
+
+    /** Adds or combines the order indices.
+     *
+     * Adds the indices if none are present, or combines the indices if the order indices
+     * were already added previously.
+     **/
+    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
 };
 }
 

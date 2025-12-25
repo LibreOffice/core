@@ -1,5 +1,12 @@
 ---
 assumeFilename: sw/source/core/doc/docnew.cxx
+customAssumeFilenames:
+    # Need -I/.../sw/source/writerfilter/inc
+    sw/source/writerfilter: sw/source/writerfilter/dmapper/DomainMapper.cxx
+    # Need -I/.../workdir/UnpackedTarball/cppunit/include to work
+    sw/qa/inc: sw/qa/core/test_ToxMiscTest.cxx
+    # Needs -I/...workdir/CustomTarget/oox/generated
+    sw/source/filter/ww8: sw/source/filter/ww8/docxattributeoutput.cxx
 excludelist:
     sw/sdi/swslots.hrc:
     # Needed for sdi files to compile

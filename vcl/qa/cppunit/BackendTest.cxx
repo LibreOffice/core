@@ -16,6 +16,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
+#include <config_cairo_rgba.h>
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
@@ -486,7 +487,7 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawBitmapExWithAlpha24bpp()
+    void testDrawBitmapWithAlpha24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
@@ -500,6 +501,7 @@ public:
 
     void testDrawMask24bpp()
     {
+#if !ENABLE_CAIRO_RGBA
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
@@ -508,6 +510,7 @@ public:
         exportImage(u"08-05_mask_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+#endif
     }
 
     void testDrawBlend24bpp()
@@ -546,7 +549,7 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawBitmapExWithAlpha32bpp()
+    void testDrawBitmapWithAlpha32bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
@@ -1138,7 +1141,7 @@ public:
         bitmap.Erase(COL_BLUE);
         // No alpha, this will actually call SalGraphics::DrawBitmap(), but still check
         // the alpha of the device is handled correctly.
-        device->DrawBitmapEx(Point(2, 2), bitmap);
+        device->DrawBitmap(Point(2, 2), bitmap);
         exportDevice(u"blend_extended_01.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
@@ -1149,14 +1152,14 @@ public:
         device->Erase();
         AlphaMask alpha(Size(5, 5));
         alpha.Erase(0); // opaque
-        device->DrawBitmapEx(Point(2, 2), Bitmap(bitmap, alpha));
+        device->DrawBitmap(Point(2, 2), Bitmap(bitmap, alpha));
         exportDevice(u"blend_extended_02.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
 
         device->Erase();
         alpha.Erase(255); // transparent
-        device->DrawBitmapEx(Point(2, 2), Bitmap(bitmap, alpha));
+        device->DrawBitmap(Point(2, 2), Bitmap(bitmap, alpha));
         exportDevice(u"blend_extended_03.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
@@ -1169,7 +1172,7 @@ public:
         BitmapScopedWriteAccess alphaWrite(alpha);
         alphaWrite->SetPixelIndex(0, 0, 255); // opaque
         alphaWrite.reset();
-        device->DrawBitmapEx(Point(2, 2), Bitmap(bitmap, alpha));
+        device->DrawBitmap(Point(2, 2), Bitmap(bitmap, alpha));
         exportDevice(u"blend_extended_04.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
@@ -1206,16 +1209,16 @@ public:
         // alpha 127 will make COL_LIGHTRED -> COL_RED and the same for blue
         alpha.Erase(127);
         // Normal device.
-        device->DrawBitmapEx(Point(5, 5), Size(-4, -4), bitmap);
-        device->DrawBitmapEx(Point(15, 15), Size(4, 4), bitmap);
+        device->DrawBitmap(Point(5, 5), Size(-4, -4), bitmap);
+        device->DrawBitmap(Point(15, 15), Size(4, 4), bitmap);
         exportDevice(u"draw_alpha_bitmap_mirrored_01.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, device->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, device->GetPixel(Point(3, 2)));
         device->Erase();
-        device->DrawBitmapEx(Point(5, 5), Size(-4, -4), Bitmap(bitmap, alpha));
-        device->DrawBitmapEx(Point(15, 15), Size(4, 4), Bitmap(bitmap, alpha));
+        device->DrawBitmap(Point(5, 5), Size(-4, -4), Bitmap(bitmap, alpha));
+        device->DrawBitmap(Point(15, 15), Size(4, 4), Bitmap(bitmap, alpha));
         exportDevice(u"draw_alpha_bitmap_mirrored_02.png"_ustr, device);
         CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(17, 18)));
@@ -1223,16 +1226,16 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(3, 2)));
         device->Erase();
         // Now with alpha device.
-        alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), bitmap);
-        alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), bitmap);
+        alphaDevice->DrawBitmap(Point(5, 5), Size(-4, -4), bitmap);
+        alphaDevice->DrawBitmap(Point(15, 15), Size(4, 4), bitmap);
         exportDevice(u"draw_alpha_bitmap_mirrored_03.png"_ustr, alphaDevice);
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, alphaDevice->GetPixel(Point(17, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(2, 2)));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, alphaDevice->GetPixel(Point(3, 2)));
         alphaDevice->Erase();
-        alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), Bitmap(bitmap, alpha));
-        alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), Bitmap(bitmap, alpha));
+        alphaDevice->DrawBitmap(Point(5, 5), Size(-4, -4), Bitmap(bitmap, alpha));
+        alphaDevice->DrawBitmap(Point(15, 15), Size(4, 4), Bitmap(bitmap, alpha));
         exportDevice(u"draw_alpha_bitmap_mirrored_04.png"_ustr, alphaDevice);
         CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(18, 18)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, alphaDevice->GetPixel(Point(17, 18)));
@@ -1554,7 +1557,7 @@ public:
     CPPUNIT_TEST(testDrawBitmap24bpp);
     CPPUNIT_TEST(testDrawTransformedBitmap24bpp);
     CPPUNIT_TEST(testComplexDrawTransformedBitmap24bpp);
-    CPPUNIT_TEST(testDrawBitmapExWithAlpha24bpp);
+    CPPUNIT_TEST(testDrawBitmapWithAlpha24bpp);
     CPPUNIT_TEST(testDrawMask24bpp);
     CPPUNIT_TEST(testDrawBlend24bpp);
 
@@ -1562,7 +1565,7 @@ public:
 
     CPPUNIT_TEST(testDrawBitmap32bpp);
     CPPUNIT_TEST(testDrawTransformedBitmap32bpp);
-    CPPUNIT_TEST(testDrawBitmapExWithAlpha32bpp);
+    CPPUNIT_TEST(testDrawBitmapWithAlpha32bpp);
     CPPUNIT_TEST(testDrawMask32bpp);
     CPPUNIT_TEST(testDrawBlend32bpp);
 

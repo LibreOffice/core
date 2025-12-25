@@ -166,10 +166,10 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
     else
     {
         ScDocument& rDoc = mpViewShell->GetDocument();
-        const ScMergeAttr* pItem = rDoc.GetAttr(
+        const ScMergeAttr& rItem = rDoc.GetAttr(
             static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE );
-        if ( pItem && pItem->GetRowMerge() > 0 )
-            nRows = pItem->GetRowMerge();
+        if ( rItem.GetRowMerge() > 0 )
+            nRows = rItem.GetRowMerge();
     }
 
     return nRows;
@@ -197,10 +197,10 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_In
     else
     {
         ScDocument& rDoc = mpViewShell->GetDocument();
-        const ScMergeAttr* pItem = rDoc.GetAttr(
+        const ScMergeAttr& rItem = rDoc.GetAttr(
             static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE );
-        if ( pItem && pItem->GetColMerge() > 0 )
-            nColumns = pItem->GetColMerge();
+        if ( rItem.GetColMerge() > 0 )
+            nColumns = rItem.GetColMerge();
     }
 
     return nColumns;

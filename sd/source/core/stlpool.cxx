@@ -47,6 +47,7 @@
 #include <svx/sdr/table/tabledesign.hxx>
 #include <editeng/autokernitem.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/debug.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <editeng/lrspitem.hxx>

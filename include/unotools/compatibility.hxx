@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 

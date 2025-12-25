@@ -80,6 +80,7 @@ DOCUMENT = SFDocuments.SF_Document
 BASE = SFDocuments.SF_Base
 CALC = SFDocuments.SF_Calc
 CALCREFERENCE = SFDocuments.SF_CalcReference
+SHAPE = SFDocuments.SF_Shape
 CHART = SFDocuments.SF_Chart
 FORM = SFDocuments.SF_Form
 FORMCONTROL = SFDocuments.SF_FormControl
@@ -5758,6 +5759,30 @@ class SFDocuments:
                 """
             ...
 
+        def CreateShapeFromFile(self,
+                                shapename: str,
+                                imagefile: FILE,
+                                range: RANGE = ...,
+                                aslink: bool = ...) -> SHAPE | None:
+            """
+                Insert a new shape in a Calc sheet from a disk file containing its image.
+                The shape will be positioned on, anchored to the given range,
+                and sized according to the image original size.
+                    Args
+                        ``shapename``: the user-defined name of the new shape.
+
+                        ``imagefile``: the input file in the ``FileSystem`` notation.
+
+                        ``range``: the top-left position of the new shape.
+                        It may be a cell range, but only the top-left cell will be considered.
+                        The default is the top-left cell of the current selection.
+
+                        ``aslink``: When ``True`` (default = ``False``), the file is not embedded in the document.
+                    Returns
+                        A new SF_Shape class instance or None.
+                """
+            ...
+
         def DAvg(self, range: RANGE) -> float:
             """
                 Get the number of the numeric values stored in the given range, excluding values from filtered
@@ -6409,6 +6434,23 @@ class SFDocuments:
                         A string representing the modified area as a range of cells.
                 """
             ...
+
+        def Shapes(self, sheetname: SHEETNAME, shapename: str = ...) -> SHAPE | tuple[str, ...]:
+            """
+                Depending on the parameters provided this method will return:
+
+                    - A tuple with the names of all the shapes contained in a given sheet (if the ``shapename`` argument is absent).
+                    - A ``SFDocuments.Shape`` service instance representing the shape specified as argument.
+
+                    Args
+                        ``sheetname``: the name of the sheet, as a string, from which the shape(s) will be retrieved.
+
+                        ``shapename``: the name corresponding to a shape stored in the specified sheet.
+                        If this argument is absent, the method will return a list with the names of all shapes available
+                        in the sheet.
+                """
+            ...
+
         def ShiftDown(self, range: RANGE, wholerow: bool = ..., rows: int = ...) -> RANGE:
             """
                 Moves a given range of cells downwards by inserting empty rows.
@@ -6545,6 +6587,104 @@ class SFDocuments:
             """
 
     # #########################################################################
+    # SF_Shape CLASS
+    # #########################################################################
+    class SF_Shape(SFServices):
+        """
+            The SF_Shape module is focused on the description of shapes/images/drawing objects stored in documents.
+            In the actual release only shapes in Calc sheets are considered.
+            """
+
+        XRectangle: UNO
+        """ A com.sun.star.awt.XRectangle object delimiting the shape. Distances are expressed in 1/100th mm. """
+        XShape: UNO
+        """ Returns the ``com.sun.star.drawing.XShape`` object representing the shape. """
+
+        def Anchor(self,
+                   anchortype: Literal['CELL', 'CELLRESIZE', 'PAGE'],
+                   cell: RANGE = ...
+                   ) -> bool:
+            """
+                Define the anchor type and the cell to which the shape has to be anchored.
+                    Args
+                        ``anchortype``: 'CELL' = the shape is anchored "to cell",
+                        'CELLRESIZE' = the shape is anchored "to cell (resize with cell)",
+                        'PAGE' = the shape is anchored to the sheet.
+
+                        ``cell``: a unique cell or a cell range in the sheet where the shape is located.
+                        Only the top-left cell of a range will be considered.
+                        The argument is ignored and may be omitted when ``anchortype`` = 'PAGE'.
+                    Returns
+                        ``True`` when successful.
+                """
+            ...
+
+        def ExportToFile(self,
+                         filename: FILE,
+                         imagetype: Literal['gif', 'jpeg', 'png', 'svg', 'tiff'] = ...,
+                         overwrite: bool = ...
+                         ) -> bool:
+            """
+                Saves the shape as an image file in a specified location.
+                    Args
+                        ``filename``: identifies the path and file name where the image will be saved.
+                        It must follow the notation defined in ``SF_FileSystem.FileNaming``.
+
+                        ``imagetype``: the name of the image type to be created.
+                        The following values are accepted: ``gif, jpeg, png`` (default), ``svg`` and ``tiff``.
+
+                        ``overwrite``: specifies if the destination file may be overwritten. Defaults to ``False``.
+                    Returns
+                        ``True`` if the image file could be successfully created.
+                """
+            ...
+
+        def Pick(self) -> bool:
+            """
+                Make the actual shape the current selection.
+                This allows to execute thereafter a menu command on the shape.
+                    Returns
+                        `True`` when successful.
+                """
+            ...
+
+        def Resize(self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...) -> bool:
+            """
+                Changes the position of the shape in the current sheet and modifies its width and height.
+                    Args
+                        ``xpos``: specify the new ``X`` position of the chart.
+
+                        ``ypos``: specify the new ``Y`` position of the chart.
+
+                        ``width``: specify the new width of the chart.
+
+                        ``height``: specify the new height of the chart.
+                    Returns
+                        ``True`` if repositioning/resizing was successful.
+                    Note
+                        - All arguments are provided as integer values that correspond to ``1/100`` of a millimeter.
+                        - Omitted arguments leave the corresponding actual values unchanged.
+                        - Negative arguments are ignored.
+                """
+            ...
+
+        def Rotate(self, angle: int | float, pivot: str | tuple[int, int] = ...) -> bool:
+            """
+                Rotate the shape using a given pivot point with a given angle.
+                    Args
+                        ``angle``: specify the magnitude of the rotation, expressed in degrees.
+                        An angle may be positive or negative. Positive means counterclockwise.
+                        It is to be understood as absolute vs. the usual X-axis orientation.
+
+                        ``pivot``: specify the point about which the rotation will take place. It can be
+                             - either an array (x, y) being the coordinates of the pivot point in 1/100 mm. The origin (0, 0) is the top-left corner of the sheet where the shape is located.
+                             - or, when the intent is to use the shape's natural pivot points, a string combining 2 of next uppercase characters (other characters are ignored): L(eft), R(ight), C(enter) and T(op), B(ottom), M(iddle). Default = 'CM'.
+                    Returns
+                        ``True`` when successful.
+                """
+            ...
+
+    # #########################################################################
     # SF_Chart CLASS
     # #########################################################################
     class SF_Chart(SFServices):
@@ -6553,6 +6693,7 @@ class SFDocuments:
             stored in Calc sheets.
             With this service, many chart types and chart characteristics available
             in the user interface can be read or modified.
+            Charts are a special type of shapes. The "Chart" service is a subclass of the "Shape" service.
             """
 
         ChartType: Literal['Pie', 'Bar', 'Donut', 'Column', 'Area', 'Line', 'XY', 'Bubble', 'Net']
@@ -6594,46 +6735,6 @@ class SFDocuments:
         XTableChart: UNO
         """ Returns the ``com.sun.star.table.XTableChart`` object representing the data being displayed in the chart.
         """
-
-        def ExportToFile(self,
-                         filename: FILE,
-                         imagetype: Literal['gif', 'jpeg', 'png', 'svg', 'tiff'] = ...,
-                         overwrite: bool = ...
-                         ) -> bool:
-            """
-                Saves the chart as an image file in a specified location.
-                    Args
-                        ``filename``: identifies the path and file name where the image will be saved.
-                        It must follow the notation defined in ``SF_FileSystem.FileNaming``.
-
-                        ``imagetype``: the name of the image type to be created.
-                        The following values are accepted: ``gif, jpeg, png`` (default), ``svg`` and ``tiff``.
-
-                        ``overwrite``: specifies if the destination file can be overwritten. Defaults to ``False``.
-                    Returns
-                        ``True`` if the image file could be successfully created.
-                """
-            ...
-
-        def Resize(self, xpos: int = ..., ypos: int = ..., width: int = ..., height: int = ...) -> bool:
-            """
-                Changes the position of the chart in the current sheet and modifies its width and height.
-                    Args
-                        ``xpos``: specify the new ``X`` position of the chart.
-
-                        ``ypos``: specify the new ``Y`` position of the chart.
-
-                        ``width``: specify the new width of the chart.
-
-                        ``height``: specify the new height of the chart.
-                    Returns
-                        ``True`` if repositioning/resizing was successful.
-                    Note
-                        - All arguments are provided as integer values that correspond to ``1/100`` of a millimeter.
-                        - Omitted arguments leave the corresponding actual values unchanged.
-                        - Negative arguments are ignored.
-                """
-            ...
 
     # #########################################################################
     # SF_Form CLASS

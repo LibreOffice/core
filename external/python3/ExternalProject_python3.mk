@@ -12,8 +12,10 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	bzip2 \
 	expat \
+	$(call gb_Helper_optional,LZMA,lzma) \
 	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
+	$(call gb_Helper_optional,SQLITE3,sqlite3) \
 	zlib \
 ))
 
@@ -42,6 +44,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
 			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
 			/p:zlibDir=$(gb_UnpackedTarball_workdir)/zlib \
+			/p:sqlite3Dir=$(gb_UnpackedTarball_workdir)/sqlite3 \
+			/p:lzmaDir=$(gb_UnpackedTarball_workdir)/lzma/ \
+			/p:mpdecimalDir=$(gb_UnpackedTarball_workdir)/python3/Modules/_decimal/ \
 			/p:libffiOutDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs \
 			/p:libffiIncludeDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/include \
 			/maxcpucount \
@@ -111,7 +116,11 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		CC="$(strip $(CC) \
 			$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
 			$(if $(SYSTEM_BZIP2),,-I$(gb_UnpackedTarball_workdir)/bzip2) \
-			$(if $(SYSTEM_EXPAT),,-I$(gb_UnpackedTarball_workdir)/expat/lib) \
+			$(if $(SYSTEM_EXPAT),, \
+				-I$(gb_UnpackedTarball_workdir)/expat \
+				-I$(gb_UnpackedTarball_workdir)/expat/lib) \
+			$(if $(SYSTEM_SQLITE3),,-I$(gb_UnpackedTarball_workdir)/sqlite3) \
+			$(if $(SYSTEM_LZMA),,-I$(gb_UnpackedTarball_workdir)/lzma/src/liblzma/api) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
@@ -121,6 +130,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSTEM_BZIP2),,-L$(gb_UnpackedTarball_workdir)/bzip2) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
+			$(if $(SYSTEM_SQLITE3),,-L$(gb_StaticLibrary_WORKDIR)) \
+			$(if $(SYSTEM_LZMA),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
 			$(gb_LTOFLAGS) \
 			)" \
@@ -160,7 +171,6 @@ $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_Exter
 	$(call gb_Output_announce,python3 - remove reference to installroot from scripts,build,CUS,5)
 	$(COMMAND_ECHO)cd $(python3_fw_prefix)/bin/ && \
 	for file in \
-		2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		pip$(PYTHON_VERSION_MAJOR) \
 		pip$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
@@ -202,16 +212,12 @@ $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_Exte
 
 $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove the stuff we don't need to ship,build,CUS,5)
-	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/dbm
-	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/sqlite3
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/curses
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/idlelib
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/tkinter
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/turtledemo
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
 	# Then the binary libraries
-	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.$(python3_EXTENSION_MODULE_SUFFIX).so
-	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.$(python3_EXTENSION_MODULE_SUFFIX).so

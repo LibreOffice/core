@@ -51,7 +51,7 @@
 #include <DrawDocShell.hxx>
 #include <sdresid.hxx>
 #include <fusel.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;

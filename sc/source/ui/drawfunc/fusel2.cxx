@@ -121,8 +121,8 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         const ScViewData& rViewData = rViewShell.GetViewData();
         ScDocument& rDoc = rViewData.GetDocument();
         SCTAB nTab = rViewData.CurrentTabForData();
-        ScDocShell& rDocSh = rViewData.GetDocShell();
-        bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || rDocSh.IsReadOnly();
+        ScDocShell* pDocSh = rViewData.GetDocShell();
+        bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
         // search the last object (on top) in the object list
         SdrObjListIter aIter( pPageView->GetObjList(), SdrIterMode::DeepNoGroups, true );
@@ -134,8 +134,8 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
                 {
                     const ScAddress& rNotePos = pCaptData->maStart;
                     // skip caption objects of notes in protected cells
-                    const ScProtectionAttr* pProtAttr =  rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION );
-                    bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell();
+                    const ScProtectionAttr& rProtAttr =  rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION );
+                    bool bProtectAttr = rProtAttr.GetProtection() || rProtAttr.GetHideCell();
                     if( !bProtectAttr || !bProtectDoc )
                         return true;
                 }

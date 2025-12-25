@@ -25,8 +25,9 @@
 #include <sal/log.hxx>
 #include <svl/whiter.hxx>
 #include <tools/bigint.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <getallcharpropids.hxx>
 #include <svx/dialmgr.hxx>
@@ -1007,7 +1008,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                         const SfxPoolItem* pItem = rSet.GetItem(XATTR_FILLTRANSPARENCE);
                         if (pItem)
                         {
-                            sal_uInt16 nTransparency = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sal_uInt16 nTransparency = static_cast<const XFillTransparenceItem*>(pItem)->GetValue();
                             sPayload = OUString::number(nTransparency);
 
                             sPayload = ".uno:FillTransparence=" + sPayload;

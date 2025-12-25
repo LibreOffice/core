@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <UITools.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>

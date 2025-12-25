@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/memorystream.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -50,7 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uri;
 
-using utl::MediaDescriptor;
 using comphelper::IDocPasswordVerifier;
 using comphelper::DocPasswordVerifierResult;
 
@@ -96,6 +96,14 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
         case W_TOKEN(compatSetting):
             if (!maContextStack.empty() && (maContextStack.back() == W_TOKEN(compat)))
                 parseSettings(aAttribs);
+            break;
+
+        // cases for xl/workbook.xml
+        case XLS_TOKEN(workbook):
+            break;
+        case XLS_TOKEN(fileVersion):
+            if (!maContextStack.empty() && (maContextStack.back() == XLS_TOKEN(workbook)))
+                parseWorkbook(aAttribs);
             break;
 
         // cases for _rels/.rels
@@ -164,16 +172,28 @@ void FilterDetectDocHandler::parseSettings(const AttributeList& rAttribs)
     }
 }
 
+void FilterDetectDocHandler::parseWorkbook(const AttributeList& rAttribs)
+{
+    if (maOOXMLVariant != OOXMLVariant::ECMA_Transitional)
+        return;
+
+    // tdf#165180 Remember filter when opening file as 'Office Open XML Spreadsheet'
+    // (fileVersion can only exist once, and lowestEdited can only be defined once - else corrupt)
+    // lowestEdited: 4 is 2007, 5 is 2010, 6 is 2013 and 2016, 7 is 2019-2024
+    const sal_Int32 nDefaultValue = rAttribs.getInteger(XML_lastEdited, 99);
+    if (rAttribs.getInteger(XML_lowestEdited, nDefaultValue) > 4)
+        maOOXMLVariant = OOXMLVariant::ISO_Transitional; // Excel 2010+
+}
+
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getStringDefaulted( XML_Type);
 
-    // tdf#131936 Remember filter when opening file as 'Office Open XML Text'
-    if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties"))
-        maOOXMLVariant = OOXMLVariant::ISO_Transitional;
-    else if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"))
-        maOOXMLVariant = OOXMLVariant::ECMA_Transitional;
-    else if (aType.startsWithIgnoreAsciiCase("http://purl.oclc.org/ooxml/officeDocument"))
+    // Although the spec says that ISO_Transitional uses the "officedocument" URI for core.xml,
+    // MS errata admits that MS Office just uses the old "package" URI from ECMA_376_1ST_EDITION.
+    // So core-properties can't be used to identify a non-ECMA_376_1ST_EDITION document...
+
+    if (aType.startsWithIgnoreAsciiCase("http://purl.oclc.org/ooxml/officeDocument"))
         maOOXMLVariant = OOXMLVariant::ISO_Strict;
 
     if ( aType != "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
@@ -231,14 +251,32 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_vi
     }
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
-        return u"MS Excel 2007 XML"_ustr;
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return u"Office Open XML Spreadsheet"_ustr; // Excel 2010+
+            case OOXMLVariant::ECMA_Transitional:
+                return u"MS Excel 2007 XML"_ustr;
+        }
+    }
 
     if (rContentType == u"application/vnd.ms-excel.sheet.macroEnabled.main+xml")
         return u"MS Excel 2007 VBA XML"_ustr;
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
         rContentType == u"application/vnd.ms-excel.template.macroEnabled.main+xml" )
-        return u"MS Excel 2007 XML Template"_ustr;
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return u"Office Open XML Spreadsheet Template"_ustr; // Excel 2010+
+            case OOXMLVariant::ECMA_Transitional:
+                return u"MS Excel 2007 XML Template"_ustr;
+        }
+    }
 
     if ( rContentType == u"application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
         return u"MS Excel 2007 Binary"_ustr;
@@ -336,16 +374,16 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
 
 } // namespace
 
-Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
+Reference< XInputStream > FilterDetect::extractUnencryptedPackage( comphelper::SequenceAsHashMap& rMediaDescriptor ) const
 {
     const bool bRepairPackage(rMediaDescriptor.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false));
     // try the plain input stream
-    Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
+    Reference<XInputStream> xInputStream( rMediaDescriptor[ utl::MediaDescriptor::PROP_INPUTSTREAM ], UNO_QUERY );
     if (!xInputStream.is() || lclIsZipPackage(mxContext, xInputStream, bRepairPackage))
         return xInputStream;
 
     // check if a temporary file is passed in the 'ComponentData' property
-    Reference<XStream> xDecrypted( rMediaDescriptor.getComponentDataEntry( u"DecryptedPackage"_ustr ), UNO_QUERY );
+    Reference<XStream> xDecrypted( utl::MediaDescriptor::getComponentDataEntry(rMediaDescriptor, u"DecryptedPackage"_ustr ), UNO_QUERY );
     if( xDecrypted.is() )
     {
         Reference<XInputStream> xDecryptedInputStream = xDecrypted->getInputStream();
@@ -375,14 +413,15 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     (according to the verifier), or with an empty string if
                     user has cancelled the password input dialog. */
                 PasswordVerifier aVerifier( aDecryptor );
-                Sequence<NamedValue> aEncryptionData = rMediaDescriptor.requestAndVerifyDocPassword(
+                Sequence<NamedValue> aEncryptionData = utl::MediaDescriptor::requestAndVerifyDocPassword(
+                                                rMediaDescriptor,
                                                 aVerifier,
                                                 comphelper::DocPasswordRequestType::MS,
                                                 &aDefaultPasswords );
 
                 if( !aEncryptionData.hasElements() )
                 {
-                    rMediaDescriptor[ MediaDescriptor::PROP_ABORTED ] <<= true;
+                    rMediaDescriptor[ utl::MediaDescriptor::PROP_ABORTED ] <<= true;
                 }
                 else
                 {
@@ -392,12 +431,12 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     // if decryption was unsuccessful (corrupted file or any other reason)
                     if (!aDecryptor.decrypt(xTempStream))
                     {
-                        rMediaDescriptor[ MediaDescriptor::PROP_ABORTED ] <<= true;
+                        rMediaDescriptor[ utl::MediaDescriptor::PROP_ABORTED ] <<= true;
                     }
                     else
                     {
                         // store temp file in media descriptor to keep it alive
-                        rMediaDescriptor.setComponentDataEntry( u"DecryptedPackage"_ustr, Any( Reference<XStream>(xTempStream) ) );
+                        utl::MediaDescriptor::setComponentDataEntry(rMediaDescriptor, u"DecryptedPackage"_ustr, Any( Reference<XStream>(xTempStream) ) );
 
                         Reference<XInputStream> xDecryptedInputStream = xTempStream->getInputStream();
                         if (lclIsZipPackage(mxContext, xDecryptedInputStream, bRepairPackage))
@@ -435,11 +474,11 @@ Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames()
 OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq )
 {
     OUString aFilterName;
-    MediaDescriptor aMediaDescriptor( rMediaDescSeq );
+    comphelper::SequenceAsHashMap aMediaDescriptor(rMediaDescSeq);
 
     try
     {
-        aMediaDescriptor.addInputStream();
+        utl::MediaDescriptor::addInputStream(aMediaDescriptor);
 
         /*  Get the unencrypted input stream. This may include creation of a
             temporary file that contains the decrypted package. This temporary
@@ -458,6 +497,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
             aParser.registerNamespace(NMSP_doc); // for W_TOKEN
+            aParser.registerNamespace(NMSP_xls); // for XLS_TOKEN
 
             OUString aFileName;
             aMediaDescriptor[utl::MediaDescriptor::PROP_URL] >>= aFileName;
@@ -470,11 +510,20 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             try
             {
                 // Text documents can't use .rels to determine maOOXMLVariant. Use compatibilityMode
-                 aParser.parseStream(aZipStorage, u"word/settings.xml"_ustr);
+                aParser.parseStream(aZipStorage, u"word/settings.xml"_ustr);
             }
             catch(const Exception&)
             {
                 // not a MS Word text document, or file might not exist
+                try
+                {
+                    // Spreadsheets distinguish maOOXMLVariant using fileVersion lowestEdited
+                    aParser.parseStream(aZipStorage, u"xl/workbook.xml"_ustr);
+                }
+                catch(const Exception&)
+                {
+                    // not a MS Excel spreadsheet document, or file might not exist
+                }
             }
             // Order is critical: .rels and then settings.xml must be parsed before [Content_Types]
             aParser.parseStream( aZipStorage, u"[Content_Types].xml"_ustr );
@@ -482,7 +531,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     }
     catch( const Exception& )
     {
-        if ( aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED, false ) )
+        if ( aMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_ABORTED, false ) )
             /*  The user chose to abort detection, e.g. by hitting 'Cancel' in the password input dialog,
                 so we have to return non-empty type name to abort the detection loop. The loading code is
                 supposed to check whether the "Aborted" flag is present in the descriptor, and to not attempt
@@ -493,7 +542,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
                 already know that the file is OLE encrypted package, so trying with other type detectors doesn't
                 make much sense anyway.
             */
-            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME, OUString() );
+            aFilterName = aMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
     }
 
     // write back changed media descriptor members

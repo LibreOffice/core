@@ -220,9 +220,12 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
         SAL_INFO("sd.eppt", "animate value " << i << ": " << aKeyTimes[i]);
         if (aValues[i].hasValue())
         {
+            // ST_TLTimeAnimateValueTime can't be negative ([ISO/IEC 29500-1] 19.7.39)
+            sal_uInt32 nTime = static_cast<sal_uInt32>(std::max(0.0, aKeyTimes[i] * 100000.0));
+
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
                                 sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()), XML_tm,
-                                OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
+                                sax_fastparser::UseIf(OString::number(nTime), nTime != 0));
             pFS->startElementNS(XML_p, XML_val);
             ValuePair aPair;
             if (aValues[i] >>= aPair)
@@ -488,7 +491,7 @@ class PPTXAnimationExport
     void WriteAnimationNodeEffect();
     void WriteAnimationNodeCommand();
     /// Handles XAudio nodes, used for both video and audio.
-    void WriteAnimationNodeMedia();
+    void WriteAnimationNodeMedia(const sal_Int16 nParentNodeType);
     void WriteAnimationNodeCommonPropsStart();
     void WriteAnimationTarget(const Any& rTarget);
     void WriteAnimationCondList(const std::vector<Cond>& rList, sal_Int32 nToken);
@@ -935,9 +938,11 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         {
             const char* sType = convertTextAnimationType(xIterate->getIterateType());
 
+            // ST_TLTime should be unsigned int ([ISO/IEC 29500-1] 19.7.38)
+            sal_uInt32 nTime = static_cast<sal_uInt32>(xIterate->getIterateInterval() * 1000);
+
             mpFS->startElementNS(XML_p, XML_iterate, XML_type, sType);
-            mpFS->singleElementNS(XML_p, XML_tmAbs, XML_val,
-                                  OString::number(xIterate->getIterateInterval() * 1000));
+            mpFS->singleElementNS(XML_p, XML_tmAbs, XML_val, OString::number(nTime));
             mpFS->endElementNS(XML_p, XML_iterate);
         }
     }
@@ -946,18 +951,28 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     if (!aChildNodes.empty())
     {
         bool bSubTnLst = false;
-        mpFS->startElementNS(XML_p, XML_childTnLst);
+        bool bWroteChildTnList = false;
         for (const NodeContextPtr& pChildContext : aChildNodes)
         {
             if (pChildContext->isValid())
             {
                 if (pChildContext->isOnSubTnLst())
                     bSubTnLst = true;
+                else if (pChildContext->getNode()->getType() == AnimationNodeType::ANIMATEPHYSICS)
+                    ; // ignore we don't support exporting this node type
                 else
+                {
+                    if (!bWroteChildTnList)
+                    {
+                        bWroteChildTnList = true;
+                        mpFS->startElementNS(XML_p, XML_childTnLst);
+                    }
                     WriteAnimationNode(pChildContext);
+                }
             }
         }
-        mpFS->endElementNS(XML_p, XML_childTnLst);
+        if (bWroteChildTnList)
+            mpFS->endElementNS(XML_p, XML_childTnLst);
 
         if (bSubTnLst)
         {
@@ -1059,7 +1074,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
     mpFS->endElementNS(XML_p, XML_cmd);
 }
 
-void PPTXAnimationExport::WriteAnimationNodeMedia()
+void PPTXAnimationExport::WriteAnimationNodeMedia(const sal_Int16 nParentNodeType)
 {
     SAL_INFO("sd.eppt", "write animation node media");
     Reference<XAudio> xAudio(getCurrentNode(), UNO_QUERY);
@@ -1111,6 +1126,14 @@ void PPTXAnimationExport::WriteAnimationNodeMedia()
     }
     else
     {
+        // Don't export audio node if the context doesn't have any triggers
+        if (!convertEffectNodeType(nParentNodeType))
+            return;
+
+        // Don't export audio node if embedding audio was unsuccessful
+        if (!xShape.is() && (sRelId.isEmpty() || sUrl.isEmpty()))
+            return;
+
         bool bNarration = xAudio->getNarration();
         mpFS->startElementNS(XML_p, XML_audio, XML_isNarration, bNarration ? "1" : "0");
         bool bHideDuringShow = xAudio->getHideDuringShow();
@@ -1193,7 +1216,7 @@ void PPTXAnimationExport::WriteAnimationNode(const NodeContextPtr& pContext)
             WriteAnimationNodeCommand();
             break;
         case XML_audio:
-            WriteAnimationNodeMedia();
+            WriteAnimationNodeMedia(pSavedContext->getEffectNodeType());
             break;
         default:
             SAL_WARN("sd.eppt", "export ooxml node type: " << xmlNodeType);

@@ -163,21 +163,15 @@ namespace logging
             Sequence< NamedValue > aSettings( nServiceSettingCount );
             if ( nServiceSettingCount )
             {
-                const OUString* pSettingNames = aSettingNames.getConstArray();
-                const OUString* pSettingNamesEnd = aSettingNames.getConstArray() + aSettingNames.getLength();
-                NamedValue* pSetting = aSettings.getArray();
-
-                for (   ;
-                        pSettingNames != pSettingNamesEnd;
-                        ++pSettingNames, ++pSetting
-                    )
-                {
-                    pSetting->Name = *pSettingNames;
-                    pSetting->Value = xServiceSettingsNode->getByName( *pSettingNames );
-
-                    if ( _pSettingTranslation )
-                        _pSettingTranslation( _rxLogger, pSetting->Name, pSetting->Value );
-                }
+                std::transform(
+                    aSettingNames.begin(), aSettingNames.end(), aSettings.getArray(),
+                    [&xServiceSettingsNode, &_rxLogger, _pSettingTranslation](const OUString& rName)
+                    {
+                        Any a = xServiceSettingsNode->getByName(rName);
+                        if (_pSettingTranslation)
+                            _pSettingTranslation(_rxLogger, rName, a);
+                        return NamedValue(rName, a);
+                    });
             }
 
             OUString sServiceName;

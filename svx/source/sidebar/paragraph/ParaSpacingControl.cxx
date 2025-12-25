@@ -24,6 +24,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/editids.hrc>
 #include <svx/ParaSpacingControl.hxx>
+#include <tools/debug.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>

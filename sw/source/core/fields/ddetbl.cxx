@@ -62,7 +62,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate 
     }
 }
 
-SwDDETable::~SwDDETable()
+void SwDDETable::ImplDestroy()
 {
     SwDoc& rDoc = GetFrameFormat()->GetDoc();
     if (!rDoc.IsInDtor() && !m_aLines.empty())
@@ -81,6 +81,11 @@ SwDDETable::~SwDDETable()
         delete m_pDDEType;
         m_pDDEType = nullptr;
     }
+}
+
+SwDDETable::~SwDDETable()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)

@@ -110,8 +110,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
     if (bHasSelection)
     {
         // iteration will start top to bottom
-        if (m_pCurrentPam->GetPoint()->nNode > m_pCurrentPam->GetMark()->nNode)
-            m_pCurrentPam->Exchange();
+        m_pCurrentPam->Normalize();
     }
 
     auto const& pNodes = rWrtSh.GetNodes();

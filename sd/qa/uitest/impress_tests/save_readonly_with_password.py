@@ -16,7 +16,7 @@ import os.path
 class save_readonly_with_password(UITestCase):
 
     #Bug 145511 - FILESAVE to PPTX as read-only with additional password protection for editing not working
-   def test_save_to_pptx(self):
+    def test_save_to_pptx(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf144374-tmp.pptx")
@@ -62,7 +62,7 @@ class save_readonly_with_password(UITestCase):
 
                 self.assertFalse(document.isReadonly())
 
-   def test_save_to_odp(self):
+    def test_save_to_odp(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "readonly_with_password_tmp.odp")

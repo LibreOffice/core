@@ -77,6 +77,8 @@ UIName SwDBFieldType::GetName() const
     return m_sName;
 }
 
+void SwDBFieldType::SetName(const UIName& newName) { m_sName = newName; }
+
 void SwDBFieldType::ReleaseRef()
 {
     OSL_ENSURE(m_nRefCnt > 0, "RefCount < 0!");

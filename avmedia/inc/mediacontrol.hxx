@@ -24,7 +24,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
 constexpr sal_Int32 AVMEDIA_CONTROLOFFSET = 6;

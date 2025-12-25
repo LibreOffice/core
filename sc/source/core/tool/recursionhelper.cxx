@@ -230,7 +230,7 @@ void ScRecursionHelper::CleanTemporaryGroupCells()
 
 bool ScRecursionHelper::CheckFGIndependence(ScFormulaCellGroup* pFG)
 {
-    if (pFGSet && pFGSet->count(pFG))
+    if (pFGSet && pFGSet->contains(pFG))
     {
         bGroupsIndependent = false;
         return false;

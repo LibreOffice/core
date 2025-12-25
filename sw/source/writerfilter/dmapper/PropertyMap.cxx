@@ -1542,6 +1542,70 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     m_sPageStyleName = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
 }
 
+void SectionPropertyMap::EmulateSectPrBelowSpacing(DomainMapper_Impl& rDM_Impl)
+{
+    if (!m_xStartingRange || !m_xPreStartingRange || rDM_Impl.IsInFootOrEndnote())
+        return;
+
+    SectionPropertyMap* pPrevSection = rDM_Impl.GetLastSectionContext();
+    if (!pPrevSection || !pPrevSection->GetBelowSpacing().has_value())
+        return; // no consolidated spacing to emulate
+
+    // MS Word is excessively consistent about consolidating paragraph top and bottom spacing.
+    // They even consolidate spacing between section breaks!
+    // The complication here is that the sectPr paragraph (which Writer needs to discard)
+    // defines the bottom spacing that exists at the end of the section.
+
+    // Emulation: apply the previous section's belowSpacing
+    // to the last paragraph in that section.
+    // This emulation works because below spacing before a page break normally has no relevance.
+
+    if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_continuous)
+    {
+        // The complication with continuous breaks is that the below spacing of a sectPr
+        // does NOT directly affect the layout.
+        // [So (except before a page break) it MUST NOT be applied to the previous para.]
+        // However, it IS (indirectly) used to reduce the top margin of the following paragraph.
+        uno::Reference<beans::XPropertySet> const xPSet(m_xStartingRange, uno::UNO_QUERY);
+        if (!xPSet)
+            return; // TODO tdf#170119: emulation not possible without a page break
+
+        style::BreakType eBreakType(style::BreakType_NONE);
+        xPSet->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
+        if (eBreakType != style::BreakType_PAGE_BEFORE)
+            return; // emulation not possible without a page break.
+    }
+
+    // m_xPreStartingRange may have skipped over a table as the last thing before the break!
+    // If so, then the below spacing can be ignored since tables don't have below spacing.
+    // Also, if m_xStartingRange starts with a table (which also doesn't have above spacing)
+    // then again the below spacing can be ignored since no consolidation is needed.
+    auto pCursor = dynamic_cast<SwXTextCursor*>(m_xStartingRange.get());
+    if (!pCursor || pCursor->GetPaM()->GetPointNode().FindTableNode())
+        return; // no emulation needed: section starts with a table (i.e. a zero top margin)
+
+    SwPaM aPaM(pCursor->GetPaM()->GetPointNode()); // at start of section, contentIndex(0)
+    if (!aPaM.Move(fnMoveBackward, GoInContent)) // now at end of previous section
+        assert(false && "impossible: with a previous section, this must be able to move backwards");
+
+    if (aPaM.GetPointNode().FindTableNode())
+        return; // no emulation possible: DOCX tables don't have bottom spacing
+    // TODO: somehow emulate on tables - but only if it is round-trippable...
+
+    try
+    {
+        const uno::Any aBelowSpacingOfPrevSection(*pPrevSection->GetBelowSpacing());
+        const OUString sProp(getPropertyName(PROP_PARA_BOTTOM_MARGIN));
+        uno::Reference<beans::XPropertySet> xLastParaInPrevSection(m_xPreStartingRange,
+                                                                    uno::UNO_QUERY_THROW);
+        xLastParaInPrevSection->setPropertyValue(sProp, aBelowSpacingOfPrevSection);
+    }
+    catch (uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("writerfilter", "Failed to transfer below spacing to last para.");
+    }
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     SectionPropertyMap* pPrevSection = rDM_Impl.GetLastSectionContext();
@@ -1642,6 +1706,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             setHeaderFooterProperties(rDM_Impl);
             InheritOrFinalizePageStyles( rDM_Impl );
             ApplySectionProperties( xSection, rDM_Impl );  //depends on InheritOrFinalizePageStyles
+
+            EmulateSectPrBelowSpacing(rDM_Impl);
+
             uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
             if ( m_bIsFirstSection && !m_sPageStyleName.isEmpty() && xRangeProperties.is() )
             {
@@ -1941,25 +2008,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         ApplyBorderToPageStyles( rDM_Impl, m_eBorderApply, m_eBorderOffsetFrom );
         ApplyPaperSource(rDM_Impl);
 
-        // Emulation: now apply the previous section's unused belowSpacing
-        // to the last paragraph before the section page break
-        // so that the consolidation/collapse of this section's 1st paragraph's aboveSpacing
-        // works correctly (since below spacing before a page break otherwise has no relevance).
-        if (pPrevSection && pPrevSection->GetBelowSpacing().has_value() && m_xPreStartingRange.is())
-        {
-            try
-            {
-                const uno::Any aBelowSpacingOfPrevSection(*pPrevSection->GetBelowSpacing());
-                const OUString sProp(getPropertyName(PROP_PARA_BOTTOM_MARGIN));
-                uno::Reference<beans::XPropertySet> xLastParaInPrevSection(m_xPreStartingRange,
-                                                                           uno::UNO_QUERY_THROW);
-                xLastParaInPrevSection->setPropertyValue(sProp, aBelowSpacingOfPrevSection);
-            }
-            catch (uno::Exception&)
-            {
-                TOOLS_WARN_EXCEPTION("writerfilter", "Transfer below spacing to last para.");
-            }
-        }
+        EmulateSectPrBelowSpacing(rDM_Impl);
 
         try
         {
@@ -2175,6 +2224,8 @@ void SectionPropertyMap::SetStart( const uno::Reference< text::XTextRange >& xRa
     {
         uno::Reference<text::XParagraphCursor> const xPCursor(
             m_xStartingRange->getText()->createTextCursorByRange(m_xStartingRange), uno::UNO_QUERY_THROW);
+        // CAUTION: gotoPreviousParagraph skips over tables,
+        // so this range does not necessarily indicate the end of the previous section
         xPCursor->gotoPreviousParagraph(false);
         m_xPreStartingRange = xPCursor;
     }

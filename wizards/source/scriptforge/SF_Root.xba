@@ -79,6 +79,7 @@ Private ConfigurationProvider _
 Private PackageProvider		As Object	&apos; com.sun.star.comp.deployment.PackageInformationProvider
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
 Private GraphicExportFilter	As Object	&apos; com.sun.star.drawing.GraphicExportFilter
+Private GraphicProvider		As Object	&apos; com.sun.star.graphic.GraphicProvider
 Private Toolkit				As Object	&apos; com.sun.star.awt.Toolkit
 Private ModuleUIConfigurationManagerSupplier _
 							As Object	&apos; com.sun.star.ui.ModuleUIConfigurationManagerSupplier
@@ -152,6 +153,7 @@ Private Sub Class_Initialize()
 	Set PackageProvider = Nothing
 	Set MailService = Nothing
 	Set GraphicExportFilter = Nothing
+	Set GraphicProvider = Nothing
 	Set Toolkit = Nothing
 	Set ModuleUIConfigurationManagerSupplier = Nothing
 	Set TransientDocument = Nothing
@@ -879,6 +881,20 @@ Try:
 									&amp;	&quot;%5: An identifier\n&quot; _
 									&amp;	&quot;%6: A file name&quot; _
 					)
+	&apos;	SF_Calc.CreateShapeFromFile
+			.AddText(	Context := &quot;DUPLICATESHAPE&quot; _
+						, MsgId := &quot;A shape with the same name exists already in the sheet.\n\n&quot; _
+									&amp; &quot;« %1 » = %2\n&quot; _
+									&amp; &quot;« %3 » = %4\n&quot; _
+									&amp; &quot;« %5 » = %6\n&quot; _
+						, Comment :=	&quot;SF_Calc CreateShapeFromFile\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A string\n&quot; _
+									&amp;	&quot;%3: An identifier\n&quot; _
+									&amp;	&quot;%4: A string\n&quot; _
+									&amp;	&quot;%5: An identifier\n&quot; _
+									&amp;	&quot;%6: A file name&quot; _
+					)
 	&apos;	SF_Calc.ExportRangeToFile
 			.AddText(	Context := &quot;RANGEEXPORT&quot; _
 						, MsgId := &quot;The given range could not be exported.\n&quot; _
@@ -891,13 +907,13 @@ Try:
 									&amp;	&quot;%3: An identifier\n&quot; _
 									&amp;	&quot;%4: True or False\n&quot; _
 					)
-	&apos;	SF_Chart.ExportToFile
-			.AddText(	Context := &quot;CHARTEXPORT&quot; _
-						, MsgId := &quot;The chart could not be exported.\n&quot; _
+	&apos;	SF_Shape.ExportToFile
+			.AddText(	Context := &quot;SHAPEEXPORT&quot; _
+						, MsgId := &quot;The shape could not be exported.\n&quot; _
 									&amp; &quot;Either the destination file must not be overwritten, or it has a read-only attribute set.\n\n&quot; _
 									&amp; &quot;%1 = &apos;%2&apos;\n&quot; _
 									&amp; &quot;%3 = %4&quot; _
-						, Comment :=	&quot;SF_Chart.ExportToFile error message\n&quot; _
+						, Comment :=	&quot;SF_Shape.ExportToFile error message\n&quot; _
 									&amp;	&quot;%1: An identifier\n&quot; _
 									&amp;	&quot;%2: A file name\n&quot; _
 									&amp;	&quot;%3: An identifier\n&quot; _

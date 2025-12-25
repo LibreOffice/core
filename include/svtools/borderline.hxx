@@ -21,7 +21,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <o3tl/hash_combine.hxx>
 #include <tools/long.hxx>
 
 /**

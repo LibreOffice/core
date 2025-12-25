@@ -94,6 +94,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -110,7 +111,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/unofill.hxx>
 #include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -191,7 +192,7 @@ static void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStor
 
     _rModel->SetReadOnly((nOpenMode & embed::ElementModes::WRITE) != embed::ElementModes::WRITE);
 }
-static void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
+static void lcl_stripLoadArguments( comphelper::SequenceAsHashMap& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
 {
     _rDescriptor.erase( u"StatusIndicator"_ustr );
     _rDescriptor.erase( u"InteractionHandler"_ustr );
@@ -199,7 +200,7 @@ static void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Seq
     _rDescriptor >> _rArgs;
 }
 
-static void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDescriptor, uno::Reference< task::XStatusIndicator >& _rxStatusIndicator,
+static void lcl_extractAndStartStatusIndicator( const comphelper::SequenceAsHashMap& _rDescriptor, uno::Reference< task::XStatusIndicator >& _rxStatusIndicator,
     uno::Sequence< uno::Any >& _rCallArgs )
 {
     try
@@ -1110,7 +1111,7 @@ sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, 
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
-    utl::MediaDescriptor aDescriptor( _aArguments );
+    comphelper::SequenceAsHashMap aDescriptor(_aArguments);
 
     m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( false );
     try
@@ -1127,7 +1128,7 @@ sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, 
     return true;
 }
 
-void OReportDefinition::fillArgs(utl::MediaDescriptor& _aDescriptor)
+void OReportDefinition::fillArgs(comphelper::SequenceAsHashMap& _aDescriptor)
 {
     uno::Sequence<beans::PropertyValue> aComponentData;
     aComponentData = _aDescriptor.getUnpackedValueOrDefault(u"ComponentData"_ustr,aComponentData);
@@ -1230,7 +1231,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
 {
     m_pImpl->m_xStorage = _xStorageToLoadFrom;
 
-    utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
+    comphelper::SequenceAsHashMap aDescriptor(_aMediaDescriptor);
     fillArgs(aDescriptor);
     aDescriptor.createItemIfMissing(u"Storage"_ustr,uno::Any(_xStorageToLoadFrom));
 
@@ -1259,7 +1260,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
         uno::Reference<XComponent> xComponent(getXWeak(),uno::UNO_QUERY);
         xImporter->setTargetDocument(xComponent);
 
-        utl::MediaDescriptor aTemp;
+        comphelper::SequenceAsHashMap aTemp;
         aTemp << aDelegatorArguments;
         xFilter->filter(aTemp.getAsConstPropertyValueList());
 
@@ -1289,7 +1290,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     // create XStatusIndicator
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     uno::Sequence< uno::Any > aDelegatorArguments;
-    utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
+    comphelper::SequenceAsHashMap aDescriptor(_aMediaDescriptor);
     lcl_extractAndStartStatusIndicator( aDescriptor, xStatusIndicator, aDelegatorArguments );
     bool AutoSaveEvent = false;
     aDescriptor[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;

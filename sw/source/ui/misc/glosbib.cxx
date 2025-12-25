@@ -19,7 +19,7 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>

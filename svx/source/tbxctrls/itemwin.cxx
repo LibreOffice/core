@@ -219,7 +219,7 @@ namespace
         if(rBitmap.GetSizePixel().Width() >= rSize.Width() && rBitmap.GetSizePixel().Height() >= rSize.Height())
         {
             rBitmap.Scale(rSize);
-            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmap);
+            pVirtualDevice->DrawBitmap(Point(0, 0), rBitmap);
         }
         else
         {
@@ -229,7 +229,7 @@ namespace
             {
                 for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                 {
-                    pVirtualDevice->DrawBitmapEx(
+                    pVirtualDevice->DrawBitmap(
                         Point(x, y),
                         rBitmap);
                 }
@@ -257,7 +257,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
             rBox.append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
@@ -284,7 +284,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XGradientListRef &pList)
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
             rBox.append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
@@ -311,7 +311,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
         const XBitmapEntry* pEntry = pList->GetBitmap( i );
         Bitmap aBitmap = pEntry->GetGraphicObject().GetGraphic().GetBitmap();
         formatBitmapToSize(aBitmap, aSize);
-        pVD->DrawBitmapEx(Point(), aBitmap);
+        pVD->DrawBitmap(Point(), aBitmap);
         rBox.append(u""_ustr, pEntry->GetName(), *pVD);
     }
 
@@ -335,7 +335,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XPatternListRef &pList)
         const XBitmapEntry* pEntry = pList->GetBitmap( i );
         Bitmap aBitmap = pEntry->GetGraphicObject().GetGraphic().GetBitmap();
         formatBitmapToSize(aBitmap, aSize);
-        pVD->DrawBitmapEx(Point(), aBitmap);
+        pVD->DrawBitmap(Point(), aBitmap);
         rBox.append(u""_ustr, pEntry->GetName(), *pVD);
     }
 

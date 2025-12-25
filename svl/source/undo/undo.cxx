@@ -25,10 +25,12 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/long.hxx>
 #include <libxml/xmlwriter.h>
+#include <tools/XmlWriter.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <unotools/datetime.hxx>
 
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 #include <limits.h>
@@ -145,13 +147,14 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoAction"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number(static_cast<sal_Int32>(GetViewShellId())).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dateTime"), BAD_CAST(utl::toISO8601(m_aDateTime.GetUNODateTime()).toUtf8().getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxUndoAction");
+    aWriter.attribute("ptr", reinterpret_cast<sal_IntPtr>(this));
+    aWriter.attribute("symbol", typeid(*this).name());
+    aWriter.attribute("comment", GetComment());
+    aWriter.attribute("viewShellId", sal_Int32(GetViewShellId()));
+    aWriter.attribute("dateTime", utl::toISO8601(m_aDateTime.GetUNODateTime()));
+    aWriter.endElement();
 }
 
 std::unique_ptr<SfxUndoAction> SfxUndoArray::Remove(int idx)
@@ -1204,27 +1207,27 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         bOwns = true;
     }
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoManager"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUndoActionCount"), BAD_CAST(OString::number(GetUndoActionCount()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRedoActionCount"), BAD_CAST(OString::number(GetRedoActionCount()).getStr()));
-
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("undoActions"));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxUndoManager");
+    aWriter.attribute("nUndoActionCount", GetUndoActionCount());
+    aWriter.attribute("nRedoActionCount", GetRedoActionCount());
+    aWriter.startElement("undoActions");
     for (size_t i = 0; i < GetUndoActionCount(); ++i)
     {
         const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
         pUndoArray->maUndoActions[pUndoArray->nCurUndoAction - 1 - i].pAction->dumpAsXml(pWriter);
     }
-    (void)xmlTextWriterEndElement(pWriter);
-
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("redoActions"));
+    aWriter.endElement();
+    aWriter.startElement("redoActions");
     for (size_t i = 0; i < GetRedoActionCount(); ++i)
     {
         const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
         pUndoArray->maUndoActions[pUndoArray->nCurUndoAction + i].pAction->dumpAsXml(pWriter);
     }
-    (void)xmlTextWriterEndElement(pWriter);
 
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
+    aWriter.endElement();
+
     if (bOwns)
     {
         (void)xmlTextWriterEndDocument(pWriter);
@@ -1416,14 +1419,13 @@ bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 
 void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxListUndoAction"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(maUndoActions.size()).getStr()));
+    tools::XmlWriter aWriter(pWriter);
+    aWriter.startElement("SfxListUndoAction");
+    aWriter.attribute("size", maUndoActions.size());
     SfxUndoAction::dumpAsXml(pWriter);
-
     for (size_t i = 0; i < maUndoActions.size(); ++i)
         maUndoActions[i].pAction->dumpAsXml(pWriter);
-
-    (void)xmlTextWriterEndElement(pWriter);
+    aWriter.endElement();
 }
 
 SfxUndoArray::~SfxUndoArray()

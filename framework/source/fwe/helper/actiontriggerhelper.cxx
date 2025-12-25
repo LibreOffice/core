@@ -65,7 +65,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
                             OUString& aMenuLabel,
                             OUString& aCommandURL,
                             OUString& aHelpURL,
-                            Any& rImage,
+                            Reference<css::graphic::XGraphic>& xGraphic,
                             Reference< XIndexContainer >& xSubContainer )
 {
     try
@@ -73,7 +73,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
         // mandatory properties
         xActionTriggerPropertySet->getPropertyValue(u"Text"_ustr) >>= aMenuLabel;
         xActionTriggerPropertySet->getPropertyValue(u"CommandURL"_ustr) >>= aCommandURL;
-        rImage = xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr);
+        xGraphic = vcl::GetGraphic(xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr));
         xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr) >>= xSubContainer;
     }
     catch (const Exception&)
@@ -117,11 +117,11 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                     OUString aLabel;
                     OUString aCommandURL;
                     OUString aHelpURL;
-                    Any aImage;
+                    Reference<css::graphic::XGraphic> xGraphic;
                     Reference< XIndexContainer > xSubContainer;
 
                     sal_uInt16 nNewItemId = nItemId++;
-                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, aImage, xSubContainer );
+                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xGraphic, xSubContainer );
 
                     {
                         // insert new menu item
@@ -142,10 +142,9 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                         }
 
                         // handle bitmap
-                        if (aImage.hasValue())
+                        if (xGraphic)
                         {
-                            if (auto xGraphic = vcl::GetGraphic(aImage))
-                                rSubMenu->setItemImage(nNewItemId, xGraphic, false);
+                            rSubMenu->setItemImage(nNewItemId, xGraphic, false);
                         }
                         else
                         {
@@ -197,14 +196,11 @@ static Reference< XPropertySet > CreateActionTrigger(sal_uInt16 nItemId,
         xPropSet.set( xMultiServiceFactory->createInstance( u"com.sun.star.ui.ActionTrigger"_ustr ),
                       UNO_QUERY );
 
-        Any a;
-
         try
         {
             // Retrieve the menu attributes and set them in our PropertySet
             OUString aLabel = rMenu->getItemText(nItemId);
-            a <<= aLabel;
-            xPropSet->setPropertyValue(u"Text"_ustr, a );
+            xPropSet->setPropertyValue(u"Text"_ustr, Any(aLabel));
 
             OUString aCommandURL = rMenu->getCommand(nItemId);
 
@@ -213,14 +209,12 @@ static Reference< XPropertySet > CreateActionTrigger(sal_uInt16 nItemId,
                 aCommandURL = "slot:" + OUString::number( nItemId );
             }
 
-            a <<= aCommandURL;
-            xPropSet->setPropertyValue(u"CommandURL"_ustr, a );
+            xPropSet->setPropertyValue(u"CommandURL"_ustr, Any(aCommandURL));
 
             Reference<XBitmap> xBitmap(rMenu->getItemImage(nItemId), UNO_QUERY);
             if (xBitmap.is())
             {
-                a <<= xBitmap;
-                xPropSet->setPropertyValue(u"Image"_ustr, a );
+                xPropSet->setPropertyValue(u"Image"_ustr, Any(xBitmap));
             }
         }
         catch (const Exception&)
@@ -269,22 +263,17 @@ static void FillActionTriggerContainerWithMenu(const Reference<XPopupMenu>& rMen
 
         try
         {
-            Any a;
-            Reference< XPropertySet > xPropSet;
-
             if (nType == css::awt::MenuItemType_SEPARATOR)
             {
-                xPropSet = CreateActionTriggerSeparator( rActionTriggerContainer );
+                Reference< XPropertySet > xPropSet = CreateActionTriggerSeparator( rActionTriggerContainer );
 
-                a <<= xPropSet;
-                rActionTriggerContainer->insertByIndex( nPos, a );
+                rActionTriggerContainer->insertByIndex(nPos, Any(xPropSet));
             }
             else
             {
-                xPropSet = CreateActionTrigger(nItemId, rMenu, rActionTriggerContainer);
+                Reference< XPropertySet > xPropSet = CreateActionTrigger(nItemId, rMenu, rActionTriggerContainer);
 
-                a <<= xPropSet;
-                rActionTriggerContainer->insertByIndex( nPos, a );
+                rActionTriggerContainer->insertByIndex(nPos, Any(xPropSet));
 
                 css::uno::Reference<XPopupMenu> xPopupMenu = rMenu->getPopupMenu(nItemId);
                 if (xPopupMenu.is())
@@ -292,8 +281,7 @@ static void FillActionTriggerContainerWithMenu(const Reference<XPopupMenu>& rMen
                     // recursive call to build next sub menu
                     Reference< XIndexContainer > xSubContainer = CreateActionTriggerContainer( rActionTriggerContainer );
 
-                    a <<= xSubContainer;
-                    xPropSet->setPropertyValue(u"SubContainer"_ustr, a );
+                    xPropSet->setPropertyValue(u"SubContainer"_ustr, Any(xSubContainer));
                     FillActionTriggerContainerWithMenu(xPopupMenu, xSubContainer);
                 }
             }

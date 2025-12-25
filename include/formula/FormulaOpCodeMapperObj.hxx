@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
-#define INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
+#pragma once
 
 #include <memory>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <formula/formuladllapi.h>
@@ -65,8 +63,5 @@ private:
 };
 
 } // formula
-
-
-#endif // INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

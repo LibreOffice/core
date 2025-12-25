@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>

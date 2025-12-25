@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="SortOptionsPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -34,7 +34,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="case-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|case">Sorts first by uppercase letters and then by lowercase letters. For Asian locales, special handling applies.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|case">Treats lowercase and uppercase variants of a letter as different characters. For Asian locales, special handling applies.</property>
                   </object>
                 </child>
               </object>
@@ -70,14 +70,19 @@
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkCheckButton" id="naturalsort">
-                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort">Recognize numbers within strings</property>
+                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort">Enable natural sort</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort">For numbers embedded in text, sorting uses their values instead of their sequence of digit characters. Example: A1, A2, A10 instead of A1, A10, A2</property>
+                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort">Numbers embedded in text are sorted according to their value.</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="naturalsort-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|naturalsort">For numbers embedded in text, sorting uses their values instead of their sequence of digit characters. Example: A1, A2, A10 instead of A1, A10, A2</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -87,15 +92,20 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="doublenaturalsortrb">
-                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort|doublenaturalsortrb">Use decimal numbers as a whole</property>
+                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort|doublenaturalsortrb">Recognize decimal separator</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort|doublenaturalsortrb">Decimal numbers are detected. Example: A1.14, A1.2, A2.5, A10 (with dot as separator)</property>
+                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort|doublenaturalsortrb">Example: A1.14 (with dot as separator) contains character 'A' and number 1.14</property>
                     <property name="margin-start">20</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="doublenaturalsortrb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|doublenaturalsortrb">Example: A1.14, A1.2, A2.5, A10 (with dot as separator). The locale determines which character is used as the decimal separator.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -105,16 +115,21 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="integernaturalsortrb">
-                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort|integernaturalsortrb">Split in integer and fractions</property>
+                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort|integernaturalsortrb">Decimal separator as regular character</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort|integernaturalsortrb">Decimal separator is treated as ordinary character. Example: A1.2, A1.14, A2.5, A10</property>
+                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort|integernaturalsortrb">Example: In A1.14, the dot is a character, not a decimal separator.</property>
                     <property name="margin-start">20</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">doublenaturalsortrb</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="integernaturalsortrb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|integernaturalsortrb">Example: A1.14 contains character 'A', number 1, character '.' and number 14.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

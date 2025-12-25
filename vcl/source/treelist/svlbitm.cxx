@@ -152,7 +152,7 @@ bool SvLBoxButtonData::IsRadio() const {
 SvLBoxString::SvLBoxString(OUString aStr)
     : mbEmphasized(false)
     , mbCustom(false)
-    , mfAlign(0.0)
+    , meAlign(TxtAlign::Left)
     , maText(std::move(aStr))
 {
 }
@@ -160,7 +160,7 @@ SvLBoxString::SvLBoxString(OUString aStr)
 SvLBoxString::SvLBoxString()
     : mbEmphasized(false)
     , mbCustom(false)
-    , mfAlign(0.0)
+    , meAlign(TxtAlign::Left)
 {
 }
 
@@ -208,20 +208,26 @@ void SvLBoxString::Paint(
     }
     else
     {
-        if (mfAlign < 0.5 )
+        switch (meAlign)
         {
-            nStyle |= DrawTextFlags::Left;
-            aSize.setWidth(GetWidth(&rDev, &rEntry));
-        }
-        else if (mfAlign == 0.5)
-        {
-            nStyle |= DrawTextFlags::Center;
-            aSize.setWidth(rDev.GetBoundingRect(&rEntry).getOpenWidth());
-        }
-        else if (mfAlign > 0.5)
-        {
-            nStyle |= DrawTextFlags::Right;
-            aSize.setWidth(rDev.GetBoundingRect(&rEntry).getOpenWidth());
+            case TxtAlign::Left:
+            {
+                nStyle |= DrawTextFlags::Left;
+                aSize.setWidth(GetWidth(&rDev, &rEntry));
+                break;
+            }
+            case TxtAlign::Center:
+            {
+                nStyle |= DrawTextFlags::Center;
+                aSize.setWidth(rDev.GetBoundingRect(&rEntry).getOpenWidth());
+                break;
+            }
+            case TxtAlign::Right:
+            {
+                nStyle |= DrawTextFlags::Right;
+                aSize.setWidth(rDev.GetBoundingRect(&rEntry).getOpenWidth());
+                break;
+            }
         }
     }
     aSize.setHeight(GetHeight(&rDev, &rEntry));
@@ -253,7 +259,7 @@ std::unique_ptr<SvLBoxItem> SvLBoxString::Clone(SvLBoxItem const * pSource) cons
     pNew->maText = pOther->maText;
     pNew->mbEmphasized = pOther->mbEmphasized;
     pNew->mbCustom = pOther->mbCustom;
-    pNew->mfAlign = pOther->mfAlign;
+    pNew->meAlign = pOther->meAlign;
 
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }

@@ -35,6 +35,11 @@
           <value xml:lang="en-US">Number Format Type</value>
         </prop>
       </node>
+      <node oor:name=".uno:CurrentSheetView" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Current Sheet View</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ObjectMirrorHorizontal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Flip Horizontally</value>

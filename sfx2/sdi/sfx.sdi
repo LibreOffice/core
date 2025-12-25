@@ -134,6 +134,23 @@ SfxVoidItem About SID_ABOUT
     GroupId = SfxGroupId::Application;
 ]
 
+SfxVoidItem ExtensionManager SID_EXTENSION_MANAGER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
+
 SfxVoidItem Activate SID_ACTIVATE
 ()
 [
@@ -2634,6 +2651,22 @@ SfxBoolItem Navigator SID_NAVIGATOR
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxBoolItem QuickFind SID_QUICKFIND
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = ;
+]
+
 SfxBoolItem InfoBar SID_INFOBAR
 [
     AutoUpdate = FALSE,
@@ -3171,7 +3204,7 @@ SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
 
 
 SfxVoidItem Paste SID_PASTE
-(SfxUInt16Item AnchorType FN_PARAM_1, SfxBoolItem IgnoreComments FN_PARAM_2)
+(SfxUInt16Item AnchorType FN_PARAM_1, SfxBoolItem IgnoreComments FN_PARAM_2, SfxBoolItem SkipDetection FN_PARAM_3)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,

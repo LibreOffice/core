@@ -28,7 +28,7 @@
 #include <svx/xlnasit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dlgctrl.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 enum class PageType;
 class ColorListBox;

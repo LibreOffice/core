@@ -21,6 +21,7 @@
 
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <rtl/math.h>
+#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -466,8 +467,16 @@ namespace sax_fastparser {
 #ifdef DBG_UTIL
             // Well-formedness constraint: Unique Att Spec
             OString const nameId(getId(nToken));
-            SAL_WARN_IF(DebugAttributes.find(nameId) != DebugAttributes.end(),  "sax", "Duplicate attribute: " << nameId );
-            assert(DebugAttributes.find(nameId) == DebugAttributes.end());
+            if (DebugAttributes.find(nameId) != DebugAttributes.end())
+            {
+                OStringBuffer aValuesBuf;
+                for (size_t k = 0; k < j; k++)
+                    if (Tokens[k] == nToken)
+                        aValuesBuf.append(nameId + "=" + rAttrList.getFastAttributeValue(k));
+                aValuesBuf.append(" " + nameId + "=" + rAttrList.getFastAttributeValue(j));
+                SAL_WARN("sax", "Duplicate attribute, " << aValuesBuf.toString());
+                assert(false);
+            }
             DebugAttributes.insert(nameId);
 #endif
 

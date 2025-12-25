@@ -38,7 +38,7 @@ class Test : public SwModelTestBase, public HtmlTestTools
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/filter/html/data/"_ustr, u"HTML (StarWriter)"_ustr)
+        : SwModelTestBase(u"/sw/qa/filter/html/data/"_ustr)
     {
     }
 };
@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyParagraph)
 {
     // Given a document with 2 paragraphs, the second is empty:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("empty-paragraph.xhtml");
 
     // Then make sure that the resulting document has a 2nd empty paragraph:
@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
 {
     // Given a document with an OLE object, width set to 100%, height is not set:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("relative-keep-aspect.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
 {
     // Given a document with an image, width set to 100%, height is not set:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("relative-keep-aspect-image.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
 
     // When exporting to reqif:
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(u"HTML (StarWriter)"_ustr);
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure we only export PNG:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
 
     // When exporting to XHTML:
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(u"HTML (StarWriter)"_ustr);
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure that the sdval attribute is omitted, which is not in the XHTML spec:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableRowSpanInAllCells)
     pBox->setRowSpan(-1);
 
     // When exporting to HTML:
-    save(u"HTML (StarWriter)"_ustr);
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure that the output is simplified to valid HTML, by omitting the rowspan attribute
     // & the empty <tr> element:
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
 
     // When exporting to XHTML:
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(u"HTML (StarWriter)"_ustr);
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure that CSS is used to horizontally position the table:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)
 {
     // Given an XHTML file with a centered (with inline CSS) table, when importing that document:
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(u"HTML (StarWriter)"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
     createSwDoc("centered-table.xhtml");
 
     // Then make sure that the table is centered:

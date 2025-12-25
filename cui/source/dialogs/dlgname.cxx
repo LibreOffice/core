@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(SvxListDialog, AddHdl_Impl, weld::Button&, void)
     if (!sNewText.isEmpty())
     {
         m_xList->insert_text(-1, sNewText);
-        m_xList->select(-1);
+        m_xList->unselect_all();
     }
 }
 

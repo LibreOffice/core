@@ -374,7 +374,7 @@ DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentT
     }
 
     static int nDocumentIdCounter = 0;
-    SfxViewShell::SetCurrentDocId(ViewShellDocId(nDocumentIdCounter));
+    comphelper::LibreOfficeKit::setDocId(ViewShellDocId(nDocumentIdCounter));
     mxComponent = loadFromDesktop(rFileURL, aService);
 
     std::unique_ptr<LibLODocument_Impl> pDocument(new LibLODocument_Impl(mxComponent, nDocumentIdCounter));
@@ -755,6 +755,26 @@ void DesktopLOKTest::testPasteWriter()
     // Without the accompanying fix in place, this test would have failed, as we had a comment
     // between "foo" and "baz".
     CPPUNIT_ASSERT(!xTextPortionEnumeration->hasMoreElements());
+
+    // Overwrite the doc contents with an explicitly plain text paste.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    OString aPlainText("foo _bar_ baz"_ostr);
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain", aPlainText.getStr(),
+                                            aPlainText.getLength()));
+
+    // Check if '_bar_' was pasted as-is.
+    xParagraphEnumeration = xParagraphEnumerationAccess->createEnumeration();
+    xParagraph.set(xParagraphEnumeration->nextElement(), uno::UNO_QUERY);
+    xTextPortionEnumeration = xParagraph->createEnumeration();
+    uno::Reference<text::XTextRange> xTextPortionRange(xTextPortionEnumeration->nextElement(),
+                                                       uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: foo _bar_ baz
+    // - Actual  : foo
+    // i.e. the text/plain input was parsed as markdown, while that should not happen when
+    // specifying the text/plain mimetype explicitly (and not text/markdown).
+    CPPUNIT_ASSERT_EQUAL(u"foo _bar_ baz"_ustr, xTextPortionRange->getString());
 }
 
 void DesktopLOKTest::testPasteWriterJPEG()
@@ -4219,10 +4239,11 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(23), offsetof(struct _LibreOfficeKitClass, extractDocumentStructureRequest));
     CPPUNIT_ASSERT_EQUAL(classOffset(24), offsetof(struct _LibreOfficeKitClass, registerAnyInputCallback));
     CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(struct _LibreOfficeKitClass, getDocsCount));
+    CPPUNIT_ASSERT_EQUAL(classOffset(26), offsetof(struct _LibreOfficeKitClass, registerFileSaveDialogCallback));
 
     // When extending LibreOfficeKit with a new function pointer,  add new assert for the offsetof the
     // new function pointer and bump this assert for the size of the class.
-    CPPUNIT_ASSERT_EQUAL(classOffset(26), sizeof(struct _LibreOfficeKitClass));
+    CPPUNIT_ASSERT_EQUAL(classOffset(27), sizeof(struct _LibreOfficeKitClass));
 
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(struct _LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(struct _LibreOfficeKitDocumentClass, saveAs));

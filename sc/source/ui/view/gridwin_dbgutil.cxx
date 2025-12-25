@@ -17,6 +17,8 @@
 #include <patattr.hxx>
 #include <userdat.hxx>
 #include <dpobject.hxx>
+#include <tools/XmlWriter.hxx>
+#include <filesystem>
 
 namespace {
 
@@ -61,6 +63,18 @@ void ScGridWindow::dumpColumnInformationHmm()
         tools::Long nPixel = o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100);
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "hmm" << std::endl;
     }
+}
+
+void ScGridWindow::dumpPivotTable()
+{
+    ScAddress aPosition = mrViewData.GetCurPos();
+    ScDocument& rDocument = mrViewData.GetDocument();
+
+    const ScDPObject* pDPObject = rDocument.GetDPAtCursor(aPosition.Col(), aPosition.Row(), aPosition.Tab());
+    if (!pDPObject)
+        return;
+
+    pDPObject->dumpXmlFile();
 }
 
 void ScGridWindow::dumpCellProperties()

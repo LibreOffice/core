@@ -20,6 +20,7 @@
 #pragma once
 
 #include <unotools/configitem.hxx>
+#include <tools/solar.h>
 #include <sfx2/module.hxx>
 #include <svx/optgrid.hxx>
 #include <tools/degree.hxx>
@@ -277,7 +278,6 @@ public:
     bool    IsUseGridSnap() const { Init(); return SvxOptionsGrid::GetUseGridSnap(); }
     bool    IsSynchronize() const { Init(); return SvxOptionsGrid::GetSynchronize(); }
     bool    IsGridVisible() const { Init(); return SvxOptionsGrid::GetGridVisible(); }
-    bool    IsEqualGrid() const { Init(); return SvxOptionsGrid::GetEqualGrid(); }
 
     void    SetFieldDrawX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDrawX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDrawX( nSet ); } }
     void    SetFieldDivisionX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDivisionX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDivisionX( nSet ); } }
@@ -286,7 +286,6 @@ public:
     void    SetUseGridSnap( bool bSet ) { if( bSet != SvxOptionsGrid::GetUseGridSnap() ) { OptionsChanged(); SvxOptionsGrid::SetUseGridSnap( bSet ); } }
     void    SetSynchronize( bool bSet ) { if( bSet != SvxOptionsGrid::GetSynchronize() ) { OptionsChanged(); SvxOptionsGrid::SetSynchronize( bSet ); } }
     void    SetGridVisible( bool bSet ) { if( bSet != SvxOptionsGrid::GetGridVisible() ) { OptionsChanged(); SvxOptionsGrid::SetGridVisible( bSet ); } }
-    void    SetEqualGrid( bool bSet ) { if( bSet != SvxOptionsGrid::GetEqualGrid() ) { OptionsChanged(); SvxOptionsGrid::SetEqualGrid( bSet ); } }
 };
 
 class SdOptionsGridItem final : public SvxGridItem

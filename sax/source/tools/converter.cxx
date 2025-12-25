@@ -26,6 +26,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <optional>
 
+#include <comphelper/date.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <rtl/character.hxx>
@@ -1571,8 +1572,9 @@ bool Converter::convertDuration(util::Duration& rDuration,
     return convertDurationHelper(rDuration, o3tl::trim(rString));
 }
 
+template<typename TStringBuffer>
 static void
-lcl_AppendTimezone(OUStringBuffer & i_rBuffer, int const nOffset)
+lcl_AppendTimezone(TStringBuffer & i_rBuffer, int const nOffset)
 {
     if (0 == nOffset)
     {
@@ -1617,18 +1619,19 @@ void Converter::convertDate(
     convertDateTime(i_rBuffer, dt, pTimeZoneOffset);
 }
 
+template<typename TStringBuffer, typename TString>
 static void convertTime(
-        OUStringBuffer& i_rBuffer,
+        TStringBuffer& i_rBuffer,
         const css::util::DateTime& i_rDateTime)
 {
     if (i_rDateTime.Hours   < 10) {
         i_rBuffer.append('0');
     }
-    i_rBuffer.append( OUString::number(static_cast<sal_Int32>(i_rDateTime.Hours)) + ":");
+    i_rBuffer.append( TString::number(static_cast<sal_Int32>(i_rDateTime.Hours)) + ":");
     if (i_rDateTime.Minutes < 10) {
         i_rBuffer.append('0');
     }
-    i_rBuffer.append( OUString::number(static_cast<sal_Int32>(i_rDateTime.Minutes) ) + ":");
+    i_rBuffer.append( TString::number(static_cast<sal_Int32>(i_rDateTime.Minutes) ) + ":");
     if (i_rDateTime.Seconds < 10) {
         i_rBuffer.append('0');
     }
@@ -1636,16 +1639,17 @@ static void convertTime(
     if (i_rDateTime.NanoSeconds > 0) {
         OSL_ENSURE(i_rDateTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
         i_rBuffer.append('.');
-        std::ostringstream ostr;
-        ostr.fill('0');
-        ostr.width(9);
-        ostr << i_rDateTime.NanoSeconds;
-        i_rBuffer.appendAscii(ostr.str().c_str());
+        // pad to 9 characters length
+        auto sNanoStr = TString::number(i_rDateTime.NanoSeconds);
+        for (int i=0; i < 9 - sNanoStr.length; i++)
+            i_rBuffer.append('0');
+        i_rBuffer.append(sNanoStr);
     }
 }
 
+template<typename TStringBuffer>
 static void convertTimeZone(
-        OUStringBuffer& i_rBuffer,
+        TStringBuffer& i_rBuffer,
         const css::util::DateTime& i_rDateTime,
         sal_Int16 const* pTimeZoneOffset)
 {
@@ -1668,7 +1672,7 @@ void Converter::convertTimeOrDateTime(
         i_rDateTime.Month < 1 || i_rDateTime.Month > 12 ||
         i_rDateTime.Day < 1 || i_rDateTime.Day > 31)
     {
-        convertTime(i_rBuffer, i_rDateTime);
+        convertTime<OUStringBuffer, OUString>(i_rBuffer, i_rDateTime);
         convertTimeZone(i_rBuffer, i_rDateTime, nullptr);
     }
     else
@@ -1678,14 +1682,15 @@ void Converter::convertTimeOrDateTime(
 }
 
 /** convert util::DateTime to ISO "date" or "dateTime" string */
-void Converter::convertDateTime(
-        OUStringBuffer& i_rBuffer,
+template<typename TStringBuffer, typename TString, typename TStringChar>
+static void lcl_convertDateTime(
+        TStringBuffer& i_rBuffer,
         const css::util::DateTime& i_rDateTime,
         sal_Int16 const*const pTimeZoneOffset,
         bool i_bAddTimeIf0AM )
 {
-    const sal_Unicode dash('-');
-    const sal_Unicode zero('0');
+    const char dash('-');
+    const char zero('0');
 
     sal_Int32 const nYear(abs(i_rDateTime.Year));
     if (i_rDateTime.Year < 0) {
@@ -1700,11 +1705,11 @@ void Converter::convertDateTime(
     if (nYear < 10) {
         i_rBuffer.append(zero);
     }
-    i_rBuffer.append( OUString::number(nYear) + OUStringChar(dash) );
+    i_rBuffer.append( TString::number(nYear) + TStringChar(dash) );
     if( i_rDateTime.Month < 10 ) {
         i_rBuffer.append(zero);
     }
-    i_rBuffer.append( OUString::number(i_rDateTime.Month) + OUStringChar(dash) );
+    i_rBuffer.append( TString::number(i_rDateTime.Month) + TStringChar(dash) );
     if( i_rDateTime.Day   < 10 ) {
         i_rBuffer.append(zero);
     }
@@ -1716,10 +1721,30 @@ void Converter::convertDateTime(
         i_bAddTimeIf0AM )
     {
         i_rBuffer.append('T');
-        convertTime(i_rBuffer, i_rDateTime);
+        convertTime<TStringBuffer, TString>(i_rBuffer, i_rDateTime);
     }
 
     convertTimeZone(i_rBuffer, i_rDateTime, pTimeZoneOffset);
+}
+
+/** convert util::DateTime to ISO "date" or "dateTime" string */
+void Converter::convertDateTime(
+        OUStringBuffer& i_rBuffer,
+        const css::util::DateTime& i_rDateTime,
+        sal_Int16 const*const pTimeZoneOffset,
+        bool i_bAddTimeIf0AM )
+{
+    lcl_convertDateTime<OUStringBuffer, OUString, OUStringChar>(i_rBuffer, i_rDateTime, pTimeZoneOffset, i_bAddTimeIf0AM);
+}
+
+/** convert util::DateTime to ISO "date" or "dateTime" string */
+void Converter::convertDateTime(
+        OStringBuffer& i_rBuffer,
+        const css::util::DateTime& i_rDateTime,
+        sal_Int16 const*const pTimeZoneOffset,
+        bool i_bAddTimeIf0AM )
+{
+    lcl_convertDateTime<OStringBuffer, OString, OStringChar>(i_rBuffer, i_rDateTime, pTimeZoneOffset, i_bAddTimeIf0AM);
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
@@ -1738,25 +1763,6 @@ bool Converter::parseDateTime(   util::DateTime& rDateTime,
     bool isDateTime;
     return parseDateOrDateTime(nullptr, rDateTime, isDateTime, nullptr,
             rString);
-}
-
-static bool lcl_isLeapYear(const sal_uInt32 nYear)
-{
-    return ((nYear % 4) == 0)
-        && (((nYear % 100) != 0) || ((nYear % 400) == 0));
-}
-
-static sal_uInt16
-lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
-{
-    static const sal_uInt16 s_MaxDaysPerMonth[12] =
-        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    assert(0 < nMonth && nMonth <= 12);
-    if ((2 == nMonth) && lcl_isLeapYear(nYear))
-    {
-        return 29;
-    }
-    return s_MaxDaysPerMonth[nMonth - 1];
 }
 
 static void lcl_ConvertToUTC(
@@ -1791,7 +1797,7 @@ static void lcl_ConvertToUTC(
             return; // handle time without date - don't adjust what isn't there
         }
         o_rDay += nDayAdd;
-        sal_Int16 const nDaysInMonth(lcl_MaxDaysPerMonth(o_rMonth, o_rYear));
+        sal_Int16 const nDaysInMonth(comphelper::date::getDaysInMonth(o_rMonth, o_rYear));
         if (o_rDay <= nDaysInMonth)
         {
             return;
@@ -1831,7 +1837,7 @@ static void lcl_ConvertToUTC(
             return;
         }
         sal_Int16 const nPrevMonth((o_rMonth == 1) ? 12 : o_rMonth - 1);
-        sal_Int16 const nDaysInMonth(lcl_MaxDaysPerMonth(nPrevMonth, o_rYear));
+        sal_Int16 const nDaysInMonth(comphelper::date::getDaysInMonth(nPrevMonth, o_rYear));
         o_rDay += nDaysInMonth;
         --o_rMonth;
         if (0 == o_rMonth)
@@ -1895,6 +1901,7 @@ static bool lcl_parseDate(
         {
             bSuccess &= (0 < nYear);
         }
+        bSuccess &= (nYear <= (isNegative ? 32768 : 32767)); // Must fit into css::util::Date
         bSuccess &= (nPos < string.size()); // not last token
     }
     if (bSuccess && ('-' != string[nPos])) // separator
@@ -1928,7 +1935,9 @@ static bool lcl_parseDate(
         }
         if (nMonth > 0) // not possible to check if month was missing
         {
-            bSuccess &= (nDay <= lcl_MaxDaysPerMonth(nMonth, nYear));
+            sal_Int32 nMaxDay
+                = comphelper::date::getDaysInMonth(nMonth, isNegative ? -nYear : nYear);
+            bSuccess &= (nDay <= nMaxDay);
         }
         else assert(bIgnoreInvalidOrMissingDate);
     }

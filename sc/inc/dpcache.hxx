@@ -37,6 +37,7 @@ struct ScQueryParam;
 class ScDPObject;
 class ScDocument;
 struct ScInterpreterContext;
+namespace tools { class XmlWriter; }
 
 enum class SvNumFormatType : sal_Int16;
 
@@ -162,6 +163,7 @@ public:
      */
     SC_DLLPUBLIC sal_Int32 GetGroupType(tools::Long nDim) const;
 
+    SC_DLLPUBLIC bool IsValidDimensionIndex(tools::Long nDimensionIndex) const;
     SC_DLLPUBLIC SCCOL GetDimensionIndex(std::u16string_view sName) const;
     sal_uInt32 GetNumberFormat( tools::Long nDim ) const;
     SC_DLLPUBLIC bool IsDateDimension( tools::Long nDim ) const ;
@@ -202,14 +204,16 @@ public:
     ScDPCache(ScDocument& rDoc);
     ~ScDPCache();
 
+    void dumpAsXml(tools::XmlWriter& rWriter) const;
+
 #if DUMP_PIVOT_TABLE
     void Dump() const;
 #endif
+    const GroupItems* GetGroupItems(tools::Long nDim) const;
 
 private:
     void PostInit();
     void Clear();
-    const GroupItems* GetGroupItems(tools::Long nDim) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

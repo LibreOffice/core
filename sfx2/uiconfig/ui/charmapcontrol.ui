@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTreeStore" id="favchars_treestore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="recentchars_treestore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="charmapctrl">
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
@@ -26,227 +46,18 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=6 n-rows=3 -->
-          <object class="GtkGrid" id="favgrid">
+          <object class="GtkIconView" id="favchars_iconview">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="row-spacing">3</property>
-            <property name="column-spacing">3</property>
-            <child>
-              <object class="GtkDrawingArea" id="favchar1">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar2">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar4">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar3">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar5">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">4</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar6">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">5</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar7">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar8">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar9">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar10">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar11">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">4</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar12">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">5</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar13">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar14">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar15">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="favchar16">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="can-focus">True</property>
+            <property name="margin">6</property>
+            <property name="model">favchars_treestore</property>
+            <property name="pixbuf-column">0</property>
+            <property name="columns">6</property>
+            <property name="row-spacing">0</property>
+            <property name="column-spacing">0</property>
+            <property name="tooltip-column">2</property>
+            <property name="item-padding">2</property>
+            <property name="activate-on-single-click">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -267,227 +78,18 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=6 n-rows=3 -->
-          <object class="GtkGrid" id="viewgrid">
+          <object class="GtkIconView" id="recentchars_iconview">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="row-spacing">3</property>
-            <property name="column-spacing">3</property>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar1">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar2">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar4">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar3">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar5">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">4</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar6">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">5</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar16">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar15">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar14">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar13">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar12">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">5</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar11">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">4</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar10">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar9">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar8">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkDrawingArea" id="viewchar7">
-                <property name="width-request">35</property>
-                <property name="height-request">35</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="can-focus">True</property>
+            <property name="margin">6</property>
+            <property name="model">recentchars_treestore</property>
+            <property name="pixbuf-column">0</property>
+            <property name="columns">6</property>
+            <property name="row-spacing">0</property>
+            <property name="column-spacing">0</property>
+            <property name="tooltip-column">2</property>
+            <property name="item-padding">2</property>
+            <property name="activate-on-single-click">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -506,7 +108,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="position">6</property>
           </packing>
         </child>
         <child>
@@ -519,7 +121,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="position">7</property>
           </packing>
         </child>
       </object>

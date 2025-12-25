@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
@@ -52,14 +53,10 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     // there may be illegal characters in the box
     // sanitization
     OUString sTmp = m_xEditBox->get_text();
-    OUString sMsg;
     const sal_Int32 nLen = sTmp.getLength();
     for (sal_Int32 i = 0; i < BookmarkTable::aForbiddenChars.getLength(); i++)
     {
-        const sal_Int32 nTmpLen = sTmp.getLength();
         sTmp = sTmp.replaceAll(OUStringChar(BookmarkTable::aForbiddenChars.getStr()[i]), "");
-        if (sTmp.getLength() != nTmpLen)
-            sMsg += OUStringChar(BookmarkTable::aForbiddenChars.getStr()[i]);
     }
     const bool bHasForbiddenChars = sTmp.getLength() != nLen;
     m_xForbiddenChars->set_visible(bHasForbiddenChars);
@@ -407,6 +404,10 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
     m_xEditTextBtn->set_sensitive(false);
     m_xRenameBtn->set_sensitive(false);
 
+    // Clicking the "edit text" button is not yet supported in JSDialog
+    // to edit this we need to send back 'editend' events from editing via another trigger - presumably double-clicking
+    m_xEditTextBtn->set_visible(!comphelper::LibreOfficeKit::isActive());
+
     // select 3rd column, otherwise it'll pick 1st one
     m_xBookmarksBox->set_column_editables({ false, false, true, false, false });
 
@@ -499,10 +500,7 @@ BookmarkTable::BookmarkTable(std::unique_ptr<weld::TreeView> xControl)
 
 std::unique_ptr<weld::TreeIter> BookmarkTable::get_selected() const
 {
-    std::unique_ptr<weld::TreeIter> xIter(m_xControl->make_iterator());
-    if (!m_xControl->get_selected(xIter.get()))
-        xIter.reset();
-    return xIter;
+    return m_xControl->get_selected();
 }
 
 void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pMark)

@@ -21,7 +21,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 
@@ -261,7 +261,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     // correct source range name list for web query import
     OUString aTempArea;
 
-    if( rNewFilter == ScDocShell::GetWebQueryFilterName() )
+    if (rNewFilter == SC_HTML_WEBQ_FILTER_NAME)
         aTempArea = ScFormatFilter::Get().GetHTMLRangeNameList( rSrcDoc, rNewArea );
     else
         aTempArea = rNewArea;

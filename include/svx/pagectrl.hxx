@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SVX_PAGECTRL_HXX
 #define INCLUDED_SVX_PAGECTRL_HXX
 
-#include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <vcl/weld/customweld.hxx>
 
 enum class SvxPageUsage;
 enum class SvxFrameDirection;

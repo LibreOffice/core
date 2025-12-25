@@ -28,7 +28,7 @@
 #include <vcl/errinf.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
 
     std::unique_ptr<weld::WaitObject> xWait(new weld::WaitObject(m_pParent));
 
-    m_pTabPage->m_xLbxFound->select(-1);
+    m_pTabPage->m_xLbxFound->unselect_all();
     m_pTabPage->m_xLbxFound->freeze();
 
     // mark all taken positions in aRemoveEntries
@@ -672,7 +672,7 @@ void TPGalleryThemeProperties::FillFilterList()
         aName = rFilter.GetImportFormatName( i );
         bool bInList = false;
 
-        OUString aExtensions;
+        OUStringBuffer aExtensions;
         int j = 0;
         OUString sWildcard;
         while( true )
@@ -683,8 +683,8 @@ void TPGalleryThemeProperties::FillFilterList()
             if ( aExtensions.indexOf( sWildcard ) == -1 )
             {
                 if ( !aExtensions.isEmpty() )
-                    aExtensions += ";";
-                aExtensions += sWildcard;
+                    aExtensions.append(";");
+                aExtensions.append(sWildcard);
             }
         }
         aName = addExtension( aName, aExtensions );
@@ -720,7 +720,7 @@ void TPGalleryThemeProperties::FillFilterList()
 #endif
 
     // 'All' filters
-    OUString aExtensions;
+    OUStringBuffer aExtensions;
 
     // graphic filters
     for ( i = 0; i < nKeyCount; ++i )
@@ -735,9 +735,9 @@ void TPGalleryThemeProperties::FillFilterList()
             if ( aExtensions.indexOf( sWildcard ) == -1 )
             {
                 if ( !aExtensions.isEmpty() )
-                    aExtensions += ";";
+                    aExtensions.append(";");
 
-                aExtensions += sWildcard;
+                aExtensions.append(sWildcard);
             }
         }
     }
@@ -749,8 +749,8 @@ void TPGalleryThemeProperties::FillFilterList()
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             if ( !aExtensions.isEmpty() )
-                aExtensions += ";";
-            aExtensions += OUString::Concat(aWildcard) + o3tl::getToken(aFilter.second, 0, ';', nIndex );
+                aExtensions.append(";");
+            aExtensions.append(OUString::Concat(aWildcard) + o3tl::getToken(aFilter.second, 0, ';', nIndex ));
         }
     }
 #endif
@@ -868,6 +868,11 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, weld::Toggleable&, vo
 void TPGalleryThemeProperties::DoPreview()
 {
     int nIndex = m_xLbxFound->get_selected_index();
+    if (nIndex == -1)
+    {
+        SAL_WARN("cui.dialogs", "Nothing selected");
+        return;
+    }
     OUString aString(m_xLbxFound->get_text(nIndex));
 
     if (aString == aPreviewString)

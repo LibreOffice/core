@@ -591,6 +591,11 @@ void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener 
 
 Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 {
+    return getSwLineNumberingProperties();
+}
+
+rtl::Reference< SwXLineNumberingProperties > SwXTextDocument::getSwLineNumberingProperties()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
 
@@ -602,6 +607,11 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 }
 
 Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules()
+{
+    return getSwChapterNumberingRules();
+}
+
+rtl::Reference< SwXChapterNumbering >  SwXTextDocument::getSwChapterNumberingRules()
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -807,8 +817,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             pRange->GetPositions(*pUnoCursor);
             if(pUnoCursor->HasMark())
             {
-                if(*pUnoCursor->GetPoint() < *pUnoCursor->GetMark())
-                    pUnoCursor->Exchange();
+                pUnoCursor->Normalize(false);
                 pUnoCursor->DeleteMark();
             }
         }
@@ -1224,6 +1233,11 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects()
 
 Reference< XNameAccess >  SwXTextDocument::getBookmarks()
 {
+    return getSwBookmarks();
+}
+
+rtl::Reference< SwXBookmarks >  SwXTextDocument::getSwBookmarks()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXBookmarks.is())
@@ -1234,6 +1248,11 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks()
 }
 
 Reference< XNameAccess >  SwXTextDocument::getTextSections()
+{
+    return getSwTextSections();
+}
+
+rtl::Reference< SwXTextSections >  SwXTextDocument::getSwTextSections()
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -1705,6 +1724,17 @@ rtl::Reference< SwXSection > SwXTextDocument::createSection(std::u16string_view 
     auto xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
     assert(!xTmp || dynamic_cast<SwXDocumentIndex*>(xTmp.get()) || dynamic_cast<SwXTextSection*>(xTmp.get()));
     return dynamic_cast<SwXSection*>(xTmp.get());
+}
+
+rtl::Reference< SwXDocumentIndex > SwXTextDocument::createDocumentIndex(std::u16string_view rObjectType)
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+    const SwServiceType nType = SwXServiceProvider::GetProviderType(rObjectType);
+    assert(nType != SwServiceType::Invalid);
+    auto xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    assert(!xTmp || dynamic_cast<SwXDocumentIndex*>(xTmp.get()));
+    return dynamic_cast<SwXDocumentIndex*>(xTmp.get());
 }
 
 rtl::Reference<SwXFieldMaster> SwXTextDocument::createFieldMaster(

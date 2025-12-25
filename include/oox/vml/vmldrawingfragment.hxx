@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_VML_VMLDRAWINGFRAGMENT_HXX
 #define INCLUDED_OOX_VML_VMLDRAWINGFRAGMENT_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/dllapi.h>

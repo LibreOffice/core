@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_XMLSTYLE_HXX
 #define INCLUDED_XMLOFF_XMLSTYLE_HXX
 
-#include <rtl/ref.hxx>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>

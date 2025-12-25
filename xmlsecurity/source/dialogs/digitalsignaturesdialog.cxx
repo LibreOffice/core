@@ -51,7 +51,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>

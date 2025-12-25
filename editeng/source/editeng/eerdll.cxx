@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
+#include <editeng/autodiritem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
@@ -118,6 +119,7 @@ ItemInfoPackage& getItemInfoPackageEditEngine()
             { EE_PARA_TABS, new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS ), SID_ATTR_TABSTOP, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_JUST_METHOD, new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD ), SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_VER_JUST, new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST ), SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_AUTOWRITINGDIR, new SvxAutoFrameDirectionItem( false, EE_PARA_AUTOWRITINGDIR ), SID_ATTR_PARA_AUTOFRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE },
             { EE_CHAR_COLOR, new SvxColorItem( COL_AUTO, EE_CHAR_COLOR ), SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
 
             // EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK and EE_CHAR_FONTINFO_CTL need on-demand initialization

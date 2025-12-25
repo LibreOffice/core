@@ -934,10 +934,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawSparklines(*pContentDev);
 
-    // Show Note Mark
-    if ( rOpts.GetOption(sc::ViewOption::NOTES) )
-        aOutputData.DrawNoteMarks(*pContentDev);
-
     if ( rOpts.GetOption(sc::ViewOption::FORMULAS_MARKS) )
         aOutputData.DrawFormulaMarks(*pContentDev);
 
@@ -967,6 +963,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     // Autofilter- and Pivot-Buttons
     DrawButtons(nX1, nX2, rTableInfo, pContentDev, pLokRTLCtxt.get());          // Pixel
+
+    // Show Note Mark
+    if (rOpts.GetOption(sc::ViewOption::NOTES))
+        aOutputData.DrawNoteMarks(*pContentDev);
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
@@ -1036,10 +1036,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     ScInputHandler* pHdl = pScMod->GetInputHdl( mrViewData.GetViewShell() );
     if (pHdl)
     {
-        ScDocShell& rDocSh = mrViewData.GetDocShell();
+        ScDocShell* pDocSh = mrViewData.GetDocShell();
         ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
         if ( pRangeFinder && !pRangeFinder->IsHidden() &&
-                pRangeFinder->GetDocName() == rDocSh.GetTitle() )
+                pRangeFinder->GetDocName() == pDocSh->GetTitle() )
         {
             sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFinder->Count());
             for (sal_uInt16 i=0; i<nCount; i++)
@@ -2165,9 +2165,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     aCellBtn.setText(aStr);
                 }
 
-                sal_uInt16 nIndent = 0;
-                if (const ScIndentItem* pIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT))
-                    nIndent = pIndentItem->GetValue();
+                const ScIndentItem& rIndentItem = rDoc.GetAttr(nCol, nRow, nTab, ATTR_INDENT);
+                sal_uInt16 nIndent = rIndentItem.GetValue();
                 aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                 aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                 aCellBtn.setDrawBaseButton(pInfo->bPivotButton);
@@ -2219,9 +2218,9 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
 
     //  left edge of next cell if there is a non-hidden next column
     SCCOL nNextCol = nCol + 1;
-    const ScMergeAttr* pMerge = rDoc.GetAttr( nCol,nRow,nTab, ATTR_MERGE );
-    if ( pMerge->GetColMerge() > 1 )
-        nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
+    const ScMergeAttr& rMerge = rDoc.GetAttr( nCol,nRow,nTab, ATTR_MERGE );
+    if (rMerge.GetColMerge() > 1)
+        nNextCol = nCol + rMerge.GetColMerge();    // next cell after the merged area
     while ( nNextCol <= rDoc.MaxCol() && rDoc.ColHidden(nNextCol, nTab) )
         ++nNextCol;
     bool bNextCell = ( nNextCol <= rDoc.MaxCol() );
@@ -2458,7 +2457,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
             if (nX2 < nX1)                      // the rest of the merge
             {
                 SCCOL nStartX = nX1;
-                while ( rDoc.GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG)->IsHorOverlapped() )
+                while (rDoc.GetAttr(nStartX, nY, nTab, ATTR_MERGE_FLAG).IsHorOverlapped())
                     --nStartX;
                 if (nStartX <= nX2)
                     nLoopEndX = nX1;
@@ -2550,7 +2549,7 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         return;
 
     if ( rDCEvt.GetType() == DataChangedEventType::FONTS && eWhich == mrViewData.GetActivePart() )
-        mrViewData.GetDocShell().UpdateFontList();
+        mrViewData.GetDocShell()->UpdateFontList();
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
@@ -2603,7 +2602,7 @@ IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
         // Do not attempt to calculate a page size here if it is empty if
         // that involves counting pages.
         // An earlier implementation did
-        //   ScPrintFunc(pDocSh, rDocSh.GetPrinter(), nCurrentTab);
+        //   ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nCurrentTab);
         //   rDoc.SetPageSize(nCurrentTab, rDoc.GetPageSize(nCurrentTab));
         // which resulted in tremendous waiting times after having loaded
         // larger documents i.e. imported from CSV, in which UI is entirely
@@ -2616,14 +2615,14 @@ IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
         // disable things.
         if (!aPageSize.IsEmpty())
         {
-            ScDocShell& rDocSh = mrViewData.GetDocShell();
-            const bool bModified = rDocSh.IsModified();
+            ScDocShell* pDocSh = mrViewData.GetDocShell();
+            const bool bModified = pDocSh->IsModified();
             // Even setting the same size sets page size valid, so
             // UpdatePageBreaks() actually does something.
             rDoc.SetPageSize( nCurrentTab, aPageSize);
             rDoc.UpdatePageBreaks(nCurrentTab);
-            rDocSh.PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
-            rDocSh.SetModified(bModified);
+            pDocSh->PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
+            pDocSh->SetModified(bModified);
         }
     }
 }

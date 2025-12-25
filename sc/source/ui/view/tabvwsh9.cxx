@@ -31,6 +31,7 @@
 #include <svl/stritem.hxx>
 
 #include "imapwrap.hxx"
+#include <navipi.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <docsh.hxx>
@@ -86,6 +87,27 @@ void ScTabViewShell::ExecGallery( const SfxRequest& rReq )
     }
 }
 
+void ScTabViewShell::ExecNavigatorWin(const SfxRequest& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem;
+
+    if (pArgs && pArgs->HasItem(FN_PARAM_1, &pItem))
+    {
+        sal_uInt16 nCommentId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        if (SfxChildWindow* pWin = GetViewFrame().GetChildWindow(SID_NAVIGATOR))
+        {
+            ScNavigatorWin* pNavWin = static_cast<ScNavigatorWin*>(pWin->GetWindow());
+            if (pNavWin->m_xNavigator && pNavWin->m_xNavigator->m_xLbEntries)
+                pNavWin->m_xNavigator->m_xLbEntries->BringCommentToAttention(nCommentId);
+        }
+        else
+            SAL_WARN("sc.ui", "GetChildWindow(SID_NAVIGATOR) == nullptr");
+    }
+    else
+        SAL_WARN("sc.ui", "failed to extract FN_PARAM_1 i.e. CommentNumber");
+}
+
 void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -137,7 +159,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                     else
                         pIMapInfo->SetImageMap( rImageMap );
 
-                    GetViewData().GetDocShell().SetDrawModified();
+                    GetViewData().GetDocShell()->SetDrawModified();
                 }
             }
         }

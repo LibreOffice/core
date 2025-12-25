@@ -9,7 +9,10 @@
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
 #include <headless/svpdata.hxx>
+#include <staticsalinstance.hxx>
 #include <unistd.h>
+
+namespace {
 
 class HeadlessSalInstance : public SvpSalInstance
 {
@@ -29,9 +32,8 @@ public:
     HeadlessSalSystem() : SvpSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::vector< OUString >& rButtons ) override
+                                  const std::vector< OUString >& ) override
     {
-        (void)rButtons;
         SAL_INFO("vcl.headless",
                 "LibreOffice - dialog '"
                 << rTitle << "': '"
@@ -43,6 +45,8 @@ public:
 SalSystem *HeadlessSalInstance::CreateSalSystem()
 {
     return new HeadlessSalSystem();
+}
+
 }
 
 extern "C" SalInstance *create_SalInstance()

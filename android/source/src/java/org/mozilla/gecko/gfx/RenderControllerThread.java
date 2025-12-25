@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * processed and delegated by this thread.
  */
 public class RenderControllerThread extends Thread implements LayerView.Listener {
-    private LinkedBlockingQueue<RenderCommand> queue = new LinkedBlockingQueue<RenderCommand>();
+    private final LinkedBlockingQueue<RenderCommand> queue = new LinkedBlockingQueue<RenderCommand>();
     private GLController controller;
     private boolean renderQueued = false;
     private int width;
@@ -57,11 +57,6 @@ public class RenderControllerThread extends Thread implements LayerView.Listener
 
     public void shutdown() {
         queue.add(RenderCommand.SHUTDOWN);
-    }
-
-    @Override
-    public void compositorCreated() {
-
     }
 
     @Override

@@ -143,7 +143,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 && !SlideShow::IsInteractiveSlideshow(GetViewShellBase()) // IASS
                 && rReq.GetArgs())
             {
-                if (const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE))
+                if (const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE))
                     SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber(static_cast<sal_Int32>((pWhatPage->GetValue()-1)>>1));
             }
             else
@@ -157,7 +157,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
                 else if (pArgs->Count () == 2)
                 {
-                    const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE);
+                    const SfxUInt32Item* pWhatPage = rReq.GetArg(ID_VAL_WHATPAGE);
                     const SfxUInt32Item* pWhatKind = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATKIND);
 
                     sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
@@ -427,7 +427,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                const SfxStringItem* pBookmark = rReq.GetArg<SfxStringItem>(SID_JUMPTOMARK);
+                const SfxStringItem* pBookmark = rReq.GetArg(SID_JUMPTOMARK);
 
                 if (pBookmark)
                 {
@@ -488,6 +488,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         break;
 
         case SID_REGENERATE_DIAGRAM:
+        case SID_DIAGRAM_TO_GROUP:
         case SID_EDIT_DIAGRAM:
         {
             if (1 == rMarkList.GetMarkCount())
@@ -497,13 +498,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 // Support advanced DiagramHelper
                 if(nullptr != pObj && pObj->isDiagram())
                 {
-                    if(SID_REGENERATE_DIAGRAM == nSlot)
+                    if (SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
                         pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
-                    else // SID_EDIT_DIAGRAM
+                    else if (SID_EDIT_DIAGRAM == nSlot)
                     {
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                         VclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
@@ -515,6 +516,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                                 pDlg->disposeOnce();
                             }
                         );
+                    }
+                    else // SID_DIAGRAM_TO_GROUP
+                    {
+                        mpDrawView->UnmarkAll();
+                        pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                        mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                 }
             }
@@ -771,6 +778,28 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             mpDrawView->SetAttributes( aEditAttr );
 
             Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
+            break;
+        }
+        case SID_ATTR_PARA_ADJUST_START:
+        {
+            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
+            SfxItemSetFixed<EE_PARA_JUST, EE_PARA_JUST> aEditAttr( GetPool() );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_START);
+            break;
+        }
+        case SID_ATTR_PARA_ADJUST_END:
+        {
+            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
+            SfxItemSetFixed<EE_PARA_JUST, EE_PARA_JUST> aEditAttr( GetPool() );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_END);
             break;
         }
         case SID_ATTR_PARA_ULSPACE:

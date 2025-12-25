@@ -48,6 +48,7 @@
 #include <comphelper/compbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configpaths.hxx>
 #include <o3tl/string_view.hxx>

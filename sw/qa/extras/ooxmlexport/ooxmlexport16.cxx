@@ -35,12 +35,13 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 {
-    loadAndReload("tdf143860_NonPrimitiveCustomShape.odt");
+    createSwDoc("tdf143860_NonPrimitiveCustomShape.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The document has a custom shape of type non-primitive without handles. Make sure that the shape
@@ -53,7 +54,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 {
-    loadAndSave("tdf136386_WrapPolygonCurve.odt");
+    createSwDoc("tdf136386_WrapPolygonCurve.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a curve with contour wrap and 'outside only'. Error was, that type 'square' was
@@ -71,7 +73,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCurve)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 {
-    loadAndSave("tdf136386_WrapPolygonLineShape.odt");
+    createSwDoc("tdf136386_WrapPolygonLineShape.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a sloping line with contour wrap. Error was, that type 'square' was written and
@@ -88,7 +91,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonLineShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 {
-    loadAndReload("tdf142433_WrapPolygonCustomShape.odt");
+    createSwDoc("tdf142433_WrapPolygonCustomShape.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has 4-point star with contour wrap. Error was, that the enhanced path was written
@@ -109,7 +113,12 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
 {
-    loadAndSave("tdf143432_Frame_WrapTextMode.odt");
+    createSwDoc("tdf143432_Frame_WrapTextMode.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
@@ -141,7 +150,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
     // Test fails on reload without fix with left: expected 1461 actual 2455; right: expected 1302
     // actual 4177; top: expected 1522 actual 2457; bottom: expected 1296, actual 4179
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -165,13 +178,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
     // Test after reload would fail without fix with
     // left, top: expected 318 actual 635; right, bottom: expected 1164 actual 2434
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123569_rotWriterImage)
 {
-    loadAndReload("tdf123569_rotWriterImage_46deg.odt");
+    createSwDoc("tdf123569_rotWriterImage_46deg.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -196,7 +210,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
 
 DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
 {
-    loadAndSave("151384Hyperlink.odt");
+    createSwDoc("151384Hyperlink.odt");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", u"Hyperlink");
@@ -205,6 +220,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 4
+    skipValidation();
+
     // This bugdoc has a groupshape (WPG) with a table inside its each member shape.
     // Before there was no table after import at all. From now, there must be 2 tables.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -217,7 +235,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 {
-    loadAndReload("tdf142486_FrameShadow.odt");
+    createSwDoc("tdf142486_FrameShadow.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -238,7 +257,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136059)
 {
-    loadAndReload("tdf136059.odt");
+    createSwDoc("tdf136059.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
@@ -419,7 +439,8 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 {
-    loadAndSave("gutter-top.docx");
+    createSwDoc("gutter-top.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     CPPUNIT_ASSERT(pXmlSettings);
     // Without the accompanying fix in place, this test would have failed with:
@@ -431,7 +452,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 {
-    loadAndReload("testCustomShapePresetExport.odt");
+    createSwDoc("testCustomShapePresetExport.odt");
+    saveAndReload(TestFilter::DOCX);
     // Check if the load failed.
     CPPUNIT_ASSERT(getPages());
 
@@ -463,7 +485,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 {
-    loadAndSave("tdf148671.docx");
+    createSwDoc("tdf148671.docx");
+    save(TestFilter::DOCX);
     // Don't assert with 'pFieldMark' failed when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -474,6 +497,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
     // Don't crash when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
@@ -486,12 +512,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149649, "tdf149649.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // Don't crash when document is imported
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf168017, "tdf168017.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 20
+    skipValidation();
+
     // Don't crash when document is imported
 }
 
@@ -503,7 +535,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
-    loadAndReload("tdf134619_numberingProps.doc");
+    createSwDoc("tdf134619_numberingProps.doc");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     // Get the third paragraph's numbering style's 1st level's bullet size
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
@@ -518,7 +555,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 {
-    loadAndReload("tdf134951_duplicates.odt");
+    createSwDoc("tdf134951_duplicates.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -546,7 +584,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
     officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
     batch->commit();
 
-    loadAndSave("tdf135774_numberingShading.docx");
+    createSwDoc("tdf135774_numberingShading.docx");
+    save(TestFilter::DOCX);
     // This test uses a custom setting to export CharBackground as Highlight instead of the 7.0 default of Shading.
 
     // Before the fix, the imported shading was converted into a red highlight.
@@ -556,7 +595,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 {
-    loadAndReload("tdf140336_paraNoneShading.odt");
+    createSwDoc("tdf140336_paraNoneShading.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), u"ParaBackColor"_ustr));
@@ -569,10 +609,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141173_missingFrames)
 {
-    loadAndReload("tdf141173_missingFrames.rtf");
+    createSwDoc("tdf141173_missingFrames.rtf");
+    saveAndReload(TestFilter::DOCX);
     // Without the fix in place, almost all of the text and textboxes were missing.
     // Without the fix, there were only 2 shapes (mostly unseen).
-    CPPUNIT_ASSERT_EQUAL(13, getShapes());
+    CPPUNIT_ASSERT_EQUAL(14, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabSpacing, "tdf142404_tabSpacing.docx")
@@ -591,7 +632,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabOverMarginC15, "tdf142404_tabOverMargi
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
 {
-    loadAndReload("tdf142404_tabOverSpacingC15.odt");
+    createSwDoc("tdf142404_tabOverSpacingC15.odt");
+    saveAndReload(TestFilter::DOCX);
     // Although TabOverMargin no longer applies to compatibilityMode 15 DOCX files,
     // it still applies to a tab over the paragraph end (inside text boundaries).
     // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
@@ -652,7 +694,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
 
     // FIXME: After save&reload, the text frame should still be a text frame, and the above test should still work.
     // (Currently the Writer text frame becomes a text box (shape based)). See tdf#140961
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // DML
@@ -669,7 +711,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
     // disable and check only the conversion of the invalid (zeroed) change date
     // 0000-00-00T00:00:00Z, resulting loss of change tracking during ODF roundtrip
     // reload("writer8", "tdf146171.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0
@@ -684,7 +726,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
 {
-    loadAndReload("tdf139580.odt");
+    createSwDoc("tdf139580.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 21
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
     // Without the fix in place, this test would have crashed at export time
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -699,7 +746,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149198, "tdf149198.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
 {
-    loadAndSave("footer-margin-lost.docx");
+    createSwDoc("footer-margin-lost.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 709
@@ -725,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
     // - Actual  : 561
     // i.e. the upper spacing was too large, the last line of the text moved below the shape.
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -738,7 +786,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     CPPUNIT_ASSERT(getProperty<bool>(xStandard, u"RtlGutter"_ustr));
 
     // When saving back to DOCX:
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // Then make sure the section's gutter is still RTL:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -749,7 +797,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140572_docDefault_superscript)
 {
-    loadAndReload("tdf140572_docDefault_superscript.docx");
+    createSwDoc("tdf140572_docDefault_superscript.docx");
+    saveAndReload(TestFilter::DOCX);
     // A round-trip was crashing.
 
     // Without the fix, everything was DFLT_ESC_AUTO_SUPER (default superscript)
@@ -783,7 +832,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 {
-    loadAndReload("croppedAndRotated.odt");
+    createSwDoc("croppedAndRotated.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -798,7 +848,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118535)
 {
-    loadAndReload("tdf118535.odt");
+    createSwDoc("tdf118535.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -840,6 +891,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
 {
+    //FIXME: validation error in OOXML export: Errors: 1
+    skipValidation();
+
     // Collect the z-order values of the textboxes
     std::vector<sal_uInt64> ShapeZorders;
     std::vector<sal_uInt64> FrameZorders;
@@ -895,7 +949,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105688, "tdf105688.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
 {
-    loadAndSave("CommentReply.docx");
+    createSwDoc("CommentReply.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     xmlDocUniquePtr pXmlCommExt = parseExport(u"word/commentsExtended.xml"_ustr);
     CPPUNIT_ASSERT(pXmlComm);
@@ -913,7 +968,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentDone)
 {
-    loadAndSave("CommentDone.docx");
+    createSwDoc("CommentDone.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     assertXPath(pXmlComm, "/w:comments/w:comment[1]/w:p", 2);
     OUString idLastPara = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[2]", "paraId");
@@ -982,13 +1038,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
 
     createSwDoc("CommentDone.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 {
-    loadAndSave("tdf142361ShadowDirection.odt");
+    createSwDoc("tdf142361ShadowDirection.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The attribute 'rotWithShape' has the default value 'true' in OOXML, so Words interprets a
@@ -1004,7 +1061,8 @@ CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
 {
-    loadAndSave("tdf150542.docx");
+    createSwDoc("tdf150542.docx");
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pSettingsDoc = parseExport(u"word/settings.xml"_ustr);
     // Ensure that all docvars from input are written back and with correct values.
@@ -1025,7 +1083,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 {
-    loadAndSave("tdf139549.docx");
+    createSwDoc("tdf139549.docx");
+    save(TestFilter::DOCX);
     // Document contains a VML textbox, the position of the textbox was incorrect.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape", "style");
@@ -1066,7 +1125,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 {
-    loadAndReload("Simple-TOC.odt");
+    createSwDoc("Simple-TOC.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
@@ -1077,7 +1137,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 {
-    loadAndReload("embedded_images.odt");
+    createSwDoc("embedded_images.odt");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
@@ -1097,7 +1162,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
 {
-    loadAndReload("artistic_effects.docx");
+    createSwDoc("artistic_effects.docx");
+
+    //FIXME: validation error in OOXML export: Errors: 2
+    skipValidation();
+
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),

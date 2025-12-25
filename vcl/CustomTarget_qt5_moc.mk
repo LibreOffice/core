@@ -35,6 +35,7 @@ $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceGrid.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceIconView.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceImage.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceItemView.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceLabel.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceLevelBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceLinkButton.moc \

@@ -21,8 +21,8 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/wintypes.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
@@ -215,7 +215,6 @@ private:
     bool            mbHighlight : 1;
     bool            mbNoSelection : 1;
     bool            mbDoubleSel : 1;
-    bool            mbScroll : 1;
     bool            mbFullMode : 1;
     bool            mbEdgeBlending : 1;
     bool            mbHasVisibleItems : 1;

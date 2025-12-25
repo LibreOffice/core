@@ -22,6 +22,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <svx/relfld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 
 namespace svx
 {

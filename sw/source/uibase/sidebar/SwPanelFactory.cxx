@@ -29,7 +29,7 @@
 #include "PageFormatPanel.hxx"
 #include "PageHeaderPanel.hxx"
 #include "PageFooterPanel.hxx"
-#include "QuickFindPanel.hxx"
+#include <QuickFindPanel.hxx>
 #include "WrapPropertyPanel.hxx"
 #include "WriterInspectorTextPanel.hxx"
 #include "TableEditPanel.hxx"
@@ -37,7 +37,7 @@
 #include <redlndlg.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
@@ -221,7 +221,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/QuickFindPanel"))
     {
         std::unique_ptr<PanelLayout> xPanel
-            = sw::sidebar::QuickFindPanel::Create(pParent, xFrame);
+            = sw::sidebar::QuickFindPanel::Create(pParent, xFrame, pBindings);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(rsResourceURL, xFrame, std::move(xPanel),
                                                            ui::LayoutSize(-1, -1, -1));
     }

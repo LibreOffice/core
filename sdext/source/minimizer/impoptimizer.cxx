@@ -19,10 +19,12 @@
 
 
 #include "impoptimizer.hxx"
+#include <sdextresid.hxx>
 #include "pppoptimizer.hxx"
 #include "graphiccollector.hxx"
 #include "pagecollector.hxx"
 #include "informationdialog.hxx"
+#include <strings.hrc>
 
 #include <vector>
 #include <com/sun/star/util/URL.hpp>
@@ -41,7 +43,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -371,7 +373,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                 Reference< XGraphic > xGraphic;
                 if ( rGraphic.maUser[ 0 ].mbFillBitmap && rGraphic.maUser[ 0 ].mxPropertySet.is() )
                 {
-                    Reference< rendering::XBitmap > xFillBitmap;
+                    Reference< awt::XBitmap > xFillBitmap;
                     if ( rGraphic.maUser[ 0 ].mxPropertySet->getPropertyValue( u"FillBitmap"_ustr ) >>= xFillBitmap )
                         xGraphic.set( xFillBitmap, UNO_QUERY_THROW );
                 }
@@ -412,7 +414,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                             }
                             else if ( rGraphicUser.mxPropertySet.is() )
                             {
-                                Reference< rendering::XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
+                                Reference< awt::XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
                                 if ( xFillBitmap.is() )
                                 {
                                     awt::Size aSize;
@@ -491,14 +493,14 @@ void ImpOptimizer::Optimize()
     if ( mbDeleteHiddenSlides )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( u"STR_DELETING_SLIDES"_ustr ) );
+        SetStatusValue( TK_Status, Any( SdextResId( STR_DELETING_SLIDES ) ) );
         DispatchStatus();
         ImpDeleteHiddenSlides( mxModel );
     }
 
     if ( mbDeleteNotesPages )
     {
-        SetStatusValue( TK_Status, Any( u"STR_DELETING_SLIDES"_ustr ) );
+        SetStatusValue( TK_Status, Any( SdextResId( STR_DELETING_SLIDES) ) );
         DispatchStatus();
         ImpDeleteNotesPages( mxModel );
     }
@@ -506,7 +508,7 @@ void ImpOptimizer::Optimize()
     if ( mbDeleteUnusedMasterPages )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( u"STR_DELETING_SLIDES"_ustr ) );
+        SetStatusValue( TK_Status, Any( SdextResId( STR_DELETING_SLIDES ) ) );
         DispatchStatus();
         ImpDeleteUnusedMasterPages( mxModel );
     }
@@ -514,7 +516,7 @@ void ImpOptimizer::Optimize()
     if ( mbOLEOptimization )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 45 ) ) );
-        SetStatusValue( TK_Status, Any( u"STR_CREATING_OLE_REPLACEMENTS"_ustr ) );
+        SetStatusValue( TK_Status, Any( SdextResId( STR_CREATING_OLE_REPLACEMENTS ) ) );
         DispatchStatus();
         ImpConvertOLE( mxModel, mnOLEOptimizationType );
     }
@@ -522,7 +524,7 @@ void ImpOptimizer::Optimize()
     if ( mbJPEGCompression || mbRemoveCropArea || mnImageResolution )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 50 ) ) );
-        SetStatusValue( TK_Status, Any( u"STR_OPTIMIZING_GRAPHICS"_ustr ) );
+        SetStatusValue( TK_Status, Any( SdextResId( STR_OPTIMIZING_GRAPHICS) ) );
         DispatchStatus();
 
         std::vector< GraphicCollector::GraphicEntity > aGraphicList;
@@ -610,7 +612,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
     {
 
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
-        SetStatusValue( TK_Status, Any( u"STR_DUPLICATING_PRESENTATION"_ustr ) );
+        SetStatusValue( TK_Status, Any( SdextResId( STR_DUPLICATING_PRESENTATION ) ) );
         DispatchStatus();
 
         Reference< XStorable >xStorable( mxModel, UNO_QUERY );
@@ -633,7 +635,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
 
             SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
-            SetStatusValue( TK_Status, Any( u"STR_DUPLICATING_PRESENTATION"_ustr ) );
+            SetStatusValue( TK_Status, Any( SdextResId( STR_DUPLICATING_PRESENTATION ) ) );
             DispatchStatus();
 
             Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );

@@ -27,7 +27,6 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
@@ -44,6 +43,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <sal/log.hxx>
@@ -428,14 +428,14 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
         }
 
         Reference<chart2::data::XDataProvider> xDataProvider(mxNewDoc->getDataProvider());
-        Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xDataProvider, uno::UNO_QUERY);
+        chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider = dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(xDataProvider.get());
 
         Reference<chart2::data::XDataSequence> xSequenceValues;
 
         // values
-        if (xPivotTableDataProvider.is()) // is pivot chart
+        if (pPivotTableDataProvider) // is pivot chart
         {
-            xSequenceValues.set(xPivotTableDataProvider->createDataSequenceOfValuesByIndex(mnSeriesIndex));
+            xSequenceValues.set(pPivotTableDataProvider->createDataSequenceOfValuesByIndex(mnSeriesIndex));
         }
         else
         {
@@ -460,9 +460,9 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
         // label
         Reference<chart2::data::XDataSequence> xSequenceLabel;
 
-        if (xPivotTableDataProvider.is())
+        if (pPivotTableDataProvider)
         {
-            xSequenceLabel.set(xPivotTableDataProvider->createDataSequenceOfLabelsByIndex(mnSeriesIndex));
+            xSequenceLabel.set(pPivotTableDataProvider->createDataSequenceOfLabelsByIndex(mnSeriesIndex));
         }
         else
         {

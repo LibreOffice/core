@@ -73,6 +73,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>
@@ -128,7 +129,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sfx2/digitalsignatures.hxx>
@@ -474,7 +475,7 @@ public:
 
     util::DateTime m_aDateTime;
 
-    uno::Sequence<beans::PropertyValue> m_aArgs;
+    comphelper::SequenceAsHashMap m_aArgs;
 
     explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
@@ -637,6 +638,10 @@ util::DateTime const & SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
     return pImpl->m_aDateTime;
 }
 
+void SfxMedium::ClearInitFileDateCache()
+{
+    pImpl->m_bGotDateTime = false;
+}
 
 Reference < XContent > SfxMedium::GetContent() const
 {
@@ -652,7 +657,7 @@ Reference < XContent > SfxMedium::GetContent() const
         css::uno::Reference< css::ucb::XProgressHandler > xProgress;
         rtl::Reference<::ucbhelper::CommandEnvironment> pCommandEnv = new ::ucbhelper::CommandEnvironment( new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
 
-        const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_CONTENT, false);
+        const SfxUnoAnyItem* pItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_CONTENT, false);
         if ( pItem )
             pItem->GetValue() >>= xContent;
 
@@ -1479,7 +1484,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             {
                 // the error should be set in case it is storing process
                 // or the document has been opened for editing explicitly
-                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
+                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
 
                 if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                     SetError(ERRCODE_IO_ACCESSDENIED);
@@ -1729,7 +1734,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
         {
             // the error should be set in case it is storing process
             // or the document has been opened for editing explicitly
-            const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
+            const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
 
             if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                 SetError(ERRCODE_IO_ACCESSDENIED);
@@ -1934,7 +1939,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         GetVersionList();
     }
 
-    const SfxInt16Item* pVersion = SfxItemSet::GetItem<SfxInt16Item>(pImpl->m_pSet.get(), SID_VERSION, false);
+    const SfxInt16Item* pVersion = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_VERSION, false);
 
     bool bResetStorage = false;
     if ( pVersion && pVersion->GetValue() )
@@ -2470,7 +2475,7 @@ void SfxMedium::Transfer_Impl()
     if (pImpl->m_aLogicName.startsWith("private:stream"))
     {
         // TODO/LATER: support storing to SID_STREAM
-        const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_OUTPUTSTREAM, false);
+        const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_OUTPUTSTREAM, false);
         if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
         {
             if ( pImpl->xStorage.is() )
@@ -2918,7 +2923,7 @@ void SfxMedium::GetLockingStream_Impl()
          || pImpl->m_xLockingStream.is() )
         return;
 
-    const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_STREAM, false);
+    const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_STREAM, false);
     if ( pWriteStreamItem )
         pWriteStreamItem->GetValue() >>= pImpl->m_xLockingStream;
 
@@ -2926,11 +2931,9 @@ void SfxMedium::GetLockingStream_Impl()
         return;
 
     // open the original document
-    uno::Sequence< beans::PropertyValue > xProps;
-    TransformItems( SID_OPENDOC, GetItemSet(), xProps );
-    utl::MediaDescriptor aMedium( xProps );
+    comphelper::SequenceAsHashMap aMedium(TransformItems(SID_OPENDOC, GetItemSet()));
 
-    aMedium.addInputStreamOwnLock();
+    utl::MediaDescriptor::addInputStreamOwnLock(aMedium);
 
     uno::Reference< io::XInputStream > xInputStream;
     aMedium[utl::MediaDescriptor::PROP_STREAM] >>= pImpl->m_xLockingStream;
@@ -2961,8 +2964,8 @@ void SfxMedium::GetMedium_Impl()
     Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
 
     //TODO/MBA: need support for SID_STREAM
-    const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_STREAM, false);
-    const SfxUnoAnyItem* pInStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_INPUTSTREAM, false);
+    const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_STREAM, false);
+    const SfxUnoAnyItem* pInStreamItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_INPUTSTREAM, false);
     if ( pWriteStreamItem )
     {
         pWriteStreamItem->GetValue() >>= pImpl->xStream;
@@ -2979,7 +2982,6 @@ void SfxMedium::GetMedium_Impl()
     }
     else
     {
-        uno::Sequence < beans::PropertyValue > xProps;
         OUString aFileName;
         if (!pImpl->m_aName.isEmpty())
         {
@@ -3013,8 +3015,7 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
-            TransformItems( SID_OPENDOC, GetItemSet(), xProps );
-            utl::MediaDescriptor aMedium( xProps );
+            comphelper::SequenceAsHashMap aMedium(TransformItems(SID_OPENDOC, GetItemSet()));
 
             if ( pImpl->m_xLockingStream.is() && !bFromTempFile )
             {
@@ -3027,12 +3028,12 @@ void SfxMedium::GetMedium_Impl()
                 {
                     aMedium[utl::MediaDescriptor::PROP_URL] <<= aFileName;
                     aMedium.erase( utl::MediaDescriptor::PROP_READONLY );
-                    aMedium.addInputStream();
+                    utl::MediaDescriptor::addInputStream(aMedium);
                 }
                 else if ( GetURLObject().GetProtocol() == INetProtocol::File )
                 {
                     // use the special locking approach only for file URLs
-                    aMedium.addInputStreamOwnLock();
+                    utl::MediaDescriptor::addInputStreamOwnLock(aMedium);
                 }
                 else
                 {
@@ -3042,7 +3043,7 @@ void SfxMedium::GetMedium_Impl()
                     {
                         aMedium[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER] <<= GetInteractionHandler( true );
                     }
-                    aMedium.addInputStream();
+                    utl::MediaDescriptor::addInputStream(aMedium);
                 }
                 // the ReadOnly property set in aMedium is ignored
                 // the check is done in LockOrigFileOnDemand() for file and non-file URLs
@@ -3139,7 +3140,7 @@ void SfxMedium::Init_Impl()
     // TODO/LATER: handle lifetime of storages
     pImpl->bDisposeStorage = false;
 
-    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet.get(), SID_DOC_SALVAGE, false);
+    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_DOC_SALVAGE, false);
     if ( pSalvageItem && pSalvageItem->GetValue().isEmpty() )
     {
         pSalvageItem = nullptr;
@@ -3194,7 +3195,7 @@ void SfxMedium::Init_Impl()
 
     // in case output stream is by mistake here
     // clear the reference
-    const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_OUTPUTSTREAM, false);
+    const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_OUTPUTSTREAM, false);
     if( pOutStreamItem
      && ( !( pOutStreamItem->GetValue() >>= rOutStream )
           || !pImpl->m_aLogicName.startsWith("private:stream")) )
@@ -3206,7 +3207,7 @@ void SfxMedium::Init_Impl()
     if (!pImpl->m_aLogicName.isEmpty())
     {
         // if the logic name is set it should be set in MediaDescriptor as well
-        const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet.get(), SID_FILE_NAME, false);
+        const SfxStringItem* pFileNameItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_FILE_NAME, false);
         if ( !pFileNameItem )
         {
             // let the ItemSet be created if necessary
@@ -3256,7 +3257,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
     if ( pImpl->m_pSet )
     {
         css::uno::Reference< css::task::XInteractionHandler > xHandler;
-        const SfxUnoAnyItem* pHandler = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_INTERACTIONHANDLER, false);
+        const SfxUnoAnyItem* pHandler = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_INTERACTIONHANDLER, false);
         if ( pHandler && (pHandler->GetValue() >>= xHandler) && xHandler.is() )
             return xHandler;
     }
@@ -3648,7 +3649,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
         pImpl->m_pFilter = pImpl->m_pCustomFilter;
     }
 
-    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet.get(), SID_DOC_SALVAGE, false);
+    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_DOC_SALVAGE, false);
     if( pSalvageItem )
     {
         // QUESTION: there is some treatment of Salvage in Init_Impl; align!
@@ -3657,7 +3658,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
             // if a URL is provided in SalvageItem that means that the FileName refers to a temporary file
             // that must be copied here
 
-            const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet.get(), SID_FILE_NAME, false);
+            const SfxStringItem* pFileNameItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_FILE_NAME, false);
             if (!pFileNameItem) throw uno::RuntimeException();
             OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
             if ( !aNewTempFileURL.isEmpty() )
@@ -3674,11 +3675,11 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
         }
     }
 
-    const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
+    const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
     if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
         pImpl->m_bOriginallyLoadedReadOnly = true;
 
-    const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet.get(), SID_FILE_NAME, false);
+    const SfxStringItem* pFileNameItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_FILE_NAME, false);
     if (!pFileNameItem) throw uno::RuntimeException();
     pImpl->m_aLogicName = pFileNameItem->GetValue();
     pImpl->m_nStorOpenMode = pImpl->m_bOriginallyLoadedReadOnly
@@ -3688,14 +3689,12 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
 void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
 {
-    comphelper::SequenceAsHashMap aArgsMap(rArgs);
-    aArgsMap.erase(u"Stream"_ustr);
-    aArgsMap.erase(u"InputStream"_ustr);
-
-    pImpl->m_aArgs = aArgsMap.getAsConstPropertyValueList();
+    pImpl->m_aArgs << rArgs;
+    pImpl->m_aArgs.erase(u"Stream"_ustr);
+    pImpl->m_aArgs.erase(u"InputStream"_ustr);
 }
 
-const uno::Sequence<beans::PropertyValue> & SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
+const comphelper::SequenceAsHashMap& SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const std::shared_ptr<SfxItemSet>& p ) :
     pImpl(new SfxMedium_Impl)
@@ -4770,7 +4769,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                 // remove the readonly state
                 bool bWasReadonly = false;
                 pImpl->m_nStorOpenMode = SFX_STREAM_READWRITE;
-                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
+                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
                 if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
                     bWasReadonly = true;
                 GetItemSet().ClearItem( SID_DOC_READONLY );

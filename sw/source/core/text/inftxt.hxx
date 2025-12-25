@@ -360,6 +360,9 @@ class SwTextPaintInfo : public SwTextSizeInfo
     sw::WrongListIterator *m_pGrammarCheckList;
     sw::WrongListIterator *m_pSmartTags;
     std::vector<tools::Long>* m_pSpaceAdd;
+    SwTwips m_nLetterSpacing = 0; // custom letter spacing
+    SwTwips m_nScaleWidth = 100;  // glyph scaling (grain resolution to limit font generation)
+
     const SvxBrushItem *m_pBrushItem; // For the background
     SwTextFly    m_aTextFly;    // Calculate the FlyFrame
     Point       m_aPos;       // Paint position
@@ -475,6 +478,12 @@ public:
 
     void SetpSpaceAdd( std::vector<tools::Long>* pNew ){ m_pSpaceAdd = pNew; }
     std::vector<tools::Long>* GetpSpaceAdd() const { return m_pSpaceAdd; }
+
+    SwTwips GetLetterSpacing() const { return m_nLetterSpacing; }
+    void SetLetterSpacing(SwTwips nNew) { m_nLetterSpacing = nNew; }
+
+    SwTwips GetScaleWidth() const { return m_nScaleWidth; }
+    void SetScaleWidth(SwTwips nNew) { m_nScaleWidth = nNew; }
 
     void SetWrongList(sw::WrongListIterator *const pNew) { m_pWrongList = pNew; }
     sw::WrongListIterator* GetpWrongList() const { return m_pWrongList; }

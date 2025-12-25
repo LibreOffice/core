@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class masterElements(UITestCase):
 
-   def test_master_elements(self):
+    def test_master_elements(self):
         with self.ui_test.create_doc_in_start_center("impress"):
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

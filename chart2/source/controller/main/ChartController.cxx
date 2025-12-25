@@ -67,7 +67,7 @@
 #include <utility>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/lok.hxx>
 
@@ -1297,10 +1297,9 @@ void SAL_CALL ChartController::dispatch(
                             const Sequence<Reference<chart2::XFormattedString>> aStrings(
                                 xTitle->getText());
                             xProperties.pop_back();
-                            for (int i = 0; i < aStrings.getLength(); i++)
+                            for (const auto& aString : aStrings)
                             {
-                                Reference<beans::XPropertySet> xTitlePropSet(aStrings[i],
-                                                                             uno::UNO_QUERY);
+                                Reference<beans::XPropertySet> xTitlePropSet(aString, uno::UNO_QUERY);
                                 xProperties.push_back(xTitlePropSet);
                             }
                         }
@@ -1310,9 +1309,9 @@ void SAL_CALL ChartController::dispatch(
                     }
                 }
                 bool bAllPropertiesExist = (xProperties.size() > 0);
-                for (std::size_t i = 0; i < xProperties.size(); i++)
+                for (const auto& xProperty : xProperties)
                 {
-                    if (!xProperties[i].is())
+                    if (!xProperty.is())
                         bAllPropertiesExist = false;
                 }
                 if (bAllPropertiesExist)
@@ -1544,8 +1543,9 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
             m_pDrawModelWrapper = m_xChartView->getDrawModelWrapper();
         if ( m_pDrawModelWrapper )
         {
-            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl(
-                std::bind(&ChartController::NotifyUndoActionHdl, this, std::placeholders::_1) );
+            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl([this](std::unique_ptr<SdrUndoAction> pUndoAction){
+                NotifyUndoActionHdl(std::move(pUndoAction));
+            });
         }
     }
     return m_pDrawModelWrapper.get();

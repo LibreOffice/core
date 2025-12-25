@@ -24,6 +24,8 @@
 #include <fldupde.hxx>
 #include <viewopt.hxx>
 #include <tools/fldunit.hxx>
+#include <optional>
+#include "SwBaselineGridConfig.hxx"
 
 class SwMasterUsrPref;
 
@@ -176,6 +178,7 @@ class SwMasterUsrPref : public SwViewOption
     SwCursorConfig      m_aCursorConfig;
     std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
     SwFmtAidsAutoComplConfig m_aFmtAidsAutoComplConfig;
+    std::optional<SwBaselineGridConfig> m_aBaselineGridConfig; // Not available in web mode
 
 public:
     SwMasterUsrPref(bool bWeb);
@@ -192,6 +195,11 @@ public:
             if(m_pWebColorConfig)
                 m_pWebColorConfig->SetModified();
             m_aFmtAidsAutoComplConfig.SetModified();
+
+            if(m_aBaselineGridConfig.has_value())
+            {
+                m_aBaselineGridConfig->SetModified();
+            }
         }
 
     void SetUpdateLinkMode(sal_Int32 nSet, bool bNoModify = false)

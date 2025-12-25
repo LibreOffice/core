@@ -29,7 +29,7 @@
 #include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 
 #include <spelldialog.hxx>
@@ -51,8 +51,8 @@ ScConversionEngineBase::ScConversionEngineBase(
         ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
     ScEditEngineDefaulter( pEnginePoolP ),
     mrViewData( rViewData ),
-    mrDocShell( rViewData.GetDocShell() ),
-    mrDoc( rViewData.GetDocShell().GetDocument() ),
+    mrDocShell( *rViewData.GetDocShell() ),
+    mrDoc( rViewData.GetDocShell()->GetDocument() ),
     maSelState( rViewData ),
     mpUndoDoc( pUndoDoc ),
     mpRedoDoc( pRedoDoc ),
@@ -215,8 +215,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 }
 
                 // language changed?
-                const SfxPoolItem* pItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
-                if( const SvxLanguageItem* pLangItem = dynamic_cast<const SvxLanguageItem*>( pItem )  )
+                const SfxPoolItem& rItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
+                if (const SvxLanguageItem* pLangItem = dynamic_cast<const SvxLanguageItem*>(&rItem))
                 {
                     LanguageType eLang = pLangItem->GetValue();
                     if( eLang == LANGUAGE_SYSTEM )

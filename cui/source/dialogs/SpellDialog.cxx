@@ -46,7 +46,7 @@
 #include <vcl/specialchars.hxx>
 #include <vcl/event.hxx>
 #include <vcl/texteng.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include <SpellDialog.hxx>
 #include <optlingu.hxx>
@@ -2098,7 +2098,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 
             aPortion1.sText = m_xEditEngine->GetText(ESelection(0, 0, 0, nTextLen));
 
-            aRet.push_back(aPortion1);
+            aRet.push_back(std::move(aPortion1));
         }
         else
         {
@@ -2120,7 +2120,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 {
                     aPortion1.bIgnoreThisError = true;
                 }
-                aRet.push_back(aPortion1);
+                aRet.push_back(std::move(aPortion1));
                 nStart = aStart->nPosition;
                 eLang = aStart->eLanguage;
                 ++aStart;
@@ -2144,7 +2144,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
                 svx::SpellPortion aPortion2;
                 aPortion2.eLanguage = eLang;
                 aPortion2.sText = aLeftOverText.makeStringAndClear();
-                aRet.push_back( aPortion2 );
+                aRet.push_back(std::move(aPortion2));
             }
             else if (!aLeftOverText.isEmpty() && !aRet.empty())
             {   // we just need to append the left-over text to the last portion (which had no errors)

@@ -67,43 +67,11 @@ constexpr auto constSystemColorMap = frozen::make_unordered_map<sal_Int32, model
     { XML_menuBar, model::SystemColorType::MenuBar }
 });
 
-constexpr auto constTransformTypeMap = frozen::make_unordered_map<sal_Int32, model::TransformationType>
-({
-    { XML_alpha, model::TransformationType::Alpha },
-    { XML_alphaMod, model::TransformationType::AlphaMod },
-    { XML_alphaOff, model::TransformationType::AlphaOff },
-    { XML_blue, model::TransformationType::Blue },
-    { XML_blueMod, model::TransformationType::BlueMod },
-    { XML_blueOff, model::TransformationType::BlueOff },
-    { XML_hue, model::TransformationType::Hue },
-    { XML_hueMod, model::TransformationType::HueMod},
-    { XML_hueOff, model::TransformationType::HueOff },
-    { XML_lum, model::TransformationType::Lum },
-    { XML_lumMod, model::TransformationType::LumMod },
-    { XML_lumOff, model::TransformationType::LumOff },
-    { XML_green, model::TransformationType::Green },
-    { XML_greenMod, model::TransformationType::GreenMod },
-    { XML_greenOff, model::TransformationType::GreenOff },
-    { XML_red, model::TransformationType::Red },
-    { XML_redMod, model::TransformationType::RedMod },
-    { XML_redOff, model::TransformationType::RedOff },
-    { XML_sat, model::TransformationType::Sat },
-    { XML_satMod, model::TransformationType::SatMod },
-    { XML_satOff, model::TransformationType::SatMod },
-    { XML_shade, model::TransformationType::Shade },
-    { XML_tint, model::TransformationType::Tint },
-    { XML_comp, model::TransformationType::Comp },
-    { XML_gamma, model::TransformationType::Gamma },
-    { XML_gray, model::TransformationType::Gray },
-    { XML_inv, model::TransformationType::Inv },
-    { XML_invGamma, model::TransformationType::InvGamma }
-});
-
 }
 
-ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor)
+ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Color* pColor, model::ComplexColor* pComplexColor)
     : ContextHandler2(rParent)
-    , mrColor(rColor)
+    , mpColor(pColor)
     , mpComplexColor(pComplexColor)
 {
 }
@@ -114,10 +82,13 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
     {
         case A_TOKEN(scrgbClr):
         {
-            mrColor.setScrgbClr(
-                rAttribs.getInteger( XML_r, 0 ),
-                rAttribs.getInteger( XML_g, 0 ),
-                rAttribs.getInteger( XML_b, 0 ) );
+            if (mpColor)
+            {
+                mpColor->setScrgbClr(
+                    rAttribs.getInteger( XML_r, 0 ),
+                    rAttribs.getInteger( XML_g, 0 ),
+                    rAttribs.getInteger( XML_b, 0 ) );
+            }
             if (mpComplexColor)
             {
                 mpComplexColor->setCRGB(
@@ -130,7 +101,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 
         case A_TOKEN(srgbClr):
         {
-            mrColor.setSrgbClr(rAttribs.getIntegerHex(XML_val, 0));
+            if (mpColor) mpColor->setSrgbClr(rAttribs.getIntegerHex(XML_val, 0));
             if (mpComplexColor)
             {
                 mpComplexColor->setRGB(rAttribs.getIntegerHex(XML_val, 0));
@@ -140,10 +111,13 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 
         case A_TOKEN(hslClr):
         {
-            mrColor.setHslClr(
-                rAttribs.getInteger( XML_hue, 0 ),
-                rAttribs.getInteger( XML_sat, 0 ),
-                rAttribs.getInteger( XML_lum, 0 ) );
+            if (mpColor)
+            {
+                mpColor->setHslClr(
+                    rAttribs.getInteger(XML_hue, 0),
+                    rAttribs.getInteger(XML_sat, 0),
+                    rAttribs.getInteger(XML_lum, 0));
+            }
 
             if (mpComplexColor)
             {
@@ -160,7 +134,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             sal_Int32 nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
             sal_Int32 nLastColor = rAttribs.getIntegerHex(XML_lastClr, -1);
 
-            mrColor.setSysClr(nToken, nLastColor);
+            if (mpColor) mpColor->setSysClr(nToken, nLastColor);
 
             if (mpComplexColor)
             {
@@ -178,11 +152,11 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         case A_TOKEN(schemeClr):
         {
             auto nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
-            mrColor.setSchemeClr(nToken);
+            if (mpColor) mpColor->setSchemeClr(nToken);
             std::optional<OUString> sSchemeName = rAttribs.getString(XML_val);
             if (sSchemeName.has_value())
             {
-                mrColor.setSchemeName(*sSchemeName);
+                if (mpColor) mpColor->setSchemeName(*sSchemeName);
 
                 if (mpComplexColor)
                 {
@@ -203,7 +177,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         case A_TOKEN(prstClr):
         {
             sal_Int32 nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
-            mrColor.setPrstClr(nToken);
+            if (mpColor) mpColor->setPrstClr(nToken);
             if (mpComplexColor)
             {
                 // TODO - just converted to RGB for now
@@ -252,7 +226,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             }
             else
                 nVal = rAttribs.getInteger(XML_val, 0);
-            mrColor.addTransformation( nElement, nVal );
+            if (mpColor) mpColor->addTransformation(nElement, nVal);
         }
         break;
         case A_TOKEN( comp ):
@@ -260,35 +234,34 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         case A_TOKEN( gray ):
         case A_TOKEN( inv ):
         case A_TOKEN( invGamma ):
-            mrColor.addTransformation( nElement );
+            if (mpColor) mpColor->addTransformation( nElement );
         break;
     }
 
     if (mpComplexColor)
     {
-        auto aIterator = constTransformTypeMap.find(getBaseToken(nElement));
-        if (aIterator != constTransformTypeMap.end())
-        {
-            auto const& aPair = *aIterator;
-            model::TransformationType eType = aPair.second;
+        model::TransformationType eType = Color::getTransformationType(getBaseToken(nElement));
 
-            OUString aValueString = rAttribs.getStringDefaulted(XML_val);
-            sal_Int32 nValue = 0;
-            if (aValueString.endsWith("%"))
-                nValue = aValueString.toDouble() * PER_PERCENT;
-            else
-                nValue = rAttribs.getInteger(XML_val, 0);
+        OUString aValueString = rAttribs.getStringDefaulted(XML_val);
+        sal_Int32 nValue = 0;
+        if (aValueString.endsWith("%"))
+            nValue = aValueString.toDouble() * PER_PERCENT;
+        else
+            nValue = rAttribs.getInteger(XML_val, 0);
 
-            mpComplexColor->addTransformation({eType, sal_Int16(nValue / 10)});
-        }
+        mpComplexColor->addTransformation({eType, sal_Int16(nValue / 10)});
     }
 
     return nullptr;
 }
 
-ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color& rColor, model::ComplexColor* pComplexColor)
+//===========
+// ColorContext
+//===========
+
+ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color* pColor, model::ComplexColor* pComplexColor)
     : ContextHandler2(rParent)
-    , mrColor(rColor)
+    , mpColor(pColor)
     , mpComplexColor(pComplexColor)
 {
 }
@@ -304,10 +277,42 @@ ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color& rColor,
         case A_TOKEN( sysClr ):
         case A_TOKEN( schemeClr ):
         case A_TOKEN( prstClr ):
-            return new ColorValueContext(*this, mrColor, mpComplexColor);
+            return new ColorValueContext(*this, mpColor, mpComplexColor);
     }
     return nullptr;
 }
+
+//===========
+// VariationContext
+//===========
+
+VariationContext::VariationContext(ContextHandler2Helper const & rParent,
+        Color* pColor, model::ComplexColor* pComplexColor)
+    : ColorValueContext(rParent, pColor, pComplexColor)
+    , mpColor(pColor)
+    , mpComplexColor(pComplexColor)
+{
+}
+
+::oox::core::ContextHandlerRef VariationContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
+{
+    switch( nElement )
+    {
+        case A_TOKEN( scrgbClr ):
+        case A_TOKEN( srgbClr ):
+        case A_TOKEN( hslClr ):
+        case A_TOKEN( sysClr ):
+        case A_TOKEN( schemeClr ):
+        case A_TOKEN( prstClr ):
+            return new ColorValueContext(*this, mpColor, mpComplexColor);
+    }
+    return nullptr;
+}
+
+//===========
+// ColorsContext
+//===========
 
 ColorsContext::ColorsContext(ContextHandler2Helper const& rParent, std::vector<Color>& rColors)
     : ContextHandler2(rParent)
@@ -328,7 +333,7 @@ ColorsContext::ColorsContext(ContextHandler2Helper const& rParent, std::vector<C
         case A_TOKEN(prstClr):
         {
             mrColors.emplace_back();
-            return new ColorValueContext(*this, mrColors.back(), nullptr);
+            return new ColorValueContext(*this, &mrColors.back(), nullptr);
         }
     }
     return nullptr;

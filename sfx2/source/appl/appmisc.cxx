@@ -125,11 +125,11 @@ static bool FileExists( const INetURLObject& rURL )
     return bRet;
 }
 
-bool SfxApplication::loadBrandSvg(const char *pName, Bitmap &rBitmap, int nWidth)
+bool SfxApplication::loadBrandSvg(std::u16string_view sName, Bitmap &rBitmap, int nWidth)
 {
     // Load from disk
 
-    OUString aBaseName = "/" + OUString::createFromAscii( pName );
+    OUString aBaseName = u"/"_ustr + sName;
 
     OUString uri = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + aBaseName + ".svg";
     rtl::Bootstrap::expandMacros( uri );
@@ -212,7 +212,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, Bitmap &rBitmap, int nWidth
 Bitmap SfxApplication::GetApplicationLogo(tools::Long nWidth)
 {
     Bitmap aBitmap;
-    SfxApplication::loadBrandSvg("shell/about", aBitmap, nWidth);
+    SfxApplication::loadBrandSvg(u"shell/about", aBitmap, nWidth);
     return aBitmap;
 }
 

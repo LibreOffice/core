@@ -649,6 +649,12 @@ Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getDataPilotFields()
     return new ScDataPilotFieldsObj( *this );
 }
 
+rtl::Reference<ScDataPilotFieldsObj> ScDataPilotDescriptorBase::getScDataPilotFields()
+{
+    SolarMutexGuard aGuard;
+    return new ScDataPilotFieldsObj( *this );
+}
+
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getColumnFields()
 {
     SolarMutexGuard aGuard;
@@ -957,6 +963,11 @@ void SAL_CALL ScDataPilotDescriptorBase::removeVetoableChangeListener(
 // XDataPilotDataLayoutFieldSupplier
 
 Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutField()
+{
+    return getScDataLayoutField();
+}
+
+rtl::Reference< ScDataPilotFieldObj > ScDataPilotDescriptorBase::getScDataLayoutField()
 {
     SolarMutexGuard aGuard;
     if( ScDPObject* pDPObject = GetDPObject() )
@@ -1565,6 +1576,15 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
     return Any( Reference< XPropertySet >(xField) );
 }
 
+rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::getScDataPilotFieldObjByIndex( sal_Int32 nIndex )
+{
+    SolarMutexGuard aGuard;
+    rtl::Reference< ScDataPilotFieldObj > xField( GetObjectByIndex_Impl( nIndex ) );
+    if (!xField.is())
+        throw IndexOutOfBoundsException();
+    return xField;
+}
+
 // XElementAccess
 
 uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType()
@@ -1587,6 +1607,15 @@ Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
     if (!xField.is())
         throw NoSuchElementException();
     return Any( Reference<XPropertySet>(xField) );
+}
+
+rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::getScDataPilotFieldObjByName( const OUString& aName )
+{
+    SolarMutexGuard aGuard;
+    rtl::Reference<ScDataPilotFieldObj> xField(GetObjectByName_Impl(aName));
+    if (!xField.is())
+        throw NoSuchElementException();
+    return xField;
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
@@ -2385,9 +2414,14 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
 // XDataPilotFieldGrouping
 Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( const Sequence< OUString >& rItems )
 {
+    return createNameGroup(comphelper::sequenceToContainer<std::vector<OUString>>(rItems));
+}
+
+rtl::Reference< ScDataPilotFieldObj > ScDataPilotFieldObj::createNameGroup( const std::vector< OUString >& rItems )
+{
     SolarMutexGuard aGuard;
 
-    if( !rItems.hasElements() )
+    if( rItems.empty() )
         throw IllegalArgumentException(u"rItems is empty"_ustr, getXWeak(), 0);
 
     Reference< XMembersAccess > xMembers = GetMembers();
@@ -2406,7 +2440,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         }
     }
 
-    Reference< XDataPilotField > xRet;
+    rtl::Reference< ScDataPilotFieldObj > xRet;
     OUString sNewDim;
     ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
@@ -2473,7 +2507,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 {
                     const ScDPSaveGroupItem& rBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                    if (comphelper::findValue(rItems, rBaseGroup.GetGroupName()) == -1)    //! ignore case?
+                    if (std::find(rItems.begin(), rItems.end(), rBaseGroup.GetGroupName()) == rItems.end())    //! ignore case?
                     {
                         // add an additional group for each item that is not in the selection
                         ScDPSaveGroupItem aGroup( rBaseGroup.GetGroupName() );
@@ -2528,29 +2562,30 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     // if new grouping field has been created (on first group), return it
     if( !sNewDim.isEmpty() )
     {
-        Reference< XNameAccess > xFields(mxParent->getDataPilotFields(), UNO_QUERY);
-        if (xFields.is())
+        try
         {
-            try
-            {
-                xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
-                SAL_WARN_IF(!xRet.is(), "sc.ui", "there is a name, so there should be also a field");
-            }
-            catch (const container::NoSuchElementException&)
-            {
-                css::uno::Any anyEx = cppu::getCaughtException();
-                SAL_WARN("sc.ui", "Cannot find field with that name: " + sNewDim + ".");
-                // Avoid throwing exception that's not specified in the method signature.
-                throw css::lang::WrappedTargetRuntimeException(
-                        "Cannot find field with name \"" + sNewDim + "\"",
-                        getXWeak(), anyEx );
-            }
+            xRet = mxParent->getScDataPilotFields()->getScDataPilotFieldObjByName(sNewDim);
+            SAL_WARN_IF(!xRet.is(), "sc.ui", "there is a name, so there should be also a field");
+        }
+        catch (const container::NoSuchElementException&)
+        {
+            css::uno::Any anyEx = cppu::getCaughtException();
+            SAL_WARN("sc.ui", "Cannot find field with that name: " + sNewDim + ".");
+            // Avoid throwing exception that's not specified in the method signature.
+            throw css::lang::WrappedTargetRuntimeException(
+                    "Cannot find field with name \"" + sNewDim + "\"",
+                    getXWeak(), anyEx );
         }
     }
     return xRet;
 }
 
 Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( const DataPilotFieldGroupInfo& rInfo )
+{
+    return createScDateGroup(rInfo);
+}
+
+rtl::Reference < ScDataPilotFieldObj > ScDataPilotFieldObj::createScDateGroup( const DataPilotFieldGroupInfo& rInfo )
 {
     SolarMutexGuard aGuard;
     using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
@@ -2652,12 +2687,11 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     }
 
     // return the UNO object of the new dimension, after writing back saved data
-    Reference< XDataPilotField > xRet;
+    rtl::Reference< ScDataPilotFieldObj > xRet;
     if( !aGroupDimName.isEmpty() )
         try
         {
-           Reference< XNameAccess > xFields( mxParent->getDataPilotFields(), UNO_QUERY_THROW );
-           xRet.set( xFields->getByName( aGroupDimName ), UNO_QUERY );
+           xRet = mxParent->getScDataPilotFields()->getScDataPilotFieldObjByName( aGroupDimName );
         }
         catch( Exception& )
         {

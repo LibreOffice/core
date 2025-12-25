@@ -162,7 +162,7 @@ public:
     void set_cursor(const weld::TreeIter& rIter) { mxTreeView->set_cursor(rIter); }
     bool get_cursor(weld::TreeIter* pIter) const { return mxTreeView->get_cursor(pIter); }
     bool get_iter_first(weld::TreeIter& rIter) const { return mxTreeView->get_iter_first(rIter); }
-    bool get_selected(weld::TreeIter* pIter) const { return mxTreeView->get_selected(pIter); }
+    std::unique_ptr<weld::TreeIter> get_selected() const { return mxTreeView->get_selected(); }
 
     OUString get_selected_text() const
     {
@@ -451,7 +451,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
 
     mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
-    mxTreeView->connect_popup_menu(LINK(this, ViewTabListBox_Impl, CommandHdl));
+    mxTreeView->connect_command(LINK(this, ViewTabListBox_Impl, CommandHdl));
     mxTreeView->connect_key_press(LINK(this, ViewTabListBox_Impl, KeyInputHdl));
 }
 
@@ -586,8 +586,7 @@ void ViewTabListBox_Impl::ExecuteContextMenuAction(std::u16string_view rSelected
         DeleteEntries();
     else if (rSelectedPopupEntry == u"rename")
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-        if (mxTreeView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_selected())
         {
             mbEditing = true;
 
@@ -849,14 +848,12 @@ OUString SvtFileView::GetCurrentURL() const
     OUString aURL;
     if (mpImpl->mxView->get_visible())
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
-        if (mpImpl->mxView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->get_selected())
             pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry));
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
-        if (mpImpl->mxIconView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->get_selected())
             pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry));
     }
     if (pEntry)
@@ -1008,15 +1005,13 @@ SvtContentEntry* SvtFileView::FirstSelected() const
     if (mpImpl->mxView->get_visible())
     {
         SvtContentEntry* pRet = nullptr;
-        std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
-        if (mpImpl->mxView->get_selected(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->get_selected())
             pRet = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry));
         return pRet;
     }
 
     SvtContentEntry* pRet = nullptr;
-    std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
-    if (mpImpl->mxIconView->get_selected(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->get_selected())
         pRet = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry));
     return pRet;
 }
@@ -1066,10 +1061,10 @@ IMPL_LINK(SvtFileView, HeaderSelect_Impl, int, nColumn, void)
 OUString SvtFileView::GetConfigString() const
 {
     // sort order
-    OUString sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
+    OUStringBuffer sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
 
     bool bUp = mpImpl->mbAscending;
-    sRet += OUString::Concat(bUp ? std::u16string_view(u"1") : std::u16string_view(u"0")) + ";";
+    sRet.append(OUString::Concat(bUp ? std::u16string_view(u"1") : std::u16string_view(u"0")) + ";");
 
     weld::TreeView* pView = mpImpl->mxView->getWidget();
     sal_uInt16 nCount = mpImpl->mxView->TypeColumnVisible() ? 4 : 3;
@@ -1080,13 +1075,13 @@ OUString SvtFileView::GetConfigString() const
         if (!mpImpl->mxView->TypeColumnVisible() && nId != COLUMN_TITLE)
             ++nId;
 
-        sRet += OUString::number( nId )
+        sRet.append(OUString::number( nId )
                 + ";"
                 + OUString::number(pView->get_column_width(i))
-                + ";";
+                + ";");
     }
 
-    return comphelper::string::stripEnd(sRet, ';');
+    return comphelper::string::stripEnd(sRet.toString(), ';');
 }
 
 ::std::vector< SvtContentEntry > SvtFileView::GetContent()

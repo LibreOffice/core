@@ -56,9 +56,9 @@ bool PlacesListBox::IsUpdated() {
     return false;
 }
 
-void PlacesListBox::RemovePlace( sal_uInt16 nPos )
+void PlacesListBox::RemovePlace(int nPos)
 {
-    if ( nPos < maPlaces.size() )
+    if (nPos >= 0 && o3tl::make_unsigned(nPos) < maPlaces.size())
     {
         if(maPlaces[nPos]->IsEditable()) {
             --mnNbEditables;
@@ -98,7 +98,8 @@ OUString PlacesListBox::getEntryIcon( const PlacePtr& pPlace )
 
 IMPL_LINK_NOARG( PlacesListBox, Selection, weld::TreeView&, void )
 {
-    sal_uInt32 nSelected = mxImpl->get_cursor_index();
+    int nSelected = mxImpl->get_cursor_index();
+    assert(nSelected != -1 && "no selection");
     PlacePtr pPlace = maPlaces[nSelected];
 
     if (pPlace->IsEditable())
@@ -111,7 +112,9 @@ IMPL_LINK_NOARG( PlacesListBox, Selection, weld::TreeView&, void )
 
 IMPL_LINK_NOARG( PlacesListBox, DoubleClick, weld::TreeView&, bool )
 {
-    sal_uInt16 nSelected = mxImpl->get_cursor_index();
+    int nSelected = mxImpl->get_cursor_index();
+    if (nSelected == -1)
+        return true;
     PlacePtr pPlace = maPlaces[nSelected];
     if ( !pPlace->IsEditable() || pPlace->IsLocal( ) )
         return true;
@@ -150,7 +153,8 @@ IMPL_LINK(PlacesListBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString
 
 void PlacesListBox::updateView( )
 {
-    sal_uInt32 nSelected = mxImpl->get_cursor_index();
+    int nSelected = mxImpl->get_cursor_index();
+    assert(nSelected != -1 && "no selection");
     PlacePtr pPlace = maPlaces[nSelected];
     mpDlg->OpenURL_Impl( pPlace->GetUrl( ) );
 }

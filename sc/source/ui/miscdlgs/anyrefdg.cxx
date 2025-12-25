@@ -634,9 +634,9 @@ bool ScRefHandler::EnterRefMode()
     return m_bInRefMode;
 }
 
-ScRefHandler::~ScRefHandler() COVERITY_NOEXCEPT_FALSE
+ScRefHandler::~ScRefHandler()
 {
-    disposeRefHandler();
+    suppress_fun_call_w_exception(disposeRefHandler());
 }
 
 void ScRefHandler::disposeRefHandler()

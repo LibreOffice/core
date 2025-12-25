@@ -31,6 +31,7 @@
 
 #include <com/sun/star/drawing/LineCap.hpp>
 
+#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

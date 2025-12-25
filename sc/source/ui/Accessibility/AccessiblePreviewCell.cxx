@@ -223,9 +223,8 @@ bool ScAccessiblePreviewCell::IsOpaque() const
     bool bOpaque(true);
     if (mpDoc)
     {
-        const SvxBrushItem* pItem = mpDoc->GetAttr(maCellAddress, ATTR_BACKGROUND);
-        if (pItem)
-            bOpaque = pItem->GetColor() != COL_TRANSPARENT;
+        const SvxBrushItem& rItem = mpDoc->GetAttr(maCellAddress, ATTR_BACKGROUND);
+        bOpaque = rItem.GetColor() != COL_TRANSPARENT;
     }
     return bOpaque;
 }

@@ -62,7 +62,7 @@ namespace oox::ppt {
             return this;
         }
         case PPT_TOKEN( clrVal ):
-            return new ::oox::drawingml::ColorContext( *this, maColor );
+            return new ::oox::drawingml::ColorContext(*this, &maColor);
             // we'll defer setting the Any until the end.
         case PPT_TOKEN( fltVal ):
         {

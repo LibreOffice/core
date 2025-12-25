@@ -79,4 +79,8 @@
 #define RID_STR_PROPTITLE_SPINBUTTON                NC_("RID_STR_PROPTITLE_SPINBUTTON", "Spin Button")
 #define RID_STR_PROPTITLE_NAVBAR                    NC_("RID_STR_PROPTITLE_NAVBAR", "Navigation Bar")
 
+#define STR_QUERY_CLR_RECENTS_DOCS_TITLE            NC_("STR_QUERY_CLR_RECENTS_DOCS_TITLE", "Clear Recent Documents")
+#define STR_QUERY_CLR_RECENTS_DOCS_TEXT             NC_("STR_QUERY_CLR_RECENTS_DOCS_TEXT", "This is an irreversible operation.")
+#define STR_QUERY_CLR_RECENTS_DOCS_QUESTION         NC_("STR_QUERY_CLR_RECENTS_DOCS_QUESTION", "Do you want to clear all recent Documents?")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

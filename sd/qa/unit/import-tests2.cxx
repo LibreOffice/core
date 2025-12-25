@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157285)
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf152186)
 {
     createSdImpressDoc("pptx/tdf152186.pptx");
-    saveAndReload(u"Impress MS PowerPoint 2007 XML"_ustr);
+    saveAndReload(TestFilter::PPTX_2007);
 
     bool bHasShadow = bool();
     const SdrPage* pPage = GetPage(1);
@@ -1670,7 +1670,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf127964)
         CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     }
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
 
     {
         const SdrPage* pPage = GetPage(1);
@@ -1952,12 +1952,24 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf128596)
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_REPEAT, bitmapmode);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest2, testDefaultTabStop)
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf96389_deftabstopISO29500)
 {
-    createSdImpressDoc("pptx/deftabstop.pptx");
+    createSdImpressDoc("potx/tdf96389_deftabstopISO29500.potx");
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    sal_Int32 nDefTab = pDoc->GetDefaultTabulator();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), nDefTab);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf96389_deftabstopECMA)
+{
+    createSdImpressDoc("potx/tdf96389_deftabstopECMA.potx");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
 
     sal_Int32 nDefTab = pDoc->GetDefaultTabulator();
@@ -2077,7 +2089,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149961AutofitIndentation)
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149588TransparentSolidFill)
 {
     createSdImpressDoc("pptx/tdf149588_transparentSolidFill.pptx");
-    saveAndReload(u"Impress MS PowerPoint 2007 XML"_ustr);
+    saveAndReload(TestFilter::PPTX_2007);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(6, 0));
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
@@ -2104,7 +2116,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testOverflowBehaviorClip)
             true, xPropSet->getPropertyValue(u"TextClipVerticalOverflow"_ustr).get<bool>());
     }
 
-    saveAndReload(u"impress8"_ustr);
+    saveAndReload(TestFilter::ODP);
     {
         uno::Reference<beans::XPropertySet> xPropSet(getShapeFromPage(0, 0));
         CPPUNIT_ASSERT_EQUAL(
@@ -2273,6 +2285,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, tdf158512)
                          pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE).GetValue());
     CPPUNIT_ASSERT_EQUAL(false,
                          pPage->GetObj(0)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND).GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf169524)
+{
+    createSdImpressDoc("pptx/tdf169524.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> const xParagraph(getParagraphFromShape(8, xShape),
+                                                         uno::UNO_QUERY_THROW);
+    sal_Int32 nLeftMargin;
+    xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nLeftMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

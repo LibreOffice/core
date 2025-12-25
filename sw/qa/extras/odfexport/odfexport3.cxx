@@ -38,7 +38,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/odfexport/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/odfexport/data/"_ustr)
     {
     }
 };
@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxRoundedCorners)
 
     createSwDoc("textbox-rounded-corners.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::ODT);
     verify();
 
     // Table inside a textbox should be in the extension namespace.
@@ -541,13 +541,14 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 
     createSwDoc("btlr-frame.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::ODT);
     verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129520)
 {
-    loadAndReload("tdf129520.docx");
+    createSwDoc("tdf129520.docx");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(u"M"_ustr, getParagraph(1)->getString());
 
@@ -633,7 +634,8 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeOOo)
 {
-    loadAndReload("pagestyle_background_ooo33.odt");
+    createSwDoc("pagestyle_background_ooo33.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // Standard
@@ -727,7 +729,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeOOo)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeLO64)
 {
-    loadAndReload("pagestyle_background_lo64.odt");
+    createSwDoc("pagestyle_background_lo64.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // Standard
@@ -908,7 +911,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeLO64)
 
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeLO70)
 {
-    loadAndReload("pagestyle_background_lo70.odt");
+    createSwDoc("pagestyle_background_lo70.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // Standard
@@ -1089,7 +1093,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPageStyleBackgroundFullSizeLO70)
 
 CPPUNIT_TEST_FIXTURE(Test, testFillBitmapUnused)
 {
-    loadAndReload("fillbitmap3.odt");
+    createSwDoc("fillbitmap3.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // nav_5f_home and all its references are completely gone
@@ -1238,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedPdf)
 
     createSwDoc("embedded-pdf.odt");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::ODT);
     verify();
 
     uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
@@ -1508,7 +1513,8 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStyles3)
 {
-    loadAndReload("table_styles_3.odt");
+    createSwDoc("table_styles_3.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This test checks if default valued attributes aren't exported.
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -1698,7 +1704,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStyles5)
 {
-    loadAndReload("table_styles_5.odt");
+    createSwDoc("table_styles_5.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test if cell styles doesn't have a style:parent-style-name attribute.
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -1771,7 +1778,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles5)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf145226)
 {
-    loadAndReload("tdf145226.fodt");
+    createSwDoc("tdf145226.fodt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
@@ -1800,7 +1808,8 @@ DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129568)
 {
-    loadAndReload("tdf129568.fodt");
+    createSwDoc("tdf129568.fodt");
+    saveAndReload(TestFilter::ODT);
     // Test that export doesn't fail, and that style is imported and in use.
     uno::Reference<style::XStyle> xStyle(
         getStyles(u"CellStyles"_ustr)->getByName(u"Default Style.1"_ustr), uno::UNO_QUERY);
@@ -1810,7 +1819,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
 {
-    loadAndReload("tdf129568-ui.fodt");
+    createSwDoc("tdf129568-ui.fodt");
+    saveAndReload(TestFilter::ODT);
     // Same as above, but styles referenced by UI name.
     uno::Reference<style::XStyle> xStyle(
         getStyles(u"CellStyles"_ustr)->getByName(u"Default Style.1"_ustr), uno::UNO_QUERY);
@@ -1820,7 +1830,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf164712)
 {
-    loadAndReload("tdf164712.odt");
+    createSwDoc("tdf164712.odt");
+    saveAndReload(TestFilter::ODT);
     auto xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
     auto xCursor(xText->createTextCursorByRange(getParagraph(1)));
@@ -1906,7 +1917,8 @@ DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testImageMimetype)
 {
-    loadAndReload("image-mimetype.odt");
+    createSwDoc("image-mimetype.odt");
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202

@@ -55,13 +55,13 @@ namespace oglcanvas
         // interface. Also note subtle method parameter differences)
         void clear();
         void drawLine( const css::rendering::XCanvas*      pCanvas,
-                       const css::geometry::RealPoint2D&   aStartPoint,
-                       const css::geometry::RealPoint2D&   aEndPoint,
+                       const css::geometry::RealPoint2D&   rStartPoint,
+                       const css::geometry::RealPoint2D&   rEndPoint,
                        const css::rendering::ViewState&    viewState,
                        const css::rendering::RenderState&  renderState );
         void drawBezier( const css::rendering::XCanvas*            pCanvas,
-                         const css::geometry::RealBezierSegment2D& aBezierSegment,
-                         const css::geometry::RealPoint2D&         aEndPoint,
+                         const css::geometry::RealBezierSegment2D& rBezierSegment,
+                         const css::geometry::RealPoint2D&         rEndPoint,
                          const css::rendering::ViewState&          viewState,
                          const css::rendering::RenderState&        renderState );
         css::uno::Reference< css::rendering::XCachedPrimitive >

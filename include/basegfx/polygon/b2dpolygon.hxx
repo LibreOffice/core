@@ -25,7 +25,6 @@
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/basegfxdllapi.h>
 
@@ -38,6 +37,7 @@ namespace basegfx
     class B2DHomMatrix;
     class B2DCubicBezier;
     class B2DVector;
+    enum class B2VectorContinuity;
 }
 
 namespace basegfx

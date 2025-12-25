@@ -19,7 +19,8 @@
 #pragma once
 
 #include <sfx2/sidebar/Theme.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace sfx2::sidebar {
 

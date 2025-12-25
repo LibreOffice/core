@@ -49,7 +49,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 {
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
 
-    SwRectFnSet aRectFnSet(&GetAnchorFrame());
+    SwRectFnSet aRectFnSet(GetAnchorFrame());
 
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
     const SvxLRSpaceItem &rLR = rFrameFormat.GetLRSpace();

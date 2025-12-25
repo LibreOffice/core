@@ -76,7 +76,7 @@
 #include <sdpage.hxx>
 #include <sdgrffilter.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/graphicfilter.hxx>
 
@@ -441,7 +441,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         OUString aIconMediaType;
         uno::Reference< io::XInputStream > xIconMetaFile;
 
-        const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
+        const SfxGlobalNameItem* pNameItem = rReq.GetArg(SID_INSERT_OBJECT);
         if ( nSlotId == SID_INSERT_OBJECT && pNameItem )
         {
             const SvGlobalName& aClassName = pNameItem->GetValue();

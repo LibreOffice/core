@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,meson))
 
 $(eval $(call gb_Module_add_targets,meson,\
+    ExternalProject_meson \
     UnpackedTarball_meson \
 ))
 

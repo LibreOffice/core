@@ -7,10 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
-#define INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
+#pragma once
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -134,7 +132,5 @@ private:
 }; // end of DMLPresetShapeExporter class
 
 } // end of namespace oox::drawingml
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

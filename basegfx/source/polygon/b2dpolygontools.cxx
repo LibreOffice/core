@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/point/b3dpoint.hxx>
@@ -34,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 // #i37443#
 constexpr double ANGLE_BOUND_START_VALUE = 2.25;
@@ -533,9 +535,12 @@ namespace basegfx::utils
                     // handle fDistance < 0.0
                     if(rCandidate.isClosed())
                     {
-                        // if fDistance < 0.0 increment with multiple of fLength
-                        sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
-                        fDistance += double(nCount + 1) * fLength;
+                        if (fLength != 0)
+                        {
+                            // if fDistance < 0.0 increment with multiple of fLength
+                            sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
+                            fDistance += double(nCount + 1) * fLength;
+                        }
                     }
                     else
                     {
@@ -549,9 +554,12 @@ namespace basegfx::utils
                     // handle fDistance >= fLength
                     if(rCandidate.isClosed())
                     {
-                        // if fDistance >= fLength decrement with multiple of fLength
-                        sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
-                        fDistance -= static_cast<double>(nCount) * fLength;
+                        if (fLength != 0)
+                        {
+                            // if fDistance >= fLength decrement with multiple of fLength
+                            sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
+                            fDistance -= static_cast<double>(nCount) * fLength;
+                        }
                     }
                     else
                     {
@@ -631,7 +639,7 @@ namespace basegfx::utils
                             }
                         }
 
-                        if(!bDone)
+                        if(!bDone && fEdgeLength != 0)
                         {
                             const double fRelativeInEdge(fDistance / fEdgeLength);
                             aRetval = interpolate(aRetval, aNextPoint, fRelativeInEdge);

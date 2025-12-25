@@ -39,6 +39,7 @@
 #include <drawingml/chart/chartspacefragment.hxx>
 #include <drawingml/chart/stylefragment.hxx>
 #include <drawingml/chart/stylemodel.hxx>
+#include <drawingml/chart/colorsmodel.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -61,6 +62,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
@@ -91,6 +93,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartStyle.hpp>
+#include <com/sun/star/chart2/XChartColorStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -158,7 +161,6 @@ Shape::Shape()
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , mbHasCustomPrompt( false )
-, maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
     setDefaults(/*bDefaultHeight*/true);
@@ -192,7 +194,6 @@ Shape::Shape( const OUString& rServiceName, bool bDefaultHeight )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , mbHasCustomPrompt( false )
-, maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
     msServiceName = rServiceName;
@@ -237,7 +238,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbTextBox( pSourceShape->mbTextBox )
 , mbHasLinkedTxbx(false)
 , mbHasCustomPrompt( pSourceShape->mbHasCustomPrompt )
-, maDiagramDoms( pSourceShape->maDiagramDoms )
 , mnZOrder(pSourceShape->mnZOrder)
 , mnZOrderOff(pSourceShape->mnZOrderOff)
 , mnDataNodeType(pSourceShape->mnDataNodeType)
@@ -489,8 +489,6 @@ void Shape::addShape(
 
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
-                keepDiagramCompatibilityInfo();
-
                 // set DiagramHelper at SdrObjGroup
                 propagateDiagramHelper();
 
@@ -1432,6 +1430,24 @@ Reference< XShape > const & Shape::createAndInsert(
 
         ActionLockGuard const alg(mxShape);
 
+        if (!getDiagramDataModelID().isEmpty())
+        {
+            SdrObject* pShape(SdrObject::getSdrObjectFromXShape(mxShape));
+
+            if (nullptr != pShape)
+            {
+                // check if we have a DiagramHelper
+                std::shared_ptr< svx::diagram::IDiagramHelper > pIDiagramHelper(
+                    pShape->getDiagramHelperFromDiagramOrMember());
+
+                if (pIDiagramHelper)
+                {
+                    // only needed when DiagramHelper exists
+                    pShape->setDiagramDataModelID(getDiagramDataModelID());
+                }
+            }
+        }
+
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
         {
@@ -1642,7 +1658,8 @@ Reference< XShape > const & Shape::createAndInsert(
         }
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
-        if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
+        if ((getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill) ||
+            aFillProperties.maFillColor.isPlaceHolder() )
             getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic && !bIs3DGraphic)
             aFillProperties.pushToPropMap(aShapeProps, rGraphicHelper, mnRotation, nFillPhClr,
@@ -2390,9 +2407,9 @@ Reference< XShape > const & Shape::createAndInsert(
 
 void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFragmentPath)
 {
-
-    sal_Int32 length = maDiagramDoms.getLength();
-    maDiagramDoms.realloc(length + 1);
+    AdvancedDiagramHelper* pAdvancedDiagramHelper(getDiagramHelper());
+    if (nullptr == pAdvancedDiagramHelper)
+        return;
 
     // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
     uno::Sequence<uno::Any> diagramDrawing{
@@ -2400,40 +2417,10 @@ void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFrag
         uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image"))
     };
 
-    beans::PropertyValue* pValue = maDiagramDoms.getArray();
-    pValue[length].Name = "OOXDrawing";
-    pValue[length].Value <<= diagramDrawing;
-}
-
-void Shape::keepDiagramCompatibilityInfo()
-{
-    try
-    {
-        if( !maDiagramDoms.hasElements() )
-            return;
-
-        Reference < XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
-        Reference < XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
-        if ( !xSetInfo.is() )
-            return;
-
-        const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-        if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )
-            return;
-
-        Sequence < PropertyValue > aGrabBag;
-        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-
-        // We keep the previous items, if present
-        if ( aGrabBag.hasElements() )
-            xSet->setPropertyValue( aGrabBagPropName, Any( comphelper::concatSequences(aGrabBag, maDiagramDoms) ) );
-        else
-            xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
-    }
-    catch( const Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo" );
-    }
+    beans::PropertyValue aValue;
+    aValue.Name = "OOXDrawing";
+    aValue.Value <<= diagramDrawing;
+    pAdvancedDiagramHelper->addDomPropertyValue(aValue);
 }
 
 void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)
@@ -2472,7 +2459,8 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
 
     try
     {
-        if( !maDiagramDoms.hasElements() )
+        if( nullptr != getDiagramHelper() )
+        // if( !maDiagramDoms.hasElements() )
             return xShape;
 
         // Stream in which to place the rendered shape
@@ -2660,6 +2648,19 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         rFilter, sStylePath, aStyleModel );
                 rFilter.importFragment( pStyleFragment );
 
+                // Import colors file.
+                OUString sColorPath(pFPath, nLastSlash + 1);
+                sColorPath += u"colors"_ustr;
+                sChartFName = sFullPath.copy(nLastSlash + 1, sFullPath.getLength() - nLastSlash - 1);
+                sColorPath += sNumber;
+                sColorPath += u".xml"_ustr;
+
+                chart::ColorStyleModel aColorsModel;
+                rtl::Reference<chart::ColorsFragment> pColorsFragment =
+                    new chart::ColorsFragment( rFilter, sColorPath, aColorsModel );
+                rFilter.importFragment( pColorsFragment );
+
+
                 // The original theme.
                 ThemePtr pTheme;
                 const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
@@ -2708,6 +2709,9 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 // convert chart style model to docmodel style data
                 Reference<com::sun::star::chart2::XChartStyle> xStyle = xChartDoc->getStyles();
                 oox::drawingml::chart::ChartStyleConverter::convertFromModel(rFilter, aStyleModel, xStyle);
+                // convert color style model to docmodel colors data
+                Reference<com::sun::star::chart2::XChartColorStyle> xCStyle = xChartDoc->getColorStyles();
+                oox::drawingml::chart::ChartColorStyleConverter::convertFromModel(rFilter, aColorsModel, xCStyle);
 
                 if (pPowerPointImport)
                 {

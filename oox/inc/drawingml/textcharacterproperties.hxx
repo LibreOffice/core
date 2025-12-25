@@ -44,8 +44,8 @@ struct TextCharacterProperties
     TextFont            maComplexFont;
     TextFont            maComplexThemeFont;
     TextFont            maSymbolFont;
-    Color               maUnderlineColor;
-    Color               maHighlightColor;
+    model::ComplexColor maUnderlineColor;
+    model::ComplexColor maHighlightColor;
     std::optional< OUString > moLang;
     std::optional< sal_Int32 > moHeight;
     /// If a font scale has to be applied manually to moHeight.
@@ -61,6 +61,7 @@ struct TextCharacterProperties
     std::optional< bool >    moUnderlineFillFollowText;
     std::optional<LineProperties> moTextOutlineProperties;
 
+    Color maHighlightOOXColor;
     FillProperties      maFillProperties;
     /// Set if there was a property set that alters run visually during import
     bool mbHasVisualRunProperties;

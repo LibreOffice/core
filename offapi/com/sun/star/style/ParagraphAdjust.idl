@@ -43,8 +43,19 @@ published enum ParagraphAdjust
 
     /** adjusted to both borders / stretched, including last line
      */
-    STRETCH
+    STRETCH,
 
+    /** equivalent to LEFT for LTR paragraphs, RIGHT for RTL paragraphs
+
+        @since LibreOffice 26.2
+     */
+    START,
+
+    /** equivalent to RIGHT for LTR paragraphs, LEFT for RTL paragraphs
+
+        @since LibreOffice 26.2
+     */
+    END
 };
 
 

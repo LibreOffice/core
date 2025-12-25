@@ -11,7 +11,7 @@
 #include <edtwin.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <bookmark.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/event.hxx>
 
 FormFieldButton::FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFieldmark)
@@ -115,7 +115,7 @@ void FormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     const tools::Rectangle aFrameRect(tools::Rectangle(aPos, aSize));
     rRenderContext.SetLineColor(aLineColor);
     if (rRenderContext.HasAlpha())
-        rRenderContext.SetFillColor(COL_TRANSPARENT);
+        rRenderContext.SetFillColor();
     else
         rRenderContext.SetFillColor(COL_WHITE);
     rRenderContext.DrawRect(aFrameRect);

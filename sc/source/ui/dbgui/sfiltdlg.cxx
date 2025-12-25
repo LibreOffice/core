@@ -34,7 +34,7 @@
 
 #include <filtdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 // DEFINE --------------------------------------------------------------------
 
@@ -177,7 +177,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
 void ScSpecialFilterDlg::Close()
 {
-    rViewData.GetDocShell().CancelAutoDBRange();
+    rViewData.GetDocShell()->CancelAutoDBRange();
 
     DoClose( ScSpecialFilterDlgWrapper::GetChildWindowId() );
 }

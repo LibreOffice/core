@@ -20,8 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
 #define INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
 
-#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
 
 namespace com::sun::star::beans
 {

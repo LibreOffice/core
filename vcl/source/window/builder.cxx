@@ -19,13 +19,11 @@
 #include <frozen/unordered_map.h>
 
 #include <comphelper/lok.hxx>
-#include <i18nutil/unicode.hxx>
 #include <jsdialog/enabled.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <utility>
 #include <vcl/builder.hxx>
@@ -59,8 +57,8 @@
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <slider.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <iconview.hxx>
 #include <svdata.hxx>
@@ -185,8 +183,36 @@ namespace
 
 }
 
+static bool bEnableUICoverage = false;
+
+void Application::EnableUICoverage(bool bEnable)
+{
+    bEnableUICoverage = bEnable;
+    if (!bEnableUICoverage)
+        ImplGetSVData()->mpDefInst->getUsedUIList().clear();
+}
+
+void Application::UICoverageReport(tools::JsonWriter& rJson)
+{
+    auto resultNode = rJson.startNode("result");
+
+    const auto& entries = ImplGetSVData()->mpDefInst->getUsedUIList();
+    {
+        auto childrenNode = rJson.startArray("used");
+        for (const auto& entry : entries)
+            rJson.putSimpleValue(entry);
+    }
+
+    rJson.put("CompleteWriterDialogCoverage", jsdialog::completeWriterDialogList(entries));
+}
+
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
 {
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (bEnableUICoverage)
+        pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
+
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
@@ -197,6 +223,8 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForNavigator(rUIFile))
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nLOKWindowId);
+        else if (jsdialog::isBuilderEnabledForQuickFind(rUIFile))
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nLOKWindowId);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         // this is notebookbar widget but converted from sidebar panel
@@ -206,11 +234,16 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+    return pSVData->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
 std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (bEnableUICoverage)
+        pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
+
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         // Notebookbar sub controls
@@ -226,7 +259,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
+    return pSVData->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
@@ -246,39 +279,6 @@ weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWin
 
 namespace weld
 {
-    OUString MetricSpinButton::MetricToString(FieldUnit rUnit)
-    {
-        const FieldUnitStringList& rList = ImplGetFieldUnits();
-        // return unit's default string (ie, the first one )
-        auto it = std::find_if(
-            rList.begin(), rList.end(),
-            [&rUnit](const std::pair<OUString, FieldUnit>& rItem) { return rItem.second == rUnit; });
-        if (it != rList.end())
-            return it->first;
-
-        return OUString();
-    }
-
-    IMPL_LINK_NOARG(MetricSpinButton, spin_button_value_changed, SpinButton&, void)
-    {
-        signal_value_changed();
-    }
-
-    IMPL_LINK(MetricSpinButton, spin_button_output, sal_Int64, nValue, OUString)
-    {
-        return format_number(nValue);
-    }
-
-    void MetricSpinButton::update_width_chars()
-    {
-        sal_Int64 min, max;
-        m_xSpinButton->get_range(min, max);
-        auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
-                              m_xSpinButton->get_pixel_size(format_number(max)).Width());
-        int chars = ceil(width / m_xSpinButton->get_approximate_digit_width());
-        m_xSpinButton->set_width_chars(chars);
-    }
-
     unsigned int SpinButton::Power10(unsigned int n)
     {
         unsigned int nValue = 1;
@@ -302,160 +302,6 @@ namespace weld
         if (nValue < 0)
             return (nValue - nHalf) / nFactor;
         return (nValue + nHalf) / nFactor;
-    }
-
-    OUString MetricSpinButton::format_number(sal_Int64 nValue) const
-    {
-        OUString aStr;
-
-        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
-
-        unsigned int nDecimalDigits = m_xSpinButton->get_digits();
-        //pawn percent off to icu to decide whether percent is separated from its number for this locale
-        if (m_eSrcUnit == FieldUnit::PERCENT)
-        {
-            double fValue = nValue;
-            fValue /= SpinButton::Power10(nDecimalDigits);
-            aStr = unicode::formatPercent(fValue, rLocaleData.getLanguageTag());
-        }
-        else
-        {
-            aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
-            OUString aSuffix = MetricToString(m_eSrcUnit);
-            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE && m_eSrcUnit != FieldUnit::INCH && m_eSrcUnit != FieldUnit::FOOT)
-                aStr += " ";
-            if (m_eSrcUnit == FieldUnit::INCH)
-            {
-                OUString sDoublePrime = u"\u2033"_ustr;
-                if (aSuffix != "\"" && aSuffix != sDoublePrime)
-                    aStr += " ";
-                else
-                    aSuffix = sDoublePrime;
-            }
-            else if (m_eSrcUnit == FieldUnit::FOOT)
-            {
-                OUString sPrime = u"\u2032"_ustr;
-                if (aSuffix != "'" && aSuffix != sPrime)
-                    aStr += " ";
-                else
-                    aSuffix = sPrime;
-            }
-
-            assert(m_eSrcUnit != FieldUnit::PERCENT);
-            aStr += aSuffix;
-        }
-
-        return aStr;
-    }
-
-    void MetricSpinButton::set_digits(unsigned int digits)
-    {
-        sal_Int64 step, page;
-        get_increments(step, page, m_eSrcUnit);
-        sal_Int64 value = get_value(m_eSrcUnit);
-        m_xSpinButton->set_digits(digits);
-        set_increments(step, page, m_eSrcUnit);
-        set_value(value, m_eSrcUnit);
-        update_width_chars();
-    }
-
-    void MetricSpinButton::set_unit(FieldUnit eUnit)
-    {
-        if (eUnit != m_eSrcUnit)
-        {
-            sal_Int64 step, page;
-            get_increments(step, page, m_eSrcUnit);
-            sal_Int64 value = get_value(m_eSrcUnit);
-            m_eSrcUnit = eUnit;
-            set_increments(step, page, m_eSrcUnit);
-            set_value(value, m_eSrcUnit);
-            const OUString sText = format_number(m_xSpinButton->get_value());
-            m_xSpinButton->set_text(sText);
-            update_width_chars();
-        }
-    }
-
-    sal_Int64 MetricSpinButton::ConvertValue(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
-    {
-        return vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
-    }
-
-    IMPL_LINK(MetricSpinButton, spin_button_input, const OUString&, rText, std::optional<int>)
-    {
-        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
-        double fResult(0.0);
-        bool bRet = vcl::TextToValue(rText, fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
-        if (!bRet)
-            return {};
-
-        if (fResult > SAL_MAX_INT32)
-            fResult = SAL_MAX_INT32;
-        else if (fResult < SAL_MIN_INT32)
-            fResult = SAL_MIN_INT32;
-
-        return std::optional<int>(std::round(fResult));
-    }
-
-    EntryTreeView::EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView)
-        : m_xEntry(std::move(xEntry))
-        , m_xTreeView(std::move(xTreeView))
-    {
-        m_xTreeView->connect_selection_changed(LINK(this, EntryTreeView, ClickHdl));
-        m_xEntry->connect_changed(LINK(this, EntryTreeView, ModifyHdl));
-    }
-
-    IMPL_LINK(EntryTreeView, ClickHdl, weld::TreeView&, rView, void)
-    {
-        m_xEntry->set_text(rView.get_selected_text());
-        m_aChangeHdl.Call(*this);
-    }
-
-    IMPL_LINK_NOARG(EntryTreeView, ModifyHdl, weld::Entry&, void)
-    {
-        m_aChangeHdl.Call(*this);
-    }
-
-    void EntryTreeView::set_height_request_by_rows(int nRows)
-    {
-        int nHeight = nRows == -1 ? -1 : m_xTreeView->get_height_rows(nRows);
-        m_xTreeView->set_size_request(m_xTreeView->get_size_request().Width(), nHeight);
-    }
-
-    size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
-    {
-        size_t nAbsPos = 0;
-
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(&rIter));
-        if (!rTreeView.get_iter_first(*xEntry))
-            xEntry.reset();
-
-        while (xEntry && rTreeView.iter_compare(*xEntry, rIter) != 0)
-        {
-            if (!rTreeView.iter_next(*xEntry))
-                xEntry.reset();
-            nAbsPos++;
-        }
-
-        return nAbsPos;
-    }
-
-    bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
-    {
-        // short circuit for the common case
-        if (rTreeView.get_iter_depth(rIter) == 0)
-            return true;
-
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(&rIter));
-        bool bRetVal = false;
-        do
-        {
-            if (rTreeView.get_iter_depth(*xEntry) == 0)
-            {
-                bRetVal = true;
-                break;
-            }
-        }  while (rTreeView.iter_parent(*xEntry) && rTreeView.get_row_expanded(*xEntry));
-        return bRetVal;
     }
 }
 
@@ -522,11 +368,9 @@ void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
-                       bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
+                       bool bLegacy, std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem)
     : WidgetBuilder(sUIDir, sUIFile, bLegacy)
-    , m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
-                                   ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
-                                   : new NotebookBarAddonsItem{})
+    , m_pNotebookBarAddonsItem(std::move(pNotebookBarAddonsItem))
     , m_sID(std::move(sID))
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
@@ -3011,7 +2855,10 @@ void VclBuilder::insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const
 
     if(rClass == "NotebookBarAddonsMenuMergePoint")
     {
-        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
+        }
         m_pVclParserState->m_nLastMenuItemId = pParent->GetItemCount();
     }
     else if (rClass == "GtkMenuItem")

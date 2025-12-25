@@ -25,6 +25,8 @@
 #include <svdata.hxx>
 #include <window.h>
 
+#include <comphelper/OAccessible.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/dockwin.hxx>

@@ -37,7 +37,7 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/xmlgrhlp.hxx>
+#include <xmloff/xmlgrhlp.hxx>
 #include <xmloff/xmlexp.hxx>
 
 #include <DrawDocShell.hxx>

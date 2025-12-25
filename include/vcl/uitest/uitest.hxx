@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_UITEST_UITEST_HXX
 
 #include <rtl/ustring.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <memory>
 
@@ -26,9 +27,15 @@ namespace UITest
     bool executeCommandWithParameters(const OUString& rCommand,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
 
+    bool executeCommandForProvider(
+        const OUString& rCommand,
+        const css::uno::Reference< css::frame::XDispatchProvider >& xProvider);
+
     bool executeDialog(const OUString& rCommand);
 
     std::unique_ptr<UIObject> getFocusTopWindow();
+
+    std::unique_ptr<UIObject> getFocusWindow();
 
     std::unique_ptr<UIObject> getFloatWindow();
 };

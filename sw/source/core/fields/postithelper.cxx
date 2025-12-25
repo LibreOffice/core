@@ -179,7 +179,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 }
                 o_rInfo.mPageFrame = pPage->getFrameArea();
                 o_rInfo.mPagePrtArea = pPage->getFramePrintArea();
-                o_rInfo.mPagePrtArea.Pos() += o_rInfo.mPageFrame.Pos();
+                o_rInfo.mPagePrtArea += o_rInfo.mPageFrame.Pos();
                 o_rInfo.mnPageNumber = pPage->GetPhyPageNum();
                 o_rInfo.meSidebarPosition = pPage->SidebarPosition();
                 o_rInfo.mRedlineAuthor = 0;

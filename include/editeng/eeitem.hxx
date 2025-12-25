@@ -27,6 +27,7 @@ class SfxBoolItem;
 class SfxGrabBagItem;
 class SfxInt16Item;
 class SvxAdjustItem;
+class SvxAutoFrameDirectionItem;
 class SvxAutoKernItem;
 class SvxCaseMapItem;
 class SvxCharReliefItem;
@@ -93,7 +94,8 @@ inline constexpr TypedWhichId<SvxAdjustItem>             EE_PARA_JUST           
 inline constexpr TypedWhichId<SvxTabStopItem>            EE_PARA_TABS               (EE_PARA_START+17);
 inline constexpr TypedWhichId<SvxJustifyMethodItem>      EE_PARA_JUST_METHOD        (EE_PARA_START+18);
 inline constexpr TypedWhichId<SvxVerJustifyItem>         EE_PARA_VER_JUST           (EE_PARA_START+19);
-inline constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 19);
+inline constexpr TypedWhichId<SvxAutoFrameDirectionItem> EE_PARA_AUTOWRITINGDIR     (EE_PARA_START+20);
+inline constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 20);
 
 // Character attributes:
 inline constexpr sal_uInt16                           EE_CHAR_START          (EE_PARA_END + 1);

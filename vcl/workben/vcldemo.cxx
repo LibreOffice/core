@@ -840,7 +840,7 @@ public:
                 aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), rSize),
                                      BmpScaleFlag::Fast);
 
-                rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
+                rDev.DrawBitmap(aRenderPt, aShadowStretch);
                 aRenderPt.Move(aShadowStretch.GetSizePixel().Width() + 4, 0);
             }
 
@@ -856,7 +856,7 @@ public:
             rDev.SetFillColor(COL_BLUE);
             tools::Rectangle aSurround(r.Center(), aPageShadowMask.GetSizePixel());
             rDev.DrawRect(aSurround);
-            rDev.DrawBitmapEx(aRenderPt, aWhole);
+            rDev.DrawBitmap(aRenderPt, aWhole);
         }
 
         virtual void RenderRegion(OutputDevice &rDev, tools::Rectangle r,
@@ -883,7 +883,7 @@ public:
             aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             AlphaMask aSemiTransp(aBitmap.GetSizePixel());
             aSemiTransp.Erase(64);
-            rDev.DrawBitmapEx(r.TopLeft(), Bitmap(aBitmap.CreateColorBitmap(),
+            rDev.DrawBitmap(r.TopLeft(), Bitmap(aBitmap.CreateColorBitmap(),
                                                     aSemiTransp));
         }
     };
@@ -1078,7 +1078,7 @@ public:
             else if (eType == RENDER_AS_BITMAPEX)
             {
                 Bitmap aBitmapEx(pNested->GetBitmap(Point(0,0),aWhole.GetSize()));
-                rDev.DrawBitmapEx(r.TopLeft(), aBitmapEx);
+                rDev.DrawBitmap(r.TopLeft(), aBitmapEx);
             }
             else if (eType == RENDER_AS_OUTDEV ||
                      eType == RENDER_AS_ALPHA_OUTDEV)
@@ -1208,7 +1208,7 @@ public:
 //              sAL_DEBUG("Draw icon '" << maIconNames[i] << "'");
 
                 if (!(i % 4))
-                    rDev.DrawBitmapEx(p, maIcons[i]);
+                    rDev.DrawBitmap(p, maIcons[i]);
                 else
                 {
                     basegfx::B2DHomMatrix aTransform;
@@ -1264,8 +1264,8 @@ public:
             aBlack->SetOutputSizePixel(aSrc.GetSizePixel());
             aBlack->SetBackground(Wallpaper(COL_BLACK));
             aBlack->Erase();
-            aWhite->DrawBitmapEx(Point(), aSrc);
-            aBlack->DrawBitmapEx(Point(), aSrc);
+            aWhite->DrawBitmap(Point(), aSrc);
+            aBlack->DrawBitmap(Point(), aSrc);
 
             // Now recover that alpha...
             Bitmap aWhiteBmp = aWhite->GetBitmap(Point(),aSrc.GetSizePixel());
@@ -1348,7 +1348,7 @@ public:
                     // original above
                     Point aAbove(aLocation);
                     aAbove.Move(0,-aSrc.GetSizePixel().Height() - 4);
-                    rDev.DrawBitmapEx(aAbove, aSrc);
+                    rDev.DrawBitmap(aAbove, aSrc);
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
                     rDev.DrawBitmap(aAbove, aSrc.CreateColorBitmap());
@@ -1361,18 +1361,18 @@ public:
                     // result below
                     Point aBelow(aLocation);
                     aBelow.Move(0,aResult.GetSizePixel().Height());
-                    rDev.DrawBitmapEx(aBelow, aResult);
+                    rDev.DrawBitmap(aBelow, aResult);
 
                     // mini convert test.
                     aBelow.Move(aResult.GetSizePixel().Width()+4,0);
-                    rDev.DrawBitmapEx(aBelow, aResult);
+                    rDev.DrawBitmap(aBelow, aResult);
 
                     Bitmap aGrey = aSrc.CreateColorBitmap();
                     aGrey.Convert(BmpConversion::N8BitGreys);
                     rDev.DrawBitmap(aBelow, aGrey);
 
                     aBelow.Move(aGrey.GetSizePixel().Width(),0);
-                    rDev.DrawBitmapEx(aBelow, aSrc);
+                    rDev.DrawBitmap(aBelow, aSrc);
 
                     aLocation.Move(aSrc.GetSizePixel().Width()*6,0);
                     if (aLocation.X() > r.Right())

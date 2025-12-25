@@ -110,7 +110,7 @@
 #include <rtl/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/flatpak.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -303,7 +303,7 @@ bool shouldLaunchQuickstart()
     bool bQuickstart = Desktop::GetCommandLineArgs().IsQuickstart();
     if (!bQuickstart)
     {
-        SfxItemSetFixed<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> aQLSet(SfxGetpApp()->GetPool());
+        auto aQLSet = SfxItemSet::makeFixedSfxItemSet<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>(SfxGetpApp()->GetPool());
         SfxApplication::GetOptions(aQLSet);
         const SfxBoolItem* pLauncherItem = aQLSet.GetItemIfSet(SID_ATTR_QUICKLAUNCHER, false);
         if (pLauncherItem)
@@ -356,7 +356,7 @@ void RemoveIconCacheDirectory()
 
 namespace {
 
-#if !defined(EMSCRIPTEN)
+#if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
 void runGraphicsRenderTests()
 {
     if (comphelper::LibreOfficeKit::isActive())
@@ -1645,7 +1645,7 @@ int Desktop::Main()
         CheckOpenCLCompute(xDesktop);
 #endif
 
-#if !defined(EMSCRIPTEN)
+#if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
         //Running the VCL graphics rendering tests
         const char * pDisplay = std::getenv("DISPLAY");
         if (!pDisplay || pDisplay[0] == ':')

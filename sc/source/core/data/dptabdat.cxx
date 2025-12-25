@@ -282,6 +282,10 @@ sal_Int32 ScDPTableData::Compare( sal_Int32 nDim, sal_Int32 nDataId1, sal_Int32 
         return -1;
 }
 
+void ScDPTableData::dumpAsXml(tools::XmlWriter& /*rWriter*/) const
+{
+}
+
 #if DUMP_PIVOT_TABLE
 void ScDPTableData::Dump() const
 {

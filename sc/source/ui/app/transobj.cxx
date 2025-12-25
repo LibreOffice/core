@@ -97,17 +97,18 @@ void ScTransferObj::GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab
     nCol = nMaxCol;
 }
 
-void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocShell& rDocSh, double nPrintFactor,
+void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPrintFactor,
                                 const ScRange& rBlock )
 {
     tools::Rectangle aBound( Point(), pDev->GetOutputSize() );      //! use size from clip area?
 
-    ScViewData aViewData(rDocSh, nullptr);
+    ScViewData aViewData(rDoc);
 
+    aViewData.SetTabNo( rBlock.aEnd.Tab() );
     aViewData.SetScreen( rBlock.aStart.Col(), rBlock.aStart.Row(),
                             rBlock.aEnd.Col(), rBlock.aEnd.Row() );
 
-    ScPrintFunc::DrawToDev( rDocSh.GetDocument(), pDev, nPrintFactor, aBound, aViewData, false/*bMetaFile*/ );
+    ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, aViewData, false/*bMetaFile*/ );
 }
 
 ScTransferObj::ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, TransferableObjectDescriptor aDesc ) :
@@ -433,8 +434,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             pVirtDev->SetOutputSizePixel(aPixelSize);
 
-            InitDocShell(true);
-            PaintToDev( pVirtDev, *m_aDocShellRef, 1.0, aReducedBlock );
+            PaintToDev( pVirtDev, *m_pDoc, 1.0, aReducedBlock );
 
             pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel, Point(), aScale, aScale ) );
             Bitmap aBmp( pVirtDev->GetBitmap( Point(), pVirtDev->GetOutputSize() ) );
@@ -903,7 +903,7 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
             ScAddress aPos(nCol, nRow, nDestTab);
             if (nErrCode != FormulaError::NONE)
             {
-                if ( rDestDoc.GetAttr( nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY)->GetValue() ==
+                if ( rDestDoc.GetAttr( nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY).GetValue() ==
                         SvxCellHorJustify::Standard )
                     rDestDoc.ApplyAttr( nCol,nRow,nDestTab,
                             SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY) );

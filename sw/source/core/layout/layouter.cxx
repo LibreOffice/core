@@ -370,6 +370,27 @@ bool SwLayouter::FrameMovedFwdByObjPos( const SwDoc& _rDoc,
     }
 }
 
+// static
+size_t SwLayouter::GetMovedFwdFramesCount(const SwDoc& _rDoc)
+{
+    if (_rDoc.getIDocumentLayoutAccess().GetLayouter()
+        && _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames)
+    {
+        return _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->Count();
+    }
+    return 0;
+}
+
+// static
+void SwLayouter::InvalidateMovedFwdFrames(const SwDoc& _rDoc)
+{
+    if (_rDoc.getIDocumentLayoutAccess().GetLayouter()
+        && _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames)
+    {
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->InvalidateAll();
+    }
+}
+
 // #i26945#
 bool SwLayouter::DoesRowContainMovedFwdFrame( const SwDoc& _rDoc,
                                             const SwRowFrame& _rRowFrame )
@@ -462,7 +483,7 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
     aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrame.getFrameArea().Pos().Y();
     aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrame.getFrameArea().Width();
     aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrame.getFrameArea().Height();
-    SwRectFnSet aRectFnSet(&p_rNewUpperFrame);
+    SwRectFnSet aRectFnSet(p_rNewUpperFrame);
     const SwFrame* pLastLower( p_rNewUpperFrame.Lower() );
     while ( pLastLower && pLastLower->GetNext() )
     {

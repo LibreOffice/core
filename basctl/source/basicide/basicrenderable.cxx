@@ -26,6 +26,7 @@
 #include <tools/multisel.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace basctl
 {

@@ -230,7 +230,7 @@ public:
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips );
 
-    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr );
+    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr, bool bRangeWidthChanged = false );
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi );
 
     void            ModifyCellSize( ScDirection eDir, bool bOptimal );
@@ -409,7 +409,7 @@ private:
                                         SCCOL nPosX, SCROW nPosY,
                                         bool bAllowDialogs, const TransferableDataHelper& rDataHelper, bool useSavedPrefs = false );
 
-    sal_uInt16      GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
+    sal_uInt16 GetOptimalColWidth(SCCOL nCol, SCTAB nTab, bool bFormula, const ScMarkData& rMark);
 
     void            StartFormatArea();
 
@@ -418,6 +418,9 @@ private:
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 
     bool CheckSheetViewProtection(sc::Operation eOperation);
+
+    void PasteFromExcelClip(ScDocument& rClipDoc, SCTAB nSrcTab, SCCOL nPosX, SCROW nPosY,
+                            const Point* pLogicPos, bool bAllowDialogs);
 };
 
 extern bool bPasteIsMove;

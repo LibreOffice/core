@@ -22,6 +22,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
@@ -31,6 +32,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>
@@ -121,7 +123,16 @@ void ImplGrafControl::ImplModify()
 
     INetURLObject aObj( maCommand );
 
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(aObj.GetURLPath(), a) };
+    // Map command to SDI FN_PARAM_1 names where applicable; else use URL path
+    OUString aParamName = aObj.GetURLPath();
+    if ( maCommand == ".uno:GrafLuminance" )
+        aParamName = u"Brightness"_ustr;
+    else if ( maCommand == ".uno:GrafContrast" )
+        aParamName = u"Contrast"_ustr;
+    else if ( maCommand == ".uno:GrafTransparence" )
+        aParamName = u"Transparency"_ustr;
+
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(aParamName, a) };
 
     SfxToolBoxControl::Dispatch(
         Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
@@ -317,7 +328,7 @@ ImplGrafModeControl::~ImplGrafModeControl()
 
 IMPL_LINK(ImplGrafModeControl, SelectHdl, weld::ComboBox&, rBox, void)
 {
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"GrafMode"_ustr,
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"ColorMode"_ustr,
                                                                    sal_Int16(rBox.get_active())) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -586,7 +597,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_ATTR_GRAF_TRANSPARENCE:
         {
-            const SfxInt16Item* pTransparency = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            const SfxUInt16Item* pTransparency = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
             if ( pTransparency )
                 aSet.Put( SdrGrafTransparenceItem( pTransparency->GetValue() ));
             else if( pItem )
@@ -598,7 +609,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_ATTR_GRAF_MODE:
         {
-            const SfxInt16Item* pMode = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            const SfxUInt16Item* pMode = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
             if ( pMode )
                 aSet.Put( SdrGrafModeItem( static_cast<GraphicDrawMode>( pMode->GetValue() ) ) );
             else if( pItem )

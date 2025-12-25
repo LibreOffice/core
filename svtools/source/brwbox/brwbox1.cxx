@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -593,15 +593,26 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, tools::Long nWidth )
     tools::Long nOldWidth = mvCols[ nItemPos ]->Width();
 
     // adjust last column, if necessary
-    if ( IsVisible() && nItemPos == mvCols.size() - 1 )
+    if ( nItemPos == mvCols.size() - 1 )
     {
-        tools::Long nMaxWidth = pDataWin->GetSizePixel().Width();
-        nMaxWidth -= pDataWin->bAutoSizeLastCol
+        if ( IsVisible() )
+        {
+            tools::Long nMaxWidth = pDataWin->GetSizePixel().Width();
+            nMaxWidth -= pDataWin->bAutoSizeLastCol
                 ? GetFieldRect(nItemId).Left()
                 : GetFrozenWidth();
-        if ( pDataWin->bAutoSizeLastCol || nWidth > nMaxWidth )
+            if ( pDataWin->bAutoSizeLastCol || nWidth > nMaxWidth )
+            {
+                nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
+            }
+        }
+        else if ( nWidth == LONG_MAX )
         {
-            nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
+            // If we can’t calculate the maximum width because the window isn’t visible then it’s
+            // better to leave the width as it is than to set it to LONG_MAX. The last column width
+            // will be recalculated when the window is shown anyway because the window will be
+            // resized.
+            return;
         }
     }
 

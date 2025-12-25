@@ -18,6 +18,7 @@
  */
 
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/untaint.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/bitmap/BitmapSimpleColorQuantizationFilter.hxx>
@@ -304,7 +305,7 @@ void SdVectorizeDlg::SaveSettings() const
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Vectorize::ColorCount::set(m_xNmLayers->get_value(),batch);
-    officecfg::Office::Common::Vectorize::PointReduce::set(m_xMtReduce->get_value(FieldUnit::NONE),batch);
+    officecfg::Office::Common::Vectorize::PointReduce::set(o3tl::sanitizing_cast<sal_Int16>(m_xMtReduce->get_value(FieldUnit::NONE)),batch);
     officecfg::Office::Common::Vectorize::FillHole::set(m_xCbFillHoles->get_active(),batch);
     officecfg::Office::Common::Vectorize::TileExtent::set(m_xMtFillHoles->get_value(FieldUnit::NONE),batch);
     batch->commit();

@@ -256,6 +256,16 @@ namespace
 
         return aArguments;
     }
+
+bool isOAuth2(const cmis::URL& url)
+{
+    return url.getBindingUrl() == ONEDRIVE_BASE_URL || url.getBindingUrl() == GDRIVE_BASE_URL;
+}
+
+OUString getSessionId(const cmis::URL& url)
+{
+    return isOAuth2(url) ? url.getBindingUrl() : url.getBindingUrl() + url.getRepositoryId();
+}
 }
 
 namespace cmis
@@ -309,154 +319,165 @@ namespace cmis
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), std::string(), std::string(), std::string() );
 
         // Look for a cached session, key is binding url + repo id
-        OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
         if ( nullptr == m_pSession )
-            m_pSession = m_pProvider->getSession( sSessionId, m_aURL.getUsername( ) );
+            m_pSession = m_pProvider->getSession(getSessionId(m_aURL), m_aURL.getUsername());
 
         if ( nullptr == m_pSession )
         {
-            // init libcurl callback
-            libcmis::SessionFactory::setCurlInitProtocolsFunction(&::InitCurl_easy);
+            m_pSession = createSession(xEnv, *m_pProvider, m_aURL,
+                                       m_xIdentifier->getContentIdentifier(), this);
+        }
 
-            // Get the auth credentials
-            AuthProvider aAuthProvider(xEnv, m_xIdentifier->getContentIdentifier(), m_aURL.getBindingUrl());
-            AuthProvider::setXEnv( xEnv );
+        return m_pSession;
+    }
 
-            auto rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
-            auto rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
+    libcmis::Session* createSession(const css::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
+                                    ContentProvider& rProvider, const URL& rURL,
+                                    const OUString& rContentId,
+                                    const css::uno::Reference<css::ucb::XContent>& xContext)
+    {
+        // init libcurl callback
+        libcmis::SessionFactory::setCurlInitProtocolsFunction(&::InitCurl_easy);
 
-            bool bSkipInitialPWAuth = false;
-            if (m_aURL.getBindingUrl() == ONEDRIVE_BASE_URL
-                || m_aURL.getBindingUrl() == GDRIVE_BASE_URL)
+        // Get the auth credentials
+        AuthProvider aAuthProvider(xEnv, rContentId, rURL.getBindingUrl());
+        AuthProvider::setXEnv( xEnv );
+
+        auto rUsername = OUSTR_TO_STDSTR( rURL.getUsername( ) );
+        auto rPassword = OUSTR_TO_STDSTR( rURL.getPassword( ) );
+
+        bool bSkipInitialPWAuth = false;
+        if (isOAuth2(rURL))
+        {
+            // skip the initial username and pw-auth prompt
+            bSkipInitialPWAuth = true;
+            rPassword = aAuthProvider.getRefreshToken(rUsername);
+        }
+
+        while (true)
+        {
+            if (bSkipInitialPWAuth || aAuthProvider.authenticationQuery(rUsername, rPassword))
             {
-                // skip the initial username and pw-auth prompt, the only supported method is the
-                // auth-code-fallback one (login with your browser, copy code into the dialog)
-                // TODO: if LO were to listen on localhost for the request, it would be much nicer
-                // user experience
-                bSkipInitialPWAuth = true;
-                rPassword = aAuthProvider.getRefreshToken(rUsername);
+                // Initiate a CMIS session and register it as we found nothing
+                libcmis::OAuth2DataPtr oauth2Data;
+                if ( rURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                {
+                    // reset the skip, so user gets a chance to cancel
+                    bSkipInitialPWAuth = false;
+                    libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::copyWebAuthCodeFallback);
+                    oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
+                        GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
+                        GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
+                        GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET );
+                }
+                if ( rURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
+                    oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
+                        ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
+                        ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
+                        ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET );
+                if ( rURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
+                {
+                    // reset the skip, so user gets a chance to cancel
+                    bSkipInitialPWAuth = false;
+                    libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::copyWebAuthCodeFallback);
+                    oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
+                        ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
+                        ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
+                        ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET );
+                }
+                try
+                {
+                    std::unique_ptr<libcmis::Session> pSession(libcmis::SessionFactory::createSession(
+                        OUSTR_TO_STDSTR( rURL.getBindingUrl( ) ),
+                        rUsername, rPassword, OUSTR_TO_STDSTR( rURL.getRepositoryId( ) ), false, std::move(oauth2Data) ));
+
+                    if ( pSession == nullptr )
+                    {
+                        // Fail: session was not created
+                        ucbhelper::cancelCommandExecution(
+                            ucb::IOErrorCode_INVALID_DEVICE,
+                            generateErrorArguments(rURL),
+                            xEnv);
+                    }
+                    else if (pSession->getRepository() == nullptr
+                             && xContext->getContentType() != CMIS_REPO_TYPE)
+                    {
+                        // Fail: no repository or repository is invalid
+                        ucbhelper::cancelCommandExecution(
+                            ucb::IOErrorCode_INVALID_DEVICE,
+                            generateErrorArguments(rURL),
+                            xEnv,
+                            u"error accessing a repository"_ustr);
+                    }
+                    else
+                    {
+                        rProvider.registerSession(getSessionId(rURL), rURL.getUsername(), pSession.get());
+                        if (isOAuth2(rURL))
+                        {
+                            aAuthProvider.storeRefreshToken(rUsername, rPassword,
+                                                            pSession->getRefreshToken());
+                        }
+                    }
+
+                    return pSession.release();
+                }
+                catch( const libcmis::Exception & e )
+                {
+                    if (e.getType() == "dnsFailed")
+                    {
+                        uno::Any ex;
+                        ex <<= ucb::InteractiveNetworkResolveNameException(
+                                OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
+                                xContext,
+                                task::InteractionClassification_ERROR,
+                                rURL.getBindingUrl());
+                        ucbhelper::cancelCommandExecution(ex, xEnv);
+                    }
+                    else if (e.getType() == "connectFailed" || e.getType() == "connectTimeout")
+                    {
+                        uno::Any ex;
+                        ex <<= ucb::InteractiveNetworkConnectException(
+                                OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
+                                xContext,
+                                task::InteractionClassification_ERROR,
+                                rURL.getBindingUrl());
+                        ucbhelper::cancelCommandExecution(ex, xEnv);
+                    }
+                    else if (e.getType() == "transferFailed")
+                    {
+                        uno::Any ex;
+                        ex <<= ucb::InteractiveNetworkReadException(
+                                OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
+                                xContext,
+                                task::InteractionClassification_ERROR,
+                                rURL.getBindingUrl());
+                        ucbhelper::cancelCommandExecution(ex, xEnv);
+                    }
+                    else if (e.getType() == "permissionDenied")
+                    {
+                        if (isOAuth2(rURL))
+                        {
+                            // For OAuth2, this means user cancelled - don't try again
+                            ucbhelper::cancelCommandExecution(ucb::IOErrorCode_ABORT, {}, xEnv);
+                        }
+                    }
+                    else
+                    {
+                        SAL_INFO("ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what());
+                        throw;
+                    }
+                }
             }
-
-            bool bIsDone = false;
-
-            while ( !bIsDone )
+            else
             {
-                if (bSkipInitialPWAuth || aAuthProvider.authenticationQuery(rUsername, rPassword))
-                {
-                    // Initiate a CMIS session and register it as we found nothing
-                    libcmis::OAuth2DataPtr oauth2Data;
-                    if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
-                    {
-                        // reset the skip, so user gets a chance to cancel
-                        bSkipInitialPWAuth = false;
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::copyWebAuthCodeFallback);
-                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
-                            GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
-                            GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
-                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET );
-                    }
-                    if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
-                            ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
-                            ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
-                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET );
-                    if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
-                    {
-                        // reset the skip, so user gets a chance to cancel
-                        bSkipInitialPWAuth = false;
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::copyWebAuthCodeFallback);
-                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
-                            ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
-                            ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
-                            ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET );
-                    }
-                    try
-                    {
-                        m_pSession = libcmis::SessionFactory::createSession(
-                            OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, std::move(oauth2Data) );
-
-                        if ( m_pSession == nullptr )
-                        {
-                            // Fail: session was not created
-                            ucbhelper::cancelCommandExecution(
-                                ucb::IOErrorCode_INVALID_DEVICE,
-                                generateErrorArguments(m_aURL),
-                                xEnv);
-                        }
-                        else if ( m_pSession->getRepository() == nullptr )
-                        {
-                            // Fail: no repository or repository is invalid
-                            ucbhelper::cancelCommandExecution(
-                                ucb::IOErrorCode_INVALID_DEVICE,
-                                generateErrorArguments(m_aURL),
-                                xEnv,
-                                u"error accessing a repository"_ustr);
-                        }
-                        else
-                        {
-                            m_pProvider->registerSession(sSessionId, m_aURL.getUsername( ), m_pSession);
-                            if (m_aURL.getBindingUrl() == ONEDRIVE_BASE_URL
-                                || m_aURL.getBindingUrl() == GDRIVE_BASE_URL)
-                            {
-                                aAuthProvider.storeRefreshToken(rUsername, rPassword,
-                                                                m_pSession->getRefreshToken());
-                            }
-                        }
-
-                        bIsDone = true;
-                    }
-                    catch( const libcmis::Exception & e )
-                    {
-                        if (e.getType() == "dnsFailed")
-                        {
-                            uno::Any ex;
-                            ex <<= ucb::InteractiveNetworkResolveNameException(
-                                    OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
-                                    getXWeak(),
-                                    task::InteractionClassification_ERROR,
-                                    m_aURL.getBindingUrl());
-                            ucbhelper::cancelCommandExecution(ex, xEnv);
-                        }
-                        else if (e.getType() == "connectFailed" || e.getType() == "connectTimeout")
-                        {
-                            uno::Any ex;
-                            ex <<= ucb::InteractiveNetworkConnectException(
-                                    OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
-                                    getXWeak(),
-                                    task::InteractionClassification_ERROR,
-                                    m_aURL.getBindingUrl());
-                            ucbhelper::cancelCommandExecution(ex, xEnv);
-                        }
-                        else if (e.getType() == "transferFailed")
-                        {
-                            uno::Any ex;
-                            ex <<= ucb::InteractiveNetworkReadException(
-                                    OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
-                                    getXWeak(),
-                                    task::InteractionClassification_ERROR,
-                                    m_aURL.getBindingUrl());
-                            ucbhelper::cancelCommandExecution(ex, xEnv);
-                        }
-                        else if (e.getType() != "permissionDenied")
-                        {
-                            SAL_INFO("ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what());
-                            throw;
-                        }
-                    }
-                }
-                else
-                {
-                    // Silently fail as the user cancelled the authentication
-                    ucbhelper::cancelCommandExecution(
-                                        ucb::IOErrorCode_ABORT,
-                                        uno::Sequence< uno::Any >( 0 ),
-                                        xEnv );
-                    throw uno::RuntimeException( );
-                }
+                // Silently fail as the user cancelled the authentication
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_ABORT,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv );
+                throw uno::RuntimeException( );
             }
         }
-        return m_pSession;
     }
 
     libcmis::ObjectTypePtr const & Content::getObjectType( const uno::Reference< ucb::XCommandEnvironment >& xEnv )

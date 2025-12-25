@@ -967,10 +967,8 @@ void RemoteFilesDialog::AddFilterGroup(
                                   const css::uno::Sequence< css::beans::StringPair >& rFilters )
 {
     AddFilter( rFilter, OUString() );
-    const StringPair* pSubFilters       =               rFilters.getConstArray();
-    const StringPair* pSubFiltersEnd    = pSubFilters + rFilters.getLength();
-    for ( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        AddFilter( pSubFilters->First, pSubFilters->Second );
+    for (const StringPair& rSubFilter : rFilters)
+        AddFilter(rSubFilter.First, rSubFilter.Second);
 }
 
 OUString RemoteFilesDialog::GetCurFilter() const

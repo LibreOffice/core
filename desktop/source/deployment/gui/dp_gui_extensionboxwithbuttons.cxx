@@ -129,22 +129,35 @@ bool ExtensionBoxWithButtons::Command(const CommandEvent& rCEvt)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return ExtensionBox::Command(rCEvt);
 
-    const Point aMousePos(rCEvt.GetMousePosPixel());
-    const auto nPos = PointToPos(aMousePos);
-    OUString sCommand = ShowPopupMenu(aMousePos, nPos);
+    tools::Long nIndex = -1;
+    Point aPos;
+    if (rCEvt.IsMouseEvent())
+    {
+        aPos = rCEvt.GetMousePosPixel();
+        nIndex = PointToPos(aPos);
+    }
+    else
+    {
+        nIndex = getSelIndex();
+        if (nIndex >= 0)
+            aPos = GetEntryRect(nIndex).Center();
+    }
+    if (nIndex < 0)
+        return false;
 
+    const OUString sCommand = ShowPopupMenu(aPos, nIndex);
     if (sCommand == "CMD_ENABLE")
-        m_rParent.enablePackage(GetEntryData(nPos)->m_xPackage, true);
+        m_rParent.enablePackage(GetEntryData(nIndex)->m_xPackage, true);
     else if (sCommand == "CMD_DISABLE")
-        m_rParent.enablePackage(GetEntryData(nPos)->m_xPackage, false);
+        m_rParent.enablePackage(GetEntryData(nIndex)->m_xPackage, false);
     else if (sCommand == "CMD_UPDATE")
-        m_rParent.updatePackage(GetEntryData(nPos)->m_xPackage);
+        m_rParent.updatePackage(GetEntryData(nIndex)->m_xPackage);
     else if (sCommand == "CMD_REMOVE")
-        m_rParent.removePackage(GetEntryData(nPos)->m_xPackage);
+        m_rParent.removePackage(GetEntryData(nIndex)->m_xPackage);
     else if (sCommand == "CMD_SHOW_LICENSE")
     {
         m_rParent.incBusy();
-        ShowLicenseDialog aLicenseDlg(m_rParent.getDialog(), GetEntryData(nPos)->m_xPackage);
+        ShowLicenseDialog aLicenseDlg(m_rParent.getDialog(), GetEntryData(nIndex)->m_xPackage);
         aLicenseDlg.run();
         m_rParent.decBusy();
     }

@@ -25,6 +25,7 @@
 #include <oox/ppt/pptimport.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdoutl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -233,6 +234,30 @@ void AdvancedDiagramHelper::applyDiagramDataState(const svx::diagram::DiagramDat
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
 }
 
+void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl)
+{
+    if(!mpDiagramPtr)
+    {
+        return;
+    }
+
+    // try text change for model part in DiagramData
+    const bool bChanged(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
+
+    if(bChanged)
+    {
+        // reset Dom properties at DiagramData
+        mpDiagramPtr->resetDomPropertyValues();
+
+        // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
+        // entries anymore, but others like "mso-rotation-angle" and others
+        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
+
+        // also set self to modified to get correct exports
+        setModified();
+    }
+}
+
 void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape)
 {
     if(!mpDiagramPtr)
@@ -247,7 +272,8 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Sha
     // secure that data at the Diagram ModelData by copying.
     mpDiagramPtr->getData()->secureDataFromShapeToModelAfterDiagramImport(rRootShape);
 
-    anchorToSdrObjGroup(rTarget);
+    // initialize connection to GroupObject
+    connectToSdrObjGroup(rTarget);
 }
 
 const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCreateThemePtr(
@@ -278,6 +304,20 @@ const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCr
     }
 
     return mpThemePtr;
+}
+
+void AdvancedDiagramHelper::addDomPropertyValue(beans::PropertyValue& aValue)
+{
+    if (mpDiagramPtr)
+        mpDiagramPtr->addDomPropertyValue(aValue);
+}
+
+beans::PropertyValue AdvancedDiagramHelper::getDomPropertyValue(const OUString& rName) const
+{
+    if (mpDiagramPtr)
+        return mpDiagramPtr->getDomPropertyValue(rName);
+
+    return beans::PropertyValue();
 }
 
 }

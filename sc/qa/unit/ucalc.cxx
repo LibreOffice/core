@@ -3559,6 +3559,44 @@ CPPUNIT_TEST_FIXTURE(Test, testToggleRefFlag)
         CPPUNIT_ASSERT_EQUAL(u"=A1+4"_ustr, aFormula);
     }
 
+    {
+        // Calc A1, with newlines in the formula:
+        OUString aFormula(u"=SUM(\nA1:A10\n)"_ustr);
+        ScAddress aPos(1, 1, 0);
+        ScRefFinder aFinder(aFormula, aPos, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+
+        // Original
+        CPPUNIT_ASSERT_EQUAL(aFormula, aFinder.GetText());
+
+        // Set the cursor at the 'A1' part and toggle
+        aFinder.ToggleRel(6, 6);
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(\n$A$1:A10\n)"_ustr, aFinder.GetText());
+        // Selected: "$A$1"
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aFinder.GetSelStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aFinder.GetSelEnd());
+
+        // Set the cursor behind the 'A10' part and toggle
+        aFinder.ToggleRel(14, 14);
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(\n$A$1:$A$10\n)"_ustr, aFinder.GetText());
+        // Selected: "$A$10"
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aFinder.GetSelStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aFinder.GetSelEnd());
+
+        // Set the cursor around an area including a newline and toggle
+        aFinder.ToggleRel(2, 6);
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(\nA$1:$A$10\n)"_ustr, aFinder.GetText());
+        // Selected: "A$1"
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aFinder.GetSelStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aFinder.GetSelEnd());
+
+        // Select all and toggle
+        aFinder.ToggleRel(0, 16);
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(\n$A1:A$10\n)"_ustr, aFinder.GetText());
+        // Selected: "$A1:A$10"
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aFinder.GetSelStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aFinder.GetSelEnd());
+    }
+
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
     // partial selection within formula string.
 

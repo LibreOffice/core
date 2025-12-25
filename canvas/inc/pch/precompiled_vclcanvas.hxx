@@ -35,6 +35,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/gradient.hxx>

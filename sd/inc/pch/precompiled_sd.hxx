@@ -91,7 +91,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
@@ -118,8 +118,8 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/wrkwin.hxx>

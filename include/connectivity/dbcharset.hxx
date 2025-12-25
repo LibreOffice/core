@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_DBCHARSET_HXX
-#define INCLUDED_CONNECTIVITY_DBCHARSET_HXX
+#pragma once
 
 #include <config_options.h>
 #include <sal/config.h>
@@ -143,8 +142,5 @@ namespace dbtools
 
 
 }   // namespace dbtools
-
-
-#endif // INCLUDED_CONNECTIVITY_DBCHARSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

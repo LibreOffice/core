@@ -36,7 +36,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase(u"/sw/qa/extras/embedded_fonts/data/"_ustr, u"writer8"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/embedded_fonts/data/"_ustr)
     {
     }
 };
@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont)
         CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
 
         // Make sure that saving doesn't somehow embed the font
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
         xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
         assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
         assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont)
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Naftalene"));
 
         // Make sure that saving doesn't somehow embed the font
-        save(u"writer8"_ustr);
+        save(TestFilter::ODT);
         xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
         assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
         assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
@@ -262,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
 
         // Make sure that saving doesn't somehow embed the font
-        save(u"Office Open XML Text"_ustr);
+        save(TestFilter::DOCX);
         xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
         assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
         assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
@@ -298,7 +298,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
 
         // Make sure that saving doesn't somehow embed the font
-        save(u"Office Open XML Text"_ustr);
+        save(TestFilter::DOCX);
         xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
         assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
         assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
 
         // Make sure that saving doesn't somehow embed the font
-        save(u"Office Open XML Text"_ustr);
+        save(TestFilter::DOCX);
         xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
         assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
         assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
@@ -386,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167849)
 CPPUNIT_TEST_FIXTURE(Test, tdf166627)
 {
     createSwDoc("font_used_in_header_only.fodt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     // DejaVu Serif wasn't embedded before fix, because it was only seen used in header
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     // CASE 1 - no font embedding enabled
 
     // Save the document
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     CPPUNIT_ASSERT(maTempFile.IsValid());
 
     // Check setting - No font embedding should be enabled
@@ -497,7 +497,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(false));
 
     // Save the document again
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     CPPUNIT_ASSERT(maTempFile.IsValid());
 
     // Check setting - font embedding should be enabled
@@ -554,7 +554,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(true));
 
     // Save the document again
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     CPPUNIT_ASSERT(maTempFile.IsValid());
 
     // Check setting - font embedding should be enabled + embed only used fonts and scripts
@@ -623,7 +623,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
     xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
 
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
@@ -674,7 +674,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbeddingDOCX)
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(uno::Any(true), xProps->getPropertyValue(u"EmbedFonts"_ustr));
 
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
 

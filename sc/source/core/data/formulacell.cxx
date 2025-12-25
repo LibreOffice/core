@@ -1486,13 +1486,19 @@ struct TemporaryCellGroupMaker
             mCell->GetDocument().GetRecursionHelper().AddTemporaryGroupCell( mCell );
         }
     }
-    ~TemporaryCellGroupMaker() COVERITY_NOEXCEPT_FALSE
+    ~TemporaryCellGroupMaker()
+    {
+        suppress_fun_call_w_exception(ImplDestroy());
+    }
+    ScFormulaCell* mCell;
+    const bool mEnabled;
+
+private:
+    void ImplDestroy()
     {
         if( mEnabled )
             mCell->GetDocument().GetRecursionHelper().CleanTemporaryGroupCells();
     }
-    ScFormulaCell* mCell;
-    const bool mEnabled;
 };
 
 } // namespace
@@ -2273,7 +2279,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         if ( pCode->IsRecalcModeForced() )
         {
             sal_uInt32 nValidation = rDocument.GetAttr(
-                    aPos.Col(), aPos.Row(), aPos.Tab(), ATTR_VALIDDATA )->GetValue();
+                    aPos.Col(), aPos.Row(), aPos.Tab(), ATTR_VALIDDATA ).GetValue();
             if ( nValidation )
             {
                 const ScValidationData* pData = rDocument.GetValidationEntry( nValidation );

@@ -73,7 +73,7 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
         xNotify.reset(new SwFlyNotify( this ));
     m_aRef = rPoint;
     SetCurrRelPos( rRelAttr );
-    SwRectFnSet aRectFnSet(GetAnchorFrame());
+    SwRectFnSet aRectFnSet(*GetAnchorFrame());
 
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);

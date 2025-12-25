@@ -19,6 +19,7 @@
 
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <algorithm>
 #include <cassert>
 

@@ -143,9 +143,9 @@ void PageObjectPainter::PaintPreview (
     if ( ! aPreview.IsEmpty())
     {
         if (aPreview.GetSizePixel() != aBox.GetSize())
-            rDevice.DrawBitmapEx(aBox.TopLeft(), aBox.GetSize(), aPreview);
+            rDevice.DrawBitmap(aBox.TopLeft(), aBox.GetSize(), aPreview);
         else
-            rDevice.DrawBitmapEx(aBox.TopLeft(), aPreview);
+            rDevice.DrawBitmap(aBox.TopLeft(), aPreview);
     }
 }
 
@@ -162,7 +162,7 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
         pDevice.disposeAndReset(VclPtr<VirtualDevice>::Create());
     pDevice->SetOutputSizePixel(rSize);
 
-    pDevice->DrawBitmapEx(Point(0,0), rSize, rPreview);
+    pDevice->DrawBitmap(Point(0,0), rSize, rPreview);
 
     // Paint bitmap tiled over the preview to mark it as excluded.
     const sal_Int32 nIconWidth (rOverlay.GetSizePixel().Width());
@@ -171,7 +171,7 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     {
         for (::tools::Long nX=0; nX<rSize.Width(); nX+=nIconWidth)
             for (::tools::Long nY=0; nY<rSize.Height(); nY+=nIconHeight)
-                pDevice->DrawBitmapEx(Point(nX,nY), rOverlay);
+                pDevice->DrawBitmap(Point(nX,nY), rOverlay);
     }
     return pDevice->GetBitmap(Point(0,0), rSize);
 }
@@ -275,7 +275,7 @@ void PageObjectPainter::PaintTransitionEffect (
             PageObjectLayouter::Part::TransitionEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
 
-        rDevice.DrawBitmapEx(
+        rDevice.DrawBitmap(
             aBox.TopCenter(),
             pPageObjectLayouter->GetTransitionEffectIcon().GetBitmap());
     }
@@ -296,7 +296,7 @@ void PageObjectPainter::PaintCustomAnimationEffect (
             rpDescriptor,
             PageObjectLayouter::Part::CustomAnimationEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
-        rDevice.DrawBitmapEx(
+        rDevice.DrawBitmap(
             aBox.TopCenter(),
             pPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmap());
     }

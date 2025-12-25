@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkMenu" id="navmenu">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -96,6 +96,14 @@
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DEMOTE_LEVEL">Demote Outline Level</property>
         <property name="use-underline">True</property>
         <accelerator key="Right" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="401">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_REMOVE_INDEX">_Remove Index</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
@@ -403,6 +411,13 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_RENAME">_Rename</property>
         <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="textalternative">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_TEXT_ALTERNATIVE">Text Alternative...</property>
       </object>
     </child>
     <child>

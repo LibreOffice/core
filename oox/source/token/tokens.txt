@@ -5727,6 +5727,7 @@ varScale
 varSubtotal
 variable
 variant
+variation
 varp
 varyColors
 vbProcedure

@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <i18nlangtag/languagetag.hxx>
-#include <memory>
 #include <optional>
 
 namespace com::sun::star::uno { class XComponentContext; }

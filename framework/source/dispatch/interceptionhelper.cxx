@@ -90,13 +90,10 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
-    sal_Int32                                                          c           = lDescriptor.getLength();
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches (c);
-    css::uno::Reference< css::frame::XDispatch >*                      pDispatches = lDispatches.getArray();
-    const css::frame::DispatchDescriptor*                              pDescriptor = lDescriptor.getConstArray();
-
-    for (sal_Int32 i=0; i<c; ++i)
-        pDispatches[i] = queryDispatch(pDescriptor[i].FeatureURL, pDescriptor[i].FrameName, pDescriptor[i].SearchFlags);
+    css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> lDispatches(lDescriptor.getLength());
+    std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatches.getArray(),
+                   [this](const css::frame::DispatchDescriptor& r)
+                   { return queryDispatch(r.FeatureURL, r.FrameName, r.SearchFlags); });
 
     return lDispatches;
 }

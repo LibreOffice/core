@@ -29,7 +29,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <tools/gen.hxx>
 
 #include <sal/macros.h>
@@ -312,6 +312,12 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
     }
 }
 
+bool AnnotationManagerImpl::isVisibleAnnotations()
+{
+    return (!comphelper::LibreOfficeKit::isActive()
+            || comphelper::LibreOfficeKit::isTiledAnnotations());
+}
+
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest const & rReq )
 {
     switch( rReq.GetSlot() )
@@ -342,7 +348,7 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest const & rReq )
 
 void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest const & rReq)
 {
-    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+    if (isVisibleAnnotations())
         ShowAnnotations(true);
 
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -563,7 +569,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *xAnnotation);
 
     UpdateTags(true);
-    SelectAnnotation(xAnnotation, true);
+    SelectAnnotation(xAnnotation, isVisibleAnnotations());
 }
 
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
@@ -668,7 +674,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
         mpDoc->EndUndo();
 
     UpdateTags(true);
-    SelectAnnotation( xAnnotation, true );
+    SelectAnnotation( xAnnotation, isVisibleAnnotations() );
 }
 
 void AnnotationManagerImpl::DeleteAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation )

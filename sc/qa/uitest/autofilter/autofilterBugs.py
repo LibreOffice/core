@@ -14,7 +14,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class autofilter(UITestCase):
 
-   def test_tdf115046(self):
+    def test_tdf115046(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf115046.ods")) as calc_doc:
             #autofilter exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
@@ -25,7 +25,7 @@ class autofilter(UITestCase):
             #autofilter still exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
-   def test_tdf123095(self):
+    def test_tdf123095(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -45,7 +45,7 @@ class autofilter(UITestCase):
             self.assertEqual(get_state_as_dict(xTreeList.getChild("0"))["Text"], "乙二醇(进口料件)")
             self.assertEqual(get_state_as_dict(xTreeList.getChild("1"))["Text"], "乙二醇（进口料件）")
 
-   def test_tdf125363(self):
+    def test_tdf125363(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -73,7 +73,7 @@ class autofilter(UITestCase):
             self.assertEqual(get_state_as_dict(xTreeList.getChild("4"))["Text"], "vröude")
             self.assertEqual(get_state_as_dict(xTreeList.getChild("5"))["Text"], "vröudᵉ")
 
-   def test_tdf158326(self):
+    def test_tdf158326(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -97,7 +97,7 @@ class autofilter(UITestCase):
             self.assertEqual(get_state_as_dict(xTreeList.getChild("0"))["Text"], "vröude")
             self.assertEqual(get_state_as_dict(xTreeList.getChild("1"))["Text"], "vröudᵉ")
 
-   def test_tdf94055(self):
+    def test_tdf94055(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -123,7 +123,7 @@ class autofilter(UITestCase):
 
 
         #tdf77479.ods
-   def test_tdf77479(self):
+    def test_tdf77479(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf77479.ods")) as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -139,7 +139,7 @@ class autofilter(UITestCase):
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
         #112656
-   def test_tdf112656(self):
+    def test_tdf112656(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf112656.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -153,7 +153,7 @@ class autofilter(UITestCase):
             self.assertEqual(get_state_as_dict(xSecondEntry)["Text"], "Vegetables")
 
         #tdf81124
-   def test_tdf81124(self):
+    def test_tdf81124(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf81124.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -175,7 +175,7 @@ class autofilter(UITestCase):
             xCancel.executeAction("CLICK", tuple())
 
 #tdf73565
-   def test_tdf73565(self):
+    def test_tdf73565(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf73565.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -190,7 +190,7 @@ class autofilter(UITestCase):
             xCancel.executeAction("CLICK", tuple())
 
         #tdf65505
-   def test_tdf65505(self):
+    def test_tdf65505(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf81124.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -205,7 +205,7 @@ class autofilter(UITestCase):
             xCancel.executeAction("CLICK", tuple())
 
 #tdf74857
-   def test_tdf74857(self):
+    def test_tdf74857(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf74857.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -216,7 +216,7 @@ class autofilter(UITestCase):
             self.assertEqual(gridWinState["MarkedArea"], "Sheet1.A1:Sheet1.A25")
 
         #tdf35294
-   def test_tdf35294(self):
+    def test_tdf35294(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf35294.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -244,7 +244,7 @@ class autofilter(UITestCase):
             xCancel.executeAction("CLICK", tuple())
 
         #tdf55712
-   def test_tdf55712(self):
+    def test_tdf55712(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf55712.ods")):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
@@ -277,7 +277,7 @@ class autofilter(UITestCase):
             xCancel.executeAction("CLICK", tuple())
 
         #tdf152082
-   def test_tdf152082(self):
+    def test_tdf152082(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf152082.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

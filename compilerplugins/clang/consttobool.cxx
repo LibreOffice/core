@@ -16,7 +16,6 @@
 #include "clang/Basic/Builtins.h"
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find implicit conversions from non-'bool' constants (e.g., 'sal_False') to 'bool'.
@@ -146,7 +145,7 @@ public:
         {
             if (auto const e = dyn_cast<clang::StringLiteral>(sub->IgnoreParenImpCasts()))
             {
-                if (compat::isOrdinary(e)) // somewhat randomly restrict to plain literals
+                if (e->isOrdinary()) // somewhat randomly restrict to plain literals
                 {
                     if (compiler.getSourceManager().isMacroArgExpansion(l)
                         && Lexer::getImmediateMacroName(l, compiler.getSourceManager(),
@@ -266,10 +265,9 @@ private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const
     {
         return !compiler.getSourceManager().isInMainFile(spellingLocation)
-               && compat::ends_with(StringRef(compiler.getSourceManager()
-                                                  .getPresumedLoc(spellingLocation)
-                                                  .getFilename()),
-                                    ".h");
+               && StringRef(
+                      compiler.getSourceManager().getPresumedLoc(spellingLocation).getFilename())
+                      .ends_with(".h");
     }
 
     bool isSharedCAndCppCode(SourceLocation location) const

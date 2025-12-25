@@ -18,6 +18,7 @@
  */
 
 #include "optctl.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <svl/ctloptions.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -60,13 +61,13 @@ std::unique_ptr<SfxTabPage> SvxCTLOptionsPage::Create( weld::Container* pPage, w
 
 OUString SvxCTLOptionsPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"label4"_ustr, u"label5"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"sequencechecking"_ustr, u"restricted"_ustr, u"typeandreplace"_ustr };
@@ -74,7 +75,7 @@ OUString SvxCTLOptionsPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"movementlogical"_ustr, u"movementvisual"_ustr };
@@ -82,10 +83,10 @@ OUString SvxCTLOptionsPage::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )

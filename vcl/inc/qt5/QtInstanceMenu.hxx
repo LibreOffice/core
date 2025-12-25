@@ -9,15 +9,18 @@
 
 #pragma once
 
-#include <QtWidgets/QMenu>
+#include <vcl/weld/weld.hxx>
 
-#include <vcl/weld.hxx>
+#include <QtCore/QPointer>
+#include <QtWidgets/QMenu>
 
 class QtInstanceMenu : public QObject, public virtual weld::Menu
 {
     Q_OBJECT
 
     QMenu* m_pMenu;
+
+    QPointer<QAction> m_pCurrentAction;
 
 public:
     QtInstanceMenu(QMenu* pMenu);
@@ -55,6 +58,10 @@ private:
     void insertAction(QAction& rAction, const OUString& rId, int nPos);
     // get action with the given ID
     QAction* getAction(const OUString& rIdent) const;
+
+private Q_SLOTS:
+    void menuActionHovered(QAction* pAction);
+    void showHelp();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

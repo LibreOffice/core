@@ -10,7 +10,9 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/IconView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 

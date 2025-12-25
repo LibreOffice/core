@@ -22,8 +22,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/locktoplevels.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -43,19 +44,18 @@ class ExtensionBoxWithButtons;
 class ExtensionBox;
 class TheExtensionManager;
 
-class DialogHelper
+class DialogHelper : public weld::GenericDialogController
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    weld::Dialog* m_pDialog;
     ImplSVEvent *   m_nEventID;
     TopLevelWindowLocker m_aBusy;
 
 public:
-    DialogHelper(const css::uno::Reference<css::uno::XComponentContext>&, weld::Dialog* pDialog);
+    DialogHelper(weld::Widget* pParent, const OUString& rUIFile, const OUString& rDialogId,
+                 const css::uno::Reference<css::uno::XComponentContext>&);
     virtual        ~DialogHelper();
 
     void            openWebBrowser(const OUString& rURL, const OUString& rTitle);
-    weld::Window*   getFrameWeld() const { return m_pDialog; }
     void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller );
     void            clearEventID() { m_nEventID = nullptr; }
 
@@ -75,15 +75,14 @@ public:
     bool continueOnSharedExtension(const css::uno::Reference<css::deployment::XPackage>&,
                                    TranslateId pResID, bool& bHadWarning);
 
-    void            incBusy() { m_aBusy.incBusy(m_pDialog); }
+    void incBusy() { m_aBusy.incBusy(m_xDialog.get()); }
     void            decBusy() { m_aBusy.decBusy(); }
     bool            isBusy() const { return m_aBusy.isBusy(); }
     bool            installExtensionWarn(std::u16string_view rExtensionURL);
     bool            installForAllUsers(bool &bInstallForAll);
 };
 
-class ExtMgrDialog : public weld::GenericDialogController
-                   , public DialogHelper
+class ExtMgrDialog : public DialogHelper
 {
     OUString             m_sProgressText;
     bool                 m_bHasProgress;
@@ -153,8 +152,6 @@ public:
 
     void Close();
 
-    TheExtensionManager& getExtensionManager() const { return m_rManager; }
-
     void updateList();
     virtual void    prepareChecking() override;
     virtual void    checkEntries() override;
@@ -171,9 +168,7 @@ public:
     void enableButtontoEnable( bool bEnable );
 };
 
-
-class UpdateRequiredDialog : public weld::GenericDialogController
-                           , public DialogHelper
+class UpdateRequiredDialog : public DialogHelper
 {
     const OUString       m_sCloseText;
     OUString             m_sProgressText;

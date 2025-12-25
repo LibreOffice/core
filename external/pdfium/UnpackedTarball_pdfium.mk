@@ -12,13 +12,13 @@ pdfium_patches :=
 pdfium_patches += build.patch.1
 pdfium_patches += c++20-comparison.patch
 
-pdfium_patches += constexpr-template.patch
-
 pdfium_patches += freebsd.patch
 
 pdfium_patches += system-abseil.diff
 # expose this mapping information
 pdfium_patches += tounicodeinfo.patch.1
+pdfium_patches += charcodetoglyphindex.patch.1
+pdfium_patches += getfontdictobjnum.patch.1
 
 pdfium_patches += system-fast_float.diff
 
@@ -28,6 +28,7 @@ endif
 
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
+pdfium_patches += extractpatterns.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 

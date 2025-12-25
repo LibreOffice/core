@@ -11,8 +11,6 @@
 
 #include <sal/config.h>
 
-#include <string>
-
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 

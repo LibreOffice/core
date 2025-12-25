@@ -1,5 +1,30 @@
 ---
 assumeFilename: desktop/source/app/app.cxx
+customAssumeFilenames:
+    # Needs  -isystem /usr/include/gtk-3.0
+    include/LibreOfficeKit/LibreOfficeKitGtk.h: libreofficekit/source/gtk/lokdocview.cxx
+    # Needs -I/.../workdir/UnpackedTarball/libxml2/include
+    include/comphelper/dumpxmltostring.hxx: chart2/source/view/main/ChartView.cxx
+    # Needs -I/.../core/external/unixODBC/inc
+    include/connectivity/odbc.hxx: connectivity/source/drivers/odbc/ODriver.cxx
+    # Needs -isystem /usr/include/cairo
+    include/drawinglayer/processor2d/cairopixelprocessor2d.hxx: drawinglayer/source/processor2d/cairopixelprocessor2d.cxx
+    # Needs -I/.../workdir/UnpackedTarball/libxml2/include
+    include/drawinglayer/tools: drawinglayer/source/tools/primitive2dxmldump.cxx
+    # Needs -I/usr/lib/jvm/java-21-openjdk-amd64/include/linux
+    include/jvmaccess: jvmaccess/source/unovirtualmachine.cxx
+    # Needs -I/usr/lib/jvm/java-21-openjdk-amd64/include/linux
+    include/jvmfwk: jvmaccess/source/unovirtualmachine.cxx
+    # Needs -I/...workdir/CustomTarget/oox/generated
+    include/oox: oox/source/export/shapes.cxx
+    # Needs -I/...workdir/CustomTarget/oox/generated
+    include/svx/diagram/datamodel.hxx: oox/source/export/shapes.cxx
+    # Needs -I/.../workdir/UnpackedTarball/libxml2/include
+    include/test: tools/source/xml/XmlWriter.cxx
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
+    include/vcl/qt: vcl/qt5/QtInstance.cxx
+    # Needs -I/.../workdir/UnoApiHeadersTarget/oovbaapi/normal
+    include/vbahelper: vbahelper/source/vbahelper/vbahelper.cxx
 excludelist:
     include/sal/typesizes.h:
     # needed for build to work
@@ -114,6 +139,7 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
     include/comphelper/OAccessible.hxx:
     # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext2.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
     include/comphelper/accessibleselectionhelper.hxx:
@@ -149,12 +175,22 @@ excludelist:
     - com/sun/star/task/XInteractionDisapprove.hpp
     - com/sun/star/task/XInteractionRequest.hpp
     - com/sun/star/task/XInteractionRetry.hpp
+    include/comphelper/indexedpropertyvalues.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexContainer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
     include/comphelper/SelectionMultiplex.hxx:
     # base class has to be a complete type
     - com/sun/star/view/XSelectionChangeListener.hpp
     include/comphelper/MasterPropertySetInfo.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp
+    include/comphelper/memorystream.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/io/XStream.hpp
+    - com/sun/star/io/XSeekableInputStream.hpp
+    - com/sun/star/io/XTruncate.hpp
     include/comphelper/numberedcollection.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XUntitledNumbers.hpp
@@ -171,6 +207,9 @@ excludelist:
     include/comphelper/propertystatecontainer.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyState.hpp
+    include/comphelper/propmultiplex2.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
     include/comphelper/seekableinput.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
@@ -179,6 +218,7 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XSeekable.hpp
+    - com/sun/star/io/XOutputStream.hpp
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -200,30 +240,27 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
     - com/sun/star/rendering/XLinePolyPolygon2D.hpp
-    include/o3tl/char16_t2wchar_t.hxx:
-    # Needed on WIN32
-    - string_view
-    include/o3tl/make_shared.hxx:
-    # Needed for __COVERITY__
-    - o3tl/deleter.hxx
+    include/o3tl/float_int_conversion.hxx:
+    # Don't replace with std <concepts>
+    - o3tl/concepts.hxx
+    include/o3tl/numeric.hxx:
+    # Don't replace with std <concepts>
+    - o3tl/concepts.hxx
     include/o3tl/safeint.hxx:
     # Needed for std::min
     - algorithm
+    include/o3tl/strong_int.hxx:
+    # Needed for operator<=> needs std::strong_ordering
+    - compare
     include/o3tl/unreachable.hxx:
     # Needed for C++23 mode
     - utility
-    include/o3tl/vector_utils.hxx:
-    # Needed for std::copy_if
-    - algorithm
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
     include/package/Deflater.hxx:
     # Needed in --fwdecl mode
     - struct z_stream_s
-    include/tools/debug.hxx:
-    # Used behind #ifndef
-    - tools/toolsdllapi.h
     include/comphelper/diagnose_ex.hxx:
     # Needed for macros
     - com/sun/star/lang/IllegalArgumentException.hpp
@@ -238,6 +275,10 @@ excludelist:
     include/tools/simdsupport.hxx:
     # Needed for CPU intrinsics detection to work
     - emmintrin.h
+    include/unotest/bootstrapfixturebase.hxx:
+    # These are used in virtually all test files, too much work to move them everywhere
+    - cppunit/TestAssert.h
+    - cppunit/plugin/TestPlugIn.h
     include/unotools/accessiblerelationsethelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleRelationSet.hpp
@@ -275,6 +316,9 @@ excludelist:
     # Needed for macro #define
     - vcl/builder.hxx
     - vcl/vclptr.hxx
+    include/vcl/CairoFormats.hxx:
+    # Needed for macro #define
+    - vcl/Scanline.hxx
     include/vcl/keycodes.hxx:
     # Needed for macros
     - com/sun/star/awt/Key.hpp
@@ -505,6 +549,9 @@ excludelist:
     include/drawinglayer/primitive3d/baseprimitive3d.hxx:
     # base class has to be a complete type
     - com/sun/star/graphic/XPrimitive3D.hpp
+    include/sfx2/childwin.hxx:
+    # Needed in macro #define
+    - comphelper/lok.hxx
     include/sfx2/dinfdlg.hxx:
     # Needed for implicit dtor
     - com/sun/star/document/CmisProperty.hpp

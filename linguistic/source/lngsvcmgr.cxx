@@ -559,7 +559,7 @@ namespace
             {
                 SAL_WARN_IF( aValues.getLength() != 1, "linguistic", "unexpected length of sequence" );
                 Sequence< OUString > aSvcImplNames;
-                if (aValues.getConstArray()[0] >>= aSvcImplNames)
+                if (aValues[0] >>= aSvcImplNames)
                     aRes = std::move(aSvcImplNames);
                 else
                 {
@@ -761,7 +761,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
-                    aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+                    aSvcImplNames = GetLangSvcList(aValues[0]);
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
@@ -784,7 +784,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
-                    aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
+                    aSvcImplNames = GetLangSvc(aValues[0]);
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
@@ -810,7 +810,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
-                    aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
+                    aSvcImplNames = GetLangSvc(aValues[0]);
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
@@ -833,7 +833,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 aValues = /*aCfg.*/GetProperties( aNames );
                 uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
-                    aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+                    aSvcImplNames = GetLangSvcList(aValues[0]);
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
@@ -1692,7 +1692,7 @@ uno::Sequence< OUString > SAL_CALL
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
             if (aValues.hasElements())
-                aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+                aSvcImplNames = GetLangSvcList(aValues[0]);
         }
     }
     else if ( rServiceName == SN_GRAMMARCHECKER )
@@ -1704,7 +1704,7 @@ uno::Sequence< OUString > SAL_CALL
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
             if (aValues.hasElements())
-                aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
+                aSvcImplNames = GetLangSvc(aValues[0]);
         }
     }
     else if ( rServiceName == SN_HYPHENATOR )
@@ -1716,7 +1716,7 @@ uno::Sequence< OUString > SAL_CALL
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
             if (aValues.hasElements())
-                aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
+                aSvcImplNames = GetLangSvc(aValues[0]);
         }
     }
     else if ( rServiceName == SN_THESAURUS )
@@ -1728,7 +1728,7 @@ uno::Sequence< OUString > SAL_CALL
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
             if (aValues.hasElements())
-                aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+                aSvcImplNames = GetLangSvcList(aValues[0]);
         }
     }
 

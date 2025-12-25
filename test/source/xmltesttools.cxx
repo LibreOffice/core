@@ -15,6 +15,8 @@
 #include <sal/log.hxx>
 #include <test/cppunitasserthelper.hxx>
 
+#include <libxml/xpathInternals.h>
+
 namespace {
 
 OUString convert(xmlChar const * string) {
@@ -64,12 +66,17 @@ xmlDocUniquePtr XmlTestTools::parseXmlStream(SvStream* pStream)
     return xmlDocUniquePtr(xmlReadDoc(pCharBuffer, nullptr, nullptr, options));
 }
 
-xmlDocUniquePtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
+xmlDocUniquePtr XmlTestTools::dumpAndParse(const MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
 {
     SvMemoryStream aStream;
     rDumper.dump(rGDIMetaFile, aStream);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
     return XmlTestTools::parseXmlStream(&aStream);
+}
+
+xmlDocUniquePtr XmlTestTools::dumpAndParse(const GDIMetaFile& rGDIMetaFile)
+{
+    return dumpAndParse(MetafileXmlDump(), rGDIMetaFile);
 }
 
 xmlXPathObjectPtr XmlTestTools::getXPathNode(const xmlDocUniquePtr& pXmlDoc, const char* pXPath)

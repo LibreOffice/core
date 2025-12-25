@@ -22,6 +22,7 @@ class EventListener(XDocumentEventListener,unohelper.Base):
         self.xContext = xContext
         self.executed = False
         self.eventExecuted = []
+        self.supplements = []
         self.printEvents = kwargs.get('printNames', False)
         if isinstance(eventNames, str):
             self.eventNames = [eventNames]
@@ -39,8 +40,9 @@ class EventListener(XDocumentEventListener,unohelper.Base):
         print("documentEventOccured: name=" + event.EventName + ", title=" + str(event.Supplement))
         print("documentEventOccured: found event we are waiting for")
         if event.EventName in self.eventNames:
-            self.executed = True
             self.eventExecuted.append(event.EventName)
+            self.supplements.append(event.Supplement)
+            self.executed = True
 
     def hasExecuted(self, eventName):
         return eventName in self.eventExecuted

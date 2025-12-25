@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <algorithm>
 #include <cstddef>
 
 #include <utility>
@@ -293,7 +294,7 @@ void TEIMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
 {
     nLen = nL;
     pAttribs.reset( new ExtTextInputAttr[ nL ] );
-    memcpy( pAttribs.get(), pA, nL*sizeof(ExtTextInputAttr) );
+    std::copy_n(pA, nL, pAttribs.get());
 }
 
 void TEIMEInfos::DestroyAttribs()

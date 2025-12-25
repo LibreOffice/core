@@ -13,4 +13,15 @@ auto f1()
     return [=] { return 0; };
 }
 
+auto f2()
+{
+    // expected-error@+1 {{unused capture-default [loplugin:unusedcapturedefault]}}
+    return [=](auto x) { return x; };
+}
+
+template <typename T> auto f3(T x)
+{
+    return [=]() { return x; };
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

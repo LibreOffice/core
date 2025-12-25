@@ -160,6 +160,7 @@ class SvxScriptHintItem;
 #define SID_PARA_VERTALIGN                              TypedWhichId<SvxParaVertAlignItem>( SID_SVX_START + 925 )
 #define SID_ATTR_FRAMEDIRECTION                         TypedWhichId<SvxFrameDirectionItem>( SID_SVX_START + 944 )
 #define SID_ATTR_PARA_SNAPTOGRID                        TypedWhichId<SvxParaGridItem>( SID_SVX_START + 945 )
+#define SID_ATTR_PARA_AUTOFRAMEDIRECTION                TypedWhichId<SvxAutoFrameDirectionItem>( SID_SVX_START + 946 )
 #define SID_ATTR_PARA_LRSPACE_VERTICAL                  ( SID_SVX_START + 947 )
 #define SID_ATTR_PARA_LEFT_TO_RIGHT                     ( SID_SVX_START + 950 )
 #define SID_ATTR_PARA_RIGHT_TO_LEFT                     ( SID_SVX_START + 951 )
@@ -184,6 +185,8 @@ class SvxScriptHintItem;
 #define SID_ATTR_CHAR_BOX                               ( SID_EDIT_START + 76 )
 #define SID_ATTR_CHAR_SHADOW                            ( SID_EDIT_START + 77 )
 #define SID_ATTR_PARA_GRABBAG                           TypedWhichId<SfxGrabBagItem>( SID_EDIT_START + 78 )
+#define SID_ATTR_PARA_ADJUST_START                      ( SID_EDIT_START + 79 )
+#define SID_ATTR_PARA_ADJUST_END                        ( SID_EDIT_START + 80 )
 
 
 #if 95 > (SID_EDIT_END-SID_EDIT_START)

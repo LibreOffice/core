@@ -162,61 +162,6 @@ namespace
                 // no extension was present, append new one if not empty
     }
 
-    void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
-    {
-        // if auto extension is enabled...
-        if ( !_pDialog->isAutoExtensionEnabled() )
-            return;
-
-        // automatically switch to the extension of the (maybe just newly selected) extension
-        OUString aNewFile = _pDialog->getCurrentFileText( );
-        OUString aExt = GetFsysExtension_Impl( aNewFile, _rLastFilterExt );
-
-        // but only if there already is an extension
-        if ( aExt.isEmpty() )
-            return;
-
-        // check if it is a real file extension, and not only the "post-dot" part in
-        // a directory name
-        bool bRealExtensions = true;
-        if ( -1 != aExt.indexOf( '/' ) )
-            bRealExtensions = false;
-        else if ( -1 != aExt.indexOf( '\\' ) )
-            bRealExtensions = false;
-        else
-        {
-            // no easy way to tell, because the part containing the dot already is the last
-            // segment of the complete file name
-            // So we have to check if the file name denotes a folder or a file.
-            // For performance reasons, we do this for file urls only
-            INetURLObject aURL( aNewFile );
-            if ( INetProtocol::NotValid == aURL.GetProtocol() )
-            {
-                OUString sURL;
-                if ( osl::FileBase::getFileURLFromSystemPath( aNewFile, sURL )
-                     == osl::FileBase::E_None )
-                    aURL = INetURLObject( sURL );
-            }
-            if ( INetProtocol::File == aURL.GetProtocol() )
-            {
-                try
-                {
-                    bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-                }
-                catch( const css::uno::Exception& )
-                {
-                    SAL_INFO( "fpicker.office", "Exception in lcl_autoUpdateFileExtension" );
-                }
-            }
-        }
-
-        if ( bRealExtensions )
-        {
-            SetFsysExtension_Impl( aNewFile, _pDialog->GetDefaultExt() );
-            _pDialog->setCurrentFileText( aNewFile );
-        }
-    }
-
 #if defined( UNX )
     bool lcl_getHomeDirectory( const OUString& _rForURL, OUString& /* [out] */ _rHomeDir )
     {
@@ -940,7 +885,7 @@ IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl, weld::ComboBox&, void )
                 EraseDefaultExt( nSepPos );
 
             // update the extension of the current file if necessary
-            lcl_autoUpdateFileExtension( this, sLastFilterExt );
+            AutoUpdateFileExtension(sLastFilterExt);
 
             // if the user is traveling fast through the filterbox
             // do not filter instantly
@@ -1227,7 +1172,7 @@ IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, weld::Toggleable&, void)
         m_pFileNotifier->notify(CTRL_STATE_CHANGED, CHECKBOX_AUTOEXTENSION);
 
     // update the extension of the current file if necessary
-    lcl_autoUpdateFileExtension( this, m_xImpl->GetCurFilter()->GetExtension() );
+    AutoUpdateFileExtension(m_xImpl->GetCurFilter()->GetExtension());
 }
 
 IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::Toggleable&, rCheckBox, void )
@@ -1434,6 +1379,60 @@ void SvtFileDialog::EnableUI(bool bEnable)
         {
             rxControl->set_sensitive(false);
         }
+    }
+}
+
+void SvtFileDialog::AutoUpdateFileExtension(const OUString& rLastFilterExt)
+{
+    // if auto extension is enabled...
+    if (!isAutoExtensionEnabled())
+        return;
+
+    // automatically switch to the extension of the (maybe just newly selected) extension
+    OUString aNewFile = getCurrentFileText();
+    OUString aExt = GetFsysExtension_Impl(aNewFile, rLastFilterExt);
+
+    // but only if there already is an extension
+    if (aExt.isEmpty())
+        return;
+
+    // check if it is a real file extension, and not only the "post-dot" part in
+    // a directory name
+    bool bRealExtensions = true;
+    if (-1 != aExt.indexOf('/'))
+        bRealExtensions = false;
+    else if (-1 != aExt.indexOf('\\'))
+        bRealExtensions = false;
+    else
+    {
+        // no easy way to tell, because the part containing the dot already is the last
+        // segment of the complete file name
+        // So we have to check if the file name denotes a folder or a file.
+        // For performance reasons, we do this for file urls only
+        INetURLObject aURL(aNewFile);
+        if (INetProtocol::NotValid == aURL.GetProtocol())
+        {
+            OUString sURL;
+            if (osl::FileBase::getFileURLFromSystemPath(aNewFile, sURL) == osl::FileBase::E_None)
+                aURL = INetURLObject(sURL);
+        }
+        if (INetProtocol::File == aURL.GetProtocol())
+        {
+            try
+            {
+                bRealExtensions = !ContentIsFolder(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
+            catch (const css::uno::Exception&)
+            {
+                SAL_INFO("fpicker.office", "Exception in SvtFileDialog::AutoUpdateFileExtension");
+            }
+        }
+    }
+
+    if (bRealExtensions)
+    {
+        SetFsysExtension_Impl(aNewFile, GetDefaultExt());
+        setCurrentFileText(aNewFile);
     }
 }
 
@@ -1672,10 +1671,8 @@ void SvtFileDialog::AddFilterGroup( const OUString& rFilter, const Sequence< Str
     SAL_WARN_IF( m_bIsInExecute, "fpicker.office", "SvtFileDialog::AddFilter: currently executing!" );
 
     implAddFilter( rFilter, OUString() );
-    const StringPair* pSubFilters       =               rFilters.getConstArray();
-    const StringPair* pSubFiltersEnd    = pSubFilters + rFilters.getLength();
-    for ( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        implAddFilter( pSubFilters->First, pSubFilters->Second );
+    for (const StringPair& rPair : rFilters)
+        implAddFilter(rPair.First, rPair.Second);
 }
 
 

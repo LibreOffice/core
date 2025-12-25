@@ -20,9 +20,9 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -51,7 +51,6 @@ class TheExtensionManager;
 
 struct Entry_Impl
 {
-    bool            m_bActive       :1;
     bool            m_bLocked       :1;
     bool            m_bHasOptions   :1;
     bool            m_bUser         :1;
@@ -146,7 +145,8 @@ class ExtensionBox : public weld::CustomWidgetController
     void CalcActiveHeight( const tools::Long nPos );
     tools::Long GetTotalHeight() const;
     void SetupScrollBar();
-    void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry);
+    void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
+                 const TEntry_Impl& rEntry, bool bActive);
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     bool FindEntryPos( const TEntry_Impl& rEntry, tools::Long nStart, tools::Long nEnd, tools::Long &nFound );
     void DeleteRemoved();
@@ -170,7 +170,7 @@ public:
 
     TEntry_Impl const & GetEntryData( tools::Long nPos ) { return m_vEntries[ nPos ]; }
     tools::Long            GetEntryCount() const { return static_cast<tools::Long>(m_vEntries.size()); }
-    tools::Rectangle GetActiveEntryRect() const;
+    tools::Rectangle GetEntryRect(tools::Long nPos) const;
     bool            HasActive() const { return m_nActive >= 0; }
     tools::Long            PointToPos( const Point& rPos );
     virtual void    RecalcAll();

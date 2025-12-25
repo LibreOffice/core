@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/untaint.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/numitem.hxx>
@@ -30,6 +31,7 @@
 #include <vcl/graph.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -793,7 +795,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, BulColorHdl_Impl, ColorListBox&, rColorBox, v
 
 IMPL_LINK(SvxBulletAndPositionDlg, BulRelSizeHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    sal_uInt16 nRelSize = rField.get_value(FieldUnit::PERCENT);
+    sal_uInt16 nRelSize = o3tl::sanitizing_cast<sal_uInt16>(rField.get_value(FieldUnit::PERCENT));
 
     sal_uInt16 nMask = 1;
     for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -923,7 +925,7 @@ void SvxBulletAndPositionDlg::PopulateGalleryMenu()
                 aBitmap.Scale(nScale, nScale);
             }
             pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
 
             // We want to show only icon names not full path.
             aObj.removeExtension();

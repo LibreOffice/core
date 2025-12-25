@@ -28,4 +28,13 @@ $(gb_CustomTarget_workdir)/rust_uno/rustmaker/cpp: \
         $(call gb_UnoApi_get_target,offapi) $(call gb_UnoApi_get_target,udkapi)))
 	touch $@
 
+#TODO: Add to the general pattern rule from solenv/gbuild/CustomTarget.mk, instead of having to
+# repeat its recipe here:
+$(call gb_CustomTarget_get_clean_target,rust_uno/rustmaker):
+	$(call gb_Output_announce,rust_uno/rustmaker,$(false),CUS,3)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $(gb_CustomTarget_workdir)/rust_uno/rustmaker && \
+		rm -f $(call gb_CustomTarget_get_target,rust_uno/rustmaker))
+	rm -fr $(SRCDIR)/rust_uno/src/generated
+
 # vim: set noet sw=4 ts=4:

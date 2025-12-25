@@ -121,7 +121,7 @@ class ScriptForge(object, metaclass = _Singleton):
     # Class constants
     # #########################################################################
     library = 'ScriptForge'
-    Version = '26.2'  # Version number of the LibreOffice release containing the actual file
+    Version = '26.8'  # Version number of the LibreOffice release containing the actual file
     #
     # Basic dispatcher for Python scripts (@scope#library.module.function)
     basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
@@ -2647,6 +2647,9 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'CreatePivotTable', pivottablename, sourcerange, targetcell,
                                    datafields, rowfields, columnfields, filterbutton, rowtotals, columntotals)
 
+        def CreateShapeFromFile(self, shapename, imagefile, range = '~.~', aslink = False):
+            return self.ExecMethod(self.vbMethod, 'CreateShapeFromFile', shapename, imagefile, range, aslink)
+
         def DAvg(self, range):
             return self.ExecMethod(self.vbMethod, 'DAvg', range)
 
@@ -2746,6 +2749,9 @@ class SFDocuments:
         def SetValue(self, targetrange, value):
             return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
 
+        def Shapes(self, sheetname, shapename = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Shapes', sheetname, shapename)
+
         def ShiftDown(self, range, wholerow = False, rows = 0):
             return self.ExecMethod(self.vbMethod, 'ShiftDown', range, wholerow, rows)
 
@@ -2778,9 +2784,38 @@ class SFDocuments:
         serviceproperties = dict()
 
     # #########################################################################
+    # SF_Shape CLASS
+    # #########################################################################
+    class SF_Shape(SFServices):
+        """
+            The SF_Shape module is focused on the description of shapes/images/drawing objects stored in documents.
+            In the actual release only shapes in Calc sheets are considered.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Shape'
+        servicesynonyms = ()
+        serviceproperties = dict(XRectangle = 1, XShape = 0)
+
+        def Anchor(self, anchortype, cell = '~.A1'):
+            return self.ExecMethod(self.vbMethod, 'Anchor', anchortype, cell)
+
+        def ExportToFile(self, filename, imagetype = 'png', overwrite = False):
+            return self.ExecMethod(self.vbMethod, 'ExportToFile', filename, imagetype, overwrite)
+
+        def Pick(self):
+            return self.ExecMethod(self.vbMethod, 'Pick')
+
+        def Resize(self, xpos = -1, ypos = -1, width = -1, height = -1):
+            return self.ExecMethod(self.vbMethod, 'Resize', xpos, ypos, width, height)
+
+        def Rotate(self, angle, pivot = ''):
+            return self.ExecMethod(self.vbMethod, 'Rotate', angle, pivot)
+
+    # #########################################################################
     # SF_Chart CLASS
     # #########################################################################
-    class SF_Chart(SFServices):
+    class SF_Chart(SF_Shape, SFServices):
         """
             The SF_Chart module is focused on the description of chart documents
             stored in Calc sheets.
@@ -2793,14 +2828,8 @@ class SFDocuments:
         servicesynonyms = ()
         serviceproperties = dict(ChartType = 2, Deep = 2, Dim3D = 2, Exploded = 2, Filled = 2,
                                  Legend = 2, Percent = 2, Stacked = 2, Title = 2,
-                                 XChartObj = 0, XDiagram = 0, XShape = 0, XTableChart = 0,
+                                 XChartObj = 0, XDiagram = 0, XRectangle = 1, XShape = 0, XTableChart = 0,
                                  XTitle = 2, YTitle = 2)
-
-        def ExportToFile(self, filename, imagetype = 'png', overwrite = False):
-            return self.ExecMethod(self.vbMethod, 'ExportToFile', filename, imagetype, overwrite)
-
-        def Resize(self, xpos = -1, ypos = -1, width = -1, height = -1):
-            return self.ExecMethod(self.vbMethod, 'Resize', xpos, ypos, width, height)
 
     # #########################################################################
     # SF_Form CLASS

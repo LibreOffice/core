@@ -107,8 +107,8 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
 		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
 		&& echo "}" \
 		&& echo "android {" \
-		&& echo "    ndkPath '$(ANDROID_NDK_DIR)'" \
-		&& echo "    ndkVersion '$(ANDROID_NDK_VERSION)'" \
+		&& echo "    ndkPath = '$(ANDROID_NDK_DIR)'" \
+		&& echo "    ndkVersion = '$(ANDROID_NDK_VERSION)'" \
 		&& echo "}" \
 		&& echo "android.defaultConfig {" \
 		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \

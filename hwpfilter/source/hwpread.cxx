@@ -19,7 +19,6 @@
 
 #include "precompile.h"
 
-#include <comphelper/newarray.hxx>
 #include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 #include <tools/long.hxx>
@@ -296,7 +295,7 @@ bool TxtBox::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
 
-    cell.reset( ::comphelper::newArray_null<Cell>(ncell) );
+    cell.reset(new (std::nothrow) Cell[ncell]);
     if (!cell) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }

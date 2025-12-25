@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>

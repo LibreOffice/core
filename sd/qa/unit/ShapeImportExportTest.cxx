@@ -256,7 +256,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
 {
     createSdImpressDoc("TextDistancesInsets3.pptx");
 
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -372,7 +372,7 @@ void ShapeImportExportTest::testTextDistancesOOXML_Export()
 void ShapeImportExportTest::testTextDistancesODP_OOXML_Export()
 {
     createSdImpressDoc("odp/tdf150966_hugeInset.odp");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 

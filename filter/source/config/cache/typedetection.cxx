@@ -39,6 +39,7 @@
 #include <framework/interaction.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
@@ -384,7 +385,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
                                                               sal_Bool                                         bAllowDeep )
 {
     // make the descriptor more usable :-)
-    utl::MediaDescriptor stlDescriptor(lDescriptor);
+    comphelper::SequenceAsHashMap stlDescriptor(lDescriptor);
     OUString sType, sURL;
 
     try
@@ -474,7 +475,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
 }
 
 
-void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDescriptor,
+void TypeDetection::impl_checkResultsAndAddBestFilter(comphelper::SequenceAsHashMap& rDescriptor,
                                                       OUString&               sType      )
 {
     // a)
@@ -770,7 +771,7 @@ OUString TypeDetection::impl_getTypeFromFilter(std::unique_lock<std::mutex>& /*r
 
 void TypeDetection::impl_getAllFormatTypes(
     std::unique_lock<std::mutex>& rGuard,
-    const util::URL& aParsedURL, utl::MediaDescriptor const & rDescriptor, FlatDetection& rFlatTypes)
+    const util::URL& aParsedURL, comphelper::SequenceAsHashMap const & rDescriptor, FlatDetection& rFlatTypes)
 {
     rFlatTypes.clear();
 
@@ -911,7 +912,7 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
 }
 
 
-OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
+OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap& rDescriptor,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 bool                       bAllowDeep    ,
                                                                 OUString&               rLastChance   )
@@ -995,7 +996,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.
     //                                               Our types list was sorted by such criteria!
-    // d) detect service return a valid result    => return its decision but only when it matches the type being tested
+    // d) detect service return a valid result    => return its decision
     // e) detect service return an invalid result
     //    or any needed information could not be
     //    obtained from the cache                 => ignore it, and continue with search
@@ -1043,12 +1044,8 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
 
             OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
 
-            // d) call it 'detected' only when the reported type matches the
-            // type being checked for.  This is important because many detectors
-            // report multiple different types which may mess up our strict type
-            // check order e.g when the type being tested is of higher
-            // complexity and the detector reports a type of lower complexity.
-            if (sDeepType == sFlatType)
+            // d)
+            if (!sDeepType.isEmpty())
                 return sDeepType;
         }
         catch(const css::container::NoSuchElementException&)
@@ -1060,7 +1057,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // <- SAFE ----------------------------------
 }
 
-void TypeDetection::impl_seekStreamToZero(utl::MediaDescriptor const & rDescriptor)
+void TypeDetection::impl_seekStreamToZero(comphelper::SequenceAsHashMap const& rDescriptor)
 {
     // try to seek to 0 ...
     // But because XSeekable is an optional interface ... try it only .-)
@@ -1085,7 +1082,7 @@ void TypeDetection::impl_seekStreamToZero(utl::MediaDescriptor const & rDescript
 }
 
 OUString TypeDetection::impl_askDetectService(const OUString&               sDetectService,
-                                                           utl::MediaDescriptor& rDescriptor   )
+                                              comphelper::SequenceAsHashMap& rDescriptor)
 {
     // Open the stream and add it to the media descriptor if this method is called for the first time.
     // All following requests to this method will detect, that there already exists a stream .-)
@@ -1171,7 +1168,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
 }
 
 
-OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor)
+OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(comphelper::SequenceAsHashMap& rDescriptor)
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteraction =
         rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INTERACTIONHANDLER,
@@ -1230,7 +1227,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
 }
 
 
-void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
+void TypeDetection::impl_openStream(comphelper::SequenceAsHashMap& rDescriptor)
 {
     bool bSuccess = false;
     OUString sURL = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL, OUString() );
@@ -1238,10 +1235,10 @@ void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     if ( comphelper::isFileUrl( sURL ) )
     {
         // OOo uses own file locking mechanics in case of local file
-        bSuccess = rDescriptor.addInputStreamOwnLock();
+        bSuccess = utl::MediaDescriptor::addInputStreamOwnLock(rDescriptor);
     }
     else
-        bSuccess = rDescriptor.addInputStream();
+        bSuccess = utl::MediaDescriptor::addInputStream(rDescriptor);
 
     if ( !bSuccess )
         throw css::uno::Exception(
@@ -1259,10 +1256,10 @@ void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
 }
 
 
-void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor)
+void TypeDetection::impl_removeTypeFilterFromDescriptor(comphelper::SequenceAsHashMap& rDescriptor)
 {
-    utl::MediaDescriptor::iterator pItType   = rDescriptor.find(utl::MediaDescriptor::PROP_TYPENAME  );
-    utl::MediaDescriptor::iterator pItFilter = rDescriptor.find(utl::MediaDescriptor::PROP_FILTERNAME);
+    auto pItType = rDescriptor.find(utl::MediaDescriptor::PROP_TYPENAME);
+    auto pItFilter = rDescriptor.find(utl::MediaDescriptor::PROP_FILTERNAME);
     if (pItType != rDescriptor.end())
         rDescriptor.erase(pItType);
     if (pItFilter != rDescriptor.end())
@@ -1270,7 +1267,7 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rD
 }
 
 
-bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
+bool TypeDetection::impl_validateAndSetTypeOnDescriptor(comphelper::SequenceAsHashMap& rDescriptor,
                                                             const OUString&               sType      )
 {
     if (GetTheFilterCache().hasItem(FilterCache::E_TYPE, sType))
@@ -1285,7 +1282,7 @@ bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescript
 }
 
 
-bool TypeDetection::impl_validateAndSetFilterOnDescriptor( utl::MediaDescriptor& rDescriptor,
+bool TypeDetection::impl_validateAndSetFilterOnDescriptor( comphelper::SequenceAsHashMap& rDescriptor,
                                                            const OUString&               sFilter    )
 {
     try

@@ -20,7 +20,8 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 
 class SwWrtShell;
 class SwContentControl;

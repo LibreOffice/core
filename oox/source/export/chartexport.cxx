@@ -22,6 +22,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/chartexport.hxx>
+#include <oox/export/shapes.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/export/utils.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
@@ -30,6 +31,8 @@
 
 #include <cstdio>
 #include <limits>
+
+#include <tools/UnitConversion.hxx>
 
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -114,9 +117,12 @@
 
 #include <o3tl/temporary.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <docmodel/styles/ChartStyle.hxx>
 #include <docmodel/uno/UnoChartStyle.hxx>
+#include <docmodel/styles/ChartColorStyle.hxx>
+#include <docmodel/uno/UnoChartColorStyle.hxx>
 
 #include <oox/export/ThemeExport.hxx>
 
@@ -270,17 +276,11 @@ static Reference< chart2::data::XLabeledDataSequence >
         const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aLabeledSeq,
         const OUString & rRole )
 {
-    Reference< chart2::data::XLabeledDataSequence > aNoResult;
-
-    const Reference< chart2::data::XLabeledDataSequence > * pBegin = aLabeledSeq.getConstArray();
-    const Reference< chart2::data::XLabeledDataSequence > * pEnd = pBegin + aLabeledSeq.getLength();
-    const Reference< chart2::data::XLabeledDataSequence > * pMatch =
-        ::std::find_if( pBegin, pEnd, lcl_MatchesRole( rRole ));
-
-    if( pMatch != pEnd )
+    auto* pMatch = std::find_if(aLabeledSeq.begin(), aLabeledSeq.end(), lcl_MatchesRole(rRole));
+    if (pMatch != aLabeledSeq.end())
         return *pMatch;
 
-    return aNoResult;
+    return {};
 }
 
 static bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xChartDoc )
@@ -1281,16 +1281,47 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     SetFS( pColorStyle );
     pFS = GetFS();
 
-    pFS->startElement(FSNS(XML_cs, XML_colorStyle),
-            FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
-            FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
-            XML_meth, "cycle",
-            XML_id, "10" /* no idea what this number is supposed to be */);
+    Reference<com::sun::star::chart2::XChartColorStyle> xColorStyle = xChartDoc->getColorStyles();
+    model::ColorStyleSet* aCSS = model::style::getFromXChartColorStyle(xColorStyle);
 
-    pFS->singleElement(FSNS(XML_a, XML_schemeClr),
-            XML_val, "accent1");
+    if (!aCSS->maEntryList.empty()) {
+        // use the stored data in the document model
 
-    pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+        static const std::map<model::ColorStyleMethod, std::string> aMethMap {
+                { model::ColorStyleMethod::CYCLE, "cycle" },
+                { model::ColorStyleMethod::WITHIN_LINEAR, "withinLinear" },
+                { model::ColorStyleMethod::ACROSS_LINEAR, "acrossLinear" },
+                { model::ColorStyleMethod::WITHIN_LINEAR_REVERSED, "withinLinearReversed" },
+                { model::ColorStyleMethod::ACROSS_LINEAR_REVERSED, "acrossLinearReversed" }
+        };
+
+        for (const model::ColorStyleEntry& rCStyleEntry : aCSS->maEntryList) {
+            pFS->startElement(FSNS(XML_cs, XML_colorStyle),
+                    FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
+                    FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+                    XML_meth, aMethMap.at(rCStyleEntry.meMethod).c_str(),
+                    XML_id, OUString::number(rCStyleEntry.mnId));
+
+            ThemeExport aTE(mpFB, GetDocumentType(), pFS);
+            for (const model::ComplexColor& rColor : rCStyleEntry.maComplexColors) {
+                aTE.writeComplexColor(rColor);
+            }
+
+            pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+        }
+    } else {
+        // output a default value to make MS Office happy
+        pFS->startElement(FSNS(XML_cs, XML_colorStyle),
+                FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
+                FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+                XML_meth, "cycle",
+                XML_id, "10" /* no idea what this number is supposed to be */);
+
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent1");
+
+        pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+    }
 
     pColorStyle->endDocument();
 
@@ -2238,7 +2269,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         // shape properties
         if( xPropSet.is() )
         {
-            exportShapeProps( xPropSet, bIsChartex ? XML_cx : XML_c );
+            exportShapeProps(xPropSet, XML_cx);
         }
 
         pFS->startElement(FSNS(XML_cx, XML_txPr));
@@ -2263,18 +2294,25 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
 
     pFS->startElement(FSNS(XML_a, XML_pPr));
 
-    bool bDummy = false;
-    sal_Int32 nDummy;
-    WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy );
+    {
+        WriteRunInput aInput;
+        aInput.bCheckDirect = true;
+        aInput.bUseTextSchemeColors = true;
+        WriteRunProperties(xPropSet, XML_defRPr, aInput);
+    }
 
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
 
     for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
     {
         pFS->startElement(FSNS(XML_a, XML_r));
-        bDummy = false;
         Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
-        WriteRunProperties(xRunPropSet, false, XML_rPr, true, bDummy, nDummy);
+        {
+            WriteRunInput aInput;
+            aInput.bCheckDirect = true;
+            aInput.bUseTextSchemeColors = true;
+            WriteRunProperties(xRunPropSet, XML_rPr, aInput);
+        }
         pFS->startElement(FSNS(XML_a, XML_t));
 
         // the linebreak should always be at the end of the XFormattedString text
@@ -2295,8 +2333,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
 
             pFS->startElement(FSNS(XML_a, XML_p));
             pFS->startElement(FSNS(XML_a, XML_pPr));
-            bDummy = false;
-            WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy);
+
+            WriteRunInput aInput;
+            aInput.bCheckDirect = true;
+            aInput.bUseTextSchemeColors = true;
+            WriteRunProperties(xPropSet, XML_defRPr, aInput);
+
             pFS->endElement(FSNS(XML_a, XML_pPr));
         }
     }
@@ -4031,8 +4073,10 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet,
     pFS->startElement(FSNS(XML_a, XML_p));
     pFS->startElement(FSNS(XML_a, XML_pPr));
 
-    WriteRunProperties(xPropSet, false, XML_defRPr, true, o3tl::temporary(false),
-                       o3tl::temporary(sal_Int32()));
+    WriteRunInput aInput;
+    aInput.bCheckDirect = true;
+    aInput.bUseTextSchemeColors = true;
+    WriteRunProperties(xPropSet, XML_defRPr, aInput);
 
     pFS->endElement(FSNS(XML_a, XML_pPr));
     pFS->endElement(FSNS(XML_a, XML_p));
@@ -4518,7 +4562,8 @@ void ChartExport::exportOneAxis_chart(
         }
 
         // FIXME: seems not support? noMultiLvlLbl
-        pFS->singleElement(FSNS(XML_c, XML_noMultiLvlLbl), XML_val, OString::number(0));
+        if( nAxisType == XML_catAx )
+            pFS->singleElement(FSNS(XML_c, XML_noMultiLvlLbl), XML_val, OString::number(0));
     }
 
     // crossBetween
@@ -4768,8 +4813,6 @@ void ChartExport::exportOneAxis_chartex(
     pFS->endElement( FSNS( XML_cx, XML_axis ) );
 }
 
-namespace {
-
 struct LabelPlacementParam
 {
     bool mbExport;
@@ -4795,6 +4838,8 @@ struct LabelPlacementParam
         )
     {}
 };
+
+namespace {
 
 const char* toOOXMLPlacement( sal_Int32 nPlacement )
 {
@@ -4844,9 +4889,10 @@ OUString getFieldTypeString( const chart2::DataPointCustomLabelFieldType aType )
 
 void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet> const & xPropertySet )
 {
-    bool bDummy = false;
-    sal_Int32 nDummy;
-    pChartExport->WriteRunProperties(xPropertySet, false, XML_rPr, true, bDummy, nDummy);
+    WriteRunInput aInput;
+    aInput.bCheckDirect = true;
+    aInput.bUseTextSchemeColors = true;
+    pChartExport->WriteRunProperties(xPropertySet, XML_rPr, aInput);
 }
 
 void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
@@ -4931,13 +4977,17 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pFS->endElement(FSNS(XML_c, XML_tx));
 }
 
-void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
+}
+
+void ChartExport::writeLabelProperties(
     const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
     sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
     bool bIsChartex)
 {
     if (!xPropSet.is())
         return;
+
+    FSHelperPtr pFS = GetFS();
 
     const sal_Int32 nChartNS = bIsChartex ? XML_cx : XML_c;
 
@@ -4947,11 +4997,37 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     sal_Int32 nLabelBorderColor = 0x00FFFFFF;
     sal_Int32 nLabelFillColor = -1;
 
-    xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel;
     xPropSet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aCustomLabelFields;
     xPropSet->getPropertyValue(u"LabelBorderWidth"_ustr) >>= nLabelBorderWidth;
     xPropSet->getPropertyValue(u"LabelBorderColor"_ustr) >>= nLabelBorderColor;
     xPropSet->getPropertyValue(u"LabelFillColor"_ustr) >>= nLabelFillColor;
+
+    if (aCustomLabelFields.hasElements())
+        writeCustomLabel(pFS, this, aCustomLabelFields, nLabelIndex, rDLblsRange); // c:tx
+
+    bool bLinkedNumFmt = false;
+    if( GetProperty(xPropSet, u"LinkNumberFormatToSource"_ustr) )
+        mAny >>= bLinkedNumFmt;
+
+    bool bLabelIsNumberFormat = true;
+    if( xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
+        bLabelIsNumberFormat = aLabel.ShowNumber;
+
+    if (GetProperty(xPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
+    {
+        sal_Int32 nKey = 0;
+        mAny >>= nKey;
+
+        OUString aNumberFormatString = getNumberFormatCode(nKey);
+
+        if (bIsChartex) {
+            pFS->singleElement(FSNS(XML_cx, XML_numFmt), XML_formatCode, aNumberFormatString,
+                               XML_sourceLinked, ToPsz10(bLinkedNumFmt));
+        } else {
+            pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, aNumberFormatString,
+                               XML_sourceLinked, ToPsz10(bLinkedNumFmt));
+        }
+    }
 
     if (nLabelBorderWidth > 0 || nLabelFillColor != -1)
     {
@@ -4961,9 +5037,9 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         {
             ::Color nColor(ColorTransparency, nLabelFillColor);
             if (nColor.IsTransparent())
-                pChartExport->WriteSolidFill(nColor, nColor.GetAlpha());
+                WriteSolidFill(nColor, nColor.GetAlpha());
             else
-                pChartExport->WriteSolidFill(nColor);
+                WriteSolidFill(nColor);
         }
 
         if (nLabelBorderWidth > 0)
@@ -4975,9 +5051,9 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
             {
                 ::Color nColor(ColorTransparency, nLabelBorderColor);
                 if (nColor.IsTransparent())
-                    pChartExport->WriteSolidFill(nColor, nColor.GetAlpha());
+                    WriteSolidFill(nColor, nColor.GetAlpha());
                 else
-                    pChartExport->WriteSolidFill(nColor);
+                    WriteSolidFill(nColor);
             }
 
             pFS->endElement(FSNS(XML_a, XML_ln));
@@ -4986,10 +5062,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         pFS->endElement(FSNS(nChartNS, XML_spPr));
     }
 
-    pChartExport->exportTextProps(xPropSet, bIsChartex);
-
-    if (aCustomLabelFields.hasElements())
-        writeCustomLabel(pFS, pChartExport, aCustomLabelFields, nLabelIndex, rDLblsRange);
+    exportTextProps(xPropSet, bIsChartex); // c:txPr
 
     if (!bIsChartex) {
         // In chartex label position is an attribute of cx:dataLabel
@@ -5028,15 +5101,13 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         // TODO: is the following correct for chartex?
         pFS->startElement(FSNS(nChartNS, XML_ext), XML_uri,
             "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15),
-            pChartExport->GetFB()->getNamespaceURL(OOX_NS(c15)));
+            GetFB()->getNamespaceURL(OOX_NS(c15)));
 
         pFS->singleElement(FSNS(XML_c15, XML_showDataLabelsRange), XML_val, "1");
 
         pFS->endElement(FSNS(nChartNS, XML_ext));
         pFS->endElement(FSNS(nChartNS, XML_extLst));
     }
-}
-
 }
 
 void ChartExport::exportDataLabels(
@@ -5057,33 +5128,6 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_cx, XML_dataLabels));
     } else {
         pFS->startElement(FSNS(XML_c, XML_dLbls));
-    }
-
-    bool bLinkedNumFmt = true;
-    if (GetProperty(xPropSet, u"LinkNumberFormatToSource"_ustr))
-        mAny >>= bLinkedNumFmt;
-
-    chart2::DataPointLabel aLabel;
-    bool bLabelIsNumberFormat = true;
-    if( xPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
-        bLabelIsNumberFormat = aLabel.ShowNumber;
-
-    if (GetProperty(xPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
-    {
-        sal_Int32 nKey = 0;
-        mAny >>= nKey;
-
-        OUString aNumberFormatString = getNumberFormatCode(nKey);
-
-        if (bIsChartex) {
-            pFS->singleElement(FSNS(XML_cx, XML_numFmt),
-                XML_formatCode, aNumberFormatString,
-                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-        } else {
-            pFS->singleElement(FSNS(XML_c, XML_numFmt),
-                XML_formatCode, aNumberFormatString,
-                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-        }
     }
 
     uno::Sequence<sal_Int32> aAttrLabelIndices;
@@ -5192,39 +5236,13 @@ void ChartExport::exportDataLabels(
             }
         }
 
-        if( GetProperty(xLabelPropSet, u"LinkNumberFormatToSource"_ustr) )
-            mAny >>= bLinkedNumFmt;
-
-        if( xLabelPropSet->getPropertyValue(u"Label"_ustr) >>= aLabel )
-            bLabelIsNumberFormat = aLabel.ShowNumber;
-        else
-            bLabelIsNumberFormat = true;
-
-        if (GetProperty(xLabelPropSet, bLabelIsNumberFormat ? u"NumberFormat"_ustr : u"PercentageNumberFormat"_ustr))
-        {
-            sal_Int32 nKey = 0;
-            mAny >>= nKey;
-
-            OUString aNumberFormatString = getNumberFormatCode(nKey);
-
-            if (bIsChartex) {
-                pFS->singleElement(FSNS(XML_cx, XML_numFmt), XML_formatCode, aNumberFormatString,
-                                   XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-            } else {
-                pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, aNumberFormatString,
-                                   XML_sourceLinked, ToPsz10(bLinkedNumFmt));
-            }
-        }
-
         // Individual label property that overwrites the baseline.
-        writeLabelProperties(pFS, this, xLabelPropSet, aParam, nIdx,
-                rDLblsRange, bIsChartex);
+        writeLabelProperties(xLabelPropSet, aParam, nIdx, rDLblsRange, bIsChartex);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
     // Baseline label properties for all labels.
-    writeLabelProperties(pFS, this, xPropSet, aParam, -1, rDLblsRange,
-            bIsChartex);
+    writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, bIsChartex);
 
     if (!bIsChartex) {
         bool bShowLeaderLines = false;
@@ -5274,7 +5292,6 @@ void ChartExport::exportDataPoints(
         xSeriesProperties->getPropertyValue( u"VaryColorsByPoint"_ustr ) >>= bVaryColorsByPoint;
     }
 
-    const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
     sal_Int32 nElement;
     Reference< chart2::XColorScheme > xColorScheme;
     if( mxNewDiagram.is())
@@ -5284,8 +5301,8 @@ void ChartExport::exportDataPoints(
     {
         o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
         aAttrPointSet.reserve(aDataPointSeq.getLength());
-        for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
-            aAttrPointSet.insert(*p);
+        for (sal_Int32 point : aDataPointSeq)
+            aAttrPointSet.insert(point);
         const auto aEndIt = aAttrPointSet.end();
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
@@ -5345,8 +5362,8 @@ void ChartExport::exportDataPoints(
 
     o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
     aAttrPointSet.reserve(aDataPointSeq.getLength());
-    for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
-        aAttrPointSet.insert(*p);
+    for (sal_Int32 point : aDataPointSeq)
+        aAttrPointSet.insert(point);
     const auto aEndIt = aAttrPointSet.end();
     for( nElement = 0; nElement < nSeriesLength; ++nElement )
     {
@@ -5844,17 +5861,24 @@ void ChartExport::exportView3D()
     {
         sal_Int32 nRotationX = 0;
         mAny >>= nRotationX;
-        if( nRotationX < 0 )
+        if(eChartType == chart::TYPEID_PIE)
         {
-            if(eChartType == chart::TYPEID_PIE)
-            {
             /* In OOXML we get value in 0..90 range for pie chart X rotation , whereas we expect it to be in -90..90 range,
                so we convert that during import. It is modified in View3DConverter::convertFromModel()
                here we convert it back to 0..90 as we received in import */
-               nRotationX += 90;  // X rotation (map Chart2 [-179,180] to OOXML [0..90])
-            }
-            else
-                nRotationX += 360; // X rotation (map Chart2 [-179,180] to OOXML [-90..90])
+            if( nRotationX < 0 )
+                nRotationX += 90;  // X rotation (map Chart2 [-179,180] to OOXML [0..90])
+        }
+        else
+        {
+            assert(nRotationX >= -180 && nRotationX <= 180);
+            // X rotation (map Chart2 [-179,180] to OOXML [-90..90])
+            // This is not ideal, we are losing information, but that is unavoidable since OOXML does not
+            // allow upside down 3d charts.
+            if( nRotationX < -90 )
+                nRotationX = -90;
+            else if( nRotationX > 90 )
+                nRotationX = 90;
         }
         pFS->singleElement(FSNS(XML_c, XML_rotX), XML_val, OString::number(nRotationX));
     }
@@ -6044,13 +6068,13 @@ void ChartExport::outputStyleEntry(FSHelperPtr pFS, sal_Int32 nElTokenId, model:
         exportShapeProps(aEntry.mxShapePr->getShapeProperties().makePropertySet(), XML_cs);
     }
 
-    bool bDummy;
-    sal_Int32 nDummy;
-
     if (aEntry.mrTextCharacterPr) {
         PropertyMap *pPM = aEntry.mrTextCharacterPr.get();
         Reference< XPropertySet > rPS = pPM->makePropertySet();
-        WriteRunProperties(rPS, false, XML_defRPr, false, bDummy, nDummy );
+
+        WriteRunInput aInput;
+        aInput.bUseTextSchemeColors = true;
+        WriteRunProperties(rPS, XML_defRPr, aInput);
     }
 
     if (aEntry.mxTextBodyPr) {

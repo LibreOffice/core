@@ -24,11 +24,16 @@
 #include <pagedesc.hxx>
 #include <SwUndoPageDesc.hxx>
 #include <SwRewriter.hxx>
+#include <UndoManager.hxx>
 #include <undobj.hxx>
 #include <strings.hrc>
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <osl/diagnose.h>
+#include <cntfrm.hxx>
+#include <fmtpdsc.hxx>
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
 
 SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,
@@ -268,6 +273,29 @@ void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 {
     if (m_pDesc)
     {
+        SwNodes& rUndoNds = m_rDoc.GetUndoManager().GetUndoNodes();
+
+        // Record which nodes in the undo nodes used this page description.
+        rUndoNds.ForEach([](SwNode* pNode, void* pArgs) -> bool {
+            SwUndoPageDescCreate* pThis = static_cast<SwUndoPageDescCreate*>(pArgs);
+
+            const SwPageDesc *pPgDesc = nullptr;
+
+            if (pNode->IsContentNode())
+                pPgDesc = pNode->GetContentNode()->GetAttr(RES_PAGEDESC).GetPageDesc();
+            else if (pNode->IsTableNode())
+                pPgDesc = pNode->GetTableNode()->GetTable().
+                        GetFrameFormat()->GetPageDesc().GetPageDesc();
+            else if (pNode->IsSectionNode())
+                pPgDesc = pNode->GetSectionNode()->GetSection().
+                        GetFormat()->GetPageDesc().GetPageDesc();
+
+            if (pPgDesc == pThis->m_pDesc)
+                pThis->m_aAppliedNodes.push_back(pNode->GetIndex());
+
+            return true;
+        }, this);
+
         m_aNew = *m_pDesc;
         m_pDesc = nullptr;
     }
@@ -281,6 +309,21 @@ void SwUndoPageDescCreate::DoImpl()
     SwPageDesc* pNewPageDesc = m_rDoc.MakePageDesc(m_aNew.GetName(), &aPageDesc, false);
     if (m_aNew.GetName() == m_aNew.GetFollowName())
         pNewPageDesc->SetFollow(pNewPageDesc);
+
+    SwNodes& rUndoNds = m_rDoc.GetUndoManager().GetUndoNodes();
+
+    for (const SwNodeOffset& aOffset : m_aAppliedNodes)
+    {
+        SwNode* pNd = rUndoNds[aOffset];
+
+        SwFormatPageDesc aNew(pNewPageDesc);
+        if (pNd->IsContentNode())
+            pNd->GetContentNode()->SetAttr(aNew);
+        else if (pNd->IsTableNode())
+            pNd->GetTableNode()->GetTable().GetFrameFormat()->SetFormatAttr(aNew);
+        else if (pNd->IsSectionNode())
+            pNd->GetSectionNode()->GetSection().GetFormat()->SetFormatAttr(aNew);
+    }
 }
 
 void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
@@ -310,6 +353,50 @@ SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
                                            SwDoc& rDoc)
     : SwUndo(SwUndoId::DELETE_PAGEDESC, rDoc), m_aOld(_aOld, rDoc), m_rDoc(rDoc)
 {
+    // Record which page descriptions in this document used this page desc as their follow
+    for (size_t i = 0; i < m_rDoc.GetPageDescCnt(); ++i)
+    {
+        if (const SwPageDesc& rPageDesc = m_rDoc.GetPageDesc(i); rPageDesc.GetFollow() == &_aOld)
+        {
+            m_aPageDescsThisFollowed.emplace_back(rPageDesc.GetName());
+        }
+    }
+
+    // Record which nodes in the document used this page description.
+    for (SwRootFrame* pRootFrame : rDoc.GetAllLayouts())
+    {
+        const SwPageFrame* pPageFrameIter = pRootFrame->GetLastPage();
+        while (pPageFrameIter)
+        {
+            const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+            if (pContentFrame)
+            {
+                const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+                if (const sw::BroadcastingModify* pMod = rFormatPageDesc.GetDefinedIn())
+                {
+                    const SwPageDesc *pPgDesc = nullptr;
+                    if (auto pNd = dynamic_cast<const SwNode*>( pMod); pNd != nullptr)
+                    {
+                        pPgDesc = pNd->GetContentNode()->GetAttr( RES_PAGEDESC ).GetPageDesc();
+
+                        if (pNd->IsContentNode())
+                            pPgDesc = pNd->GetContentNode()->GetAttr( RES_PAGEDESC ).GetPageDesc();
+                        else if (pNd->IsTableNode())
+                            pPgDesc = pNd->GetTableNode()->GetTable().
+                                    GetFrameFormat()->GetPageDesc().GetPageDesc();
+                        else if (pNd->IsSectionNode())
+                            pPgDesc = pNd->GetSectionNode()->GetSection().
+                                    GetFormat()->GetPageDesc().GetPageDesc();
+
+                        if (pPgDesc == &_aOld)
+                            m_aAppliedNodes.push_back(pNd->GetIndex());
+                    }
+
+                }
+            }
+            pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
+        }
+    }
 }
 
 SwUndoPageDescDelete::~SwUndoPageDescDelete()
@@ -322,6 +409,27 @@ void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
     SwPageDesc* pNewPageDesc = m_rDoc.MakePageDesc(m_aOld.GetName(), &aPageDesc, false);
     if (m_aOld.GetName() == m_aOld.GetFollowName())
         pNewPageDesc->SetFollow(pNewPageDesc);
+
+    for (const UIName& aName : m_aPageDescsThisFollowed)
+    {
+        if (SwPageDesc* pPageDesc = m_rDoc.FindPageDesc(aName); pPageDesc != nullptr)
+        {
+            pPageDesc->SetFollow(pNewPageDesc);
+        }
+    }
+
+    for (const SwNodeOffset& aOffset : m_aAppliedNodes)
+    {
+        SwNode* pNd = m_rDoc.GetNodes()[aOffset];
+
+        SwFormatPageDesc aNew(pNewPageDesc);
+        if (pNd->IsContentNode())
+            pNd->GetContentNode()->SetAttr(aNew);
+        else if (pNd->IsTableNode())
+            pNd->GetTableNode()->GetTable().GetFrameFormat()->SetFormatAttr(aNew);
+        else if (pNd->IsSectionNode())
+            pNd->GetSectionNode()->GetSection().GetFormat()->SetFormatAttr(aNew);
+    }
 }
 
 void SwUndoPageDescDelete::DoImpl()

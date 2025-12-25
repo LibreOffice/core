@@ -23,7 +23,6 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
@@ -180,8 +179,6 @@ enum class StructElement
     // Illustration elements
     Figure, Formula, Form
 };
-
-}
 
 class PDFWriter
 {
@@ -441,7 +438,7 @@ public:
         bool                SubmitGet;
 
         PushButtonWidget()
-                : AnyWidget( vcl::PDFWriter::PushButton ),
+                : AnyWidget( PDFWriter::PushButton ),
                   Dest( -1 ), Submit( false ), SubmitGet( false )
         {}
 
@@ -458,7 +455,7 @@ public:
         OUString            OffValue; // the value of the checkbox if it is not selected
 
         CheckBoxWidget()
-                : AnyWidget( vcl::PDFWriter::CheckBox ),
+                : AnyWidget( PDFWriter::CheckBox ),
                   Checked( false )
         {}
 
@@ -476,7 +473,7 @@ public:
         OUString       OffValue; // the value of the radio button if it is not selected
 
         RadioButtonWidget()
-                : AnyWidget( vcl::PDFWriter::RadioButton ),
+                : AnyWidget( PDFWriter::RadioButton ),
                   Selected( false ),
                   RadioGroup( 0 )
         {}
@@ -509,7 +506,7 @@ public:
         OUString            DateFormat;
 
         EditWidget()
-                : AnyWidget( vcl::PDFWriter::Edit ),
+                : AnyWidget( PDFWriter::Edit ),
                   MultiLine( false ),
                   Password( false ),
                   FileSelect( false ),
@@ -536,7 +533,7 @@ public:
          // since multiselect is a 1.4+ feature
 
         ListBoxWidget()
-                : AnyWidget( vcl::PDFWriter::ListBox ),
+                : AnyWidget( PDFWriter::ListBox ),
                   DropDown( false ),
                   MultiSelect( false )
         {}
@@ -554,7 +551,7 @@ public:
         // set the current value in AnyWidget::Text
 
         ComboBoxWidget()
-                : AnyWidget( vcl::PDFWriter::ComboBox )
+                : AnyWidget( PDFWriter::ComboBox )
         {}
 
         virtual std::shared_ptr<AnyWidget> Clone() const override
@@ -566,7 +563,7 @@ public:
     struct SignatureWidget final : public AnyWidget
     {
         SignatureWidget()
-                : AnyWidget( vcl::PDFWriter::Signature )
+                : AnyWidget( PDFWriter::Signature )
         {}
 
         virtual std::shared_ptr<AnyWidget> Clone() const override
@@ -1304,7 +1301,9 @@ public:
     static OString GetDateTime(svl::crypto::SigningContext* pSigningContext = nullptr);
 };
 
-}
+} // end namespace vcl::pdf
+
+} // end namespace vcl
 
 #endif // INCLUDED_VCL_PDFWRITER_HXX
 

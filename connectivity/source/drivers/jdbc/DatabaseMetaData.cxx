@@ -126,16 +126,15 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         {
             jobjectArray pObjArray = t.pEnv->NewObjectArray( static_cast<jsize>(typeFilterCount), java_lang_String::st_getMyClass(), nullptr );
             OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
-            const OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
-            for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
+            for (sal_Int32 i = 0; i < typeFilterCount; ++i)
             {
-                if ( *typeFilter == "%" )
+                if (_types[i] == "%")
                 {
                     bIncludeAllTypes = true;
                     break;
                 }
-                jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
+                jstring aT = convertwchar_tToJavaString(t.pEnv, _types[i]);
                 t.pEnv->SetObjectArrayElement( pObjArray, static_cast<jsize>(i), aT );
                 OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
             }

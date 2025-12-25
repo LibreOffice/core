@@ -408,7 +408,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // the anchor frame, thus it has to move forward.
     bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
     do {
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
         SwFlyFreeFrame::MakeAll(pRenderContext);
 
@@ -444,17 +444,12 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
             sal_uInt32 nToPageNum( 0 );
             bool bDummy( false );
-            bool bPageHasFlysAnchoredBelowThis(false);
             if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
 // TODO: what if this fly moved bc it's in table? does sth prevent that?
                                 *this, *GetPageFrame(),
-                                bAnchoredAtMaster, nToPageNum, bDummy,
-                                bPageHasFlysAnchoredBelowThis) )
+                                bAnchoredAtMaster, nToPageNum, bDummy))
             {
-                if (!bPageHasFlysAnchoredBelowThis)
-                {
-                    bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
-                }
+                bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
                 // mark anchor text frame
                 // directly, that it is moved forward by object positioning.
                 SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
@@ -465,21 +460,14 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     if ( nAnchorFrameToPageNum < nToPageNum )
                     {
-                        if (!bPageHasFlysAnchoredBelowThis)
-                        {
-                            SwLayouter::RemoveMovedFwdFrame(rDoc, *pAnchorTextFrame);
-                        }
+                        SwLayouter::RemoveMovedFwdFrame(rDoc, *pAnchorTextFrame);
                     }
                     else
                         bInsert = false;
                 }
                 if ( bInsert )
                 {
-                    if (!bPageHasFlysAnchoredBelowThis)
-                    {
-                        SwLayouter::InsertMovedFwdFrame(rDoc, *pAnchorTextFrame,
-                                                        nToPageNum);
-                    }
+                    SwLayouter::InsertMovedFwdFrame(rDoc, *pAnchorTextFrame, nToPageNum);
                 }
             }
         }
@@ -544,7 +532,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
         if ( pCellFrame )
         {
-            SwRectFnSet aRectFnSet(pCellFrame);
+            SwRectFnSet aRectFnSet(*pCellFrame);
             if ( aRectFnSet.GetTop(pCellFrame->getFrameArea()) == 0 &&
                  aRectFnSet.GetHeight(pCellFrame->getFrameArea()) == 0 )
             {

@@ -356,9 +356,9 @@ void PlaceEditDialog::SelectType(bool bSkipSeparator)
 
     m_xCurrentDetails->set_visible(true);
 
-    m_xCBPassword->set_visible( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
-    m_xEDPassword->set_visible( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
-    m_xFTPasswordLabel->set_visible( m_bShowPassword && m_xCurrentDetails->enableUserCredentials() );
+    m_xCBPassword->set_visible(m_bShowPassword && m_xCurrentDetails->enablePassword());
+    m_xEDPassword->set_visible(m_bShowPassword && m_xCurrentDetails->enablePassword());
+    m_xFTPasswordLabel->set_visible(m_bShowPassword && m_xCurrentDetails->enablePassword());
     m_xEDUsername->set_visible( m_xCurrentDetails->enableUserCredentials() );
     m_xFTUsernameLabel->set_visible( m_xCurrentDetails->enableUserCredentials() );
 

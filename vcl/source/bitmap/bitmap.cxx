@@ -64,6 +64,11 @@
 #include <vcl/graphicfilter.hxx>
 #endif
 
+#if USE_HEADLESS_CODE
+#include <headless/svpbmp.hxx>
+#include <headless/CairoCommon.hxx>
+#endif
+
 Bitmap::Bitmap()
 {
 }
@@ -187,7 +192,7 @@ static Bitmap createBitmapFromColorAndAlpha(const Bitmap& rColorBitmap, const Bi
 //        ScopedVclPtrInstance<VirtualDevice> xDev(DeviceFormat::WITH_ALPHA);
 //        Size aPixelSize = rBitmapEx.GetSizePixel();
 //        xDev->SetOutputSizePixel(aPixelSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
-//        xDev->DrawBitmapEx(Point(0, 0), aPixelSize, rBitmapEx);
+//        xDev->DrawBitmap(Point(0, 0), aPixelSize, rBitmapEx);
 //        mxSalBmp = xDev->GetBitmap(Point(0,0), aPixelSize).mxSalBmp;
 
     }
@@ -379,6 +384,21 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 
     return *this;
 }
+
+#if USE_HEADLESS_CODE
+void* Bitmap::tryToGetCairoSurface() const
+{
+    SvpSalBitmap* pSvpSalBitmap(dynamic_cast<SvpSalBitmap*>(ImplGetSalBitmap().get()));
+    if (nullptr == pSvpSalBitmap)
+        return nullptr;
+
+    const BitmapBuffer* pBitmapBuffer(pSvpSalBitmap->GetBuffer());
+    if (nullptr == pBitmapBuffer)
+        return nullptr;
+
+    return CairoCommon::createCairoSurface(pBitmapBuffer);
+}
+#endif
 
 Bitmap& Bitmap::operator=( Bitmap&& rBitmap ) noexcept
 {
@@ -2181,13 +2201,13 @@ Color Bitmap::GetAverageColor() const
 
 void Bitmap::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
-    pOutDev->DrawBitmapEx( rDestPt, *this );
+    pOutDev->DrawBitmap( rDestPt, *this );
 }
 
 void Bitmap::Draw( OutputDevice* pOutDev,
                      const Point& rDestPt, const Size& rDestSize ) const
 {
-    pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
+    pOutDev->DrawBitmap( rDestPt, rDestSize, *this );
 }
 
 AlphaMask Bitmap::CreateAlphaMask() const
@@ -2417,7 +2437,7 @@ Bitmap Bitmap::AutoScaleBitmap(Bitmap const & aBitmap, const tools::Long aStanda
     // Draw a rect into virDevice
     aVirDevice->DrawRect( aRect );
     Point aPointPixel( static_cast<tools::Long>(imgposX), static_cast<tools::Long>(imgposY) );
-    aVirDevice->DrawBitmapEx( aPointPixel, aRet );
+    aVirDevice->DrawBitmap( aPointPixel, aRet );
     aRet = aVirDevice->GetBitmap( aEmptyPoint, aStdSize );
 
     return aRet;

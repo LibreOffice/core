@@ -899,6 +899,9 @@ namespace emfplushelper
         }
     }
 
+    const sal_uInt16 LOWERGAMMA = 1000;
+    const sal_uInt16 UPPERGAMMA = 2200;
+
     EmfPlusHelperData::EmfPlusHelperData(
         SvMemoryStream& rMS,
         wmfemfhelper::TargetHolders& rTargetHolders,
@@ -1667,7 +1670,11 @@ namespace emfplushelper
 
                         if (mbSetTextContrast)
                         {
-                            const auto gammaVal = mnTextContrast / 1000;
+                            sal_uInt16 nTextContrast = std::clamp(mnTextContrast, LOWERGAMMA, UPPERGAMMA);
+                            assert(nTextContrast >= LOWERGAMMA && nTextContrast <= UPPERGAMMA);
+                            const auto gammaVal = nTextContrast / 1000;
+                            assert(gammaVal != 0);
+                            SAL_INFO("drawinglayer.emf", "EMF+\t Text contrast: " << gammaVal << " gamma");
                             const basegfx::BColorModifier_gamma gamma(gammaVal);
 
                             // gamma correct transparency color
@@ -1766,16 +1773,10 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetTextContrast:
                     {
-                        const sal_uInt16 LOWERGAMMA = 1000;
-                        const sal_uInt16 UPPERGAMMA = 2200;
-
                         mbSetTextContrast = true;
                         mnTextContrast = flags & 0xFFF;
                         SAL_WARN_IF(mnTextContrast > UPPERGAMMA || mnTextContrast < LOWERGAMMA,
                             "drawinglayer.emf", "EMF+\t Gamma value is not with bounds 1000 to 2200, value is " << mnTextContrast);
-                        mnTextContrast = std::min(mnTextContrast, UPPERGAMMA);
-                        mnTextContrast = std::max(mnTextContrast, LOWERGAMMA);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t Text contrast: " << (mnTextContrast / 1000) << " gamma");
                         break;
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:

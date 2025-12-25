@@ -22,7 +22,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
@@ -34,6 +33,7 @@ namespace com::sun::star {
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
 namespace comphelper

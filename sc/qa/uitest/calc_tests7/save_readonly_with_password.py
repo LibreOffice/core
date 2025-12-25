@@ -16,7 +16,7 @@ import os.path
 
 class save_readonly_with_password(UITestCase):
 
-   def test_save_to_xlsx(self):
+    def test_save_to_xlsx(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "readonly_with_password_tmp.xlsx")
@@ -29,7 +29,7 @@ class save_readonly_with_password(UITestCase):
                     xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                     xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
                     xFileTypeCombo = xSaveDialog.getChild("file_type")
-                    select_by_text(xFileTypeCombo, "Excel 2007–365 (.xlsx)")
+                    select_by_text(xFileTypeCombo, "Excel 2010–365 Spreadsheet (.xlsx)")
                     xPasswordCheckButton = xSaveDialog.getChild("password")
                     xPasswordCheckButton.executeAction("CLICK", tuple())
                     xOpen = xSaveDialog.getChild("open")
@@ -56,7 +56,7 @@ class save_readonly_with_password(UITestCase):
 
                 self.assertFalse(document.isReadonly())
 
-   def test_save_to_ods(self):
+    def test_save_to_ods(self):
 
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "readonly_with_password_tmp.ods")

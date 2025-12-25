@@ -531,6 +531,27 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                 }
             }
             break;
+        case KEY_TAB:
+            if (!rKEvt.GetKeyCode().IsMod1())
+                bKeyUsed = false; // handle simple tab key without ctrl/cmd
+            else if( pCursor )
+            {
+                MakeEntryVisible( pCursor );
+                const bool bDown = !rKEvt.GetKeyCode().IsShift();
+                pNewCursor = pImpCursor->GoUpDown(pCursor, bDown, true);
+                SetCursor_Impl(pNewCursor);
+                if( !pNewCursor )
+                {
+                    tools::Rectangle aRect( GetEntryBoundRect( pCursor ) );
+                    if( aRect.Top())
+                    {
+                        aRect.AdjustBottom( -(aRect.Top()) );
+                        aRect.SetTop( 0 );
+                        MakeVisible( aRect );
+                    }
+                }
+            }
+            break;
 
         case KEY_DOWN:
         case KEY_PAGEDOWN:

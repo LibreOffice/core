@@ -201,25 +201,19 @@ bool EffectRewinder::rewind (
 
         // No main sequence effects to rewind on the current slide.
         // Go back to the previous slide.
-        mpAsynchronousRewindEvent = makeEvent(
-            ::std::bind(
-                &EffectRewinder::asynchronousRewindToPreviousSlide,
-                this,
-                rPreviousSlideFunctor),
-            u"EffectRewinder::asynchronousRewindToPreviousSlide"_ustr);
+        mpAsynchronousRewindEvent
+            = makeEvent(([this, rPreviousSlideFunctor]()
+                         { asynchronousRewindToPreviousSlide(rPreviousSlideFunctor); }),
+                        u"EffectRewinder::asynchronousRewindToPreviousSlide"_ustr);
     }
     else
     {
         // The actual rewinding is done asynchronously so that we can safely
         // call other methods.
-        mpAsynchronousRewindEvent = makeEvent(
-            ::std::bind(
-                &EffectRewinder::asynchronousRewind,
-                this,
-                nSkipCount,
-                true,
-                rSlideRewindFunctor),
-            u"EffectRewinder::asynchronousRewind"_ustr);
+        mpAsynchronousRewindEvent
+            = makeEvent(([this, nSkipCount, rSlideRewindFunctor]()
+                         { asynchronousRewind(nSkipCount, true, rSlideRewindFunctor); }),
+                        u"EffectRewinder::asynchronousRewind"_ustr);
     }
 
     if (mpAsynchronousRewindEvent)
@@ -240,12 +234,8 @@ void EffectRewinder::skipAllMainSequenceEffects()
 
     const int nTotalMainSequenceEffectCount (countMainSequenceEffects());
     mpAsynchronousRewindEvent = makeEvent(
-        ::std::bind(
-            &EffectRewinder::asynchronousRewind,
-            this,
-            nTotalMainSequenceEffectCount,
-            false,
-            ::std::function<void ()>()),
+        ([this, nTotalMainSequenceEffectCount]()
+         { asynchronousRewind(nTotalMainSequenceEffectCount, false, ::std::function<void()>()); }),
         u"EffectRewinder::asynchronousRewind"_ustr);
     mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 }
@@ -356,14 +346,10 @@ void EffectRewinder::asynchronousRewind (
         // Re-display the current slide.
         if (rSlideRewindFunctor)
             rSlideRewindFunctor();
-        mpAsynchronousRewindEvent = makeEvent(
-            ::std::bind(
-                &EffectRewinder::asynchronousRewind,
-                this,
-                nEffectCount,
-                false,
-                rSlideRewindFunctor),
-            u"EffectRewinder::asynchronousRewind"_ustr);
+        mpAsynchronousRewindEvent
+            = makeEvent(([this, nEffectCount, rSlideRewindFunctor]()
+                         { asynchronousRewind(nEffectCount, false, rSlideRewindFunctor); }),
+                        u"EffectRewinder::asynchronousRewind"_ustr);
         mrEventQueue.addEvent(mpAsynchronousRewindEvent);
     }
     else

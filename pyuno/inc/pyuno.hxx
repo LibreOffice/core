@@ -150,9 +150,6 @@ public:
 //struct stRuntimeImpl;
 typedef struct stRuntimeImpl RuntimeImpl;
 
-enum ConversionMode { ACCEPT_UNO_ANY, REJECT_UNO_ANY };
-
-
 /** The pyuno::Runtime class keeps the internal state of the python UNO bridge
     for the currently in use python interpreter.
 
@@ -229,8 +226,7 @@ public:
 
         @throws css::uno::RuntimeException
     */
-    css::uno::Any pyObject2Any (
-        const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const;
+    css::uno::Any pyObject2Any ( const PyRef & source ) const;
 
     /** extracts a proper uno exception from a given python exception
      */

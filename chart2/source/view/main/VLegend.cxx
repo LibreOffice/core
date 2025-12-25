@@ -37,8 +37,8 @@
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
+#include <chart2/AbstractPivotTableDataProvider.hxx>
 #include <rtl/math.hxx>
 #include <svl/ctloptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -834,18 +834,19 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
 {
     std::vector<std::shared_ptr<VButton>> aButtons;
 
-    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
-    if (!xPivotTableDataProvider.is())
+    chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+        dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(rModel.getDataProvider().get());
+    if (!pPivotTableDataProvider)
         return aButtons;
 
-    if (!xPivotTableDataProvider->getColumnFields().hasElements())
+    if (pPivotTableDataProvider->getColumnFields().empty())
         return aButtons;
 
     awt::Size aSize(2000, 700);
     int x = 100;
     int y = 100;
 
-    const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getColumnFields();
+    const std::vector<chart2::data::PivotTableFieldEntry>& aPivotFieldEntries = pPivotTableDataProvider->getColumnFields();
     for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : aPivotFieldEntries)
     {
         auto pButton = std::make_shared<VButton>();
@@ -999,8 +1000,9 @@ void VLegend::createShapes(
 
             bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( m_xLegend, m_nDefaultWritingMode );
 
-            uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider( mrModel.getDataProvider(), uno::UNO_QUERY );
-            bool bIsPivotChart = xPivotTableDataProvider.is();
+            chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
+                dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(mrModel.getDataProvider().get());
+            bool bIsPivotChart = pPivotTableDataProvider != nullptr;
 
             if ( !aViewEntries.empty() || bIsPivotChart )
             {

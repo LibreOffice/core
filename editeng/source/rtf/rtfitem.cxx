@@ -61,6 +61,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <vcl/font.hxx>
 
 #include <editeng/svxrtf.hxx>

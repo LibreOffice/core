@@ -119,7 +119,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData& rData) :
     SetPool( mrViewData.GetScDrawView()->GetDefaultAttr().GetPool() );
 
     //  At the switching-over the UndoManager is changed to edit mode
-    SfxUndoManager* pMgr = mrViewData.GetSfxDocShell().GetUndoManager();
+    SfxUndoManager* pMgr = mrViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !mrViewData.GetDocument().IsUndoEnabled() )
     {
@@ -705,6 +705,16 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
             break;
 
+        case SID_ALIGN_ANY_START:
+        case SID_ATTR_PARA_ADJUST_START:
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::ParaStart, EE_PARA_JUST ) );
+            break;
+
+        case SID_ALIGN_ANY_END:
+        case SID_ATTR_PARA_ADJUST_END:
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::ParaEnd, EE_PARA_JUST ) );
+            break;
+
         case SID_ATTR_PARA_LINESPACE_10:
             {
                 SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
@@ -934,7 +944,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             {
                 const sal_uInt16 nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
                 const std::optional<NamedColor> oColor
-                    = mrViewData.GetDocShell().GetRecentColor(nSlot);
+                    = mrViewData.GetDocShell()->GetRecentColor(nSlot);
                 if (oColor.has_value())
                 {
                     const model::ComplexColor aCol = (*oColor).getComplexColor();
@@ -1079,6 +1089,16 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
         }
         break;
+    case SvxAdjust::ParaStart:
+        {
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, true ) );
+        }
+        break;
+    case SvxAdjust::ParaEnd:
+        {
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, true ) );
+        }
+        break;
         default:
         {
             // added to avoid warnings
@@ -1088,6 +1108,8 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_LEFT,      eAdj == SvxAdjust::Left ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_HCENTER,   eAdj == SvxAdjust::Center ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SvxAdjust::Right ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_START,     eAdj == SvxAdjust::ParaStart ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_END,       eAdj == SvxAdjust::ParaEnd ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SvxAdjust::Block ) );
 
     SvxLRSpaceItem aLR = aAttrSet.Get( EE_PARA_LRSPACE );

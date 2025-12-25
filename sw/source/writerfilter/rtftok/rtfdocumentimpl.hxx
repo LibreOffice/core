@@ -696,7 +696,7 @@ public:
                     rtl::Reference<SwXTextDocument> const& xDstDoc,
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
                     css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
-                    const utl::MediaDescriptor& rMediaDescriptor);
+                    const comphelper::SequenceAsHashMap& rMediaDescriptor);
     ~RTFDocumentImpl() override;
 
     // RTFDocument
@@ -986,7 +986,7 @@ private:
     /// New document means not pasting into an existing one.
     bool m_bIsNewDoc;
     /// The media descriptor contains e.g. the base URL of the document.
-    const utl::MediaDescriptor& m_rMediaDescriptor;
+    const comphelper::SequenceAsHashMap& m_rMediaDescriptor;
 
     /// Flags for ensuring that only one header and footer is added per section
     bool m_hasRHeader;

@@ -19,7 +19,9 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TreeView.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 

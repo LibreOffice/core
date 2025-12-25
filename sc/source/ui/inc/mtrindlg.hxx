@@ -19,7 +19,9 @@
 
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ScMetricInputDlg : public weld::GenericDialogController
 {

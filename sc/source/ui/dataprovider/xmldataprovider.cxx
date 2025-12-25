@@ -106,12 +106,15 @@ void XMLDataProvider::Import()
     mxXMLFetchThread = new XMLFetchThread(
         *mpDoc, mrDataSource.getURL(), mrDataSource.getXMLImportParam(), mrDataSource.getID(),
         [this]() { this->ImportFinished(); }, std::vector(mrDataSource.getDataTransformation()));
-    mxXMLFetchThread->launch();
 
     if (mbDeterministic)
     {
         SolarMutexReleaser aReleaser;
-        mxXMLFetchThread->join();
+        mxXMLFetchThread->execute();
+    }
+    else
+    {
+        mxXMLFetchThread->launch();
     }
 }
 

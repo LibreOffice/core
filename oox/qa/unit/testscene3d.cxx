@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_wireframe)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0));
 
     // Make sure the export to ODF has the corresponding attributes.
-    save(u"impress8"_ustr);
+    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPath(pXmlDoc,
@@ -631,7 +631,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_shape_rotation)
     uno::Reference<drawing::XShape> xShape(getShape(0, 0));
 
     // Make sure that the immediate export to pptx has the same shape rotation
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//p:spPr/a:xfrm", "rot", u"300000");
 }

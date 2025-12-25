@@ -66,6 +66,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <viewopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -149,7 +150,7 @@ bool SwTextFrame::CalcPrepFootnoteAdjust()
         const SwFootnoteContFrame *pCont = pBoss->FindFootnoteCont();
         bool bReArrange = true;
 
-        SwRectFnSet aRectFnSet(this);
+        SwRectFnSet aRectFnSet(*this);
         if ( pCont && aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->getFrameArea()),
                                           aRectFnSet.GetBottom(getFrameArea()) ) > 0 )
         {
@@ -182,7 +183,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
 {
     // nLower is an absolute value. It denotes the bottom of the line
     // containing the footnote.
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
 
     OSL_ENSURE( !pFrame->IsVertical() || !pFrame->IsSwapped(),
             "lcl_GetFootnoteLower with swapped frame" );
@@ -340,7 +341,7 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
         const SwFrame *pCont = pFootnoteFrame->GetUpper();
 
         // Height within the Container which we're allowed to consume anyways
-        SwRectFnSet aRectFnSet(pCont);
+        SwRectFnSet aRectFnSet(*pCont);
         SwTwips nTmp = aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*pCont),
                                            aRectFnSet.GetTop(getFrameArea()) );
 
@@ -703,7 +704,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
         {
             SwFrame *pCont = pFootnoteFrame->GetUpper();
 
-            SwRectFnSet aRectFnSet(pCont);
+            SwRectFnSet aRectFnSet(*pCont);
             tools::Long nDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->getFrameArea()),
                                              nDeadLine );
 
@@ -896,7 +897,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
                     if( bVertical )
                         nTmpBot = m_pFrame->SwitchHorizontalToVertical( nTmpBot );
 
-                    SwRectFnSet aRectFnSet(pFootnoteCont);
+                    SwRectFnSet aRectFnSet(*pFootnoteCont);
 
                     const tools::Long nDiff = aRectFnSet.YDiff(
                                             aRectFnSet.GetTop(pFootnoteCont->getFrameArea()),
@@ -1016,9 +1017,9 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
                     : pRedline->GetAuthor();
 
             if ( RedlineType::Delete == pRedline->GetType() )
-                SwModule::get()->GetDeletedAuthorAttr(aAuthor, aSet);
+                SwModule::get()->GetDeletedAuthorAttr(aAuthor, aSet, SwRedlineRenderMode::Standard);
             else
-                SwModule::get()->GetInsertAuthorAttr(aAuthor, aSet);
+                SwModule::get()->GetInsertAuthorAttr(aAuthor, aSet, SwRedlineRenderMode::Standard);
 
             if (const SvxColorItem* pItem = aSet.GetItemIfSet(RES_CHRATR_COLOR))
                 pNumFnt->SetColor(pItem->GetValue());

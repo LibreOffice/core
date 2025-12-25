@@ -190,6 +190,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox
     friend class SalInstanceIconView;
     friend class SalInstanceTreeView;
     friend class SalInstanceEntryTreeView;
+    friend class JSTreeView;
 
     std::unique_ptr<SvTreeListBoxImpl> mpImpl;
     Link<SvTreeListBox*,void>  aScrolledHdl;
@@ -197,7 +198,6 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox
     Link<SvTreeListBox*,bool>  aExpandingHdl;
     Link<SvTreeListBox*,void>  aSelectHdl;
     Link<SvTreeListBox*,void>  aDeselectHdl;
-    Link<const CommandEvent&, bool> aPopupMenuHdl;
     Link<SvTreeListEntry*, OUString> aTooltipHdl;
     Link<svtree_render_args, void> aCustomRenderHdl;
     Link<svtree_measure_args, Size> aCustomMeasureHdl;
@@ -365,6 +365,8 @@ public:
 
     SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
 
+    sal_uInt32 GetEntryPos(const SvTreeListEntry* pEntry) const;
+
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
     void            RemoveSelection();
@@ -394,7 +396,7 @@ public:
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
     const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
-    OUString GetEntryTooltip(SvTreeListEntry* pEntry) const { return aTooltipHdl.Call(pEntry); }
+    OUString GetEntryTooltip(SvTreeListEntry* pEntry) const;
 
     VclPtr<Edit> GetEditWidget() const; // for UITest
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
@@ -410,7 +412,6 @@ public:
     void            SetDoubleClickHdl(const Link<SvTreeListBox*,bool>& rNewHdl) {aDoubleClickHdl=rNewHdl;}
     void            SetExpandingHdl(const Link<SvTreeListBox*,bool>& rNewHdl){aExpandingHdl=rNewHdl;}
     void            SetExpandedHdl(const Link<SvTreeListBox*,void>& rNewHdl){aExpandedHdl=rNewHdl;}
-    void SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink) { aPopupMenuHdl = rLink; }
     void SetTooltipHdl(const Link<SvTreeListEntry*, OUString>& rLink) { aTooltipHdl = rLink; }
     void SetCustomRenderHdl(const Link<svtree_render_args, void>& rLink) { aCustomRenderHdl = rLink; }
     void SetCustomMeasureHdl(const Link<svtree_measure_args, Size>& rLink) { aCustomMeasureHdl = rLink; }
@@ -552,7 +553,7 @@ public:
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr);
+                                         sal_uInt32 nPos=TREELIST_APPEND, OUString* pUserData = nullptr);
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;

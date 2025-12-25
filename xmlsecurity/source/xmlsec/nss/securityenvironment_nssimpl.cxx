@@ -34,6 +34,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <vector>
 #include <memory>
 #include <osl/thread.h>
@@ -117,7 +118,7 @@ static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*ar
         sal_Int32 nLen = aPassword.getLength();
         char* pPassword = static_cast<char*>(PORT_Alloc( nLen+1 ) );
         pPassword[nLen] = 0;
-        memcpy( pPassword, aPassword.getStr(), nLen );
+        std::copy( aPassword.getStr(), aPassword.getStr() + nLen, pPassword );
         return pPassword;
     }
     return nullptr;

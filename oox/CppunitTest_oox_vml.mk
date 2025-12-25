@@ -45,4 +45,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,oox_vml,\
 
 $(eval $(call gb_CppunitTest_use_configuration,oox_vml))
 
+$(eval $(call gb_CppunitTest_add_arguments,oox_vml, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

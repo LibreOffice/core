@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/errinf.hxx>
 #include <editeng/langitem.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
@@ -229,7 +229,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
             if (!bIntercept)
             {
-                if (const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME))
+                if (const SfxStringItem* pURLItem = rReq.GetArg(SID_FILE_NAME))
                 {
                     if (!pViewShell || !SfxObjectShell::AllowedLinkProtocolFromDocument(pURLItem->GetValue(),
                                                                                         pViewShell->GetObjectShell(),
@@ -483,7 +483,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
     if (SvtModuleOptions().IsImpressInstalled())
     {
         Reference< XFrame > xTargetFrame;
-        const SfxUnoFrameItem* pFrmItem = rReq.GetArg<SfxUnoFrameItem>(SID_FILLFRAME);
+        const SfxUnoFrameItem* pFrmItem = rReq.GetArg(SID_FILLFRAME);
         if ( pFrmItem )
             xTargetFrame = pFrmItem->GetFrame();
 

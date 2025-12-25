@@ -383,12 +383,12 @@ void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
     maModel.mnSortRefItem = rStrm.readInt32();
 }
 
-void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& rxDPDesc )
+void PivotTableField::finalizeImport(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc)
 {
     /*  Process all fields based on source data, other fields (e.g. group
         fields) are processed from here. PivotCache::getCacheDatabaseIndex()
         returns -1 for all fields not based on source data. */
-    Reference< XDataPilotField > xDPField;
+    rtl::Reference< ScDataPilotFieldObj > xDPField;
     sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );
     if( !((nDatabaseIdx >= 0) && rxDPDesc.is()) )
         return;
@@ -396,8 +396,8 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
     try
     {
         // try to get the source field and its name from passed DataPilot descriptor
-        Reference< XIndexAccess > xDPFieldsIA( rxDPDesc->getDataPilotFields(), UNO_SET_THROW );
-        xDPField.set( xDPFieldsIA->getByIndex( nDatabaseIdx ), UNO_QUERY_THROW );
+        rtl::Reference< ScDataPilotFieldsObj > xDPFieldsIA( rxDPDesc->getScDataPilotFields() );
+        xDPField = xDPFieldsIA->getScDataPilotFieldObjByIndex( nDatabaseIdx );
     }
     catch( Exception& )
     {
@@ -438,8 +438,7 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
         else
         {
             // No choice - check the sheet for field name
-            Reference< XNamed > xDPFieldName( xDPField, UNO_QUERY_THROW );
-            maDPFieldName = xDPFieldName->getName();
+            maDPFieldName = xDPField->getName();
             OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeImport - no field name in source data found" );
         }
     }
@@ -448,7 +447,7 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
     }
 }
 
-void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
+void PivotTableField::finalizeDateGroupingImport( const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
     if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
@@ -464,7 +463,7 @@ void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotFie
     }
 }
 
-void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,  const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames )
+void PivotTableField::finalizeParentGroupingImport( const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,  const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames )
 {
     if( !maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
         return;
@@ -487,29 +486,29 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
     maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
     pCacheField->setFinalGroupName(maDPFieldName);
     // on success, try to create nested group fields
-    Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
+    rtl::Reference< ScDataPilotFieldObj > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
     if( xDPField.is() )
         mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, orItemNames );
 }
 
-void PivotTableField::finalizeImportBasedOnCache( const Reference< XDataPilotDescriptor >& rxDPDesc)
+void PivotTableField::finalizeImportBasedOnCache(
+    const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc)
 {
     /*  Process all fields based on source data, other fields (e.g. group
         fields) are processed based on cache fields.*/
-    Reference< XDataPilotField > xDPField;
+    rtl::Reference< ScDataPilotFieldObj > xDPField;
     sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );
-    if( (nDatabaseIdx >= 0) && rxDPDesc.is() ) try
-    {
-        // Try to get the source field and its name from passed DataPilot descriptor
-        Reference< XIndexAccess > xDPFieldsIA( rxDPDesc->getDataPilotFields(), UNO_SET_THROW );
-        xDPField.set( xDPFieldsIA->getByIndex( nDatabaseIdx ), UNO_QUERY_THROW );
-        Reference< XNamed > xDPFieldName( xDPField, UNO_QUERY_THROW );
-        maDPFieldName = xDPFieldName->getName();
-        SAL_WARN_IF( maDPFieldName.isEmpty(), "sc.filter", "PivotTableField::finalizeImportBasedOnCache - no field name in source data found" );
-    }
-    catch( Exception& )
-    {
-    }
+    if( (nDatabaseIdx >= 0) && rxDPDesc.is() )
+        try
+        {
+            // Try to get the source field and its name from passed DataPilot descriptor
+            xDPField = rxDPDesc->getScDataPilotFields()->getScDataPilotFieldObjByIndex( nDatabaseIdx );
+            maDPFieldName = xDPField->getName();
+            SAL_WARN_IF( maDPFieldName.isEmpty(), "sc.filter", "PivotTableField::finalizeImportBasedOnCache - no field name in source data found" );
+        }
+        catch( Exception& )
+        {
+        }
 
     // Use group names already generated for another table using the same group field.
     if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
@@ -538,12 +537,12 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
 {
     OSL_ENSURE( rPageField.mnField == mnFieldIndex, "PivotTableField::convertPageField - wrong field index" );
     // convert all settings common for row/column/page fields
-    Reference< XDataPilotField > xDPField = convertRowColPageField( XML_axisPage );
+    rtl::Reference< ScDataPilotFieldObj > xDPField = convertRowColPageField( XML_axisPage );
 
     if( !xDPField.is() )
         return;
 
-    PropertySet aPropSet( xDPField );
+    PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(xDPField) ));
 
     // find cache item used as 'selected page'
     sal_Int32 nCacheItem = -1;
@@ -592,11 +591,11 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
 {
     OSL_ENSURE( rDataField.mnField == mnFieldIndex, "PivotTableField::convertDataField - wrong field index" );
     OSL_ENSURE( maModel.mbDataField, "PivotTableField::convertDataField - not a data field" );
-    Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
+    rtl::Reference< ScDataPilotFieldObj > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
     if( !xDPField.is() )
         return;
 
-    PropertySet aPropSet( xDPField );
+    PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(xDPField) ));
 
     // field orientation
     aPropSet.setProperty( PROP_Orientation, DataPilotFieldOrientation_DATA );
@@ -670,10 +669,10 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
 
 // private --------------------------------------------------------------------
 
-Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 nAxis )
+rtl::Reference< ScDataPilotFieldObj > PivotTableField::convertRowColPageField( sal_Int32 nAxis )
 {
     bool bDataLayout = mnFieldIndex == OOX_PT_DATALAYOUTFIELD;
-    Reference< XDataPilotField > xDPField = bDataLayout ? mrPivotTable.getDataLayoutField() : mrPivotTable.getDataPilotField( maDPFieldName );
+    rtl::Reference< ScDataPilotFieldObj > xDPField = bDataLayout ? mrPivotTable.getDataLayoutField() : mrPivotTable.getDataPilotField( maDPFieldName );
     OSL_ENSURE( bDataLayout || (nAxis == maModel.mnAxis), "PivotTableField::convertRowColPageField - field axis mismatch" );
 
     if( xDPField.is() )
@@ -681,7 +680,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
         // TODO: Use this to set properties directly, bypassing the slow uno layer.
         ScDPObject* pDPObj = mrPivotTable.getDPObject();
 
-        PropertySet aPropSet( xDPField );
+        PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(xDPField) ));
 
         // field orientation
         DataPilotFieldOrientation eFieldOrient = DataPilotFieldOrientation_HIDDEN;
@@ -925,7 +924,7 @@ void PivotTableFilter::finalizeImport()
     if( maModel.mnType != XML_count )
         return;
 
-    PropertySet aPropSet( mrPivotTable.getDataPilotField( maModel.mnField ) );
+    PropertySet aPropSet( css::uno::Reference< css::beans::XPropertySet >(mrPivotTable.getDataPilotField( maModel.mnField )) );
     if( aPropSet.is() )
     {
         DataPilotFieldAutoShowInfo aAutoShowInfo;
@@ -1083,18 +1082,6 @@ void PivotTable::importDataField( const AttributeList& rAttribs )
     aModel.mnBaseItem   = rAttribs.getInteger( XML_baseItem, -1 );
     aModel.mnNumFmtId   = rAttribs.getInteger( XML_numFmtId, 0 );
     maDataFields.push_back( aModel );
-}
-
-void PivotTable::putToInteropGrabBag(const OUString& sName, const AttributeList& rAttribs)
-{
-    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
-    {
-        // Store both known and unknown attribute sequences to the grab bag as is
-        css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
-        css::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();
-        css::uno::Sequence<css::uno::Any> aVal{ css::uno::Any(aFast), css::uno::Any(aUnk) };
-        maInteropGrabBag[sName] <<= aVal;
-    }
 }
 
 void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
@@ -1353,8 +1340,8 @@ void PivotTable::finalizeImport()
         if( !maPageFields.empty() )
             aPos.Row = ::std::max< sal_Int32 >( static_cast< sal_Int32 >( aPos.Row - maPageFields.size() - 1 ), 0 );
 
-        // save interop grab bag
-        mpDPObject->PutInteropGrabBag(std::move(maInteropGrabBag));
+        // set the pivot table style info
+        mpDPObject->setStyleInfo(std::move(maStyleInfo));
 
         // insert the DataPilot table into the sheet
         ScDocument& rDoc = getDocImport().getDoc();
@@ -1398,13 +1385,14 @@ void PivotTable::finalizeFieldsImport()
     maFields.forEachMem(&PivotTableField::finalizeImport, ::std::cref(mxDPDescriptor));
 }
 
-void PivotTable::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
+void PivotTable::finalizeDateGroupingImport( const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
     // process all fields, there is no chaining information in the cache fields
-    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, ::std::cref(rxBaseDPField), nBaseFieldIdx );
+    for (const auto & rField : maFields)
+        rField->finalizeDateGroupingImport( rxBaseDPField, nBaseFieldIdx );
 }
 
-void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,
+void PivotTable::finalizeParentGroupingImport( const rtl::Reference< ScDataPilotFieldObj >& rxBaseDPField,
         const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames )
 {
     // try to create parent group fields that group the items of the passed base field
@@ -1412,35 +1400,35 @@ void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField 
         pParentTableField->finalizeParentGroupingImport( rxBaseDPField, rBaseCacheField, orItemNames );
 }
 
-Reference< XDataPilotField > PivotTable::getDataPilotField( const OUString& rFieldName ) const
+rtl::Reference< ScDataPilotFieldObj > PivotTable::getDataPilotField( const OUString& rFieldName ) const
 {
-    Reference< XDataPilotField > xDPField;
-    if( !rFieldName.isEmpty() && mxDPDescriptor.is() ) try
-    {
-        Reference< XNameAccess > xDPFieldsNA( mxDPDescriptor->getDataPilotFields(), UNO_QUERY_THROW );
-        xDPField.set( xDPFieldsNA->getByName( rFieldName ), UNO_QUERY );
-    }
-    catch( Exception& )
-    {
-    }
+    rtl::Reference< ScDataPilotFieldObj > xDPField;
+    if( !rFieldName.isEmpty() && mxDPDescriptor.is() )
+        try
+        {
+            xDPField = mxDPDescriptor->getScDataPilotFields()->getScDataPilotFieldObjByName(rFieldName);
+        }
+        catch( Exception& )
+        {
+        }
     return xDPField;
 }
 
-Reference< XDataPilotField > PivotTable::getDataPilotField( sal_Int32 nFieldIdx ) const
+rtl::Reference< ScDataPilotFieldObj > PivotTable::getDataPilotField( sal_Int32 nFieldIdx ) const
 {
-    Reference< XDataPilotField > xDPField;
+    rtl::Reference< ScDataPilotFieldObj > xDPField;
     if( const PivotTableField* pTableField = maFields.get( nFieldIdx ).get() )
         xDPField = getDataPilotField( pTableField->getDPFieldName() );
     return xDPField;
 }
 
-Reference< XDataPilotField > PivotTable::getDataLayoutField() const
+rtl::Reference< ScDataPilotFieldObj > PivotTable::getDataLayoutField() const
 {
-    Reference< XDataPilotField > xDPField;
+    rtl::Reference< ScDataPilotFieldObj > xDPField;
     try
     {
         if (mxDPDescriptor)
-            xDPField = mxDPDescriptor->getDataLayoutField();
+            xDPField = mxDPDescriptor->getScDataLayoutField();
     }
     catch( Exception& )
     {

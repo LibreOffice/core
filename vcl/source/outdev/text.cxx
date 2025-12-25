@@ -994,29 +994,9 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::SubstituteDigits)
     {
-        // disable character localization when no digits used
-        const sal_Unicode* pBase = rStr.getStr();
-        const sal_Unicode* pStr = pBase + nMinIndex;
-        const sal_Unicode* pEnd = pBase + nEndIndex;
-        std::optional<OUStringBuffer> xTmpStr;
-        for( ; pStr < pEnd; ++pStr )
-        {
-            // TODO: are there non-digit localizations?
-            if( (*pStr >= '0') && (*pStr <= '9') )
-            {
-                // translate characters to local preference
-                sal_UCS4 cChar = GetLocalizedChar( *pStr, meTextLanguage );
-                if( cChar != *pStr )
-                {
-                    if (!xTmpStr)
-                        xTmpStr = OUStringBuffer(rStr);
-                    // TODO: are the localized digit surrogates?
-                    (*xTmpStr)[pStr - pBase] = cChar;
-                }
-            }
-        }
-        if (xTmpStr)
-            rStr = (*xTmpStr).makeStringAndClear();
+        sal_Int32 nSubstringLen = nEndIndex - nMinIndex;
+        rStr = LocalizeDigitsInString(rStr, meTextLanguage, nMinIndex, nSubstringLen);
+        nEndIndex = nMinIndex + nSubstringLen;
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style

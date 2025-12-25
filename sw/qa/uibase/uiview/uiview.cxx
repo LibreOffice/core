@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -16,6 +17,9 @@
 #include <vcl/scheduler.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <test/lokcallback.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
@@ -137,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     CPPUNIT_ASSERT(pViewOption->IsKeepRatio());
 
     // Then export as well:
-    save(u"writer8"_ustr);
+    save(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']", u"true");
 }
@@ -438,6 +442,109 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testReinstateTrackedChangeState)
     // - Actual  : 32 (DEFAULT)
     // i.e. reinstate was always enabled.
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeCommand)
+{
+    // Given a document with default view options:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwRedlineRenderMode eActual = pWrtShell->GetViewOptions()->GetRedlineRenderMode();
+    CPPUNIT_ASSERT_EQUAL(SwRedlineRenderMode::Standard, eActual);
+
+    // When toggling redline render mode to omit deletes:
+    dispatchCommand(mxComponent, u".uno:RedlineRenderMode"_ustr, {});
+
+    // Then make sure the view option is updated:
+    eActual = pWrtShell->GetViewOptions()->GetRedlineRenderMode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2 (OmitDeletes)
+    // - Actual  : 0 (Standard)
+    // i.e. the view option wasn't set.
+    CPPUNIT_ASSERT_EQUAL(SwRedlineRenderMode::OmitDeletes, eActual);
+
+    // And when toggling off:
+    dispatchCommand(mxComponent, u".uno:RedlineRenderMode"_ustr, {});
+
+    // Then make sure the view option is back to its default:
+    eActual = pWrtShell->GetViewOptions()->GetRedlineRenderMode();
+    CPPUNIT_ASSERT_EQUAL(SwRedlineRenderMode::Standard, eActual);
+}
+
+namespace
+{
+/// LOK view callback for test purposes.
+struct ViewCallback
+{
+    std::set<SwRedlineRenderMode> m_aInvalidationModes;
+
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
+};
+
+void ViewCallback::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void ViewCallback::callbackImpl(int nType, const char* pPayload)
+{
+    switch (nType)
+    {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            OUString aPayload = OUString::fromUtf8(pPayload);
+            if (aPayload.startsWith("EMPTY"))
+            {
+                break;
+            }
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(aPayload);
+            // x y w h part mode
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aSeq.getLength());
+            m_aInvalidationModes.insert(static_cast<SwRedlineRenderMode>(aSeq[5].toInt32()));
+        }
+        break;
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
+{
+    // Set up LOK:
+    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setPartInInvalidation(true);
+
+    // Given a document where redline render mode is set to "omit deletes":
+    createSwDoc();
+    getSwTextDoc()->initializeForTiledRendering({});
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    ViewCallback aCallback;
+    TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
+    pWrtShell->ApplyViewOptions(aOpt);
+    Scheduler::ProcessEventsToIdle();
+    aCallback.m_aInvalidationModes.clear();
+
+    // When typing a key:
+    pWrtShell->Insert(u"x"_ustr);
+    pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
+
+    // Then make sure that both the "omit inserts" and the "omit deletes" modes are invalidated:
+    // Without the accompanying fix in place, this test would have failed, only the "omit deletes"
+    // mode was invalidated.
+    CPPUNIT_ASSERT(aCallback.m_aInvalidationModes.contains(SwRedlineRenderMode::OmitInserts));
+    CPPUNIT_ASSERT(aCallback.m_aInvalidationModes.contains(SwRedlineRenderMode::OmitDeletes));
+
+    // Tear down LOK:
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setPartInInvalidation(false);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -617,12 +617,12 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
             if (xTitle.is())
             {
-                OUString aTitle;
+                OUStringBuffer aTitle;
                 const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
                     = xTitle->getText();
                 for (auto const& fs : aFSSeq)
-                    aTitle += fs->getString();
-                rJsonWriter.put("title", aTitle);
+                    aTitle.append(fs->getString());
+                rJsonWriter.put("title", aTitle.toString());
             }
         }
 
@@ -633,12 +633,12 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             uno::Reference<chart2::XTitle> xSubTitle = xSubTitled->getTitleObject();
             if (xSubTitle.is())
             {
-                OUString aSubTitle;
+                OUStringBuffer aSubTitle;
                 const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
                     = xSubTitle->getText();
                 for (auto const& fs : aFSSeq)
-                    aSubTitle += fs->getString();
-                rJsonWriter.put("subtitle", aSubTitle);
+                    aSubTitle.append(fs->getString());
+                rJsonWriter.put("subtitle", aSubTitle.makeStringAndClear());
             }
         }
 
@@ -1133,6 +1133,46 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
             u"Bookmark",       u"Field",         u"Layout" };
 
     return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
+}
+
+int SwXTextDocument::getEditMode()
+{
+    SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+    {
+        return 0;
+    }
+
+    SfxViewShell* pView = pViewShell->GetSfxViewShell();
+    if (!pView)
+    {
+        return 0;
+    }
+    return pView->getEditMode();
+}
+
+void SwXTextDocument::setEditMode(int nEditMode)
+{
+    auto eMode = static_cast<SwRedlineRenderMode>(nEditMode);
+    SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+    {
+        return;
+    }
+
+    SwViewOption aOpt(*pViewShell->GetViewOptions());
+    if (eMode != aOpt.GetRedlineRenderMode())
+    {
+        aOpt.SetRedlineRenderMode(eMode);
+        pViewShell->ApplyViewOptions(aOpt);
+    }
+}
+
+OUString SwXTextDocument::getPartInfo(int /*nPart*/)
+{
+    tools::JsonWriter jsonWriter;
+    jsonWriter.put("mode", getEditMode());
+    return OUString::fromUtf8(jsonWriter.finishAndGetAsOString());
 }
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)

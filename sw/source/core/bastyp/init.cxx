@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <doc.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -376,6 +377,7 @@ std::unique_ptr<ItemInfoPackage> createItemInfoPackageSwAttributes()
             { RES_PARATR_SNAPTOGRID, new SvxParaGridItem( true, RES_PARATR_SNAPTOGRID ), SID_ATTR_PARA_SNAPTOGRID, SFX_ITEMINFOFLAG_NONE },
             { RES_PARATR_CONNECT_BORDER, new SwParaConnectBorderItem, SID_ATTR_BORDER_CONNECT, SFX_ITEMINFOFLAG_NONE },
             { RES_PARATR_OUTLINELEVEL, new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 ), SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_AUTOFRAMEDIR, new SvxAutoFrameDirectionItem( false, RES_PARATR_AUTOFRAMEDIR ), SID_ATTR_PARA_AUTOFRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE },
             { RES_PARATR_RSID, new SvxRsidItem( 0, RES_PARATR_RSID ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_PARATR_GRABBAG, new SfxGrabBagItem( RES_PARATR_GRABBAG ), SID_ATTR_PARA_GRABBAG, SFX_ITEMINFOFLAG_NONE },
 

@@ -2543,6 +2543,25 @@ SfxVoidItem GoDownToEndOfData SID_CURSORBLKDOWN
 ]
 
 
+SfxVoidItem NavigatorSelectComment SID_NAVIGATOR_SELECT_COMMENT
+(SfxUInt16Item CommentId FN_PARAM_1)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
+
 SfxVoidItem GoDownToEndOfDataSel SID_CURSORBLKDOWN_SEL
 (SfxInt16Item By FN_PARAM_1)
 [
@@ -5023,7 +5042,7 @@ SfxVoidItem SetInputMode SID_SETINPUTMODE
 
 
 SfxVoidItem SetOptimalColumnWidth FID_COL_OPT_WIDTH
-(SfxUInt16Item aExtraWidth FID_COL_OPT_WIDTH)
+(SfxUInt16Item aExtraWidth FID_COL_OPT_WIDTH,SfxUInt16Item Column FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -6049,6 +6068,23 @@ SfxBoolItem ToggleFormula   FID_TOGGLEFORMULA
     GroupId = SfxGroupId::View
 ]
 
+SfxInt32Item CurrentSheetVIew FID_CURRENT_SHEET_VIEW
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxBoolItem NewSheetView FID_NEW_SHEET_VIEW
 [
     /* flags */
@@ -6134,8 +6170,8 @@ SfxBoolItem SelectSheetView FID_SELECT_SHEET_VIEW
 
     /* config */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View
 ]
 

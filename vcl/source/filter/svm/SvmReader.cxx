@@ -1158,7 +1158,7 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
             mrStream.ReadDouble(fG);
             mrStream.ReadDouble(fB);
 
-            aColorStops.emplace_back(fOff, basegfx::BColor(fR, fG, fB));
+            aColorStops.addStop(fOff, basegfx::BColor(fR, fG, fB));
         }
     }
 

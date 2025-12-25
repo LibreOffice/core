@@ -37,7 +37,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -1447,8 +1447,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 boost::property_tree::ptree aHyperlinkTree;
                 if (pActiveView && URLFieldHelper::IsCursorAtURLField(*pActiveView))
                 {
-                    if (const SvxFieldItem* pFld = GetField(aPos, nullptr, nullptr))
-                        if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
+                    const SvxFieldData* pField  = pActiveView->GetFieldUnderMouseOrInSelectionOrAtCursor();
+                    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
                             aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
                 }
                 else if (GetEditSelection().HasRange())
@@ -1638,7 +1638,9 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
             mpOutputWindow->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
+        bool bInvalidateToTriggerRedraw = !mpOutputWindow && getEditViewCallbacks();
+
+        if (comphelper::LibreOfficeKit::isActive() || bInvalidateToTriggerRedraw)
         {
             // Need to invalidate the window, otherwise no tile will be re-painted.
             // NOTE:
@@ -2524,11 +2526,9 @@ void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEv
     // Only check for text, will also be there if bin or rtf
     datatransfer::DataFlavor aTextFlavor;
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aTextFlavor );
-    const css::datatransfer::DataFlavor* pFlavors = rDTDEE.SupportedDataFlavors.getConstArray();
-    int nFlavors = rDTDEE.SupportedDataFlavors.getLength();
-    for ( int n = 0; n < nFlavors; n++ )
+    for (const css::datatransfer::DataFlavor& rFlavor : rDTDEE.SupportedDataFlavors)
     {
-        if( TransferableDataHelper::IsEqual( pFlavors[n], aTextFlavor ) )
+        if (TransferableDataHelper::IsEqual(rFlavor, aTextFlavor))
         {
             mpDragAndDropInfo->bHasValidData = true;
             break;

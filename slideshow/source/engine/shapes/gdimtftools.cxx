@@ -298,7 +298,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             {
                 case Disposal::Not:
                 {
-                    pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
+                    pVDev->DrawBitmap(rAnimationFrame.maPositionPixel,
                                         rAnimationFrame.maBitmap);
 
                     if (!rAnimationFrame.maBitmap.HasAlpha())
@@ -311,7 +311,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                     {
                         AlphaMask aMask = rAnimationFrame.maBitmap.CreateAlphaMask();
                         Bitmap aTmpMask(aMask.GetBitmap(), aMask);
-                        pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aTmpMask);
+                        pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aTmpMask);
                     }
                     break;
                 }
@@ -342,7 +342,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
                 case Disposal::Previous:
                 {
-                    pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
+                    pVDev->DrawBitmap(rAnimationFrame.maPositionPixel,
                                         rAnimationFrame.maBitmap);
                     pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel,
                                           rAnimationFrame.maBitmap.CreateAlphaMask().GetBitmap());

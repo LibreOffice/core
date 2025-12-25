@@ -24,6 +24,8 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <unoprnms.hxx>
+#include <unocoll.hxx>
+#include <unosection.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
@@ -47,6 +49,9 @@
 #include <strings.hrc>
 #include <rdfhelper.hxx>
 #include <unotxdoc.hxx>
+#include <unobookmark.hxx>
+#include <unostyle.hxx>
+#include <unoxstyle.hxx>
 
 namespace sw::sidebar
 {
@@ -339,6 +344,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "UnvisitedCharStyleName", RID_UNVISITED_CHAR_STYLE_NAME },
         { "VisitedCharStyleName", RID_VISITED_CHAR_STYLE_NAME },
         { "WritingMode", RID_WRITING_MODE },
+        { "WritingModeAutomatic", RID_WRITING_MODE_AUTOMATIC },
         { "BorderColor", RID_BORDER_COLOR },
         { "BorderInnerLineWidth", RID_BORDER_INNER_LINE_WIDTH },
         { "BorderLineDistance", RID_BORDER_LINE_DISTANCE },
@@ -599,25 +605,24 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                  aHiddenProperties, aFieldsNode);
 
     rtl::Reference<SwXTextDocument> pSwTextDocument(rDocSh.GetBaseModel());
-    uno::Reference<container::XNameAccess> xStyleFamilies = pSwTextDocument->getStyleFamilies();
+    rtl::Reference<SwXStyleFamilies> xStyleFamilies = pSwTextDocument->getSwStyleFamilies();
     OUString sCurrentCharStyle, sCurrentParaStyle, sDisplayName;
 
-    uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName(u"CharacterStyles"_ustr), uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXStyleFamily> xStyleFamily = xStyleFamilies->GetCharacterStyles();
     xRange->getPropertyValue(u"CharStyleName"_ustr) >>= sCurrentCharStyle;
     xRange->getPropertyValue(u"ParaStyleName"_ustr) >>= sCurrentParaStyle;
 
     if (!sCurrentCharStyle.isEmpty())
     {
-        uno::Reference<beans::XPropertySet> xPropertiesSet(
-            xStyleFamily->getByName(sCurrentCharStyle), css::uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXBaseStyle> xPropertiesSet
+            = xStyleFamily->getStyleByName(sCurrentCharStyle);
         xPropertiesSet->getPropertyValue(u"DisplayName"_ustr) >>= sDisplayName;
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, aHiddenCharacterProperties,
-                     aFieldsNode);
+        InsertValues(cppu::getXWeak(xPropertiesSet.get()), aIsDefined, aCurrentChild, false,
+                     aHiddenCharacterProperties, aFieldsNode);
 
         aCharNode.children.push_back(std::move(aCurrentChild));
     }
@@ -633,22 +638,21 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                      aFieldsNode);
     }
 
-    xStyleFamily.set(xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW);
+    xStyleFamily = xStyleFamilies->GetParagraphStyles();
 
     while (!sCurrentParaStyle.isEmpty())
     {
-        uno::Reference<style::XStyle> xPropertiesStyle(xStyleFamily->getByName(sCurrentParaStyle),
-                                                       uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xPropertiesSet(xPropertiesStyle,
-                                                           css::uno::UNO_QUERY_THROW);
-        xPropertiesSet->getPropertyValue(u"DisplayName"_ustr) >>= sDisplayName;
+        rtl::Reference<SwXStyle> xPropertiesStyle(
+            xStyleFamily->getParagraphStyleByName(sCurrentParaStyle));
+        xPropertiesStyle->getPropertyValue(u"DisplayName"_ustr) >>= sDisplayName;
         OUString aParentParaStyle = xPropertiesStyle->getParentStyle();
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(),
-                     aHiddenCharacterProperties, aFieldsNode);
+        InsertValues(uno::Reference<beans::XPropertySet>(xPropertiesStyle), aIsDefined,
+                     aCurrentChild, aParentParaStyle.isEmpty(), aHiddenCharacterProperties,
+                     aFieldsNode);
 
         aParaNode.children.push_back(std::move(aCurrentChild));
         sCurrentParaStyle = aParentParaStyle;
@@ -658,18 +662,15 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                  aParaNode.children.end()); // Parent style should be first then children
 
     // Collect bookmarks at character position
-    uno::Reference<container::XIndexAccess> xBookmarks(pSwTextDocument->getBookmarks(),
-                                                       uno::UNO_QUERY);
+    rtl::Reference<SwXBookmarks> xBookmarks(pSwTextDocument->getSwBookmarks());
     for (sal_Int32 i = 0; i < xBookmarks->getCount(); ++i)
     {
         svx::sidebar::TreeNode aCurNode;
-        uno::Reference<text::XTextContent> bookmark;
-        xBookmarks->getByIndex(i) >>= bookmark;
-        uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
+        rtl::Reference<SwXBookmark> xBookmark = xBookmarks->getBookmarkByIndex(i);
 
         try
         {
-            uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
+            uno::Reference<text::XTextRange> bookmarkRange = xBookmark->getAnchor();
             uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
                                                                       uno::UNO_QUERY);
             if (xTextRangeCompare.is()
@@ -679,7 +680,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                 aCurNode.sNodeName = xBookmark->getName();
                 aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-                MetadataToTreeNode(xBookmark, aCurNode);
+                MetadataToTreeNode(cppu::getXWeak(xBookmark.get()), aCurNode);
                 // show bookmark only if it has RDF metadata
                 if (aCurNode.children.size() > 0)
                     aBookmarksNode.children.push_back(std::move(aCurNode));
@@ -691,14 +692,12 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     }
 
     // Collect sections at character position
-    uno::Reference<container::XIndexAccess> xTextSections(pSwTextDocument->getTextSections(),
-                                                          uno::UNO_QUERY);
+    rtl::Reference<SwXTextSections> xTextSections(pSwTextDocument->getSwTextSections());
     for (sal_Int32 i = 0; i < xTextSections->getCount(); ++i)
     {
         svx::sidebar::TreeNode aCurNode;
-        uno::Reference<text::XTextContent> section;
-        xTextSections->getByIndex(i) >>= section;
-        uno::Reference<container::XNamed> xTextSection(section, uno::UNO_QUERY);
+        rtl::Reference<SwXTextSection> section = xTextSections->getSwTextSectionByIndex(i);
+        uno::Reference<container::XNamed> xTextSection(section);
 
         try
         {
@@ -709,7 +708,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                 && xTextRangeCompare->compareRegionStarts(sectionRange, xRange) != -1
                 && xTextRangeCompare->compareRegionEnds(xRange, sectionRange) != -1)
             {
-                aCurNode.sNodeName = xTextSection->getName();
+                aCurNode.sNodeName = section->getName();
                 aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
                 MetadataToTreeNode(xTextSection, aCurNode);

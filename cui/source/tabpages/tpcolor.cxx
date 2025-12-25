@@ -21,7 +21,7 @@
 #include <i18nutil/unicode.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <strings.hrc>
 #include <svx/xfillit0.hxx>
@@ -204,22 +204,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
     if (!m_pColorList.is())
         return;
 
-    if (const XFillColorItem* pFillColorItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_FILLCOLOR)))
-    {
-        SetColorModel( ColorModel::RGB );
-        ChangeColorModel();
-
-        const Color aColor = pFillColorItem->GetColorValue();
-        NamedColor aNamedColor;
-        aNamedColor.m_aColor = aColor;
-        ChangeColor(aNamedColor);
-        sal_Int32 nPos = FindInPalette( aColor );
-
-        if ( nPos != -1 )
-            m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nPos));
-        // else search in other palettes?
-
-    }
+    SelectPaletteLBHdl(*m_xSelectPalette);
 
     m_aCtlPreviewOld.SetAttributes(m_aXFillAttr.GetItemSet());
     m_aCtlPreviewOld.Invalidate();
@@ -486,6 +471,46 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
     }
 
     m_xValSetColorList->Resize();
+
+    // select the 'Active' color in the m_xValSetColorList if it has it
+    if (const XFillColorItem* pFillColorItem = m_rOutAttrs.GetItemIfSet(GetWhich(XATTR_FILLCOLOR)))
+    {
+        SetColorModel(ColorModel::RGB);
+        ChangeColorModel();
+
+        const Color aColor = pFillColorItem->GetColorValue();
+        NamedColor aNamedColor;
+        aNamedColor.m_aColor = aColor;
+        ChangeColor(aNamedColor);
+
+        if (sal_Int32 nPalettePos = maPaletteManager.GetPalette();
+            /* theme colors palette */ maPaletteManager.IsThemePaletteSelected() ||
+            /* document colors palette */ nPalettePos == maPaletteManager.GetPaletteCount() - 1
+            || /* custom palette */ nPalettePos == 0)
+        {
+            for (size_t nItemPos = 0, nItemCount = m_xValSetColorList->GetItemCount();
+                 nItemPos < nItemCount; nItemPos++)
+            {
+                auto nItemId = m_xValSetColorList->GetItemId(nItemPos);
+                if (m_xValSetColorList->GetItemColor(nItemId) == aColor)
+                {
+                    m_xValSetColorList->SelectItem(nItemId);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            m_pColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+                XPropertyListType::Color, maPaletteManager.GetSelectedPalettePath()));
+            if (m_pColorList->Load())
+            {
+                auto nItemPos = FindInPalette(aColor);
+                if (nItemPos != -1)
+                    m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nItemPos));
+            }
+        }
+    }
 }
 
 IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)

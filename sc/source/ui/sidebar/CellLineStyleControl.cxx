@@ -18,7 +18,6 @@
  */
 
 #include "CellLineStyleControl.hxx"
-#include "CellLineStyleValueSet.hxx"
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -37,69 +36,105 @@ CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& r
     : WeldToolbarPopup(nullptr, pParent, u"modules/scalc/ui/floatinglinestyle.ui"_ustr, u"FloatingLineStyle"_ustr)
     , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)
-    , mxCellLineStyleValueSet(new sc::sidebar::CellLineStyleValueSet)
-    , mxCellLineStyleValueSetWin(new weld::CustomWeld(*m_xBuilder, u"linestylevalueset"_ustr, *mxCellLineStyleValueSet))
+    , mxCellLineStyleTreeView(m_xBuilder->weld_tree_view(u"linestyletreeview"_ustr))
     , mxPushButtonMoreOptions(m_xBuilder->weld_button(u"more"_ustr))
 {
-    Initialize();
+    mxPushButtonMoreOptions->connect_clicked(LINK(this, CellLineStylePopup, PBClickHdl));
+
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
+    const std::vector<OUString> aStrings = {
+        ScResId(STR_BORDER_HAIRLINE).replaceFirst("%s", rI18nHelper.GetNum(5, 2)),
+        ScResId(STR_BORDER_VERY_THIN).replaceFirst("%s", rI18nHelper.GetNum(50, 2)),
+        ScResId(STR_BORDER_THIN).replaceFirst("%s", rI18nHelper.GetNum(75, 2)),
+        ScResId(STR_BORDER_MEDIUM).replaceFirst("%s", rI18nHelper.GetNum(150, 2)),
+        ScResId(STR_BORDER_THICK).replaceFirst("%s", rI18nHelper.GetNum(225, 2)),
+        ScResId(STR_BORDER_EXTRA_THICK).replaceFirst("%s", rI18nHelper.GetNum(450, 2)),
+        // Numbers in pt are the total width of the double line (inner + outer + distance)
+        ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(110, 2)),
+        ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(235, 2)),
+        ScResId(STR_BORDER_DOUBLE_2).replaceFirst("%s", rI18nHelper.GetNum(300, 2)),
+        ScResId(STR_BORDER_DOUBLE_3).replaceFirst("%s", rI18nHelper.GetNum(305, 2)),
+        ScResId(STR_BORDER_DOUBLE_4).replaceFirst("%s", rI18nHelper.GetNum(450, 2))
+    };
+
+    for (size_t i = 0; i < aStrings.size(); ++i)
+    {
+        mxCellLineStyleTreeView->append();
+        mxCellLineStyleTreeView->set_text(i, aStrings.at(i), 1);
+
+        ScopedVclPtr<VirtualDevice> pDev = CreateImage(i);
+        mxCellLineStyleTreeView->set_image(i, *pDev, 0);
+    }
+    mxCellLineStyleTreeView->columns_autosize();
+    const int nHeight = mxCellLineStyleTreeView->get_preferred_size().Height();
+    mxCellLineStyleTreeView->set_size_request(-1, nHeight);
+    mxCellLineStyleTreeView->queue_resize();
+
+    mxCellLineStyleTreeView->connect_row_activated(LINK(this, CellLineStylePopup, StyleSelectHdl));
 }
 
 CellLineStylePopup::~CellLineStylePopup()
 {
 }
 
-void CellLineStylePopup::Initialize()
+VclPtr<VirtualDevice> CellLineStylePopup::CreateImage(int nIndex)
 {
-    mxPushButtonMoreOptions->connect_clicked(LINK(this, CellLineStylePopup, PBClickHdl));
+    VclPtr<VirtualDevice> pDev = mxCellLineStyleTreeView->create_virtual_device();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    pDev->SetBackground(rStyleSettings.GetFieldColor());
+    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+    pDev->SetFillColor(pDev->GetLineColor());;
+    pDev->SetOutputSizePixel(Size(50, 26));
 
-    mxCellLineStyleValueSet->SetStyle(mxCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
-
-    for(sal_uInt16 i = 1 ; i <= CELL_LINE_STYLE_ENTRIES ; i++)
+    constexpr tools::Long nX = 5;
+    constexpr tools::Long nY = 10;
+    constexpr tools::Long nTRX = 40;
+    switch(nIndex)
     {
-        mxCellLineStyleValueSet->InsertItem(i);
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            pDev->DrawRect(tools::Rectangle(nX, nY , nTRX, nY + nIndex * 2 + 1 ));
+            break;
+        case 6:
+            pDev->DrawRect(tools::Rectangle(nX, nY , nTRX, nY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nX, nY + 3 , nTRX, nY + 4 ));
+            break;
+        case 7:
+            pDev->DrawRect(tools::Rectangle(nX, nY , nTRX, nY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nX, nY + 5 , nTRX, nY + 6 ));
+            break;
+        case 8:
+            pDev->DrawRect(tools::Rectangle(nX, nY , nTRX, nY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nX, nY + 3 , nTRX, nY + 6 ));
+            break;
+        case 9:
+            pDev->DrawRect(tools::Rectangle(nX, nY , nTRX, nY + 3 ));
+            pDev->DrawRect(tools::Rectangle(nX, nY + 5 , nTRX, nY + 6 ));
+            break;
+        case 10:
+            pDev->DrawRect(tools::Rectangle(nX, nY , nTRX, nY + 3 ));
+            pDev->DrawRect(tools::Rectangle(nX, nY + 5 , nTRX, nY + 8 ));
+            break;
     }
 
-    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
-    maStr[0] = ScResId(STR_BORDER_HAIRLINE).replaceFirst("%s", rI18nHelper.GetNum(5, 2));
-    maStr[1] = ScResId(STR_BORDER_VERY_THIN).replaceFirst("%s", rI18nHelper.GetNum(50, 2));
-    maStr[2] = ScResId(STR_BORDER_THIN).replaceFirst("%s", rI18nHelper.GetNum(75, 2));
-    maStr[3] = ScResId(STR_BORDER_MEDIUM).replaceFirst("%s", rI18nHelper.GetNum(150, 2));
-    maStr[4] = ScResId(STR_BORDER_THICK).replaceFirst("%s", rI18nHelper.GetNum(225, 2));
-    maStr[5] = ScResId(STR_BORDER_EXTRA_THICK).replaceFirst("%s", rI18nHelper.GetNum(450, 2));
-
-    // Numbers in pt are the total width of the double line (inner + outer + distance)
-    maStr[6] = ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(110, 2));
-    maStr[7] = ScResId(STR_BORDER_DOUBLE_1).replaceFirst("%s", rI18nHelper.GetNum(235, 2));
-    maStr[8] = ScResId(STR_BORDER_DOUBLE_2).replaceFirst("%s", rI18nHelper.GetNum(300, 2));
-    maStr[9] = ScResId(STR_BORDER_DOUBLE_3).replaceFirst("%s", rI18nHelper.GetNum(305, 2));
-    maStr[10] = ScResId(STR_BORDER_DOUBLE_4).replaceFirst("%s", rI18nHelper.GetNum(450, 2));
-    mxCellLineStyleValueSet->SetUnit(&maStr[0]);
-
-    for (sal_uInt16 i = 1; i <= CELL_LINE_STYLE_ENTRIES; ++i)
-    {
-        mxCellLineStyleValueSet->SetItemText(i, maStr[i-1]);
-    }
-
-    SetAllNoSel();
-    mxCellLineStyleValueSet->SetSelectHdl(LINK(this, CellLineStylePopup, VSSelectHdl));
+    return pDev;
 }
 
 void CellLineStylePopup::GrabFocus()
 {
-    mxCellLineStyleValueSet->GrabFocus();
+    mxCellLineStyleTreeView->grab_focus();
 }
 
-void CellLineStylePopup::SetAllNoSel()
+IMPL_LINK_NOARG(CellLineStylePopup, StyleSelectHdl, weld::TreeView&, bool)
 {
-    mxCellLineStyleValueSet->SelectItem(0);
-    mxCellLineStyleValueSet->SetNoSelection();
-    mxCellLineStyleValueSet->SetFormat();
-    mxCellLineStyleValueSet->Invalidate();
-}
+    const int nIndex = mxCellLineStyleTreeView->get_selected_index();
+    if (nIndex < 0)
+        return false;
 
-IMPL_LINK_NOARG(CellLineStylePopup, VSSelectHdl, ValueSet*, void)
-{
-    const sal_uInt16 iPos(mxCellLineStyleValueSet->GetSelectedItemId());
     SvxLineItem aLineItem(SID_FRAME_LINESTYLE);
     SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID;
     sal_uInt16 n1 = 0;
@@ -108,51 +143,51 @@ IMPL_LINK_NOARG(CellLineStylePopup, VSSelectHdl, ValueSet*, void)
 
     //FIXME: fully for new border line possibilities
 
-    switch(iPos)
+    switch(nIndex)
     {
-        case 1:
+        case 0:
             n1 = SvxBorderLineWidth::Hairline;
             break;
-        case 2:
+        case 1:
             n1 = SvxBorderLineWidth::VeryThin;
             break;
-        case 3:
+        case 2:
             n1 = SvxBorderLineWidth::Thin;
             break;
-        case 4:
+        case 3:
             n1 = SvxBorderLineWidth::Medium;
             break;
-        case 5:
+        case 4:
             n1 = SvxBorderLineWidth::Thick;
             break;
-        case 6:
+        case 5:
             n1 = SvxBorderLineWidth::ExtraThick;
             break;
-        case 7:
+        case 6:
             n1 = SvxBorderLineWidth::Hairline;
             n2 = SvxBorderLineWidth::Hairline;
             n3 = SvxBorderLineWidth::Medium;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
-        case 8:
+        case 7:
             n1 = SvxBorderLineWidth::Hairline;
             n2 = SvxBorderLineWidth::Hairline;
             n3 = SvxBorderLineWidth::Thick;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
-        case 9:
+        case 8:
             n1 = SvxBorderLineWidth::Thin;
             n2 = SvxBorderLineWidth::Medium;
             n3 = SvxBorderLineWidth::Thin;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
-        case 10:
+        case 9:
             n1 = SvxBorderLineWidth::Medium;
             n2 = SvxBorderLineWidth::Hairline;
             n3 = SvxBorderLineWidth::Medium;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
-        case 11:
+        case 10:
             n1 = SvxBorderLineWidth::Medium;
             n2 = SvxBorderLineWidth::Medium;
             n3 = SvxBorderLineWidth::Medium;
@@ -167,9 +202,10 @@ IMPL_LINK_NOARG(CellLineStylePopup, VSSelectHdl, ValueSet*, void)
     aLineItem.SetLine( &aTmp );
     mpDispatcher->ExecuteList(
         SID_FRAME_LINESTYLE, SfxCallMode::RECORD, { &aLineItem });
-    SetAllNoSel();
+    mxCellLineStyleTreeView->unselect_all();
 
     maToolButton.set_inactive();
+    return true;
 }
 
 IMPL_LINK_NOARG(CellLineStylePopup, PBClickHdl, weld::Button&, void)
@@ -180,63 +216,64 @@ IMPL_LINK_NOARG(CellLineStylePopup, PBClickHdl, weld::Button&, void)
 
 void CellLineStylePopup::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis)
 {
-    mxCellLineStyleValueSet->GrabFocus();
-    SetAllNoSel();
+    mxCellLineStyleTreeView->grab_focus();
 
     //FIXME: fully for new border line possibilities
 
-    if(out == SvxBorderLineWidth::Hairline && in == 0 && dis == 0)  //1
+    if (out == SvxBorderLineWidth::Hairline && in == 0 && dis == 0)
     {
-        mxCellLineStyleValueSet->SetSelItem(1);
+        mxCellLineStyleTreeView->select(0);
     }
-    else if(out == SvxBorderLineWidth::VeryThin && in == 0 && dis == 0) //2
+    else if (out == SvxBorderLineWidth::VeryThin && in == 0 && dis == 0)
     {
-        mxCellLineStyleValueSet->SetSelItem(2);
+        mxCellLineStyleTreeView->select(1);
     }
-    else if(out == SvxBorderLineWidth::Thin && in == 0 && dis == 0) //3
+    else if (out == SvxBorderLineWidth::Thin && in == 0 && dis == 0)
     {
-        mxCellLineStyleValueSet->SetSelItem(3);
+        mxCellLineStyleTreeView->select(2);
     }
-    else if(out == SvxBorderLineWidth::Medium && in == 0 && dis == 0) //4
+    else if (out == SvxBorderLineWidth::Medium && in == 0 && dis == 0)
     {
-        mxCellLineStyleValueSet->SetSelItem(4);
+        mxCellLineStyleTreeView->select(3);
     }
-    else if(out == SvxBorderLineWidth::Thick && in == 0 && dis == 0) //5
+    else if (out == SvxBorderLineWidth::Thick && in == 0 && dis == 0)
     {
-        mxCellLineStyleValueSet->SetSelItem(5);
+        mxCellLineStyleTreeView->select(4);
     }
-    else if(out == SvxBorderLineWidth::ExtraThick && in == 0 && dis == 0) //6
+    else if (out == SvxBorderLineWidth::ExtraThick && in == 0 && dis == 0)
     {
-        mxCellLineStyleValueSet->SetSelItem(6);
+        mxCellLineStyleTreeView->select(5);
     }
-    else if(out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Thin) //7
+    else if (out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline
+             && dis == SvxBorderLineWidth::Thin)
     {
-        mxCellLineStyleValueSet->SetSelItem(7);
+        mxCellLineStyleTreeView->select(6);
     }
-    else if(out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Medium) //8
+    else if (out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline
+             && dis == SvxBorderLineWidth::Medium)
     {
-        mxCellLineStyleValueSet->SetSelItem(8);
+        mxCellLineStyleTreeView->select(7);
     }
-    else if(out == SvxBorderLineWidth::Thin && in == SvxBorderLineWidth::Medium && dis == SvxBorderLineWidth::Thin) //9
+    else if (out == SvxBorderLineWidth::Thin && in == SvxBorderLineWidth::Medium
+             && dis == SvxBorderLineWidth::Thin)
     {
-        mxCellLineStyleValueSet->SetSelItem(9);
+        mxCellLineStyleTreeView->select(8);
     }
-    else if(out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Medium) //10
+    else if (out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Hairline
+             && dis == SvxBorderLineWidth::Medium)
     {
-        mxCellLineStyleValueSet->SetSelItem(10);
+        mxCellLineStyleTreeView->select(9);
     }
-    else if(out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Medium && dis == SvxBorderLineWidth::Medium) //11
+    else if (out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Medium
+             && dis == SvxBorderLineWidth::Medium)
     {
-        mxCellLineStyleValueSet->SetSelItem(11);
+        mxCellLineStyleTreeView->select(10);
     }
-
     else
     {
-        mxCellLineStyleValueSet->SetSelItem(0);
+        mxCellLineStyleTreeView->unselect_all();
         mxPushButtonMoreOptions->grab_focus();
     }
-    mxCellLineStyleValueSet->SetFormat();
-    mxCellLineStyleValueSet->Invalidate();
 }
 
 } // end of namespace sc::sidebar

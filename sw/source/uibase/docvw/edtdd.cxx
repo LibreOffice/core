@@ -64,7 +64,8 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 
 void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 {
-    if (m_rView.GetObjectShell()->isContentExtractionLocked())
+    if (m_rView.GetObjectShell()->isContentExtractionLocked()
+        || !SwViewOption::IsAllowDragDropText())
         return;
 
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -81,13 +82,13 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     if ( m_pApplyTempl || rSh.IsDrawCreate() || IsDrawAction())
         return;
 
-    bool bStart = false, bDelSelect = false;
+    bool bStartDragging = false, bDelSelect = false;
     SdrObject *pObj = nullptr;
     Point aDocPos( PixelToLogic( rPosPixel ) );
     const bool bInSelect = rSh.IsInSelect();
     if (!bInSelect && rSh.TestCurrPam(aDocPos, true))
         //We are not selecting and aren't at a selection
-        bStart = true;
+        bStartDragging = true;
     else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
                 rSh.IsInsideSelectedObj( aDocPos ) &&
                 nullptr == m_pAnchorMarker)
@@ -100,25 +101,37 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         // keep the now invalid ptr in place, next access will crash.
         // It is indeed wrong to enter drag mode when AnchorDrag is
         // already active
-        bStart = true;
+        bStartDragging = true;
     }
     else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
             OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
     {
         rSh.LockPaint(LockPaintReason::StartDrag);
         if( rSh.SelectObj( aDocPos, 0, pObj ))
-            bStart = bDelSelect = true;
+            bStartDragging = bDelSelect = true;
         else
             rSh.UnlockPaint();
     }
-    else if (!bInSelect)// tdf#116384 only drag hyperlink if user's not currently setting the selection
+    else if (!bInSelect)// tdf#116384 only drag hyperlink if not currently setting the selection
     {
+        // Prefer starting a selection (rather than a drag) when at the start/end of a hyperlink.
+
+        // Use the cursor point, not the mouse point, to determine whether this is at the start/end.
+        Point aCursorPoint = rSh.GetCharRect().Center();
+
         SwContentAtPos aSwContentAtPos( IsAttrAtPos::InetAttr );
-        bStart = rSh.GetContentAtPos( aDocPos,
-                    aSwContentAtPos );
+        bStartDragging = rSh.GetContentAtPos(aCursorPoint, aSwContentAtPos);
+
+        // If true (cursor is in hyperlink), perhaps the cursor is at the start of the hyperlink?
+        if (bStartDragging)
+        {
+            aCursorPoint.AdjustX(-1);
+            aSwContentAtPos = SwContentAtPos(IsAttrAtPos::InetAttr);
+            bStartDragging = rSh.GetContentAtPos(aCursorPoint, aSwContentAtPos);
+        }
     }
 
-    if ( !bStart || m_bIsInDrag )
+    if ( !bStartDragging || m_bIsInDrag )
         return;
 
     // If the add selection mode has been pushed in the MouseButtonDown handler it needs to be

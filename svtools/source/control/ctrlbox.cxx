@@ -26,14 +26,15 @@
 #include <o3tl/untaint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/weldutils.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
@@ -1059,14 +1060,18 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
     {
         int nFound = m_xComboBox->find_text(aOldText);
         if (nFound != -1)
-        {
             m_xComboBox->set_active(nFound);
-            return;
+        else
+        {
+            // otherwise, just pick something
+            m_xComboBox->set_active(0);
         }
     }
 
-    // otherwise, just pick something
-    m_xComboBox->set_active(0);
+    // tdf#165265 if nothing was originally selected, then
+    // don't pick anything and leave the combobox empty
+    // so the search for style feature doesn't add any
+    // not-explicitly selected font styles by default
 }
 
 FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)

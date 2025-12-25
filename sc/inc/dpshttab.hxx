@@ -115,6 +115,8 @@ public:
     virtual const ScDPFilteredCache&   GetCacheTable() const override;
     virtual void ReloadCacheTable() override;
 
+    virtual void dumpAsXml(tools::XmlWriter& rWriter) const override;
+
 #if DUMP_PIVOT_TABLE
     virtual void Dump() const override;
 #endif

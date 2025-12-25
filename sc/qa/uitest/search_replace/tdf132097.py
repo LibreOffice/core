@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf132097(UITestCase):
 
-   def test_tdf132097(self):
+    def test_tdf132097(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 xCols = xDialog.getChild('cols')

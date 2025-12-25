@@ -13,7 +13,7 @@ from uitest.uihelper.common import select_pos
 
 class insertCaption(UITestCase):
 
-   def test_insert_caption(self):
+    def test_insert_caption(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialogFr:
 

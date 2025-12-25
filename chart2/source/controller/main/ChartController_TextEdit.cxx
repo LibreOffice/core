@@ -189,7 +189,7 @@ uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController::Get
 
         uno::Reference< chart2::XFormattedString2 > xFmtStr = chart2::FormattedString::create(m_xCC);
         if (bNextPara)
-            aNewString = aNewString + OUStringChar('\n');
+            aNewString += OUStringChar('\n');
         xFmtStr->setString(aNewString);
         aNewStrings.emplace_back(xFmtStr);
 

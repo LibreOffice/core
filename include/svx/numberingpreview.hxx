@@ -10,7 +10,7 @@
 
 #include <svx/svxdllapi.h>
 #include <editeng/numitem.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
 
 /// Provides the preview to show how looks bullet or numbering format before the apply.
 class SVXCORE_DLLPUBLIC SvxNumberingPreview final : public weld::CustomWidgetController

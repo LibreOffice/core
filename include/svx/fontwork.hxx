@@ -23,7 +23,8 @@
 #include <sfx2/ctrlitem.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/weld.hxx>
 
 class ColorListBox;
 
@@ -47,7 +48,7 @@ class SvxFontWorkDialog;
 
 class SvxFontWorkControllerItem final : public SfxControllerItem
 {
-    SvxFontWorkDialog  &rFontWorkDlg;
+    SvxFontWorkDialog  &m_rFontWorkDlg;
 
     virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
@@ -73,19 +74,19 @@ class SAL_WARN_UNUSED SvxFontWorkDialog final : public SfxDockingWindow
 {
 #define CONTROLLER_COUNT 11
 
-    SfxBindings&    rBindings;
-    Idle            aInputIdle;
+    SfxBindings&    m_rBindings;
+    Idle            m_aInputIdle;
 
     OUString         m_sLastStyleTbxId;
     OUString         m_sLastAdjustTbxId;
     OUString         m_sLastShadowTbxId;
 
-    tools::Long            nSaveShadowX;
-    tools::Long            nSaveShadowY;
-    tools::Long            nSaveShadowAngle;
-    tools::Long            nSaveShadowSize;
+    tools::Long            m_nSaveShadowX;
+    tools::Long            m_nSaveShadowY;
+    tools::Long            m_nSaveShadowAngle;
+    tools::Long            m_nSaveShadowSize;
 
-    SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
+    SvxFontWorkControllerItem* m_pCtrlItems[CONTROLLER_COUNT];
 
     std::unique_ptr<weld::Toolbar> m_xTbxStyle;
     std::unique_ptr<weld::Toolbar> m_xTbxAdjust;

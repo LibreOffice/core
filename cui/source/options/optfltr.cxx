@@ -22,6 +22,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "optfltr.hxx"
 #include <strings.hrc>
 #include <dialmgr.hxx>
@@ -85,13 +86,13 @@ std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( weld::Container* pPage, 
 
 OUString OfaMSFilterTabPage::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString checkButton[] = { u"wo_basic"_ustr, u"wo_exec"_ustr,     u"wo_saveorig"_ustr, u"ex_basic"_ustr,
@@ -100,10 +101,10 @@ OUString OfaMSFilterTabPage::GetAllStrings()
     for (const auto& check : checkButton)
     {
         if (const auto pString = m_xBuilder->weld_check_button(check))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
@@ -211,13 +212,13 @@ std::unique_ptr<SfxTabPage> OfaMSFilterTabPage2::Create( weld::Container* pPage,
 
 OUString OfaMSFilterTabPage2::GetAllStrings()
 {
-    OUString sAllStrings;
+    OUStringBuffer sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"label4"_ustr, u"label5"_ustr, u"label6"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
     OUString radioButton[] = { u"highlighting"_ustr, u"shading"_ustr };
@@ -225,12 +226,12 @@ OUString OfaMSFilterTabPage2::GetAllStrings()
     for (const auto& radio : radioButton)
     {
         if (const auto pString = m_xBuilder->weld_radio_button(radio))
-            sAllStrings += pString->get_label() + " ";
+            sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings += m_xMSOLockFileCB->get_label() + " ";
+    sAllStrings.append(m_xMSOLockFileCB->get_label() + " ");
 
-    return sAllStrings.replaceAll("_", "");
+    return sAllStrings.toString().replaceAll("_", "");
 }
 
 namespace

@@ -315,7 +315,9 @@ class ByteSequence:
 class Any:
     """Represents a UNO Any value.
 
-    Use only in connection with uno.invoke() to pass an explicit typed Any.
+    Use to pass an explicit typed Any. Note that before LibreOffice 26.8 it was not possible to pass
+    an Any as an argument to a method call and you had to use uno.invoke instead.
+
     """
 
     def __init__(self, type, value):
@@ -328,7 +330,12 @@ class Any:
 
 
 def invoke(object, methodname, argTuple):
-    """Use this function to pass exactly typed Anys to the callee (using uno.Any)."""
+    """Use this function to call an interface method named by a string.
+
+    Note that before LibreOffice 26.8 this function was needed in order to pass an Any as an
+    argument to a method call, but now it is possible to just directly call the method instead.
+
+    """
 
     return pyuno.invoke(object, methodname, argTuple)
 

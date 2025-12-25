@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_sdk_api,xo))
 
 $(eval $(call gb_Library_use_libraries,xo,\
     basegfx \
+    chart2api \
     comphelper \
     cppu \
     cppuhelper \
@@ -130,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/xmlcnimp \
     xmloff/source/core/xmlerror \
     xmloff/source/core/xmlexp \
+    xmloff/source/core/xmlgrhlp \
     xmloff/source/core/xmlictxt \
     xmloff/source/core/xmlimp \
     xmloff/source/core/xmltkmap \

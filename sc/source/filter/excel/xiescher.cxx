@@ -4118,7 +4118,7 @@ void XclImpDrawing::ApplyGroupBoxes()
 
             sGroupName = rGroupBox.second->GetObjName();
             if (sGroupName.isEmpty())
-                sGroupName += "autoGroup_" + OUString::number(rGroupBox.second->GetObjId());
+                sGroupName = "autoGroup_" + OUString::number(rGroupBox.second->GetObjId());
             // I ASSUME the smallest box wins in MS Word. (otherwise first? last?)
             break;
         }

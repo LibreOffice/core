@@ -12,7 +12,9 @@
 #include <svx/ChartColorPaletteType.hxx>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
-#include <vcl/customweld.hxx>
+#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/IconView.hxx>
 
 class MouseEvent;
 

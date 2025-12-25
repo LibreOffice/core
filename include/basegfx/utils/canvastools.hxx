@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 
@@ -47,6 +45,9 @@ namespace com::sun::star::awt
 {
     struct Rectangle;
 }
+
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace basegfx
 {

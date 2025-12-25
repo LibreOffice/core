@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf115871(UITestCase):
 
-   def test_tdf115871_reset_outline_list_options_parent(self):
+    def test_tdf115871_reset_outline_list_options_parent(self):
 
         with self.ui_test.create_doc_in_start_center("writer"):
 

@@ -35,6 +35,7 @@ class SwFormatContentControl;
 class SvXMLAttrContainerItem;
 class SwMsgPoolItem;
 class SfxBoolItem;
+class SvxAutoFrameDirectionItem;
 class SvxColorItem;
 class SvxLeftMarginItem;
 class SvxTextLeftMarginItem;
@@ -314,9 +315,13 @@ inline constexpr TypedWhichId<SvxParaGridItem> RES_PARATR_SNAPTOGRID(RES_PARATR_
 inline constexpr TypedWhichId<SwParaConnectBorderItem> RES_PARATR_CONNECT_BORDER(RES_PARATR_BEGIN
                                                                                  + 15);
 inline constexpr TypedWhichId<SfxUInt16Item> RES_PARATR_OUTLINELEVEL(RES_PARATR_BEGIN + 16);
-inline constexpr TypedWhichId<SvxRsidItem> RES_PARATR_RSID(RES_PARATR_BEGIN + 17);
-inline constexpr TypedWhichId<SfxGrabBagItem> RES_PARATR_GRABBAG(RES_PARATR_BEGIN + 18);
-inline constexpr sal_uInt16 RES_PARATR_END(RES_PARATR_BEGIN + 19);
+inline constexpr TypedWhichId<SvxAutoFrameDirectionItem> RES_PARATR_AUTOFRAMEDIR(RES_PARATR_BEGIN
+                                                                                 + 17);
+// DocumentRedlineManager assumes RSID and GRABBAG are the last paragraph attributes.
+// Insert new paragraph attributes before them.
+inline constexpr TypedWhichId<SvxRsidItem> RES_PARATR_RSID(RES_PARATR_BEGIN + 18);
+inline constexpr TypedWhichId<SfxGrabBagItem> RES_PARATR_GRABBAG(RES_PARATR_BEGIN + 19);
+inline constexpr sal_uInt16 RES_PARATR_END(RES_PARATR_BEGIN + 20);
 
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles

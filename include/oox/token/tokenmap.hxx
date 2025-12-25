@@ -23,13 +23,9 @@
 #include <sal/config.h>
 
 #include <string_view>
-#include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <oox/token/tokens.hxx>
-#include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 
 namespace oox {

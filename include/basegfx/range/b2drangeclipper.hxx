@@ -19,9 +19,12 @@
 
 #pragma once
 
-#include <basegfx/range/b2dpolyrange.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
+
+namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DRange; }
+namespace basegfx { enum class B2VectorOrientation; }
 
 namespace basegfx::utils
 {

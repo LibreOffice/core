@@ -269,7 +269,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         mvItems.erase(mvItems.begin() + nPos);
         mvItems.insert(mvItems.begin(), std::move(item));
     }
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
     tools::Long nTmpTop = aRectFnSet.GetTop(rLine);
     // fnGetBottom is top + height
     tools::Long nTmpBottom = aRectFnSet.GetBottom(rLine);
@@ -382,7 +382,7 @@ SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
     SwRect aRet;
     if( ForEach( rRect, &aRet, true ) )
     {
-        SwRectFnSet aRectFnSet(m_pCurrFrame);
+        SwRectFnSet aRectFnSet(*m_pCurrFrame);
         aRectFnSet.SetTop( aRet, aRectFnSet.GetTop(rRect) );
 
         // Do not always adapt the bottom
@@ -905,7 +905,7 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
         SwRect const aRect(GetFrameArea());
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
-        SwRectFnSet aRectFnSet(m_pCurrFrame);
+        SwRectFnSet aRectFnSet(*m_pCurrFrame);
         const tools::Long nRight = aRectFnSet.GetRight(aRect) - 1;
         const tools::Long nLeft = aRectFnSet.GetLeft(aRect) + 1;
         const bool bR2L = m_pCurrFrame->IsRightToLeft();
@@ -1099,7 +1099,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
     SwSwapIfSwapped swap(const_cast<SwTextFrame *>(m_pCurrFrame));
 
     // Optimization
-    SwRectFnSet aRectFnSet(m_pCurrFrame);
+    SwRectFnSet aRectFnSet(*m_pCurrFrame);
 
     // tdf#127235 stop if the area is larger than the page
     if( aRectFnSet.GetHeight(m_pPage->getFrameArea()) < aRectFnSet.GetHeight(rRect))
@@ -1212,7 +1212,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
     // Usually the right margin is the right margin of the Printarea
     OSL_ENSURE( !m_pCurrFrame->IsVertical() || !m_pCurrFrame->IsSwapped(),
             "SwTextFly::CalcRightMargin with swapped frame" );
-    SwRectFnSet aRectFnSet(m_pCurrFrame);
+    SwRectFnSet aRectFnSet(*m_pCurrFrame);
     // #118796# - correct determination of right of printing area
     SwTwips nRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
     SwTwips nFlyRight = aRectFnSet.GetRight(rFly);
@@ -1300,7 +1300,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
 {
     OSL_ENSURE( !m_pCurrFrame->IsVertical() || !m_pCurrFrame->IsSwapped(),
             "SwTextFly::CalcLeftMargin with swapped frame" );
-    SwRectFnSet aRectFnSet(m_pCurrFrame);
+    SwRectFnSet aRectFnSet(*m_pCurrFrame);
     // #118796# - correct determination of left of printing area
     SwTwips nLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
     const SwTwips nFlyLeft = aRectFnSet.GetLeft(rFly);
@@ -1361,7 +1361,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
 SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                             const SwRect &rLine ) const
 {
-    SwRectFnSet aRectFnSet(m_pCurrFrame);
+    SwRectFnSet aRectFnSet(*m_pCurrFrame);
 
     const tools::Long nXPos = m_pCurrFrame->IsRightToLeft() ?
                        rLine.Right() :
@@ -1453,7 +1453,7 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
     // "ideal page wrap":
     if ( css::text::WrapTextMode_DYNAMIC == eSurroundForTextWrap )
     {
-        SwRectFnSet aRectFnSet(m_pCurrFrame);
+        SwRectFnSet aRectFnSet(*m_pCurrFrame);
         const tools::Long nCurrLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
         const tools::Long nCurrRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
         const SwRect& aRect( pAnchoredObj->GetObjRectWithSpaces() );

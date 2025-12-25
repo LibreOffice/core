@@ -28,11 +28,12 @@
 #include <sfx2/passwd.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <tools/debug.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 
 #include <sfx2/strings.hrc>

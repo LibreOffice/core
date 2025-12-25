@@ -353,7 +353,7 @@ DomainMapper_Impl::DomainMapper_Impl(
             uno::Reference<uno::XComponentContext> xContext,
             rtl::Reference<SwXTextDocument> const& xModel,
             SourceDocumentType eDocumentType,
-            utl::MediaDescriptor const & rMediaDesc) :
+            comphelper::SequenceAsHashMap const & rMediaDesc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_pOOXMLDocument(nullptr),
@@ -990,6 +990,13 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
+    // Empty run level SDTs before starting a block level SDT
+    if (bSdt)
+    {
+        while (!m_xSdtStarts.empty())
+            m_xSdtStarts.pop();
+    }
+
     m_StreamStateStack.top().bSdt = bSdt;
 
     if (m_StreamStateStack.top().bSdt && !m_aTextAppendStack.empty())
@@ -1299,15 +1306,18 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
         if (!IsFirstRun())
         {
             auto pParaContext = static_cast<ParagraphPropertyMap*>(GetTopContextOfType(eId).get());
-            pParaContext->props().SetListId(-1);
-            pParaContext->Erase(PROP_NUMBERING_RULES); // only true with column, not page break
-            pParaContext->Erase(PROP_NUMBERING_LEVEL);
-            pParaContext->Erase(PROP_NUMBERING_TYPE);
-            pParaContext->Erase(PROP_START_WITH);
+            if (pParaContext)
+            {
+                pParaContext->props().SetListId(-1);
+                pParaContext->Erase(PROP_NUMBERING_RULES); // only true with column, not page break
+                pParaContext->Erase(PROP_NUMBERING_LEVEL);
+                pParaContext->Erase(PROP_NUMBERING_TYPE);
+                pParaContext->Erase(PROP_START_WITH);
 
-            pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
-            pParaContext->Erase(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
-            pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::Any(sal_uInt32(0)));
+                pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                pParaContext->Erase(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::Any(sal_uInt32(0)));
+            }
         }
 
         m_aPropertyStacks[eId].push( GetTopContextOfType(eId));
@@ -7601,9 +7611,9 @@ void DomainMapper_Impl::handleToc
 
         }
 
-        uno::Reference<container::XIndexAccess> xChapterNumberingRules;
+        rtl::Reference<SwXChapterNumbering> xChapterNumberingRules;
         if (m_xTextDocument)
-            xChapterNumberingRules = m_xTextDocument->getChapterNumberingRules();
+            xChapterNumberingRules = m_xTextDocument->getSwChapterNumberingRules();
         rtl::Reference<SwXStyleFamily> xStyles;
         if (m_xTextDocument)
         {
@@ -7626,8 +7636,8 @@ void DomainMapper_Impl::handleToc
             {
                 // This relies on the chapter numbering rules already defined
                 // (see ListDef::CreateNumberingRules)
-                uno::Sequence<beans::PropertyValue> props;
-                xChapterNumberingRules->getByIndex(nLevel - 1) >>= props;
+                uno::Sequence<beans::PropertyValue> props =
+                    xChapterNumberingRules->getRuleByIndex(nLevel - 1);
                 bool bHasNumbering = false;
                 bool bUseTabStop = false;
                 for (const auto& propval : props)
@@ -8440,7 +8450,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     bool bStyleRef = aIt->second.eFieldId == FIELD_STYLEREF;
 
                     // Do we need a GetReference (default) or a GetExpression field?
-                    uno::Reference< container::XNameAccess > xFieldMasterAccess = GetTextDocument()->getTextFieldMasters();
+                    rtl::Reference< SwXTextFieldMasters > xFieldMasterAccess = GetTextDocument()->getSwXTextFieldMasters();
 
                     if (!xFieldMasterAccess->hasByName(
                             "com.sun.star.text.FieldMaster.SetExpression."

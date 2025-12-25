@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_OOXM
 {
     // Load, save in OOXML format and reload
     createSwDoc("tdf118393.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(7, getPages());
 
@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_ODF)
 {
     // Load, save in ODF format and reload
     createSwDoc("tdf118393.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     CPPUNIT_ASSERT_EQUAL(7, getPages());
 
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFloatingTableInHeader)
     // This was 0, floating table in header wasn't converted to a TextFrame.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // This was 0, floating table in header wasn't converted to a TextFrame.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageHeadersAndEmptyFooters)
 
     createSwDoc("fdo66145.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -288,14 +288,14 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooterImport)
 
     createSwDoc("first-header-footer.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooterRoundTrip)
 {
     createSwDoc("first-header-footerB.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
@@ -317,7 +317,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooterRoundTrip)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooter_ODF)
 {
     createSwDoc("first-header-footer.odt");
-    saveAndReload(u"writer8"_ustr);
+    saveAndReload(TestFilter::ODT);
 
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     // Test import and export of the header-first token.
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooter_ODF)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooter_DOC)
 {
     createSwDoc("first-header-footer.doc");
-    saveAndReload(u"MS Word 97"_ustr);
+    saveAndReload(TestFilter::DOC);
 
     // Test import and export of a section's headerf/footerf properties.
 
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo65655)
     };
     createSwDoc("fdo65655.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInHeader)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInFooter)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
@@ -432,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf112694)
 
     createSwDoc("tdf112694.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testContSectBreakHeaderFooter)
 
     createSwDoc("cont-sect-break-header-footer.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     // Additional problem: top margin on page 3 was wrong.
@@ -481,7 +481,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testContSectBreakHeaderFooter)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf145998_firstHeader)
 {
     createSwDoc("tdf145998_firstHeader.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     // Sanity check - always good to test when dealing with page styles and breaks.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -561,7 +561,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
 
     // Load, save as OOXML and reload
     createSwDoc("tdf135216_evenOddFooter.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
@@ -598,7 +598,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf69635)
 {
     createSwDoc("tdf69635.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlHeader1 = parseExport(u"word/header1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlHeader1);
@@ -618,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf69635)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf113849_evenAndOddHeaders)
 {
     createSwDoc("tdf113849_evenAndOddHeaders.odt");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", u"L. J. Kendall"_ustr,
@@ -657,7 +657,8 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageFooterEnabled)
     };
     createSwDoc("TestFirstFooterDisabled.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -750,7 +751,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
 
     createSwDoc("bnc519228_odd-breaksB.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 #endif
@@ -893,7 +894,7 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
     };
     createSwDoc("headerfooter-link-to-prev.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
@@ -915,14 +916,14 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testN750935)
     };
     createSwDoc("n750935.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testOnlyLeftPageStyle)
 {
     createSwDoc("TestPageStyleOnlyLeft.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     // There should be 2 pages - first page should be blank
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -971,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testMsoPosition)
     };
 
     createSwDoc("bnc884615-mso-position.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verifyHeader();
     verifyFooter();
 }

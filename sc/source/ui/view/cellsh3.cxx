@@ -27,7 +27,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scmod.hxx>
@@ -271,9 +271,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     // Enter
                     // NOTE: This also means we want to set the modified state
                     // regardless of the DontCommit parameter's value.
-                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData().GetDocShell().IsModified())
+                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData().GetDocShell()->IsModified())
                     {
-                        GetViewData().GetDocShell().SetModified();
+                        GetViewData().GetDocShell()->SetModified();
                         rBindings.Invalidate(SID_SAVEDOC);
                         rBindings.Invalidate(SID_DOC_MODIFIED);
                     }
@@ -861,9 +861,32 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = pReqArgs->Get( FID_COL_OPT_WIDTH );
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,
-                                    o3tl::toTwips(rUInt16Item.GetValue(), o3tl::Length::mm100) );
-                    ScGlobal::nLastColWidthExtra = rUInt16Item.GetValue();
+                    const sal_uInt16 nSizeTwips
+                        = o3tl::toTwips(rUInt16Item.GetValue(), o3tl::Length::mm100);
+                    ScGlobal::nLastColWidthExtra = nSizeTwips;
+
+                    if (const SfxPoolItem* pItem; pReqArgs->HasItem(FN_PARAM_1, &pItem))
+                    {
+                        SCCOL nColumn = static_cast<const SfxUInt16Item*>(pItem)->GetValue() - 1;
+                        // See also: ScColBar::SetEntrySize
+                        std::vector<sc::ColRowSpan> aRanges;
+                        ScMarkData& rMark = GetViewData().GetMarkData();
+
+                        if (rMark.IsColumnMarked(nColumn))
+                        {
+                            aRanges = rMark.GetMarkedColSpans();
+                        }
+                        else
+                        {
+                            aRanges.emplace_back(nColumn, nColumn);
+                        }
+
+                        pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_OPTIMAL, nSizeTwips);
+                    }
+                    else
+                    {
+                        pTabViewShell->SetMarkedWidthOrHeight(true, SC_SIZE_OPTIMAL, nSizeTwips);
+                    }
 
                     if( ! rReq.IsAPI() )
                         rReq.Done();

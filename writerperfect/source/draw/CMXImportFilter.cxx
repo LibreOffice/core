@@ -18,7 +18,7 @@
 #include "CMXImportFilter.hxx"
 
 bool CMXImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
-                                       OdgGenerator& rGenerator, utl::MediaDescriptor&)
+                                       OdgGenerator& rGenerator, comphelper::SequenceAsHashMap&)
 {
     return libcdr::CMXDocument::parse(&rInput, &rGenerator);
 }

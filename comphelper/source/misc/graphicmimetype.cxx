@@ -32,6 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/salctype.hxx>
 
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
@@ -221,7 +222,7 @@ auto IsMediaMimeType(OUString const& rMimeType) -> bool
             mimes.insert(OStringToOUString(it.second, RTL_TEXTENCODING_UTF8));
         }
     }
-    return rMimeType == AVMEDIA_MIMETYPE_COMMON || mimes.find(rMimeType) != mimes.end();
+    return rMimeType == AVMEDIA_MIMETYPE_COMMON || mimes.contains(rMimeType);
 }
 
 auto GuessMediaMimeType(::std::u16string_view rFileName) -> OUString

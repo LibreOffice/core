@@ -23,6 +23,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -299,7 +300,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
                                  rtl::Reference<SwXTextDocument> const& xDstDoc,
                                  uno::Reference<frame::XFrame> const& xFrame,
                                  uno::Reference<task::XStatusIndicator> const& xStatusIndicator,
-                                 const utl::MediaDescriptor& rMediaDescriptor)
+                                 const comphelper::SequenceAsHashMap& rMediaDescriptor)
     : m_xContext(xContext)
     , m_xInputStream(xInputStream)
     , m_xDstDoc(xDstDoc)

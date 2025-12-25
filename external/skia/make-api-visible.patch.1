@@ -76,26 +76,6 @@ diff -ur skia.org/tools/window/unix/GaneshVulkanWindowContext_unix.h skia/tools/
  }  // namespace skwindow
 
  #endif
-diff -ur skia.org/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h skia/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h
---- skia.org/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h	2024-10-12 15:57:21
-+++ skia/tools/window/unix/GraphiteDawnVulkanWindowContext_unix.h	2024-10-12 15:58:48
-@@ -8,6 +8,7 @@
- #ifndef GraphiteDawnVulkanWindowContext_unix_DEFINED
- #define GraphiteDawnVulkanWindowContext_unix_DEFINED
-
-+#include "include/private/base/SkAPI.h"
- #include <memory>
-
- namespace skwindow {
-@@ -15,7 +16,7 @@
- class DisplayParams;
- struct XlibWindowInfo;
-
--std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
-+SK_API std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
-                                                              std::unique_ptr<const DisplayParams>);
- }  // namespace skwindow
-
 diff -ur skia.org/tools/window/unix/RasterWindowContext_unix.h skia/tools/window/unix/RasterWindowContext_unix.h
 --- skia.org/tools/window/unix/RasterWindowContext_unix.h	2024-10-12 15:57:21
 +++ skia/tools/window/unix/RasterWindowContext_unix.h	2024-10-12 15:58:48

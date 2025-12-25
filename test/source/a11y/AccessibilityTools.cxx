@@ -415,7 +415,7 @@ OUString AccessibilityTools::getRoleName(const sal_Int16 role)
 
 OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedState)
 {
-    OUString combinedName;
+    OUStringBuffer combinedName;
 
     for (int i = 0; i < 63; i++)
     {
@@ -538,13 +538,13 @@ OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedSt
                 break;
         }
         if (combinedName.getLength())
-            combinedName += " | ";
-        combinedName += name;
+            combinedName.append(" | ");
+        combinedName.append(name);
     }
 
     if (combinedName.isEmpty())
         return u"unknown"_ustr;
-    return combinedName;
+    return combinedName.makeStringAndClear();
 }
 
 OUString AccessibilityTools::getEventIdName(const sal_Int16 event_id)

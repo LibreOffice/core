@@ -13,12 +13,12 @@
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
+namespace com::sun::star::beans { class XPropertyChangeListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper {
@@ -95,8 +95,6 @@ public:
     /// Notify of the property change
     virtual void SAL_CALL propertyChange(
         css::beans::PropertyChangeEvent const &rEvt ) override;
-
-    bool isDisposed() const { return mbDisposed; }
 };
 
 template< typename uno_type > ConfigurationListenerProperty< uno_type >::ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener, const OUString &rProp )

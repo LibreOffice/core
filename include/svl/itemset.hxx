@@ -22,7 +22,6 @@
 
 #include <cassert>
 #include <memory>
-#include <utility>
 #include <unordered_map>
 
 #include <svl/svldllapi.h>
@@ -160,10 +159,8 @@ public:
     template<class T> const T* GetItem(sal_uInt16 nWhich, bool bSearchInParent = true) const
     {
         const SfxPoolItem* pItem = GetItem(nWhich, bSearchInParent);
-        const T* pCastedItem = dynamic_cast<const T*>(pItem);
-
-        assert(!pItem || pCastedItem); // if it exists, must have the correct type
-        return pCastedItem;
+        assert(!pItem || dynamic_cast<const T*>(pItem)); // if it exists, must have the correct type
+        return static_cast<const T*>(pItem);
     }
     template<class T> const T* GetItem( TypedWhichId<T> nWhich, bool bSearchInParent = true ) const
     {
@@ -191,7 +188,7 @@ public:
         return GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, bSrchInParent, ppItem);
     }
 
-    template <class T> SfxItemState GetItemState(TypedWhichId<T> nWhich, bool bSrchInParent = true, const T **ppItem = nullptr ) const
+    template <class T> SfxItemState GetItemState(TypedWhichId<T> nWhich, bool bSrchInParent, const T **ppItem) const
     {
         return GetItemState(sal_uInt16(nWhich), bSrchInParent, reinterpret_cast<SfxPoolItem const**>(ppItem));
     }
@@ -201,16 +198,13 @@ public:
     const T *                   GetItemIfSet(   TypedWhichId<T> nWhich,
                                                 bool bSrchInParent = true ) const
     {
-        const T * pItem = nullptr;
-        if (SfxItemState::SET == GetItemState(nWhich, bSrchInParent, &pItem))
-            return pItem;
+        const SfxPoolItem* pItem = nullptr;
+        if (SfxItemState::SET == GetItemState(sal_uInt16(nWhich), bSrchInParent, &pItem))
+            return &pItem->StaticWhichCast(nWhich);
         return nullptr;
     }
 
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = nullptr) const;
-    template<class T>
-    bool                        HasItem(TypedWhichId<T> nWhich, const T** ppItem = nullptr) const
-    { return HasItem(sal_uInt16(nWhich), reinterpret_cast<const SfxPoolItem**>(ppItem)); }
     void                        CollectHasItems(std::vector<sal_uInt16>& rItemWhichs) const;
 
     void DisableItem(sal_uInt16 nWhich)

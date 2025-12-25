@@ -35,7 +35,7 @@ public:
     virtual void clear() override;
 
     virtual int get_active() const override;
-    virtual void set_active(int nPos) override;
+    virtual void do_set_active(int nPos) override;
     virtual void remove(int nPos) override;
 
     virtual OUString get_active_text() const override;
@@ -43,7 +43,7 @@ public:
     virtual int find_text(const OUString& rStr) const override;
 
     virtual OUString get_active_id() const override;
-    virtual void set_active_id(const OUString& rStr) override;
+    virtual void do_set_active_id(const OUString& rStr) override;
     virtual OUString get_id(int nPos) const override;
     virtual void set_id(int nRow, const OUString& rId) override;
     virtual int find_id(const OUString& rId) const override;

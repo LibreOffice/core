@@ -27,6 +27,9 @@
 #include <fmtftntx.hxx>
 #include <numberingtypelistbox.hxx>
 #include <svx/paraprev.hxx>
+#include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 #include <memory>
 #include <map>

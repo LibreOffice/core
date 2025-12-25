@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <frmfmt.hxx>
 #include <tabfrm.hxx>
@@ -673,7 +674,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
 {
     // #i87532# - determine table cell in <nRow>th row and
     // in first column of row header table and return its text content.
-    OUString sRowDesc;
+    OUStringBuffer sRowDesc;
 
     GetTableData().CheckRowAndCol(nRow, 0);
 
@@ -693,12 +694,12 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
             uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
             if ( xChildText.is() )
             {
-                sRowDesc += xChildText->getText();
+                sRowDesc.append(xChildText->getText());
             }
         }
     }
 
-    return sRowDesc;
+    return sRowDesc.makeStringAndClear();
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
@@ -706,7 +707,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
 {
     // #i87532# - determine table cell in first row and
     // in <nColumn>th column of column header table and return its text content.
-    OUString sColumnDesc;
+    OUStringBuffer sColumnDesc;
 
     GetTableData().CheckRowAndCol(0, nColumn);
 
@@ -726,12 +727,12 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
             uno::Reference< XAccessibleText > xChildText( xChild, uno::UNO_QUERY );
             if ( xChildText.is() )
             {
-                sColumnDesc += xChildText->getText();
+                sColumnDesc.append(xChildText->getText());
             }
         }
     }
 
-    return sColumnDesc;
+    return sColumnDesc.makeStringAndClear();
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(

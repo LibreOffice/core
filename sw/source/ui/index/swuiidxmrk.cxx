@@ -33,7 +33,8 @@
 #include <i18nutil/searchopt.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/itemset.hxx>
@@ -679,13 +680,14 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, weld::Entry&, rEdit, void)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl, weld::Button&, void)
 {
-    SwNewUserIdxDlg aDlg(this, m_xDialog.get());
-    if (aDlg.run() == RET_OK)
-    {
-        OUString sNewName(aDlg.GetName());
-        m_xTypeDCB->append_text(sNewName);
-        m_xTypeDCB->set_active_text(sNewName);
-    }
+    auto xDlg = std::make_shared<SwNewUserIdxDlg>(this, m_xDialog.get());
+    weld::GenericDialogController::runAsync(xDlg, [xDlg, this](sal_Int32 nResult){
+        if (nResult == RET_OK) {
+            OUString sNewName(xDlg->GetName());
+            m_xTypeDCB->append_text(sNewName);
+            m_xTypeDCB->set_active_text(sNewName);
+        }
+    });
 }
 
 IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, weld::Toggleable&, rBox, void)
@@ -754,9 +756,9 @@ short SwIndexMarkPane::ShowWarning4Modifications()
 {
     short nresult = RET_NO;
     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    auto pDlg = pFact->CreateQueryDialog(
-        m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE),
-        SwResId(STR_QUERY_CLOSE_TEXT), SwResId(STR_QUERY_CLOSE_QUESTION), false);
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateQueryDialog(
+        m_xDialog.get(), SwResId(STR_QUERY_CLOSE_TITLE), SwResId(STR_QUERY_CLOSE_TEXT),
+        SwResId(STR_QUERY_CLOSE_QUESTION), false));
     nresult = pDlg->Execute();
 
     return nresult;

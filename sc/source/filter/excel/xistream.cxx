@@ -745,7 +745,7 @@ std::size_t XclImpStream::Read( void* pData, std::size_t nBytes )
 
 std::size_t XclImpStream::CopyToStream( SvStream& rOutStrm, std::size_t nBytes )
 {
-    std::size_t nRet = 0;
+    std::size_t nBytesCopied = 0;
     if (mbValid && nBytes)
     {
         const std::size_t nMaxBuffer = 4096;
@@ -757,14 +757,14 @@ std::size_t XclImpStream::CopyToStream( SvStream& rOutStrm, std::size_t nBytes )
             if (!nBytesLeft)
                 break;
             std::size_t nReadSize = o3tl::sanitizing_min(nBytesLeft, nMaxBuffer);
-            nRet += Read(aBuffer.data(), nReadSize);
-            // writing more bytes than read results in invalid memory access
-            SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
-            rOutStrm.WriteBytes(aBuffer.data(), nReadSize);
-            nBytesLeft -= nReadSize;
+            auto nBytesRead = Read(aBuffer.data(), nReadSize);
+            assert(nBytesRead <= nReadSize);
+            nBytesCopied += nBytesRead;
+            rOutStrm.WriteBytes(aBuffer.data(), nBytesRead);
+            nBytesLeft -= nBytesRead;
         }
     }
-    return nRet;
+    return nBytesCopied;
 }
 
 void XclImpStream::CopyRecordToStream( SvStream& rOutStrm )

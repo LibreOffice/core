@@ -18,8 +18,9 @@
  */
 
 #include <hintids.hxx>
+#include <o3tl/untaint.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -646,7 +647,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if (m_xRelWidthCB->get_active() && m_xRelWidthCB->get_sensitive())
             {
                 lWidth = m_pTableData->GetSpace() - lRight - lLeft;
-                const sal_uInt16 nPercentWidth = m_xWidthMF->get_value(FieldUnit::PERCENT);
+                const sal_uInt16 nPercentWidth = o3tl::sanitizing_cast<sal_uInt16>(m_xWidthMF->get_value(FieldUnit::PERCENT));
                 if(m_pTableData->GetWidthPercent() != nPercentWidth)
                 {
                     m_pTableData->SetWidthPercent(nPercentWidth);

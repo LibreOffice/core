@@ -63,7 +63,7 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     : m_nRstHeight(nRst), m_pFrame(pNewFrame)
 {
     SwSwapIfSwapped swap(m_pFrame);
-    SwRectFnSet aRectFnSet(m_pFrame);
+    SwRectFnSet aRectFnSet(*m_pFrame);
     m_nOrigin = aRectFnSet.GetPrtTop(*m_pFrame);
     m_bKeep = !m_pFrame->IsMoveable() || IsNastyFollow( m_pFrame );
     if( !m_bKeep && m_pFrame->IsInSct() )
@@ -119,7 +119,7 @@ bool SwTextFrameBreak::IsInside(SwTextMargin const& rLine, SwResizeLimitReason& 
     bool bFit = false;
 
     SwSwapIfSwapped swap(m_pFrame);
-    SwRectFnSet aRectFnSet(m_pFrame);
+    SwRectFnSet aRectFnSet(*m_pFrame);
     // nOrigin is an absolute value, rLine refers to the swapped situation.
 
     SwTwips nTmpY;
@@ -284,7 +284,7 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
 void SwTextFrameBreak::SetRstHeight( const SwTextMargin &rLine )
 {
     // Consider bottom margin
-    SwRectFnSet aRectFnSet(m_pFrame);
+    SwRectFnSet aRectFnSet(*m_pFrame);
 
     m_nRstHeight = aRectFnSet.GetBottomMargin(*m_pFrame);
 
@@ -461,7 +461,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         return false;
 
     // Remaining height of the master
-    SwRectFnSet aRectFnSet(pFrame);
+    SwRectFnSet aRectFnSet(*pFrame);
 
     const SwTwips nDocPrtTop = aRectFnSet.GetPrtTop(*pFrame);
     SwTwips nOldHeight;

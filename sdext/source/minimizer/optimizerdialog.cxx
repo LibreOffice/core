@@ -21,6 +21,7 @@
 #include "optimizerdialog.hxx"
 #include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
+#include <sdextresid.hxx>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -37,12 +38,13 @@
 #include <osl/time.h>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/string_view.hxx>
 #include <bitmaps.hlst>
+#include <strings.hrc>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
@@ -242,7 +244,7 @@ void SummaryPage::UpdateProgressValue(int nProgress)
 
 void OptimizerDialog::InitDialog()
 {
-    set_title(getString(STR_SUN_OPTIMIZATION_WIZARD2));
+    set_title(SdextResId( STR_SUN_OPTIMIZATION_WIZARD2 ));
 }
 
 void OptimizerDialog::InitRoadmap()
@@ -306,15 +308,15 @@ OUString OptimizerDialog::getStateDisplayName(vcl::WizardTypes::WizardState nSta
     switch (nState)
     {
         case ITEM_ID_INTRODUCTION:
-            return getString(STR_INTRODUCTION);
+            return SdextResId( STR_INTRODUCTION );
         case ITEM_ID_SLIDES:
-            return getString(STR_SLIDES);
+            return SdextResId( STR_SLIDES );
         case ITEM_ID_GRAPHIC_OPTIMIZATION:
-            return getString(STR_IMAGE_OPTIMIZATION);
+            return SdextResId( STR_IMAGE_OPTIMIZATION );
         case ITEM_ID_OLE_OPTIMIZATION:
-            return getString(STR_OLE_OBJECTS);
+            return SdextResId( STR_OLE_OBJECTS );
         case ITEM_ID_SUMMARY:
-            return getString(STR_SUMMARY);
+            return SdextResId( STR_SUMMARY );
     }
     return OUString();
 }
@@ -392,7 +394,7 @@ void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::Proper
         OUString sStatus;
         if ( *pVal >>= sStatus )
         {
-            mpPage4->UpdateStatusLabel(getString(TKGet(sStatus)));
+            mpPage4->UpdateStatusLabel( sStatus );
         }
     }
     pVal = maStats.GetStatusValue( TK_Progress );
@@ -524,7 +526,7 @@ bool OptimizerDialog::onFinish()
 
         if (!aName.isEmpty())
         {
-            aName += " " + getString(STR_FILENAME_SUFFIX);
+            aName += " " + SdextResId( STR_FILENAME_SUFFIX );
             aFileOpenDialog.setDefaultName(aName);
         }
 
@@ -555,7 +557,7 @@ bool OptimizerDialog::onFinish()
             SolarMutexGuard aSolarGuard;
             std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(
                 m_xAssistant.get(), VclMessageType::Question, VclButtonsType::YesNo,
-                getString(STR_WARN_UNSAVED_PRESENTATION)));
+                SdextResId( STR_WARN_UNSAVED_PRESENTATION )));
             if (popupDlg->run() != RET_YES)
             {
                 // Selected not "yes" ("no" or dialog was cancelled) so return to previous step

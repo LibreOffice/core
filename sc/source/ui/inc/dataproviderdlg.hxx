@@ -15,13 +15,15 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/idle.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include "datatableview.hxx"
 #include <memory>
 
 class ScDocument;
 class ScDataTransformationBaseControl;
 class ScDBData;
+class ScDBCollection;
 
 class ScDataProviderDlg : public weld::GenericDialogController
 {
@@ -53,6 +55,7 @@ private:
 
     sal_uInt32 mnIndex;
     ScDBData* pDBData;
+    ScDBCollection* mpDestDBCollection;
 
     DECL_LINK(StartMenuHdl, const OString&, void);
     DECL_LINK(ColumnMenuHdl, const weld::ComboBox&, void);

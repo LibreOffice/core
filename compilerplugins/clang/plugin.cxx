@@ -203,7 +203,7 @@ bool Plugin::suppressWarningAt(SourceLocation location) const {
                 if (isDebugMode()) {
                     report(DiagnosticsEngine::Fatal, "failed to getSpelling", prev);
                 }
-            } else if (!compat::starts_with(spell, "/*")) {
+            } else if (!spell.starts_with("/*")) {
                 continue;
             }
         }
@@ -441,7 +441,7 @@ StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
             return fn;
         }
 #if !defined _WIN32
-        assert(compat::starts_with(fn, "/") || fn == "<stdin>");
+        assert(fn.starts_with("/") || fn == "<stdin>");
 #endif
         s_Mode = fn == "<stdin>" ? STDIN : GOOD;
         return getFilenameOfLocation(spellingLocation);
@@ -876,8 +876,8 @@ bool RewritePlugin::wouldRewriteWorkdir(SourceLocation loc)
     if (loc.isInvalid() || loc.isMacroID()) {
         return false;
     }
-    return compat::starts_with(
-        getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(loc)), WORKDIR "/");
+    return getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(loc)).starts_with(
+        WORKDIR "/");
 }
 
 bool RewritePlugin::reportEditFailure( SourceLocation loc )
@@ -931,7 +931,7 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix)
 {
     return checkPathname(
         pathname, prefix,
-        [](StringRef p, StringRef a) { return compat::starts_with(p, a); });
+        [](StringRef p, StringRef a) { return p.starts_with(a); });
 }
 
 bool isSamePathname(StringRef pathname, StringRef other)
@@ -1029,7 +1029,7 @@ int derivedFromCount(QualType subclassQt, QualType baseclassQt)
 // a variable declared in an 'extern "..." {...}'-style linkage-specification as
 // if it contained the 'extern' specifier:
 bool hasExternalLinkage(VarDecl const * decl) {
-    if (decl->getLinkageAndVisibility().getLinkage() != compat::Linkage::External) {
+    if (decl->getLinkageAndVisibility().getLinkage() != Linkage::External) {
         return false;
     }
     for (auto ctx = decl->getLexicalDeclContext();

@@ -20,7 +20,8 @@
 #pragma once
 
 #include <sal/config.h>
-#include <vcl/weld.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 #include <rtl/ref.hxx>
 
 #include <string_view>

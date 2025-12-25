@@ -34,14 +34,14 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
 class DocmTest : public SwModelTestBase
 {
 public:
     DocmTest()
-        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"MS Word 2007 XML VBA"_ustr)
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr)
     {
     }
 };
@@ -54,7 +54,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testDocm)
 {
-    loadAndSave("hello.docm");
+    createSwDoc("hello.docm");
+    save(TestFilter::DOCX);
     // Make sure that we check the name of the export filter.
     // This was application/vnd.ms-word.document.macroEnabled.main+xml when the
     // name of the import filter was checked.
@@ -67,7 +68,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDocm)
 
 CPPUNIT_TEST_FIXTURE(Test, testDefaultContentTypes)
 {
-    loadAndSave("fdo55381.docx");
+    createSwDoc("fdo55381.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Default[@Extension='xml']",
@@ -95,7 +97,8 @@ CPPUNIT_TEST_FIXTURE(DocmTest, testDocmSave)
     // This was
     // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
     // we used the wrong content type for .docm files.
-    loadAndSave("hello.docm");
+    createSwDoc("hello.docm");
+    save(TestFilter::DOCM);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
@@ -109,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(DocmTest, testBadDocm)
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
     CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
 
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCM);
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
     CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
 }
@@ -127,13 +130,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109063)
     };
     createSwDoc("tdf109063.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(DocmTest, testTdf108269)
 {
-    loadAndReload("tdf108269.docm");
+    createSwDoc("tdf108269.docm");
+    saveAndReload(TestFilter::DOCM);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: VBA streams were not roundtripped via the doc-level
     // grab-bag.
@@ -143,7 +147,8 @@ CPPUNIT_TEST_FIXTURE(DocmTest, testTdf108269)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125338)
 {
-    loadAndSave("tdf125338.docm");
+    createSwDoc("tdf125338.docm");
+    save(TestFilter::DOCX);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // docm files should not retain macros when saved as docx
     CPPUNIT_ASSERT(!xNameAccess->hasByName(u"word/vbaProject.bin"_ustr));
@@ -196,7 +201,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122342, "tdf122342.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132802)
 {
-    loadAndSave("tdf132802.docx");
+    createSwDoc("tdf132802.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "after", u"0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "after", u"0");
@@ -213,7 +219,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132802)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132807)
 {
-    loadAndSave("tdf132807.docx");
+    createSwDoc("tdf132807.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "before", u"280");
     // This was 240 (list auto spacing is zero in lists)
@@ -232,7 +239,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132807)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133052)
 {
-    loadAndSave("tdf133052.docx");
+    createSwDoc("tdf133052.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 240 (top auto spacing of list subitems are zero)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", u"0");
@@ -246,7 +254,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133052)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134648)
 {
-    loadAndSave("tdf134648.docx");
+    createSwDoc("tdf134648.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // list item with direct top auto spacing
@@ -323,7 +332,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118812)
 {
-    loadAndSave("tdf118812_tableStyles-comprehensive.docx");
+    createSwDoc("tdf118812_tableStyles-comprehensive.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // cell A1
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", u"Normal");
@@ -414,7 +424,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118812)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107626)
 {
-    loadAndSave("tdf107626.odt");
+    createSwDoc("tdf107626.odt");
+    save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 2 (missing trailing cell in merged cell range)
@@ -440,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79272_strictDxa)
 
     createSwDoc("tdf79272_strictDxa.docx");
     verify();
-    saveAndReload(mpFilter);
+    saveAndReload(TestFilter::DOCX);
     verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
@@ -494,7 +505,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104420, "tdf104420_lostParagraph.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 {
-    loadAndReload("tdf41542_borderlessPadding.odt");
+    createSwDoc("tdf41542_borderlessPadding.odt");
+    saveAndReload(TestFilter::DOCX);
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
@@ -541,7 +553,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf97648_relativeWidth)
 
     createSwDoc("tdf97648_relativeWidth.docx");
     verify();
-    saveAndReload(mpFilter);
+
+    saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
 
@@ -581,7 +594,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_do
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf98700_keepWithNext)
 {
-    loadAndReload("tdf98700_keepWithNext.odt");
+    createSwDoc("tdf98700_keepWithNext.odt");
+    saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading style keeps with next", true, getProperty<bool>(getParagraph(1), u"ParaKeepTogether"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default style doesn't keep with next", false, getProperty<bool>(getParagraph(2), u"ParaKeepTogether"_ustr));
@@ -689,7 +703,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112352_nextPageColumns, "tdf112352_nextPageColum
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109310_endnoteStyleForMSO)
 {
-    loadAndSave("tdf109310_endnoteStyleForMSO.docx");
+    createSwDoc("tdf109310_endnoteStyleForMSO.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/endnotes.xml"_ustr);
     // It is important that EndnoteCharacters exists, and is not duplicated on each round-trip
     assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "val",
@@ -698,7 +713,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109310_endnoteStyleForMSO)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103389)
 {
-    loadAndSave("tdf103389.docx");
+    createSwDoc("tdf103389.docx");
+    save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // No geometry was exported for the second canvas
     // Check both canvases' geometry
@@ -769,13 +785,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79329)
     };
     createSwDoc("tdf79329.docx");
     verify();
-    saveAndReload(u"Office Open XML Text"_ustr);
+    saveAndReload(TestFilter::DOCX);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103982)
 {
-    loadAndReload("tdf103982.docx");
+    createSwDoc("tdf103982.docx");
+    saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
     // This was -260350, which is not a valid value for an unsigned type.

@@ -40,7 +40,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/TaskStopwatch.hxx>
 
 #include <inputopt.hxx>
@@ -488,16 +488,9 @@ public:
         mrDoc.EnableIdle(false);
     }
 
-    ~IdleCalcTextWidthScope() COVERITY_NOEXCEPT_FALSE
+    ~IdleCalcTextWidthScope()
     {
-        SfxPrinter* pDev = mrDoc.GetPrinter();
-        if (pDev)
-            pDev->SetMapMode(maOldMapMode);
-
-        if (mbProgress)
-            ScProgress::DeleteInterpretProgress();
-
-        mrDoc.EnableIdle(true);
+        suppress_fun_call_w_exception(ImplDestroy());
     }
 
     SCTAB Tab() const { return mrCalcPos.Tab(); }
@@ -525,6 +518,19 @@ public:
     bool hasProgressBar() const { return mbProgress; }
 
     ScStyleSheetPool* getStylePool() { return mpStylePool; }
+
+private:
+    void ImplDestroy()
+    {
+        SfxPrinter* pDev = mrDoc.GetPrinter();
+        if (pDev)
+            pDev->SetMapMode(maOldMapMode);
+
+        if (mbProgress)
+            ScProgress::DeleteInterpretProgress();
+
+        mrDoc.EnableIdle(true);
+    }
 };
 
 }
@@ -1304,7 +1310,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                         sal_uInt16 nWhich = ( nScript == SvtScriptType::ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                                         ( ( nScript == SvtScriptType::COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );
-                        nLanguage = static_cast<const SvxLanguageItem*>(GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
+                        nLanguage = static_cast<const SvxLanguageItem&>(GetAttr( nCol, nRow, nTab, nWhich )).GetValue();
                     }
 
                     uno::Sequence<sal_Int32> aOffsets;

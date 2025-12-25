@@ -76,10 +76,13 @@ double  lclGetGraphicAspectRatio( const Reference< XGraphic >& rxGraphic )
 // CT_TextParagraphProperties
 TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper const & rParent,
                                                                 const AttributeList& rAttribs,
-                                                                TextParagraphProperties& rTextParagraphProperties )
+                                                                TextParagraphProperties& rTextParagraphProperties,
+                                                                uint16_t* pListNumberingMask)
 : ContextHandler2( rParent )
 , mrTextParagraphProperties( rTextParagraphProperties )
 , mrBulletList( rTextParagraphProperties.getBulletList() )
+, mpListNumberingMask( pListNumberingMask )
+, mbHaveNum( false )
 {
     OUString sValue;
 
@@ -189,6 +192,8 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         mrBulletList.setBulletAspectRatio( lclGetGraphicAspectRatio(mxBlipProps->mxFillGraphic) );
     }
 
+    if( !mbHaveNum )
+        markListUnnumbered();
     if( mrBulletList.is() )
         rPropertyMap.setProperty( PROP_IsNumbering, true);
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
@@ -197,6 +202,52 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 
     if( mrTextParagraphProperties.getParaAdjust() )
         rPropertyMap.setProperty( PROP_ParaAdjust, *mrTextParagraphProperties.getParaAdjust());
+}
+
+bool TextParagraphPropertiesContext::markListNumbered()
+{
+    sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
+
+    // We only track list state in some situations
+    if (mpListNumberingMask == nullptr)
+    {
+        return false;
+    }
+
+    uint16_t nOldMask = *mpListNumberingMask;
+    // The bit that represents this level  (..0001000)
+    uint16_t nOurBit = static_cast<uint16_t>(1) << nLevel;
+
+    uint16_t nTmp = nOldMask;
+    // Clears all bits at our level and lower (..0000xxx)
+    nTmp &= nOurBit - 1;
+    // and put our bit in (..0001xxx)
+    nTmp |= nOurBit;
+
+    *mpListNumberingMask = nTmp;
+
+    return (nOldMask & nOurBit) == 0;
+}
+
+void TextParagraphPropertiesContext::markListUnnumbered()
+{
+    sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
+
+    // We only track list state in some situations
+    if (mpListNumberingMask == nullptr)
+    {
+        return;
+    }
+
+    uint16_t nOldMask = *mpListNumberingMask;
+    // The bit that represents this level  (..0001000)
+    uint16_t nOurBit = static_cast<uint16_t>(1) << nLevel;
+
+    uint16_t nTmp = nOldMask;
+    // Clears all bits at our level and lower (..0000xxx)
+    nTmp &= nOurBit - 1;
+
+    *mpListNumberingMask = nTmp;
 }
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
@@ -214,7 +265,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             mrBulletList.mbBulletColorFollowText <<= true;
             break;
         case A_TOKEN( buClr ):          // CT_Color
-            return new ColorContext( *this, *mrBulletList.maBulletColorPtr );
+            return new ColorContext(*this, mrBulletList.maBulletColorPtr.get());
         // EG_TextBulletSize
         case A_TOKEN( buSzTx ):         // CT_TextBulletSizeFollowText
             mrBulletList.mbBulletSizeFollowText <<= true;
@@ -241,9 +292,17 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case A_TOKEN( buAutoNum ):      // CT_TextAutonumberBullet
         {
+            bool bStartingNumList = markListNumbered();
+            mbHaveNum = true;
+
             try {
                 sal_Int32 nType = rAttribs.getToken( XML_type, 0 );
-                sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, 1 );
+                sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, -1 );
+                if( nStartAt >= 0 || bStartingNumList )
+                {
+                    mrTextParagraphProperties.setRestartNumbering(true);
+                }
+
                 if( nStartAt > 32767 )
                 {
                     nStartAt = 32767;

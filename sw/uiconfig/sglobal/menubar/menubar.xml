@@ -34,6 +34,8 @@
               <menu:menuitem menu:id=".uno:NewDoc" menu:style="text"/>
           </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:CompareDocuments" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:MergeDocuments" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Reload" menu:style="text"/>
       <menu:menuitem menu:id=".uno:VersionDialog" menu:style="text"/>
@@ -136,9 +138,6 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:CommentChangeTracking" menu:style="text"/>
           <menu:menuitem menu:id=".uno:ProtectTraceChangeMode" menu:style="text"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:CompareDocuments" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:MergeDocuments" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:EditCommentsMenu" menu:style="text">
@@ -191,11 +190,12 @@
           <menu:menuitem menu:id=".uno:VScroll" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:GridMenu">
+      <menu:menu menu:id=".uno:GridsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible" menu:style="text"/>
           <menu:menuitem menu:id=".uno:GridUse" menu:style="text"/>
           <menu:menuitem menu:id=".uno:HelplinesMove" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:BaselineGridVisible" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -775,7 +775,7 @@
       <menu:menuitem menu:id=".uno:DevelopmentToolsDockingWindow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
-      <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ExtensionManager" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
     </menu:menupopup>

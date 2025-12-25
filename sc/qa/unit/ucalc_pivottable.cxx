@@ -18,6 +18,7 @@
 #include <dbdocfun.hxx>
 #include <generalfunction.hxx>
 #include <tabprotection.hxx>
+#include <undomanager.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -33,7 +34,7 @@ namespace {
 
 struct DPFieldDef
 {
-    const char* pName;
+    std::u16string_view aName;
     sheet::DataPilotFieldOrientation eOrient;
 
     /**
@@ -77,16 +78,17 @@ ScDPObject* createDPFromSourceDesc(
     // Set the dimension information.
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName = OUString::createFromAscii(aFields[i].pName);
-        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(aDimName);
-        pDim->SetOrientation(aFields[i].eOrient);
+        auto& rField = aFields[i];
+        OUString aName(rField.aName);
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(aName);
+        pDim->SetOrientation(rField.eOrient);
         pDim->SetUsedHierarchy(0);
 
-        if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
+        if (rField.eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
             ScGeneralFunction eFunc = ScGeneralFunction::SUM;
-            if (aFields[i].eFunc != ScGeneralFunction::NONE)
-                eFunc = aFields[i].eFunc;
+            if (rField.eFunc != ScGeneralFunction::NONE)
+                eFunc = rField.eFunc;
 
             pDim->SetFunction(eFunc);
             pDim->SetReferenceValue(nullptr);
@@ -107,7 +109,7 @@ ScDPObject* createDPFromSourceDesc(
             aShowInfo.ShowItemsMode = 0;
             aShowInfo.ItemCount = 0;
             pDim->SetAutoShowInfo(&aShowInfo);
-            pDim->SetRepeatItemLabels(aFields[i].bRepeatItemLabels);
+            pDim->SetRepeatItemLabels(rField.bRepeatItemLabels);
         }
     }
 
@@ -155,7 +157,30 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
     return refresh(pDPObj);
 }
 
+ScDPObject* getDPObject(ScDocument* pDoc, size_t index)
+{
+    ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table collection.", pDPCollection);
+    return &(*pDPCollection)[index];
 }
+
+sal_Int32 getNumberOfPivotTables(ScDocument* pDoc)
+{
+    ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+    if (!pDPCollection)
+        return -1;
+    return pDPCollection->GetCount();
+}
+
+void updatePivotTable(ScDocShellRef const& xDocShell, size_t index)
+{
+    ScDBDocFunc aFunc(*xDocShell);
+    ScDPObject* pDPObject = getDPObject(&xDocShell->GetDocument(), index);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table object.", pDPObject);
+    aFunc.RefreshPivotTables(pDPObject, true);
+}
+
+} // end anonymous
 
 class TestPivottable : public ScUcalcTestBase
 {
@@ -169,7 +194,7 @@ ScRange TestPivottable::insertDPSourceData(ScDocument* pDoc, DPFieldDef const aF
 {
     // Insert field names in row 0.
     for (size_t i = 0; i < nFieldCount; ++i)
-        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].aName));
 
     // Insert data into row 1 and downward.
     for (size_t i = 0; i < nDataCount; ++i)
@@ -209,9 +234,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTable)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -397,9 +422,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableLabels)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -457,9 +482,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateLabels)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Date",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -535,11 +560,11 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilters)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
-        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
-        { "Group2", sheet::DataPilotFieldOrientation_PAGE, ScGeneralFunction::NONE, false },
-        { "Val1",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false },
-        { "Val2",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Name",   sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
+        { u"Group1", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
+        { u"Group2", sheet::DataPilotFieldOrientation_PAGE, ScGeneralFunction::NONE, false },
+        { u"Val1",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false },
+        { u"Val2",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -690,9 +715,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -1021,9 +1046,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDuplicateDataFields)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false }
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false }
     };
 
     ScAddress aPos(2,2,0);
@@ -1113,8 +1138,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1273,8 +1298,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumberGrouping)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Order", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Order", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1356,8 +1381,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateGrouping)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Date", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Date", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1524,8 +1549,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableEmptyRows)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1637,8 +1662,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableTextNumber)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     // Insert raw data such that the first column values are entered as text.
@@ -1740,8 +1765,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCaseInsensitiveStrings)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1818,8 +1843,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumStability)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Total", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Total", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     m_pDoc->InsertTab(0, u"Data"_ustr);
@@ -1906,8 +1931,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFieldReference)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -2077,8 +2102,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDocFunc)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -2178,8 +2203,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATA)
     {
         // Dimension definition
         static const DPFieldDef aFields[] = {
-            { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+            { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
         };
 
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2237,9 +2262,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATA)
     {
         // Dimension definition
         static const DPFieldDef aFields[] = {
-            { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
+            { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+            { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
         };
 
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2331,9 +2356,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATALeafAccess)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Type", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Member", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { u"Type", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Member", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     // Create pivot table at A1 on 2nd sheet.
@@ -2409,10 +2434,10 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableRepeatItemLabels)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, true },
-        { "Country", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Year", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, true },
+        { u"Country", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Year", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -2489,9 +2514,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDPCollection)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+        { u"Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -2601,10 +2626,10 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableMedianFunc)
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
-        { "Condition", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
-        { "Day1Hit", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
-        { "Day1Miss", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
-        { "Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
+        { u"Condition", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Day1Hit", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
+        { u"Day1Miss", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
+        { u"Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
     };
 
     ScAddress aPos(1, 1, 0);
@@ -2644,6 +2669,217 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableMedianFunc)
 
     bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableUndoCreate)
+{
+    // Test Undo and Redo creating a pivot table
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    bool bSuccess{};
+    ScDBDocFunc aFunc(*m_xDocShell);
+    ScRange aDataRange;
+
+    // Insert data
+    {
+        const std::vector<std::vector<const char*>> aData = {
+            { "Name", "Value" },
+            { "A", "1" },
+            { "B", "2" },
+        };
+
+        static constexpr ScAddress aPosition(1, 1, 0);
+        aDataRange = insertRangeData(m_pDoc, aPosition, aData);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPosition, aDataRange.aStart);
+    }
+
+    // Create pivot table
+    {
+        // Dimension definition
+        static constexpr auto aFields = std::to_array<DPFieldDef>({
+            { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
+        });
+
+        std::unique_ptr<ScDPObject> pDPObject(createDPFromRange(m_pDoc, aDataRange, aFields.data(), aFields.size(), false));
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObject);
+
+        // Create a new pivot table output.
+        bSuccess = aFunc.CreatePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
+    }
+
+    // Check output
+    std::function functionCheckNotFiltered = [this, &bSuccess](int nLine)
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+
+        ScRange aOutRange = pDPObject->GetOutRange();
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { "Name", "Count - Value" },
+                { "A", "1" },
+                { "B", "1" },
+                { "Total Result", "2" },
+            };
+
+            bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Unfiltered data not as expected");
+            CPPUNIT_ASSERT_MESSAGE(OString::number(nLine).getStr(), bSuccess);
+        }
+    };
+    functionCheckNotFiltered(__LINE__);
+
+    // Undo
+    m_pDoc->GetUndoManager()->Undo();
+    {
+        ScDPCollection* pDPCollection = m_pDoc->GetDPCollection();
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pDPCollection->GetCount());
+    }
+
+    // Redo
+    m_pDoc->GetUndoManager()->Redo();
+    {
+        ScDPCollection* pDPCollection = m_pDoc->GetDPCollection();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDPCollection->GetCount());
+    }
+
+    functionCheckNotFiltered(__LINE__);
+
+    // Remove Pivot Table
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        bSuccess = aFunc.RemovePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
+    }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilterValueUndoRedo)
+{
+    // Test Undo and Redo when a value is filtered out
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    bool bSuccess{};
+    ScDBDocFunc aFunc(*m_xDocShell);
+    ScRange aDataRange;
+
+    // Insert data
+    {
+        const std::vector<std::vector<const char*>> aData = {
+            { "Name", "Value" },
+            { "A", "1" },
+            { "B", "2" },
+        };
+
+        static constexpr ScAddress aPosition(1, 1, 0);
+        aDataRange = insertRangeData(m_pDoc, aPosition, aData);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPosition, aDataRange.aStart);
+    }
+
+    // Create pivot table
+    {
+        // Dimension definition
+        static constexpr auto aFields = std::to_array<DPFieldDef>({
+            { u"Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { u"Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
+        });
+
+        std::unique_ptr<ScDPObject> pDPObject(createDPFromRange(m_pDoc, aDataRange, aFields.data(), aFields.size(), false));
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObject);
+
+        // Create a new pivot table output.
+        bSuccess = aFunc.CreatePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
+    }
+
+    // Check output
+    std::function functionCheckNotFiltered = [this, &bSuccess](int nLine)
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+
+        ScRange aOutRange = pDPObject->GetOutRange();
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { "Name", "Count - Value" },
+                { "A", "1" },
+                { "B", "1" },
+                { "Total Result", "2" },
+            };
+
+            bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Unfiltered data not as expected");
+            OString sMessage("Vales don't match. Called at line " + OString::number(nLine));
+            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), bSuccess);
+        }
+    };
+    functionCheckNotFiltered(__LINE__);
+
+    // Filter value "A" in "Name" Dimension
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        ScDPObject aNewObject(*pDPObject);
+
+        ScDPSaveData* pSaveData = aNewObject.GetSaveData();
+        CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(u"Name"_ustr);
+        CPPUNIT_ASSERT_MESSAGE("Name dimension should exist.", pDim);
+        ScDPSaveMember* pMember = pDim->GetMemberByName(u"A"_ustr);
+        CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMember);
+        pMember->SetIsVisible(false);
+
+        aNewObject.SetSaveData(*pSaveData);
+        aNewObject.ReloadGroupTableData();
+        aNewObject.InvalidateData();
+
+        bSuccess = aFunc.DataPilotUpdate(pDPObject, &aNewObject, true, true);
+        //TODO - We need to fix UpdatePivotTable too
+        // bSuccess = aFunc.UpdatePivotTable(aNewObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Pivot table should update.", bSuccess);
+    }
+
+    std::function functionCheckFiltered = [this, &bSuccess](int nLine)
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        ScRange aOutRange = pDPObject->GetOutRange();
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { "Name", "Count - Value" },
+                { "B", "1" },
+                { "Total Result", "1" },
+            };
+
+            bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Filtered data not as expected");
+            OString sMessage("Vales don't match. Called at line " + OString::number(nLine));
+            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), bSuccess);
+        }
+    };
+    functionCheckFiltered(__LINE__);
+    updatePivotTable(m_xDocShell, 0);
+    functionCheckFiltered(__LINE__);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfPivotTables(m_pDoc));
+
+    // Undo
+    m_pDoc->GetUndoManager()->Undo();
+
+    functionCheckNotFiltered(__LINE__);
+    updatePivotTable(m_xDocShell, 0);
+    functionCheckNotFiltered(__LINE__);
+
+    // Remove Pivot Table
+    {
+        ScDPObject* pDPObject = getDPObject(m_pDoc, 0);
+        bSuccess = aFunc.RemovePivotTable(*pDPObject, true, true);
+        CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
+    }
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);

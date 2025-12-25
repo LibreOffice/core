@@ -20,10 +20,12 @@
 #include <sal/config.h>
 
 #include <array>
+#include <vector>
 
 #include <oox/token/tokenmap.hxx>
 
 #include <string.h>
+#include <sal/log.hxx>
 #include <rtl/string.hxx>
 #include <oox/token/tokens.hxx>
 

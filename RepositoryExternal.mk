@@ -146,6 +146,86 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+ifneq ($(filter LZMA,$(BUILD_TYPE)),)
+ifneq ($(SYSTEM_LZMA),)
+
+define gb_LinkTarget__use_lzma_impl
+$(if $(2),,$(error gb_LinkTarget__use_lzma_impl needs additional parameter))
+
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_LZMA \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),-llzma)
+
+endef
+
+gb_ExternalProject__use_lzma :=
+
+else # !SYSTEM_LZMA
+
+define gb_LinkTarget__use_lzma_impl
+$(if $(2),,$(error gb_LinkTarget__use_lzma_impl needs additional parameter))
+
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(gb_UnpackedTarball_workdir)/lzma \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+    $(2) \
+)
+
+endef
+
+define gb_ExternalProject__use_lzma
+$(call gb_ExternalProject_use_static_libraries,$(1),lzma)
+
+endef
+
+endif # SYSTEM_LZMA
+endif # LZMA
+
+ifneq ($(filter SQLITE3,$(BUILD_TYPE)),)
+ifneq ($(SYSTEM_SQLITE3),)
+
+define gb_LinkTarget__use_sqlite3_impl
+$(if $(2),,$(error gb_LinkTarget__use_sqlite3_impl needs additional parameter))
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_SQLITE3 \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),-lsqlite3)
+
+endef
+
+gb_ExternalProject__use_sqlite3 :=
+
+else # !SYSTEM_SQLITE3
+
+define gb_LinkTarget__use_sqlite3_impl
+$(if $(2),,$(error gb_LinkTarget__use_sqlite3_impl needs additional parameter))
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(gb_UnpackedTarball_workdir)/sqlite3 \
+    $$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	$(2) \
+)
+
+endef
+
+define gb_ExternalProject__use_sqlite3
+$(call gb_ExternalProject_use_static_libraries,$(1),sqlite3)
+
+endef
+
+endif # SYSTEM_SQLITE3
+endif # SQLITE3
+
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers
@@ -1200,7 +1280,7 @@ endef
 
 else # !SYSTEM_CAIRO
 
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
+ifneq ($(filter-out MACOSX$(ENABLE_HEADLESS) WNT,$(OS)),)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	cairo \
@@ -1291,7 +1371,7 @@ gb_ExternalProject__use_fontconfig :=
 
 else # SYSTEM_FONTCONFIG
 
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
+ifneq (,$(filter FONTCONFIG,$(BUILD_TYPE)))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	fontconfig \
@@ -4136,7 +4216,7 @@ $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_GeneratedPackage_
 
 else
 
-$(call gb_ExternalExecutable_set_internal,python,$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python.bin))
+$(call gb_ExternalExecutable_set_internal,python,$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python))
 $(call gb_ExternalExecutable_set_precommand,python,$(subst $$,$$$$,$(gb_Python_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Package_get_target_for_build,python3))
 
@@ -4277,6 +4357,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
        pdfium \
 ))
 
+ifneq ($(SYSTEM_AFDKO),)
+
+else # !SYSTEM_AFDKO
+
 define gb_LinkTarget__use_afdko
 $(call gb_LinkTarget_use_unpacked,$(1),afdko)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -4286,16 +4370,14 @@ $(call gb_LinkTarget_set_include,$(1),\
        -I$(gb_UnpackedTarball_workdir)/afdko/c/makeotf/source \
        $$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	afdko \
-)
-
+$(call gb_LinkTarget_use_static_libraries,$(1),afdko)
 endef
 
 define gb_ExternalProject__use_afdko
 $(call gb_ExternalProject_use_static_libraries,$(1),afdko)
-
 endef
+
+endif
 
 endif
 
@@ -4470,7 +4552,18 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(gb_UnpackedTarball_workdir)/y-crdt/tests-ffi/include \
 )
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(gb_UnpackedTarball_workdir)/y-crdt/target/debug/yrs.lib \
+	$(eval $(call gb_LinkTarget_use_system_win32_libs,$(1),\
+		ntdll \
+		userenv \
+		ws2_32 \
+	))
+)
+else
 $(call gb_LinkTarget_add_libs,$(1),$(gb_UnpackedTarball_workdir)/y-crdt/target/debug/libyrs.a)
+endif
 endef
 
 else

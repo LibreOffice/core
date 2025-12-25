@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include <vcl/weld.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include "JoinTableView.hxx"
 
 namespace dbaui
@@ -36,8 +37,6 @@ namespace dbaui
 
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         IRelationControlInterface*              m_pParentDialog;
-        OUString                                m_strCurrentLeft;
-        OUString                                m_strCurrentRight;
         DECL_LINK( OnTableChanged, weld::ComboBox&, void );
     public:
         OTableListBoxControl(weld::Builder* _pParent,

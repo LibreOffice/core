@@ -172,6 +172,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
 		$(call fetch_Optional,LPSOLVE,LPSOLVE_TARBALL) \
 		$(call fetch_Optional,LXML,LXML_TARBALL) \
+		$(call fetch_Optional,LZMA,LZMA_TARBALL) \
 		$(call fetch_Optional,MARIADB_CONNECTOR_C,MARIADB_CONNECTOR_C_TARBALL) \
 		$(call fetch_Optional,MD4C,MD4C_TARBALL) \
 		$(call fetch_Optional,MDDS,MDDS_TARBALL) \
@@ -228,7 +229,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,POPPLER,POPPLER_DATA_TARBALL) \
 		$(call fetch_Optional,POSTGRESQL,POSTGRESQL_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
-		$(if $(filter WNT,$(OS)),PYTHON_BOOTSTRAP_TARBALL) \
 		$(call fetch_Optional,QXP,QXP_TARBALL) \
 		$(call fetch_Optional,REDLAND,RAPTOR_TARBALL) \
 		$(call fetch_Optional,REDLAND,RASQAL_TARBALL) \
@@ -236,6 +236,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,REVENGE,REVENGE_TARBALL) \
 		$(call fetch_Optional,RHINO,RHINO_TARBALL) \
 		$(call fetch_Optional,SKIA,SKIA_TARBALL) \
+		$(call fetch_Optional,SQLITE3,SQLITE3_TARBALL) \
 		$(call fetch_Optional,STAROFFICE,STAROFFICE_TARBALL) \
 		$(if $(filter WNT,$(OS)),TWAIN_DSM_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
