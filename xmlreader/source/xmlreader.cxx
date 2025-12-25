@@ -495,42 +495,42 @@ Span XmlReader::handleAttributeValue(
             --end;
         }
         char const * p = begin;
-        enum Space { SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
+        enum class Space { None, Span, Break };
             // a single true space character can go into the current span,
             // everything else breaks the span
-        Space space = SPACE_NONE;
+        Space space = Space::None;
         while (p != end) {
             switch (*p) {
             case '\x09':
             case '\x0A':
             case '\x0D':
                 switch (space) {
-                case SPACE_NONE:
+                case Space::None:
                     pad_.add(begin, p - begin);
                     pad_.add(" ");
-                    space = SPACE_BREAK;
+                    space = Space::Break;
                     break;
-                case SPACE_SPAN:
+                case Space::Span:
                     pad_.add(begin, p - begin);
-                    space = SPACE_BREAK;
+                    space = Space::Break;
                     break;
-                case SPACE_BREAK:
+                case Space::Break:
                     break;
                 }
                 begin = ++p;
                 break;
             case ' ':
                 switch (space) {
-                case SPACE_NONE:
+                case Space::None:
                     ++p;
-                    space = SPACE_SPAN;
+                    space = Space::Span;
                     break;
-                case SPACE_SPAN:
+                case Space::Span:
                     pad_.add(begin, p - begin);
                     begin = ++p;
-                    space = SPACE_BREAK;
+                    space = Space::Break;
                     break;
-                case SPACE_BREAK:
+                case Space::Break:
                     begin = ++p;
                     break;
                 }
@@ -539,11 +539,11 @@ Span XmlReader::handleAttributeValue(
                 pad_.add(begin, p - begin);
                 p = handleReference(p, end);
                 begin = p;
-                space = SPACE_NONE;
+                space = Space::None;
                 break;
             default:
                 ++p;
-                space = SPACE_NONE;
+                space = Space::None;
                 break;
             }
         }
@@ -800,10 +800,10 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
     pad_.clear();
     char const * flowBegin = pos_;
     char const * flowEnd = pos_;
-    enum Space { SPACE_START, SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
+    enum class Space { Start, None, Span, Break };
         // a single true space character can go into the current flow,
         // everything else breaks the flow
-    Space space = SPACE_START;
+    Space space = Space::Start;
     for (;;) {
         switch (peek()) {
         case '\0': // i.e., EOF
@@ -813,39 +813,39 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
         case '\x0A':
         case '\x0D':
             switch (space) {
-            case SPACE_START:
-            case SPACE_BREAK:
+            case Space::Start:
+            case Space::Break:
                 break;
-            case SPACE_NONE:
-            case SPACE_SPAN:
-                space = SPACE_BREAK;
+            case Space::None:
+            case Space::Span:
+                space = Space::Break;
                 break;
             }
             ++pos_;
             break;
         case ' ':
             switch (space) {
-            case SPACE_START:
-            case SPACE_BREAK:
+            case Space::Start:
+            case Space::Break:
                 break;
-            case SPACE_NONE:
-                space = SPACE_SPAN;
+            case Space::None:
+                space = Space::Span;
                 break;
-            case SPACE_SPAN:
-                space = SPACE_BREAK;
+            case Space::Span:
+                space = Space::Break;
                 break;
             }
             ++pos_;
             break;
         case '&':
             switch (space) {
-            case SPACE_START:
+            case Space::Start:
                 break;
-            case SPACE_NONE:
-            case SPACE_SPAN:
+            case Space::None:
+            case Space::Span:
                 pad_.add(flowBegin, pos_ - flowBegin);
                 break;
-            case SPACE_BREAK:
+            case Space::Break:
                 pad_.add(flowBegin, flowEnd - flowBegin);
                 pad_.add(" ");
                 break;
@@ -853,7 +853,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             pos_ = handleReference(pos_, end_);
             flowBegin = pos_;
             flowEnd = pos_;
-            space = SPACE_NONE;
+            space = Space::None;
             break;
         case '<':
             ++pos_;
@@ -861,7 +861,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             case '!':
                 ++pos_;
                 if (skipComment()) {
-                    space = SPACE_BREAK;
+                    space = Space::Break;
                 } else {
                     Span cdata(scanCdataSection());
                     if (cdata.is()) {
@@ -869,13 +869,13 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                         // references; it keeps the code simple), but it might
                         // arguably be better to normalize it:
                         switch (space) {
-                        case SPACE_START:
+                        case Space::Start:
                             break;
-                        case SPACE_NONE:
-                        case SPACE_SPAN:
+                        case Space::None:
+                        case Space::Span:
                             pad_.add(flowBegin, pos_ - flowBegin);
                             break;
-                        case SPACE_BREAK:
+                        case Space::Break:
                             pad_.add(flowBegin, flowEnd - flowBegin);
                             pad_.add(" ");
                             break;
@@ -883,7 +883,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                         normalizeLineEnds(cdata);
                         flowBegin = pos_;
                         flowEnd = pos_;
-                        space = SPACE_NONE;
+                        space = Space::None;
                     } else {
                         skipDocumentTypeDeclaration();
                     }
@@ -898,7 +898,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             case '?':
                 ++pos_;
                 skipProcessingInstruction();
-                space = SPACE_BREAK;
+                space = Space::Break;
                 break;
             default:
                 pad_.add(flowBegin, flowEnd - flowBegin);
@@ -909,20 +909,20 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             break;
         default:
             switch (space) {
-            case SPACE_START:
+            case Space::Start:
                 flowBegin = pos_;
                 break;
-            case SPACE_NONE:
-            case SPACE_SPAN:
+            case Space::None:
+            case Space::Span:
                 break;
-            case SPACE_BREAK:
+            case Space::Break:
                 pad_.add(flowBegin, flowEnd - flowBegin);
                 pad_.add(" ");
                 flowBegin = pos_;
                 break;
             }
             flowEnd = ++pos_;
-            space = SPACE_NONE;
+            space = Space::None;
             break;
         }
     }

@@ -608,7 +608,7 @@ static auto CheckX509Data(
                 start = i; // issuer isn't in the list
                 break;
             }
-            if (xmlsecurity::EqualDistinguishedNames(certs[i]->getIssuerName(), certs[j]->getSubjectName(), xmlsecurity::NOCOMPAT))
+            if (xmlsecurity::EqualDistinguishedNames(certs[i]->getIssuerName(), certs[j]->getSubjectName(), xmlsecurity::EqualMode::NoCompat))
             {
                 if (i == j) // self signed
                 {
@@ -641,7 +641,7 @@ static auto CheckX509Data(
             if (chain[i] != j)
             {
                 if (xmlsecurity::EqualDistinguishedNames(
-                        certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName(), xmlsecurity::NOCOMPAT))
+                        certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName(), xmlsecurity::EqualMode::NoCompat))
                 {
                     if (chain.size() != i + 1) // already found issue?
                     {

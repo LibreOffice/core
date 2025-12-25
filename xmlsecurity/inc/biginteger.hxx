@@ -38,11 +38,11 @@ numericStringToBigInteger(std::u16string_view serialNumber);
 // DNs read as strings from XML files may need to be mangled for compatibility
 // as NSS and MS CryptoAPI have different string serialisations; if the DN is
 // from an XCertificate it's "native" already and doesn't need to be mangled.
-enum EqualMode
+enum class EqualMode
 {
-    NOCOMPAT,
-    COMPAT_2ND,
-    COMPAT_BOTH
+    NoCompat,
+    Compat2nd,
+    CompatBoth
 };
 XSECXMLSEC_DLLPUBLIC bool EqualDistinguishedNames(std::u16string_view rName1,
                                                   std::u16string_view rName2, EqualMode eMode);
