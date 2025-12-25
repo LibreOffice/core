@@ -111,6 +111,8 @@ enum class SalEvent;
     BOOL            mbInCommitMarkedText;
     NSAttributedString* mpLastMarkedText;
     BOOL            mbTextInputWantsNonRepeatKeyDown;
+    BOOL            mbTextInputWantsInsertText;
+    BOOL            mbInTextInputDelete;
     NSTrackingArea* mpLastTrackingArea;
 
     BOOL            mbInViewDidChangeEffectiveAppearance;
