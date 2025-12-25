@@ -1736,6 +1736,40 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_layout_type)
     assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"blank");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf170102_layout_type)
+{
+    createSdImpressDoc("odp/tdf170102_layout_type.odp");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    uno::Reference<drawing::XMasterPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    sal_Int32 nMPCount = xDoc->getMasterPages()->getCount();
+    // test roughly the same thing in document and in XML: no drawing object in master page/layout
+    for (sal_Int32 i = 0; i < nMPCount; i++)
+    {
+        uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(i),
+                                                 uno::UNO_QUERY_THROW);
+        sal_Int32 nObjCount = xPage->getCount();
+        for (sal_Int32 j = 0; j < nObjCount; j++)
+        {
+            uno::Reference<lang::XServiceInfo> xShapeInfo(xPage->getByIndex(j),
+                                                          uno::UNO_QUERY_THROW);
+            // without the fix in place there would be a graphic shape placeholder
+            CPPUNIT_ASSERT_MESSAGE(
+                "Unexpected graphic object shape in exported master page",
+                !xShapeInfo->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr));
+        }
+
+        xmlDocUniquePtr pXmlDocLayout = parseExport(u"ppt/slideLayouts/slideLayout"_ustr
+                                                    + OUString::number(i + 1) + u".xml"_ustr);
+        CPPUNIT_ASSERT(pXmlDocLayout);
+        // without the fix in place there would be a pic layout element for the placeholder
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "Unexpected \"pic\" element in exported PPTX slide layout", 0,
+            countXPathNodes(pXmlDocLayout, "/p:sldLayout/p:cSld/p:spTree/p:pic"));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testFooterIdxConsistency)
 {
     createSdImpressDoc("pptx/multiplelayoutfooter.pptx");
