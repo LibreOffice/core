@@ -1145,6 +1145,8 @@ static NSString* getCurrentSelection()
         mbInCommitMarkedText = NO;
         mpLastMarkedText = nil;
         mbTextInputWantsNonRepeatKeyDown = NO;
+        mbTextInputWantsInsertText = NO;
+        mbInTextInputDelete = NO;
         mpLastTrackingArea = nil;
 
         mbInViewDidChangeEffectiveAppearance = NO;
@@ -1711,31 +1713,50 @@ static NSString* getCurrentSelection()
         if( ! [self handleKeyDownException: pEvent] )
         {
             sal_uInt16 nKeyCode = ImplMapKeyCode( [pEvent keyCode] );
-            if ( nKeyCode == KEY_DELETE && mbTextInputWantsNonRepeatKeyDown )
+            if ( nKeyCode == KEY_DELETE && mpLastMarkedText )
             {
                 // tdf#42437 Enable press-and-hold special character input method
                 // Emulate the press-and-hold behavior of the TextEdit
                 // application by deleting the marked text when only the
                 // Delete key is pressed and keep the marked text when the
                 // Backspace key or Fn-Delete keys are pressed.
-                if ( [pEvent keyCode] == 51 )
+                if ( mbTextInputWantsInsertText )
                 {
-                    [self deleteTextInputWantsNonRepeatKeyDown];
-                }
-                else
-                {
-                    [self unmarkText];
-                    mbKeyHandled = true;
-                    mbInKeyInput = false;
+                    if ( [pEvent keyCode] == 51 )
+                        [self insertText:[NSString string] replacementRange:NSMakeRange( NSNotFound, 0 )];
+                    else
+                        [self insertText:[mpLastMarkedText string] replacementRange:NSMakeRange( 0, [mpLastMarkedText length] )];
                 }
 
-                [self endExtTextInput];
-                return;
+                // Related: tdf#170149 Calling [self interpretKeyEvents:] with
+                // a delete key event calls [self insertText:replacementRange:]
+                // and maybe [self deleteBackward:] or [self deleteForward:] so
+                // ignore those calls since the marked tecxt has already been
+                // discarded or committed.
+                mbInTextInputDelete = YES;
             }
 
             NSArray* pArray = [NSArray arrayWithObject: pEvent];
             [self interpretKeyEvents: pArray];
 
+            if ( mbInTextInputDelete )
+            {
+                // For some unknown reason, press-and-hold will fail after
+                // doing the following steps twice:
+                // - Arrowing into the input method's popup window
+                // - Arrowing out of the popup window
+                // - Pressing Delete or Backspace or Fn-Delete
+                // The only way I have found to reset the input method is to
+                // deactivate and then reactivate the input method.
+                NSTextInputContext *pInputContext = [NSTextInputContext currentInputContext];
+                if ( pInputContext )
+                {
+                    [pInputContext deactivate];
+                    [pInputContext activate];
+                }
+
+                mbInTextInputDelete = NO;
+            }
             // Handle repeat key events by explicitly inserting the text if
             // -[NSResponder interpretKeyEvents:] does not insert or mark any
             // text. Note: do not do this step if there is uncommitted text.
@@ -1743,7 +1764,7 @@ static NSString* getCurrentSelection()
             // Pressing and holding action keys such as arrow keys must not be
             // handled like pressing and holding a character key as it will
             // insert unexpected text.
-            if ( !mbKeyHandled && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] )
+            else if ( !mbKeyHandled && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] )
             {
                 NSString *pChars = [mpLastEvent characters];
                 if ( pChars )
@@ -1751,15 +1772,35 @@ static NSString* getCurrentSelection()
             }
             // tdf#42437 Enable press-and-hold special character input method
             // Emulate the press-and-hold behavior of the TextEdit application
-            // by committing an empty string for key down events dispatched
-            // while the special character input method popup is displayed.
-            else if ( mpLastMarkedText && mbTextInputWantsNonRepeatKeyDown && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && ![mpLastEvent isARepeat] )
+            // by reapplying the existing marked text for key down events
+            // dispatched while the special character input method popup is
+            // displayed.
+            else if ( mpLastMarkedText && mbTextInputWantsInsertText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && ![mpLastEvent isARepeat] )
             {
-                // If the escape or return key is pressed, unmark the text to
-                // skip deletion of marked text
-                if ( nKeyCode == KEY_ESCAPE || nKeyCode == KEY_RETURN )
-                    [self unmarkText];
-                [self insertText:[NSString string] replacementRange:NSMakeRange( NSNotFound, 0 )];
+                // In most cases, if the escape or return key is pressed,
+                // commit the text to skip deletion of marked text
+                bool bCommitText = false;
+                if ( nKeyCode == KEY_ESCAPE )
+                {
+                    // Pressing escape should not commmit when using input
+                    // methods such as Japanese or Chinese so only commit
+                    // if the marked text is a single character below the
+                    // start of the Devanagari Unicode block.
+                    if ( [mpLastMarkedText length] == 1 && [[mpLastMarkedText string] characterAtIndex:0] < 0x0900 )
+                        bCommitText = true;
+                }
+                else if ( nKeyCode == KEY_RETURN )
+                {
+                    bCommitText = true;
+                }
+
+                if ( bCommitText )
+                    [self insertText:[mpLastMarkedText string] replacementRange:NSMakeRange( 0, [mpLastMarkedText length] )];
+                // Don't change or commit the marked text as it will break
+                // right/left-arrowing in input methods such as Japanese or
+                // Chinese that support editing subblocks of uncommitted text.
+                else
+                    mbTextInputWantsInsertText = NO;
             }
         }
 
@@ -1805,6 +1846,8 @@ static NSString* getCurrentSelection()
 
     SolarMutexGuard aGuard;
 
+    mbTextInputWantsInsertText = NO;
+
     [self deleteTextInputWantsNonRepeatKeyDown];
 
     // Ignore duplicate events that are sometimes posted during cancellation
@@ -1820,7 +1863,18 @@ static NSString* getCurrentSelection()
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         NSString* pInsert = nil;
-        if( [aString isKindOfClass: [NSAttributedString class]] )
+        if (mbInTextInputDelete)
+        {
+            // In the TextEdit application, arrowing into the "press-and-hold"
+            // native popup window and then arrowing out (i.e. the popup
+            // window has no selection), pressing Backspace or Fn-Delete will
+            // commit the marked text.
+            if ( mpLastMarkedText && mpLastEvent && [mpLastEvent keyCode] != 51 )
+                pInsert = [mpLastMarkedText string];
+            else
+                pInsert = [NSString string];
+        }
+        else if( [aString isKindOfClass: [NSAttributedString class]] )
             pInsert = [aString string];
         else
             pInsert = aString;
@@ -2154,13 +2208,17 @@ static NSString* getCurrentSelection()
 -(void)deleteBackward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b' modifiers: 0];
+
+    if (!mbInTextInputDelete)
+        [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b' modifiers: 0];
 }
 
 -(void)deleteForward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f modifiers: 0];
+
+    if (!mbInTextInputDelete)
+        [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f modifiers: 0];
 }
 
 -(void)deleteBackwardByDecomposingPreviousCharacter: (id)aSender
@@ -2506,6 +2564,8 @@ static NSString* getCurrentSelection()
             bReschedule = true;
             mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
         }
+
+        mbTextInputWantsInsertText = YES;
     } else {
         aInputEvent.maText.clear();
         aInputEvent.mnCursorPos = 0;
@@ -2625,6 +2685,7 @@ static NSString* getCurrentSelection()
     }
 
     mbTextInputWantsNonRepeatKeyDown = NO;
+    mbTextInputWantsInsertText = NO;
 }
 
 -(void)clearLastTrackingArea
@@ -2674,7 +2735,7 @@ static NSString* getCurrentSelection()
     // dispatch an empty SalEvent::ExtTextInput event, fetch the position,
     // and then dispatch a SalEvent::EndExtTextInput event.
     NSString *pNewMarkedText = nullptr;
-    NSString *pChars = [mpLastEvent characters];
+    NSString *pChars = mpLastEvent ? [mpLastEvent characters] : nil;
 
     // tdf#158124 KEY_DELETE events do not need an ExtTextInput event
     // When using various Japanese input methods, the last event will be a
@@ -2740,6 +2801,15 @@ static NSString* getCurrentSelection()
             mpLastMarkedText = [[NSAttributedString alloc] initWithString:pNewMarkedText];
             mSelectedRange = mMarkedRange = NSMakeRange( 0, [mpLastMarkedText length] );
             mbTextInputWantsNonRepeatKeyDown = YES;
+
+            // tdf#170149 Fix clicking on a character in the input method's popup window
+            // [self setMarkedText:selectedRange:replacementRange:] does not
+            // get called on macOS Tahoe. So when pressing and holding a key,
+            // the original character would never get selected and clicking
+            // on a replacement character in the input method's popup window
+            // would fail. Surprisingly, pressing a replacement character's
+            // number still worked.
+            [self setMarkedText:pNewMarkedText selectedRange:mSelectedRange replacementRange:mMarkedRange];
         }
     }
 
@@ -2911,6 +2981,8 @@ static NSString* getCurrentSelection()
     // [self insertText:replacementRange:].
     if (mbTextInputWantsNonRepeatKeyDown)
     {
+        mbTextInputWantsNonRepeatKeyDown = NO;
+
         if ( mpLastMarkedText )
         {
             NSString *pChars = [mpLastMarkedText string];
