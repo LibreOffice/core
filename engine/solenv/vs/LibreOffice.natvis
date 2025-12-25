@@ -480,6 +480,13 @@
         <Expand>
           <Item Name='Area'>maFrameArea</Item>
           <Item Name='Print Area'>maFramePrintArea</Item>
+          <Item Name='Left Margin'>maFramePrintArea.m_Point.mnA</Item>
+          <Item Name='Top Margin'>maFramePrintArea.m_Point.mnB</Item>
+          <Item Name='Right Margin'>maFrameArea.m_Size.mnA - maFramePrintArea.m_Size.mnA - maFramePrintArea.m_Point.mnA</Item>
+          <Item Name='Bottom Margin'>maFrameArea.m_Size.mnB - maFramePrintArea.m_Size.mnB - maFramePrintArea.m_Point.mnB</Item>
+          <Item Name='Frame Area Position Valid'>mbFrameAreaPositionValid</Item>
+          <Item Name='Frame Area Size Valid'>mbFrameAreaSizeValid</Item>
+          <Item Name='Print Area Valid'>mbFramePrintAreaValid</Item>
         </Expand>
       </Synthetic>
       <Item Name='Upper'>mpUpper</Item>
