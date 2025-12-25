@@ -219,6 +219,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,vcl,\
+    CppunitTest_vcl_map \
     CppunitTest_vcl_drawmode \
     CppunitTest_vcl_lifecycle \
     CppunitTest_vcl_bitmap_test \
