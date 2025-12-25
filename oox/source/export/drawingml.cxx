@@ -4980,6 +4980,11 @@ OUString GetFormula(const OUString& sEquation)
     // TODO: This needs to be completely re-written. It is extremely simplistic/minimal.
     // What is needed here is the reverse of convertToOOEquation.
 
+    // If the equation is numerical
+    sal_Int64 nValue = sEquation.toInt64();
+    if (!sEquation.isEmpty() && OUString::number(nValue) == sEquation)
+        return "val " + sEquation;
+
     OUString sFormula = sEquation;
 
     /* replace LO native placeholders with OOXML placeholders
