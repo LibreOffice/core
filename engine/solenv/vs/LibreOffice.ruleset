@@ -1,6 +1,489 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="LibreOffice Rule Set" Description=" " ToolsVersion="15.0">
  <Rules AnalyzerId="Microsoft.Analyzers.NativeCodeAnalysis" RuleNamespace="Microsoft.Rules.Native">
-  <Rule Id="C6011" Action="Warning"/>
+  <Rule Id="C26100" Action="None"/> <!-- Race condition -->
+  <Rule Id="C26101" Action="None"/> <!-- Failing to use interlocked operation properly -->
+  <Rule Id="C26102" Action="None"/> <!-- Race condition through parameter access -->
+  <Rule Id="C26105" Action="None"/> <!-- Order violation with lock acquire -->
+  <Rule Id="C26106" Action="None"/> <!-- Order violation with lock release -->
+  <Rule Id="C26110" Action="None"/> <!-- Caller failing to hold lock -->
+  <Rule Id="C26111" Action="None"/> <!-- Caller failing to release lock -->
+  <Rule Id="C26112" Action="None"/> <!-- Caller cannot hold any lock -->
+  <Rule Id="C26115" Action="None"/> <!-- Failing to release lock -->
+  <Rule Id="C26116" Action="None"/> <!-- Failing to acquire or to hold lock -->
+  <Rule Id="C26117" Action="None"/> <!-- Releasing unheld lock -->
+  <Rule Id="C26130" Action="None"/> <!-- Missing _Requires_lock_held_ annotation -->
+  <Rule Id="C26135" Action="None"/> <!-- Missing locking annotation -->
+  <Rule Id="C26136" Action="None"/> <!-- Missing a _Guarded_by_ annotation -->
+  <Rule Id="C26137" Action="None"/> <!-- Missing an _Interlocked_ annotation -->
+  <Rule Id="C26138" Action="None"/> <!-- Suspending a coroutine while holding lock -->
+  <Rule Id="C26140" Action="None"/> <!-- Annotation syntax error -->
+  <Rule Id="C26160" Action="None"/> <!-- Caller possibly failing to hold lock -->
+  <Rule Id="C26165" Action="None"/> <!-- Possibly failing to release lock -->
+  <Rule Id="C26166" Action="None"/> <!-- Possibly failing to acquire or to hold lock -->
+  <Rule Id="C26167" Action="None"/> <!-- Possibly releasing unheld lock -->
+  <Rule Id="C26400" Action="None"/> <!-- No raw pointer assignment -->
+  <Rule Id="C26401" Action="None"/> <!-- Don't delete non-owner -->
+  <Rule Id="C26402" Action="None"/> <!-- Don't heap allocate movable result -->
+  <Rule Id="C26403" Action="None"/> <!-- Reset or delete owner -->
+  <Rule Id="C26404" Action="None"/> <!-- Don't delete invalid owner -->
+  <Rule Id="C26405" Action="None"/> <!-- Don't assign to valid owner -->
+  <Rule Id="C26406" Action="None"/> <!-- Don't assign raw pointer to owner -->
+  <Rule Id="C26407" Action="None"/> <!-- Don't heap allocate unnecessarily -->
+  <Rule Id="C26408" Action="None"/> <!-- No malloc or free -->
+  <Rule Id="C26409" Action="None"/> <!-- No new or delete -->
+  <Rule Id="C26410" Action="None"/> <!-- No reference to const unique pointer -->
+  <Rule Id="C26411" Action="None"/> <!-- No reference to unique pointer -->
+  <Rule Id="C26414" Action="None"/> <!-- Reset local smart pointer -->
+  <Rule Id="C26415" Action="None"/> <!-- Smart pointer not needed -->
+  <Rule Id="C26416" Action="None"/> <!-- No rvalue reference to shared pointer -->
+  <Rule Id="C26417" Action="None"/> <!-- No lvalue reference to shared pointer -->
+  <Rule Id="C26418" Action="None"/> <!-- No shared pointer passed by value or reference to const -->
+  <Rule Id="C26426" Action="None"/> <!-- No calls in global initializer -->
+  <Rule Id="C26427" Action="None"/> <!-- No extern symbols in global initializer -->
+  <Rule Id="C26429" Action="None"/> <!-- Use gsl::not_null -->
+  <Rule Id="C26430" Action="None"/> <!-- Test on all paths -->
+  <Rule Id="C26431" Action="None"/> <!-- Do not test gsl::not_null -->
+  <Rule Id="C26432" Action="None"/> <!-- Define or delete special operations -->
+  <Rule Id="C26433" Action="None"/> <!-- Override explicitly -->
+  <Rule Id="C26434" Action="None"/> <!-- Don't hide methods -->
+  <Rule Id="C26435" Action="None"/> <!-- Use single virtual specification -->
+  <Rule Id="C26436" Action="None"/> <!-- Need virtual destructor -->
+  <Rule Id="C26437" Action="None"/> <!-- Don't slice -->
+  <Rule Id="C26438" Action="None"/> <!-- No goto -->
+  <Rule Id="C26439" Action="None"/> <!-- Special noexcept functions -->
+  <Rule Id="C26440" Action="None"/> <!-- Declare noexcept -->
+  <Rule Id="C26441" Action="None"/> <!-- Do not use unnamed guards -->
+  <Rule Id="C26443" Action="None"/> <!-- Don't override destructor explicitly -->
+  <Rule Id="C26444" Action="None"/> <!-- No unnamed RAII objects -->
+  <Rule Id="C26445" Action="None"/> <!-- No reference to gsl::span -->
+  <Rule Id="C26446" Action="None"/> <!-- Use gsl::at -->
+  <Rule Id="C26447" Action="None"/> <!-- Do not throw in noexcept -->
+  <Rule Id="C26448" Action="None"/> <!-- Use gsl::finally -->
+  <Rule Id="C26449" Action="None"/> <!-- No gsl::span from temporary -->
+  <Rule Id="C26450" Action="None"/> <!-- Arithmetic operation may cause data loss -->
+  <Rule Id="C26451" Action="None"/> <!-- Cast before arithmetic operation -->
+  <Rule Id="C26452" Action="None"/> <!-- Shift count is negative or too big -->
+  <Rule Id="C26453" Action="None"/> <!-- Left shift is a negative signed number -->
+  <Rule Id="C26454" Action="None"/> <!-- Arithmetic operation causes negative unsigned result -->
+  <Rule Id="C26455" Action="None"/> <!-- Default constructor must be noexcept -->
+  <Rule Id="C26456" Action="None"/> <!-- Do not hide operators -->
+  <Rule Id="C26457" Action="None"/> <!-- Prefer 'std::ignore =' over '(void)' to ignore return values -->
+  <Rule Id="C26458" Action="None"/> <!-- Prefer gsl::at over unchecked subscript operators -->
+  <Rule Id="C26459" Action="None"/> <!-- Wrap raw pointers in gsl::span for STL functions -->
+  <Rule Id="C26460" Action="None"/> <!-- Use const reference arguments -->
+  <Rule Id="C26461" Action="None"/> <!-- Use const pointer arguments -->
+  <Rule Id="C26462" Action="None"/> <!-- Use const pointer for variable -->
+  <Rule Id="C26463" Action="None"/> <!-- Use const for elements -->
+  <Rule Id="C26464" Action="None"/> <!-- Use const pointer for elements -->
+  <Rule Id="C26465" Action="None"/> <!-- No unnecessary const cast -->
+  <Rule Id="C26466" Action="None"/> <!-- No static polymorphic downcast -->
+  <Rule Id="C26471" Action="None"/> <!-- No reinterpret_cast from void pointer -->
+  <Rule Id="C26472" Action="None"/> <!-- No casts for arithmetic conversion -->
+  <Rule Id="C26473" Action="None"/> <!-- No identity cast -->
+  <Rule Id="C26474" Action="None"/> <!-- No implicit cast -->
+  <Rule Id="C26475" Action="None"/> <!-- No function style casts -->
+  <Rule Id="C26476" Action="None"/> <!-- No naked unions -->
+  <Rule Id="C26477" Action="None"/> <!-- Use 'nullptr' -->
+  <Rule Id="C26478" Action="None"/> <!-- Don't std::move const variables -->
+  <Rule Id="C26479" Action="None"/> <!-- No std::move to return local variables -->
+  <Rule Id="C26481" Action="None"/> <!-- No pointer arithmetic -->
+  <Rule Id="C26482" Action="None"/> <!-- No dynamic array indexing -->
+  <Rule Id="C26483" Action="None"/> <!-- Static index out of range -->
+  <Rule Id="C26485" Action="None"/> <!-- No array to pointer decay -->
+  <Rule Id="C26486" Action="None"/> <!-- Function precondition violation -->
+  <Rule Id="C26487" Action="None"/> <!-- Function postcondition violation -->
+  <Rule Id="C26488" Action="None"/> <!-- Do not dereference a potentially null pointer -->
+  <Rule Id="C26489" Action="None"/> <!-- Do not dereference invalid pointer -->
+  <Rule Id="C26490" Action="None"/> <!-- No reinterpret_cast -->
+  <Rule Id="C26491" Action="None"/> <!-- No static downcast -->
+  <Rule Id="C26492" Action="None"/> <!-- No const cast -->
+  <Rule Id="C26493" Action="None"/> <!-- No C-style cast -->
+  <Rule Id="C26494" Action="None"/> <!-- Variable used before initialization -->
+  <Rule Id="C26495" Action="None"/> <!-- Member uninitialized -->
+  <Rule Id="C26496" Action="None"/> <!-- Use const for variable -->
+  <Rule Id="C26497" Action="None"/> <!-- Use constexpr for function -->
+  <Rule Id="C26498" Action="None"/> <!-- Use constexpr for function call -->
+  <Rule Id="C26800" Action="None"/> <!-- Use of a moved-from object -->
+  <Rule Id="C26810" Action="None"/> <!-- Coroutine use after lifetime ends (capture) -->
+  <Rule Id="C26811" Action="None"/> <!-- Coroutine use after lifetime ends (param) -->
+  <Rule Id="C26812" Action="None"/> <!-- Use scoped enums -->
+  <Rule Id="C26813" Action="None"/> <!-- Bitwise enum misuse -->
+  <Rule Id="C26814" Action="None"/> <!-- Use constexpr -->
+  <Rule Id="C26815" Action="None"/> <!-- Dangling pointer -->
+  <Rule Id="C26816" Action="None"/> <!-- Pointer to memory on stack -->
+  <Rule Id="C26817" Action="None"/> <!-- Expensive copy in range-for loop -->
+  <Rule Id="C26818" Action="None"/> <!-- Add 'default' label to non-exhaustive switch -->
+  <Rule Id="C26819" Action="None"/> <!-- Use fallthrough annotation -->
+  <Rule Id="C26820" Action="None"/> <!-- Unnecessary copy with use of auto -->
+  <Rule Id="C26821" Action="None"/> <!-- Use gsl::span instead of std::span -->
+  <Rule Id="C26822" Action="None"/> <!-- Null pointer dereference -->
+  <Rule Id="C26823" Action="None"/> <!-- Null pointer dereference -->
+  <Rule Id="C26824" Action="None"/> <!-- Null pointer dereference (postcondition) -->
+  <Rule Id="C26825" Action="None"/> <!-- Null pointer dereference (postcondition) -->
+  <Rule Id="C26826" Action="None"/> <!-- No C-style variable arguments -->
+  <Rule Id="C26827" Action="None"/> <!-- Bitwise enum misuse -->
+  <Rule Id="C26828" Action="None"/> <!-- Bitwise enum misuse -->
+  <Rule Id="C26829" Action="None"/> <!-- Unwrapping empty optional -->
+  <Rule Id="C26830" Action="None"/> <!-- Unwrapping possibly empty optional -->
+  <Rule Id="C26837" Action="None"/> <!-- Misuse of InterlockedCompareExchange function -->
+  <Rule Id="C26846" Action="None"/> <!-- Function precondition violation -->
+  <Rule Id="C26847" Action="None"/> <!-- Function postcondition violation -->
+  <Rule Id="C26848" Action="None"/> <!-- Do not dereference a null pointer -->
+  <Rule Id="C26849" Action="None"/> <!-- Do not dereference invalid pointer -->
+  <Rule Id="C26861" Action="None"/> <!-- Date-time object changed without leap year check -->
+  <Rule Id="C26862" Action="None"/> <!-- Date-time object conversion is missing adjustments -->
+  <Rule Id="C26863" Action="None"/> <!-- Return value from date-time function ignored -->
+  <Rule Id="C26864" Action="None"/> <!-- Date-time object changed assuming 365 days per year -->
+  <Rule Id="C28020" Action="None"/> <!-- The expression is not true at this call -->
+  <Rule Id="C28021" Action="None"/> <!-- The parameter being annotated must be a pointer -->
+  <Rule Id="C28022" Action="None"/> <!-- Function class annotation mismatch with typedef -->
+  <Rule Id="C28023" Action="None"/> <!-- Missing _Function_class_ -->
+  <Rule Id="C28024" Action="None"/> <!-- Function class annotation mismatch -->
+  <Rule Id="C28039" Action="None"/> <!-- The type of actual parameter should exactly match the type -->
+  <Rule Id="C28101" Action="None"/> <!-- The drivers module has inferred that the current function is not the correct type of function -->
+  <Rule Id="C28103" Action="None"/> <!-- Leaking resource -->
+  <Rule Id="C28104" Action="None"/> <!-- Resource that should have been acquired before function exit was not acquired -->
+  <Rule Id="C28105" Action="None"/> <!-- Leaking resource due to an exception -->
+  <Rule Id="C28106" Action="None"/> <!-- Variable already holds resource possibly causing leak -->
+  <Rule Id="C28107" Action="None"/> <!-- Resource must be held when calling function -->
+  <Rule Id="C28108" Action="None"/> <!-- Variable holds an unexpected resource -->
+  <Rule Id="C28109" Action="None"/> <!-- Variable cannot be held at the time function is called -->
+  <Rule Id="C28110" Action="None"/> <!-- Drivers must protect floating point hardware state -->
+  <Rule Id="C28111" Action="None"/> <!-- The IRQL where the floating point state was saved does not match the current IRQL (for this restore operation) -->
+  <Rule Id="C28112" Action="None"/> <!-- Directly accessing shared variable -->
+  <Rule Id="C28113" Action="None"/> <!-- Accessing a local variable via an interlocked function -->
+  <Rule Id="C28114" Action="None"/> <!-- Copying a whole IRP stack entry leaves certain fields initialized that should be cleared or updated -->
+  <Rule Id="C28120" Action="None"/> <!-- The function is not permitted to be called at the current IRQ level. The current level is too low -->
+  <Rule Id="C28121" Action="None"/> <!-- The function is not permitted to be called at the current IRQ level. The current level is too high -->
+  <Rule Id="C28122" Action="None"/> <!-- The function is not permitted to be called at a low IRQ level. Prior function calls are inconsistent with this constraint -->
+  <Rule Id="C28123" Action="None"/> <!-- The function is not permitted to be called at a high IRQ level. Prior function calls are inconsistent with this constraint -->
+  <Rule Id="C28124" Action="None"/> <!-- The call to causes the IRQ level to be set below the minimum acceptable for the function being analyzed -->
+  <Rule Id="C28125" Action="None"/> <!-- The function must be called from within a try/except block -->
+  <Rule Id="C28126" Action="None"/> <!-- The AccessMode parameter to ObReferenceObject* should be IRP->RequestorMode -->
+  <Rule Id="C28127" Action="None"/> <!-- The function being used as a routine does not exactly match the type expected -->
+  <Rule Id="C28128" Action="None"/> <!-- An access to a field has been made directly instead of by a routine -->
+  <Rule Id="C28129" Action="None"/> <!-- An assignment has been made to  an operand intead of using bit sets and clears -->
+  <Rule Id="C28131" Action="None"/> <!-- DriverEntry routine should save a copy of the argument, not the pointer -->
+  <Rule Id="C28132" Action="None"/> <!-- Taking the size of pointer -->
+  <Rule Id="C28133" Action="None"/> <!-- IoInitializeTimer is best called from AddDevice -->
+  <Rule Id="C28134" Action="None"/> <!-- The type of a pool tag should be integral instead of a string or string pointer -->
+  <Rule Id="C28135" Action="None"/> <!-- If the first argument to KeWaitForSingleObject is a local variable then the Mode parameter must be KernelMode -->
+  <Rule Id="C28137" Action="None"/> <!-- Variable argument specified should instead be a (literal) constant -->
+  <Rule Id="C28138" Action="None"/> <!-- The constant argument should instead be variable -->
+  <Rule Id="C28141" Action="None"/> <!-- The argument causes the IRQ Level to be set below the current IRQL, and this function cannot be used for that purpose -->
+  <Rule Id="C28143" Action="None"/> <!-- Adispatch routine that calls IoMarkIrpPending must also return STATUS_PENDING -->
+  <Rule Id="C28144" Action="None"/> <!-- At the point of exit within a cancel routine the IRQL in Irp->CancelIrql should be the current IRQL -->
+  <Rule Id="C28145" Action="None"/> <!-- The opaque MDL structure should not be modified by a driver -->
+  <Rule Id="C28146" Action="None"/> <!-- Kernel mode drivers should use ntstrsafe.h instead ofstrsafe.h -->
+  <Rule Id="C28147" Action="None"/> <!-- The use of a default pool tag (' kdD' or ' mdW') for calls to this function defeats the purpose of pool tagging -->
+  <Rule Id="C28150" Action="None"/> <!-- The function causes the IRQ Level to be set above the maximum acceptable for the function being analyzed -->
+  <Rule Id="C28151" Action="None"/> <!-- Illegal value for IRQL -->
+  <Rule Id="C28152" Action="None"/> <!-- The return value from an AddDevice-like function is unexpectedly DO_DEVICE_INITIALIZING -->
+  <Rule Id="C28153" Action="None"/> <!-- The IRQL value could not be evaluated in this context -->
+  <Rule Id="C28156" Action="None"/> <!-- The actual IRQL is inconsistent with the required IRQL -->
+  <Rule Id="C28157" Action="None"/> <!-- The IRQL was never restored -->
+  <Rule Id="C28158" Action="None"/> <!-- No IRQL was saved -->
+  <Rule Id="C28159" Action="None"/> <!-- Consider using another function instead -->
+  <Rule Id="C28160" Action="None"/> <!-- User defined error annotation -->
+  <Rule Id="C28161" Action="None"/> <!-- Exiting without acquiring the right to use floating hardware -->
+  <Rule Id="C28162" Action="None"/> <!-- Exiting while holding the right to use floating point hardware -->
+  <Rule Id="C28163" Action="None"/> <!-- The function should never be called from within a try/except block -->
+  <Rule Id="C28164" Action="None"/> <!-- Pointer to pointer passed where pointer to object expected -->
+  <Rule Id="C28165" Action="None"/> <!-- The function pointer of class does not match the function class -->
+  <Rule Id="C28166" Action="None"/> <!-- The function does not restore the IRQL to the value that was current at function entry and is required to do so -->
+  <Rule Id="C28167" Action="None"/> <!-- Changed IRQL is not restored before function exit -->
+  <Rule Id="C28168" Action="None"/> <!-- The dispatch function does not have a __drv_dispatchType annotation matching this dispatch table entry -->
+  <Rule Id="C28169" Action="None"/> <!-- The dispatch function does not have any __drv_dispatchType annotations -->
+  <Rule Id="C28170" Action="None"/> <!-- The function has been declared to be in a paged segment, but neither PAGED_CODE nor PAGED_CODE_LOCKED was found -->
+  <Rule Id="C28171" Action="None"/> <!-- The function has more than one instance of PAGED_CODE or PAGED_CODE_LOCKED -->
+  <Rule Id="C28172" Action="None"/> <!-- The function has PAGED_CODE or PAGED_CODE_LOCKED but is not declared to be in a paged segment -->
+  <Rule Id="C28173" Action="None"/> <!-- The current function appears to incorrectly adapt to physical memory above 4GB -->
+  <Rule Id="C28175" Action="None"/> <!-- Specified member of struct should not be accessed by a driver -->
+  <Rule Id="C28176" Action="None"/> <!-- Specified member of struct should not be accessed by a driver -->
+  <Rule Id="C28182" Action="None"/> <!-- Dereferencing a copy of a null pointer -->
+  <Rule Id="C28183" Action="None"/> <!-- The argument could be one value, and is a copy of the value found in the pointer -->
+  <Rule Id="C28193" Action="None"/> <!-- Variable specified holds a value that must be examined -->
+  <Rule Id="C28194" Action="None"/> <!-- The function was declared as aliasing the value in variable and exited without doing so -->
+  <Rule Id="C28195" Action="None"/> <!-- The function was declared as acquiring memory in  a variable and exited without doing so -->
+  <Rule Id="C28196" Action="None"/> <!-- The requirement is not satisfied because the expression does not evaluate to true -->
+  <Rule Id="C28197" Action="None"/> <!-- Possibly leaking memory -->
+  <Rule Id="C28198" Action="None"/> <!-- Possibly leaking memory due to an exception -->
+  <Rule Id="C28199" Action="None"/> <!-- Using possibly uninitialized memory -->
+  <Rule Id="C28202" Action="None"/> <!-- Illegal reference to non-static member -->
+  <Rule Id="C28203" Action="None"/> <!-- Ambiguous reference to class member -->
+  <Rule Id="C28204" Action="None"/> <!-- Inconsistently annotated overridden function -->
+  <Rule Id="C28205" Action="None"/> <!-- _Success_ or _On_failure_ used in an illegal context -->
+  <Rule Id="C28206" Action="None"/> <!-- Use '->' when left operand points to a struct -->
+  <Rule Id="C28207" Action="None"/> <!-- Use '.' when left operand is a struct -->
+  <Rule Id="C28208" Action="None"/> <!-- Function was previously defined with a different parameter list which may yield incorrect results -->
+  <Rule Id="C28209" Action="None"/> <!-- The declaration for symbol has a conflicting declaration -->
+  <Rule Id="C28210" Action="None"/> <!-- Annotations for the _On_failure_ context must not be in explicit pre context -->
+  <Rule Id="C28211" Action="None"/> <!-- Static context name expected for SAL_context -->
+  <Rule Id="C28212" Action="None"/> <!-- Pointer expression expected for annotation -->
+  <Rule Id="C28213" Action="None"/> <!-- Incorrect use of _Use_decl_annotations_ annotation -->
+  <Rule Id="C28214" Action="None"/> <!-- Attribute parameter names must be p1...p9 -->
+  <Rule Id="C28215" Action="None"/> <!-- The typefix cannot be applied to a parameter that already has a typefix -->
+  <Rule Id="C28216" Action="None"/> <!-- Incorrect use of _Must_check_result_ annotation -->
+  <Rule Id="C28217" Action="None"/> <!-- Mismatch in the number of pamaters for annotation -->
+  <Rule Id="C28218" Action="None"/> <!-- Annotation parameter mismatch -->
+  <Rule Id="C28219" Action="None"/> <!-- Member of enumeration expected for annotation the parameter in the annotation -->
+  <Rule Id="C28220" Action="None"/> <!-- Integer expression expected in the annotation -->
+  <Rule Id="C28221" Action="None"/> <!-- String expression expected for the parameter in the annotation -->
+  <Rule Id="C28222" Action="None"/> <!-- __yes, __no, or __maybe expected for annotation -->
+  <Rule Id="C28223" Action="None"/> <!-- Expected token/identifier missing on annotation -->
+  <Rule Id="C28224" Action="None"/> <!-- Annotation requires parameters -->
+  <Rule Id="C28225" Action="None"/> <!-- Incorrect number of required parameters in annotation -->
+  <Rule Id="C28226" Action="None"/> <!-- Annotation cannot also be a PrimOp (in the current declaration) -->
+  <Rule Id="C28227" Action="None"/> <!-- Annotation cannot also be a PrimOp (see prior declaration) -->
+  <Rule Id="C28228" Action="None"/> <!-- Cannot use type in annotations -->
+  <Rule Id="C28229" Action="None"/> <!-- Annotation does not support parameters -->
+  <Rule Id="C28230" Action="None"/> <!-- The type of parameter has no member -->
+  <Rule Id="C28231" Action="None"/> <!-- Annotation is only valid on array -->
+  <Rule Id="C28232" Action="None"/> <!-- _Pre_, _Post_, or _Deref_ not applied to any annotation -->
+  <Rule Id="C28233" Action="None"/> <!-- _Pre_, _Post_, or _Deref_ applied to a block -->
+  <Rule Id="C28234" Action="None"/> <!-- _At_ expression does not apply to current function -->
+  <Rule Id="C28235" Action="None"/> <!-- Function cannot stand alone as an annotation -->
+  <Rule Id="C28236" Action="None"/> <!-- Annotation cannot be used in an expression -->
+  <Rule Id="C28237" Action="None"/> <!-- Annotation is no longer supported -->
+  <Rule Id="C28238" Action="None"/> <!-- Annotation has more than one value, stringValue, and longValue defined -->
+  <Rule Id="C28239" Action="None"/> <!-- Annotation has both value, stringValue, or longValue; and paramn=xxx defined -->
+  <Rule Id="C28240" Action="None"/> <!-- Annotation has param2 but no param1 -->
+  <Rule Id="C28241" Action="None"/> <!-- Annotation is not recognized -->
+  <Rule Id="C28243" Action="None"/> <!-- Annotation requires more dereferences than the actual type annotated allows -->
+  <Rule Id="C28244" Action="None"/> <!-- Unparseable parameter/external annotation -->
+  <Rule Id="C28245" Action="None"/> <!-- Annotating 'this' on a non-member-function -->
+  <Rule Id="C28246" Action="None"/> <!-- Annotation does not match the type of the parameter -->
+  <Rule Id="C28250" Action="None"/> <!-- Inconsistent annotation for function: the prior instance has an error -->
+  <Rule Id="C28251" Action="None"/> <!-- Inconsistent annotation for function: this instance has an error -->
+  <Rule Id="C28252" Action="None"/> <!-- Inconsistent annotation with prior instance -->
+  <Rule Id="C28253" Action="None"/> <!-- Inconsistent annotation with prior instance -->
+  <Rule Id="C28254" Action="None"/> <!-- Dynamic_cast<>() is not supported in annotations -->
+  <Rule Id="C28260" Action="None"/> <!-- Annotation property syntax error -->
+  <Rule Id="C28262" Action="None"/> <!-- Annotation syntax error -->
+  <Rule Id="C28263" Action="None"/> <!-- Conditional annotation syntax error -->
+  <Rule Id="C28266" Action="None"/> <!-- Annotation syntax error -->
+  <Rule Id="C28267" Action="None"/> <!-- Annotation syntax error -->
+  <Rule Id="C28272" Action="None"/> <!-- Annotation is inconsistent with the function declaration -->
+  <Rule Id="C28273" Action="None"/> <!-- Annotation mismatch error -->
+  <Rule Id="C28275" Action="None"/> <!-- The parameter to _Macro_value_ is null -->
+  <Rule Id="C28278" Action="None"/> <!-- Function name appears with no prototype in scope -->
+  <Rule Id="C28279" Action="None"/> <!-- A'begin' was found without a matching 'end' -->
+  <Rule Id="C28280" Action="None"/> <!-- An 'end' was found without a matching 'begin' -->
+  <Rule Id="C28282" Action="None"/> <!-- Format strings must be in preconditions -->
+  <Rule Id="C28283" Action="None"/> <!-- The specified size specification is not yet supported -->
+  <Rule Id="C28284" Action="None"/> <!-- Predicates are currently not supported for non-function symbols -->
+  <Rule Id="C28285" Action="None"/> <!-- Annotation syntax error in parameter -->
+  <Rule Id="C28286" Action="None"/> <!-- Annotation syntax error -->
+  <Rule Id="C28287" Action="None"/> <!-- Syntax error in _At_() annotation (unrecognized parameter name) -->
+  <Rule Id="C28288" Action="None"/> <!-- Syntax error in _At_() annotation (invalid parameter name) -->
+  <Rule Id="C28289" Action="None"/> <!-- No limit specified for ReadableTo or WritableTo -->
+  <Rule Id="C28290" Action="None"/> <!-- The specified annotation contains more Externals than parameters -->
+  <Rule Id="C28291" Action="None"/> <!-- Reference parameter annotation  on pass-by-value parameter -->
+  <Rule Id="C28300" Action="None"/> <!-- Expression operands of incompatible types for operator -->
+  <Rule Id="C28301" Action="None"/> <!-- No annotations for first declaration of function -->
+  <Rule Id="C28302" Action="None"/> <!-- An extra _Deref_ operator was found on annotation -->
+  <Rule Id="C28303" Action="None"/> <!-- An ambiguous _Deref_ operator was found on annotation -->
+  <Rule Id="C28304" Action="None"/> <!-- An improperly placed _Notref_ operator was found applied to token -->
+  <Rule Id="C28305" Action="None"/> <!-- Error parsing tokens -->
+  <Rule Id="C28306" Action="None"/> <!-- Annotation is obsolescent -->
+  <Rule Id="C28307" Action="None"/> <!-- Annotation is obsolescent -->
+  <Rule Id="C28308" Action="None"/> <!-- The format list argument position specified by the annotation is incorrect -->
+  <Rule Id="C28309" Action="None"/> <!-- Annotation operands must be of the correct types -->
+  <Rule Id="C28350" Action="None"/> <!-- The annotation describes a situation that is not conditionally applicable -->
+  <Rule Id="C28351" Action="None"/> <!-- _When_ expression should evaluate to a constant -->
+  <Rule Id="C28601" Action="None"/> <!-- Avoid blocking on HWND_BROADCAST -->
+  <Rule Id="C28602" Action="None"/> <!-- Avoid calling SendMessageTimeout with HWND_BROADCAST -->
+  <Rule Id="C28604" Action="None"/> <!-- Avoid calling SendMessageTimeout with SMTO_ABORTIFHUNG with a timeout of 0 -->
+  <Rule Id="C28615" Action="None"/> <!-- Must call _resetstkoflw in the __except() block when calling _alloca in the __try block instead of from inside a catch() block -->
+  <Rule Id="C28616" Action="None"/> <!-- Multithreaded AV condition -->
+  <Rule Id="C28617" Action="None"/> <!-- Use _beginthreadex() instead of the return value of _beginthread() -->
+  <Rule Id="C28623" Action="None"/> <!-- Unsigned cast of GetMessagePos() coordinates. Use GET_X_LPARAM/GET_Y_LPARAM instead of LOWORD/HIWORD -->
+  <Rule Id="C28624" Action="None"/> <!-- No call to Release() to match incremented refcount from LResultFromObject -->
+  <Rule Id="C28625" Action="None"/> <!-- Function call used to clear sensitive data will be optimized away -->
+  <Rule Id="C28636" Action="None"/> <!-- Calling LocalFree on non-allocated pointer obtained from calls to GetSecurityDescriptorOwner/Group/Dacl/Sacl -->
+  <Rule Id="C28637" Action="None"/> <!-- Calling the function in a global initializer is unsafe -->
+  <Rule Id="C28638" Action="None"/> <!-- Function delayload stub is missing a matching declaration -->
+  <Rule Id="C28639" Action="None"/> <!-- Calling close handle with string -->
+  <Rule Id="C28640" Action="None"/> <!-- Function delayload stub is missing a matching declaration -->
+  <Rule Id="C28645" Action="None"/> <!-- MessageBox was called using the question mark message symbol which is no longer recommended -->
+  <Rule Id="C28648" Action="None"/> <!-- PulseEvent is an unreliable function -->
+  <Rule Id="C28649" Action="None"/> <!-- Automatic or global stack arrays are never null -->
+  <Rule Id="C28650" Action="None"/> <!-- The type for which !0 is being used does not treat it as a failure case -->
+  <Rule Id="C28714" Action="None"/> <!-- Cast between semantically different integer types -->
+  <Rule Id="C28715" Action="None"/> <!-- Cast between semantically different integer types -->
+  <Rule Id="C28716" Action="None"/> <!-- Compiler-inserted cast between semantically different integral types -->
+  <Rule Id="C28717" Action="None"/> <!-- Invalid VARIANT type -->
+  <Rule Id="C28719" Action="None"/> <!-- Banned api usage -->
+  <Rule Id="C28720" Action="None"/> <!-- Banned api usage -->
+  <Rule Id="C28721" Action="None"/> <!-- Deprecated performance counter architecture -->
+  <Rule Id="C28726" Action="None"/> <!-- Banned API usage -->
+  <Rule Id="C28727" Action="None"/> <!-- Banned API usage -->
+  <Rule Id="C28730" Action="None"/> <!-- Possible assignment of '\\0' directly to a pointer -->
+  <Rule Id="C28735" Action="None"/> <!-- Banned Crimson API usage -->
+  <Rule Id="C28736" Action="None"/> <!-- Banned API argument usage -->
+  <Rule Id="C28750" Action="None"/> <!-- Banned usage of lstrlen and its variants -->
+  <Rule Id="C28751" Action="None"/> <!-- Banned usage of ExAllocatePool and its variants -->
+  <Rule Id="C33001" Action="None"/> <!-- Clearing uninitialized VARIANT -->
+  <Rule Id="C33004" Action="None"/> <!-- Clearing uninitialized output VARIANT -->
+  <Rule Id="C33005" Action="None"/> <!-- Passing uninitialized VARIANT as read-only or read-write parameter -->
+  <Rule Id="C33010" Action="None"/> <!-- Unchecked lower bound for enum -->
+  <Rule Id="C33011" Action="None"/> <!-- Unchecked upper bound for enum -->
+  <Rule Id="C33020" Action="None"/> <!-- Likely incorrect HRESULT usage -->
+  <Rule Id="C33022" Action="None"/> <!-- Potentially incorrect HRESULT usage -->
+  <Rule Id="C6001" Action="None"/> <!-- Using uninitialized memory -->
+  <Rule Id="C6011" Action="Warning"/> <!-- Dereferencing null pointer -->
+  <Rule Id="C6014" Action="None"/> <!-- Leaking memory -->
+  <Rule Id="C6029" Action="None"/> <!-- Use of unchecked value -->
+  <Rule Id="C6031" Action="None"/> <!-- Return value ignored -->
+  <Rule Id="C6053" Action="None"/> <!-- Zero termination from call -->
+  <Rule Id="C6054" Action="None"/> <!-- Zero termination missing -->
+  <Rule Id="C6059" Action="None"/> <!-- Bad concatenation -->
+  <Rule Id="C6063" Action="None"/> <!-- Missing string argument to format function -->
+  <Rule Id="C6064" Action="None"/> <!-- Missing integer argument to format function -->
+  <Rule Id="C6066" Action="None"/> <!-- Missing pointer argument to format function -->
+  <Rule Id="C6067" Action="None"/> <!-- Missing string pointer argument to format function -->
+  <Rule Id="C6101" Action="None"/> <!-- Returning uninitialized memory -->
+  <Rule Id="C6200" Action="None"/> <!-- Index exceeds buffer maximum -->
+  <Rule Id="C6201" Action="None"/> <!-- Index exceeds stack buffer maximum -->
+  <Rule Id="C6211" Action="None"/> <!-- Memory leak due to exception -->
+  <Rule Id="C6214" Action="None"/> <!-- Invalid cast HRESULT to BOOL -->
+  <Rule Id="C6215" Action="None"/> <!-- Invalid cast BOOL to HRESULT -->
+  <Rule Id="C6216" Action="None"/> <!-- Invalid compiler-inserted cast BOOL to HRESULT -->
+  <Rule Id="C6217" Action="None"/> <!-- Invalid HRESULT test with NOT -->
+  <Rule Id="C6219" Action="None"/> <!-- Invalid HRESULT compare to 2 -->
+  <Rule Id="C6220" Action="None"/> <!-- Invalid HRESULT compare to -2 -->
+  <Rule Id="C6221" Action="None"/> <!-- Invalid HRESULT compare to integer -->
+  <Rule Id="C6225" Action="None"/> <!-- Invalid HRESULT assignment to 2 -->
+  <Rule Id="C6226" Action="None"/> <!-- Invalid HRESULT assignment to -2 -->
+  <Rule Id="C6230" Action="None"/> <!-- Invalid HRESULT use as boolean -->
+  <Rule Id="C6235" Action="None"/> <!-- Non-zero constant with logical-OR -->
+  <Rule Id="C6236" Action="None"/> <!-- Logical-OR with non-zero constant -->
+  <Rule Id="C6237" Action="None"/> <!-- Zero with logical-AND loses side effects -->
+  <Rule Id="C6239" Action="None"/> <!-- Non-zero logical-AND should be bitwise-AND -->
+  <Rule Id="C6240" Action="None"/> <!-- Logical-AND with non-zero constant should be bitwise-AND -->
+  <Rule Id="C6242" Action="None"/> <!-- Local unwind forced -->
+  <Rule Id="C6244" Action="None"/> <!-- Local declaration hides global -->
+  <Rule Id="C6246" Action="None"/> <!-- Local declaration hides local -->
+  <Rule Id="C6248" Action="None"/> <!-- Creating null DACL -->
+  <Rule Id="C6250" Action="None"/> <!-- Unreleased address descriptors -->
+  <Rule Id="C6255" Action="None"/> <!-- Unprotected use of alloca -->
+  <Rule Id="C6258" Action="None"/> <!-- Using TerminateThread -->
+  <Rule Id="C6259" Action="None"/> <!-- Dead code in bitwise-OR limited switch -->
+  <Rule Id="C6260" Action="None"/> <!-- Use of byte arithmetic -->
+  <Rule Id="C6262" Action="None"/> <!-- Excessive stack usage -->
+  <Rule Id="C6263" Action="None"/> <!-- Using alloca in loop -->
+  <Rule Id="C6268" Action="None"/> <!-- Missing parentheses in cast -->
+  <Rule Id="C6269" Action="None"/> <!-- Pointer dereference ignored -->
+  <Rule Id="C6270" Action="None"/> <!-- Missing float argument to format function -->
+  <Rule Id="C6271" Action="None"/> <!-- Extra argument to format function -->
+  <Rule Id="C6272" Action="None"/> <!-- Non-float argument to format function -->
+  <Rule Id="C6273" Action="None"/> <!-- Non-integer argument to format function -->
+  <Rule Id="C6274" Action="None"/> <!-- Non-character argument to format function -->
+  <Rule Id="C6276" Action="None"/> <!-- Invalid string cast -->
+  <Rule Id="C6277" Action="None"/> <!-- Invalid CreateProcess call -->
+  <Rule Id="C6278" Action="None"/> <!-- Array-new scalar-delete mismatch -->
+  <Rule Id="C6279" Action="None"/> <!-- Scalar-new array-delete mismatch -->
+  <Rule Id="C6280" Action="None"/> <!-- Memory allocation-deallocation mismatch -->
+  <Rule Id="C6281" Action="None"/> <!-- Bitwise relation precedence -->
+  <Rule Id="C6282" Action="None"/> <!-- Assignment replaces test -->
+  <Rule Id="C6283" Action="None"/> <!-- Primitive array-new scalar-delete mismatch -->
+  <Rule Id="C6284" Action="None"/> <!-- Invalid object argument to format function -->
+  <Rule Id="C6285" Action="None"/> <!-- Logical-OR of constants -->
+  <Rule Id="C6286" Action="None"/> <!-- Non-zero logical-OR losing side effects -->
+  <Rule Id="C6287" Action="None"/> <!-- Redundant test -->
+  <Rule Id="C6288" Action="None"/> <!-- Mutual inclusion over logical-AND is false -->
+  <Rule Id="C6289" Action="None"/> <!-- Mutual exclusion over logical-OR is true -->
+  <Rule Id="C6290" Action="None"/> <!-- Logical-NOT bitwise-AND precedence -->
+  <Rule Id="C6291" Action="None"/> <!-- Logical-NOT bitwise-OR precedence -->
+  <Rule Id="C6292" Action="None"/> <!-- Loop counts up from maximum -->
+  <Rule Id="C6293" Action="None"/> <!-- Loop counts down from minimum -->
+  <Rule Id="C6294" Action="None"/> <!-- Loop body never executed -->
+  <Rule Id="C6295" Action="None"/> <!-- Infinite loop -->
+  <Rule Id="C6296" Action="None"/> <!-- Loop only executed once -->
+  <Rule Id="C6297" Action="None"/> <!-- Result of shift cast to larger size -->
+  <Rule Id="C6298" Action="None"/> <!-- Constant string to writable string -->
+  <Rule Id="C6299" Action="None"/> <!-- Bitfield to boolean comparison -->
+  <Rule Id="C6302" Action="None"/> <!-- Invalid character string argument to format function -->
+  <Rule Id="C6303" Action="None"/> <!-- Invalid wide character string argument to format function -->
+  <Rule Id="C6305" Action="None"/> <!-- Mismatched size and count use -->
+  <Rule Id="C6306" Action="None"/> <!-- Incorrect variable argument function call -->
+  <Rule Id="C6308" Action="None"/> <!-- Realloc leak -->
+  <Rule Id="C6310" Action="None"/> <!-- Illegal exception filter constant -->
+  <Rule Id="C6312" Action="None"/> <!-- Exception continue execution loop -->
+  <Rule Id="C6313" Action="None"/> <!-- Bitwise-AND test with zero-valued flag -->
+  <Rule Id="C6314" Action="None"/> <!-- Bitwise-OR precedence -->
+  <Rule Id="C6315" Action="None"/> <!-- Bitwise-OR with Bitwise-AND precedence -->
+  <Rule Id="C6316" Action="None"/> <!-- Inappropriate use of bitwise-OR -->
+  <Rule Id="C6317" Action="None"/> <!-- NOT NOT complement -->
+  <Rule Id="C6318" Action="None"/> <!-- Exception continue search -->
+  <Rule Id="C6319" Action="None"/> <!-- Ignored by comma -->
+  <Rule Id="C6320" Action="None"/> <!-- Exception execute handler -->
+  <Rule Id="C6322" Action="None"/> <!-- Except block empty -->
+  <Rule Id="C6323" Action="None"/> <!-- Arithmetic operation on boolean -->
+  <Rule Id="C6324" Action="None"/> <!-- String copy instead of string compare -->
+  <Rule Id="C6326" Action="None"/> <!-- Constant constant comparison -->
+  <Rule Id="C6328" Action="None"/> <!-- Potential argument type mismatch -->
+  <Rule Id="C6329" Action="None"/> <!-- Return value for a call to the function should not be checked against -->
+  <Rule Id="C6330" Action="None"/> <!-- Incorrect type passed as parameter in call to function -->
+  <Rule Id="C6331" Action="None"/> <!-- VirtualFree invalid flags -->
+  <Rule Id="C6332" Action="None"/> <!-- VirtualFree invalid parameter -->
+  <Rule Id="C6333" Action="None"/> <!-- VirtualFree invalid size -->
+  <Rule Id="C6334" Action="None"/> <!-- Sizeof operation on expression -->
+  <Rule Id="C6335" Action="None"/> <!-- Leaking process handle -->
+  <Rule Id="C6336" Action="None"/> <!-- Question precedence -->
+  <Rule Id="C6340" Action="None"/> <!-- Incorrect type passed as parameter in call to function -->
+  <Rule Id="C6381" Action="None"/> <!-- Shutdown information missing -->
+  <Rule Id="C6383" Action="None"/> <!-- Element-count byte-count buffer overrun -->
+  <Rule Id="C6384" Action="None"/> <!-- Pointer size division -->
+  <Rule Id="C6385" Action="None"/> <!-- Read overrun -->
+  <Rule Id="C6386" Action="None"/> <!-- Write overrun -->
+  <Rule Id="C6387" Action="None"/> <!-- Invalid parameter value -->
+  <Rule Id="C6388" Action="None"/> <!-- Invalid parameter value -->
+  <Rule Id="C6389" Action="None"/> <!-- Move to anonymous namespace -->
+  <Rule Id="C6392" Action="None"/> <!-- Outputting void pointer to stream -->
+  <Rule Id="C6393" Action="None"/> <!-- Fixed size 365 day lookup table -->
+  <Rule Id="C6394" Action="None"/> <!-- 365 day lookup table -->
+  <Rule Id="C6395" Action="None"/> <!-- Evaluation order has changed in C++17 mode -->
+  <Rule Id="C6396" Action="None"/> <!-- sizeof('constant') -->
+  <Rule Id="C6397" Action="None"/> <!-- Dubious null check -->
+  <Rule Id="C6398" Action="None"/> <!-- Dubious null check for fields -->
+  <Rule Id="C6400" Action="None"/> <!-- Locale dependent constant string comparison -->
+  <Rule Id="C6401" Action="None"/> <!-- Default locale constant string comparison -->
+  <Rule Id="C6411" Action="None"/> <!-- Potentially reading invalid data from the buffer -->
+  <Rule Id="C6412" Action="None"/> <!-- Potential buffer overrun while writing to buffer -->
+  <Rule Id="C6500" Action="None"/> <!-- Invalid attribute property -->
+  <Rule Id="C6501" Action="None"/> <!-- Conflicting attribute property values -->
+  <Rule Id="C6503" Action="None"/> <!-- References cannot be null -->
+  <Rule Id="C6504" Action="None"/> <!-- Null on non-pointer -->
+  <Rule Id="C6505" Action="None"/> <!-- MustCheck on void -->
+  <Rule Id="C6506" Action="None"/> <!-- Buffer size on non-pointer or array -->
+  <Rule Id="C6508" Action="None"/> <!-- Write access on constant -->
+  <Rule Id="C6509" Action="None"/> <!-- Return used on precondition -->
+  <Rule Id="C6510" Action="None"/> <!-- Null terminated on non-pointer -->
+  <Rule Id="C6511" Action="None"/> <!-- MustCheck must be Yes or No -->
+  <Rule Id="C6513" Action="None"/> <!-- Element size without buffer size -->
+  <Rule Id="C6514" Action="None"/> <!-- Buffer size exceeds array size -->
+  <Rule Id="C6515" Action="None"/> <!-- Buffer size on non-pointer -->
+  <Rule Id="C6516" Action="None"/> <!-- No properties on attribute -->
+  <Rule Id="C6517" Action="None"/> <!-- Valid size on non-readable buffer -->
+  <Rule Id="C6518" Action="None"/> <!-- Writable size on non-writable buffer -->
+  <Rule Id="C6522" Action="None"/> <!-- Invalid size string type -->
+  <Rule Id="C6525" Action="None"/> <!-- Invalid size string unreachable location -->
+  <Rule Id="C6527" Action="None"/> <!-- 'NeedsRelease' property may not be used on values of void type -->
+  <Rule Id="C6530" Action="None"/> <!-- Unrecognized format string style -->
+  <Rule Id="C6540" Action="None"/> <!-- Attribute annotations invalidate existing __declspec annotations -->
+  <Rule Id="C6551" Action="None"/> <!-- Invalid size specification: expression not parsable -->
+  <Rule Id="C6552" Action="None"/> <!-- Invalid Deref= or Notref=: expression not parsable -->
+  <Rule Id="C6701" Action="None"/> <!-- Value specified is not a valid Yes/No/Maybe value -->
+  <Rule Id="C6702" Action="None"/> <!-- Value specified is not a string value -->
+  <Rule Id="C6703" Action="None"/> <!-- Value specified is not a number -->
+  <Rule Id="C6704" Action="None"/> <!-- Unexpected annotation expression -->
+  <Rule Id="C6705" Action="None"/> <!-- Incorrect number of annotation arguments -->
+  <Rule Id="C6706" Action="None"/> <!-- Annotation syntax error -->
+  <Rule Id="C6707" Action="None"/> <!-- Unexpected model error -->
+  <Rule Id="C6993" Action="None"/> <!-- OpenMP not supported -->
+  <Rule Id="C6995" Action="None"/> <!-- Failed to save XML Log file -->
+  <Rule Id="C6997" Action="None"/> <!-- Ignored annotations -->
  </Rules>
 </RuleSet>
