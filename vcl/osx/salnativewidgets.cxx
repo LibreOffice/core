@@ -454,13 +454,35 @@ static void drawEditableBackground(CGContextRef context, const NSRect& rc)
     CGContextRestoreGState(context);
 }
 
-static constexpr int spinButtonWidth()
+static bool useTahoeNativeBounds()
 {
+    if (@available(macOS 26.2, *))
+        return true;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-    if (@available(macOS 26, *))
+    else if (@available(macOS 26, *))
+        return true;
+#endif
+
+    return false;
+}
+
+static bool adjustPreTahoeBuildForTahoeNativeBounds()
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 260000
+    if (@available(macOS 26.2, *))
+        return true;
+#endif
+
+    return false;
+}
+
+static int spinButtonWidth()
+{
+    // Builds on pre-Tahoe macOS versions still render the pre-Tahoe style
+    // so further adjustments are needed when running on macOS Tahoe.
+    if (useTahoeNativeBounds() && !adjustPreTahoeBuildForTahoeNativeBounds())
         return 23;
     else
-#endif
         return 16;
 }
 
@@ -633,8 +655,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                     rc.origin.x -= nMargin;
                     rc.size.width += nMargin * 2;
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                    if (@available(macOS 26, *))
+                    if (useTahoeNativeBounds())
                     {
                         rc.origin.x += FOCUS_RING_WIDTH * 2;
                         rc.size.width -= FOCUS_RING_WIDTH * 4;
@@ -643,9 +664,29 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                             rc.origin.y += 1;
                             rc.size.height -= FOCUS_RING_WIDTH;
                         }
+
+                        // Builds on pre-Tahoe macOS versions still render
+                        // the pre-Tahoe style so further adjustments are
+                        // needed when running on macOS Tahoe.
+                        if (adjustPreTahoeBuildForTahoeNativeBounds())
+                        {
+                            if (eBezelStyle == NSBezelStyleFlexiblePush)
+                            {
+                                rc.origin.x -= FOCUS_RING_WIDTH;
+                                rc.size.width += FOCUS_RING_WIDTH * 2;
+                                rc.origin.y -= (FOCUS_RING_WIDTH / 2) - 1;
+                                rc.size.height += FOCUS_RING_WIDTH;
+                            }
+                            else
+                            {
+                                rc.origin.x -= FOCUS_RING_WIDTH * 2;
+                                rc.size.width += FOCUS_RING_WIDTH * 4;
+                                rc.origin.y -= FOCUS_RING_WIDTH * 2;
+                                rc.size.height += FOCUS_RING_WIDTH * 4;
+                            }
+                        }
                     }
                     else
-#endif
                     {
                         if (eBezelStyle == NSBezelStyleFlexiblePush)
                         {
@@ -947,24 +988,20 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 [pCtrl setSegmentCount: nCells];
                 if (bSolo)
                 {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                    if (@available(macOS 26, *))
+                    if (useTahoeNativeBounds())
                         [pCtrl setWidth: rc.size.width forSegment: 0];
                     else
-#endif
                         [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH forSegment: 0];
                 }
                 else
                 {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                    if (@available(macOS 26, *))
+                    if (useTahoeNativeBounds())
                     {
                         [pCtrl setWidth: rc.size.width - FOCUS_RING_WIDTH/2 forSegment: 0];
                         [pCtrl setWidth: rc.size.width - FOCUS_RING_WIDTH/4 forSegment: 1];
                         [pCtrl setWidth: rc.size.width - FOCUS_RING_WIDTH/2 forSegment: 2];
                     }
                     else
-#endif
                     {
 
                         [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 0];
@@ -1043,18 +1080,29 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 {
                     if (bSolo)
                     {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                        if (@available(macOS 26, *))
+                        if (useTahoeNativeBounds())
                         {
                             rc.origin.y += FOCUS_RING_WIDTH / 4;
                             rc.size.height -= FOCUS_RING_WIDTH / 2;
+
+                            // Builds on pre-Tahoe macOS versions still render
+                            // the pre-Tahoe style so further adjustments are
+                            // needed when running on macOS Tahoe.
+                            if (adjustPreTahoeBuildForTahoeNativeBounds())
+                            {
+                                rc.size.width -= 1;
+                                rc.origin.y += 1;
+                                rc.size.height -= FOCUS_RING_WIDTH / 2;
+                            }
                         }
-#endif
+                        else
+                        {
+                            rc.size.width -= 1;
+                        }
                     }
                     else
                     {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                        if (@available(macOS 26, *))
+                        if (useTahoeNativeBounds())
                         {
                             if (nPaintIndex == 0)
                                 rc.origin.x += FOCUS_RING_WIDTH / 2;
@@ -1066,19 +1114,40 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                             else
                                 rc.size.width -= FOCUS_RING_WIDTH * 3 / 4;
                             rc.size.height -= FOCUS_RING_WIDTH;
+
+                            // Builds on pre-Tahoe macOS versions still render
+                            // the pre-Tahoe style so further adjustments are
+                            // needed when running on macOS Tahoe.
+                            if (adjustPreTahoeBuildForTahoeNativeBounds())
+                            {
+                                if (nPaintIndex == 0)
+                                {
+                                    rc.origin.x -= FOCUS_RING_WIDTH / 2;
+                                    rc.size.width += FOCUS_RING_WIDTH / 2;
+                                }
+                                else if (nPaintIndex == 1)
+                                {
+                                    rc.origin.x -= FOCUS_RING_WIDTH / 2 + 1;
+                                    rc.size.width += FOCUS_RING_WIDTH;
+                                }
+                                else if (nPaintIndex == 2)
+                                {
+                                    rc.origin.x -= FOCUS_RING_WIDTH / 2;
+                                    rc.size.width += FOCUS_RING_WIDTH;
+                                }
+                            }
                         }
                         else
-#endif
                         {
-                            if (nPaintIndex == 0)
+                            if (nPaintIndex == 1)
                             {
-                                rc.origin.x += FOCUS_RING_WIDTH / 2;
-                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                                rc.origin.x -= 1;
+                                rc.size.width += 1;
                             }
                             else if (nPaintIndex == 2)
                             {
-                                rc.size.width -= FOCUS_RING_WIDTH / 2;
-                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                                rc.origin.x -= 1;
+                                rc.size.width += 1;
                             }
                         }
                     }
@@ -1137,11 +1206,9 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 
                 {
                     rc.origin.x += 2;
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                    if (@available(macOS 26, *))
+                    if (useTahoeNativeBounds())
                         rc.size.width -= 4;
                     else
-#endif
                         rc.size.width -= 1;
                 }
 
@@ -1173,14 +1240,12 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                     else
                         [pBtn setKeyEquivalent: @""];
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                    if (@available(macOS 26, *))
+                    if (useTahoeNativeBounds())
                     {
                         rc.origin.x += 2;
                         rc.size.width -= 4;
                     }
                     else
-#endif
                     {
                         rc.size.width += 1;
                     }
@@ -1250,11 +1315,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                     ControlState nLowerState = pSpinButtonVal->mnLowerState;
 
                     rc.origin.x += rc.size.width + FOCUS_RING_WIDTH + 1;
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                    if (@available(macOS 26, *))
-                        ;
-                    else
-#endif
+                    if (!useTahoeNativeBounds())
                         rc.origin.y -= 1;
                     rc.size.width = SPIN_BUTTON_WIDTH;
                     rc.size.height = SPIN_UPPER_BUTTON_HEIGHT + SPIN_LOWER_BUTTON_HEIGHT;
@@ -1406,11 +1467,9 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
         case ControlType::TabItem:
             {
                 w = aCtrlBoundRect.GetWidth() + 2 * TAB_TEXT_MARGIN;
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                if (@available(macOS 26, *))
+                if (useTahoeNativeBounds())
                     h = TAB_HEIGHT + 2 + FOCUS_RING_WIDTH;
                 else
-#endif
                     h = TAB_HEIGHT + 2;
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
@@ -1506,11 +1565,9 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
             if (nPart == ControlPart::Entire)
             {
                 w = aCtrlBoundRect.GetWidth();
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
-                if (@available(macOS 26, *))
+                if (useTahoeNativeBounds())
                     h = EDITBOX_HEIGHT + 2 * FOCUS_RING_WIDTH + 1;
                 else
-#endif
                     h = EDITBOX_HEIGHT + 2 * FOCUS_RING_WIDTH;
                 x += SPINBOX_OFFSET;
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
