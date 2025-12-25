@@ -4943,6 +4943,11 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
 
 OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const OUString& sNewStr)
 {
+    // If the equation is numerical
+    sal_Int64 nValue = sEquation.toInt64();
+    if (!sEquation.isEmpty() && OUString::number(nValue) == sEquation)
+        return "val " + sEquation;
+
     OUString sFormula = sEquation;
     size_t nPos = sFormula.indexOf(sReplace);
     if (nPos != std::string::npos)
