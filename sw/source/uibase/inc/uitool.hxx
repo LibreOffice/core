@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 
+#include <tools/fldunit.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <swtypes.hxx>

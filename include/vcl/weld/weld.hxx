@@ -13,7 +13,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
-#include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
@@ -21,7 +20,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/uitest/factory.hxx>
 #include <vcl/windowstate.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>

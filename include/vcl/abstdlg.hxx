@@ -21,8 +21,6 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
-#include <vcl/ColorDialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>

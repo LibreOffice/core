@@ -20,7 +20,6 @@
 #pragma once
 
 #include <vcl/abstdlg.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <memory>
 #include <type_traits>
