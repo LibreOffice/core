@@ -49,6 +49,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header

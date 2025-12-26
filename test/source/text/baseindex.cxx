@@ -15,8 +15,10 @@
 #include <com/sun/star/text/XTextSection.hpp>
 
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <unotools/tempfile.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 
 #include <test/unoapi_property_testers.hxx>

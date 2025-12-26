@@ -11,8 +11,17 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/BinaryDataContainer.hxx>
-#include <com/sun/star/util/XBinaryDataContainer.hpp>
+#include <sal/types.h>
+
+class BinaryDataContainer;
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace com::sun::star::util
+{
+class XBinaryDataContainer;
+}
 
 namespace vcl
 {

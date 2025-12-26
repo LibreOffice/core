@@ -13,18 +13,25 @@
 #include <config_cairo_canvas.h>
 #include <config_wasm_strip.h>
 
-#include <vcl/bitmap.hxx>
+#include <tools/long.hxx>
 #include <vcl/ImageTree.hxx>
 #if ENABLE_CAIRO_CANVAS
 #include <vcl/cairo.hxx>
 #endif
 #include <basegfx/range/b2drectangle.hxx>
 #include <array>
-#include <vcl/RawBitmap.hxx>
 
+class AlphaMask;
+class BitmapColor;
+class Color;
+class Point;
+class Size;
 class SvStream;
 namespace basegfx { class B2DHomMatrix; }
+namespace basegfx { class B2DPolyPolygon; }
 namespace com::sun::star::geometry { struct IntegerRectangle2D; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace vcl::bitmap { class RawBitmap; }
 
 namespace vcl::bitmap {
 

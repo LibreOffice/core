@@ -9,6 +9,7 @@
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>

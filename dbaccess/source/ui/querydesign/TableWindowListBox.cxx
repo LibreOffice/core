@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace dbaui;

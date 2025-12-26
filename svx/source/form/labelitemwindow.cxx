@@ -9,6 +9,7 @@
 
 #include <svx/labelitemwindow.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 
 LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
     : InterimItemWindow(pParent, u"svx/ui/labelbox.ui"_ustr, u"LabelBox"_ustr)

@@ -19,12 +19,14 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/BitmapBuffer.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapInfoAccess.hxx>
+
+class AlphaMask;
+class Bitmap;
 
 class SAL_DLLPUBLIC_RTTI BitmapReadAccess : public BitmapInfoAccess
 {

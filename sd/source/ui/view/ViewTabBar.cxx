@@ -29,8 +29,10 @@
 
 #include <Client.hxx>
 #include <utility>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

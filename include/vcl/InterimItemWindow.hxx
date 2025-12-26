@@ -12,8 +12,19 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
+
+namespace weld
+{
+class Builder;
+}
+namespace weld
+{
+class Container;
+}
+namespace weld
+{
+class Widget;
+}
 
 class VCL_DLLPUBLIC InterimItemWindow : public Control
 {

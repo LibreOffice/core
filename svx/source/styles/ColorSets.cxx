@@ -18,6 +18,7 @@
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <o3tl/numeric.hxx>
+#include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWalker.hxx>
 #include <tools/XmlWriter.hxx>

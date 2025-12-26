@@ -12,6 +12,7 @@
 
 #include <tools/color.hxx>
 #include <vcl/BitmapPalette.hxx>
+#include <vcl/BitmapColor.hxx>
 
 namespace vcl::bitmap
 {

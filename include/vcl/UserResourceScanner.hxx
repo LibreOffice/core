@@ -13,7 +13,11 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <deque>
-#include <osl/file.hxx>
+
+namespace osl
+{
+class FileStatus;
+}
 
 namespace vcl
 {

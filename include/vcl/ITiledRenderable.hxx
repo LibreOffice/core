@@ -10,24 +10,23 @@
 
 #pragma once
 
-#include <sfx2/viewsh.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/ptrstyle.hxx>
-#include <vcl/vclptr.hxx>
 #include <map>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <basegfx/range/b2drange.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::datatransfer { class XTransferable; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
-namespace vcl { class Window; }
-namespace tools { class JsonWriter; }
-
+class SfxViewShell;
 class VirtualDevice;
+enum class PointerStyle;
+namespace tools { class JsonWriter; }
+namespace vcl { class Window; }
+template <class reference_type> class VclPtr;
 
 namespace vcl
 {

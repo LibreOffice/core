@@ -22,6 +22,8 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <filter/PbmReader.hxx>
 

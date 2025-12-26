@@ -23,6 +23,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <framework/addonsoptions.hxx>

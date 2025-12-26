@@ -21,6 +21,7 @@
 #include <TableWindow.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <TableWindowListBox.hxx>
 #include <TableConnection.hxx>
 #include <JoinController.hxx>

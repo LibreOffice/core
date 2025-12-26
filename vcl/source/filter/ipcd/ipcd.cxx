@@ -23,6 +23,7 @@
 
 #include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <filter/PcdReader.hxx>

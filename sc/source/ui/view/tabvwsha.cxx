@@ -50,6 +50,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <global.hxx>
 #include <appoptio.hxx>

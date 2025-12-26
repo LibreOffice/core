@@ -47,6 +47,8 @@
 #include <cppuhelper/weakref.hxx>
 #include "sddllapi.h"
 
+#include <optional>
+
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
 
 class SdDrawDocument;

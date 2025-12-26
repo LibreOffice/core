@@ -15,7 +15,11 @@
 #include <rtl/ustring.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
+
+namespace com::sun::star::frame
+{
+class XFrame;
+}
 
 /**
  * Welded wrapper for NotebookBar used for online

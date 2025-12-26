@@ -20,6 +20,7 @@
 #include <tabsplit.hxx>
 #include <viewdata.hxx>
 
+#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 
 ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, ScViewData& rData ) :

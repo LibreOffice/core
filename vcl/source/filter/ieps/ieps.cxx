@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <comphelper/configuration.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/process.h>

@@ -19,9 +19,11 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
-#include <tools/stream.hxx>
 #include <tools/degree.hxx>
+#include <vcl/dllapi.h>
+
+class Graphic;
+class SvStream;
 
 class VCL_DLLPUBLIC GraphicNativeMetadata final
 {

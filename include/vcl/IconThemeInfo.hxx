@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_ICONTHEMEINFO_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vector>
@@ -20,6 +19,7 @@
 class IconThemeInfoTest;
 class IconThemeSelectorTest;
 class IconThemeScannerTest;
+class Size;
 
 namespace vcl
 {

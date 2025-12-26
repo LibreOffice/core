@@ -31,6 +31,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/dbmetadata.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <algorithm>
 

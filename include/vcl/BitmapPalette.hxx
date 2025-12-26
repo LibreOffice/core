@@ -20,13 +20,13 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/BitmapColor.hxx>
 #include <vcl/checksum.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
 #include <array>
 
 class ImplBitmapPalette;
+class BitmapColor;
 
 class VCL_DLLPUBLIC BitmapPalette
 {

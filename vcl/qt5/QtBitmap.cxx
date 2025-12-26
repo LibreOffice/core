@@ -25,6 +25,7 @@
 #include <QtCore/QVector>
 #include <QtGui/QColor>
 
+#include <vcl/BitmapColor.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 

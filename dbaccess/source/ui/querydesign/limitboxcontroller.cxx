@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/window.hxx>
+#include <vcl/weld/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <core_resource.hxx>

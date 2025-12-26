@@ -22,6 +22,7 @@
 #include "decode.hxx"
 #include "gifread.hxx"
 #include <memory>
+#include <vcl/alpha.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 namespace {

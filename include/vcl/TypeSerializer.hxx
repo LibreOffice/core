@@ -22,9 +22,12 @@
 
 #include <vcl/dllapi.h>
 #include <tools/GenericTypeSerializer.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/gfxlink.hxx>
-#include <vcl/graph.hxx>
+
+class GfxLink;
+class Gradient;
+class Graphic;
+class MapMode;
+class SvStream;
 
 constexpr sal_uInt32 createMagic(char char1, char char2, char char3, char char4)
 {

@@ -19,6 +19,7 @@
 
 #include <salbmp.hxx>
 #include <o3tl/enumarray.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <rtl/crc.h>
 
 static BitmapChecksum scanlineChecksum(BitmapChecksum nCrc, const sal_uInt8* bits, int lineBitsCount, sal_uInt8 extraBitsMask)

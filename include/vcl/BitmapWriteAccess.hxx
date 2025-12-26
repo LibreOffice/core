@@ -9,10 +9,17 @@
  */
 #pragma once
 
-#include <vcl/alpha.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <optional>
+
+class AlphaMask;
+class Bitmap;
+class Color;
+class Point;
+namespace tools
+{
+class Rectangle;
+}
 
 class VCL_DLLPUBLIC BitmapWriteAccess final : public BitmapReadAccess
 {

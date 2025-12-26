@@ -24,6 +24,7 @@
 #include <rtl/crc.h>
 #include <tools/helpers.hxx>
 
+#include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>

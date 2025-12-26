@@ -10,8 +10,11 @@
 #pragma once
 
 #include <o3tl/safeint.hxx>
+#include <tools/gen.hxx>
+#include <tools/long.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/bitmap.hxx>
+
+class Bitmap;
 
 namespace vcl::bitmap
 {

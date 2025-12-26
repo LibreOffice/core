@@ -8,6 +8,7 @@
  */
 
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/ptrstyle.hxx>
 
 namespace vcl
 {

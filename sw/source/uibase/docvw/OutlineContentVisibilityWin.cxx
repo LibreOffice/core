@@ -18,6 +18,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <strings.hrc>
 
 #include <viewopt.hxx>

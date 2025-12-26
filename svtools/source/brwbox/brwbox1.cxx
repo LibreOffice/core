@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>

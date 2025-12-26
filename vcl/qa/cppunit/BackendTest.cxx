@@ -10,6 +10,7 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>

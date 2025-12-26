@@ -27,6 +27,7 @@
 #include <o3tl/any.hxx>
 #include <utility>
 #include <vcl/virdev.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>

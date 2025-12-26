@@ -12,13 +12,24 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 
 #include <memory>
 #include <vector>
+
+class SvStream;
+namespace com::sun::star::io
+{
+class XInputStream;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
 
 /** Container for the binary data, whose responsibility is to manage the
  *  make it as simple as possible to manage the binary data. The binary

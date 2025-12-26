@@ -10,6 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 
 #include "edtwin.hxx"

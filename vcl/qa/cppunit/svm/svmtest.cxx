@@ -15,6 +15,7 @@
 #include <osl/endian.h>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>

@@ -22,6 +22,7 @@
 #include <drawview.hxx>
 
 #include <svx/svxids.hrc>
+#include <vcl/ptrstyle.hxx>
 
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                                      SdrModel& rDoc, const SfxRequest& rReq)

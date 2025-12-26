@@ -18,6 +18,8 @@
  */
 
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <tools/color.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <mutex>

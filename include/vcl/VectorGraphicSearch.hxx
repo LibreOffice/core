@@ -11,13 +11,17 @@
 #pragma once
 
 #include <vcl/graph.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/dllapi.h>
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 
 #include <memory>
+
+class VectorGraphicData;
+namespace basegfx
+{
+class B2DSize;
+}
 
 enum class SearchStartPosition
 {
