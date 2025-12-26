@@ -163,7 +163,7 @@
   <Rule Id="C28126" Action="None"/> <!-- The AccessMode parameter to ObReferenceObject* should be IRP->RequestorMode -->
   <Rule Id="C28127" Action="None"/> <!-- The function being used as a routine does not exactly match the type expected -->
   <Rule Id="C28128" Action="None"/> <!-- An access to a field has been made directly instead of by a routine -->
-  <Rule Id="C28129" Action="None"/> <!-- An assignment has been made to  an operand intead of using bit sets and clears -->
+  <Rule Id="C28129" Action="None"/> <!-- An assignment has been made to an operand instead of using bit sets and clears -->
   <Rule Id="C28131" Action="None"/> <!-- DriverEntry routine should save a copy of the argument, not the pointer -->
   <Rule Id="C28132" Action="None"/> <!-- Taking the size of pointer -->
   <Rule Id="C28133" Action="None"/> <!-- IoInitializeTimer is best called from AddDevice -->
@@ -225,7 +225,7 @@
   <Rule Id="C28214" Action="None"/> <!-- Attribute parameter names must be p1...p9 -->
   <Rule Id="C28215" Action="None"/> <!-- The typefix cannot be applied to a parameter that already has a typefix -->
   <Rule Id="C28216" Action="None"/> <!-- Incorrect use of _Must_check_result_ annotation -->
-  <Rule Id="C28217" Action="None"/> <!-- Mismatch in the number of pamaters for annotation -->
+  <Rule Id="C28217" Action="None"/> <!-- Mismatch in the number of parameters for annotation -->
   <Rule Id="C28218" Action="None"/> <!-- Annotation parameter mismatch -->
   <Rule Id="C28219" Action="None"/> <!-- Member of enumeration expected for annotation the parameter in the annotation -->
   <Rule Id="C28220" Action="None"/> <!-- Integer expression expected in the annotation -->
