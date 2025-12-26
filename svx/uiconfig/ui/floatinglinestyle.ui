@@ -30,7 +30,7 @@
             <property name="hscrollbar-policy">never</property>
             <property name="vscrollbar-policy">always</property>
             <property name="shadow_type">in</property>
-            <property name="height-request">264</property>
+            <property name="height-request">280</property>
             <child>
               <object class="GtkIconView" id="floating_line_style_iconview">
                 <property name="visible">True</property>
