@@ -1575,6 +1575,8 @@
 
 #define STR_PAGES NNC_("STR_PAGES", "Page: %1", "Pages: %1-%2")
 
+#define STR_UNDO_SORT_CHAPTERS NC_("STR_UNDO_SORT_CHAPTERS", "Sort chapters")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

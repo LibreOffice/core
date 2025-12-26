@@ -164,6 +164,8 @@
 
 #include <svx/dialog/gotodlg.hxx>
 
+#include <set>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -1707,7 +1709,118 @@ void SwView::Execute(SfxRequest &rReq)
             }
             break;
         }
+        case FN_SORT_CHAPTERS:
+        {
+            auto sort_chapters = [this](const SwNode* pParentNode, int nOutlineLevel)
+            {
+                const SwNode* pEndNode;
 
+                std::vector<const SwTextNode*> vLevelOutlineNodes;
+                auto GetLevelOutlineNodesAndEndNode = [&]()
+                {
+                    vLevelOutlineNodes.clear();
+                    bool bParentFound = false;
+                    pEndNode = &m_pWrtShell->GetNodes().GetEndOfContent();
+                    for (const SwNode* pNode : m_pWrtShell->GetNodes().GetOutLineNds())
+                    {
+                        if (!pNode->IsTextNode())
+                            continue;
+                        if (pParentNode && !bParentFound)
+                        {
+                            bParentFound = pNode == pParentNode;
+                            continue;
+                        }
+                        if (pNode->GetTextNode()->GetAttrOutlineLevel() < nOutlineLevel)
+                        {
+                            pEndNode = pNode;
+                            break;
+                        }
+                        if (pNode->GetTextNode()->GetAttrOutlineLevel() == nOutlineLevel)
+                            vLevelOutlineNodes.emplace_back(pNode->GetTextNode());
+                    }
+                };
+
+                GetLevelOutlineNodesAndEndNode();
+
+                std::vector<const SwTextNode*> vSortedLevelOutlineNodes = vLevelOutlineNodes;
+                std::stable_sort(vSortedLevelOutlineNodes.begin(), vSortedLevelOutlineNodes.end(),
+                                 [](const SwTextNode* a, const SwTextNode* b)
+                                 {
+                                     const OUString& raText = a->GetText();
+                                     const OUString& rbText = b->GetText();
+                                     return raText < rbText;
+                                 });
+
+                for (size_t i = 0, nSize = vLevelOutlineNodes.size(); i < nSize; i++)
+                {
+                    // Find the position that the sorted node is at in the unsorted vector.
+                    // This is the postition of the node in the unsorted vector that is used for the start of
+                    // the range of nodes to be moved in this iteration.
+                    size_t j = 0;
+                    for (; j < nSize; j++)
+                    {
+                        if (vSortedLevelOutlineNodes[i] == vLevelOutlineNodes[j])
+                            break;
+                    }
+
+                    // The end node in the range is the next entry in the unsorted vector or the pEndNode set
+                    // by GetLevelOutlineNodesAndEndNode or the end of the document.
+                    const SwNode* pEndRangeNode;
+                    if (j + 1 < nSize)
+                        pEndRangeNode = vLevelOutlineNodes[j + 1];
+                    else
+                        pEndRangeNode = pEndNode;
+
+                    SwNodeRange aNodeRange(*vLevelOutlineNodes[j], SwNodeOffset(0), *pEndRangeNode,
+                                           SwNodeOffset(0));
+
+                    // Move the range of nodes to before the node in the unsorted outline vector at the
+                    // current iteration index to match the position of the outline node in the sorted vector.
+                    m_pWrtShell->getIDocumentContentOperations().MoveNodeRange(
+                        aNodeRange, *const_cast<SwTextNode*>(vLevelOutlineNodes[i]),
+                        SwMoveFlags::DEFAULT | SwMoveFlags::CREATEUNDOOBJ);
+
+                    GetLevelOutlineNodesAndEndNode();
+                }
+            };
+
+            const SwOutlineNodes& rOutlineNodes = m_pWrtShell->GetNodes().GetOutLineNds();
+
+            if (rOutlineNodes.empty())
+                return;
+
+            m_pWrtShell->StartAction();
+            m_pWrtShell->StartUndo(SwUndoId::SORT_CHAPTERS);
+
+            // Create an ordered set of outline levels in the outline nodes for use to determine
+            // the lowest level to use for first sort and to only iterate over higher levels used.
+            std::set<int> aOutlineLevelSet;
+            for (const SwNode* pNode : rOutlineNodes)
+            {
+                int nOutlineLevel = pNode->GetTextNode()->GetAttrOutlineLevel();
+                aOutlineLevelSet.emplace(nOutlineLevel);
+            }
+
+            // No parent node for the lowest outline level nodes sort.
+            sort_chapters(nullptr /*pParentNode*/,
+                          aOutlineLevelSet.extract(aOutlineLevelSet.begin()).value());
+
+            for (int nOutlineLevel : aOutlineLevelSet)
+                for (size_t i = 0, nSize = rOutlineNodes.size(); i < nSize; i++)
+                {
+                    const SwNode* pParentNode = rOutlineNodes[i];
+                    if (i + 1 < nSize
+                        && rOutlineNodes[i + 1]->GetTextNode()->GetAttrOutlineLevel()
+                               == nOutlineLevel)
+                    {
+                        sort_chapters(pParentNode, nOutlineLevel);
+                    }
+                }
+
+            m_pWrtShell->EndUndo(SwUndoId::SORT_CHAPTERS);
+            m_pWrtShell->EndAction();
+        }
+        break;
         default:
             OSL_ENSURE(false, "wrong dispatcher");
             return;

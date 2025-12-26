@@ -213,6 +213,8 @@ class SwUINumRuleItem;
 
 #define FN_VIEW_BASELINE_GRID_VISIBLE (FN_VIEW + 74)  /* Menu for displaying baseline grid */
 
+#define FN_SORT_CHAPTERS (FN_VIEW + 75) /* Make chapters alphabetically sorted */
+
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
 // FN_INSERT + 3 is FN_INSERT_BREAK

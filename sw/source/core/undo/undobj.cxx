@@ -700,6 +700,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::COPY_HEADER_FOOTER:
             pId = STR_UNDO_COPY_HEADER_FOOTER;
             break;
+        case SwUndoId::SORT_CHAPTERS:
+            pId = STR_UNDO_SORT_CHAPTERS;
+            break;
     }
 
     assert(pId);
