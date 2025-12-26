@@ -186,6 +186,7 @@ private:
 
     void Update();
     void FillStyleBox();
+    void AppendStyles(std::vector<OUString>& rStyles, SfxStyleFamily eFamily, SfxStyleSearchBits eBits);
     void SelectStyle(const OUString& rStyleName);
 
 friend class SfxStyleControllerItem_Impl;
