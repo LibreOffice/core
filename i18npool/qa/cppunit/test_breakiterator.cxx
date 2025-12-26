@@ -1844,7 +1844,7 @@ void TestBreakIterator::testDictWordAbbreviationHU()
 
     for (const auto& rLocale : aLocale)
     {
-        auto aTest = u"Pl. stb. dr.-ral Mo.-gal"_ustr;
+        auto aTest = u"Pl. stb. dr.-ral Mo.-gal 50-et 50.-et"_ustr;
 
         i18n::Boundary aBounds
             = m_xBreak->getWordBoundary(aTest, 1, rLocale, i18n::WordType::DICTIONARY_WORD, false);
@@ -1865,6 +1865,16 @@ void TestBreakIterator::testDictWordAbbreviationHU()
             = m_xBreak->getWordBoundary(aTest, 17, rLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(17), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 25, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 31, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(31), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(37), aBounds.endPos);
     }
 }
 

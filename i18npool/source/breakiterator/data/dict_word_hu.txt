@@ -168,7 +168,7 @@ $Ideographic $ExFm* {400};          #
 ### tdf#162514: For spell checking, abbreviations may end with a period.
 
 # ($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter);
-($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PostPeriod)?;
+($ALetterPlus | $Hebrew_Letter | $Numeric) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PostPeriod)?;
 
 ### END CUSTOMIZATION
 
@@ -178,7 +178,7 @@ $Ideographic $ExFm* {400};          #
 ### tdf#162514: For spell checking, abbreviations may end with a period.
 
 # ($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) {200};
-($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PostPeriod)? {200};
+($ALetterPlus | $Hebrew_Letter | $Numeric)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PostPeriod)? {200};
 
 ### END CUSTOMIZATION
 
