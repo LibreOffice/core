@@ -459,28 +459,6 @@ public:
     }
 };
 
-
-// SelectHdl needs the Modifiers, get them in MouseButtonUp
-class SvxFrmValueSet_Impl final : public ValueSet
-{
-private:
-    sal_uInt16 nModifier;
-
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override
-    {
-        nModifier = rMEvt.GetModifier();
-        return ValueSet::MouseButtonUp(rMEvt);
-    }
-
-public:
-    SvxFrmValueSet_Impl()
-        : ValueSet(nullptr)
-        , nModifier(0)
-    {
-    }
-    sal_uInt16 GetModifier() const {return nModifier;}
-};
-
 }
 
 namespace {
@@ -491,25 +469,31 @@ class SvxFrameWindow_Impl final : public WeldToolbarPopup
 {
 private:
     rtl::Reference<SvxFrameToolBoxControl> mxControl;
-    std::unique_ptr<SvxFrmValueSet_Impl> mxFrameSet;
-    std::unique_ptr<weld::CustomWeld> mxFrameSetWin;
+    std::unique_ptr<weld::IconView> mxFrameIV;
     std::vector<std::pair<BitmapEx, OUString>> aImgVec;
     bool                        bParagraphMode;
     bool                        m_bIsWriter;
     bool                        m_bIsCalc;
+    sal_uInt16                  nModifier;
 
     void InitImageList();
-    void CalcSizeValueSet();
-    DECL_LINK( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectHdl, weld::IconView&, bool );
+    DECL_LINK( MousePressHdl, const MouseEvent&, bool );
+    DECL_LINK( MouseReleaseHdl, const MouseEvent&, bool );
+    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    OUString GetBorderTypeTooltip(sal_uInt16 nBorderType) const;
+
 
     void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
     void SetDiagonalUpBorder(const SvxLineItem& dUpLineItem);
+    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aPreviewBitmap);
 
 public:
     SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
     virtual void GrabFocus() override
     {
-        mxFrameSet->GrabFocus();
+        mxFrameIV->grab_focus();
     }
 
     virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -533,7 +517,7 @@ private:
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 };
 
-    class LineListBox final : public ValueSet
+    class LineListBox final
     {
     public:
         typedef Color (*ColorFunc)(Color);
@@ -542,11 +526,9 @@ private:
         LineListBox();
 
         /** Set the width in Twips */
-        Size SetWidth( tools::Long nWidth )
+        void SetWidth( tools::Long nWidth )
         {
-            tools::Long nOldWidth = m_nWidth;
             m_nWidth = nWidth;
-            return UpdateEntries( nOldWidth );
         }
 
         void SetNone( const OUString& sNone )
@@ -563,22 +545,25 @@ private:
 
         SvxBorderLineStyle GetEntryStyle( sal_Int32 nPos ) const;
 
-        SvxBorderLineStyle GetSelectEntryStyle() const;
+        SvxBorderLineStyle GetSelectEntryStyle(std::u16string_view sId) const;
+
+        void            UpdateEntries( weld::IconView& rIconView );
+        ImpLineListData* getBorderLineData(sal_Int32 nId);
 
         void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
         const Color&    GetColor() const { return aColor; }
+        OUString        m_sNone;
 
-        virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     private:
 
-        void         ImpGetLine(tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
+        void         ImpGetLine(const Size& rPreviewSize, tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                 Color nColor1, Color nColor2, Color nColorDist,
                                 SvxBorderLineStyle nStyle, BitmapEx& rBmp);
 
         void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
 
-        Size            UpdateEntries( tools::Long nOldWidth );
+        static VclPtr<VirtualDevice> GetVirtualDevice(Image pImage);
         sal_Int32       GetStylePos( sal_Int32  nListPos, tools::Long nWidth );
 
         const Color& GetPaintColor() const
@@ -595,36 +580,34 @@ private:
 
         std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
         tools::Long            m_nWidth;
-        OUString        m_sNone;
         ScopedVclPtr<VirtualDevice>   aVirDev;
-        Size            aTxtSize;
         Color const     aColor;
         Color           maPaintCol;
         FieldUnit       eSourceUnit;
     };
 
-    SvxBorderLineStyle LineListBox::GetSelectEntryStyle() const
+    SvxBorderLineStyle LineListBox::GetSelectEntryStyle(std::u16string_view sId) const
     {
-        SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID;
-        size_t nPos = GetSelectItemPos();
-        if (nPos != VALUESET_ITEM_NOTFOUND)
-        {
-            if (!m_sNone.isEmpty())
-                --nPos;
-            nStyle = GetEntryStyle( nPos );
-        }
+        if (sId.empty())
+            return SvxBorderLineStyle::NONE;
 
-        return nStyle;
+        sal_Int32 nId = o3tl::toInt32(sId);
+        if (nId == 0)
+            return SvxBorderLineStyle::NONE;
+
+        return GetEntryStyle(nId - 1);
     }
 
-    void LineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
+    Size getPreviewSize(const weld::Widget& rControl)
+    {
+        return Size(rControl.get_approximate_digit_width() * 15, rControl.get_text_height());
+    }
+
+    void LineListBox::ImpGetLine( const Size& rPreviewSize, tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                 Color aColor1, Color aColor2, Color aColorDist,
                                 SvxBorderLineStyle nStyle, BitmapEx& rBmp )
     {
-        auto nMinWidth = GetDrawingArea()->get_ref_device().approximate_digit_width() * COMBO_WIDTH_IN_CHARS;
-        Size aSize(nMinWidth, aTxtSize.Height());
-        aSize.AdjustWidth( -(aTxtSize.Width()) );
-        aSize.AdjustWidth( -6 );
+        Size aSize(rPreviewSize);
 
         // SourceUnit to Twips
         if ( eSourceUnit == FieldUnit::POINT )
@@ -677,8 +660,7 @@ private:
     }
 
     LineListBox::LineListBox()
-        : ValueSet(nullptr)
-        , m_nWidth( 5 )
+        : m_nWidth( 5 )
         , aVirDev(VclPtr<VirtualDevice>::Create())
         , aColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor())
         , maPaintCol(COL_BLACK)
@@ -686,18 +668,6 @@ private:
     {
         aVirDev->SetLineColor();
         aVirDev->SetMapMode( MapMode( MapUnit::MapTwip ) );
-    }
-
-    void LineListBox::SetDrawingArea(weld::DrawingArea* pDrawingArea)
-    {
-        ValueSet::SetDrawingArea(pDrawingArea);
-
-        OutputDevice& rDevice = pDrawingArea->get_ref_device();
-
-        aTxtSize.setWidth( rDevice.approximate_digit_width() );
-        aTxtSize.setHeight( rDevice.GetTextHeight() );
-
-        UpdatePaintLineColor();
     }
 
     sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, tools::Long nWidth )
@@ -749,57 +719,92 @@ private:
             maPaintCol = aNewCol;
     }
 
-    Size LineListBox::UpdateEntries( tools::Long nOldWidth )
+    ImpLineListData* LineListBox::getBorderLineData(sal_Int32 nId)
     {
-        Size aSize;
+        SvxBorderLineStyle eStyle = static_cast<SvxBorderLineStyle>(nId);
 
+        for (auto& pData : m_vLineList)
+        {
+            if (pData->GetStyle() == eStyle)
+                return pData.get();
+        }
+
+        return nullptr;
+    }
+
+    VclPtr<VirtualDevice> LineListBox::GetVirtualDevice(Image pImage)
+    {
+        constexpr tools::Long nMarginTopBottom = 5;
+        constexpr tools::Long nMarginLeftRight = 2;
+
+        BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
+        Size aBmpSize = aPreviewBitmap.GetSizePixel();
+
+        Size aVDSize(
+            aBmpSize.Width()  + 2 * nMarginLeftRight,
+            aBmpSize.Height() + 2 * nMarginTopBottom
+        );
+        VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+        pVDev->SetOutputSizePixel(aVDSize);
+
+        Point aDrawPos(nMarginLeftRight, nMarginTopBottom);
+        pVDev->DrawBitmapEx(aDrawPos, aPreviewBitmap);
+
+        return pVDev;
+    }
+
+    void LineListBox::UpdateEntries( weld::IconView& rIconView )
+    {
         UpdatePaintLineColor( );
 
-        sal_Int32      nSelEntry = GetSelectItemPos();
-        sal_Int32       nTypePos = GetStylePos( nSelEntry, nOldWidth );
+        OUString sCurrentSelectedId = rIconView.get_selected_id();
 
         // Remove the old entries
-        Clear();
+        rIconView.clear();
 
-        sal_uInt16 nId(1);
+        sal_uInt16 nPos = 0;
 
         // Add the new entries based on the defined width
         if (!m_sNone.isEmpty())
-            InsertItem(nId++, Image(), m_sNone);
+        {
+            Size aPreviewSize = getPreviewSize(rIconView);
+            VclPtr<VirtualDevice> pVDevNone = GetVirtualDevice(Image());
+            pVDevNone->SetOutputSizePixel(aPreviewSize);
+            rIconView.append("0", m_sNone, pVDevNone.get());
 
-        sal_uInt16 n = 0;
-        sal_uInt16 nCount = m_vLineList.size( );
-        while ( n < nCount )
+            if (sCurrentSelectedId == "0")
+                rIconView.select(nPos);
+            nPos++;
+        }
+
+        for (size_t n = 0; n < m_vLineList.size(); ++n)
         {
             auto& pData = m_vLineList[ n ];
             if ( pData->GetMinWidth() <= m_nWidth )
             {
                 BitmapEx aBmp;
-                ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
+                Size aPreviewSize = getPreviewSize(rIconView);
+                ImpGetLine(aPreviewSize,
+                        pData->GetLine1ForWidth( m_nWidth ),
                         pData->GetLine2ForWidth( m_nWidth ),
                         pData->GetDistForWidth( m_nWidth ),
-                        GetColorLine1( GetItemCount( ) ),
-                        GetColorLine2( GetItemCount( ) ),
-                        GetColorDist( GetItemCount( ) ),
+                        GetColorLine1( n ),
+                        GetColorLine2( n ),
+                        GetColorDist( n ),
                         pData->GetStyle(), aBmp );
-                InsertItem(nId, Image(aBmp), SvtLineListBox::GetLineStyleName(pData->GetStyle()));
-                Size aBmpSize = aBmp.GetSizePixel();
-                if (aBmpSize.Width() > aSize.Width())
-                    aSize.setWidth(aBmpSize.getWidth());
-                if (aBmpSize.Height() > aSize.Height())
-                    aSize.setHeight(aBmpSize.getHeight());
-                if ( n == nTypePos )
-                    SelectItem(nId);
+
+                VclPtr<VirtualDevice> pVDev = GetVirtualDevice(Image(aBmp));
+                OUString sStyleName = SvtLineListBox::GetLineStyleName(pData->GetStyle());
+
+                OUString sId = OUString::number(n + 1);
+                rIconView.append(sId, sStyleName, pVDev.get());
+
+                if (sCurrentSelectedId == sId)
+                    rIconView.select(nPos);
+
+                nPos++;
             }
-            else if ( n == nTypePos )
-                SetNoSelection();
-            n++;
-            ++nId;
         }
-
-        Invalidate();
-
-        return aSize;
     }
 
     Color LineListBox::GetColorLine1( sal_Int32 nPos )
@@ -839,16 +844,17 @@ class SvxLineWindow_Impl final : public WeldToolbarPopup
 private:
     rtl::Reference<SvxFrameToolBoxControl> m_xControl;
     std::unique_ptr<LineListBox> m_xLineStyleLb;
-    std::unique_ptr<weld::CustomWeld> m_xLineStyleLbWin;
+    std::unique_ptr<weld::IconView> m_xLineStyleIV;
     bool                m_bIsWriter;
 
-    DECL_LINK( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectHdl, weld::IconView&, bool );
+    DECL_LINK( QueryTooltipHdl, const weld::TreeIter&, OUString );
 
 public:
     SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
     virtual void GrabFocus() override
     {
-        m_xLineStyleLb->GrabFocus();
+        m_xLineStyleIV->grab_focus();
     }
 };
 
@@ -2549,11 +2555,11 @@ Color ColorStatus::GetColor()
 SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatingframeborder.ui"_ustr, u"FloatingFrameBorder"_ustr)
     , mxControl(pControl)
-    , mxFrameSet(new SvxFrmValueSet_Impl)
-    , mxFrameSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxFrameSet))
+    , mxFrameIV(m_xBuilder->weld_icon_view(u"iconview_borders"_ustr))
     , bParagraphMode(false)
     , m_bIsWriter(false)
     , m_bIsCalc(false)
+    , nModifier(0)
 {
 
     // check whether the document is Writer or not
@@ -2564,7 +2570,6 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
         m_bIsCalc = xSI->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
     }
 
-    mxFrameSet->SetStyle(WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
     AddStatusListener(u".uno:BorderReducedMode"_ustr);
     InitImageList();
 
@@ -2583,23 +2588,36 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     // Therefore, Calc uses 10 border types while
     // Writer uses 8 of them - for a single cell.
     for ( i=1; i < (m_bIsCalc ? 11 : 9); i++ )
-        mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
+    {
+        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImgVec[i-1].first);
+        mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, pVDev.get());
+    }
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         // when multiple cell selected:
         // Writer has 12 border types and Calc has 15 of them.
         for ( i = (m_bIsCalc ? 11 : 9); i < (m_bIsCalc ? 16 : 13); i++ )
-            mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
+        {
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImgVec[i-1].first);
+            mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, pVDev.get());
+        }
 
-    // adjust frame column for Writer
-    sal_uInt16 colCount = m_bIsWriter ? 4 : 5;
-    mxFrameSet->SetColCount( colCount );
-    mxFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
-    CalcSizeValueSet();
+    mxFrameIV->connect_mouse_press(LINK(this, SvxFrameWindow_Impl, MousePressHdl));
+    mxFrameIV->connect_mouse_release(LINK(this, SvxFrameWindow_Impl, MouseReleaseHdl));
+    mxFrameIV->connect_key_press(LINK(this, SvxFrameWindow_Impl, KeyPressHdl));
+    mxFrameIV->connect_item_activated( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
 
-    mxFrameSet->SetHelpId( HID_POPUP_FRAME );
-    mxFrameSet->SetAccessibleName( SvxResId(RID_SVXSTR_FRAME) );
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        mxFrameIV->connect_query_tooltip(LINK(this, SvxFrameWindow_Impl, QueryTooltipHdl));
+    }
+
+    mxFrameIV->set_help_id( HID_POPUP_FRAME );
+    mxFrameIV->set_accessible_name( SvxResId(RID_SVXSTR_FRAME) );
 }
 
 namespace {
@@ -2624,8 +2642,12 @@ namespace o3tl {
 // By default unset lines remain unchanged.
 // Via Shift unset lines are reset
 
-IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, weld::IconView&, bool)
 {
+    OUString sId = mxFrameIV->get_selected_id();
+    if (sId.isEmpty())
+        return false;
+
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
@@ -2644,8 +2666,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                         *pRight = nullptr,
                         *pTop = nullptr,
                         *pBottom = nullptr;
-    sal_uInt16           nSel = mxFrameSet->GetSelectedItemId();
-    sal_uInt16           nModifier = mxFrameSet->GetModifier();
+    sal_uInt16           nSel = sId.toUInt32();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 
     // tdf#48622, tdf#145828 use correct default to create intended 0.75pt
@@ -2776,15 +2797,89 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     }
 
     // coverity[ check_after_deref : FALSE]
-    if (mxFrameSet)
+    if (mxFrameIV)
     {
         /* #i33380# Moved the following line above the Dispatch() call.
            This instance may be deleted in the meantime (i.e. when a dialog is opened
            while in Dispatch()), accessing members will crash in this case. */
-        mxFrameSet->SetNoSelection();
+        mxFrameIV->unselect_all();
     }
 
     mxControl->EndPopupMode();
+    return true;
+}
+
+IMPL_LINK(SvxFrameWindow_Impl, MousePressHdl, const MouseEvent&, rMEvt, bool)
+{
+    nModifier = rMEvt.GetModifier();
+    return false;
+}
+
+IMPL_LINK(SvxFrameWindow_Impl, MouseReleaseHdl, const MouseEvent&, rMEvt, bool)
+{
+    nModifier = rMEvt.GetModifier();
+
+    if (rMEvt.IsLeft() && rMEvt.GetModifier() == KEY_SHIFT)
+    {
+        OUString sId = mxFrameIV->get_selected_id();
+        if (!sId.isEmpty())
+            SelectHdl(*mxFrameIV);
+
+        return true;
+    }
+    return false;
+}
+
+IMPL_LINK(SvxFrameWindow_Impl, KeyPressHdl, const KeyEvent&, rKEvt, bool)
+{
+    nModifier = rKEvt.GetKeyCode().GetModifier();
+
+    if (rKEvt.GetKeyCode().GetCode() == KEY_RETURN ||
+        rKEvt.GetKeyCode().GetCode() == KEY_SPACE)
+    {
+        OUString sId = mxFrameIV->get_selected_id();
+        if (!sId.isEmpty())
+            SelectHdl(*mxFrameIV);
+
+        return true;
+    }
+    return false;
+}
+
+VclPtr<VirtualDevice> SvxFrameWindow_Impl::GetVirtualDevice(BitmapEx aPreviewBitmap)
+{
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Point aNull(0, 0);
+    if (pVDev->GetDPIScaleFactor() > 1)
+        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
+    const Size aSize(aPreviewBitmap.GetSizePixel());
+    pVDev->SetOutputSizePixel(aSize);
+    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
+
+    return pVDev;
+}
+
+IMPL_LINK(SvxFrameWindow_Impl, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
+{
+    const OUString sId = mxFrameIV->get_id(iter);
+
+    if (!sId.isEmpty())
+    {
+        sal_uInt16 nBorderType = sId.toUInt32();
+        return GetBorderTypeTooltip(nBorderType);
+    }
+
+    return OUString();
+}
+
+OUString SvxFrameWindow_Impl::GetBorderTypeTooltip(sal_uInt16 nBorderType) const
+{
+    if (nBorderType > 0 && nBorderType <= aImgVec.size())
+    {
+        return aImgVec[nBorderType - 1].second;
+    }
+
+    return OUString();
 }
 
 void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem)
@@ -2818,40 +2913,26 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
 
     bParagraphMode = bValue;
     //initial calls mustn't insert or remove elements
-    if(!mxFrameSet->GetItemCount())
+    if(mxFrameIV->n_children() == 0)
         return;
 
     // set 12 border types for Writer, otherwise 15 for Calc.
-    bool bTableMode = ( mxFrameSet->GetItemCount() == static_cast<size_t>(m_bIsCalc ? 15 : 12) );
-    bool bResize    = false;
+    bool bTableMode = ( mxFrameIV->n_children() == (m_bIsCalc ? 15 : 12) );
 
     if ( bTableMode && bParagraphMode )
     {
         for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
-            mxFrameSet->RemoveItem(i);
-        bResize = true;
+            mxFrameIV->remove(i - 1);
     }
     else if ( !bTableMode && !bParagraphMode )
     {
         for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
-            mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
-        bResize = true;
+        {
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImgVec[i-1].first);
+            OUString sId = OUString::number(i);
+            mxFrameIV->insert(i - 1, &aImgVec[i-1].second, &sId, pVDev.get(), nullptr);
+        }
     }
-
-    if ( bResize )
-    {
-        CalcSizeValueSet();
-    }
-}
-
-void SvxFrameWindow_Impl::CalcSizeValueSet()
-{
-    weld::DrawingArea* pDrawingArea = mxFrameSet->GetDrawingArea();
-    const OutputDevice& rDevice = pDrawingArea->get_ref_device();
-    Size aItemSize( 20 * rDevice.GetDPIScaleFactor(), 20 * rDevice.GetDPIScaleFactor() );
-    Size aSize = mxFrameSet->CalcWindowSizePixel( aItemSize );
-    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    mxFrameSet->SetOutputSizePixel(aSize);
 }
 
 void SvxFrameWindow_Impl::InitImageList()
@@ -2911,10 +2992,10 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 }
 
 SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatingframeborder.ui"_ustr, u"FloatingFrameBorder"_ustr)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatinglinestyle.ui"_ustr, u"FloatingLineStyle"_ustr)
     , m_xControl(pControl)
     , m_xLineStyleLb(new LineListBox)
-    , m_xLineStyleLbWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xLineStyleLb))
+    , m_xLineStyleIV(m_xBuilder->weld_icon_view(u"floating_line_style_iconview"_ustr))
     , m_bIsWriter(false)
 {
     try
@@ -2926,8 +3007,6 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
     catch(const uno::Exception& )
     {
     }
-
-    m_xLineStyleLb->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 
     m_xLineStyleLb->SetSourceUnit( FieldUnit::TWIP );
     m_xLineStyleLb->SetNone( comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
@@ -2959,33 +3038,40 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
            &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
     m_xLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::INSET ), SvxBorderLineStyle::INSET, 10,
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
-    Size aSize = m_xLineStyleLb->SetWidth( 20 ); // 1pt by default
+    m_xLineStyleLb->SetWidth( 20 ); // 1pt by default
+    m_xLineStyleLb->UpdateEntries( *m_xLineStyleIV );
 
-    m_xLineStyleLb->SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
+    m_xLineStyleIV->connect_item_activated( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
+
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated during character formatting resets.
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        m_xLineStyleIV->connect_query_tooltip(LINK(this, SvxLineWindow_Impl, QueryTooltipHdl));
+    }
 
     m_xContainer->set_help_id(HID_POPUP_LINE);
-
-    aSize.AdjustWidth(6);
-    aSize.AdjustHeight(6);
-    aSize = m_xLineStyleLb->CalcWindowSizePixel(aSize);
-    m_xLineStyleLb->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
-    m_xLineStyleLb->SetOutputSizePixel(aSize);
 }
 
-IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, weld::IconView&, bool)
 {
-    SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
-    SvxBorderLineStyle  nStyle = m_xLineStyleLb->GetSelectEntryStyle();
+    OUString sSelectedId = m_xLineStyleIV->get_selected_id();
 
-    if ( m_xLineStyleLb->GetSelectItemPos( ) > 0 )
+    SvxLineItem aLineItem( SID_FRAME_LINESTYLE );
+    if (sSelectedId.isEmpty() || sSelectedId == "0")
     {
-        SvxBorderLine aTmp;
-        aTmp.SetBorderLineStyle( nStyle );
-        aTmp.SetWidth( SvxBorderLineWidth::Thin ); // TODO Make it depend on a width field
-        aLineItem.SetLine( &aTmp );
+        aLineItem.SetLine(nullptr);
     }
     else
-        aLineItem.SetLine( nullptr );
+    {
+        SvxBorderLineStyle nStyle = m_xLineStyleLb->GetSelectEntryStyle(sSelectedId);
+
+        SvxBorderLine aTmp;
+        aTmp.SetBorderLineStyle(nStyle);
+        aTmp.SetWidth(SvxBorderLineWidth::Thin); // TODO Make it depend on a width field
+        aLineItem.SetLine(&aTmp);
+    }
 
     Any a;
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
@@ -2994,6 +3080,25 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ValueSet*, void)
     m_xControl->dispatchCommand( u".uno:LineStyle"_ustr, aArgs );
 
     m_xControl->EndPopupMode();
+
+    return true;
+}
+
+IMPL_LINK(SvxLineWindow_Impl, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = m_xLineStyleIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    if (sId == "0")
+        return m_xLineStyleLb->m_sNone;
+
+    sal_Int32 nId = sId.toUInt32() - 1;
+    ImpLineListData* pData = m_xLineStyleLb->getBorderLineData(nId);
+    if (pData)
+        return SvtLineListBox::GetLineStyleName(pData->GetStyle());
+
+    return OUString();
 }
 
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
