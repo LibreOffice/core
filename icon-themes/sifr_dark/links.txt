@@ -1547,14 +1547,17 @@ cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 # Grid
 cmd/32/grid.png cmd/32/viewrowcolumnheaders.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
+cmd/32/gridsmenu.png cmd/32/gridvisible.png
 cmd/32/insertgridcontrol.png cmd/32/viewrowcolumnheaders.png
 
 cmd/lc_grid.png cmd/lc_viewrowcolumnheaders.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
+cmd/lc_gridsmenu.png cmd/lc_gridvisible.png
 cmd/lc_insertgridcontrol.png cmd/lc_viewrowcolumnheaders.png
 
 cmd/sc_grid.png cmd/sc_viewrowcolumnheaders.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
+cmd/sc_gridsmenu.png cmd/sc_gridvisible.png
 cmd/sc_insertgridcontrol.png cmd/sc_viewrowcolumnheaders.png
 
 # Extrusion Rotate
