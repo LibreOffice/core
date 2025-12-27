@@ -3044,23 +3044,19 @@ void SbRtl_Format(StarBASIC *, SbxArray & rPar, bool)
 {
     const sal_uInt32 nArgCount = rPar.Count();
     if ( nArgCount < 2 || nArgCount > 3 )
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    OUString aResult;
+    if( nArgCount == 2 )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        rPar.Get(1)->Format(aResult);
     }
     else
     {
-        OUString aResult;
-        if( nArgCount == 2 )
-        {
-            rPar.Get(1)->Format(aResult);
-        }
-        else
-        {
-            OUString aFmt(rPar.Get(2)->GetOUString());
-            rPar.Get(1)->Format(aResult, &aFmt);
-        }
-        rPar.Get(0)->PutString(aResult);
+        OUString aFmt(rPar.Get(2)->GetOUString());
+        rPar.Get(1)->Format(aResult, &aFmt);
     }
+    rPar.Get(0)->PutString(aResult);
 }
 
 static bool IsMissing(SbxArray& rPar, const sal_uInt32 i)
@@ -3451,14 +3447,10 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_VarType(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() != 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        SbxDataType eType = rPar.Get(1)->GetType();
-        rPar.Get(0)->PutInteger(static_cast<sal_Int16>(eType));
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxDataType eType = rPar.Get(1)->GetType();
+    rPar.Get(0)->PutInteger(static_cast<sal_Int16>(eType));
 }
 
 // Exported function
@@ -3581,29 +3573,25 @@ static OUString getObjectTypeName( SbxVariable* pVar )
 void SbRtl_TypeName(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxDataType eType = rPar.Get(1)->GetType();
+    bool bIsArray = ( ( eType & SbxARRAY ) != 0 );
+
+    OUString aRetStr;
+    if ( SbiRuntime::isVBAEnabled() && eType == SbxOBJECT )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        aRetStr = getObjectTypeName(rPar.Get(1));
     }
     else
     {
-        SbxDataType eType = rPar.Get(1)->GetType();
-        bool bIsArray = ( ( eType & SbxARRAY ) != 0 );
-
-        OUString aRetStr;
-        if ( SbiRuntime::isVBAEnabled() && eType == SbxOBJECT )
-        {
-            aRetStr = getObjectTypeName(rPar.Get(1));
-        }
-        else
-        {
-            aRetStr = getBasicTypeName( eType );
-        }
-        if( bIsArray )
-        {
-            aRetStr += "()";
-        }
-        rPar.Get(0)->PutString(aRetStr);
+        aRetStr = getBasicTypeName( eType );
     }
+    if( bIsArray )
+    {
+        aRetStr += "()";
+    }
+    rPar.Get(0)->PutString(aRetStr);
 }
 
 void SbRtl_Len(StarBASIC *, SbxArray & rPar, bool)
