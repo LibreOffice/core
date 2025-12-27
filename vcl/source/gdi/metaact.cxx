@@ -282,6 +282,9 @@ MetaRoundRectAction::MetaRoundRectAction( const tools::Rectangle& rRect,
 
 void MetaRoundRectAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawRect( maRect, mnHorzRound, mnVertRound );
 }
 
