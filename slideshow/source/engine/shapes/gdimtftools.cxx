@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 

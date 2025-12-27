@@ -19,6 +19,7 @@
 
 #include <vcl/ColorDialog.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/event.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

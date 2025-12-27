@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -51,6 +52,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>

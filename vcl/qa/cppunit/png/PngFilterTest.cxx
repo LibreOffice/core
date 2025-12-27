@@ -28,6 +28,7 @@
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/tempfile.hxx>
 

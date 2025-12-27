@@ -29,6 +29,7 @@
 #include <vcl/region.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>

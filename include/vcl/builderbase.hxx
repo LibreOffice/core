@@ -10,13 +10,19 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/image.hxx>
 #include <vcl/EnumContext.hxx>
-
-#include <com/sun/star/uno/Exception.hpp>
 
 #include <map>
 #include <vector>
+
+class Image;
+
+namespace com::sun::star::uno
+{
+class Exception;
+}
+
+enum class VclButtonsType;
 
 namespace xmlreader
 {

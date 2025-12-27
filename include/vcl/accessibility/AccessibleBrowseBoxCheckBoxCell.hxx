@@ -19,8 +19,9 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
+
+namespace com::sun::star::accessibility { class XAccessible; }
 
 class VCL_DLLPUBLIC AccessibleCheckBoxCell final
     : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell,

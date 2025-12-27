@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <vcl/accessibility/AccessibleBrowseBoxTableBase.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >

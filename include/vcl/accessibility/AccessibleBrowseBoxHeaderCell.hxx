@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 class VCL_DLLPUBLIC AccessibleBrowseBoxHeaderCell final : public AccessibleBrowseBoxBase
 {

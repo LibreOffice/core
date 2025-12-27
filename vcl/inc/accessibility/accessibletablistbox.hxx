@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 class SvHeaderTabListBox;
 

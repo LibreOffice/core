@@ -11,6 +11,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/bitmap/BitmapFilter.hxx>
 
 BitmapFilter::BitmapFilter() {}

@@ -18,6 +18,7 @@
  */
 
 #include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

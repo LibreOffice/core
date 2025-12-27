@@ -23,9 +23,8 @@
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <vcl/salctype.hxx>
-#include <comphelper/errcode.hxx>
 
-
+class ErrCode;
 class   Graphic;
 
 class VCL_DLLPUBLIC GraphicConverter

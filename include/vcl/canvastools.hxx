@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_CANVASTOOLS_HXX
 #define INCLUDED_VCL_CANVASTOOLS_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
@@ -58,6 +56,8 @@ namespace com::sun::star::rendering
 }
 
 namespace com::sun::star::rendering { class XColorSpace; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace vcl::unotools
 {

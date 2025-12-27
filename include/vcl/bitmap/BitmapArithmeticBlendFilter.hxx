@@ -11,6 +11,7 @@
 #pragma once
 
 #include <vcl/bitmap/BitmapFilter.hxx>
+#include <vcl/bitmap.hxx>
 
 class VCL_DLLPUBLIC BitmapArithmeticBlendFilter final : public BitmapFilter
 {

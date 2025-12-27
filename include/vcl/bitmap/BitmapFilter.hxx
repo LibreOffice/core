@@ -10,10 +10,12 @@
 
 #pragma once
 
-#include <vcl/bitmap.hxx>
+#include <tools/long.hxx>
+#include <vcl/dllapi.h>
 #include <functional>
 
 class Animation;
+class Bitmap;
 
 namespace vcl::bitmap
 {
