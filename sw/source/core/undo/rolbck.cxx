@@ -683,15 +683,17 @@ void SwHistoryBookmark::SetInDoc( SwDoc& rDoc, bool )
     if(m_bSavePos)
     {
         SwContentNode* const pContentNd = rNds[m_nNode]->GetContentNode();
-        assert(pContentNd);
-        oPam.emplace(*pContentNd, m_nContent);
+        SAL_WARN_IF(!pContentNd, "sw.core", "expected a SwContentNode");
+        if (pContentNd)
+            oPam.emplace(*pContentNd, m_nContent);
     }
     else
     {
         assert(pMark);
         oPam.emplace(pMark->GetMarkPos());
     }
-    assert(oPam);
+    if (!oPam)
+        return;
 
     if(m_bSaveOtherPos)
     {
