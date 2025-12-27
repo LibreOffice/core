@@ -234,7 +234,6 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM& rPam = AddUndoRedoPaM(rContext);
     SwDoc& rDoc = rContext.GetDoc();
 
     SwNodes& rNds = rDoc.GetNodes();
@@ -250,6 +249,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
+        SwPaM& rPam = AddUndoRedoPaM(rContext);
         SwPaM aPam(*rPam.GetPoint());
         SetPaM( aPam );
         SwPosition aMvPos( aIdx, aIdx.GetNode().GetContentNode(), m_nMoveDestContent );
