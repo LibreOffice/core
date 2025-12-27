@@ -243,6 +243,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
+#define SPELL_NON_ASCII_APOSTROPHE 1 << 10
 sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLocale, int& rInfo)
 {
     if (rWord.getLength() > MAXWORDLEN)
@@ -261,15 +262,19 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
     sal_Int32 n = rBuf.getLength();
     sal_Unicode c;
     sal_Int32 extrachar = 0;
-
+    const bool bDoNotConvertApostrophe = bool(rInfo & SPELL_NON_ASCII_APOSTROPHE);
+    bool bHasNonASCIIApostrophe = false;
+    rInfo = 0;
     for (sal_Int32 ix=0; ix < n; ix++)
     {
         c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D))
             rBuf[ix] = u'"';
-        else if ((c == 0x2018) || (c == 0x2019))
+        else if (!bDoNotConvertApostrophe && ((c == 0x2018) || (c == 0x2019)))
+        {
             rBuf[ix] = u'\'';
-
+            bHasNonASCIIApostrophe = true;
+        }
         // recognize words with Unicode ligatures and ZWNJ/ZWJ characters (only
         // with 8-bit encoded dictionaries. For UTF-8 encoded dictionaries
         // set ICONV and IGNORE aff file options, if needed.)
@@ -370,6 +375,10 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
         }
     }
 
+    // checked with apostrophe conversion
+    if ( bHasNonASCIIApostrophe )
+        rInfo |= SPELL_NON_ASCII_APOSTROPHE;
+
     return nRes;
 }
 
@@ -396,8 +405,14 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     PropertyHelper_Spelling& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    int nInfo = 0;
+    int nInfo = 0; // return compound information, disable apostrophe conversion
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale, nInfo );
+    // it contains non-ASCII apostrophe, and it was bad with ASCII conversion:
+    // check the word with the original apostrophe character(s), too
+    if ( nFailure != -1 && nInfo & SPELL_NON_ASCII_APOSTROPHE ) {
+        nInfo = SPELL_NON_ASCII_APOSTROPHE; // disable apostrophe conversion
+        nFailure = GetSpellFailure( rWord, rLocale, nInfo );
+    }
     if (nFailure != -1 && !rWord.match(SPELL_XML, 0))
     {
         LanguageType nLang = LinguLocaleToLanguage( rLocale );
