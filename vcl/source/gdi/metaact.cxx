@@ -422,6 +422,9 @@ MetaChordAction::MetaChordAction( const tools::Rectangle& rRect,
 
 void MetaChordAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawChord( maRect, maStartPt, maEndPt );
 }
 
