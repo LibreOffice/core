@@ -61,6 +61,7 @@ var oo_sdk_sed_home=getSedHome();
 var oo_sdk_manifest_used="";
 var oo_sdk_windowssdk="";
 var oo_sdk_cpp_home=getCppHome();
+var oo_sdk_vcvars=getVcvars();
 var oo_sdk_cli_home=getCliHome();
 var oo_sdk_dotnet_root=getDotnetRoot();
 var oo_sdk_java_home=getJavaHome();
@@ -538,6 +539,38 @@ function getCppHome()
 
         return sHome;
     }
+}
+
+function getVcvars()
+{
+    var sVcvars = "";
+
+    if (!oo_sdk_cpp_home)
+        return sVcvars;
+
+    var sBitness = "64";
+    try {
+        var sArchitecture = WshSysEnv("PROCESSOR_ARCHITECTURE");
+        if (sArchitecture == "x86") {
+            sArchitecture = WshSysEnv("PROCESSOR_ARCHITEW6432");
+            if (sArchitecture == "")
+                sBitness = "32";
+        }
+    } catch (exc) {}
+
+    var index = oo_sdk_cpp_home.search("VC");
+    var sVCDir = oo_sdk_cpp_home.slice(0, index + 2)
+
+    try {
+        sVcvars = WshShell.Exec("cmd.exe /c dir \"" + sVCDir + "\\vcvars" +
+                        sBitness + ".bat\" /s /b").StdOut.ReadLine();
+    } catch (exc) {}
+
+    if (!sVcvars)
+        stdout.Write("\nAuto-detection of VCVARS file failed, "
+                        + "C++ environment will not be initialized.");
+
+    return sVcvars;
 }
 
 function getCliHome()
@@ -1056,6 +1089,9 @@ function writeBatFile(fdir, file)
         "REM Add directory of the C++ compiler to the path, if necessary.\n" +
         "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" +
         "\n" +
+        "REM Save path of the C++ environment setup, if necessary.\n" +
+        "if defined OO_SDK_CPP_HOME set OO_SDK_VCVARS=" + oo_sdk_vcvars +
+        "\n\n" +
         "REM Add directory of the Win SDK to the path, if necessary.\n" +
         "if defined CPP_WINDOWS_SDK set PATH=%CPP_WINDOWS_SDK%\\bin;%PATH%\n" +
         "if defined CPP_WINDOWS_SDK set INCLUDE=%CPP_WINDOWS_SDK%\\Include;%INCLUDE%\n" +
@@ -1069,7 +1105,7 @@ function writeBatFile(fdir, file)
         "if defined OO_SDK_JAVA_HOME set PATH=%OO_SDK_JAVA_HOME%\\bin;%OO_SDK_JAVA_HOME%\\jre\\bin;%PATH%\n" +
         "\n" +
         "REM Set environment for C++ compiler tools, if necessary.\n" +
-        "if defined OO_SDK_CPP_HOME call \"%OO_SDK_CPP_HOME%\\VCVARS32.bat\"\n" +
+        "if defined OO_SDK_VCVARS call \"%OO_SDK_VCVARS%\"\n" +
         "\n" +
         "REM Set title to identify the prepared shell.\n" +
         "title Shell prepared for SDK\n" +
