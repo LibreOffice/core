@@ -73,7 +73,7 @@ enum class SystemColorType
  * A color that can be expresses as a RGB, CRGB or HSL representation or
  * a more abstract representation as for example system color, palette,
  * theme color or a placeholder. In these representations the
- * color needs to be additionally
+ * color needs to be additionally computed and/or looked up.
  *
  * The color can also have transformations defined, which in addition
  * manipulates the resulting color (i.e. tints, shades, alpha,...).
