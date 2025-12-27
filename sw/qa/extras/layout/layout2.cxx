@@ -1275,6 +1275,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
                 u"lenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
 }
 
+// TODO: move this test to the lingucomponent project
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170140)
+{
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    auto aLocale = lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString());
+    LanguageType eLang = LanguageTag::convertToLanguageType(aLocale);
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    uno::Sequence<beans::PropertyValue> aProperties;
+
+    // correct non-ASCII apostrophe
+    OUString sWord(u"d’Arc"_ustr);
+    CPPUNIT_ASSERT(xSpell->isValid(sWord, static_cast<sal_uInt16>(eLang), aProperties));
+
+    // bad ASCII apostrophe
+    OUString sWord2(u"d'Arc"_ustr);
+    CPPUNIT_ASSERT(!xSpell->isValid(sWord2, static_cast<sal_uInt16>(eLang), aProperties));
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     createSwDoc("tdf85610.fodt");
