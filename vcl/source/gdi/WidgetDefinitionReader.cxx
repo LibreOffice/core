@@ -12,7 +12,9 @@
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
 
+#include <unordered_map>
 #include <utility>
+
 #include <widgetdraw/WidgetDefinitionReader.hxx>
 
 #include <sal/config.h>
@@ -341,7 +343,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
 
     rWidgetDefinition.mpStyle = std::make_shared<WidgetDefinitionStyle>();
 
-    auto aStyleColorMap = frozen::make_unordered_map<std::string_view, Color*>({
+    std::unordered_map<std::string_view, Color*> aStyleColorMap = {
         { "faceColor", &rWidgetDefinition.mpStyle->maFaceColor },
         { "checkedColor", &rWidgetDefinition.mpStyle->maCheckedColor },
         { "lightColor", &rWidgetDefinition.mpStyle->maLightColor },
@@ -396,11 +398,11 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
         { "linkColor", &rWidgetDefinition.mpStyle->maLinkColor },
         { "visitedLinkColor", &rWidgetDefinition.mpStyle->maVisitedLinkColor },
         { "toolTextColor", &rWidgetDefinition.mpStyle->maToolTextColor },
-    });
+    };
 
     rWidgetDefinition.mpSettings = std::make_shared<WidgetDefinitionSettings>();
 
-    auto aSettingMap = frozen::make_unordered_map<std::string_view, OString*>({
+    std::unordered_map<std::string_view, OString*> aSettingMap = {
         { "noActiveTabTextRaise", &rWidgetDefinition.mpSettings->msNoActiveTabTextRaise },
         { "centeredTabs", &rWidgetDefinition.mpSettings->msCenteredTabs },
         { "listBoxEntryMargin", &rWidgetDefinition.mpSettings->msListBoxEntryMargin },
@@ -411,7 +413,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
           &rWidgetDefinition.mpSettings->msListBoxPreviewDefaultLogicWidth },
         { "listBoxPreviewDefaultLogicHeight",
           &rWidgetDefinition.mpSettings->msListBoxPreviewDefaultLogicHeight },
-    });
+    };
 
     SvFileStream aFileStream(m_rDefinitionFile, StreamMode::READ);
 
