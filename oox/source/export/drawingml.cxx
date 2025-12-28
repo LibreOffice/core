@@ -1685,39 +1685,6 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     {
         eMediaType = Relationship::AUDIO;
     }
-    else
-    if (aMimeType == "application/vnd.sun.star.media")
-    {
-        // try to set something better
-        // TODO fix the importer to actually set the mimetype on import
-        if (aExtension.equalsIgnoreAsciiCase(".avi"))
-            aMimeType = "video/x-msvideo";
-        else if (aExtension.equalsIgnoreAsciiCase(".flv"))
-            aMimeType = "video/x-flv";
-        else if (aExtension.equalsIgnoreAsciiCase(".mp4"))
-            aMimeType = "video/mp4";
-        else if (aExtension.equalsIgnoreAsciiCase(".mov"))
-            aMimeType = "video/quicktime";
-        else if (aExtension.equalsIgnoreAsciiCase(".ogv"))
-            aMimeType = "video/ogg";
-        else if (aExtension.equalsIgnoreAsciiCase(".wmv"))
-            aMimeType = "video/x-ms-wmv";
-        else if (aExtension.equalsIgnoreAsciiCase(".wav"))
-        {
-            aMimeType = "audio/x-wav";
-            eMediaType = Relationship::AUDIO;
-        }
-        else if (aExtension.equalsIgnoreAsciiCase(".m4a"))
-        {
-            aMimeType = "audio/mp4";
-            eMediaType = Relationship::AUDIO;
-        }
-        else if (aExtension.equalsIgnoreAsciiCase(".mp3"))
-        {
-            aMimeType = "audio/mp3";
-            eMediaType = Relationship::AUDIO;
-        }
-    }
 
     OUString aVideoFileRelId;
     OUString aMediaRelId;
