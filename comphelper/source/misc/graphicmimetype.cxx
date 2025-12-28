@@ -190,6 +190,7 @@ static auto GetMediaMimes() -> std::map<OString, OString> const&
         { "mov", "video/quicktime" },
         { "wmv", "video/x-ms-wmv" },
         { "avi", "video/x-msvideo" },
+        { "flv", "video/x-flv" },
         { "m4a", "audio/mp4" },
         { "aac", "audio/aac" },
         { "mp3", "audio/mpeg" }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004

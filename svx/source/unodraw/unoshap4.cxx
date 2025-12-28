@@ -33,6 +33,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/mediamimetype.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -902,6 +903,12 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             if( rValue >>= sMimeType )
             {
                 bOk = true;
+
+                if (aItem.getMimeType() != AVMEDIA_MIMETYPE_COMMON
+                    && (sMimeType == "audio/unknown" || sMimeType == "video/unknown"))
+                {
+                    break;
+                }
                 aItem.setMimeType( sMimeType );
             }
         }
