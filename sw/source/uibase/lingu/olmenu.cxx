@@ -324,6 +324,13 @@ SwSpellPopup::SwSpellPopup(
 
         m_aDics = xDicList->getDictionaries();
 
+        OUString sWord;
+        if ( m_xSpellAlt.is() )
+            sWord = m_xSpellAlt->getWord();
+        // allow to put the word with terminating dot to the custom dictionaries
+        // using optional menu items
+        bool bPossibleAbbreviation = sWord.endsWith(".");
+
         for (const uno::Reference<linguistic2::XDictionary>& rDic : m_aDics)
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp = rDic;
@@ -339,7 +346,9 @@ SwSpellPopup::SwSpellPopup(
             {
                 // the extra 1 is because of the (possible) external
                 // linguistic entry above
-                pMenu->InsertItem( nItemId, xDicTmp->getName() );
+                pMenu->InsertItem( nItemId, bPossibleAbbreviation
+                        ? xDicTmp->getName() + " (" + sWord.subView(0, sWord.getLength()-1) + ")"
+                        : xDicTmp->getName() );
                 m_aDicNameSingle = xDicTmp->getName();
 
                 if (bUseImagesInMenus)
@@ -358,6 +367,13 @@ SwSpellPopup::SwSpellPopup(
                 }
 
                 ++nItemId;
+
+                // add an optional menu item for adding the word with dot to this dictionary
+                if ( bPossibleAbbreviation )
+                {
+                    pMenu->InsertItem( nItemId, xDicTmp->getName() + " (" + sWord + ")");
+                    ++nItemId;
+                }
             }
         }
     }

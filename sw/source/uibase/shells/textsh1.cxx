@@ -926,7 +926,7 @@ bool lcl_DeleteChartColumns(const uno::Reference<chart2::XChartDocument>& xChart
 }
 }
 
-static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xDictionary, SwWrtShell &rWrtSh)
+static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xDictionary, SwWrtShell &rWrtSh, bool bAddWithDot = false)
 {
     if (!xDictionary)
         return false;
@@ -937,7 +937,7 @@ static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xD
         return false;
 
     OUString sWord = xSpellAlt->getWord();
-    linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDictionary, sWord, false, OUString());
+    linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDictionary, sWord, false, OUString(), !bAddWithDot);
     if (linguistic::DictionaryError::NONE != nAddRes && xDictionary.is() && !xDictionary->getEntry(sWord).is())
     {
         SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
@@ -2363,7 +2363,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         else if (sApplyText == "Spelling")
         {
-            AddWordToWordbook(LinguMgr::GetIgnoreAllList(), rWrtSh);
+            AddWordToWordbook(LinguMgr::GetIgnoreAllList(), rWrtSh );
         }
     }
     break;
@@ -2373,9 +2373,22 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if (const SfxStringItem* pItem1 = rReq.GetArg<SfxStringItem>(FN_PARAM_1))
             aDicName = pItem1->GetValue();
 
+        // strip dot, if the extended dictionary name ends with ")", but not ".)", e.g.
+        // "standard.dic (F.A.C.S)"  -> strip dot
+        // "standard.dic (F.A.C.S.)" -> with dot
+        bool bAddWithDot = false;
+        if ( aDicName.endsWith(")") )
+        {
+            bAddWithDot = aDicName.endsWith(".)");
+            // restore the dictionary name by stripping the parenthesized extension
+            sal_Int32 nHintPos = aDicName.indexOf(" (");
+            if ( nHintPos > 0 )
+                aDicName = aDicName.copy(0, nHintPos);
+        }
+
         uno::Reference<linguistic2::XSearchableDictionaryList> xDicList(LinguMgr::GetDictionaryList());
         uno::Reference<linguistic2::XDictionary> xDic = xDicList.is() ? xDicList->getDictionaryByName(aDicName) : nullptr;
-        if (AddWordToWordbook(xDic, rWrtSh))
+        if (AddWordToWordbook(xDic, rWrtSh, bAddWithDot))
         {
             // save modified user-dictionary if it is persistent
             uno::Reference<frame::XStorable> xSavDic(xDic, uno::UNO_QUERY);

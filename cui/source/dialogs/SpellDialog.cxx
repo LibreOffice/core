@@ -603,6 +603,23 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl, weld::Button&, void)
         m_xIgnorePB->grab_focus();
 }
 
+// words with multiple dots are added to the custom
+// dictionary with the terminating dot
+static bool lcl_IsStripDot( const OUString & rWord )
+{
+    // strip the terminating dot, if there is no
+    // an extra dot inside the word, e.g.
+    // put "dots." as "dots" into the dictionary,
+    // but put "F.A.C.S." as "F.A.C.S.", not "F.A.C.S"
+    if ( rWord.endsWith(".") ) {
+        sal_Int32 nDotPos = rWord.indexOf(".");
+        if ( nDotPos == rWord.getLength() - 1 )
+            return true;
+    }
+
+    return false;
+}
+
 IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
 {
     auto xGuard(std::make_unique<UndoChangeGroupGuard>(*m_xSentenceED));
@@ -615,7 +632,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
     Reference<XDictionary> aXDictionary = LinguMgr::GetChangeAllList();
     DictionaryError nAdded = AddEntryToDic( aXDictionary,
             aOldWord, true,
-            aString );
+            aString, lcl_IsStripDot(aOldWord) );
 
     if(nAdded == DictionaryError::NONE)
     {
@@ -661,7 +678,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
         OUString sErrorText(m_xSentenceED->GetErrorText());
         DictionaryError nAdded = AddEntryToDic( aXDictionary,
             sErrorText, false,
-            OUString() );
+            OUString(), lcl_IsStripDot(sErrorText) );
         if (nAdded == DictionaryError::NONE)
         {
             std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
@@ -914,7 +931,7 @@ void SpellDialog::AddToDictionaryExecute(const OUString& rItemId)
     DictionaryError nAddRes = DictionaryError::UNKNOWN;
     if (xDic.is())
     {
-        nAddRes = AddEntryToDic( xDic, aNewWord, false, OUString() );
+        nAddRes = AddEntryToDic( xDic, aNewWord, false, OUString(), lcl_IsStripDot(aNewWord) );
         // save modified user-dictionary if it is persistent
         uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
         if (xSavDic.is())
