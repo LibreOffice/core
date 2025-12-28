@@ -244,7 +244,9 @@ bool MediaItem::setURL(const OUString& rURL, const OUString& rTempURL, const OUS
         m_pImpl->m_URL = rURL;
         m_pImpl->m_TempFileURL = rTempURL;
         m_pImpl->m_Referer = rReferer;
-        setMimeType(::comphelper::GuessMediaMimeType(GetFilename(rURL)));
+        OUString sMimeType(::comphelper::GuessMediaMimeType(GetFilename(rURL)));
+        if (!sMimeType.isEmpty())
+            setMimeType(sMimeType);
     }
     return bChanged;
 }

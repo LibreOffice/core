@@ -917,6 +917,11 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         if (m_xMediaStream.is())
             rPropMap.setProperty(PROP_PrivateStream, m_xMediaStream);
     }
+    // Media Type
+    if (!m_sMediaMimeType.isEmpty())
+    {
+        rPropMap.setProperty(PROP_MediaMimeType, m_sMediaMimeType);
+    }
 }
 
 bool ArtisticEffectProperties::isEmpty() const

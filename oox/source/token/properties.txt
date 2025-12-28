@@ -366,6 +366,7 @@ MarkPosition
 MaxFieldCount
 MaxTextLen
 MediaType
+MediaMimeType
 MediaURL
 Metal
 MetalType
