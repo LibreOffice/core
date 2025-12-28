@@ -204,6 +204,18 @@ sal_Bool SAL_CALL
         // fallback: convert the apostrophes
         bRet = isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, bConvert );
     }
+    if (!bRet)
+    {
+        // accept compounds combined from custom and default dictionary words
+        // separated by a hyphen
+        sal_Int32 nHyphenPos = rWord.indexOf("-");
+        if (nHyphenPos > -1)
+        {
+            return isValid(rWord.copy(0, nHyphenPos), rLocale, rProperties) &&
+                isValid(rWord.copy(nHyphenPos + 1, rWord.getLength() - nHyphenPos - 1),
+                                rLocale, rProperties);
+        }
+    }
     return bRet;
 }
 
