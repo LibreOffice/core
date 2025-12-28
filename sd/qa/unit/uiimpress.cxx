@@ -507,6 +507,34 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf155211_dashed_line)
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf169813_prevent_unintended_dashed_line)
+{
+    createSdImpressDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    OUString aImageURL = createFileURL(u"tdf169813_prevent_unintended_dashed_line.svg");
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "FileName", uno::Any(aImageURL) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    // split the (auto-selected) svg
+    dispatchCommand(mxComponent, u".uno:Break"_ustr, {});
+
+    SdrObject* pObject = pActualPage->GetObj(3);
+    const XLineStyleItem& rStyleItem = pObject->GetMergedItem(XATTR_LINESTYLE);
+    // tdf#169813: Without the fix in place, this test would have failed with
+    // - Expected: 0 (LineStyle_NONE)
+    // - Actual  : 2 (LineStyle_DASH)
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, rStyleItem.GetValue());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
 {
     createSdImpressDoc();
