@@ -582,7 +582,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             break;
         case SAL_MSG_GETCACHEDDC:
             nRet = reinterpret_cast<LRESULT>(
-                GetDCEx(reinterpret_cast<HWND>(wParam), nullptr, 0x00000002L));
+                GetDCEx(reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE));
             break;
         case SAL_MSG_RELEASEDC:
             ReleaseDC(reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam));
