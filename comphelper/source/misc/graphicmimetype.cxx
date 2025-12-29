@@ -230,7 +230,8 @@ auto GuessMediaMimeType(::std::u16string_view rFileName) -> OUString
 {
     if (auto const i = rFileName.rfind('.'); i != ::std::string_view::npos)
     {
-        OString const ext(OUStringToOString(rFileName.substr(i + 1), RTL_TEXTENCODING_UTF8));
+        OString const ext(
+            OUStringToOString(rFileName.substr(i + 1), RTL_TEXTENCODING_UTF8).toAsciiLowerCase());
         auto const& rMap(GetMediaMimes());
         auto const it(rMap.find(ext));
         if (it != rMap.end())
