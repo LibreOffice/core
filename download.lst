@@ -327,8 +327,8 @@ GRAPHITE_TARBALL := graphite2-minimal-1.3.14.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HARFBUZZ_SHA256SUM := ecb603aa426a8b24665718667bda64a84c1504db7454ee4cadbd362eea64e545
-HARFBUZZ_TARBALL := harfbuzz-12.2.0.tar.xz
+HARFBUZZ_SHA256SUM := 8660ebd3c27d9407fc8433b5d172bafba5f0317cb0bb4339f28e5370c93d42b7
+HARFBUZZ_TARBALL := harfbuzz-12.3.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
