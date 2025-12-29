@@ -11,23 +11,36 @@
 #include <font/OpenTypeFeatureDefinitionList.hxx>
 #include <font/OpenTypeFeatureStrings.hrc>
 
-#include <rtl/character.hxx>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+#include <frozen/unordered_set.h>
 
+#include <rtl/character.hxx>
 #include <algorithm>
 
-namespace vcl::font
+namespace vcl::font::feature
 {
-OpenTypeFeatureDefinitionListPrivate& OpenTypeFeatureDefinitionList()
+namespace
 {
-    static OpenTypeFeatureDefinitionListPrivate SINGLETON;
-    return SINGLETON;
-};
+constexpr auto constRequiredFeatures = frozen::make_unordered_set<sal_uInt32>({
+    featureCode("abvf"), featureCode("abvm"), featureCode("abvs"), featureCode("akhn"),
+    featureCode("blwf"), featureCode("blwm"), featureCode("blws"), featureCode("ccmp"),
+    featureCode("cfar"), featureCode("cjct"), featureCode("curs"), featureCode("dist"),
+    featureCode("dtls"), featureCode("fin2"), featureCode("fin3"), featureCode("fina"),
+    featureCode("flac"), featureCode("half"), featureCode("haln"), featureCode("init"),
+    featureCode("isol"), featureCode("ljmo"), featureCode("locl"), featureCode("ltra"),
+    featureCode("ltrm"), featureCode("mark"), featureCode("med2"), featureCode("medi"),
+    featureCode("mkmk"), featureCode("mset"), featureCode("nukt"), featureCode("pref"),
+    featureCode("pres"), featureCode("pstf"), featureCode("psts"), featureCode("rand"),
+    featureCode("rclt"), featureCode("rkrf"), featureCode("rlig"), featureCode("rphf"),
+    featureCode("rtla"), featureCode("rtlm"), featureCode("rvrn"), featureCode("size"),
+    featureCode("ssty"), featureCode("stch"), featureCode("tjmo"), featureCode("vatu"),
+    featureCode("vert"), featureCode("vjmo"),
+});
 
-OpenTypeFeatureDefinitionListPrivate::OpenTypeFeatureDefinitionListPrivate() { init(); }
-
-void OpenTypeFeatureDefinitionListPrivate::init()
-{
-    m_aFeatureDefinition.assign({
+constexpr auto constFeatureCodeToTranslationID
+    = frozen::make_unordered_map<sal_uInt32, TranslateId>({
         { featureCode("aalt"), STR_FONT_FEATURE_ID_AALT },
         { featureCode("afrc"), STR_FONT_FEATURE_ID_AFRC },
         { featureCode("alig"), STR_FONT_FEATURE_ID_ALIG },
@@ -102,37 +115,14 @@ void OpenTypeFeatureDefinitionListPrivate::init()
         { featureCode("vrtr"), STR_FONT_FEATURE_ID_VRTR },
         { featureCode("zero"), STR_FONT_FEATURE_ID_ZERO },
     });
-
-    for (size_t i = 0; i < m_aFeatureDefinition.size(); ++i)
-    {
-        m_aCodeToIndex.emplace(m_aFeatureDefinition[i].getCode(), i);
-    }
-
-    m_aRequiredFeatures.assign({
-        featureCode("abvf"), featureCode("abvm"), featureCode("abvs"), featureCode("akhn"),
-        featureCode("blwf"), featureCode("blwm"), featureCode("blws"), featureCode("ccmp"),
-        featureCode("cfar"), featureCode("cjct"), featureCode("curs"), featureCode("dist"),
-        featureCode("dtls"), featureCode("fin2"), featureCode("fin3"), featureCode("fina"),
-        featureCode("flac"), featureCode("half"), featureCode("haln"), featureCode("init"),
-        featureCode("isol"), featureCode("ljmo"), featureCode("locl"), featureCode("ltra"),
-        featureCode("ltrm"), featureCode("mark"), featureCode("med2"), featureCode("medi"),
-        featureCode("mkmk"), featureCode("mset"), featureCode("nukt"), featureCode("pref"),
-        featureCode("pres"), featureCode("pstf"), featureCode("psts"), featureCode("rand"),
-        featureCode("rclt"), featureCode("rkrf"), featureCode("rlig"), featureCode("rphf"),
-        featureCode("rtla"), featureCode("rtlm"), featureCode("rvrn"), featureCode("size"),
-        featureCode("ssty"), featureCode("stch"), featureCode("tjmo"), featureCode("vatu"),
-        featureCode("vert"), featureCode("vjmo"),
-    });
 }
 
-FeatureDefinition
-OpenTypeFeatureDefinitionListPrivate::getDefinition(const vcl::font::Feature& rFeature)
+FeatureDefinition getDefinition(const vcl::font::Feature& rFeature)
 {
     if (rFeature.isCharacterVariant() || rFeature.isStylisticSet())
     {
         FeatureDefinition aFeatureDefinition;
-        OUString sNumericPart = OUStringChar(char((rFeature.m_nCode >> 8) & 0xFF))
-                                + OUStringChar(char((rFeature.m_nCode >> 0) & 0xFF));
+        OUString sNumericPart = rFeature.getCodeNumericPart();
         if (rFeature.isCharacterVariant())
             aFeatureDefinition = { rFeature.m_nCode, STR_FONT_FEATURE_ID_CVXX, sNumericPart };
         else if (rFeature.isStylisticSet())
@@ -141,18 +131,16 @@ OpenTypeFeatureDefinitionListPrivate::getDefinition(const vcl::font::Feature& rF
     }
 
     auto nFeatureCode = rFeature.m_nCode;
-    if (m_aCodeToIndex.find(nFeatureCode) != m_aCodeToIndex.end())
-    {
-        size_t nIndex = m_aCodeToIndex.at(nFeatureCode);
-        return m_aFeatureDefinition[nIndex];
-    }
+
+    auto iterator = constFeatureCodeToTranslationID.find(nFeatureCode);
+    if (iterator != constFeatureCodeToTranslationID.end())
+        return FeatureDefinition(iterator->first, iterator->second);
     return FeatureDefinition();
 }
 
-bool OpenTypeFeatureDefinitionListPrivate::isRequired(sal_uInt32 nFeatureCode)
+bool isRequired(sal_uInt32 nFeatureCode)
 {
-    return std::find(m_aRequiredFeatures.begin(), m_aRequiredFeatures.end(), nFeatureCode)
-           != m_aRequiredFeatures.end();
+    return constRequiredFeatures.find(nFeatureCode) != constRequiredFeatures.end();
 }
 
 } // end vcl::font namespace

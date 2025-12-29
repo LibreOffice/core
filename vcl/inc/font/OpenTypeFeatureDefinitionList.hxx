@@ -14,25 +14,10 @@
 #include <vector>
 #include <unordered_map>
 
-namespace vcl::font
+namespace vcl::font::feature
 {
-class OpenTypeFeatureDefinitionListPrivate
-{
-private:
-    std::vector<FeatureDefinition> m_aFeatureDefinition;
-    std::unordered_map<sal_uInt32, size_t> m_aCodeToIndex;
-    std::vector<sal_uInt32> m_aRequiredFeatures;
-
-    void init();
-
-public:
-    OpenTypeFeatureDefinitionListPrivate();
-    FeatureDefinition getDefinition(const vcl::font::Feature& rFeature);
-    bool isRequired(sal_uInt32 nFeatureCode);
-};
-
-VCL_DLLPUBLIC OpenTypeFeatureDefinitionListPrivate& OpenTypeFeatureDefinitionList();
-
-} // namespace vcl::font
+FeatureDefinition getDefinition(const vcl::font::Feature& rFeature);
+bool isRequired(sal_uInt32 nFeatureCode);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
