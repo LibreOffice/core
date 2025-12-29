@@ -1611,6 +1611,26 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextAlignLeft)
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr", "algn", u"l");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSubtitleNoBullets)
+{
+    createSdImpressDoc("odp/tdf170166.odp");
+    saveAndReload(TestFilter::PPTX);
+    const SdrPage* pPage1 = GetPage(1);
+    {
+        // subtitle placeholder object
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage1->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong object type!", SdrObjKind::Text,
+                                     pTxtObj->GetObjIdentifier());
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+        // Without a fix, it will fail with numbering type: SVX_NUM_CHAR_SPECIAL
+        CPPUNIT_ASSERT(pNumFmt);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet's numbering type is wrong!", SVX_NUM_NUMBER_NONE,
+                                     pNumFmt->GetNumRule().GetLevel(0).GetNumberingType());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169496_hidden_graphic)
 {
     createSdImpressDoc("pptx/tdf169496_hidden_graphic.pptx");
