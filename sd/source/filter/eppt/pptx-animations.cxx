@@ -107,6 +107,9 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
         }
         return;
     }
+    // If rAny is not a valid ValuePair and token is XML_by
+    if (nToken == XML_by)
+        return;
 
     sal_Int32 nRgb = {}; // spurious -Werror=maybe-uninitialized
     double fDouble = {}; // spurious -Werror=maybe-uninitialized
