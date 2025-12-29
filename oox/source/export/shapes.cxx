@@ -2211,7 +2211,7 @@ constexpr auto constMap = frozen::make_unordered_map<std::u16string_view, ShapeC
     { u"com.sun.star.presentation.OutlinerShape", &ShapeExport::WriteTextShape },
     { u"com.sun.star.presentation.SlideNumberShape", &ShapeExport::WriteTextShape },
     { u"com.sun.star.presentation.TitleTextShape", &ShapeExport::WriteTextShape },
-    //{ u"com.sun.star.presentation.SubtitleShape", &ShapeExport::WriteTextShape }, TODO: handle subtitle shape: see tdf#112557 workaround
+    { u"com.sun.star.presentation.SubtitleShape", &ShapeExport::WriteTextShape }
 });
 
 } // end anonymous namespace
