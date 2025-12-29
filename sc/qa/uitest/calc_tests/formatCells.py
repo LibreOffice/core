@@ -261,21 +261,23 @@ class formatCell(UITestCase):
                     select_pos(xTabs, "5")  #tab Borders
 
                     linewidthmf = xDialog.getChild("linewidthmf")
-                    xLineSet = xDialog.getChild('lineset')
+                    xLineIconView = xDialog.getChild('iconview_lines')
 
                     # check line-width for default solid line
-                    self.assertEqual('0', get_state_as_dict(xLineSet)['SelectedItemPos'])
+                    self.assertEqual('0', get_state_as_dict(xLineIconView)['SelectedItemPos'])
                     widthVal = get_state_as_dict(linewidthmf)["Text"]
                     self.assertEqual(widthVal, '0.75 pt')
 
                     # set line style to "double" (minimal width is taken)
-                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
+                    element6 = xLineIconView.getChild('6')
+                    element6.executeAction("SELECT", mkPropertyValues({}))
                     widthVal = get_state_as_dict(linewidthmf)["Text"]
                     # minimum predefined width is Medium (1.50 pt)
                     self.assertEqual(widthVal, '1.50 pt')
 
                     # set line style to "solid"
-                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
+                    element1 = xLineIconView.getChild('0')
+                    element1.executeAction("SELECT", mkPropertyValues({}))
                     widthVal = get_state_as_dict(linewidthmf)["Text"]
                     self.assertEqual(widthVal, '1.50 pt')
 
@@ -287,7 +289,8 @@ class formatCell(UITestCase):
                     self.assertEqual(widthVal, '2.25 pt')
 
                     # set line style to "double" (minimal width is not taken)
-                    xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
+                    element8 = xLineIconView.getChild('6')
+                    element8.executeAction("SELECT", mkPropertyValues({}))
                     widthVal = get_state_as_dict(linewidthmf)["Text"]
                     self.assertEqual(widthVal, '2.25 pt')
 
