@@ -239,6 +239,7 @@ class PropertyHelper_Hyphen final :
     sal_Int16   nHyphMinLeading,
             nHyphMinTrailing,
             nHyphCompoundMinLeading,
+            nHyphCompoundMinTrailing,
             nHyphMinWordLength,
             nHyphTextHyphenZone;
     bool bNoHyphenateCaps;
@@ -247,6 +248,7 @@ class PropertyHelper_Hyphen final :
     sal_Int16   nResHyphMinLeading,
             nResHyphMinTrailing,
             nResHyphCompoundMinLeading,
+            nResHyphCompoundMinTrailing,
             nResHyphMinWordLength,
             nResHyphTextHyphenZone;
     bool bResNoHyphenateCaps;
@@ -275,6 +277,7 @@ public:
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
     sal_Int16   GetCompoundMinLeading() const       { return nResHyphCompoundMinLeading; }
+    sal_Int16   GetCompoundMinTrailing() const      { return nResHyphCompoundMinTrailing; }
     sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
     bool IsNoHyphenateCaps() const { return bResNoHyphenateCaps; }
 };
@@ -299,6 +302,7 @@ public:
     sal_Int16   GetMinLeading() const;
     sal_Int16   GetMinTrailing() const;
     sal_Int16   GetCompoundMinLeading() const;
+    sal_Int16   GetCompoundMinTrailing() const;
     sal_Int16   GetMinWordLength() const;
     bool IsNoHyphenateCaps() const;
     /// @throws css::uno::RuntimeException

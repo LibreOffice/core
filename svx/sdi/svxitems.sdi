@@ -290,6 +290,7 @@ struct SvxHyphenZone
     INT16       HyphenKeepType MID_HYPHEN_KEEP_TYPE;
     BOOL        HyphenKeepLine MID_HYPHEN_KEEP_LINE;
     INT16       MinLead       MID_HYPHEN_COMPOUND_MIN_LEAD;
+    INT16       MinTrail      MID_HYPHEN_COMPOUND_MIN_TRAIL;
 };
 item SvxHyphenZone SvxHyphenZoneItem;
 

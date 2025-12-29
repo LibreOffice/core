@@ -173,7 +173,7 @@
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="">
    <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" style:page-number="auto"/>
-   <style:text-properties officeooo:rsid="000f4814" officeooo:paragraph-rsid="000f4814" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="3" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2"/>
+   <style:text-properties officeooo:rsid="000f4814" officeooo:paragraph-rsid="000f4814" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="3" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="5" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2" loext:hyphenation-compound-push-char-count="2"/>
   </style:style>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties fo:page-width="595.3pt" fo:page-height="841.89pt" style:num-format="1" style:print-orientation="portrait" fo:margin-top="56.69pt" fo:margin-bottom="56.69pt" fo:margin-left="56.69pt" fo:margin-right="56.69pt" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="20.01pt" style:layout-grid-ruby-height="10.01pt" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0pt" loext:margin-gutter="0pt">
@@ -189,8 +189,8 @@
  </office:master-styles>
  <office:body>
   <office:text>
-   <text:p text:style-name="P1">emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes </text:p>
-   <text:p text:style-name="P1">kovakőbányászat kovakőbányászat kovakőbányászat kovakőbányászat kovakőbányászat,,, kovakőbányászat kovakőbányászat kovakőbányászat kovakőbányászat</text:p>
+   <text:p text:style-name="P1">,,,,emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes emberellenes </text:p>
+   <text:p text:style-name="P1">vasemberellenes vasemberellenes vasemberellenes vasemberellenes vasemberellenes vasemberellenes</text:p>
   </office:text>
  </office:body>
 </office:document>

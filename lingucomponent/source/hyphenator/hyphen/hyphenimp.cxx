@@ -346,6 +346,7 @@ hyphenation_result getHyphens(std::u16string_view word, const HDInfo& hdInfo, sa
     HyphenDict* dict = hdInfo.aPtr;
     const bool failed = 0 != hnj_hyphen_hyphenate3( dict, encWord.getStr(), n, hyphens.get(), nullptr,
                 &rep, &pos, &cut, minLead, minTrail,
+                // TODO add "no-limit"/0 clh/crh support to libhyphen, also add minCompoundLead/Trail support
                 std::max<sal_Int16>(dict->clhmin, 2) + std::max(0, minLead  - std::max<sal_Int16>(dict->lhmin, 2)),
                 std::max<sal_Int16>(dict->crhmin, 2) + std::max(0, minTrail - std::max<sal_Int16>(dict->rhmin, 2)) );
     return { n, failed, rep, pos, cut, std::move(hyphens) }; // buffers will free in dtor
@@ -390,6 +391,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minCompoundLead = rHelper.GetCompoundMinLeading();
+    sal_Int16 minCompoundTrail = rHelper.GetCompoundMinTrailing();
     sal_Int16 minLen = rHelper.GetMinWordLength();
     bool bNoHyphenateCaps = rHelper.IsNoHyphenateCaps();
 
@@ -399,6 +401,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         int nHyphenationPos = -1;
         int nHyphenationPosAlt = -1;
         int nHyphenationPosAltHyph = -1;
+        int nPrevHyphenationPos = -1;
+        int nPrevHyphenationPosAlt = -1;
+        int nPrevHyphenationPosAltHyph = -1;
+        int nCompoundHyphenationPos = -1;
 
         // hyphenate the word with that dictionary
         rtl_TextEncoding eEnc = pHDInfo->eEnc;
@@ -432,6 +438,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         {
             int leftrep = 0;
             bool hit = (result.n >= minLen);
+            bool compoundhit = (result.n >= 1) && (result.hyphens[i] & 1);;
+            bool bPrevCompound = false;
             if (!result.rep || !result.rep[i])
             {
                 hit = hit && (result.hyphens[i] & 1) && (i < Leading);
@@ -455,11 +463,22 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 hit = hit && ((i + leftrep - result.pos[i]) >= (minLead-1) );
                 hit = hit && ((result.n - i - 1 + sal::static_int_cast< sal_sSize >(strlen(result.rep[i])) - leftrep - 1) >= minTrail);
             }
-            if (hit)
+            if (hit || compoundhit)
             {
-                // skip hyphenation right after stem boundaries in compound words
+                // skip hyphenation inside compound constituents right after constituent boundaries in compound words
                 // if minCompoundLead > 2 (default value: less than n=minCompoundLead character distance)
-                if ( bCompoundHyphenation && minCompoundLead > 2 && nHyphenationPos > -1 && i - nHyphenationPos < minCompoundLead )
+                // or always skip hyphenation inside compound constituents, if minCompoundLead == 0,
+                // also skip hyphenation inside compound constituents right before constituent boundaries in compound words
+                // or always skip hyphenation inside compound consituents, if minCompoundTrail == 0
+                // if both minCompoundLead and minCompoundTrail == 0, don't hyphenate inside suffixes, too
+                if ( bCompoundHyphenation && (nCompoundHyphenationPos > -1 || minCompoundLead == 0 || minCompoundTrail > 2 || minCompoundTrail == 0 ) &&
+                        // check minimal distance from the left constituent boundary
+                        ( ( minCompoundLead > 2 && i - nCompoundHyphenationPos < minCompoundLead ) ||
+                        // check minimal distance from the right constituent boundary
+                        ( minCompoundTrail > 2 && i - nCompoundHyphenationPos < minCompoundTrail ) ||
+                        // special value: zero compound limit means forbidden hyphenation
+                        // inside (stems of) compound constituents
+                        minCompoundLead == 0 || minCompoundTrail == 0 ) )
                 {
                     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
                     uno::Reference< XSpellChecker1 > xSpell;
@@ -575,6 +594,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                         {
                             sal_Int32 nLetters = 0; // count not separator characters
                             sal_Int32 nSepPos = -1; // position of last character | used for stem boundaries
+                            sal_Int32 nSepLetterPos = -1; // letter position of the character associated to nSepPos
                             bool bWeightedSep = false; // double separator || = weighted stem boundary
                             sal_Int32 j = 0;
                             for (; j < sStems.getLength() && nLetters <= i; j++)
@@ -583,26 +603,55 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                 {
                                     bWeightedSep = nSepPos > -1 && (j - 1 == nSepPos);
                                     nSepPos = j;
+                                    nSepLetterPos = nLetters;
                                 }
                                 else if ( sStems[j] != '-' && sStems[j] != '=' && sStems[j] != '*' )
                                     ++nLetters;
                             }
-                            // skip break points near stem boundaries
-                            if (
+                            // skip break points near after the stem boundaries
+                            if ( hit &&
+                                // too close to the left break point or special case?
+                                ( i - nCompoundHyphenationPos < minCompoundLead || minCompoundLead == 0 ) &&
                                 // there is a stem boundary before the actual break point
                                 nSepPos > -1 &&
                                 // and the break point is within a stem, i.e. not in the
-                                // suffix of the last stem
-                                i < aWord.getLength() - nSuffixLen - 1 &&
+                                // suffix of the last stem or both minCompoundLead and
+                                // minCompoundTrail == 0, i.e. hyphenation is allowed only
+                                // at compound constituent boundaries
+                                ( i < aWord.getLength() - nSuffixLen - 1 ||
+                                    ( minCompoundLead == 0 && minCompoundTrail == 0) ) &&
                                 // and it is not another stem boundary
                                 j + 1 < sStems.getLength() &&
-                                ( sStems[j + 1] != u'|' ||
+                                ( sStems[j] != u'|' ||
                                 // except if it's only the previous was a weighted one
-                                    ( bWeightedSep && ( j + 2 == sStems.getLength() ||
-                                                        sStems[j + 2] != u'|' ) ) ) )
+                                    ( bWeightedSep && ( j + 1 == sStems.getLength() ||
+                                                        sStems[j + 1] != u'|' ) ) ) )
                             {
                                 continue;
                             }
+                            // skip break points near before the stem boundaries
+                            // (hit is not mandatory, only compondhit, because the
+                            // compound boundary can be after the lead limit)
+                            if (!hit &&
+                                // too close to the right break point?
+                                ( i - nCompoundHyphenationPos < minCompoundTrail || minCompoundTrail == 0 ) &&
+                                // and the break point is within a stem, i.e. not in the
+                                // suffix of the last stem suffix or both minCompoundLead and
+                                // minCompoundTrail == 0, i.e. hyphenation is allowed only
+                                // at compound constituent boundaries
+                                ( i < aWord.getLength() - nSuffixLen - 1 ||
+                                    ( minCompoundLead == 0 && minCompoundTrail == 0) ) &&
+                                // and it is a stem boundary
+                                j + 1 < sStems.getLength() && sStems[j+1] == u'|' &&
+                                // the previous break point is not a boundary
+                                (nSepPos == -1 || nCompoundHyphenationPos != nSepLetterPos - 1 ) )
+                            {
+                                nHyphenationPos = nPrevHyphenationPos;
+                                nHyphenationPosAlt = nPrevHyphenationPosAlt;
+                                nHyphenationPosAltHyph = nPrevHyphenationPosAltHyph;
+                                continue;
+                            }
+                            bPrevCompound = nSepPos == j || nSepPos == j - 1;
                         }
                         else
                             // not a compound word
@@ -613,9 +662,20 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                         bCompoundHyphenation = false;
                 }
 
-                nHyphenationPos = i;
+                nCompoundHyphenationPos = i;
+                if (hit)
+                {
+                    if ( bPrevCompound )
+                        nPrevHyphenationPos = nHyphenationPos;
+                    nHyphenationPos = i;
+                }
                 if (result.rep && result.rep[i])
                 {
+                    if ( bPrevCompound )
+                    {
+                        nPrevHyphenationPosAlt = nHyphenationPosAlt;
+                        nPrevHyphenationPosAltHyph = nHyphenationPosAltHyph;
+                    }
                     nHyphenationPosAlt = i - result.pos[i];
                     nHyphenationPosAltHyph = i + leftrep - result.pos[i];
                 }

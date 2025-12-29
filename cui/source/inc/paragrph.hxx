@@ -266,6 +266,8 @@ private:
     std::unique_ptr<weld::SpinButton> m_xExtHyphenAfterBox;
     std::unique_ptr<weld::Label> m_xCompoundBeforeText;
     std::unique_ptr<weld::SpinButton> m_xExtCompoundHyphenBeforeBox;
+    std::unique_ptr<weld::Label> m_xCompoundAfterText;
+    std::unique_ptr<weld::SpinButton> m_xExtCompoundHyphenAfterBox;
     std::unique_ptr<weld::Label> m_xMaxHyphenLabel;
     std::unique_ptr<weld::SpinButton> m_xMaxHyphenEdit;
     std::unique_ptr<weld::Label> m_xMinWordLabel;
