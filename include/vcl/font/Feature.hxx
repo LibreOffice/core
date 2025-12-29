@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_FONT_FEATURE_HXX
-#define INCLUDED_VCL_FONT_FEATURE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/character.hxx>
@@ -92,18 +91,29 @@ struct Feature
     Feature();
     Feature(uint32_t const nCode, FeatureType eType);
 
+    bool hasCodeNumericPart() const
+    {
+        return rtl::isAsciiDigit((m_nCode >> 8) & 0xFF) && rtl::isAsciiDigit((m_nCode >> 0) & 0xFF);
+    }
+
     bool isCharacterVariant() const
     {
         return ((m_nCode >> 24) & 0xFF) == 'c' && ((m_nCode >> 16) & 0xFF) == 'v'
-               && rtl::isAsciiDigit((m_nCode >> 8) & 0xFF)
-               && rtl::isAsciiDigit((m_nCode >> 0) & 0xFF);
+               && hasCodeNumericPart();
     }
 
     bool isStylisticSet() const
     {
         return ((m_nCode >> 24) & 0xFF) == 's' && ((m_nCode >> 16) & 0xFF) == 's'
-               && rtl::isAsciiDigit((m_nCode >> 8) & 0xFF)
-               && rtl::isAsciiDigit((m_nCode >> 0) & 0xFF);
+               && hasCodeNumericPart();
+    }
+
+    OUString getCodeNumericPart() const
+    {
+        if (hasCodeNumericPart())
+            return OUStringChar(char((m_nCode >> 8) & 0xFF))
+                   + OUStringChar(char((m_nCode >> 0) & 0xFF));
+        return OUString();
     }
 
     uint32_t m_nCode;
@@ -124,7 +134,5 @@ struct FeatureSetting
 };
 
 } // namespace vcl::font
-
-#endif // INCLUDED_VCL_FONT_FEATURE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
