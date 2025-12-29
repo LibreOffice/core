@@ -89,8 +89,7 @@ SlideMasterPagesAllWrapper::SlideMasterPagesAllWrapper(vcl::Window* pParent,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
-    if (pDocument == nullptr)
-        SAL_INFO("sd", "SlideMasterPagesAllWrapper got null SdDrawDocument");
+    assert(pDocument && "SlideMasterPagesAllWrapper got null SdDrawDocument");
 
     m_xPane = std::make_unique<sd::sidebar::AllMasterPagesSelector>(
         m_xContainer.get(), *pDocument, rBase,
