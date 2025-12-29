@@ -23,6 +23,9 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -35,6 +38,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 
 namespace oox::core
 {
@@ -177,6 +181,23 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
             if (xAudio->getSource() >>= sURL)
             {
                 mbValid = IsAudioURL(sURL);
+
+                // Check whether URL is accessible
+                try
+                {
+                    if (!sURL.startsWith("vnd.sun.star.Package:"))
+                    {
+                        Reference<XInputStream> xAudioStream;
+                        xAudioStream = comphelper::OStorageHelper::GetInputStreamFromURL(
+                            sURL, comphelper::getProcessComponentContext());
+                        mbValid = mbValid && xAudioStream.is();
+                    }
+                }
+                catch (const Exception&)
+                {
+                    SAL_WARN("sd", "NodeContext::initValid, invalid audio");
+                    mbValid = false;
+                }
             }
             else if (xAudio->getSource() >>= xShape)
             {
