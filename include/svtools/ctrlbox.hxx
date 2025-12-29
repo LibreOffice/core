@@ -197,8 +197,6 @@ inline Color sameDistColor( Color /*rMain*/, Color rDefault )
     return rDefault;
 }
 
-class ValueSet;
-
 class SVT_DLLPUBLIC SvtLineListBox final : public WeldToolbarPopup
 {
 public:
@@ -253,7 +251,8 @@ private:
                                     Color nColor1, Color nColor2, Color nColorDist,
                                     SvxBorderLineStyle nStyle, BitmapEx& rBmp );
 
-    DECL_DLLPRIVATE_LINK(ValueSelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(SelectionChangedHdl, weld::IconView&, void);
+    DECL_DLLPRIVATE_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(NoneHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(StyleUpdatedHdl, weld::Widget&, void);
@@ -261,14 +260,15 @@ private:
     void            UpdateEntries();
 
     void UpdatePreview();
+    static VclPtr<VirtualDevice> GetVirtualDevice(const BitmapEx& rBmp);
+    ImpLineListData* getBorderLineData(sal_Int32 nId);
 
                     SvtLineListBox( const SvtLineListBox& ) = delete;
     SvtLineListBox&    operator =( const SvtLineListBox& ) = delete;
 
     std::unique_ptr<weld::MenuButton> m_xControl;
     std::unique_ptr<weld::Button> m_xNoneButton;
-    std::unique_ptr<ValueSet> m_xLineSet;
-    std::unique_ptr<weld::CustomWeld> m_xLineSetWin;
+    std::unique_ptr<weld::IconView> m_xLineIV;
 
     std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
     tools::Long            m_nWidth;

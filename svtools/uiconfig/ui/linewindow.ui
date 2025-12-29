@@ -7,6 +7,14 @@
     <property name="can-focus">False</property>
     <property name="icon-name">cmd/sc_square_unfilled.png</property>
   </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="line_popup_window">
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
@@ -37,13 +45,19 @@
           </packing>
         </child>
         <child>
-          <object class="GtkDrawingArea" id="lineset">
+          <object class="GtkIconView" id="iconview_lines">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="model">liststore1</property>
+            <property name="pixbuf-column">0</property>
+            <property name="selection-mode">single</property>
+            <property name="columns">1</property>
+            <property name="activate-on-single-click">True</property>
+            <property name="item-padding">2</property>
+            <property name="row-spacing">2</property>
+            <property name="margin">2</property>
           </object>
           <packing>
             <property name="expand">False</property>

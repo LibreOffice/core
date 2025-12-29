@@ -47,7 +47,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
-#include <svtools/valueset.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -1415,9 +1414,10 @@ int FontSizeBox::get_value() const
 
 SvxBorderLineStyle SvtLineListBox::GetSelectEntryStyle() const
 {
-    if (m_xLineSet->IsNoSelection())
+    if (m_xLineIV->get_selected_id().isEmpty())
         return SvxBorderLineStyle::NONE;
-    auto nId = m_xLineSet->GetSelectedItemId();
+
+    auto nId = m_xLineIV->get_selected_id().toInt32();
     return static_cast<SvxBorderLineStyle>(nId - 1);
 }
 
@@ -1489,17 +1489,20 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     : WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>(), pControl.get(), u"svt/ui/linewindow.ui"_ustr, u"line_popup_window"_ustr)
     , m_xControl(std::move(pControl))
     , m_xNoneButton(m_xBuilder->weld_button(u"none_line_button"_ustr))
-    , m_xLineSet(new ValueSet(nullptr))
-    , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, u"lineset"_ustr, *m_xLineSet))
+    , m_xLineIV(m_xBuilder->weld_icon_view(u"iconview_lines"_ustr))
     , m_nWidth( 5 )
     , aVirDev(VclPtr<VirtualDevice>::Create())
     , aColor(COL_BLACK)
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    m_xLineSet->SetStyle(WinBits(WB_FLATVALUESET | WB_NO_DIRECTSELECT | WB_TABSTOP));
-    m_xLineSet->SetItemHeight(rStyleSettings.GetListBoxPreviewDefaultPixelSize().Height() + 1);
-    m_xLineSet->SetColCount(1);
-    m_xLineSet->SetSelectHdl(LINK(this, SvtLineListBox, ValueSelectHdl));
+    m_xLineIV->connect_selection_changed(LINK(this, SvtLineListBox, SelectionChangedHdl));
+
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated during character formatting resets.
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        m_xLineIV->connect_query_tooltip(LINK(this, SvtLineListBox, QueryTooltipHdl));
+    }
 
     m_xNoneButton->connect_clicked(LINK(this, SvtLineListBox, NoneHdl));
 
@@ -1528,7 +1531,7 @@ void SvtLineListBox::GrabFocus()
     if (GetSelectEntryStyle() == SvxBorderLineStyle::NONE)
         m_xNoneButton->grab_focus();
     else
-        m_xLineSet->GrabFocus();
+        m_xLineIV->grab_focus();
 }
 
 IMPL_LINK(SvtLineListBox, ToggleHdl, weld::Toggleable&, rButton, void)
@@ -1546,7 +1549,7 @@ IMPL_LINK_NOARG(SvtLineListBox, StyleUpdatedHdl, weld::Widget&, void)
 IMPL_LINK_NOARG(SvtLineListBox, NoneHdl, weld::Button&, void)
 {
     SelectEntry(SvxBorderLineStyle::NONE);
-    ValueSelectHdl(nullptr);
+    SelectionChangedHdl(*m_xLineIV);
 }
 
 SvtLineListBox::~SvtLineListBox()
@@ -1570,9 +1573,26 @@ OUString SvtLineListBox::GetLineStyleName(SvxBorderLineStyle eStyle)
 void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
 {
     if (nStyle == SvxBorderLineStyle::NONE)
-        m_xLineSet->SetNoSelection();
+        m_xLineIV->unselect_all();
     else
-        m_xLineSet->SelectItem(static_cast<sal_Int16>(nStyle) + 1);
+    {
+        for (int i = 0; i < m_xLineIV->n_children(); i++)
+        {
+            OUString sId = m_xLineIV->get_id(i);
+
+            if (!sId.isEmpty())
+            {
+                sal_Int32 nId = sId.toUInt32();
+                SvxBorderLineStyle eIdStyle = static_cast<SvxBorderLineStyle>(nId - 1);
+
+                if (eIdStyle == nStyle)
+                {
+                    m_xLineIV->select(i);
+                    break;
+                }
+            }
+        }
+    }
     UpdatePreview();
 }
 
@@ -1589,7 +1609,7 @@ void SvtLineListBox::UpdateEntries()
     SvxBorderLineStyle eSelected = GetSelectEntryStyle();
 
     // Remove the old entries
-    m_xLineSet->Clear();
+    m_xLineIV->clear();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     Color aFieldColor = rSettings.GetFieldColor();
@@ -1608,22 +1628,72 @@ void SvtLineListBox::UpdateEntries()
                 pData->GetColorLine2(aColor),
                 pData->GetColorDist(aColor, aFieldColor),
                 pData->GetStyle(), aBmp );
-        sal_Int16 nItemId = static_cast<sal_Int16>(pData->GetStyle()) + 1;
-        m_xLineSet->InsertItem(nItemId, Image(aBmp), GetLineStyleName(pData->GetStyle()));
+        sal_Int16 nPos = static_cast<sal_Int16>(pData->GetStyle());
+        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBmp);
+
+        OUString sId = OUString::number(nPos + 1);
+        m_xLineIV->append(sId, GetLineStyleName(pData->GetStyle()), pVDev.get());
         if (pData->GetStyle() == eSelected)
-            m_xLineSet->SelectItem(nItemId);
+            m_xLineIV->select(n);
         n++;
     }
-
-    m_xLineSet->SetOptimalSize();
 }
 
-IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, ValueSet*, void)
+VclPtr<VirtualDevice> SvtLineListBox::GetVirtualDevice(const BitmapEx& rBmp)
+{
+    constexpr tools::Long nMarginTopBottom = 5;
+    constexpr tools::Long nMarginLeftRight = 2;
+
+    Size aBmpSize = rBmp.GetSizePixel();
+
+    Size aVDSize(
+        aBmpSize.Width()  + 2 * nMarginLeftRight,
+        aBmpSize.Height() + 2 * nMarginTopBottom
+    );
+
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    pVDev->SetOutputSizePixel(aVDSize);
+
+    Point aDrawPos(nMarginLeftRight, nMarginTopBottom);
+    pVDev->DrawBitmapEx(aDrawPos, rBmp);
+
+    return pVDev;
+}
+
+IMPL_LINK_NOARG(SvtLineListBox, SelectionChangedHdl, weld::IconView&, void)
 {
     maSelectHdl.Call(*this);
     UpdatePreview();
     if (m_xControl->get_active())
         m_xControl->set_active(false);
+}
+
+IMPL_LINK(SvtLineListBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = m_xLineIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    sal_Int32 nId = sId.toUInt32();
+
+    ImpLineListData* pData = getBorderLineData(nId - 1);
+    if (pData)
+        return GetLineStyleName(pData->GetStyle());
+
+    return OUString();
+}
+
+ImpLineListData* SvtLineListBox::getBorderLineData(sal_Int32 nId)
+{
+    SvxBorderLineStyle eStyle = static_cast<SvxBorderLineStyle>(nId);
+
+    for (auto& pData : m_vLineList)
+    {
+        if (pData->GetStyle() == eStyle)
+            return pData.get();
+    }
+
+    return nullptr;
 }
 
 void SvtLineListBox::UpdatePreview()
@@ -1645,13 +1715,28 @@ void SvtLineListBox::UpdatePreview()
     }
     else
     {
-        Image aImage(m_xLineSet->GetItemImage(m_xLineSet->GetSelectedItemId()));
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        Color aFieldColor = rSettings.GetFieldColor();
+
+        auto nId = m_xLineIV->get_selected_id().toInt32();
+        ImpLineListData* pData = getBorderLineData(nId - 1);
+
+        if(!pData) return;
+
+        BitmapEx aBmp;
+        ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
+                pData->GetLine2ForWidth( m_nWidth ),
+                pData->GetDistForWidth( m_nWidth ),
+                pData->GetColorLine1(aColor),
+                pData->GetColorLine2(aColor),
+                pData->GetColorDist(aColor, aFieldColor),
+                pData->GetStyle(), aBmp );
+        Image aImage(aBmp);
         m_xControl->set_label(u""_ustr);
         const auto nPos = (aVirDev->GetOutputSizePixel().Height() - aImage.GetSizePixel().Height()) / 2;
         aVirDev->Push(vcl::PushFlags::MAPMODE);
         aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        aVirDev->SetBackground(rSettings.GetFieldColor());
+        aVirDev->SetBackground(aFieldColor);
         aVirDev->Erase();
         aVirDev->DrawImage(Point(0, nPos), aImage);
         m_xControl->set_image(aVirDev.get());
