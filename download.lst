@@ -60,8 +60,8 @@ DRAGONBOX_TARBALL := dragonbox-1.1.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FAST_FLOAT_SHA256SUM := 4bfabb5979716995090ce68dce83f88f99629bc17ae280eae79311c5340143e1
-FAST_FLOAT_TARBALL := fast_float-8.1.0.tar.gz
+FAST_FLOAT_SHA256SUM := 1c63903701c7aadbd47386752ab4efc3d324c9a2fbe230f461ff3806fa264d84
+FAST_FLOAT_TARBALL := fast_float-8.2.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
