@@ -86,8 +86,7 @@ def get_library_list(fileName):
         if "JFREEREPORT_" in variableName:
             continue
 
-        # FIXME
-        if "FONT_" in variableName and "REEM" not in variableName:
+        if "FONT_" in variableName and "REEM" not in variableName and "NOTO" not in variableName:
             continue
 
         libraryName = decodedName.split("=")[1]
@@ -114,7 +113,8 @@ def get_library_list(fileName):
         libraryList.append(libraryName.lower())
     return libraryList
 
-def get_latest_version(libName):
+def get_latest_version(libNameOrig):
+    libName = libNameOrig
     bFound = False
     for k,v in libraryNames.items():
         if k in libName:
@@ -125,6 +125,8 @@ def get_latest_version(libName):
     if not bFound:
         if libName.startswith("postgresql"):
             libName = "postgresql%20" + str(postgres_branch) + ".x"
+        if libName.startswith("noto"):
+            libName = "notofonts"
         elif re.match("[0-9a-f]{5,40}", libName.split("-")[0]): # SHA1
             libName = libName.split("-")[1]
         else:
@@ -165,6 +167,13 @@ def get_latest_version(libName):
             if ver.startswith(rhino_branch):
                 latest_version = idx
                 break
+
+    elif libName == "notofonts":
+        fontName = libNameOrig.split("-")[0]
+        for i in range(len(json['items'])):
+            for idx, ver in enumerate(json['items'][i]['stable_versions']):
+                if ver.lower().startswith(fontName + "-"):
+                    return Version(ver.split("-")[1]), json['items'][item]['homepage']
 
     return Version(json['items'][item]['stable_versions'][latest_version].replace("_", ".").replace("-", ".")), json['items'][item]['homepage']
 
