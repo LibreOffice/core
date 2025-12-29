@@ -49,7 +49,7 @@ namespace basctl
 
     namespace {
 
-    enum ListenerAction
+    enum class ListenerAction
     {
         RegisterListener,
         RemoveListener
@@ -99,7 +99,7 @@ namespace basctl
     {
         std::unique_lock aGuard(m_aMutex);
         osl_atomic_increment( &m_refCount );
-        impl_listenerAction_nothrow( aGuard, RegisterListener );
+        impl_listenerAction_nothrow( aGuard, ListenerAction::RegisterListener );
         osl_atomic_decrement( &m_refCount );
     }
 
@@ -178,7 +178,7 @@ namespace basctl
 
     void DocumentEventNotifier::Impl::disposing(std::unique_lock<std::mutex>& rGuard)
     {
-        impl_listenerAction_nothrow( rGuard, RemoveListener );
+        impl_listenerAction_nothrow( rGuard, ListenerAction::RemoveListener );
         impl_dispose_nothrow(rGuard);
     }
 
@@ -203,7 +203,7 @@ namespace basctl
             }
 
             void ( SAL_CALL XDocumentEventBroadcaster::*listenerAction )( const Reference< XDocumentEventListener >& ) =
-                ( _eAction == RegisterListener ) ? &XDocumentEventBroadcaster::addDocumentEventListener : &XDocumentEventBroadcaster::removeDocumentEventListener;
+                ( _eAction == ListenerAction::RegisterListener ) ? &XDocumentEventBroadcaster::addDocumentEventListener : &XDocumentEventBroadcaster::removeDocumentEventListener;
 
             rGuard.unlock();
             (xBroadcaster.get()->*listenerAction)( this );

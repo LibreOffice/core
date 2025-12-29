@@ -106,7 +106,7 @@ IMPL_LINK(ObjectPage, EditedEntryHdl, const IterString&, rIterString, bool)
     const OUString& aLibName( aDesc.GetLibName() );
     EntryType eType = aDesc.GetType();
 
-    bool bSuccess = eType == OBJ_TYPE_MODULE ?
+    bool bSuccess = eType == EntryType::Module ?
         RenameModule(m_pDialog->getDialog(), aDocument, aLibName, aCurText, sNewText) :
         RenameDialog(m_pDialog->getDialog(), aDocument, aLibName, aCurText, sNewText);
 
@@ -196,7 +196,7 @@ void OrganizeDialog::SetCurrentEntry(const css::uno::Reference<css::frame::XFram
     Reference<css::frame::XModel> xModel(xController->getModel());
     if (!xModel)
         return;
-    EntryDescriptor aDesc(ScriptDocument(xModel), LIBRARY_LOCATION_DOCUMENT, OUString(), OUString(), OUString(), OBJ_TYPE_DOCUMENT);
+    EntryDescriptor aDesc(ScriptDocument(xModel), LIBRARY_LOCATION_DOCUMENT, OUString(), OUString(), OUString(), EntryType::Module);
     m_xModulePage->SetCurrentEntry(aDesc);
     m_xDialogPage->SetCurrentEntry(aDesc);
 }
@@ -381,8 +381,8 @@ private:
             }
 
             // check, if module/dialog with this name is already existing in target library
-            if ( ( eSourceType == OBJ_TYPE_MODULE && rDestDoc.hasModule( aDestLibName, aSourceName ) ) ||
-                ( eSourceType == OBJ_TYPE_DIALOG && rDestDoc.hasDialog( aDestLibName, aSourceName ) ) )
+            if ( ( eSourceType == EntryType::Module && rDestDoc.hasModule( aDestLibName, aSourceName ) ) ||
+                ( eSourceType == EntryType::Dialog && rDestDoc.hasDialog( aDestLibName, aSourceName ) ) )
             {
                 bValid = false;
             }
@@ -440,7 +440,7 @@ private:
 
             try
             {
-                if ( eType == OBJ_TYPE_MODULE ) // module
+                if ( eType == EntryType::Module ) // module
                 {
                     // get module
                     OUString aModule;
@@ -457,7 +457,7 @@ private:
                         }
                     }
                 }
-                else if ( eType == OBJ_TYPE_DIALOG )    // dialog
+                else if ( eType == EntryType::Dialog )    // dialog
                 {
                     // get dialog
                     Reference< io::XInputStreamProvider > xISP;
@@ -487,7 +487,7 @@ private:
         {
             try
             {
-                if ( eType == OBJ_TYPE_MODULE ) // module
+                if ( eType == EntryType::Module ) // module
                 {
                     // get module
                     OUString aModule;
@@ -498,7 +498,7 @@ private:
                             MarkDocumentModified( rDestDoc );
                     }
                 }
-                else if ( eType == OBJ_TYPE_DIALOG )    // dialog
+                else if ( eType == EntryType::Dialog )    // dialog
                 {
                     // get dialog
                     Reference< io::XInputStreamProvider > xISP;
@@ -524,15 +524,15 @@ private:
         /// if copying then clone the userdata
         if (Entry* pEntry = bMove ? nullptr : weld::fromId<Entry*>(sId))
         {
-            assert(pEntry->GetType() != OBJ_TYPE_DOCUMENT);
+            assert(pEntry->GetType() != EntryType::Document);
             std::unique_ptr<Entry> xNewUserData(std::make_unique<Entry>(*pEntry));
             sId = weld::toId(xNewUserData.release());
         }
         std::unique_ptr<weld::TreeIter> xRet(m_rTreeView.make_iterator());
         m_rTreeView.get_widget().insert(xNewParent.get(), nNewChildPos, &sText, &sId, nullptr, nullptr, false, xRet.get());
-        if (eType == OBJ_TYPE_MODULE)
+        if (eType == EntryType::Module)
             m_rTreeView.get_widget().set_image(*xRet, RID_BMP_MODULE);
-        else if (eType == OBJ_TYPE_DIALOG)
+        else if (eType == EntryType::Dialog)
             m_rTreeView.get_widget().set_image(*xRet, RID_BMP_DIALOG);
         if (!m_rTreeView.get_row_expanded(*xNewParent))
             m_rTreeView.expand_row(*xNewParent);
@@ -847,18 +847,18 @@ void ObjectPage::NewDialog()
         {
             if (!m_xBasicBox->get_row_expanded(*xIter))
                 m_xBasicBox->expand_row(*xIter);
-            bool bLibEntry = m_xBasicBox->FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xIter);
+            bool bLibEntry = m_xBasicBox->FindEntry(aLibName, EntryType::Library, *xIter);
             DBG_ASSERT( bLibEntry, "LibEntry not found!" );
             if (bLibEntry)
             {
                 if (!m_xBasicBox->get_row_expanded(*xIter))
                     m_xBasicBox->expand_row(*xIter);
                 std::unique_ptr<weld::TreeIter> xSubRootEntry(m_xBasicBox->make_iterator(xIter.get()));
-                bool bDlgEntry = m_xBasicBox->FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xIter);
+                bool bDlgEntry = m_xBasicBox->FindEntry(aDlgName, EntryType::Dialog, *xIter);
                 if (!bDlgEntry)
                 {
                     m_xBasicBox->AddEntry(aDlgName, RID_BMP_DIALOG, xSubRootEntry.get(), false,
-                                       std::make_unique<Entry>(OBJ_TYPE_DIALOG), xIter.get());
+                                       std::make_unique<Entry>(EntryType::Dialog), xIter.get());
                     assert(xIter && "Insert entry failed!");
                 }
                 m_xBasicBox->set_cursor(*xIter);
@@ -883,8 +883,8 @@ void ObjectPage::DeleteCurrent()
     const OUString& aName( aDesc.GetName() );
     EntryType eType = aDesc.GetType();
 
-    if ( !(( eType == OBJ_TYPE_MODULE && QueryDelModule(aName, m_pDialog->getDialog()) ) ||
-         ( eType == OBJ_TYPE_DIALOG && QueryDelDialog(aName, m_pDialog->getDialog()) )) )
+    if ( !(( eType == EntryType::Module && QueryDelModule(aName, m_pDialog->getDialog()) ) ||
+         ( eType == EntryType::Dialog && QueryDelDialog(aName, m_pDialog->getDialog()) )) )
         return;
 
     m_xBasicBox->remove(*xCurEntry);
@@ -901,9 +901,9 @@ void ObjectPage::DeleteCurrent()
     try
     {
         bool bSuccess = false;
-        if ( eType == OBJ_TYPE_MODULE )
+        if ( eType == EntryType::Module )
             bSuccess = aDocument.removeModule( aLibName, aName );
-        else if ( eType == OBJ_TYPE_DIALOG )
+        else if ( eType == EntryType::Dialog )
             bSuccess = RemoveDialog( aDocument, aLibName, aName );
 
         if ( bSuccess )
@@ -995,7 +995,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             {
                 if (!rBasicBox.get_row_expanded(*xIter))
                     rBasicBox.expand_row(*xIter);
-                bool bLibEntry = rBasicBox.FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xIter);
+                bool bLibEntry = rBasicBox.FindEntry(aLibName, EntryType::Library, *xIter);
                 DBG_ASSERT( bLibEntry, "LibEntry not found!" );
                 if (bLibEntry)
                 {
@@ -1006,7 +1006,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     {
                         // add the new module in the "Modules" entry
                         std::unique_ptr<weld::TreeIter> xLibSubEntry(rBasicBox.make_iterator(xIter.get()));
-                        bool bLibSubEntry = rBasicBox.FindEntry(IDEResId(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES, *xLibSubEntry);
+                        bool bLibSubEntry = rBasicBox.FindEntry(IDEResId(RID_STR_NORMAL_MODULES) , EntryType::NormalModules, *xLibSubEntry);
                         if (bLibSubEntry)
                         {
                             if (!rBasicBox.get_row_expanded(*xLibSubEntry))
@@ -1016,11 +1016,11 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     }
 
                     std::unique_ptr<weld::TreeIter> xEntry(rBasicBox.make_iterator(xSubRootEntry.get()));
-                    bool bEntry = rBasicBox.FindEntry(aModName, OBJ_TYPE_MODULE, *xEntry);
+                    bool bEntry = rBasicBox.FindEntry(aModName, EntryType::Module, *xEntry);
                     if (!bEntry)
                     {
                         rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xSubRootEntry.get(), false,
-                                           std::make_unique<Entry>(OBJ_TYPE_MODULE), xEntry.get());
+                                           std::make_unique<Entry>(EntryType::Module), xEntry.get());
                     }
                     rBasicBox.set_cursor(*xEntry);
                     rBasicBox.select(*xEntry);

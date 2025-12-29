@@ -30,7 +30,7 @@
 namespace basctl
 {
 
-enum MacroExitCode {
+enum class MacroExitCode {
     Macro_Close = 110,
     Macro_OkRun = 111,
     Macro_New   = 112,
@@ -40,7 +40,7 @@ enum MacroExitCode {
 class MacroChooser : public SfxDialogController
 {
 public:
-    enum Mode {
+    enum class Mode {
         All = 1,
         ChooseOnly = 2,
         Recording = 3,

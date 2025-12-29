@@ -59,7 +59,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     // the Sfx doesn't ask the BasicManager whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
     , bForceStoreBasic(false)
-    , nMode(All)
+    , nMode(Mode::All)
     , m_xMacroNameEdit(m_xBuilder->weld_entry(u"macronameedit"_ustr))
     , m_xMacroLibsFrame(m_xBuilder->weld_frame(u"librariesframe"_ustr))
     , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr), m_xDialog.get()))
@@ -136,7 +136,7 @@ void MacroChooser::StoreMacroDescription()
     if ( !aMethodName.isEmpty() )
     {
         aDesc.SetMethodName( aMethodName );
-        aDesc.SetType( OBJ_TYPE_METHOD );
+        aDesc.SetType( EntryType::Method );
     }
 
     if (ExtraData* pData = basctl::GetExtraData())
@@ -231,7 +231,7 @@ void MacroChooser::EnableButton(weld::Button& rButton, bool bEnable)
 {
     if ( bEnable )
     {
-        if (nMode == ChooseOnly || nMode == Recording)
+        if (nMode == Mode::ChooseOnly || nMode == Mode::Recording)
             rButton.set_sensitive(&rButton == m_xRunButton.get());
         else
             rButton.set_sensitive(true);
@@ -403,11 +403,11 @@ void MacroChooser::CheckButtons()
         }
     }
 
-    if (nMode != Recording)
+    if (nMode != Mode::Recording)
     {
         // Run...
         bool bEnable = pMethod != nullptr;
-        if (nMode != ChooseOnly && StarBASIC::IsRunning())
+        if (nMode != Mode::ChooseOnly && StarBASIC::IsRunning())
             bEnable = false;
         EnableButton(*m_xRunButton, bEnable);
     }
@@ -421,15 +421,15 @@ void MacroChooser::CheckButtons()
     EnableButton(*m_xEditButton, bMacroEntry);
 
     // Organizer...
-    EnableButton(*m_xOrganizeButton, !StarBASIC::IsRunning() && nMode == All);
+    EnableButton(*m_xOrganizeButton, !StarBASIC::IsRunning() && nMode == Mode::All);
 
     // m_xDelButton/m_xNewButton ->...
     bool bProtected = pCursor && m_xBasicBox->IsEntryProtected(pCursor.get());
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
-    bool bEnable = !StarBASIC::IsRunning() && nMode == All && !bProtected && !bReadOnly && !bShare;
+    bool bEnable = !StarBASIC::IsRunning() && nMode == Mode::All && !bProtected && !bReadOnly && !bShare;
     EnableButton(*m_xDelButton, bEnable);
     EnableButton(*m_xNewButton, bEnable);
-    if (nMode == All)
+    if (nMode == Mode::All)
     {
         if (pMethod)
         {
@@ -443,7 +443,7 @@ void MacroChooser::CheckButtons()
         }
     }
 
-    if (nMode == Recording)
+    if (nMode == Mode::Recording)
     {
         // save button
         m_xRunButton->set_sensitive(!bProtected && !bReadOnly && !bShare);
@@ -471,13 +471,13 @@ IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, weld::TreeView&, bool)
     }
 
     StoreMacroDescription();
-    if (nMode == Recording)
+    if (nMode == Mode::Recording)
     {
         if (pMethod && !QueryReplaceMacro(pMethod->GetName(), m_xDialog.get()))
             return true;
     }
 
-    m_xDialog->response(Macro_OkRun);
+    m_xDialog->response(static_cast<int>(MacroExitCode::Macro_OkRun));
     return true;
 }
 
@@ -586,7 +586,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         StoreMacroDescription();
 
         // #116444# check security settings before macro execution
-        if (nMode == All)
+        if (nMode == Mode::All)
         {
             SbMethod* pMethod = GetMacro();
             SbModule* pModule = pMethod ? pMethod->GetModule() : nullptr;
@@ -604,7 +604,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                 }
             }
         }
-        else if (nMode == Recording )
+        else if (nMode == Mode::Recording )
         {
             if ( !IsValidSbxName(m_xMacroNameEdit->get_text()) )
             {
@@ -621,12 +621,12 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                 return;
         }
 
-        m_xDialog->response(Macro_OkRun);
+        m_xDialog->response(static_cast<int>(MacroExitCode::Macro_OkRun));
     }
     else if (&rButton == m_xCloseButton.get())
     {
         StoreMacroDescription();
-        m_xDialog->response(Macro_Close);
+        m_xDialog->response(static_cast<int>(MacroExitCode::Macro_Close));
     }
     else if (&rButton == m_xEditButton.get() || &rButton == m_xDelButton.get() || &rButton == m_xNewButton.get())
     {
@@ -672,7 +672,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                 pDispatcher->ExecuteList(SID_BASICIDE_EDITMACRO,
                         SfxCallMode::ASYNCHRON, { &aInfoItem });
             }
-            m_xDialog->response(Macro_Edit);
+            m_xDialog->response(static_cast<int>(MacroExitCode::Macro_Close));
         }
         else
         {
@@ -716,7 +716,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                                 SfxCallMode::ASYNCHRON, { &aInfoItem });
                     }
                     StoreMacroDescription();
-                    m_xDialog->response(Macro_New);
+                    m_xDialog->response(static_cast<int>(MacroExitCode::Macro_New));
                 }
             }
         }
@@ -798,7 +798,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         weld::DialogController::runAsync(xDlg, [this](sal_Int32 nRet) {
             if (nRet == RET_OK) // not only closed
             {
-                m_xDialog->response(Macro_Edit);
+                m_xDialog->response(static_cast<int>(MacroExitCode::Macro_Close));
                 return;
             }
 
@@ -853,7 +853,7 @@ void MacroChooser::SetMode (Mode nM)
     nMode = nM;
     switch (nMode)
     {
-        case All:
+        case Mode::All:
         {
             m_xRunButton->set_label(IDEResId(RID_STR_RUN));
             EnableButton(*m_xDelButton, true);
@@ -862,7 +862,7 @@ void MacroChooser::SetMode (Mode nM)
             break;
         }
 
-        case ChooseOnly:
+        case Mode::ChooseOnly:
         {
             m_xRunButton->set_label(IDEResId(RID_STR_CHOOSE));
             EnableButton(*m_xDelButton, false);
@@ -871,7 +871,7 @@ void MacroChooser::SetMode (Mode nM)
             break;
         }
 
-        case Recording:
+        case Mode::Recording:
         {
             m_xRunButton->set_label(IDEResId(RID_STR_RECORD));
             EnableButton(*m_xDelButton, false);

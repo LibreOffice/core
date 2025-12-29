@@ -113,7 +113,7 @@ LibEntry::LibEntry (
     LibraryLocation eLocation,
     OUString aLibName
 ) :
-    DocumentEntry(rDocument, eLocation, OBJ_TYPE_LIBRARY),
+    DocumentEntry(rDocument, eLocation, EntryType::Library),
     m_aLibName(std::move(aLibName))
 { }
 
@@ -123,7 +123,7 @@ LibEntry::~LibEntry()
 EntryDescriptor::EntryDescriptor () :
     m_aDocument(ScriptDocument::getApplicationScriptDocument()),
     m_eLocation(LIBRARY_LOCATION_UNKNOWN),
-    m_eType(OBJ_TYPE_UNKNOWN)
+    m_eType(EntryType::Unknown)
 { }
 
 EntryDescriptor::EntryDescriptor (
@@ -249,7 +249,7 @@ void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const Scrip
             else
                 sId = bLoaded ? RID_BMP_MODLIB : RID_BMP_MODLIBNOTLOADED;
             std::unique_ptr<weld::TreeIter> xLibRootEntry(m_xControl->make_iterator(&rIter));
-            bool bLibRootEntry = FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xLibRootEntry);
+            bool bLibRootEntry = FindEntry(aLibName, EntryType::Library, *xLibRootEntry);
             if (bLibRootEntry)
             {
                 SetEntryBitmaps(*xLibRootEntry, sId);
@@ -260,7 +260,7 @@ void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const Scrip
             }
             else
             {
-                AddEntry(aLibName, sId, &rIter, true, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+                AddEntry(aLibName, sId, &rIter, true, std::make_unique<Entry>(EntryType::Library));
             }
         }
     }
@@ -289,10 +289,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
                     for (auto& aModName : rDocument.getObjectNames(E_SCRIPTS, rLibName))
                     {
                         m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
-                        bool bModuleEntry = FindEntry(aModName, OBJ_TYPE_MODULE, *xTreeIter);
+                        bool bModuleEntry = FindEntry(aModName, EntryType::Module, *xTreeIter);
                         if (!bModuleEntry)
                         {
-                            AddEntry(aModName, RID_BMP_MODULE, &rLibRootEntry, false, std::make_unique<Entry>(OBJ_TYPE_MODULE), xTreeIter.get());
+                            AddEntry(aModName, RID_BMP_MODULE, &rLibRootEntry, false, std::make_unique<Entry>(EntryType::Module), xTreeIter.get());
                         }
 
                         // methods
@@ -303,10 +303,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
                             for (auto& aName : GetMethodNames(rDocument, rLibName, aModName))
                             {
                                 m_xControl->copy_iterator(*xTreeIter, *xSubTreeIter);
-                                bool bEntry = FindEntry(aName, OBJ_TYPE_METHOD, *xSubTreeIter);
+                                bool bEntry = FindEntry(aName, EntryType::Method, *xSubTreeIter);
                                 if (!bEntry)
                                 {
-                                    AddEntry(aName, RID_BMP_MACRO, xTreeIter.get(), false, std::make_unique<Entry>(OBJ_TYPE_METHOD));
+                                    AddEntry(aName, RID_BMP_MACRO, xTreeIter.get(), false, std::make_unique<Entry>(EntryType::Method));
                                 }
                             }
                         }
@@ -337,10 +337,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
         for (auto& aDlgName : rDocument.getObjectNames(E_DIALOGS, rLibName))
         {
             m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
-            bool bDialogEntry = FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xTreeIter);
+            bool bDialogEntry = FindEntry(aDlgName, EntryType::Dialog, *xTreeIter);
             if (!bDialogEntry)
             {
-                AddEntry(aDlgName, RID_BMP_DIALOG, &rLibRootEntry, false, std::make_unique<Entry>(OBJ_TYPE_DIALOG));
+                AddEntry(aDlgName, RID_BMP_DIALOG, &rLibRootEntry, false, std::make_unique<Entry>(EntryType::Dialog));
             }
         }
     }
@@ -353,10 +353,10 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
 void SbTreeListBox::ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     auto const aEntries = {
-        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDEResId(RID_STR_DOCUMENT_OBJECTS) ),
-        std::make_pair( OBJ_TYPE_USERFORMS, IDEResId(RID_STR_USERFORMS) ),
-        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDEResId(RID_STR_NORMAL_MODULES) ),
-        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDEResId(RID_STR_CLASS_MODULES) ) };
+        std::make_pair( EntryType::DocumentObjects, IDEResId(RID_STR_DOCUMENT_OBJECTS) ),
+        std::make_pair( EntryType::UserForms, IDEResId(RID_STR_USERFORMS) ),
+        std::make_pair( EntryType::NormalModules, IDEResId(RID_STR_NORMAL_MODULES) ),
+        std::make_pair( EntryType::ClassModules, IDEResId(RID_STR_CLASS_MODULES) ) };
     for( auto const & iter: aEntries )
     {
         EntryType eType = iter.first;
@@ -391,20 +391,20 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
 
         for (auto& aModName : rDocument.getObjectNames(E_SCRIPTS, rLibName))
         {
-            EntryType eType = OBJ_TYPE_UNKNOWN;
+            EntryType eType = EntryType::Unknown;
             switch( ModuleInfoHelper::getModuleType( xLib, aModName ) )
             {
                 case script::ModuleType::DOCUMENT:
-                    eType = OBJ_TYPE_DOCUMENT_OBJECTS;
+                    eType = EntryType::DocumentObjects;
                     break;
                 case script::ModuleType::FORM:
-                    eType = OBJ_TYPE_USERFORMS;
+                    eType = EntryType::UserForms;
                     break;
                 case script::ModuleType::NORMAL:
-                    eType = OBJ_TYPE_NORMAL_MODULES;
+                    eType = EntryType::NormalModules;
                     break;
                 case script::ModuleType::CLASS:
-                    eType = OBJ_TYPE_CLASS_MODULES;
+                    eType = EntryType::ClassModules;
                     break;
             }
             if( eType != eCurrentType )
@@ -413,7 +413,7 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
             // display a nice friendly name in the ObjectModule tab,
                // combining the objectname and module name, e.g. Sheet1 ( Financials )
             OUString aEntryName = aModName;
-            if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
+            if( eType == EntryType::DocumentObjects )
             {
                 OUString sObjName;
                 ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
@@ -423,12 +423,12 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
                 }
             }
             std::unique_ptr<weld::TreeIter> xModuleEntry(m_xControl->make_iterator(&rLibSubRootEntry));
-            bool bModuleEntry = FindEntry(aEntryName, OBJ_TYPE_MODULE, *xModuleEntry);
+            bool bModuleEntry = FindEntry(aEntryName, EntryType::Module, *xModuleEntry);
             if (!bModuleEntry)
             {
                 m_xControl->copy_iterator(rLibSubRootEntry, *xModuleEntry);
                 AddEntry(aEntryName, RID_BMP_MODULE, xModuleEntry.get(), false,
-                         std::make_unique<Entry>(OBJ_TYPE_MODULE));
+                         std::make_unique<Entry>(EntryType::Module));
             }
 
             // methods
@@ -437,10 +437,10 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
                 for (auto& aName : GetMethodNames(rDocument, rLibName, aModName))
                 {
                     std::unique_ptr<weld::TreeIter> xEntry(m_xControl->make_iterator(xModuleEntry.get()));
-                    bool bEntry = FindEntry(aName, OBJ_TYPE_METHOD, *xEntry);
+                    bool bEntry = FindEntry(aName, EntryType::Method, *xEntry);
                     if (!bEntry)
                     {
-                        AddEntry(aName, RID_BMP_MACRO, xModuleEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_METHOD));
+                        AddEntry(aName, RID_BMP_MACRO, xModuleEntry.get(), false, std::make_unique<Entry>(EntryType::Method));
                     }
                 }
             }
@@ -796,12 +796,12 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
     bool bCurEntry = false;
     auto xCurIter = m_xControl->make_iterator();
     EntryDescriptor aDesc = rDesc;
-    if ( aDesc.GetType() == OBJ_TYPE_UNKNOWN )
+    if ( aDesc.GetType() == EntryType::Unknown )
     {
         aDesc = EntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
             LIBRARY_LOCATION_USER, u"Standard"_ustr,
-            OUString(), u"."_ustr, OBJ_TYPE_UNKNOWN
+            OUString(), u"."_ustr, EntryType::Unknown
         );
     }
     ScriptDocument aDocument = aDesc.GetDocument();
@@ -817,7 +817,7 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
         {
             m_xControl->expand_row(*m_xScratchIter);
             auto xLibIter = m_xControl->make_iterator(m_xScratchIter.get());
-            bool bLibEntry = FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xLibIter);
+            bool bLibEntry = FindEntry(aLibName, EntryType::Library, *xLibIter);
             if (bLibEntry)
             {
                 m_xControl->copy_iterator(*xLibIter, *xCurIter);
@@ -832,9 +832,9 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
                 if ( !aName.isEmpty() )
                 {
                     m_xControl->expand_row(*xCurIter);
-                    EntryType eType = OBJ_TYPE_MODULE;
-                    if ( aDesc.GetType() == OBJ_TYPE_DIALOG )
-                        eType = OBJ_TYPE_DIALOG;
+                    EntryType eType = EntryType::Module;
+                    if ( aDesc.GetType() == EntryType::Dialog )
+                        eType = EntryType::Dialog;
                     auto xEntryIter = m_xControl->make_iterator(xCurIter.get());
                     bool bEntry = FindEntry(aName, eType, *xEntryIter);
                     if (bEntry)
@@ -845,7 +845,7 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
                         {
                             m_xControl->expand_row(*xCurIter);
                             auto xSubEntryIter = m_xControl->make_iterator(xCurIter.get());
-                            bool bSubEntry = FindEntry(aMethodName, OBJ_TYPE_METHOD, *xSubEntryIter);
+                            bool bSubEntry = FindEntry(aMethodName, EntryType::Method, *xSubEntryIter);
                             if (bSubEntry)
                             {
                                 m_xControl->copy_iterator(*xSubEntryIter, *xCurIter);
@@ -898,9 +898,9 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
     EntryDescriptor aDesc = GetEntryDescriptor(pCursor.get());
     switch (aDesc.GetType())
     {
-        case OBJ_TYPE_METHOD:
-        case OBJ_TYPE_MODULE:
-        case OBJ_TYPE_DIALOG:
+        case EntryType::Method:
+        case EntryType::Module:
+        case EntryType::Dialog:
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 SbxItem aSbxItem(
