@@ -790,6 +790,7 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                     return new DataLabelsContext( *this, mrModel.mxLabels.create(false) );
                 case CX_TOKEN( dataId ):
                     mrModel.mnDataId = rAttribs.getInteger(XML_val, -1);
+                    mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
                     return nullptr;
                 case CX_TOKEN( layoutPr ):
                     // This looks complicated. TODO

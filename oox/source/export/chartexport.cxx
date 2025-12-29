@@ -1589,14 +1589,49 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                     // The data id needs to agree with the id in exportSeries(). See DATA_ID_COMMENT
                     pFS->startElement(FSNS(XML_cx, XML_data), XML_id, OUString::number(nSeriesIndex));
 
-                    // .xlsx chartex files seem to have this magical "_xlchart.v2.0" string,
+                    // .xlsx chartex files seem to have this magical "_xlchart..." string,
                     // and no explicit data, while .docx and .pptx contain the literal data,
                     // as well as a ../embeddings file (which LO doesn't seem to produce).
                     // But there's probably a smarter way to determine which pathway to take
                     // than based on document type.
                     if (GetDocumentType() == DOCUMENT_XLSX) {
                         // Just hard-coding this for now
-                        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
+
+                        sal_Int32 nSuffixVal = nSeriesIndex;
+
+                        // Output category data formula for some chart types.
+                        // (This is completely hacky)
+                        if (eChartType ==  chart::TYPEID_SUNBURST ||
+                                eChartType == chart::TYPEID_TREEMAP) {
+                            pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
+                            pFS->startElement(FSNS(XML_cx, XML_f));
+
+                            std::string sFormulaId = "_xlchart.v1.";
+                            sFormulaId.append(std::to_string(nSuffixVal));
+
+                            pFS->writeEscaped(sFormulaId);
+
+                            pFS->endElement(FSNS(XML_cx, XML_f));
+                            pFS->endElement(FSNS(XML_cx, XML_strDim));
+
+                            ++nSuffixVal;
+                        }
+
+                        // Set the ST_NumericDimensionType. For some (stupid?)
+                        // reason, MSO requires the value data for sunburst and
+                        // treemap to be type "size", while for most other chart
+                        // types it's of type "val".
+                        std::string sNumDimType;
+                        if (eChartType ==  chart::TYPEID_SUNBURST ||
+                                eChartType == chart::TYPEID_TREEMAP) {
+                            sNumDimType = "size";
+                        } else {
+                            sNumDimType = "val";
+                        }
+
+                        // Now output value data formula
+                        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type,
+                                sNumDimType.c_str());
                         pFS->startElement(FSNS(XML_cx, XML_f));
 
                         // Set the formula value based on the chart type. This
@@ -1627,7 +1662,7 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                         // Append the id value, which seems (?) to be what
                         // follows the period in the string. E.g., for id=2 we
                         // might end up with "_xlchart.v1.2"
-                        sFormulaId.append(std::to_string(nSeriesIndex));
+                        sFormulaId.append(std::to_string(nSuffixVal));
 
                         pFS->writeEscaped(sFormulaId);
 
