@@ -27,6 +27,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

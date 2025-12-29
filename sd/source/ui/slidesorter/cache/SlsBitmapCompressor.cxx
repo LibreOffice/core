@@ -23,6 +23,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/graph.hxx>
 
 namespace sd::slidesorter::cache {
 

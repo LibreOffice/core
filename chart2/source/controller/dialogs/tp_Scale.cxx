@@ -34,6 +34,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>

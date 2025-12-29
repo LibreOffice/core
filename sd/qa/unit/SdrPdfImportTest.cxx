@@ -19,6 +19,7 @@
 #include <editeng/editobj.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <Annotation.hxx>
 #include <DrawDocShell.hxx>

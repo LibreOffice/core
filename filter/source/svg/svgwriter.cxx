@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
+#include <vcl/fntstyle.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>

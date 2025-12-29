@@ -50,6 +50,8 @@
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 #include <uitool.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

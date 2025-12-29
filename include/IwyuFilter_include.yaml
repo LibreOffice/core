@@ -332,6 +332,12 @@ excludelist:
     include/vcl/CairoFormats.hxx:
     # Needed for macro #define
     - vcl/Scanline.hxx
+    include/vcl/dndlistenercontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp
+    - com/sun/star/datatransfer/dnd/XDropTarget.hpp
+    - com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp
+    - com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp
     include/vcl/keycodes.hxx:
     # Needed for macros
     - com/sun/star/awt/Key.hpp

@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <memory>
 #include <string_view>

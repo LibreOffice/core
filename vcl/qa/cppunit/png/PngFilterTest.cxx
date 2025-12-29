@@ -30,7 +30,9 @@
 #include <vcl/alpha.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <unotools/tempfile.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace css;
 

@@ -11,13 +11,17 @@
 #include <pdf/pdfcompat.hxx>
 
 #include <pdf/PdfConfig.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;

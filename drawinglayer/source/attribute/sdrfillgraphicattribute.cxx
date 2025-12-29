@@ -21,6 +21,9 @@
 
 #include <algorithm>
 
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <utility>

@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_GRAPHICFILTER_HXX
 
 #include <tools/gen.hxx>
+#include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -28,6 +29,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <memory>
 

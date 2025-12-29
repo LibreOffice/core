@@ -144,6 +144,7 @@
 #include <osl/file.hxx>
 #include <utility>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>

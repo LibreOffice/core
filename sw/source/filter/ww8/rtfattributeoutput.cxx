@@ -87,6 +87,7 @@
 #include <redline.hxx>
 #include <rtf.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/gfxlink.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/mathml/imexport.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>

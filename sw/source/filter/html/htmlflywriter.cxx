@@ -24,7 +24,9 @@
 #include <hintids.hxx>
 #include <tools/fract.hxx>
 #include <svl/urihelper.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <sfx2/event.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>

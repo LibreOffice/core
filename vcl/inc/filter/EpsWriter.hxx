@@ -22,6 +22,8 @@
 #include <vcl/graph.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
+class SvStream;
+
 VCL_DLLPUBLIC bool ExportEpsGraphic(SvStream& rStream, const Graphic& rGraphic,
                                     FilterConfigItem* pFilterConfigItem);
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap/BitmapMosaicFilter.hxx>
 #include <vcl/bitmap/BitmapSharpenFilter.hxx>
 #include <vcl/bitmap/BitmapEmbossGreyFilter.hxx>

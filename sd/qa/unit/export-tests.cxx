@@ -45,6 +45,7 @@
 
 #include <svx/svdotable.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 using namespace css;
 using namespace css::animations;

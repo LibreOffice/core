@@ -32,6 +32,7 @@
 #include <set>
 #include <bitmaps.hlst>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 

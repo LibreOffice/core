@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <vcl/fntstyle.hxx>
 
 // anonymous Outline/EditEngine decompose helpers
 namespace

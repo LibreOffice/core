@@ -48,6 +48,7 @@
 
 #include <utility>
 #include <vcl/gdimtf.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 #include <sal/log.hxx>

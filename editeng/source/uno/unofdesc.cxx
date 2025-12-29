@@ -32,6 +32,7 @@
 #include <editeng/memberids.h>
 #include <svl/itempool.hxx>
 #include <vcl/font.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/gen.hxx>
 

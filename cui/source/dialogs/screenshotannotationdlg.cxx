@@ -41,6 +41,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/virdev.hxx>

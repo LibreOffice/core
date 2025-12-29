@@ -33,6 +33,7 @@
 #include "contwnd.hxx"
 #include <svx/svdopath.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

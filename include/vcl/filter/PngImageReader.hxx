@@ -13,8 +13,6 @@
 #include <sal/config.h>
 
 #include <vcl/dllapi.h>
-#include <vcl/BinaryDataContainer.hxx>
-#include <vcl/filter/ImportOutput.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -40,7 +38,9 @@ namespace com::sun::star::task
 class XStatusIndicator;
 }
 
+class BinaryDataContainer;
 class Bitmap;
+class ImportOutput;
 class SvStream;
 
 namespace vcl

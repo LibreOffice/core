@@ -10,7 +10,13 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/font/FontDataContainer.hxx>
+
+#include <vector>
+
+namespace font
+{
+class FontDataContainer;
+}
 
 namespace font
 {

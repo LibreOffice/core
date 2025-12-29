@@ -14,6 +14,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 using uno::Reference;
 using beans::XPropertySet;

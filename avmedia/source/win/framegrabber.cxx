@@ -37,6 +37,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapTools.hxx>

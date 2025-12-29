@@ -21,8 +21,10 @@
 
 #include <algorithm>
 
+#include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <utility>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 
 namespace drawinglayer::attribute

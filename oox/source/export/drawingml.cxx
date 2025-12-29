@@ -120,8 +120,10 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <rtl/strbuf.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>

@@ -19,6 +19,8 @@
  **/
 
 #include <rtl/ustring.hxx>
+#include <tools/stream.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/image.hxx>
 #include <vcl/outdev.hxx>

@@ -28,6 +28,7 @@
 #include <tools/UnitConversion.hxx>
 #include <svl/fstathelper.hxx>
 #include <vcl/imap.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>

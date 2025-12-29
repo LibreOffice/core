@@ -37,6 +37,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFErrorType.hxx>
 #include <vcl/pdf/pwdinteract.hxx>
 #include <memory>
 #include <utility>

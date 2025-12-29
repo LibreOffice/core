@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 namespace
 {

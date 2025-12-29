@@ -21,16 +21,16 @@
 #define INCLUDED_VCL_GRADIENT_HXX
 
 #include <sal/types.h>
-#include <tools/color.hxx>
 #include <tools/degree.hxx>
 #include <tools/long.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/awt/GradientStyle.hpp>
 
+namespace com::sun::star::awt { enum class GradientStyle; }
 namespace tools { class Rectangle; }
 
+class Color;
 class Point;
 class GDIMetaFile;
 

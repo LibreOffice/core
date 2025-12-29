@@ -26,6 +26,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>

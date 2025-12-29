@@ -21,7 +21,9 @@
 #include "wmfwr.hxx"
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 using namespace com::sun::star;
 

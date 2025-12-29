@@ -21,9 +21,12 @@
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <tools/link.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
+
+class SvStream;
 
 namespace com :: sun :: star :: io { class XInputStream; }
 

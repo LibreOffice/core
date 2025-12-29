@@ -9,6 +9,17 @@
  */
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotAActionType.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFBitmapType.hxx>
+#include <vcl/pdf/PDFErrorType.hxx>
+#include <vcl/pdf/PDFFillMode.hxx>
+#include <vcl/pdf/PDFFindFlags.hxx>
+#include <vcl/pdf/PDFFormFieldType.hxx>
+#include <vcl/pdf/PDFObjectType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
+#include <vcl/pdf/PDFSegmentType.hxx>
+#include <vcl/pdf/PDFTextRenderMode.hxx>
 
 #include <cassert>
 
@@ -24,6 +35,8 @@
 #include <fpdf_attachment.h>
 #include <fpdf_structtree.h>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
@@ -36,6 +49,8 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/dibtools.hxx>
 #include <functional>
+
+#include <com/sun/star/util/DateTime.hpp>
 
 using namespace com::sun::star;
 

@@ -28,6 +28,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/print.hxx>

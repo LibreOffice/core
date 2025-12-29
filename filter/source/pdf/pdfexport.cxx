@@ -37,6 +37,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/compbase.hxx>

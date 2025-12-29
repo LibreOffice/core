@@ -22,9 +22,12 @@
 
 #include <vector>
 
+#include <tools/color.hxx>
 #include <vcl/graph.hxx>
 
 #include <svtools/svtdllapi.h>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com :: sun :: star :: awt { class XToolkit; }
 namespace com :: sun :: star :: frame { class XModel; }

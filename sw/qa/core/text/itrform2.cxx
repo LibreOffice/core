@@ -17,6 +17,10 @@
 #include <editeng/colritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/pdf/PDFAnnotAActionType.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFFormFieldType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>

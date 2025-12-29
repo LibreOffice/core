@@ -49,6 +49,7 @@
 #include <memory>
 #include <vector>
 #include <vcl/graph.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <svx/svxids.hrc>
 #include <dstribut_enum.hxx>
 #include <osl/diagnose.h>

@@ -19,6 +19,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <sal/log.hxx>
 
 class Chart2ImportTest2 : public ChartTest
 {

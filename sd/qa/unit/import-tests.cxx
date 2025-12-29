@@ -72,6 +72,7 @@
 #include <osl/file.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 using namespace ::com::sun::star;
 

@@ -35,6 +35,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/editobj.hxx>
+#include <vcl/fntstyle.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/numitem.hxx>

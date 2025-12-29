@@ -18,6 +18,7 @@
  */
 
 
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/RawBitmap.hxx>

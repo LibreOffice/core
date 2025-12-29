@@ -26,6 +26,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
+#include <vcl/gfxlink.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>

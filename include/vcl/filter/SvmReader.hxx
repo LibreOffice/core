@@ -19,10 +19,17 @@
 
 #pragma once
 
-#include <vcl/gdimtf.hxx>
+#include <vcl/dllapi.h>
 
+class Color;
+class GDIMetaFile;
+class MetaAction;
 class SvStream;
 struct ImplMetaReadData;
+namespace rtl
+{
+template <class reference_type> class Reference;
+}
 
 class SvmReader
 {

@@ -24,6 +24,11 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/pdf/PDFBitmapType.hxx>
+#include <vcl/pdf/PDFFillMode.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
+#include <vcl/pdf/PDFSegmentType.hxx>
+#include <vcl/pdf/PDFTextRenderMode.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 
 #include <editeng/eeitem.hxx>

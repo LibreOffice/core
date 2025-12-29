@@ -23,6 +23,7 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/graphicmimetype.hxx>
 #include <tools/debug.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/docfile.hxx>

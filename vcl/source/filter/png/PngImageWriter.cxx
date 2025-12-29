@@ -9,12 +9,18 @@
 
 #include <vcl/filter/PngImageWriter.hxx>
 #include <png.h>
+#include <basegfx/vector/b2dsize.hxx>
+#include <tools/stream.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <sal/log.hxx>
 #include <rtl/crc.h>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace
 {

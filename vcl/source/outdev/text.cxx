@@ -27,6 +27,7 @@
 #include <comphelper/configuration.hxx>
 
 #include <vcl/ctrl.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>

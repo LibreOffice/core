@@ -37,6 +37,8 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 #include <accel.hxx>
 #include <svdata.hxx>
 #include <window.h>

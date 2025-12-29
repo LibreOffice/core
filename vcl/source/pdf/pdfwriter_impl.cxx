@@ -34,7 +34,9 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <memory>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -69,6 +71,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/lineinfo.hxx>
@@ -78,6 +81,7 @@
 #include <vcl/settings.hxx>
 #include <strhelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/PngImageReader.hxx>

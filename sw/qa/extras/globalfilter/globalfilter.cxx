@@ -20,6 +20,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFObjectType.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>

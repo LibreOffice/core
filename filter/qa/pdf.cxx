@@ -16,12 +16,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <tools/helpers.hxx>
 
 using namespace ::com::sun::star;

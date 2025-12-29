@@ -27,6 +27,7 @@
 #include "CommonTools.hxx"
 
 #include <vcl/TypeSerializer.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 #if USE_TLS_NSS
 #include <nss.h>

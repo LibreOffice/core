@@ -23,6 +23,7 @@
 #include <basic/sbxvar.hxx>
 #include <basic/sbuno.hxx>
 #include <osl/process.h>
+#include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -21,10 +21,16 @@
 #include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <tools/color.hxx>
 #include <tools/zcodec.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFObjectType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
+#include <vcl/pdf/PDFSegmentType.hxx>
+#include <vcl/pdf/PDFTextRenderMode.hxx>
 
 using namespace ::com::sun::star;
 

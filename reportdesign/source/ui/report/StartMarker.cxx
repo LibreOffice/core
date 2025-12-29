@@ -33,6 +33,8 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 #define CORNER_SPACE     5
 
 

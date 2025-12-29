@@ -32,6 +32,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <rtl/bootstrap.hxx>
 
 #ifdef DBG_UTIL

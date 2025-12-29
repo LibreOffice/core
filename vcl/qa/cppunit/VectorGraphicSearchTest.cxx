@@ -12,6 +12,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <basegfx/vector/b2dsize.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <unotest/directories.hxx>
 

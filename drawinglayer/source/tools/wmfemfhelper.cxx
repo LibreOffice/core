@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapColor.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>

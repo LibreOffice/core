@@ -25,10 +25,10 @@
 #include <string_view>
 
 #include <vcl/dllapi.h>
-#include <tools/fldunit.hxx>
-#include <tools/mapunit.hxx>
 
 class LocaleDataWrapper;
+enum class FieldUnit : sal_uInt16;
+enum class MapUnit : sal_uInt8;
 
 namespace vcl
 {

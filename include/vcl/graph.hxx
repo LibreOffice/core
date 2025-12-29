@@ -22,14 +22,10 @@
 #include <memory>
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
+#include <tools/gen.hxx>
+#include <tools/long.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/animate/Animation.hxx>
-#include <vcl/gfxlink.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <vcl/vectorgraphicdata.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <vcl/GraphicExternalLink.hxx>
+#include <vcl/checksum.hxx>
 
 enum class GraphicType
 {
@@ -41,10 +37,19 @@ enum class GraphicType
 
 namespace com::sun::star::graphic { class XGraphic; }
 namespace vcl { class Font; }
+namespace basegfx { class B2DSize; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+template <typename Arg, typename Ret> class Link;
 
+class Animation;
+class Bitmap;
 class GDIMetaFile;
+class GfxLink;
+class GraphicExternalLink;
 class ImpGraphic;
+class MapMode;
 class OutputDevice;
+class VectorGraphicData;
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC GraphicConversionParameters
 {

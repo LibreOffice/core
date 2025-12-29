@@ -8,6 +8,7 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <tools/color.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>

@@ -12,32 +12,32 @@
 
 #include <memory>
 
-#include <com/sun/star/util/DateTime.hpp>
-
 #include <vcl/dllapi.h>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
-#include <tools/gen.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/pdf/PDFAnnotationSubType.hxx>
-#include <vcl/pdf/PDFPageObjectType.hxx>
-#include <vcl/pdf/PDFSegmentType.hxx>
-#include <vcl/pdf/PDFBitmapType.hxx>
-#include <vcl/pdf/PDFObjectType.hxx>
-#include <vcl/pdf/PDFTextRenderMode.hxx>
-#include <vcl/pdf/PDFFillMode.hxx>
-#include <vcl/pdf/PDFFindFlags.hxx>
-#include <vcl/pdf/PDFErrorType.hxx>
-#include <vcl/pdf/PDFFormFieldType.hxx>
-#include <vcl/pdf/PDFAnnotAActionType.hxx>
 
-class SvMemoryStream;
 class Bitmap;
+class Color;
+class Size;
+class SvMemoryStream;
+namespace basegfx
+{
+class B2DHomMatrix;
+}
+namespace basegfx
+{
+class B2DPoint;
+}
+namespace basegfx
+{
+class B2DSize;
+}
+namespace com::sun::star::util
+{
+struct DateTime;
+}
 
 namespace vcl::pdf
 {
@@ -52,6 +52,17 @@ inline constexpr OString constDictionaryKey_RichContent = "RC"_ostr;
 class PDFiumBitmap;
 class PDFiumDocument;
 class PDFiumPageObject;
+enum class PDFAnnotAActionType;
+enum class PDFAnnotationSubType;
+enum class PDFBitmapType;
+enum class PDFErrorType;
+enum class PDFFillMode;
+enum class PDFFindFlags : sal_uInt32;
+enum class PDFFormFieldType;
+enum class PDFObjectType;
+enum class PDFPageObjectType;
+enum class PDFSegmentType;
+enum class PDFTextRenderMode;
 
 class PDFiumFont
 {

@@ -24,6 +24,7 @@
 #include <vector>
 #include <memory>
 #include <o3tl/sorted_vector.hxx>
+#include <tools/link.hxx>
 
 struct ScRTFCellDefault
 {

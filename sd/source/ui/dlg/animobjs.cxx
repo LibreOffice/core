@@ -25,6 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>

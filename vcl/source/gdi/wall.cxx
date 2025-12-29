@@ -27,6 +27,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/TypeSerializer.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rImplWallpaper )
 {
     VersionCompatRead  aCompat(rIStm);

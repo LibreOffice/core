@@ -30,6 +30,8 @@
 #include <skia/zone.hxx>
 #include <tools/debug.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 #include <SkBitmap.h>
 #include <SkCanvas.h>
 #include <SkGradientShader.h>

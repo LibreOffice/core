@@ -18,11 +18,14 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 
+#include <basegfx/vector/b2dsize.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
+#include <vcl/pdf/PDFTextRenderMode.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 

@@ -19,8 +19,10 @@
 
 #include <Outliner.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <basegfx/vector/b2dsize.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <svl/srchitem.hxx>
 #include <svl/intitem.hxx>

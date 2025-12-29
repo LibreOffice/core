@@ -28,6 +28,7 @@
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>
 #include <vcl/filter/SvmWriter.hxx>
+#include <vcl/gfxlink.hxx>
 
 #include <sal/log.hxx>
 

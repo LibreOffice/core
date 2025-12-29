@@ -31,6 +31,7 @@
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/weld.hxx>
 #include <avmedia/mediawindow.hxx>

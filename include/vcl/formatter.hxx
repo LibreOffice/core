@@ -21,13 +21,18 @@
 
 #include <config_options.h>
 #include <i18nlangtag/lang.h>
+#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
-#include <vcl/settings.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
 #include <map>
+#include <optional>
 #include <string_view>
 
+class Color;
 class SvNumberFormatter;
+enum class SelectionOptions;
 
 namespace validation
 {

@@ -30,6 +30,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>

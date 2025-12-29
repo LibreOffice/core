@@ -26,6 +26,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/inethist.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 

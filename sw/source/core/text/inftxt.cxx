@@ -85,6 +85,7 @@
 #include <unomap.hxx>
 #include <names.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;

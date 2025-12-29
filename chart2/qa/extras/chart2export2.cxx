@@ -17,6 +17,8 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <vcl/gfxlink.hxx>
+
 using uno::Reference;
 using beans::XPropertySet;
 

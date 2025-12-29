@@ -27,6 +27,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
@@ -44,6 +45,9 @@
 #include <docsh.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFFormFieldType.hxx>
+#include <vcl/pdf/PDFObjectType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/pdfread.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cmath>
