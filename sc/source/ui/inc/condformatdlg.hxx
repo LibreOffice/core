@@ -15,6 +15,8 @@
 
 #include "anyrefdg.hxx"
 
+#include <vcl/weld/ScrolledWindow.hxx>
+
 #include <memory>
 
 #define DLG_RET_ADD         8

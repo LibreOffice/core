@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 #include <tools/long.hxx>
 #include <svx/weldeditview.hxx>

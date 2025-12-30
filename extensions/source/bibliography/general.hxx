@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include "bibshortcuthandler.hxx"
 
 

@@ -21,6 +21,7 @@
 
 #include <svx/weldeditview.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 class SmDocShell;
 class SmViewShell;

@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 

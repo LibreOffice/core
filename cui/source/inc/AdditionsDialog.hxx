@@ -14,6 +14,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 
 // Detect changes on the UI

@@ -37,6 +37,7 @@
 #include <vcl/transfer.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>

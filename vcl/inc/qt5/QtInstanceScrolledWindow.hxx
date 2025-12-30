@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/ScrolledWindow.hxx>
+
 #include <QtWidgets/QScrollArea>
 
 class QtInstanceScrolledWindow : public QtInstanceWidget, public virtual weld::ScrolledWindow

@@ -32,6 +32,7 @@
 #include <tools/link.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 

@@ -13,6 +13,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>

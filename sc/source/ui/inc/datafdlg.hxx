@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 #include <types.hxx>
 #include "viewfunc.hxx"

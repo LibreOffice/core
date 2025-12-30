@@ -25,6 +25,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svx/weldeditview.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <mutex>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
