@@ -706,18 +706,18 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+        TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
         if(pViewItem)
         {
-            if(!pItem->isSelected())
+            if (!pViewItem->isSelected())
             {
                 deselectItems();
-                pItem->setSelection(true);
-                maItemStateHdl.Call(pItem);
+                pViewItem->setSelection(true);
+                maItemStateHdl.Call(pViewItem);
             }
-            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-            maCreateContextMenuHdl.Call(pItem);
+            maSelectedItem = pViewItem;
+            maCreateContextMenuHdl.Call(pViewItem);
         }
     }
     else
