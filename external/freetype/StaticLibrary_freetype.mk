@@ -24,8 +24,6 @@ $(eval $(call gb_StaticLibrary_add_defs,freetype,\
 	-DDLG_STATIC \
 	-DZ_PREFIX \
 	-DFT2_BUILD_LIBRARY \
-	-DDLL_EXPORT \
-	-DFT_DEBUG_LOGGING \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,freetype,\

@@ -1,0 +1,23 @@
+When building for CODA-W, we build freetype as a static library, and
+we don't define DLL_EXPORT as there in general is no need to export
+freetype symbols from the (dynamkic) library that freetype gets linked
+into, cairo.dll and vcllo.dll (or mergedlo.dll). But there is one
+exception: FT_Done_MM_Var *must* be exported as the code in
+dlFT_Done_MM_Var() in vcl/unx/generic/glyphs/freetype_glyphcache.cxx
+wants to look it up and call it.
+
+--- include/freetype/ftmm.h
++++ include/freetype/ftmm.h
+@@ -400,7 +400,12 @@
+    * @return:
+    *   FreeType error code.  0~means success.
+    */
++#if defined( _WIN32 ) && defined( FT2_BUILD_LIBRARY ) && !defined( DLL_EXPORT )
++  /* FT_EXPORT is defined as a no-op but for CODA-W we *must* export FT_Done_MM_Var */
++   __declspec( dllexport ) FT_Error
++#else
+   FT_EXPORT( FT_Error )
++#endif 
+   FT_Done_MM_Var( FT_Library   library,
+                   FT_MM_Var   *amaster );
+

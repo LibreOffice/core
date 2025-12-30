@@ -74,4 +74,10 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,fontconfig,\
 	) \
 ))
 
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,fontconfig,\
+	$(addprefix UnpackedTarball/fontconfig/src/, \
+		fcdwrite \
+	) \
+))
+
 # vim: set noet sw=4 ts=4:
