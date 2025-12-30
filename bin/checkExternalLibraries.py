@@ -56,6 +56,7 @@ libraryNames = {
     "y-crdt": "y-crdt",
     "sqlite": "sqlite",
     "reemkufi": "aliftype-reem-kufi-fonts",
+    "culmus": "culmus-fonts",
 }
 
 def get_current_version(libName):
@@ -86,7 +87,8 @@ def get_library_list(fileName):
         if "JFREEREPORT_" in variableName:
             continue
 
-        if "FONT_" in variableName and "REEM" not in variableName and "NOTO" not in variableName:
+        if "FONT_" in variableName and "REEM" not in variableName and "NOTO" not in variableName and \
+                "CULMUS" not in variableName:
             continue
 
         libraryName = decodedName.split("=")[1]
