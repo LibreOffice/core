@@ -480,8 +480,35 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
         else
             aGrfSize = OutputDevice::LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
 
-        const Point aGrfPos( std::max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
-                             std::max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
+        // Scale the logo to fit a reasonable portion of the screen while maintaining aspect ratio
+        if (aGrfSize.Width() > 0 && aGrfSize.Height() > 0)
+        {
+            // Use 1/3 of the smaller screen dimension as max size
+            const tools::Long nMaxLogoSize = std::min(aOutSize.Width(), aOutSize.Height()) / 3;
+
+            // Calculate scale factor to fit within max size while keeping aspect ratio
+            const double fLogoAspect = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
+            tools::Long nNewWidth, nNewHeight;
+
+            if (fLogoAspect >= 1.0)  // wider than tall
+            {
+                nNewWidth = nMaxLogoSize;
+                nNewHeight = static_cast<tools::Long>(nMaxLogoSize / fLogoAspect);
+            }
+            else  // taller than wide
+            {
+                nNewHeight = nMaxLogoSize;
+                nNewWidth = static_cast<tools::Long>(nMaxLogoSize * fLogoAspect);
+            }
+
+            aGrfSize = Size(nNewWidth, nNewHeight);
+        }
+
+        // Center the logo on screen
+        const Point aGrfPos(
+            aOutOrg.X() + (aOutSize.Width() - aGrfSize.Width()) / 2,
+            aOutOrg.Y() + (aOutSize.Height() - aGrfSize.Height()) / 2
+        );
 
         if( maLogo.IsAnimated() )
             maLogo.StartAnimation(*GetOutDev(), aGrfPos, aGrfSize, reinterpret_cast<sal_IntPtr>(this));
@@ -501,15 +528,19 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
         // set font first, to determine real output height
         pVDev->SetFont( aFont );
 
-        const Size aVDevSize( aOutSize.Width(), pVDev->GetTextHeight() );
+        // Note: if performance gets an issue here, we can use NumberFormatter directly
+        SvtSysLocale                aSysLocale;
+        const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
+
+        aText += " ( " + aLocaleData.getDuration( ::tools::Duration( 0, 0, 0, mnPauseTimeout, 0 )) + " )";
+
+        // Size the VirtualDevice to fit only the text width (plus offset padding),
+        // not the full screen width, to avoid overlapping the centered logo
+        const tools::Long nTextWidth = pVDev->GetTextWidth( aText ) + 2 * aOffset.Width();
+        const Size aVDevSize( nTextWidth, pVDev->GetTextHeight() );
 
         if( pVDev->SetOutputSize( aVDevSize ) )
         {
-            // Note: if performance gets an issue here, we can use NumberFormatter directly
-            SvtSysLocale                aSysLocale;
-            const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
-
-            aText += " ( " + aLocaleData.getDuration( ::tools::Duration( 0, 0, 0, mnPauseTimeout, 0 )) + " )";
             pVDev->DrawText( Point( aOffset.Width(), 0 ), aText );
             GetOutDev()->DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev );
             bDrawn = true;
