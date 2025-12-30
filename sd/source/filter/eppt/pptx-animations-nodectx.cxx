@@ -211,6 +211,11 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
             }
         }
     }
+    else if (nType == AnimationNodeType::ANIMATEPHYSICS)
+    {
+        // ignore we don't support exporting this node type
+        mbValid = false;
+    }
     else
     {
         Reference<XAnimate> xAnimate(mxNode, UNO_QUERY);
