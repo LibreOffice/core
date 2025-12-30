@@ -28,6 +28,7 @@
 #include <tools/fract.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
+#include <svdimportbase.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>
 
@@ -40,37 +41,12 @@ class SvdProgressInfo;
 
 
 // Helper Class ImpSdrGDIMetaFileImport
-class ImpSdrGDIMetaFileImport final
+class ImpSdrGDIMetaFileImport final : public ImpSdrImportBase
 {
-    ::std::vector< rtl::Reference<SdrObject> > maTmpList;
-    ScopedVclPtr<VirtualDevice> mpVD;
     MapMode maPrefMapMode;
-    tools::Rectangle            maScaleRect;
-    std::unique_ptr<SfxItemSet> mpLineAttr;
-    std::unique_ptr<SfxItemSet> mpFillAttr;
-    std::unique_ptr<SfxItemSet> mpTextAttr;
-    SdrModel*                   mpModel;
-    SdrLayerID                  mnLayer;
     Color                       maOldLineColor;
-    sal_Int32                   mnLineWidth;
     basegfx::B2DLineJoin        maLineJoin;
     css::drawing::LineCap       maLineCap;
-    XDash                       maDash;
-
-    bool                        mbMov;
-    bool                        mbSize;
-    Point                       maOfs;
-    double                      mfScaleX;
-    double                      mfScaleY;
-    double                      maScaleX;
-    double                      maScaleY;
-
-    bool                        mbFntDirty;
-
-    // to optimize (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> two-in-one
-    bool                        mbLastObjWasPolyWithoutLine;
-    bool                        mbNoLine;
-    bool                        mbNoFill;
 
     // to optimize multiple lines into a Polyline
     bool                        mbLastObjWasLine;
@@ -138,12 +114,11 @@ class ImpSdrGDIMetaFileImport final
     void DoAction(MetaOverlineColorAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
 
     void ImportText(const Point& rPos, const OUString& rStr, const MetaAction& rAct);
-    void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
+    void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false) override;
     void InsertObj(SdrObject* pObj, bool bScale = true);
 
     // #i73407# reformulation to use new B2DPolygon classes
     bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
-    bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     void DoLoopActions(GDIMetaFile const & rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
 

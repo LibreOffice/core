@@ -98,23 +98,8 @@ static OUString getPrefix(void* p)
 
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
                                  Graphic const& rGraphic)
-    : maScaleRect(rRect)
+    : ImpSdrImportBase(rModel, nLay, rRect)
     , mnMapScalingOfs(0)
-    , mpModel(&rModel)
-    , mnLayer(nLay)
-    , mnLineWidth(0)
-    , maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0)
-    , mbMov(false)
-    , mbSize(false)
-    , maOfs(0, 0)
-    , mfScaleX(1.0)
-    , mfScaleY(1.0)
-    , maScaleX(1.0)
-    , maScaleY(1.0)
-    , mbFntDirty(true)
-    , mbLastObjWasPolyWithoutLine(false)
-    , mbNoLine(false)
-    , mbNoFill(false)
     , mnPageCount(0)
     , mdPageHeightPts(0)
     , mpPDFium(vcl::pdf::PDFiumLibrary::get())
@@ -755,33 +740,6 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj1, bool bScale)
             mbLastObjWasPolyWithoutLine = false;
         }
     }
-}
-
-bool ImpSdrPdfImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon)
-{
-    // #i73407# reformulation to use new B2DPolygon classes
-    if (mbLastObjWasPolyWithoutLine)
-    {
-        SdrObject* pTmpObj = !maTmpList.empty() ? maTmpList[maTmpList.size() - 1].get() : nullptr;
-        SdrPathObj* pLastPoly = dynamic_cast<SdrPathObj*>(pTmpObj);
-
-        if (pLastPoly)
-        {
-            if (pLastPoly->GetPathPoly() == rPolyPolygon)
-            {
-                SetAttributes(nullptr);
-
-                if (!mbNoLine && mbNoFill)
-                {
-                    pLastPoly->SetMergedItemSet(*mpLineAttr);
-
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
 }
 
 void ImpSdrPdfImport::ImportPdfObject(

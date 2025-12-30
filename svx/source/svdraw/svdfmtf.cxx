@@ -82,27 +82,12 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrModel& rModel,
     SdrLayerID nLay,
     const tools::Rectangle& rRect)
-:   mpVD(VclPtr<VirtualDevice>::Create()),
-    maScaleRect(rRect),
-    mpModel(&rModel),
-    mnLayer(nLay),
-    mnLineWidth(0),
+:   ImpSdrImportBase(rModel, nLay, rRect),
     maLineJoin(basegfx::B2DLineJoin::NONE),
     maLineCap(css::drawing::LineCap_BUTT),
-    maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0),
-    mbMov(false),
-    mbSize(false),
-    maOfs(0, 0),
-    mfScaleX(1.0),
-    mfScaleY(1.0),
-    maScaleX(1.0),
-    maScaleY(1.0),
-    mbFntDirty(true),
-    mbLastObjWasPolyWithoutLine(false),
-    mbNoLine(false),
-    mbNoFill(false),
     mbLastObjWasLine(false)
 {
+    mpVD = VclPtr<VirtualDevice>::Create();
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
     mpVD->SetFillColor();
@@ -843,33 +828,6 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
                 }
 
                 return bOk;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon & rPolyPolygon)
-{
-    // #i73407# reformulation to use new B2DPolygon classes
-    if(mbLastObjWasPolyWithoutLine)
-    {
-        SdrObject* pTmpObj = !maTmpList.empty() ? maTmpList[maTmpList.size() - 1].get() : nullptr;
-        SdrPathObj* pLastPoly = dynamic_cast< SdrPathObj* >(pTmpObj);
-
-        if(pLastPoly)
-        {
-            if(pLastPoly->GetPathPoly() == rPolyPolygon)
-            {
-                SetAttributes(nullptr);
-
-                if(!mbNoLine && mbNoFill)
-                {
-                    pLastPoly->SetMergedItemSet(*mpLineAttr);
-
-                    return true;
-                }
             }
         }
     }
