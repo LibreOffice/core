@@ -7382,6 +7382,11 @@ the  Windows SDK are installed.])
         elif test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
         fi
+        if test "$USE_HEADLESS_CODE" = "TRUE"; then
+            if test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/winrt"; then
+                SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/winrt"
+            fi
+        fi
     fi
 
     dnl TODO: solenv/bin/modules/installer/windows/msiglobal.pm wants to use a

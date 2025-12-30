@@ -20,9 +20,46 @@ well.
  #  define FC_SEARCH_PATH_SEPARATOR ';'
  #  define FC_DIR_SEPARATOR         '\\'
  #  define FC_DIR_SEPARATOR_S       "\\"
+--- src/fccfg.c
++++ src/fccfg.c
+@@ -658,6 +658,9 @@
+ FcConfigMapFontPath (FcConfig      *config,
+                      const FcChar8 *path)
+ {
++#ifdef _WIN32
++    return 0;
++#else
+     FcStrList     *list;
+     FcChar8       *dir;
+     const FcChar8 *map, *rpath;
+@@ -687,12 +687,16 @@
+ 	retval[len] = 0;
+     }
+     return retval;
++#endif
+ }
+ 
+ const FcChar8 *
+ FcConfigMapSalt (FcConfig      *config,
+                  const FcChar8 *path)
+ {
++#ifdef _WIN32
++    return 0;
++#else
+     FcStrList *list;
+     FcChar8   *dir;
+ 
+@@ -707,6 +707,7 @@
+ 	return NULL;
+ 
+     return FcStrTripleThird (dir);
++#endif
+ }
+ 
+ FcBool
 --- src/fcxml.c
 +++ src/fcxml.c
-@@ -58,11 +58,9 @@
+@@ -58,11 +58,10 @@
  
  #ifdef _WIN32
  #  include <mbstring.h>
@@ -33,10 +70,19 @@ well.
 -pfnSHGetFolderPathA          pSHGetFolderPathA = NULL;
 -static void
 -_ensureWin32GettersReady ();
++extern char* appx_fonts_get_dirs();
  #endif
  
  static FcChar8 *__fc_userdir = NULL;
-@@ -1330,23 +1330,29 @@
+@@ -1264,6 +1264,7 @@
+ #endif
+     FcChar8  *parent = NULL, *retval = NULL;
+     FcStrSet *e = NULL;
++    FcBool dontInsertRetval = FcFalse;
+ 
+     if (prefix) {
+ 	if (FcStrCmp (prefix, (const FcChar8 *)"xdg") == 0) {
+@@ -1330,23 +1330,42 @@
  	strcat ((char *)path, "\\..\\share\\fonts");
      } else if (strcmp ((const char *)path, "WINDOWSUSERFONTDIR") == 0) {
  	path = buffer;
@@ -73,9 +119,31 @@ well.
 +	path = buffer;
 +	WideCharToMultiByte(CP_UTF8, 0, wpath, wcslen(wpath), path, size_needed, NULL, NULL);
 +	CoTaskMemFree (wpath);
++    } else if (strcmp ((const char *)path, "WINDOWSAPPXFONTDIRS") == 0) {
++	char *appxFontDirs = appx_fonts_get_dirs();
++	char *semicolon;
++	char *p = appxFontDirs;
++	e = FcStrSetCreate ();
++	while ((semicolon = strchr(p, ';')) != NULL) {
++	    *semicolon = '\0';
++	    FcStrSetAdd (e, (FcChar8*)p);
++	    p = semicolon + 1;
++	}
++	free(appxFontDirs);
++	path = NULL;
++       dontInsertRetval = FcTrue;
      } else {
  	if (!prefix) {
  	    if (!FcStrIsAbsoluteFilename (path) && path[0] != '~')
+@@ -1388,7 +1388,7 @@
+ 	    e->strs[i] = s;
+ 	}
+     }
+-    if (!FcStrSetInsert (e, retval, 0)) {
++    if (!dontInsertRetval && !FcStrSetInsert (e, retval, 0)) {
+ 	FcStrSetDestroy (e);
+ 	e = NULL;
+     }
 @@ -2288,7 +2288,7 @@
  	char   szFPath[MAX_PATH + 1];
  	size_t len;
@@ -140,3 +208,133 @@ well.
 
  #define __fcxml__
  #include "fcaliastail.h"
+--- src/fcdwrite.cxx
++++ src/fcdwrite.cxx
+@@ -0,0 +1,127 @@
++#undef _WIN32_WINNT
++#define _WIN32_WINNT 0x0A00
++
++#include <windows.h>
++#include <dwrite_3.h>
++#include <wrl/client.h>
++
++#include <cstring>
++#include <iostream>
++#include <set>
++#include <string>
++#include <vector>
++
++using Microsoft::WRL::ComPtr;
++
++static std::string wide_string_to_string(const std::wstring& wide_string)
++{
++    if (wide_string.empty()) {
++	return "";
++    }
++
++    const auto size_needed = WideCharToMultiByte(CP_UTF8, 0, wide_string.data(), (int)wide_string.size(), nullptr, 0, nullptr, nullptr);
++    if (size_needed <= 0) {
++	std::wcerr << L"WideCharToMultiByte() failed: " + std::to_wstring(size_needed) << std::endl;
++	return "";
++    }
++
++    std::string result(size_needed, 0);
++    WideCharToMultiByte(CP_UTF8, 0, wide_string.data(), (int)wide_string.size(), result.data(), size_needed, nullptr, nullptr);
++    return result;
++}
++
++extern "C" char* appx_fonts_get_dirs()
++{
++    // We assume COM has been initialised by the surrounding app
++    HRESULT hr;
++    ComPtr<IDWriteFactory7> factory;
++
++    hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED,
++			      __uuidof(IDWriteFactory7),
++			      reinterpret_cast<IUnknown**>(factory.GetAddressOf()));
++
++    if (FAILED(hr)) {
++	std::wcerr << L"Failed to create DirectWrite factory\n";
++	return nullptr;
++    }
++
++    // Get the unified system font set (covers system, user, Store fonts)
++    ComPtr<IDWriteFontSet2> fontSet;
++    hr = factory->GetSystemFontSet(FALSE, &fontSet);
++    if (FAILED(hr)) {
++	std::wcerr << L"GetSystemFontSet failed\n";
++	return nullptr;
++    }
++
++    ComPtr<IDWriteFontSet3> fontSet3;
++    hr = fontSet.As(&fontSet3);
++    if (FAILED(hr)) {
++	std::wcerr << L"Could not get IDWriteFontSet3 from IDWriteFontSet2\n";
++	return nullptr;
++    }
++
++    std::set<std::wstring> folders;
++    UINT32 count = fontSet->GetFontCount();
++
++    for (UINT32 i = 0; i < count; ++i) {
++	auto sourceType = fontSet3->GetFontSourceType(i);
++
++	// We are interested only in the fonts from the Store, i.e. APPX ones, here.
++	if (sourceType != DWRITE_FONT_SOURCE_TYPE_APPX_PACKAGE)
++	    continue;
++
++	ComPtr<IDWriteFontFaceReference> faceRef;
++	if (FAILED(fontSet->GetFontFaceReference(i, &faceRef)))
++	    continue;
++
++	// Resolve to actual font face to access files
++	ComPtr<IDWriteFontFace3> face;
++	if (FAILED(faceRef->CreateFontFace(&face)))
++	    continue;
++
++	UINT32 fileCount = 0;
++	face->GetFiles(&fileCount, nullptr);
++
++	std::vector<ComPtr<IDWriteFontFile>> files(fileCount);
++	face->GetFiles(&fileCount, reinterpret_cast<IDWriteFontFile**>(files.data()));
++
++	for (UINT32 f = 0; f < fileCount; ++f) {
++	    const void* refKey = nullptr;
++	    UINT32 refKeySize = 0;
++
++	    files[f]->GetReferenceKey(&refKey, &refKeySize);
++
++	    ComPtr<IDWriteFontFileLoader> loader;
++	    files[f]->GetLoader(&loader);
++
++	    ComPtr<IDWriteLocalFontFileLoader> localLoader;
++	    if (SUCCEEDED(loader.As(&localLoader))) {
++		UINT32 pathLen = 0;
++		hr = localLoader->GetFilePathLengthFromKey(refKey, refKeySize, &pathLen);
++		if (SUCCEEDED(hr)) {
++		    std::wstring path(pathLen + 1, L'\0');
++		    hr = localLoader->GetFilePathFromKey(refKey, refKeySize, path.data(), pathLen + 1);
++
++		    // We actually only want the folders that such
++		    // fonts are in. Fontconfig will, stupidly enough,
++		    // scan the whole folder looking for font files,
++		    // even if we here would already know the font
++		    // files. But I can't be arsed to re-wire
++		    // fontconfig any more than absolutely necessary,
++		    // it is complicated enough as is.
++
++		    if (SUCCEEDED(hr)) {
++			auto lastBackslash = path.find_last_of(L'\\');
++			if (lastBackslash != std::wstring::npos)
++			    folders.insert(path.substr(0, lastBackslash));
++		    }
++		}
++	    }
++	}
++    }
++
++    std::string result;
++    for (const auto& i : folders)
++	result += wide_string_to_string(i) + ";";
++    return _strdup(result.c_str());
++}

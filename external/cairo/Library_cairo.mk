@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_externals,cairo,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,cairo,\
+    dwrite \
     ole32 \
     shell32 \
 ))

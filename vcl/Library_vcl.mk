@@ -831,6 +831,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vcl,\
+    dwrite \
     ole32 \
     setupapi \
     shell32 \
