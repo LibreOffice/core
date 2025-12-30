@@ -1212,6 +1212,8 @@ MetaGradientAction::MetaGradientAction( const tools::Rectangle& rRect, Gradient 
 
 void MetaGradientAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
     pOut->DrawGradient( maRect, maGradient );
 }
 
