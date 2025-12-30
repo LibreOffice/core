@@ -508,8 +508,6 @@ public:
         = 0;
 };
 
-class Label;
-
 class VCL_DLLPUBLIC Frame : virtual public Container
 {
 public:
