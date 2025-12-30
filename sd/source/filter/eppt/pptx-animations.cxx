@@ -961,8 +961,6 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
             {
                 if (pChildContext->isOnSubTnLst())
                     bSubTnLst = true;
-                else if (pChildContext->getNode()->getType() == AnimationNodeType::ANIMATEPHYSICS)
-                    ; // ignore we don't support exporting this node type
                 else
                 {
                     if (!bWroteChildTnList)
