@@ -2411,13 +2411,16 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             {
                                 switch ( nPlaceholderId )
                                 {
-                                    case PptPlaceholder::MEDIACLIP :
-                                    case PptPlaceholder::OBJECT : ePresObjKind = PresObjKind::Object; break;
-                                    case PptPlaceholder::GRAPH : ePresObjKind = PresObjKind::Chart; break;
-                                    case PptPlaceholder::TABLE : ePresObjKind = PresObjKind::Table; break;
-                                    case PptPlaceholder::CLIPART : ePresObjKind = PresObjKind::Graphic; break;
-                                    case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PresObjKind::OrgChart; break;
-                                    default: break;
+                                    case PptPlaceholder::MEDIACLIP:
+                                    case PptPlaceholder::OBJECT:
+                                    case PptPlaceholder::GRAPH:
+                                    case PptPlaceholder::TABLE:
+                                    case PptPlaceholder::CLIPART:
+                                    case PptPlaceholder::ORGANISZATIONCHART:
+                                        ePresObjKind = PresObjKind::Outline;
+                                        break;
+                                    default:
+                                        break;
                                 }
                             }
                         };
