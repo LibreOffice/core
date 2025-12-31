@@ -165,8 +165,6 @@ to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
-typedef std::vector<std::unique_ptr<ValueSetItem>> ValueItemList;
-
 #define WB_ITEMBORDER           (WinBits(0x00010000))
 #define WB_DOUBLEBORDER         (WinBits(0x00020000))
 #define WB_NAMEFIELD            (WinBits(0x00040000))
@@ -183,7 +181,7 @@ class SVT_DLLPUBLIC ValueSet : public weld::CustomWidgetController
 private:
     ScopedVclPtr<VirtualDevice> maVirDev;
     rtl::Reference<ValueSetAcc> mxAccessible;
-    ValueItemList   mItemList;
+    std::vector<std::unique_ptr<ValueSetItem>> mItemList;
     std::unique_ptr<ValueSetItem> mpNoneItem;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     tools::Rectangle  maNoneItemRect;
