@@ -73,7 +73,7 @@ protected:
     DECL_DLLPRIVATE_LINK(OpenRegionHdl, void*, void);
     DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_DLLPRIVATE_LINK(OpenTemplateHdl, const OUString&, void);
-    DECL_DLLPRIVATE_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(EditTemplateHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(DeleteTemplateHdl, void*, void);
     DECL_DLLPRIVATE_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
     DECL_DLLPRIVATE_LINK(MoveTemplateHdl, void*, void);

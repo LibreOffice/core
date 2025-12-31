@@ -151,7 +151,7 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::u16string_view rIdent)
     if (rIdent == u"open")
         maOpenTemplateHdl.Call(maSelectedItem->getPath());
     else if (rIdent == u"edit")
-        maEditTemplateHdl.Call(maSelectedItem);
+        maEditTemplateHdl.Call(maSelectedItem->getPath());
     else if (rIdent == u"rename")
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));

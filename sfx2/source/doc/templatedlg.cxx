@@ -708,7 +708,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, const OUString&, rTemplatePath
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, const OUString&, rTemplatePath, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
@@ -717,11 +717,9 @@ IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, voi
     };
 
     uno::Reference< XStorable > xStorable;
-    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
-
     try
     {
-        xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),u"_default"_ustr, 0, aArgs ),
+        xStorable.set( mxDesktop->loadComponentFromURL(rTemplatePath, u"_default"_ustr, 0, aArgs),
                        uno::UNO_QUERY );
     }
     catch( const uno::Exception& )

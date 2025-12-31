@@ -703,7 +703,7 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, const OUString&, rTemplatePath, void)
     }
 }
 
-IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, EditTemplateHdl, const OUString&, rTemplatePath, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
@@ -711,13 +711,11 @@ IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG),
     };
 
-    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
-
     Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
     try
     {
-        dispatchURL( pViewItem->getPath(), u"_default"_ustr, xFrame, aArgs );
+        dispatchURL(rTemplatePath, u"_default"_ustr, xFrame, aArgs);
     }
     catch( const uno::Exception& )
     {
