@@ -116,7 +116,7 @@ protected:
     SAL_DLLPRIVATE FILTER_APPLICATION getCurrentApplicationFilter() const;
 
 protected:
-    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
+    std::set<const TemplateViewItem*, selection_cmp_fn> maSelTemplates;
     css::uno::Reference<css::frame::XModel> m_xModel;
     css::uno::Reference<css::frame::XDesktop2> mxDesktop;
 

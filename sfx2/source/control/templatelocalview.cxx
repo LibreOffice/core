@@ -423,8 +423,8 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
     return true;
 }
 
-void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, selection_cmp_fn> &rItems,
-                                      const sal_uInt16 nTargetItem)
+void TemplateLocalView::moveTemplates(
+    const std::set<const TemplateViewItem*, selection_cmp_fn>& rItems, const sal_uInt16 nTargetItem)
 {
     TemplateContainerItem *pTarget = nullptr;
     TemplateContainerItem *pSrc = nullptr;
@@ -444,10 +444,9 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
     std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)
 
-    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aSelIter;
-    for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
+    for (auto aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx)
     {
-        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
+        const TemplateViewItem* pViewItem = *aSelIter;
         sal_uInt16 nSrcRegionId = pViewItem->mnRegionId;
 
         for (auto const & pRegion : maRegions)

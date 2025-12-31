@@ -658,10 +658,8 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
     bool bIsDefault = false;
     bool bIsInternal = false;
 
-    for (const ThumbnailViewItem* pSelItem : maSelTemplates)
+    for (const TemplateViewItem* pSelTemplate : maSelTemplates)
     {
-        const TemplateViewItem* pSelTemplate = dynamic_cast<const TemplateViewItem*>(pSelItem);
-        assert(pSelTemplate);
         if (pSelTemplate->IsDefaultTemplate())
             bIsDefault = true;
         if (TemplateLocalView::IsInternalTemplate(pSelTemplate->getPath()))
@@ -737,15 +735,14 @@ IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, voi
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, DeleteTemplateHdl, void*, void)
 {
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates;
+    std::set<const TemplateViewItem*, selection_cmp_fn> aSelTemplates = maSelTemplates;
     OUString aDeletedTemplate;
 
     for (auto const& pItem : aSelTemplates)
     {
-        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(pItem);
-        sal_uInt16 nRegionItemId = mxLocalView->getRegionId(pViewItem->mnRegionId);
+        sal_uInt16 nRegionItemId = mxLocalView->getRegionId(pItem->mnRegionId);
 
-        if (!mxLocalView->removeTemplate(pViewItem->mnDocId + 1, nRegionItemId))//mnId w.r.t. region is mnDocId + 1;
+        if (!mxLocalView->removeTemplate(pItem->mnDocId + 1, nRegionItemId))//mnId w.r.t. region is mnDocId + 1;
         {
             aDeletedTemplate += pItem->maTitle+"\n";
         }
@@ -1002,10 +999,8 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
     sal_uInt16 i = 1;
     auto aSelTemplates = maSelTemplates;
-    for (auto const& selTemplate : aSelTemplates)
+    for (const TemplateViewItem* pItem : aSelTemplates)
     {
-        const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(selTemplate);
-
         INetURLObject aItemPath(pItem->getPath());
 
         if ( 1 == i )
@@ -1048,8 +1043,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
 void SfxTemplateManagerDlg::OnTemplateOpen ()
 {
-    const ThumbnailViewItem* pItem = *maSelTemplates.begin();
-
+    const TemplateViewItem* pItem = *maSelTemplates.begin();
     OpenTemplateHdl(pItem);
 }
 
@@ -1375,7 +1369,7 @@ IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, const ThumbnailViewItem*, pI
 
 IMPL_LINK_NOARG(SfxTemplateSelectionDlg, OkClickHdl, weld::Button&, void)
 {
-    const TemplateViewItem* pViewItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
+    const TemplateViewItem* pViewItem = *maSelTemplates.begin();
     msTemplatePath = pViewItem->getPath();
 
     m_xDialog->response(RET_OK);
