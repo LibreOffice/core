@@ -166,7 +166,7 @@ protected:
 
     sal_uInt16 mnCurRegionId;
 
-    TemplateViewItem *maSelectedItem;
+    TemplateViewItem* mpSelectedItem;
 
     tools::Long mnThumbnailWidth;
     tools::Long mnThumbnailHeight;

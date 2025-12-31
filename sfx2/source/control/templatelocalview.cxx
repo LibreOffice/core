@@ -86,7 +86,7 @@ TemplateLocalView::TemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWind
                                            std::unique_ptr<weld::Menu> xMenu)
     : ThumbnailView(std::move(xWindow), std::move(xMenu))
     , mnCurRegionId(0)
-    , maSelectedItem(nullptr)
+    , mpSelectedItem(nullptr)
     , mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH)
     , mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT)
     , maPosition(0,0)
@@ -193,21 +193,21 @@ TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
 void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
 {
     if (rIdent == u"open")
-        maOpenTemplateHdl.Call(maSelectedItem->getPath());
+        maOpenTemplateHdl.Call(mpSelectedItem->getPath());
     else if (rIdent == u"edit")
-        maEditTemplateHdl.Call(maSelectedItem->getPath());
+        maEditTemplateHdl.Call(mpSelectedItem->getPath());
     else if (rIdent == u"rename")
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
-        OUString sOldTitle = maSelectedItem->getTitle();
+        OUString sOldTitle = mpSelectedItem->getTitle();
         aTitleEditDlg.SetEntryText(sOldTitle);
         aTitleEditDlg.HideHelpBtn();
 
         auto aCurRegionItems = getFilteredItems([&](const TemplateItemProperties& rItem) {
-            return rItem.aRegionName == getRegionName(maSelectedItem->mnRegionId);
+            return rItem.aRegionName == getRegionName(mpSelectedItem->mnRegionId);
         });
         OUString sTooltip(SfxResId(STR_TOOLTIP_ERROR_RENAME_TEMPLATE));
-        sTooltip = sTooltip.replaceFirst("$2", getRegionName(maSelectedItem->mnRegionId));
+        sTooltip = sTooltip.replaceFirst("$2", getRegionName(mpSelectedItem->mnRegionId));
         aTitleEditDlg.setCheckEntry([&](OUString sNewTitle) {
             if (sNewTitle.isEmpty() || sNewTitle == sOldTitle)
                 return true;
@@ -227,7 +227,7 @@ void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
 
         if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
         {
-            maSelectedItem->setTitle(sNewTitle);
+            mpSelectedItem->setTitle(sNewTitle);
         }
     }
     else if (rIdent == u"delete")
@@ -237,11 +237,11 @@ void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
         if (xQueryDlg->run() != RET_YES)
             return;
 
-        maDeleteTemplateHdl.Call(maSelectedItem);
+        maDeleteTemplateHdl.Call(mpSelectedItem);
         reload();
     }
     else if (rIdent == u"default")
-        maDefaultTemplateHdl.Call(maSelectedItem);
+        maDefaultTemplateHdl.Call(mpSelectedItem);
 }
 
 sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
@@ -713,7 +713,7 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
                 pViewItem->setSelection(true);
                 maItemStateHdl.Call(pViewItem);
             }
-            maSelectedItem = pViewItem;
+            mpSelectedItem = pViewItem;
             maCreateContextMenuHdl.Call(pViewItem);
         }
     }
@@ -725,8 +725,8 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
             {
                 tools::Rectangle aRect = pItem->getDrawArea();
                 maPosition = aRect.Center();
-                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-                maCreateContextMenuHdl.Call(maSelectedItem);
+                mpSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                maCreateContextMenuHdl.Call(mpSelectedItem);
                 break;
             }
         }

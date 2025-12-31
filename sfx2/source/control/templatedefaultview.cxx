@@ -81,8 +81,8 @@ void TemplateDefaultView::createContextMenu()
     mxContextMenu->append(u"open"_ustr,SfxResId(STR_OPEN));
     mxContextMenu->append(u"edit"_ustr,SfxResId(STR_EDIT_TEMPLATE));
     deselectItems();
-    maSelectedItem->setSelection(true);
-    maItemStateHdl.Call(maSelectedItem);
+    mpSelectedItem->setSelection(true);
+    maItemStateHdl.Call(mpSelectedItem);
     ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
     Invalidate();
 }
