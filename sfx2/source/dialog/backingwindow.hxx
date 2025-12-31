@@ -98,7 +98,7 @@ class BackingWindow : public InterimItemWindow
     DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_STATIC_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, void);
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
-    DECL_LINK(OpenTemplateHdl, const ThumbnailViewItem*, void);
+    DECL_LINK(OpenTemplateHdl, const OUString&, void);
     DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
 
     void initControls();

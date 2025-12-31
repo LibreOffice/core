@@ -193,7 +193,7 @@ TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
 void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
 {
     if (rIdent == u"open")
-        maOpenTemplateHdl.Call(maSelectedItem);
+        maOpenTemplateHdl.Call(maSelectedItem->getPath());
     else if (rIdent == u"edit")
         maEditTemplateHdl.Call(maSelectedItem);
     else if (rIdent == u"rename")
@@ -788,7 +788,7 @@ void TemplateLocalView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,vo
     maCreateContextMenuHdl = rLink;
 }
 
-void TemplateLocalView::setOpenTemplateHdl(const Link<const ThumbnailViewItem*, void>& rLink)
+void TemplateLocalView::setOpenTemplateHdl(const Link<const OUString&, void>& rLink)
 {
     maOpenTemplateHdl = rLink;
 }
@@ -892,7 +892,7 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
     TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
     if( pViewItem )
-        maOpenTemplateHdl.Call(pViewItem);
+        maOpenTemplateHdl.Call(pViewItem->getPath());
 }
 
 bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)

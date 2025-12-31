@@ -149,7 +149,7 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
 void TemplateDlgLocalView::ContextMenuSelectHdl(std::u16string_view rIdent)
 {
     if (rIdent == u"open")
-        maOpenTemplateHdl.Call(maSelectedItem);
+        maOpenTemplateHdl.Call(maSelectedItem->getPath());
     else if (rIdent == u"edit")
         maEditTemplateHdl.Call(maSelectedItem);
     else if (rIdent == u"rename")
@@ -334,7 +334,7 @@ void TemplateDlgLocalView::updateSelection()
 
 IMPL_LINK_NOARG(TemplateDlgLocalView, RowActivatedHdl, weld::TreeView&, bool)
 {
-    maOpenTemplateHdl.Call(maSelectedItem);
+    maOpenTemplateHdl.Call(maSelectedItem->getPath());
     return true;
 }
 

@@ -250,7 +250,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
     // Ignore view events since we are cleaning the object
     mxLocalView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mxLocalView->setOpenRegionHdl(Link<void*,void>());
-    mxLocalView->setOpenTemplateHdl(Link<const ThumbnailViewItem*, void>());
+    mxLocalView->setOpenTemplateHdl(Link<const OUString&, void>());
 }
 
 short SfxTemplateManagerDlg::run()
@@ -687,7 +687,7 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
     mxLocalView->createContextMenu(bIsDefault, bIsInternal, bIsSingleSel, aDefaultImg);
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, const ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, const OUString&, rTemplatePath, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
@@ -697,11 +697,9 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, const ThumbnailViewItem*, pIte
         comphelper::makePropertyValue(u"ReadOnly"_ustr, true)
     };
 
-    const TemplateViewItem* pTemplateItem = static_cast<const TemplateViewItem*>(pItem);
-
     try
     {
-        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),u"_default"_ustr, 0, aArgs );
+        mxDesktop->loadComponentFromURL(rTemplatePath, u"_default"_ustr, 0, aArgs );
     }
     catch( const uno::Exception& )
     {
@@ -1044,7 +1042,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 void SfxTemplateManagerDlg::OnTemplateOpen ()
 {
     const TemplateViewItem* pItem = *maSelTemplates.begin();
-    OpenTemplateHdl(pItem);
+    OpenTemplateHdl(pItem->getPath());
 }
 
 void SfxTemplateManagerDlg::OnCategoryNew()
@@ -1359,10 +1357,9 @@ IMPL_LINK_NOARG(SfxTemplateSelectionDlg, TimeOut, Timer*, void)
     m_xDialog->set_centered_on_parent(false);
 }
 
-IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, const ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, const OUString&, rTemplatePath, void)
 {
-    const TemplateViewItem* pViewItem = static_cast<const TemplateViewItem*>(pItem);
-    msTemplatePath = pViewItem->getPath();
+    msTemplatePath = rTemplatePath;
 
     m_xDialog->response(RET_OK);
 }

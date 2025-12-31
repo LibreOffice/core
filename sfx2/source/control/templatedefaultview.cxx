@@ -68,7 +68,7 @@ bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
         TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
         if(pViewItem)
-            maOpenTemplateHdl.Call(pViewItem);
+            maOpenTemplateHdl.Call(pViewItem->getPath());
         return true;
     }
 

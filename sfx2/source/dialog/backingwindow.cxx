@@ -683,7 +683,7 @@ IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
         mxLocalView->createContextMenu();
 }
 
-IMPL_LINK(BackingWindow, OpenTemplateHdl, const ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, OpenTemplateHdl, const OUString&, rTemplatePath, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
@@ -692,13 +692,11 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, const ThumbnailViewItem*, pItem, void)
         comphelper::makePropertyValue(u"InteractionHandler"_ustr, task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ))
     };
 
-    const TemplateViewItem* pTemplateItem = static_cast<const TemplateViewItem*>(pItem);
-
     Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
     try
     {
-        dispatchURL( pTemplateItem->getPath(), u"_default"_ustr, xFrame, aArgs );
+        dispatchURL(rTemplatePath, u"_default"_ustr, xFrame, aArgs);
     }
     catch( const uno::Exception& )
     {
