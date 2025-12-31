@@ -59,7 +59,6 @@
 #include <osl/mutex.hxx>
 #include <osl/pipe.h>
 #include <osl/process.h>
-#include <osl/profile.hxx>
 #include <osl/security.hxx>
 #include <osl/signal.h>
 #include <osl/socket.h>

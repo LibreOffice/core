@@ -102,8 +102,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	osl/pipe.hxx \
 	osl/pipe_decl.hxx \
 	osl/process.h \
-	osl/profile.h \
-	osl/profile.hxx \
 	osl/security.h \
 	osl/security.hxx \
 	osl/security_decl.hxx \

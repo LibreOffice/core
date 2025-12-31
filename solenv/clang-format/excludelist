@@ -5254,8 +5254,6 @@ include/osl/nlsupport.h
 include/osl/pipe.h
 include/osl/pipe.hxx
 include/osl/process.h
-include/osl/profile.h
-include/osl/profile.hxx
 include/osl/security.h
 include/osl/security.hxx
 include/osl/security_decl.hxx
@@ -7328,7 +7326,6 @@ sal/osl/unx/osxlocale.cxx
 sal/osl/unx/pipe.cxx
 sal/osl/unx/process.cxx
 sal/osl/unx/process_impl.cxx
-sal/osl/unx/profile.cxx
 sal/osl/unx/readwrite_helper.cxx
 sal/osl/unx/salinit.cxx
 sal/osl/unx/security.cxx
@@ -7358,7 +7355,6 @@ sal/osl/w32/path_helper.hxx
 sal/osl/w32/pipe.cxx
 sal/osl/w32/process.cxx
 sal/osl/w32/procimpl.cxx
-sal/osl/w32/profile.cxx
 sal/osl/w32/salinit.cxx
 sal/osl/w32/security.cxx
 sal/osl/w32/socket.cxx
@@ -7384,7 +7380,6 @@ sal/qa/osl/pipe/osl_Pipe.cxx
 sal/qa/osl/process/osl_Thread.cxx
 sal/qa/osl/process/osl_process.cxx
 sal/qa/osl/process/osl_process_child.cxx
-sal/qa/osl/profile/osl_old_testprofile.cxx
 sal/qa/osl/security/TODO.h
 sal/qa/osl/security/osl_Security.cxx
 sal/qa/osl/setthreadname/test-setthreadname.cxx

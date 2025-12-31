@@ -47,6 +47,10 @@ SAL_DLLPUBLIC void SAL_CALL osl_clearSocketSet(void *) {
     std::abort();
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_closeProfile(void*) {
+    std::abort();
+}
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL osl_createSemaphore(sal_uInt32) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
@@ -69,12 +73,40 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroySocketSet(void *) {
     std::abort();
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_flushProfile(void*) {
+     std::abort();
+}
+
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL osl_getProfileSectionEntries(void*, const char*, char*, sal_uInt32) {
+     std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL osl_getProfileSections(void*, char*, sal_uInt32) {
+     std::abort();
+}
+
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(void *, oslSocket) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL osl_openProfile(rtl_uString*, sal_uInt32) {
+     std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_readProfileBool(void*, const char*, const char*, sal_Bool) {
+     std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL osl_readProfileIdent(void*, const char*, const char*, sal_uInt32, const char**, sal_uInt32) {
+     std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_readProfileString(void*, const char*, const char*, char*, sal_uInt32, const char*) {
+     std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe) {
@@ -83,6 +115,10 @@ SAL_DLLPUBLIC_EXPORT oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe) {
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_releaseSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_removeProfileEntry(void*, const char*, const char*) {
+     std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL osl_reportError(
@@ -123,6 +159,18 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_trace(char const *, ...) {
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_tryToAcquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_writeProfileBool(void*, const char*, const char*, sal_Bool) {
+     std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_writeProfileIdent(void*, const char*, const char*, sal_uInt32, const char**, sal_uInt32) {
+     std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_writeProfileString(void*, const char*, const char*, const char*) {
+     std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_addUnloadingListener(
