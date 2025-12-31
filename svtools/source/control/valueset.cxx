@@ -1072,7 +1072,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
                 mpNoneItem.reset(new ValueSetItem(*this));
 
             mpNoneItem->mnId = 0;
-            mpNoneItem->meType = VALUESETITEM_NONE;
+            mpNoneItem->meType = ValueSetItemType::None;
             mpNoneItem->mbVisible = true;
             maNoneItemRect.SetLeft( x );
             maNoneItemRect.SetTop( y );
@@ -1423,7 +1423,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         else
             maVirDev->DrawText(aTxtPos, pItem->maText);
     }
-    else if (pItem->meType == VALUESETITEM_COLOR)
+    else if (pItem->meType == ValueSetItemType::Color)
     {
         maVirDev->SetFillColor(pItem->maColor);
         maVirDev->DrawRect(aRect);
@@ -1440,7 +1440,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             maVirDev->SetFillColor(rStyleSettings.GetFaceColor());
         maVirDev->DrawRect(aRect);
 
-        if (pItem->meType == VALUESETITEM_USERDRAW)
+        if (pItem->meType == ValueSetItemType::UserDraw)
         {
             UserDrawEvent aUDEvt(maVirDev.get(), aRect, pItem->mnId);
             UserDraw(aUDEvt);
@@ -1452,7 +1452,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             Point aPos(aRect.Left(), aRect.Top());
             aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
 
-            if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+            if (pItem->meType != ValueSetItemType::ImageAndText)
                 aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
 
             DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
@@ -1469,7 +1469,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             else
                 maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
 
-            if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+            if (pItem->meType == ValueSetItemType::ImageAndText)
             {
                 maVirDev->SetFont(rRenderContext.GetFont());
                 maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
@@ -1558,7 +1558,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         return;
 
     ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->meType  = VALUESETITEM_IMAGE;
+    pItem->meType  = ValueSetItemType::Image;
     pItem->maImage = rImage;
 
     if (!mbFormat && IsReallyVisible())
@@ -1578,7 +1578,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
         return;
 
     ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->meType  = VALUESETITEM_COLOR;
+    pItem->meType  = ValueSetItemType::Color;
     pItem->maColor = rColor;
 
     if (!mbFormat && IsReallyVisible())
@@ -1681,7 +1681,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
 {
     std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
+    pItem->meType = ValueSetItemType::Image;
     pItem->maImage  = rImage;
     ImplInsertItem( std::move(pItem), VALUESET_APPEND );
 }
@@ -1692,7 +1692,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 {
     std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
+    pItem->meType   = bShowLegend ? ValueSetItemType::ImageAndText : ValueSetItemType::Image;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
     ImplInsertItem( std::move(pItem), nPos );
@@ -1702,7 +1702,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
     std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_USERDRAW;
+    pItem->meType = ValueSetItemType::UserDraw;
     ImplInsertItem( std::move(pItem), nPos );
 }
 
@@ -1711,7 +1711,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
 {
     std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_COLOR;
+    pItem->meType   = ValueSetItemType::Color;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
     ImplInsertItem( std::move(pItem), VALUESET_APPEND );
@@ -1800,7 +1800,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t nPo
                 "ValueSet::InsertItem(): ItemId already exists" );
     std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_USERDRAW;
+    pItem->meType = ValueSetItemType::UserDraw;
     pItem->maText   = rText;
     ImplInsertItem( std::move(pItem), nPos );
 }
@@ -1867,7 +1867,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
     ValueSetItem* pItem = mItemList[nPos].get();
     pItem->mpData = pData;
 
-    if ( pItem->meType == VALUESETITEM_USERDRAW )
+    if (pItem->meType == ValueSetItemType::UserDraw)
     {
         if (!mbFormat && IsReallyVisible())
         {
@@ -1935,15 +1935,15 @@ Size ValueSet::GetLargestItemSize()
         if (!pItem->mbVisible)
             continue;
 
-        if (pItem->meType != VALUESETITEM_IMAGE &&
-            pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+        if (pItem->meType != ValueSetItemType::Image &&
+            pItem->meType != ValueSetItemType::ImageAndText)
         {
             // handle determining an optimal size for this case
             continue;
         }
 
         Size aSize = pItem->maImage.GetSizePixel();
-        if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+        if (pItem->meType == ValueSetItemType::ImageAndText)
         {
             aSize.AdjustHeight(3 * NAME_LINE_HEIGHT +
                 maVirDev->GetTextHeight() );
