@@ -84,8 +84,21 @@
           </packing>
         </child>
         <child>
+          <object class="GtkBox" id="content">
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">start</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
           <!-- n-columns=1 n-rows=1 -->
-          <object class="GtkGrid" id="grid2">
+          <object class="GtkGrid" id="EditFieldGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="column_spacing">6</property>
@@ -159,9 +172,6 @@
             <property name="pack_type">end</property>
             <property name="position">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>

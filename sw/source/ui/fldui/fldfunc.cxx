@@ -26,6 +26,7 @@
 #include "fldfunc.hxx"
 #include "flddinf.hxx"
 #include <flddropdown.hxx>
+#include <comphelper/lok.hxx>
 #include <o3tl/string_view.hxx>
 
 #define USER_DATA_VERSION_1 "1"
@@ -78,11 +79,14 @@ SwFieldFuncPage::SwFieldFuncPage(weld::Container* pPage, weld::DialogController*
     m_xCond1ED->ShowBrackets(false);
     m_xCond2ED->ShowBrackets(false);
 
-    // uitests
-    m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-func");
-    m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-func");
-    m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-func");
-    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-func");
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // uitests
+        m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-func");
+        m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-func");
+        m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-func");
+        m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-func");
+    }
 }
 
 SwFieldFuncPage::~SwFieldFuncPage()
