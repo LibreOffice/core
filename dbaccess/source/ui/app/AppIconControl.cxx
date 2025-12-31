@@ -57,7 +57,7 @@ public:
 };
 
 OApplicationIconControl::OApplicationIconControl(std::unique_ptr<weld::ScrolledWindow> xScroll)
-    : ThumbnailView(std::move(xScroll), nullptr)
+    : ThumbnailView(std::move(xScroll))
     , m_pActionListener(nullptr)
     , m_nMaxWidth(0)
     , m_nMaxHeight(0)

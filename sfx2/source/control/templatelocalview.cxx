@@ -84,13 +84,14 @@ void TemplateLocalView::updateThumbnailDimensions(tools::Long itemMaxSize)
 
 TemplateLocalView::TemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                            std::unique_ptr<weld::Menu> xMenu)
-    : ThumbnailView(std::move(xWindow), std::move(xMenu))
+    : ThumbnailView(std::move(xWindow))
     , mnCurRegionId(0)
     , mpSelectedItem(nullptr)
     , mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH)
     , mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT)
     , maPosition(0,0)
     , mpDocTemplates(new SfxDocumentTemplates)
+    , mxContextMenu(std::move(xMenu))
 {
 }
 

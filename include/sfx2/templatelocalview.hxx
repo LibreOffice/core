@@ -185,6 +185,8 @@ protected:
     std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
     std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;
     std::vector<TemplateItemProperties > maAllTemplates;
+
+    std::unique_ptr<weld::Menu> mxContextMenu;
 };
 
 

@@ -188,7 +188,7 @@ Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
     return aThumbnail;
 }
 
-ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
+ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow)
     : mnThumbnailHeight(0)
     , mnDisplayHeight(0)
     , mnVItemSpace(-1)
@@ -196,7 +196,6 @@ ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std:
     , mbSelectOnFocus(true)
     , mpItemAttrs(new ThumbnailItemAttributes)
     , mxScrolledWindow(std::move(xWindow))
-    , mxContextMenu(std::move(xMenu))
 {
     ImplInit();
     mxScrolledWindow->connect_vadjustment_value_changed(LINK(this, ThumbnailView, ImplScrollHdl));
