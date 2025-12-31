@@ -32,7 +32,7 @@ public:
                     const Color& rDefaultColor);
     virtual ~ScTabBgColorDlg() override;
 
-    void GetSelectedColor( Color& rColor ) const;
+    Color GetSelectedColor() const;
 
     class ScTabBgColorValueSet : public SvxColorValueSet
     {

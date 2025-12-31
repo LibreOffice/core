@@ -376,7 +376,7 @@ class AbstractScTabBgColorDlg : public VclAbstractDialog
 protected:
     virtual             ~AbstractScTabBgColorDlg() override = default;
 public:
-    virtual void GetSelectedColor( Color& rColor ) const = 0;
+    virtual Color GetSelectedColor() const = 0;
 };
 
 class AbstractScImportOptionsDlg : public VclAbstractDialog
