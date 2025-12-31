@@ -568,10 +568,11 @@ def tidy(compileCommands, paths, noexclude, checknamespaces, finderrors, removef
                 p2 = subprocess.Popen(['grep', '-e', '#if'], stdin=p1.stdout, stdout=subprocess.PIPE, text=True)
                 p1.stdout.close()
                 output, _ = p2.communicate()
-                if not output:
+                if not output or noexclude:
                     invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
                 else:
                     # '#if' found, skipping file
+                    print("WARNING: #if found in file:", path, "- skipping for now.")
                     continue
 
             # In --fwdecl mode we ask for fw declaration removal suggestions.
