@@ -308,9 +308,8 @@ void TemplateDlgLocalView::syncCursor()
 
         size_t nPos = GetItemPos(nCursorId);
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-        if (pViewItem)
-            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+        if (TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem))
+            maSelectedItem = pViewItem;
     }
 }
 
@@ -329,9 +328,8 @@ void TemplateDlgLocalView::updateSelection()
     sal_uInt16 nCursorId = get_nId(nCursorIndex);
     size_t nPos = GetItemPos(nCursorId);
     ThumbnailViewItem* pItem = ImplGetItem(nPos);
-    const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-    if (pViewItem)
-        maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+    if (TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem))
+        maSelectedItem = pViewItem;
 }
 
 IMPL_LINK_NOARG(TemplateDlgLocalView, RowActivatedHdl, weld::TreeView&, bool)
