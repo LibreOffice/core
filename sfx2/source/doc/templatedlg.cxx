@@ -657,18 +657,14 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
     const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
     bool bIsDefault = false;
     bool bIsInternal = false;
-    std::vector<const TemplateViewItem*> aSelTemplates;
-    for(const auto& aSelTmpl : maSelTemplates)
-    {
-        const TemplateViewItem *aItem = dynamic_cast<const TemplateViewItem*>(aSelTmpl);
-        aSelTemplates.push_back(aItem);
-    }
 
-    for(const auto& aSelTmpl : aSelTemplates)
+    for (const ThumbnailViewItem* pSelItem : maSelTemplates)
     {
-        if(aSelTmpl->IsDefaultTemplate())
+        const TemplateViewItem* pSelTemplate = dynamic_cast<const TemplateViewItem*>(pSelItem);
+        assert(pSelTemplate);
+        if (pSelTemplate->IsDefaultTemplate())
             bIsDefault = true;
-        if(TemplateLocalView::IsInternalTemplate(aSelTmpl->getPath()))
+        if (TemplateLocalView::IsInternalTemplate(pSelTemplate->getPath()))
         {
             bIsInternal = true;
             if(bIsDefault)
