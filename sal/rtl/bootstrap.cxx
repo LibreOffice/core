@@ -24,7 +24,6 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <osl/profile.hxx>
 #include <osl/security.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -982,15 +981,42 @@ OUString expandMacros(
                 }
                 else
                 {
-                    buf.append(
-                        OStringToOUString(
-                            osl::Profile(seg[0]).readString(
-                                OUStringToOString(
-                                    seg[1], RTL_TEXTENCODING_UTF8),
-                                OUStringToOString(
-                                    seg[2], RTL_TEXTENCODING_UTF8),
-                                OString()),
-                            RTL_TEXTENCODING_UTF8));
+                    osl::File aFile(seg[0]);
+                    if (aFile.open(osl_File_OpenFlag_Read) != osl::FileBase::E_None)
+                    {
+                        SAL_WARN("vcl", "failed to open profile: " << seg[0]);
+                    }
+                    rtl::ByteSequence seq;
+                    bool bInSection = false;
+                    while (aFile.readLine(seq) == osl::FileBase::E_None)
+                    {
+                        OString line(reinterpret_cast<const char*>(seq.getConstArray()),
+                                     seq.getLength());
+                        std::string_view trimmed = o3tl::trim(line);
+                        if (trimmed.size() >= 2 && trimmed.front() == '[' && trimmed.back() == ']')
+                        {
+                            OUString sCurrent = OStringToOUString(
+                                trimmed.substr(1, trimmed.size() - 2), RTL_TEXTENCODING_UTF8);
+                            bInSection = (sCurrent == seg[1]);
+                            continue;
+                        }
+                        if (bInSection)
+                        {
+                            sal_Int32 nIndex = line.indexOf('=');
+                            if (nIndex >= 1)
+                            {
+                                OUString sKey = OStringToOUString(
+                                    o3tl::trim(line.subView(0, nIndex)), RTL_TEXTENCODING_ASCII_US);
+                                if (sKey == seg[2])
+                                {
+                                    buf.append(
+                                        OStringToOUString(o3tl::trim(line.subView(nIndex + 1)),
+                                                          RTL_TEXTENCODING_UTF8));
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else
