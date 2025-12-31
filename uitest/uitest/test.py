@@ -86,7 +86,7 @@ class UITest(object):
                     return
                 time.sleep(DEFAULT_SLEEP)
 
-    def load_component_from_url(self, url, eventName="OnLoad", load_props=()):
+    def load_component_from_url(self, url, eventName="OnLoad", load_props=mkPropertyValues({"OnMainThread":True})):
         with EventListener(self._xContext, eventName) as event:
             component =  self.get_desktop().loadComponentFromURL(url, "_default", 0, load_props)
             while True:
@@ -99,7 +99,7 @@ class UITest(object):
 
     # Calls UITest.close_doc at exit
     @contextmanager
-    def load_file(self, url, load_props=()):
+    def load_file(self, url, load_props=mkPropertyValues({"OnMainThread":True})):
         try:
             yield self.load_component_from_url(url, "OnLoad", load_props)
         finally:

@@ -569,6 +569,8 @@ void ListBox::setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidt
 
 void ListBox::Resize()
 {
+    if (isDisposed())
+        return;
     Size aOutSz = GetOutputSizePixel();
     if( IsDropDownBox() )
     {
