@@ -71,7 +71,7 @@ protected:
     SAL_DLLPRIVATE void DefaultTemplateMenuSelectHdl(std::u16string_view rIdent);
 
     DECL_DLLPRIVATE_LINK(OpenRegionHdl, void*, void);
-    DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, TemplateViewItem*, void);
     DECL_DLLPRIVATE_LINK(OpenTemplateHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(EditTemplateHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(DeleteTemplateHdl, void*, void);

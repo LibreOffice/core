@@ -652,9 +652,8 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
     mxActionBar->show();
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, TemplateViewItem*, pItem, void)
 {
-    const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
     bool bIsDefault = false;
     bool bIsInternal = false;
 
@@ -670,12 +669,12 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
         }
     }
 
-    if (!pViewItem)
+    if (!pItem)
         return;
 
     bool bIsSingleSel = maSelTemplates.size() == 1;
     OUString aDefaultImg;
-    INetURLObject aUrl(pViewItem->getPath());
+    INetURLObject aUrl(pItem->getPath());
     if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::WRITER, aUrl.getExtension()))
         aDefaultImg = BMP_ACTION_DEFAULT_WRITER;
     else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::CALC, aUrl.getExtension()))

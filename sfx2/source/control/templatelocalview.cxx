@@ -726,7 +726,7 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
                 tools::Rectangle aRect = pItem->getDrawArea();
                 maPosition = aRect.Center();
                 maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-                maCreateContextMenuHdl.Call(pItem);
+                maCreateContextMenuHdl.Call(maSelectedItem);
                 break;
             }
         }
@@ -781,7 +781,7 @@ void TemplateLocalView::setOpenRegionHdl(const Link<void*,void> &rLink)
     maOpenRegionHdl = rLink;
 }
 
-void TemplateLocalView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateLocalView::setCreateContextMenuHdl(const Link<TemplateViewItem*, void>& rLink)
 {
     maCreateContextMenuHdl = rLink;
 }

@@ -131,7 +131,7 @@ public:
 
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 
-    void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setCreateContextMenuHdl(const Link<TemplateViewItem*, void>& rLink);
 
     void setOpenTemplateHdl(const Link<const OUString&, void>& rLink);
 
@@ -174,7 +174,7 @@ protected:
     Point maPosition; //store the point of click event
 
     Link<void*,void>              maOpenRegionHdl;
-    Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
+    Link<TemplateViewItem*, void> maCreateContextMenuHdl;
     Link<const OUString&, void> maOpenTemplateHdl;
     Link<const OUString&, void> maEditTemplateHdl;
     Link<void*,void> maDeleteTemplateHdl;

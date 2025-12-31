@@ -675,11 +675,9 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OUString&, rId, void)
     }
 }
 
-IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, CreateContextMenuHdl, TemplateViewItem*, pItem, void)
 {
-    const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
-
-    if (pViewItem)
+    if (pItem)
         mxLocalView->createContextMenu();
 }
 
