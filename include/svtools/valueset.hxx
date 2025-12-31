@@ -383,10 +383,6 @@ public:
         maDoubleClickHdl = rLink;
     }
 
-    bool GetEdgeBlending() const
-    {
-        return mbEdgeBlending;
-    }
     void SetEdgeBlending(bool bNew);
 
     void SaveValue()

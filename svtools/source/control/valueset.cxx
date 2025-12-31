@@ -1491,7 +1491,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         }
     }
 
-    const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
+    const sal_uInt16 nEdgeBlendingPercent = mbEdgeBlending ? rStyleSettings.GetEdgeBlending() : 0;
 
     if (nEdgeBlendingPercent)
     {
