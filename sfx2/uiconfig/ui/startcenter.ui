@@ -70,10 +70,6 @@
     <property name="can-focus">False</property>
     <property name="icon-name">framework/res/remote-documents.png</property>
   </object>
-  <object class="GtkMenu" id="recentmenu">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-  </object>
   <object class="GtkImage" id="templates_all_image">
     <property name="visible">True</property>
     <property name="can-focus">False</property>

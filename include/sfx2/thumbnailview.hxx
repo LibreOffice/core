@@ -162,7 +162,8 @@ class SFX2_DLLPUBLIC ThumbnailView : public weld::CustomWidgetController
     friend class ThumbnailViewItemAcc;
 
 public:
-    ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
+    ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                  std::unique_ptr<weld::Menu> xMenu = {});
 
     virtual ~ThumbnailView() override;
 
