@@ -1379,10 +1379,10 @@ IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, const ThumbnailViewItem*, pI
 
 IMPL_LINK_NOARG(SfxTemplateSelectionDlg, OkClickHdl, weld::Button&, void)
 {
-   const TemplateViewItem* pViewItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
-   msTemplatePath = pViewItem->getPath();
+    const TemplateViewItem* pViewItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
+    msTemplatePath = pViewItem->getPath();
 
-   m_xDialog->response(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
