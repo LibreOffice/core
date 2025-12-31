@@ -789,7 +789,7 @@ void TemplateLocalView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,vo
     maCreateContextMenuHdl = rLink;
 }
 
-void TemplateLocalView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateLocalView::setOpenTemplateHdl(const Link<const ThumbnailViewItem*, void>& rLink)
 {
     maOpenTemplateHdl = rLink;
 }

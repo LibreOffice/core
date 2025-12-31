@@ -132,7 +132,7 @@ public:
 
     void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
-    void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setOpenTemplateHdl(const Link<const ThumbnailViewItem*, void>& rLink);
 
     void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
@@ -174,7 +174,7 @@ protected:
 
     Link<void*,void>              maOpenRegionHdl;
     Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
-    Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
+    Link<const ThumbnailViewItem*, void> maOpenTemplateHdl;
     Link<ThumbnailViewItem*,void> maEditTemplateHdl;
     Link<void*,void> maDeleteTemplateHdl;
     Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;

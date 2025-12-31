@@ -250,7 +250,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
     // Ignore view events since we are cleaning the object
     mxLocalView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mxLocalView->setOpenRegionHdl(Link<void*,void>());
-    mxLocalView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
+    mxLocalView->setOpenTemplateHdl(Link<const ThumbnailViewItem*, void>());
 }
 
 short SfxTemplateManagerDlg::run()
@@ -693,7 +693,7 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
     mxLocalView->createContextMenu(bIsDefault, bIsInternal, bIsSingleSel, aDefaultImg);
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, const ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
@@ -703,7 +703,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, voi
         comphelper::makePropertyValue(u"ReadOnly"_ustr, true)
     };
 
-    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+    const TemplateViewItem* pTemplateItem = static_cast<const TemplateViewItem*>(pItem);
 
     try
     {
@@ -1052,7 +1052,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
 void SfxTemplateManagerDlg::OnTemplateOpen ()
 {
-    ThumbnailViewItem *pItem = const_cast<ThumbnailViewItem*>(*maSelTemplates.begin());
+    const ThumbnailViewItem* pItem = *maSelTemplates.begin();
 
     OpenTemplateHdl(pItem);
 }
@@ -1369,9 +1369,9 @@ IMPL_LINK_NOARG(SfxTemplateSelectionDlg, TimeOut, Timer*, void)
     m_xDialog->set_centered_on_parent(false);
 }
 
-IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, const ThumbnailViewItem*, pItem, void)
 {
-    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+    const TemplateViewItem* pViewItem = static_cast<const TemplateViewItem*>(pItem);
     msTemplatePath = pViewItem->getPath();
 
     m_xDialog->response(RET_OK);
@@ -1379,7 +1379,7 @@ IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, v
 
 IMPL_LINK_NOARG(SfxTemplateSelectionDlg, OkClickHdl, weld::Button&, void)
 {
-   TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(const_cast<ThumbnailViewItem*>(*maSelTemplates.begin()));
+   const TemplateViewItem* pViewItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
    msTemplatePath = pViewItem->getPath();
 
    m_xDialog->response(RET_OK);
