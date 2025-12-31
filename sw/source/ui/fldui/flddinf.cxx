@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <sfx2/frame.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -85,10 +86,13 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     if ( pItem )
         pItem->GetValue() >>= m_xCustomPropertySet;
 
-    // uitests
-    m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
-    m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-docinf");
-    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-docinf");
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // uitests
+        m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
+        m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-docinf");
+        m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-docinf");
+    }
 }
 
 SwFieldDokInfPage::~SwFieldDokInfPage()
@@ -109,19 +113,22 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (aCustomProperties.hasElements())
     {
         m_xTypeList->hide();
-        m_xTypeList->set_buildable_name(u"type-list"_ustr);
+        if (!comphelper::LibreOfficeKit::isActive())
+            m_xTypeList->set_buildable_name(u"type-list"_ustr);
         m_xTypeTree->show();
         m_pTypeView = m_xTypeTree.get();
     }
     else
     {
         m_xTypeTree->hide();
-        m_xTypeTree->set_buildable_name(u"type-tree"_ustr);
+        if (!comphelper::LibreOfficeKit::isActive())
+            m_xTypeTree->set_buildable_name(u"type-tree"_ustr);
         m_xTypeList->show();
         m_pTypeView = m_xTypeList.get();
     }
 
-    m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
+    if (!comphelper::LibreOfficeKit::isActive())
+        m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
 
     // initialise TypeListBox
     m_pTypeView->freeze();

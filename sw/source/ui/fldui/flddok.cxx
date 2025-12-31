@@ -24,6 +24,7 @@
 #include "flddok.hxx"
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
+#include <comphelper/lok.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/string_view.hxx>
@@ -73,12 +74,15 @@ SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* p
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
 
-    // uitests
-    m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-doc");
-    m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-doc");
-    m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-doc");
-    m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-doc");
-    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-doc");
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // uitests
+        m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-doc");
+        m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-doc");
+        m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-doc");
+        m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-doc");
+        m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-doc");
+    }
 }
 
 SwFieldDokPage::~SwFieldDokPage()
