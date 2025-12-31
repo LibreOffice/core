@@ -27,6 +27,7 @@
 #include <vcl/vclevent.hxx>
 
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <scrollbarvalue.hxx>
 
 /*  #i77549#

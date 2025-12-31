@@ -21,6 +21,7 @@
 #include <o3tl/sprintf.hxx>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
+#include <tools/mapunit.hxx>
 
 #include <bitmaps.hlst>
 #include <cmath>

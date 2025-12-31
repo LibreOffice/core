@@ -22,6 +22,7 @@
 #include <rtl/math.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <vcl/BitmapTools.hxx>

@@ -22,6 +22,7 @@
 #include <tools/link.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
+#include <vcl/vclptr.hxx>
 
 class BubbleWindow;
 class MenuBar;

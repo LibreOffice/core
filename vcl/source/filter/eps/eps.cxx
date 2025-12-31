@@ -18,6 +18,7 @@
  */
 
 #include <filter/EpsWriter.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>

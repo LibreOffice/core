@@ -20,6 +20,7 @@
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -27,6 +28,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
 #include <rtl/ustring.hxx>

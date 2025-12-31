@@ -30,6 +30,7 @@
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/GenericTypeSerializer.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/configuration.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>

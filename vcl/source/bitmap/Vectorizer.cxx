@@ -22,6 +22,7 @@
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

@@ -12,6 +12,7 @@
 #include <png.h>
 #include <iostream>
 #include <rtl/crc.h>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>

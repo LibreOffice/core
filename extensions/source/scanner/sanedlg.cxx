@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <o3tl/sprintf.hxx>
 #include <tools/config.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>

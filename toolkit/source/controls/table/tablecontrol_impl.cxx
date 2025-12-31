@@ -33,6 +33,7 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 
 #include <comphelper/flagguard.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>

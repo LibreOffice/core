@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/graph.hxx>
 #include <tools/lazydelete.hxx>

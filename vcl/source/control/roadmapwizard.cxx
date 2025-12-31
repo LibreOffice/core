@@ -20,6 +20,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <vcl/event.hxx>
 

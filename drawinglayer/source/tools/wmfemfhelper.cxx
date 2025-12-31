@@ -49,6 +49,7 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gradient.hxx>

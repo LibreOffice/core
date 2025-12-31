@@ -35,6 +35,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/outdev.hxx>
 

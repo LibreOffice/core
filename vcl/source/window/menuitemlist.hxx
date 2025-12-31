@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/image.hxx>

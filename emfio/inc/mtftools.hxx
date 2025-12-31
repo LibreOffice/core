@@ -19,6 +19,7 @@
 #pragma once
 
 #include <basegfx/utils/b2dclipstate.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bitmap.hxx>
@@ -26,6 +27,8 @@
 #include <vcl/rendercontext/State.hxx>
 #include <vcl/metaact.hxx>
 #include <rtl/ref.hxx>
+
+#include <com/sun/star/drawing/LineCap.hpp>
 
 #include "emfiodllapi.h"
 

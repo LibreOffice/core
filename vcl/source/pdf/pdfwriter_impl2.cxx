@@ -32,6 +32,7 @@
 
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 
 #include <comphelper/fileformat.h>

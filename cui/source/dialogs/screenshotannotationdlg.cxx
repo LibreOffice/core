@@ -36,6 +36,7 @@
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/bitmap.hxx>

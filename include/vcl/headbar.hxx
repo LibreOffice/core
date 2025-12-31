@@ -20,12 +20,13 @@
 #ifndef INCLUDED_VCL_HEADBAR_HXX
 #define INCLUDED_VCL_HEADBAR_HXX
 
-#include <comphelper/OAccessible.hxx>
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+
+namespace comphelper { class OAccessible; }
 
 /*************************************************************************
 

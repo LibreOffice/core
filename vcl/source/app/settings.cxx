@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <o3tl/test_info.hxx>
 #include <rtl/bootstrap.hxx>
+#include <tools/mapunit.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

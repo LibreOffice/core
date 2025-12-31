@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/VCL.hxx>
@@ -33,6 +34,7 @@
 #include <vcl/naturalsort.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

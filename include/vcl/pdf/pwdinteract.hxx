@@ -11,7 +11,16 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace com::sun::star::task
+{
+class XInteractionHandler;
+}
 
 namespace vcl::pdf
 {

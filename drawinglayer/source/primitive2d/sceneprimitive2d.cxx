@@ -33,6 +33,7 @@
 #include <processor3d/geometry2dextractor.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <utility>
+#include <tools/mapunit.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/RawBitmap.hxx>
 #include <vcl/skia/SkiaHelper.hxx>

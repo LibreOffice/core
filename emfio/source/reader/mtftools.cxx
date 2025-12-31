@@ -23,6 +23,7 @@
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/BitmapTools.hxx>

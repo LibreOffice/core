@@ -12,6 +12,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

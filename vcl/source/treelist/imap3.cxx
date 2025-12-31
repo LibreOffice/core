@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/stream.hxx>
 #include <vcl/imap.hxx>
 
 #include <tools/debug.hxx>

@@ -21,6 +21,7 @@
 
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <cmath>
 
 class Gradient::Impl

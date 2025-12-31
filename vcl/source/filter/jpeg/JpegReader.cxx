@@ -27,6 +27,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <memory>
 

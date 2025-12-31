@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <tools/mapunit.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
 

@@ -38,6 +38,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>

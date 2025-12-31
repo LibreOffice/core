@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/alpha.hxx>
 #include <vcl/QueueInfo.hxx>
@@ -32,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
+#include <vcl/PrinterSupport.hxx>
 
 #include <jobset.h>
 #include <print.h>

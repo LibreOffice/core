@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <tools/mapunit.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>

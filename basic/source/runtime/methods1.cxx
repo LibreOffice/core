@@ -31,6 +31,7 @@
 #include <basic/sbxvar.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <o3tl/environment.hxx>

@@ -26,11 +26,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/long.hxx>
-#include <i18nutil/paper.hxx>
 
 #include <vcl/dllapi.h>
 #include <utility>
-#include <vcl/PrinterSupport.hxx>
 #include <comphelper/errcode.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
@@ -38,7 +36,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/view/PrintableState.hpp>
 
 #include <memory>
 #include <unordered_map>
@@ -46,10 +43,13 @@
 class GDIMetaFile;
 class SalInfoPrinter;
 struct SalPrinterQueueInfo;
+class PaperInfo;
 class QueueInfo;
 class SalPrinter;
 class VirtualDevice;
 enum class SalPrinterError;
+enum class PrinterSupport;
+enum Paper : unsigned int;
 
 namespace vcl {
     class PrinterController;
@@ -60,6 +60,7 @@ namespace vcl {
 }
 
 namespace weld { class Window; }
+namespace com::sun::star::view { enum class PrintableState; }
 
 class VCL_DLLPUBLIC Printer : public OutputDevice
 {

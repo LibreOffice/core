@@ -21,6 +21,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
 #include <svtools/colorcfg.hxx>

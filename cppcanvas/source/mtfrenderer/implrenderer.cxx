@@ -19,6 +19,7 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysequence.hxx>

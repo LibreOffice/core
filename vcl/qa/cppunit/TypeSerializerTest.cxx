@@ -21,6 +21,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <comphelper/hash.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/vcompat.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/fract.hxx>

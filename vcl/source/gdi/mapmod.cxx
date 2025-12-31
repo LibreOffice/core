@@ -22,6 +22,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <vcl/TypeSerializer.hxx>

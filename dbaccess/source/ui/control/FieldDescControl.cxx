@@ -21,6 +21,7 @@
 #include <FieldDescControl.hxx>
 #include <FieldControls.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/mapunit.hxx>
 #include <TableDesignHelpBar.hxx>
 #include <vcl/svapp.hxx>
 #include <FieldDescriptions.hxx>

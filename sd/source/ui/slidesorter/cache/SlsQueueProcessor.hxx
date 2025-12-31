@@ -23,6 +23,7 @@
 #include "SlsRequestPriorityClass.hxx"
 #include "SlsBitmapFactory.hxx"
 
+#include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <mutex>
 

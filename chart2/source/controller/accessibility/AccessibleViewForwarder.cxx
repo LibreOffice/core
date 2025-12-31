@@ -20,6 +20,7 @@
 #include "AccessibleViewForwarder.hxx"
 #include <AccessibleChartView.hxx>
 
+#include <tools/mapunit.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;

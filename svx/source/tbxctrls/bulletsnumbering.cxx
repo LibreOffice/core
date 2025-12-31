@@ -17,6 +17,7 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/numvset.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>

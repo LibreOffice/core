@@ -19,6 +19,7 @@
 
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <sbstdobj.hxx>
 

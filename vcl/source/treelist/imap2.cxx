@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <string.h>
 #include <o3tl/string_view.hxx>
+#include <tools/stream.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>

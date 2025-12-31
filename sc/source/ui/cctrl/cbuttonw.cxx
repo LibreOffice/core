@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/lok.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>

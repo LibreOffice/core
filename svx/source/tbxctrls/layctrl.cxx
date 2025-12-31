@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <tools/mapunit.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 

@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/extendapplicationenvironment.hxx>
+#include <tools/mapunit.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>

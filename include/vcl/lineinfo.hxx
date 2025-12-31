@@ -23,14 +23,14 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
-#include <basegfx/vector/b2enums.hxx>
-#include <com/sun/star/drawing/LineCap.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
 #include <vector>
 
 class SvStream;
 namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { enum class B2DLineJoin; }
+namespace com::sun::star::drawing { enum class LineCap; }
 
 struct ImplLineInfo
 {

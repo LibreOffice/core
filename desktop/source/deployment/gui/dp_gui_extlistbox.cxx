@@ -38,6 +38,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>

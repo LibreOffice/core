@@ -28,6 +28,7 @@
 #include <rtl/tencinfo.h>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>

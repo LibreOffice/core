@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>

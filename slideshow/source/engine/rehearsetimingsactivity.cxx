@@ -30,6 +30,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/mapunit.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>

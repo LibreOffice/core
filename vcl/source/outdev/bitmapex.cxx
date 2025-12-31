@@ -22,6 +22,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/lok.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>

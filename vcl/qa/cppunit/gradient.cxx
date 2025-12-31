@@ -12,6 +12,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 
 class VclGradientTest : public test::BootstrapFixture
 {

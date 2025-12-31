@@ -23,6 +23,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <utility>

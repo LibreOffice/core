@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/GraphicExternalLink.hxx>
+#include <tools/mapunit.hxx>
 
 struct SwapInfo
 {

@@ -17,6 +17,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>

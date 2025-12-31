@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/image.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 

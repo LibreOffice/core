@@ -23,6 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>

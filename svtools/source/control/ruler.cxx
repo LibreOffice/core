@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <vcl/event.hxx>
 #include <vcl/themecolors.hxx>

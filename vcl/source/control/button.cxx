@@ -51,6 +51,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 
 

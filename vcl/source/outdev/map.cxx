@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/cursor.hxx>
 #include <vcl/lineinfo.hxx>

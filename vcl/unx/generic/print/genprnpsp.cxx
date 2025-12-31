@@ -38,6 +38,7 @@
 #include <comphelper/fileurl.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <tools/mapunit.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -49,6 +50,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/printer/Options.hxx>
 #include <vcl/print.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <printerinfomanager.hxx>
@@ -66,6 +68,7 @@
 #include <salptype.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/view/PrintableState.hpp>
 
 using namespace psp;
 using namespace com::sun::star;

@@ -21,13 +21,15 @@
 #define INCLUDED_VCL_IMAGE_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/gen.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/outdev.hxx>
-
+#include <rtl/ustring.hxx>
 #include <memory>
 
 class ImplImage;
+class Bitmap;
+class OutputDevice;
+class Point;
+class Size;
+enum class DrawImageFlags;
 
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }

@@ -19,6 +19,7 @@
 
 #include <osl/thread.h>
 #include <o3tl/safeint.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>

@@ -25,6 +25,7 @@
 #include <vcl/RawBitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>

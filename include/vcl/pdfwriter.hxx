@@ -26,21 +26,27 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/kernarray.hxx>
+#include <vcl/rendercontext/DrawTextFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <memory>
 #include <vector>
 #include <set>
+#include <span>
 
 namespace com::sun::star::beans { class XMaterialHolder; }
 namespace com::sun::star::io { class XOutputStream; }
 namespace com::sun::star::security { class XCertificate; }
 
+class AlphaMask;
 class GDIMetaFile;
+class Graphic;
 class MapMode;
 class LineInfo;
 namespace tools {

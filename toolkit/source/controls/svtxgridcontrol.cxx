@@ -26,6 +26,7 @@
 #include <controls/table/gridtablerenderer.hxx>
 #include "unocontroltablemodel.hxx"
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <helper/property.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>

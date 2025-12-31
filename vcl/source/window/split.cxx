@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <tools/lazydelete.hxx>
+#include <tools/mapunit.hxx>
 
 #include <window.h>
 

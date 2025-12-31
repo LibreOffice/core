@@ -40,6 +40,7 @@
 #include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <sdresid.hxx>

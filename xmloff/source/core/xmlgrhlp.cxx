@@ -41,6 +41,7 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <comphelper/diagnose_ex.hxx>

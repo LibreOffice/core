@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 
 #include <controls/controlmodelcontainerbase.hxx>

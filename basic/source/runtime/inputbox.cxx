@@ -19,6 +19,7 @@
 
 #include <basic/sberrors.hxx>
 #include <tools/lineend.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/DialogController.hxx>

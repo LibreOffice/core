@@ -21,6 +21,7 @@
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <rtl/crc.h>
 #include <tools/solar.h>
 #include <tools/vcompat.hxx>

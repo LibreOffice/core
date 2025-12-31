@@ -75,6 +75,7 @@
 #include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <tools/mapunit.hxx>
 #include <sal/log.hxx>
 #include <vcl/print.hxx>
 

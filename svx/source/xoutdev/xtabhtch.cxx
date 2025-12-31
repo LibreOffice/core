@@ -18,6 +18,7 @@
  */
 
 #include <XPropertyTable.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 
 #include <vcl/virdev.hxx>

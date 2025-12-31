@@ -28,6 +28,7 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <unotools/mediadescriptor.hxx>
 

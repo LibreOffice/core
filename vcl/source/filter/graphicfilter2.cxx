@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/urlobj.hxx>

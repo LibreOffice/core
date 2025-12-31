@@ -30,6 +30,7 @@
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <i18nutil/paper.hxx>
 #include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/tempfile.hxx>
@@ -41,6 +42,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

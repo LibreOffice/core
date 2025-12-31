@@ -27,6 +27,7 @@
 #include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 

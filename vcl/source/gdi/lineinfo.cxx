@@ -24,6 +24,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <numeric>
 
 

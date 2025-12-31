@@ -21,6 +21,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/gen.hxx>
+#include <tools/mapunit.hxx>
 
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <comphelper/lok.hxx>

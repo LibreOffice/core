@@ -18,6 +18,7 @@
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 
 using namespace css;

@@ -31,6 +31,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

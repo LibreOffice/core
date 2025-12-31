@@ -26,6 +26,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>

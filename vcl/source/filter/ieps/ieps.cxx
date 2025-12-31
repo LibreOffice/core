@@ -19,6 +19,7 @@
 
 
 #include <filter/EpsReader.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>

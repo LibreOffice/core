@@ -21,6 +21,7 @@
 
 #include "MasterPageContainer.hxx"
 #include <memory>
+#include <vector>
 
 namespace sd { class PreviewRenderer; }
 class SdDrawDocument;

@@ -21,6 +21,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/GenericTypeSerializer.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/vclenum.hxx>
 
 ImplHatch::ImplHatch() :
     maColor     ( COL_BLACK ),

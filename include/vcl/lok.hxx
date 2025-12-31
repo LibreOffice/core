@@ -12,8 +12,12 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
-#include <rtl/strbuf.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+
+namespace rtl
+{
+class OStringBuffer;
+}
 
 namespace vcl::lok
 {

@@ -19,6 +19,7 @@
 #include "LineWidthValueSet.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

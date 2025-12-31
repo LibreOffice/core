@@ -26,6 +26,7 @@
 #include <officecfg/VCL.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 
 #include <utility>
@@ -48,6 +49,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <com/sun/star/view/PrintableState.hpp>
 
 #include <unordered_map>
 #include <unordered_set>

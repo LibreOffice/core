@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

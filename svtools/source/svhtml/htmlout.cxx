@@ -34,6 +34,7 @@
 #include <svl/urihelper.hxx>
 #include <rtl/character.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <sstream>

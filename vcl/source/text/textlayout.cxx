@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/svapp.hxx>

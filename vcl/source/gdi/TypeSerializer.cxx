@@ -20,6 +20,7 @@
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/BinaryDataContainer.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
 #include <sal/log.hxx>

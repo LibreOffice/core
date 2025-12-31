@@ -28,6 +28,7 @@
 #include <unonames.hxx>
 
 #include <svtools/valueset.hxx>
+#include <tools/mapunit.hxx>
 
 #include <utility>
 #include <vcl/weld/TreeView.hxx>

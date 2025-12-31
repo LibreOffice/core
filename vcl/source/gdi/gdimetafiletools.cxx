@@ -30,6 +30,7 @@
 #include <vcl/graphictools.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
+#include <tools/mapunit.hxx>
 
 // helpers
 

@@ -22,6 +22,7 @@
 #include <osl/diagnose.hxx>
 #include <comphelper/string.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <o3tl/string_view.hxx>
 #include <i18nutil/unicode.hxx>

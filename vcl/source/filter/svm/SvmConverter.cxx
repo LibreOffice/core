@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <o3tl/safeint.hxx>
 

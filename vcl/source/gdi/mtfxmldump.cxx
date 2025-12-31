@@ -10,6 +10,7 @@
 #include <vcl/mtfxmldump.hxx>
 #include <tools/XmlWriter.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>

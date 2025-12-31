@@ -25,6 +25,7 @@
 
 #include <config_options.h>
 #include <accessibility/accessibletablistbox.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
