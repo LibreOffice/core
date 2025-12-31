@@ -96,7 +96,7 @@ protected:
     SAL_DLLPRIVATE void OnTemplateOpen();
     SAL_DLLPRIVATE void OnTemplateExport();
 
-    SAL_DLLPRIVATE void OnTemplateState(const ThumbnailViewItem* pItem);
+    SAL_DLLPRIVATE void OnTemplateState(const TemplateViewItem* pItem);
 
     SAL_DLLPRIVATE void OnCategoryNew();
     SAL_DLLPRIVATE void OnCategoryRename();

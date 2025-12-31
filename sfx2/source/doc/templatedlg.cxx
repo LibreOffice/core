@@ -499,10 +499,8 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectRegionHdl, weld::ComboBox&, void)
 
 IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem, void)
 {
-    const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-
-    if (pViewItem)
-        OnTemplateState(pItem);
+    if (const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem))
+        OnTemplateState(pViewItem);
 }
 
 IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OUString&, rIdent, void)
@@ -858,7 +856,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, GetFocusHdl, weld::Widget&, void)
     maSelTemplates.clear();
 }
 
-void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
+void SfxTemplateManagerDlg::OnTemplateState (const TemplateViewItem* pItem)
 {
     bool bInSelection = maSelTemplates.find(pItem) != maSelTemplates.end();
 
