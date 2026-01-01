@@ -705,9 +705,7 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
-
-        if(pViewItem)
+        if (TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem))
         {
             if (!pViewItem->isSelected())
             {
