@@ -53,7 +53,6 @@
     #define SOFFICEAPP_LIB "sofficeapp.dll"
     #define MERGED_LIB "mergedlo.dll"
     #define SEPARATOR '\\'
-    #define UNOPATH "\\..\\URE\\bin"
 
     #undef DELETE
 
@@ -88,11 +87,6 @@ extern "C"
         // Do nothing for return of dlerror()
     }
 
-    static void extendUnoPath(const char *pPath)
-    {
-        (void)pPath;
-    }
-
     static void *lok_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
@@ -105,24 +99,91 @@ extern "C"
 #endif // IOS
 
 
-#else
+#else // _WIN32
+
+    static wchar_t* lok_string_to_wide_string(const char* string)
+    {
+        const size_t len = strlen(string);
+        if (len == 0)
+        {
+            return _wcsdup(L"");
+        }
+
+        if (len > INT_MAX)
+        {
+            /* Trying to be funny, eh? */
+            return _wcsdup(L"");
+        }
+
+        const int wlen = MultiByteToWideChar(CP_UTF8, 0, string, (int)len, NULL, 0);
+        if (wlen <= 0)
+        {
+            return NULL;
+        }
+
+        wchar_t* result = (wchar_t*)malloc(wlen * 2 + 2);
+        assert(result);
+        MultiByteToWideChar(CP_UTF8, 0, string, (int)len, result, wlen);
+        result[wlen] = L'\0';
+
+        return result;
+    }
+
+    static char* lok_wide_string_to_string(const wchar_t* wstring)
+    {
+        if (wstring == NULL)
+            return NULL;
+
+        int len = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wstring, -1, NULL, 0, NULL, NULL);
+        if (len <= 0)
+            return NULL;
+
+        char* result = (char*)malloc(len);
+        if (result == NULL)
+            return NULL;
+
+        len = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wstring, -1, (char*)result, len, NULL,
+                                  NULL);
+        if (len <= 0)
+        {
+            free(result);
+            return NULL;
+        }
+
+        return result;
+    }
+
     static void *lok_loadlib(const char *pFN)
     {
-        return (void *) LoadLibraryA(pFN);
+        wchar_t* wpFN = lok_string_to_wide_string(pFN);
+        void* result = LoadLibraryW(wpFN);
+        free(wpFN);
+        return result;
     }
 
     static char *lok_dlerror(void)
     {
-        LPSTR buf = NULL;
-        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-            NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
-        return buf;
+        LPWSTR wbuf = NULL;
+        int rc = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL, GetLastError(), 0, reinterpret_cast<LPWSTR>(&wbuf), 0, NULL);
+        if (rc == 0)
+            return _strdup("");
+
+        /* Strip trailing CRLF */
+        if (wbuf[wcslen(wbuf)-1] == L'\n')
+            wbuf[wcslen(wbuf)-1] = L'\0';
+        if (wbuf[wcslen(wbuf)-1] == L'\r')
+            wbuf[wcslen(wbuf)-1] = L'\0';
+
+        char* result = lok_wide_string_to_string(wbuf);
+        HeapFree(GetProcessHeap(), 0, wbuf);
+        return result;
     }
 
     // This function must be called to release memory allocated by lok_dlerror()
     static void lok_dlerror_free(char *pErrMessage)
     {
-        HeapFree(GetProcessHeap(), 0, pErrMessage);
+        free(pErrMessage);
     }
 
     static void *lok_dlsym(void *Hnd, const char *pName)
@@ -135,52 +196,36 @@ extern "C"
         return FreeLibrary((HINSTANCE) Hnd);
     }
 
-    static void extendUnoPath(const char *pPath)
-    {
-        char *sNewPath = NULL, *sEnvPath = NULL;
-        size_t size_sEnvPath = 0, buffer_size = 0;
-        DWORD cChars;
-
-        if (!pPath)
-            return;
-
-        cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
-        if (cChars > 0)
-        {
-            sEnvPath = (char *) malloc(cChars);
-            cChars = GetEnvironmentVariableA("PATH", sEnvPath, cChars);
-            //If PATH is not set then it is no error
-            if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
-            {
-                free(sEnvPath);
-                return;
-            }
-        }
-        //prepare the new PATH. Add the Ure/bin directory at the front.
-        //note also adding ';'
-        if(sEnvPath)
-            size_sEnvPath = strlen(sEnvPath);
-        buffer_size = size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4;
-        sNewPath = (char *) malloc(buffer_size);
-        assert(sNewPath);
-        sNewPath[0] = L'\0';
-        strcat_s(sNewPath, buffer_size, pPath);     // program to PATH
-        strcat_s(sNewPath, buffer_size, ";");
-        strcat_s(sNewPath, buffer_size, UNOPATH);   // UNO to PATH
-        if (size_sEnvPath > 0)
-        {
-            strcat_s(sNewPath, buffer_size, ";");
-            strcat_s(sNewPath, buffer_size, sEnvPath);
-        }
-
-        SetEnvironmentVariableA("PATH", sNewPath);
-
-        free(sNewPath);
-        free(sEnvPath);
-    }
 #endif
 
 #if !defined(IOS)
+static int lok_stat(const char* path, struct stat* st)
+{
+#ifdef _WIN32
+    struct _stat32 st32;
+    wchar_t* wpath = lok_string_to_wide_string(path);
+    int result = _wstat32(wpath, &st32);
+    free(wpath);
+    if (result != -1)
+    {
+        st->st_dev = st32.st_dev;
+        st->st_ino = st32.st_ino;
+        st->st_mode = st32.st_mode;
+        st->st_nlink = st32.st_nlink;
+        st->st_uid = st32.st_uid;
+        st->st_gid = st32.st_gid;
+        st->st_rdev = st32.st_rdev;
+        st->st_size = st32.st_size;
+        st->st_atime = st32.st_atime;
+        st->st_mtime = st32.st_mtime;
+        st->st_ctime = st32.st_ctime;
+    }
+    return result;
+#else
+    return stat(path, st);
+#endif
+}
+
 static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 {
     char *imp_lib;
@@ -194,7 +239,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     if (!install_path)
         return NULL;
 
-    if (stat(install_path, &dir_st) != 0)
+    if (lok_stat(install_path, &dir_st) != 0)
     {
         fprintf(stderr, "installation path \"%s\" does not exist\n", install_path);
         return NULL;
@@ -212,15 +257,13 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 
     memcpy(imp_lib, install_path, partial_length);
 
-    extendUnoPath(install_path);
-
     imp_lib[partial_length++] = SEPARATOR;
     strncpy(imp_lib + partial_length, SOFFICEAPP_LIB, imp_lib_size - partial_length);
 
     struct stat st;
     // If SOFFICEAPP_LIB exists but is ridiculously small, it is the
     // one-line text stub as in the --enable-mergedlib case.
-    if (stat(imp_lib, &st) == 0 && st.st_size > 1000)
+    if (lok_stat(imp_lib, &st) == 0 && st.st_size > 1000)
     {
         dlhandle = lok_loadlib(imp_lib);
         if (!dlhandle)
@@ -264,6 +307,23 @@ typedef int             (LokHookPreInit2) ( const char *install_path, const char
 #if defined(IOS) || defined(ANDROID) || defined(__EMSCRIPTEN__)
 LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
+
+// install_path is the pathname to the LibreOffice installation
+// directory, the one with the subdirectories "program", "share" etc.
+// On Linux there is nothing special here, you just pass such a
+// pathname.
+//
+// On Windows, in the actual file system names are in UTF-16. To work
+// in arbitrary situations, on Windows one should use APIs that take
+// wide characters when accessing the file system. Here you pass in
+// the pathname in UTF-8. *Not* in the system codepage (or some other
+// codepage). Of course, in the common (lucky?) case of a pathname
+// that is just ASCII anyway, that is already UTF-8.
+//
+// On macOS it should be the pathname of the bundle (.app directory)
+// the code is in.
+//
+// user_profile_url is a file: URI for the user profile. Can be NULL.
 
 static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
 {
