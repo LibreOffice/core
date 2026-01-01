@@ -900,6 +900,8 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
         pStream->singleElement(XML_color,
             XML_rgb, XclXmlUtils::ToOString(rComplexColor.getFinalColor()));
     }
+
+    assert(!rFontData.maName.isEmpty() && "Font Name can't be empty");
     pStream->singleElement(nFontId, XML_val, rFontData.maName);
     pStream->singleElement(XML_family, XML_val, OString::number(  rFontData.mnFamily ));
     if (rFontData.mnCharSet != 0)
