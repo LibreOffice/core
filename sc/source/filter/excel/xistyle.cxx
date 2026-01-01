@@ -568,34 +568,47 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
         This also means that entries above 4 are out by one in the list. */
 
     if (nFontIndex == 4)
+    {
         return &maFont4;
-
-    if (nFontIndex < 4)
+    }
+    else if (nFontIndex < 4)
     {
         // Font ID is zero-based when it's less than 4.
-        return nFontIndex >= maFontList.size() ? nullptr : &maFontList[nFontIndex];
+        if (nFontIndex < maFontList.size() && maFontList[nFontIndex].has_value())
+            return &maFontList[nFontIndex].value();
     }
-
-    // Font ID is greater than 4.  It is now 1-based.
-    return nFontIndex > maFontList.size() ? nullptr : &maFontList[nFontIndex-1];
+    else
+    {
+        // Font ID is greater than 4.  It is now 1-based.
+        if (--nFontIndex < maFontList.size() && maFontList[nFontIndex].has_value())
+            return &maFontList[nFontIndex].value();
+    }
+    return nullptr;
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
 {
-    maFontList.emplace_back( GetRoot() );
-    XclImpFont& rFont = maFontList.back();
-    rFont.ReadFont( rStrm );
+    XclImpFont aFont(GetRoot());
+    aFont.ReadFont(rStrm);
 
-    if( maFontList.size() == 1 )
+    // If font-name is empty, remove it from the list
+    if (aFont.GetFontData().maName.isEmpty())
     {
-        UpdateAppFont( rFont.GetFontData(), rFont.HasCharSet() );
+        maFontList.emplace_back(std::nullopt);
+        return;
+    }
+    maFontList.emplace_back(aFont);
+
+    if (maFontList.size() == 1)
+    {
+        UpdateAppFont(aFont.GetFontData(), aFont.HasCharSet());
     }
 }
 
 void XclImpFontBuffer::ReadEfont( XclImpStream& rStrm )
 {
-    if( !maFontList.empty() )
-        maFontList.back().ReadEfont( rStrm );
+    if (!maFontList.empty() && maFontList.back().has_value())
+        maFontList.back().value().ReadEfont(rStrm);
 }
 
 void XclImpFontBuffer::FillToItemSet(
