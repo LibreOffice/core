@@ -195,7 +195,7 @@ protected:
     void                    ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
     void                    ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
     void                    ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
-    bool                    ImpFindEntry(weld::TreeIter& rIter, std::u16string_view rText);
+    std::unique_ptr<weld::TreeIter> ImpFindEntry(std::u16string_view rText);
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
