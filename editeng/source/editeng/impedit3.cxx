@@ -3122,7 +3122,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
         {
             // Never use WindowTextColor on the printer
-            rFont.SetColor( GetAutoColor() );
+            rFont.SetColor(GetAutoColor(&rFont));
         }
         else
         {
@@ -4966,11 +4966,15 @@ static bool hasColorContrast(const Color& rColor, const Color& rBackgroundColor)
     return false;
 }
 
-Color ImpEditEngine::GetAutoColor() const
+Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
 {
     Color aColor;
 
-    Color aBackgroundColor = GetBackgroundColor();
+    Color aBackgroundColor;
+    if (pFont) //check for char background color
+        aBackgroundColor = pFont->GetFillColor();
+    if (aBackgroundColor == COL_AUTO) // check for aother background (i.e: cell color)
+        aBackgroundColor = GetBackgroundColor();
 
     const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
