@@ -362,8 +362,8 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     }
     if (rKeyCode.GetCode() == KEY_RETURN)
     {
-        std::unique_ptr<weld::TreeIter> xCursor(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xCursor.get()) && m_xTreeView->iter_has_child(*xCursor))
+        std::unique_ptr<weld::TreeIter> xCursor = m_xTreeView->get_cursor();
+        if (xCursor && m_xTreeView->iter_has_child(*xCursor))
         {
             if (m_xTreeView->get_row_expanded(*xCursor))
                 m_xTreeView->collapse_row(*xCursor);
@@ -476,11 +476,10 @@ bool SdPageObjsTLV::DoDrag()
     m_xDropTargetHelper->SetDrawView(pViewShell->GetDrawView());
     m_xDropTargetHelper->SetOrderFrontToBack(m_bOrderFrontToBack);
 
-    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
-    bool bUserData = m_xTreeView->get_cursor(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
 
     SdrObject* pObject = nullptr;
-    sal_Int64 nUserData = bUserData ? m_xTreeView->get_id(*xEntry).toInt64() : 0;
+    sal_Int64 nUserData = xEntry ? m_xTreeView->get_id(*xEntry).toInt64() : 0;
     if (nUserData != 1)
         pObject = reinterpret_cast<SdrObject*>(nUserData);
     if (pObject != nullptr)
@@ -906,8 +905,8 @@ void SdPageObjsTLV::Select()
     {
         // Only for page/slide entry and only if page/slide entry dragging is re-enabled.
         // Commit 1b031eb1ba6c529ce67ff8f471afee414d64a098 disabled page/slide entry dragging.
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xIter.get()) && m_xTreeView->get_iter_depth(*xIter) == 0
+        std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_cursor();
+        if (xIter && m_xTreeView->get_iter_depth(*xIter) == 0
             && m_pDoc->GetSdPageCount(PageKind::Standard) == 1)
         {
             // Can not move away the last slide in a document.

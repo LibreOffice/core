@@ -1255,9 +1255,8 @@ void OfaTreeOptionsDialog::initializeCurrentDialog(OptionsPageInfo*& pPageInfo,
 
 void OfaTreeOptionsDialog::SelectHdl_Impl()
 {
-    std::unique_ptr<weld::TreeIter> xEntry(xTreeLB->make_iterator());
-
-    if (!xTreeLB->get_cursor(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = xTreeLB->get_cursor();
+    if (!xEntry)
         return;
 
     if (xCurrentPageEntry && xCurrentPageEntry->equal(*xEntry))

@@ -184,8 +184,8 @@ short MacroChooser::run()
     RestoreMacroDescription();
 
     // #104198 Check if "wrong" document is active
-    bool bSelectedEntry = m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
-    EntryDescriptor aDesc(m_xBasicBox->GetEntryDescriptor(bSelectedEntry ? m_xBasicBoxIter.get() : nullptr));
+    std::unique_ptr<weld::TreeIter> pCursor = m_xBasicBox->get_cursor();
+    EntryDescriptor aDesc(m_xBasicBox->GetEntryDescriptor(pCursor.get()));
     const ScriptDocument& rSelectedDoc(aDesc.GetDocument());
 
     // App Basic is always ok, so only check if shell was found
@@ -242,9 +242,10 @@ void MacroChooser::EnableButton(weld::Button& rButton, bool bEnable)
 
 SbMethod* MacroChooser::GetMacro()
 {
-    if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()))
+    std::unique_ptr<weld::TreeIter> pCursor = m_xBasicBox->get_cursor();
+    if (!pCursor)
         return nullptr;
-    SbModule* pModule = m_xBasicBox->FindModule(m_xBasicBoxIter.get());
+    SbModule* pModule = m_xBasicBox->FindModule(pCursor.get());
     if (!pModule)
         return nullptr;
     std::unique_ptr<weld::TreeIter> pSelected = m_xMacroBox->get_selected();
@@ -300,12 +301,17 @@ void MacroChooser::DeleteMacro()
 SbMethod* MacroChooser::CreateMacro()
 {
     SbMethod* pMethod = nullptr;
-    if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+    std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->get_cursor();
+    if (!pIter)
     {
-        SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-        return nullptr;
+        pIter = m_xBasicBox->make_iterator();
+        if (!m_xBasicBox->get_iter_first(*pIter))
+        {
+            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+            return nullptr;
+        }
     }
-    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
+    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pIter.get());
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     OSL_ENSURE( aDocument.isAlive(), "MacroChooser::CreateMacro: no document!" );
     if ( !aDocument.isAlive() )
@@ -376,14 +382,14 @@ void MacroChooser::SaveSetCurEntry(weld::TreeView& rBox, const weld::TreeIter& r
 
 void MacroChooser::CheckButtons()
 {
-    const bool bCurEntry = m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
-    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(bCurEntry ? m_xBasicBoxIter.get() : nullptr);
+    std::unique_ptr<weld::TreeIter> pCursor = m_xBasicBox->get_cursor();
+    EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pCursor.get());
     const bool bMacroEntry = bool(m_xMacroBox->get_selected());
     SbMethod* pMethod = GetMacro();
 
     // check, if corresponding libraries are readonly
     bool bReadOnly = false;
-    sal_uInt16 nDepth = bCurEntry ? m_xBasicBox->get_iter_depth(*m_xBasicBoxIter) : 0;
+    sal_uInt16 nDepth = pCursor ? m_xBasicBox->get_iter_depth(*pCursor) : 0;
     if ( nDepth == 1 || nDepth == 2 )
     {
         const ScriptDocument& aDocument( aDesc.GetDocument() );
@@ -418,7 +424,7 @@ void MacroChooser::CheckButtons()
     EnableButton(*m_xOrganizeButton, !StarBASIC::IsRunning() && nMode == All);
 
     // m_xDelButton/m_xNewButton ->...
-    bool bProtected = bCurEntry && m_xBasicBox->IsEntryProtected(m_xBasicBoxIter.get());
+    bool bProtected = pCursor && m_xBasicBox->IsEntryProtected(pCursor.get());
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
     bool bEnable = !StarBASIC::IsRunning() && nMode == All && !bProtected && !bReadOnly && !bShare;
     EnableButton(*m_xDelButton, bEnable);
@@ -484,8 +490,8 @@ IMPL_LINK_NOARG(MacroChooser, MacroSelectHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
 {
     SbModule* pModule = nullptr;
-    if (m_xBasicBox->get_cursor(m_xBasicBoxIter.get()))
-        pModule = m_xBasicBox->FindModule(m_xBasicBoxIter.get());
+    if (std::unique_ptr<weld::TreeIter> pCursor = m_xBasicBox->get_cursor())
+        pModule = m_xBasicBox->FindModule(pCursor.get());
     m_xMacroBox->clear();
     if (pModule)
     {
@@ -517,27 +523,27 @@ IMPL_LINK_NOARG(MacroChooser, EditModifyHdl, weld::Entry&, void)
 {
     // select the module in which the macro is put at "new",
     // if BasicManager or Lib is selecting
-    if (m_xBasicBox->get_cursor(m_xBasicBoxIter.get()))
+    if (std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->get_cursor())
     {
-        sal_uInt16 nDepth = m_xBasicBox->get_iter_depth(*m_xBasicBoxIter);
-        if (nDepth == 1 && m_xBasicBox->IsEntryProtected(m_xBasicBoxIter.get()))
+        sal_uInt16 nDepth = m_xBasicBox->get_iter_depth(*pIter);
+        if (nDepth == 1 && m_xBasicBox->IsEntryProtected(pIter.get()))
         {
             // then put to the respective Std-Lib...
-            m_xBasicBox->iter_parent(*m_xBasicBoxIter);
-            m_xBasicBox->iter_children(*m_xBasicBoxIter);
+            m_xBasicBox->iter_parent(*pIter);
+            m_xBasicBox->iter_children(*pIter);
         }
         if (nDepth < 2)
         {
             std::unique_ptr<weld::TreeIter> xNewEntry(m_xBasicBox->make_iterator());
-            m_xBasicBox->copy_iterator(*m_xBasicBoxIter, *xNewEntry);
+            m_xBasicBox->copy_iterator(*pIter, *xNewEntry);
             bool bCurEntry = true;
             do
             {
-                bCurEntry = m_xBasicBox->iter_children(*m_xBasicBoxIter);
+                bCurEntry = m_xBasicBox->iter_children(*pIter);
                 if (bCurEntry)
                 {
-                    m_xBasicBox->copy_iterator(*m_xBasicBoxIter, *xNewEntry);
-                    nDepth = m_xBasicBox->get_iter_depth(*m_xBasicBoxIter);
+                    m_xBasicBox->copy_iterator(*pIter, *xNewEntry);
+                    nDepth = m_xBasicBox->get_iter_depth(*pIter);
                 }
             }
             while (bCurEntry && (nDepth < 2));
@@ -624,12 +630,17 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xEditButton.get() || &rButton == m_xDelButton.get() || &rButton == m_xNewButton.get())
     {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->get_cursor();
+        if (!pIter)
         {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
+            pIter = m_xBasicBox->make_iterator();
+            if (!m_xBasicBox->get_iter_first(*pIter))
+            {
+                SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+                return;
+            }
         }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
+        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
@@ -712,12 +723,17 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xAssignButton.get())
     {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->get_cursor();
+        if (!pIter)
         {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
+            pIter = m_xBasicBox->make_iterator();
+            if (!m_xBasicBox->get_iter_first(*pIter))
+            {
+                SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+                return;
+            }
         }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
+        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
@@ -743,23 +759,33 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xNewLibButton.get())
     {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->get_cursor();
+        if (!pIter)
         {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
+            pIter = m_xBasicBox->make_iterator();
+            if (!m_xBasicBox->get_iter_first(*pIter))
+            {
+                SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+                return;
+            }
         }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
+        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         createLibImpl(m_xDialog.get(), aDocument, nullptr, m_xBasicBox.get());
     }
     else if (&rButton == m_xNewModButton.get())
     {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
+        std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->get_cursor();
+        if (!pIter)
         {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
+            pIter = m_xBasicBox->make_iterator();
+            if (!m_xBasicBox->get_iter_first(*pIter))
+            {
+                SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
+                return;
+            }
         }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
+        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(pIter.get());
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         const OUString& aLibName( aDesc.GetLibName() );
         createModImpl(m_xDialog.get(), aDocument, *m_xBasicBox, aLibName, OUString(), true);

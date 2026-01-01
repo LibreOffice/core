@@ -1453,9 +1453,10 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
         {
             // the place where it was clicked
             Point aWhere;
-            std::unique_ptr<weld::TreeIter> xClicked(m_xTreeView->make_iterator());
+            std::unique_ptr<weld::TreeIter> xClicked;
             if (rEvt.IsMouseEvent())
             {
+                xClicked = m_xTreeView->make_iterator();
                 aWhere = rEvt.GetMousePosPixel();
                 if (!m_xTreeView->get_dest_row_at_pos(aWhere, xClicked.get(), false))
                     break;
@@ -1469,7 +1470,8 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             }
             else
             {
-                if (!m_xTreeView->get_cursor(xClicked.get()))
+                xClicked = m_xTreeView->get_cursor();
+                if (!xClicked)
                     break;
                 aWhere = m_xTreeView->get_row_area(*xClicked).Center();
             }

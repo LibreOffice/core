@@ -103,10 +103,9 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
 {
     SetTreePath(rUrl);
 
-    std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator());
-    bool bParent = m_xTreeView->get_cursor(xParent.get());
+    std::unique_ptr<weld::TreeIter> xParent = m_xTreeView->get_cursor();
 
-    if (!bParent || m_xTreeView->get_row_expanded(*xParent))
+    if (!xParent || m_xTreeView->get_row_expanded(*xParent))
         return;
 
     OUString sFolderImage(RID_BMP_FOLDER);

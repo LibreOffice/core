@@ -622,9 +622,7 @@ void ObjectPage::ActivatePage()
 void ObjectPage::CheckButtons()
 {
     // enable/disable edit button
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     const OUString& aLibName( aDesc.GetLibName() );
@@ -694,8 +692,8 @@ IMPL_LINK(ObjectPage, ButtonHdl, weld::Button&, rButton, void)
 
         SfxDispatcher* pDispatcher = GetDispatcher();
 
-        std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-        if (!m_xBasicBox->get_cursor(xCurEntry.get()))
+        std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
+        if (!xCurEntry)
             return;
         if (m_xBasicBox->get_iter_depth(*xCurEntry) >= 2)
         {
@@ -748,9 +746,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
 {
     bool bRet = false;
 
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
@@ -875,9 +871,7 @@ void ObjectPage::NewDialog()
 
 void ObjectPage::DeleteCurrent()
 {
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
     DBG_ASSERT( xCurEntry, "No current entry!" );
     if (!xCurEntry)
         return;
@@ -895,7 +889,8 @@ void ObjectPage::DeleteCurrent()
         return;
 
     m_xBasicBox->remove(*xCurEntry);
-    if (m_xBasicBox->get_cursor(xCurEntry.get()))
+    xCurEntry = m_xBasicBox->get_cursor();
+    if (xCurEntry)
         m_xBasicBox->select(*xCurEntry);
     if (SfxDispatcher* pDispatcher = GetDispatcher())
     {

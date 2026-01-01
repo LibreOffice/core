@@ -249,8 +249,7 @@ void OTableWindowListBox::GetFocus()
 
     if (m_xTreeView)
     {
-        std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->make_iterator();
-        if (m_xTreeView->get_cursor(xCurrent.get()))
+        if (std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->get_cursor())
         {
             m_xTreeView->unselect_all();
             m_xTreeView->select(*xCurrent);
@@ -266,8 +265,8 @@ IMPL_LINK_NOARG(OTableWindowListBox, OnDoubleClick, weld::TreeView&, bool)
     vcl::Window* pParent = Window::GetParent();
     OSL_ENSURE(pParent != nullptr, "OTableWindowListBox::OnDoubleClick : have no Parent !");
 
-    std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->make_iterator();
-    if (!m_xTreeView->get_cursor(xCurrent.get()))
+    std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->get_cursor();
+    if (!xCurrent)
         return false;
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(*xCurrent);

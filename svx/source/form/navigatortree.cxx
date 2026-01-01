@@ -227,8 +227,7 @@ namespace svxform
 
     bool NavigatorTree::implAllowExchange( sal_Int8 _nAction, bool* _pHasNonHidden )
     {
-        bool bCurEntry = m_xTreeView->get_cursor(nullptr);
-        if (!bCurEntry)
+        if (!m_xTreeView->get_cursor())
             return false;
 
         // Information for AcceptDrop and Execute Drop
@@ -262,7 +261,7 @@ namespace svxform
             return false;
 
         m_aControlExchange.prepareDrag();
-        m_aControlExchange->setFocusEntry(m_xTreeView->get_cursor(nullptr));
+        m_aControlExchange->setFocusEntry(bool(m_xTreeView->get_cursor()));
 
         for (const auto& rpEntry : m_arrCurrentSelection)
             m_aControlExchange->addSelectedEntry(m_xTreeView->make_iterator(rpEntry.get()));
@@ -330,8 +329,8 @@ namespace svxform
                     if (m_arrCurrentSelection.empty()) // only happens with context menu via keyboard
                         break;
 
-                    std::unique_ptr<weld::TreeIter> xCurrent(m_xTreeView->make_iterator());
-                    if (!m_xTreeView->get_cursor(xCurrent.get()))
+                    std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->get_cursor();
+                    if (!xCurrent)
                         break;
                     ptWhere = m_xTreeView->get_row_area(*xCurrent).Center();
                 }

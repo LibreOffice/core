@@ -889,15 +889,15 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
 
 IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
 {
-    bool bValidIter = m_xControl->get_cursor(m_xScratchIter.get());
-    if (!bValidIter)
+    std::unique_ptr<weld::TreeIter> pCursor = m_xControl->get_cursor();
+    if (!pCursor)
         return true;
-    if (!m_xControl->get_row_expanded(*m_xScratchIter))
-        m_xControl->expand_row(*m_xScratchIter);
+    if (!m_xControl->get_row_expanded(*pCursor))
+        m_xControl->expand_row(*pCursor);
     else
-        m_xControl->collapse_row(*m_xScratchIter);
+        m_xControl->collapse_row(*pCursor);
 
-    EntryDescriptor aDesc = GetEntryDescriptor(m_xScratchIter.get());
+    EntryDescriptor aDesc = GetEntryDescriptor(pCursor.get());
     switch (aDesc.GetType())
     {
         case OBJ_TYPE_METHOD:

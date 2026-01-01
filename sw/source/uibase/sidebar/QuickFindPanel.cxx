@@ -428,8 +428,8 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::TreeView&, void)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
-    if (!m_xSearchFindsList->get_cursor(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = m_xSearchFindsList->get_cursor();
+    if (!xEntry)
         return;
 
     OUString sId = m_xSearchFindsList->get_id(*xEntry);
@@ -478,8 +478,8 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListRowActivatedHandler, weld::TreeView&, bool)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
-    if (!m_xSearchFindsList->get_cursor(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = m_xSearchFindsList->get_cursor();
+    if (!xEntry)
         return false;
 
     // check for page number entry

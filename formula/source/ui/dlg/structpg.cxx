@@ -131,8 +131,7 @@ IMPL_LINK(StructPage, SelectHdl, weld::TreeView&, rTlb, void)
 
     if (&rTlb == m_xTlbStruct.get())
     {
-        std::unique_ptr<weld::TreeIter> xCurEntry(m_xTlbStruct->make_iterator());
-        if (m_xTlbStruct->get_cursor(xCurEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xCurEntry = m_xTlbStruct->get_cursor())
         {
             pSelectedToken = weld::fromId<const FormulaToken*>(m_xTlbStruct->get_id(*xCurEntry));
             if (pSelectedToken)

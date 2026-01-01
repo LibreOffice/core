@@ -374,8 +374,8 @@ LibPage::~LibPage()
 
 void LibPage::CheckButtons()
 {
-    std::unique_ptr<weld::TreeIter> xCur(m_xLibBox->make_iterator());
-    if (!m_xLibBox->get_cursor(xCur.get()))
+    std::unique_ptr<weld::TreeIter> xCur = m_xLibBox->get_cursor();
+    if (!xCur)
         return;
 
     OUString aLibName = m_xLibBox->get_text(*xCur, 0);
@@ -449,8 +449,8 @@ IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
 
         SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
 
-        std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
-        if (!m_xLibBox->get_cursor(xCurEntry.get()))
+        std::unique_ptr<weld::TreeIter> xCurEntry = m_xLibBox->get_cursor();
+        if (!xCurEntry)
             return;
         OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
@@ -466,8 +466,8 @@ IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
         InsertLib();
     else if (&rButton == m_xExportButton.get())
     {
-        std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
-        if (!m_xLibBox->get_cursor(xCurEntry.get()))
+        std::unique_ptr<weld::TreeIter> xCurEntry = m_xLibBox->get_cursor();
+        if (!xCurEntry)
             return;
         OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
         Export(m_aCurDocument, aLibName, m_pDialog->getDialog());
@@ -476,8 +476,8 @@ IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
         DeleteCurrent();
     else if (&rButton == m_xPasswordButton.get())
     {
-        std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
-        if (!m_xLibBox->get_cursor(xCurEntry.get()))
+        std::unique_ptr<weld::TreeIter> xCurEntry = m_xLibBox->get_cursor();
+        if (!xCurEntry)
             return;
         OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
 
@@ -541,8 +541,8 @@ IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 {
     bool bRet = false;
 
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
-    if (!m_xLibBox->get_cursor(xCurEntry.get()))
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xLibBox->get_cursor();
+    if (!xCurEntry)
         return bRet;
 
     OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
@@ -1183,8 +1183,8 @@ void ExportAsBasic(const ScriptDocument& rScriptDocument, const OUString& aLibNa
 
 void LibPage::DeleteCurrent()
 {
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
-    if (!m_xLibBox->get_cursor(xCurEntry.get()))
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xLibBox->get_cursor();
+    if (!xCurEntry)
         return;
     OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
 
@@ -1393,8 +1393,8 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
 
             if( pBasicBox )
             {
-                std::unique_ptr<weld::TreeIter> xIter(pBasicBox->make_iterator(nullptr));
-                bool bValidIter = pBasicBox->get_cursor(xIter.get());
+                std::unique_ptr<weld::TreeIter> xIter = pBasicBox->get_cursor();
+                bool bValidIter = bool(xIter);
                 std::unique_ptr<weld::TreeIter> xRootEntry(pBasicBox->make_iterator(xIter.get()));
                 while (bValidIter)
                 {

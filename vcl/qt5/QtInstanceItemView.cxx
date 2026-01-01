@@ -132,20 +132,18 @@ std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_selected() const
     return pSelectedItem;
 }
 
-bool QtInstanceItemView::get_cursor(weld::TreeIter* pIter) const
+std::unique_ptr<weld::TreeIter> QtInstanceItemView::get_cursor() const
 {
     SolarMutexGuard g;
 
-    bool bRet = false;
+    std::unique_ptr<weld::TreeIter> pCursor;
     GetQtInstance().RunInMainThread([&] {
         const QModelIndex aCurrentIndex = getItemView().currentIndex();
-        QtInstanceTreeIter* pQtIter = static_cast<QtInstanceTreeIter*>(pIter);
-        if (pQtIter)
-            pQtIter->setModelIndex(aCurrentIndex);
-        bRet = aCurrentIndex.isValid();
+        if (aCurrentIndex.isValid())
+            pCursor = std::make_unique<QtInstanceTreeIter>(aCurrentIndex);
     });
 
-    return bRet;
+    return pCursor;
 }
 
 void QtInstanceItemView::selected_foreach(const std::function<bool(weld::TreeIter&)>& func)

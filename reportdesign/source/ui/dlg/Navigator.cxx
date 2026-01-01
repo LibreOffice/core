@@ -328,10 +328,9 @@ IMPL_LINK_NOARG(NavigatorTree, OnEntrySelDesel, weld::TreeView&, void)
     if ( !m_pSelectionListener->locked() )
     {
         m_pSelectionListener->lock();
-        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
-        bool bEntry = m_xTreeView->get_cursor(xEntry.get());
+        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
         uno::Any aSelection;
-        if (bEntry && m_xTreeView->is_selected(*xEntry))
+        if (xEntry && m_xTreeView->is_selected(*xEntry))
             aSelection <<= weld::fromId<UserData*>(m_xTreeView->get_id(*xEntry))->getContent();
         m_rController.select(aSelection);
         m_pSelectionListener->unlock();

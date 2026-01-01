@@ -378,8 +378,9 @@ IMPL_LINK(SfxCharmapContainer, ItemViewFocusInHdl, weld::Widget&, rWidget, void)
 {
     weld::IconView& rIconView = dynamic_cast<weld::IconView&>(rWidget);
     std::unique_ptr<weld::TreeIter> pIter = rIconView.make_iterator();
-    if (rIconView.get_cursor(pIter.get()))
-        rIconView.select(*pIter);
+    std::unique_ptr<weld::TreeIter> pCursor = rIconView.get_cursor();
+    if (pCursor)
+        rIconView.select(*pCursor);
     else if (rIconView.get_iter_first(*pIter))
         rIconView.select(*pIter);
     else

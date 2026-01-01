@@ -503,9 +503,7 @@ IMPL_LINK(CustomAnimationList, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     });
 
     // Note: pEntry is the effect with focus (if multiple effects are selected)
-    mxDndEffectDragging = mxTreeView->make_iterator();
-    if (!mxTreeView->get_cursor(mxDndEffectDragging.get()))
-        mxDndEffectDragging.reset();
+    mxDndEffectDragging = mxTreeView->get_cursor();
 
     // Allow normal processing.
     return false;
@@ -596,8 +594,7 @@ IMPL_LINK(CustomAnimationList, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             return true;
         case KEY_SPACE:
         {
-            std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-            if (mxTreeView->get_cursor(xEntry.get()))
+            if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_cursor())
             {
                 auto aRect = mxTreeView->get_row_area(*xEntry);
                 const Point aPos(aRect.getOpenWidth() / 2, aRect.getOpenHeight() / 2);
@@ -690,8 +687,6 @@ void CustomAnimationList::update()
     ::tools::Long nFirstSelOld = -1;
     ::tools::Long nLastSelOld = -1;
 
-    std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-
     if( mpMainSequence )
     {
         std::unique_ptr<weld::TreeIter> xLastSelectedEntry;
@@ -744,7 +739,7 @@ void CustomAnimationList::update()
         if (xLastVisibleEntry)
             nLastVis = weld::GetAbsPos(*mxTreeView, *xLastVisibleEntry);
 
-        if (mxTreeView->get_cursor(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_cursor())
         {
             CustomAnimationListEntryItem* pEntry = weld::fromId<CustomAnimationListEntryItem*>(mxTreeView->get_id(*xEntry));
             aCurrent = pEntry->getEffect();
@@ -798,6 +793,7 @@ void CustomAnimationList::update()
         std::vector<std::unique_ptr<weld::TreeIter>> aNewSelection;
 
         // restore selection state, expand state, and current-entry (under cursor)
+        std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
         if (mxTreeView->get_iter_first(*xEntry))
         {
             do

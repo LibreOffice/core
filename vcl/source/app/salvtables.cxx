@@ -3602,13 +3602,13 @@ std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_selected() const
     return {};
 }
 
-bool SalInstanceItemView::get_cursor(weld::TreeIter* pIter) const
+std::unique_ptr<weld::TreeIter> SalInstanceItemView::get_cursor() const
 {
     SvTreeListEntry* pEntry = m_pTreeListBox->GetCurEntry();
-    auto pVclIter = static_cast<SalInstanceTreeIter*>(pIter);
-    if (pVclIter)
-        pVclIter->iter = pEntry;
-    return pEntry != nullptr;
+    if (pEntry)
+        return std::make_unique<SalInstanceTreeIter>(pEntry);
+
+    return {};
 }
 
 void SalInstanceItemView::do_select_all()

@@ -62,7 +62,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_selected() const override;
 
-    virtual bool get_cursor(weld::TreeIter* pIter) const override;
+    virtual std::unique_ptr<weld::TreeIter> get_cursor() const override;
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 

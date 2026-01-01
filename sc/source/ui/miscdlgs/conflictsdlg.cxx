@@ -407,9 +407,8 @@ void ScConflictsDlg::SetActionString(ScChangeAction& rAction, ScDocument& rDoc, 
 void ScConflictsDlg::HandleListBoxSelection()
 {
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    bool bSelEntry = rTreeView.get_cursor(xEntry.get());
-    if (!bSelEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_cursor();
+    if (!xEntry)
         xEntry = rTreeView.get_selected();
     if (!xEntry)
         return;
