@@ -1345,7 +1345,13 @@ public:
     }
 };
 
-/// Factory method to create a lok::Office instance.
+/// Create a lok::Office instance.
+///
+/// Presumably you are not supposed to create multiple lok::Office
+/// instances in the same process. Possibly not even a new one after
+/// destroying a previous one.
+///
+/// For information on the parameters, see writeup for lok_init_2 in LibreOfficeKitInit.h.
 inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
     LibreOfficeKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);
