@@ -957,6 +957,9 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
                         if (pOLV->GetWindow()->GetOutDev() == pOutputDevice
                             || comphelper::LibreOfficeKit::isActive())
                         {
+                            SdrPage* pPage = GetSdrPageView()->GetPage();
+                            pOLV->SetBackgroundColor(
+                                pPage->GetPageBackgroundColor(GetSdrPageView(), true));
                             ImpPaintOutlinerView(*pOLV, aCheckRect,
                                                  rPaintWindow.GetTargetOutputDevice());
                             return;
