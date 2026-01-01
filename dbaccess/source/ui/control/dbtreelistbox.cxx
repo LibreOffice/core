@@ -94,7 +94,7 @@ sal_Int8 TreeListBoxDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.GetWidget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
     }
 
     return nAccept;
@@ -237,9 +237,8 @@ sal_Int8 TreeListBox::AcceptDrop(const AcceptDropEvent& rEvt)
     if ( m_pActionListener )
     {
         ::Point aDropPos = rEvt.maPosPixel;
-        std::unique_ptr<weld::TreeIter> xDropTarget(m_xTreeView->make_iterator());
-        if (!m_xTreeView->get_dest_row_at_pos(aDropPos, xDropTarget.get(), true))
-            xDropTarget.reset();
+        std::unique_ptr<weld::TreeIter> xDropTarget
+            = m_xTreeView->get_dest_row_at_pos(aDropPos, true);
 
         // check if drag is on child entry, which is not allowed
         std::unique_ptr<weld::TreeIter> xParent;
@@ -357,8 +356,8 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     ::Point aPos = rCEvt.GetMousePosPixel();
 
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_dest_row_at_pos(aPos, xIter.get(), false) && !m_xTreeView->is_selected(*xIter))
+    std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_dest_row_at_pos(aPos, false);
+    if (xIter && !m_xTreeView->is_selected(*xIter))
     {
         m_xTreeView->unselect_all();
         m_xTreeView->set_cursor(*xIter);

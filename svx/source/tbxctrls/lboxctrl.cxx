@@ -46,7 +46,6 @@ class SvxPopupWindowListBox final : public WeldToolbarPopup
 {
     rtl::Reference<SvxUndoRedoControl> m_xControl;
     std::unique_ptr<weld::TreeView> m_xListBox;
-    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     int m_nSelectedRows;
     int m_nVisRows;
 
@@ -73,7 +72,6 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(SvxUndoRedoControl* pControl, weld:
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatingundoredo.ui"_ustr, u"FloatingUndoRedo"_ustr)
     , m_xControl(pControl)
     , m_xListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr))
-    , m_xScratchIter(m_xListBox->make_iterator())
     , m_nVisRows(10)
 {
     m_xListBox->set_selection_mode(SelectionMode::Multiple);
@@ -128,16 +126,18 @@ void SvxPopupWindowListBox::UpdateRow(int nRow)
 
 IMPL_LINK(SvxPopupWindowListBox, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
-    if (m_xListBox->get_dest_row_at_pos(rMEvt.GetPosPixel(), m_xScratchIter.get(), false))
-        UpdateRow(m_xListBox->get_iter_index_in_parent(*m_xScratchIter));
+    if (std::unique_ptr<weld::TreeIter> pIter
+        = m_xListBox->get_dest_row_at_pos(rMEvt.GetPosPixel(), false))
+        UpdateRow(m_xListBox->get_iter_index_in_parent(*pIter));
     return false;
 }
 
 IMPL_LINK(SvxPopupWindowListBox, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
-    if (m_xListBox->get_dest_row_at_pos(rMEvt.GetPosPixel(), m_xScratchIter.get(), false))
+    if (std::unique_ptr<weld::TreeIter> pIter
+        = m_xListBox->get_dest_row_at_pos(rMEvt.GetPosPixel(), false))
     {
-        UpdateRow(m_xListBox->get_iter_index_in_parent(*m_xScratchIter));
+        UpdateRow(m_xListBox->get_iter_index_in_parent(*pIter));
         ActivateHdl(*m_xListBox);
     }
     return true;
@@ -145,8 +145,9 @@ IMPL_LINK(SvxPopupWindowListBox, MousePressHdl, const MouseEvent&, rMEvt, bool)
 
 IMPL_LINK(SvxPopupWindowListBox, MouseReleaseHdl, const MouseEvent&, rMEvt, bool)
 {
-    if (m_xListBox->get_dest_row_at_pos(rMEvt.GetPosPixel(), m_xScratchIter.get(), false))
-        UpdateRow(m_xListBox->get_iter_index_in_parent(*m_xScratchIter));
+    if (std::unique_ptr<weld::TreeIter> pIter
+        = m_xListBox->get_dest_row_at_pos(rMEvt.GetPosPixel(), false))
+        UpdateRow(m_xListBox->get_iter_index_in_parent(*pIter));
     return true;
 }
 

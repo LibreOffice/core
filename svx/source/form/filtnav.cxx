@@ -1032,7 +1032,7 @@ sal_Int8 FmFilterNavigatorDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
     }
 
     return nAccept;
@@ -1177,11 +1177,8 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     Point aDropPos = rEvt.maPosPixel;
-    std::unique_ptr<weld::TreeIter> xDropTarget(m_xTreeView->make_iterator());
     // get_dest_row_at_pos with false cause we must drop exactly "on" a node to paste a condition into it
-    if (!m_xTreeView->get_dest_row_at_pos(aDropPos, xDropTarget.get(), false))
-        xDropTarget.reset();
-
+    std::unique_ptr<weld::TreeIter> xDropTarget = m_xTreeView->get_dest_row_at_pos(aDropPos, false);
     if (!xDropTarget)
         return DND_ACTION_NONE;
 
@@ -1223,10 +1220,8 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     Point aDropPos = rEvt.maPosPixel;
-    std::unique_ptr<weld::TreeIter> xDropTarget(m_xTreeView->make_iterator());
     // get_dest_row_at_pos with false cause we must drop exactly "on" a node to paste a condition into it
-    if (!m_xTreeView->get_dest_row_at_pos(aDropPos, xDropTarget.get(), false))
-        xDropTarget.reset();
+    std::unique_ptr<weld::TreeIter> xDropTarget = m_xTreeView->get_dest_row_at_pos(aDropPos, false);
     if (!xDropTarget)
         return DND_ACTION_NONE;
 
@@ -1456,9 +1451,9 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             std::unique_ptr<weld::TreeIter> xClicked;
             if (rEvt.IsMouseEvent())
             {
-                xClicked = m_xTreeView->make_iterator();
                 aWhere = rEvt.GetMousePosPixel();
-                if (!m_xTreeView->get_dest_row_at_pos(aWhere, xClicked.get(), false))
+                xClicked = m_xTreeView->get_dest_row_at_pos(aWhere, false);
+                if (!xClicked)
                     break;
 
                 if (!m_xTreeView->is_selected(*xClicked))

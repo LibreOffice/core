@@ -3222,9 +3222,9 @@ sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop(const ExecuteDropEvent& rE
         std::unique_ptr<weld::TreeIter> xSource = m_rFunctions.get_selected();
         if (!xSource)
             return DND_ACTION_NONE;
-        std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
         int nTargetPos = -1;
-        if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+        if (std::unique_ptr<weld::TreeIter> xTarget
+            = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, true))
             nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
         m_aDropHdl.Call(nTargetPos);
         nRet = DND_ACTION_NONE;

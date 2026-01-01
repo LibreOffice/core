@@ -303,14 +303,16 @@ IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
         m_xTreeView->grab_focus();
 
         // select clicked entry
-        if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-                rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
-                    rCEvt.GetMousePosPixel(), xEntry.get(), false))
+        if (rCEvt.IsMouseEvent())
         {
-            m_bSelectionHandlerNavigates = true;
-            m_bNavigationGrabsFocus = false;
-            m_xTreeView->set_cursor(*xEntry);
-            Select();
+            if (std::unique_ptr<weld::TreeIter> xEntry
+                = m_xTreeView->get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false))
+            {
+                m_bSelectionHandlerNavigates = true;
+                m_bNavigationGrabsFocus = false;
+                m_xTreeView->set_cursor(*xEntry);
+                Select();
+            }
         }
 
         bool bRet = m_aPopupMenuHdl.Call(rCEvt);
@@ -528,8 +530,9 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     if (!pSource || pSource != &m_rTreeView)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+    std::unique_ptr<weld::TreeIter> xTarget
+        = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, true);
+    if (!xTarget)
         return DND_ACTION_NONE;
 
     // disallow when root is drop target
@@ -581,8 +584,9 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (!xSource)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), false))
+    std::unique_ptr<weld::TreeIter> xTarget
+        = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, false);
+    if (!xTarget)
         return DND_ACTION_NONE;
 
     auto nIterCompare = m_rTreeView.iter_compare(*xSource, *xTarget);

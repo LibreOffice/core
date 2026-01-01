@@ -481,7 +481,7 @@ sal_Int8 StyleList::AcceptDrop(const AcceptDropEvent& rEvt, const DropTargetHelp
     }
     // to enable the autoscroll when we're close to the edges
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
-    pTreeView->get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+    pTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
     return DND_ACTION_MOVE;
 }
 
@@ -538,13 +538,15 @@ IMPL_LINK(StyleList, ExecuteDrop, const ExecuteDropEvent&, rEvt, sal_Int8)
     if (!xSource)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xTarget(m_xTreeBox->make_iterator());
-    if (!m_xTreeBox->get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+    std::unique_ptr<weld::TreeIter> xTarget
+        = m_xTreeBox->get_dest_row_at_pos(rEvt.maPosPixel, true);
+    if (!xTarget)
     {
         // if nothing under the mouse, use the last row
         int nChildren = m_xTreeBox->n_children();
         if (!nChildren)
             return DND_ACTION_NONE;
+        xTarget = m_xTreeBox->make_iterator();
         if (!m_xTreeBox->get_iter_first(*xTarget)
             || !m_xTreeBox->iter_nth_sibling(*xTarget, nChildren - 1))
             return DND_ACTION_NONE;
@@ -604,8 +606,8 @@ void StyleList::DropHdl(const OUString& rStyle, const OUString& rParent)
 void StyleList::PrepareMenu(const Point& rPos)
 {
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
-    std::unique_ptr<weld::TreeIter> xIter(pTreeView->make_iterator());
-    if (pTreeView->get_dest_row_at_pos(rPos, xIter.get(), false) && !pTreeView->is_selected(*xIter))
+    std::unique_ptr<weld::TreeIter> xIter = pTreeView->get_dest_row_at_pos(rPos, false);
+    if (xIter && !pTreeView->is_selected(*xIter))
     {
         pTreeView->unselect_all();
         pTreeView->set_cursor(*xIter);

@@ -1396,9 +1396,9 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         return false;
     if (m_eState == State::HIDDEN)
         return false;
-    if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-            m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false) &&
-            !rMEvt.IsLeaveWindow())
+    std::unique_ptr<weld::TreeIter> xEntry
+        = m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), false, false);
+    if (xEntry && !rMEvt.IsLeaveWindow())
     {
         if (!m_xOverlayCompareEntry)
             m_xOverlayCompareEntry.reset(m_xTreeView->make_iterator().release());
@@ -1485,7 +1485,7 @@ sal_Int8 SwContentTreeDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
     }
 
     return nAccept;
@@ -1539,9 +1539,8 @@ sal_Int8 SwContentTreeDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
 
 sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    std::unique_ptr<weld::TreeIter> xDropEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDropEntry.get(), true))
-        xDropEntry.reset();
+    std::unique_ptr<weld::TreeIter> xDropEntry
+        = m_xTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
 
     if (m_nRootType == ContentTypeId::OUTLINE)
     {
@@ -1781,16 +1780,18 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     grab_focus();
 
     // select clicked entry or limit selection to root entry if needed
-    if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-            rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
-                rCEvt.GetMousePosPixel(), xEntry.get(), false))
+    if (rCEvt.IsMouseEvent())
     {
-        // if clicked entry is not currently selected then clear selections and select it
-        if (!m_xTreeView->is_selected(*xEntry))
-            m_xTreeView->set_cursor(*xEntry);
-        // if root entry is selected then clear selections and select it
-        else if (m_xTreeView->is_selected(0))
-            m_xTreeView->set_cursor(0);
+        if (std::unique_ptr<weld::TreeIter> xEntry
+            = m_xTreeView->get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false))
+        {
+            // if clicked entry is not currently selected then clear selections and select it
+            if (!m_xTreeView->is_selected(*xEntry))
+                m_xTreeView->set_cursor(*xEntry);
+            // if root entry is selected then clear selections and select it
+            else if (m_xTreeView->is_selected(0))
+                m_xTreeView->set_cursor(0);
+        }
     }
 
     UpdateContentFunctionsToolbar();

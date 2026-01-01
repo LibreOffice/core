@@ -477,7 +477,7 @@ sal_Int8 CustomAnimationListDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
     }
 
     return nAccept;
@@ -523,9 +523,8 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
 // D'n'D #5: Tell model to update effect order.
 sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    std::unique_ptr<weld::TreeIter> xDndEffectInsertBefore(mxTreeView->make_iterator());
-    if (!mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDndEffectInsertBefore.get(), true))
-        xDndEffectInsertBefore.reset();
+    std::unique_ptr<weld::TreeIter> xDndEffectInsertBefore
+        = mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
 
     const bool bMovingEffect = ( mxDndEffectDragging != nullptr );
     const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && mxTreeView->iter_compare(*xDndEffectInsertBefore, *mxDndEffectDragging) != 0);
@@ -1165,8 +1164,8 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.IsMouseEvent())
     {
         ::Point aPos = rCEvt.GetMousePosPixel();
-        std::unique_ptr<weld::TreeIter> xIter(mxTreeView->make_iterator());
-        if (mxTreeView->get_dest_row_at_pos(aPos, xIter.get(), false) && !mxTreeView->is_selected(*xIter))
+        std::unique_ptr<weld::TreeIter> xIter = mxTreeView->get_dest_row_at_pos(aPos, false);
+        if (xIter && !mxTreeView->is_selected(*xIter))
         {
             mxTreeView->unselect_all();
             mxTreeView->set_cursor(*xIter);

@@ -296,8 +296,8 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bo
 
 IMPL_LINK(QuickFindPanel, SearchFindsListMousePressHandler, const MouseEvent&, rMEvt, bool)
 {
-    if (std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
-        m_xSearchFindsList->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
+    if (std::unique_ptr<weld::TreeIter> xEntry
+        = m_xSearchFindsList->get_dest_row_at_pos(rMEvt.GetPosPixel(), false, false))
     {
         return m_xSearchFindsList->get_id(*xEntry)[0] == '-';
     }

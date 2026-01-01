@@ -117,7 +117,7 @@ namespace svxform
         {
             // to enable the autoscroll when we're close to the edges
             weld::TreeView& rWidget = m_rTreeView.get_widget();
-            rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+            rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
         }
 
         return nAccept;
@@ -314,8 +314,9 @@ namespace svxform
                 if (rEvt.IsMouseEvent())
                 {
                     ptWhere = rEvt.GetMousePosPixel();
-                    std::unique_ptr<weld::TreeIter> xClickedOn(m_xTreeView->make_iterator());
-                    if (!m_xTreeView->get_dest_row_at_pos(ptWhere, xClickedOn.get(), false))
+                    std::unique_ptr<weld::TreeIter> xClickedOn
+                        = m_xTreeView->get_dest_row_at_pos(ptWhere, false);
+                    if (!xClickedOn)
                         break;
                     if (!m_xTreeView->is_selected(*xClickedOn))
                     {
@@ -852,19 +853,16 @@ namespace svxform
     sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         ::Point aDropPos = rEvt.maPosPixel;
-        std::unique_ptr<weld::TreeIter> xDropTarget(m_xTreeView->make_iterator());
         // get_dest_row_at_pos with false cause we must drop exactly "on" a form to paste a control into it
-        if (!m_xTreeView->get_dest_row_at_pos(aDropPos, xDropTarget.get(), false))
-            xDropTarget.reset();
+        std::unique_ptr<weld::TreeIter> xDropTarget
+            = m_xTreeView->get_dest_row_at_pos(aDropPos, false);
         return implAcceptDataTransfer(m_aDropTargetHelper.GetDataFlavorExVector(), rEvt.mnAction, xDropTarget.get(), true);
     }
 
     sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const ::Point& _rDropPos, bool _bDnD )
     {
-        std::unique_ptr<weld::TreeIter> xDrop(m_xTreeView->make_iterator());
         // get_dest_row_at_pos with false cause we must drop exactly "on" a form to paste a control into it
-        if (!m_xTreeView->get_dest_row_at_pos(_rDropPos, xDrop.get(), false))
-            xDrop.reset();
+        std::unique_ptr<weld::TreeIter> xDrop = m_xTreeView->get_dest_row_at_pos(_rDropPos, false);
         return implExecuteDataTransfer( _rData, _nAction, xDrop.get(), _bDnD );
     }
 

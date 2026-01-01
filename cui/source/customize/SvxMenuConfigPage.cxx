@@ -523,8 +523,9 @@ IMPL_LINK(SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt, 
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
 
     // Select clicked entry
-    std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    if (!rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), xIter.get(), false))
+    std::unique_ptr<weld::TreeIter> xIter
+        = rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false);
+    if (!xIter)
         return false;
     rTreeView.select(*xIter);
     SelectMenuEntry(rTreeView);
@@ -569,8 +570,9 @@ IMPL_LINK(SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt,
     weld::TreeView& rTreeView = m_xFunctions->get_widget();
 
     // Select clicked entry
-    std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    if (!rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), xIter.get(), false))
+    std::unique_ptr<weld::TreeIter> xIter
+        = rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false);
+    if (!xIter)
         return false;
     rTreeView.select(*xIter);
     SelectFunctionHdl(rTreeView);

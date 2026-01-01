@@ -261,7 +261,7 @@ private:
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
 
         weld::TreeView* pSource = rWidget.get_drag_source();
         if (!pSource)
@@ -317,11 +317,10 @@ private:
         if (!pSource)
             return DND_ACTION_NONE;
 
-        std::unique_ptr<weld::TreeIter> xEntry(rWidget.make_iterator());
-        bool bEntry = rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xEntry.get(), true);
+        std::unique_ptr<weld::TreeIter> xEntry = rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
 
         // don't drop on a BasicManager (nDepth == 0)
-        sal_uInt16 nDepth = bEntry ? m_rTreeView.get_iter_depth(*xEntry) : 0;
+        sal_uInt16 nDepth = xEntry ? m_rTreeView.get_iter_depth(*xEntry) : 0;
         bool bValid = nDepth != 0;
         // don't drop in the same library
         std::unique_ptr<weld::TreeIter> xSelected = pSource->get_selected();

@@ -1218,8 +1218,8 @@ sal_uInt32 GalleryBrowser::ImplGetSelectedItemId( const Point* pSelPos, Point& r
     {
         if( pSelPos )
         {
-            std::unique_ptr<weld::TreeIter> xIter = mxListView->make_iterator();
-            if (mxListView->get_dest_row_at_pos(*pSelPos, xIter.get(), false))
+            if (std::unique_ptr<weld::TreeIter> xIter
+                = mxListView->get_dest_row_at_pos(*pSelPos, false))
                 nRet = mxListView->get_iter_index_in_parent(*xIter) + 1;
             rSelPos = *pSelPos;
         }

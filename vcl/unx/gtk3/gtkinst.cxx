@@ -16026,12 +16026,13 @@ public:
         g_signal_handler_unblock(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
     }
 
-    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bDnDMode, bool bAutoScroll) override
+    virtual std::unique_ptr<weld::TreeIter> get_dest_row_at_pos(const Point& rPos, bool bDnDMode,
+                                                                bool bAutoScroll) override
     {
         if (rPos.X() < 0 || rPos.Y() < 0)
         {
             // short-circuit to avoid "gtk_tree_view_get_dest_row_at_pos: assertion 'drag_x >= 0'" g_assert
-            return false;
+            return {};
         }
 
         const bool bAsTree = gtk_tree_view_get_enable_tree_lines(m_pTreeView);
@@ -16081,10 +16082,12 @@ public:
             }
         }
 
-        if (ret && pResult)
+        std::unique_ptr<weld::TreeIter> pResult;
+        if (ret)
         {
-            GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(*pResult);
-            gtk_tree_model_get_iter(m_pTreeModel, &rGtkIter.iter, path);
+            GtkTreeIter iter;
+            gtk_tree_model_get_iter(m_pTreeModel, &iter, path);
+            pResult = std::make_unique<GtkInstanceTreeIter>(iter);
         }
 
         if (m_bInDrag && bDnDMode)
@@ -16124,7 +16127,7 @@ public:
             }
         }
 
-        return ret;
+        return pResult;
     }
 
     virtual void unset_drag_dest_row() override
