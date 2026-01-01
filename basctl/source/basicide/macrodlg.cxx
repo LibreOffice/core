@@ -63,7 +63,6 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     , m_xMacroNameEdit(m_xBuilder->weld_entry(u"macronameedit"_ustr))
     , m_xMacroLibsFrame(m_xBuilder->weld_frame(u"librariesframe"_ustr))
     , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr), m_xDialog.get()))
-    , m_xBasicBoxIter(m_xBasicBox->make_iterator())
     , m_xMacrosInTxt(m_xBuilder->weld_label(u"existingmacrosft"_ustr))
     , m_xMacroBox(m_xBuilder->weld_tree_view(u"macros"_ustr))
     , m_xMacroBoxIter(m_xMacroBox->make_iterator())
@@ -192,15 +191,16 @@ short MacroChooser::run()
     if( rSelectedDoc.isDocument() && !rSelectedDoc.isActive() )
     {
         // Search for the right entry
-        bool bValidIter = m_xBasicBox->get_iter_first(*m_xBasicBoxIter);
+        std::unique_ptr<weld::TreeIter> pIter = m_xBasicBox->make_iterator();
+        bool bValidIter = m_xBasicBox->get_iter_first(*pIter);
         while (bValidIter)
         {
-            EntryDescriptor aCmpDesc(m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get()));
+            EntryDescriptor aCmpDesc(m_xBasicBox->GetEntryDescriptor(pIter.get()));
             const ScriptDocument& rCmpDoc( aCmpDesc.GetDocument() );
             if (rCmpDoc.isDocument() && rCmpDoc.isActive())
             {
                 std::unique_ptr<weld::TreeIter> xEntry(m_xBasicBox->make_iterator());
-                m_xBasicBox->copy_iterator(*m_xBasicBoxIter, *xEntry);
+                m_xBasicBox->copy_iterator(*pIter, *xEntry);
                 std::unique_ptr<weld::TreeIter> xLastValid(m_xBasicBox->make_iterator());
                 bool bValidEntryIter = true;
                 do
@@ -211,7 +211,7 @@ short MacroChooser::run()
                 while (bValidEntryIter);
                 m_xBasicBox->set_cursor(*xLastValid);
             }
-            bValidIter = m_xBasicBox->iter_next_sibling(*m_xBasicBoxIter);
+            bValidIter = m_xBasicBox->iter_next_sibling(*pIter);
         }
     }
 

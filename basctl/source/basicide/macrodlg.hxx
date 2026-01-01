@@ -76,7 +76,6 @@ private:
     std::unique_ptr<weld::Entry> m_xMacroNameEdit;
     std::unique_ptr<weld::Frame> m_xMacroLibsFrame;
     std::unique_ptr<SbTreeListBox> m_xBasicBox;
-    std::unique_ptr<weld::TreeIter> m_xBasicBoxIter;
     std::unique_ptr<weld::Label> m_xMacrosInTxt;
     std::unique_ptr<weld::TreeView> m_xMacroBox;
     std::unique_ptr<weld::TreeIter> m_xMacroBoxIter;
