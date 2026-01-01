@@ -820,7 +820,7 @@ private:
 
     tools::Long                CalcVertLineSpacing(Point& rStartPos) const;
 
-    Color               GetAutoColor() const;
+    Color               GetAutoColor(const SvxFont* pFonts = nullptr) const;
     void EnableAutoColor( bool b ) { mbUseAutoColor = b; }
     bool IsAutoColorEnabled() const { return mbUseAutoColor; }
     void ForceAutoColor( bool b ) { mbForceAutoColor = b; }
