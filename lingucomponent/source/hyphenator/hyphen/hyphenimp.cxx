@@ -469,7 +469,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 // if minCompoundLead > 2 (default value: less than n=minCompoundLead character distance)
                 // or always skip hyphenation inside compound constituents, if minCompoundLead == 0,
                 // also skip hyphenation inside compound constituents right before constituent boundaries in compound words
-                // or always skip hyphenation inside compound consituents, if minCompoundTrail == 0
+                // or always skip hyphenation inside compound constituents, if minCompoundTrail == 0
                 // if both minCompoundLead and minCompoundTrail == 0, don't hyphenate inside suffixes, too
                 if ( bCompoundHyphenation && (nCompoundHyphenationPos > -1 || minCompoundLead == 0 || minCompoundTrail > 2 || minCompoundTrail == 0 ) &&
                         // check minimal distance from the left constituent boundary
