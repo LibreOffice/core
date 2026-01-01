@@ -10,14 +10,14 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/sysdata.hxx>
 #include <vcl/vclptr.hxx>
-#include <rtl/ref.hxx>
 
 class Point;
 class Size;
 class SystemChildWindow;
 namespace vcl { class Window; }
+namespace rtl { template <class reference_type> class Reference; }
+struct SystemWindowData;
 
 /// Holds the information of our new child window
 struct VCL_DLLPUBLIC GLWindow

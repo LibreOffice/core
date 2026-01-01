@@ -17,11 +17,16 @@
 #include <vcl/dllapi.h>
 
 #include <tools/stream.hxx>
-#include <vcl/vclevent.hxx>
 
 struct EventDescription;
 class Control;
 class KeyEvent;
+enum class VclEventId;
+namespace vcl
+{
+class Window;
+}
+template <class reference_type> class VclPtr;
 
 class UITEST_DLLPUBLIC UITestLogger
 {

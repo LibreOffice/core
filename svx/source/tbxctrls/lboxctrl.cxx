@@ -35,6 +35,7 @@
 
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 
 using namespace ::com::sun::star::uno;

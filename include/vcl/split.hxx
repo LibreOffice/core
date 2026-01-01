@@ -21,8 +21,9 @@
 #define INCLUDED_VCL_SPLIT_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/keycod.hxx>
 #include <vcl/window.hxx>
+
+namespace vcl { class KeyCode; }
 
 #define SPLITTER_DEFAULTSTEPSIZE 0xFFFF
 

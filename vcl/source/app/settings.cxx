@@ -41,6 +41,7 @@
 #include <IconThemeSelector.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>

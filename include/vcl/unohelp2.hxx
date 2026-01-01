@@ -24,11 +24,14 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/IDialogRenderable.hxx>
 
 namespace com::sun::star::datatransfer::clipboard
 {
 class XClipboard;
+}
+namespace vcl
+{
+class ILibreOfficeKitNotifier;
 }
 
 namespace vcl::unohelper

@@ -67,6 +67,7 @@
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>

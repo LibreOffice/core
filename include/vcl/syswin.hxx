@@ -23,7 +23,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <memory>
 
 class SalInstanceBuilder;
@@ -34,6 +33,8 @@ class NotebookBar;
 class TaskPaneList;
 class VclBuilder;
 struct NotebookBarAddonsItem;
+
+namespace com::sun::star::frame { class XFrame; }
 
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2

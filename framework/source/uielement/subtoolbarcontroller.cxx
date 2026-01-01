@@ -25,6 +25,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/commandinfoprovider.hxx>

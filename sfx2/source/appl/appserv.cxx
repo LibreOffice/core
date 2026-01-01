@@ -73,6 +73,7 @@
 #include <osl/file.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/themecolors.hxx>
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/securityoptions.hxx>

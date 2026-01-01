@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/gen.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/unohelp.hxx>

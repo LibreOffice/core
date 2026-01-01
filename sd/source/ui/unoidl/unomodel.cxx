@@ -86,6 +86,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

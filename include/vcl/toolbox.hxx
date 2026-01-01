@@ -23,8 +23,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
-#include <vcl/image.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/toolboxid.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/degree.hxx>
@@ -34,7 +32,9 @@
 #include <vector>
 
 namespace com::sun::star::frame { class XFrame; }
+namespace vcl { class KeyCode; }
 
+class Image;
 class Timer;
 struct ImplToolItem;
 struct ImplToolBoxPrivateData;

@@ -30,6 +30,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/help.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>

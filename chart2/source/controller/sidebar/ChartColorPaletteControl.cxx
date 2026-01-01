@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>

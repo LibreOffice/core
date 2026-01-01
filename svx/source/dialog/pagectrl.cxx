@@ -22,6 +22,8 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
+#include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/pagectrl.hxx>

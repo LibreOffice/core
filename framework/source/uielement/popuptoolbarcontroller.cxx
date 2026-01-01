@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

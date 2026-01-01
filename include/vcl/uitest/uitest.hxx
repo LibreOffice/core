@@ -11,11 +11,12 @@
 #define INCLUDED_VCL_UITEST_UITEST_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class UIObject;

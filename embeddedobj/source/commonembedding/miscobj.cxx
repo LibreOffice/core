@@ -42,6 +42,7 @@
 #include <comphelper/DirectoryHelper.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>

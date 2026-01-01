@@ -21,6 +21,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/wintypes.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <svx/fmsrccfg.hxx>

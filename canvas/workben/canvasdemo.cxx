@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>

@@ -22,6 +22,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 
 ReloadEditableQueryBox::ReloadEditableQueryBox(weld::Window* pParent, const std::locale& rResLocale,
                                                const OUString& rMessage)

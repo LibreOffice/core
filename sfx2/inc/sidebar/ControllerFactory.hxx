@@ -25,6 +25,7 @@ namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XToolbarController; }
+namespace com::sun::star::lang { class XComponent; }
 
 class ToolBox;
 

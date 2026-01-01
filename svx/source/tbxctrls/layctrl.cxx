@@ -34,6 +34,7 @@
 #include <tools/mapunit.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 // namespaces
 using namespace ::com::sun::star::uno;

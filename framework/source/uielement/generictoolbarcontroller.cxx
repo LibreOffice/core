@@ -21,12 +21,14 @@
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/image.hxx>
 #include <svl/imageitm.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>

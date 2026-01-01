@@ -23,6 +23,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <svtools/toolboxcontroller.hxx>

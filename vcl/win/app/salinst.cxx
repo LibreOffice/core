@@ -35,6 +35,7 @@
 
 #include <dndhelper.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>

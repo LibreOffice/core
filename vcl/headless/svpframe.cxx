@@ -28,6 +28,7 @@
 #include <salsys.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
+#include <vcl/keycodes.hxx>
 
 #ifndef IOS
 #include <cairo.h>

@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/wintypes.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>

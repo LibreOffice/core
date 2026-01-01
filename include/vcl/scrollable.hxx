@@ -19,9 +19,10 @@
 
 #pragma once
 
-#include <tools/gen.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
+
+class Range;
 
 class VCL_DLLPUBLIC Scrollable
 {

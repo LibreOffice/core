@@ -22,6 +22,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 
 AlreadyOpenQueryBox::AlreadyOpenQueryBox(weld::Window* pParent, const std::locale& rLocale, const OUString& rMessage, bool bIsStoring)
     : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE, rMessage))

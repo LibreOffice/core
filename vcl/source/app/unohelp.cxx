@@ -28,6 +28,7 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 
 using namespace ::com::sun::star;

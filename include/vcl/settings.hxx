@@ -23,8 +23,7 @@
 #include <config_options.h>
 
 #include <vcl/dllapi.h>
-#include <vcl/themecolors.hxx>
-#include <tools/color.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -33,6 +32,7 @@
 #include <vector>
 
 class Bitmap;
+class Color;
 class LanguageTag;
 class SvtSysLocale;
 
@@ -43,6 +43,7 @@ struct ImplHelpData;
 struct ImplStyleData;
 struct ImplAllSettingsData;
 enum class ConfigurationHints;
+enum class AppearanceMode;
 
 namespace vcl {
     class Font;

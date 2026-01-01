@@ -23,10 +23,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/gen.hxx>
 #include <tools/degree.hxx>
 
-#include <vcl/glyphitem.hxx>
 #include <vcl/dllapi.h>
 
 class LogicalFontInstance;
@@ -34,6 +32,9 @@ namespace vcl::text { class ImplLayoutArgs; }
 namespace basegfx { class BColor; }
 class SalGraphics;
 class GlyphItem;
+class SalLayoutGlyphs;
+class SalLayoutGlyphsImpl;
+namespace tools { class Rectangle; }
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units

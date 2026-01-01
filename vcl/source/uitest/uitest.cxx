@@ -19,6 +19,7 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 bool UITest::executeCommand(const OUString& rCommand)
 {

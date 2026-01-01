@@ -25,6 +25,7 @@
 
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star;
 using namespace css::uno;

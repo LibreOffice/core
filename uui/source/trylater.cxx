@@ -20,6 +20,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 #include <strings.hrc>
 #include "trylater.hxx"
 

@@ -12,9 +12,13 @@
 #include <utility>
 #include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/test/TestResult.hxx>
 
 #include <vector>
+
+namespace vcl::test
+{
+enum class TestResult;
+}
 
 class VCL_PLUGIN_PUBLIC VclTestResult
 {

@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vcllayout.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/status.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>

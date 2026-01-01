@@ -20,19 +20,25 @@
 #ifndef INCLUDED_VCL_UNOHELP_HXX
 #define INCLUDED_VCL_UNOHELP_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <tools/fontenum.hxx>
-#include <tools/gen.hxx>
 #include <vcl/dllapi.h>
+
+class Point;
+class PointTemplateBase;
+class RectangleTemplateBase;
+class Size;
 
 namespace com::sun::star::i18n {
     class XBreakIterator;
     class XCharacterClassification;
 }
+namespace com::sun::star::awt { enum class FontSlant; }
+namespace com::sun::star::awt { struct Point; }
+namespace com::sun::star::awt { struct Rectangle; }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::uno { template <typename> class Reference; }
+
+namespace tools { class Rectangle; }
 
 namespace vcl::unohelper
 {

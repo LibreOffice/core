@@ -52,6 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/wintypes.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/property.hxx>
