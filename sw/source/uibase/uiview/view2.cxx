@@ -1754,7 +1754,7 @@ void SwView::Execute(SfxRequest &rReq)
                 for (size_t i = 0, nSize = vLevelOutlineNodes.size(); i < nSize; i++)
                 {
                     // Find the position that the sorted node is at in the unsorted vector.
-                    // This is the postition of the node in the unsorted vector that is used for the start of
+                    // This is the position of the node in the unsorted vector that is used for the start of
                     // the range of nodes to be moved in this iteration.
                     size_t j = 0;
                     for (; j < nSize; j++)
