@@ -828,9 +828,9 @@ SwXDocumentIndex::setPropertyValue(
             //this is for items only
             if (WID_PRIMARY_KEY > pEntry->nWID)
             {
-                const SwAttrSet& rSet =
+                const SwAttrSet* pSet =
                     SwDoc::GetTOXBaseAttrSet(rTOXBase);
-                SfxItemSet aAttrSet(rSet);
+                SfxItemSet aAttrSet(*pSet);
                 m_pImpl->m_rPropSet.setPropertyValue(
                         rPropertyName, rValue, aAttrSet);
 
@@ -1195,10 +1195,11 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 //this is for items only
                 if(WID_PRIMARY_KEY > pEntry->nWID)
                 {
-                    const SwAttrSet& rSet =
-                        SwDoc::GetTOXBaseAttrSet(*pTOXBase);
-                    aRet = m_pImpl->m_rPropSet.getPropertyValue(
-                            rPropertyName, rSet);
+                    if (const SwAttrSet* pSet = SwDoc::GetTOXBaseAttrSet(*pTOXBase))
+                    {
+                        aRet = m_pImpl->m_rPropSet.getPropertyValue(
+                                rPropertyName, *pSet);
+                    }
                 }
         }
     }
