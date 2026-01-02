@@ -50,10 +50,10 @@ portrait or landscape, layout)
 class SVX_DLLPUBLIC SvxPageItem final : public SfxPoolItem
 {
 private:
-    OUString            aDescName;          // name of the template
-    SvxNumType          eNumType;
-    bool                bLandscape;         // Portrait / Landscape
-    SvxPageUsage        eUse;               // Layout
+    OUString            m_aDescName;          // name of the template
+    SvxNumType          m_eNumType;
+    bool                m_bLandscape;         // Portrait / Landscape
+    SvxPageUsage        m_eUse;               // Layout
 
 public:
 
@@ -76,18 +76,18 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     // orientation
-    SvxPageUsage    GetPageUsage() const                { return eUse;       }
-    void            SetPageUsage(SvxPageUsage eU)       { eUse= eU;          }
+    SvxPageUsage    GetPageUsage() const                { return m_eUse;       }
+    void            SetPageUsage(SvxPageUsage eU)       { m_eUse= eU;          }
 
-    bool            IsLandscape() const                 { return bLandscape; }
-    void            SetLandscape(bool bL)               { bLandscape = bL;   }
+    bool            IsLandscape() const                 { return m_bLandscape; }
+    void            SetLandscape(bool bL)               { m_bLandscape = bL;   }
 
     // enumeration
-    SvxNumType      GetNumType() const                  { return eNumType;   }
-    void            SetNumType(SvxNumType eNum)         { eNumType = eNum;   }
+    SvxNumType      GetNumType() const                  { return m_eNumType;   }
+    void            SetNumType(SvxNumType eNum)         { m_eNumType = eNum;   }
 
     // name of the descriptor
-    void            SetDescName(const OUString& rStr)   { aDescName = rStr;  }
+    void            SetDescName(const OUString& rStr)   { m_aDescName = rStr;  }
 };
 
 

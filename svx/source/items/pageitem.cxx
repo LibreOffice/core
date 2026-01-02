@@ -43,9 +43,9 @@ SfxPoolItem* SvxPageItem::CreateDefault() { return new SvxPageItem(TypedWhichId<
 SvxPageItem::SvxPageItem( const TypedWhichId<SvxPageItem> nId )
     : SfxPoolItem( nId ),
 
-    eNumType    ( SVX_NUM_ARABIC ),
-    bLandscape  ( false ),
-    eUse        ( SvxPageUsage::All )
+    m_eNumType    ( SVX_NUM_ARABIC ),
+    m_bLandscape  ( false ),
+    m_eUse        ( SvxPageUsage::All )
 {
 }
 
@@ -53,9 +53,9 @@ SvxPageItem::SvxPageItem( const TypedWhichId<SvxPageItem> nId )
 SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     : SfxPoolItem( rItem )
 {
-    eNumType    = rItem.eNumType;
-    bLandscape  = rItem.bLandscape;
-    eUse        = rItem.eUse;
+    m_eNumType    = rItem.m_eNumType;
+    m_bLandscape  = rItem.m_bLandscape;
+    m_eUse        = rItem.m_eUse;
 }
 
 SvxPageItem::~SvxPageItem() {}
@@ -71,9 +71,9 @@ bool SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     const SvxPageItem& rItem = static_cast<const SvxPageItem&>(rAttr);
-    return ( eNumType   == rItem.eNumType   &&
-             bLandscape == rItem.bLandscape &&
-             eUse       == rItem.eUse );
+    return ( m_eNumType   == rItem.m_eNumType   &&
+             m_bLandscape == rItem.m_bLandscape &&
+             m_eUse       == rItem.m_eUse );
 }
 
 static OUString GetUsageText( const SvxPageUsage eU )
@@ -133,16 +133,16 @@ bool SvxPageItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            if ( !aDescName.isEmpty() )
+            if ( !m_aDescName.isEmpty() )
             {
-                rText = aDescName + cpDelimTmp;
+                rText = m_aDescName + cpDelimTmp;
             }
-            rText += GetNumberingDescription(eNumType) + cpDelimTmp;
-            if ( bLandscape )
+            rText += GetNumberingDescription(m_eNumType) + cpDelimTmp;
+            if ( m_bLandscape )
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_FALSE);
-            OUString aUsageText = GetUsageText( eUse );
+            OUString aUsageText = GetUsageText( m_eUse );
             if (!aUsageText.isEmpty())
             {
                 rText += cpDelimTmp + aUsageText;
@@ -152,16 +152,16 @@ bool SvxPageItem::GetPresentation
         case SfxItemPresentation::Complete:
         {
             rText += SvxResId(RID_SVXITEMS_PAGE_COMPLETE);
-            if ( !aDescName.isEmpty() )
+            if ( !m_aDescName.isEmpty() )
             {
-                rText += aDescName + cpDelimTmp;
+                rText += m_aDescName + cpDelimTmp;
             }
-            rText += GetNumberingDescription(eNumType) + cpDelimTmp;
-            if ( bLandscape )
+            rText += GetNumberingDescription(m_eNumType) + cpDelimTmp;
+            if ( m_bLandscape )
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_FALSE);
-            OUString aUsageText = GetUsageText( eUse );
+            OUString aUsageText = GetUsageText( m_eUse );
             if (!aUsageText.isEmpty())
             {
                 rText += cpDelimTmp + aUsageText;
@@ -183,16 +183,16 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_PAGE_NUMTYPE:
         {
             //! constants aren't in IDLs any more ?!?
-            rVal <<= static_cast<sal_Int16>( eNumType );
+            rVal <<= static_cast<sal_Int16>( m_eNumType );
         }
         break;
         case MID_PAGE_ORIENTATION:
-            rVal <<= bLandscape;
+            rVal <<= m_bLandscape;
         break;
         case MID_PAGE_LAYOUT     :
         {
             style::PageStyleLayout eRet;
-            switch(eUse)
+            switch(m_eUse)
             {
                 case SvxPageUsage::Left  : eRet = style::PageStyleLayout_LEFT;      break;
                 case SvxPageUsage::Right : eRet = style::PageStyleLayout_RIGHT;     break;
@@ -220,11 +220,11 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nValue))
                 return false;
 
-            eNumType = static_cast<SvxNumType>(nValue);
+            m_eNumType = static_cast<SvxNumType>(nValue);
         }
         break;
         case MID_PAGE_ORIENTATION:
-            bLandscape = Any2Bool(rVal);
+            m_bLandscape = Any2Bool(rVal);
         break;
         case MID_PAGE_LAYOUT     :
         {
@@ -238,10 +238,10 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             switch( eLayout )
             {
-                case style::PageStyleLayout_LEFT    : eUse = SvxPageUsage::Left ; break;
-                case style::PageStyleLayout_RIGHT   : eUse = SvxPageUsage::Right; break;
-                case style::PageStyleLayout_ALL     : eUse = SvxPageUsage::All  ; break;
-                case style::PageStyleLayout_MIRRORED: eUse = SvxPageUsage::Mirror;break;
+                case style::PageStyleLayout_LEFT    : m_eUse = SvxPageUsage::Left ; break;
+                case style::PageStyleLayout_RIGHT   : m_eUse = SvxPageUsage::Right; break;
+                case style::PageStyleLayout_ALL     : m_eUse = SvxPageUsage::All  ; break;
+                case style::PageStyleLayout_MIRRORED: m_eUse = SvxPageUsage::Mirror;break;
                 default: ;//prevent warning
             }
         }
