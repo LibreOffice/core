@@ -3208,9 +3208,13 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                       pFly->GetRefPoint().Y() );
 
     if ( bUseFlyAscent )
-         nAscent = std::abs( int( bTextFrameVertical ?
+    {
+        // Lock m_pFrame to avoid m_pCurr getting deleted
+        TextFrameLockGuard aGuard(m_pFrame);
+        nAscent = std::abs( int( bTextFrameVertical ?
                                                   pFly->GetRelPos().X() :
                                                   pFly->GetRelPos().Y() ) );
+    }
 
     // Check if be prefer to use the ascent of the last portion:
     if ( IsQuick() ||
