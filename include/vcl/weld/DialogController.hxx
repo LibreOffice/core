@@ -17,7 +17,6 @@
 
 namespace weld
 {
-class Assistant;
 class Container;
 class Dialog;
 class MessageDialog;
@@ -84,19 +83,6 @@ public:
     void set_secondary_text(const OUString& rText);
     OUString get_secondary_text() const;
     void set_default_response(int nResponse);
-};
-
-class VCL_DLLPUBLIC AssistantController : public DialogController
-{
-protected:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Assistant> m_xAssistant;
-
-public:
-    SAL_DLLPRIVATE AssistantController(weld::Widget* pParent, const OUString& rUIFile,
-                                       const OUString& rDialogId);
-    virtual Dialog* getDialog() override;
-    SAL_DLLPRIVATE virtual ~AssistantController() override;
 };
 }
 
