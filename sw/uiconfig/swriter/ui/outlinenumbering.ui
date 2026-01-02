@@ -294,7 +294,7 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="numbering">
+              <object class="GtkLabel" id="numberingLb">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="outlinenumbering|numbering">Numbering</property>
@@ -341,7 +341,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="position">
+              <object class="GtkLabel" id="positionLb">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="outlinenumbering|position">Position</property>
