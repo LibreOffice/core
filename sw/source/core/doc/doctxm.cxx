@@ -491,13 +491,17 @@ SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
     return nullptr;
 }
 
-const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase)
+const SwAttrSet* SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase)
 {
-    assert( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) && "no TOXBaseSection!" );
-    const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
-    SwSectionFormat const * pFormat = rTOXSect.GetFormat();
+    const SwTOXBaseSection* pTOXSect = dynamic_cast<const SwTOXBaseSection*>(&rTOXBase);
+    if (!pTOXSect)
+    {
+        SAL_WARN("sw", "TOXBase is not a SwTOXBaseSection");
+        return nullptr;
+    }
+    SwSectionFormat const * pFormat = pTOXSect->GetFormat();
     assert(pFormat && "invalid TOXBaseSection!");
-    return pFormat->GetAttrSet();
+    return &pFormat->GetAttrSet();
 }
 
 const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
