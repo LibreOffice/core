@@ -10,8 +10,8 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace weld
 {
