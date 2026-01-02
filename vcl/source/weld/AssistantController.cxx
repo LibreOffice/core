@@ -9,7 +9,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld/AssistantController.hxx>
-#include <vcl/weld/weld.hxx>
 
 namespace weld
 {
@@ -20,7 +19,7 @@ AssistantController::AssistantController(weld::Widget* pParent, const OUString& 
 {
 }
 
-Dialog* AssistantController::getDialog() { return m_xAssistant.get(); }
+Assistant* AssistantController::getDialog() { return m_xAssistant.get(); }
 
 AssistantController::~AssistantController() {}
 }

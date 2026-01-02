@@ -11,11 +11,10 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace weld
 {
-class Assistant;
-
 class VCL_DLLPUBLIC AssistantController : public DialogController
 {
 protected:
@@ -25,7 +24,7 @@ protected:
 public:
     SAL_DLLPRIVATE AssistantController(weld::Widget* pParent, const OUString& rUIFile,
                                        const OUString& rDialogId);
-    virtual Dialog* getDialog() override;
+    virtual Assistant* getDialog() override;
     SAL_DLLPRIVATE virtual ~AssistantController() override;
 };
 }
