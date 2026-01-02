@@ -957,7 +957,7 @@ public:
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet );
     SW_DLLPUBLIC static SwTOXBase* GetCurTOX( const SwPosition& rPos );
-    static const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX);
+    static const SwAttrSet* GetTOXBaseAttrSet(const SwTOXBase& rTOX);
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes );
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
