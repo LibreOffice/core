@@ -585,8 +585,8 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
 {
 #if !defined ANDROID && !defined MACOSX
    static void (*clear_cache)(unsigned char const *, unsigned char const *)
-       = (void (*)(unsigned char const *, unsigned char const *)) dlsym(
-           RTLD_DEFAULT, "__clear_cache");
+       = reinterpret_cast<void (*)(unsigned char const *, unsigned char const *)>(dlsym(
+           RTLD_DEFAULT, "__clear_cache"));
    (*clear_cache)(begin, end);
 #else
     // GCC clarified with
