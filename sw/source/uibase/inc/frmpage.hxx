@@ -25,6 +25,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <svx/swframeexample.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <swtypes.hxx>
 #include "bmpwin.hxx"

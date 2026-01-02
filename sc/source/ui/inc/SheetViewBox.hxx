@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <SheetViewTypes.hxx>
 
 /** Box / container for the combobox for showing / selecting the sheet view */

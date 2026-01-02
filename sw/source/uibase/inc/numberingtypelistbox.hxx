@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMBERINGTYPELISTBOX_HXX
 
 #include <memory>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <swdllapi.h>
 #include <o3tl/typed_flags_set.hxx>

@@ -10,6 +10,7 @@
 
 #include <config_zxing.h>
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 

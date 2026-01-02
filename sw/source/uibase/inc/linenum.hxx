@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LINENUM_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include "numberingtypelistbox.hxx"
 

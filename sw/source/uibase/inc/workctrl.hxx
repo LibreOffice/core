@@ -22,6 +22,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 class Menu;

@@ -25,6 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/customweld.hxx>
 
 #include <ElementsDockingWindow.hxx>

@@ -34,6 +34,7 @@
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include "general.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"

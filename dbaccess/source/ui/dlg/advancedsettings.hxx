@@ -21,6 +21,9 @@
 
 #include "adminpages.hxx"
 #include <dsmeta.hxx>
+
+#include <vcl/weld/ComboBox.hxx>
+
 #include <vector>
 
 namespace dbaui

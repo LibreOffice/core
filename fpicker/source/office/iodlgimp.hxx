@@ -21,6 +21,7 @@
 #include "PlacesListBox.hxx"
 
 #include <vcl/idle.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 #include <deque>
 #include <memory>

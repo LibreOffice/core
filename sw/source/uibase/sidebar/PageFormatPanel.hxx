@@ -28,6 +28,7 @@
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/relfld.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 
 #include <memory>

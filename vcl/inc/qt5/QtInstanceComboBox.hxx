@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/ComboBox.hxx>
+
 #include <QtWidgets/QComboBox>
 
 class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBox

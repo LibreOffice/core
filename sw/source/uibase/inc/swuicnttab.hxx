@@ -23,6 +23,7 @@
 #include <svx/langbox.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/TreeView.hxx>

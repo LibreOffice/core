@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>

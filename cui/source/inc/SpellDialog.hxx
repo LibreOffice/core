@@ -28,6 +28,7 @@
 #include <svl/undo.hxx>
 #include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SPACINGLISTBOXHELPER_HXX
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 enum class SpacingType
 {

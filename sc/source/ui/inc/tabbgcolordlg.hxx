@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/PaletteManager.hxx>

@@ -22,6 +22,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/customweld.hxx>
 
 class ValueSet;

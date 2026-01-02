@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 enum class SdrEscapeDirection;

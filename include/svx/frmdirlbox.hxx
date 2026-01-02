@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_FRMDIRLBOX_HXX
 #define INCLUDED_SVX_FRMDIRLBOX_HXX
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <editeng/frmdir.hxx>
 #include <svx/svxdllapi.h>

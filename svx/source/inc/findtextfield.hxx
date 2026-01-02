@@ -21,6 +21,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

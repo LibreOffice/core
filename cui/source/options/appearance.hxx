@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>

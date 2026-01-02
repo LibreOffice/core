@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 class SvNumberFormatter;
 

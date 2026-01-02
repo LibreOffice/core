@@ -24,6 +24,7 @@
 #include <editeng/colritem.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>

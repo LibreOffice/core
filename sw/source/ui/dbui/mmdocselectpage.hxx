@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMDOCSELECTPAGE_HXX
 
 #include <vcl/wizardmachine.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SwMailMergeWizard;

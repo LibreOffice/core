@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/charclass.hxx>
 

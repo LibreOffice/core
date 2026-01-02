@@ -39,6 +39,7 @@
 #include <i18nutil/unicode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 

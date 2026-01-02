@@ -44,6 +44,7 @@
 #include <vcl/errinf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -20,6 +20,8 @@
 #pragma once
 
 #include <i18nutil/searchopt.hxx>
+#include <vcl/weld/ComboBox.hxx>
+
 #include "cfgutil.hxx"
 
 class SaveInData;

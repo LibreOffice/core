@@ -25,6 +25,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 

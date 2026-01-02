@@ -34,6 +34,7 @@
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 
 class ToolbarUnoDispatcher;

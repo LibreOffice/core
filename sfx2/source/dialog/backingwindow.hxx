@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 #include <recentdocsview.hxx>
 #include <templatedefaultview.hxx>

@@ -14,6 +14,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include "ChartSidebarModifyListener.hxx"
 
 namespace com::sun::star::util { class XModifyListener; }

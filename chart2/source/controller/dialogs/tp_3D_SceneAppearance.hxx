@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace chart { class ControllerLockHelper; }

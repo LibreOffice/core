@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/roadmapwizardmachine.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 #define ITEM_ID_INTRODUCTION            0
 #define ITEM_ID_SLIDES                  1

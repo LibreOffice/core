@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include "CustomAnimationList.hxx"
 #include <misc/scopelock.hxx>

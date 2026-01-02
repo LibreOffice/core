@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <memory>

@@ -22,6 +22,7 @@
 
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 
 // footnote settings TabPage

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 class ScNumberFormat final : public InterimItemWindow
 {

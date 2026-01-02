@@ -27,6 +27,7 @@
 #include "fpdialogbase.hxx"
 #include "pickercallbacks.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 enum class PropFlags {
     Unknown           =     -1, // used as an error sentinel
