@@ -629,6 +629,13 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogCon
 
     m_xHoriMirrorCB->connect_toggled(LINK(this, SvxSwPosSizeTabPage, MirrorHdl));
     m_xPositionCB->connect_toggled(LINK(this, SvxSwPosSizeTabPage, ProtectHdl));
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Hide these, they can't be saved to OOXML.
+        m_xToPageRB->hide();
+        m_xToFrameRB->hide();
+    }
 }
 
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
