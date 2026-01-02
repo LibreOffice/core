@@ -54,6 +54,9 @@ using namespace ::com::sun::star;
 
 namespace {
 
+constexpr auto NUMBERING_TAB = u"numbering"_ustr;
+constexpr auto POSITION_TAB = u"position"_ustr;
+
 class SwNumNamesDlg : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Entry> m_xFormEdit;
@@ -165,9 +168,9 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
         SetActNumLevel(nTmp < 0 ? USHRT_MAX : (1 << nTmp));
     }
 
-    AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_NUMBERING.aLabel),
+    AddTabPage(NUMBERING_TAB, TabResId(RID_TAB_NUMBERING.aLabel),
                &SwOutlineSettingsTabPage::Create, RID_L + RID_TAB_NUMBERING.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), &SwNumPositionTabPage::Create,
+    AddTabPage(POSITION_TAB, TabResId(RID_TAB_POSITION.aLabel), &SwNumPositionTabPage::Create,
                RID_L + RID_TAB_POSITION.sIconName);
 
     UIName sHeadline;
@@ -205,12 +208,12 @@ SwOutlineTabDialog::~SwOutlineTabDialog()
 
 void SwOutlineTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& rPage)
 {
-    if (rPageId == "position")
+    if (rPageId == POSITION_TAB)
     {
         static_cast<SwNumPositionTabPage&>(rPage).SetWrtShell(&m_rWrtSh);
         static_cast<SwNumPositionTabPage&>(rPage).SetOutlineTabDialog(this);
     }
-    else if (rPageId == "numbering")
+    else if (rPageId == NUMBERING_TAB)
     {
         static_cast<SwOutlineSettingsTabPage&>(rPage).SetWrtShell(&m_rWrtSh);
     }
@@ -290,7 +293,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OUString&, rIdent, void)
         {
             pRules->ResetNumRule(m_rWrtSh, *m_xNumRule);
             m_xNumRule->SetRuleType( OUTLINE_RULE );
-            SfxTabPage* pOutlinePage = GetTabPage(u"numbering");
+            SfxTabPage* pOutlinePage = GetTabPage(NUMBERING_TAB);
             assert(pOutlinePage);
             static_cast<SwOutlineSettingsTabPage*>(pOutlinePage)->SetNumRule(m_xNumRule.get());
         }
@@ -896,7 +899,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     if (m_pActNum)
     {
         tools::Long nWidthRelation = 30; // chapter dialog
-        if(m_nPageWidth)
+        if (m_nPageWidth && aSize.Width())
         {
             nWidthRelation = m_nPageWidth / aSize.Width();
             if(m_bPosition)
