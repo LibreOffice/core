@@ -22,6 +22,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 
 #include <svx/strings.hrc>

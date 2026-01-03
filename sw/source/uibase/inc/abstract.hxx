@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class SwInsertAbstractDlg final : public SfxDialogController
 {

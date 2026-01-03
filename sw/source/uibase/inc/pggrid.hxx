@@ -21,6 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include "colex.hxx"
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/colorbox.hxx>

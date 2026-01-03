@@ -28,6 +28,7 @@
 #include <sfx2/navigat.hxx>
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include "conttree.hxx"
 #include <ndarr.hxx>
 #include <memory>

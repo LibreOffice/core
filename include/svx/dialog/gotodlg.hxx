@@ -21,6 +21,7 @@
 
 #include <svx/svxdllapi.h>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace svx

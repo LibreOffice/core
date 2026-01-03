@@ -23,6 +23,7 @@
 #include <svl/itemset.hxx>
 #include <svx/zoom_def.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SvxZoomDialog : public SfxDialogController

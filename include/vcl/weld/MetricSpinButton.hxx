@@ -11,7 +11,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/fldunit.hxx>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 namespace weld
 {

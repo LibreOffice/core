@@ -591,6 +591,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/weld/IconView \
     vcl/source/weld/ItemView \
     vcl/source/weld/MetricSpinButton \
+    vcl/source/weld/SpinButton \
     vcl/source/weld/TextView \
     vcl/source/weld/TreeView \
     vcl/source/weld/weldutils \

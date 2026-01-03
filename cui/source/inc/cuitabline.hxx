@@ -28,6 +28,7 @@
 #include <svx/xlnasit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dlgctrl.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 
 enum class PageType;

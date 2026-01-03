@@ -22,6 +22,7 @@
 #include "TypeInfo.hxx"
 #include "WTabPage.hxx"
 
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 class SvStream;

@@ -16,6 +16,8 @@
 #include <SparklineGroup.hxx>
 #include <SparklineAttributes.hxx>
 
+#include <vcl/weld/SpinButton.hxx>
+
 class ColorListBox;
 
 namespace sc

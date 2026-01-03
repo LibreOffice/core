@@ -23,6 +23,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include "bibshortcuthandler.hxx"
 
 

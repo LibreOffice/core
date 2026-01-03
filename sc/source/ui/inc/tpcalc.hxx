@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include "editfield.hxx"
 #include <config_feature_opencl.h>
 #if HAVE_FEATURE_OPENCL

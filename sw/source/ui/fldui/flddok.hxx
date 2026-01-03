@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDDOK_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 #include <numfmtlb.hxx>
 #include "fldpage.hxx"

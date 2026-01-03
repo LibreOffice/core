@@ -21,6 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 #include <map>
 #include <set>

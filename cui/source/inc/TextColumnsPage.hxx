@@ -13,6 +13,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 #include <memory>
 

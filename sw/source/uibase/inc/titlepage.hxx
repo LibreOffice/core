@@ -12,6 +12,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 #include <fmtpdsc.hxx>
 

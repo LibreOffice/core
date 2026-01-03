@@ -12,6 +12,8 @@
 #include "QtDoubleSpinBox.hxx"
 #include "QtInstanceEntry.hxx"
 
+#include <vcl/weld/SpinButton.hxx>
+
 #include <QtWidgets/QSpinBox>
 
 #include <optional>

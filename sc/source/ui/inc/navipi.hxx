@@ -25,6 +25,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <rangeutl.hxx>
 #include "content.hxx"

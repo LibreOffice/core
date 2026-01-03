@@ -22,6 +22,7 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/measctrl.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class SdrView;
 

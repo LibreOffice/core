@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 namespace sc::sidebar {
 
