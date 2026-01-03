@@ -355,15 +355,33 @@ void QtInstanceComboBox::paste_entry_clipboard()
 
 void QtInstanceComboBox::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
-void QtInstanceComboBox::set_entry_font(const vcl::Font&)
+void QtInstanceComboBox::set_entry_font(const vcl::Font& rFont)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QLineEdit* pEdit = m_pComboBox->lineEdit())
+        {
+            QtInstanceEntry aEntry(pEdit);
+            aEntry.set_font(rFont);
+        }
+    });
 }
 
 vcl::Font QtInstanceComboBox::get_entry_font()
 {
-    assert(false && "Not implemented yet");
-    return vcl::Font();
+    SolarMutexGuard g;
+
+    vcl::Font aFont;
+    GetQtInstance().RunInMainThread([&] {
+        if (QLineEdit* pEdit = m_pComboBox->lineEdit())
+        {
+            QtInstanceEntry aEntry(pEdit);
+            aFont = aEntry.get_font();
+        }
+    });
+
+    return aFont;
 }
 
 bool QtInstanceComboBox::get_popup_shown() const
