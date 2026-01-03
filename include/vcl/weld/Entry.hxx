@@ -38,8 +38,6 @@ public:
     // The maximum length of the entry. Use 0 for no maximum
     virtual void set_max_length(int nChars) = 0;
 
-    virtual void replace_selection(const OUString& rText) = 0;
-
     // nCursorPos can be -1 to set to the end
     void set_position(int nCursorPos);
 

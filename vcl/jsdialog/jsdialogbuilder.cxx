@@ -1234,9 +1234,9 @@ void JSEntry::do_set_text(const OUString& rText)
 
 void JSEntry::set_text_without_notify(const OUString& rText) { SalInstanceEntry::set_text(rText); }
 
-void JSEntry::replace_selection(const OUString& rText)
+void JSEntry::do_replace_selection(const OUString& rText)
 {
-    SalInstanceEntry::replace_selection(rText);
+    SalInstanceEntry::do_replace_selection(rText);
     sendUpdate();
 }
 

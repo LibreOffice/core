@@ -13168,7 +13168,7 @@ public:
         return gtk_editable_get_selection_bounds(m_pEditable, &rStartPos, &rEndPos);
     }
 
-    virtual void replace_selection(const OUString& rText) override
+    virtual void do_replace_selection(const OUString& rText) override
     {
         disable_notify_events();
         gtk_editable_delete_selection(m_pEditable);

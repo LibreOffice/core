@@ -635,7 +635,7 @@ public:
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
-    virtual void replace_selection(const OUString& rText) override;
+    virtual void do_replace_selection(const OUString& rText) override;
 
     virtual void do_set_position(int nCursorPos) override;
 

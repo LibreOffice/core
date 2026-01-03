@@ -23,6 +23,7 @@ private:
 protected:
     virtual void do_set_text(const OUString& rText) = 0;
     virtual void do_select_region(int nStartPos, int nEndPos) = 0;
+    virtual void do_replace_selection(const OUString& rText) = 0;
 
 public:
     void set_text(const OUString& rText);
@@ -30,6 +31,8 @@ public:
 
     // if nStartPos or nEndPos is -1 the max available text pos will be used
     void select_region(int nStartPos, int nEndPos);
+
+    void replace_selection(const OUString& rText);
 
     // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;

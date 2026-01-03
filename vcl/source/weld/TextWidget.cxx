@@ -24,6 +24,13 @@ void TextWidget::select_region(int nStartPos, int nEndPos)
     do_select_region(nStartPos, nEndPos);
     enable_notify_events();
 }
+
+void TextWidget::replace_selection(const OUString& rText)
+{
+    disable_notify_events();
+    do_replace_selection(rText);
+    enable_notify_events();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

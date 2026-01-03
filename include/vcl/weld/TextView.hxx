@@ -34,11 +34,7 @@ protected:
 
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
-    virtual void do_replace_selection(const OUString& rText) = 0;
-
 public:
-    void replace_selection(const OUString& rText);
-
     virtual void set_monospace(bool bMonospace) = 0;
     // The maximum length of the entry. Use 0 for no maximum
     virtual void set_max_length(int nChars) = 0;

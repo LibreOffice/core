@@ -11,13 +11,6 @@
 
 namespace weld
 {
-void weld::TextView::replace_selection(const OUString& rText)
-{
-    disable_notify_events();
-    do_replace_selection(rText);
-    enable_notify_events();
-}
-
 int weld::TextView::get_height_rows(int nRows) const
 {
     // can improve this if needed

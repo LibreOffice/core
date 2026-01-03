@@ -3321,7 +3321,7 @@ bool SalInstanceEntry::get_selection_bounds(int& rStartPos, int& rEndPos)
     return rSelection.Len();
 }
 
-void SalInstanceEntry::replace_selection(const OUString& rText)
+void SalInstanceEntry::do_replace_selection(const OUString& rText)
 {
     m_xEntry->ReplaceSelected(rText);
 }
