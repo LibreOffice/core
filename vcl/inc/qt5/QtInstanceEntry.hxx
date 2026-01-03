@@ -46,7 +46,6 @@ public:
     virtual void set_font(const vcl::Font& rFont) override;
     virtual void set_font_color(const Color& rColor) override;
 
-    virtual void cut_clipboard() override;
     virtual void paste_clipboard() override;
 
     virtual void set_alignment(TxtAlign eXAlign) override;

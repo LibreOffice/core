@@ -34,6 +34,12 @@ void TextWidget::replace_selection(const OUString& rText)
     enable_notify_events();
 }
 
+void TextWidget::cut_clipboard()
+{
+    copy_clipboard();
+    replace_selection(u""_ustr);
+}
+
 void TextWidget::copy_clipboard()
 {
     int nSelectionStart = 0;

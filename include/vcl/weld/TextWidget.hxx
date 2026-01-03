@@ -53,7 +53,7 @@ public:
     */
     virtual void set_font_color(const Color& rColor) = 0;
 
-    virtual void cut_clipboard() = 0;
+    virtual void cut_clipboard();
     virtual void copy_clipboard();
     virtual void paste_clipboard() = 0;
 
