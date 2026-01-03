@@ -314,11 +314,44 @@ void QtInstanceComboBox::set_entry_editable(bool bEditable)
     GetQtInstance().RunInMainThread([&] { m_pComboBox->setEditable(bEditable); });
 }
 
-void QtInstanceComboBox::cut_entry_clipboard() { assert(false && "Not implemented yet"); }
+void QtInstanceComboBox::cut_entry_clipboard()
+{
+    SolarMutexGuard g;
 
-void QtInstanceComboBox::copy_entry_clipboard() { assert(false && "Not implemented yet"); }
+    GetQtInstance().RunInMainThread([&] {
+        if (QLineEdit* pEdit = m_pComboBox->lineEdit())
+        {
+            QtInstanceEntry aEntry(pEdit);
+            aEntry.cut_clipboard();
+        }
+    });
+}
 
-void QtInstanceComboBox::paste_entry_clipboard() { assert(false && "Not implemented yet"); }
+void QtInstanceComboBox::copy_entry_clipboard()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QLineEdit* pEdit = m_pComboBox->lineEdit())
+        {
+            QtInstanceEntry aEntry(pEdit);
+            aEntry.copy_clipboard();
+        }
+    });
+}
+
+void QtInstanceComboBox::paste_entry_clipboard()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QLineEdit* pEdit = m_pComboBox->lineEdit())
+        {
+            QtInstanceEntry aEntry(pEdit);
+            aEntry.copy_clipboard();
+        }
+    });
+}
 
 void QtInstanceComboBox::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
