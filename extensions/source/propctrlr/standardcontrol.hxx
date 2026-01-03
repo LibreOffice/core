@@ -29,6 +29,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TextView.hxx>
 
 namespace pcr
 {

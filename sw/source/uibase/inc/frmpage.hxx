@@ -27,6 +27,7 @@
 #include <svx/swframeexample.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <swtypes.hxx>
 #include "bmpwin.hxx"
 #include "prcntfld.hxx"

@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/TextView.hxx>
+
 #include <QtWidgets/QPlainTextEdit>
 
 class QtInstanceTextView : public QtInstanceWidget, public virtual weld::TextView

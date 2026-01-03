@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 
 enum class ScScenarioFlags;

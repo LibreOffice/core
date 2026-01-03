@@ -20,6 +20,7 @@
 
 #include <vcl/formatter.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

@@ -16,6 +16,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/TextView.hxx>
 
 // These must match the values in offapi/com/sun/star/frame/InfobarType.idl
 enum class InfobarType

@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <vcl/mnemonic.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <IClipBoardTest.hxx>
 #include "AppTitleWindow.hxx"
 #include <AppElementType.hxx>

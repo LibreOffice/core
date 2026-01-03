@@ -35,6 +35,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <sfx2/tabdlg.hxx>
