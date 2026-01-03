@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Entry.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;

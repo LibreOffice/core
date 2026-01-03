@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <dsntypes.hxx>
 

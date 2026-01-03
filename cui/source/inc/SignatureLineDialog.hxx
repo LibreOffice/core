@@ -12,6 +12,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TextView.hxx>
 
 class SignatureLineDialog : public SignatureLineDialogBase

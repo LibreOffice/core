@@ -22,6 +22,7 @@
 #include "commoncontrol.hxx"
 #include <svtools/inettbc.hxx>
 #include <svl/zforlist.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 
 class SvNumberFormatsSupplierObj;

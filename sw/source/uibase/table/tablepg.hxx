@@ -23,6 +23,7 @@
 #include <swtypes.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 

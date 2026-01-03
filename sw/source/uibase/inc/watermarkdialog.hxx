@@ -11,6 +11,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/colorbox.hxx>

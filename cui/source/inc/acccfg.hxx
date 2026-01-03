@@ -27,6 +27,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <config_features.h>
 #include "cfgutil.hxx"

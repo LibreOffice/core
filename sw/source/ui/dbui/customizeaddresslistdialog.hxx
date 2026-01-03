@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_CUSTOMIZEADDRESSLISTDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

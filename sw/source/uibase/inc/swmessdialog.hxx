@@ -11,6 +11,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SwMessageAndEditDialog : public weld::MessageDialogController

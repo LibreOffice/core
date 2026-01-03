@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 class SwMailMergeConfigItem;

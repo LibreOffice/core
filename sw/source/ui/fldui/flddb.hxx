@@ -25,6 +25,8 @@
 
 #include "fldpage.hxx"
 
+#include <vcl/weld/Entry.hxx>
+
 class SwFieldDBPage : public SwFieldPage
 {
     OUString            m_sOldDBName;

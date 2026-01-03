@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Entry.hxx>
 
 class OptDeeplTabPage : public SfxTabPage
 {

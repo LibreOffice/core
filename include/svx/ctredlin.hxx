@@ -29,6 +29,7 @@
 #include <tools/time.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>

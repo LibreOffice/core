@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Entry.hxx>
+
 #include <QtWidgets/QLineEdit>
 
 class QtInstanceEntry : public QtInstanceWidget, public virtual weld::Entry

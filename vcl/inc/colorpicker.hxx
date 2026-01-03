@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/ColorDialog.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/hexcolorcontrol.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/DialogController.hxx>

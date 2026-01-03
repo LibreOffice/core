@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 
 class KeyEvent;

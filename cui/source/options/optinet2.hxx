@@ -21,6 +21,7 @@
 #include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 
 namespace svx {
     class SecurityOptionsDialog;

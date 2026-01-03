@@ -23,6 +23,7 @@
 #include <svtools/inettbc.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/locktoplevels.hxx>
+#include <vcl/weld/Entry.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/hlnkitem.hxx>

@@ -18,6 +18,7 @@
 #include <sfx2/weldutils.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 namespace sw::sidebar

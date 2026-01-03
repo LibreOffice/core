@@ -21,6 +21,7 @@
 
 #include <svx/weldeditview.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/wizardmachine.hxx>
 #include <mailmergehelper.hxx>

@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
 #include <sfx2/tabdlg.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/Entry.hxx>
 
 class OptLanguageToolTabPage : public SfxTabPage
 {

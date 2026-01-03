@@ -25,6 +25,7 @@
 #include <svx/xtable.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include "sdtreelb.hxx"
 
 #include <vector>

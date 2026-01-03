@@ -19,6 +19,7 @@
 #pragma once
 
 #include <formula/funcutl.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 
 namespace formula

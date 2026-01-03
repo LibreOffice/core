@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>

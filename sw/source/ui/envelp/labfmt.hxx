@@ -24,6 +24,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>

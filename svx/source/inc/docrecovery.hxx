@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>

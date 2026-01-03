@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDREF_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 #include "fldpage.hxx"

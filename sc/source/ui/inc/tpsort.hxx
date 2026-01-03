@@ -26,6 +26,7 @@
 #include <svx/langbox.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 
 #include "sortkeydlg.hxx"

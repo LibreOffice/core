@@ -13,6 +13,7 @@
 #include <sal/config.h>
 #include <sfx2/doctempl.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
