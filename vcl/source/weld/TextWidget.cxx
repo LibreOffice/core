@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld/TextWidget.hxx>
 
@@ -53,6 +54,15 @@ void TextWidget::copy_clipboard()
     const OUString sSelectedText = sText.copy(std::min(nSelectionStart, nSelectionEnd),
                                               std::abs(nSelectionEnd - nSelectionStart));
     vcl::unohelper::TextDataObject::CopyStringTo(sSelectedText, get_clipboard());
+}
+
+void TextWidget::paste_clipboard()
+{
+    TransferableDataHelper aDataHelper
+        = TransferableDataHelper::CreateFromClipboard(get_clipboard());
+    OUString sText;
+    if (aDataHelper.GetString(SotClipboardFormatId::STRING, sText))
+        replace_selection(sText);
 }
 }
 

@@ -55,7 +55,7 @@ public:
 
     virtual void cut_clipboard();
     virtual void copy_clipboard();
-    virtual void paste_clipboard() = 0;
+    virtual void paste_clipboard();
 
     void save_value() { m_sSavedValue = get_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }

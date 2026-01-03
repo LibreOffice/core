@@ -180,8 +180,6 @@ void QtInstanceEntry::set_font(const vcl::Font& rFont) { setFont(rFont); }
 
 void QtInstanceEntry::set_font_color(const Color& rColor) { setFontColor(rColor); }
 
-void QtInstanceEntry::paste_clipboard() { assert(false && "Not implemented yet"); }
-
 void QtInstanceEntry::set_alignment(TxtAlign eXAlign)
 {
     SolarMutexGuard g;

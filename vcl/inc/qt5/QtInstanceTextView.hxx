@@ -40,8 +40,6 @@ public:
     virtual bool can_move_cursor_with_up() const override;
     virtual bool can_move_cursor_with_down() const override;
 
-    virtual void paste_clipboard() override;
-
     virtual void set_alignment(TxtAlign eXAlign) override;
 
     virtual int vadjustment_get_value() const override;
