@@ -128,7 +128,7 @@ module test
                 Struct1 p16;
                 com::sun::star::uno::XInterface p17;
                 com::sun::star::uno::XNamingService p18;
-                // --- Typedef Variants of Above Tyeps ---
+                // --- Typedef Variants of Above Types ---
                 Boolean t1;
                 Byte t2;
                 Short t3;
