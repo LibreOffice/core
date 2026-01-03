@@ -526,6 +526,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
     xContentControlEnum = xContentControlEnumAccess->createEnumeration();
     xTextPortionRange.set(xContentControlEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, xTextPortionRange->getString());
+
+    // tdf#170208: compatibilityMode14 document - emulate table placement
+    // TODO: the first table is also not correctly positioned
+
+    // table2's cell margin (in the first row) is zero, so compat14 table shifts by zero, not .19cm
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
