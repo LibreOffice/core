@@ -20,6 +20,7 @@
 
 #include <vcl/formatter.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>

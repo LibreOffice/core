@@ -25,6 +25,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <tools/link.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>

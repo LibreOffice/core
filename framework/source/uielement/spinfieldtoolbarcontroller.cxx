@@ -32,6 +32,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/FormattedSpinButton.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace ::com::sun::star;
