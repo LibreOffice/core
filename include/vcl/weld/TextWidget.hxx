@@ -54,7 +54,7 @@ public:
     virtual void set_font_color(const Color& rColor) = 0;
 
     virtual void cut_clipboard() = 0;
-    virtual void copy_clipboard() = 0;
+    virtual void copy_clipboard();
     virtual void paste_clipboard() = 0;
 
     void save_value() { m_sSavedValue = get_text(); }

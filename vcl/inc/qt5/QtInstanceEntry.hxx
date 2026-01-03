@@ -47,7 +47,6 @@ public:
     virtual void set_font_color(const Color& rColor) override;
 
     virtual void cut_clipboard() override;
-    virtual void copy_clipboard() override;
     virtual void paste_clipboard() override;
 
     virtual void set_alignment(TxtAlign eXAlign) override;

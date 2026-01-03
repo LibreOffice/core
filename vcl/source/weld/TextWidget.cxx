@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <vcl/unohelp2.hxx>
 #include <vcl/weld/TextWidget.hxx>
 
 namespace weld
@@ -30,6 +32,21 @@ void TextWidget::replace_selection(const OUString& rText)
     disable_notify_events();
     do_replace_selection(rText);
     enable_notify_events();
+}
+
+void TextWidget::copy_clipboard()
+{
+    int nSelectionStart = 0;
+    int nSelectionEnd = 0;
+    if (!get_selection_bounds(nSelectionStart, nSelectionEnd))
+        return;
+
+    const OUString sText = get_text();
+    assert(nSelectionStart >= 0 && nSelectionStart <= sText.getLength() && nSelectionEnd >= 0
+           && nSelectionEnd <= sText.getLength());
+    const OUString sSelectedText = sText.copy(std::min(nSelectionStart, nSelectionEnd),
+                                              std::abs(nSelectionEnd - nSelectionStart));
+    vcl::unohelper::TextDataObject::CopyStringTo(sSelectedText, get_clipboard());
 }
 }
 

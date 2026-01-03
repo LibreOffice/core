@@ -126,8 +126,6 @@ bool QtInstanceTextView::can_move_cursor_with_down() const
 
 void QtInstanceTextView::cut_clipboard() { assert(false && "Not implemented yet"); }
 
-void QtInstanceTextView::copy_clipboard() { assert(false && "Not implemented yet"); }
-
 void QtInstanceTextView::paste_clipboard() { assert(false && "Not implemented yet"); }
 
 void QtInstanceTextView::set_alignment(TxtAlign) { assert(false && "Not implemented yet"); }

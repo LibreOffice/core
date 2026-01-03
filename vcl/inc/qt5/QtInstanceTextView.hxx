@@ -41,7 +41,6 @@ public:
     virtual bool can_move_cursor_with_down() const override;
 
     virtual void cut_clipboard() override;
-    virtual void copy_clipboard() override;
     virtual void paste_clipboard() override;
 
     virtual void set_alignment(TxtAlign eXAlign) override;
