@@ -6195,7 +6195,6 @@ include/vcl/txtattr.hxx
 include/vcl/uitest/uiobject.hxx
 include/vcl/uitest/uitest.hxx
 include/vcl/unohelp.hxx
-include/vcl/unohelp2.hxx
 include/vcl/vclenum.hxx
 include/vcl/vclevent.hxx
 include/vcl/vcllayout.hxx
@@ -14446,7 +14445,6 @@ vcl/source/app/svdata.cxx
 vcl/source/app/svmain.cxx
 vcl/source/app/timer.cxx
 vcl/source/app/unohelp.cxx
-vcl/source/app/unohelp2.cxx
 vcl/source/app/vclevent.cxx
 vcl/source/bitmap/BitmapScaleConvolutionFilter.cxx
 vcl/source/bitmap/BitmapScaleSuperFilter.cxx
