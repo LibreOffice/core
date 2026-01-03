@@ -68,6 +68,7 @@ all_la_unit_tests = \
 	unit-initial-load-fail.la \
 	unit-insert-delete.la \
 	unit-uno-command.la \
+	unit-collab.la \
 	unit-quarantine.la \
 	unit-wopi.la \
 	unit-each-view.la \
@@ -157,6 +158,9 @@ wsd_sources = \
 	../wsd/CacheUtil.cpp \
 	../wsd/ClientRequestDispatcher.cpp \
 	../wsd/ClientSession.cpp \
+	../wsd/CollabBroker.cpp \
+	../wsd/CollabFileProxy.cpp \
+	../wsd/CollabSocketHandler.cpp \
 	../wsd/ContentType.cpp \
 	../wsd/DocumentBroker.cpp \
 	../wsd/FileServer.cpp \
@@ -297,6 +301,8 @@ unit_tiletest_la_SOURCES = UnitClient.cpp TileCacheTests.cpp KitPidHelpers.cpp
 unit_tiletest_la_LIBADD = $(CPPUNIT_LIBS)
 unit_integration_la_SOURCES = UnitClient.cpp integration-http-server.cpp KitPidHelpers.cpp
 unit_integration_la_LIBADD = $(CPPUNIT_LIBS)
+unit_collab_la_SOURCES = UnitClient.cpp CollabEndpointTests.cpp KitPidHelpers.cpp
+unit_collab_la_LIBADD = $(CPPUNIT_LIBS)
 unit_httpws_la_SOURCES = UnitClient.cpp httpwstest.cpp KitPidHelpers.cpp
 unit_httpws_la_LIBADD = $(CPPUNIT_LIBS)
 unit_crash_la_SOURCES = UnitClient.cpp httpcrashtest.cpp KitPidHelpers.cpp

@@ -178,16 +178,17 @@ void saveToServer() {
             return;
         }
     }
-    emscripten_fetch_attr_t attr;
-    emscripten_fetch_attr_init(&attr);
-    strcpy(attr.requestMethod, "POST");
-    attr.attributes = EMSCRIPTEN_FETCH_SYNCHRONOUS; //TODO: make this asynchronous
-    attr.requestData = buf.get();
-    attr.requestDataSize = n;
-    emscripten_fetch_t * fetch = emscripten_fetch(&attr, remoteUrl.c_str());
-    emscripten_fetch_close(fetch);
-    LOG_TRC("Saved " << tempFile << " back to <" << remoteUrl << ">: " << fetch->status);
-    //TODO: handle fetch->status != 200
+
+    // Call back to JS with the file data; JS handles the token exchange and upload
+    MAIN_THREAD_EM_ASM({
+        if (typeof globalThis.collabSaveToServer === 'function') {
+            var bytes = HEAPU8.slice($0, $0 + $1);
+            globalThis.collabSaveToServer(bytes);
+        } else {
+            console.error('collabSaveToServer not available');
+        }
+    }, buf.get(), n);
+    LOG_TRC("Initiated save of " << tempFile << " (" << n << " bytes) via JS callback");
 }
 
 int main(int argc, char* argv_main[])
@@ -219,11 +220,16 @@ int main(int argc, char* argv_main[])
             const std::string docKind = std::string(argv_main[1]);
             const std::string docDesc = std::string(argv_main[2]);
 
-            if (docKind == "server")
+            if (docKind == "server" || docKind == "collab")
             {
-                remoteUrl = "/wasm/" + docDesc;
+                // 'server' mode: URL is encoded WOPI source, prepend /wasm/ to fetch
+                // 'collab' mode: URL is already a full path (e.g., /co/collab/fetch?token=...)
+                if (docKind == "server")
+                    remoteUrl = "/wasm/" + docDesc;
+                else
+                    remoteUrl = docDesc; // collab mode: use URL directly
 
-                printf("Fetching from url %s\n", remoteUrl.c_str());
+                printf("Fetching from url %s (mode: %s)\n", remoteUrl.c_str(), docKind.c_str());
 
                 emscripten_fetch_attr_t attr;
                 emscripten_fetch_attr_init(&attr);

@@ -127,17 +127,45 @@ if (host === '' && !window.ThisIsAMobileApp) {
 }
 
 if (window.ThisIsTheEmscriptenApp) {
-	var docParamsString = $.param(docParams);
-	// The URL may already contain a query (e.g., 'http://server.tld/foo/wopi/files/bar?desktop=baz') - then just append more params
-	var docParamsPart = docParamsString ? (docURL.includes('?') ? '&' : '?') + docParamsString : '';
-	var encodedWOPI = encodeURIComponent(docURL + docParamsPart);
-
-	globalThis.Module = createEmscriptenModule(
-		isWopi ? 'server' : 'local', isWopi ? encodedWOPI : docURL);
-	globalThis.Module.onRuntimeInitialized = function() {
-		map.loadDocument(global.socket);
+	var initEmscriptenModule = function(docKind, docDescriptor) {
+		globalThis.Module = createEmscriptenModule(docKind, docDescriptor);
+		globalThis.Module.onRuntimeInitialized = function() {
+			map.loadDocument(global.socket);
+		};
+		createOnlineModule(globalThis.Module);
 	};
-	createOnlineModule(globalThis.Module);
+
+	if (isWopi) {
+		// Use collab WebSocket endpoint to get a download URL
+		var docParamsString = $.param(docParams);
+		var docParamsPart = docParamsString ? (docURL.includes('?') ? '&' : '?') + docParamsString : '';
+		var fullDocUrl = docURL + docParamsPart;
+
+		// Set up save callback before initializing the module.
+		// The C++ saveToServer() calls this via MAIN_THREAD_EM_ASM
+		// with the file bytes, and we handle the token exchange and upload.
+		globalThis.collabSaveToServer = function(fileBytes) {
+			window.app.console.log('WASM: collabSaveToServer called with ' + fileBytes.length + ' bytes');
+			global.collabUploadFile(fullDocUrl, accessToken, fileBytes).then(function() {
+				window.app.console.log('WASM: save completed successfully');
+			}).catch(function(err) {
+				window.app.console.error('WASM: save failed: ' + err.message);
+			});
+		};
+
+		global.collabFetchFile(fullDocUrl, accessToken).then(function(downloadUrl) {
+			window.app.console.log('WASM: Using collab fetch URL: ' + downloadUrl);
+			initEmscriptenModule('collab', downloadUrl);
+		}).catch(function(err) {
+			window.app.console.error('WASM: Collab fetch failed: ' + err.message + ', falling back to direct fetch');
+			// Fallback to old /wasm/ endpoint
+			var encodedWOPI = encodeURIComponent(fullDocUrl);
+			initEmscriptenModule('server', encodedWOPI);
+		});
+	} else {
+		// Local file, use directly
+		initEmscriptenModule('local', docURL);
+	}
 } else {
 	map.loadDocument(global.socket);
 }

@@ -56,7 +56,10 @@ class Dispatcher {
 		};
 
 		this.actionsMap['closeapp'] = () => {
-			if ((window as any).ThisIsAMobileApp) {
+			if (
+				(window as any).ThisIsAMobileApp &&
+				!(window as any).ThisIsTheEmscriptenApp
+			) {
 				window.postMobileMessage('BYE');
 			} else {
 				if (
