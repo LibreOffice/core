@@ -315,6 +315,9 @@ MetaEllipseAction::MetaEllipseAction( const tools::Rectangle& rRect ) :
 
 void MetaEllipseAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawEllipse( maRect );
 }
 
