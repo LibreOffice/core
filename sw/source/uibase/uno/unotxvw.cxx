@@ -321,6 +321,8 @@ uno::Any SwXTextView::getSelection()
             case ShellMode::DrawForm        :
             case ShellMode::DrawText        :
             case ShellMode::Bezier          :
+            case ShellMode::ExtrudedCustomShape:
+            case ShellMode::FontWork:
             {
                 uno::Reference< drawing::XShapes >  xShCol = drawing::ShapeCollection::create(
                         comphelper::getProcessComponentContext());
