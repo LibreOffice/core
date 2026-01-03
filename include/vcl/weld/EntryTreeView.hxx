@@ -148,13 +148,13 @@ public:
 
     virtual void set_max_mru_count(int) override final { assert(false && "not implemented"); }
 
-    virtual OUString get_mru_entries() const override final
+    virtual std::vector<OUString> get_mru_entries() const override final
     {
         assert(false && "not implemented");
-        return OUString();
+        return {};
     }
 
-    virtual void set_mru_entries(const OUString&) override final
+    virtual void set_mru_entries(const std::vector<OUString>&) override final
     {
         assert(false && "not implemented");
     }

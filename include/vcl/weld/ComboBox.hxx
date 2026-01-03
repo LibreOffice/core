@@ -216,8 +216,8 @@ public:
     // for mru support
     virtual int get_max_mru_count() const = 0;
     virtual void set_max_mru_count(int nCount) = 0;
-    virtual OUString get_mru_entries() const = 0;
-    virtual void set_mru_entries(const OUString& rEntries) = 0;
+    virtual std::vector<OUString> get_mru_entries() const = 0;
+    virtual void set_mru_entries(const std::vector<OUString>& rEntries) = 0;
 
     // Backwards compatibility, should be avoided to allow
     // UI consistency.

@@ -20596,43 +20596,36 @@ public:
 #endif
     }
 
-    OUString get_mru_entries() const override
+    std::vector<OUString> get_mru_entries() const override
     {
-        const sal_Unicode cSep = ';';
-
-        OUStringBuffer aEntries;
+        std::vector<OUString> aEntries;
         for (sal_Int32 n = 0; n < m_nMRUCount; n++)
         {
-            aEntries.append(get_text_including_mru(n));
-            if (n < m_nMRUCount - 1)
-                aEntries.append(cSep);
+            const OUString aEntry = get_text_including_mru(n);
+            if (!aEntry.isEmpty())
+                aEntries.push_back(aEntry);
         }
-        return aEntries.makeStringAndClear();
+        return aEntries;
     }
 
-    virtual void set_mru_entries(const OUString& rEntries) override
+    virtual void set_mru_entries(const std::vector<OUString>& rEntries) override
     {
-        const sal_Unicode cSep = ';';
-
         // Remove old MRU entries
         for (sal_Int32 n = m_nMRUCount; n;)
             remove_including_mru(--n);
 
         sal_Int32 nMRUCount = 0;
-        sal_Int32 nIndex = 0;
-        do
+        for (const OUString& rEntry : rEntries)
         {
-            OUString aEntry = rEntries.getToken(0, cSep, nIndex);
             // Accept only existing entries
-            int nPos = find_text(aEntry);
+            int nPos = find_text(rEntry);
             if (nPos != -1)
             {
                 OUString sId = get_id(nPos);
-                insert_including_mru(0, aEntry, &sId, nullptr, nullptr);
+                insert_including_mru(0, rEntry, &sId, nullptr, nullptr);
                 ++nMRUCount;
             }
         }
-        while (nIndex >= 0);
 
         if (nMRUCount && !m_nMRUCount)
             insert_separator_including_mru(nMRUCount, "separator");
@@ -22543,43 +22536,36 @@ public:
         m_sMenuButtonRow = rIdent;
     }
 
-    OUString get_mru_entries() const override
+    std::vector<OUString> get_mru_entries() const override
     {
-        const sal_Unicode cSep = ';';
-
-        OUStringBuffer aEntries;
+        std::vector<OUString> aEntries;
         for (sal_Int32 n = 0; n < m_nMRUCount; n++)
         {
-            aEntries.append(get_text_including_mru(n));
-            if (n < m_nMRUCount - 1)
-                aEntries.append(cSep);
+            const OUString aEntry = get_text_including_mru(n);
+            if (!aEntry.isEmpty())
+                aEntries.push_back(aEntry);
         }
-        return aEntries.makeStringAndClear();
+        return aEntries;
     }
 
-    virtual void set_mru_entries(const OUString& rEntries) override
+    virtual void set_mru_entries(const std::vector<OUString>& rEntries) override
     {
-        const sal_Unicode cSep = ';';
-
         // Remove old MRU entries
         for (sal_Int32 n = m_nMRUCount; n;)
             remove_including_mru(--n);
 
         sal_Int32 nMRUCount = 0;
-        sal_Int32 nIndex = 0;
-        do
+        for (const OUString& rEntry : rEntries)
         {
-            OUString aEntry = rEntries.getToken(0, cSep, nIndex);
             // Accept only existing entries
-            int nPos = find_text(aEntry);
+            int nPos = find_text(rEntry);
             if (nPos != -1)
             {
                 OUString sId = get_id(nPos);
-                insert_including_mru(0, aEntry, &sId, nullptr, nullptr);
+                insert_including_mru(0, rEntry, &sId, nullptr, nullptr);
                 ++nMRUCount;
             }
         }
-        while (nIndex >= 0);
 
         if (nMRUCount && !m_nMRUCount)
             insert_separator_including_mru(nMRUCount, u"separator"_ustr);

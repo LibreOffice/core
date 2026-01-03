@@ -489,8 +489,8 @@ public:
     void            SetHighlightColor(const Color& rColor);
     void            SetHighlightTextColor(const Color& rColor);
 
-    void            SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep );
-    OUString        GetMRUEntries( sal_Unicode cSep ) const;
+    void SetMRUEntries(const std::vector<OUString>& rEntries);
+    std::vector<OUString> GetMRUEntries() const;
     void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList().SetMaxMRUCount( n ); }
     sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList().GetMaxMRUCount(); }
     sal_uInt16      GetDisplayLineCount() const

@@ -6156,13 +6156,13 @@ int SalInstanceComboBoxWithoutEdit::get_max_mru_count() const
 
 void SalInstanceComboBoxWithoutEdit::set_max_mru_count(int) { assert(false && "not implemented"); }
 
-OUString SalInstanceComboBoxWithoutEdit::get_mru_entries() const
+std::vector<OUString> SalInstanceComboBoxWithoutEdit::get_mru_entries() const
 {
     assert(false && "not implemented");
-    return OUString();
+    return {};
 }
 
-void SalInstanceComboBoxWithoutEdit::set_mru_entries(const OUString&)
+void SalInstanceComboBoxWithoutEdit::set_mru_entries(const std::vector<OUString>&)
 {
     assert(false && "not implemented");
 }
@@ -6344,12 +6344,12 @@ void SalInstanceComboBoxWithEdit::set_max_mru_count(int nCount)
     return m_xComboBox->SetMaxMRUCount(nCount);
 }
 
-OUString SalInstanceComboBoxWithEdit::get_mru_entries() const
+std::vector<OUString> SalInstanceComboBoxWithEdit::get_mru_entries() const
 {
     return m_xComboBox->GetMRUEntries();
 }
 
-void SalInstanceComboBoxWithEdit::set_mru_entries(const OUString& rEntries)
+void SalInstanceComboBoxWithEdit::set_mru_entries(const std::vector<OUString>& rEntries)
 {
     m_xComboBox->SetMRUEntries(rEntries);
 }

@@ -432,8 +432,16 @@ FontNameBox::~FontNameBox()
 
 void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
 {
-    OString aEntries(OUStringToOString(m_xComboBox->get_mru_entries(),
-        RTL_TEXTENCODING_UTF8));
+    std::vector<OUString> aMRUEntries = m_xComboBox->get_mru_entries();
+
+    const sal_Unicode cSep = ';';
+    OUStringBuffer aEntries;
+    for (size_t i = 0; i < aMRUEntries.size(); i++)
+    {
+        aEntries.append(aMRUEntries.at(i));
+        if (i < aMRUEntries.size() - 1)
+            aEntries.append(cSep);
+    }
 
     if (aEntries.isEmpty() || aFontMRUEntriesFile.isEmpty())
         return;
@@ -447,7 +455,7 @@ void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
     }
 
     aStream.SetLineDelimiter( LINEEND_LF );
-    aStream.WriteLine( aEntries );
+    aStream.WriteLine(aEntries.makeStringAndClear().toUtf8());
     aStream.WriteLine( "" );
 }
 
@@ -468,9 +476,18 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
 
     OStringBuffer aLine;
     aStream.ReadLine( aLine );
-    OUString aEntries = OStringToOUString(aLine,
-        RTL_TEXTENCODING_UTF8);
-    m_xComboBox->set_mru_entries(aEntries);
+    const OUString sEntries = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
+    std::vector<OUString> aFontEntries;
+    const sal_Unicode cSep = ';';
+    sal_Int32 nIndex = 0;
+    while (nIndex >= 0)
+    {
+        const OUString sEntry = sEntries.getToken(0, cSep, nIndex);
+        if (!sEntry.isEmpty())
+            aFontEntries.push_back(sEntry);
+    }
+
+    m_xComboBox->set_mru_entries(aFontEntries);
 }
 
 void FontNameBox::InitFontMRUEntriesFile()
@@ -496,8 +513,8 @@ void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
     OUString aOldText = m_xComboBox->get_active_text();
-    OUString rEntries = m_xComboBox->get_mru_entries();
-    bool bLoadFromFile = rEntries.isEmpty();
+    std::vector<OUString> rEntries = m_xComboBox->get_mru_entries();
+    bool bLoadFromFile = rEntries.empty();
     m_xComboBox->freeze();
     m_xComboBox->clear();
 

@@ -411,13 +411,13 @@ int QtInstanceComboBox::get_max_mru_count() const
 
 void QtInstanceComboBox::set_max_mru_count(int) { assert(false && "Not implemented yet"); }
 
-OUString QtInstanceComboBox::get_mru_entries() const
+std::vector<OUString> QtInstanceComboBox::get_mru_entries() const
 {
     assert(false && "Not implemented yet");
-    return OUString();
+    return {};
 }
 
-void QtInstanceComboBox::set_mru_entries(const OUString&)
+void QtInstanceComboBox::set_mru_entries(const std::vector<OUString>&)
 {
     assert(false && "Not implemented yet");
 }

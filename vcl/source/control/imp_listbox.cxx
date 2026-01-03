@@ -2436,7 +2436,7 @@ bool ImplListBox::HandleWheelAsCursorTravel(const CommandEvent& rCEvt, Control& 
     return bDone;
 }
 
-void ImplListBox::SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep )
+void ImplListBox::SetMRUEntries(const std::vector<OUString>& rEntries)
 {
     bool bChanges = GetEntryList().GetMRUCount() != 0;
 
@@ -2445,19 +2445,16 @@ void ImplListBox::SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep 
         maLBWindow->RemoveEntry( --n );
 
     sal_Int32 nMRUCount = 0;
-    sal_Int32 nIndex = 0;
-    do
+    for (const OUString& rEntry : rEntries)
     {
-        OUString aEntry( o3tl::getToken(rEntries, 0, cSep, nIndex ) );
         // Accept only existing entries
-        if ( GetEntryList().FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
+        if (GetEntryList().FindEntry(rEntry) != LISTBOX_ENTRY_NOTFOUND)
         {
-            ImplEntryType* pNewEntry = new ImplEntryType( aEntry );
+            ImplEntryType* pNewEntry = new ImplEntryType(rEntry);
             maLBWindow->InsertEntry(nMRUCount++, pNewEntry, false);
             bChanges = true;
         }
     }
-    while ( nIndex >= 0 );
 
     if ( bChanges )
     {
@@ -2467,16 +2464,12 @@ void ImplListBox::SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep 
     }
 }
 
-OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
+std::vector<OUString> ImplListBox::GetMRUEntries() const
 {
-    OUStringBuffer aEntries;
+    std::vector<OUString> aEntries;
     for ( sal_Int32 n = 0; n < GetEntryList().GetMRUCount(); n++ )
-    {
-        aEntries.append(GetEntryList().GetEntryText( n ));
-        if( n < ( GetEntryList().GetMRUCount() - 1 ) )
-            aEntries.append(cSep);
-    }
-    return aEntries.makeStringAndClear();
+        aEntries.push_back(GetEntryList().GetEntryText(n));
+    return aEntries;
 }
 
 void ImplListBox::SetEdgeBlending(bool bNew)
