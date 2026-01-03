@@ -32,20 +32,6 @@ void Entry::signal_cursor_position()
     m_aCursorPositionHdl.Call(*this);
 }
 
-void Entry::set_text(const OUString& rText)
-{
-    disable_notify_events();
-    do_set_text(rText);
-    enable_notify_events();
-}
-
-void Entry::select_region(int nStartPos, int nEndPos)
-{
-    disable_notify_events();
-    do_select_region(nStartPos, nEndPos);
-    enable_notify_events();
-}
-
 void Entry::set_position(int nCursorPos)
 {
     disable_notify_events();

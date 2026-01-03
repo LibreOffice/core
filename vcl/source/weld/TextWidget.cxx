@@ -7,21 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/weld/TextView.hxx>
+#include <vcl/weld/TextWidget.hxx>
 
 namespace weld
 {
-void weld::TextView::replace_selection(const OUString& rText)
+void TextWidget::set_text(const OUString& rText)
 {
     disable_notify_events();
-    do_replace_selection(rText);
+    do_set_text(rText);
     enable_notify_events();
 }
 
-int weld::TextView::get_height_rows(int nRows) const
+void TextWidget::select_region(int nStartPos, int nEndPos)
 {
-    // can improve this if needed
-    return get_text_height() * nRows;
+    disable_notify_events();
+    do_select_region(nStartPos, nEndPos);
+    enable_notify_events();
 }
 }
 

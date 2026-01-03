@@ -10,16 +10,13 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/TextWidget.hxx>
 
 namespace weld
 {
-class VCL_DLLPUBLIC TextView : virtual public Widget
+class VCL_DLLPUBLIC TextView : virtual public TextWidget
 {
     friend class ::LOKTrigger;
-
-private:
-    OUString m_sSavedValue;
 
 protected:
     Link<TextView&, void> m_aChangeHdl;
@@ -37,40 +34,15 @@ protected:
 
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
-    virtual void do_set_text(const OUString& rText) = 0;
-    virtual void do_select_region(int nStartPos, int nEndPos) = 0;
     virtual void do_replace_selection(const OUString& rText) = 0;
 
 public:
-    void set_text(const OUString& rText);
-    virtual OUString get_text() const = 0;
-
-    // if nStartPos or nEndPos is -1 the max available text pos will be used
-    void select_region(int nStartPos, int nEndPos);
-
-    // returns true if the selection has nonzero length
-    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
-
     void replace_selection(const OUString& rText);
 
-    virtual void set_editable(bool bEditable) = 0;
-    virtual bool get_editable() const = 0;
     virtual void set_monospace(bool bMonospace) = 0;
     // The maximum length of the entry. Use 0 for no maximum
     virtual void set_max_length(int nChars) = 0;
     int get_height_rows(int nRows) const;
-
-    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
-    virtual void set_font(const vcl::Font& rFont) = 0;
-
-    /*
-       Typically you want to avoid the temptation of customizing
-       font colors
-    */
-    virtual void set_font_color(const Color& rColor) = 0;
-
-    void save_value() { m_sSavedValue = get_text(); }
-    bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
 
     void connect_changed(const Link<TextView&, void>& rLink) { m_aChangeHdl = rLink; }
     virtual void connect_cursor_position(const Link<TextView&, void>& rLink)
@@ -87,10 +59,6 @@ public:
     // doesn't matter if that move is to a next line or to the end of the
     // current line just so long as the cursor would move
     virtual bool can_move_cursor_with_down() const = 0;
-
-    virtual void cut_clipboard() = 0;
-    virtual void copy_clipboard() = 0;
-    virtual void paste_clipboard() = 0;
 
     virtual void set_alignment(TxtAlign eXAlign) = 0;
 
