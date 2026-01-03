@@ -603,7 +603,18 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         if (m_rDMapper_Impl.IsOOXMLImport() && (nMode < 0 || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
-            const sal_Int32 nAdjustedMargin = nLeftMargin - rInfo.nLeftBorderDistance;
+            const sal_Int32 nMinLeftBorderDistance = aLeftBorder.LineWidth / 2;
+            sal_Int32 nLeftBorderDistance = rInfo.nLeftBorderDistance;
+            if (!m_aCellProperties.empty() && !m_aCellProperties[0].empty())
+            {
+                // only the border spacing of the first row affects the placement of the table
+                std::optional<PropertyMap::Property> aCellLeftBorderDistance
+                    = m_aCellProperties[0][0]->getProperty(PROP_LEFT_BORDER_DISTANCE);
+                if (aCellLeftBorderDistance)
+                    aCellLeftBorderDistance->second >>= nLeftBorderDistance;
+            }
+            nLeftBorderDistance = std::max(nMinLeftBorderDistance, nLeftBorderDistance);
+            const sal_Int32 nAdjustedMargin = nLeftMargin - nLeftBorderDistance;
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
         }
         else
