@@ -103,6 +103,31 @@ void SpinButton::get_increments(sal_Int64& step, sal_Int64& page) const
     step = convert_double_to_value(fStep);
     page = convert_double_to_value(fPage);
 }
+
+unsigned int SpinButton::Power10(unsigned int n)
+{
+    unsigned int nValue = 1;
+    for (unsigned int i = 0; i < n; ++i)
+        nValue *= 10;
+    return nValue;
+}
+
+sal_Int64 SpinButton::denormalize(sal_Int64 nValue) const
+{
+    const int nFactor = Power10(get_digits());
+
+    if ((nValue < (std::numeric_limits<sal_Int64>::min() + nFactor))
+        || (nValue > (std::numeric_limits<sal_Int64>::max() - nFactor)))
+    {
+        return nValue / nFactor;
+    }
+
+    const int nHalf = nFactor / 2;
+
+    if (nValue < 0)
+        return (nValue - nHalf) / nFactor;
+    return (nValue + nHalf) / nFactor;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
