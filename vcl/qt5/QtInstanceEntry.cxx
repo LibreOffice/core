@@ -15,7 +15,7 @@
 #include <QtGui/QIcon>
 
 QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
-    : QtInstanceWidget(pLineEdit)
+    : QtInstanceTextWidget(pLineEdit)
     , m_pLineEdit(pLineEdit)
 {
     assert(m_pLineEdit);
@@ -175,10 +175,6 @@ bool QtInstanceEntry::get_overwrite_mode() const
     assert(false && "Not implemented yet");
     return false;
 }
-
-void QtInstanceEntry::set_font(const vcl::Font& rFont) { setFont(rFont); }
-
-void QtInstanceEntry::set_font_color(const Color& rColor) { setFontColor(rColor); }
 
 void QtInstanceEntry::set_alignment(TxtAlign eXAlign)
 {

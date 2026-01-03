@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "QtInstanceWidget.hxx"
+#include "QtInstanceTextWidget.hxx"
 
 #include <vcl/weld/TextView.hxx>
 
 #include <QtWidgets/QPlainTextEdit>
 
-class QtInstanceTextView : public QtInstanceWidget, public virtual weld::TextView
+class QtInstanceTextView : public QtInstanceTextWidget, public virtual weld::TextView
 {
     Q_OBJECT
 
@@ -33,9 +33,6 @@ public:
     virtual bool get_editable() const override;
     virtual void set_monospace(bool bMonospace) override;
     virtual void set_max_length(int nChars) override;
-
-    virtual void set_font(const vcl::Font& rFont) override;
-    virtual void set_font_color(const Color& rColor) override;
 
     virtual bool can_move_cursor_with_up() const override;
     virtual bool can_move_cursor_with_down() const override;

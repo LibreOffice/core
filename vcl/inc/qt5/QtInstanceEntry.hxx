@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "QtInstanceWidget.hxx"
+#include "QtInstanceTextWidget.hxx"
 
 #include <vcl/weld/Entry.hxx>
 
 #include <QtWidgets/QLineEdit>
 
-class QtInstanceEntry : public QtInstanceWidget, public virtual weld::Entry
+class QtInstanceEntry : public QtInstanceTextWidget, public virtual weld::Entry
 {
     Q_OBJECT;
 
@@ -42,9 +42,6 @@ public:
 
     virtual void set_overwrite_mode(bool bOn) override;
     virtual bool get_overwrite_mode() const override;
-
-    virtual void set_font(const vcl::Font& rFont) override;
-    virtual void set_font_color(const Color& rColor) override;
 
     virtual void set_alignment(TxtAlign eXAlign) override;
 

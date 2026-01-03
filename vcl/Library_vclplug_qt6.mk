@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtInstanceSpinButton \
     vcl/qt6/QtInstanceSpinner \
     vcl/qt6/QtInstanceTextView \
+    vcl/qt6/QtInstanceTextWidget \
     vcl/qt6/QtInstanceToggleButton \
     vcl/qt6/QtInstanceToolbar \
     vcl/qt6/QtInstanceTreeIter \
