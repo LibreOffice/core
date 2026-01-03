@@ -356,6 +356,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf108791)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testFontworkSelection)
+{
+    // Load a document with a Fontwork shape and select the shape
+    createSwDoc("tdf131124_Fontwork_Selection.odt");
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+
+    // Make sure the CurrentSelection of the document is not empty.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSelections(xModel->getCurrentSelection(),
+                                                        uno::UNO_QUERY);
+    // Without fix, this test would have failed here
+    CPPUNIT_ASSERT(xSelections.is());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testExtrudedShapeSelection)
+{
+    // Load a document with an extruded custom shape and select the shape
+    createSwDoc("tdf131124_Extruded_Shape_Selection.odt");
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+
+    // Make sure the CurrentSelection of the document is not empty.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSelections(xModel->getCurrentSelection(),
+                                                        uno::UNO_QUERY);
+    // Without fix, this test would have failed here
+    CPPUNIT_ASSERT(xSelections.is());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
