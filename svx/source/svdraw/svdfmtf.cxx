@@ -88,6 +88,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mnLineWidth(0),
     maLineJoin(basegfx::B2DLineJoin::NONE),
     maLineCap(css::drawing::LineCap_BUTT),
+    maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0),
     mbMov(false),
     mbSize(false),
     maOfs(0, 0),
