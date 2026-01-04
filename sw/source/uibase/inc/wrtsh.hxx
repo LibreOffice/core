@@ -522,7 +522,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     bool IsOutlineContentVisible(const size_t nPos);
     void MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible = true, bool bSetAttrOutlineVisibility = true);
-    void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
+    SW_DLLPUBLIC void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
     void InvalidateOutlineContentVisibility();
     bool GetAttrOutlineContentVisible(const size_t nPos) const;
 
@@ -700,7 +700,7 @@ inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
 #endif
 }
 
-class MakeAllOutlineContentTemporarilyVisible
+class SW_DLLPUBLIC MakeAllOutlineContentTemporarilyVisible
 {
 private:
     SwWrtShell* m_pWrtSh = nullptr;

@@ -30,6 +30,8 @@
 
 #include <unotools/mediadescriptor.hxx>
 
+#include <wrtsh.hxx>
+
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
@@ -49,6 +51,8 @@ bool DocxExportFilter::exportDocument()
     SwDoc *pDoc = pTextDoc->GetDocShell()->GetDoc();
     if ( !pDoc )
         return false;
+
+    MakeAllOutlineContentTemporarilyVisible a(pDoc);
 
     // update layout (if present), for SwWriteTable
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
