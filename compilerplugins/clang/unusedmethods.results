@@ -1344,8 +1344,6 @@ include/vcl/weldutils.hxx:350
     void weld::DateFormatter::CursorChangedHdl(weld::Entry &)
 include/vcl/weldutils.hxx:350
     void weld::DateFormatter::LinkStubCursorChangedHdl(void *,weld::Entry &)
-include/vcl/window.hxx:366
-    const char * ImplDbgCheckWindow(const void *)
 include/vcl/windowstate.hxx:123
     std::basic_ostream<char> & vcl::operator<<(std::basic_ostream<char> &,const vcl::WindowData &)
 include/xmloff/txtimp.hxx:113
