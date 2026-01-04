@@ -1277,8 +1277,7 @@ bool ScTabViewShell::DoTableBackgroundDialog(sal_Int32 nResult, const VclPtr<Abs
     SCTAB nCurrentTab = rViewData.CurrentTabForData();
     SCTAB nTabSelCount = rMark.GetSelectCount();
     bool bDone   = false; /// temp
-    Color aSelectedColor;
-    pDlg->GetSelectedColor(aSelectedColor);
+    Color aSelectedColor = pDlg->GetSelectedColor();
     std::unique_ptr<ScUndoTabColorInfo::List>
         pTabColorList(new ScUndoTabColorInfo::List);
     if ( nTabSelCount > 1 )

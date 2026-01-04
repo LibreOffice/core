@@ -38,6 +38,7 @@ inline constexpr OUString UPN_IS_SPELL_WITH_DIGITS            = u"IsSpellWithDig
 inline constexpr OUString UPN_HYPH_MIN_LEADING                = u"HyphMinLeading"_ustr;
 inline constexpr OUString UPN_HYPH_MIN_TRAILING               = u"HyphMinTrailing"_ustr;
 inline constexpr OUString UPN_HYPH_COMPOUND_MIN_LEADING       = u"HyphCompoundMinLeading"_ustr;
+inline constexpr OUString UPN_HYPH_COMPOUND_MIN_TRAILING      = u"HyphCompoundMinTrailing"_ustr;
 inline constexpr OUString UPN_HYPH_MIN_WORD_LENGTH            = u"HyphMinWordLength"_ustr;
 inline constexpr OUString UPN_HYPH_NO_CAPS                    = u"HyphNoCaps"_ustr;
 inline constexpr OUString UPN_HYPH_NO_LAST_WORD               = u"HyphNoLastWord"_ustr;
@@ -122,7 +123,8 @@ inline constexpr OUString UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInteractiveG
 #define UPH_HYPH_KEEP                       38
 #define UPH_HYPH_KEEP_TYPE                  39
 #define UPH_HYPH_COMPOUND_MIN_LEADING       40
-#define UPH_HYPH_KEEP_LINE                  41
+#define UPH_HYPH_COMPOUND_MIN_TRAILING      41
+#define UPH_HYPH_KEEP_LINE                  42
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

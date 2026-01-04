@@ -22,9 +22,11 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 #include "symbol.hxx"
 

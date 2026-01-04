@@ -1111,4 +1111,9 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
+    FN_SORT_CHAPTERS
+    [
+        ExecMethod = Execute ;
+    ]
+
 }

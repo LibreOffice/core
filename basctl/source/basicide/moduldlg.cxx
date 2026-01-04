@@ -261,7 +261,7 @@ private:
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
 
         weld::TreeView* pSource = rWidget.get_drag_source();
         if (!pSource)
@@ -317,11 +317,10 @@ private:
         if (!pSource)
             return DND_ACTION_NONE;
 
-        std::unique_ptr<weld::TreeIter> xEntry(rWidget.make_iterator());
-        bool bEntry = rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xEntry.get(), true);
+        std::unique_ptr<weld::TreeIter> xEntry = rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
 
         // don't drop on a BasicManager (nDepth == 0)
-        sal_uInt16 nDepth = bEntry ? m_rTreeView.get_iter_depth(*xEntry) : 0;
+        sal_uInt16 nDepth = xEntry ? m_rTreeView.get_iter_depth(*xEntry) : 0;
         bool bValid = nDepth != 0;
         // don't drop in the same library
         std::unique_ptr<weld::TreeIter> xSelected = pSource->get_selected();
@@ -622,9 +621,7 @@ void ObjectPage::ActivatePage()
 void ObjectPage::CheckButtons()
 {
     // enable/disable edit button
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     const OUString& aLibName( aDesc.GetLibName() );
@@ -694,8 +691,8 @@ IMPL_LINK(ObjectPage, ButtonHdl, weld::Button&, rButton, void)
 
         SfxDispatcher* pDispatcher = GetDispatcher();
 
-        std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-        if (!m_xBasicBox->get_cursor(xCurEntry.get()))
+        std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
+        if (!xCurEntry)
             return;
         if (m_xBasicBox->get_iter_depth(*xCurEntry) >= 2)
         {
@@ -748,9 +745,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
 {
     bool bRet = false;
 
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(xCurEntry.get());
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
@@ -875,9 +870,7 @@ void ObjectPage::NewDialog()
 
 void ObjectPage::DeleteCurrent()
 {
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
-    if (!m_xBasicBox->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xBasicBox->get_cursor();
     DBG_ASSERT( xCurEntry, "No current entry!" );
     if (!xCurEntry)
         return;
@@ -895,7 +888,8 @@ void ObjectPage::DeleteCurrent()
         return;
 
     m_xBasicBox->remove(*xCurEntry);
-    if (m_xBasicBox->get_cursor(xCurEntry.get()))
+    xCurEntry = m_xBasicBox->get_cursor();
+    if (xCurEntry)
         m_xBasicBox->select(*xCurEntry);
     if (SfxDispatcher* pDispatcher = GetDispatcher())
     {

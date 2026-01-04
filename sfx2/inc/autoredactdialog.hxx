@@ -14,7 +14,9 @@
 #include <sal/config.h>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 enum RedactionTargetType

@@ -20,6 +20,7 @@
 
 #include <memory>
 
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <com/sun/star/uno/Reference.hxx>

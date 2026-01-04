@@ -21,6 +21,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <unotools/resmgr.hxx>
 #include <utility>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace dbaui

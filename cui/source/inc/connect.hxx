@@ -20,6 +20,7 @@
 
 #include <svx/connctrl.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>

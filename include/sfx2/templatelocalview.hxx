@@ -110,7 +110,8 @@ public:
 
     bool removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId);
 
-    void moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
+    void moveTemplates(const std::set<const TemplateViewItem*, selection_cmp_fn>& rItems,
+                       const sal_uInt16 nTargetItem);
 
     bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 
@@ -130,11 +131,11 @@ public:
 
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 
-    void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setCreateContextMenuHdl(const Link<TemplateViewItem*, void>& rLink);
 
-    void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setOpenTemplateHdl(const Link<const OUString&, void>& rLink);
 
-    void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setEditTemplateHdl(const Link<const OUString&, void>& rLink);
 
     void setDeleteTemplateHdl(const Link<void*,void> &rLink);
 
@@ -165,7 +166,7 @@ protected:
 
     sal_uInt16 mnCurRegionId;
 
-    TemplateViewItem *maSelectedItem;
+    TemplateViewItem* mpSelectedItem;
 
     tools::Long mnThumbnailWidth;
     tools::Long mnThumbnailHeight;
@@ -173,9 +174,9 @@ protected:
     Point maPosition; //store the point of click event
 
     Link<void*,void>              maOpenRegionHdl;
-    Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
-    Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
-    Link<ThumbnailViewItem*,void> maEditTemplateHdl;
+    Link<TemplateViewItem*, void> maCreateContextMenuHdl;
+    Link<const OUString&, void> maOpenTemplateHdl;
+    Link<const OUString&, void> maEditTemplateHdl;
     Link<void*,void> maDeleteTemplateHdl;
     Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
     Link<void*,void> maMoveTemplateHdl;
@@ -184,6 +185,8 @@ protected:
     std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
     std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;
     std::vector<TemplateItemProperties > maAllTemplates;
+
+    std::unique_ptr<weld::Menu> mxContextMenu;
 };
 
 

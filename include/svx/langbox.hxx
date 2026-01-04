@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/svxdllapi.h>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

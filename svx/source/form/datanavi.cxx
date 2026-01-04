@@ -140,9 +140,10 @@ namespace svxform
 
         Point aPos(rCEvt.GetMousePosPixel());
 
-        if (m_xItemList->get_dest_row_at_pos(aPos, m_xScratchIter.get(), false) && !m_xItemList->is_selected(*m_xScratchIter))
+        std::unique_ptr<weld::TreeIter> pIter = m_xItemList->get_dest_row_at_pos(aPos, false);
+        if (pIter && !m_xItemList->is_selected(*pIter))
         {
-            m_xItemList->select(*m_xScratchIter);
+            m_xItemList->select(*pIter);
             ItemSelectHdl(*m_xItemList);
         }
 

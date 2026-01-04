@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 
 enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };

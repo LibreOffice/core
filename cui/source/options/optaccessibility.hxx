@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <map>
 

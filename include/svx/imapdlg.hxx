@@ -24,6 +24,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/weld/Entry.hxx>
 #include <memory>
 #include <vector>
 

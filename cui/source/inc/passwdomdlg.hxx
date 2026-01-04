@@ -19,6 +19,8 @@
 #pragma once
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/Entry.hxx>
+
 #include <memory>
 
 class PasswordToOpenModifyDialog : public SfxDialogController

@@ -74,6 +74,7 @@ OString Translate(const OString& rTargetLang, const OString& rAPIUrl, const OStr
     if (size <= 0)
     {
         SAL_WARN("linguistic", "Translate: API did not return any translations");
+        return {};
     }
     // take the first one
     const boost::property_tree::ptree& translation = translations.begin()->second;

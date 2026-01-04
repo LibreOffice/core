@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 #include <recentdocsview.hxx>
 #include <templatedefaultview.hxx>
@@ -97,9 +98,9 @@ class BackingWindow : public InterimItemWindow
     DECL_LINK(ClickHelpHdl, weld::Button&, void);
     DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_STATIC_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, void);
-    DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
-    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(CreateContextMenuHdl, TemplateViewItem*, void);
+    DECL_LINK(OpenTemplateHdl, const OUString&, void);
+    DECL_LINK(EditTemplateHdl, const OUString&, void);
 
     void initControls();
 

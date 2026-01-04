@@ -1375,10 +1375,10 @@ void ScAcceptChgDlg::RemoveEntries(sal_uLong nStartAction,sal_uLong nEndAction)
     weld::TreeView& rTreeView = pTheView->GetWidget();
 
     ScRedlinData *pEntryData=nullptr;
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    if (rTreeView.get_cursor(xEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_cursor())
         pEntryData = weld::fromId<ScRedlinData*>(rTreeView.get_id(*xEntry));
 
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.make_iterator();
     if (!rTreeView.get_iter_first(*xEntry))
         return;
 
@@ -1580,9 +1580,8 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         return false;
 
     weld::TreeView& rTreeView = pTheView->GetWidget();
-    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-    bool bEntry = rTreeView.get_cursor(xEntry.get());
-    if (bEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = rTreeView.get_cursor();
+    if (xEntry)
         rTreeView.select(*xEntry);
 
     int nSortedCol = rTreeView.get_sort_column();
@@ -1591,7 +1590,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     m_xPopup->set_sensitive(u"calcedit"_ustr, false);
 
-    if (pDoc->IsDocEditable() && bEntry)
+    if (pDoc->IsDocEditable() && xEntry)
     {
         ScRedlinData *pEntryData = weld::fromId<ScRedlinData*>(rTreeView.get_id(*xEntry));
         if (pEntryData)
@@ -1608,7 +1607,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         if (sCommand == "calcedit")
         {
-            if (bEntry)
+            if (xEntry)
             {
                 ScRedlinData *pEntryData = weld::fromId<ScRedlinData*>(rTreeView.get_id(*xEntry));
                 if (pEntryData)

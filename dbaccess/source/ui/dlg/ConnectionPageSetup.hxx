@@ -22,6 +22,7 @@
 #include "ConnectionHelper.hxx"
 #include "adminpages.hxx"
 #include <unotools/resmgr.hxx>
+#include <vcl/weld/Entry.hxx>
 
 namespace dbaui
 {

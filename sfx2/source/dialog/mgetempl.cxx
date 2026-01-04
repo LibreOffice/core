@@ -19,6 +19,8 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

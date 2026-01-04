@@ -27,18 +27,15 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <mutex>
-#include <vector>
-
 #define VALUESET_ITEM_NONEITEM      0xFFFE
 
-enum ValueSetItemType
+enum class ValueSetItemType
 {
-    VALUESETITEM_NONE,
-    VALUESETITEM_IMAGE,
-    VALUESETITEM_IMAGE_AND_TEXT,
-    VALUESETITEM_COLOR,
-    VALUESETITEM_USERDRAW
+    None,
+    Image,
+    ImageAndText,
+    Color,
+    UserDraw
 };
 
 class ValueItemAcc;
@@ -53,7 +50,7 @@ struct ValueSetItem
     Image               maImage;
     Color               maColor;
     sal_uInt16          mnId;
-    sal_uInt8           meType;
+    ValueSetItemType meType;
     bool                mbVisible;
 
     explicit ValueSetItem( ValueSet& rParent );

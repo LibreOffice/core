@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/wizardmachine.hxx>

@@ -859,7 +859,7 @@ bool EqualDistinguishedNames(
         std::u16string_view const rName1, std::u16string_view const rName2,
         EqualMode const eMode)
 {
-    if (eMode == COMPAT_BOTH && !rName1.empty() && rName1 == rName2)
+    if (eMode == EqualMode::CompatBoth && !rName1.empty() && rName1 == rName2)
     {   // handle case where both need to be converted
         return true;
     }
@@ -876,7 +876,7 @@ bool EqualDistinguishedNames(
             &blob1, &blob2) == TRUE;
         delete[] blob2.pbData;
     }
-    if (!ret && eMode == COMPAT_2ND)
+    if (!ret && eMode == EqualMode::Compat2nd)
     {
         CERT_NAME_BLOB blob2compat;
         if (!EncodeDistinguishedName(CompatDNNSS(OUString(rName2)), blob2compat))

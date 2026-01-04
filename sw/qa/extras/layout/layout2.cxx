@@ -1250,6 +1250,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_compound_remain)
                 u"emberellenes emberellenes emberellenes emberellenes emberellenes ember");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
                 u"ellenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
+
+    // tdf#170177 fix hyphenation at the end of the middle constituent
+    // shorter than the minCompoundLead
+    // This was "kova=kőbányászat" (now "kovakő=bányászat)
+    // (allowed hyphenations: ko=va=kő=bányá=szat)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"kovakőbányászat kovakőbányászat kovakőbányászat kovakőbányászat kovakő");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"bányászat,,, kovakőbányászat kovakőbányászat kovakőbányászat kovakő");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
@@ -1273,6 +1282,128 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
                 u"emberellenes emberellenes emberellenes emberellenes emberellenes emberel");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
                 u"lenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
+
+    // tdf#170177 fix hyphenation at the end of the middle constituent
+    // shorter than the minCompoundLead
+    // These are "kovakő=bányászat" and "kovakőbá=nyászat
+    // (all hyphenations are allowed: ko=va=kő=bá=nyá=szat)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"kovakőbányászat kovakőbányászat kovakőbányászat kovakőbányászat kovakő");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"bányászat,,, kovakőbányászat kovakőbányászat kovakőbányászat kovakőbá");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_compound_push)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
+        return;
+
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf170177_compound-push.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // hyphenate compound word with 3- or more character distance from the stem boundary
+    // This was "em=berellenes" (now "emberellenes", i.e. no hyphenation)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,emberellenes emberellenes emberellenes emberellenes emberellenes ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"emberellenes emberellenes emberellenes emberellenes emberellenes ember");
+
+    // This was "vasem=berellenes" (now "vas=emberellenes")
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"vasemberellenes vasemberellenes vasemberellenes vasemberellenes vas");
+
+    // special value: no-limit, if both -remain and -push values are not limited, there
+    // is hyphenation only at compound constituent boundaries (not in the suffixes, and
+    // not inside the first constituent
+    // balalajka=vizsgálattal, not balalajkavizsgálat=tal
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,,,,,,vizsgálattal balalajkavizsgálattal balalajkavizsgálattal balalajka");
+
+    // no-limit -push value, while -remain = 99 (~no-limit, but hyphenation before and
+    // in the suffix is allowed)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+        u",,,,,,,,,vizsgálattal balalajkavizsgálattal balalajkavizsgálattal balalajkavizsgálat");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"tal balalajkavizsgálattal");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_not_compound_push)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
+        return;
+
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf170177_not_compound-push.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // hyphenate compound word with 3-character distance from the stem boundary,
+    // resulting less readable hyphenation "em=berellenes" (instead of
+    // "emberellenes" or "ember=ellenes")
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u",,,,emberellenes emberellenes emberellenes emberellenes emberellenes em");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"berellenes emberellenes emberellenes emberellenes emberellenes emberelle");
+
+    // (all hyphenations are allowed: vas=em=ber=elle=nes)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"vasemberellenes vasemberellenes vasemberellenes vasemberellenes vasem");
+}
+
+// TODO: move this test to the lingucomponent project
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170140)
+{
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    auto aLocale = lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString());
+    LanguageType eLang = LanguageTag::convertToLanguageType(aLocale);
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    uno::Sequence<beans::PropertyValue> aProperties;
+
+    // correct non-ASCII apostrophe
+    OUString sWord(u"d’Arc"_ustr);
+    CPPUNIT_ASSERT(xSpell->isValid(sWord, static_cast<sal_uInt16>(eLang), aProperties));
+
+    // bad ASCII apostrophe
+    OUString sWord2(u"d'Arc"_ustr);
+    CPPUNIT_ASSERT(!xSpell->isValid(sWord2, static_cast<sal_uInt16>(eLang), aProperties));
+}
+
+// TODO: move this test to the linguistic project
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40277)
+{
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    auto aLocale = lang::Locale(u"en"_ustr, u"US"_ustr, OUString());
+    LanguageType eLang = LanguageTag::convertToLanguageType(aLocale);
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    uno::Sequence<beans::PropertyValue> aProperties;
+
+    // check Hunspell dictionary
+    OUString sWord(u"based"_ustr);
+    CPPUNIT_ASSERT(xSpell->isValid(sWord, static_cast<sal_uInt16>(eLang), aProperties));
+
+    // check custom dictionary support (a word which is stored only in technical.dic)
+    OUString sWord2(u"SunHSI"_ustr);
+    CPPUNIT_ASSERT(xSpell->isValid(sWord2, static_cast<sal_uInt16>(eLang), aProperties));
+
+    OUString sWord3(u"SunHSI-based"_ustr);
+    // This was false (missing recognition of compounds formed from Hunspell
+    // dictionary words and custom dictionary words)
+    CPPUNIT_ASSERT(xSpell->isValid(sWord3, static_cast<sal_uInt16>(eLang), aProperties));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)

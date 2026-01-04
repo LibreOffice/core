@@ -92,17 +92,6 @@ MessageDialogController::~MessageDialogController()
         m_xContentArea->move(m_xRelocate.get(), m_xOrigParent.get());
     }
 }
-
-AssistantController::AssistantController(weld::Widget* pParent, const OUString& rUIFile,
-                                         const OUString& rDialogId)
-    : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
-    , m_xAssistant(m_xBuilder->weld_assistant(rDialogId))
-{
-}
-
-Dialog* AssistantController::getDialog() { return m_xAssistant.get(); }
-
-AssistantController::~AssistantController() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -22,6 +22,8 @@
 #include <labimg.hxx>
 #include <labrec.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/TextView.hxx>
 
 class SwLabPage : public SfxTabPage
 {

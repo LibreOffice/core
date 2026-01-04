@@ -160,7 +160,7 @@ public:
     void scroll_to_row(const weld::TreeIter& rIter) { mxTreeView->scroll_to_row(rIter); }
     void set_cursor(int nPos) { mxTreeView->set_cursor(nPos); }
     void set_cursor(const weld::TreeIter& rIter) { mxTreeView->set_cursor(rIter); }
-    bool get_cursor(weld::TreeIter* pIter) const { return mxTreeView->get_cursor(pIter); }
+    std::unique_ptr<weld::TreeIter> get_cursor() const { return mxTreeView->get_cursor(); }
     bool get_iter_first(weld::TreeIter& rIter) const { return mxTreeView->get_iter_first(rIter); }
     std::unique_ptr<weld::TreeIter> get_selected() const { return mxTreeView->get_selected(); }
 
@@ -1537,11 +1537,10 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
     // reset the quick search index
     mxView->ResetQuickSearch_Impl( nullptr );
 
-    std::unique_ptr<weld::TreeIter> xEntry(mxView->make_iterator());
-    bool bEntry = mxView->get_cursor(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = mxView->get_cursor();
 
     OUString aEntryURL;
-    if (bEntry && !mxView->get_id(*xEntry).isEmpty())
+    if (xEntry && !mxView->get_id(*xEntry).isEmpty())
         aEntryURL = weld::fromId<SvtContentEntry*>(mxView->get_id(*xEntry))->maURL;
 
     mnSortColumn = nColumn;

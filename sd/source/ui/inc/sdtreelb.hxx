@@ -293,16 +293,14 @@ public:
 
     OUString get_cursor_text() const
     {
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xIter.get()))
+        if (std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_cursor())
             return m_xTreeView->get_text(*xIter);
         return OUString();
     }
 
     OUString get_cursor_id() const
     {
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xIter.get()))
+        if (std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_cursor())
             return m_xTreeView->get_id(*xIter);
         return OUString();
     }

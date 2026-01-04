@@ -562,7 +562,19 @@ def tidy(compileCommands, paths, noexclude, checknamespaces, finderrors, removef
                 invocation = "include-what-you-use -Xiwyu --no_fwd_decls -Xiwyu --max_line_length=200 " + args
             # Suggest headers' replacement with forward declarations
             elif headersfwd:
-                invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
+                # Peek inside the file to check for code behind #ifdef or similar
+                # This is the fragile part, skip forward declaration suggestions for such
+                p1 = subprocess.Popen(['git', 'grep', '-v', '-e', 'INCLUDED', path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                p2 = subprocess.Popen(['grep', '-e', '#if'], stdin=p1.stdout, stdout=subprocess.PIPE, text=True)
+                p1.stdout.close()
+                output, _ = p2.communicate()
+                if not output or noexclude:
+                    invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
+                else:
+                    # '#if' found, skipping file
+                    print("WARNING: #if found in file:", path, "- skipping for now.")
+                    continue
+
             # In --fwdecl mode we ask for fw declaration removal suggestions.
             # In this mode obsolete fw declarations are suggested for removal.
             # Later we ignore the header removal suggestions, which may be
@@ -626,7 +638,7 @@ def main(argv):
     if args.recursive:
         for root, dirs, files in os.walk(args.recursive[0]):
             for file in files:
-                if args.headers:
+                if args.headers or args.headersfwd:
                     if not args.fwdecl:
                         if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
                             list_of_files.append(os.path.join(root,file))
@@ -635,18 +647,6 @@ def main(argv):
                         # used in defines and iwyu (0.21 at least) can not yet understand those properly
                         if (file.endswith(".hxx") or file.endswith(".h")):
                             list_of_files.append(os.path.join(root,file))
-                elif args.headersfwd:
-                    if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
-                        # Peek inside the file to check for code behind #ifdef or similar
-                        # This is the fragile part, skip forward declaration suggestions for such
-                        p1 = subprocess.Popen(['git', 'grep', '-v', '-e', 'INCLUDED', os.path.join(root,file) ], stdout=subprocess.PIPE)
-                        p2 = subprocess.Popen(['grep', '-e', '#if'], stdin=p1.stdout, stdout=subprocess.PIPE)
-                        p1.stdout.close()
-                        output, _ = p2.communicate()
-                        if not output:
-                            list_of_files.append(os.path.join(root,file))
-                        else:
-                            continue
                 else:
                     if (file.endswith(".cxx") or file.endswith(".c")):
                         list_of_files.append(os.path.join(root,file))

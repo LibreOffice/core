@@ -60,8 +60,8 @@ DRAGONBOX_TARBALL := dragonbox-1.1.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FAST_FLOAT_SHA256SUM := 4bfabb5979716995090ce68dce83f88f99629bc17ae280eae79311c5340143e1
-FAST_FLOAT_TARBALL := fast_float-8.1.0.tar.gz
+FAST_FLOAT_SHA256SUM := e64b5fff88e04959154adbd5fb83331d91f2e04ac06454671cdfcbdff172b158
+FAST_FLOAT_TARBALL := fast_float-8.2.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -162,8 +162,8 @@ FONT_LINLIBERTINEG_TARBALL := e7a384790b13c29113e22e596ade9687-LinLibertineG-201
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_KUFI_ARABIC_SHA256SUM := 1b6880e4b8df09c3b9e246d6084bfd94bf32a0ffff60cf2dcffd3622d0e2d79f
-FONT_NOTO_KUFI_ARABIC_TARBALL := NotoKufiArabic-v2.109.zip
+FONT_NOTO_KUFI_ARABIC_SHA256SUM := 34390882c196f032811f2a3db8982c1e839f69aae3e4c2c1fdd63203150690df
+FONT_NOTO_KUFI_ARABIC_TARBALL := NotoKufiArabic-v2.110.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -187,8 +187,8 @@ FONT_NOTO_SANS_ARABIC_TARBALL := NotoSansArabic-v2.010.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_NASKH_ARABIC_SHA256SUM := 7a509e10c9c8d21f384a26807ef2f5fbbecec46fdb8626c5441bed6d894edb81
-FONT_NOTO_NASKH_ARABIC_TARBALL := NotoNaskhArabic-v2.019.zip
+FONT_NOTO_NASKH_ARABIC_SHA256SUM := 80cbc4929693044efce4dc814cf45ff3365c140e81a076671ccbff8e3c603a83
+FONT_NOTO_NASKH_ARABIC_TARBALL := NotoNaskhArabic-v2.020.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -312,8 +312,8 @@ FROZEN_TARBALL := frozen-1.2.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-GLM_SHA256SUM := be64032585415ca7dbea0d614915bb8eec012adf7b4d4fea7ff6b5bd3e0b906a
-GLM_TARBALL := glm-1.0.2.zip
+GLM_SHA256SUM := 3aa4347b8f13cba882df1c7b61a6ca910c75a875c56ec3d75d7dc9ae8eac34df
+GLM_TARBALL := glm-1.0.3.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -327,8 +327,8 @@ GRAPHITE_TARBALL := graphite2-minimal-1.3.14.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HARFBUZZ_SHA256SUM := ecb603aa426a8b24665718667bda64a84c1504db7454ee4cadbd362eea64e545
-HARFBUZZ_TARBALL := harfbuzz-12.2.0.tar.xz
+HARFBUZZ_SHA256SUM := 8660ebd3c27d9407fc8433b5d172bafba5f0317cb0bb4339f28e5370c93d42b7
+HARFBUZZ_TARBALL := harfbuzz-12.3.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

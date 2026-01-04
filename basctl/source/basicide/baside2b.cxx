@@ -1850,13 +1850,11 @@ void WatchWindow::AddWatch( const OUString& rVName )
 
 void WatchWindow::RemoveSelectedWatch()
 {
-    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeListBox->make_iterator();
-    bool bEntry = m_xTreeListBox->get_cursor(xEntry.get());
-    if (bEntry)
+    if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeListBox->get_cursor())
     {
         m_xTreeListBox->remove(*xEntry);
-        bEntry = m_xTreeListBox->get_cursor(xEntry.get());
-        if (bEntry)
+        xEntry = m_xTreeListBox->get_cursor();
+        if (xEntry)
             m_xEdit->set_text(weld::fromId<WatchItem*>(m_xTreeListBox->get_id(*xEntry))->maName);
         else
             m_xEdit->set_text(OUString());
@@ -1873,9 +1871,8 @@ IMPL_STATIC_LINK_NOARG(WatchWindow, ButtonHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(WatchWindow, TreeListHdl, weld::TreeView&, void)
 {
-    std::unique_ptr<weld::TreeIter> xCurEntry = m_xTreeListBox->make_iterator();
-    bool bCurEntry = m_xTreeListBox->get_cursor(xCurEntry.get());
-    if (!bCurEntry)
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xTreeListBox->get_cursor();
+    if (!xCurEntry)
         return;
     WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(*xCurEntry));
     if (!pItem)

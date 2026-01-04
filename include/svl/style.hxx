@@ -205,7 +205,8 @@ public:
     SfxStyleSheetIterator(const SfxStyleSheetBasePool *pBase,
                           SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
     SfxStyleSearchBits GetSearchMask() const;
-    SfxStyleFamily GetSearchFamily() const;
+    SfxStyleFamily GetSearchFamily() const { return nSearchFamily; }
+
     virtual sal_Int32 Count();
     virtual SfxStyleSheetBase *operator[](sal_Int32 nIdx);
     virtual SfxStyleSheetBase* First();

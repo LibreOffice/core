@@ -19,7 +19,9 @@
 
 #pragma once
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <connectivity/sqliterator.hxx>
 

@@ -12,6 +12,8 @@
 #include <conditio.hxx>
 #include <formula/funcutl.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fntctrl.hxx>

@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSSARY_HXX
 
 #include <vcl/textfilter.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>

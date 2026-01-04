@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2025-12-19 10:17:21 using:
+ Generated on 2025-09-30 11:36:30 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -137,7 +137,6 @@
 #include <include/core/SkPath.h>
 #include <include/core/SkPathBuilder.h>
 #include <include/core/SkPathEffect.h>
-#include <include/core/SkPathIter.h>
 #include <include/core/SkPathMeasure.h>
 #include <include/core/SkPathTypes.h>
 #include <include/core/SkPathUtils.h>
@@ -197,11 +196,11 @@
 #include <include/encode/SkEncoder.h>
 #include <include/encode/SkICC.h>
 #include <include/encode/SkPngEncoder.h>
+#include <include/gpu/ganesh/GrDirectContext.h>
 #include <include/pathops/SkPathOps.h>
 #include <include/private/SkEncodedInfo.h>
 #include <include/private/SkExif.h>
 #include <include/private/SkGainmapInfo.h>
-#include <include/private/SkHdrMetadata.h>
 #include <include/private/SkIDChangeListener.h>
 #include <include/private/SkPathRef.h>
 #include <include/private/SkSLSampleUsage.h>
@@ -284,7 +283,6 @@
 #include <src/base/SkUtils.h>
 #include <src/base/SkVx.h>
 #include <src/base/SkZip.h>
-#include <src/capture/SkCaptureCanvas.h>
 #include <src/codec/SkAndroidCodecAdapter.h>
 #include <src/codec/SkBmpBaseCodec.h>
 #include <src/codec/SkBmpCodec.h>
@@ -351,6 +349,7 @@
 #include <src/core/SkDevice.h>
 #include <src/core/SkDistanceFieldGen.h>
 #include <src/core/SkDraw.h>
+#include <src/core/SkDrawBase.h>
 #include <src/core/SkDrawProcs.h>
 #include <src/core/SkDrawShadowInfo.h>
 #include <src/core/SkDrawTypes.h>
@@ -400,13 +399,11 @@
 #include <src/core/SkOptsTargets.h>
 #include <src/core/SkPaintDefaults.h>
 #include <src/core/SkPaintPriv.h>
-#include <src/core/SkPathData.h>
 #include <src/core/SkPathEffectBase.h>
 #include <src/core/SkPathEnums.h>
 #include <src/core/SkPathMakers.h>
 #include <src/core/SkPathMeasurePriv.h>
 #include <src/core/SkPathPriv.h>
-#include <src/core/SkPathRaw.h>
 #include <src/core/SkPathRawShapes.h>
 #include <src/core/SkPictureData.h>
 #include <src/core/SkPictureFlat.h>
@@ -446,7 +443,6 @@
 #include <src/core/SkScalerContext.h>
 #include <src/core/SkScan.h>
 #include <src/core/SkScanPriv.h>
-#include <src/core/SkSpanPriv.h>
 #include <src/core/SkSpecialImage.h>
 #include <src/core/SkSpriteBlitter.h>
 #include <src/core/SkStreamPriv.h>
@@ -566,7 +562,6 @@
 #include <src/utils/SkClipStackUtils.h>
 #include <src/utils/SkDashPathPriv.h>
 #include <src/utils/SkFloatToDecimal.h>
-#include <src/utils/SkFloatUtils.h>
 #include <src/utils/SkJSONWriter.h>
 #include <src/utils/SkMatrix22.h>
 #include <src/utils/SkMultiPictureDocumentPriv.h>

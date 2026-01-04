@@ -198,9 +198,8 @@ private:
         GroupUserData* pSrcRootData = weld::fromId<GroupUserData*>(pSource->get_id(*xSelected));
         GroupUserData* pDestRootData = nullptr;
 
-        std::unique_ptr<weld::TreeIter> xDestEntry(m_rTreeView.make_iterator());
-        bool bEntry = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xDestEntry.get(), true);
-        if (bEntry)
+        if (std::unique_ptr<weld::TreeIter> xDestEntry
+            = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, true))
         {
             while (m_rTreeView.get_iter_depth(*xDestEntry))
                 (void)m_rTreeView.iter_parent(*xDestEntry);
@@ -221,9 +220,9 @@ private:
         if (!pSource)
             return DND_ACTION_NONE;
 
-        std::unique_ptr<weld::TreeIter> xDestEntry(m_rTreeView.make_iterator());
-        bool bEntry = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xDestEntry.get(), true);
-        if (!bEntry)
+        std::unique_ptr<weld::TreeIter> xDestEntry
+            = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, true);
+        if (!xDestEntry)
             return DND_ACTION_NONE;
 
         std::unique_ptr<weld::TreeIter> xSelected = pSource->get_selected();

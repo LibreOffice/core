@@ -214,6 +214,11 @@
                   <object class="GtkLabel" id="labelST_LINEDIST_ABS">
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="paraindentspacing|labelST_LINEDIST_ABS">Fixed</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="labelST_LINEDIST_ABS-atkobject">
+                        <property name="AtkObject::accessible-role" translatable="no">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -394,6 +399,11 @@
                               <item id="6" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</item>
                               <item id="7" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Fixed</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="comboLB_LINEDIST-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="paraindentspacing|comboLB_LINEDIST">Line Spacing Type</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -406,6 +416,11 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="paraindentspacing|labelFT_LINEDIST">of</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="labelFT_LINEDIST-atkobject">
+                                <property name="AtkObject::accessible-role" translatable="no">static</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -431,6 +446,11 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustmentLINEDISTPERCENT</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinED_LINEDISTPERCENT-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="paraindentspacing|spinED_LINEDISTPERCENT">Line Spacing Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -446,6 +466,11 @@
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
                             <property name="digits">1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinED_LINEDISTMETRIC-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="paraindentspacing|spinED_LINEDISTMETRIC">Line Spacing Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -462,6 +487,11 @@
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinED_BLANK-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="paraindentspacing|spinED_BLANK">Line Spacing Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>

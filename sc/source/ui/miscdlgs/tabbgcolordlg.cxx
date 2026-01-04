@@ -61,9 +61,9 @@ ScTabBgColorDlg::~ScTabBgColorDlg()
 {
 }
 
-void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
+Color ScTabBgColorDlg::GetSelectedColor() const
 {
-    rColor = m_aTabBgColor;
+    return m_aTabBgColor;
 }
 
 void ScTabBgColorDlg::FillPaletteLB()

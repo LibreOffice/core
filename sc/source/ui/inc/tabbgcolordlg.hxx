@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/PaletteManager.hxx>
@@ -32,7 +33,7 @@ public:
                     const Color& rDefaultColor);
     virtual ~ScTabBgColorDlg() override;
 
-    void GetSelectedColor( Color& rColor ) const;
+    Color GetSelectedColor() const;
 
     class ScTabBgColorValueSet : public SvxColorValueSet
     {

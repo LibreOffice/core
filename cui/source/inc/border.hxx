@@ -20,6 +20,7 @@
 
 #include <editeng/shaditem.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>

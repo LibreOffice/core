@@ -251,7 +251,7 @@ void ScDataProvidersTest::testTdf169610_SortTransform()
 
     // range address is relative in SortTransform of Data Provider
     ScSortParam aSortParam;
-    // ctor includes Clear(). That sets alreay 0 for nCol1, nRow1 and nSourceTab
+    // ctor includes Clear(). That sets already 0 for nCol1, nRow1 and nSourceTab
     aSortParam.nCol2 = 8;
     aSortParam.nRow2 = 12;
     aSortParam.bHasHeader = true;

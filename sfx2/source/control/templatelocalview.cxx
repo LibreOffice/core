@@ -84,13 +84,14 @@ void TemplateLocalView::updateThumbnailDimensions(tools::Long itemMaxSize)
 
 TemplateLocalView::TemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                            std::unique_ptr<weld::Menu> xMenu)
-    : ThumbnailView(std::move(xWindow), std::move(xMenu))
+    : ThumbnailView(std::move(xWindow))
     , mnCurRegionId(0)
-    , maSelectedItem(nullptr)
+    , mpSelectedItem(nullptr)
     , mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH)
     , mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT)
     , maPosition(0,0)
     , mpDocTemplates(new SfxDocumentTemplates)
+    , mxContextMenu(std::move(xMenu))
 {
 }
 
@@ -193,21 +194,21 @@ TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
 void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
 {
     if (rIdent == u"open")
-        maOpenTemplateHdl.Call(maSelectedItem);
+        maOpenTemplateHdl.Call(mpSelectedItem->getPath());
     else if (rIdent == u"edit")
-        maEditTemplateHdl.Call(maSelectedItem);
+        maEditTemplateHdl.Call(mpSelectedItem->getPath());
     else if (rIdent == u"rename")
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
-        OUString sOldTitle = maSelectedItem->getTitle();
+        OUString sOldTitle = mpSelectedItem->getTitle();
         aTitleEditDlg.SetEntryText(sOldTitle);
         aTitleEditDlg.HideHelpBtn();
 
         auto aCurRegionItems = getFilteredItems([&](const TemplateItemProperties& rItem) {
-            return rItem.aRegionName == getRegionName(maSelectedItem->mnRegionId);
+            return rItem.aRegionName == getRegionName(mpSelectedItem->mnRegionId);
         });
         OUString sTooltip(SfxResId(STR_TOOLTIP_ERROR_RENAME_TEMPLATE));
-        sTooltip = sTooltip.replaceFirst("$2", getRegionName(maSelectedItem->mnRegionId));
+        sTooltip = sTooltip.replaceFirst("$2", getRegionName(mpSelectedItem->mnRegionId));
         aTitleEditDlg.setCheckEntry([&](OUString sNewTitle) {
             if (sNewTitle.isEmpty() || sNewTitle == sOldTitle)
                 return true;
@@ -227,7 +228,7 @@ void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
 
         if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
         {
-            maSelectedItem->setTitle(sNewTitle);
+            mpSelectedItem->setTitle(sNewTitle);
         }
     }
     else if (rIdent == u"delete")
@@ -237,11 +238,11 @@ void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
         if (xQueryDlg->run() != RET_YES)
             return;
 
-        maDeleteTemplateHdl.Call(maSelectedItem);
+        maDeleteTemplateHdl.Call(mpSelectedItem);
         reload();
     }
     else if (rIdent == u"default")
-        maDefaultTemplateHdl.Call(maSelectedItem);
+        maDefaultTemplateHdl.Call(mpSelectedItem);
 }
 
 sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
@@ -423,8 +424,8 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
     return true;
 }
 
-void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, selection_cmp_fn> &rItems,
-                                      const sal_uInt16 nTargetItem)
+void TemplateLocalView::moveTemplates(
+    const std::set<const TemplateViewItem*, selection_cmp_fn>& rItems, const sal_uInt16 nTargetItem)
 {
     TemplateContainerItem *pTarget = nullptr;
     TemplateContainerItem *pSrc = nullptr;
@@ -444,10 +445,9 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
     std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)
 
-    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aSelIter;
-    for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
+    for (auto aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx)
     {
-        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
+        const TemplateViewItem* pViewItem = *aSelIter;
         sal_uInt16 nSrcRegionId = pViewItem->mnRegionId;
 
         for (auto const & pRegion : maRegions)
@@ -706,18 +706,16 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-
-        if(pViewItem)
+        if (TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem))
         {
-            if(!pItem->isSelected())
+            if (!pViewItem->isSelected())
             {
                 deselectItems();
-                pItem->setSelection(true);
-                maItemStateHdl.Call(pItem);
+                pViewItem->setSelection(true);
+                maItemStateHdl.Call(pViewItem);
             }
-            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-            maCreateContextMenuHdl.Call(pItem);
+            mpSelectedItem = pViewItem;
+            maCreateContextMenuHdl.Call(pViewItem);
         }
     }
     else
@@ -728,8 +726,8 @@ bool TemplateLocalView::Command(const CommandEvent& rCEvt)
             {
                 tools::Rectangle aRect = pItem->getDrawArea();
                 maPosition = aRect.Center();
-                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-                maCreateContextMenuHdl.Call(pItem);
+                mpSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                maCreateContextMenuHdl.Call(mpSelectedItem);
                 break;
             }
         }
@@ -784,17 +782,17 @@ void TemplateLocalView::setOpenRegionHdl(const Link<void*,void> &rLink)
     maOpenRegionHdl = rLink;
 }
 
-void TemplateLocalView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateLocalView::setCreateContextMenuHdl(const Link<TemplateViewItem*, void>& rLink)
 {
     maCreateContextMenuHdl = rLink;
 }
 
-void TemplateLocalView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateLocalView::setOpenTemplateHdl(const Link<const OUString&, void>& rLink)
 {
     maOpenTemplateHdl = rLink;
 }
 
-void TemplateLocalView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateLocalView::setEditTemplateHdl(const Link<const OUString&, void>& rLink)
 {
     maEditTemplateHdl = rLink;
 }
@@ -893,7 +891,7 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
     TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
     if( pViewItem )
-        maOpenTemplateHdl.Call(pViewItem);
+        maOpenTemplateHdl.Call(pViewItem->getPath());
 }
 
 bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)

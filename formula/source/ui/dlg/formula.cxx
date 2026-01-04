@@ -20,6 +20,7 @@
 #include <memory>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <sal/log.hxx>

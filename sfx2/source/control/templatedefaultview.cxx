@@ -68,7 +68,7 @@ bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
         TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
         if(pViewItem)
-            maOpenTemplateHdl.Call(pViewItem);
+            maOpenTemplateHdl.Call(pViewItem->getPath());
         return true;
     }
 
@@ -81,8 +81,8 @@ void TemplateDefaultView::createContextMenu()
     mxContextMenu->append(u"open"_ustr,SfxResId(STR_OPEN));
     mxContextMenu->append(u"edit"_ustr,SfxResId(STR_EDIT_TEMPLATE));
     deselectItems();
-    maSelectedItem->setSelection(true);
-    maItemStateHdl.Call(maSelectedItem);
+    mpSelectedItem->setSelection(true);
+    maItemStateHdl.Call(mpSelectedItem);
     ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
     Invalidate();
 }

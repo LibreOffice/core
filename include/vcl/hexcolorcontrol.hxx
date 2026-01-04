@@ -22,6 +22,7 @@
 #include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/weld/Entry.hxx>
 
 namespace weld { class Entry; }
 

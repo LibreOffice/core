@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/print.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/timer.hxx>

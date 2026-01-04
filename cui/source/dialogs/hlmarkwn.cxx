@@ -475,9 +475,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, weld::TreeView&, b
 
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
-    bool bEntry = mxLbTree->get_cursor(xEntry.get());
-    if (bEntry)
+    if (std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->get_cursor())
     {
         TargetData* pData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         if (pData->bIsTarget)
@@ -490,9 +488,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)
 // Click on Close-Button
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
-    bool bEntry = mxLbTree->get_cursor(xEntry.get());
-    if (bEntry)
+    if (std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->get_cursor())
     {
         TargetData* pUserData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         OUString sLastSelectedMark = pUserData->aUStrLinkname;
@@ -502,6 +498,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
         //underneath it is selected leave a dummy entry
         if (mxLbTree->get_row_expanded(*xEntry))
             aLastSelectedPath.push_front(OUString());
+        bool bEntry = true;
         while (bEntry)
         {
             aLastSelectedPath.push_front(mxLbTree->get_text(*xEntry));

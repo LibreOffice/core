@@ -22,6 +22,8 @@
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include <TitleHelper.hxx>
 

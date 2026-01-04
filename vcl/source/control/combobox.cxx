@@ -1283,14 +1283,14 @@ void ComboBox::AddSeparator( sal_Int32 n )
     m_pImplLB->AddSeparator( n );
 }
 
-void ComboBox::SetMRUEntries( std::u16string_view rEntries )
+void ComboBox::SetMRUEntries(const std::vector<OUString>& rEntries)
 {
-    m_pImplLB->SetMRUEntries( rEntries, ';' );
+    m_pImplLB->SetMRUEntries(rEntries);
 }
 
-OUString ComboBox::GetMRUEntries() const
+std::vector<OUString> ComboBox::GetMRUEntries() const
 {
-    return m_pImplLB ? m_pImplLB->GetMRUEntries( ';' ) : OUString();
+    return m_pImplLB ? m_pImplLB->GetMRUEntries() : std::vector<OUString>();
 }
 
 void ComboBox::SetMaxMRUCount( sal_Int32 n )

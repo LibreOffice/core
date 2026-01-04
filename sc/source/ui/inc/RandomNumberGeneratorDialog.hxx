@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <vcl/weld/SpinButton.hxx>
+
 #include <optional>
 
 #include <address.hxx>

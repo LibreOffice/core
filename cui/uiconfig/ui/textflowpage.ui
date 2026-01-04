@@ -54,8 +54,8 @@
     <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment9">
-    <property name="lower">2</property>
-    <property name="upper">9</property>
+    <property name="lower">0</property>
+    <property name="upper">99</property>
     <property name="value">2</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
@@ -77,6 +77,13 @@
   </object>
   <object class="GtkAdjustment" id="adjustment13">
     <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment14">
+    <property name="lower">0</property>
+    <property name="upper">99</property>
+    <property name="value">2</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
@@ -141,7 +148,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -161,7 +168,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -175,13 +182,33 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinCompoundLineEnd-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinCompoundLineEnd">Enter the minimum number of characters of a compound word to leave at the end of the line before a hyphen is inserted.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinCompoundLineEnd">Enter the minimum number of characters of a compound word constituent to leave at the end of the line before a hyphen is inserted.</property>
                   </object>
                 </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinCompoundLineBegin">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">start</property>
+                <property name="margin-start">25</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment14</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="spinCompoundLineBegin-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinCompoundLineBegin">Enter the minimum number of characters of a compound word constituent that must appear at the beginning of the line after the hyphen.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
@@ -267,6 +294,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="labelCompoundLineBegin">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes" context="textflowpage|labelCompoundLineBegin">C_ompound characters at line begin</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">spinCompoundLineBegin</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="labelMaxNum">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -277,7 +318,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -291,7 +332,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>

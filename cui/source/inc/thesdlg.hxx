@@ -21,6 +21,8 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <vcl/idle.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <sfx2/basedlgs.hxx>
 

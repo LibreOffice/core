@@ -265,7 +265,7 @@ void XSecController::setX509Data(
             OUString const serialNumber(xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()));
             auto const iter = std::find_if(rX509IssuerSerials.begin(), rX509IssuerSerials.end(),
                 [&](auto const& rX509IssuerSerial) {
-                    return xmlsecurity::EqualDistinguishedNames(issuerName, rX509IssuerSerial.first, xmlsecurity::COMPAT_2ND)
+                    return xmlsecurity::EqualDistinguishedNames(issuerName, rX509IssuerSerial.first, xmlsecurity::EqualMode::Compat2nd)
                         && serialNumber == rX509IssuerSerial.second;
                 });
             if (iter != rX509IssuerSerials.end())
@@ -412,7 +412,7 @@ void XSecController::setX509CertDigest(
     {
         for (auto & it : rData)
         {
-            if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName, xmlsecurity::COMPAT_BOTH)
+            if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName, xmlsecurity::EqualMode::CompatBoth)
                 && it.X509SerialNumber == rX509SerialNumber)
             {
                 it.CertDigest = rCertDigest;
@@ -435,7 +435,7 @@ void XSecController::setX509CertDigest(
                     {
                         SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
                     }
-                    else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(), rX509IssuerName, xmlsecurity::COMPAT_2ND)
+                    else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(), rX509IssuerName, xmlsecurity::EqualMode::Compat2nd)
                         && xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()) == rX509SerialNumber)
                     {
                         it.CertDigest = rCertDigest;

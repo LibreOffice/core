@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>

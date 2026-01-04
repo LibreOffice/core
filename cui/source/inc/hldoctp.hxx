@@ -20,6 +20,8 @@
 
 #include "hltpbase.hxx"
 
+#include <vcl/weld/Entry.hxx>
+
 /*************************************************************************
 |*
 |* Tabpage : Hyperlink - Document

@@ -11,6 +11,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <vector>
+#include "epptooxml.hxx"
 #include "pptx-animations-cond.hxx"
 
 namespace oox::core
@@ -28,6 +29,8 @@ class NodeContext
     std::vector<Cond> maEndCondList;
     // if the node has valid target or contains at least one valid target.
     bool mbValid;
+    // Required to check if the associated shape is present in export or not
+    PowerPointExport& mrPowerPointExport;
 
     // if the node should be on SubTnLst or ChildTnLst
     bool mbOnSubTnLst;
@@ -37,6 +40,8 @@ class NodeContext
     sal_Int16 mnEffectPresetClass;
     OUString msEffectPresetId;
     OUString msEffectPresetSubType;
+
+    bool isValidTarget(const css::uno::Any& rTarget);
 
     /// constructor helper for initializing user data.
     void initUserData();
@@ -50,7 +55,7 @@ class NodeContext
 
 public:
     NodeContext(const css::uno::Reference<css::animations::XAnimationNode>& xNode,
-                bool bMainSeqChild, bool bIsIterateChild);
+                PowerPointExport& rExport, bool bMainSeqChild, bool bIsIterateChild);
     const css::uno::Reference<css::animations::XAnimationNode>& getNode() const { return mxNode; }
     sal_Int16 getEffectNodeType() const { return mnEffectNodeType; }
     sal_Int16 getEffectPresetClass() const { return mnEffectPresetClass; }

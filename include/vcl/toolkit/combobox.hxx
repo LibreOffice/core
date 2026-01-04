@@ -159,8 +159,8 @@ public:
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    SAL_DLLPRIVATE void     SetMRUEntries( std::u16string_view rEntries );
-    SAL_DLLPRIVATE OUString GetMRUEntries() const;
+    SAL_DLLPRIVATE void SetMRUEntries(const std::vector<OUString>& rEntries);
+    SAL_DLLPRIVATE std::vector<OUString> GetMRUEntries() const;
     SAL_DLLPRIVATE void     SetMaxMRUCount( sal_Int32  n );
     SAL_DLLPRIVATE sal_Int32 GetMaxMRUCount() const;
     SAL_DLLPRIVATE void  SetEntryData( sal_Int32  nPos, void* pNewData );

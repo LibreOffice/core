@@ -21,6 +21,7 @@
 #include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld/Entry.hxx>
 
 struct SvxAsianLayoutPage_Impl;
 class SvxAsianLayoutPage : public SfxTabPage

@@ -21,6 +21,7 @@
 #define INCLUDED_SFX2_SOURCE_INC_VERSDLG_HXX
 
 #include <sfx2/basedlgs.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

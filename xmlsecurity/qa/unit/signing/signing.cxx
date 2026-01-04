@@ -612,13 +612,17 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDNCompatibility)
     static constexpr OUString msDN(u"CN=\"\"\"ABC\"\".\", O=\"Enterprise \"\"ABC\"\"\""_ustr);
     static constexpr OUString nssDN(u"CN=\\\"ABC\\\".,O=Enterprise \\\"ABC\\\""_ustr);
     // this is just the status quo, possibly either NSS or CryptoAPI might change
-    CPPUNIT_ASSERT(!xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::NOCOMPAT));
-    CPPUNIT_ASSERT(!xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::NOCOMPAT));
+    CPPUNIT_ASSERT(
+        !xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::EqualMode::NoCompat));
+    CPPUNIT_ASSERT(
+        !xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::EqualMode::NoCompat));
     // with compat flag it should work, with the string one 2nd and the native one 1st
 #ifdef _WIN32
-    CPPUNIT_ASSERT(xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::COMPAT_2ND));
+    CPPUNIT_ASSERT(
+        xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::EqualMode::Compat2nd));
 #else
-    CPPUNIT_ASSERT(xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::COMPAT_2ND));
+    CPPUNIT_ASSERT(
+        xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::EqualMode::Compat2nd));
 #endif
 }
 

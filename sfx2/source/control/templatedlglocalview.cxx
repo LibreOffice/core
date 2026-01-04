@@ -149,22 +149,22 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
 void TemplateDlgLocalView::ContextMenuSelectHdl(std::u16string_view rIdent)
 {
     if (rIdent == u"open")
-        maOpenTemplateHdl.Call(maSelectedItem);
+        maOpenTemplateHdl.Call(mpSelectedItem->getPath());
     else if (rIdent == u"edit")
-        maEditTemplateHdl.Call(maSelectedItem);
+        maEditTemplateHdl.Call(mpSelectedItem->getPath());
     else if (rIdent == u"rename")
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
         aTitleEditDlg.set_title(SfxResId(STR_WINDOW_TITLE_RENAME_TEMPLATE));
-        OUString sOldTitle = maSelectedItem->getTitle();
+        OUString sOldTitle = mpSelectedItem->getTitle();
         aTitleEditDlg.SetEntryText(sOldTitle);
         aTitleEditDlg.HideHelpBtn();
 
         auto aCurRegionItems = getFilteredItems([&](const TemplateItemProperties& rItem) {
-            return rItem.aRegionName == getRegionName(maSelectedItem->mnRegionId);
+            return rItem.aRegionName == getRegionName(mpSelectedItem->mnRegionId);
         });
         OUString sTooltip(SfxResId(STR_TOOLTIP_ERROR_RENAME_TEMPLATE));
-        sTooltip = sTooltip.replaceFirst("$2", getRegionName(maSelectedItem->mnRegionId));
+        sTooltip = sTooltip.replaceFirst("$2", getRegionName(mpSelectedItem->mnRegionId));
         aTitleEditDlg.setCheckEntry([&](OUString sNewTitle) {
             if (sNewTitle.isEmpty() || sNewTitle == sOldTitle)
                 return true;
@@ -184,8 +184,8 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::u16string_view rIdent)
 
         if (!sNewTitle.isEmpty() && sNewTitle != sOldTitle)
         {
-            maSelectedItem->setTitle(sNewTitle);
-            ListView::rename(OUString::number(maSelectedItem->mnId), maSelectedItem->maTitle);
+            mpSelectedItem->setTitle(sNewTitle);
+            ListView::rename(OUString::number(mpSelectedItem->mnId), mpSelectedItem->maTitle);
         }
     }
     else if (rIdent == u"delete")
@@ -196,21 +196,21 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::u16string_view rIdent)
         if (xQueryDlg->run() != RET_YES)
             return;
 
-        maDeleteTemplateHdl.Call(maSelectedItem);
+        maDeleteTemplateHdl.Call(mpSelectedItem);
         reload();
     }
     else if (rIdent == u"default")
     {
-        maDefaultTemplateHdl.Call(maSelectedItem);
+        maDefaultTemplateHdl.Call(mpSelectedItem);
         ListView::refreshDefaultColumn();
     }
     else if (rIdent == u"move")
     {
-        maMoveTemplateHdl.Call(maSelectedItem);
+        maMoveTemplateHdl.Call(mpSelectedItem);
     }
     else if (rIdent == u"export")
     {
-        maExportTemplateHdl.Call(maSelectedItem);
+        maExportTemplateHdl.Call(mpSelectedItem);
     }
 }
 
@@ -308,9 +308,8 @@ void TemplateDlgLocalView::syncCursor()
 
         size_t nPos = GetItemPos(nCursorId);
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-        if (pViewItem)
-            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+        if (TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem))
+            mpSelectedItem = pViewItem;
     }
 }
 
@@ -329,14 +328,13 @@ void TemplateDlgLocalView::updateSelection()
     sal_uInt16 nCursorId = get_nId(nCursorIndex);
     size_t nPos = GetItemPos(nCursorId);
     ThumbnailViewItem* pItem = ImplGetItem(nPos);
-    const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-    if (pViewItem)
-        maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+    if (TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem))
+        mpSelectedItem = pViewItem;
 }
 
 IMPL_LINK_NOARG(TemplateDlgLocalView, RowActivatedHdl, weld::TreeView&, bool)
 {
-    maOpenTemplateHdl.Call(maSelectedItem);
+    maOpenTemplateHdl.Call(mpSelectedItem->getPath());
     return true;
 }
 
@@ -352,8 +350,8 @@ IMPL_LINK(TemplateDlgLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
         updateSelection();
-        if (maSelectedItem)
-            maCreateContextMenuHdl.Call(maSelectedItem);
+        if (mpSelectedItem)
+            maCreateContextMenuHdl.Call(mpSelectedItem);
         return true;
     }
     else
@@ -362,8 +360,8 @@ IMPL_LINK(TemplateDlgLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
             return true;
         maPosition = Point(0, 0);
         updateSelection();
-        if (maSelectedItem)
-            maCreateContextMenuHdl.Call(maSelectedItem);
+        if (mpSelectedItem)
+            maCreateContextMenuHdl.Call(mpSelectedItem);
         return true;
     }
 }
@@ -400,7 +398,7 @@ bool TemplateDlgLocalView::KeyInput(const KeyEvent& rKEvt)
         if (xQueryDlg->run() != RET_YES)
             return true;
 
-        maDeleteTemplateHdl.Call(maSelectedItem);
+        maDeleteTemplateHdl.Call(mpSelectedItem);
         reload();
     }
 
@@ -420,7 +418,7 @@ IMPL_LINK(TemplateDlgLocalView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
         if (xQueryDlg->run() != RET_YES)
             return true;
 
-        maDeleteTemplateHdl.Call(maSelectedItem);
+        maDeleteTemplateHdl.Call(mpSelectedItem);
         reload();
     }
     return false;

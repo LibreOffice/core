@@ -200,6 +200,7 @@ cmd/32/graphicdialog-more.png cmd/32/controlproperties.png
 cmd/32/graphicfilterinvert.png cmd/32/grafinvert.png
 cmd/32/graphicmenu.png cmd/32/avmediaplayer.png
 cmd/32/gridmenu.png cmd/32/gridvisible.png
+cmd/32/gridsmenu.png cmd/32/gridvisible.png
 cmd/32/groupmenu.png cmd/32/formatgroup.png
 cmd/32/groupoutlinemenu.png cmd/32/autooutline.png
 cmd/32/he/absoluterecord.png cmd/32/ar/absoluterecord.png
@@ -852,6 +853,7 @@ cmd/lc_graphicdialog-more.png cmd/lc_controlproperties.png
 cmd/lc_graphicfilterinvert.png cmd/lc_grafinvert.png
 cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_gridmenu.png cmd/lc_gridvisible.png
+cmd/lc_gridsmenu.png cmd/lc_gridvisible.png
 cmd/lc_groupmenu.png cmd/lc_formatgroup.png
 cmd/lc_groupoutlinemenu.png cmd/lc_autooutline.png
 cmd/lc_headerandfooter.png cmd/lc_editheaderandfooter.png
@@ -1279,6 +1281,7 @@ cmd/sc_graphicdialog-more.png cmd/sc_controlproperties.png
 cmd/sc_graphicfilterinvert.png cmd/sc_grafinvert.png
 cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_gridmenu.png cmd/sc_gridvisible.png
+cmd/sc_gridsmenu.png cmd/sc_gridvisible.png
 cmd/sc_groupmenu.png cmd/sc_formatgroup.png
 cmd/sc_groupoutlinemenu.png cmd/sc_autooutline.png
 cmd/sc_headerandfooter.png cmd/sc_editheaderandfooter.png

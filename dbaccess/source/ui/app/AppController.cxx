@@ -1690,8 +1690,8 @@ bool OApplicationController::onEntryDoubleClick(const weld::TreeView& rTreeView)
     if (!pContainer)
         return false;   // not handled
 
-    std::unique_ptr<weld::TreeIter> xHdlEntry = rTreeView.make_iterator();
-    if (!rTreeView.get_cursor(xHdlEntry.get()))
+    std::unique_ptr<weld::TreeIter> xHdlEntry = rTreeView.get_cursor();
+    if (!xHdlEntry)
         return false;
 
     if (!pContainer->isLeaf(rTreeView, *xHdlEntry))

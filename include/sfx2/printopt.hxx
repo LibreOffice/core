@@ -24,6 +24,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <sal/types.h>
 #include <vcl/printer/Options.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage final : public SfxTabPage
 {

@@ -195,7 +195,7 @@ protected:
     void                    ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
     void                    ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
     void                    ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
-    bool                    ImpFindEntry(weld::TreeIter& rIter, std::u16string_view rText);
+    std::unique_ptr<weld::TreeIter> ImpFindEntry(std::u16string_view rText);
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
@@ -253,7 +253,7 @@ public:
     void select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }
     void unselect(const weld::TreeIter& rIter) { m_xControl->unselect(rIter); }
     void remove(const weld::TreeIter& rIter) { m_xControl->remove(rIter); }
-    bool get_cursor(weld::TreeIter* pIter) const { return m_xControl->get_cursor(pIter); }
+    std::unique_ptr<weld::TreeIter> get_cursor() const { return m_xControl->get_cursor(); }
     void set_cursor(const weld::TreeIter& rIter) { m_xControl->set_cursor(rIter); }
     OUString get_text(const weld::TreeIter& rIter) const { return m_xControl->get_text(rIter); }
     void set_text(const weld::TreeIter& rIter, const OUString& rText) { m_xControl->set_text(rIter, rText); }

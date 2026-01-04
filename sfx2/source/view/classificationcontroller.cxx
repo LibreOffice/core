@@ -25,6 +25,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <cppuhelper/supportsservice.hxx>

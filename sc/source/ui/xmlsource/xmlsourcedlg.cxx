@@ -235,8 +235,8 @@ std::unique_ptr<weld::TreeIter> getReferenceEntry(const weld::TreeView& rTree, c
 
 void ScXMLSourceDlg::TreeItemSelected()
 {
-    std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
-    if (!mxLbTree->get_cursor(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->get_cursor();
+    if (!xEntry)
         return;
 
     mxLbTree->unselect_all();

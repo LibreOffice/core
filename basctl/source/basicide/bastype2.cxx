@@ -542,16 +542,17 @@ void SbTreeListBox::ReloadAllEntries()
     }
 }
 
-bool SbTreeListBox::ImpFindEntry(weld::TreeIter& rIter, std::u16string_view rText)
+std::unique_ptr<weld::TreeIter> SbTreeListBox::ImpFindEntry(std::u16string_view rText)
 {
-    bool bValidIter = m_xControl->iter_children(rIter);
+    std::unique_ptr<weld::TreeIter> pIter = m_xControl->make_iterator();
+    bool bValidIter = m_xControl->iter_children(*pIter);
     while (bValidIter)
     {
-        if (rText == m_xControl->get_text(rIter))
-            return true;
-        bValidIter = m_xControl->iter_next_sibling(rIter);
+        if (rText == m_xControl->get_text(*pIter))
+            return pIter;
+        bValidIter = m_xControl->iter_next_sibling(*pIter);
     }
-    return false;
+    return {};
 }
 
 void SbTreeListBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -823,12 +824,8 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
                 if( !aLibSubName.isEmpty() )
                 {
                     m_xControl->expand_row(*xLibIter);
-                    auto xSubLibIter = m_xControl->make_iterator(xLibIter.get());
-                    bool bSubLibEntry = ImpFindEntry(*xSubLibIter, aLibSubName);
-                    if (bSubLibEntry)
-                    {
+                    if (std::unique_ptr<weld::TreeIter> xSubLibIter = ImpFindEntry(aLibSubName))
                         m_xControl->copy_iterator(*xSubLibIter, *xCurIter);
-                    }
                 }
                 const OUString& aName( aDesc.GetName() );
                 if ( !aName.isEmpty() )
@@ -889,15 +886,15 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
 
 IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
 {
-    bool bValidIter = m_xControl->get_cursor(m_xScratchIter.get());
-    if (!bValidIter)
+    std::unique_ptr<weld::TreeIter> pCursor = m_xControl->get_cursor();
+    if (!pCursor)
         return true;
-    if (!m_xControl->get_row_expanded(*m_xScratchIter))
-        m_xControl->expand_row(*m_xScratchIter);
+    if (!m_xControl->get_row_expanded(*pCursor))
+        m_xControl->expand_row(*pCursor);
     else
-        m_xControl->collapse_row(*m_xScratchIter);
+        m_xControl->collapse_row(*pCursor);
 
-    EntryDescriptor aDesc = GetEntryDescriptor(m_xScratchIter.get());
+    EntryDescriptor aDesc = GetEntryDescriptor(pCursor.get());
     switch (aDesc.GetType())
     {
         case OBJ_TYPE_METHOD:

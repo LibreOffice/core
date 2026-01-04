@@ -283,6 +283,9 @@ MetaRoundRectAction::MetaRoundRectAction( const tools::Rectangle& rRect,
 
 void MetaRoundRectAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawRect( maRect, mnHorzRound, mnVertRound );
 }
 
@@ -313,6 +316,9 @@ MetaEllipseAction::MetaEllipseAction( const tools::Rectangle& rRect ) :
 
 void MetaEllipseAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawEllipse( maRect );
 }
 
@@ -420,6 +426,9 @@ MetaChordAction::MetaChordAction( const tools::Rectangle& rRect,
 
 void MetaChordAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawChord( maRect, maStartPt, maEndPt );
 }
 
@@ -1206,6 +1215,8 @@ MetaGradientAction::MetaGradientAction( const tools::Rectangle& rRect, Gradient 
 
 void MetaGradientAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
     pOut->DrawGradient( maRect, maGradient );
 }
 

@@ -25,6 +25,7 @@
 #include <vector>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>

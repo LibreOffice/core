@@ -1218,8 +1218,8 @@ sal_uInt32 GalleryBrowser::ImplGetSelectedItemId( const Point* pSelPos, Point& r
     {
         if( pSelPos )
         {
-            std::unique_ptr<weld::TreeIter> xIter = mxListView->make_iterator();
-            if (mxListView->get_dest_row_at_pos(*pSelPos, xIter.get(), false))
+            if (std::unique_ptr<weld::TreeIter> xIter
+                = mxListView->get_dest_row_at_pos(*pSelPos, false))
                 nRet = mxListView->get_iter_index_in_parent(*xIter) + 1;
             rSelPos = *pSelPos;
         }
@@ -1577,8 +1577,8 @@ IMPL_LINK(GalleryBrowser, SearchHdl, weld::Entry&, searchEdit, void)
     }
     else
     {
-        for(std::set<OUString>::iterator foundIter = aFoundThemes.begin(); foundIter != aFoundThemes.end(); ++foundIter)
-            ImplInsertThemeEntry(mpGallery->GetThemeInfo(*foundIter));
+        for (const auto& rThemeName : aFoundThemes)
+            ImplInsertThemeEntry(mpGallery->GetThemeInfo(rThemeName));
     }
     mxThemes->select_text(curThemeName);
     SelectTheme(curThemeName);

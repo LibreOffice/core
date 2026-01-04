@@ -3087,7 +3087,22 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <rng:define name="style-text-properties-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:hyphenation-compound-remain-char-count">
-        <rng:ref name="positiveInteger"/>
+         <rng:choice>
+           <rng:value>no-limit</rng:value>
+           <rng:ref name="positiveInteger"/>
+         </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-compound-push-char-count">
+         <rng:choice>
+           <rng:value>no-limit</rng:value>
+           <rng:ref name="positiveInteger"/>
+         </rng:choice>
       </rng:attribute>
     </rng:optional>
   </rng:define>

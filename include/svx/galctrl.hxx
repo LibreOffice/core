@@ -23,6 +23,7 @@
 #include <vcl/graph.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <svx/svxdllapi.h>
 

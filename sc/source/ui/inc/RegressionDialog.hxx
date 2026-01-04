@@ -13,6 +13,8 @@
 #include "StatisticsTwoVariableDialog.hxx"
 #include "TableFillingAndNavigationTools.hxx"
 
+#include <vcl/weld/SpinButton.hxx>
+
 class ScRegressionDialog : public ScStatisticsTwoVariableDialog
 {
     bool mbUnivariate;

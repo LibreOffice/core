@@ -1088,6 +1088,7 @@ namespace xmloff::token {
         TOKEN( "hyphenation-zone-page",           XML_HYPHENATION_ZONE_PAGE ),
         TOKEN( "hyphenation-zone-spread",         XML_HYPHENATION_ZONE_SPREAD ),
         TOKEN( "hyphenation-compound-remain-char-count", XML_HYPHENATION_COMPOUND_REMAIN_CHAR_COUNT ),
+        TOKEN( "hyphenation-compound-push-char-count", XML_HYPHENATION_COMPOUND_PUSH_CHAR_COUNT ),
         TOKEN( "i",                               XML_I ),
         TOKEN( "icon",                            XML_ICON ),
         TOKEN( "icon-set",                        XML_ICON_SET ),

@@ -22,6 +22,7 @@
 #include <config_options.h>
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/weld/Entry.hxx>
 
 class UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) SvxPasswordDialog final : public SfxDialogController
 {

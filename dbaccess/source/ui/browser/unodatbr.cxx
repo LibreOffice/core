@@ -1633,8 +1633,8 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
         case ID_TREE_EDIT_DATABASE:
         {
             weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-            std::unique_ptr<weld::TreeIter> xCurrentEntry(rTreeView.make_iterator());
-            if (!rTreeView.get_cursor(xCurrentEntry.get()))
+            std::unique_ptr<weld::TreeIter> xCurrentEntry = rTreeView.get_cursor();
+            if (!xCurrentEntry)
                 return aReturn;
 
             EntryType eType = getEntryType(*xCurrentEntry);
@@ -1806,16 +1806,15 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
         case ID_TREE_EDIT_DATABASE:
         {
             weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-            if (rTreeView.get_cursor(xIter.get()))
+            std::unique_ptr<weld::TreeIter> xIter = rTreeView.get_cursor();
+            if (xIter)
                 implAdministrate(*xIter);
             break;
         }
         case ID_TREE_CLOSE_CONN:
         {
             weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-            std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-            if (rTreeView.get_cursor(xIter.get()))
+            if (std::unique_ptr<weld::TreeIter> xIter = rTreeView.get_cursor())
             {
                 xIter = m_pTreeView->GetRootLevelParent(xIter.get());
                 closeConnection(*xIter);
@@ -1982,8 +1981,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             if(m_pTreeView->HasChildPathFocus())
             {
                 weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-                std::unique_ptr<weld::TreeIter> xCursor(rTreeView.make_iterator());
-                if (rTreeView.get_cursor(xCursor.get()))
+                if (std::unique_ptr<weld::TreeIter> xCursor = rTreeView.get_cursor())
                     copyEntry(*xCursor);
             }
             else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing() && getBrowserView()->getVclControl()->GetSelectRowCount() < 1)

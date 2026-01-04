@@ -27,6 +27,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>

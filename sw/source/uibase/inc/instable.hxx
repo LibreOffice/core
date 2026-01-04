@@ -24,6 +24,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/textfilter.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 #include "wrtsh.hxx"

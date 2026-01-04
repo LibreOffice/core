@@ -530,8 +530,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                 else
                 {
                     weld::TreeView& rTreeView = m_xListBox->get_widget();
-                    std::unique_ptr<weld::TreeIter> xCurrent = rTreeView.make_iterator();
-                    if (rTreeView.get_cursor(xCurrent.get()))
+                    if (std::unique_ptr<weld::TreeIter> xCurrent = rTreeView.get_cursor())
                         ptWhere = rTreeView.get_row_area(*xCurrent).Center();
                     else
                         ptWhere = m_xTitle->GetPosPixel();

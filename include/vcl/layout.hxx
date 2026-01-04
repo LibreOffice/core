@@ -19,7 +19,6 @@
 #include <vcl/transfer.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>
-#include <vcl/commandevent.hxx>
 #include <set>
 
 class ScrollBar;

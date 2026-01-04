@@ -323,7 +323,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         sal_Int32 nHyphZone = -1;
         sal_Int32 nParaZone = -1;
         const css::beans::PropertyValues & rHyphValues = rInf.GetHyphValues();
-        assert( rHyphValues.getLength() > 10 && rHyphValues[5].Name == UPN_HYPH_ZONE && rHyphValues[10].Name == UPN_HYPH_ZONE_ALWAYS );
+        assert( rHyphValues.getLength() > 11 && rHyphValues[5].Name == UPN_HYPH_ZONE && rHyphValues[11].Name == UPN_HYPH_ZONE_ALWAYS );
         // hyphenation zone (distance from the line end in twips)
         sal_Int16 nTextHyphenZone = 0;
         sal_Int16 nTextHyphenZoneAlways = 0;
@@ -437,7 +437,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             bool bHyphenationNoLastWord = false;  // do not hyphenate the last word of the paragraph
             assert( rHyphValues.getLength() > 3 && rHyphValues[3].Name == UPN_HYPH_NO_LAST_WORD );
             assert( rHyphValues.getLength() > 6 && rHyphValues[6].Name == UPN_HYPH_KEEP_TYPE );
-            assert( rHyphValues.getLength() > 8 && rHyphValues[8].Name == UPN_HYPH_KEEP );
+            assert( rHyphValues.getLength() > 9 && rHyphValues[9].Name == UPN_HYPH_KEEP );
             rHyphValues[3].Value >>= bHyphenationNoLastWord;
             rHyphValues[8].Value >>= bDoNotHyphenateLastLine;
             if ( bDoNotHyphenateLastLine )

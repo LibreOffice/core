@@ -20,6 +20,8 @@
 
 #include "WTabPage.hxx"
 
+#include <vcl/weld/Entry.hxx>
+
 namespace dbaui
 {
     class OCopyTable final : public OWizardPage

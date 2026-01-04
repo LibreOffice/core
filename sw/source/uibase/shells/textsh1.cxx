@@ -122,7 +122,6 @@
 #include <config_wasm_strip.h>
 #if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
 #include <officecfg/Office/Common.hxx>
-#include <officecfg/Office/Linguistic.hxx>
 #include <svl/visitem.hxx>
 #include <translatelangselect.hxx>
 #endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
@@ -927,7 +926,7 @@ bool lcl_DeleteChartColumns(const uno::Reference<chart2::XChartDocument>& xChart
 }
 }
 
-static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xDictionary, SwWrtShell &rWrtSh)
+static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xDictionary, SwWrtShell &rWrtSh, bool bAddWithDot = false)
 {
     if (!xDictionary)
         return false;
@@ -938,7 +937,7 @@ static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xD
         return false;
 
     OUString sWord = xSpellAlt->getWord();
-    linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDictionary, sWord, false, OUString());
+    linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDictionary, sWord, false, OUString(), !bAddWithDot);
     if (linguistic::DictionaryError::NONE != nAddRes && xDictionary.is() && !xDictionary->getEntry(sWord).is())
     {
         SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
@@ -2303,18 +2302,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         const SfxPoolItem* pTargetLangStringItem = nullptr;
         if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TARGETLANG_STR, false, &pTargetLangStringItem))
         {
-            std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
-            std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-            if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
-            {
-                SAL_WARN("sw.ui", "SID_FM_TRANSLATE: API options are not set");
-                break;
-            }
-            const OString aAPIUrl = OUStringToOString(rtl::Concat2View(*oDeeplAPIUrl + "?tag_handling=html"), RTL_TEXTENCODING_UTF8).trim();
-            const OString aAuthKey = OUStringToOString(*oDeeplKey, RTL_TEXTENCODING_UTF8).trim();
             OString aTargetLang = OUStringToOString(static_cast<const SfxStringItem*>(pTargetLangStringItem)->GetValue(), RTL_TEXTENCODING_UTF8);
-            SwTranslateHelper::TranslateAPIConfig aConfig({aAPIUrl, aAuthKey, aTargetLang});
-            SwTranslateHelper::TranslateDocument(rWrtSh, aConfig);
+            SwTranslateHelper::TranslateDocument(rWrtSh, aTargetLang);
         }
         else
         {
@@ -2374,7 +2363,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         else if (sApplyText == "Spelling")
         {
-            AddWordToWordbook(LinguMgr::GetIgnoreAllList(), rWrtSh);
+            AddWordToWordbook(LinguMgr::GetIgnoreAllList(), rWrtSh );
         }
     }
     break;
@@ -2384,9 +2373,22 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if (const SfxStringItem* pItem1 = rReq.GetArg<SfxStringItem>(FN_PARAM_1))
             aDicName = pItem1->GetValue();
 
+        // strip dot, if the extended dictionary name ends with ")", but not ".)", e.g.
+        // "standard.dic (F.A.C.S)"  -> strip dot
+        // "standard.dic (F.A.C.S.)" -> with dot
+        bool bAddWithDot = false;
+        if ( aDicName.endsWith(")") )
+        {
+            bAddWithDot = aDicName.endsWith(".)");
+            // restore the dictionary name by stripping the parenthesized extension
+            sal_Int32 nHintPos = aDicName.indexOf(" (");
+            if ( nHintPos > 0 )
+                aDicName = aDicName.copy(0, nHintPos);
+        }
+
         uno::Reference<linguistic2::XSearchableDictionaryList> xDicList(LinguMgr::GetDictionaryList());
         uno::Reference<linguistic2::XDictionary> xDic = xDicList.is() ? xDicList->getDictionaryByName(aDicName) : nullptr;
-        if (AddWordToWordbook(xDic, rWrtSh))
+        if (AddWordToWordbook(xDic, rWrtSh, bAddWithDot))
         {
             // save modified user-dictionary if it is persistent
             uno::Reference<frame::XStorable> xSavDic(xDic, uno::UNO_QUERY);
@@ -3964,9 +3966,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                         break;
                     }
-                    std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
-                    std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-                    if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
+                    if (!SwTranslateHelper::IsTranslationServiceConfigured())
                     {
                         rSet.DisableItem(nWhich);
                     }

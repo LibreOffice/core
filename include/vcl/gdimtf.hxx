@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/vclptr.hxx>

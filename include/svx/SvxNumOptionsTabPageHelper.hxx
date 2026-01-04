@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 

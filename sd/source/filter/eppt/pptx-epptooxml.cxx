@@ -355,12 +355,16 @@ ShapeExport& PowerPointShapeExport::WriteTextShape(const Reference< XShape >& xS
         if (!WritePlaceholder(xShape, Title, mbMaster))
             ShapeExport::WriteTextShape(xShape);
     }
-    /*else if (sShapeType == "com.sun.star.presentation.SubtitleShape")
+    else if (sShapeType == "com.sun.star.presentation.SubtitleShape")
     {
-        TODO: handle subtitle shape: see tdf#112557 workaround
-        if (!WritePlaceholder(xShape, Subtitle, mbMaster))
-            ShapeExport::WriteTextShape(xShape);
-    }*/
+        // TODO: handle subtitle shape: see tdf#112557 workaround
+        // MSO does not like subtitles on master slides
+        if (mePageType != MASTER)
+        {
+            if (!WritePlaceholder(xShape, Subtitle, mbMaster))
+                ShapeExport::WriteTextShape(xShape);
+        }
+    }
     else
         SAL_WARN("sd.eppt", "PowerPointShapeExport::WriteTextShape: shape of type '" << sShapeType << "' is ignored");
 
@@ -376,14 +380,6 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
     if (sShapeType == "com.sun.star.presentation.PageShape")
     {
         WritePageShape(xShape, mePageType, mrExport.GetPresObj());
-    }
-    else if (sShapeType == "com.sun.star.presentation.SubtitleShape")
-    {
-        if(mePageType != MASTER)
-        {
-            if (!WritePlaceholder(xShape, Subtitle, mbMaster))
-                ShapeExport::WriteTextShape(xShape);
-        }
     }
     else
         SAL_WARN("sd.eppt", "unknown shape not handled: " << sShapeType.toUtf8());

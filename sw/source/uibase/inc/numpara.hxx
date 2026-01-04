@@ -21,6 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svl/style.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 // with this TabPage numbering settings at the paragraph / paragraph style
 // are performed.

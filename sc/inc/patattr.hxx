@@ -25,11 +25,12 @@
 #include <svl/languageoptions.hxx>
 #include <tools/degree.hxx>
 #include <editeng/svxenum.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include "scdllapi.h"
 #include "fonthelper.hxx"
 #include "scitems.hxx"
 #include "attrib.hxx"
-#include <set>
+#include <unordered_map>
 
 namespace vcl { class Font; }
 namespace model { class ComplexColor; }
@@ -62,20 +63,16 @@ class SC_DLLPUBLIC CellAttributeHelper final
     // Data structure chosen so that
     // (a) we can find by name
     // (b) we can erase quickly, by using name and pointer.
-    // so we sort the set first by name, and then by pointer.
-    struct RegisteredAttrSetLess
+    // (c) scanning through all the entries with the same name is cheap
+    struct RegisteredAttrMapHash
     {
-        bool operator()(const ScPatternAttr* lhs, const ScPatternAttr* rhs) const;
-        // so we can search in std::set without a ScPatternAttr
-        using is_transparent = void;
-        bool operator()(const ScPatternAttr* lhs, const OUString* rhs) const;
-        bool operator()(const OUString* lhs, const ScPatternAttr* rhs) const;
+        size_t operator()(const std::optional<OUString>&) const;
     };
-    typedef std::set<const ScPatternAttr*, RegisteredAttrSetLess> RegisteredAttrSet;
+    typedef std::unordered_map<std::optional<OUString>, o3tl::sorted_vector<const ScPatternAttr*>, RegisteredAttrMapHash> RegisteredAttrMap;
 
     SfxItemPool&                                        mrSfxItemPool;
     mutable ScPatternAttr*                              mpDefaultCellAttribute;
-    mutable RegisteredAttrSet                           maRegisteredCellAttributes;
+    mutable RegisteredAttrMap                           maRegisteredCellAttributes;
     mutable const ScPatternAttr*                        mpLastHit;
     mutable sal_uInt64                                  mnCurrentMaxKey;
 
@@ -130,6 +127,7 @@ class SAL_DLLPUBLIC_RTTI ScPatternAttr final
     friend class CellAttributeHelper;
 
     SfxItemSet                  maLocalSfxItemSet;
+    mutable std::optional<size_t> moHashCode;
     std::optional<OUString>     moName;
     mutable std::optional<bool> mxVisible;
     mutable std::optional<sal_uInt32> mxNumberFormatKey;
@@ -149,6 +147,7 @@ public:
     SC_DLLPUBLIC ~ScPatternAttr();
 
     bool operator==(const ScPatternAttr& rCmp) const;
+    size_t GetHashCode() const { if (!moHashCode) CalcHashCode(); return *moHashCode; }
 
     // version that allows nullptrs
     SC_DLLPUBLIC static bool areSame(const ScPatternAttr* pItem1, const ScPatternAttr* pItem2);
@@ -285,6 +284,7 @@ private:
     LanguageType            GetLanguageType() const;
     void                    InvalidateCaches();
     void                    InvalidateCacheFor(sal_uInt16 nWhich);
+    void                    CalcHashCode() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

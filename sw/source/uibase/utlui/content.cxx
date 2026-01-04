@@ -1396,9 +1396,9 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
         return false;
     if (m_eState == State::HIDDEN)
         return false;
-    if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-            m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false) &&
-            !rMEvt.IsLeaveWindow())
+    std::unique_ptr<weld::TreeIter> xEntry
+        = m_xTreeView->get_dest_row_at_pos(rMEvt.GetPosPixel(), false, false);
+    if (xEntry && !rMEvt.IsLeaveWindow())
     {
         if (!m_xOverlayCompareEntry)
             m_xOverlayCompareEntry.reset(m_xTreeView->make_iterator().release());
@@ -1485,7 +1485,7 @@ sal_Int8 SwContentTreeDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
     }
 
     return nAccept;
@@ -1539,9 +1539,8 @@ sal_Int8 SwContentTreeDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
 
 sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    std::unique_ptr<weld::TreeIter> xDropEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDropEntry.get(), true))
-        xDropEntry.reset();
+    std::unique_ptr<weld::TreeIter> xDropEntry
+        = m_xTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
 
     if (m_nRootType == ContentTypeId::OUTLINE)
     {
@@ -1781,16 +1780,18 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     grab_focus();
 
     // select clicked entry or limit selection to root entry if needed
-    if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-            rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
-                rCEvt.GetMousePosPixel(), xEntry.get(), false))
+    if (rCEvt.IsMouseEvent())
     {
-        // if clicked entry is not currently selected then clear selections and select it
-        if (!m_xTreeView->is_selected(*xEntry))
-            m_xTreeView->set_cursor(*xEntry);
-        // if root entry is selected then clear selections and select it
-        else if (m_xTreeView->is_selected(0))
-            m_xTreeView->set_cursor(0);
+        if (std::unique_ptr<weld::TreeIter> xEntry
+            = m_xTreeView->get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false))
+        {
+            // if clicked entry is not currently selected then clear selections and select it
+            if (!m_xTreeView->is_selected(*xEntry))
+                m_xTreeView->set_cursor(*xEntry);
+            // if root entry is selected then clear selections and select it
+            else if (m_xTreeView->is_selected(0))
+                m_xTreeView->set_cursor(0);
+        }
     }
 
     UpdateContentFunctionsToolbar();
@@ -3194,9 +3195,8 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
 
     bool bConsumed = false;
 
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_cursor(xEntry.get()) && lcl_IsContent(*xEntry, *m_xTreeView) &&
-            (State::HIDDEN != m_eState))
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
+    if (xEntry && lcl_IsContent(*xEntry, *m_xTreeView) && (State::HIDDEN != m_eState))
     {
         SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
         assert(pCnt && "no UserData");
@@ -3214,11 +3214,10 @@ IMPL_LINK_NOARG(SwContentTree, AsyncContentDoubleClickHdl, void*, void)
 {
     m_nRowActivateEventId = nullptr;
 
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    bool bEntry = m_xTreeView->get_cursor(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
     // Is it a content type?
-    OSL_ENSURE(bEntry, "no current entry!");
-    if (bEntry)
+    OSL_ENSURE(xEntry, "no current entry!");
+    if (xEntry)
     {
         if (lcl_IsContentType(*xEntry, *m_xTreeView) && !m_xTreeView->iter_has_child(*xEntry))
         {
@@ -3540,9 +3539,8 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
     SwWrtShell* pWrtShell = GetWrtShell();
     OSL_ENSURE(pWrtShell, "no Shell!");
 
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    bool bEntry = m_xTreeView->get_cursor(xEntry.get());
-    if (!bEntry || lcl_IsContentType(*xEntry, *m_xTreeView) || !pWrtShell)
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
+    if (!xEntry || lcl_IsContentType(*xEntry, *m_xTreeView) || !pWrtShell)
         return false;
     assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
     SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
@@ -3746,9 +3744,8 @@ void SwContentTree::ToggleToRoot()
 {
     if(!m_bIsRoot)
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        bool bEntry = m_xTreeView->get_cursor(xEntry.get());
-        if (bEntry)
+        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
+        if (xEntry)
         {
             const SwContentType* pCntType;
             if (lcl_IsContentType(*xEntry, *m_xTreeView))
@@ -4197,8 +4194,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
                 {
                     m_bIsLastReadOnly = bReadOnly;
 
-                    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-                    if (m_xTreeView->get_cursor(xEntry.get()))
+                    if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor())
                     {
                         m_xTreeView->select(*xEntry);
                         UpdateContentFunctionsToolbar();
@@ -5647,8 +5643,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
     //multi-selection.
     else if (aCode.GetCode() == KEY_SPACE && 0 == aCode.GetModifier())
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor())
         {
             if (State::HIDDEN != m_eState)
             {
@@ -5734,8 +5729,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
     }
     else
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor())
         {
             SwContent* pCnt = dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry)));
             if (pCnt && pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE)

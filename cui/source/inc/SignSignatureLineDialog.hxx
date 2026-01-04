@@ -14,6 +14,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/TextView.hxx>
 
 class SignSignatureLineDialog : public SignatureLineDialogBase
 {

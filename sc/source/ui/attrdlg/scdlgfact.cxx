@@ -779,7 +779,7 @@ class AbstractScTabBgColorDlg_Impl
 {
 public:
     using ScreenshottedDialog_Impl_BASE::ScreenshottedDialog_Impl_BASE;
-    void GetSelectedColor(Color& rColor) const override { m_pDlg->GetSelectedColor(rColor); }
+    Color GetSelectedColor() const override { return m_pDlg->GetSelectedColor(); }
 };
 }
 

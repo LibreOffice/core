@@ -502,10 +502,11 @@ namespace xmlsecurity {
 static OUString CompatDNCryptoAPI(std::u16string_view rDN)
 {
     OUStringBuffer buf(rDN.size());
-    enum { DEFAULT, INVALUE, INQUOTE } state(DEFAULT);
+    enum class State { Default, InValue, InQuote };
+    State state(State::Default);
     for (size_t i = 0; i < rDN.size(); ++i)
     {
-        if (state == DEFAULT)
+        if (state == State::Default)
         {
             buf.append(rDN[i]);
             if (rDN[i] == '=')
@@ -518,25 +519,25 @@ static OUString CompatDNCryptoAPI(std::u16string_view rDN)
                 {
                     buf.append(rDN[i+1]);
                     ++i;
-                    state = INQUOTE;
+                    state = State::InQuote;
                 }
                 else
                 {
-                    state = INVALUE;
+                    state = State::InValue;
                 }
             }
         }
-        else if (state == INVALUE)
+        else if (state == State::InValue)
         {
             if (rDN[i] == '+' || rDN[i] == ',' || rDN[i] == ';')
             {
-                state = DEFAULT;
+                state = State::Default;
             }
             buf.append(rDN[i]);
         }
         else
         {
-            assert(state == INQUOTE);
+            assert(state == State::InQuote);
             if (rDN[i] == '"')
             {
                 if (rDN.size() != i+1 && rDN[i+1] == '"')
@@ -547,7 +548,7 @@ static OUString CompatDNCryptoAPI(std::u16string_view rDN)
                 else
                 {
                     buf.append(rDN[i]);
-                    state = DEFAULT;
+                    state = State::Default;
                 }
             }
             else
@@ -563,7 +564,7 @@ bool EqualDistinguishedNames(
         std::u16string_view const rName1, std::u16string_view const rName2,
         EqualMode const eMode)
 {
-    if (eMode == COMPAT_BOTH && !rName1.empty() && rName1 == rName2)
+    if (eMode == EqualMode::CompatBoth && !rName1.empty() && rName1 == rName2)
     {   // handle case where both need to be converted
         return true;
     }
@@ -579,7 +580,7 @@ bool EqualDistinguishedNames(
         ret = (CERT_CompareName(pName1, pName2) == SECEqual);
         CERT_DestroyName(pName2);
     }
-    if (!ret && eMode == COMPAT_2ND)
+    if (!ret && eMode == EqualMode::Compat2nd)
     {
         CERTName *const pName2Compat(CERT_AsciiToName(OUStringToOString(
             CompatDNCryptoAPI(rName2), RTL_TEXTENCODING_UTF8).getStr()));

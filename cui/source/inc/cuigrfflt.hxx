@@ -24,6 +24,7 @@
 #include <svx/rectenum.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class CuiGraphicPreviewWindow : public weld::CustomWidgetController
 {

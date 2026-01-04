@@ -1234,9 +1234,9 @@ void JSEntry::do_set_text(const OUString& rText)
 
 void JSEntry::set_text_without_notify(const OUString& rText) { SalInstanceEntry::set_text(rText); }
 
-void JSEntry::replace_selection(const OUString& rText)
+void JSEntry::do_replace_selection(const OUString& rText)
 {
-    SalInstanceEntry::replace_selection(rText);
+    SalInstanceEntry::do_replace_selection(rText);
     sendUpdate();
 }
 
@@ -1984,8 +1984,8 @@ OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rR
     else if (weld::TreeView* pTree = dynamic_cast<weld::TreeView*>(pParent); pTree)
     {
         // we find position based on parent widget id and row text inside TreeView for context menu
-        std::unique_ptr<weld::TreeIter> itEntry(pTree->make_iterator());
-        if (pTree->get_dest_row_at_pos(rRect.Center(), itEntry.get(), false, false))
+        if (std::unique_ptr<weld::TreeIter> itEntry
+            = pTree->get_dest_row_at_pos(rRect.Center(), false, false))
             sCancelId = pTree->get_text(*itEntry);
         else
             SAL_WARN("vcl", "No entry detected in JSMenu::popup_at_rect");

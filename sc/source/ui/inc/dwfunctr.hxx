@@ -22,6 +22,8 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <unordered_map>
 #include <sfx2/bindings.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/TextView.hxx>
 
 class ScFuncDesc;
 namespace formula { class IFunctionDescription; }

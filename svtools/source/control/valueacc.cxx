@@ -40,7 +40,7 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
     , mpData(nullptr)
     , mxAcc()
     , mnId(0)
-    , meType(VALUESETITEM_NONE)
+    , meType(ValueSetItemType::None)
     , mbVisible(true)
 {
 }
@@ -265,7 +265,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
 sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 {
     Color nColor;
-    if (mpValueSetItem && mpValueSetItem->meType == VALUESETITEM_COLOR)
+    if (mpValueSetItem && mpValueSetItem->meType == ValueSetItemType::Color)
         nColor = mpValueSetItem->maColor;
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();

@@ -20,9 +20,11 @@
 
 #include "SlideSorterViewShell.hxx"
 
+#include "EventMultiplexer.hxx"
 #include <svtools/valueset.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
@@ -108,6 +110,7 @@ private:
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
+    std::shared_ptr<sdtools::EventMultiplexer> mpEventMultiplexer;
 
     std::unique_ptr<weld::IconView> mxTransitionsIconView;
     std::unique_ptr<weld::ScrolledWindow> mxTransitionsScrollWindow;

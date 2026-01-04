@@ -172,8 +172,7 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mxAllButtonsBox(m_xBuilder->weld_container(u"all_buttons_box"_ustr))
     , mxButtonsBox(m_xBuilder->weld_container(u"buttons_box"_ustr))
     , mxSmallButtonsBox(m_xBuilder->weld_container(u"small_buttons_box"_ustr))
-    , mxAllRecentThumbnails(new sfx2::RecentDocsView(m_xBuilder->weld_scrolled_window(u"scrollrecent"_ustr, true),
-                                                     m_xBuilder->weld_menu(u"recentmenu"_ustr)))
+    , mxAllRecentThumbnails(new sfx2::RecentDocsView(m_xBuilder->weld_scrolled_window(u"scrollrecent"_ustr, true)))
     , mxAllRecentThumbnailsWin(new weld::CustomWeld(*m_xBuilder, u"all_recent"_ustr, *mxAllRecentThumbnails))
     , mxLocalView(new TemplateDefaultView(m_xBuilder->weld_scrolled_window(u"scrolllocal"_ustr, true),
                                           m_xBuilder->weld_menu(u"localmenu"_ustr)))
@@ -675,15 +674,13 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OUString&, rId, void)
     }
 }
 
-IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, CreateContextMenuHdl, TemplateViewItem*, pItem, void)
 {
-    const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
-
-    if (pViewItem)
+    if (pItem)
         mxLocalView->createContextMenu();
 }
 
-IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, OpenTemplateHdl, const OUString&, rTemplatePath, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
@@ -692,20 +689,18 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
         comphelper::makePropertyValue(u"InteractionHandler"_ustr, task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ))
     };
 
-    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
-
     Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
     try
     {
-        dispatchURL( pTemplateItem->getPath(), u"_default"_ustr, xFrame, aArgs );
+        dispatchURL(rTemplatePath, u"_default"_ustr, xFrame, aArgs);
     }
     catch( const uno::Exception& )
     {
     }
 }
 
-IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, EditTemplateHdl, const OUString&, rTemplatePath, void)
 {
     uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
@@ -713,13 +708,11 @@ IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG),
     };
 
-    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
-
     Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
     try
     {
-        dispatchURL( pViewItem->getPath(), u"_default"_ustr, xFrame, aArgs );
+        dispatchURL(rTemplatePath, u"_default"_ustr, xFrame, aArgs);
     }
     catch( const uno::Exception& )
     {

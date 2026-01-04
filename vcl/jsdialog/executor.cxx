@@ -17,6 +17,7 @@
 #include <sal/log.hxx>
 #include <string_view>
 #include <vcl/jsdialog/executor.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/weld/weld.hxx>
 

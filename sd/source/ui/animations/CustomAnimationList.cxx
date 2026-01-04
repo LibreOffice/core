@@ -477,7 +477,7 @@ sal_Int8 CustomAnimationListDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, true);
     }
 
     return nAccept;
@@ -503,9 +503,7 @@ IMPL_LINK(CustomAnimationList, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     });
 
     // Note: pEntry is the effect with focus (if multiple effects are selected)
-    mxDndEffectDragging = mxTreeView->make_iterator();
-    if (!mxTreeView->get_cursor(mxDndEffectDragging.get()))
-        mxDndEffectDragging.reset();
+    mxDndEffectDragging = mxTreeView->get_cursor();
 
     // Allow normal processing.
     return false;
@@ -525,9 +523,8 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
 // D'n'D #5: Tell model to update effect order.
 sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    std::unique_ptr<weld::TreeIter> xDndEffectInsertBefore(mxTreeView->make_iterator());
-    if (!mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDndEffectInsertBefore.get(), true))
-        xDndEffectInsertBefore.reset();
+    std::unique_ptr<weld::TreeIter> xDndEffectInsertBefore
+        = mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
 
     const bool bMovingEffect = ( mxDndEffectDragging != nullptr );
     const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && mxTreeView->iter_compare(*xDndEffectInsertBefore, *mxDndEffectDragging) != 0);
@@ -596,8 +593,7 @@ IMPL_LINK(CustomAnimationList, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             return true;
         case KEY_SPACE:
         {
-            std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-            if (mxTreeView->get_cursor(xEntry.get()))
+            if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_cursor())
             {
                 auto aRect = mxTreeView->get_row_area(*xEntry);
                 const Point aPos(aRect.getOpenWidth() / 2, aRect.getOpenHeight() / 2);
@@ -690,8 +686,6 @@ void CustomAnimationList::update()
     ::tools::Long nFirstSelOld = -1;
     ::tools::Long nLastSelOld = -1;
 
-    std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
-
     if( mpMainSequence )
     {
         std::unique_ptr<weld::TreeIter> xLastSelectedEntry;
@@ -744,7 +738,7 @@ void CustomAnimationList::update()
         if (xLastVisibleEntry)
             nLastVis = weld::GetAbsPos(*mxTreeView, *xLastVisibleEntry);
 
-        if (mxTreeView->get_cursor(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->get_cursor())
         {
             CustomAnimationListEntryItem* pEntry = weld::fromId<CustomAnimationListEntryItem*>(mxTreeView->get_id(*xEntry));
             aCurrent = pEntry->getEffect();
@@ -798,6 +792,7 @@ void CustomAnimationList::update()
         std::vector<std::unique_ptr<weld::TreeIter>> aNewSelection;
 
         // restore selection state, expand state, and current-entry (under cursor)
+        std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
         if (mxTreeView->get_iter_first(*xEntry))
         {
             do
@@ -1169,8 +1164,8 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.IsMouseEvent())
     {
         ::Point aPos = rCEvt.GetMousePosPixel();
-        std::unique_ptr<weld::TreeIter> xIter(mxTreeView->make_iterator());
-        if (mxTreeView->get_dest_row_at_pos(aPos, xIter.get(), false) && !mxTreeView->is_selected(*xIter))
+        std::unique_ptr<weld::TreeIter> xIter = mxTreeView->get_dest_row_at_pos(aPos, false);
+        if (xIter && !mxTreeView->is_selected(*xIter))
         {
             mxTreeView->unselect_all();
             mxTreeView->set_cursor(*xIter);

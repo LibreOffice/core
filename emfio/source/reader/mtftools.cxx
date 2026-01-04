@@ -276,7 +276,7 @@ namespace emfio
             aFont.SetFontSize( aFontSize );
             pVDev->SetFont( aFont );
             FontMetric aMetric( pVDev->GetFontMetric() );
-            tools::Long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
+            tools::Long nHeight = static_cast<tools::Long>(aMetric.GetAscent()) + aMetric.GetDescent();
             if (nHeight)
             {
                 double fHeight = (static_cast<double>(aFontSize.Height()) * rFont.lfHeight ) / nHeight;

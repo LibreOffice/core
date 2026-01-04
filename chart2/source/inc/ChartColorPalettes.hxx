@@ -15,6 +15,7 @@
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/IconView.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 class MouseEvent;
 

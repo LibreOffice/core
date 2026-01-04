@@ -20,6 +20,8 @@
 
 #include "SqlNameEdit.hxx"
 #include <unotools/resmgr.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 namespace dbaui
 {

@@ -153,8 +153,8 @@ public:
     virtual void set_column_custom_renderer(int nColumn, bool bEnable) override;
     virtual void queue_draw() override;
 
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode,
-                                     bool bAutoScroll = true) override;
+    virtual std::unique_ptr<weld::TreeIter> get_dest_row_at_pos(const Point& rPos, bool bDnDMode,
+                                                                bool bAutoScroll = true) override;
     virtual void unset_drag_dest_row() override;
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override;
     virtual weld::TreeView* get_drag_source() const override;

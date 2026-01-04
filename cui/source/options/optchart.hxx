@@ -23,6 +23,7 @@
 #include <svtools/valueset.hxx>
 #include <svx/xtable.hxx>
 #include <svx/PaletteManager.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 

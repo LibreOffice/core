@@ -27,6 +27,8 @@
 
 #include <curledit.hxx>
 
+#include <vcl/weld/Entry.hxx>
+
 namespace dbaui
 {
     class ODbTypeWizDialogSetup;

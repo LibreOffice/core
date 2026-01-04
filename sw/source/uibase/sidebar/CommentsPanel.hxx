@@ -30,6 +30,7 @@
 #include <AnnotationWin.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/link.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>

@@ -33,81 +33,83 @@
 
 using namespace ::com::sun::star;
 
-namespace vcl::unohelper {
+namespace vcl::unohelper
+{
+TextDataObject::TextDataObject(OUString aText)
+    : maText(std::move(aText))
+{
+}
 
-    TextDataObject::TextDataObject( OUString aText ) : maText(std::move( aText ))
+TextDataObject::~TextDataObject() {}
+
+void TextDataObject::CopyStringTo(
+    const OUString& rContent,
+    const uno::Reference<datatransfer::clipboard::XClipboard>& rxClipboard,
+    const vcl::ILibreOfficeKitNotifier* pNotifier)
+{
+    SAL_WARN_IF(!rxClipboard.is(), "vcl", "TextDataObject::CopyStringTo: invalid clipboard!");
+    if (!rxClipboard.is())
+        return;
+
+    rtl::Reference<TextDataObject> pDataObj = new TextDataObject(rContent);
+
+    SolarMutexReleaser aReleaser;
+    try
     {
-    }
+        rxClipboard->setContents(pDataObj, nullptr);
 
-    TextDataObject::~TextDataObject()
-    {
-    }
+        uno::Reference<datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(
+            rxClipboard, uno::UNO_QUERY);
+        if (xFlushableClipboard.is())
+            xFlushableClipboard->flushClipboard();
 
-    void TextDataObject::CopyStringTo( const OUString& rContent,
-        const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard,
-        const vcl::ILibreOfficeKitNotifier* pNotifier)
-    {
-        SAL_WARN_IF( !rxClipboard.is(), "vcl", "TextDataObject::CopyStringTo: invalid clipboard!" );
-        if ( !rxClipboard.is() )
-            return;
-
-        rtl::Reference<TextDataObject> pDataObj = new TextDataObject( rContent );
-
-        SolarMutexReleaser aReleaser;
-        try
+        if (pNotifier != nullptr && comphelper::LibreOfficeKit::isActive())
         {
-            rxClipboard->setContents( pDataObj, nullptr );
-
-            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
-
-            if (pNotifier != nullptr && comphelper::LibreOfficeKit::isActive())
-            {
-                boost::property_tree::ptree aTree;
-                aTree.put("content", rContent);
-                aTree.put("mimeType", "text/plain");
-                std::stringstream aStream;
-                boost::property_tree::write_json(aStream, aTree);
-                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_CLIPBOARD_CHANGED, OString(aStream.str()));
-            }
-        }
-        catch( const uno::Exception& )
-        {
+            boost::property_tree::ptree aTree;
+            aTree.put("content", rContent);
+            aTree.put("mimeType", "text/plain");
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_CLIPBOARD_CHANGED,
+                                                  OString(aStream.str()));
         }
     }
-
-    // css::uno::XInterface
-    uno::Any TextDataObject::queryInterface( const uno::Type & rType )
+    catch (const uno::Exception&)
     {
-        uno::Any aRet = ::cppu::queryInterface( rType, static_cast< datatransfer::XTransferable* >(this) );
-        return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
     }
+}
 
-    // css::datatransfer::XTransferable
-    uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
+// css::uno::XInterface
+uno::Any TextDataObject::queryInterface(const uno::Type& rType)
+{
+    uno::Any aRet = ::cppu::queryInterface(rType, static_cast<datatransfer::XTransferable*>(this));
+    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface(rType));
+}
+
+// css::datatransfer::XTransferable
+uno::Any TextDataObject::getTransferData(const datatransfer::DataFlavor& rFlavor)
+{
+    SotClipboardFormatId nT = SotExchange::GetFormat(rFlavor);
+    if (nT != SotClipboardFormatId::STRING)
     {
-        SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
-        if ( nT != SotClipboardFormatId::STRING )
-        {
-            throw datatransfer::UnsupportedFlavorException();
-        }
-        return uno::Any(maText);
+        throw datatransfer::UnsupportedFlavorException();
     }
+    return uno::Any(maText);
+}
 
-    uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  )
-    {
-        uno::Sequence< datatransfer::DataFlavor > aDataFlavors(1);
-        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[0] );
-        return aDataFlavors;
-    }
+uno::Sequence<datatransfer::DataFlavor> TextDataObject::getTransferDataFlavors()
+{
+    uno::Sequence<datatransfer::DataFlavor> aDataFlavors(1);
+    SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aDataFlavors.getArray()[0]);
+    return aDataFlavors;
+}
 
-    sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor )
-    {
-        SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
-        return ( nT == SotClipboardFormatId::STRING );
-    }
+sal_Bool TextDataObject::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+{
+    SotClipboardFormatId nT = SotExchange::GetFormat(rFlavor);
+    return (nT == SotClipboardFormatId::STRING);
+}
 
-}  // namespace vcl::unohelper
+} // namespace vcl::unohelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

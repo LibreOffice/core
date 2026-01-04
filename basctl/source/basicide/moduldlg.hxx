@@ -25,7 +25,10 @@
 
 #include <bastype2.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>

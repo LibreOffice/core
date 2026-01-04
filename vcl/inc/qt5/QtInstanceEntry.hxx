@@ -9,11 +9,13 @@
 
 #pragma once
 
-#include "QtInstanceWidget.hxx"
+#include "QtInstanceTextWidget.hxx"
+
+#include <vcl/weld/Entry.hxx>
 
 #include <QtWidgets/QLineEdit>
 
-class QtInstanceEntry : public QtInstanceWidget, public virtual weld::Entry
+class QtInstanceEntry : public QtInstanceTextWidget, public virtual weld::Entry
 {
     Q_OBJECT;
 
@@ -29,7 +31,7 @@ public:
     virtual void set_max_length(int nChars) override;
     virtual void do_select_region(int nStartPos, int nEndPos) override;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
-    virtual void replace_selection(const OUString& rText) override;
+    virtual void do_replace_selection(const OUString& rText) override;
     virtual void do_set_position(int nCursorPos) override;
     virtual int get_position() const override;
     virtual void set_editable(bool bEditable) override;
@@ -40,13 +42,6 @@ public:
 
     virtual void set_overwrite_mode(bool bOn) override;
     virtual bool get_overwrite_mode() const override;
-
-    virtual void set_font(const vcl::Font& rFont) override;
-    virtual void set_font_color(const Color& rColor) override;
-
-    virtual void cut_clipboard() override;
-    virtual void copy_clipboard() override;
-    virtual void paste_clipboard() override;
 
     virtual void set_alignment(TxtAlign eXAlign) override;
 

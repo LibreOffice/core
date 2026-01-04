@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDFUNC_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Entry.hxx>
 
 #include <condedit.hxx>
 #include "fldpage.hxx"

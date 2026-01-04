@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
-#include <rtl/string.h>
-#include <vector>
+#include <rtl/string.hxx>
 #include <optional>
-#include "translatehelper.hxx"
 
 class SwWrtShell;
 

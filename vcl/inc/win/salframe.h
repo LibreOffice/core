@@ -40,10 +40,7 @@ public:
     HWND                    mhWnd;                  // Window handle
     HCURSOR                 mhCursor;               // cursor handle
     HIMC                    mhDefIMEContext;        // default IME-Context
-    WinSalGraphics*         mpLocalGraphics;        // current main thread frame graphics
-    /// Some threads will call vcl functions, and even though they hold the SolarMutex, the GDI
-    /// library will error, so we need to keep a separate graphics and DC for them.
-    WinSalGraphics*         mpThreadGraphics;       // current frame graphics for other threads (DCX_CACHE)
+    WinSalGraphics*         mpGraphics;             // current main thread frame graphics
     WinSalFrame*            mpNextFrame;            // pointer to next frame
     HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
     HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened

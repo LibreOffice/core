@@ -23,8 +23,7 @@
 
 void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
 {
-    std::unique_ptr<weld::TreeIter> xCurrentEntry(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_cursor(xCurrentEntry.get()))
+    if (std::unique_ptr<weld::TreeIter> xCurrentEntry = m_xTreeView->get_cursor())
         GetLine(rLine, *xCurrentEntry);
 }
 

@@ -54,7 +54,7 @@ public:
     virtual std::unique_ptr<weld::TreeIter> get_selected() const = 0;
 
     int get_cursor_index() const;
-    virtual bool get_cursor(TreeIter* pIter) const = 0;
+    virtual std::unique_ptr<TreeIter> get_cursor() const = 0;
     void set_cursor(const TreeIter& rIter);
 
     // Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.

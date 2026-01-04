@@ -303,14 +303,16 @@ IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
         m_xTreeView->grab_focus();
 
         // select clicked entry
-        if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-                rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
-                    rCEvt.GetMousePosPixel(), xEntry.get(), false))
+        if (rCEvt.IsMouseEvent())
         {
-            m_bSelectionHandlerNavigates = true;
-            m_bNavigationGrabsFocus = false;
-            m_xTreeView->set_cursor(*xEntry);
-            Select();
+            if (std::unique_ptr<weld::TreeIter> xEntry
+                = m_xTreeView->get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false))
+            {
+                m_bSelectionHandlerNavigates = true;
+                m_bNavigationGrabsFocus = false;
+                m_xTreeView->set_cursor(*xEntry);
+                Select();
+            }
         }
 
         bool bRet = m_aPopupMenuHdl.Call(rCEvt);
@@ -362,8 +364,8 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     }
     if (rKeyCode.GetCode() == KEY_RETURN)
     {
-        std::unique_ptr<weld::TreeIter> xCursor(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xCursor.get()) && m_xTreeView->iter_has_child(*xCursor))
+        std::unique_ptr<weld::TreeIter> xCursor = m_xTreeView->get_cursor();
+        if (xCursor && m_xTreeView->iter_has_child(*xCursor))
         {
             if (m_xTreeView->get_row_expanded(*xCursor))
                 m_xTreeView->collapse_row(*xCursor);
@@ -476,11 +478,10 @@ bool SdPageObjsTLV::DoDrag()
     m_xDropTargetHelper->SetDrawView(pViewShell->GetDrawView());
     m_xDropTargetHelper->SetOrderFrontToBack(m_bOrderFrontToBack);
 
-    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
-    bool bUserData = m_xTreeView->get_cursor(xEntry.get());
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
 
     SdrObject* pObject = nullptr;
-    sal_Int64 nUserData = bUserData ? m_xTreeView->get_id(*xEntry).toInt64() : 0;
+    sal_Int64 nUserData = xEntry ? m_xTreeView->get_id(*xEntry).toInt64() : 0;
     if (nUserData != 1)
         pObject = reinterpret_cast<SdrObject*>(nUserData);
     if (pObject != nullptr)
@@ -529,8 +530,9 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     if (!pSource || pSource != &m_rTreeView)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+    std::unique_ptr<weld::TreeIter> xTarget
+        = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, true);
+    if (!xTarget)
         return DND_ACTION_NONE;
 
     // disallow when root is drop target
@@ -582,8 +584,9 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (!xSource)
         return DND_ACTION_NONE;
 
-    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), false))
+    std::unique_ptr<weld::TreeIter> xTarget
+        = m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, false);
+    if (!xTarget)
         return DND_ACTION_NONE;
 
     auto nIterCompare = m_rTreeView.iter_compare(*xSource, *xTarget);
@@ -906,8 +909,8 @@ void SdPageObjsTLV::Select()
     {
         // Only for page/slide entry and only if page/slide entry dragging is re-enabled.
         // Commit 1b031eb1ba6c529ce67ff8f471afee414d64a098 disabled page/slide entry dragging.
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xIter.get()) && m_xTreeView->get_iter_depth(*xIter) == 0
+        std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->get_cursor();
+        if (xIter && m_xTreeView->get_iter_depth(*xIter) == 0
             && m_pDoc->GetSdPageCount(PageKind::Standard) == 1)
         {
             // Can not move away the last slide in a document.

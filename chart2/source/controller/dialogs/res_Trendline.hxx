@@ -21,6 +21,7 @@
 #include <tools/link.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 namespace weld { class Builder; }
 namespace weld { class CheckButton; }

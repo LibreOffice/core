@@ -563,7 +563,7 @@ published service ParagraphProperties
 
             @see ParaLetterSpacingMaximum
 
-            @since LibreOffice 26.3
+            @since LibreOffice 26.2
          */
         [optional, property] long ParaLetterSpacingMinimum;
 
@@ -577,7 +577,7 @@ published service ParagraphProperties
 
             @see ParaLetterSpacingMininum
 
-            @since LibreOffice 26.3
+            @since LibreOffice 26.2
          */
         [optional, property] long ParaLetterSpacingMaximum;
 
@@ -591,7 +591,7 @@ published service ParagraphProperties
 
             @see ParaScaleWidthMaximum
 
-            @since LibreOffice 26.3
+            @since LibreOffice 26.2
          */
         [optional, property] long ParaScaleWidthMinimum;
 
@@ -605,9 +605,17 @@ published service ParagraphProperties
 
             @see ParaScaleWidthMininum
 
-            @since LibreOffice 26.3
+            @since LibreOffice 26.2
          */
         [optional, property] long ParaScaleWidthMaximum;
+
+        /** specifies the minimum number of characters of the compound word part
+            that must appear at the beginning of the line after the hyphen character
+            (when hyphenation is applied).
+
+            @since LibreOffice 26.8
+         */
+        [optional, property] short ParaHyphenationCompoundMinTrailingChars;
 };
 
 

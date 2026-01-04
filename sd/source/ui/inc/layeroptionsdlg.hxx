@@ -22,6 +22,8 @@
 #include <sddllapi.h>
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SfxItemSet;

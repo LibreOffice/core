@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMLAYOUTPAGE_HXX
 
 #include <vcl/wizardmachine.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <mailmergehelper.hxx>
 #include <com/sun/star/uno/Reference.h>

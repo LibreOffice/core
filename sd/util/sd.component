@@ -37,6 +37,10 @@
       constructor="org_openoffice_comp_Draw_framework_PanelFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
+  <implementation name="com.sun.star.comp.sd.SlideMasterPagesAllToolBoxControl"
+    constructor="com_sun_star_comp_sd_SlideMasterPagesAllToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.sd.InsertSlideController"
       constructor="com_sun_star_comp_sd_InsertSlideController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

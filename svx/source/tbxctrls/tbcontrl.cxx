@@ -153,7 +153,6 @@ public:
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
 
-    int get_count() const { return m_xWidget->get_count(); }
     OUString get_text(int nIndex) const { return m_xWidget->get_text(nIndex); }
     OUString get_active_text() const { return m_xWidget->get_active_text(); }
 
@@ -3239,73 +3238,65 @@ void SvxStyleToolBoxControl::FillStyleBox()
         return;
 
     const SfxStyleFamily    eFamily     = GetActFamily();
-    SfxStyleSheetBase*      pStyle      = nullptr;
-    bool                    bDoFill     = false;
 
-    auto xIter = m_pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
-    sal_uInt16 nCount = xIter->Count();
-
-    // Check whether fill is necessary
-    pStyle = xIter->First();
-    //!!! TODO: This condition isn't right any longer, because we always show some default entries
-    //!!! so the list doesn't show the count
-    if ( nCount != pBox->get_count() )
-    {
-        bDoFill = true;
-    }
-    else
-    {
-        sal_uInt16 i= 0;
-        while ( pStyle && !bDoFill )
-        {
-            bDoFill = ( pBox->get_text(i) != pStyle->GetName() );
-            pStyle = xIter->Next();
-            i++;
-        }
-    }
-
-    if ( !bDoFill )
-        return;
+    // TODO: Check whether fill is necessary
 
     OUString aStrSel(pBox->get_active_text());
     pBox->freeze();
     pBox->clear();
 
-    std::vector<OUString> aStyles;
-
-    // add used styles
-    pStyle = xIter->Next();
-    while ( pStyle )
-    {
-        aStyles.push_back(pStyle->GetName());
-        pStyle = xIter->Next();
-    }
+    // Insert Clear button
 
     if (m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc)
     {
         pBox->append_text(m_pImpl->aClearForm);
         pBox->insert_separator(1, u"separator"_ustr);
-
-        // add default styles if less than 12 items
-        for( const auto &rStyle : m_pImpl->aDefaultStyles )
-        {
-            if ( aStyles.size() + pBox->get_count() > 12)
-                break;
-            pBox->append_text(rStyle.second);
-        }
     }
-    std::sort(aStyles.begin(), aStyles.end());
 
+    // Add used, favourite and user defined
+
+    std::vector<OUString> aStyles;
+
+    AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Favourite);
+    AppendStyles(aStyles, eFamily, SfxStyleSearchBits::UserDefined);
+    AppendStyles(aStyles, eFamily, SfxStyleSearchBits::Used);
+
+    // Add default styles on top first
+    if (m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc)
+    {
+        for( const auto &rStyle : m_pImpl->aDefaultStyles )
+            pBox->append_text(rStyle.second);
+    }
+
+    // Insert styles
     for (const auto& rStyle : aStyles)
+    {
+        // do not duplicate default styles
         if (pBox->find_text(rStyle) == -1)
             pBox->append_text(rStyle);
+    }
 
+    // Insert More button
     if ((m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
         pBox->append_text(m_pImpl->aMore);
 
     pBox->thaw();
     pBox->set_active_or_entry_text(aStrSel);
     pBox->SetFamily( eFamily );
+}
+
+void SvxStyleToolBoxControl::AppendStyles(std::vector<OUString>& rStyles, SfxStyleFamily eFamily,
+                                          SfxStyleSearchBits eBits)
+{
+    auto xIter = m_pStyleSheetPool->CreateIterator(eFamily, eBits);
+    SfxStyleSheetBase* pStyle = xIter->First();
+
+    pStyle = xIter->Next();
+    while ( pStyle )
+    {
+        rStyles.push_back(pStyle->GetName());
+        pStyle = xIter->Next();
+    }
 }
 
 void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )

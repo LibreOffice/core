@@ -30,7 +30,9 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 #include <string_view>

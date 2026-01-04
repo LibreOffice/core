@@ -20,6 +20,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SvxNewTableDialog : public weld::GenericDialogController

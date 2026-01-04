@@ -9,10 +9,17 @@
 #pragma once
 
 #include <vcl/builder.hxx>
+#include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -628,7 +635,7 @@ public:
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
-    virtual void replace_selection(const OUString& rText) override;
+    virtual void do_replace_selection(const OUString& rText) override;
 
     virtual void do_set_position(int nCursorPos) override;
 
@@ -977,9 +984,9 @@ public:
 
     virtual void set_max_mru_count(int) override;
 
-    virtual OUString get_mru_entries() const override;
+    virtual std::vector<OUString> get_mru_entries() const override;
 
-    virtual void set_mru_entries(const OUString&) override;
+    virtual void set_mru_entries(const std::vector<OUString>& rEntries) override;
 
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
 
@@ -1049,9 +1056,9 @@ public:
 
     virtual void set_max_mru_count(int nCount) override;
 
-    virtual OUString get_mru_entries() const override;
+    virtual std::vector<OUString> get_mru_entries() const override;
 
-    virtual void set_mru_entries(const OUString& rEntries) override;
+    virtual void set_mru_entries(const std::vector<OUString>& rEntries) override;
 
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
 
@@ -1528,7 +1535,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeIter> get_selected() const override;
 
-    virtual bool get_cursor(weld::TreeIter* pIter) const override;
+    virtual std::unique_ptr<weld::TreeIter> get_cursor() const override;
 
     virtual int n_children() const override;
 
@@ -1807,8 +1814,8 @@ public:
 
     SvTabListBox& getTreeView();
 
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode,
-                                     bool bAutoScroll = true) override;
+    virtual std::unique_ptr<weld::TreeIter> get_dest_row_at_pos(const Point& rPos, bool bDnDMode,
+                                                                bool bAutoScroll = true) override;
 
     virtual void unset_drag_dest_row() override;
 

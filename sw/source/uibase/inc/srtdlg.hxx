@@ -21,7 +21,10 @@
 
 #include <svtools/collatorres.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 class SwWrtShell;

@@ -21,7 +21,9 @@
 #include <config_features.h>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class CanvasSettings;
 

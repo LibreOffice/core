@@ -16,7 +16,7 @@
 #include <QtWidgets/QScrollBar>
 
 QtInstanceTextView::QtInstanceTextView(QPlainTextEdit* pTextEdit)
-    : QtInstanceWidget(pTextEdit)
+    : QtInstanceTextWidget(pTextEdit)
     , m_pTextEdit(pTextEdit)
 {
     assert(m_pTextEdit);
@@ -108,10 +108,6 @@ void QtInstanceTextView::set_monospace(bool bMonospace)
 
 void QtInstanceTextView::set_max_length(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTextView::set_font(const vcl::Font& rFont) { setFont(rFont); }
-
-void QtInstanceTextView::set_font_color(const Color& rColor) { setFontColor(rColor); }
-
 bool QtInstanceTextView::can_move_cursor_with_up() const
 {
     assert(false && "Not implemented yet");
@@ -123,12 +119,6 @@ bool QtInstanceTextView::can_move_cursor_with_down() const
     assert(false && "Not implemented yet");
     return false;
 }
-
-void QtInstanceTextView::cut_clipboard() { assert(false && "Not implemented yet"); }
-
-void QtInstanceTextView::copy_clipboard() { assert(false && "Not implemented yet"); }
-
-void QtInstanceTextView::paste_clipboard() { assert(false && "Not implemented yet"); }
 
 void QtInstanceTextView::set_alignment(TxtAlign) { assert(false && "Not implemented yet"); }
 

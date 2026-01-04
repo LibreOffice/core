@@ -1645,6 +1645,27 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextAlignLeft)
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr", "algn", u"l");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSubtitleNoBullets)
+{
+    createSdImpressDoc("odp/tdf170166.odp");
+    saveAndReload(TestFilter::PPTX);
+
+    const SdrPage* pPage1 = GetPage(1);
+    {
+        // subtitle placeholder object
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage1->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong object type!", SdrObjKind::Text,
+                                     pTxtObj->GetObjIdentifier());
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+        // Without a fix, it will fail with numbering type: SVX_NUM_CHAR_SPECIAL
+        CPPUNIT_ASSERT(pNumFmt);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet's numbering type is wrong!", SVX_NUM_NUMBER_NONE,
+                                     pNumFmt->GetNumRule().GetLevel(0).GetNumberingType());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOLEObjectAnimationTarget)
 {
     createSdImpressDoc("pptx/tdf169088.pptx");
@@ -1799,6 +1820,40 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf169825_layout_type)
     // without the fix in place this would be exported as "vertTitleAndTxOverChart"
     // while in the original ODP this was - still possibly bogus - notes layout
     assertXPath(pXmlDocLayout, "/p:sldLayout", "type", u"blank");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testtdf170102_layout_type)
+{
+    createSdImpressDoc("odp/tdf170102_layout_type.odp");
+    saveAndReload(TestFilter::PPTX);
+
+    uno::Reference<drawing::XMasterPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    sal_Int32 nMPCount = xDoc->getMasterPages()->getCount();
+    // test roughly the same thing in document and in XML: no drawing object in master page/layout
+    for (sal_Int32 i = 0; i < nMPCount; i++)
+    {
+        uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(i),
+                                                 uno::UNO_QUERY_THROW);
+        sal_Int32 nObjCount = xPage->getCount();
+        for (sal_Int32 j = 0; j < nObjCount; j++)
+        {
+            uno::Reference<lang::XServiceInfo> xShapeInfo(xPage->getByIndex(j),
+                                                          uno::UNO_QUERY_THROW);
+            // without the fix in place there would be a graphic shape placeholder
+            CPPUNIT_ASSERT_MESSAGE(
+                "Unexpected graphic object shape in exported master page",
+                !xShapeInfo->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr));
+        }
+
+        xmlDocUniquePtr pXmlDocLayout = parseExport(u"ppt/slideLayouts/slideLayout"_ustr
+                                                    + OUString::number(i + 1) + u".xml"_ustr);
+        CPPUNIT_ASSERT(pXmlDocLayout);
+        // without the fix in place there would be a pic layout element for the placeholder
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "Unexpected \"pic\" element in exported PPTX slide layout", 0,
+            countXPathNodes(pXmlDocLayout, "/p:sldLayout/p:cSld/p:spTree/p:pic"));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testFooterIdxConsistency)

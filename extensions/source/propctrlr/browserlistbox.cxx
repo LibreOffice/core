@@ -33,6 +33,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <osl/mutex.hxx>
 
 

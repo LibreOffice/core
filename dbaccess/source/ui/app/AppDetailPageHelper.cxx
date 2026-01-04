@@ -496,9 +496,7 @@ std::unique_ptr<weld::TreeIter> OAppDetailPageHelper::getEntry( const Point& _aP
     {
         DBTreeViewBase& rTree = *m_aLists[nPos];
         weld::TreeView& rTreeView = rTree.GetWidget();
-        xReturn = rTreeView.make_iterator();
-        if (!rTreeView.get_dest_row_at_pos(_aPosPixel, xReturn.get(), false))
-            xReturn.reset();
+        xReturn = rTreeView.get_dest_row_at_pos(_aPosPixel, false);
     }
     return xReturn;
 }

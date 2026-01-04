@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SAMECONTENTLISTBOXHELPER_HXX
 
 #include <svx/svxdllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/ComboBox.hxx>
 
 namespace SameContentListBox
 {

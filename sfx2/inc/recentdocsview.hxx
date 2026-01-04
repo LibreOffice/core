@@ -60,7 +60,7 @@ namespace sfx2
 class RecentDocsView final : public ThumbnailView
 {
 public:
-    RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
+    RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow);
     virtual ~RecentDocsView() override;
 
     void insertItem(const OUString& rURL, const OUString& rTitle, const OUString& rThumbnail,

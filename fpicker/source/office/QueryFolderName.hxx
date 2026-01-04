@@ -19,6 +19,7 @@
 #pragma once
 
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 
 class QueryFolderNameDialog : public weld::GenericDialogController

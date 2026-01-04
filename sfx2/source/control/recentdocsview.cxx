@@ -58,8 +58,8 @@ namespace sfx2
 constexpr tools::Long gnTextHeight = 30;
 constexpr tools::Long gnItemPadding = 5;
 
-RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
-    : ThumbnailView(std::move(xWindow), std::move(xMenu))
+RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow)
+    : ThumbnailView(std::move(xWindow))
     , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))

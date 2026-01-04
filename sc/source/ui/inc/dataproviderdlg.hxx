@@ -16,6 +16,8 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/idle.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 #include "datatableview.hxx"
 #include <memory>

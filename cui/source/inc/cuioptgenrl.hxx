@@ -21,6 +21,7 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <vector>

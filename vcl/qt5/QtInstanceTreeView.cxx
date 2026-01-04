@@ -738,10 +738,10 @@ void QtInstanceTreeView::set_column_custom_renderer(int, bool)
 
 void QtInstanceTreeView::queue_draw() { assert(false && "Not implemented yet"); }
 
-bool QtInstanceTreeView::get_dest_row_at_pos(const Point&, weld::TreeIter*, bool, bool)
+std::unique_ptr<weld::TreeIter> QtInstanceTreeView::get_dest_row_at_pos(const Point&, bool, bool)
 {
     assert(false && "Not implemented yet");
-    return false;
+    return {};
 }
 
 void QtInstanceTreeView::unset_drag_dest_row() { assert(false && "Not implemented yet"); }

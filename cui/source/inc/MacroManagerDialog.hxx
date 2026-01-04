@@ -16,6 +16,7 @@
 #include <svx/passwd.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

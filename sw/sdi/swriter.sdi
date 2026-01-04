@@ -9069,3 +9069,19 @@ SfxBoolItem BaselineGridVisible FN_VIEW_BASELINE_GRID_VISIBLE
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
+SfxVoidItem SortChapters FN_SORT_CHAPTERS
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]

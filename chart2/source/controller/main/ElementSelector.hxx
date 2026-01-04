@@ -24,6 +24,7 @@
 #include <svtools/toolboxcontroller.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <unotools/weakref.hxx>
 
 namespace chart

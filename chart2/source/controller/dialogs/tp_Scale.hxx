@@ -20,6 +20,9 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/FormattedSpinButton.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class SvNumberFormatter;
 

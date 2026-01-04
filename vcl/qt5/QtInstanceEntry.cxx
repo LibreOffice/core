@@ -15,7 +15,7 @@
 #include <QtGui/QIcon>
 
 QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
-    : QtInstanceWidget(pLineEdit)
+    : QtInstanceTextWidget(pLineEdit)
     , m_pLineEdit(pLineEdit)
 {
     assert(m_pLineEdit);
@@ -84,7 +84,7 @@ bool QtInstanceEntry::get_selection_bounds(int& rStartPos, int& rEndPos)
     return bHasSelection;
 }
 
-void QtInstanceEntry::replace_selection(const OUString& rText)
+void QtInstanceEntry::do_replace_selection(const OUString& rText)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pLineEdit->insert(toQString(rText)); });
@@ -175,16 +175,6 @@ bool QtInstanceEntry::get_overwrite_mode() const
     assert(false && "Not implemented yet");
     return false;
 }
-
-void QtInstanceEntry::set_font(const vcl::Font& rFont) { setFont(rFont); }
-
-void QtInstanceEntry::set_font_color(const Color& rColor) { setFontColor(rColor); }
-
-void QtInstanceEntry::cut_clipboard() { assert(false && "Not implemented yet"); }
-
-void QtInstanceEntry::copy_clipboard() { assert(false && "Not implemented yet"); }
-
-void QtInstanceEntry::paste_clipboard() { assert(false && "Not implemented yet"); }
 
 void QtInstanceEntry::set_alignment(TxtAlign eXAlign)
 {

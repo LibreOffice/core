@@ -28,6 +28,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/longcurr.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <unotools/localedatawrapper.hxx>

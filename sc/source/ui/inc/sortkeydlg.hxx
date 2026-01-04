@@ -13,6 +13,7 @@
 #include <memory>
 
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/weld.hxx>
 
 struct ScSortKeyItem

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <svtools/svtdllapi.h>
 
 class SVT_DLLPUBLIC RecordItemWindowBase

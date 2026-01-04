@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 

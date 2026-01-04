@@ -39,6 +39,7 @@
 #include <unotools/charclass.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <osl/diagnose.h>
 
 #include <viewfunc.hxx>

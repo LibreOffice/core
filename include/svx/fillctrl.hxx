@@ -25,6 +25,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/weld/ComboBox.hxx>
 
 class XFillStyleItem;
 class XFillColorItem;

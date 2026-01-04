@@ -868,8 +868,9 @@ IMPL_LINK(SvxToolbarConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEv
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
 
     // Select clicked entry
-    std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    if (!rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), xIter.get(), false))
+    std::unique_ptr<weld::TreeIter> xIter
+        = rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false);
+    if (!xIter)
         return false;
     rTreeView.select(*xIter);
     SelectToolbarEntry(rTreeView);
@@ -916,8 +917,9 @@ IMPL_LINK(SvxToolbarConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCE
     weld::TreeView& rTreeView = m_xFunctions->get_widget();
 
     // Select clicked entry
-    std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    if (!rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), xIter.get(), false))
+    std::unique_ptr<weld::TreeIter> xIter
+        = rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), false);
+    if (!xIter)
         return false;
     rTreeView.select(*xIter);
     SelectFunctionHdl(rTreeView);

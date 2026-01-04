@@ -755,8 +755,8 @@ void ScCheckListMenuControl::setAllMemberState(bool bSet)
 void ScCheckListMenuControl::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
-    std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
-    if (!mpChecks->get_cursor(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = mpChecks->get_cursor();
+    if (!xEntry)
         return;
     mpChecks->set_toggle(*xEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
@@ -798,11 +798,8 @@ IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
         close(false);
     else if (&rBtn == mxBtnSelectSingle.get() || &rBtn == mxBtnUnselectSingle.get())
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
-        bool bEntry = mpChecks->get_cursor(xEntry.get());
-        if (!bEntry)
-            xEntry.reset();
-        if (bEntry && mpChecks->get_sensitive(*xEntry, 0))
+        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->get_cursor();
+        if (xEntry && mpChecks->get_sensitive(*xEntry, 0))
         {
             selectCurrentMemberOnly(&rBtn == mxBtnSelectSingle.get());
             Check(xEntry.get());
@@ -1520,9 +1517,8 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
     if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
-        bool bEntry = mpChecks->get_cursor(xEntry.get());
-        if (bEntry && mpChecks->get_sensitive(*xEntry, 0))
+        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->get_cursor();
+        if (xEntry && mpChecks->get_sensitive(*xEntry, 0))
         {
             bool bOldCheck = mpChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
             CheckEntry(*xEntry, !bOldCheck);

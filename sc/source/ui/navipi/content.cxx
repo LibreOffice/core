@@ -335,9 +335,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
 {
     ScContentId nType;
     sal_uLong nChild;
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_cursor(xEntry.get()))
-        xEntry.reset();
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
     GetEntryIndexes(nType, nChild, xEntry.get());
 
     if (xEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD))
@@ -454,10 +452,7 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                 break;
             case 0:
             {
-                std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-                if (!m_xTreeView->get_cursor(xEntry.get()))
-                    xEntry.reset();
-                if (xEntry)
+                if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor())
                 {
                     ScContentId nType;
                     sal_uLong nChild;
@@ -488,9 +483,7 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             bUsed = true;
             ScContentId nType;
             sal_uLong nChild;
-            std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-            if (!m_xTreeView->get_cursor(xEntry.get()))
-                xEntry.reset();
+            std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
             GetEntryIndexes(nType, nChild, xEntry.get());
 
             if (xEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD))
@@ -556,9 +549,7 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     ScContentId nType;
     sal_uLong nChild;
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_cursor(xEntry.get()))
-        xEntry.reset();
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
     GetEntryIndexes(nType, nChild, xEntry.get());
 
     switch ( rCEvt.GetCommand() )
@@ -1247,10 +1238,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     ScContentId nType;
     sal_uLong nChild;
 
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_cursor(xEntry.get()))
-        xEntry.reset();
-
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor();
     GetEntryIndexes(nType, nChild, xEntry.get());
 
     if( xEntry &&
@@ -1388,8 +1376,7 @@ void ScContentTree::ToggleRoot()        // after selection
     ScContentId nNew = ScContentId::ROOT;
     if ( nRootType == ScContentId::ROOT )
     {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xEntry.get()))
+        if (std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->get_cursor())
         {
             std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(xEntry.get()));
             if (!m_xTreeView->iter_parent(*xParent))
@@ -1638,9 +1625,7 @@ void ScContentTree::StoreNavigatorSettings()
         pSettings->SetExpanded( nEntry, bExp );
     }
 
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_cursor(xCurEntry.get()))
-        xCurEntry.reset();
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xTreeView->get_cursor();
 
     ScContentId nRoot;
     sal_uLong nChild;

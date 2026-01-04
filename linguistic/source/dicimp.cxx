@@ -834,8 +834,19 @@ uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
     if (bNeedEntries)
         loadEntries( aMainURL );
 
+    // first search: ignore the dots at the end of the
+    // dictionary words and at the end of the query word
     sal_Int32 nPos;
-    bool bFound = seekEntry( aWord, &nPos, true );
+    bool bFound = seekEntry( aWord, &nPos,/*bSimilarOnly=*/true );
+    // don't accept an abbreviation without the dot, i.e. when the
+    // searched word is without dot, but the dictionary word is there
+    // in the dictionary only with dot
+    if ( bFound && !aWord.endsWith(".") && aEntries[nPos]->getDictionaryWord().endsWith(".") )
+    {
+        sal_Int32 nPos2;
+        if ( !seekEntry( aWord, &nPos2, /*bSimilarOnly=*/false ) )
+            bFound = false;
+    }
     DBG_ASSERT(!bFound || nPos < static_cast<sal_Int32>(aEntries.size()), "lng : index out of range");
 
     return bFound ? aEntries[ nPos ]

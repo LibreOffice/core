@@ -18,7 +18,9 @@
 
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
@@ -71,9 +73,9 @@ protected:
     SAL_DLLPRIVATE void DefaultTemplateMenuSelectHdl(std::u16string_view rIdent);
 
     DECL_DLLPRIVATE_LINK(OpenRegionHdl, void*, void);
-    DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
-    DECL_DLLPRIVATE_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_DLLPRIVATE_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, TemplateViewItem*, void);
+    DECL_DLLPRIVATE_LINK(OpenTemplateHdl, const OUString&, void);
+    DECL_DLLPRIVATE_LINK(EditTemplateHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(DeleteTemplateHdl, void*, void);
     DECL_DLLPRIVATE_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
     DECL_DLLPRIVATE_LINK(MoveTemplateHdl, void*, void);
@@ -96,7 +98,7 @@ protected:
     SAL_DLLPRIVATE void OnTemplateOpen();
     SAL_DLLPRIVATE void OnTemplateExport();
 
-    SAL_DLLPRIVATE void OnTemplateState(const ThumbnailViewItem* pItem);
+    SAL_DLLPRIVATE void OnTemplateState(const TemplateViewItem* pItem);
 
     SAL_DLLPRIVATE void OnCategoryNew();
     SAL_DLLPRIVATE void OnCategoryRename();
@@ -116,7 +118,7 @@ protected:
     SAL_DLLPRIVATE FILTER_APPLICATION getCurrentApplicationFilter() const;
 
 protected:
-    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
+    std::set<const TemplateViewItem*, selection_cmp_fn> maSelTemplates;
     css::uno::Reference<css::frame::XModel> m_xModel;
     css::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
@@ -179,7 +181,7 @@ public:
     bool IsStartWithTemplate() const { return mxCBXHideDlg->get_active(); };
 
 private:
-    DECL_DLLPRIVATE_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(OpenTemplateHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(OkClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(TimeOut, Timer*, void);
 

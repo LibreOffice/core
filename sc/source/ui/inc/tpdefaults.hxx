@@ -10,6 +10,8 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 class ScTpDefaultsOptions : public SfxTabPage
 {

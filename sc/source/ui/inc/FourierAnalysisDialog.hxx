@@ -12,6 +12,8 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
+#include <vcl/weld/SpinButton.hxx>
+
 class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialog
 {
     ScAddress maLabelAddr;

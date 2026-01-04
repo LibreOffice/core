@@ -84,9 +84,9 @@ namespace dbaui
     {
         // check if we're a table or query container
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-        std::unique_ptr<weld::TreeIter> xHitEntry(rTreeView.make_iterator());
         // get_dest_row_at_pos with false cause no drop if no entry was hit exactly
-        if (rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, xHitEntry.get(), false))
+        if (std::unique_ptr<weld::TreeIter> xHitEntry
+            = rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, false))
         {
             // it must be a container
             EntryType eEntryType = getEntryType(*xHitEntry);
@@ -108,9 +108,10 @@ namespace dbaui
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-        std::unique_ptr<weld::TreeIter> xHitEntry(rTreeView.make_iterator());
+        std::unique_ptr<weld::TreeIter> xHitEntry
+            = rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, false);
         // get_dest_row_at_pos with false cause no drop if no entry was hit exactly
-        if (!rTreeView.get_dest_row_at_pos(_rEvt.maPosPixel, xHitEntry.get(), false))
+        if (!xHitEntry)
             return DND_ACTION_NONE;
         EntryType eEntryType = getEntryType(*xHitEntry);
         if (!isContainer(eEntryType))

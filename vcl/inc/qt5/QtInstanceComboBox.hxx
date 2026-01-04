@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/ComboBox.hxx>
+
 #include <QtWidgets/QComboBox>
 
 class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBox
@@ -77,8 +79,8 @@ public:
 
     virtual int get_max_mru_count() const override;
     virtual void set_max_mru_count(int nCount) override;
-    virtual OUString get_mru_entries() const override;
-    virtual void set_mru_entries(const OUString& rEntries) override;
+    virtual std::vector<OUString> get_mru_entries() const override;
+    virtual void set_mru_entries(const std::vector<OUString>& rEntries) override;
 
     virtual void set_max_drop_down_rows(int nRows) override;
 

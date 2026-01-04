@@ -335,7 +335,7 @@ typedef ::cppu::WeakImplHelper
 ScDataPilotFieldsObjImpl;
 
 /** Collection of all DataPilot fields, or of all fields from a specific dimension. */
-class ScDataPilotFieldsObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldsObjImpl
+class SAL_DLLPUBLIC_RTTI ScDataPilotFieldsObj final : public ScDataPilotChildObjBase, public ScDataPilotFieldsObjImpl
 {
 public:
     explicit            ScDataPilotFieldsObj(

@@ -23,6 +23,7 @@
 
 #include <tools/gen.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 namespace dp_gui
 {

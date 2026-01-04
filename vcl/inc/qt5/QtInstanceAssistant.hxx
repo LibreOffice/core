@@ -11,6 +11,7 @@
 
 #include "QtInstanceDialog.hxx"
 
+#include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <QtWidgets/QWizard>

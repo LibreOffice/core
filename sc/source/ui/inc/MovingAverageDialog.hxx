@@ -15,6 +15,8 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
+#include <vcl/weld/SpinButton.hxx>
+
 class ScMovingAverageDialog : public ScStatisticsInputOutputDialog
 {
 private:

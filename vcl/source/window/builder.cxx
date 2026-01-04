@@ -277,34 +277,6 @@ weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWin
     return ImplGetSVData()->mpDefInst->GetFrameWeld(rWindow);
 }
 
-namespace weld
-{
-    unsigned int SpinButton::Power10(unsigned int n)
-    {
-        unsigned int nValue = 1;
-        for (unsigned int i = 0; i < n; ++i)
-            nValue *= 10;
-        return nValue;
-    }
-
-    sal_Int64 SpinButton::denormalize(sal_Int64 nValue) const
-    {
-        const int nFactor = Power10(get_digits());
-
-        if ((nValue < (std::numeric_limits<sal_Int64>::min() + nFactor)) ||
-            (nValue > (std::numeric_limits<sal_Int64>::max() - nFactor)))
-        {
-            return nValue / nFactor;
-        }
-
-        const int nHalf = nFactor / 2;
-
-        if (nValue < 0)
-            return (nValue - nHalf) / nFactor;
-        return (nValue + nHalf) / nFactor;
-    }
-}
-
 // static
 void BuilderBase::reportException(const css::uno::Exception& rExcept)
 {

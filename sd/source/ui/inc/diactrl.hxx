@@ -21,6 +21,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 namespace com::sun::star::frame
 {

@@ -40,6 +40,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/customweld.hxx>
 
 #include <undoheaderfooter.hxx>

@@ -22,6 +22,8 @@
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"
 
+#include <vcl/weld/Entry.hxx>
+
 using vcl::WizardTypes::WizardState;
 using vcl::WizardTypes::CommitPageReason;
 

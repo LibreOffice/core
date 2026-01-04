@@ -20,6 +20,7 @@
 #include <string.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

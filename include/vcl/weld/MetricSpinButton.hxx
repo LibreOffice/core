@@ -10,7 +10,8 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 namespace weld
 {
