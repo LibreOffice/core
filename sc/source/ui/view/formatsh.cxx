@@ -1179,9 +1179,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
                     SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aOldSet( *rDoc.GetPool() );
                     SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aNewSet( *rDoc.GetPool() );
-                    const SfxPoolItem&      rBorderAttr =
-                                                pOldAttrs->GetItemSet().
-                                                    Get( ATTR_BORDER );
+                    const SfxPoolItem& rBorderAttr = pOldAttrs->GetItemSet().Get(ATTR_BORDER);
 
                     // Evaluate border items from controller:
 
