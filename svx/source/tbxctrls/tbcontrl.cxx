@@ -176,11 +176,6 @@ public:
             m_xWidget->set_entry_text(rText);
     }
 
-    int find_text(const OUString& rText)
-    {
-        return m_xWidget->find_text(rText);
-    }
-
     void set_active(int nActive)
     {
         m_xWidget->set_active(nActive);
@@ -3271,6 +3266,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
     pBox->clear();
 
     std::vector<OUString> aStyles;
+    // use a set to avoid O(n^2) performance problem in insert loop
+    std::unordered_set<OUString> aStylesSet;
 
     // add used styles
     pStyle = xIter->Next();
@@ -3291,13 +3288,17 @@ void SvxStyleToolBoxControl::FillStyleBox()
             if ( aStyles.size() + pBox->get_count() > 12)
                 break;
             pBox->append_text(rStyle.second);
+            aStylesSet.insert(rStyle.second);
         }
     }
     std::sort(aStyles.begin(), aStyles.end());
 
     for (const auto& rStyle : aStyles)
-        if (pBox->find_text(rStyle) == -1)
+    {
+        // do not duplicate default styles
+        if (aStylesSet.insert(rStyle).second)
             pBox->append_text(rStyle);
+    }
 
     if ((m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
         pBox->append_text(m_pImpl->aMore);
