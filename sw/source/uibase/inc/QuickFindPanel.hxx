@@ -32,6 +32,8 @@ class QuickFindPanel : public PanelLayout
 
         std::unique_ptr<weld::CheckButton> m_xMatchCaseCheckButton;
         std::unique_ptr<weld::CheckButton> m_xWholeWordsOnlyCheckButton;
+        std::unique_ptr<weld::CheckButton> m_xCommentsCheckButton;
+        std::unique_ptr<weld::CheckButton> m_xRegularExpressionsCheckButton;
         std::unique_ptr<weld::CheckButton> m_xSimilarityCheckButton;
         std::unique_ptr<weld::Button> m_xSimilaritySettingsDialogButton;
 
@@ -81,6 +83,8 @@ private:
 
     bool m_bMatchCase = false;
     bool m_bWholeWordsOnly = false;
+    bool m_bComments = true;
+    bool m_bRegularExpression = false;
     bool m_bSimilarity = false;
     bool m_bIsLEVRelaxed = true;
     sal_uInt16 m_nLEVOther = 2;

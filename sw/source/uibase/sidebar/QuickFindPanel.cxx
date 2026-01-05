@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 
 const int CharactersBeforeAndAfter = 40;
+const sal_Int32 MaxShownSearchResultLength = 120;
 
 namespace
 {
@@ -66,6 +67,8 @@ QuickFindPanel::SearchOptionsDialog::SearchOptionsDialog(weld::Window* pParent)
                               u"SearchOptionsDialog"_ustr)
     , m_xMatchCaseCheckButton(m_xBuilder->weld_check_button(u"matchcase"_ustr))
     , m_xWholeWordsOnlyCheckButton(m_xBuilder->weld_check_button(u"wholewordsonly"_ustr))
+    , m_xCommentsCheckButton(m_xBuilder->weld_check_button(u"comments"_ustr))
+    , m_xRegularExpressionsCheckButton(m_xBuilder->weld_check_button(u"regularexpressions"_ustr))
     , m_xSimilarityCheckButton(m_xBuilder->weld_check_button(u"similarity"_ustr))
     , m_xSimilaritySettingsDialogButton(m_xBuilder->weld_button(u"similaritysettingsdialog"_ustr))
 {
@@ -204,6 +207,8 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUStri
 
     aDlg.m_xMatchCaseCheckButton->set_active(m_bMatchCase);
     aDlg.m_xWholeWordsOnlyCheckButton->set_active(m_bWholeWordsOnly);
+    aDlg.m_xCommentsCheckButton->set_active(m_bComments);
+    aDlg.m_xRegularExpressionsCheckButton->set_active(m_bRegularExpression);
     aDlg.m_xSimilarityCheckButton->set_active(m_bSimilarity);
     aDlg.m_xSimilaritySettingsDialogButton->set_sensitive(m_bSimilarity);
     if (m_bSimilarity)
@@ -218,6 +223,8 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUStri
     {
         m_bMatchCase = aDlg.m_xMatchCaseCheckButton->get_active();
         m_bWholeWordsOnly = aDlg.m_xWholeWordsOnlyCheckButton->get_active();
+        m_bComments = aDlg.m_xCommentsCheckButton->get_active();
+        m_bRegularExpression = aDlg.m_xRegularExpressionsCheckButton->get_active();
         m_bSimilarity = aDlg.m_xSimilarityCheckButton->get_active();
         if (m_bSimilarity)
         {
@@ -508,19 +515,26 @@ void QuickFindPanel::FillSearchFindsList()
     aSearchOptions.Locale = GetAppLanguageTag().getLocale();
     aSearchOptions.searchString = sFindEntry;
     aSearchOptions.replaceString.clear();
-    if (m_bWholeWordsOnly)
-        aSearchOptions.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
-    if (m_bSimilarity)
+    if (m_bRegularExpression)
     {
-        aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::APPROXIMATE;
-        if (m_bIsLEVRelaxed)
-            aSearchOptions.searchFlag |= css::util::SearchFlags::LEV_RELAXED;
-        aSearchOptions.changedChars = m_nLEVOther;
-        aSearchOptions.insertedChars = m_nLEVShorter;
-        aSearchOptions.deletedChars = m_nLEVLonger;
+        aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
     }
     else
-        aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    {
+        if (m_bWholeWordsOnly)
+            aSearchOptions.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
+        if (m_bSimilarity)
+        {
+            aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::APPROXIMATE;
+            if (m_bIsLEVRelaxed)
+                aSearchOptions.searchFlag |= css::util::SearchFlags::LEV_RELAXED;
+            aSearchOptions.changedChars = m_nLEVOther;
+            aSearchOptions.insertedChars = m_nLEVShorter;
+            aSearchOptions.deletedChars = m_nLEVLonger;
+        }
+        else
+            aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    }
     TransliterationFlags nTransliterationFlags = TransliterationFlags::IGNORE_WIDTH;
     if (!m_bMatchCase)
         nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
@@ -528,7 +542,7 @@ void QuickFindPanel::FillSearchFindsList()
 
     m_pWrtShell->StartAllAction();
     /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
-        aSearchOptions, false, SwDocPositions::Start, SwDocPositions::End,
+        aSearchOptions, m_bComments, SwDocPositions::Start, SwDocPositions::End,
         FindRanges::InBody | FindRanges::InSelAll, false);
     m_pWrtShell->EndAllAction();
 
@@ -668,8 +682,21 @@ void QuickFindPanel::FillSearchFindsList()
 
             auto nCount = nMarkIndex - nStartIndex;
             OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
-            auto nCount1 = nPointIndex - nMarkIndex;
-            OUString sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
+            OUString sFind;
+            if (auto pField = SwWrtShell::GetFieldAtCursor(xPaM.get(), true);
+                pField && pField->GetTypeId() == SwFieldTypesEnum::Postit)
+            {
+                sFind += OUString::Concat("{") + SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT) + "}";
+            }
+            else
+            {
+                auto nCount1 = std::min(nPointIndex - nMarkIndex, MaxShownSearchResultLength);
+                sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
+                if (nPointIndex - nMarkIndex > MaxShownSearchResultLength)
+                {
+                    sFind += "...";
+                }
+            }
             auto nCount2 = nEndIndex - nPointIndex + 1;
             OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
             OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
