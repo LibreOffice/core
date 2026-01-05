@@ -204,7 +204,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                 case CH_TXT_ATR_FIELDEND:
                 {
                     assert(startedFields.back().first == rIDMA.getFieldmarkAt(SwPosition(rNode, i)));
-                    startedFields.pop_back();
+                    if (!startedFields.empty())
+                    {
+                        startedFields.pop_back();
+                    }
                     aHiddenMulti.Select({i, i}, true);
                     break;
                 }
