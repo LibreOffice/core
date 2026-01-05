@@ -1733,6 +1733,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTotalsRowFunction)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTotalsRowShown)
+{
+    createScDoc("xlsx/totalsRowShown.xlsx");
+    saveAndReload(TestFilter::XLSX);
+    {
+        xmlDocUniquePtr pDocXml = parseExport(u"xl/tables/table1.xml"_ustr);
+        CPPUNIT_ASSERT(pDocXml);
+        assertXPathNoAttribute(pDocXml, "/x:table", "totalsRowShown");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf167689_xmlMaps_and_xmlColumnPr)
 {
     createScDoc("xlsx/tdf167689_xmlMaps_and_xmlColumnPr.xlsx");
