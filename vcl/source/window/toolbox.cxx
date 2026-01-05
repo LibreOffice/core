@@ -2565,7 +2565,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     tools::Long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
     tools::Long    nImageOffX  = 0;
     tools::Long    nImageOffY  = 0;
-    DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
     // draw separators
     if ( (pItem->meType == ToolBoxItemType::SEPARATOR) && nPos > 0 )
@@ -2576,19 +2575,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     // do nothing if item is no button or will be displayed as window
     if ( (pItem->meType != ToolBoxItemType::BUTTON) || pItem->mbShowWindow )
         return;
-
-    if ( pItem->meState == TRISTATE_TRUE )
-    {
-        nStyle |= DrawButtonFlags::Checked;
-    }
-    else if ( pItem->meState == TRISTATE_INDET )
-    {
-        nStyle |= DrawButtonFlags::DontKnow;
-    }
-    if ( nHighlight == 1 )
-    {
-        nStyle |= DrawButtonFlags::Pressed;
-    }
 
     ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
 
