@@ -439,7 +439,7 @@ desktop/source/deployment/gui/dp_gui_updatedialog.hxx:100
     _Bool bEnableCheckBox
     0
 desktop/source/lib/init.cxx:8431
-    struct _LibreOfficeKit * libreofficekit_hook_2(const char *,const char *)
+    struct LibreOfficeKitStruct * libreofficekit_hook_2(const char *,const char *)
     const char * user_profile_url
     0
 drawinglayer/qa/unit/vclmetafileprocessor2d.cxx:62
