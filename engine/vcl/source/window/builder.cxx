@@ -3472,7 +3472,8 @@ std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlRe
                 {
                     nPriority = o3tl::toInt32(rest);
                 }
-                else if (classStyle != "small-button" && classStyle != "destructive-action" && classStyle != "suggested-action")
+                else if (classStyle != "small-button" && classStyle != "destructive-action" &&
+                         classStyle != "suggested-action" && classStyle != "novertpad")
                 {
                     SAL_WARN("vcl.builder", "unknown class: " << classStyle);
                 }
