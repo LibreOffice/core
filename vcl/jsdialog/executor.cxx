@@ -687,10 +687,23 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
             auto pIconView = dynamic_cast<weld::IconView*>(pWidget);
             if (pIconView)
             {
-                if (sAction == "select")
+                sal_Int32 nPos = o3tl::toInt32(rData.at(u"data"_ustr));
+                if (sAction == "keypress")
                 {
-                    sal_Int32 nPos = o3tl::toInt32(rData.at(u"data"_ustr));
-
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    LOKTrigger::trigger_key_press(*pIconView,
+                                                  KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
+                else if (sAction == "keyrelease")
+                {
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    LOKTrigger::trigger_key_release(*pIconView,
+                                                    KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
+                else if (sAction == "select")
+                {
                     pIconView->select(nPos);
                     LOKTrigger::trigger_changed(*pIconView);
 
@@ -698,8 +711,6 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "activate")
                 {
-                    sal_Int32 nPos = o3tl::toInt32(rData.at(u"data"_ustr));
-
                     pIconView->select(nPos);
                     LOKTrigger::trigger_changed(*pIconView);
                     LOKTrigger::trigger_item_activated(*pIconView);
@@ -708,8 +719,6 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "contextmenu")
                 {
-                    sal_Int32 nPos = o3tl::toInt32(rData.at(u"data"_ustr));
-
                     tools::Rectangle aRect = pIconView->get_rect(nPos);
                     Point aPoint = aRect.Center();
                     assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);

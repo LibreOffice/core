@@ -481,6 +481,7 @@ private:
     DECL_LINK( MousePressHdl, const MouseEvent&, bool );
     DECL_LINK( MouseReleaseHdl, const MouseEvent&, bool );
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+    DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     OUString GetBorderTypeTooltip(sal_uInt16 nBorderType) const;
 
@@ -2606,6 +2607,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     mxFrameIV->connect_mouse_press(LINK(this, SvxFrameWindow_Impl, MousePressHdl));
     mxFrameIV->connect_mouse_release(LINK(this, SvxFrameWindow_Impl, MouseReleaseHdl));
     mxFrameIV->connect_key_press(LINK(this, SvxFrameWindow_Impl, KeyPressHdl));
+    mxFrameIV->connect_key_release(LINK(this, SvxFrameWindow_Impl, KeyReleaseHdl));
     mxFrameIV->connect_item_activated( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
 
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
@@ -2844,6 +2846,12 @@ IMPL_LINK(SvxFrameWindow_Impl, KeyPressHdl, const KeyEvent&, rKEvt, bool)
         return true;
     }
     return false;
+}
+
+IMPL_LINK(SvxFrameWindow_Impl, KeyReleaseHdl, const KeyEvent&, /*rKEvt*/, bool)
+{
+    nModifier = 0;
+    return true;
 }
 
 VclPtr<VirtualDevice> SvxFrameWindow_Impl::GetVirtualDevice(BitmapEx aPreviewBitmap)
