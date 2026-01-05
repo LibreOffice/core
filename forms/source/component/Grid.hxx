@@ -20,6 +20,7 @@
 #pragma once
 
 #include "errorbroadcaster.hxx"
+#include "Columns.hxx"
 #include <FormComponent.hxx>
 #include <formcontrolfont.hxx>
 #include <InterfaceContainer.hxx>

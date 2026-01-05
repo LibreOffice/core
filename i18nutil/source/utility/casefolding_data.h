@@ -20,6 +20,7 @@
 #define INCLUDED_I18NUTIL_SOURCE_UTILITY_CASEFOLDING_DATA_H
 
 #include <sal/types.h>
+#include <i18nutil/casefolding.hxx>
 
 namespace i18nutil {
 

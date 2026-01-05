@@ -45,6 +45,7 @@
 
 #include "pq_connection.hxx"
 #include "pq_xbase.hxx"
+#include "pq_xkeycolumns.hxx"
 
 namespace pq_sdbc_driver
 {

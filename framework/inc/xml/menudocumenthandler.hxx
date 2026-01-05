@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/attributelist.hxx>
 #include <cppuhelper/implbase.hxx>

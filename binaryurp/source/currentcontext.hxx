@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <sal/types.h>
+
 namespace com::sun::star::uno
 {
 class UnoInterfaceReference;

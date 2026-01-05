@@ -27,6 +27,7 @@
 #include "binding.hxx"
 #include "submission.hxx"
 #include "unohelper.hxx"
+#include "model.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
