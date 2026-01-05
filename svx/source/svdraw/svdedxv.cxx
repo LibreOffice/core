@@ -926,31 +926,28 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
         // to update accordingly (will update selection, too). Suppress new
         // stuff when LibreOfficeKit is active
         EditViewInvalidate(tools::Rectangle());
+        return;
     }
-    else
-    {
-        // draw old text edit stuff
-        if (IsTextEdit())
-        {
-            const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
 
-            if (pActiveOutliner)
-            {
-                const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
+    // draw old text edit stuff
+    if (!IsTextEdit())
+        return;
 
-                if (nViewCount)
-                {
-                    const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
-                    const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
+    const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
+    if (!pActiveOutliner)
+        return;
 
-                    OutlinerView* pOLV = pActiveOutliner->GetView(0);
-                    SdrPage* pPage = GetSdrPageView()->GetPage();
-                    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
-                    ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
-                }
-            }
-        }
-    }
+    const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
+    if (!nViewCount)
+        return;
+
+    const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
+    const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
+
+    OutlinerView* pOLV = pActiveOutliner->GetView(0);
+    SdrPage* pPage = GetSdrPageView()->GetPage();
+    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
+    ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
 }
 
 void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::Rectangle& rRect,
