@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
+const redlineHelper = require('../../common/redline_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function () {
 
@@ -26,30 +27,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		});
 	}
 
-	function confirmChange(action) {
-		cy.cGet('#menu-editmenu').click();
-		cy.cGet('#menu-changesmenu').should($el => { expect(Cypress.dom.isDetached($el)).to.eq(false); }).click();
-		cy.cGet('#menu-changesmenu').should($el => { expect(Cypress.dom.isDetached($el)).to.eq(false); }).contains(action).click();
-		cy.cGet('body').type('{esc}');
-		cy.cGet('#menu-changesmenu').should('not.be.visible');
-	}
-
-	//enable record for track changes
-	function enableRecord() {
-		cy.cGet('#menu-editmenu').click();
-		cy.cGet('#menu-changesmenu').click();
-		cy.cGet('#menu-changesmenu').contains('Record').click();
-
-		cy.cGet('body').type('{esc}');
-
-		cy.cGet('#menu-editmenu').click();
-		cy.cGet('#menu-changesmenu').click();
-		cy.cGet('#menu-changesmenu').contains('Record').should('have.class', 'lo-menu-item-checked');
-
-		//to close
-		cy.cGet('#menu-changesmenu').click();
-	}
-
 	it('Accept All', function () {
 		helper.typeIntoDocument('Hello World');
 		cy.wait(3000);
@@ -62,7 +39,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 			// Wait for animation
 			cy.wait(500);
 		}
-		enableRecord();
+		redlineHelper.enableRecord();
 
 		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 		cy.cGet('#insertannotation').click();
@@ -80,7 +57,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		cy.cGet('#comment-container-2').should('contain','some text1');
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
-		confirmChange('Accept All');
+		redlineHelper.confirmChange('Accept All');
 		cy.cGet('#comment-container-1').should('contain','some text0');
 		cy.cGet('#comment-container-2').should('not.exist');
 		cy.cGet('#comment-container-3').should('contain','some text2');
@@ -89,7 +66,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		helper.clearAllText();
 		helper.selectAllText();
 		cy.wait(500);
-		confirmChange('Accept All');
+		redlineHelper.confirmChange('Accept All');
 		helper.typeIntoDocument('{ctrl}a');
 		cy.wait(500);
 		helper.textSelectionShouldNotExist();
@@ -108,7 +85,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 			// Wait for animation
 			cy.wait(500);
 		}
-		enableRecord();
+		redlineHelper.enableRecord();
 
 		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 		cy.cGet('#insertannotation').click();
@@ -126,7 +103,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		cy.cGet('#comment-container-2').should('contain','some text1');
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
-		confirmChange('Reject All');
+		redlineHelper.confirmChange('Reject All');
 		cy.cGet('#comment-container-1').should('contain','some text0');
 		cy.cGet('#comment-container-2').should('contain','some text1');
 		cy.cGet('#comment-container-2').should('not.have.class','tracked-deleted-comment-show');
@@ -136,7 +113,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		helper.clearAllText();
 		helper.selectAllText();
 		cy.wait(500);
-		confirmChange('Reject All');
+		redlineHelper.confirmChange('Reject All');
 		cy.cGet('#document-container').click();
 		helper.selectAllText();
 		cy.wait(500);
@@ -425,7 +402,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 			// Wait for animation
 			cy.wait(500);
 		}
-		enableRecord();
+		redlineHelper.enableRecord();
 
 		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
 		cy.cGet('#insertannotation').click();
