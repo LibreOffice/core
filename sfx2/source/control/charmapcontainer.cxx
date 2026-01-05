@@ -346,8 +346,7 @@ void SfxCharmapContainer::updateCharControl(weld::IconView& rIconView,
 {
     rIconView.clear();
 
-    int i = 0;
-    for (auto it = rChars.begin(); it != rChars.end(); ++it, i++)
+    for (auto it = rChars.begin(); it != rChars.end(); ++it)
     {
         const int nIndex = rIconView.n_children();
         const OUString* pNullIconName = nullptr;
