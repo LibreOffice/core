@@ -32,11 +32,11 @@ extern "C"
 {
 #endif
 
-typedef struct _LibreOfficeKit LibreOfficeKit;
-typedef struct _LibreOfficeKitClass LibreOfficeKitClass;
+typedef struct LibreOfficeKitStruct LibreOfficeKit;
+typedef struct LibreOfficeKitClassStruct LibreOfficeKitClass;
 
-typedef struct _LibreOfficeKitDocument LibreOfficeKitDocument;
-typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
+typedef struct LibreOfficeKitDocumentStruct LibreOfficeKitDocument;
+typedef struct LibreOfficeKitDocumentClassStruct LibreOfficeKitDocumentClass;
 
 // Do we have an extended member in this struct ?
 #define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
@@ -44,12 +44,12 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
-struct _LibreOfficeKit
+struct LibreOfficeKitStruct
 {
     LibreOfficeKitClass* pClass;
 };
 
-struct _LibreOfficeKitClass
+struct LibreOfficeKitClassStruct
 {
     size_t  nSize;
 
@@ -187,12 +187,12 @@ struct _LibreOfficeKitClass
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
 
-struct _LibreOfficeKitDocument
+struct LibreOfficeKitDocumentStruct
 {
     LibreOfficeKitDocumentClass* pClass;
 };
 
-struct _LibreOfficeKitDocumentClass
+struct LibreOfficeKitDocumentClassStruct
 {
     size_t  nSize;
 
