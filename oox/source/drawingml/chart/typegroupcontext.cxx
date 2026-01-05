@@ -405,61 +405,11 @@ ChartexTypeGroupContext::~ChartexTypeGroupContext()
 {
 }
 
-void ChartexTypeGroupContext::CreateSeries()
-{
-    mrModel.maSeries.create(false);
-}
-
 ContextHandlerRef ChartexTypeGroupContext::onCreateContext( [[maybe_unused]] sal_Int32 nElement,
         [[maybe_unused]] const AttributeList& rAttribs )
 {
-    if (isRootElement()) switch (nElement) {
-        case CX_TOKEN(plotSurface) :
-            // TODO
-            return nullptr;
-        case CX_TOKEN(series) :
-            if (rAttribs.hasAttribute(XML_layoutId)) {
-                // If this is the first series, then the type ID is currently
-                // set to <cx:plotAreaRegion>. If this is not the first series
-                // in a multi-series chart, it should be set to the previous
-                // chart type in the series (which *should* only be another
-                // chartex type, not a <c> type). In either case, set it
-                // to the specific chart type based on the layoutId attribute
-                assert(mrModel.mnTypeId == CX_TOKEN(plotAreaRegion) ||
-                        mrModel.mnTypeId == CX_TOKEN(boxWhisker) ||
-                        mrModel.mnTypeId == CX_TOKEN(clusteredColumn) ||
-                        mrModel.mnTypeId == CX_TOKEN(funnel) ||
-                        mrModel.mnTypeId == CX_TOKEN(paretoLine) ||
-                        mrModel.mnTypeId == CX_TOKEN(regionMap) ||
-                        mrModel.mnTypeId == CX_TOKEN(sunburst) ||
-                        mrModel.mnTypeId == CX_TOKEN(treemap) ||
-                        mrModel.mnTypeId == CX_TOKEN(waterfall));
-                OUString sChartId = rAttribs.getStringDefaulted(XML_layoutId);
-                assert(!sChartId.isEmpty());
-
-                if (sChartId == "boxWhisker") {
-                    mrModel.mnTypeId = CX_TOKEN(boxWhisker);
-                } else if (sChartId == "clusteredColumn") {
-                    mrModel.mnTypeId = CX_TOKEN(clusteredColumn);
-                } else if (sChartId == "funnel") {
-                    mrModel.mnTypeId = CX_TOKEN(funnel);
-                } else if (sChartId == "paretoLine") {
-                    mrModel.mnTypeId = CX_TOKEN(paretoLine);
-                } else if (sChartId == "regionMap") {
-                    mrModel.mnTypeId = CX_TOKEN(regionMap);
-                } else if (sChartId == "sunburst") {
-                    mrModel.mnTypeId = CX_TOKEN(sunburst);
-                } else if (sChartId == "treemap") {
-                    mrModel.mnTypeId = CX_TOKEN(treemap);
-                } else if (sChartId == "waterfall") {
-                    mrModel.mnTypeId = CX_TOKEN(waterfall);
-                } else {
-                    assert(false);
-                }
-
-                return new ChartexSeriesContext(*this, mrModel.maSeries.create(false));
-            }
-            break;
+    if (isRootElement()) {
+         return new ChartexSeriesContext(*this, mrModel.maSeries.create(false));
     }
 
     return nullptr;
