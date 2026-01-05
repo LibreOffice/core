@@ -941,6 +941,23 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 break;
             }
             case SID_ATTR_CHAR_COLOR:
+                {
+                    Color aColor(COL_TRANSPARENT);
+                    if (auto pObjectShell = pTabViewShell->GetObjectShell())
+                    {
+                        const std::optional<NamedColor> oColor
+                            = pObjectShell->GetRecentColor(SID_ATTR_CHAR_COLOR);
+                        if (oColor.has_value())
+                            aColor = (*oColor).getComplexColor().getFinalColor();
+                    }
+
+                    SvxColorItem aColorItem(
+                        pTabViewShell->GetSelectionPattern()->GetItem(ATTR_FONT_COLOR));
+                    aColorItem.setColor(aColor);
+                    pTabViewShell->ApplyAttr(aColorItem, false);
+                }
+                break;
+
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
                 pTabViewShell->ExecuteCellFormatDlg(rReq, u"font"_ustr);       // when ToolBar is vertical
