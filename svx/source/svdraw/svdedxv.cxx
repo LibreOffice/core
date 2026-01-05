@@ -946,27 +946,15 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
                     const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
                     const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
-                    for (sal_uInt32 i(0); i < nViewCount; i++)
+                    if (sal_uInt32 i(0); i < nViewCount)
                     {
                         OutlinerView* pOLV = pActiveOutliner->GetView(i);
-
-                        // If rPaintWindow knows that the output device is a render
-                        // context and is aware of the underlying vcl::Window,
-                        // compare against that; that's how double-buffering can
-                        // still find the matching OutlinerView.
-                        OutputDevice* pOutputDevice = rPaintWindow.GetWindow()
-                                                          ? rPaintWindow.GetWindow()->GetOutDev()
-                                                          : &rPaintWindow.GetOutputDevice();
-                        if (pOLV->GetWindow()->GetOutDev() == pOutputDevice
-                            || comphelper::LibreOfficeKit::isActive())
-                        {
-                            SdrPage* pPage = GetSdrPageView()->GetPage();
-                            pOLV->SetBackgroundColor(
-                                pPage->GetPageBackgroundColor(GetSdrPageView(), true));
-                            ImpPaintOutlinerView(*pOLV, aCheckRect,
-                                                 rPaintWindow.GetTargetOutputDevice());
-                            return;
-                        }
+                        SdrPage* pPage = GetSdrPageView()->GetPage();
+                        pOLV->SetBackgroundColor(
+                            pPage->GetPageBackgroundColor(GetSdrPageView(), true));
+                        ImpPaintOutlinerView(*pOLV, aCheckRect,
+                                             rPaintWindow.GetTargetOutputDevice());
+                        return;
                     }
                 }
             }
