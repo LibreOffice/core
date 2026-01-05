@@ -946,16 +946,10 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
                     const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
                     const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
-                    if (sal_uInt32 i(0); i < nViewCount)
-                    {
-                        OutlinerView* pOLV = pActiveOutliner->GetView(i);
-                        SdrPage* pPage = GetSdrPageView()->GetPage();
-                        pOLV->SetBackgroundColor(
-                            pPage->GetPageBackgroundColor(GetSdrPageView(), true));
-                        ImpPaintOutlinerView(*pOLV, aCheckRect,
-                                             rPaintWindow.GetTargetOutputDevice());
-                        return;
-                    }
+                    OutlinerView* pOLV = pActiveOutliner->GetView(0);
+                    SdrPage* pPage = GetSdrPageView()->GetPage();
+                    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
+                    ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
                 }
             }
         }
