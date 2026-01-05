@@ -22,12 +22,12 @@
 
 SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_xSpinButton(std::move(pControl))
-    , nRelMin(0)
-    , nRelMax(0)
-    , bRelativeMode(false)
-    , bRelative(false)
-    , bNegativeEnabled(false)
-    , bFontRelativeMode(false)
+    , m_nRelMin(0)
+    , m_nRelMax(0)
+    , m_bRelativeMode(false)
+    , m_bRelative(false)
+    , m_bNegativeEnabled(false)
+    , m_bFontRelativeMode(false)
 {
     weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
     rSpinButton.connect_changed(LINK(this, SvxRelativeField, ModifyHdl));
@@ -35,12 +35,12 @@ SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pCont
 
 IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
 {
-    if (bRelativeMode)
+    if (m_bRelativeMode)
     {
         OUString aStr = m_xSpinButton->get_text();
-        bool bNewMode = bRelative;
+        bool bNewMode = m_bRelative;
 
-        if (bRelative)
+        if (m_bRelative)
         {
             const sal_Unicode* pStr = aStr.getStr();
 
@@ -60,11 +60,11 @@ IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
                 bNewMode = true;
         }
 
-        if (bNewMode != bRelative)
+        if (bNewMode != m_bRelative)
             SetRelative(bNewMode);
     }
 
-    if (bFontRelativeMode)
+    if (m_bFontRelativeMode)
     {
         OUString aStr = m_xSpinButton->get_text();
         FieldUnit eNewFieldUnit = vcl::GetTextMetricUnit(aStr);
@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
                 break;
         }
 
-        if (eNewFieldUnit != eFontRelativeFieldUnit)
+        if (eNewFieldUnit != m_eFontRelativeFieldUnit)
         {
             SetFontRelative(eNewFieldUnit);
         }
@@ -90,13 +90,13 @@ IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
 
 void SvxRelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
 {
-    bRelativeMode = true;
-    nRelMin       = nMin;
-    nRelMax       = nMax;
+    m_bRelativeMode = true;
+    m_nRelMin       = nMin;
+    m_nRelMax       = nMax;
     m_xSpinButton->set_unit(FieldUnit::CM);
 }
 
-void SvxRelativeField::EnableFontRelativeMode() { bFontRelativeMode = true; }
+void SvxRelativeField::EnableFontRelativeMode() { m_bFontRelativeMode = true; }
 
 void SvxRelativeField::SetRelative( bool bNewRelative )
 {
@@ -106,20 +106,20 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
     rSpinButton.get_selection_bounds(nStartPos, nEndPos);
     OUString aStr = rSpinButton.get_text();
 
-    eFontRelativeFieldUnit = FieldUnit::NONE;
+    m_eFontRelativeFieldUnit = FieldUnit::NONE;
 
     if ( bNewRelative )
     {
-        bRelative = true;
+        m_bRelative = true;
         m_xSpinButton->set_digits(0);
-        m_xSpinButton->set_range(nRelMin, nRelMax, FieldUnit::NONE);
+        m_xSpinButton->set_range(m_nRelMin, m_nRelMax, FieldUnit::NONE);
         m_xSpinButton->set_unit(FieldUnit::PERCENT);
     }
     else
     {
-        bRelative = false;
+        m_bRelative = false;
         m_xSpinButton->set_digits(2);
-        m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
+        m_xSpinButton->set_range(m_bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
         m_xSpinButton->set_unit(FieldUnit::CM);
     }
 
@@ -135,14 +135,14 @@ void SvxRelativeField::SetFontRelative(FieldUnit eNewRelativeUnit)
     rSpinButton.get_selection_bounds(nStartPos, nEndPos);
     OUString aStr = rSpinButton.get_text();
 
-    bRelative = false;
-    eFontRelativeFieldUnit = eNewRelativeUnit;
+    m_bRelative = false;
+    m_eFontRelativeFieldUnit = eNewRelativeUnit;
     m_xSpinButton->set_digits(2);
-    m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
+    m_xSpinButton->set_range(m_bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
 
     if (eNewRelativeUnit == FieldUnit::NONE)
     {
-        m_xSpinButton->set_unit(eAbsoluteFieldUnit);
+        m_xSpinButton->set_unit(m_eAbsoluteFieldUnit);
     }
     else
     {
