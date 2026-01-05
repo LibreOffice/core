@@ -208,6 +208,7 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/controller/sidebar/ChartAreaPanel \
     chart2/source/controller/sidebar/ChartColorsPanel \
     chart2/source/controller/sidebar/ChartColorPaletteControl \
+    chart2/source/controller/sidebar/ChartEffectPanel \
     chart2/source/controller/sidebar/ChartAxisPanel \
     chart2/source/controller/sidebar/ChartColorWrapper \
     chart2/source/controller/sidebar/ChartElementsPanel \

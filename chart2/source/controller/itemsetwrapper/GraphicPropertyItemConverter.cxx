@@ -25,7 +25,9 @@
 #include <CommonConverters.hxx>
 #include <editeng/memberids.h>
 #include <svx/chrtitem.hxx>
+#include <svx/sdmetitm.hxx>
 #include <svx/unomid.hxx>
+#include <svx/xcolit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -66,7 +68,13 @@ ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
         {XATTR_FILLBMP_TILEOFFSETX, {"FillBitmapOffsetX", 0}},
         {XATTR_FILLBMP_TILEOFFSETY, {"FillBitmapOffsetY", 0}},
         {XATTR_FILLBMP_POSOFFSETX, {"FillBitmapPositionOffsetX", 0}},
-        {XATTR_FILLBMP_POSOFFSETY, {"FillBitmapPositionOffsetY", 0}}};
+        {XATTR_FILLBMP_POSOFFSETY, {"FillBitmapPositionOffsetY", 0}},
+        {SDRATTR_GLOW_COLOR, {"GlowEffectColor", 0}},
+        {SDRATTR_GLOW_RADIUS, {"GlowEffectRadius", 0}},
+        {SDRATTR_GLOW_TRANSPARENCY, {"GlowEffectTransparency", 0}},
+        {SDRATTR_SOFTEDGE_RADIUS, {"SoftEdgeRadius", 0}}
+    };
+
     return aDataPointPropertyFilledMap;
 }
 ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()

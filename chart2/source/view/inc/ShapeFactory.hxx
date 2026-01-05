@@ -148,7 +148,8 @@ public:
 
     static rtl::Reference<SvxShapePolyPolygon>
         createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon);
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
+                    , const std::vector<std::vector<css::drawing::Position3D>>* pClipPolyPolygon = nullptr);
 
     static rtl::Reference<SvxShapePolyPolygon>
         createSymbol2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget

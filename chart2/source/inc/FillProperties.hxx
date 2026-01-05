@@ -61,6 +61,10 @@ namespace FillProperties
         , PROP_FILL_BITMAP_MODE
         // bitmap properties end
         , PROP_FILL_BACKGROUND
+        , PROP_FILL_GLOW_COLOR
+        , PROP_FILL_GLOW_RADIUS
+        , PROP_FILL_GLOW_TRANSPARENCY
+        , PROP_FILL_SOFTEDGE_RADIUS
     };
 
     void AddPropertiesToVector(

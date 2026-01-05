@@ -2749,6 +2749,16 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
     }
 }
 
+void SdrPathObj::SetClipPoly(const basegfx::B2DPolyPolygon& rClipPoly)
+{
+    if (GetClipPoly() != rClipPoly)
+    {
+        maClipPolygon = rClipPoly;
+        SetChanged();
+        BroadcastObjectChange();
+    }
+}
+
 void SdrPathObj::ToggleClosed()
 {
     tools::Rectangle aBoundRect0;

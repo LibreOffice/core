@@ -49,6 +49,7 @@ private:
     basegfx::B2DPolyPolygon maPathPolygon;
     SdrObjKind meKind;
     bool mbHandleScale = false;
+    basegfx::B2DPolyPolygon maClipPolygon;
 
     // for isolation of old Drag/Create code
     std::unique_ptr<ImpPathForDragAndCreate> mpDAC;
@@ -141,6 +142,10 @@ public:
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }
     void SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
     void NbcSetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
+
+    // Clip Polygon getter/setter
+    const basegfx::B2DPolyPolygon& GetClipPoly() const { return maClipPolygon; }
+    void SetClipPoly(const basegfx::B2DPolyPolygon& rClipPoly);
 
     // special functions for Bezier-polygon handling
     bool IsClosed() const { return meKind==SdrObjKind::Polygon || meKind==SdrObjKind::PathPoly || meKind==SdrObjKind::PathFill || meKind==SdrObjKind::FreehandFill; }

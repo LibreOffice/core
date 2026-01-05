@@ -926,7 +926,30 @@ void BarChart::doXSlot(
                         }
                     };
                     pPosHelper->transformScaledLogicToScene( aPoly );
-                    xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
+
+                    // set up a clip polygon for cropping any glow or shadow effect rendered
+                    // below the (logical) bottom side of the bar
+                    double fStartYValue = fLowerYValue;
+                    double fHeight = fUpperYValue - fLowerYValue;
+                    // we need to avoid cropping anything else but what below the bottom side of the bar
+                    constexpr double dM = 1000;
+                    if (fHeight < 0)
+                    {
+                        fHeight = -fHeight;
+                        fStartYValue = fUpperYValue;
+                    }
+                    std::vector<std::vector<css::drawing::Position3D>> aClipPoly
+                    {
+                        { // inner vector
+                            drawing::Position3D(fLogicX + dM*fLogicBarWidth, fStartYValue, fLogicZ),
+                            drawing::Position3D(fLogicX + dM*fLogicBarWidth, fStartYValue + dM*fHeight, fLogicZ),
+                            drawing::Position3D(fLogicX - dM*fLogicBarWidth, fStartYValue + dM*fHeight, fLogicZ),
+                            drawing::Position3D(fLogicX - dM*fLogicBarWidth, fStartYValue, fLogicZ)
+                        }
+                    };
+                    pPosHelper->transformScaledLogicToScene( aClipPoly );
+
+                    xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly, &aClipPoly );
                     PropertyMapper::setMappedProperties( *xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
                 }
 

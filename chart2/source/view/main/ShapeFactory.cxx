@@ -1116,7 +1116,8 @@ rtl::Reference<Svx3DExtrudeObject>
 
 rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon )
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
+                    , const std::vector<std::vector<css::drawing::Position3D>>* pClipPolyPolygon )
 {
     if( !xTarget.is() )
         return nullptr;
@@ -1133,6 +1134,13 @@ rtl::Reference<SvxShapePolyPolygon>
         // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
         pPath->ForceMetricToItemPoolMetric(aNewPolyPolygon);
         pPath->SetPathPoly(aNewPolyPolygon);
+
+        if (pClipPolyPolygon && !pClipPolyPolygon->empty())
+        {
+            basegfx::B2DPolyPolygon aClipPolyPolygon( PolyToB2DPolyPolygon(*pClipPolyPolygon) );
+            pPath->ForceMetricToItemPoolMetric(aClipPolyPolygon);
+            pPath->SetClipPoly(aClipPolyPolygon);
+        }
     }
     catch( const uno::Exception& )
     {

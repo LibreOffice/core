@@ -151,6 +151,8 @@ namespace sdr::contact
                 }
             }
 
+            basegfx::B2DPolyPolygon aClipPolyPolygon = GetPathObj().GetClipPoly();
+
             // create primitive. Always create primitives to allow the decomposition of
             // SdrPathPrimitive2D to create needed invisible elements for HitTest and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
@@ -158,7 +160,8 @@ namespace sdr::contact
                     aObjectMatrix,
                     aAttribute,
                     std::move(aUnitPolyPolygon),
-                    std::move(aUnitDefinitionPolyPolygon)));
+                    std::move(aUnitDefinitionPolyPolygon),
+                    std::move(aClipPolyPolygon)));
 
 #ifdef DBG_UTIL
             // helper to create something that uses InvertPrimitive2D to be able

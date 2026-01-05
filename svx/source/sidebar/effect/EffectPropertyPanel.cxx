@@ -23,140 +23,45 @@
 namespace svx::sidebar
 {
 EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBindings)
-    : PanelLayout(pParent, u"EffectPropertyPanel"_ustr, u"svx/ui/sidebareffect.ui"_ustr)
+    : EffectPropertyPanelBase(pParent)
+    , mpBindings(pBindings)
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
     , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
-    , mxFTTransparency(m_xBuilder->weld_label(u"transparency"_ustr))
     , maSoftEdgeRadiusController(SID_ATTR_SOFTEDGE_RADIUS, *pBindings, *this)
-    , mpBindings(pBindings)
-    , mxGlowRadius(m_xBuilder->weld_metric_spin_button(u"LB_GLOW_RADIUS"_ustr, FieldUnit::POINT))
-    , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_GLOW_COLOR"_ustr),
-                                     [this] { return GetFrameWeld(); }))
-    , mxGlowTransparency(
-          m_xBuilder->weld_metric_spin_button(u"LB_GLOW_TRANSPARENCY"_ustr, FieldUnit::PERCENT))
-    , mxFTColor(m_xBuilder->weld_label(u"glowcolorlabel"_ustr))
-    , mxSoftEdgeRadius(
-          m_xBuilder->weld_metric_spin_button(u"SB_SOFTEDGE_RADIUS"_ustr, FieldUnit::POINT))
 {
-    Initialize();
 }
 
 EffectPropertyPanel::~EffectPropertyPanel()
 {
-    mxGlowRadius.reset();
-    mxLBGlowColor.reset();
-    mxGlowTransparency.reset();
-    mxFTColor.reset();
-    mxFTTransparency.reset();
-    mxSoftEdgeRadius.reset();
-
     maGlowColorController.dispose();
     maGlowRadiusController.dispose();
     maGlowTransparencyController.dispose();
     maSoftEdgeRadiusController.dispose();
 }
 
-void EffectPropertyPanel::Initialize()
+void EffectPropertyPanel::setGlowRadius(const SdrMetricItem& rGlowRadius)
 {
-    mxGlowRadius->connect_value_changed(LINK(this, EffectPropertyPanel, ModifyGlowRadiusHdl));
-    mxLBGlowColor->SetSelectHdl(LINK(this, EffectPropertyPanel, ModifyGlowColorHdl));
-    mxGlowTransparency->connect_value_changed(
-        LINK(this, EffectPropertyPanel, ModifyGlowTransparencyHdl));
-    mxSoftEdgeRadius->connect_value_changed(
-        LINK(this, EffectPropertyPanel, ModifySoftEdgeRadiusHdl));
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::RECORD,
+                                             { &rGlowRadius });
 }
 
-IMPL_LINK_NOARG(EffectPropertyPanel, ModifySoftEdgeRadiusHdl, weld::MetricSpinButton&, void)
+void EffectPropertyPanel::setGlowColor(const XColorItem& rGlowColor)
 {
-    SdrMetricItem aItem(SDRATTR_SOFTEDGE_RADIUS, mxSoftEdgeRadius->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::RECORD,
-                                             { &aItem });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_COLOR, SfxCallMode::RECORD,
+                                             { &rGlowColor });
 }
 
-IMPL_LINK_NOARG(EffectPropertyPanel, ModifyGlowColorHdl, ColorListBox&, void)
+void EffectPropertyPanel::setGlowTransparency(const SdrPercentItem& rGlowTransparency)
 {
-    XColorItem aItem(SDRATTR_GLOW_COLOR, mxLBGlowColor->GetSelectEntryColor());
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_COLOR, SfxCallMode::RECORD, { &aItem });
-}
-
-IMPL_LINK_NOARG(EffectPropertyPanel, ModifyGlowRadiusHdl, weld::MetricSpinButton&, void)
-{
-    SdrMetricItem aItem(SDRATTR_GLOW_RADIUS, mxGlowRadius->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::RECORD, { &aItem });
-}
-
-IMPL_LINK_NOARG(EffectPropertyPanel, ModifyGlowTransparencyHdl, weld::MetricSpinButton&, void)
-{
-    SdrPercentItem aItem(SDRATTR_GLOW_TRANSPARENCY,
-                         mxGlowTransparency->get_value(FieldUnit::PERCENT));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TRANSPARENCY, SfxCallMode::RECORD,
-                                             { &aItem });
+                                             { &rGlowTransparency });
 }
 
-void EffectPropertyPanel::UpdateControls()
+void EffectPropertyPanel::setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius)
 {
-    const bool bEnabled = mxGlowRadius->get_value(FieldUnit::MM_100TH) != 0;
-    mxLBGlowColor->set_sensitive(bEnabled);
-    mxGlowTransparency->set_sensitive(bEnabled);
-    mxFTColor->set_sensitive(bEnabled);
-    mxFTTransparency->set_sensitive(bEnabled);
-}
-
-void EffectPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
-                                           const SfxPoolItem* pState)
-{
-    switch (nSID)
-    {
-        case SID_ATTR_SOFTEDGE_RADIUS:
-        {
-            if (eState >= SfxItemState::DEFAULT)
-            {
-                const SdrMetricItem* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState);
-                if (pRadiusItem)
-                {
-                    mxSoftEdgeRadius->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
-                }
-            }
-        }
-        break;
-        case SID_ATTR_GLOW_COLOR:
-        {
-            if (eState >= SfxItemState::DEFAULT)
-            {
-                const XColorItem* pColorItem = dynamic_cast<const XColorItem*>(pState);
-                if (pColorItem)
-                {
-                    mxLBGlowColor->SelectEntry(pColorItem->GetColorValue());
-                }
-            }
-        }
-        break;
-        case SID_ATTR_GLOW_RADIUS:
-        {
-            if (eState >= SfxItemState::DEFAULT)
-            {
-                const SdrMetricItem* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState);
-                if (pRadiusItem)
-                {
-                    mxGlowRadius->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
-                }
-            }
-        }
-        break;
-        case SID_ATTR_GLOW_TRANSPARENCY:
-        {
-            if (eState >= SfxItemState::DEFAULT)
-            {
-                if (auto pItem = dynamic_cast<const SdrPercentItem*>(pState))
-                {
-                    mxGlowTransparency->set_value(pItem->GetValue(), FieldUnit::PERCENT);
-                }
-            }
-        }
-        break;
-    }
-    UpdateControls();
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::RECORD,
+                                             { &rSoftEdgeRadius });
 }
 
 std::unique_ptr<PanelLayout> EffectPropertyPanel::Create(weld::Widget* pParent,

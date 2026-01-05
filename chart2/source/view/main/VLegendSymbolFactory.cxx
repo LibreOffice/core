@@ -38,6 +38,13 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
         ::chart::VLegendSymbolFactory::PropertyType ePropertyType,
         const awt::Size& aMaxSymbolExtent)
 {
+    static const std::unordered_set<OUString> aIgnoredPropertyList = {
+        u"GlowEffectColor"_ustr,
+        u"GlowEffectRadius"_ustr,
+        u"GlowEffectTransparency"_ustr,
+        u"SoftEdgeRadius"_ustr
+    };
+
     const ::chart::tPropertyNameMap & aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
     const ::chart::tPropertyNameMap & aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
     const ::chart::tPropertyNameMap & aLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineProperties());
@@ -55,6 +62,11 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
             ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
             break;
     }
+
+    // not apply glow/soft-edge effects applied to a data series to the chart symbol
+    std::erase_if(aValueMap, [](const auto& rEntry) {
+            return aIgnoredPropertyList.contains(rEntry.first);
+        });
 
     ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
 
