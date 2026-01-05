@@ -22,6 +22,7 @@
 #include "pivotcachebuffer.hxx"
 #include "PivotTableFormat.hxx"
 #include "stylesbuffer.hxx"
+#include <dapiuno.hxx>
 #include <rtl/ref.hxx>
 #include <dpobject.hxx>
 

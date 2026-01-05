@@ -21,6 +21,7 @@
 #include <comphelper/configurationlistener.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <unordered_map>
+#include <set>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TextView.hxx>

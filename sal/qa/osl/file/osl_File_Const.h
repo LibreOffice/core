@@ -26,6 +26,7 @@
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>
+#include <osl/file.hxx>
 
 #include <cppunit/extensions/HelperMacros.h>
 

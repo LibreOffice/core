@@ -30,6 +30,7 @@
 #include <vcl/pdfwriter.hxx>
 #include <tools/degree.hxx>
 #include <o3tl/deleter.hxx>
+#include <map>
 #include <optional>
 
 struct ScCellInfo;

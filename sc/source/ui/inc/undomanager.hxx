@@ -9,6 +9,8 @@
 #pragma once
 
 #include <svx/sdrundomanager.hxx>
+#include <scdllapi.h>
+#include <address.hxx>
 
 class SfxViewShell;
 class ScSimpleUndo;
