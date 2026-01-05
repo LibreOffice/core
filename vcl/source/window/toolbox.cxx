@@ -2549,12 +2549,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     // no gradient background for items that have a popup open
     bool bHasOpenPopup = mpFloatWin && (mnDownItemId==pItem->mnId);
 
-    bool bHighContrastWhite = false;
-    // check the face color as highcontrast indicator
-    // because the toolbox itself might have a gradient
-    if (rStyleSettings.GetFaceColor() == COL_WHITE)
-        bHighContrastWhite = true;
-
     // Compute buttons area.
     Size    aBtnSize    = pItem->maRect.GetSize();
 
@@ -2636,12 +2630,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             else
                 ImplDrawButton(rRenderContext, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE,
                                pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow);
-
-            if( nHighlight != 0 )
-            {
-                if( bHighContrastWhite )
-                    nImageStyle |= DrawImageFlags::ColorTransform;
-            }
         }
         rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);
     }

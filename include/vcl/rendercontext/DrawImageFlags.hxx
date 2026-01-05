@@ -28,7 +28,7 @@ enum class DrawImageFlags
     Disable = 0x0001,
     Highlight = 0x0002,
     Deactive = 0x0004,
-    ColorTransform = 0x0008,
+    // 0x0008 is unused,
     SemiTransparent = 0x0010,
 };
 namespace o3tl

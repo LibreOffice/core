@@ -134,8 +134,8 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
     Bitmap aRenderBmp = mpImplData->getBitmapForHiDPI(bool(nStyle & DrawImageFlags::Disable), pOutDev->GetGraphics());
 
     if (!(nStyle & DrawImageFlags::Disable) &&
-        (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |
-                   DrawImageFlags::Deactive | DrawImageFlags::SemiTransparent)))
+        (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive |
+                   DrawImageFlags::SemiTransparent)))
     {
         if (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive))
         {
