@@ -196,17 +196,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
     pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-#if 0
-    // This is what it really should be, based on MSO output
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
-            2, 0, "layoutId", u"clusteredColumn");
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
-            2, 1, "layoutId", u"paretoLine");
-#else
-    // This is what LO currently produces
+    // A pareto chart from MSO really consists of two subcharts: a pareto line
+    // and a clustered column chart.
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 0,
+                "layoutId", u"clusteredColumn");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 1,
                 "layoutId", u"paretoLine");
-#endif
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"ParetoLine");
     // ====

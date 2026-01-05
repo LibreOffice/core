@@ -170,7 +170,7 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
         case CX_TOKEN(plotArea) :
             switch (nElement) {
                 case CX_TOKEN(plotAreaRegion) :
-                    return new ChartexTypeGroupContext(*this, mrModel.maTypeGroups.create(nElement, false));
+                    return this;
                 case CX_TOKEN(axis) :
                     if (rAttribs.hasAttribute(XML_id)) {
                         sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
@@ -186,6 +186,54 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                     return nullptr;
             }
             break;
+        case CX_TOKEN(plotAreaRegion):
+            switch (nElement) {
+                case CX_TOKEN(series):
+                    if (rAttribs.hasAttribute(XML_layoutId)) {
+                        sal_Int32 nTypeId = 0;
+                        OUString sChartId = rAttribs.getStringDefaulted(XML_layoutId);
+                        assert(!sChartId.isEmpty());
+
+                        if (sChartId == "boxWhisker") {
+                            nTypeId = CX_TOKEN(boxWhisker);
+                        } else if (sChartId == "clusteredColumn") {
+                            nTypeId = CX_TOKEN(clusteredColumn);
+                        } else if (sChartId == "funnel") {
+                            nTypeId = CX_TOKEN(funnel);
+                        } else if (sChartId == "paretoLine") {
+                            nTypeId = CX_TOKEN(paretoLine);
+                        } else if (sChartId == "regionMap") {
+                            nTypeId = CX_TOKEN(regionMap);
+                        } else if (sChartId == "sunburst") {
+                            nTypeId = CX_TOKEN(sunburst);
+                        } else if (sChartId == "treemap") {
+                            nTypeId = CX_TOKEN(treemap);
+                        } else if (sChartId == "waterfall") {
+                            nTypeId = CX_TOKEN(waterfall);
+                        } else {
+                            assert(false);
+                        }
+
+                        // The chartex schema doesn't have the same structure as
+                        // chart. Specifically, there's not a chart type tag
+                        // (which corresponds to the "type group" used in oox)
+                        // plus enclosed series tags. Instead, in chartex, each
+                        // series has an attribute specifying the chart type. As
+                        // a result, we don't want to call the type group
+                        // context handler, but we still need to create a type
+                        // group in the model tree, since much of the existing
+                        // machinery depends on it.
+                        mrModel.maTypeGroups.create(nTypeId, false);
+                        std::shared_ptr<TypeGroupModel> aTGM =
+                            mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
+                        return new ChartexSeriesContext(*this, aTGM->maSeries.create(false));
+                    }
+                    return nullptr;
+                case CX_TOKEN(plotSurface) :
+                    // TODO
+                    return nullptr;
+
+            }
     }
     return nullptr;
 }
