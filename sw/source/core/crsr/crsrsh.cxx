@@ -1068,7 +1068,6 @@ int SwCursorShell::SetCursor(const Point& rLPt, bool bOnlyText, bool bBlock, boo
                                     bOnlyText ?  CursorMoveState::SetOnlyText : CursorMoveState::NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
     aTmpState.m_bFieldInfo = bFieldInfo; // always set cursor at field-start if point is over field
-    aTmpState.m_bPosMatchesBounds = bFieldInfo; // always set cursor at character-start if over char
 
     SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
 
