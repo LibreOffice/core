@@ -5436,7 +5436,7 @@ void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaT
                 }
             }
             else if( pMatrix->IsEmpty( nC, nR ) )
-                AppendDouble(rBuffer, 0);
+                rBuffer.append(ScGlobal::GetErrorString(FormulaError::NotAvailable));
             else if( pMatrix->IsStringOrEmpty( nC, nR ) )
                 AppendString( rBuffer, pMatrix->GetString(nC, nR).getString() );
         }
