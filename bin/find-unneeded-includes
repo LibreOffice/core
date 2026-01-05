@@ -485,19 +485,113 @@ def isInUnoIncludeFile(path):
 def isNonLinuxPath(path):
     return path.startswith("avmedia/source/win/") \
         or path.startswith("avmedia/source/macavf/") \
-        or path.startswith("include/apple_remote/")
+        or path.startswith("bridges/inc/gcc3_ios/") \
+        or path.startswith("bridges/inc/gcc3_linux_alpha/") \
+        or path.startswith("bridges/inc/gcc3_linux_arm/") \
+        or path.startswith("bridges/inc/gcc3_linux_hppa/") \
+        or path.startswith("bridges/inc/gcc3_linux_ia64/") \
+        or path.startswith("bridges/inc/gcc3_linux_intel/") \
+        or path.startswith("bridges/inc/gcc3_linux_loongarch64/") \
+        or path.startswith("bridges/inc/gcc3_linux_m68k/") \
+        or path.startswith("bridges/inc/gcc3_linux_mips/") \
+        or path.startswith("bridges/inc/gcc3_linux_mips64/") \
+        or path.startswith("bridges/inc/gcc3_linux_mips64/") \
+        or path.startswith("bridges/inc/gcc3_linux_powerpc/") \
+        or path.startswith("bridges/inc/gcc3_linux_powerpc64/") \
+        or path.startswith("bridges/inc/gcc3_linux_riscv64/") \
+        or path.startswith("bridges/inc/gcc3_linux_s390x/") \
+        or path.startswith("bridges/inc/gcc3_linux_sparc/") \
+        or path.startswith("bridges/inc/gcc3_linux_sparc64/") \
+        or path.startswith("bridges/inc/gcc3_macosx_x86-64/") \
+        or path.startswith("bridges/inc/gcc3_wasm/") \
+        or path.startswith("bridges/inc/msvc/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_ios/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_ios/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_aarch64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_alpha/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_arm/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_hppa/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_ia64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_intel/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_loongarch64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_m68k/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_mips/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_mips64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_mips64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_powerpc/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_powerpc64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_riscv64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_s390x/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_sparc/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_linux_sparc64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_macosx_x86-64/") \
+        or path.startswith("bridges/source/cpp_uno/gcc3_wasm/") \
+        or path.startswith("bridges/source/cpp_uno/msvc_win32_arm64/") \
+        or path.startswith("bridges/source/cpp_uno/msvc_win32_x86-64/") \
+        or path.startswith("canvas/source/directx") \
+        or path.startswith("connectivity/source/drivers/ado") \
+        or path.startswith("connectivity/source/drivers/macab") \
+        or path.startswith("connectivity/source/inc/ado") \
+        or path.startswith("desktop/win32") \
+        or path.startswith("embeddedobj/source/msole") \
+        or path.startswith("extensions/source/activex") \
+        or path.startswith("extensions/source/macosx") \
+        or path.startswith("extensions/source/ole") \
+        or path.startswith("fpicker/source/aqua/") \
+        or path.startswith("fpicker/source/win32/") \
+        or path.startswith("include/apple_remote/") \
+        or path.startswith("ios") \
+        or path.startswith("lingucomponent/source/spellcheck/macosxspell") \
+        or path.startswith("osx") \
+        or path.startswith("sal/osl/w32") \
+        or path.startswith("shell/source/win32") \
+        or path.startswith("vcl/inc/android/") \
+        or path.startswith("vcl/inc/ios") \
+        or path.startswith("vcl/inc/osx") \
+        or path.startswith("vcl/inc/quartz") \
+        or path.startswith("vcl/inc/skia/osx") \
+        or path.startswith("vcl/inc/skia/quartz") \
+        or path.startswith("vcl/inc/win/") \
+        or path.startswith("vcl/ios") \
+        or path.startswith("vcl/osx") \
+        or path.startswith("vcl/win") \
+        or path.startswith("winaccessibility") \
+        or path.startswith("xmlsecurity/source/xmlsec/mscrypt/") \
 
 def isNonLinuxFile(path):
-    NonLinuxFiles = (
-        "include/comphelper/windowserrorstring.hxx",
+    nonLinuxFiles = (
+        "configmgr/source/winreg.hxx",
+        "extensions/source/scanner/twain32shim.hxx",
         "include/comphelper/windowsdebugoutput.hxx",
+        "include/comphelper/windowserrorstring.hxx",
         "include/comphelper/windowsStart.hxx",
         "include/drawinglayer/processor2d/d2dpixelprocessor2d.hxx",
         "include/static/unoembindhelpers/PrimaryBindings.hxx",
-        "include/version.hrc",
         "include/vcl/winscheduler.hxx",
+        "include/version.hrc",
+        "sd/source/ui/remotecontrol/OSXBluetooth.h",
+        "sd/source/ui/remotecontrol/OSXBluetoothWrapper.hxx",
+        "sd/source/ui/remotecontrol/OSXNetworkService.h",
+        "sd/source/ui/remotecontrol/OSXNetworkService.hxx",
+        "sd/source/ui/remotecontrol/WINNetworkService.hxx",
+        "shell/inc/basereader.hxx",
+        "shell/inc/columninfo.hxx",
+        "shell/inc/contentreader.hxx",
+        "shell/inc/fileextensions.hxx",
+        "shell/inc/global.hxx",
+        "shell/inc/infotips.hxx",
+        "shell/inc/metainforeader.hxx",
+        "shell/inc/propertyhdl.hxx",
+        "shell/inc/propsheets.hxx",
+        "shell/inc/registry.hxx",
+        "shell/inc/shlxthdl.hxx",
+        "shell/inc/thumbviewer.hxx",
+        "shell/inc/utilities.hxx",
+        "shell/qa/zip/testzipimpl.hxx",
+        "svl/source/svdde/ddeimp.hxx",
+        "vcl/source/filter/jpeg/transupp.h",
     )
-    if path in NonLinuxFiles:
+    if path in nonLinuxFiles:
         return True
 
 def tidy(compileCommands, paths, noexclude, checknamespaces, finderrors, removefwdd, debug, headersfwd):
