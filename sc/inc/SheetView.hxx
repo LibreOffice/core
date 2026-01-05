@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 #include "SheetViewTypes.hxx"
 #include <optional>
+#include <vector>
 
 class ScTable;
 
