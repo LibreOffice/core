@@ -1907,7 +1907,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
                                 .toInt32();
     sal_Int32 nXColumn = getXPath(pXmlDoc,
                                   "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/"
-                                  "push[1]/push[41]/polypolygon/polygon/point[1]",
+                                  "push[1]/push[41]/push[1]/polypolygon/polygon/point[1]",
                                   "x")
                              .toInt32();
 

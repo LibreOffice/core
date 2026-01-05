@@ -752,6 +752,12 @@ std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWr
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapName"_ustr,u"FillBitmapName"_ustr) );
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillBackground"_ustr,u"FillBackground"_ustr) );
 
+    aWrappedProperties.emplace_back( new WrappedProperty(u"GlowEffectColor"_ustr,u"GlowEffectColor"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"GlowEffectRadius"_ustr,u"GlowEffectRadius"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"GlowEffectTransparency"_ustr,u"GlowEffectTransparency"_ustr) );
+    aWrappedProperties.emplace_back( new WrappedProperty(u"SoftEdgeRadius"_ustr,u"SoftEdgeRadius"_ustr) );
+
+
     //bitmap properties
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapMode"_ustr,u"FillBitmapMode"_ustr) );
     aWrappedProperties.emplace_back( new WrappedProperty(u"FillBitmapSizeX"_ustr,u"FillBitmapSizeX"_ustr) );

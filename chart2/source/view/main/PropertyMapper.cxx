@@ -371,6 +371,12 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
         {"FillStyle",                    "FillStyle"},
         {"FillTransparence",             "FillTransparence"},
         {"FillTransparenceGradientName", "FillTransparenceGradientName"},
+
+        {"GlowEffectColor",              "GlowEffectColor"},
+        {"GlowEffectRadius",             "GlowEffectRadius"},
+        {"GlowEffectTransparency",       "GlowEffectTransparency"},
+        {"SoftEdgeRadius",               "SoftEdgeRadius"},
+
         //bitmap properties
         {"FillBitmapMode",               "FillBitmapMode"},
         {"FillBitmapSizeX",              "FillBitmapSizeX"},
@@ -498,6 +504,12 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPropert
         {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
         {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
         {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"},
+
+        {"GlowEffectColor",              "GlowEffectColor"},
+        {"GlowEffectRadius",             "GlowEffectRadius"},
+        {"GlowEffectTransparency",       "GlowEffectTransparency"},
+        {"SoftEdgeRadius",               "SoftEdgeRadius"},
+
         //line properties
         {"LineColor",                    "BorderColor"},
         {"LineComplexColor",             "BorderComplexColor"},

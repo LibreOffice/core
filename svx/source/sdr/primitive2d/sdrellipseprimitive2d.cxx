@@ -86,6 +86,13 @@ namespace drawinglayer::primitive2d
                         attribute::SdrLineStartEndAttribute()));
             }
 
+            // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
+            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            {
+                // glow
+                aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
+            }
+
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Widget.hxx>
 

@@ -22,6 +22,7 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <utility>
 
 
@@ -96,6 +97,20 @@ namespace drawinglayer::primitive2d
                 aRetval.append(aTemp);
             }
 
+            // Soft edges should be before text, since text is not affected by soft edges
+            if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            {
+                aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
+                    getSdrLFSTAttribute().getSoftEdgeRadius());
+            }
+
+            // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
+            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            {
+                // glow
+                aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
+            }
+
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
@@ -117,6 +132,15 @@ namespace drawinglayer::primitive2d
                     getSdrLFSTAttribute().getShadow());
             }
 
+            if (getClipPolyPolygon().count() > 0)
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            getClipPolyPolygon(),
+                            std::move(aRetval)));
+                aRetval = { aMaskedGraphic };
+            }
+
             return new GroupPrimitive2D(std::move(aRetval));
         }
 
@@ -124,11 +148,13 @@ namespace drawinglayer::primitive2d
             basegfx::B2DHomMatrix aTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             basegfx::B2DPolyPolygon aUnitPolyPolygon,
-            basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon)
+            basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon,
+            basegfx::B2DPolyPolygon aClipPolyPolygon)
         :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maUnitPolyPolygon(std::move(aUnitPolyPolygon)),
-            maUnitDefinitionPolyPolygon(std::move(aUnitDefinitionPolyPolygon))
+            maUnitDefinitionPolyPolygon(std::move(aUnitDefinitionPolyPolygon)),
+            maClipPolyPolygon(std::move(aClipPolyPolygon))
         {
         }
 

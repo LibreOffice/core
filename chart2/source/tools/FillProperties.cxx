@@ -53,6 +53,34 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector<beans::Prop
                   cppu::UnoType<util::XComplexColor>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "GlowEffectColor",
+          FillProperties::PROP_FILL_GLOW_COLOR,
+          cppu::UnoType<sal_Int32>::get(),
+          beans::PropertyAttribute::BOUND
+          | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+          | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "GlowEffectRadius",
+          FillProperties::PROP_FILL_GLOW_RADIUS,
+          cppu::UnoType<sal_Int32>::get(),
+          beans::PropertyAttribute::BOUND
+          | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+          | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "GlowEffectTransparency",
+      FillProperties::PROP_FILL_GLOW_TRANSPARENCY,
+      cppu::UnoType<sal_Int16>::get(),
+      beans::PropertyAttribute::BOUND
+      | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+      | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "SoftEdgeRadius",
+      FillProperties::PROP_FILL_SOFTEDGE_RADIUS,
+      cppu::UnoType<sal_Int32>::get(),
+      beans::PropertyAttribute::BOUND
+      | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+      | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "FillTransparence",
                   FillProperties::PROP_FILL_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),

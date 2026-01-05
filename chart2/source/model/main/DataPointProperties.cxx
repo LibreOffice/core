@@ -77,6 +77,34 @@ void DataPointProperties::AddPropertiesToVector(
                   cppu::UnoType<util::XComplexColor>::get(),
                   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "GlowEffectColor",
+              PROP_DATAPOINT_GLOW_COLOR,
+              cppu::UnoType<sal_Int32>::get(),
+              beans::PropertyAttribute::BOUND
+              | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+              | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "GlowEffectRadius",
+          PROP_DATAPOINT_GLOW_RADIUS,
+          cppu::UnoType<sal_Int32>::get(),
+          beans::PropertyAttribute::BOUND
+          | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+          | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "GlowEffectTransparency",
+          PROP_DATAPOINT_GLOW_TRANSPARENCY,
+          cppu::UnoType<sal_Int16>::get(),
+          beans::PropertyAttribute::BOUND
+          | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+          | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "SoftEdgeRadius",
+          PROP_DATAPOINT_SOFTEDGE_RADIUS,
+          cppu::UnoType<sal_Int32>::get(),
+          beans::PropertyAttribute::BOUND
+          | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+          | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "Transparency",
                   PROP_DATAPOINT_TRANSPARENCY,
                   cppu::UnoType<sal_Int16>::get(),
@@ -495,6 +523,10 @@ void DataPointProperties::AddDefaultsToMap(
 {
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_COLOR, Color(0x99, 0xcc, 0xff) ); // blue 8
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TRANSPARENCY, sal_Int16(0) );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_GLOW_COLOR, Color(0x22, 0xff, 0x22) ); // blue 8
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_GLOW_RADIUS, sal_Int32(0) );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_GLOW_TRANSPARENCY, sal_Int16(0) );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_SOFTEDGE_RADIUS, sal_Int32(0) );
 
     //fill
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_STYLE, drawing::FillStyle_SOLID );
