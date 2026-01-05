@@ -193,7 +193,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         = rData.GetTotalRowAttributes(formula::FormulaGrammar::GRAM_OOXML);
 
     // if the Total row have ever been showed it will be true
-    bool hasAnySetValue = std::any_of(aTotalValues.begin(), aTotalValues.end(),
+    bool hasAnySetValue = rData.HasTotals() || std::any_of(aTotalValues.begin(), aTotalValues.end(),
                                       [](const TableColumnAttributes& attr)
                                       {
                                           return attr.maTotalsRowLabel.has_value()
@@ -210,7 +210,8 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         XML_tableType, tableType,
         XML_headerRowCount, ToPsz10(rData.HasHeader()),
         XML_totalsRowCount, ToPsz10(rData.HasTotals()),
-        XML_totalsRowShown, ToPsz10(hasAnySetValue)
+        XML_totalsRowShown, (hasAnySetValue ? nullptr : ToPsz10(false)) // we don't support that but
+        // if there are totals or any total row attribute is set they are shown
         // OOXTODO: XML_comment, ...,
         // OOXTODO: XML_connectionId, ...,
         // OOXTODO: XML_dataCellStyle, ...,
