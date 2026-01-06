@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 
     model::FontScheme const& rFontScheme = pTheme->getFontScheme();
-    CPPUNIT_ASSERT_EQUAL(u"Calibri Light"_ustr, rFontScheme.getMajorLatin().maTypeface);
+    CPPUNIT_ASSERT_EQUAL(u"Noto Sans"_ustr, rFontScheme.getMajorLatin().maTypeface);
     CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, rFontScheme.getMinorLatin().maTypeface);
     CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMajorAsian().maTypeface.isEmpty());
     CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMinorAsian().maTypeface.isEmpty());
