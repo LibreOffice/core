@@ -64,6 +64,10 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sw_globalfilter,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_globalfilter))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_globalfilter,abort))
+endif
+
 $(eval $(call gb_CppunitTest_add_arguments,sw_globalfilter, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))

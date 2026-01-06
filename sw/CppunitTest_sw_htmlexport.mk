@@ -77,4 +77,6 @@ $(eval $(call gb_CppunitTest_use_packages,sw_htmlexport,\
 ))
 endif
 
+$(eval $(call gb_CppunitTest_use_more_fonts,sw_htmlexport))
+
 # vim: set noet sw=4 ts=4:
