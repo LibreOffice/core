@@ -2226,6 +2226,12 @@ void DocumentRedlineManager::PreAppendDeleteRedline(AppendRedlineContext& rCtx)
             {
                 if( *rCtx.pEnd != *rCtx.pRStt )
                 {
+                    // At this point, rCtx.pRedl is the old format redline and rCtx.pNewRedl is the
+                    // new delete redline. Make sure that when this pNewRedl gets appended, it still
+                    // has the formatting redline data from rCtx.pRedl / pNew, and format is on top
+                    // of delete.
+                    rCtx.pNewRedl->PushData(*rCtx.pRedl);
+
                     SwRangeRedline* pNew = new SwRangeRedline( *rCtx.pRedl );
                     pNew->SetStart( *rCtx.pEnd );
                     rCtx.pRedl->SetEnd( *rCtx.pStart, rCtx.pREnd );
