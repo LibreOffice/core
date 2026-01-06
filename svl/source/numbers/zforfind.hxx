@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/date.hxx>
+#include <unotools/nativenumberwrapper.hxx>
 #include <memory>
 #include <optional>
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 
 // no need to translate this
 // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the

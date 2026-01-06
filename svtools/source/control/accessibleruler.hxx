@@ -27,6 +27,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/compbase.hxx>
+#include <svtools/ruler.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace tools { class Rectangle; }
