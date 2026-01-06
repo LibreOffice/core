@@ -491,14 +491,16 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::Any( aGrabBag.getAsConstPropertyValueList() ) );
         }
 
+        bool bLeftMarginProvided = false;
         std::optional<PropertyMap::Property> oLeftMarginFromStyle = m_aTableProperties->getProperty(PROP_LEFT_MARGIN);
         if (oLeftMarginFromStyle)
         {
-            oLeftMarginFromStyle->second >>= nLeftMargin;
+            bLeftMarginProvided = oLeftMarginFromStyle->second >>= nLeftMargin;
             // don't need to erase, we will push back the adjusted value
             // of this (or the direct formatting, if that exists) later
         }
-        m_aTableProperties->getValue( TablePropertyMap::LEFT_MARGIN, nLeftMargin );
+        if (m_aTableProperties->getValue(TablePropertyMap::LEFT_MARGIN, nLeftMargin))
+            bLeftMarginProvided = true;
 
         m_aTableProperties->getValue( TablePropertyMap::CELL_MAR_LEFT,
                                      rInfo.nLeftBorderDistance );
@@ -605,7 +607,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         {
             const sal_Int32 nMinLeftBorderDistance = aLeftBorder.LineWidth / 2;
             sal_Int32 nLeftBorderDistance = rInfo.nLeftBorderDistance;
-            if (!m_aCellProperties.empty() && !m_aCellProperties[0].empty())
+            if (!bLeftMarginProvided)
+            {
+                // Interestingly, MS Word 'makes up' an 'indent from left' if none is provided,
+                // and that value varies depending on the version of MS Word.
+                // Most recent versions effectively make it look like compat15 would...
+                nLeftBorderDistance = nMinLeftBorderDistance;
+            }
+            else if (!m_aCellProperties.empty() && !m_aCellProperties[0].empty())
             {
                 // only the border spacing of the first row affects the placement of the table
                 std::optional<PropertyMap::Property> aCellLeftBorderDistance
