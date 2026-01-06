@@ -35,5 +35,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_writerfilter_misc, \
 	sw/qa/writerfilter/misc/misc \
 ))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_writerfilter_misc,abort))
+endif
 
 # vim: set noet sw=4 ts=4:
