@@ -341,10 +341,14 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 
         // draw ButtonStyle
         // avoid 3D borders
-        if (bHigh)
-            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, aRect, 1, true, false, false, &aSelectionTextColor);
-        else if (!mbButtonStyle || (nBits & HeaderBarItemBits::FLAT))
-            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, aRect, 0, true, false, false, &aSelectionTextColor);
+        Color const *aWinControlForeground = IsControlBackground() ? &GetControlForeground() : nullptr;
+        if (bHigh) {
+            aSelectionTextColor = rRenderContext.DrawSelectionBackground(aRect, GetBackgroundColor(),
+                                                    1, true, false, false, aWinControlForeground);
+        } else if (!mbButtonStyle || (nBits & HeaderBarItemBits::FLAT)) {
+            aSelectionTextColor = rRenderContext.DrawSelectionBackground(aRect, GetBackgroundColor(),
+                                                    0, true, false, false, aWinControlForeground);
+        }
     }
 
     // do not draw if there is no space

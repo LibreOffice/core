@@ -92,9 +92,9 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext& rRenderContext,
             rRenderContext.SetFillColor( rRenderContext.GetSettings().GetStyleSettings().GetWindowColor() );
             rRenderContext.SetLineColor();
             rRenderContext.DrawRect( rRect );
-            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pWin, rRect, 2,
-                                                      bool(nState & DrawButtonFlags::Pressed),
-                                                      true, false );
+            rRenderContext.DrawSelectionBackground(rRect, pWin->GetBackgroundColor(), 2,
+                                                   bool(nState & DrawButtonFlags::Pressed),
+                                                   true);
         }
         aTempRect = rRect;
         aTempRect.AdjustLeft( 3 );

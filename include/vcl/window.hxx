@@ -416,19 +416,6 @@ namespace o3tl {
 
 namespace vcl {
 
-class RenderTools
-{
-public:
-    // transparent background for selected or checked items in toolboxes etc.
-    // + selection Color with a text color complementing the selection background
-    // + rounded edge
-    static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
-                                        const tools::Rectangle& rRect, sal_uInt16 nHighlight,
-                                        bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
-                                        Color* pSelectionTextColor = nullptr, tools::Long nCornerRadius = 0,
-                                        Color const * pPaintColor = nullptr);
-};
-
 class VCL_DLLPUBLIC Window : public virtual VclReferenceBase
 {
     friend class ::vcl::Cursor;
@@ -1057,9 +1044,6 @@ public:
 
     virtual void                        ShowFocus(const tools::Rectangle& rRect);
     void                                HideFocus();
-
-    // transparent background for selected or checked items in toolboxes etc.
-    void                                DrawSelectionBackground( const tools::Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder );
 
     void                                ShowTracking( const tools::Rectangle& rRect,
                                                       ShowTrackFlags nFlags = ShowTrackFlags::Small );

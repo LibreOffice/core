@@ -628,6 +628,40 @@ public:
      */
     void                        DrawGridOfCrosses( const tools::Rectangle& rGridArea, const Size& rGridDistance, const tools::Rectangle& rDrawingArea );
 
+    /** Draw background for selected or checked items in toolboxes etc.
+
+     @param rRect                      The area to draw the selection background for
+     @param aWinBackgroundColor        Background color of the window that owns this output device
+     @param nHighlight                 Drawing modifier to change transparency based on item state
+     @param bChecked                   If true and nHighlight is > 0, darkens the drawn selection color
+     @param bDrawBorder                If true, draw the exterior border of the selection
+     @param bDrawExtBorderOnly         If true, only draw the exterior border of the selection
+     @param pWinControlForegroundColor If the window that owns this output device is a
+                                       control background (eg, IsControlBackground() returns
+                                       true) this value should be the window's control
+                                       foreground color
+     @param nCornerRadius              If > 0, round the corners of the drawn background
+                                       by the given amount
+     @param pPaintColor                If not null, use the given color as the selection
+                                       background color; otherwise use the system style highlight
+                                       color.
+
+     @returns The color to use when drawing text over the selection background. Only valid
+              when pWinControlForegroundColor is given.
+
+     @since LibreOffice 26.8
+    */
+    Color                       DrawSelectionBackground(
+                                    const tools::Rectangle& rRect,
+                                    Color aWinBackgroundColor,
+                                    sal_uInt16 nHighlight,
+                                    bool bChecked,
+                                    bool bDrawBorder = false,
+                                    bool bDrawExtBorderOnly = false,
+                                    Color const * pWinControlForeground = nullptr,
+                                    tools::Long nCornerRadius = 0,
+                                    Color const * pPaintColor = nullptr);
+
     ///@}
 
     /** @name Invert functions

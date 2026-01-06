@@ -1085,10 +1085,10 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     if (!bNativeOK)
     {
-        if (bSelected)
-            vcl::RenderTools::DrawSelectionBackground(
-                rRenderContext, *pView, aFocusRect, pView->HasFocus() ? 1 : 2, false, false, false);
-        else
+        if (bSelected) {
+            rRenderContext.DrawSelectionBackground(aFocusRect, pView->GetBackgroundColor(),
+                                                    pView->HasFocus() ? 1 : 2, false);
+        } else
             PaintEmphasis(aTextRect, rRenderContext);
 
         if (pEntry->IsFocused())

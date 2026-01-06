@@ -1652,6 +1652,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::Window const & rWindow, const tools::Rectangle& i_rRect, bool i_bHighlight)
 {
     bool bNativeOk = false;
+
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
     {
         ImplControlValue    aControlValue;
@@ -1670,7 +1671,8 @@ static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::W
     {
         const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
-        RenderTools::DrawSelectionBackground(rRenderContext, rWindow, i_rRect, 0, i_bHighlight, true, false, nullptr, 2, &aColor);
+        rRenderContext.DrawSelectionBackground(i_rRect, rWindow.GetBackgroundColor(), 0,
+                                               i_bHighlight, true, false, nullptr, 2, &aColor);
     }
 }
 

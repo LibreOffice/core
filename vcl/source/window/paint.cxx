@@ -325,156 +325,6 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 namespace vcl
 {
 
-void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
-                                          const tools::Rectangle& rRect, sal_uInt16 nHighlight,
-                                          bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
-                                          Color* pSelectionTextColor, tools::Long nCornerRadius, Color const * pPaintColor)
-{
-    if (rRect.IsEmpty())
-        return;
-
-    bool bRoundEdges = nCornerRadius > 0;
-
-    const StyleSettings& rStyles = rRenderContext.GetSettings().GetStyleSettings();
-
-    // colors used for item highlighting
-    Color aSelectionBorderColor(pPaintColor ? *pPaintColor : rStyles.GetHighlightColor());
-    Color aSelectionFillColor(aSelectionBorderColor);
-
-    bool bDark = rStyles.GetFaceColor().IsDark();
-    bool bBright = ( rStyles.GetFaceColor() == COL_WHITE );
-
-    int c1 = aSelectionBorderColor.GetLuminance();
-    int c2 = rWindow.GetBackgroundColor().GetLuminance();
-
-    if (!bDark && !bBright && std::abs(c2 - c1) < (pPaintColor ? 40 : 75))
-    {
-        // contrast too low
-        sal_uInt16 h, s, b;
-        aSelectionFillColor.RGBtoHSB( h, s, b );
-        if( b > 50 )    b -= 40;
-        else            b += 40;
-        aSelectionFillColor = Color::HSBtoRGB( h, s, b );
-        aSelectionBorderColor = aSelectionFillColor;
-    }
-
-    if (bRoundEdges)
-    {
-        if (aSelectionBorderColor.IsDark())
-            aSelectionBorderColor.IncreaseLuminance(128);
-        else
-            aSelectionBorderColor.DecreaseLuminance(128);
-    }
-
-    tools::Rectangle aRect(rRect);
-    if (bDrawExtBorderOnly)
-    {
-        aRect.AdjustLeft( -1 );
-        aRect.AdjustTop( -1 );
-        aRect.AdjustRight(1 );
-        aRect.AdjustBottom(1 );
-    }
-    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
-
-    if (bDrawBorder)
-        rRenderContext.SetLineColor(bDark ? COL_WHITE : (bBright ? COL_BLACK : aSelectionBorderColor));
-    else
-        rRenderContext.SetLineColor();
-
-    sal_uInt16 nPercent = 0;
-    if (!nHighlight)
-    {
-        if (bDark)
-            aSelectionFillColor = COL_BLACK;
-        else
-            nPercent = 80;  // just checked (light)
-    }
-    else
-    {
-        if (bChecked && nHighlight == 2)
-        {
-            if (bDark)
-                aSelectionFillColor = COL_LIGHTGRAY;
-            else if (bBright)
-            {
-                aSelectionFillColor = COL_BLACK;
-                rRenderContext.SetLineColor(COL_BLACK);
-                nPercent = 0;
-            }
-            else
-                nPercent = bRoundEdges ? 40 : 20; // selected, pressed or checked ( very dark )
-        }
-        else if (bChecked || nHighlight == 1)
-        {
-            if (bDark)
-                aSelectionFillColor = COL_GRAY;
-            else if (bBright)
-            {
-                aSelectionFillColor = COL_BLACK;
-                rRenderContext.SetLineColor(COL_BLACK);
-                nPercent = 0;
-            }
-            else
-                nPercent = bRoundEdges ? 60 : 35; // selected, pressed or checked ( very dark )
-        }
-        else
-        {
-            if (bDark)
-                aSelectionFillColor = COL_LIGHTGRAY;
-            else if (bBright)
-            {
-                aSelectionFillColor = COL_BLACK;
-                rRenderContext.SetLineColor(COL_BLACK);
-                if (nHighlight == 3)
-                    nPercent = 80;
-                else
-                    nPercent = 0;
-            }
-            else
-                nPercent = 70; // selected ( dark )
-        }
-    }
-
-    if (bDark && bDrawExtBorderOnly)
-    {
-        rRenderContext.SetFillColor();
-        if (pSelectionTextColor)
-            *pSelectionTextColor = rStyles.GetHighlightTextColor();
-    }
-    else
-    {
-        rRenderContext.SetFillColor(aSelectionFillColor);
-        if (pSelectionTextColor)
-        {
-            Color aTextColor = rWindow.IsControlBackground() ? rWindow.GetControlForeground() : rStyles.GetButtonTextColor();
-            Color aHLTextColor = rStyles.GetHighlightTextColor();
-            int nTextDiff = std::abs(aSelectionFillColor.GetLuminance() - aTextColor.GetLuminance());
-            int nHLDiff = std::abs(aSelectionFillColor.GetLuminance() - aHLTextColor.GetLuminance());
-            *pSelectionTextColor = (nHLDiff >= nTextDiff) ? aHLTextColor : aTextColor;
-        }
-    }
-
-    if (bDark)
-    {
-        rRenderContext.DrawRect(aRect);
-    }
-    else
-    {
-        if (bRoundEdges)
-        {
-            tools::Polygon aPoly(aRect, nCornerRadius, nCornerRadius);
-            tools::PolyPolygon aPolyPoly(aPoly);
-            rRenderContext.DrawTransparent(aPolyPoly, nPercent);
-        }
-        else
-        {
-            tools::Polygon aPoly(aRect);
-            tools::PolyPolygon aPolyPoly(aPoly);
-            rRenderContext.DrawTransparent(aPolyPoly, nPercent);
-        }
-    }
-}
-
 void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderContext)
 {
     pHelper->SetPop();
@@ -572,8 +422,11 @@ PaintHelper::~PaintHelper()
     }
 
     // #98943# draw toolbox selection
-    if( !m_aSelectionRect.IsEmpty() )
-        m_pWindow->DrawSelectionBackground( m_aSelectionRect, 3, false, true );
+    if( !m_aSelectionRect.IsEmpty() ) {
+        m_pWindow->GetOutDev()->DrawSelectionBackground( m_aSelectionRect,
+                                                         m_pWindow->GetBackgroundColor(),
+                                                         3, false, true);
+    }
 }
 
 namespace vcl {

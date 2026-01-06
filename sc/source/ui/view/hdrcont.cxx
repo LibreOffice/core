@@ -231,12 +231,12 @@ tools::Long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
     return nScrPos;
 }
 
-void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
+void ScHeaderControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     // It is important for VCL to have few calls, that is why the outer lines are
     // grouped together
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     bool bHighContrast = rStyleSettings.GetHighContrastMode();
     bool bDark = rStyleSettings.GetFaceColor().IsDark();
     // Use the same distinction for bDark as in Window::DrawSelectionBackground
@@ -253,9 +253,9 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         aBoldFont.SetColor( aSelTextColor );
 
     if (bAutoFilterSet)
-        SetTextColor(aAFilterTextColor);
+        rRenderContext.SetTextColor(aAFilterTextColor);
     else
-        SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
+        rRenderContext.SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
 
     ScModule* mod = ScModule::get();
     Color aSelLineColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
@@ -330,7 +330,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     //  background is different for entry area and behind the entries
 
     tools::Rectangle aFillRect;
-    GetOutDev()->SetLineColor();
+    rRenderContext.SetLineColor();
 
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
@@ -353,23 +353,23 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             aFaceColor.IncreaseLuminance(20);
         else
             aFaceColor.DecreaseLuminance(20);
-        GetOutDev()->SetFillColor(aFaceColor);
+        rRenderContext.SetFillColor(aFaceColor);
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
         else
             aFillRect = tools::Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
-        GetOutDev()->DrawRect( aFillRect );
+        rRenderContext.DrawRect( aFillRect );
     }
 
     if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
     {
         Color aAppBackgroundColor = mod->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor;
-        GetOutDev()->SetFillColor(aAppBackgroundColor);
+        rRenderContext.SetFillColor(aAppBackgroundColor);
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nLineEnd+nLayoutSign, nBarSize-1, nPEnd );
         else
             aFillRect = tools::Rectangle( nLineEnd+nLayoutSign, 0, nPEnd, nBarSize-1 );
-        GetOutDev()->DrawRect( aFillRect );
+        rRenderContext.DrawRect( aFillRect );
     }
 
     if ( nLineEnd * nLayoutSign >= nPStart * nLayoutSign )
@@ -386,15 +386,15 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                 if ( bDark )
                 {
                     //  solid grey background for dark face color is drawn before lines
-                    GetOutDev()->SetLineColor();
-                    GetOutDev()->SetFillColor( COL_LIGHTGRAY );
-                    GetOutDev()->DrawRect( aFillRect );
+                    rRenderContext.SetLineColor();
+                    rRenderContext.SetFillColor( COL_LIGHTGRAY );
+                    rRenderContext.DrawRect( aFillRect );
                 }
             }
             else
             {
                 // background for selection
-                GetOutDev()->SetLineColor();
+                rRenderContext.SetLineColor();
                 Color aColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
 // merging the highlightcolor (which is used if accent does not exist) with the background
 // fails in many cases such as Breeze Dark (highlight is too close to background) and
@@ -402,21 +402,21 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 #ifdef MACOSX
                 aColor.Merge( rStyleSettings.GetFaceColor(), 80 );
 #endif
-                GetOutDev()->SetFillColor( aColor );
-                GetOutDev()->DrawRect( aFillRect );
+                rRenderContext.SetFillColor( aColor );
+                rRenderContext.DrawRect( aFillRect );
             }
         }
 
-        GetOutDev()->SetLineColor( rStyleSettings.GetShadowColor() );
+        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
         if (bVertical)
         {
-            GetOutDev()->DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) ); //left
-            GetOutDev()->DrawLine( Point( nBarSize-1, nPStart ), Point( nBarSize-1, nLineEnd ) ); //right
+            rRenderContext.DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) ); //left
+            rRenderContext.DrawLine( Point( nBarSize-1, nPStart ), Point( nBarSize-1, nLineEnd ) ); //right
         }
         else
         {
-            GetOutDev()->DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) ); //bottom
-            GetOutDev()->DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) ); //top
+            rRenderContext.DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) ); //bottom
+            rRenderContext.DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) ); //top
         }
     }
 
@@ -483,10 +483,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         {
             case HeaderPaintPass::SelectionBottom:
                 // same as non-selected for high contrast
-                GetOutDev()->SetLineColor( bHighContrast ? rStyleSettings.GetShadowColor() : aSelLineColor );
+                rRenderContext.SetLineColor( bHighContrast ? rStyleSettings.GetShadowColor() : aSelLineColor );
                 break;
             case HeaderPaintPass::Bottom:
-                GetOutDev()->SetLineColor( rStyleSettings.GetShadowColor() );
+                rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
                 break;
             case HeaderPaintPass::Text:
                 // DrawSelectionBackground is used only for high contrast on light background
@@ -505,9 +505,9 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                         aTransRect = tools::Rectangle( 0, nTransStart, nBarSize-1, nTransEnd );
                     else
                         aTransRect = tools::Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
-                    SetBackground( rStyleSettings.GetFaceColor() );
-                    DrawSelectionBackground( aTransRect, 0, true, false );
-                    SetBackground();
+                    rRenderContext.SetBackground( rStyleSettings.GetFaceColor() );
+                    rRenderContext.DrawSelectionBackground(aTransRect, GetBackgroundColor(), 0, true);
+                    rRenderContext.SetBackground();
                 }
                 break;
         }
@@ -563,10 +563,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                     if ( GetEntrySize(nEntryNo+1)==0 )
                                     {
                                         if (bVertical)
-                                            GetOutDev()->DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
+                                            rRenderContext.DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
                                                       Point(aEndPos.X(),aEndPos.Y()-nLayoutSign) );
                                         else
-                                            GetOutDev()->DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
+                                            rRenderContext.DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
                                                       Point(aEndPos.X()-nLayoutSign,aEndPos.Y()) );
                                     }
                             }
@@ -634,7 +634,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                 else
                                     aRect = tools::Rectangle(aScrPos.X(), aScrPos.Y(), aEndPos.X(),
                                                              aEndPos.Y());
-                                GetOutDev()->DrawText(aRect, aString, nDrawTextStyle);
+                                rRenderContext.DrawText(aRect, aString, nDrawTextStyle);
                             }
                             break;
                     }

@@ -2521,9 +2521,10 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Re
                                               rRect, nState, aControlValue, OUString() );
     }
 
-    if (!bNativeOk)
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, bIsWindow ? 3 : highlight,
-                                                  bChecked, true, bIsWindow, nullptr, 2);
+    if (!bNativeOk) {
+        rRenderContext.DrawSelectionBackground(rRect, GetBackgroundColor(), bIsWindow ? 3 : highlight,
+                                               bChecked, true, bIsWindow, nullptr, 2);
+    }
 }
 
 void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight)
