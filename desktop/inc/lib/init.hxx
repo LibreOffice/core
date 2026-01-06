@@ -254,7 +254,7 @@ namespace desktop {
         DECL_LINK(FlushQueue, void*, void);
     };
 
-    struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
+    struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public LibreOfficeKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
         std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
@@ -269,7 +269,7 @@ namespace desktop {
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
     };
 
-    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public _LibreOfficeKit
+    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public LibreOfficeKit
     {
         OUString maLastExceptionMsg;
         std::shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
