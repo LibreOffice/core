@@ -459,6 +459,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78886)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[2]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:r[2]/w:fldChar[1]", 0);
+
+    // tdf#170208: compatibilityMode12 document - emulate table placement
+    // TableGrid style defines tblInd - which we adjust by the border spacing to emulate positioning
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // The left margin (1619 / 1.62cm) is adjusted by the border spacing (203 / 0.2cm)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1416), getProperty<sal_Int32>(xTable, "LeftMargin"));
+
+    xTable.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    // Without the fix, this was -191 (DEF_BORDER_DIST)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-203), getProperty<sal_Int32>(xTable, "LeftMargin"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78910)
