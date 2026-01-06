@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LANGHELPER_HXX
 
 #include <sal/types.h>
+#include <editeng/langitem.hxx>
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
 

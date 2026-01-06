@@ -1,1 +1,1 @@
-A [![alt](./myimage.png)](https://www.example.com) Z
+A [![alt](./test.png)](https://www.example.com) Z

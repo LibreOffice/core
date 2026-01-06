@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustring.hxx>
+
 #include <string_view>
 
 constexpr inline std::u16string_view sCSS_mimetype = u"text/css";

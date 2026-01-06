@@ -23,6 +23,8 @@
 #include <ooo/vba/word/XHeadersFooters.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XHeadersFooters > SwVbaHeadersFooters_BASE;

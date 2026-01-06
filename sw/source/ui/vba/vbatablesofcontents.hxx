@@ -26,6 +26,8 @@
 #include <ooo/vba/word/XRange.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XTablesOfContents > SwVbaTablesOfContents_BASE;

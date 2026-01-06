@@ -13,7 +13,6 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-#include "vbaformfielddropdownlistentries.hxx"
 #include "vbaformfielddropdownlistentry.hxx"
 
 typedef CollTestImplHelper<ooo::vba::word::XListEntries> SwVbaFormFieldDropDownListEntries_BASE;

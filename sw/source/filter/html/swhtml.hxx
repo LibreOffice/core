@@ -25,6 +25,7 @@
 #include <svl/listener.hxx>
 #include <svl/macitem.hxx>
 #include <svtools/htmltokn.h>
+#include <svx/svdotext.hxx>
 #include <editeng/svxenum.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>

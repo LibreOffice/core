@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAWORDBASIC_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAWORDBASIC_HXX
 
+#include <cppuhelper/implbase.hxx>
+#include <ooo/vba/word/XWordBasic.hpp>
+
 class SwVbaApplication;
 
 /**

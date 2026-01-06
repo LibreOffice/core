@@ -25,6 +25,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaDialogsBase, ov::word::XDialogs > SwVbaDialogs_BASE;

@@ -25,6 +25,7 @@
 #include <postithelper.hxx>
 
 #include <AnnotationWin.hxx>
+#include <annotationmark.hxx>
 #include "frmsidebarwincontainer.hxx"
 #include <accmap.hxx>
 

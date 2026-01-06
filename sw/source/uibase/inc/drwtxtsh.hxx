@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DRWTXTSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRWTXTSH_HXX
 
+#include <editeng/outliner.hxx>
 #include <sfx2/shell.hxx>
 #include <shellid.hxx>
 #include <unotools/caserotate.hxx>

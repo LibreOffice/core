@@ -27,6 +27,8 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XField > SwVbaField_BASE;

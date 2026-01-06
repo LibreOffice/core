@@ -18,11 +18,15 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONTENT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONTENT_HXX
+
+#include <svl/lstner.hxx>
+
 #include <memory>
 #include "swcont.hxx"
 
 #include <ndarr.hxx>
 #include <fmtfld.hxx>
+#include <docufld.hxx>
 #include <tools/long.hxx>
 #include <utility>
 

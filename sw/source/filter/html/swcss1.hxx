@@ -27,6 +27,7 @@
 #include <svtools/htmltokn.h>
 #include <tools/solar.h>
 
+#include <names.hxx>
 #include <poolfmt.hxx>
 
 #include "svxcss1.hxx"

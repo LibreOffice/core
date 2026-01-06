@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
+#include "swdllapi.h"
 #include "coreframestyle.hxx"
 #include "unobasestyle.hxx"
 #include "names.hxx"

@@ -92,6 +92,7 @@
 #include <bitmaps.hlst>
 
 #include <AnnotationWin.hxx>
+#include <annotationmark.hxx>
 #include <memory>
 
 #include <fmtcntnt.hxx>

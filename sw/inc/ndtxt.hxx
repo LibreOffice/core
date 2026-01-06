@@ -30,6 +30,8 @@
 #include "ndhints.hxx"
 #include "node.hxx"
 #include "paratr.hxx"
+#include "../source/core/inc/wrong.hxx"
+#include "../source/core/inc/SwGrammarMarkUp.hxx"
 
 #include <sfx2/Metadatable.hxx>
 #include <unotools/weakref.hxx>

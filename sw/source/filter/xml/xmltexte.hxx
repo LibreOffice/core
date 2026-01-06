@@ -23,6 +23,8 @@
 #include <xmloff/txtparae.hxx>
 #include <tools/globname.hxx>
 
+#include <frmfmt.hxx>
+
 #include <optional>
 #include <unordered_map>
 

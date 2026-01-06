@@ -24,6 +24,7 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include "swdllapi.h"
+#include "names.hxx"
 
 #include <unordered_map>
 #include <memory>

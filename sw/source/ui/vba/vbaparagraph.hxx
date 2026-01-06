@@ -27,6 +27,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XParagraph > SwVbaParagraph_BASE;

@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <sal/types.h>
+
 enum class ReferencesSubtype : sal_uInt16
 {
     SetRefAttr = 0,

@@ -21,6 +21,8 @@
 
 #include <xmloff/txtimp.hxx>
 
+#include "xmlimp.hxx"
+
 class XMLRedlineImportHelper;
 class SvXMLImport;
 

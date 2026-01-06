@@ -30,7 +30,6 @@
 #include "postithelper.hxx"
 #include "swrect.hxx"
 #include "SidebarWindowsTypes.hxx"
-#include <annotationmark.hxx>
 
 class OutlinerParaObject;
 class SwPostItMgr;

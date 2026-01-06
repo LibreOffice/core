@@ -20,6 +20,8 @@
 
 #include <sal/types.h>
 
+#include <viewsh.hxx>
+
 class SwRootFrame;
 class SwPageFrame;
 class SwPrintData;

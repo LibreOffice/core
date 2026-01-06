@@ -23,6 +23,7 @@
 #include <memory>
 #include <undobj.hxx>
 #include <IDocumentContentOperations.hxx>
+#include "rolbck.hxx"
 
 struct SwSortOptions;
 class SwRangeRedline;

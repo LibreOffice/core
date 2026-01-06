@@ -27,6 +27,8 @@
 #include <ooo/vba/word/XTable.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTable > SwVbaTable_BASE;

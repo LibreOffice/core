@@ -35,6 +35,7 @@
 #include <view.hxx>
 #include <cmdid.h>
 #include <AnnotationWin.hxx>
+#include <annotationmark.hxx>
 #include <PostItMgr.hxx>
 #include <frameformats.hxx>
 #include <tools/json_writer.hxx>
