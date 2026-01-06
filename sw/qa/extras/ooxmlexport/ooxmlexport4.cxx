@@ -106,9 +106,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 {
     createSwDoc("testTrackChangesDeletedParagraphMark.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
@@ -117,9 +114,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedParagraphMark)
 {
     createSwDoc("testTrackChangesInsertedParagraphMark.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -146,9 +140,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 {
     createSwDoc("testTrackChangesDeletedTableCell.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellDel");
@@ -157,9 +148,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableCell)
 {
     createSwDoc("testTrackChangesInsertedTableCell.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -184,9 +172,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 CPPUNIT_TEST_FIXTURE(Test, testFDO73034)
 {
     createSwDoc("FDO73034.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
