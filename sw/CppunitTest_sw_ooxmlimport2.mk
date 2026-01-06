@@ -77,6 +77,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_ooxmlimport2,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlimport2))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,sw_ooxmlimport2))
+
 $(eval $(call gb_CppunitTest_add_arguments,sw_ooxmlimport2, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
