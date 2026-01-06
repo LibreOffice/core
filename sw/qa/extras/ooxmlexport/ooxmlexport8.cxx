@@ -529,6 +529,12 @@ DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
     //tdf#102619 - I would have expected this to be "Standard", but MSO 2013/2010/2003 all give FollowStyle==Date
     uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Date"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Date"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
+
+    // tdf#170208: compatibilityMode12 document - emulate table placement
+    // MS Word conjures up an 'indent from left' tblInd that cancels out the 'shift by cell margin'.
+    // Without the fix, it spilled into the left margin by the border spacing distance (-203/0.2cm)
+    uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
