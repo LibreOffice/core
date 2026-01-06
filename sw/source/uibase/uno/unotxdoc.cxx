@@ -3350,6 +3350,11 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
 Size SwXTextDocument::getDocumentSize()
 {
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+    {
+        return Size();
+    }
+
     Size aDocSize = pViewShell->GetDocSize();
 
     return Size(aDocSize.Width()  + 2 * DOCUMENTBORDER,
