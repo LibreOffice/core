@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <unomodel.hxx>
+
 #include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <comphelper/errcode.hxx>
