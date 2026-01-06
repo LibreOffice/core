@@ -392,6 +392,51 @@ CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatOwn)
         CPPUNIT_ASSERT(!rRedlineData.Next());
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatThenDel)
+{
+    // Given an "AAA <format>BBB CCC DDD</format> EEE" document:
+    createSwDoc("fmt.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Skip "AAA BBB ".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 8, /*bBasicCall=*/false);
+    // Select "CCC".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+
+    // When deleting CCC:
+    pWrtShell->DelLeft();
+
+    // Then make sure the resulting new "delete" redline still tracks formatting:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+    {
+        const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+    }
+    {
+        const SwRedlineData& rRedlineData = rRedlines[1]->GetRedlineData(0);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2 (Format)
+        // - Actual  : 1 (Delete)
+        // i.e. the middle redline was just "delete", not "format-on-delete", so formatting remained
+        // in the document after reject-all.
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+        CPPUNIT_ASSERT(rRedlineData.Next());
+        const SwRedlineData& rRedlineData2 = rRedlines[1]->GetRedlineData(1);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
+        CPPUNIT_ASSERT(!rRedlineData2.Next());
+    }
+    {
+        const SwRedlineData& rRedlineData = rRedlines[2]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
