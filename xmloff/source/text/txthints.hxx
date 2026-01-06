@@ -18,9 +18,14 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <memory>
 #include <unordered_map>
 #include <vector>
+
+#include "txtparaimphint.hxx"
 
 class XMLHint_Impl;
 class XMLIndexMarkHint_Impl;

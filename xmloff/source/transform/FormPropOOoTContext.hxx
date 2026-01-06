@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ref.hxx>
+#include "MutableAttrList.hxx"
 #include "TransformerContext.hxx"
 
 class XMLFormPropValueTContext_Impl;

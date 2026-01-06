@@ -22,6 +22,8 @@
 // prevent funny things like "#define sun 1" from the compiler
 #include <sal/config.h>
 
+#include <sal/types.h>
+
 class SvXMLExport;
 namespace com::sun::star {
     namespace style { struct TabStop; }
