@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include <vcl/BitmapColor.hxx>
+#include <tools/color.hxx>
+
 #include <vcl/bitmap/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapDuoToneFilter final : public BitmapFilter

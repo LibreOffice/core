@@ -28,6 +28,8 @@
 #include <vcl/GestureEventZoom.hxx>
 #include <vcl/GestureEventRotate.hxx>
 
+#include "font/LogicalFontInstance.hxx"
+
 class LogicalFontInstance;
 class SalGraphics;
 class SalFrame;

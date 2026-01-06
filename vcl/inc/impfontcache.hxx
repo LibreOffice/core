@@ -27,6 +27,7 @@
 #include <o3tl/hash_combine.hxx>
 
 #include "font/FontSelectPattern.hxx"
+#include "font/LogicalFontInstance.hxx"
 #include "glyphid.hxx"
 
 class Size;

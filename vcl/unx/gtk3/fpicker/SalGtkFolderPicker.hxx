@@ -23,6 +23,9 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+
 #include "SalGtkPicker.hxx"
 
 class SalGtkFolderPicker :

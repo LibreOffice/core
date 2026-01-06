@@ -12,6 +12,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <tools/color.hxx>
 
+#include <vector>
+
 struct SalGradientStop
 {
     Color maColor;

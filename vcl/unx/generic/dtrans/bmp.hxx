@@ -24,6 +24,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
+#include <tools/long.hxx>
 
 namespace x11 {
 

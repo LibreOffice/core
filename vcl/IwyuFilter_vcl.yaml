@@ -6,9 +6,11 @@ customAssumeFilenames:
     # Needs -isystem /usr/include/x86_64-linux-gnu/qt6
     vcl/inc/qt6: vcl/qt6/QtInstance.cxx
     # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
-    vcl/unx/gtk3_kde5: vcl/qt5/QtInstance.cxx
+    vcl/unx/gtk3_kde5: vcl/unx/gtk3_kde5/kde5_filepicker.cxx
     # Needs -isystem /usr/include/gtk-3.0 -isystem /usr/include/gstreamer-1.0
-    vcl/inc/unx: vcl/unx/gtk3/gtkinst.cxx
+    vcl/inc/unx/gtk3: vcl/unx/gtk3/gtkframe.cxx
+    # Needs -isystem /usr/include/gtk-3.0 -isystem /usr/include/gstreamer-1.0
+    vcl/unx/gtk3: vcl/unx/gtk3/gtkframe.cxx
     # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
     vcl/unx/kf5: vcl/qt5/QtInstance.cxx
     # Needs -isystem /usr/include/x86_64-linux-gnu/qt5

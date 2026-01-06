@@ -35,7 +35,10 @@ $(eval $(call gb_CppunitTest_use_sdk_api,vcl_bitmap_render_test))
 $(eval $(call gb_CppunitTest_use_ure,vcl_bitmap_render_test))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_bitmap_render_test))
 
-$(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_render_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_render_test,\
+    boost_headers \
+    harfbuzz \
+))
 
 $(eval $(call gb_CppunitTest_use_components,vcl_bitmap_render_test,\
     configmgr/source/configmgr \

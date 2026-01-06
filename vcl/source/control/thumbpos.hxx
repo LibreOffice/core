@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <tools/long.hxx>
+
 inline tools::Long ImplMulDiv(tools::Long nNumber, tools::Long nNumerator, tools::Long nDenominator)
 {
     if (!nDenominator)

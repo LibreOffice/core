@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <tools/gen.hxx>
+#include <vcl/mapmod.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/GraphicExternalLink.hxx>
 #include <tools/mapunit.hxx>

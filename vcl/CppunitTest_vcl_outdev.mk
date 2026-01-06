@@ -39,6 +39,8 @@ $(eval $(call gb_CppunitTest_use_sdk_api,vcl_outdev))
 $(eval $(call gb_CppunitTest_use_ure,vcl_outdev))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_outdev))
 
+$(eval $(call gb_CppunitTest_use_externals,vcl_outdev,harfbuzz))
+
 $(eval $(call gb_CppunitTest_use_components,vcl_outdev,\
 	configmgr/source/configmgr \
 	i18npool/util/i18npool \

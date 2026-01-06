@@ -48,6 +48,8 @@ $(eval $(call gb_CppunitTest_use_vcl,vcl_bitmap_test))
 
 $(eval $(call gb_CppunitTest_use_rdb,vcl_bitmap_test,services))
 
+$(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,harfbuzz))
+
 $(eval $(call gb_CppunitTest_use_configuration,vcl_bitmap_test))
 
 # vim: set noet sw=4 ts=4:

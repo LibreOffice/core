@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <QtCore/QSize>
+#include <QtGui/QImage>
 
 class QtGraphics;
 class QImage;

@@ -12,6 +12,7 @@
 #include <salmenu.hxx>
 
 #include <QtCore/QObject>
+#include <QtWidgets/QMenu>
 
 #include <memory>
 

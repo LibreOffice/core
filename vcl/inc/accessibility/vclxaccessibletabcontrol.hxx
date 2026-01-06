@@ -21,6 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <accessibility/vclxaccessibletabpage.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/vclptr.hxx>
