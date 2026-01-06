@@ -538,7 +538,7 @@ void doExecuteTest(css::uno::Reference<org::libreoffice::embindtest::XTest> cons
         auto const val = test->getSequenceAny();
         verify(val
                == css::uno::Sequence<css::uno::Any>{
-                      css::uno::Any(-123456), css::uno::Any(),
+                      css::uno::Any(sal_Int32(-123456)), css::uno::Any(),
                       css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
                           org::libreoffice::embindtest::Enum_E_2,
                           org::libreoffice::embindtest::Enum_E3,
