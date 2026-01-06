@@ -3368,6 +3368,10 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
     {
+        FSNS( XML_w, XML_del ),
+        FSNS( XML_w, XML_ins ),
+        FSNS( XML_w, XML_moveFrom ),
+        FSNS( XML_w, XML_moveTo ),
         FSNS( XML_w, XML_rStyle ),
         FSNS( XML_w, XML_rFonts ),
         FSNS( XML_w, XML_b ),
@@ -3408,10 +3412,6 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w, XML_specVanish ),
         FSNS( XML_w, XML_oMath ),
         FSNS( XML_w, XML_rPrChange ),
-        FSNS( XML_w, XML_del ),
-        FSNS( XML_w, XML_ins ),
-        FSNS( XML_w, XML_moveFrom ),
-        FSNS( XML_w, XML_moveTo ),
         FSNS( XML_w14, XML_glow ),
         FSNS( XML_w14, XML_shadow ),
         FSNS( XML_w14, XML_reflection ),
