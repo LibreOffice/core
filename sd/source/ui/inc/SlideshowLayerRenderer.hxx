@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>

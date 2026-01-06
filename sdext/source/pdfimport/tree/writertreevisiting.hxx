@@ -21,6 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_WRITERTREEVISITING_HXX
 
 #include <treevisiting.hxx>
+#include <pdfiprocessor.hxx>
 
 #include <pdfihelper.hxx>
 

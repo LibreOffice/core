@@ -21,6 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_DRAWTREEVISITING_HXX
 
 #include <treevisiting.hxx>
+#include <pdfiprocessor.hxx>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>

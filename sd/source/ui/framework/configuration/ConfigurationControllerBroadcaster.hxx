@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <rtl/ref.hxx>
 #include <unordered_map>
 #include <vector>

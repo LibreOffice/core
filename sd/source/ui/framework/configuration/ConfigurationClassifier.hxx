@@ -20,6 +20,8 @@
 #pragma once
 
 #include "debugtrace.hxx"
+#include <framework/Configuration.hxx>
+#include <ResourceId.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <vector>

@@ -21,6 +21,8 @@
 
 #include <com/sun/star/lang/EventObject.hpp>
 #include <ResourceId.hxx>
+#include <framework/AbstractResource.hxx>
+#include <framework/Configuration.hxx>
 #include <rtl/ref.hxx>
 
 namespace sd::framework

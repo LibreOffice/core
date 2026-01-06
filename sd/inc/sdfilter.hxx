@@ -20,6 +20,7 @@
 #pragma once
 
 #include <osl/module.h>
+#include <tools/stream.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
