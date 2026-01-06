@@ -1229,12 +1229,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 responseJSON.add_child("kinds", nodes);
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, responseJSON, /*pretty=*/ false);
-                handleArrayStr = OString::Concat(", \"handles\":") + aStream.view();
+                handleArrayStr = OString::Concat(", \"handles\":") + aStream.str().c_str();
                 if (bConnectorSelection)
                 {
                     aStream.str("");
                     boost::property_tree::write_json(aStream, aGluePointsTree, /*pretty=*/ false);
-                    handleArrayStr += OString::Concat(", \"GluePoints\":") + aStream.view();
+                    handleArrayStr += OString::Concat(", \"GluePoints\":") + aStream.str().c_str();
                 }
             }
 
