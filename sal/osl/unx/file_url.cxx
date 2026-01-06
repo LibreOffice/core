@@ -260,7 +260,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
     // Handle empty path:
     if (i == url.getLength())
     {
-        *path = "/";
+        *path = "/"_tstr;
         return osl_File_E_None;
     }
     // Path must not contain %2F:
