@@ -603,7 +603,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
         // but not for RTF
 
-        if (m_rDMapper_Impl.IsOOXMLImport() && (nMode < 0 || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
+        if (m_rDMapper_Impl.IsOOXMLImport() && nMode < 15 && rInfo.nNestLevel == 1)
         {
             const sal_Int32 nMinLeftBorderDistance = aLeftBorder.LineWidth / 2;
             sal_Int32 nLeftBorderDistance = rInfo.nLeftBorderDistance;
