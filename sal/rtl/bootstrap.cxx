@@ -982,10 +982,6 @@ OUString expandMacros(
                 }
                 else
                 {
-                    // Going through osl::Profile, this code erroneously
-                    // does not recursively expand macros in the resulting
-                    // replacement text (and if it did, it would fail to
-                    // detect cycles that pass through here):
                     buf.append(
                         OStringToOUString(
                             osl::Profile(seg[0]).readString(
