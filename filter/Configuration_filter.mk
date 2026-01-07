@@ -497,6 +497,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	MS_Excel_2007_Binary \
 	calc_OOXML \
 	calc_OOXML_Template \
+	calc_OOXML_VBA \
 	calc_MS_Works_Document \
 	calc_WPS_Lotus_Document \
 	calc_WPS_QPro_Document \
@@ -546,6 +547,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	calc_MS_Excel_2007_Binary \
 	calc_OOXML \
 	calc_OOXML_Template \
+	calc_OOXML_VBA \
 	MS_Works_Calc \
 	WPS_Lotus_Calc \
 	WPS_QPro_Calc \
