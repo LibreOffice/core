@@ -4961,7 +4961,7 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
         if (aTokens.find(strTokens[0]) == aTokens.end())
             return false;
 
-        // Check that the remaining tokens are either numbers or buit-in variables
+        // Check that the remaining tokens are either numbers or built-in variables
         for (sal_Int16 i = 1; i < nSize; i++)
         {
             OUString sVal = strTokens[i];
