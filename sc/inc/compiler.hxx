@@ -554,6 +554,10 @@ private:
 
     virtual formula::ParamClass GetForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const override;
 
+    bool GetRefColRowNames(const formula::FormulaToken* pToken, ScComplexRefData& rRef,
+                           bool& bInList, FormulaError& nError, bool bLookUpColRowNames) const;
+    OUString CreateStringFromLabel(const formula::FormulaToken* pToken) const;
+
     /// Access the CharTable flags
     ScCharFlags GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : ScCharFlags::NONE; }
