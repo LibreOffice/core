@@ -349,6 +349,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_MS_Word_2007_XML_VBA \
 	writer_OOXML \
 	writer_OOXML_Template \
+	writer_OOXML_VBA \
 	writer_layout_dump_xml \
 	writer_indexing_export_xml \
 	writer_BroadBand_eBook \
@@ -400,6 +401,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	MS_Word_2007_XML_VBA \
 	OOXML_Text \
 	OOXML_Text_Template \
+	OOXML_Text_VBA \
 	writer_layout_dump \
 	writer_indexing_export \
 	BroadBand_eBook \
