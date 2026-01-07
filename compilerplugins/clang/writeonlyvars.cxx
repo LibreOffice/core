@@ -533,9 +533,10 @@ bool WriteOnlyVars::VisitVarDecl(const VarDecl* varDecl)
     if (tc.Typedef("BitmapScopedWriteAccess"))
         return true;
     std::string typeName = varDecl->getType().getAsString();
-    if (contains(typeName, "Guard") || contains(typeName, "Reader") || contains(typeName, "Stream")
-        || contains(typeName, "Parser") || contains(typeName, "Codec")
-        || contains(typeName, "Exception"))
+    if (contains(typeName, "Guard") || contains(typeName, "_lock") || contains(typeName, "Reader")
+        || contains(typeName, "Stream") || contains(typeName, "Parser")
+        || contains(typeName, "Codec") || contains(typeName, "Exception")
+        || contains(typeName, "TypeSerializer"))
         return true;
     varDecl = varDecl->getCanonicalDecl();
     if (!varDecl->getLocation().isValid() || ignoreLocation(varDecl))
@@ -746,7 +747,8 @@ void WriteOnlyVars::checkIfReadFrom(const VarDecl* varDecl, const Expr* memberEx
                  || isa<DeclStmt>(parent) || isa<WhileStmt>(parent) || isa<CXXNewExpr>(parent)
                  || isa<ForStmt>(parent) || isa<InitListExpr>(parent)
                  || isa<CXXDependentScopeMemberExpr>(parent) || isa<UnresolvedMemberExpr>(parent)
-                 || isa<MaterializeTemporaryExpr>(parent))
+                 || isa<MaterializeTemporaryExpr>(parent) || isa<CXXDefaultInitExpr>(parent)
+                 || isa<DeclRefExpr>(parent)) // this could be a DeclRefExpr to a function template
         {
             bPotentiallyReadFrom = true;
             break;
@@ -833,6 +835,12 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
         if (isa<CXXReinterpretCastExpr>(parent))
         {
             // once we see one of these, there is not much useful we can know
+            bPotentiallyWrittenTo = true;
+            break;
+        }
+        else if (isa<DeclRefExpr>(parent))
+        {
+            // this could be a DeclRefExpr to a function template
             bPotentiallyWrittenTo = true;
             break;
         }
@@ -966,7 +974,7 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
                  || isa<CXXForRangeStmt>(parent) || isa<CXXTypeidExpr>(parent)
                  || isa<DefaultStmt>(parent) || isa<ConstantExpr>(parent) || isa<GCCAsmStmt>(parent)
                  || isa<VAArgExpr>(parent) || isa<CXXDefaultArgExpr>(parent)
-                 || isa<LambdaExpr>(parent))
+                 || isa<LambdaExpr>(parent) || isa<CXXDefaultInitExpr>(parent))
         {
             break;
         }
