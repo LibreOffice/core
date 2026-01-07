@@ -1328,6 +1328,29 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
                 "id", cNvPr_id);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169979_missing_ppic)
+{
+    createSdImpressDoc("odp/tdf169979.odp");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXml2 = parseExport(u"ppt/slides/slide2.xml"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr' number of nodes is incorrect
+    assertXPath(pXml2,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/"
+                "a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr",
+                "name", u"");
+
+    assertXPath(pXml2,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/"
+                "a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr",
+                "descr", u"");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyChildTnLstElement)
 {
     createSdImpressDoc("odp/emptyChildTnLstElement.odp");
