@@ -263,7 +263,16 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_vi
     }
 
     if (rContentType == u"application/vnd.ms-excel.sheet.macroEnabled.main+xml")
-        return u"MS Excel 2007 VBA XML"_ustr;
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return u"Office Open XML Spreadsheet VBA"_ustr; // Excel 2010+
+            case OOXMLVariant::ECMA_Transitional:
+                return u"MS Excel 2007 VBA XML"_ustr;
+        }
+    }
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
         rContentType == u"application/vnd.ms-excel.template.macroEnabled.main+xml" )

@@ -108,7 +108,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::XHTML_DRAW, u"XHTML Draw File"_ustr },
     { TestFilter::XHTML_WRITER, u"XHTML Writer File"_ustr },
     { TestFilter::XLS, u"MS Excel 97"_ustr },
-    { TestFilter::XLSM, u"Calc MS Excel 2007 VBA XML"_ustr },
+    { TestFilter::XLSM, u"Calc Office Open XML VBA"_ustr },
     { TestFilter::XLST, u"Calc MS Excel 2007 XML Template"_ustr },
     { TestFilter::XLSX, u"Calc Office Open XML"_ustr },
     { TestFilter::XLSX_2007, u"Calc MS Excel 2007 XML"_ustr },
