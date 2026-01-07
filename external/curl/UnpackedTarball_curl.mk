@@ -30,6 +30,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/0001-const-up-readonly-H2_NON_FIELD.patch.1 \
 	external/curl/0001-cookie-don-t-treat-the-leading-slash-as-trailing.patch \
 	external/curl/0001-ws-get-a-new-mask-for-each-new-outgoing-frame.patch \
+	external/curl/0001-libssh-require-private-key-or-user-agent-for-public-.patch \
+	external/curl/0001-libssh-set-both-knownhosts-options-to-the-same-file.patch \
+	external/curl/0001-openssl-toggling-CURLSSLOPT_NO_PARTIALCHAIN-makes-a-.patch \
+	external/curl/0001-curl_sasl-if-redirected-require-permission-to-use-be.patch \
+	external/curl/0001-ldap-call-ldap_init-before-setting-the-options.patch \
+	external/curl/0001-vquic-tls-gnutls-call-Curl_gtls_verifyserver-uncondi.patch \
 ))
 
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
