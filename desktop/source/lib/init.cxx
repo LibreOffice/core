@@ -329,7 +329,7 @@ TraceEventDumper *traceEventDumper = nullptr;
 constexpr ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   u"MS Word 97"_ustr },
-    { "docm",  u"MS Word 2007 XML VBA"_ustr },
+    { "docm",  u"Office Open XML Text VBA"_ustr },
     { "docx",  u"Office Open XML Text"_ustr },
     { "fodt",  u"OpenDocument Text Flat XML"_ustr },
     { "html",  u"HTML (StarWriter)"_ustr },

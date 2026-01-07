@@ -108,13 +108,14 @@ CPPUNIT_TEST_FIXTURE(DocmTest, testDocmSave)
 
 CPPUNIT_TEST_FIXTURE(DocmTest, testBadDocm)
 {
+    // Given a compat15 (Word 2013+) document
     createSwDoc("bad.docm");
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
-    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Office Open XML Text VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
 
     saveAndReload(TestFilter::DOCM);
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
-    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Office Open XML Text VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109063)

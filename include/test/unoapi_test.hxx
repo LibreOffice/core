@@ -73,7 +73,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::CSV, u"Text - txt - csv (StarCalc)"_ustr },
     { TestFilter::DOC, u"MS Word 97"_ustr },
     { TestFilter::DOCBOOK, u"DocBook File"_ustr },
-    { TestFilter::DOCM, u"MS Word 2007 XML VBA"_ustr },
+    { TestFilter::DOCM, u"Office Open XML Text VBA"_ustr },
     { TestFilter::DOCX, u"Office Open XML Text"_ustr },
     { TestFilter::DOCX_2007, u"MS Word 2007 XML"_ustr },
     { TestFilter::DOTX, u"MS Word 2007 XML Template"_ustr },
