@@ -695,7 +695,7 @@ void SdrUndoRemoveObj::Undo()
     ImpShowPageOfThisObject();
 
     DBG_ASSERT(!mxObj->IsInserted(),"UndoRemoveObj: mxObj has already been inserted.");
-    if (mxObj->IsInserted())
+    if (mxObj->IsInserted() || !pObjList)
         return;
 
     // #i11426#
@@ -703,7 +703,6 @@ void SdrUndoRemoveObj::Undo()
     // position of the target object.
     Point aOwnerAnchorPos(0, 0);
 
-    assert(pObjList); // must never be null
     if (dynamic_cast< const SdrObjGroup* >(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
     {
         aOwnerAnchorPos = pObjList->getSdrObjectFromSdrObjList()->GetAnchorPos();
@@ -722,11 +721,10 @@ void SdrUndoRemoveObj::Undo()
 void SdrUndoRemoveObj::Redo()
 {
     DBG_ASSERT(mxObj->IsInserted(),"RedoRemoveObj: mxObj is not inserted.");
-    if (mxObj->IsInserted())
+    if (mxObj->IsInserted() && pObjList)
     {
         ImplUnmarkObject( mxObj.get() );
         E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
-        assert(pObjList); // must never be null
         pObjList->RemoveObject(mxObj->GetOrdNum());
     }
 
@@ -745,11 +743,10 @@ void SdrUndoInsertObj::Undo()
     ImpShowPageOfThisObject();
 
     DBG_ASSERT(mxObj->IsInserted(),"UndoInsertObj: mxObj is not inserted.");
-    if (mxObj->IsInserted())
+    if (mxObj->IsInserted() && pObjList)
     {
         ImplUnmarkObject( mxObj.get() );
 
-        assert(pObjList); // must never be null
         rtl::Reference<SdrObject> pChkObj= pObjList->RemoveObject(mxObj->GetOrdNum());
         DBG_ASSERT(pChkObj.get()==mxObj.get(),"UndoInsertObj: RemoveObjNum!=mxObj");
     }
@@ -758,14 +755,13 @@ void SdrUndoInsertObj::Undo()
 void SdrUndoInsertObj::Redo()
 {
     DBG_ASSERT(!mxObj->IsInserted(),"RedoInsertObj: mxObj is already inserted");
-    if (!mxObj->IsInserted())
+    if (!mxObj->IsInserted() && pObjList)
     {
         // Restore anchor position of an object,
         // which becomes a member of a group, because its cleared in method
         // <InsertObject(..)>. Needed for correct Redo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
 
-        assert(pObjList); // must never be null
         if (dynamic_cast<const SdrObjGroup*>(pObjList->getSdrObjectFromSdrObjList()) != nullptr)
         {
             aAnchorPos = mxObj->GetAnchorPos();
