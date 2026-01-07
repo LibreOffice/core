@@ -139,10 +139,6 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp,
         aPaint.Mirror( nMirrFlags );
     }
 
-    // we always want to have a mask
-    AlphaMask aAlphaMask(aSrcRect.GetSize());
-    aAlphaMask.Erase( 0 );
-
     // do painting
     const tools::Long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
     tools::Long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
