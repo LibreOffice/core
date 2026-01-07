@@ -63,6 +63,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
+#include <vcl/canvastools.hxx>
+#include <vcl/vclenum.hxx>
+
 #include <unoviewcontainer.hxx>
 #include <transitionfactory.hxx>
 #include <eventmultiplexer.hxx>
@@ -100,6 +103,18 @@ namespace box2d::utils { class box2DWorld;
                          typedef ::std::shared_ptr< box2DWorld > Box2DWorldSharedPtr; }
 
 namespace {
+
+constexpr OUString BMP_PREV_SLIDE_SMALL = u"sd/res/prevslide_small.png"_ustr;
+constexpr OUString BMP_NEXT_SLIDE_SMALL = u"sd/res/nextslide_small.png"_ustr;
+constexpr OUString BMP_MENU_SLIDE_SMALL = u"sd/res/slideshowmenu_small.png"_ustr;
+
+constexpr OUString BMP_PREV_SLIDE_LARGE = u"sd/res/prevslide_large.png"_ustr;
+constexpr OUString BMP_NEXT_SLIDE_LARGE = u"sd/res/nextslide_large.png"_ustr;
+constexpr OUString BMP_MENU_SLIDE_LARGE = u"sd/res/slideshowmenu_large.png"_ustr;
+
+constexpr OUString BMP_PREV_SLIDE_EXTRALARGE = u"sd/res/prevslide_extralarge.png"_ustr;
+constexpr OUString BMP_NEXT_SLIDE_EXTRALARGE = u"sd/res/nextslide_extralarge.png"_ustr;
+constexpr OUString BMP_MENU_SLIDE_EXTRALARGE = u"sd/res/slideshowmenu_extralarge.png"_ustr;
 
 /** During animations the update() method tells its caller to call it as
     soon as possible.  This gives us more time to render the next frame and
@@ -266,6 +281,9 @@ public:
      */
     bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
 
+
+    void handleViewChangedEvent( const sal_Int32 width, const sal_Int32 height );
+
     /** Obtain a MediaTempFile for the specified url. */
     virtual std::shared_ptr<avmedia::MediaTempFile> getMediaTempFile(const OUString& aUrl) override;
 
@@ -406,6 +424,11 @@ private:
     */
     void rewindEffectToPreviousSlide();
 
+    void updateNavbarIcons(
+            const OUString& prevSlideIconPath,
+            const OUString& contextMenuIconPath,
+            const OUString& nextSlideIconPath );
+
     /// all registered views
     UnoViewContainer                        maViewContainer;
 
@@ -447,6 +470,8 @@ private:
     std::shared_ptr<SlideOverlayButton>  mpNavigationPrev;
     std::shared_ptr<SlideOverlayButton>  mpNavigationMenu;
     std::shared_ptr<SlideOverlayButton>  mpNavigationNext;
+
+    NavbarButtonSize                     maCurNavbarBtnSize;
 
     std::shared_ptr<PointerSymbol>        mpPointerSymbol;
 
@@ -498,7 +523,8 @@ private:
 struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
                                              public ViewRepaintHandler,
                                              public HyperlinkHandler,
-                                             public AnimationEventHandler
+                                             public AnimationEventHandler,
+                                             public ViewEventHandler
 {
     SlideShowImpl& mrShow;
     ScreenUpdater& mrScreenUpdater;
@@ -550,6 +576,23 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     {
         return mrShow.handleAnimationEvent(rNode);
     }
+
+    // ViewEventHandler
+    virtual void viewAdded(const UnoViewSharedPtr& rView) override
+    {
+        auto size = rView->getUnoView()->getCanvasArea();
+        mrShow.handleViewChangedEvent(size.Width, size.Height);
+    }
+
+    virtual void viewRemoved(const UnoViewSharedPtr& /*rView*/) override { }
+
+    virtual void viewChanged(const UnoViewSharedPtr& rView) override
+    {
+        auto size = rView->getUnoView()->getCanvasArea();
+        mrShow.handleViewChangedEvent(size.Width, size.Height);
+    }
+
+    virtual void viewsChanged() override { }
 };
 
 SlideShowImpl::SlideShowImpl(
@@ -574,7 +617,7 @@ SlideShowImpl::SlideShowImpl(
       mpBox2DDummyPtr(),
       mpListener(),
       mpRehearseTimingsActivity(),
-      mpWaitSymbol(),
+      maCurNavbarBtnSize(),
       mpPointerSymbol(),
       mpCurrentSlideTransitionSound(),
       mxComponentContext(std::move( xContext )),
@@ -1280,6 +1323,52 @@ void SlideShowImpl::rewindEffectToPreviousSlide()
     maScreenUpdater.commitUpdates();
 }
 
+void SlideShowImpl::updateNavbarIcons(
+    const OUString& prevSlideIconPath,
+    const OUString& contextMenuIconPath,
+    const OUString& nextSlideIconPath )
+{
+    mpNavigationPrev->clear();
+    Bitmap prevSlideBm(prevSlideIconPath);
+    const uno::Reference<rendering::XBitmap> xPrevSBitmap( vcl::unotools::xBitmapFromBitmap(prevSlideBm) );
+    if (xPrevSBitmap.is())
+    {
+        mpNavigationPrev = SlideOverlayButton::create(
+            xPrevSBitmap, { 20, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(true); },
+            maScreenUpdater, maEventMultiplexer, maViewContainer);
+    }
+
+    mpNavigationMenu->clear();
+    Bitmap menuBm(contextMenuIconPath);
+    const uno::Reference<rendering::XBitmap> xMenuBitmap( vcl::unotools::xBitmapFromBitmap(menuBm) );
+    if (xMenuBitmap.is())
+    {
+        mpNavigationMenu = SlideOverlayButton::create(
+            xMenuBitmap, { xMenuBitmap->getSize().Width + 48, 10 }, [this](basegfx::B2DPoint pos) {
+                maListenerContainer.forEach(
+                    [pos](const uno::Reference<presentation::XSlideShowListener>& xListener) {
+                        uno::Reference<presentation::XSlideShowNavigationListener> xNavListener(
+                            xListener, uno::UNO_QUERY);
+                        if (xNavListener.is())
+                            xNavListener->contextMenuShow(
+                                css::awt::Point(static_cast<sal_Int32>(floor(pos.getX())),
+                                                static_cast<sal_Int32>(floor(pos.getY()))));
+                    });
+            },
+            maScreenUpdater, maEventMultiplexer, maViewContainer);
+    }
+
+    mpNavigationNext->clear();
+    Bitmap nextSlideBm(nextSlideIconPath);
+    const uno::Reference<rendering::XBitmap> xNextSBitmap( vcl::unotools::xBitmapFromBitmap(nextSlideBm) );
+    if (xNextSBitmap.is())
+    {
+        mpNavigationNext = SlideOverlayButton::create(
+            xNextSBitmap, { 2 * xPrevSBitmap->getSize().Width + 76, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(false); },
+            maScreenUpdater, maEventMultiplexer, maViewContainer);
+    }
+}
+
 sal_Bool SlideShowImpl::startShapeActivity(
     uno::Reference<drawing::XShape> const& /*xShape*/ )
 {
@@ -1874,6 +1963,24 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         mpNavigationNext = SlideOverlayButton::create(
             xBitmap, { 2 * xBitmap->getSize().Width + 76, 10 }, [this](basegfx::B2DPoint) { notifySlideEnded(false); },
             maScreenUpdater, maEventMultiplexer, maViewContainer);
+
+        return true;
+    }
+
+    if (rProperty.Name == "NavigationBarAutoscale")
+    {
+        bool isAutoscale;
+        if (!(rProperty.Value >>= isAutoscale))
+            return false;
+
+        if (isAutoscale)
+        {
+            maEventMultiplexer.addViewHandler( mpListener );
+        }
+        else
+        {
+            maEventMultiplexer.removeViewHandler( mpListener );
+        }
 
         return true;
     }
@@ -2499,6 +2606,42 @@ bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     }
 
     return true;
+}
+
+void SlideShowImpl::handleViewChangedEvent( const sal_Int32 width, const sal_Int32 height )
+{
+    NavbarButtonSize newSize = NavbarButtonSize::Small;
+    sal_Int32 screenArea = width * height;
+    if (screenArea >= 3840 * 2160 /* UHD and above */)
+    {
+        newSize = NavbarButtonSize::XLarge;
+    }
+    else if (screenArea >= 1920 * 1080 /* FHD and above */)
+    {
+        newSize = NavbarButtonSize::Large;
+    }
+
+    if (newSize != maCurNavbarBtnSize)
+    {
+        maCurNavbarBtnSize = newSize;
+        switch ( maCurNavbarBtnSize ) {
+            case NavbarButtonSize::Large:
+            {
+                updateNavbarIcons(BMP_PREV_SLIDE_LARGE, BMP_MENU_SLIDE_LARGE, BMP_NEXT_SLIDE_LARGE);
+            }
+            break;
+            case NavbarButtonSize::XLarge:
+            {
+                updateNavbarIcons(BMP_PREV_SLIDE_EXTRALARGE, BMP_MENU_SLIDE_EXTRALARGE, BMP_NEXT_SLIDE_EXTRALARGE);
+            }
+            break;
+            default:
+            {
+                updateNavbarIcons(BMP_PREV_SLIDE_SMALL, BMP_MENU_SLIDE_SMALL, BMP_NEXT_SLIDE_SMALL);
+            }
+            break;
+        }
+    }
 }
 
 std::shared_ptr<avmedia::MediaTempFile> SlideShowImpl::getMediaTempFile(const OUString& aUrl)

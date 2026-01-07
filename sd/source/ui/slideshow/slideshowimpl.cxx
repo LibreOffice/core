@@ -1303,6 +1303,12 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         break;
                     }
                     case NavbarButtonSize::Auto:
+                    {
+                        mxShow->setProperty(beans::PropertyValue("NavigationBarAutoscale", -1,
+                                Any(true),
+                                PropertyState_DIRECT_VALUE));
+                    }
+                    [[fallthrough]]; // Preset default buttons size
                     case NavbarButtonSize::Small:
                     default:
                     {
