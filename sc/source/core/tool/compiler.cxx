@@ -5522,6 +5522,230 @@ void escapeTableRefColumnSpecifier( OUString& rStr )
 }
 }
 
+bool ScCompiler::GetRefColRowNames(const FormulaToken* pToken, ScComplexRefData& rRef,
+                                   bool& bInList, FormulaError& nError,
+                                   bool bLookUpColRowNames) const
+{
+    ScSingleRefData rSingleRef = *pToken->GetSingleRef();
+    const ScAddress aAbs = rSingleRef.toAbs(rDoc, aPos);
+
+    if (!rDoc.ValidAddress(aAbs))
+    {
+        nError = FormulaError::NoRef;
+        return false;
+    }
+
+    const SCCOL nCol = aAbs.Col();
+    const SCROW nRow = aAbs.Row();
+    const SCTAB nTab = aAbs.Tab();
+    const bool bColName = rSingleRef.IsColRel();
+    const SCCOL nMyCol = aPos.Col();
+    const SCROW nMyRow = aPos.Row();
+
+    bool bValidName = false;
+
+    ScRangePairList* pRL = (bColName ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges());
+    ScRange aRange;
+
+    for (size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i)
+    {
+        const ScRangePair& rR = (*pRL)[i];
+        if (rR.GetRange(0).Contains(aAbs))
+        {
+            bInList = bValidName = true;
+            aRange = rR.GetRange(1);
+            if (bColName)
+            {
+                aRange.aStart.SetCol(nCol);
+                aRange.aEnd.SetCol(nCol);
+            }
+            else
+            {
+                aRange.aStart.SetRow(nRow);
+                aRange.aEnd.SetRow(nRow);
+            }
+            break; // for
+        }
+    }
+    if (!bInList && bLookUpColRowNames)
+    { // automagically or created by copying and NamePos isn't in list
+        ScRefCellValue aCell(rDoc, aAbs);
+        bool bString = aCell.hasString();
+        if (!bString && aCell.isEmpty())
+            bString = true; // empty cell is ok
+        if (bString)
+        { // corresponds with ScInterpreter::ScColRowNameAuto()
+            bValidName = true;
+            if (bColName)
+            { // ColName
+                SCROW nStartRow = nRow + 1;
+                if (nStartRow > rDoc.MaxRow())
+                    nStartRow = rDoc.MaxRow();
+                SCROW nMaxRow = rDoc.MaxRow();
+                if (nMyCol == nCol)
+                { // formula cell in same column
+                    if (nMyRow == nStartRow)
+                    { // take remainder under name cell
+                        nStartRow++;
+                        if (nStartRow > rDoc.MaxRow())
+                            nStartRow = rDoc.MaxRow();
+                    }
+                    else if (nMyRow > nStartRow)
+                    { // from name cell down to formula cell
+                        nMaxRow = nMyRow - 1;
+                    }
+                }
+                for (size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i)
+                { // next defined ColNameRange below limits row
+                    const ScRangePair& rR = (*pRL)[i];
+                    const ScRange& rRange = rR.GetRange(1);
+                    if (rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col())
+                    { // identical column range
+                        SCROW nTmp = rRange.aStart.Row();
+                        if (nStartRow < nTmp && nTmp <= nMaxRow)
+                            nMaxRow = nTmp - 1;
+                    }
+                }
+                aRange.aStart.Set(nCol, nStartRow, nTab);
+                aRange.aEnd.Set(nCol, nMaxRow, nTab);
+            }
+            else
+            { // RowName
+                SCCOL nStartCol = nCol + 1;
+                if (nStartCol > rDoc.MaxCol())
+                    nStartCol = rDoc.MaxCol();
+                SCCOL nMaxCol = rDoc.MaxCol();
+                if (nMyRow == nRow)
+                { // formula cell in same row
+                    if (nMyCol == nStartCol)
+                    { // take remainder right from name cell
+                        nStartCol++;
+                        if (nStartCol > rDoc.MaxCol())
+                            nStartCol = rDoc.MaxCol();
+                    }
+                    else if (nMyCol > nStartCol)
+                    { // from name cell right to formula cell
+                        nMaxCol = nMyCol - 1;
+                    }
+                }
+                for (size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i)
+                { // next defined RowNameRange to the right limits column
+                    const ScRangePair& rR = (*pRL)[i];
+                    const ScRange& rRange = rR.GetRange(1);
+                    if (rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row())
+                    { // identical row range
+                        SCCOL nTmp = rRange.aStart.Col();
+                        if (nStartCol < nTmp && nTmp <= nMaxCol)
+                            nMaxCol = nTmp - 1;
+                    }
+                }
+                aRange.aStart.Set(nStartCol, nRow, nTab);
+                aRange.aEnd.Set(nMaxCol, nRow, nTab);
+            }
+        }
+    }
+
+    if (bValidName)
+    {
+        // And now the magic to distinguish between a range and a single
+        // cell thereof, which is picked position-dependent of the formula
+        // cell. If a direct neighbor is a binary operator (ocAdd, ...) a
+        // SingleRef matching the column/row of the formula cell is
+        // generated. A ocColRowName or ocIntersect as a neighbor results
+        // in a range. Special case: if label is valid for a single cell, a
+        // position independent SingleRef is generated.
+        bool bSingle = (aRange.aStart == aRange.aEnd);
+        bool bFound;
+        if (bSingle)
+            bFound = true;
+        else
+        {
+            FormulaToken* p1 = maArrIterator.PeekPrevNoSpaces();
+            FormulaToken* p2 = maArrIterator.PeekNextNoSpaces();
+            // begin/end of a formula => single
+            OpCode eOp1 = p1 ? p1->GetOpCode() : ocAdd;
+            OpCode eOp2 = p2 ? p2->GetOpCode() : ocAdd;
+            if (eOp1 != ocColRowName && eOp1 != ocIntersect && eOp2 != ocColRowName
+                && eOp2 != ocIntersect)
+            {
+                if ((SC_OPCODE_START_BIN_OP <= eOp1 && eOp1 < SC_OPCODE_STOP_BIN_OP)
+                    || (SC_OPCODE_START_BIN_OP <= eOp2 && eOp2 < SC_OPCODE_STOP_BIN_OP))
+                    bSingle = true;
+            }
+            if (bSingle)
+            { // column and/or row must match range
+                if (bColName)
+                {
+                    bFound = (aRange.aStart.Row() <= nMyRow && nMyRow <= aRange.aEnd.Row());
+                    if (bFound)
+                        aRange.aStart.SetRow(nMyRow);
+                }
+                else
+                {
+                    bFound = (aRange.aStart.Col() <= nMyCol && nMyCol <= aRange.aEnd.Col());
+                    if (bFound)
+                        aRange.aStart.SetCol(nMyCol);
+                }
+            }
+            else
+                bFound = true;
+        }
+        if (!bFound)
+            nError = FormulaError::NoRef;
+        else
+        {
+            if (bSingle)
+            {
+                ScSingleRefData aRefData;
+                aRefData.InitAddress(aRange.aStart);
+                if (bColName)
+                    aRefData.SetColRel(true);
+                else
+                    aRefData.SetRowRel(true);
+                aRefData.SetAddress(rDoc.GetSheetLimits(), aRange.aStart, aPos);
+                rRef.Ref1 = rRef.Ref2 = aRefData;
+            }
+            else
+            {
+                rRef.InitRange(aRange);
+                if (bColName)
+                {
+                    rRef.Ref1.SetColRel(true);
+                    rRef.Ref2.SetColRel(true);
+                }
+                else
+                {
+                    rRef.Ref1.SetRowRel(true);
+                    rRef.Ref2.SetRowRel(true);
+                }
+                rRef.SetRange(rDoc.GetSheetLimits(), aRange, aPos);
+            }
+        }
+    }
+
+    return bValidName;
+}
+
+OUString ScCompiler::CreateStringFromLabel(const FormulaToken* _pTokenP) const
+{
+    ScComplexRefData aRef;
+    FormulaError nError = FormulaError::NONE;
+    bool bInList = false;
+    OUStringBuffer aBuffer;
+    OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
+
+    if (GetRefColRowNames(_pTokenP, aRef, bInList, nError, true))
+    {
+        pConv->makeRefStr(rDoc.GetSheetLimits(), aBuffer, meGrammar, aPos, aErrRef,
+                          GetSetupTabNames(), aRef, (aRef.Ref1 == aRef.Ref2),
+                          (pArr && pArr->IsFromRangeName()));
+
+        return aBuffer.makeStringAndClear();
+    }
+
+    return OUString();
+}
+
 void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     const FormulaToken* p;
@@ -5532,6 +5756,16 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
     {
+        if (FormulaGrammar::isOOXML(meGrammar))
+        {
+            OUString aStr = CreateStringFromLabel(_pTokenP);
+            if (!aStr.isEmpty())
+                rBuffer.append(aStr);
+            else
+                rBuffer.append(ScGlobal::GetErrorString(FormulaError::NoRef));
+
+            return;
+        }
         ScAddress aAbs = rRef.toAbs(rDoc, aPos);
         if (rDoc.HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
@@ -5730,207 +5964,29 @@ void ScCompiler::fillAddInToken(std::vector< css::sheet::FormulaOpCodeMapEntry >
 
 bool ScCompiler::HandleColRowName()
 {
-    ScSingleRefData& rRef = *mpToken->GetSingleRef();
-    const ScAddress aAbs = rRef.toAbs(rDoc, aPos);
-    if (!rDoc.ValidAddress(aAbs))
-    {
-        SetError( FormulaError::NoRef );
-        return true;
-    }
-    SCCOL nCol = aAbs.Col();
-    SCROW nRow = aAbs.Row();
-    SCTAB nTab = aAbs.Tab();
-    bool bColName = rRef.IsColRel();
-    SCCOL nMyCol = aPos.Col();
-    SCROW nMyRow = aPos.Row();
+    ScComplexRefData aRef;
+    FormulaError nError = FormulaError::NONE;
     bool bInList = false;
-    bool bValidName = false;
-    ScRangePairList* pRL = (bColName ?
-        rDoc.GetColNameRanges() : rDoc.GetRowNameRanges());
-    ScRange aRange;
-    for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
+    bool bValid = GetRefColRowNames(mpToken.get(), aRef, bInList, nError,
+                                    rDoc.GetDocOptions().IsLookUpColRowNames());
+    SetError(nError);
+
+    ScTokenArray* pNew = new ScTokenArray(rDoc);
+    if (bValid)
     {
-        const ScRangePair & rR = (*pRL)[i];
-        if ( rR.GetRange(0).Contains( aAbs ) )
+        if (mbJumpCommandReorder)
         {
-            bInList = bValidName = true;
-            aRange = rR.GetRange(1);
-            if ( bColName )
-            {
-                aRange.aStart.SetCol( nCol );
-                aRange.aEnd.SetCol( nCol );
-            }
+            // If it's a SingleRef
+            if (aRef.Ref1 == aRef.Ref2)
+                pNew->AddSingleReference(aRef.Ref1);
             else
             {
-                aRange.aStart.SetRow( nRow );
-                aRange.aEnd.SetRow( nRow );
+                if (bInList)
+                    pNew->AddDoubleReference(aRef);
+                else // automagically
+                    pNew->Add(new ScDoubleRefToken(rDoc.GetSheetLimits(), aRef, ocColRowNameAuto));
             }
-            break;  // for
-        }
-    }
-    if ( !bInList && rDoc.GetDocOptions().IsLookUpColRowNames() )
-    {   // automagically or created by copying and NamePos isn't in list
-        ScRefCellValue aCell(rDoc, aAbs);
-        bool bString = aCell.hasString();
-        if (!bString && aCell.isEmpty())
-            bString = true;     // empty cell is ok
-        if ( bString )
-        {   // corresponds with ScInterpreter::ScColRowNameAuto()
-            bValidName = true;
-            if ( bColName )
-            {   // ColName
-                SCROW nStartRow = nRow + 1;
-                if ( nStartRow > rDoc.MaxRow() )
-                    nStartRow = rDoc.MaxRow();
-                SCROW nMaxRow = rDoc.MaxRow();
-                if ( nMyCol == nCol )
-                {   // formula cell in same column
-                    if ( nMyRow == nStartRow )
-                    {   // take remainder under name cell
-                        nStartRow++;
-                        if ( nStartRow > rDoc.MaxRow() )
-                            nStartRow = rDoc.MaxRow();
-                    }
-                    else if ( nMyRow > nStartRow )
-                    {   // from name cell down to formula cell
-                        nMaxRow = nMyRow - 1;
-                    }
-                }
-                for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
-                {   // next defined ColNameRange below limits row
-                    const ScRangePair & rR = (*pRL)[i];
-                    const ScRange& rRange = rR.GetRange(1);
-                    if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
-                    {   // identical column range
-                        SCROW nTmp = rRange.aStart.Row();
-                        if ( nStartRow < nTmp && nTmp <= nMaxRow )
-                            nMaxRow = nTmp - 1;
-                    }
-                }
-                aRange.aStart.Set( nCol, nStartRow, nTab );
-                aRange.aEnd.Set( nCol, nMaxRow, nTab );
-            }
-            else
-            {   // RowName
-                SCCOL nStartCol = nCol + 1;
-                if ( nStartCol > rDoc.MaxCol() )
-                    nStartCol = rDoc.MaxCol();
-                SCCOL nMaxCol = rDoc.MaxCol();
-                if ( nMyRow == nRow )
-                {   // formula cell in same row
-                    if ( nMyCol == nStartCol )
-                    {   // take remainder right from name cell
-                        nStartCol++;
-                        if ( nStartCol > rDoc.MaxCol() )
-                            nStartCol = rDoc.MaxCol();
-                    }
-                    else if ( nMyCol > nStartCol )
-                    {   // from name cell right to formula cell
-                        nMaxCol = nMyCol - 1;
-                    }
-                }
-                for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
-                {   // next defined RowNameRange to the right limits column
-                    const ScRangePair & rR = (*pRL)[i];
-                    const ScRange& rRange = rR.GetRange(1);
-                    if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
-                    {   // identical row range
-                        SCCOL nTmp = rRange.aStart.Col();
-                        if ( nStartCol < nTmp && nTmp <= nMaxCol )
-                            nMaxCol = nTmp - 1;
-                    }
-                }
-                aRange.aStart.Set( nStartCol, nRow, nTab );
-                aRange.aEnd.Set( nMaxCol, nRow, nTab );
-            }
-        }
-    }
-    if ( bValidName )
-    {
-        // And now the magic to distinguish between a range and a single
-        // cell thereof, which is picked position-dependent of the formula
-        // cell. If a direct neighbor is a binary operator (ocAdd, ...) a
-        // SingleRef matching the column/row of the formula cell is
-        // generated. A ocColRowName or ocIntersect as a neighbor results
-        // in a range. Special case: if label is valid for a single cell, a
-        // position independent SingleRef is generated.
-        bool bSingle = (aRange.aStart == aRange.aEnd);
-        bool bFound;
-        if ( bSingle )
-            bFound = true;
-        else
-        {
-            FormulaToken* p1 = maArrIterator.PeekPrevNoSpaces();
-            FormulaToken* p2 = maArrIterator.PeekNextNoSpaces();
-            // begin/end of a formula => single
-            OpCode eOp1 = p1 ? p1->GetOpCode() : ocAdd;
-            OpCode eOp2 = p2 ? p2->GetOpCode() : ocAdd;
-            if ( eOp1 != ocColRowName && eOp1 != ocIntersect
-                && eOp2 != ocColRowName && eOp2 != ocIntersect )
-            {
-                if (    (SC_OPCODE_START_BIN_OP <= eOp1 && eOp1 < SC_OPCODE_STOP_BIN_OP) ||
-                        (SC_OPCODE_START_BIN_OP <= eOp2 && eOp2 < SC_OPCODE_STOP_BIN_OP))
-                    bSingle = true;
-            }
-            if ( bSingle )
-            {   // column and/or row must match range
-                if ( bColName )
-                {
-                    bFound = (aRange.aStart.Row() <= nMyRow
-                        && nMyRow <= aRange.aEnd.Row());
-                    if ( bFound )
-                        aRange.aStart.SetRow( nMyRow );
-                }
-                else
-                {
-                    bFound = (aRange.aStart.Col() <= nMyCol
-                        && nMyCol <= aRange.aEnd.Col());
-                    if ( bFound )
-                        aRange.aStart.SetCol( nMyCol );
-                }
-            }
-            else
-                bFound = true;
-        }
-        if ( !bFound )
-            SetError(FormulaError::NoRef);
-        else if (mbJumpCommandReorder)
-        {
-            ScTokenArray* pNew = new ScTokenArray(rDoc);
-            if ( bSingle )
-            {
-                ScSingleRefData aRefData;
-                aRefData.InitAddress( aRange.aStart );
-                if ( bColName )
-                    aRefData.SetColRel( true );
-                else
-                    aRefData.SetRowRel( true );
-                aRefData.SetAddress(rDoc.GetSheetLimits(), aRange.aStart, aPos);
-                pNew->AddSingleReference( aRefData );
-            }
-            else
-            {
-                ScComplexRefData aRefData;
-                aRefData.InitRange( aRange );
-                if ( bColName )
-                {
-                    aRefData.Ref1.SetColRel( true );
-                    aRefData.Ref2.SetColRel( true );
-                }
-                else
-                {
-                    aRefData.Ref1.SetRowRel( true );
-                    aRefData.Ref2.SetRowRel( true );
-                }
-                aRefData.SetRange(rDoc.GetSheetLimits(), aRange, aPos);
-                if ( bInList )
-                    pNew->AddDoubleReference( aRefData );
-                else
-                {   // automagically
-                    pNew->Add( new ScDoubleRefToken( rDoc.GetSheetLimits(), aRefData, ocColRowNameAuto ) );
-                }
-            }
-            PushTokenArray( pNew, true );
+            PushTokenArray(pNew, true);
             return GetToken();
         }
     }

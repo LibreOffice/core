@@ -2029,6 +2029,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf82254_csv_bom)
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(3), pStream->Tell());
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf170249)
+{
+    createScDoc("ods/tdf170249.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c/x:f",
+                       u"INDEX($B2:$XFD2, 1, 2)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
