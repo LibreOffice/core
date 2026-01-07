@@ -110,6 +110,12 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
 
     m_xTypeLB->clear();
 
+    if (comphelper::LibreOfficeKit::isActive()) {
+        // In LOK (read: under JSDialog), it is preferable to run this search on
+        // the client side rather than in core for positioning/interference/etc. reasons
+        m_xFilterED->hide();
+    }
+
     m_xNameED->connect_changed(LINK(this, SwFieldRefPage, ModifyHdl));
     m_xFilterED->connect_changed( LINK( this, SwFieldRefPage, ModifyHdl_Impl ) );
 
