@@ -231,7 +231,10 @@ static void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
 #else
     str = ((DCTStream *)str)->getRawStream();
 #endif
-#if POPPLER_CHECK_VERSION(25, 2, 0)
+#if POPPLER_CHECK_VERSION(26, 1, 0)
+    if (!str->rewind())
+        return;
+#elif POPPLER_CHECK_VERSION(25, 2, 0)
     if (!str->reset())
         return;
 #else
@@ -272,7 +275,10 @@ static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int he
     o_rOutputBuf.resize(header_size);
 
     // initialize stream
-#if POPPLER_CHECK_VERSION(25, 2, 0)
+#if POPPLER_CHECK_VERSION(26, 1, 0)
+    if (!str->rewind())
+        return;
+#elif POPPLER_CHECK_VERSION(25, 2, 0)
     if (!str->reset())
         return;
 #else
@@ -334,7 +340,10 @@ static void writePpm_( OutputBuffer&     o_rOutputBuf,
                         width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits()));
-#if POPPLER_CHECK_VERSION(25, 2, 0)
+#if POPPLER_CHECK_VERSION(26, 1, 0)
+    if (!imgStr->rewind())
+        return;
+#elif POPPLER_CHECK_VERSION(25, 2, 0)
     if (!imgStr->reset())
         return;
 #else

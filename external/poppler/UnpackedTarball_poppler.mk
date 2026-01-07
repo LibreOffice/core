@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/disable-freetype.patch.1 \
 	external/poppler/clang-std-ranges.patch.1 \
 	external/poppler/poppler-config.patch.1 \
+	external/poppler/include-climits.patch.1 \
 ))
 
 ifneq ($(filter -fsanitize=%,$(CC)),)
