@@ -134,10 +134,10 @@ protected:
                          std::u16string_view rClass);
     void handleRow(xmlreader::XmlReader& reader, const OUString& rID);
 
-    void addAdjustment(const OUString& sID, const Adjustment& rAdjustment);
+    void addAdjustment(const OUString& sID, Adjustment&& rAdjustment);
     const Adjustment* get_adjustment_by_name(const OUString& sID) const;
 
-    void addTextBuffer(const OUString& sID, const TextBuffer& rTextBuffer);
+    void addTextBuffer(const OUString& sID, TextBuffer&& rTextBuffer);
     const TextBuffer* get_buffer_by_name(const OUString& sID) const;
 
     const ListStore* get_model_by_name(const OUString& sID) const;

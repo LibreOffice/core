@@ -3545,9 +3545,9 @@ const BuilderBase::ListStore* BuilderBase::get_model_by_name(const OUString& sID
     return nullptr;
 }
 
-void BuilderBase::addTextBuffer(const OUString& sID, const TextBuffer& rTextBuffer)
+void BuilderBase::addTextBuffer(const OUString& sID, TextBuffer&& rTextBuffer)
 {
-    m_pParserState->m_aTextBuffers[sID] = rTextBuffer;
+    m_pParserState->m_aTextBuffers[sID] = std::move(rTextBuffer);
 }
 
 const BuilderBase::TextBuffer* BuilderBase::get_buffer_by_name(const OUString& sID) const
@@ -3558,9 +3558,9 @@ const BuilderBase::TextBuffer* BuilderBase::get_buffer_by_name(const OUString& s
     return nullptr;
 }
 
-void BuilderBase::addAdjustment(const OUString& sID, const Adjustment& rAdjustment)
+void BuilderBase::addAdjustment(const OUString& sID, Adjustment&& rAdjustment)
 {
-    m_pParserState->m_aAdjustments[sID] = rAdjustment;
+    m_pParserState->m_aAdjustments[sID] = std::move(rAdjustment);
 }
 
 const BuilderBase::Adjustment* BuilderBase::get_adjustment_by_name(const OUString& sID) const
