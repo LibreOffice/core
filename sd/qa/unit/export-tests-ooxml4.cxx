@@ -1369,6 +1369,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyChildTnLstElement)
     CPPUNIT_ASSERT_EQUAL(0, countXPathNodes(pXmlDoc, "//p:sld/p:timing"));
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169941_internal_link_to_shapes)
+{
+    createSdImpressDoc("odp/tdf169941.odp");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pRelsDoc2 = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: slide1.xml
+    // - Actual  :
+    assertXPath(pRelsDoc2, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"slide1.xml");
+
+    xmlDocUniquePtr pRelsDoc3 = parseExport(u"ppt/slides/_rels/slide3.xml.rels"_ustr);
+    assertXPath(pRelsDoc3, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"slide1.xml");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPlaceHolderFitHeightToText)
 {
     createSdImpressDoc("pptx/tdf160487.pptx");
