@@ -190,12 +190,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesParagraphProperties)
 {
     createSwDoc("testTrackChangesParagraphProperties.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMsoSpt180)
