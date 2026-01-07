@@ -4750,11 +4750,11 @@ Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
     if (pKitSh)
     {
         Color aBackgroundColor;
-        if (pFont) //check for char backgound color
+        if (pFont) //check for char background color
             aBackgroundColor = pFont->GetFillColor();
-        if (aBackgroundColor == COL_AUTO) // check for aother backgound (i.e: cell color)
+        if (aBackgroundColor == COL_AUTO) // check for another background (i.e: cell color)
             aBackgroundColor = GetBackgroundColor();
-        if (aBackgroundColor == COL_AUTO) // if everything is auto/transperent then use doc color
+        if (aBackgroundColor == COL_AUTO) // if everything is auto/transparent then use doc color
             aBackgroundColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
 
         if (aBackgroundColor.IsDark())
