@@ -1651,11 +1651,6 @@ Size SalInstanceWindow::get_size() const { return m_xWindow->GetSizePixel(); }
 
 Point SalInstanceWindow::get_position() const { return m_xWindow->GetPosPixel(); }
 
-AbsoluteScreenPixelRectangle SalInstanceWindow::get_monitor_workarea() const
-{
-    return m_xWindow->GetDesktopRectPixel();
-}
-
 bool SalInstanceWindow::get_resizable() const { return m_xWindow->GetStyle() & WB_SIZEABLE; }
 
 bool SalInstanceWindow::has_toplevel_focus() const { return m_xWindow->HasChildPathFocus(); }

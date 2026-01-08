@@ -518,7 +518,6 @@ public:
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
-    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const = 0;
 
     // returns whether the widget that has focus is within this Window
     // (its very possible to move this to weld::Container if that becomes

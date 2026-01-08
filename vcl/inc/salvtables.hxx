@@ -472,8 +472,6 @@ public:
 
     virtual Point get_position() const override;
 
-    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
-
     virtual bool get_resizable() const override;
 
     virtual bool has_toplevel_focus() const override;

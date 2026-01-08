@@ -87,12 +87,6 @@ Point QtInstanceWindow::get_position() const
     return aPosition;
 }
 
-AbsoluteScreenPixelRectangle QtInstanceWindow::get_monitor_workarea() const
-{
-    assert(false && "Not implemented yet");
-    return AbsoluteScreenPixelRectangle();
-}
-
 bool QtInstanceWindow::has_toplevel_focus() const
 {
     SolarMutexGuard g;

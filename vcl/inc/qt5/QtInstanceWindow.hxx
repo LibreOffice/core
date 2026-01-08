@@ -28,7 +28,6 @@ public:
     virtual bool get_resizable() const override;
     virtual Size get_size() const override;
     virtual Point get_position() const override;
-    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
 
     virtual bool has_toplevel_focus() const override;
     virtual void present() override;
