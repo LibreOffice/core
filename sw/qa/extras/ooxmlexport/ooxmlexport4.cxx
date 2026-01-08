@@ -278,6 +278,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSegFaultWhileSave)
     createSwDoc("test_segfault_while_save.docx");
 
     //FIXME: validation error in OOXML export: Errors: 171
+    // This occurs because the input doc has w:sdtContent nested inside w:sdtContent in the footer2.xml file.
+    // Which confuses our importer, and we end up with weird data in the grab-bag.
+    // And the exporter is also confused, does not know
+    // how to do a nested w:sdtContent.
     skipValidation();
 
     save(TestFilter::DOCX);
