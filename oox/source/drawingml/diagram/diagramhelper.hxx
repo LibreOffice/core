@@ -72,8 +72,9 @@ public:
     virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
 
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addNode(const OUString& rText) override;
-    virtual bool removeNode(const OUString& rNodeId) override;
+    virtual OUString addDiagramNode(const OUString& rText) override;
+    virtual bool removeDiagramNode(const OUString& rNodeId) override;
+    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) override;
 
     // Undo/Redo helpers to extract/restore Diagram-defining data
     virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
@@ -83,12 +84,12 @@ public:
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 
-    // react on changes to objects identified by DiagramDataModelID, returns true if a change was done
-    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) override;
-
     // access to get/set PropertyValues
-    void addDomPropertyValue(css::beans::PropertyValue& aValue);
-    css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const override;
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const com::sun::star::uno::Any& rValue);
+    virtual com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
+
+    // check if mandatory DiagramDomS exist (or can be created)
+    virtual bool checkOrCreateMinimalDataDoms() override;
 };
 
 }

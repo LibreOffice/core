@@ -27,6 +27,7 @@
 #include <map>
 
 #include <svx/svxdllapi.h>
+#include <svx/diagram/DomMapFlag.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -225,15 +226,13 @@ public:
     void setBackgroundShapeModelID( const OUString& rModelID ) { msBackgroundShapeModelID = rModelID; }
 
     // model modifiers
-    OUString addNode(const OUString& rText);
-    bool removeNode(const OUString& rNodeId);
+    std::pair<OUString, DomMapFlags> addDiagramNode(const OUString& rText);
+    DomMapFlags removeDiagramNode(const OUString& rNodeId);
+    DomMapFlags TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl);
 
     // Undo/Redo helpers to extract/restore Diagram-defining data
     DiagramDataStatePtr extractDiagramDataState() const;
     void applyDiagramDataState(const DiagramDataStatePtr& rState);
-
-    // react on changes to objects identified by DiagramDataModelID, returns true if a change was done
-    bool TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl);
 
 protected:
     // helpers

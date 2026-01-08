@@ -2411,16 +2411,12 @@ void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFrag
     if (nullptr == pAdvancedDiagramHelper)
         return;
 
-    // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
-    uno::Sequence<uno::Any> diagramDrawing{
-        uno::Any(rFilterBase.importFragment(rFragmentPath)),
-        uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image"))
-    };
-
-    beans::PropertyValue aValue;
-    aValue.Name = "OOXDrawing";
-    aValue.Value <<= diagramDrawing;
-    pAdvancedDiagramHelper->addDomPropertyValue(aValue);
+    pAdvancedDiagramHelper->setOOXDomValue(
+        svx::diagram::DomMapFlag::OOXDrawing,
+        uno::Any(rFilterBase.importFragment(rFragmentPath)));
+    pAdvancedDiagramHelper->setOOXDomValue(
+        svx::diagram::DomMapFlag::OOXDrawingRels,
+        uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image")));
 }
 
 void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)

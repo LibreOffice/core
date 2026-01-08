@@ -516,11 +516,15 @@ public:
     OOX_DLLPUBLIC void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
+
+    // Diagram helpers
+    OOX_DLLPUBLIC static bool PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape);
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
     void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
                           const css::uno::Reference<css::io::XOutputStream>& xOutStream,
                           std::u16string_view sGrabBagProperyName, int nDiagramId);
+
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
                             const sax_fastparser::FSHelperPtr& pDrawing);
 

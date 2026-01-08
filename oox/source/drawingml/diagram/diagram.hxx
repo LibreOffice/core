@@ -123,7 +123,7 @@ struct DiagramColor
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
-typedef std::map<OUString,css::beans::PropertyValue> DiagramPRDomMap;
+typedef std::map<svx::diagram::DomMapFlag,com::sun::star::uno::Any> DiagramPRDomMap;
 
 class Diagram
 {
@@ -142,15 +142,17 @@ public:
     const DiagramQStyleMap& getStyles() const { return maStyles; }
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
-    DiagramPRDomMap & getRPDomMap() { return maDiagramPRDomMap; }
-    void addTo( const ShapePtr & pShape, bool bCreate );
+    void createShapeHierarchyFromModel( const ShapePtr & pShape, bool bCreate );
 
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
     void syncDiagramFontHeights();
 
-    void addDomPropertyValue(css::beans::PropertyValue& aValue);
-    css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const;
-    void resetDomPropertyValues() { maDiagramPRDomMap.clear(); }
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const com::sun::star::uno::Any& rValue);
+    com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
+    void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
+
+    // check if mandatory DiagramDomS exist (or can be created)
+    bool checkOrCreateMinimalDataDoms();
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.

@@ -6740,40 +6740,59 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
 }
 
+bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape)
+{
+    SdrObject* pObj(SdrObject::getSdrObjectFromXShape(rXShape));
+
+    if (nullptr == pObj)
+        return false;
+
+    const std::shared_ptr<svx::diagram::IDiagramHelper>& rIDiagramHelper(pObj->getDiagramHelper());
+
+    if (!rIDiagramHelper)
+        return false;
+
+    if (!rIDiagramHelper->checkOrCreateMinimalDataDoms())
+        return false;
+
+    return true;
+}
+
 void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
-    uno::Reference<xml::dom::XDocument> dataDom;
-    uno::Reference<xml::dom::XDocument> layoutDom;
-    uno::Reference<xml::dom::XDocument> styleDom;
-    uno::Reference<xml::dom::XDocument> colorDom;
-    uno::Reference<xml::dom::XDocument> drawingDom;
-    uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
-    uno::Sequence<uno::Any> diagramDrawing;
+    if (!PrepareToWriteAsDiagram(rXShape))
+        return;
 
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
+    assert(pObj && "no SdrObject");
+    assert(pObj->isDiagram() && "is no Diagram");
 
-    if (nullptr != pObj && pObj->isDiagram())
-    {
-        const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+    const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+    assert(rIDiagramHelper && "has no DiagramHelper");
 
-        if (rIDiagramHelper)
-        {
-            rIDiagramHelper->getDomPropertyValue("OOXData").Value >>= dataDom;
-            rIDiagramHelper->getDomPropertyValue("OOXLayout").Value >>= layoutDom;
-            rIDiagramHelper->getDomPropertyValue("OOXStyle").Value >>= styleDom;
-            rIDiagramHelper->getDomPropertyValue("OOXColor").Value >>= colorDom;
-            rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value >>= diagramDrawing;
-            if (diagramDrawing.hasElements())
-                // if there is OOXDrawing property then set drawingDom here only.
-                diagramDrawing[0] >>= drawingDom;
-            rIDiagramHelper->getDomPropertyValue("OOXDiagramDataRels").Value >>= xDataRelSeq;
-        }
-    }
+    // get/check mandatory DomS
+    uno::Reference<xml::dom::XDocument> dataDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData) >>= dataDom;
+    assert(dataDom && "mandatory DiagramDom missing");
 
-    // check that we have the 4 mandatory XDocuments
-    // if not, there was an error importing and we won't output anything
-    if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
-        return;
+    uno::Reference<xml::dom::XDocument> layoutDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXLayout) >>= layoutDom;
+    assert(layoutDom && "mandatory DiagramDom missing");
+
+    uno::Reference<xml::dom::XDocument> styleDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXStyle) >>= styleDom;
+    assert(styleDom && "mandatory DiagramDom missing");
+
+    uno::Reference<xml::dom::XDocument> colorDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXColor) >>= colorDom;
+    assert(colorDom && "mandatory DiagramDom missing");
+
+    // get optional DomS
+    uno::Reference<xml::dom::XDocument> drawingDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing) >>= drawingDom;
+
+    uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataRels) >>= xDataRelSeq;
 
     // generate a unique id
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
@@ -6952,7 +6971,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
     // write the associated Images and rels for drawing file
     uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
-    diagramDrawing[1] >>= xDrawingRelSeq;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingRels) >>= xDrawingRelSeq;
     writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
 }
 

@@ -105,7 +105,7 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
 }
 
 
-void Diagram::addTo( const ShapePtr & pParentShape, bool bCreate )
+void Diagram::createShapeHierarchyFromModel( const ShapePtr & pParentShape, bool bCreate )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
         SAL_WARN("oox.drawingml", "Diagram cannot be correctly laid out. Size: "
@@ -149,14 +149,47 @@ Diagram::Diagram()
 {
 }
 
-beans::PropertyValue Diagram::getDomPropertyValue(const OUString& rName) const
+uno::Any Diagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
 {
-    const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(rName);
+    const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(aDomMapFlag);
 
     if (aHit != maDiagramPRDomMap.end())
         return aHit->second;
 
-    return beans::PropertyValue();
+    return uno::Any();
+}
+
+void Diagram::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const uno::Any& rValue)
+{
+    maDiagramPRDomMap[aDomMapFlag] = rValue;
+}
+
+void Diagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
+{
+    for (const auto& rEntry : aDomMapFlags)
+    {
+        maDiagramPRDomMap.erase(rEntry);
+
+        if (maDiagramPRDomMap.empty())
+            return;
+    }
+}
+
+bool Diagram::checkOrCreateMinimalDataDoms()
+{
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
+        return false;
+
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXLayout))
+        return false;
+
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXStyle))
+        return false;
+
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXColor))
+        return false;
+
+    return true;
 }
 
 using ShapePairs
@@ -210,12 +243,6 @@ void Diagram::syncDiagramFontHeights()
     maDiagramFontHeights.clear();
 }
 
-void Diagram::addDomPropertyValue(beans::PropertyValue& aValue)
-{
-    if (!aValue.Name.isEmpty())
-        maDiagramPRDomMap[aValue.Name] = aValue;
-}
-
 static uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const OUString& rFragmentPath )
@@ -234,14 +261,11 @@ static uno::Reference<xml::dom::XDocument> loadFragment(
 
 static void importFragment( core::XmlFilterBase& rFilter,
                      const uno::Reference<xml::dom::XDocument>& rXDom,
-                     const OUString& rDocName,
+                     svx::diagram::DomMapFlag aDomMapFlag,
                      const DiagramPtr& pDiagram,
                      const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
-    beans::PropertyValue aValue;
-    aValue.Name = rDocName;
-    aValue.Value <<= rXDom;
-    pDiagram->addDomPropertyValue(aValue);
+    pDiagram->setOOXDomValue(aDomMapFlag, uno::Any(rXDom));
 
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);
@@ -323,17 +347,14 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                            loadFragment(rFilter,xRefDataModel),
-                           u"OOXData"_ustr,
+                           svx::diagram::DomMapFlag::OOXData,
                            pDiagram,
                            xRefDataModel);
 
             uno::Sequence< uno::Sequence< uno::Any > > aDataRelsMap(
                 pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter, xRefDataModel->getFragmentPath(), u"image" ));
 
-            beans::PropertyValue aValue;
-            aValue.Name = "OOXDiagramDataRels";
-            aValue.Value <<= aDataRelsMap;
-            pDiagram->addDomPropertyValue(aValue);
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataRels, uno::Any(aDataRelsMap));
 
             // Pass the info to pShape
             for (auto const& extDrawing : pData->getExtDrawings())
@@ -372,7 +393,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                     loadFragment(rFilter,xRefLayout),
-                    u"OOXLayout"_ustr,
+                    svx::diagram::DomMapFlag::OOXLayout,
                     pDiagram,
                     xRefLayout);
         }
@@ -385,7 +406,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                     loadFragment(rFilter,xRefQStyle),
-                    u"OOXStyle"_ustr,
+                    svx::diagram::DomMapFlag::OOXStyle,
                     pDiagram,
                     xRefQStyle);
         }
@@ -398,7 +419,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                 loadFragment(rFilter,xRefColorStyle),
-                u"OOXColor"_ustr,
+                svx::diagram::DomMapFlag::OOXColor,
                 pDiagram,
                 xRefColorStyle);
         }
@@ -427,7 +448,7 @@ void loadDiagram( ShapePtr const & pShape,
         // above. Moving to local bool, there might more conditions show
         // up
         const bool bCreate(pShape->getExtDrawings().empty());
-        pDiagram->addTo(pShape, bCreate);
+        pDiagram->createShapeHierarchyFromModel(pShape, bCreate);
 
         // Get the oox::Theme definition and - if available - move/secure the
         // original ImportData directly to the Diagram ModelData

@@ -93,14 +93,16 @@ OUString DiagramData::getString() const
     return aBuf.makeStringAndClear();
 }
 
-bool DiagramData::removeNode(const OUString& rNodeId)
+DomMapFlags DiagramData::removeDiagramNode(const OUString& rNodeId)
 {
+    DomMapFlags aRetval;
+
     // check if it doesn't have children
     for (const auto& aCxn : maConnections)
         if (aCxn.mnXMLType == TypeConstant::XML_parOf && aCxn.msSourceId == rNodeId)
         {
             SAL_WARN("svx.diagram", "Node has children - can't be removed");
-            return false;
+            return aRetval;
         }
 
     Connection aParCxn;
@@ -138,7 +140,13 @@ bool DiagramData::removeNode(const OUString& rNodeId)
                                   });
 
     // TODO: fix source/dest order
-    return true;
+
+    // prepare retval, OOXData and OOXLayout is changed
+    aRetval.push_back(DomMapFlag::OOXData);
+    aRetval.push_back(DomMapFlag::OOXDataRels);
+    aRetval.push_back(DomMapFlag::OOXLayout);
+
+    return aRetval;
 }
 
 DiagramDataState::DiagramDataState(Connections aConnections, Points aPoints)
@@ -225,8 +233,9 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
     return aChildren;
 }
 
-OUString DiagramData::addNode(const OUString& rText)
+std::pair<OUString, DomMapFlags> DiagramData::addDiagramNode(const OUString& rText)
 {
+    DomMapFlags aRetval;
     const svx::diagram::Point& rDataRoot = *getRootPoint();
     OUString sPresRoot;
     for (const auto& aCxn : maConnections)
@@ -234,7 +243,7 @@ OUString DiagramData::addNode(const OUString& rText)
             sPresRoot = aCxn.msDestId;
 
     if (sPresRoot.isEmpty())
-        return OUString();
+        return std::make_pair(OUString(), aRetval);
 
     OUString sNewNodeId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
 
@@ -276,7 +285,12 @@ OUString DiagramData::addNode(const OUString& rText)
     maPoints.push_back(std::move(aDataPoint));
     maPoints.push_back(std::move(aPresPoint));
 
-    return sNewNodeId;
+    // prepare retval, OOXData and OOXLayout is changed
+    aRetval.push_back(DomMapFlag::OOXData);
+    aRetval.push_back(DomMapFlag::OOXDataRels);
+    aRetval.push_back(DomMapFlag::OOXLayout);
+
+    return std::make_pair(sNewNodeId, aRetval);
 }
 
 void DiagramData::addConnection(svx::diagram::TypeConstant nType, const OUString& sSourceId, const OUString& sDestId)
@@ -494,50 +508,57 @@ void DiagramData::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 #endif
 }
 
-bool DiagramData::TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl)
+DomMapFlags DiagramData::TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl)
 {
+    DomMapFlags aRetval;
+
     // try to get the Point for the associated ID
     const auto pDataNode = maPointNameMap.find(rDiagramDataModelID);
     if (pDataNode == maPointNameMap.end())
-        return false;
+        return aRetval;
 
     // use PresentationAssociationId to get to the text containing Point
     const OUString& rPresentationAssociationId(pDataNode->second->msPresentationAssociationId);
     if (rPresentationAssociationId.isEmpty())
-        return false;
+        return aRetval;
 
     // try to get the text-associated Point
     const auto pTextNode = maPointNameMap.find(rPresentationAssociationId);
     if (pTextNode == maPointNameMap.end())
-        return false;
+        return aRetval;
 
     // check if it has a text node - it should
     if (!pTextNode->second->msTextBody)
-        return false;
+        return aRetval;
 
     // access TextBody
     TextBodyPtr pTextBody(pTextNode->second->msTextBody);
 
     // now for outliner/source: Do we have data at all?
     if(0 == rOutl.GetParagraphCount())
-        return false;
+        return aRetval;
 
     // if yes, use 1st paragraph (for now)
     const Paragraph* pPara(rOutl.GetParagraph(0));
     if (nullptr == pPara)
-        return false;
+        return aRetval;
 
     // extract 1st para as text
     const OUString aCurrentText(rOutl.GetText(pPara));
 
     // check if text differs at all
     if (aCurrentText == pTextBody->msText)
-        return false;
+        return aRetval;
 
     // do change and return true (change was done)
     // NOTE: for now only rough text change, attributes are missing and will need to be added
     pTextBody->msText = aCurrentText;
-    return true;
+
+    // prepare retval, OOXData is changed
+    aRetval.push_back(DomMapFlag::OOXData);
+    aRetval.push_back(DomMapFlag::OOXDataRels);
+
+    return aRetval;
 }
 
 }

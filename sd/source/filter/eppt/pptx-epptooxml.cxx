@@ -2348,13 +2348,19 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
             bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
 
-            // check if it was modified. For now, since we have no ppt export for Diagram,
-            // do not export as Diagram, that would be empty if the GrabBag was deleted
-            if (bIsDiagram && pDiagramCandidate->getDiagramHelper()->isModified())
+            // check if export as Diagram is possible
+            if (bIsDiagram && !oox::drawingml::DrawingML::PrepareToWriteAsDiagram(mXShape))
                 bIsDiagram = false;
 
             if (bIsDiagram)
-                WriteDiagram(pFS, aDML, mXShape, mnDiagramId++);
+            {
+                sal_Int32 nShapeId = aDML.GetNewShapeID(mXShape);
+                SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(mnDiagramId) + " with Shape Id " + OUString::number(nShapeId));
+                pFS->startElementNS(XML_p, XML_graphicFrame);
+                aDML.WriteDiagram(mXShape, mnDiagramId, nShapeId);
+                pFS->endElementNS(XML_p, XML_graphicFrame);
+                mnDiagramId++;
+            }
             else
                 aDML.WriteShape(mXShape);
         }
@@ -2878,18 +2884,6 @@ bool PowerPointExport::ImplCreateMainNotes()
 OUString PowerPointExport::getImplementationName()
 {
     return u"com.sun.star.comp.Impress.oox.PowerPointExport"_ustr;
-}
-
-void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
-                                    const css::uno::Reference<css::drawing::XShape>& rXShape,
-                                    sal_Int32 nDiagramId)
-{
-    sal_Int32 nShapeId = rDML.GetNewShapeID(rXShape);
-    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId) + " with Shape Id "
-                            + OUString::number(nShapeId));
-    pFS->startElementNS(XML_p, XML_graphicFrame);
-    rDML.WriteDiagram(rXShape, nDiagramId, nShapeId);
-    pFS->endElementNS(XML_p, XML_graphicFrame);
 }
 
 void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType)
