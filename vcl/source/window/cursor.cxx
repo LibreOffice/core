@@ -274,6 +274,9 @@ tools::Rectangle calcualteCursorRect(Point const& rPosition, Size const rSize, v
 
 void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
 {
+    if (!pWindow)
+        return;
+
     VclPtr<vcl::Window> pParent = pWindow->GetParentWithLOKNotifier();
     if (!pParent)
         return;
