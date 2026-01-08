@@ -30,10 +30,11 @@ enum class DrawImageFlags
     Deactive = 0x0004,
     // 0x0008 is unused,
     SemiTransparent = 0x0010,
+    Invert = 0x0020,
 };
 namespace o3tl
 {
-template <> struct typed_flags<DrawImageFlags> : is_typed_flags<DrawImageFlags, 0x001f>
+template <> struct typed_flags<DrawImageFlags> : is_typed_flags<DrawImageFlags, 0x003f>
 {
 };
 }

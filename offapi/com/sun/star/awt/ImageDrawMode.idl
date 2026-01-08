@@ -47,6 +47,12 @@ constants ImageDrawMode
     /** the image is drawn semi-transparent.
      */
     const short SEMITRANSPARENT = 0x0010;
+
+    /** the image is drawn inverted after all other mode transformations.
+
+        @since LibreOffice 26.8
+     */
+    const short INVERT = 0x0020;
 };
 
 }; }; }; };

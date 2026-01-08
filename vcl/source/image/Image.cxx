@@ -135,7 +135,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
 
     if (!(nStyle & DrawImageFlags::Disable) &&
         (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive |
-                   DrawImageFlags::SemiTransparent)))
+                   DrawImageFlags::SemiTransparent | DrawImageFlags::Invert)))
     {
         if (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive))
         {
@@ -165,6 +165,9 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
             }
             aRenderBmp = std::move(aTempBitmap);
         }
+
+        if (nStyle & DrawImageFlags::Invert)
+            aRenderBmp.Adjust(0, 0, 0, 0, 0, 0, true, false);
     }
 
     pOutDev->DrawBitmap(rPos, aOutSize, aRenderBmp);
