@@ -529,6 +529,11 @@ numbering and text:</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="preview-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="numberingpositionpage|previewframe">Preview</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
