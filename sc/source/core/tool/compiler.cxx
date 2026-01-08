@@ -2011,8 +2011,8 @@ ScCompiler::~ScCompiler()
 void ScCompiler::CheckTabQuotes( OUString& rString,
                                  const FormulaGrammar::AddressConvention eConv )
 {
-    sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_UNDERSCORE;
-    sal_Int32 nContFlags = nStartFlags;
+    sal_Int32 nStartFlags = KParseTokens::ANY_LETTER | KParseTokens::ASC_UNDERSCORE;
+    sal_Int32 nContFlags = nStartFlags | KParseTokens::ANY_NUMBER;
     ParseResult aRes = ScGlobal::getCharClass().parsePredefinedToken(
         KParseType::IDENTNAME, rString, 0, nStartFlags, OUString(), nContFlags, OUString());
     bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength());
@@ -2033,12 +2033,6 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
                 rString = rString.replaceAll( "'", "''" );
             }
             break;
-    }
-
-    if ( !bNeedsQuote && CharClass::isAsciiNumeric( rString ) )
-    {
-        // Prevent any possible confusion resulting from pure numeric sheet names.
-        bNeedsQuote = true;
     }
 
     if( bNeedsQuote )
