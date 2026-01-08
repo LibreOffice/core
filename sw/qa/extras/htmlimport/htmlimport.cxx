@@ -28,6 +28,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <ndgrf.hxx>
@@ -37,6 +38,10 @@
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
 #include <unotxdoc.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <bodyfrm.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -673,6 +678,42 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
                                               uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"HTML"_ustr, getProperty<OUString>(xCursor, u"PageStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTextAlignStartEnd)
+{
+    createSwWebDoc("text-align-start-end.html");
+
+    auto* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    auto* pRoot = pWrtShell->GetLayout();
+
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    auto* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    auto* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    auto* pTextFrame = dynamic_cast<SwTextFrame*>(pBody->GetLower());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaStart,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaStart,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaEnd,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaEnd,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
 }
 
 } // end of anonymous namespace

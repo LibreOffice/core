@@ -2653,8 +2653,21 @@ static SwHTMLWriter& OutCSS1_SvxLineSpacing( SwHTMLWriter& rWrt, const SfxPoolIt
 static SwHTMLWriter& OutCSS1_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
     // Export Alignment in Style-Option only if the Tag does not allow ALIGN=xxx
+    // or if the align value is accepted by CSS text-align, but not ALIGN
+    auto fnUseAlignAttr = [&] {
+        switch(static_cast<const SvxAdjustItem&>(rHt).GetAdjust())
+        {
+            default:
+                return true;
+
+            case SvxAdjust::ParaStart:
+            case SvxAdjust::ParaEnd:
+                return false;
+        }
+    };
+
     if( rWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) &&
-        !rWrt.m_bNoAlign)
+        !rWrt.m_bNoAlign && fnUseAlignAttr())
         return rWrt;
 
     std::string_view pStr;
@@ -2664,6 +2677,8 @@ static SwHTMLWriter& OutCSS1_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& r
     case SvxAdjust::Right:  pStr = sCSS1_PV_right;      break;
     case SvxAdjust::Block:  pStr = sCSS1_PV_justify;    break;
     case SvxAdjust::Center: pStr = sCSS1_PV_center;     break;
+    case SvxAdjust::ParaStart: pStr = sCSS1_PV_start;   break;
+    case SvxAdjust::ParaEnd: pStr = sCSS1_PV_end;       break;
     default:
         ;
     }

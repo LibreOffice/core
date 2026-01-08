@@ -161,6 +161,8 @@ CSS1PropertyEnum const aTextAlignTable[] =
     { "center",      sal_uInt16(SvxAdjust::Center)   },
     { "right",       sal_uInt16(SvxAdjust::Right)    },
     { "justify",     sal_uInt16(SvxAdjust::Block)    },
+    { "start",       sal_uInt16(SvxAdjust::ParaStart)},
+    { "end",         sal_uInt16(SvxAdjust::ParaEnd)  },
     { nullptr,                    0                   }
 };
 

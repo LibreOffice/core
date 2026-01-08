@@ -1637,6 +1637,26 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoObjectBorderExport)
     assertXPath(pXmlDoc, "//reqif-xhtml:font", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTextAlignStartEnd)
+{
+    createSwDoc("text-align-start-end.fodt");
+
+    ExportToHTML();
+
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body/p", 4);
+    assertXPath(pDoc,
+                "/html/body/p[1]/descendant-or-self::*[contains(@style, 'text-align: start')]", 1);
+    assertXPath(pDoc,
+                "/html/body/p[2]/descendant-or-self::*[contains(@style, 'text-align: start')]", 1);
+    assertXPath(pDoc, "/html/body/p[3]/descendant-or-self::*[contains(@style, 'text-align: end')]",
+                1);
+    assertXPath(pDoc, "/html/body/p[4]/descendant-or-self::*[contains(@style, 'text-align: end')]",
+                1);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
