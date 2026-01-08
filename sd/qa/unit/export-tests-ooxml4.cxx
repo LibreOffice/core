@@ -1862,7 +1862,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testFooterIdxConsistency)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169559)
 {
     createSdImpressDoc("pptx/tdf169524.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
     assertXPath(
