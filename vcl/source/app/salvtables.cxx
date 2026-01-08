@@ -7053,18 +7053,6 @@ void SalInstanceWindow::help()
     pHelp->Start(sHelpId, pSource);
 }
 
-//iterate upwards through the hierarchy from this widgets through its parents
-//calling func with their helpid until func returns true or we run out of parents
-void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>& func)
-{
-    vcl::Window* pParent = m_xWidget;
-    while ((pParent = pParent->GetParent()))
-    {
-        if (func(pParent->GetHelpId()))
-            return;
-    }
-}
-
 weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
                                                       VclMessageType eMessageType,
                                                       VclButtonsType eButtonsType,

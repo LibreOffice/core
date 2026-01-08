@@ -353,11 +353,6 @@ public:
 
     virtual std::unique_ptr<Container> weld_parent() const = 0;
 
-    //iterate upwards through the hierarchy starting at this widgets parent,
-    //calling func with their helpid until func returns true or we run out of
-    //parents
-    virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>& func) = 0;
-
     virtual OUString strip_mnemonic(const OUString& rLabel) const = 0;
 
     /* Escapes string contents which are interpreted by the UI.

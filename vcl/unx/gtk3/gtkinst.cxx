@@ -4294,8 +4294,6 @@ public:
         }
     }
 
-    virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>& func) override;
-
     virtual OUString strip_mnemonic(const OUString &rLabel) const override
     {
         return rLabel.replaceFirst("_", "");
@@ -24411,18 +24409,6 @@ void GtkInstanceWindow::help()
     }
 #endif
     pHelp->Start(sHelpId, pSource);
-}
-
-//iterate upwards through the hierarchy from this widgets through its parents
-//calling func with their helpid until func returns true or we run out of parents
-void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>& func)
-{
-    GtkWidget* pParent = m_pWidget;
-    while ((pParent = gtk_widget_get_parent(pParent)))
-    {
-        if (func(::get_help_id(pParent)))
-            return;
-    }
 }
 
 std::unique_ptr<weld::Builder> GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)

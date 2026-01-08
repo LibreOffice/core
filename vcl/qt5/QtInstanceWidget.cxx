@@ -743,11 +743,6 @@ void QtInstanceWidget::queue_resize()
     GetQtInstance().RunInMainThread([&] { getQWidget()->adjustSize(); });
 }
 
-void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>&)
-{
-    assert(false && "Not implemented yet");
-}
-
 OUString QtInstanceWidget::strip_mnemonic(const OUString& rLabel) const
 {
     return rLabel.replaceFirst("&", "");

@@ -372,8 +372,6 @@ public:
 
     virtual void queue_resize() override;
 
-    virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>& func) override;
-
     virtual OUString strip_mnemonic(const OUString& rLabel) const override;
     virtual OUString escape_ui_str(const OUString& rLabel) const override;
 
