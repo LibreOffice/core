@@ -2371,7 +2371,9 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
 
     if ( bSetColor )
     {
-        if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+        if (rStyleSettings.GetFaceColor().IsDark() || rStyleSettings.GetHighContrastMode())
             rRenderContext.SetFillColor(COL_WHITE);
         else
             rRenderContext.SetFillColor(COL_BLACK);
