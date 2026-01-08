@@ -360,9 +360,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO74215)
 {
     createSwDoc("FDO74215.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
     // tdf#106849 NumPicBullet xShape should not be resized.
@@ -691,9 +688,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77718)
 CPPUNIT_TEST_FIXTURE(Test, testTableCurruption)
 {
     createSwDoc("tableCurrupt.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
