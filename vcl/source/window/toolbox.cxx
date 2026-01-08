@@ -2600,12 +2600,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         const Image* pImage = &(pItem->maImage);
         aImageSize = pImage->GetSizePixel();
 
-        // determine drawing flags
-        DrawImageFlags nImageStyle = DrawImageFlags::NONE;
-
-        if ( !pItem->mbEnabled || !IsEnabled() )
-            nImageStyle |= DrawImageFlags::Disable;
-
         // #i35563# the dontknow state indicates different states at the same time
         // which should not be rendered disabled but normal
 
@@ -2635,6 +2629,14 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
                 ImplDrawButton(rRenderContext, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE,
                                pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow);
         }
+
+        // determine drawing flags
+        DrawImageFlags nImageStyle = DrawImageFlags::NONE;
+        if ( nHighlight && rStyleSettings.GetHighContrastMode() )
+            nImageStyle |= DrawImageFlags::Invert;
+        else if ( !pItem->mbEnabled || !IsEnabled() )
+            nImageStyle |= DrawImageFlags::Disable;
+
         rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);
     }
 
