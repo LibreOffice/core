@@ -10498,12 +10498,6 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
 bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor,
                          weld::Placement ePlace, bool bTryShrink)
 {
-    static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
-                                                                 GdkGravity, GdkAnchorHints, gint, gint)>(
-                                                                    dlsym(nullptr, "gdk_window_move_to_rect"));
-    if (!window_move_to_rect)
-        return false;
-
     // under wayland gdk_window_move_to_rect works great for me, but in my current
     // gtk 3.24 under X it leaves part of long menus outside the work area
     GdkDisplay *pDisplay = gtk_widget_get_display(pComboBox);
@@ -10541,8 +10535,7 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
     GdkRectangle rect {x, y, rAnchor.width, rAnchor.height};
     GdkSurface* toplevel = widget_get_surface(GTK_WIDGET(pMenu));
 
-    window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor, anchor_hints,
-                        0, 0);
+    gdk_window_move_to_rect(toplevel, &rect, rect_anchor, menu_anchor, anchor_hints, 0, 0);
 
     return true;
 }
