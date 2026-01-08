@@ -24,7 +24,7 @@ public:
 
     virtual void set_title(const OUString& rTitle) override;
     virtual OUString get_title() const override;
-    virtual void window_move(int, int) override;
+    virtual void window_move(int x, int y) override;
     virtual bool get_resizable() const override;
     virtual Size get_size() const override;
     virtual Point get_position() const override;

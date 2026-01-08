@@ -54,7 +54,12 @@ OUString QtInstanceWindow::get_title() const
     return toOUString(getQWidget()->windowTitle());
 }
 
-void QtInstanceWindow::window_move(int, int) { assert(false && "Not implemented yet"); }
+void QtInstanceWindow::window_move(int x, int y)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getQWidget()->move(x, y); });
+}
 
 bool QtInstanceWindow::get_resizable() const
 {
