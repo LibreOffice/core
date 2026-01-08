@@ -259,6 +259,10 @@ public:
     {
         m_aListItems = rListItems;
     }
+    void SetListItems(std::vector<SwContentControlListItem>&& rListItems)
+    {
+        m_aListItems = std::move(rListItems);
+    }
 
     bool AddListItem(size_t nZIndex, const OUString& rDisplayText, const OUString& rValue);
     void DeleteListItem(size_t nZIndex);
