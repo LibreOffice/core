@@ -333,6 +333,14 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
     // Sheets where IsExportTab is not true are not exported, so use mnXclTab
     // (1 based) to get the sheetid as of the exported document's perspective.
     SCTAB nXlsxTab = mnXclTab - 1;
+    OUString sName = maOrigName;
+    if (sName.indexOf(' ') != -1)
+    {
+        sName = sName.replace(' ', '_');
+        SAL_WARN("sc.filter",
+                 "'" << maOrigName << "' is an invalid name, using '" << sName << "' instead.");
+    }
+
     rWorkbook->startElement( XML_definedName,
             // OOXTODO: XML_comment, "",
             // OOXTODO: XML_customMenu, "",
@@ -342,7 +350,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_help, "",
             XML_hidden, ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
             XML_localSheetId, sax_fastparser::UseIf(OString::number(nXlsxTab), mnScTab != SCTAB_GLOBAL),
-            XML_name, maOrigName.toUtf8(),
+            XML_name, sName.toUtf8(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
             // OOXTODO: XML_statusBar, "",
