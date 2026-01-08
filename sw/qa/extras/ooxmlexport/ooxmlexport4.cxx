@@ -718,9 +718,6 @@ CPPUNIT_TEST_FIXTURE(Test, test_OpeningBrace)
 {
     createSwDoc("2120112713_OpenBrace.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for OpeningBrace tag
@@ -978,9 +975,6 @@ CPPUNIT_TEST_FIXTURE(Test, testOLEObjectinHeader)
 CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
 {
     createSwDoc("2120112713.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
