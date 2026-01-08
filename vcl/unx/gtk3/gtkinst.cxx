@@ -6332,9 +6332,9 @@ namespace
     AbsoluteScreenPixelRectangle get_monitor_workarea(GtkWidget* pWindow)
     {
         GdkRectangle aRect;
-        GdkScreen* pScreen = gtk_widget_get_screen(pWindow);
-        gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, widget_get_surface(pWindow));
-        gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
+        GdkDisplay* pDisplay = gtk_widget_get_display(pWindow);
+        GdkMonitor* pMonitor = gdk_display_get_monitor_at_window(pDisplay, widget_get_surface(pWindow));
+        gdk_monitor_get_workarea(pMonitor, &aRect);
         return AbsoluteScreenPixelRectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
     }
 #endif
