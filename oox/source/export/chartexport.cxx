@@ -1683,7 +1683,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
     if (bIsChartex) return; // TODO!!
     // Embedded external data is grab bagged for docx file hence adding export part of
     // external data for docx files only.
-    if(GetDocumentType() != DOCUMENT_DOCX)
+    if(!mbLinkToExternalData || GetDocumentType() != DOCUMENT_DOCX)
         return;
 
     OUString externalDataPath;

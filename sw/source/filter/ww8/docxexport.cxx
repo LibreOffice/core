@@ -404,7 +404,21 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
     oox::drawingml::ChartExport aChartExport(XML_w, pChartFS, xModel, &m_rFilter, oox::drawingml::DOCUMENT_DOCX);
     css::uno::Reference<css::util::XModifiable> xModifiable(xModel, css::uno::UNO_QUERY);
     const bool bOldModified = xModifiable && xModifiable->isModified();
+
+    // Currently, content in ../embeddings is simply grab-bagged as OOEmbeddings
+    // and must only be referred to once or else MS Word considers the document corrupt,
+    // so if a chart is duplicated (common in headers/footers) then only exportExternalData once.
+    for (const auto& xExport : m_aExportedCharts)
+    {
+        if (xExport != xModel)
+            continue;
+
+        aChartExport.mbLinkToExternalData = false;
+        break;
+    }
+
     aChartExport.ExportContent();
+    m_aExportedCharts.push_back(xModel);
     if (!bOldModified && xModifiable && xModifiable->isModified())
         // tdf#134973: the model could get modified: e.g., calling XChartDocument::getSubTitle(),
         // which creates the object if absent, and sets the modified state.
