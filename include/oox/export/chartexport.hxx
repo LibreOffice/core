@@ -140,6 +140,7 @@ class ChartExport final : public DrawingML {
 public:
     // first: data sequence for label, second: data sequence for values.
     typedef ::std::vector< AxisIdPair > AxisVector;
+    bool mbLinkToExternalData = true;
 
 private:
     sal_Int32           mnXmlNamespace;
