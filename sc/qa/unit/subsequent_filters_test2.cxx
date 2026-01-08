@@ -871,8 +871,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf130132)
     const ScPatternAttr* pAttr = pDoc->GetPattern(434, 0, 0);
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
         const Color& rColor = rBackground.GetColor();
         // background colour is yellow
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, rColor);
@@ -887,8 +886,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf166445)
 
     const ScPatternAttr* pAttr = pDoc->GetPattern(0, 0, 0);
 
-    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-    const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+    const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
     const Color& rColor = rBackground.GetColor();
 
     // Without the fix in place, this test would have failed with
@@ -905,8 +903,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf165080)
 
     const ScPatternAttr* pAttr = pDoc->GetPattern(0, 0, 0);
 
-    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-    const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+    const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
     const Color& rColor = rBackground.GetColor();
 
     // Without the fix in place, this test would have failed with
@@ -923,8 +920,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf133327)
 
     const ScPatternAttr* pAttr = pDoc->GetPattern(250, 1, 0);
 
-    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-    const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+    const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
     const Color& rColor = rBackground.GetColor();
 
     // Without the fix in place, this test would have failed with
@@ -941,28 +937,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testColumnStyle2XLSX)
     const ScPatternAttr* pAttr = pDoc->GetPattern(1, 1, 0);
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
         const Color& rColor = rBackground.GetColor();
         CPPUNIT_ASSERT_EQUAL(Color(255, 51, 51), rColor);
     }
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
-        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        const SvxHorJustifyItem& rJustify = pAttr->GetItem(ATTR_HOR_JUSTIFY);
         CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Center, rJustify.GetValue());
     }
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_FONT_HEIGHT);
-        const SvxFontHeightItem& rFontHeight = static_cast<const SvxFontHeightItem&>(rItem);
+        const SvxFontHeightItem& rFontHeight = pAttr->GetItem(ATTR_FONT_HEIGHT);
         sal_uInt16 nHeight = rFontHeight.GetHeight();
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(240), nHeight);
     }
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_FONT);
-        const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rItem);
+        const SvxFontItem& rFont = pAttr->GetItem(ATTR_FONT);
         OUString aName = rFont.GetFamilyName();
         CPPUNIT_ASSERT_EQUAL(u"Linux Biolinum G"_ustr, aName);
     }

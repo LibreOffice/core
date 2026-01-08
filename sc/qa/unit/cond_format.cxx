@@ -554,8 +554,7 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testCondFormatParentXLSX)
     ScDocument* pDoc = getScDoc();
     const SfxItemSet* pCondSet = pDoc->GetCondResult(2, 5, 0);
     const ScPatternAttr* pPattern = pDoc->GetPattern(2, 5, 0);
-    const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
-    const SvxVerJustifyItem& rVerJustify = static_cast<const SvxVerJustifyItem&>(rPoolItem);
+    const SvxVerJustifyItem& rVerJustify = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
     CPPUNIT_ASSERT_EQUAL(SvxCellVerJustify::Top, rVerJustify.GetValue());
 }
 

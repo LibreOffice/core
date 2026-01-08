@@ -211,10 +211,9 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
 
     if ( pDocSh )
     {
-        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if( pItem )
+        if (const SvxColorListItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE ))
         {
-            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+            pColorList = pItem->GetColorList();
             FillValueSet();
         }
     }

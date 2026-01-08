@@ -225,9 +225,9 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     AddTabPage(u"events"_ustr, TabResId(RID_TAB_EVENTS.aLabel), CreateSvxEventConfigPage,
                RID_L + RID_TAB_EVENTS.sIconName);
 
-    if (const SfxPoolItem* pItem = pInSet->GetItem(SID_CONFIG))
+    if (const SfxStringItem* pItem = pInSet->GetItem(SID_CONFIG))
     {
-        OUString text = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        OUString text = pItem->GetValue();
         if (text.startsWith( ITEM_TOOLBAR_URL ) )
             SetCurPageId(u"toolbars"_ustr);
         else if (text.startsWith( ITEM_EVENT_URL) )

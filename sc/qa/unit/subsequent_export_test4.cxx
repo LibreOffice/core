@@ -574,8 +574,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf123139XLSX)
     pAttr = pDoc->GetPattern(0, 1, 0); //A2
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
-        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        const SvxHorJustifyItem& rJustify = pAttr->GetItem(ATTR_HOR_JUSTIFY);
         CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Center, rJustify.GetValue());
     }
 
@@ -588,8 +587,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf123139XLSX)
     pAttr = pDoc->GetPattern(2, 0, 0); //C1
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
-        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        const SvxHorJustifyItem& rJustify = pAttr->GetItem(ATTR_HOR_JUSTIFY);
         CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Standard, rJustify.GetValue());
     }
 
@@ -602,8 +600,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf123139XLSX)
     pAttr = pDoc->GetPattern(2, 1, 0); //C2
 
     {
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
-        const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
+        const SvxHorJustifyItem& rJustify = pAttr->GetItem(ATTR_HOR_JUSTIFY);
         CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Block, rJustify.GetValue());
     }
 

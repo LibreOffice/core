@@ -108,11 +108,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
     // has been passed in
     m_aURLToSelect = GetDefaultToolbar();
 
-    const SfxPoolItem* pItem = rSet.GetItem(SID_CONFIG);
-
-    if (pItem)
+    if (const SfxStringItem* pItem = rSet.GetItem(SID_CONFIG))
     {
-        OUString text = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        OUString text = pItem->GetValue();
         if (text.startsWith(ITEM_TOOLBAR_URL))
         {
             m_aURLToSelect = text.copy(0);

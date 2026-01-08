@@ -997,7 +997,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
     if( !rEscherFmt.mxItemSet )
         return;
 
-    const XFillStyleItem* pStyleItem = rEscherFmt.mxItemSet->GetItem<XFillStyleItem>( XATTR_FILLSTYLE, false );
+    const XFillStyleItem* pStyleItem = rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, false );
     if( !pStyleItem )
         return;
 
@@ -1005,10 +1005,10 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
     {
         case drawing::FillStyle_SOLID:
             // #i84812# Excel 2007 writes Escher properties for solid fill
-            if( const XFillColorItem* pColorItem = rEscherFmt.mxItemSet->GetItem<XFillColorItem>( XATTR_FILLCOLOR, false ) )
+            if( const XFillColorItem* pColorItem = rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, false ) )
             {
                 // get solid transparence too
-                const XFillTransparenceItem* pTranspItem = rEscherFmt.mxItemSet->GetItem<XFillTransparenceItem>( XATTR_FILLTRANSPARENCE, false );
+                const XFillTransparenceItem* pTranspItem = rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, false );
                 sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
                 ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
                 rAreaHlp.InitializeWrite();

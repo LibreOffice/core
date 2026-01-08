@@ -426,7 +426,7 @@ namespace sw
             m_DyaTop = m_DyaHdrTop;
             m_DyaBottom = m_DyaHdrBottom;
 
-            const SwFormatHeader *pHd = rPage.GetItem<SwFormatHeader>(RES_HEADER);
+            const SwFormatHeader *pHd = rPage.GetItem(RES_HEADER);
             if (pHd && pHd->IsActive() && pHd->GetHeaderFormat())
             {
                 mbHasHeader = true;
@@ -435,7 +435,7 @@ namespace sw
             else
                 mbHasHeader = false;
 
-            const SwFormatFooter *pFt = rPage.GetItem<SwFormatFooter>(RES_FOOTER);
+            const SwFormatFooter *pFt = rPage.GetItem(RES_FOOTER);
             if (pFt && pFt->IsActive() && pFt->GetFooterFormat())
             {
                 mbHasFooter = true;

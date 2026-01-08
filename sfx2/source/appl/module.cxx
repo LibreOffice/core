@@ -260,9 +260,9 @@ FieldUnit SfxModule::GetFieldUnit() const
         return MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
     }
     FieldUnit eUnit = FieldUnit::INCH;
-    const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
+    const SfxUInt16Item* pItem = GetItem( SID_ATTR_METRIC );
     if ( pItem )
-        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+        eUnit = static_cast<FieldUnit>(pItem->GetValue());
     return eUnit;
 }
 

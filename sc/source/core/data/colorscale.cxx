@@ -1218,8 +1218,8 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
 
     std::unique_ptr<ScIconSetInfo> pInfo(new ScIconSetInfo);
 
-    const SfxPoolItem& rPoolItem = mrDoc.GetPattern(rAddr)->GetItem(ATTR_FONT_HEIGHT);
-    tools::Long aFontHeight = static_cast<const SvxFontHeightItem&>(rPoolItem).GetHeight();
+    const SvxFontHeightItem& rPoolItem = mrDoc.GetPattern(rAddr)->GetItem(ATTR_FONT_HEIGHT);
+    tools::Long aFontHeight = rPoolItem.GetHeight();
     pInfo->mnHeight = aFontHeight;
 
     if(mpFormatData->mbReverse)
