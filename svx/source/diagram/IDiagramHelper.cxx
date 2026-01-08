@@ -410,7 +410,6 @@ IDiagramHelper::IDiagramHelper(bool bSelfCreated)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
 , mbSelfCreated(bSelfCreated)
-, mbModified(false)
 , mpAssociatedSdrObjGroup(nullptr)
 {
 }

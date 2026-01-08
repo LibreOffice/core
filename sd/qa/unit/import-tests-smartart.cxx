@@ -1071,11 +1071,12 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInteropGrabBag)
     // const AdvancedDiagramHelper* pHelper(dynamic_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get()));
     CPPUNIT_ASSERT(rIDiagramHelper);
 
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXData").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXLayout").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXStyle").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXColor").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value.hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData).hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXLayout).hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXStyle).hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXColor).hasValue());
+    CPPUNIT_ASSERT(
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing).hasValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackground)

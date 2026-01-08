@@ -23,6 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
 #include <svx/svdhdl.hxx>
+#include <svx/diagram/DomMapFlag.hxx>
 
 // Forward declarations
 class SdrObjGroup;
@@ -83,10 +84,6 @@ private:
     // and the layouting stuff
     bool mbSelfCreated;
 
-    // set to true if the model contained here for the Diagram was
-    // modified
-    bool mbModified; // false
-
 protected:
     // remember associated SdrObjGroup
     SdrObjGroup* mpAssociatedSdrObjGroup;
@@ -108,8 +105,9 @@ public:
     getChildren(const OUString& rParentId) const = 0;
 
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addNode(const OUString& rText) = 0;
-    virtual bool removeNode(const OUString& rNodeId) = 0;
+    virtual OUString addDiagramNode(const OUString& rText) = 0;
+    virtual bool removeDiagramNode(const OUString& rNodeId) = 0;
+    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) = 0;
 
     // Undo/Redo helpers for extracting/restoring Diagram-defining data
     virtual std::shared_ptr<svx::diagram::DiagramDataState> extractDiagramDataState() const = 0;
@@ -127,18 +125,13 @@ public:
     void connectToSdrObjGroup(SdrObjGroup& rTarget);
     void disconnectFromSdrObjGroup();
 
-    // modified state of this local model. Needs to be set to know
-    // how to do correct export
-    bool isModified() const { return mbModified; }
-    void setModified() { mbModified = true; }
-
-    // react on changes to objects identified by DiagramDataModelID, returns true if a change was done
-    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) = 0;
-
     static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);
 
     // access to PropertyValues
-    virtual css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const = 0;
+    virtual com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const = 0;
+
+    // check if mandatory DiagramDomS exist (or can be created)
+    virtual bool checkOrCreateMinimalDataDoms() = 0;
 };
 
 }} // end of namespace

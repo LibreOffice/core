@@ -124,10 +124,6 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-    static void WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
-                             const css::uno::Reference<css::drawing::XShape>& rXShape,
-                             sal_Int32 nDiagramId);
-
     /** Create a new placeholder index for a master placeholder shape
 
         @param rXShape Master placeholder shape

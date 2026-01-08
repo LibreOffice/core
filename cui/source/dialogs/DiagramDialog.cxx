@@ -75,7 +75,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
             aStartState = pDiagramHelper->extractDiagramDataState();
         }
 
-        OUString sNodeId = pDiagramHelper->addNode(sText);
+        OUString sNodeId = pDiagramHelper->addDiagramNode(sText);
 
         if (bUndo)
         {
@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
             aStartState = pDiagramHelper->extractDiagramDataState();
         }
 
-        if (pDiagramHelper->removeNode(mpTreeDiagram->get_id(*pEntry)))
+        if (pDiagramHelper->removeDiagramNode(mpTreeDiagram->get_id(*pEntry)))
         {
             if (bUndo)
             {

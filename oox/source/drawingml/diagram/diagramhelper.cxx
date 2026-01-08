@@ -76,7 +76,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     pShapePtr->setSize(maImportSize);
 
     // Re-create the oox::Shapes for the diagram content
-    mpDiagramPtr->addTo(pShapePtr, true);
+    mpDiagramPtr->createShapeHierarchyFromModel(pShapePtr, true);
 
     // Delete all existing shapes in that group to prepare re-creation
     rTarget.getChildrenOfSdrObject()->ClearSdrObjList();
@@ -174,13 +174,17 @@ std::vector<std::pair<OUString, OUString>> AdvancedDiagramHelper::getChildren(co
     return std::vector<std::pair<OUString, OUString>>();
 }
 
-OUString AdvancedDiagramHelper::addNode(const OUString& rText)
+OUString AdvancedDiagramHelper::addDiagramNode(const OUString& rText)
 {
     OUString aRetval;
 
     if(hasDiagramData())
     {
-        aRetval = mpDiagramPtr->getData()->addNode(rText);
+        const std::pair<OUString, svx::diagram::DomMapFlags> aResult = mpDiagramPtr->getData()->addDiagramNode(rText);
+        aRetval = aResult.first;
+
+        // reset Dom properties at DiagramData
+        mpDiagramPtr->resetOOXDomValues(aResult.second);
 
         // reset temporary buffered ModelData association lists & rebuild them
         // and the Diagram DataModel
@@ -194,13 +198,17 @@ OUString AdvancedDiagramHelper::addNode(const OUString& rText)
     return aRetval;
 }
 
-bool AdvancedDiagramHelper::removeNode(const OUString& rNodeId)
+bool AdvancedDiagramHelper::removeDiagramNode(const OUString& rNodeId)
 {
     bool bRetval(false);
 
     if(hasDiagramData())
     {
-        bRetval = mpDiagramPtr->getData()->removeNode(rNodeId);
+        const svx::diagram::DomMapFlags aResult = mpDiagramPtr->getData()->removeDiagramNode(rNodeId);
+        bRetval = !aResult.empty();
+
+        // reset Dom properties at DiagramData
+        mpDiagramPtr->resetOOXDomValues(aResult);
 
         // reset temporary buffered ModelData association lists & rebuild them
         // and the Diagram DataModel
@@ -212,6 +220,27 @@ bool AdvancedDiagramHelper::removeNode(const OUString& rNodeId)
     }
 
     return bRetval;
+}
+
+void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl)
+{
+    if(!mpDiagramPtr)
+    {
+        return;
+    }
+
+    // try text change for model part in DiagramData
+    const svx::diagram::DomMapFlags aDomMapFlags(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
+
+    if(!aDomMapFlags.empty())
+    {
+        // reset Dom properties at DiagramData
+        mpDiagramPtr->resetOOXDomValues(aDomMapFlags);
+
+        // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
+        // entries anymore, but others like "mso-rotation-angle" and others
+        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
+    }
 }
 
 svx::diagram::DiagramDataStatePtr AdvancedDiagramHelper::extractDiagramDataState() const
@@ -232,30 +261,6 @@ void AdvancedDiagramHelper::applyDiagramDataState(const svx::diagram::DiagramDat
     }
 
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
-}
-
-void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl)
-{
-    if(!mpDiagramPtr)
-    {
-        return;
-    }
-
-    // try text change for model part in DiagramData
-    const bool bChanged(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
-
-    if(bChanged)
-    {
-        // reset Dom properties at DiagramData
-        mpDiagramPtr->resetDomPropertyValues();
-
-        // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
-        // entries anymore, but others like "mso-rotation-angle" and others
-        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
-
-        // also set self to modified to get correct exports
-        setModified();
-    }
 }
 
 void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape)
@@ -306,18 +311,26 @@ const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCr
     return mpThemePtr;
 }
 
-void AdvancedDiagramHelper::addDomPropertyValue(beans::PropertyValue& aValue)
+void AdvancedDiagramHelper::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const uno::Any& rValue)
 {
     if (mpDiagramPtr)
-        mpDiagramPtr->addDomPropertyValue(aValue);
+        mpDiagramPtr->setOOXDomValue(aDomMapFlag, rValue);
 }
 
-beans::PropertyValue AdvancedDiagramHelper::getDomPropertyValue(const OUString& rName) const
+uno::Any AdvancedDiagramHelper::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
 {
     if (mpDiagramPtr)
-        return mpDiagramPtr->getDomPropertyValue(rName);
+        return mpDiagramPtr->getOOXDomValue(aDomMapFlag);
 
-    return beans::PropertyValue();
+    return uno::Any();
+}
+
+bool AdvancedDiagramHelper::checkOrCreateMinimalDataDoms()
+{
+    if (!mpDiagramPtr)
+        return false;
+
+    return mpDiagramPtr->checkOrCreateMinimalDataDoms();
 }
 
 }
