@@ -1388,6 +1388,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169941_internal_link_to_shapes)
                 u"slide1.xml");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyAttrNameElement)
+{
+    createSdImpressDoc("odp/emptyChildTnLstElement.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 2
+    // - validation error in OOXML export: Errors: 2
+    saveAndReload(TestFilter::PPTX);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPlaceHolderFitHeightToText)
 {
     createSdImpressDoc("pptx/tdf160487.pptx");
