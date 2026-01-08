@@ -330,18 +330,15 @@ OWizTypeSelectList::OWizTypeSelectList(std::unique_ptr<weld::TreeView> xControl)
 
 bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
+    if (!m_bPKey)
+        return true;
+
     auto aRows = m_xControl->get_selected_rows();
-    std::sort(aRows.begin(), aRows.end());
 
-    const sal_Int32 nCount = aRows.size();
-
-    for( sal_Int32 j = 0; m_bPKey && j < nCount; ++j )
-    {
-        OFieldDescription* pField = weld::fromId<OFieldDescription*>(m_xControl->get_id(aRows[j]));
-        if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
-            return false;
-    }
-    return true;
+    return std::ranges::all_of(aRows, [this](sal_Int32 row) {
+        auto* pField =  weld::fromId<OFieldDescription*>(m_xControl->get_id(row));
+        return pField && pField->getTypeInfo()->nSearchType != ColumnSearch::NONE;
+    });
 }
 
 void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt16 _nPos, bool _bSet)
