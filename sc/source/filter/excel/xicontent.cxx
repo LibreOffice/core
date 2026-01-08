@@ -662,6 +662,12 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
         {
+            // If it's an external formula then skip the entry
+            if (const formula::FormulaToken* pToken = pTokArr->FirstToken())
+            {
+                if (pToken->GetOpCode() == ocExternal)
+                    return;
+            }
             xTokArr1 = std::move( pTokArr );
             GetDoc().CheckLinkFormulaNeedingCheck( *xTokArr1);
         }
@@ -676,6 +682,12 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
         {
+            // If it's an external formula then skip the entry
+            if (const formula::FormulaToken* pToken = pTokArr->FirstToken())
+            {
+                if (pToken->GetOpCode() == ocExternal)
+                    return;
+            }
             xTokArr2 = std::move( pTokArr );
             GetDoc().CheckLinkFormulaNeedingCheck( *xTokArr2);
         }
