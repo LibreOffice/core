@@ -165,12 +165,6 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
     mbStdControlsInit = true;
 }
 
-// Move Extra-Window
-void SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos )
-{
-    mxMarkWnd->MoveTo(aNewPos);
-}
-
 // Show Extra-Window
 void SvxHyperlinkTabPageBase::ShowMarkWnd()
 {
@@ -195,24 +189,27 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd()
     Size aExtraWndSize(mxMarkWnd->getDialog()->get_preferred_size());
 
     // mxMarkWnd is a child of mpDialog, so coordinates for positioning must be relative to mpDialog
+    Point aPos;
     if( aDlgPos.X()+(1.05*aDlgSize.Width())+aExtraWndSize.Width() > aScreen.Right() )
     {
         if( aDlgPos.X() - ( 0.05*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
         {
             // Pos Extrawindow anywhere
-            MoveToExtraWnd( Point(10,10) );  // very unlikely
+            aPos = Point(10, 10); // very unlikely
         }
         else
         {
             // Pos Extrawindow on the left side of Dialog
-            MoveToExtraWnd( Point(0,0) - Point( tools::Long(0.05*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
+            aPos = Point(0, 0) - Point(tools::Long(0.05 * aDlgSize.Width()), 0)
+                   - Point(aExtraWndSize.Width(), 0);
         }
     }
     else
     {
         // Pos Extrawindow on the right side of Dialog
-        MoveToExtraWnd ( Point( tools::Long(1.05*aDlgSize.getWidth()), 0 ) );
+        aPos = Point(tools::Long(1.05 * aDlgSize.getWidth()), 0);
     }
+    mxMarkWnd->MoveTo(aPos);
 
     // Set size of Extra-Window
     mxMarkWnd->getDialog()->set_size_request(aExtraWndSize.Width(), aDlgSize.Height());

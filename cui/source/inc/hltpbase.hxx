@@ -121,7 +121,6 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     bool IsMarkWndVisible() const { return static_cast<bool>(mxMarkWnd); }
-    void MoveToExtraWnd ( Point aNewPos );
 
     virtual bool        QueryClose() override;
 
