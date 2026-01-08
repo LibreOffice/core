@@ -179,37 +179,12 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd()
     mxMarkWnd = std::make_shared<SvxHlinkDlgMarkWnd>(pDialog, this);
 
     // Size of dialog-window in screen pixels
-    Point aDlgPos(pDialog->get_position());
     Size aDlgSize(pDialog->get_size());
-
-    // Absolute size of the screen
-    ::tools::Rectangle aScreen(pDialog->get_monitor_workarea());
 
     // Size of Extrawindow
     Size aExtraWndSize(mxMarkWnd->getDialog()->get_preferred_size());
 
-    // mxMarkWnd is a child of mpDialog, so coordinates for positioning must be relative to mpDialog
-    Point aPos;
-    if( aDlgPos.X()+(1.05*aDlgSize.Width())+aExtraWndSize.Width() > aScreen.Right() )
-    {
-        if( aDlgPos.X() - ( 0.05*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
-        {
-            // Pos Extrawindow anywhere
-            aPos = Point(10, 10); // very unlikely
-        }
-        else
-        {
-            // Pos Extrawindow on the left side of Dialog
-            aPos = Point(0, 0) - Point(tools::Long(0.05 * aDlgSize.Width()), 0)
-                   - Point(aExtraWndSize.Width(), 0);
-        }
-    }
-    else
-    {
-        // Pos Extrawindow on the right side of Dialog
-        aPos = Point(tools::Long(1.05 * aDlgSize.getWidth()), 0);
-    }
-    mxMarkWnd->MoveTo(aPos);
+    mxMarkWnd->RestorePosSize();
 
     // Set size of Extra-Window
     mxMarkWnd->getDialog()->set_size_request(aExtraWndSize.Width(), aDlgSize.Height());

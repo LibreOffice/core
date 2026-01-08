@@ -132,14 +132,12 @@ sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
 }
 
 // Move window
-void SvxHlinkDlgMarkWnd::MoveTo(const Point& rNewPos)
+void SvxHlinkDlgMarkWnd::RestorePosSize()
 {
     // tdf#149935 - remember last used position and size
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
-    else
-        m_xDialog->window_move(rNewPos.X(), rNewPos.Y());
 }
 
 namespace

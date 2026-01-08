@@ -59,7 +59,7 @@ public:
     SvxHlinkDlgMarkWnd(weld::Window* pParentDialog, SvxHyperlinkTabPageBase *pParentPage);
     virtual ~SvxHlinkDlgMarkWnd() override;
 
-    void MoveTo(const Point& rNewPos);
+    void RestorePosSize();
     void RefreshTree(const OUString& aStrURL);
     bool SelectEntry(std::u16string_view aStrMark);
 
