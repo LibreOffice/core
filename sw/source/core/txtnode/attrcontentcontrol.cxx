@@ -333,7 +333,7 @@ bool SwContentControl::AddListItem(size_t nZIndex, const OUString& rDisplayText,
     }
     std::vector<SwContentControlListItem> vListItems = GetListItems();
     vListItems.insert(vListItems.begin() + nZIndex, aListItem);
-    SetListItems(vListItems);
+    SetListItems(std::move(vListItems));
     return true;
 }
 
@@ -357,7 +357,7 @@ void SwContentControl::DeleteListItem(size_t nZIndex)
 
     std::vector<SwContentControlListItem> vListItems = GetListItems();
     vListItems.erase(vListItems.begin() + nZIndex);
-    SetListItems(vListItems);
+    SetListItems(std::move(vListItems));
     return;
 }
 

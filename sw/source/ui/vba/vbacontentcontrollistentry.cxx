@@ -64,7 +64,7 @@ void SwVbaContentControlListEntry::setText(const OUString& rSet)
     const bool bNeedsInvalidation = m_pCC->GetDropDown() && oSel && *oSel == m_nZIndex;
 
     vListItems[m_nZIndex].m_aDisplayText = rSet;
-    m_pCC->SetListItems(vListItems);
+    m_pCC->SetListItems(std::move(vListItems));
 
     if (bNeedsInvalidation)
     {
@@ -92,7 +92,7 @@ void SwVbaContentControlListEntry::setValue(const OUString& rSet)
         vListItems[m_nZIndex].m_aDisplayText = vListItems[m_nZIndex].ToString();
 
     vListItems[m_nZIndex].m_aValue = rSet;
-    m_pCC->SetListItems(vListItems);
+    m_pCC->SetListItems(std::move(vListItems));
 }
 
 void SwVbaContentControlListEntry::Delete() { m_pCC->DeleteListItem(m_nZIndex); }
@@ -113,7 +113,7 @@ void SwVbaContentControlListEntry::MoveDown()
     }
     std::vector<SwContentControlListItem> vListItems = m_pCC->GetListItems();
     std::swap(vListItems[m_nZIndex], vListItems[m_nZIndex + 1]);
-    m_pCC->SetListItems(vListItems);
+    m_pCC->SetListItems(std::move(vListItems));
     ++m_nZIndex;
 }
 
@@ -133,7 +133,7 @@ void SwVbaContentControlListEntry::MoveUp()
     }
     std::vector<SwContentControlListItem> vListItems = m_pCC->GetListItems();
     std::swap(vListItems[m_nZIndex], vListItems[m_nZIndex - 1]);
-    m_pCC->SetListItems(vListItems);
+    m_pCC->SetListItems(std::move(vListItems));
     --m_nZIndex;
 }
 
