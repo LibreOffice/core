@@ -336,32 +336,26 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) );
 
     // adjust margins (right/left)
-    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_LRSPACE );
-
-    if ( pItem )
+    if (const SvxLRSpaceItem* pLRSpace = GetItem( *rSet, SID_ATTR_LRSPACE ))
     {
-        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
-        SetMetricValue(*m_xLeftMarginEdit, rLRSpace.ResolveLeft({}), eUnit);
-        SetMetricValue(*m_xGutterMarginEdit, rLRSpace.GetGutterMargin(), eUnit);
+        SetMetricValue(*m_xLeftMarginEdit, pLRSpace->ResolveLeft({}), eUnit);
+        SetMetricValue(*m_xGutterMarginEdit, pLRSpace->GetGutterMargin(), eUnit);
         m_aBspWin.SetLeft(
-            static_cast<sal_uInt16>(ConvertLong_Impl(rLRSpace.ResolveLeft({}), eUnit)));
-        SetMetricValue(*m_xRightMarginEdit, rLRSpace.ResolveRight({}), eUnit);
+            static_cast<sal_uInt16>(ConvertLong_Impl(pLRSpace->ResolveLeft({}), eUnit)));
+        SetMetricValue(*m_xRightMarginEdit, pLRSpace->ResolveRight({}), eUnit);
         m_aBspWin.SetRight(
-            static_cast<sal_uInt16>(ConvertLong_Impl(rLRSpace.ResolveRight({}), eUnit)));
+            static_cast<sal_uInt16>(ConvertLong_Impl(pLRSpace->ResolveRight({}), eUnit)));
     }
 
     // adjust margins (top/bottom)
-    pItem = GetItem( *rSet, SID_ATTR_ULSPACE );
-
-    if ( pItem )
+    if (const SvxULSpaceItem* pULSpace = GetItem( *rSet, SID_ATTR_ULSPACE ))
     {
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(*pItem);
-        SetMetricValue( *m_xTopMarginEdit, rULSpace.GetUpper(), eUnit );
+        SetMetricValue( *m_xTopMarginEdit, pULSpace->GetUpper(), eUnit );
         m_aBspWin.SetTop(
-            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(rULSpace.GetUpper()), eUnit )) );
-        SetMetricValue( *m_xBottomMarginEdit, rULSpace.GetLower(), eUnit );
+            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(pULSpace->GetUpper()), eUnit )) );
+        SetMetricValue( *m_xBottomMarginEdit, pULSpace->GetLower(), eUnit );
         m_aBspWin.SetBottom(
-            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(rULSpace.GetLower()), eUnit )) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(pULSpace->GetLower()), eUnit )) );
     }
 
     if (const SfxGrabBagItem* pGragbagItem = rSet->GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
@@ -410,14 +404,11 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     SvxNumType eNumType = SVX_NUM_ARABIC;
     bLandscape = ( mpDefPrinter->GetOrientation() == Orientation::Landscape );
     SvxPageUsage nUse = SvxPageUsage::All;
-    pItem = GetItem( *rSet, SID_ATTR_PAGE );
-
-    if ( pItem )
+    if (const SvxPageItem* pItem = GetItem( *rSet, SID_ATTR_PAGE ))
     {
-        const SvxPageItem& rItem = static_cast<const SvxPageItem&>(*pItem);
-        eNumType = rItem.GetNumType();
-        nUse = rItem.GetPageUsage();
-        bLandscape = rItem.IsLandscape();
+        eNumType = pItem->GetNumType();
+        nUse = pItem->GetPageUsage();
+        bLandscape = pItem->IsLandscape();
     }
 
     // alignment
@@ -430,11 +421,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     m_xPaperTrayBox->clear();
     sal_uInt8 nPaperBin = PAPERBIN_PRINTER_SETTINGS;
-    pItem = GetItem( *rSet, SID_ATTR_PAGE_PAPERBIN );
-
-    if ( pItem )
+    if (const SvxPaperBinItem* pItem = GetItem( *rSet, SID_ATTR_PAGE_PAPERBIN ))
     {
-        nPaperBin = static_cast<const SvxPaperBinItem*>(pItem)->GetValue();
+        nPaperBin = pItem->GetValue();
 
         if ( nPaperBin >= mpDefPrinter->GetPaperBinCount() )
             nPaperBin = PAPERBIN_PRINTER_SETTINGS;
@@ -455,10 +444,8 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xPaperTrayBox->connect_focus_in(LINK(this, SvxPageDescPage, PaperBinHdl_Impl));
 
     Size aPaperSize = SvxPaperInfo::GetPaperSize( mpDefPrinter );
-    pItem = GetItem( *rSet, SID_ATTR_PAGE_SIZE );
-
-    if ( pItem )
-        aPaperSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
+    if (const SvxSizeItem* pItem = GetItem( *rSet, SID_ATTR_PAGE_SIZE ))
+        aPaperSize = pItem->GetSize();
 
     bool bOrientationSupport =
         mpDefPrinter->HasSupport( PrinterSupport::SetOrientation );
@@ -514,7 +501,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             DisableVerticalPageDir();
 
             // horizontal alignment
-            pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
+            const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
             m_xHorzBox->set_active(pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
             // vertical alignment
@@ -538,7 +525,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         {
             DisableVerticalPageDir();
             m_xAdaptBox->show();
-            pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
+            const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
             m_xAdaptBox->set_active( pItem &&
                 static_cast<const SfxBoolItem*>(pItem)->GetValue() );
 
@@ -605,12 +592,13 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         m_xRegisterLB->save_value();
     }
 
+    const SvxFrameDirectionItem* pItem = nullptr;
     SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
                                                 true, &pItem );
     if( SfxItemState::UNKNOWN != eState )
     {
         SvxFrameDirection nVal  = SfxItemState::SET == eState
-                                ? static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue()
+                                ? pItem->GetValue()
                                 : SvxFrameDirection::Horizontal_LR_TB;
         m_xTextFlowBox->set_active_id(nVal);
 
@@ -1250,10 +1238,9 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 {
     bLandscape = m_xLandscapeBtn->get_active();
-    const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
-    if ( pItem )
-        m_aBspWin.SetSize( static_cast<const SvxSizeItem*>(pItem)->GetSize() );
+    if (const SvxSizeItem* pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE ))
+        m_aBspWin.SetSize( pItem->GetSize() );
 
     const SvxSetItem* pSetItem = nullptr;
 
@@ -1261,7 +1248,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SfxItemState::SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                            false, reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
+                            false, &pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =

@@ -102,13 +102,13 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
 void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
+    const SdrAngleItem* pDegreesItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
 
-    Degree100 nDegrees = pItem ? static_cast<const SdrAngleItem*>(pItem)->GetValue() : 0_deg100;
+    Degree100 nDegrees = pDegreesItem ? pDegreesItem->GetValue() : 0_deg100;
     m_xCtrlDial->SetRotation( nDegrees );
 
-    pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );
-    bool bStacked = pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue();
+    const SfxBoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );
+    bool bStacked = pItem && pItem->GetValue();
     m_xCbStacked->set_active(bStacked);
     StackedToggleHdl(*m_xCbStacked);
 

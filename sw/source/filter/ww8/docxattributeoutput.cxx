@@ -606,10 +606,9 @@ sal_Int32 DocxAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Point
         if (pTextNode && pTextNode->GetpSwAttrSet())
         {
             const SfxItemSet* pSet = pTextNode->GetpSwAttrSet();
-            if (const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_GRABBAG))
+            if (const SfxGrabBagItem* pParaGrabBag = pSet->GetItem(RES_PARATR_GRABBAG))
             {
-                const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
-                const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
+                const std::map<OUString, css::uno::Any>& rMap = pParaGrabBag->GetGrabBag();
                 bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.contains(u"ParaSdtEndBefore"_ustr);
             }
         }

@@ -113,97 +113,95 @@ bool CommonStylePreviewRenderer::recalculate()
     SvxFont aCJKFont;
     SvxFont aCTLFont;
 
-    const SfxPoolItem* pItem;
+    if (const SvxWeightItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_WEIGHT))
+        aFont.SetWeight(pItem->GetWeight());
+    if (const SvxWeightItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_CJK_WEIGHT))
+        aCJKFont.SetWeight(pItem->GetWeight());
+    if (const SvxWeightItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_CTL_WEIGHT))
+        aCTLFont.SetWeight(pItem->GetWeight());
 
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_WEIGHT)) != nullptr)
-        aFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CJK_WEIGHT)) != nullptr)
-        aCJKFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CTL_WEIGHT)) != nullptr)
-        aCTLFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
+    if (const SvxPostureItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_POSTURE))
+        aFont.SetItalic(pItem->GetPosture());
+    if (const SvxPostureItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_CJK_POSTURE))
+        aCJKFont.SetItalic(pItem->GetPosture());
+    if (const SvxPostureItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_CTL_POSTURE))
+        aCTLFont.SetItalic(pItem->GetPosture());
 
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_POSTURE)) != nullptr)
-        aFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CJK_POSTURE)) != nullptr)
-        aCJKFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CTL_POSTURE)) != nullptr)
-        aCTLFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
-
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CONTOUR)) != nullptr)
+    if (const SvxContourItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_CONTOUR))
     {
-        auto aVal = static_cast<const SvxContourItem*>(pItem)->GetValue();
+        auto aVal = pItem->GetValue();
         aFont.SetOutline(aVal);
         aCJKFont.SetOutline(aVal);
         aCTLFont.SetOutline(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_SHADOWED)) != nullptr)
+    if (const SvxShadowedItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_SHADOWED))
     {
-        auto aVal = static_cast<const SvxShadowedItem*>(pItem)->GetValue();
+        auto aVal = pItem->GetValue();
         aFont.SetShadow(aVal);
         aCJKFont.SetShadow(aVal);
         aCTLFont.SetShadow(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_RELIEF)) != nullptr)
+    if (const SvxCharReliefItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_RELIEF))
     {
-        auto aVal = static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
+        auto aVal = pItem->GetValue();
         aFont.SetRelief(aVal);
         aCJKFont.SetRelief(aVal);
         aCTLFont.SetRelief(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_UNDERLINE)) != nullptr)
+    if (const SvxUnderlineItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_UNDERLINE))
     {
-        auto aVal = static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle();
+        auto aVal = pItem->GetLineStyle();
         aFont.SetUnderline(aVal);
         aCJKFont.SetUnderline(aVal);
         aCTLFont.SetUnderline(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_OVERLINE)) != nullptr)
+    if (const SvxOverlineItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_OVERLINE))
     {
-        auto aVal = static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+        auto aVal = pItem->GetValue();
         aFont.SetOverline(aVal);
         aCJKFont.SetOverline(aVal);
         aCTLFont.SetOverline(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_STRIKEOUT)) != nullptr)
+    if (const SvxCrossedOutItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_STRIKEOUT))
     {
-        auto aVal = static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout();
+        auto aVal = pItem->GetStrikeout();
         aFont.SetStrikeout(aVal);
         aCJKFont.SetStrikeout(aVal);
         aCTLFont.SetStrikeout(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CASEMAP)) != nullptr)
+    if (const SvxCaseMapItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_CASEMAP))
     {
-        auto aVal = static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap();
+        auto aVal = pItem->GetCaseMap();
         aFont.SetCaseMap(aVal);
         aCJKFont.SetCaseMap(aVal);
         aCTLFont.SetCaseMap(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_EMPHASISMARK)) != nullptr)
+    if (const SvxEmphasisMarkItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_EMPHASISMARK))
     {
-        auto aVal = static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark();
+        auto aVal = pItem->GetEmphasisMark();
         aFont.SetEmphasisMark(aVal);
         aCJKFont.SetEmphasisMark(aVal);
         aCTLFont.SetEmphasisMark(aVal);
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
+    if (const SvxColorItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR))
     {
-        maFontColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
+        maFontColor = pItem->GetValue();
     }
-    if ((pItem = pItemSet->GetItem(SID_ATTR_BRUSH_CHAR)) != nullptr)
+    if (const SvxBrushItem* pItem = pItemSet->GetItem(SID_ATTR_BRUSH_CHAR))
     {
-        maHighlightColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
+        maHighlightColor = pItem->GetColor();
     }
 
     if (mpStyle->GetFamily() == SfxStyleFamily::Para)
     {
-        if ((pItem = pItemSet->GetItem(XATTR_FILLSTYLE)) != nullptr)
+        if (const XFillStyleItem* pItem = pItemSet->GetItem(XATTR_FILLSTYLE))
         {
-            css::drawing::FillStyle aFillStyle = static_cast<const XFillStyleItem*>(pItem)->GetValue();
+            css::drawing::FillStyle aFillStyle = pItem->GetValue();
             if (aFillStyle == drawing::FillStyle_SOLID)
             {
-                if ((pItem = pItemSet->GetItem(XATTR_FILLCOLOR)) != nullptr)
+                if (const XFillColorItem* pFillColorItem = pItemSet->GetItem(XATTR_FILLCOLOR))
                 {
-                    maBackgroundColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
+                    maBackgroundColor = pFillColorItem->GetColorValue();
                 }
             }
         }

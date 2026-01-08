@@ -1408,73 +1408,65 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     SetFontStyle(*pItemSet, SID_ATTR_CHAR_CJK_POSTURE, SID_ATTR_CHAR_CJK_WEIGHT, aCJKFont);
     SetFontStyle(*pItemSet, SID_ATTR_CHAR_CTL_POSTURE, SID_ATTR_CHAR_CTL_WEIGHT, aCTLFont);
 
-    const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR );
-    if ( pItem )
+    if (const SvxContourItem *pContourItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR ))
     {
-        auto aVal = static_cast< const SvxContourItem* >( pItem )->GetValue();
+        auto aVal = pContourItem->GetValue();
         aFont.SetOutline(aVal);
         aCJKFont.SetOutline(aVal);
         aCTLFont.SetOutline(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_SHADOWED );
-    if ( pItem )
+    if (const SvxShadowedItem* pShadowedItem = pItemSet->GetItem( SID_ATTR_CHAR_SHADOWED ))
     {
-        auto aVal = static_cast< const SvxShadowedItem* >( pItem )->GetValue();
+        auto aVal = pShadowedItem->GetValue();
         aFont.SetShadow(aVal);
         aCJKFont.SetShadow(aVal);
         aCTLFont.SetShadow(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF );
-    if ( pItem )
+    if (const SvxCharReliefItem* pCharReliefItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF ))
     {
-        auto aVal = static_cast< const SvxCharReliefItem* >( pItem )->GetValue();
+        auto aVal = pCharReliefItem->GetValue();
         aFont.SetRelief(aVal);
         aCJKFont.SetRelief(aVal);
         aCTLFont.SetRelief(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE );
-    if ( pItem )
+    if (const SvxUnderlineItem* pUnderlineItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE ))
     {
-        auto aVal = static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle();
+        auto aVal = pUnderlineItem->GetLineStyle();
         aFont.SetUnderline(aVal);
         aCJKFont.SetUnderline(aVal);
         aCTLFont.SetUnderline(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE );
-    if ( pItem )
+    if (const SvxOverlineItem* pOverlineItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE ))
     {
-        auto aVal = static_cast< const SvxOverlineItem* >( pItem )->GetValue();
+        auto aVal = pOverlineItem->GetValue();
         aFont.SetOverline(aVal);
         aCJKFont.SetOverline(aVal);
         aCTLFont.SetOverline(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT );
-    if ( pItem )
+    if (const SvxCrossedOutItem* pCrossedOutItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT ))
     {
-        auto aVal = static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout();
+        auto aVal = pCrossedOutItem->GetStrikeout();
         aFont.SetStrikeout(aVal);
         aCJKFont.SetStrikeout(aVal);
         aCTLFont.SetStrikeout(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_CASEMAP );
-    if ( pItem )
+    if (const SvxCaseMapItem* pCaseMapItem = pItemSet->GetItem( SID_ATTR_CHAR_CASEMAP ))
     {
-        auto aVal = static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap();
+        auto aVal = pCaseMapItem->GetCaseMap();
         aFont.SetCaseMap(aVal);
         aCJKFont.SetCaseMap(aVal);
         aCTLFont.SetCaseMap(aVal);
     }
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_EMPHASISMARK );
-    if ( pItem )
+    if (const SvxEmphasisMarkItem* pEmphasisMarkItem = pItemSet->GetItem( SID_ATTR_CHAR_EMPHASISMARK ))
     {
-        auto aVal = static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark();
+        auto aVal = pEmphasisMarkItem->GetEmphasisMark();
         aFont.SetEmphasisMark(aVal);
         aCJKFont.SetEmphasisMark(aVal);
         aCTLFont.SetEmphasisMark(aVal);
@@ -1483,26 +1475,25 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     // setup the device & draw
     Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
+    const SvxColorItem* pColorItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
     // text color, when nothing is selected
-    if ( (nullptr != pItem) && bIsNotSelected)
-        aFontCol = static_cast< const SvxColorItem* >( pItem )->GetValue();
+    if ( pColorItem && bIsNotSelected)
+        aFontCol = pColorItem->GetValue();
 
     drawing::FillStyle style = drawing::FillStyle_NONE;
     // which kind of Fill style is selected
-    pItem = pItemSet->GetItem( XATTR_FILLSTYLE );
+    const XFillStyleItem* pFillStyleItem = pItemSet->GetItem( XATTR_FILLSTYLE );
     // only when ok and not selected
-    if ( (nullptr != pItem) && bIsNotSelected)
-        style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
+    if ( pFillStyleItem && bIsNotSelected)
+        style = pFillStyleItem->GetValue();
 
     switch(style)
     {
         case drawing::FillStyle_SOLID:
         {
             // set background color
-            pItem = pItemSet->GetItem( XATTR_FILLCOLOR );
-            if ( nullptr != pItem )
-                aBackCol = static_cast< const XFillColorItem* >( pItem )->GetColorValue();
+            if (const XFillColorItem* pFillColorItem = pItemSet->GetItem( XATTR_FILLCOLOR ))
+                aBackCol = pFillColorItem->GetColorValue();
 
             if ( aBackCol != COL_AUTO )
             {

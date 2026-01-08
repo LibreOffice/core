@@ -1474,6 +1474,10 @@ public:
         return static_cast<const T*>(HasTextItem(sal_uInt16(nWhich)));
     }
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const = 0;
+    template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetItem(sal_uInt16(nWhich)));
+    }
 };
 
 /// Used to export formatted text associated to drawings.
@@ -1513,6 +1517,7 @@ public:
     void OutAttr( sal_Int32 nSwPos );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
+    template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const { return MSWordAttrIter::GetItem(nWhich); }
     sal_Int32 WhereNext() const                { return m_nCurrentSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const     { return m_eNdChrSet; }
@@ -1572,6 +1577,7 @@ public:
     void OutAttr(sal_Int32 nSwPos, bool bWriteCombinedChars);
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
+    template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const { return MSWordAttrIter::GetItem(nWhich); }
     int OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos);
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );

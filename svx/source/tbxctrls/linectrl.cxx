@@ -284,9 +284,8 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
     {
-        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_LINEEND_LIST );
-        if( pItem )
-            mpLineEndList = static_cast<const SvxLineEndListItem*>( pItem )->GetLineEndList();
+        if (const SvxLineEndListItem* pItem = pDocSh->GetItem( SID_LINEEND_LIST ))
+            mpLineEndList = pItem->GetLineEndList();
     }
     DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 

@@ -121,12 +121,12 @@ void ScStyleDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         if (rPageId == "numbers")
         {
-            const SfxPoolItem* pInfoItem
+            const SvxNumberInfoItem* pInfoItem
                 = pDocSh->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
             OSL_ENSURE( pInfoItem, "NumberInfoItem not found!" );
 
-            aSet.Put ( static_cast<const SvxNumberInfoItem&>(*pInfoItem) );
+            aSet.Put ( *pInfoItem );
             rTabPage.PageCreated(aSet);
         }
         else if (rPageId == "font")
