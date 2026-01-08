@@ -71,6 +71,7 @@
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolkit/unowrap.hxx>
+#include <vcl/weld/Paned.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/toolkit/vclmedit.hxx>

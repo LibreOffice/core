@@ -12,6 +12,7 @@
 
 #include <sfx2/dllapi.h>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Paned.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>

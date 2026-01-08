@@ -21,6 +21,7 @@
 #include <dbaccess/dataview.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Paned.hxx>
 #include <vcl/weld/weld.hxx>
 #include "IClipBoardTest.hxx"
 

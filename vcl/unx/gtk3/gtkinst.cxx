@@ -38,6 +38,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Paned.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
