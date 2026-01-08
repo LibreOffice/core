@@ -573,9 +573,6 @@ DECLARE_OOXMLEXPORT_TEST(testAfterlines, "afterlines.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // The problem was that we didn't handle the situation when an empty paragraph's marker had both a char style and some direct formatting.
 
     // This was 11.

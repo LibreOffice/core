@@ -279,9 +279,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158023Export)
 {
     createSwDoc("tdf158023_export.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(u"left [ right ] left ( right ) left lbrace  right rbrace"_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
@@ -614,9 +611,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -741,9 +735,6 @@ DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65265, "fdo65265.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     // Redline (tracked changes) of text formatting were not exported
     uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);
     uno::Reference<text::XTextRange> xParagraph2 = getParagraph(2);

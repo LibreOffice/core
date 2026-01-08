@@ -1079,9 +1079,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeXLSM)
 {
     createSwDoc("fdo76098.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1125,9 +1122,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTCTagMisMatch)
 CPPUNIT_TEST_FIXTURE(Test, testFDO78292)
 {
     createSwDoc("FDO78292.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
 
     save(TestFilter::DOCX);
     //text node is a leaf node, it should not have any children
@@ -1214,9 +1208,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 16
-    skipValidation();
-
     // the problem was: file is truncated: the first page is missing.
     // More precisely, the table in the first page was clipped.
     {
