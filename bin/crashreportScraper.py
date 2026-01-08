@@ -63,11 +63,12 @@ def convert_str_to_date(value):
     value = ", ".join(value.split(", ")[:-1])
     return datetime.strptime(value, '%b %d, %Y')
 
-def parse_version_url(url):
+def parse_version_url(version, session):
     crashReports = {}
+    url = "https://crashreport.libreoffice.org/stats/version/" + version + "?limit=1000&days=30"
 
     try:
-        html_text = requests.get(url, timeout=200).text
+        html_text = session.get(url, timeout=200).text
         soup = BeautifulSoup(html_text, 'html.parser')
     except requests.exceptions.Timeout:
         print("Timeout requesting " + url)
@@ -84,9 +85,10 @@ def parse_version_url(url):
 
     return crashReports
 
-def parse_reports_and_get_most_recent_report_from_last_page(url):
+def parse_reports_and_get_most_recent_report_from_last_page(signature, session):
     try:
-        html_text = requests.get(url, timeout=200).text
+        url = "https://crashreport.libreoffice.org/stats/signature/" + signature
+        html_text = session.get(url, timeout=200).text
         soup = BeautifulSoup(html_text, 'html.parser')
     except requests.exceptions.Timeout:
         print("Timeout")
@@ -132,9 +134,10 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
     return count, ID, OS
 
-def parse_details_and_get_info(url, gitRepo, gitBranch):
+def parse_details_and_get_info(crashId, session, gitRepo, gitBranch):
     try:
-        html_text = requests.get(url, timeout=200).text
+        url = "https://crashreport.libreoffice.org/stats/crash_details/" + crashID
+        html_text = session.get(url, timeout=200).text
         soup = BeautifulSoup(html_text, 'html.parser')
     except requests.exceptions.Timeout:
         print("Timeout")
@@ -193,8 +196,10 @@ if __name__ == '__main__':
 
     gitBranch = git.Repo(args.repository).active_branch.name
 
-    crashes = parse_version_url(
-            "https://crashreport.libreoffice.org/stats/version/" + args.version + "?limit=1000&days=30")
+    session = requests.Session()
+    session.headers.update({'Referer': 'https://crashreport.libreoffice.org'})
+
+    crashes = parse_version_url(args.version, session)
 
     print(str(len(crashes)) + " crash reports in version " + args.version)
 
@@ -221,12 +226,12 @@ if __name__ == '__main__':
                 f.write("<tr>")
                 try:
                     crashCount, crashID, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
-                            "https://crashreport.libreoffice.org/stats/signature/" + urllib.parse.quote(k))
+                            urllib.parse.quote(k), session)
                     if crashCount == 0:
                         continue
 
                     crashReason, codeStack, unoCommands = parse_details_and_get_info(
-                            "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository, gitBranch)
+                            crashID, session, args.repository, gitBranch)
                     ratio = round(crashCount / ((lDate[2] - lDate[1]).days + 1), 2)
                     count += 1
                     f.write("<td id=\"td1\">" + str(count) + "</td>")
