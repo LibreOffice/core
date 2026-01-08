@@ -564,7 +564,7 @@ Color OutputDevice::DrawSelectionBackground(const tools::Rectangle& rRect,
     Color aSelectionFillColor(aSelectionBorderColor);
 
     bool bDark = rStyles.GetFaceColor().IsDark();
-    bool bBright = ( rStyles.GetFaceColor() == COL_WHITE );
+    bool bBright = !bDark && rStyles.GetHighContrastMode();
 
     int c1 = aSelectionBorderColor.GetLuminance();
     int c2 = aWinBackgroundColor.GetLuminance();
