@@ -11572,7 +11572,7 @@ dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
 ICU_MAJOR=78
-ICU_MINOR=1
+ICU_MINOR=2
 ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
 ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib -licuuc"
 libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 66])
