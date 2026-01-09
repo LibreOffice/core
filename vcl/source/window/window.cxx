@@ -3409,9 +3409,12 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     // If GtkLabel has a static accessibility role, mark renderAsStatic.
     // so LOK renders it as <span> instead of <label> for correct accessibility.
+    OUString sAccRole;
     sal_uInt16 nAccessibleRole = GetAccessibleRole();
     if (nAccessibleRole == css::accessibility::AccessibleRole::STATIC && GetType() == WindowType::FIXEDTEXT)
         rJsonWriter.put("renderAsStatic", true);
+    else if (nAccessibleRole == css::accessibility::AccessibleRole::PAGE_TAB_LIST)
+        sAccRole = "tablist";
 
     vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();
     if (pAccLabelFor)
@@ -3424,13 +3427,15 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     OUString sAccName = (!pAccLabelFor && !pAccLabelledBy) ? GetAccessibleName() : OUString();
     OUString sAccDesc = GetAccessibleDescription();
 
-    if (!sAccName.isEmpty() || !sAccDesc.isEmpty())
+    if (!sAccName.isEmpty() || !sAccDesc.isEmpty() || !sAccRole.isEmpty())
     {
         auto aAria = rJsonWriter.startNode("aria");
         if (!sAccDesc.isEmpty())
             rJsonWriter.put("description", sAccDesc);
         if (!sAccName.isEmpty())
             rJsonWriter.put("label", sAccName);
+        if (!sAccRole.isEmpty())
+            rJsonWriter.put("role", sAccRole);
     }
 
     mpWindowImpl->maDumpAsPropertyTreeHdl.Call(rJsonWriter);
