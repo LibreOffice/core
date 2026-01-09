@@ -68,6 +68,11 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="find_tab_btn-atkobject">
+                    <property name="AtkObject::accessible-role">page tab list</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -81,6 +86,11 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="replace_tab_btn-atkobject">
+                    <property name="AtkObject::accessible-role">page tab list</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
