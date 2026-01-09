@@ -1659,8 +1659,7 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base&
     const SvxFontListItem* pFontListItem = nullptr;
 
     if ( pDocSh )
-        pFontListItem =
-            static_cast<const SvxFontListItem*>(pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
+        pFontListItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
     else
     {
         ::std::unique_ptr<FontList> aFontList(new FontList(Application::GetDefaultDevice()));

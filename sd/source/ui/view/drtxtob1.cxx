@@ -471,7 +471,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:
         {
-            const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(mrViewShell.GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ));
+            const SvxFontListItem* pFonts = mrViewShell.GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST );
             const FontList* pFontList = pFonts ? pFonts->GetFontList(): nullptr;
             if( pFontList )
             {

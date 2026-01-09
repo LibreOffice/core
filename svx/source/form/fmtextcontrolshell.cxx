@@ -613,7 +613,7 @@ namespace svx
 
     void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& rReq )
     {
-        const SvxFontListItem* pFontList = dynamic_cast<const SvxFontListItem*>( m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST )  );
+        const SvxFontListItem* pFontList = m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST );
         DBG_ASSERT( pFontList, "FmTextControlShell::executeAttributeDialog: no font list item!" );
         if ( !pFontList )
             return;

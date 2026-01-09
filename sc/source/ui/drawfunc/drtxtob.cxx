@@ -855,8 +855,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 {
                     if (SfxObjectShell* pObjSh = SfxObjectShell::Current())
                     {
-                        const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
-                                ( pObjSh->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+                        const SvxFontListItem* pFontListItem = pObjSh->GetItem( SID_ATTR_CHAR_FONTLIST );
                         const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                         pOutView->GetEditView().ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
                         mrViewData.GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );

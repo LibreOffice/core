@@ -349,12 +349,11 @@ const FontList* SvxCharNamePage::GetFontList() const
         /* #110771# SvxFontListItem::GetFontList can return NULL */
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
         {
-            const SfxPoolItem* pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+            const SvxFontListItem* pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
             if ( pItem != nullptr )
             {
-                DBG_ASSERT(nullptr != static_cast<const SvxFontListItem*>(pItem)->GetFontList(),
-                           "Where is the font list?");
-                m_pImpl->m_pFontList = static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
+                DBG_ASSERT(nullptr != pItem->GetFontList(), "Where is the font list?");
+                m_pImpl->m_pFontList = pItem->GetFontList()->Clone();
             }
         }
         if(!m_pImpl->m_pFontList)

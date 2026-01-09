@@ -1106,8 +1106,7 @@ const FontList *SwCSS1Parser::GetFontList() const
     SwDocShell *pDocSh = m_pDoc->GetDocShell();
     if( pDocSh )
     {
-        const SvxFontListItem *pFListItem =
-            static_cast<const SvxFontListItem *>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+        const SvxFontListItem *pFListItem = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
         if( pFListItem )
             pFList = pFListItem->GetFontList();
     }
