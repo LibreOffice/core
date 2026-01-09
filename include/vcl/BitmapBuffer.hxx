@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPBUFFER_HXX
-#define INCLUDED_VCL_BITMAPBUFFER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -46,7 +45,5 @@ struct VCL_DLLPUBLIC BitmapBuffer
 VCL_DLLPUBLIC std::optional<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal = std::nullopt );
-
-#endif // INCLUDED_VCL_BITMAPBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
