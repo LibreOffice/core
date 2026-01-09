@@ -19,13 +19,24 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Any.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/font.hxx>
 
 #include <map>
 #include <vector>
+
+namespace com::sun::star::beans
+{
+struct PropertyValue;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Sequence;
+}
+namespace vcl
+{
+class Font;
+}
 
 class VCL_DLLPUBLIC CharacterAttributesHelper
 {

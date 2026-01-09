@@ -95,7 +95,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to insert the date in a spreadsheet cell? Type %MOD1+; or Shift+%MOD1+; to insert the time."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "Insert your metadata in your document with Insert ▸ Fields ▸ More Fields… ▸ Document or DocInformation."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Get help from the community via the Ask portal."), "https://ask.libreoffice.org", "", soffice},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Use Shift+Space to select the current row and %MOD1+Space to select the current column."), "", "", scalc},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Use Shift+Space to select the current row and %MOD3+Space to select the current column."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can move an object to another layer by holding it until its edges flash, then drag it to the tab of the layer you want to move it to."), "", "", sdraw},
      { NC_("RID_CUI_TIPOFTHEDAY", "Data ▸ Validity allows you to create drop-down lists where the user selects a value instead of typing."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/guide/validity.html", "", scalc}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Hold down %MOD1 and turn the mouse wheel to change the zoom factor."), "", "", soffice},

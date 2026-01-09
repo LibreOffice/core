@@ -11,6 +11,7 @@
 #include <cppunit/TestAssert.h>
 
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 
 class VclAnimationTest : public test::BootstrapFixture
 {

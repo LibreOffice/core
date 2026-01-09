@@ -214,6 +214,8 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     }
 
     rJsonWriter.put("checkboxtype", checkboxtype);
+    if (GetCustomEntryRenderer())
+        rJsonWriter.put("customEntryRenderer", true);
     auto entriesNode = rJsonWriter.startArray("entries");
     lcl_DumpEntryAndSiblings(rJsonWriter, First(), this, bCheckButtons);
 }

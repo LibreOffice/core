@@ -24,6 +24,7 @@
 #include <helpids.h>
 
 #include <vcl/taskpanelist.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace basctl
 {

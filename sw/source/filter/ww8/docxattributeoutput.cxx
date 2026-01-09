@@ -3366,6 +3366,10 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
     {
+        FSNS( XML_w, XML_del ),
+        FSNS( XML_w, XML_ins ),
+        FSNS( XML_w, XML_moveFrom ),
+        FSNS( XML_w, XML_moveTo ),
         FSNS( XML_w, XML_rStyle ),
         FSNS( XML_w, XML_rFonts ),
         FSNS( XML_w, XML_b ),
@@ -3406,10 +3410,6 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w, XML_specVanish ),
         FSNS( XML_w, XML_oMath ),
         FSNS( XML_w, XML_rPrChange ),
-        FSNS( XML_w, XML_del ),
-        FSNS( XML_w, XML_ins ),
-        FSNS( XML_w, XML_moveFrom ),
-        FSNS( XML_w, XML_moveTo ),
         FSNS( XML_w14, XML_glow ),
         FSNS( XML_w14, XML_shadow ),
         FSNS( XML_w14, XML_reflection ),
@@ -4282,6 +4282,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         if (!bNoDate)
             pAttributeList->add(FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ));
         m_pSerializer->startElementNS( XML_w, XML_pPrChange, pAttributeList );
+        m_pSerializer->startElementNS(XML_w, XML_pPr);
+        m_pSerializer->mark(Tag_Redline_2, comphelper::containerToSequence(aParagraphPropertiesOrder));
 
         // Check if there is any extra data stored in the redline object
         if (pRedlineData->GetExtraData())
@@ -4297,10 +4299,6 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                 const UIName & sParaStyleName = pFormattingChanges->GetFormatName();
                 if (pChangesSet || !sParaStyleName.isEmpty())
                 {
-                    m_pSerializer->startElementNS(XML_w, XML_pPr);
-
-                    m_pSerializer->mark(Tag_Redline_2, comphelper::containerToSequence(aParagraphPropertiesOrder));
-
                     if (!sParaStyleName.isEmpty())
                     {
                         OString sStyleName;
@@ -4336,13 +4334,11 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     m_rExport.SdrExporter().getFlyAttrList() = std::move(pFlyAttrList_Original);
                     m_pLRSpaceAttrList = std::move(pLRSpaceAttrList_Original);
                     m_pParagraphSpacingAttrList = std::move(pParagraphSpacingAttrList_Original);
-
-                    m_pSerializer->mergeTopMarks(Tag_Redline_2);
-
-                    m_pSerializer->endElementNS( XML_w, XML_pPr );
                 }
             }
         }
+        m_pSerializer->mergeTopMarks(Tag_Redline_2);
+        m_pSerializer->endElementNS( XML_w, XML_pPr );
         m_pSerializer->endElementNS( XML_w, XML_pPrChange );
         break;
     }

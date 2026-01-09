@@ -197,13 +197,21 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
     auto resultNode = rJson.startNode("result");
 
     const auto& entries = ImplGetSVData()->mpDefInst->getUsedUIList();
+    if (!entries.empty())
     {
         auto childrenNode = rJson.startArray("used");
         for (const auto& entry : entries)
             rJson.putSimpleValue(entry);
     }
 
-    rJson.put("CompleteWriterDialogCoverage", jsdialog::completeWriterDialogList(entries));
+    std::vector<OUString> missingWriterDialogUIs = jsdialog::completeWriterDialogList(entries);
+    rJson.put("CompleteWriterDialogCoverage", missingWriterDialogUIs.empty());
+    if (!missingWriterDialogUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingWriterDialogCoverage");
+        for (const auto& entry : missingWriterDialogUIs)
+            rJson.putSimpleValue(entry);
+    }
 }
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
@@ -3127,7 +3135,8 @@ std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlRe
                 {
                     nPriority = o3tl::toInt32(rest);
                 }
-                else if (classStyle != "small-button" && classStyle != "destructive-action" && classStyle != "suggested-action")
+                else if (classStyle != "small-button" && classStyle != "destructive-action" &&
+                         classStyle != "suggested-action" && classStyle != "novertpad")
                 {
                     SAL_WARN("vcl.builder", "unknown class: " << classStyle);
                 }
@@ -3536,9 +3545,9 @@ const BuilderBase::ListStore* BuilderBase::get_model_by_name(const OUString& sID
     return nullptr;
 }
 
-void BuilderBase::addTextBuffer(const OUString& sID, const TextBuffer& rTextBuffer)
+void BuilderBase::addTextBuffer(const OUString& sID, TextBuffer&& rTextBuffer)
 {
-    m_pParserState->m_aTextBuffers[sID] = rTextBuffer;
+    m_pParserState->m_aTextBuffers[sID] = std::move(rTextBuffer);
 }
 
 const BuilderBase::TextBuffer* BuilderBase::get_buffer_by_name(const OUString& sID) const
@@ -3549,9 +3558,9 @@ const BuilderBase::TextBuffer* BuilderBase::get_buffer_by_name(const OUString& s
     return nullptr;
 }
 
-void BuilderBase::addAdjustment(const OUString& sID, const Adjustment& rAdjustment)
+void BuilderBase::addAdjustment(const OUString& sID, Adjustment&& rAdjustment)
 {
-    m_pParserState->m_aAdjustments[sID] = rAdjustment;
+    m_pParserState->m_aAdjustments[sID] = std::move(rAdjustment);
 }
 
 const BuilderBase::Adjustment* BuilderBase::get_adjustment_by_name(const OUString& sID) const

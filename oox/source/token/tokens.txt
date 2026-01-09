@@ -1603,7 +1603,9 @@ cw
 cwIn
 cwOut
 cx
+cx1
 cx2
+cx4
 cxn
 cxnId
 cxnLst

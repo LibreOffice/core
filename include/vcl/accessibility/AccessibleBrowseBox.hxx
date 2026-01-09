@@ -21,10 +21,10 @@
 #pragma once
 
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
-#include <vcl/accessibletableprovider.hxx>
 
 class AccessibleBrowseBoxHeaderBar;
 class AccessibleBrowseBoxTable;
+namespace vcl { class IAccessibleTableProvider; }
 
 
 /** This class represents the complete accessible BrowseBox object. */

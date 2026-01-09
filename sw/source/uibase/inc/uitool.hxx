@@ -21,7 +21,6 @@
 
 #include <tools/fldunit.hxx>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 #include <swtypes.hxx>
 #include <swdllapi.h>
 

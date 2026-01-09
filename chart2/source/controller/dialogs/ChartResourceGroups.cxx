@@ -34,6 +34,7 @@ Dim3DLookResourceGroup::Dim3DLookResourceGroup(weld::Builder* pBuilder)
 {
     m_xCB_3DLook->connect_toggled(LINK(this, Dim3DLookResourceGroup, Dim3DLookCheckHdl));
     m_xLB_Scheme->connect_changed(LINK(this, Dim3DLookResourceGroup, SelectSchemeHdl));
+    m_xCB_3DLook->set_active(false);
 }
 
 void Dim3DLookResourceGroup::showControls(bool bShow)

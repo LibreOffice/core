@@ -611,6 +611,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 SID_DISPLAY_MASTER_OBJECTS,
                 0 };
             updateMasterSlideSelection();
+            updatePaperSizeBoxSelection();
             GetBindings()->Invalidate( SidArray );
         }
         break;
@@ -685,6 +686,17 @@ void SlideBackground::updateMasterSlideSelection()
         SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
         SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
         mxMasterSlide->set_active_text(pMasterPage->GetName());
+    }
+}
+
+void SlideBackground::updatePaperSizeBoxSelection()
+{
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+    SdPage* pPage = pMainViewShell ? pMainViewShell->getCurrentPage() : nullptr;
+    if (pPage != nullptr)
+    {
+        Paper ePaper = SvxPaperInfo::GetSvxPaper(pPage->GetSize(), MapUnit::Map100thMM);
+        mxPaperSizeBox->set_active_id(ePaper);
     }
 }
 
@@ -1104,21 +1116,6 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD,
                                                 { &aSizeItem, mpPageItem.get(), &aFitObjs });
-
-    // Notify LOK clients of the page size change.
-    if (!comphelper::LibreOfficeKit::isActive())
-        return;
-
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
-    {
-        if (pViewShell->GetDocId() == mrBase.GetDocId())
-        {
-            SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pViewShell->GetCurrentDocument());
-            SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
-        }
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
 }
 
 IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)

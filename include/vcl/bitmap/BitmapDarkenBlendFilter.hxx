@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapDarkenBlendFilter final : public BitmapFilter

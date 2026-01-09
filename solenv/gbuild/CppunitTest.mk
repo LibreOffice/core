@@ -409,11 +409,16 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 endef
 
 # One of allow, deny, abort:
+# Controls use of non-bundled fonts. Set to 'abort' to detect when a test in the suite would use a
+# non-bundled font (a good practice). Default is to neither deny nor abort.
 define gb_CppunitTest_set_non_application_font_use
 $(call gb_CppunitTest_get_target,$(1)) : NON_APPLICATION_FONT_USE += $(2)
 
 endef
 
+# This test suite uses the fonts available on the "more fonts" build type:
+# 1) only run the test once those are packaged already
+# 2) don't use fonts which are "non-application" (not part of the installation set)
 define gb_CppunitTest_use_more_fonts
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(call gb_CppunitTest_get_target,$(1)) : \

@@ -1054,18 +1054,15 @@ void SdXMLLineShapeContext::startFastElement (sal_Int32 nElement,
 
     // get sizes and offsets
     awt::Point aTopLeft(mnX1, mnY1);
-    awt::Point aBottomRight(mnX2, mnY2);
 
     if(mnX1 > mnX2)
     {
         aTopLeft.X = mnX2;
-        aBottomRight.X = mnX1;
     }
 
     if(mnY1 > mnY2)
     {
         aTopLeft.Y = mnY2;
-        aBottomRight.Y = mnY1;
     }
 
     // set local parameters on shape

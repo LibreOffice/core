@@ -30,6 +30,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>

@@ -31,6 +31,9 @@ replacements["Lucida Sans Unicode"]="Noto Sans"
 replacements["Candara"]="Noto Sans"
 replacements["Verdana"]="Noto Sans"
 replacements["Gill Sans MT"]="Noto Sans"
+replacements["Century Schoolbook"]="Noto Serif"
+replacements["CG Omega"]="Noto Sans"
+replacements["AvantGarde Bk BT"]="Noto Sans"
 
 extracted_folder=".temp_extracted"
 

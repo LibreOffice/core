@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <o3tl/safeint.hxx>
 #include <osl/time.h>
+#include <vcl/alpha.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>

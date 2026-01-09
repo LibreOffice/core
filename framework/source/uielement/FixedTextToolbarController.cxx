@@ -23,6 +23,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

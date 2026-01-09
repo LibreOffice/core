@@ -9,6 +9,7 @@
 
 #include <vcl/IconThemeInfo.hxx>
 #include <rtl/character.hxx>
+#include <tools/gen.hxx>
 
 #include <stdexcept>
 #include <algorithm>

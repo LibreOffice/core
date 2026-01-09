@@ -18,6 +18,7 @@
  */
 
 #include <svtools/recorditemwindow.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/event.hxx>
 
 RecordItemWindowBase::RecordItemWindowBase(std::unique_ptr<weld::Entry> xEntry)

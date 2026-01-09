@@ -29,6 +29,7 @@
 
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
+#include <vcl/alpha.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -40,6 +41,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/RawBitmap.hxx>
 
 using namespace css;
 

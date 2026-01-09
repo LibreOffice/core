@@ -56,6 +56,8 @@
 #include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <svx/unomodel.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -66,7 +68,8 @@ const WhichRangesContainer SvxPageDescPage::pRanges(
     svl::Items<
     SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_SHADOW,
     SID_ATTR_LRSPACE, SID_ATTR_PAGE_SHARED,
-    SID_SWREGISTER_COLLECTION, SID_SWREGISTER_MODE>);
+    SID_SWREGISTER_COLLECTION, SID_SWREGISTER_MODE,
+    SID_ATTR_RESIZE_ALL_PAGES, SID_ATTR_RESIZE_ALL_PAGES>);
 // ------- Mapping page layout ------------------------------------------
 
 const SvxPageUsage aArr[] =
@@ -153,6 +156,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xLandscapeBtn(m_xBuilder->weld_radio_button(u"radiobuttonLandscape"_ustr))
     , m_xTextFlowLbl(m_xBuilder->weld_label(u"labelTextFlow"_ustr))
     , m_xTextFlowBox(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboTextFlowBox"_ustr)))
+    , m_xResizeAllPages(m_xBuilder->weld_check_button(u"checkResizeAllPages"_ustr))
     , m_xPaperTrayBox(m_xBuilder->weld_combo_box(u"comboPaperTray"_ustr))
     , m_xLeftMarginLbl(m_xBuilder->weld_label(u"labelLeftMargin"_ustr))
     , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button(u"spinMargLeft"_ustr, FieldUnit::CM))
@@ -396,6 +400,12 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         }
     }
 
+    if (rSet->HasItem(SID_ATTR_RESIZE_ALL_PAGES))
+    {
+        const SfxBoolItem& rItem = rSet->Get(SID_ATTR_RESIZE_ALL_PAGES);
+        m_xResizeAllPages->set_active(rItem.GetValue());
+    }
+
     // general page data
     SvxNumType eNumType = SVX_NUM_ARABIC;
     bLandscape = ( mpDefPrinter->GetOrientation() == Orientation::Landscape );
@@ -568,6 +578,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xPaperSizeBox->save_value();
     m_xPaperWidthEdit->save_value();
     m_xPaperHeightEdit->save_value();
+    m_xResizeAllPages->save_state();
     m_xPortraitBtn->save_state();
     m_xLandscapeBtn->save_state();
     m_xPaperTrayBox->save_value();
@@ -721,6 +732,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
             bModified = true;
             rSet->Put( aTopMargin );
         }
+    }
+
+    if (m_xResizeAllPages->get_state_changed_from_saved())
+    {
+        SfxBoolItem aResize (GetWhich(SID_ATTR_RESIZE_ALL_PAGES), m_xResizeAllPages->get_active());
+        rSet->Put(aResize);
+        bModified = true;
     }
 
     // paper tray

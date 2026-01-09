@@ -10,7 +10,10 @@
 #ifndef INCLUDED_VCL_GRAPHIC_LOADER_HXX
 #define INCLUDED_VCL_GRAPHIC_LOADER_HXX
 
-#include <vcl/graph.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
+
+class Graphic;
 
 namespace weld
 {

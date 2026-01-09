@@ -37,6 +37,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <initializer_list>
 #include <memory>

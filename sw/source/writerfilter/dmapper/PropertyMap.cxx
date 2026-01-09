@@ -2226,8 +2226,8 @@ void SectionPropertyMap::SetStart( const uno::Reference< text::XTextRange >& xRa
             m_xStartingRange->getText()->createTextCursorByRange(m_xStartingRange), uno::UNO_QUERY_THROW);
         // CAUTION: gotoPreviousParagraph skips over tables,
         // so this range does not necessarily indicate the end of the previous section
-        xPCursor->gotoPreviousParagraph(false);
-        m_xPreStartingRange = xPCursor;
+        if (xPCursor->gotoPreviousParagraph(false))
+            m_xPreStartingRange = xPCursor;
     }
     catch (const uno::Exception&)
     {

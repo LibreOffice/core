@@ -21,6 +21,7 @@
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
 #include <rtl/crc.h>
+#include <tools/solar.h>
 #include <tools/vcompat.hxx>
 
 #include <osl/thread.h>

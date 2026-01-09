@@ -35,6 +35,7 @@
 #include <tools/link.hxx>
 #include <utility>
 #include <vcl/toolboxid.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <unordered_map>
 

@@ -128,7 +128,6 @@ private:
     friend class TextChain;
     friend class TextChainFlow;
     friend class EditingTextChainFlow;
-    friend class SdrOutliner;
 
     // CustomShapeproperties need to access the "mbTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;

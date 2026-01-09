@@ -18,6 +18,7 @@
  */
 
 #include <svtools/scrolladaptor.hxx>
+#include <vcl/weld/Builder.hxx>
 
 ScrollAdaptor::ScrollAdaptor(vcl::Window* pWin, bool bHoriz)
     : InterimItemWindow(pWin, u"svt/ui/scrollbars.ui"_ustr, u"ScrollBars"_ustr)

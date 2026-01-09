@@ -47,6 +47,8 @@
 #include <cppuhelper/weakref.hxx>
 #include "sddllapi.h"
 
+#include <optional>
+
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
 
 class SdDrawDocument;
@@ -242,6 +244,8 @@ public:
                             tools::Long nTileWidth,
                             tools::Long nTileHeight ) override;
     virtual Size getDocumentSize() override;
+    virtual Size getPartSize(int part) override;
+    virtual void getAllPartSize(::tools::JsonWriter& rJsonWriter) override;
     SD_DLLPUBLIC virtual void setPart(   int nPart, bool bAllowChangeFocus = true ) override;
     SD_DLLPUBLIC virtual int  getPart() override;
     SD_DLLPUBLIC virtual int  getParts() override;

@@ -22,6 +22,7 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/poly.hxx>

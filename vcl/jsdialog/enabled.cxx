@@ -221,6 +221,13 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/dropdownfielddialog.ui" },
         { u"modules/swriter/ui/editsectiondialog.ui" },
         { u"modules/swriter/ui/endnotepage.ui" },
+        { u"modules/swriter/ui/editfielddialog.ui" },
+        { u"modules/swriter/ui/fielddialog.ui" },
+        { u"modules/swriter/ui/flddocumentpage.ui" },
+        { u"modules/swriter/ui/fldvarpage.ui" },
+        { u"modules/swriter/ui/flddocinfopage.ui" },
+        { u"modules/swriter/ui/fldrefpage.ui" },
+        { u"modules/swriter/ui/fldfuncpage.ui"},
         { u"modules/swriter/ui/footendnotedialog.ui" },
         { u"modules/swriter/ui/footnoteareapage.ui" },
         { u"modules/swriter/ui/footnotepage.ui" },
@@ -627,14 +634,16 @@ bool isBuilderEnabledForFormulabar(std::u16string_view rUIFile)
     return isInMap(FormulabarList, rUIFile);
 }
 
-bool completeWriterDialogList(const o3tl::sorted_vector<OUString>& entries)
+std::vector<OUString> completeWriterDialogList(const o3tl::sorted_vector<OUString>& entries)
 {
+    std::vector<OUString> missing;
     for (const auto& entry : SwriterDialogList)
     {
-        if (!entries.contains(OUString(entry)))
-            return false;
+        OUString sEntry(entry);
+        if (!entries.contains(sEntry))
+            missing.push_back(sEntry);
     }
-    return true;
+    return missing;
 }
 
 } // end of jsdialog

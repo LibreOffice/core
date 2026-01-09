@@ -32,6 +32,7 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/bitmap.hxx>
 

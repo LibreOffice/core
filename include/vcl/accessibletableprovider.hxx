@@ -20,9 +20,18 @@
 #ifndef INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 #define INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 
-#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
-#include <vcl/window.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <rtl/ustring.hxx>
+#include <vector>
+
+class Point;
+enum class AccessibleBrowseBoxObjType;
+namespace comphelper { class OAccessible; }
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace rtl { template <class reference_type> class Reference; }
+namespace tools { class Rectangle; }
+namespace vcl { class Window; }
 
 namespace vcl
 {

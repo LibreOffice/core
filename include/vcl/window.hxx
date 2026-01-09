@@ -29,6 +29,7 @@
 #include <vcl/region.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
@@ -365,10 +366,6 @@ enum class GetDlgWindowType
 };
 
 
-#ifdef DBG_UTIL
-const char* ImplDbgCheckWindow( const void* pObj );
-#endif
-
 namespace vcl { class Window; }
 namespace vcl { class Cursor; }
 namespace vcl { class WindowOutputDevice; }
@@ -475,10 +472,6 @@ private:
     //       but use class WindowImpl instead
 
     std::unique_ptr<WindowImpl> mpWindowImpl;
-
-#ifdef DBG_UTIL
-    friend const char* ::ImplDbgCheckWindow( const void* pObj );
-#endif
 
 public:
 

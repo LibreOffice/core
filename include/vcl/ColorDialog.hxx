@@ -19,12 +19,13 @@
 
 #pragma once
 
-#include <tools/color.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <functional>
+
+class Color;
+namespace weld { class Window; }
 
 namespace vcl
 {

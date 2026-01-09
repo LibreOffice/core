@@ -77,6 +77,10 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_macros_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_macros_test))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_macros_test,abort))
+endif
+
 $(eval $(call gb_CppunitTest_add_arguments,sw_macros_test, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))

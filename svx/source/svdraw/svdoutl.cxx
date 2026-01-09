@@ -26,7 +26,6 @@
 #include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/editeng.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
 
@@ -64,9 +63,6 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         SetPaperSize( aMaxSize );
         SetTextColumns(pObj->GetTextColumnsNumber(), pObj->GetTextColumnsSpacing());
         ClearPolygon();
-
-        if (pObj->GetTextEditOutliner())
-            SetBackgroundColor(pObj->GetTextEditOutliner()->GetEditEngine().GetBackgroundColor());
     }
 
     mxWeakTextObj = const_cast< SdrTextObj* >(pObj);

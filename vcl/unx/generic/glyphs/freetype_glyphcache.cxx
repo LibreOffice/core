@@ -69,7 +69,6 @@ static FT_Library aLibFT = nullptr;
 // if (AA prio <= AH prio) => antialias + autohint
 // if (AH<AA) => do not autohint when antialiasing
 // if (EB<AH) => do not autohint for monochrome
-static int nDefaultPrioEmbedded    = 2;
 static int nDefaultPrioAntiAlias   = 1;
 
 FreetypeFontFile::FreetypeFontFile( OString aNativeFileName )
@@ -248,9 +247,6 @@ void FreetypeManager::InitFreetype()
 
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
-    pEnv = ::getenv( "SAL_EMBEDDED_BITMAP_PRIORITY" );
-    if( pEnv )
-        nDefaultPrioEmbedded  = pEnv[0] - '0';
     pEnv = ::getenv( "SAL_ANTIALIASED_TEXT_PRIORITY" );
     if( pEnv )
         nDefaultPrioAntiAlias = pEnv[0] - '0';

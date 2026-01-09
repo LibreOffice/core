@@ -39,6 +39,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <svl/grabbagitem.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <doc.hxx>
 
 #define TEXT_PADDING 3

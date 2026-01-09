@@ -12,9 +12,11 @@
 #include <rtl/ustring.hxx>
 #include <rtl/character.hxx>
 #include <comphelper/string.hxx>
+#include <tools/color.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <utility>
+#include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>

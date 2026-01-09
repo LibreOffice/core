@@ -126,6 +126,8 @@ class DocxExport : public MSWordExportBase
 
     std::set<SwNode*> m_aDummyFloatingTableAnchors;
 
+    std::vector<css::uno::Reference<frame::XModel>> m_aExportedCharts;
+
 public:
 
     DocxExportFilter& GetFilter() { return m_rFilter; };

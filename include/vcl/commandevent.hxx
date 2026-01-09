@@ -27,7 +27,6 @@
 #include <vcl/keycodes.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/GestureEventPan.hxx>
 #include <vcl/GestureEventZoom.hxx>
 #include <vcl/GestureEventRotate.hxx>
 
@@ -45,6 +44,8 @@ class CommandGestureZoomData;
 class CommandGestureRotateData;
 
 enum class CommandEventId;
+enum class GestureEventPanType;
+enum class PanningOrientation;
 
 enum class ExtTextInputAttr {
     NONE                  = 0x0000,

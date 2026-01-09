@@ -49,7 +49,7 @@ published enum ValidationAlertStyle
 
     /** silently reject
 
-        @since LibreOffice 26.2
+        @since LibreOffice 26.8
      */
     NONE
 };

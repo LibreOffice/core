@@ -105,6 +105,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/sdasitm.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
@@ -164,10 +165,26 @@ void SdDrawDocument::CreateLayoutTemplates()
     aNullGrad.SetEndIntens(100);
     XHatch aNullHatch(aNullCol);
 
+    // Setup default colors, sizes
+    const tools::Long nDefaultLineSize = pointsToHMM(3);
+
+    auto eLineAndFillThemeType = model::ThemeColorType::Accent1;
+    auto aFillComplexColor = model::ComplexColor::Theme(eLineAndFillThemeType);
+    Color aFillColor = getTheme()->getColorSet()->resolveColor(aFillComplexColor);
+    aFillComplexColor.setFinalColor(aFillColor);
+
+    Color aBaseThemeColor = getTheme()->getColorSet()->getColor(eLineAndFillThemeType);
+    auto aLineComplexColor = model::ComplexColor::create(eLineAndFillThemeType, aBaseThemeColor, 4);
+
+    Color aLineColor = getTheme()->getColorSet()->resolveColor(aLineComplexColor);
+    aLineComplexColor.setFinalColor(aLineColor);
+
     // Line attributes (Extended OutputDevice)
     rISet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
-    rISet.Put(XLineColorItem(OUString(), COL_DEFAULT_SHAPE_STROKE));
-    rISet.Put(XLineWidthItem(0));
+    XLineColorItem aLineColorItem(OUString(), aLineColor);
+    aLineColorItem.setComplexColor(aLineComplexColor);
+    rISet.Put(aLineColorItem);
+    rISet.Put(XLineWidthItem(nDefaultLineSize));
     rISet.Put(XLineDashItem(aNullDash));
     rISet.Put(XLineStartItem(basegfx::B2DPolyPolygon()));
     rISet.Put(XLineEndItem(basegfx::B2DPolyPolygon()));
@@ -179,7 +196,9 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Fill attributes (Extended OutputDevice)
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    rISet.Put(XFillColorItem(OUString(), COL_DEFAULT_SHAPE_FILLING));
+    XFillColorItem aFillColorItem(OUString(), aFillColor);
+    aFillColorItem.setComplexColor(aFillComplexColor);
+    rISet.Put(aFillColorItem);
 
     rISet.Put(XFillGradientItem(aNullGrad));
     rISet.Put(XFillHatchItem(aNullHatch));

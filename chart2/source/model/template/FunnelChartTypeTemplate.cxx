@@ -8,7 +8,7 @@
  */
 
 #include "FunnelChartTypeTemplate.hxx"
-#include "ColumnChartType.hxx"
+#include "FunnelChartType.hxx"
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
@@ -99,7 +99,7 @@ bool FunnelChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Dia
 rtl::Reference<ChartType>
     FunnelChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
 {
-    return new ColumnChartType();
+    return new FunnelChartType();
 }
 
 rtl::Reference<ChartType> FunnelChartTypeTemplate::getChartTypeForNewSeries2(

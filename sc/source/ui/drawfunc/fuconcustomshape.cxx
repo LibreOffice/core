@@ -28,6 +28,7 @@
 #include <svx/xfillit0.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <tabvwsh.hxx>
 #include <drawview.hxx>
 #include <editeng/adjustitem.hxx>

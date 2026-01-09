@@ -25,6 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <sc.hrc>
 
 ScNumberFormat::ScNumberFormat(vcl::Window* pParent)

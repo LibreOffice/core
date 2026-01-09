@@ -22,6 +22,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="tooltip_text" translatable="yes" context="tokenwidget|left|tooltip_text">Scroll left</property>
         <property name="image">image1</property>
         <property name="always-show-image">True</property>
       </object>
@@ -84,6 +85,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
+        <property name="tooltip_text" translatable="yes" context="tokenwidget|right|tooltip_text">Scroll right</property>
         <property name="image">image2</property>
         <property name="always-show-image">True</property>
       </object>

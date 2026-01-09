@@ -447,8 +447,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
                          const DbGridRow* pRow,
                          const Reference< XNumberFormatter >& xFormatter)
 {
-    bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
-                ||  ( rDev.GetOwnerWindow()->IsEnabled() );
+    bool bEnabled = rDev.GetOwnerWindow() && rDev.GetOwnerWindow()->IsEnabled();
 
     FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell.get() );
     if (pDataCell)
@@ -3570,7 +3569,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
                         const Reference< XNumberFormatter >& xFormatter)
 {
     DrawTextFlags nStyle = DrawTextFlags::Clip;
-    if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !rDev.GetOwnerWindow()->IsEnabled() )
+    if ( !rDev.GetOwnerWindow() || !rDev.GetOwnerWindow()->IsEnabled() )
         nStyle |= DrawTextFlags::Disable;
 
     switch (m_pColumn->GetAlignment())

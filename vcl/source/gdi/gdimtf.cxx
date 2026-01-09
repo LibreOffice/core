@@ -27,6 +27,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>

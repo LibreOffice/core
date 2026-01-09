@@ -152,9 +152,32 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenODS)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
 {
+    xmlDocUniquePtr pXmlDoc;
+
+    // ====
+    loadFromFile(u"xlsx/boxWhisker.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 3, 0,
+                "layoutId", u"boxWhisker");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"BoxWhisker");
+    // ====
+    loadFromFile(u"xlsx/clusteredColumn.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"clusteredColumn");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Clustered Column");
+    // ====
     loadFromFile(u"xlsx/funnel1.xlsx");
     save(TestFilter::XLSX);
-    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
@@ -166,6 +189,61 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
         "val", u"c55a11");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Funnel chart!");
+
+    // ====
+    loadFromFile(u"xlsx/paretoLine.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // A pareto chart from MSO really consists of two subcharts: a pareto line
+    // and a clustered column chart.
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 0,
+                "layoutId", u"clusteredColumn");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 1,
+                "layoutId", u"paretoLine");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"ParetoLine");
+    // ====
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"regionMap");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"RegionMap");
+    // ====
+    loadFromFile(u"xlsx/sunburst.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"sunburst");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Sunburst");
+    // ====
+    loadFromFile(u"xlsx/treemap.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"treemap");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Treemap");
+    // ====
+    loadFromFile(u"xlsx/waterfall.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
+                "layoutId", u"waterfall");
+    assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
+                       u"Waterfall");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
@@ -354,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
                          aFields[1]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(u" <CELLREF"_ustr, aFields[1]->getString());
 
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -626,7 +704,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161607PieChartLeaderLinesColorWid
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testNumberFormatExportPPTX)
 {
     loadFromFile(u"pptx/tdf115859.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -661,7 +739,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLabelSeparatorExportDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesColorFillPPTX)
 {
     loadFromFile(u"pptx/testChartTitlePropertiesColorFill.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathInsensitive(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr",
@@ -672,7 +750,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesColorFillPPTX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesGradientFillPPTX)
 {
     loadFromFile(u"pptx/testChartTitlePropertiesGradientFill.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathInsensitive(
@@ -687,7 +765,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesGradientFillPPTX
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesBitmapFillPPTX)
 {
     loadFromFile(u"pptx/testChartTitlePropertiesBitmapFill.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed",
@@ -776,7 +854,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testMultipleCategoryAxisLablesDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf116163)
 {
     loadFromFile(u"pptx/tdf116163.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -818,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf119029)
 {
     loadFromFile(u"odp/tdf119029.odp");
     // Only use "chart", without number, because the number depends on the previous tests
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -1019,7 +1097,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf60316)
 {
     loadFromFile(u"pptx/tdf60316.pptx");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -1176,7 +1254,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf125812)
 {
     loadFromFile(u"odp/ellipticalGradientFill.odp");
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", "path",

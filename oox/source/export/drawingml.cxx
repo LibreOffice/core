@@ -39,6 +39,7 @@
 #include <sax/fastattribs.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -46,6 +47,7 @@
 
 #include <numeric>
 #include <string_view>
+#include <set>
 
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -2483,6 +2485,25 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
             sTarget = "slide" + OUString::number(i + 1) + ".xml";
             break;
         }
+        else // If URL is linked to a shape, assign it's slide as target
+        {
+            Reference<XShapes> xShapes = xDrawPage;
+            sal_uInt32 nShapes = xShapes->getCount();
+            for (sal_uInt32 j = 0; j < nShapes; j++)
+            {
+                Reference<XShape> xShape;
+                xShapes->getByIndex(j) >>= xShape;
+                Reference<container::XNamed> xName(xShape, UNO_QUERY);
+                if (!xName)
+                    continue;
+                OUString sShapeName = "#" + xName->getName();
+                if (rURL == sShapeName)
+                {
+                    sTarget = "slide" + OUString::number(i + 1) + ".xml";
+                    break;
+                }
+            }
+        }
     }
     if (sTarget.isEmpty())
     {
@@ -2895,17 +2916,21 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                 bool bExtURL = URLTransformer().isExternalURL(sURL);
                 sURL = bExtURL ? sURL : lcl_GetTarget(GetFB()->getModel(), sURL);
 
-                OUString sRelId
-                    = mpFB->addRelation(mpFS->getOutputStream(),
-                                        bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
-                                                : oox::getRelationship(Relationship::SLIDE),
-                                        sURL, bExtURL);
-
+                OUString sRelId;
+                if (!sURL.isEmpty())
+                {
+                    sRelId
+                        = mpFB->addRelation(mpFS->getOutputStream(),
+                                            bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                                    : oox::getRelationship(Relationship::SLIDE),
+                                            sURL, bExtURL);
+                }
                 if (bExtURL)
                     mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
                 else
-                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
-                                          XML_action, "ppaction://hlinksldjump");
+                    mpFS->singleElementNS(
+                        XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
+                        sURL.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
             }
             else
             {
@@ -4909,6 +4934,47 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     return;
 }
 
+bool IsValidOOXMLFormula(std::u16string_view sFormula)
+{
+    // Accepted Formulas
+    // "val n1"
+    // "abs n1"
+    // "sqrt n1"
+    // "min n1 n2"
+    // "max n1 n2"
+    // "*/ n1 n2 n3"
+    // "+- n1 n2 n3"
+    // "?: n1 n2 n3"
+
+    // Below vector contains validTokens for the 1st token based on the number of tokens in the formula. The order is: 2, 3, 4
+    const std::vector<std::set<OUString>> validTokens
+        = { { "val", "abs", "sqrt" }, { "min", "max" }, { "*/", "+-", "?:" } };
+    const std::set<OUString> builtInVariables = { "w", "h", "t", "b", "l", "r" };
+    const std::vector<OUString> strTokens = comphelper::string::split(sFormula, ' ');
+    sal_uInt16 nSize = strTokens.size();
+
+    if (nSize > 1 && nSize < 5)
+    {
+        auto aTokens = validTokens[nSize - 2];
+
+        // Check whether the 1st token is valid
+        if (aTokens.find(strTokens[0]) == aTokens.end())
+            return false;
+
+        // Check that the remaining tokens are either numbers or built-in variables
+        for (sal_Int16 i = 1; i < nSize; i++)
+        {
+            OUString sVal = strTokens[i];
+            sal_Int64 nVal = sVal.toInt64();
+            if (builtInVariables.find(sVal) == builtInVariables.end()
+                && OUString::number(nVal) != sVal)
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const OUString& sNewStr)
 {
     OUString sFormula = sEquation;
@@ -4919,7 +4985,10 @@ OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const O
         sFormula = "*/ " + sModifiedEquation;
     }
 
-    return sFormula;
+    if (IsValidOOXMLFormula(sFormula))
+        return sFormula;
+
+    return OUString();
 }
 
 void prepareGluePoints(std::vector<Guide>& rGuideList,

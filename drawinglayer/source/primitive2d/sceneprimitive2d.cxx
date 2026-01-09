@@ -34,6 +34,7 @@
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <utility>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <comphelper/threadpool.hxx>
 #include <comphelper/lok.hxx>

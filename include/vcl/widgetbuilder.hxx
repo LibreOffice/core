@@ -274,12 +274,12 @@ protected:
 
         if (sClass == "GtkAdjustment")
         {
-            addAdjustment(sID, aProperties);
+            addAdjustment(sID, std::move(aProperties));
             return nullptr;
         }
         else if (sClass == "GtkTextBuffer")
         {
-            addTextBuffer(sID, aProperties);
+            addTextBuffer(sID, std::move(aProperties));
             return nullptr;
         }
 

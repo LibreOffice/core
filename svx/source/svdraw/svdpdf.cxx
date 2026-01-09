@@ -19,6 +19,7 @@
 
 #include <svdpdf.hxx>
 
+#include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/embeddedfontsmanager.hxx>

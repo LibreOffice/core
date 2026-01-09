@@ -544,8 +544,22 @@ constexpr auto constChartTypeMap = frozen::make_unordered_map<std::u16string_vie
     { u"com.sun.star.chart2.CandleStickChartType",  chart::TYPEID_STOCK },
     { u"com.sun.star.chart.BubbleDiagram",  chart::TYPEID_BUBBLE },
     { u"com.sun.star.chart2.BubbleChartType",  chart::TYPEID_BUBBLE },
+    { u"com.sun.star.chart2.BoxWhiskerDiagram",  chart::TYPEID_BOXWHISKER },
+    { u"com.sun.star.chart2.BoxWhiskerChartType",  chart::TYPEID_BOXWHISKER },
+    { u"com.sun.star.chart2.ClusteredColumnDiagram", chart::TYPEID_CLUSTEREDCOLUMN },
+    { u"com.sun.star.chart2.ClusteredColumnChartType", chart::TYPEID_CLUSTEREDCOLUMN },
     { u"com.sun.star.chart.FunnelDiagram",  chart::TYPEID_FUNNEL },
     { u"com.sun.star.chart2.FunnelChartType",  chart::TYPEID_FUNNEL },
+    { u"com.sun.star.chart2.ParetoLineDiagram",  chart::TYPEID_PARETOLINE },
+    { u"com.sun.star.chart2.ParetoLineChartType",  chart::TYPEID_PARETOLINE },
+    { u"com.sun.star.chart2.RegionMapDiagram",  chart::TYPEID_REGIONMAP },
+    { u"com.sun.star.chart2.RegionMapChartType",  chart::TYPEID_REGIONMAP },
+    { u"com.sun.star.chart2.SunburstDiagram",  chart::TYPEID_SUNBURST },
+    { u"com.sun.star.chart2.SunburstChartType",  chart::TYPEID_SUNBURST },
+    { u"com.sun.star.chart2.TreemapDiagram",  chart::TYPEID_TREEMAP },
+    { u"com.sun.star.chart2.TreemapChartType",  chart::TYPEID_TREEMAP },
+    { u"com.sun.star.chart2.WaterfallDiagram",  chart::TYPEID_WATERFALL },
+    { u"com.sun.star.chart2.WaterfallChartType",  chart::TYPEID_WATERFALL },
 });
 
 } // end anonymous namespace
@@ -1026,15 +1040,32 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     // chart.
     mxNewDiagram.set( xChartDoc->getFirstDiagram());
 
-    const bool bIsChartex = isChartexNotChartNS();
+    NamespaceAbbrev eNS = NamespaceAbbrev::NONE;
+    const bool bIsChartex = isChartexNotChartNS(&eNS);
 
     if (bIsChartex) {
         // Do the AlternateContent header
         mpFS->startElementNS(XML_mc, XML_AlternateContent, FSNS(XML_xmlns, XML_mc),
                 "http://schemas.openxmlformats.org/markup-compatibility/2006");
-        mpFS->startElementNS(XML_mc, XML_Choice,
-                FSNS(XML_xmlns, XML_cx2), "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex",
-                XML_Requires, "cx2");
+        switch (eNS) {
+            case NamespaceAbbrev::CX1:
+                mpFS->startElementNS(XML_mc, XML_Choice,
+                        FSNS(XML_xmlns, XML_cx1), "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex",
+                        XML_Requires, "cx1");
+                break;
+            case NamespaceAbbrev::CX2:
+                mpFS->startElementNS(XML_mc, XML_Choice,
+                        FSNS(XML_xmlns, XML_cx2), "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex",
+                        XML_Requires, "cx2");
+                break;
+            case NamespaceAbbrev::CX4:
+                mpFS->startElementNS(XML_mc, XML_Choice,
+                        FSNS(XML_xmlns, XML_cx4), "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex",
+                        XML_Requires, "cx4");
+                break;
+            case NamespaceAbbrev::NONE:
+                assert(false);
+        }
     }
 
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
@@ -1356,7 +1387,7 @@ void ChartExport::ExportContent()
         return;
     InitRangeSegmentationProperties( xChartDoc );
 
-    const bool bIsChartex = isChartexNotChartNS();
+    const bool bIsChartex = isChartexNotChartNS(nullptr);
     ExportContent_( bIsChartex );
 }
 
@@ -1501,6 +1532,9 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
             Reference< chart2::XChartType > xChartType( rCT, uno::UNO_QUERY );
             if( ! xChartType.is())
                 continue;
+            // note: if xDSCnt.is() then also aCTSeq[nCTIdx]
+            OUString aChartType( xChartType->getChartType());
+            sal_Int32 eChartType = lcl_getChartType( aChartType );
 
             OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
 
@@ -1547,20 +1581,85 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                     FSHelperPtr pFS = GetFS();
 
                     // The data id needs to agree with the id in exportSeries(). See DATA_ID_COMMENT
-                    pFS->startElement(FSNS(XML_cx, XML_data), XML_id, OUString::number(nSeriesIndex++));
+                    pFS->startElement(FSNS(XML_cx, XML_data), XML_id, OUString::number(nSeriesIndex));
 
-                    // .xlsx chartex files seem to have this magical "_xlchart.v2.0" string,
+                    // .xlsx chartex files seem to have this magical "_xlchart..." string,
                     // and no explicit data, while .docx and .pptx contain the literal data,
                     // as well as a ../embeddings file (which LO doesn't seem to produce).
                     // But there's probably a smarter way to determine which pathway to take
                     // than based on document type.
                     if (GetDocumentType() == DOCUMENT_XLSX) {
                         // Just hard-coding this for now
-                        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
+
+                        sal_Int32 nSuffixVal = nSeriesIndex;
+
+                        // Output category data formula for some chart types.
+                        // (This is completely hacky)
+                        if (eChartType ==  chart::TYPEID_SUNBURST ||
+                                eChartType == chart::TYPEID_TREEMAP) {
+                            pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
+                            pFS->startElement(FSNS(XML_cx, XML_f));
+
+                            std::string sFormulaId = "_xlchart.v1.";
+                            sFormulaId.append(std::to_string(nSuffixVal));
+
+                            pFS->writeEscaped(sFormulaId);
+
+                            pFS->endElement(FSNS(XML_cx, XML_f));
+                            pFS->endElement(FSNS(XML_cx, XML_strDim));
+
+                            ++nSuffixVal;
+                        }
+
+                        // Set the ST_NumericDimensionType. For some (stupid?)
+                        // reason, MSO requires the value data for sunburst and
+                        // treemap to be type "size", while for most other chart
+                        // types it's of type "val".
+                        std::string sNumDimType;
+                        if (eChartType ==  chart::TYPEID_SUNBURST ||
+                                eChartType == chart::TYPEID_TREEMAP) {
+                            sNumDimType = "size";
+                        } else {
+                            sNumDimType = "val";
+                        }
+
+                        // Now output value data formula
+                        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type,
+                                sNumDimType.c_str());
                         pFS->startElement(FSNS(XML_cx, XML_f));
-                        pFS->writeEscaped("_xlchart.v2.0");    // I have no idea what this
-                                                                // means or what it should be in
-                                                                // general
+
+                        // Set the formula value based on the chart type. This
+                        // is just a hack. It obviously should be based on the
+                        // identifier for the actual data (either as imported or
+                        // created within LO). TODO
+                        std::string sFormulaId;
+                        switch( eChartType )
+                        {
+                            case chart::TYPEID_BOXWHISKER:
+                            case chart::TYPEID_CLUSTEREDCOLUMN:
+                            case chart::TYPEID_PARETOLINE:
+                            case chart::TYPEID_SUNBURST:
+                            case chart::TYPEID_TREEMAP:
+                            case chart::TYPEID_WATERFALL:
+                                sFormulaId = "_xlchart.v1.";
+                                break;
+                            case chart::TYPEID_FUNNEL:
+                                sFormulaId = "_xlchart.v2.";
+                                break;
+                            case chart::TYPEID_REGIONMAP:
+                                sFormulaId = "_xlchart.v5.";
+                                break;
+                            default:
+                                assert(false);
+                                break;
+                        }
+                        // Append the id value, which seems (?) to be what
+                        // follows the period in the string. E.g., for id=2 we
+                        // might end up with "_xlchart.v1.2"
+                        sFormulaId.append(std::to_string(nSuffixVal));
+
+                        pFS->writeEscaped(sFormulaId);
+
                         pFS->endElement(FSNS(XML_cx, XML_f));
                         pFS->endElement(FSNS(XML_cx, XML_numDim));
                     } else {    // PPTX, DOCX
@@ -1708,6 +1807,8 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                         }
                     }
                     pFS->endElement(FSNS(XML_cx, XML_data));
+
+                    ++nSeriesIndex;
                 }
             }
         }
@@ -1720,7 +1821,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
     if (bIsChartex) return; // TODO!!
     // Embedded external data is grab bagged for docx file hence adding export part of
     // external data for docx files only.
-    if(GetDocumentType() != DOCUMENT_DOCX)
+    if(!mbLinkToExternalData || GetDocumentType() != DOCUMENT_DOCX)
         return;
 
     OUString externalDataPath;
@@ -2503,9 +2604,46 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
                         exportBubbleChart( xChartType );
                         break;
                     }
+                case chart::TYPEID_BOXWHISKER:
+                    {
+                        exportChartex( xChartType, "boxWhisker" );
+                        break;
+                    }
+                case chart::TYPEID_CLUSTEREDCOLUMN:
+                    {
+                        exportChartex( xChartType, "clusteredColumn" );
+                        break;
+                    }
                 case chart::TYPEID_FUNNEL:
                     {
-                        exportFunnelChart( xChartType );
+                        exportChartex( xChartType, "funnel" );
+                        break;
+                    }
+                case chart::TYPEID_PARETOLINE:
+                    {
+                        // MSO pareto charts actually include both a
+                        // clusteredColumn series and a paretoLine series. TODO
+                        exportChartex( xChartType, "paretoLine" );
+                        break;
+                    }
+                case chart::TYPEID_REGIONMAP:
+                    {
+                        exportRegionMapChart( xChartType);
+                        break;
+                    }
+                case chart::TYPEID_SUNBURST:
+                    {
+                        exportChartex( xChartType, "sunburst" );
+                        break;
+                    }
+                case chart::TYPEID_TREEMAP:
+                    {
+                        exportChartex( xChartType, "treemap" );
+                        break;
+                    }
+                case chart::TYPEID_WATERFALL:
+                    {
+                        exportChartex( xChartType, "waterfall" );
                         break;
                     }
                 case chart::TYPEID_DOUGHNUT: // doesn't currently happen
@@ -3109,7 +3247,10 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
     }
 }
 
-void ChartExport::exportFunnelChart( const Reference< chart2::XChartType >& xChartType )
+// Output a chartex chart. *sTypeName should be the string used in the layoutId
+// attribue of <cx:series>
+void ChartExport::exportChartex( const Reference< chart2::XChartType >& xChartType,
+        const char* sTypeName)
 {
     FSHelperPtr pFS = GetFS();
     const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
@@ -3120,7 +3261,25 @@ void ChartExport::exportFunnelChart( const Reference< chart2::XChartType >& xCha
 
         //exportVaryColors(xChartType);
 
-        exportSeries_chartex(xChartType, splitDataSeries, "funnel");
+        exportSeries_chartex(xChartType, splitDataSeries, sTypeName);
+    }
+}
+
+void ChartExport::exportRegionMapChart( const Reference< chart2::XChartType >& xChartType)
+{
+    FSHelperPtr pFS = GetFS();
+    const std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (const auto& splitDataSeries : aSplitDataSeries)
+    {
+        if (!splitDataSeries.hasElements())
+            continue;
+
+        //exportVaryColors(xChartType);
+
+        // Handle all the regionMap-specific stuff under
+        // <cx:series> <cx:layoutPr>
+
+        exportSeries_chartex(xChartType, splitDataSeries, "regionMap");
     }
 }
 
@@ -3343,13 +3502,15 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
         // Use a dummy data series to output needed basic chart-related XML even in case of empty charts
         aSplitDataSeries.push_back({});
     }
+
+    sal_uInt32 nIdx = 0;
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
         pFS->startElement(FSNS(XML_c, XML_stockChart));
 
         bool bPrimaryAxes = true;
         if (splitDataSeries.hasElements())
-            exportCandleStickSeries(splitDataSeries, bPrimaryAxes);
+            exportCandleStickSeries(splitDataSeries, bPrimaryAxes, nIdx);
 
         // export stock properties
         Reference< css::chart::XStatisticDisplay > xStockPropProvider(mxDiagram, uno::UNO_QUERY);
@@ -3751,8 +3912,7 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
 }
 
 void ChartExport::exportCandleStickSeries(
-    const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
-    bool& rPrimaryAxes)
+    const Sequence<Reference<chart2::XDataSeries>>& aSeriesSeq, bool& rPrimaryAxes, sal_uInt32& nIdx)
 {
     for( const Reference< chart2::XDataSeries >& xSeries : aSeriesSeq )
     {
@@ -3767,12 +3927,13 @@ void ChartExport::exportCandleStickSeries(
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
 
-            const char* sSeries[] = {"values-first","values-max","values-min","values-last",nullptr};
+            const char* sSeries[] = {"values-first","values-max","values-min","values-last"};
 
-            for( sal_Int32 idx = 0; sSeries[idx] != nullptr ; idx++ )
+            for (const char* series : sSeries)
             {
-                Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii(sSeries[idx]) ) );
-                if( xLabeledSeq.is())
+                Reference<chart2::data::XLabeledDataSequence> xLabeledSeq(
+                    lcl_getDataSequenceByRole(aSeqCnt, OUString::createFromAscii(series)));
+                if (xLabeledSeq.is())
                 {
                     Reference< chart2::data::XDataSequence > xLabelSeq( xLabeledSeq->getLabel());
                     Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues());
@@ -3780,12 +3941,8 @@ void ChartExport::exportCandleStickSeries(
                         FSHelperPtr pFS = GetFS();
                         pFS->startElement(FSNS(XML_c, XML_ser));
 
-                        // TODO: idx and order
-                        // idx attribute should start from 1 and not from 0.
-                        pFS->singleElement( FSNS( XML_c, XML_idx ),
-                                XML_val, OString::number(idx+1) );
-                        pFS->singleElement( FSNS( XML_c, XML_order ),
-                                XML_val, OString::number(idx+1) );
+                        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(++nIdx));
+                        pFS->singleElement(FSNS(XML_c, XML_order), XML_val, OString::number(nIdx));
 
                         // export label
                         if( xLabelSeq.is() )
@@ -5937,7 +6094,10 @@ bool ChartExport::isDeep3dChart()
     return isDeep;
 }
 
-bool ChartExport::isChartexNotChartNS() const
+// Determine if the chart is a chartex type or pre-2015 ("classic chart") type.
+// If *peNS is non-null, also set it to the namespace abbreviation (e.g., "cx1",
+// "cx2", etc.)
+bool ChartExport::isChartexNotChartNS(NamespaceAbbrev *peNS) const
 {
     Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
     if( ! xBCooSysCnt.is()) return false;
@@ -5976,7 +6136,19 @@ bool ChartExport::isChartexNotChartNS() const
                 case chart::TYPEID_STOCK:
                 case chart::TYPEID_SURFACE:
                     break;
+                case chart::TYPEID_BOXWHISKER:
+                case chart::TYPEID_CLUSTEREDCOLUMN:
+                case chart::TYPEID_PARETOLINE:
+                case chart::TYPEID_SUNBURST:
+                case chart::TYPEID_TREEMAP:
+                case chart::TYPEID_WATERFALL:
+                    if (peNS) *peNS = NamespaceAbbrev::CX1;
+                    return true;
                 case chart::TYPEID_FUNNEL:
+                    if (peNS) *peNS = NamespaceAbbrev::CX2;
+                    return true;
+                case chart::TYPEID_REGIONMAP:
+                    if (peNS) *peNS = NamespaceAbbrev::CX4;
                     return true;
                 default:
                     assert(false);
@@ -5984,6 +6156,7 @@ bool ChartExport::isChartexNotChartNS() const
             }
         }
     }
+    if (peNS) *peNS = NamespaceAbbrev::NONE;
     return false;
 }
 

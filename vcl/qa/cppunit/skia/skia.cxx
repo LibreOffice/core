@@ -11,6 +11,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 

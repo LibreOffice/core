@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/awt/XVclWindowPeer.hdl>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
@@ -25,6 +26,7 @@
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <sal/types.h>
+#include <vcl/window.hxx>
 
 
 using namespace ::com::sun::star::uno;

@@ -54,6 +54,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/BitmapPalette.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <tools/poly.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <implrenderer.hxx>

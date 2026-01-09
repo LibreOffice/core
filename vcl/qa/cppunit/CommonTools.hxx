@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include <tools/stream.hxx>
+#include <vcl/BinaryDataContainer.hxx>
+
+#include <vector>
+
 static std::vector<unsigned char> calculateHash(SvStream& rStream)
 {
     rStream.Seek(STREAM_SEEK_TO_BEGIN);

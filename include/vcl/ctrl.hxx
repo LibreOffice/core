@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <optional>
@@ -31,6 +30,11 @@
 // forward
 class StyleSettings;
 class Control;
+class Pair;
+class Point;
+class Size;
+
+namespace tools { class Rectangle; }
 
 namespace vcl
 {

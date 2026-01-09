@@ -751,6 +751,25 @@ static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xMo
             sTarget = "slide" + OUString::number(i + 1) + ".xml";
             break;
         }
+        else // If URL is linked to a shape, assign it's slide as target
+        {
+            Reference<XShapes> xShapes = xDrawPage;
+            sal_uInt32 nShapes = xShapes->getCount();
+            for (sal_uInt32 j = 0; j < nShapes; j++)
+            {
+                Reference<XShape> xShape;
+                xShapes->getByIndex(j) >>= xShape;
+                Reference<container::XNamed> xName(xShape, UNO_QUERY);
+                if (!xName)
+                    continue;
+                OUString sShapeName = "#" + xName->getName();
+                if (rURL == sShapeName)
+                {
+                    sTarget = "slide" + OUString::number(i + 1) + ".xml";
+                    break;
+                }
+            }
+        }
     }
 
     return sTarget;
@@ -2777,6 +2796,25 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->endElementNS(XML_mc, XML_AlternateContent);
 }
 
+static void WriteEmptyGraphic(FSHelperPtr const& pFS, sal_Int32 nGraphicId)
+{
+    pFS->startElementNS(XML_p, XML_pic);
+    pFS->startElementNS(XML_p, XML_nvPicPr);
+    pFS->startElementNS(XML_p, XML_cNvPr, XML_id, OUString::number(nGraphicId), XML_name, "",
+                        XML_descr, "");
+    pFS->endElementNS(XML_p, XML_cNvPr);
+    pFS->startElementNS(XML_p, XML_cNvPicPr);
+    pFS->endElementNS(XML_p, XML_cNvPicPr);
+    pFS->startElementNS(XML_p, XML_nvPr);
+    pFS->endElementNS(XML_p, XML_nvPr);
+    pFS->endElementNS(XML_p, XML_nvPicPr);
+    pFS->startElementNS(XML_p, XML_blipFill);
+    pFS->endElementNS(XML_p, XML_blipFill);
+    pFS->startElementNS(XML_p, XML_spPr);
+    pFS->endElementNS(XML_p, XML_spPr);
+    pFS->endElementNS(XML_p, XML_pic);
+}
+
 ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
@@ -3001,6 +3039,8 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         const Graphic* pGraphic = pOle2Obj->GetGraphic();
         if (pGraphic)
             WriteGraphicObjectShapePart(xShape, pGraphic);
+        else // Required for MSO
+            WriteEmptyGraphic(mpFS, GetNewShapeID(xShape));
     }
 
     mpFS->endElementNS( mnXmlNamespace, XML_oleObj );

@@ -929,46 +929,28 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
         // to update accordingly (will update selection, too). Suppress new
         // stuff when LibreOfficeKit is active
         EditViewInvalidate(tools::Rectangle());
+        return;
     }
-    else
-    {
-        // draw old text edit stuff
-        if (IsTextEdit())
-        {
-            const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
 
-            if (pActiveOutliner)
-            {
-                const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
+    // draw old text edit stuff
+    if (!IsTextEdit())
+        return;
 
-                if (nViewCount)
-                {
-                    const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
-                    const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
+    const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
+    if (!pActiveOutliner)
+        return;
 
-                    for (sal_uInt32 i(0); i < nViewCount; i++)
-                    {
-                        OutlinerView* pOLV = pActiveOutliner->GetView(i);
+    const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
+    if (!nViewCount)
+        return;
 
-                        // If rPaintWindow knows that the output device is a render
-                        // context and is aware of the underlying vcl::Window,
-                        // compare against that; that's how double-buffering can
-                        // still find the matching OutlinerView.
-                        OutputDevice* pOutputDevice = rPaintWindow.GetWindow()
-                                                          ? rPaintWindow.GetWindow()->GetOutDev()
-                                                          : &rPaintWindow.GetOutputDevice();
-                        if (pOLV->GetWindow()->GetOutDev() == pOutputDevice
-                            || comphelper::LibreOfficeKit::isActive())
-                        {
-                            ImpPaintOutlinerView(*pOLV, aCheckRect,
-                                                 rPaintWindow.GetTargetOutputDevice());
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
+    const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
+
+    OutlinerView* pOLV = pActiveOutliner->GetView(0);
+    SdrPage* pPage = GetSdrPageView()->GetPage();
+    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
+    ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
 }
 
 void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::Rectangle& rRect,

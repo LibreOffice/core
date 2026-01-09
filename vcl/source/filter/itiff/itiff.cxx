@@ -24,6 +24,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <tools/long.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
 
 namespace vcl

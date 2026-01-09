@@ -31,14 +31,14 @@ class SVX_DLLPUBLIC SvxRelativeField
 private:
     std::unique_ptr<weld::MetricSpinButton> m_xSpinButton;
 
-    FieldUnit eAbsoluteFieldUnit = FieldUnit::NONE;
-    FieldUnit eFontRelativeFieldUnit = FieldUnit::NONE;
-    sal_uInt16          nRelMin;
-    sal_uInt16          nRelMax;
-    bool                bRelativeMode;
-    bool                bRelative;
-    bool                bNegativeEnabled;
-    bool bFontRelativeMode;
+    FieldUnit m_eAbsoluteFieldUnit = FieldUnit::NONE;
+    FieldUnit m_eFontRelativeFieldUnit = FieldUnit::NONE;
+    sal_uInt16          m_nRelMin;
+    sal_uInt16          m_nRelMax;
+    bool                m_bRelativeMode;
+    bool                m_bRelative;
+    bool                m_bNegativeEnabled;
+    bool m_bFontRelativeMode;
 
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
 
@@ -49,9 +49,9 @@ public:
     void EnableFontRelativeMode();
     void            SetRelative( bool bRelative );
     void SetFontRelative(FieldUnit eNewRelativeUnit);
-    bool            IsRelative() const { return bRelative; }
-    void            EnableNegativeMode() {bNegativeEnabled = true;}
-    FieldUnit GetCurrentUnit() const { return eFontRelativeFieldUnit; }
+    bool            IsRelative() const { return m_bRelative; }
+    void            EnableNegativeMode() {m_bNegativeEnabled = true;}
+    FieldUnit GetCurrentUnit() const { return m_eFontRelativeFieldUnit; }
 
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
     bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
@@ -73,7 +73,7 @@ public:
     void SetFieldUnit(FieldUnit eUnit, bool bAll = false)
     {
         ::SetFieldUnit(*m_xSpinButton, eUnit, bAll);
-        eAbsoluteFieldUnit = m_xSpinButton->get_unit();
+        m_eAbsoluteFieldUnit = m_xSpinButton->get_unit();
     }
     void SetMetricValue(sal_Int64 lCoreValue, MapUnit eUnit) { ::SetMetricValue(*m_xSpinButton, lCoreValue, eUnit); }
 };

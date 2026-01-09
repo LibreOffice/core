@@ -23,17 +23,17 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/OAccessible.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 
-namespace vcl { class Window; }
+enum class AccessibleBrowseBoxObjType;
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::uno { class Any; }
+namespace tools { class Rectangle; }
 
 namespace vcl {
     class IAccessibleTableProvider;

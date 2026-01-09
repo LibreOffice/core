@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
 

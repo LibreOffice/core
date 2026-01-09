@@ -23,6 +23,7 @@
 #include <config_options.h>
 #include <cairo.h>
 
+#include <tools/color.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>

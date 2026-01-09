@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <rtl/strbuf.hxx>
 #include <pdf/IPDFEncryptor.hxx>
 #include <vcl/pdfwriter.hxx>
 

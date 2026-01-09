@@ -32,6 +32,7 @@
 #include <editeng/udlnitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/voiditem.hxx>
+#include <tools/stream.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <vcl/salgtype.hxx>

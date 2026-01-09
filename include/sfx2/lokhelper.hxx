@@ -187,6 +187,8 @@ public:
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
+    /// Emits a LOK_CALLBACK_STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
+    static void notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable* pDoc);
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
     static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
     /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR

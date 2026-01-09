@@ -15,8 +15,10 @@
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/color/Transformation.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <basegfx/color/bcolortools.hxx>
 
 #include <vector>
+#include <array>
 
 namespace model
 {
@@ -198,6 +200,63 @@ public:
     {
         model::ComplexColor aComplexColor;
         aComplexColor.setThemeColor(eThemeColorType);
+        return aComplexColor;
+    }
+
+    static sal_Int32 getLumMod(size_t nIndex, size_t nEffect)
+    {
+        static constexpr std::array<const std::array<sal_Int32, 6>, 5> g_aLumMods = {
+            std::array<sal_Int32, 6>{ 10'000, 5'000, 6'500, 7'500, 8'500, 9'500 },
+            std::array<sal_Int32, 6>{ 10'000, 1'000, 2'500, 5'000, 7'500, 9'000 },
+            std::array<sal_Int32, 6>{ 10'000, 2'000, 4'000, 6'000, 7'500, 5'000 },
+            std::array<sal_Int32, 6>{ 10'000, 9'000, 7'500, 5'000, 2'500, 1'000 },
+            std::array<sal_Int32, 6>{ 10'000, 9'500, 8'500, 7'500, 6'500, 5'000 },
+        };
+        return g_aLumMods[nIndex][nEffect];
+    }
+
+    static sal_Int32 getLumOff(size_t nIndex, size_t nEffect)
+    {
+        static constexpr std::array<const std::array<sal_Int32, 6>, 5> g_aLumOffs = {
+            std::array<sal_Int32, 6>{ 0, 5'000, 3'500, 2'500, 1'500, 0'500 },
+            std::array<sal_Int32, 6>{ 0, 9'000, 7'500, 5'000, 2'500, 1'000 },
+            std::array<sal_Int32, 6>{ 0, 8'000, 6'000, 4'000, 0, 0 },
+            std::array<sal_Int32, 6>{ 0, 0, 0, 0, 0, 0 },
+            std::array<sal_Int32, 6>{ 0, 0, 0, 0, 0, 0 },
+        };
+        return g_aLumOffs[nIndex][nEffect];
+    }
+
+    static size_t getIndexForLuminance(Color const& rColor)
+    {
+        basegfx::BColor aHSLColor = basegfx::utils::rgb2hsl(rColor.getBColor());
+        double aLuminanceValue = aHSLColor.getBlue() * 255.0;
+
+        if (aLuminanceValue < 0.5)
+            return 0; // Black
+        else if (aLuminanceValue > 254.5)
+            return 4; // White
+        else if (aLuminanceValue < 50.5)
+            return 1; // Low
+        else if (aLuminanceValue > 203.5)
+            return 3; // High
+        else
+            return 2; // Middle
+    }
+
+    static model::ComplexColor create(model::ThemeColorType eThemeType, Color const& rThemeColor,
+                                      sal_Int32 nEffect)
+    {
+        size_t nIndex = getIndexForLuminance(rThemeColor);
+
+        auto aComplexColor = model::ComplexColor::Theme(eThemeType);
+
+        aComplexColor.addTransformation(
+            { model::TransformationType::LumMod, getLumMod(nIndex, nEffect) });
+
+        aComplexColor.addTransformation(
+            { model::TransformationType::LumOff, getLumOff(nIndex, nEffect) });
+
         return aComplexColor;
     }
 };

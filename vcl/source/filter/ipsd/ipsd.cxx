@@ -20,6 +20,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <vcl/outdev.hxx>
 #include <sal/log.hxx>
 #include <tools/fract.hxx>

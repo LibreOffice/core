@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_features.h>
+
 #include <memory>
 #include <pres.hxx>
 #include <tools/gen.hxx>
@@ -268,7 +270,9 @@ protected:
     sal_Int8                mnAction;
     Idle                    maDropErrorIdle;
     Idle                    maDropInsertFileIdle;
+#if HAVE_FEATURE_AVMEDIA
     rtl::Reference<avmedia::PlayerListener> mxDropMediaSizeListener;
+#endif
     sal_uInt16              mnLockRedrawSmph;
     bool                    mbIsDropAllowed;
 

@@ -106,9 +106,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 {
     createSwDoc("testTrackChangesDeletedParagraphMark.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
@@ -117,9 +114,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedParagraphMark)
 {
     createSwDoc("testTrackChangesInsertedParagraphMark.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -146,9 +140,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 {
     createSwDoc("testTrackChangesDeletedTableCell.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellDel");
@@ -157,9 +148,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableCell)
 {
     createSwDoc("testTrackChangesInsertedTableCell.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -185,9 +173,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO73034)
 {
     createSwDoc("FDO73034.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:u", "val").match("single"));
@@ -205,12 +190,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesParagraphProperties)
 {
     createSwDoc("testTrackChangesParagraphProperties.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMsoSpt180)
@@ -485,6 +467,21 @@ CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
         u"rId1");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // tdf#168977: MS Word reports corrupt if same embeddings/file referred to by multiple charts
+    // Currently, we duplicate a chart into the first page footer (from the 'default' footer)
+    xmlDocUniquePtr pXmlChart1Rels = parseExport(u"word/charts/_rels/chart1.xml.rels"_ustr);
+    assertXPath(pXmlChart1Rels,
+        "//rels:Relationship[@Target='../embeddings/Microsoft_Excel_Worksheet1.xlsx']");
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"word/charts/chart2.xml"_ustr)); // first page footer
+    // without the fix, this was true; both charts referred to the same 'Microsoft_Excel_Worksheet1'
+    CPPUNIT_ASSERT_EQUAL(false,
+                         bool(xNameAccess->hasByName(u"word/charts/_rels/chart2.xml.rels"_ustr)));
+
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNestedTextFrames)

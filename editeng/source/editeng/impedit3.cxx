@@ -3036,7 +3036,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
         {
             // Never use WindowTextColor on the printer
-            rFont.SetColor( GetAutoColor() );
+            rFont.SetColor(GetAutoColor(&rFont));
         }
         else
         {
@@ -4742,16 +4742,21 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
     return mxISC;
 }
 
-Color ImpEditEngine::GetAutoColor() const
+Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
 {
     Color aColor;
 
     const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
     {
-        Color aBackgroundColor = GetBackgroundColor();
-        if (aBackgroundColor == COL_AUTO)
+        Color aBackgroundColor;
+        if (pFont) //check for char background color
+            aBackgroundColor = pFont->GetFillColor();
+        if (aBackgroundColor == COL_AUTO) // check for another background (i.e: cell color)
+            aBackgroundColor = GetBackgroundColor();
+        if (aBackgroundColor == COL_AUTO) // if everything is auto/transparent then use doc color
             aBackgroundColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
+
         if (aBackgroundColor.IsDark())
             aColor = COL_WHITE;
         else

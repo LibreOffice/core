@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <unordered_set>
 
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -53,6 +54,7 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
@@ -76,6 +78,7 @@ using namespace oox;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::text::XSimpleText;
 using ::sax_fastparser::FSHelperPtr;
 
@@ -296,16 +299,12 @@ void WriteAnimationAttributeName(const FSHelperPtr& pFS, const OUString& rAttrib
             attrConv++;
         }
 
+        pFS->startElementNS(XML_p, XML_attrName);
         if (pAttribute)
-        {
-            pFS->startElementNS(XML_p, XML_attrName);
             pFS->writeEscaped(pAttribute);
-            pFS->endElementNS(XML_p, XML_attrName);
-        }
         else
-        {
             SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
-        }
+        pFS->endElementNS(XML_p, XML_attrName);
     }
 
     pFS->endElementNS(XML_p, XML_attrNameLst);
@@ -1234,7 +1233,23 @@ void PPTXAnimationExport::WriteAnimations(const Reference<XDrawPage>& rXDrawPage
     if (!(xEnumeration.is() && xEnumeration->hasMoreElements()))
         return;
 
-    auto pNodeContext = std::make_unique<NodeContext>(xNode, mrPowerPointExport, false, false);
+    Reference<XShapes> xShapes = rXDrawPage;
+    sal_uInt32 nShapes = xShapes->getCount();
+    std::unordered_set<sal_Int32> aSlideShapeIDs;
+    if (xShapes.is())
+    {
+        for (sal_uInt32 i = 0; i < nShapes; i++)
+        {
+            Reference<XShape> xShape;
+            xShapes->getByIndex(i) >>= xShape;
+            sal_Int32 nId = mrPowerPointExport.GetShapeID(xShape);
+            if (nId != -1)
+                aSlideShapeIDs.insert(nId);
+        }
+    }
+
+    auto pNodeContext
+        = std::make_unique<NodeContext>(xNode, aSlideShapeIDs, mrPowerPointExport, false, false);
     if (pNodeContext->isValid())
     {
         mpFS->startElementNS(XML_p, XML_timing);

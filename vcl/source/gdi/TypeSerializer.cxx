@@ -24,6 +24,7 @@
 #include <comphelper/fileformat.h>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
 

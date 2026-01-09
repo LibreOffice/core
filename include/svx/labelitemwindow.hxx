@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/weld.hxx>
 #include <svx/svxdllapi.h>
 
 enum class LabelItemWindowType

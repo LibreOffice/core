@@ -8,6 +8,7 @@
  *
  */
 
+#include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapGaussianSeparableBlurFilter.hxx>
 #include <vcl/bitmap/BitmapSeparableUnsharpenFilter.hxx>
 #include <vcl/bitmap/BitmapSmoothenFilter.hxx>

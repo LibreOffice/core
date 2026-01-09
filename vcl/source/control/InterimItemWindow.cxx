@@ -9,6 +9,8 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <salobj.hxx>
 #include <svdata.hxx>
 #include <window.h>

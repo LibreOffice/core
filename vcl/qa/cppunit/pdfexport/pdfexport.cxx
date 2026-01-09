@@ -45,6 +45,7 @@ public:
     void saveAsPDF(std::u16string_view rFile);
     void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
 
+#if !defined MACOSX && !defined _WIN32
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExportNoAssert()
     {
         SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
@@ -55,6 +56,7 @@ public:
             return nullptr;
         return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
     }
+#endif
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)

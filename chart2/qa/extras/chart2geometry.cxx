@@ -177,7 +177,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
     // ODF im/export for MCGR is integrated
 
     // Make sure the chart area has a transparency in gradient stops in saved pptx file.
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -238,7 +238,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
     loadFromFile(u"odp/tdf128345_ChartWall_CS_TG.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -290,7 +290,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
     loadFromFile(u"odp/tdf128345_Legend_CS_TG_axial.odp");
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
-    save(TestFilter::PPTX_2007);
+    save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 

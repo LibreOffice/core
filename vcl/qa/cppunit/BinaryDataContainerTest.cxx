@@ -11,6 +11,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <tools/stream.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 
 using namespace css;

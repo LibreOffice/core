@@ -406,6 +406,10 @@ namespace slideshow::internal
         void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams )
         {
+#if !HAVE_FEATURE_AVMEDIA
+            (void) rBounds;
+            (void) rVCLDeviceParams;
+#else
             SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
             if( mpMediaWindow || rBounds.isEmpty() )
                 return;
@@ -508,6 +512,7 @@ namespace slideshow::internal
             {
                 TOOLS_WARN_EXCEPTION( "slideshow", "" );
             }
+#endif
         }
 }
 

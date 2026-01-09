@@ -11,6 +11,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapWriteAccess.hxx>

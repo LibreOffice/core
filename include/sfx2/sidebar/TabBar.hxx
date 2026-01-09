@@ -23,6 +23,8 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/Builder.hxx>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+
 #include <functional>
 
 namespace com::sun::star::frame { class XFrame; }

@@ -23,6 +23,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <helpids.h>
 #include <vcl/weld/weld.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
 #include <com/sun/star/media/ZoomLevel.hpp>

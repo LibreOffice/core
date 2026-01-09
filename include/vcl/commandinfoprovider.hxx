@@ -20,11 +20,17 @@
 #define INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/image.hxx>
-#include <vcl/keycod.hxx>
+#include <vcl/vclenum.hxx>
+#include <rtl/ustring.hxx>
+
+class Image;
+namespace vcl { class KeyCode; }
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 namespace vcl::CommandInfoProvider {
 

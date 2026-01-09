@@ -33,6 +33,7 @@
 #include <DrawDocShell.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 

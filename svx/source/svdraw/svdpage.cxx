@@ -1299,7 +1299,14 @@ void SdrPageProperties::setTheme(std::shared_ptr<model::Theme> const& pTheme)
     }
     else
     {
-        mrSdrPage.getSdrModelFromSdrPage().setTheme(pTheme);
+        if (mrSdrPage.TRG_HasMasterPage())
+        {
+            mrSdrPage.TRG_GetMasterPage().getSdrPageProperties().setTheme(pTheme);
+        }
+        else
+        {
+            mrSdrPage.getSdrModelFromSdrPage().setTheme(pTheme);
+        }
     }
 }
 
@@ -1308,6 +1315,9 @@ std::shared_ptr<model::Theme> const& SdrPageProperties::getTheme() const
     // If the page theme is available use that, else get the theme from the model
     if (mpTheme)
         return mpTheme;
+
+    if (mrSdrPage.TRG_HasMasterPage())
+        return mrSdrPage.TRG_GetMasterPage().getSdrPageProperties().getTheme();
     else
         return mrSdrPage.getSdrModelFromSdrPage().getTheme();
 }

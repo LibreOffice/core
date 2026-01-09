@@ -20,7 +20,9 @@
 
 #include <sal/log.hxx>
 #include <comphelper/configuration.hxx>
+#include <tools/color.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/RawBitmap.hxx>
 #include <memory>
 
 #include "bitmap.hxx"

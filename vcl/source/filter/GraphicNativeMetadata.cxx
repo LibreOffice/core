@@ -19,6 +19,7 @@
 
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/graph.hxx>
 #include "jpeg/Exif.hxx"
 #include <memory>
 

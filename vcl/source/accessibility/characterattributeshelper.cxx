@@ -19,8 +19,11 @@
 
 #include <tools/gen.hxx>
 #include <vcl/accessibility/characterattributeshelper.hxx>
+#include <vcl/font.hxx>
 #include <vcl/unohelp.hxx>
 #include <comphelper/sequence.hxx>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

@@ -67,10 +67,7 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( sal_Int64 )
 {
-    SolarMutexGuard aSolarGuard;
-    uno::Reference< XAccessible >   xChild ;
-
-    return xChild;
+    return uno::Reference< XAccessible >();
 }
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
@@ -81,13 +78,11 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
 
 sal_Int16 SAL_CALL SvtRulerAccessible::getAccessibleRole()
 {
-    SolarMutexGuard aSolarGuard;
     return AccessibleRole::RULER;
 }
 
 OUString SAL_CALL SvtRulerAccessible::getAccessibleDescription()
 {
-    SolarMutexGuard aSolarGuard;
     return OUString();
 }
 
@@ -102,7 +97,6 @@ OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
 */
 uno::Reference< XAccessibleRelationSet > SAL_CALL SvtRulerAccessible::getAccessibleRelationSet()
 {
-    SolarMutexGuard aSolarGuard;
     return uno::Reference< XAccessibleRelationSet >();
 }
 

@@ -482,7 +482,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf132472)
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue(u"FillColor"_ustr) >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), nColor);
+    // Fill color is set to default (from style).
+    CPPUNIT_ASSERT_EQUAL(Color(0x18a303), nColor);
+    drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
+    xCell->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
+    // But fill style is NONE anyway.
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_NONE), static_cast<int>(aFillStyle));
 
     uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));

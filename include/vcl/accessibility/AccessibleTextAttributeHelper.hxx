@@ -19,10 +19,18 @@
 
 #pragma once
 
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
+
+namespace com::sun::star::accessibility
+{
+class XAccessibleText;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
 
 /**
  * According to the IAccessible2 specification, some of the attributes that LibreOffice

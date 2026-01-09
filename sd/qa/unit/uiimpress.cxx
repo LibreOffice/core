@@ -2074,8 +2074,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     CPPUNIT_ASSERT(bContoured);
 }
 
-// TODO - Readd when we implement style level fill color and set that for default style
-/*CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
 {
     // Given a document with a theme, accent1 color is set to 0x000004:
     createSdImpressDoc();
@@ -2108,6 +2107,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue("CreateDirectly", true),
     };
+
     dispatchCommand(mxComponent, ".uno:BasicShapes.round-rectangle", aArgs);
 
     // Then make sure the that fill color of the last shape is the accent1 color:
@@ -2115,11 +2115,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
     sal_Int32 nFillColor{};
     xShape->getPropertyValue("FillColor") >>= nFillColor;
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 0 / 0x000004 (~black)
-    // - Actual  : 7512015 / 0x729fcf (~blue)
+
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4), nFillColor);
-}*/
+}
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166647_userpaint)
 {

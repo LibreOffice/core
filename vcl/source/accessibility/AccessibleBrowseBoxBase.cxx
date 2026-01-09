@@ -25,8 +25,10 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

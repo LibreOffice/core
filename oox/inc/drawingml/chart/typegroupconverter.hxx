@@ -54,10 +54,12 @@ enum TypeId
     TYPEID_FUNNEL,                  /// Funnel chart.
     TYPEID_HISTO,                   /// Histogram chart.
     TYPEID_BOXWHISKER,              /// Box & whisker
+    TYPEID_CLUSTEREDCOLUMN,         /// Chartex clustered column
     TYPEID_PARETOLINE,              /// Pareto (sorted column + cumulative line)
     TYPEID_REGIONMAP,               /// Geographic map
     TYPEID_SUNBURST,                /// Multi-level hierarchical
     TYPEID_TREEMAP,                 /// Two-level hierarchical
+    TYPEID_WATERFALL,               /// Cumulative sum of differences
     TYPEID_UNKNOWN,                 /// Default for unknown chart types.
 };
 
@@ -71,6 +73,14 @@ enum TypeCategory
     TYPECATEGORY_SCATTER,           /// Scatter and bubble charts.
     TYPECATEGORY_SURFACE,           /// Surface charts.
     TYPECATEGORY_FUNNEL,            /// Funnel charts. TODO: can this be BAR?
+    TYPECATEGORY_HISTO,             /// Histogram charts.
+    TYPECATEGORY_BOXWHISKER,        /// Box & whisker
+    TYPECATEGORY_CLUSTEREDCOLUMN,         /// Chartex clustered column
+    TYPECATEGORY_PARETOLINE,        /// Pareto
+    TYPECATEGORY_REGIONMAP,         /// Geographic map
+    TYPECATEGORY_SUNBURST,          /// Multi-level hierarchical
+    TYPECATEGORY_TREEMAP,           /// Two-level hierarchical
+    TYPECATEGORY_WATERFALL,               /// Cumulative sum of differences
 };
 
 /** Enumerates modes for varying point colors in a series. */

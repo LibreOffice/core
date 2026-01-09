@@ -884,6 +884,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf74670)
     CPPUNIT_ASSERT_EQUAL(1, nImageFiles);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169911_exporting_animations_without_target)
+{
+    createSdImpressDoc("odp/tdf169911.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 28
+    // - validation error in OOXML export: Errors: 28
+    saveAndReload(TestFilter::PPTX);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf109169_OctagonBevel)
 {
     // The document has a shape 'Octagon Bevel'. It consists of an octagon with 8 points and eight
@@ -1317,6 +1328,29 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
                 "id", cNvPr_id);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169979_missing_ppic)
+{
+    createSdImpressDoc("odp/tdf169979.odp");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXml2 = parseExport(u"ppt/slides/slide2.xml"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr' number of nodes is incorrect
+    assertXPath(pXml2,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/"
+                "a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr",
+                "name", u"");
+
+    assertXPath(pXml2,
+                "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/"
+                "a:graphicData/p:oleObj/p:pic/p:nvPicPr/p:cNvPr",
+                "descr", u"");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyChildTnLstElement)
 {
     createSdImpressDoc("odp/emptyChildTnLstElement.odp");
@@ -1325,6 +1359,43 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyChildTnLstElement)
     // - Expected: 0
     // - Actual  : 4
     // - validation error in OOXML export: Errors: 4
+    saveAndReload(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // tdf#170202: Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(0, countXPathNodes(pXmlDoc, "//p:sld/p:timing"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169941_internal_link_to_shapes)
+{
+    createSdImpressDoc("odp/tdf169941.odp");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pRelsDoc2 = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: slide1.xml
+    // - Actual  :
+    assertXPath(pRelsDoc2, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"slide1.xml");
+
+    xmlDocUniquePtr pRelsDoc3 = parseExport(u"ppt/slides/_rels/slide3.xml.rels"_ustr);
+    assertXPath(pRelsDoc3, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"slide1.xml");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyAttrNameElement)
+{
+    createSdImpressDoc("odp/emptyChildTnLstElement.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 2
+    // - validation error in OOXML export: Errors: 2
     saveAndReload(TestFilter::PPTX);
 }
 

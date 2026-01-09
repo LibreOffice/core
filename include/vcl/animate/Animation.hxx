@@ -24,7 +24,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/animate/AnimationFrame.hxx>
+
+struct AnimationFrame;
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 

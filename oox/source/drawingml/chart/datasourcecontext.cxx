@@ -298,6 +298,7 @@ void StringSequenceContext::onCharacters( const OUString& rChars )
     switch( getCurrentElement() )
     {
         case C_TOKEN( f ):
+        case CX_TOKEN( f ):
             mrModel.maFormula = rChars;
         break;
         case C15_TOKEN( f ):

@@ -19,6 +19,7 @@
 
 
 #include <tools/stream.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapReadAccess.hxx>

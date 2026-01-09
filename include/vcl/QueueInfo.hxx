@@ -23,7 +23,8 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/dllapi.h>
-#include <vcl/prntypes.hxx>
+
+enum class PrintQueueFlags;
 
 class VCL_DLLPUBLIC QueueInfo
 {

@@ -25,6 +25,7 @@
 #include <tools/helpers.hxx>
 
 #include <utility>
+#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
 

@@ -10,8 +10,16 @@
 #ifndef INCLUDED_VCL_BUILDERPAGE_HXX
 #define INCLUDED_VCL_BUILDERPAGE_HXX
 
-#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
+
+namespace weld
+{
+class Builder;
+}
+namespace weld
+{
+class DialogController;
+}
 
 class VCL_DLLPUBLIC BuilderPage
 {

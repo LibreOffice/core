@@ -32,6 +32,7 @@
 #include <premac.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
+#include <tools/color.hxx>
 #endif
 
 struct BitmapBuffer;

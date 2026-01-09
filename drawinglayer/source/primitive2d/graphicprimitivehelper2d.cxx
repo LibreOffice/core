@@ -42,6 +42,7 @@
 
 #include <utility>
 #include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>

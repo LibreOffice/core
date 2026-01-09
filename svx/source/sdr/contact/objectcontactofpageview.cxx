@@ -60,6 +60,14 @@ namespace sdr::contact
             : Idle(pDebugName)
             , mrPageWindow(rPageWindow)
         {
+            // Set EditViewActive early at local ViewInformation2D. Usually this
+            // gets updated at the 1st paint (see updateViewInformation2D calls).
+            // To be independent of this mechanism and prepared for cases where
+            // e.g. a HitTest is used before paint, initialize it here already.
+            // This is the ObjectContact of PageView, so usage is bound to
+            // EditView visualization anyways
+            setEditViewActiveEarly();
+
             // init PreviewRenderer flag
             setPreviewRenderer(static_cast<SdrPaintView&>(rPageWindow.GetPageView().GetView()).IsPreviewRenderer());
 
@@ -224,10 +232,10 @@ namespace sdr::contact
             if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
                 aNewViewInformation2D.setTextEditActive(true);
 
-            if (!isOutputToRecordingMetaFile())
+            if (!isOutputToRecordingMetaFile() && !comphelper::LibreOfficeKit::isSlideshowRendering())
             {
                 // this is the EditView repaint, provide that information,
-                // but only if we do not export to metafile
+                // but only if we do not export to metafile and do not prepare a SlideShow
                 aNewViewInformation2D.setEditViewActive(true);
 
                 // also copy the current DrawModeFlags

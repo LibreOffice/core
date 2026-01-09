@@ -70,6 +70,11 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL)   // TODO: check this
         )
     {
@@ -299,6 +304,8 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
     {
         aRet.realloc( 2 );
@@ -325,7 +332,10 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
         if( !bStacked )
             *pSeq++ = css::chart::MissingValueTreatment::CONTINUE;
     }
-    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) ||
+            aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP) ||
+            aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST) ||
+            aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP))
     {
         aRet.realloc( 3 );
         sal_Int32* pSeq = aRet.getArray();

@@ -9,6 +9,7 @@
 
 #include <vcl/filter/PngImageWriter.hxx>
 #include <png.h>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>

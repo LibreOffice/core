@@ -26,6 +26,7 @@
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <utility>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/GraphicObject.hxx>
