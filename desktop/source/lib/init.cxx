@@ -67,6 +67,7 @@
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/errinf.hxx>
+#include <vcl/idletask.hxx>
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -1449,6 +1450,23 @@ int getDocumentType (LibreOfficeKitDocument* pThis)
 }
 
 } // anonymous namespace
+
+WaitUntilIdle::WaitUntilIdle()
+    : maIdle{"LibLODocument IdleTask"}
+{
+    maIdle.SetPriority(TaskPriority::TOOLKIT_DEBUG);
+    maIdle.SetInvokeHandler(LINK(this, WaitUntilIdle, IdleHdl));
+}
+
+IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
+{
+    tools::JsonWriter aJson;
+    aJson.put("commandName", ".uno:ReportWhenIdle");
+    aJson.put("idleID", msIdleId);
+    mpCallbackFlushHandler->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    mpCallbackFlushHandler.reset();
+    msIdleId.clear();
+}
 
 LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
     : mxComponent(std::move(xComponent))
@@ -5645,6 +5663,24 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             }
         }
 
+        return;
+    }
+    else if (gImpl && aCommand == ".uno:ReportWhenIdle")
+    {
+        assert(pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be uset");
+        pDocument->maIdleHelper.mpCallbackFlushHandler = pDocument->mpCallbackFlushHandlers[nView];
+
+        for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
+        {
+            if (rPropValue.Name == "idleID")
+            {
+                rPropValue.Value >>= pDocument->maIdleHelper.msIdleId;
+            }
+        }
+
+        assert(!pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be set");
+
+        pDocument->maIdleHelper.maIdle.Start();
         return;
     }
 
