@@ -30,6 +30,7 @@
 #include <tools/gen.hxx>
 #include <sfx2/lokcallback.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <vcl/idle.hxx>
 
 #include <desktop/dllapi.h>
 
@@ -254,12 +255,24 @@ namespace desktop {
         DECL_LINK(FlushQueue, void*, void);
     };
 
+    struct WaitUntilIdle
+    {
+        WaitUntilIdle();
+
+        Idle maIdle;
+        OUString msIdleId;
+        std::shared_ptr<CallbackFlushHandler> mpCallbackFlushHandler;
+
+        DECL_LINK(IdleHdl, Timer*, void);
+    };
+
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public LibreOfficeKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
         std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
+        WaitUntilIdle maIdleHelper;
         std::set<OUString> maFontsMissing;
 
         explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
