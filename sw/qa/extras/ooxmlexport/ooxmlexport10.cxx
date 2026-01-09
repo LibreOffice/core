@@ -352,10 +352,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 
     // this will test the text direction and alignment for paragraphs
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaLeftRTL, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaLeftRTL, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaLeftRTL, u"ParaAdjust"_ustr ));
 
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaRightLTR, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( xParaRightLTR, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaRightLTR, u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
@@ -363,7 +363,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
     // The problem was libreoffice confuse when RTL was specified in non-default style
     uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
@@ -371,14 +371,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
     // The problem was libreoffice confuse when RTL was specified in DocDefaults
     uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560d, "fdo72560d.docx")
 {
     // The problem was libreoffice confuse when RTL was specified in "Normal" when not using Normal at all
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(1), u"ParaAdjust"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(2), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( getParagraph(1), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( getParagraph(2), u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
@@ -386,7 +386,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
     // The problem was libreoffice confuse when *locale* is RTL, but w:bidi / w:jc are never defined.
     // This unit test would only be noticed if the testing environment is set to something like an Arabic locale.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( getParagraph(2), u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_LEFT), getProperty<sal_Int32>( getParagraph(2), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_START), getProperty<sal_Int32>( getParagraph(2), u"ParaAdjust"_ustr ));
 
     // widow/orphan control is on when never specified.
     CPPUNIT_ASSERT_EQUAL(sal_Int8(2), getProperty<sal_Int8>( getParagraph(2), u"ParaWidows"_ustr ));

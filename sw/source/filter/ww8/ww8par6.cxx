@@ -395,10 +395,7 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
             if ( !pItem )
             {
                 // no previous adjust: set appropriate default
-                if ( eDir == SvxFrameDirection::Horizontal_LR_TB )
-                    NewAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
-                else
-                    NewAttr( SvxAdjustItem( SvxAdjust::Right, RES_PARATR_ADJUST ) );
+                NewAttr( SvxAdjustItem( SvxAdjust::ParaStart, RES_PARATR_ADJUST ) );
             }
             else
             {
@@ -4801,7 +4798,10 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16 nId, const sal_uInt8* pData, shor
         return;
     }
 
-    SvxAdjust eAdjust(SvxAdjust::Left);
+    // tdf#121110: Jc80 justify is absolute, not bidi-relative.
+    // Handle this with left/right adjustment instead of start/end.
+    bool bIsJc80 = (nId == NS_sprm::PJc80::val);
+    SvxAdjust eAdjust = bIsJc80 ? SvxAdjust::Left : SvxAdjust::ParaStart;
     bool bDistributed = false;
     switch (*pData)
     {
@@ -4812,7 +4812,7 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16 nId, const sal_uInt8* pData, shor
             eAdjust = SvxAdjust::Center;
             break;
         case 2:
-            eAdjust = SvxAdjust::Right;
+            eAdjust = bIsJc80 ? SvxAdjust::Right : SvxAdjust::ParaEnd;
             break;
         case 3:
             eAdjust = SvxAdjust::Block;
@@ -4861,7 +4861,10 @@ void SwWW8ImplReader::Read_RTLJustify( sal_uInt16 nId, const sal_uInt8* pData, s
         Read_Justify(nId, pData, nLen);
     else
     {
-        SvxAdjust eAdjust(SvxAdjust::Right);
+        // tdf#121110: Jc80 justify is absolute, not bidi-relative.
+        // Handle this with left/right adjustment instead of start/end.
+        bool bIsJc80 = (nId == NS_sprm::PJc80::val);
+        SvxAdjust eAdjust = bIsJc80 ? SvxAdjust::Left : SvxAdjust::ParaStart;
         bool bDistributed = false;
         switch (*pData)
         {
@@ -4872,7 +4875,7 @@ void SwWW8ImplReader::Read_RTLJustify( sal_uInt16 nId, const sal_uInt8* pData, s
                 eAdjust = SvxAdjust::Center;
                 break;
             case 2:
-                eAdjust = SvxAdjust::Left;
+                eAdjust = bIsJc80 ? SvxAdjust::Right : SvxAdjust::ParaEnd;
                 break;
             case 3:
                 eAdjust = SvxAdjust::Block;

@@ -1764,7 +1764,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_PPrBase_jc:
     {
         bool bExchangeLeftRight = !IsRTFImport() && !m_pImpl->IsInComments() && ExchangeLeftRight(rContext, *m_pImpl);
-        handleParaJustification(nIntValue, rContext, bExchangeLeftRight);
+        bool bUseLiteralDirection = IsRTFImport() || m_pImpl->IsInComments();
+        handleParaJustification(nIntValue, rContext, bExchangeLeftRight, bUseLiteralDirection);
         break;
     }
     case NS_ooxml::LN_CT_PPrBase_keepLines:
@@ -2141,8 +2142,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 // 2. no adjust property exists yet
                 if ( !(m_pImpl->GetAnyProperty(PROP_PARA_ADJUST, rContext) >>= eAdjust) )
                 {
-                    // RTL defaults to right adjust
-                    eAdjust = nIntValue ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+                    // Both directions default to start adjust
+                    eAdjust = style::ParagraphAdjust_START;
                     rContext->Insert(PROP_PARA_ADJUST, uno::Any( eAdjust ), /*bOverwrite=*/false);
                 }
                 // 3,4. existing adjust: if RTL, then swap. If LTR, but previous was RTL, also swap.
@@ -4472,8 +4473,13 @@ void DomainMapper::ResetStyleProperties()
                             pContext->Insert(ePropertyId, uno::Any(sal_Int32(0)));
                             break;
                         case PROP_PARA_LAST_LINE_ADJUST:
-                        case PROP_PARA_ADJUST:
                             pContext->Insert(ePropertyId, uno::Any(style::ParagraphAdjust_LEFT));
+                            break;
+                        case PROP_PARA_ADJUST:
+                            pContext->Insert(ePropertyId,
+                                             uno::Any(IsRTFImport()
+                                                          ? style::ParagraphAdjust_LEFT
+                                                          : style::ParagraphAdjust_START));
                             break;
                         case PROP_PARA_TAB_STOPS:
                             pContext->Insert(ePropertyId, uno::Any(uno::Sequence< style::TabStop >()));
@@ -5044,9 +5050,13 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::tools::SvRef<Proper
     rContext->Insert(PROP_CHAR_UNDERLINE, uno::Any(nUnderline));
 }
 
-void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::tools::SvRef<PropertyMap>& rContext, const bool bExchangeLeftRight)
+void DomainMapper::handleParaJustification(const sal_Int32 nIntValue,
+                                           const ::tools::SvRef<PropertyMap>& rContext,
+                                           const bool bExchangeLeftRight,
+                                           const bool bUseLiteralDirection)
 {
-    style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
+    style::ParagraphAdjust nAdjust
+        = bUseLiteralDirection ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_START;
     style::ParagraphAdjust nLastLineAdjust = style::ParagraphAdjust_LEFT;
     OUString aStringValue = u"left"_ustr;
     sal_uInt16 nWordSpacing = 100;
@@ -5058,7 +5068,15 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
         break;
     case NS_ooxml::LN_Value_ST_Jc_right:
     case NS_ooxml::LN_Value_ST_Jc_end:
-        nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT;
+        if (bUseLiteralDirection)
+        {
+            nAdjust
+                = bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT;
+        }
+        else
+        {
+            nAdjust = style::ParagraphAdjust_END;
+        }
         aStringValue = "right";
         break;
     case NS_ooxml::LN_Value_ST_Jc_distribute:
@@ -5092,7 +5110,15 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
     case NS_ooxml::LN_Value_ST_Jc_left:
     case NS_ooxml::LN_Value_ST_Jc_start:
     default:
-        nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+        if (bUseLiteralDirection)
+        {
+            nAdjust
+                = bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+        }
+        else
+        {
+            nAdjust = style::ParagraphAdjust_START;
+        }
         break;
     }
     rContext->Insert( PROP_PARA_ADJUST, uno::Any( nAdjust ) );

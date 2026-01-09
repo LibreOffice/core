@@ -1549,14 +1549,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120338)
 {
     createSwDoc("tdf120338.docx");
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                         getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // right
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                         getProperty<sal_Int32>(getParagraph(3), u"ParaAdjust"_ustr)); // right
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         getProperty<sal_Int32>(getParagraph(4), u"ParaAdjust"_ustr)); // left
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                         getProperty<sal_Int32>(getParagraph(5), u"ParaAdjust"_ustr)); // right
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6),
+                         getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // end
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6),
+                         getProperty<sal_Int32>(getParagraph(3), u"ParaAdjust"_ustr)); // end
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
+                         getProperty<sal_Int32>(getParagraph(4), u"ParaAdjust"_ustr)); // start
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6),
+                         getProperty<sal_Int32>(getParagraph(5), u"ParaAdjust"_ustr)); // end
 
     CPPUNIT_ASSERT_EQUAL(u""_ustr,
                          getProperty<OUString>(getParagraph(7), u"NumberingStyleName"_ustr));
@@ -1572,14 +1572,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf120338)
     // reject tracked paragraph adjustments
     dispatchCommand(mxComponent, u".uno:RejectAllTrackedChanges"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
+                         getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // start
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
                          getProperty<sal_Int32>(getParagraph(3), u"ParaAdjust"_ustr)); // center
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
                          getProperty<sal_Int32>(getParagraph(4), u"ParaAdjust"_ustr)); // center
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         getProperty<sal_Int32>(getParagraph(5), u"ParaAdjust"_ustr)); // left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
+                         getProperty<sal_Int32>(getParagraph(5), u"ParaAdjust"_ustr)); // start
 
     // tdf#126245 revert numbering changes
     CPPUNIT_ASSERT_EQUAL(u"WWNum2"_ustr,

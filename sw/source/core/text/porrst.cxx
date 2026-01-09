@@ -442,9 +442,10 @@ bool SwTextFrame::FormatEmpty()
         return false;
     const SwAttrSet& aSet = GetTextNodeForParaProps()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
-    if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SvxAdjust::Left != nAdjust ) ) ||
-          (   IsRightToLeft() && ( SvxAdjust::Right != nAdjust ) ) ) ||
-          aSet.GetRegister().GetValue() ) )
+    bool bAdjustInsignificant = (!IsRightToLeft() && (SvxAdjust::Left == nAdjust))
+                                || (IsRightToLeft() && (SvxAdjust::Right == nAdjust))
+                                || (SvxAdjust::ParaStart == nAdjust);
+    if (!bCollapse && (!bAdjustInsignificant || aSet.GetRegister().GetValue()))
         return false;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( !bCollapse && ( SvxLineSpaceRule::Min == rSpacing.GetLineSpaceRule() ||

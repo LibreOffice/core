@@ -229,19 +229,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.doc
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Another paragraph aligned to right"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(5), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(7), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(9), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(10), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(11), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(12), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(13), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(14), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getParagraph(5), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END),  getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getParagraph(7), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END),  getProperty<sal_Int16>(getParagraph(9), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END),  getProperty<sal_Int16>(getParagraph(10), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(11), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START),  getProperty<sal_Int16>(getParagraph(12), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START),  getProperty<sal_Int16>(getParagraph(13), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(14), u"ParaAdjust"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_strict.docx")
@@ -739,10 +739,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98620_environmentBiDi)
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( getParagraph(1), u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(1), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_START), getProperty<sal_Int32>( getParagraph(1), u"ParaAdjust"_ustr ));
 
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( getParagraph(2), u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(2), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_END), getProperty<sal_Int32>( getParagraph(2), u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116976, "tdf116976.docx")

@@ -1599,7 +1599,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf156685)
 
     int nPageObjectCount = pPage->getObjectCount();
 
-    CPPUNIT_ASSERT_EQUAL(9, nPageObjectCount);
+    CPPUNIT_ASSERT_EQUAL(11, nPageObjectCount);
 
     auto pTextPage = pPage->getTextPage();
 

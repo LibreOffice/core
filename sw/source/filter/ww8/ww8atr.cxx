@@ -5267,6 +5267,14 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     sal_uInt8 nAdjBiDi;
     switch ( rAdjust.GetAdjust() )
     {
+        case SvxAdjust::ParaStart:
+            nAdj = 0;
+            nAdjBiDi = 0;
+            break;
+        case SvxAdjust::ParaEnd:
+            nAdj = 2;
+            nAdjBiDi = 2;
+            break;
         case SvxAdjust::Left:
             nAdj = 0;
             nAdjBiDi = 2;

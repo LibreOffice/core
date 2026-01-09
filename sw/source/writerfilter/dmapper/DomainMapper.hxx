@@ -185,7 +185,9 @@ private:
     void finishParagraph(const bool bRemove = false, const bool bNoNumbering = false);
 
     static void handleUnderlineType(const Id nId, const ::tools::SvRef<PropertyMap>& rContext);
-    void handleParaJustification(const sal_Int32 nIntValue, const ::tools::SvRef<PropertyMap>& rContext, const bool bExchangeLeftRight);
+    void handleParaJustification(const sal_Int32 nIntValue,
+                                 const ::tools::SvRef<PropertyMap>& rContext,
+                                 const bool bExchangeLeftRight, const bool bUseLiteralDirection);
     void HandleFramedParagraphPageBreak(PropertyMapPtr pContext);
     static bool getColorFromId(const Id, sal_Int32 &nColor);
     static sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);

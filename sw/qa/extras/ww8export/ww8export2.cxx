@@ -409,19 +409,34 @@ DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJ
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTable, u"HoriOrient"_ustr));
     CPPUNIT_ASSERT_MESSAGE("Table Indent", getProperty<tools::Long>(xTable, u"LeftMargin"_ustr) > 3000);
     CPPUNIT_ASSERT_MESSAGE("Table Indent is 3750", getProperty<tools::Long>(xTable, u"LeftMargin"_ustr) < 4000 );
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOrTable(2), u"ParaAdjust"_ustr)) );
+
+    // tdf#169035: The document uses Jc80 adjustment, which is interpreted as literal left/right.
+    // However, on re-export, this value is converted to Jc adjustment, which is bidi-relative.
+    auto nAdjust = static_cast<style::ParagraphAdjust>(
+        getProperty<sal_Int16>(getParagraphOrTable(2), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT(style::ParagraphAdjust_RIGHT == nAdjust
+                   || style::ParagraphAdjust_START == nAdjust);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf98620_rtlJustify, "tdf98620_rtlJustify.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr)) );
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_START, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr)) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left style", text::WritingMode2::RL_TB, getProperty<sal_Int16>(getParagraph(1), u"WritingMode"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr)) );
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr)) );
+    // tdf#169035: The document uses Jc80 adjustment, which is interpreted as literal left/right.
+    // However, on re-export, this value is converted to Jc adjustment, which is bidi-relative.
+    auto nParaAdjust1 = static_cast<style::ParagraphAdjust>(
+        getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT(style::ParagraphAdjust_RIGHT == nParaAdjust1
+                   || style::ParagraphAdjust_START == nParaAdjust1);
+
+    auto nParaAdjust3 = static_cast<style::ParagraphAdjust>(
+        getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT(style::ParagraphAdjust_LEFT == nParaAdjust3
+                   || style::ParagraphAdjust_START == nParaAdjust3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106174_rtlParaAlign)
@@ -431,19 +446,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106174_rtlParaAlign)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Another paragraph aligned to right"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(5), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(7), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(9), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(10), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(11), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(12), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(13), u"ParaAdjust"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(14), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getParagraph(5), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END),  getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getParagraph(7), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END),  getProperty<sal_Int16>(getParagraph(9), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END),  getProperty<sal_Int16>(getParagraph(10), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(11), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START),  getProperty<sal_Int16>(getParagraph(12), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START),  getProperty<sal_Int16>(getParagraph(13), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getParagraph(14), u"ParaAdjust"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf119232_startEvenPage, "tdf119232_startEvenPage.doc")

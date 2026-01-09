@@ -2128,7 +2128,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         {
             // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
             SetDefaultParaProps(PROP_WRITING_MODE, uno::Any(sal_Int16(text::WritingMode_LR_TB)));
-            SetDefaultParaProps(PROP_PARA_ADJUST, uno::Any(sal_Int16(style::ParagraphAdjust_LEFT)));
+            SetDefaultParaProps(PROP_PARA_ADJUST, uno::Any(sal_Int16(style::ParagraphAdjust_START)));
 
             // Widow/Orphan -> set both to two if not already set
             uno::Any aTwo(sal_Int8(2));

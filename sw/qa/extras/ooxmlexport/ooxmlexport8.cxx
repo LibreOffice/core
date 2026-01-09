@@ -1236,16 +1236,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093b.docx")
     sal_Int16 nLLDir  = getProperty< sal_Int32 >( xParaLtrLeft, u"WritingMode"_ustr );
 
     // this will test the both the text direction and alignment for each paragraph
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nRtlRight);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_START), nRtlRight);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nRRDir);
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nRtlLeft);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), nRtlLeft);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nRLDir);
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nLtrRight);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), nLtrRight);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nLtrLeft);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_START), nLtrLeft);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLLDir);
 }
 

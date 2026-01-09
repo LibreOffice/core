@@ -5230,7 +5230,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = rHt.StaticWhichCast(RES_PARATR_LINESPACING).GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off;
             break;
         case RES_PARATR_ADJUST:
-            bMustWrite = rHt.StaticWhichCast(RES_PARATR_ADJUST).GetAdjust() != SvxAdjust::Left;
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_ADJUST).GetAdjust() != SvxAdjust::ParaStart;
             break;
         case RES_PARATR_SPLIT:
             bMustWrite = !rHt.StaticWhichCast(RES_PARATR_SPLIT).GetValue();
@@ -9124,6 +9124,12 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 
     switch ( rAdjust.GetAdjust() )
     {
+        case SvxAdjust::ParaStart:
+            pAdjustString = bEcma ? "left" : "start";
+            break;
+        case SvxAdjust::ParaEnd:
+            pAdjustString = bEcma ? "right" : "end";
+            break;
         case SvxAdjust::Left:
             if ( bEcma )
             {

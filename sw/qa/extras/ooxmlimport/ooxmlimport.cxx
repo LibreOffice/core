@@ -1159,17 +1159,17 @@ CPPUNIT_TEST_FIXTURE(Test, testDMLGroupShapeParaAdjust)
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
     // 2nd line is adjusted to the right
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getRun(getParagraphOfText(2, xText), 1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_END), getProperty<sal_Int16>(getRun(getParagraphOfText(2, xText), 1), u"ParaAdjust"_ustr));
     // 3rd line has no adjustment
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(3, xText), 1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getRun(getParagraphOfText(3, xText), 1), u"ParaAdjust"_ustr));
     // 4th line is adjusted to center
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getRun(getParagraphOfText(4, xText), 1), u"ParaAdjust"_ustr));
     // 5th line has no adjustment
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(5, xText), 1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getRun(getParagraphOfText(5, xText), 1), u"ParaAdjust"_ustr));
     // 6th line is justified
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_BLOCK), getProperty<sal_Int16>(getRun(getParagraphOfText(6, xText), 1), u"ParaAdjust"_ustr));
     // 7th line has no adjustment
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT), getProperty<sal_Int16>(getRun(getParagraphOfText(7, xText), 1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_START), getProperty<sal_Int16>(getRun(getParagraphOfText(7, xText), 1), u"ParaAdjust"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99135)
@@ -1834,7 +1834,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136952_pgBreak3)
     //Do not lose the page::breakAfter. This SHOULD be on page 4, but sadly it is not.
     //The key part of this test is that the page starts with "Lorem ipsum"
     //Prior to this, there was no page break, and so it was in the middle of a page.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion").startsWith("Lorem ipsum"));
 }
 
 

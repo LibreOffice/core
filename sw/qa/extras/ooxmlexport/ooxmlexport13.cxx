@@ -514,7 +514,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sets 2.5 line-spacing", sal_Int16(250), getProperty<style::LineSpacing>(xPara, u"ParaLineSpacing"_ustr).Height);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph background color in cell A2", sal_Int32(-1), getProperty<sal_Int32>(xPara, u"ParaBackColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode overrides left adjust", style::ParagraphAdjust_RIGHT,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode overrides left adjust", style::ParagraphAdjust_END,
                                  static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
 }
 
@@ -534,7 +534,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
     // Even though not specified, Table-Style tries to distribute the properties in DocDefault. DocDefault fontsize is 8pt.
     // However, this is overridden by the default style's specified fontsize of 12 and left justify.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode has 12pt font size", 12.f, getProperty<float>(getRun(xPara,1), u"CharHeight"_ustr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode keeps the style's left adjust", style::ParagraphAdjust_LEFT,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode keeps the style's left adjust", style::ParagraphAdjust_START,
                                  static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
 }
 

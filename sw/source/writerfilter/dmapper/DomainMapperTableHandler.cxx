@@ -1275,7 +1275,8 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     {
                         style::ParagraphAdjust eAdjust(style::ParagraphAdjust_CENTER);
                         aParaStyle >>= eAdjust;
-                        bCompatOverride = eAdjust == style::ParagraphAdjust_LEFT;
+                        bCompatOverride = (eAdjust == style::ParagraphAdjust_START)
+                                          || (eAdjust == style::ParagraphAdjust_LEFT);
                     }
 
                     // The wording is confusing here. Normally, the paragraph style DOES override the table-style.
