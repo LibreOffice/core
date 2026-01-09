@@ -1441,8 +1441,7 @@ void SAL_CALL ChartController::dispatch(
                                 bool bGrow = (aCommand == "Grow");
                                 const SfxObjectShell* pObjSh = SfxObjectShell::Current();
                                 const SvxFontListItem* pFontListItem
-                                    = static_cast<const SvxFontListItem*>(
-                                        pObjSh ? pObjSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr);
+                                    = pObjSh ? pObjSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr;
                                 const FontList* pFontList
                                     = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                                 pOutlinerView->GetEditView().ChangeFontSize(bGrow, pFontList);

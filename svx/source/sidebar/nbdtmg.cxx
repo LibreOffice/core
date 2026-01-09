@@ -815,7 +815,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                 {
                     if (SfxObjectShell* pCurDocShell = SfxObjectShell::Current())
                     {
-                        const SvxFontListItem* pFontListItem = static_cast<const SvxFontListItem*>(pCurDocShell->GetItem(SID_ATTR_CHAR_FONTLIST));
+                        const SvxFontListItem* pFontListItem = pCurDocShell->GetItem(SID_ATTR_CHAR_FONTLIST);
                         pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                     }
                 }

@@ -1395,8 +1395,7 @@ const vcl::Font* FindFont(std::u16string_view rFontName)
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
         return nullptr;
-    const SvxFontListItem* pFonts
-        = static_cast<const SvxFontListItem*>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const SvxFontListItem* pFonts = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
     if (pList && !rFontName.empty())
         if (sal_Handle hMetric = pList->GetFirstFontMetric(rFontName))
@@ -6539,8 +6538,7 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
         return nullptr;
-    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const SvxFontListItem* pFonts = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
     if (!bBloatWithRepeatedSizes)

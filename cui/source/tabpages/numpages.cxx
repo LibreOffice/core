@@ -812,8 +812,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
                     if (SfxObjectShell* pCurDocShell = SfxObjectShell::Current())
                     {
                         const SvxFontListItem* pFontListItem =
-                                static_cast<const SvxFontListItem*>( pCurDocShell
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                                pCurDocShell->GetItem( SID_ATTR_CHAR_FONTLIST );
                         pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                     }
                 }

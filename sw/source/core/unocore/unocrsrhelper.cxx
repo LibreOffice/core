@@ -891,9 +891,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     {
                         if (SwDocShell* pShell = rDoc.GetDocShell())
                         {
-                            const SvxFontListItem* pFontListItem =
-                                    static_cast<const SvxFontListItem* >(
-                                                        pShell->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                            const SvxFontListItem* pFontListItem = pShell->GetItem( SID_ATTR_CHAR_FONTLIST );
                             const FontList* pList = pFontListItem->GetFontList();
 
                             vcl::Font aFont(pList->Get(

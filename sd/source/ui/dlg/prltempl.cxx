@@ -262,7 +262,7 @@ void SdPresLayoutTemplateDlg::PageCreated(const OUString& rId, SfxTabPage &rPage
     }
     else if (rId == "font")
     {
-        SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) );
+        SvxFontListItem aItem(*mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) );
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }

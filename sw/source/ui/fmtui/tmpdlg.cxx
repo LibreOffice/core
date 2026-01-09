@@ -311,8 +311,7 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
     {
         if (SwView* pView = GetActiveView())
         {
-            SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(pView->
-                GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
+            SvxFontListItem aFontListItem( *(pView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST )) );
 
             aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
             sal_uInt32 nFlags = 0;

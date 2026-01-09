@@ -1248,8 +1248,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_SHRINK_FONT_SIZE:
             {
                 SfxObjectShell* pObjSh = SfxObjectShell::Current();
-                const SvxFontListItem* pFontListItem = static_cast<const SvxFontListItem*>
-                        (pObjSh ? pObjSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr);
+                const SvxFontListItem* pFontListItem = (pObjSh ? pObjSh->GetItem(SID_ATTR_CHAR_FONTLIST) : nullptr);
                 const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                 pEditView->ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
                 rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );

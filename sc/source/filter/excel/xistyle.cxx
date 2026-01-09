@@ -220,8 +220,7 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
     {
         if( ScDocShell* pDocShell = GetDocShell() )
         {
-            if( const SvxFontListItem* pInfoItem = static_cast< const SvxFontListItem* >(
-                pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
+            if( const SvxFontListItem* pInfoItem = pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) )
             {
                 if( const FontList* pFontList = pInfoItem->GetFontList() )
                 {
