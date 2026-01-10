@@ -15669,17 +15669,12 @@ public:
         return false;
     }
 
-    virtual bool iter_children(weld::TreeIter& rIter) const override
+    virtual bool do_iter_children(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeIter tmp;
         bool ret = gtk_tree_model_iter_children(m_pTreeModel, &tmp, &rGtkIter.iter);
         rGtkIter.iter = tmp;
-        if (ret)
-        {
-            //on-demand dummy entry doesn't count
-            return get_text(rGtkIter, -1) != "<dummy>";
-        }
         return ret;
     }
 

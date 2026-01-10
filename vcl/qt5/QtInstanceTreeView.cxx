@@ -233,7 +233,7 @@ bool QtInstanceTreeView::iter_previous(weld::TreeIter&) const
     return false;
 }
 
-bool QtInstanceTreeView::iter_children(weld::TreeIter& rIter) const
+bool QtInstanceTreeView::do_iter_children(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
     const QModelIndex aChildIndex = m_pModel->index(0, 0, rQtIter.modelIndex());

@@ -127,6 +127,14 @@ bool weld::TreeView::is_selected(int pos) const
     return false;
 }
 
+bool weld::TreeView::iter_children(TreeIter& rIter) const
+{
+    if (get_children_on_demand(rIter))
+        return false;
+
+    return do_iter_children(rIter);
+}
+
 bool weld::TreeView::iter_has_child(const TreeIter& rIter) const
 {
     std::unique_ptr<weld::TreeIter> pIter = make_iterator(&rIter);

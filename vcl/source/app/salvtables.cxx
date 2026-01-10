@@ -4513,17 +4513,11 @@ bool SalInstanceTreeView::iter_previous(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
-bool SalInstanceTreeView::iter_children(weld::TreeIter& rIter) const
+bool SalInstanceTreeView::do_iter_children(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
     rVclIter.iter = m_xTreeView->FirstChild(rVclIter.iter);
-    bool bRet = rVclIter.iter != nullptr;
-    if (bRet)
-    {
-        //on-demand dummy entry doesn't count
-        return !IsDummyEntry(rVclIter.iter);
-    }
-    return bRet;
+    return rVclIter.iter != nullptr;
 }
 
 bool SalInstanceTreeView::iter_parent(weld::TreeIter& rIter) const

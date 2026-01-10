@@ -132,6 +132,7 @@ protected:
     using weld::ItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
+    virtual bool do_iter_children(TreeIter& rIter) const = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
 
@@ -318,7 +319,7 @@ public:
     // set iter to point to previous node, sibling first then depth
     virtual bool iter_previous(TreeIter& rIter) const = 0;
     // set iter to point to first child node
-    virtual bool iter_children(TreeIter& rIter) const = 0;
+    bool iter_children(TreeIter& rIter) const;
     bool iter_nth_sibling(TreeIter& rIter, int nChild) const
     {
         bool bRet = true;
