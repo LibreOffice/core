@@ -352,10 +352,10 @@ IACCESSIBLE2_TARBALL := IAccessible2-1.3+git20231013.3d8c7f0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ICU_SHA256SUM := 6217f58ca39b23127605cfc6c7e0d3475fe4b0d63157011383d716cb41617886
-ICU_TARBALL := icu4c-78.1-sources.tgz
-ICU_DATA_SHA256SUM := e7b652244f27194e0ea46a0d21cfc714ee8a818e1fd82d51a93bc91516fdcf65
-ICU_DATA_TARBALL := icu4c-78.1-data.zip
+ICU_SHA256SUM := 3e99687b5c435d4b209630e2d2ebb79906c984685e78635078b672e03c89df35
+ICU_TARBALL := icu4c-78.2-sources.tgz
+ICU_DATA_SHA256SUM := 582968cf174c9498b2046b4f4e7f786def5f18222bd8d98432d7a29399c38c70
+ICU_DATA_TARBALL := icu4c-78.2-data.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -400,8 +400,8 @@ LANGTAGREG_TARBALL := language-subtag-registry-2025-08-25.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LCMS2_SHA256SUM := d11af569e42a1baa1650d20ad61d12e41af4fead4aa7964a01f93b08b53ab074
-LCMS2_TARBALL := lcms2-2.17.tar.gz
+LCMS2_SHA256SUM := ee67be3566f459362c1ee094fde2c159d33fa0390aa4ed5f5af676f9e5004347
+LCMS2_TARBALL := lcms2-2.18.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -657,8 +657,8 @@ SKIA_TARBALL := skia-m144-ee20d565acb08dece4a32e3f209cdd41119015ca.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-SQLITE3_SHA256SUM := 84a85d6a1b920234349f01720912c12391a4f0cb5cb998087e641dee3ef8ef2e
-SQLITE3_TARBALL := sqlite-amalgamation-3510100.zip
+SQLITE3_SHA256SUM := 6e2a845a493026bdbad0618b2b5a0cf48584faab47384480ed9f592d912f23ec
+SQLITE3_TARBALL := sqlite-amalgamation-3510200.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

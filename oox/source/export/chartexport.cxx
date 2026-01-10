@@ -3248,7 +3248,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
 }
 
 // Output a chartex chart. *sTypeName should be the string used in the layoutId
-// attribue of <cx:series>
+// attribute of <cx:series>
 void ChartExport::exportChartex( const Reference< chart2::XChartType >& xChartType,
         const char* sTypeName)
 {

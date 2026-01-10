@@ -2000,8 +2000,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             if (!sBulletFontName.isEmpty() && pLclDocShell)
             {
                 const SvxFontListItem* pFontListItem =
-                        static_cast<const SvxFontListItem* >(pLclDocShell
-                                            ->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                        pLclDocShell->GetItem( SID_ATTR_CHAR_FONTLIST );
                 const FontList*  pList = pFontListItem->GetFontList();
                 vcl::Font aFont(pList->Get(sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE));
                 aFormat.SetBulletFont(&aFont);

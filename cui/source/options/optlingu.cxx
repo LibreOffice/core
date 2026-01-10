@@ -1143,9 +1143,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     int nEntry = 0;
 
     aLngCfg.GetProperty( UPN_IS_SPELL_AUTO ) >>= bVal;
-    const SfxPoolItem* pItem = GetItem( *rSet, SID_AUTOSPELL_CHECK );
-    if (pItem)
-        bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+    if (const SfxBoolItem* pItem = GetItem( *rSet, SID_AUTOSPELL_CHECK ))
+        bVal = pItem->GetValue();
     nUserData = OptionsUserData( EID_SPELL_AUTO, false, 0, true, bVal).GetUserData();
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sSpellAuto, 0);

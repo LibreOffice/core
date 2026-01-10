@@ -10,10 +10,23 @@
 $(eval $(call gb_Module_Module,fontconfig))
 
 $(eval $(call gb_Module_add_targets,fontconfig,\
+	UnpackedTarball_fontconfig \
+))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,fontconfig,\
+	StaticLibrary_fontconfig \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,fontconfig,\
 	ExternalProject_fontconfig \
 	$(if $(filter EMSCRIPTEN,$(OS)),ExternalPackage_fontconfig_data) \
 	$(if $(filter FONTCONFIG,$(BUILD_TYPE)),ExternalPackage_fontconfig) \
-	UnpackedTarball_fontconfig \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

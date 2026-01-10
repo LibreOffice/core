@@ -163,10 +163,10 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     // if no example exists, otherwise Init here in Activate
     std::optional<SwPageFootnoteInfo> pDefFootnoteInfo;
     const SwPageFootnoteInfo* pFootnoteInfo;
-    const SfxPoolItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
+    const SwPageFootnoteInfoItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
     if( pItem )
     {
-        pFootnoteInfo = &static_cast<const SwPageFootnoteInfoItem*>(pItem)->GetPageFootnoteInfo();
+        pFootnoteInfo = &pItem->GetPageFootnoteInfo();
     }
     else
     {

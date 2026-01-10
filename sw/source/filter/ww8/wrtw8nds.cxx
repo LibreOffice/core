@@ -1853,9 +1853,9 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
     aSnippet = comphelper::string::removeAny(aSnippet, aForbidden);
 
     m_rExport.m_aCurrentCharPropStarts.push( nCurrentPos );
-    const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
+    const SvxCaseMapItem &rItem = GetItem(RES_CHRATR_CASEMAP);
 
-    if (SvxCaseMap::Capitalize == static_cast<const SvxCaseMapItem&>(rItem).GetValue())
+    if (SvxCaseMap::Capitalize == rItem.GetValue())
     {
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
         sal_uInt16 nScriptType = g_pBreakIt->GetBreakIter()->getScriptType(aSnippet, 0);
@@ -1864,14 +1864,14 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
         switch (nScriptType)
         {
         case i18n::ScriptType::ASIAN:
-                nLanguage = static_cast<const SvxLanguageItem&>(GetItem(RES_CHRATR_CJK_LANGUAGE)).GetLanguage();
+                nLanguage = GetItem(RES_CHRATR_CJK_LANGUAGE).GetLanguage();
                 break;
         case i18n::ScriptType::COMPLEX:
-                nLanguage = static_cast<const SvxLanguageItem&>(GetItem(RES_CHRATR_CTL_LANGUAGE)).GetLanguage();
+                nLanguage = GetItem(RES_CHRATR_CTL_LANGUAGE).GetLanguage();
                 break;
         case i18n::ScriptType::LATIN:
             default:
-                nLanguage = static_cast<const SvxLanguageItem&>(GetItem(RES_CHRATR_LANGUAGE)).GetLanguage();
+                nLanguage = GetItem(RES_CHRATR_LANGUAGE).GetLanguage();
                 break;
         }
 
@@ -2308,13 +2308,9 @@ OUString lcl_GetSymbolFont(SwAttrPool& rPool, const SwTextNode& rTextNode, int n
     SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet( rPool );
     if (rTextNode.GetParaAttr(aSet, nStart, nEnd))
     {
-        SfxPoolItem const* pPoolItem = aSet.GetItem(RES_CHRATR_FONT);
-        if (pPoolItem)
-        {
-            const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pPoolItem);
-            if (pFontItem->GetCharSet() == RTL_TEXTENCODING_SYMBOL)
-                return pFontItem->GetFamilyName();
-        }
+        SvxFontItem const* pFontItem = aSet.GetItem(RES_CHRATR_FONT);
+        if (pFontItem && pFontItem->GetCharSet() == RTL_TEXTENCODING_SYMBOL)
+            return pFontItem->GetFamilyName();
     }
 
     return OUString();

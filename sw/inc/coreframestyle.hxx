@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <svl/typedwhich.hxx>
 
 class SfxPoolItem;
 
@@ -29,6 +30,10 @@ class ICoreFrameStyle
 public:
     virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) = 0;
     virtual const SfxPoolItem* GetItem(sal_uInt16 eAtr) = 0;
+    template <class T> const T* GetItem(TypedWhichId<T> nWhich)
+    {
+        return static_cast<const T*>(GetItem(sal_uInt16(nWhich)));
+    }
     virtual css::document::XEventsSupplier& GetEventsSupplier() = 0;
     virtual ~ICoreFrameStyle(){};
 };

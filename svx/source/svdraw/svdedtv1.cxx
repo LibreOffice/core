@@ -979,10 +979,10 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                 {
                     case XATTR_LINECOLOR:
                     {
-                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_LINECOLOR);
+                        const XLineColorItem* pItem = rSet.GetItem(XATTR_LINECOLOR);
                         if (pItem)
                         {
-                            Color aColor = static_cast<const XLineColorItem*>(pItem)->GetColorValue();
+                            Color aColor = pItem->GetColorValue();
                             sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
 
                             sPayload = ".uno:XLineColor=" + sPayload;
@@ -992,10 +992,10 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 
                     case XATTR_FILLCOLOR:
                     {
-                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_FILLCOLOR);
+                        const XFillColorItem* pItem = rSet.GetItem(XATTR_FILLCOLOR);
                         if (pItem)
                         {
-                            Color aColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
+                            Color aColor = pItem->GetColorValue();
                             sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
 
                             sPayload = ".uno:FillColor=" + sPayload;
@@ -1005,10 +1005,10 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 
                     case XATTR_FILLTRANSPARENCE:
                     {
-                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_FILLTRANSPARENCE);
+                        const XFillTransparenceItem* pItem = rSet.GetItem(XATTR_FILLTRANSPARENCE);
                         if (pItem)
                         {
-                            sal_uInt16 nTransparency = static_cast<const XFillTransparenceItem*>(pItem)->GetValue();
+                            sal_uInt16 nTransparency = pItem->GetValue();
                             sPayload = OUString::number(nTransparency);
 
                             sPayload = ".uno:FillTransparence=" + sPayload;
@@ -1018,10 +1018,10 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 
                     case XATTR_LINETRANSPARENCE:
                     {
-                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_LINETRANSPARENCE);
+                        const SfxUInt16Item* pItem = rSet.GetItem(XATTR_LINETRANSPARENCE);
                         if (pItem)
                         {
-                            sal_uInt16 nTransparency = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sal_uInt16 nTransparency = pItem->GetValue();
                             sPayload = OUString::number(nTransparency);
 
                             sPayload = ".uno:LineTransparence=" + sPayload;
@@ -1031,10 +1031,10 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 
                     case XATTR_LINEWIDTH:
                     {
-                        const SfxPoolItem* pItem = rSet.GetItem(XATTR_LINEWIDTH);
+                        const XLineWidthItem* pItem = rSet.GetItem(XATTR_LINEWIDTH);
                         if (pItem)
                         {
-                            sal_uInt32 nWidth = static_cast<const XLineWidthItem*>(pItem)->GetValue();
+                            sal_uInt32 nWidth = pItem->GetValue();
                             sPayload = OUString::number(nWidth);
 
                             sPayload = ".uno:LineWidth=" + sPayload;
@@ -1044,10 +1044,10 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 
                     case SDRATTR_SHADOWTRANSPARENCE:
                     {
-                        const SfxPoolItem* pItem = rSet.GetItem(SDRATTR_SHADOWTRANSPARENCE);
+                        const SfxUInt16Item* pItem = rSet.GetItem(SDRATTR_SHADOWTRANSPARENCE);
                         if (pItem)
                         {
-                            sal_uInt16 nWidth = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                            sal_uInt16 nWidth = pItem->GetValue();
                             sPayload = OUString::number(nWidth);
 
                             sPayload = ".uno:FillShadowTransparency=" + sPayload;

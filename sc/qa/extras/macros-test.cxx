@@ -725,8 +725,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
     for (SCCOL i = 0; i < 5; ++i)
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern(i, 0, 0);
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
         const Color& rColor = rBackground.GetColor();
 
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, rColor);
@@ -735,15 +734,13 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
     for (SCROW i = 1; i < 13; ++i)
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern(0, i, 0);
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
         const Color& rColor = rBackground.GetColor();
 
         CPPUNIT_ASSERT_EQUAL(Color(0x4d, 0x4d, 0x4d), rColor);
 
         const ScPatternAttr* pAttr2 = pDoc->GetPattern(5, i, 0);
-        const SfxPoolItem& rItem2 = pAttr2->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground2 = static_cast<const SvxBrushItem&>(rItem2);
+        const SvxBrushItem& rBackground2 = pAttr2->GetItem(ATTR_BACKGROUND);
         const Color& rColor2 = rBackground2.GetColor();
 
         CPPUNIT_ASSERT_EQUAL(COL_GRAY3, rColor2);

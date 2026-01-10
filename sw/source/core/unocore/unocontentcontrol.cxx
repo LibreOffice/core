@@ -715,7 +715,7 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
         }
         else
         {
-            m_pImpl->m_pContentControl->SetListItems(aItems);
+            m_pImpl->m_pContentControl->SetListItems(std::move(aItems));
 
             if (!m_pImpl->m_pContentControl->GetComboBox()
                 && !m_pImpl->m_pContentControl->GetDropDown())

@@ -153,10 +153,9 @@ struct SearchDlg_Impl
     }
 };
 
-static void ListToStrArr_Impl(sal_uInt16 nId, std::vector<OUString>& rStrLst, weld::ComboBox& rCBox, sal_uInt16 nRememberSize)
+static void ListToStrArr_Impl(TypedWhichId<SfxStringListItem> nId, std::vector<OUString>& rStrLst, weld::ComboBox& rCBox, sal_uInt16 nRememberSize)
 {
-    const SfxStringListItem* pSrchItem =
-        static_cast<const SfxStringListItem*>(SfxGetpApp()->GetItem( nId ));
+    const SfxStringListItem* pSrchItem = SfxGetpApp()->GetItem( nId );
 
     if (!pSrchItem)
         return;

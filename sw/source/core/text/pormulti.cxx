@@ -192,12 +192,7 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     if( !pRot )
     {
         const SwTextAttr& rAttr = *rCreate.pAttr;
-        const SfxPoolItem *const pItem =
-                CharFormat::GetItem(rAttr, RES_CHRATR_ROTATE);
-        if ( pItem )
-        {
-            pRot = static_cast<const SvxCharRotateItem*>(pItem);
-        }
+        pRot = CharFormat::GetItem(rAttr, RES_CHRATR_ROTATE);
     }
     if( pRot )
     {
@@ -313,12 +308,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(
         const SwTextAttr& rAttr = *rCreate.pAttr;
         m_pBracket->nStart = rCreate.nStartOfAttr;
 
-        const SfxPoolItem * const pItem =
-            CharFormat::GetItem( rAttr, RES_CHRATR_TWO_LINES );
-        if ( pItem )
-        {
-            pTwo = static_cast<const SvxTwoLinesItem*>(pItem);
-        }
+        pTwo = CharFormat::GetItem( rAttr, RES_CHRATR_TWO_LINES );
     }
     if( pTwo )
     {

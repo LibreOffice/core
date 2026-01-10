@@ -718,8 +718,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     const FontList* pFontList = nullptr;
     if( SfxObjectShell* pDocShell = GetDocShell() )
     {
-        if( const SvxFontListItem* pInfoItem = static_cast< const SvxFontListItem* >(
-                pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
+        if( const SvxFontListItem* pInfoItem = pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) )
             pFontList = pInfoItem->GetFontList();
     }
 

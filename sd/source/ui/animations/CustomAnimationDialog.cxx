@@ -271,9 +271,9 @@ SdFontPropertyBox::SdFontPropertyBox(weld::Label* pLabel, weld::Container* pPare
 
     if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
     {
-        auto pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+        const SvxFontListItem* pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
         if (pItem)
-            pFontList = static_cast<const SvxFontListItem*>(pItem)->GetFontList();
+            pFontList = pItem->GetFontList();
     }
 
     if (!pFontList)

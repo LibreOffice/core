@@ -121,22 +121,21 @@ void ScStyleDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         if (rPageId == "numbers")
         {
-            const SfxPoolItem* pInfoItem
+            const SvxNumberInfoItem* pInfoItem
                 = pDocSh->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
             OSL_ENSURE( pInfoItem, "NumberInfoItem not found!" );
 
-            aSet.Put ( static_cast<const SvxNumberInfoItem&>(*pInfoItem) );
+            aSet.Put ( *pInfoItem );
             rTabPage.PageCreated(aSet);
         }
         else if (rPageId == "font")
         {
-            const SfxPoolItem* pInfoItem
-                = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+            const SvxFontListItem* pInfoItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
 
             OSL_ENSURE( pInfoItem, "FontListItem not found!" );
 
-            aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            aSet.Put (SvxFontListItem(pInfoItem->GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rTabPage.PageCreated(aSet);
         }
         else if (rPageId == "background")
@@ -230,8 +229,7 @@ void ScDrawStyleDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
     {
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
         {
-            SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(
-                pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST)));
+            SvxFontListItem aItem(*pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
 
             aSet.Put(SvxFontListItem(aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         }

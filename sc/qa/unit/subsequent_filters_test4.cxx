@@ -1701,16 +1701,14 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowImportCellStyleIssue)
     // Check cell A6 - should have no background color set
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern(0, 5, 0); // A6
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
         CPPUNIT_ASSERT_EQUAL(false, rBackground.isUsed());
     }
 
     // Check cell A7 - should have light2 (background2) theme color set
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern(0, 6, 0); // A7
-        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
-        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const SvxBrushItem& rBackground = pAttr->GetItem(ATTR_BACKGROUND);
         CPPUNIT_ASSERT_EQUAL(true, rBackground.isUsed());
         CPPUNIT_ASSERT_EQUAL(Color(0xe7e6e6), rBackground.GetColor());
         auto const& rComplexColor = rBackground.getComplexColor();

@@ -349,6 +349,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_MS_Word_2007_XML_VBA \
 	writer_OOXML \
 	writer_OOXML_Template \
+	writer_OOXML_VBA \
 	writer_layout_dump_xml \
 	writer_indexing_export_xml \
 	writer_BroadBand_eBook \
@@ -400,6 +401,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	MS_Word_2007_XML_VBA \
 	OOXML_Text \
 	OOXML_Text_Template \
+	OOXML_Text_VBA \
 	writer_layout_dump \
 	writer_indexing_export \
 	BroadBand_eBook \
@@ -497,6 +499,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	MS_Excel_2007_Binary \
 	calc_OOXML \
 	calc_OOXML_Template \
+	calc_OOXML_VBA \
 	calc_MS_Works_Document \
 	calc_WPS_Lotus_Document \
 	calc_WPS_QPro_Document \
@@ -546,6 +549,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	calc_MS_Excel_2007_Binary \
 	calc_OOXML \
 	calc_OOXML_Template \
+	calc_OOXML_VBA \
 	MS_Works_Calc \
 	WPS_Lotus_Calc \
 	WPS_QPro_Calc \

@@ -856,8 +856,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         const SfxItemSet* pResult = aDlg.GetOutputItemSet();
         if (pResult)
         {
-            const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
-            const SvxNumberInfoItem* pInfoItem = static_cast<const SvxNumberInfoItem*>(pItem);
+            const SvxNumberInfoItem* pInfoItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
             if (pInfoItem)
             {
                 for (sal_uInt32 key : pInfoItem->GetDelFormats())

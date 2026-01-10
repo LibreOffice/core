@@ -1758,7 +1758,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&
         {
             if (SwDocShell* pShell = m_pDoc->GetDocShell())
             {
-                const auto pFontListItem(static_cast<const SvxFontListItem*>(pShell->GetItem(SID_ATTR_CHAR_FONTLIST)));
+                const SvxFontListItem* pFontListItem(pShell->GetItem(SID_ATTR_CHAR_FONTLIST));
                 const auto pList(pFontListItem->GetFontList());
                 vcl::Font aFont(pList->Get(rBulletName.toString(), WEIGHT_NORMAL, ITALIC_NONE));
                 aFormat.SetBulletFont(&aFont);

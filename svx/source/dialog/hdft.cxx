@@ -792,15 +792,11 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
 void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
-
-    if ( pItem )
+    if (const SvxLRSpaceItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE ))
     {
         // Set left and right margins
-        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
-
-        m_aBspWin.SetLeft(rLRSpace.ResolveLeft({}));
-        m_aBspWin.SetRight(rLRSpace.ResolveRight({}));
+        m_aBspWin.SetLeft(pItem->ResolveLeft({}));
+        m_aBspWin.SetRight(pItem->ResolveRight({}));
     }
     else
     {
@@ -808,15 +804,11 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         m_aBspWin.SetRight( 0 );
     }
 
-    pItem = GetItem( rSet, SID_ATTR_ULSPACE );
-
-    if ( pItem )
+    if (const SvxULSpaceItem* pItem = GetItem( rSet, SID_ATTR_ULSPACE ))
     {
         // Set top and bottom margins
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(*pItem);
-
-        m_aBspWin.SetTop( rULSpace.GetUpper() );
-        m_aBspWin.SetBottom( rULSpace.GetLower() );
+        m_aBspWin.SetTop( pItem->GetUpper() );
+        m_aBspWin.SetBottom( pItem->GetLower() );
     }
     else
     {
@@ -825,10 +817,8 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     }
 
     SvxPageUsage nUsage = SvxPageUsage::All;
-    pItem = GetItem( rSet, SID_ATTR_PAGE );
-
-    if ( pItem )
-        nUsage = static_cast<const SvxPageItem*>(pItem)->GetPageUsage();
+    if (const SvxPageItem* pItem = GetItem( rSet, SID_ATTR_PAGE ))
+        nUsage = pItem->GetPageUsage();
 
     m_aBspWin.SetUsage( nUsage );
 
@@ -839,14 +829,12 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         m_xCntSharedBox->set_sensitive(true);
         m_xCntSharedFirstBox->set_sensitive(true);
     }
-    pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
-    if ( pItem )
+    if (const SvxSizeItem* pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE ))
     {
         // Orientation and Size from the PageItem
-        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(*pItem);
         // if the size is already swapped (Landscape)
-        m_aBspWin.SetSize( rSize.GetSize() );
+        m_aBspWin.SetSize( pItem->GetSize() );
     }
 
     // For Writer, either header OR footer can indicate that first H/F will have different contents.
@@ -959,17 +947,13 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     m_xCntSharedFirstBox->set_active(
         oNonActivatedFirstShared.has_value() ? *oNonActivatedFirstShared : bActivatedFirstShared);
 
-    pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
-
-    if ( auto pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
+    if (auto pBoolItem = dynamic_cast<const SfxBoolItem*>(GetItem( rSet, SID_ATTR_PAGE_EXT1 )))
     {
         m_aBspWin.SetTable( true );
         m_aBspWin.SetHorz( pBoolItem->GetValue() );
     }
 
-    pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
-
-    if ( auto pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
+    if (const SfxBoolItem* pBoolItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 ))
     {
         m_aBspWin.SetTable( true );
         m_aBspWin.SetVert( pBoolItem->GetValue() );

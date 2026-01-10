@@ -73,8 +73,7 @@ void SvxSearchFormatDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
         const FontList* pApm_pFontList = nullptr;
         if (SfxObjectShell* pSh = SfxObjectShell::Current())
         {
-            const SvxFontListItem* pFLItem = static_cast<const SvxFontListItem*>(
-                pSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
+            const SvxFontListItem* pFLItem = pSh->GetItem( SID_ATTR_CHAR_FONTLIST );
             if ( pFLItem )
                 pApm_pFontList = pFLItem->GetFontList();
         }

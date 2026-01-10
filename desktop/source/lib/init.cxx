@@ -329,7 +329,7 @@ TraceEventDumper *traceEventDumper = nullptr;
 constexpr ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   u"MS Word 97"_ustr },
-    { "docm",  u"MS Word 2007 XML VBA"_ustr },
+    { "docm",  u"Office Open XML Text VBA"_ustr },
     { "docx",  u"Office Open XML Text"_ustr },
     { "fodt",  u"OpenDocument Text Flat XML"_ustr },
     { "html",  u"HTML (StarWriter)"_ustr },
@@ -355,7 +355,7 @@ constexpr ExtensionMap aCalcExtensionMap[] =
     { "pdf",   u"calc_pdf_Export"_ustr },
     { "xhtml", u"XHTML Calc File"_ustr },
     { "xls",   u"MS Excel 97"_ustr },
-    { "xlsm",  u"Calc MS Excel 2007 VBA XML"_ustr },
+    { "xlsm",  u"Calc Office Open XML VBA"_ustr },
     { "xlsx",  u"Calc Office Open XML"_ustr },
     { "png",   u"calc_png_Export"_ustr },
 };
@@ -1392,8 +1392,7 @@ const vcl::Font* FindFont(std::u16string_view rFontName)
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
         return nullptr;
-    const SvxFontListItem* pFonts
-        = static_cast<const SvxFontListItem*>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const SvxFontListItem* pFonts = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
     if (pList && !rFontName.empty())
         if (sal_Handle hMetric = pList->GetFirstFontMetric(rFontName))
@@ -6457,8 +6456,7 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
         return nullptr;
-    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const SvxFontListItem* pFonts = pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
     if (!bBloatWithRepeatedSizes)

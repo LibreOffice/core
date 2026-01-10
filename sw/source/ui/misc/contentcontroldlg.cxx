@@ -263,7 +263,7 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
     }
     if (aItems != m_aSavedListItems)
     {
-        m_pContentControl->SetListItems(aItems);
+        m_pContentControl->SetListItems(std::move(aItems));
         bChanged = true;
     }
 

@@ -152,13 +152,15 @@ void SwInsTableDlg::InitAutoTableFormat()
 IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
     // Get index of selected item from the listbox
-    size_t styleIdx = m_xLbFormat->get_selected_index();
+    int styleIdx = m_xLbFormat->get_selected_index();
+    assert(styleIdx != -1 && "nothing selected");
     m_aWndPreview.NotifyChange((*m_xTableTable)[styleIdx]);
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 {
-    size_t styleIdx = m_xLbFormat->get_selected_index();
+    int styleIdx = m_xLbFormat->get_selected_index();
+    assert(styleIdx != -1 && "nothing selected");
     m_pShell->SetTableStyle((*m_xTableTable)[styleIdx]);
 
     if( m_xTAutoFormat )

@@ -487,16 +487,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableNoColumnsLayout)
     // Check first pivot table's popup button (headerlayout flag)
     {
         const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 1);
-        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 
     // Check second pivot table's popup button
     {
         const ScPatternAttr* pPattern = pDoc->GetPattern(3, 0, 1);
-        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 }
@@ -518,22 +516,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf112501)
         // Row button
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(0, 3, 0);
-            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
         // Column button
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(1, 2, 0);
-            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
         // Check also C3 to make sure column button is not placed there
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(2, 2, 0);
-            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
             CPPUNIT_ASSERT(!(rMergeFlag.GetValue() & ScMF::ButtonPopup));
         }
     }
@@ -546,21 +541,18 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf112501)
         // Two row buttons
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(7, 3, 0);
-            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(8, 3, 0);
-            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
         // Column button
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(9, 2, 0);
-            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
     }
@@ -1178,8 +1170,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRowHeaderXLS)
         CPPUNIT_ASSERT(pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = pDoc->GetPattern(3, 3, 0);
-        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 
@@ -1190,8 +1181,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRowHeaderXLS)
         CPPUNIT_ASSERT(!pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = pDoc->GetPattern(0, 2, 0);
-        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 
@@ -1210,8 +1200,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRowHeaderXLS)
         CPPUNIT_ASSERT(pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = pDoc->GetPattern(3, 3, 0);
-        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 
@@ -1222,8 +1211,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRowHeaderXLS)
         CPPUNIT_ASSERT(!pDPObj->GetHeaderLayout());
         // Check whether the row header has the right popupbutton flag
         const ScPatternAttr* pPattern = pDoc->GetPattern(0, 2, 0);
-        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
-        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 }

@@ -278,6 +278,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSegFaultWhileSave)
     createSwDoc("test_segfault_while_save.docx");
 
     //FIXME: validation error in OOXML export: Errors: 171
+    // This occurs because the input doc has w:sdtContent nested inside w:sdtContent in the footer2.xml file.
+    // Which confuses our importer, and we end up with weird data in the grab-bag.
+    // And the exporter is also confused, does not know
+    // how to do a nested w:sdtContent.
     skipValidation();
 
     save(TestFilter::DOCX);
@@ -355,9 +359,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO74106)
 CPPUNIT_TEST_FIXTURE(Test, testFDO74215)
 {
     createSwDoc("FDO74215.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
@@ -688,9 +689,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCurruption)
 {
     createSwDoc("tableCurrupt.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc) ;
@@ -732,9 +730,6 @@ CPPUNIT_TEST_FIXTURE(Test, test_Tdf115030)
 CPPUNIT_TEST_FIXTURE(Test, test_OpeningBrace)
 {
     createSwDoc("2120112713_OpenBrace.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -994,9 +989,6 @@ CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
 {
     createSwDoc("2120112713.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for ClosingBrace tag
@@ -1087,9 +1079,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeXLSM)
 {
     createSwDoc("fdo76098.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1133,9 +1122,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTCTagMisMatch)
 CPPUNIT_TEST_FIXTURE(Test, testFDO78292)
 {
     createSwDoc("FDO78292.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
 
     save(TestFilter::DOCX);
     //text node is a leaf node, it should not have any children
@@ -1222,9 +1208,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 16
-    skipValidation();
-
     // the problem was: file is truncated: the first page is missing.
     // More precisely, the table in the first page was clipped.
     {

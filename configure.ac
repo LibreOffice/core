@@ -7110,6 +7110,8 @@ if test $_os = Darwin; then
     if test -n "$PKG_CONFIG"; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
             AC_MSG_ERROR([yes, from Mono. This *will* break the build. Please remove or hide $PKG_CONFIG])
+        elif test "$PKG_CONFIG" = "/opt/homebrew/bin/pkg-config"; then
+            AC_MSG_RESULT([yes, from Homebrew. This is OK.])
         else
             if test "$enable_bogus_pkg_config" = "yes"; then
                 AC_MSG_RESULT([yes, user-approved from unknown origin.])
@@ -11517,7 +11519,7 @@ dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
 ICU_MAJOR=78
-ICU_MINOR=1
+ICU_MINOR=2
 ICU_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
 ICU_LIBS_internal="-L${WORKDIR}/UnpackedTarball/icu/source/lib -licuuc"
 libo_CHECK_SYSTEM_MODULE([icu],[ICU],[icu-i18n >= 66])
