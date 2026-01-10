@@ -15,6 +15,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,fontconfig,fontconfig))
 
 $(eval $(call gb_StaticLibrary_set_include,fontconfig,\
 	-I$(gb_UnpackedTarball_workdir)/fontconfig \
+	-I$(gb_UnpackedTarball_workdir)/fontconfig/fc-lang \
 	-I$(gb_UnpackedTarball_workdir)/freetype/include \
 	-I$(gb_UnpackedTarball_workdir)/expat/lib \
 	$$(INCLUDE) \
