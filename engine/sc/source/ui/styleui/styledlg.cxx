@@ -133,7 +133,7 @@ void ScStyleDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
         {
             const SvxFontListItem* pInfoItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
 
-            OSL_ENSURE( pInfoItem, "FontListItem not found!" );
+            assert(pInfoItem && "FontListItem not found!");
 
             aSet.Put (SvxFontListItem(pInfoItem->GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rTabPage.PageCreated(aSet);
