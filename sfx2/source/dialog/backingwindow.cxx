@@ -676,8 +676,13 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OUString&, rId, void)
 
 IMPL_LINK(BackingWindow, CreateContextMenuHdl, TemplateViewItem*, pItem, void)
 {
-    if (pItem)
-        mxLocalView->createContextMenu();
+    if (!pItem)
+        return;
+
+    bool bIsInternal = TemplateLocalView::IsInternalTemplate(pItem->getPath());
+
+    mxLocalView->createContextMenu(bIsInternal);
+
 }
 
 IMPL_LINK(BackingWindow, OpenTemplateHdl, const OUString&, rTemplatePath, void)

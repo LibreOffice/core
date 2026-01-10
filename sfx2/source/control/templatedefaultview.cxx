@@ -75,11 +75,17 @@ bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
     return TemplateLocalView::MouseButtonDown(rMEvt);
 }
 
-void TemplateDefaultView::createContextMenu()
+void TemplateDefaultView::createContextMenu(const bool bIsBuiltIn)
 {
     mxContextMenu->clear();
     mxContextMenu->append(u"open"_ustr,SfxResId(STR_OPEN));
     mxContextMenu->append(u"edit"_ustr,SfxResId(STR_EDIT_TEMPLATE));
+
+    if (bIsBuiltIn)
+    {
+        mxContextMenu->set_sensitive(u"edit"_ustr, false);
+    }
+
     deselectItems();
     mpSelectedItem->setSelection(true);
     maItemStateHdl.Call(mpSelectedItem);

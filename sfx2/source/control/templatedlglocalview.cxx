@@ -132,6 +132,7 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
     }
     if (bIsBuiltIn)
     {
+        mxContextMenu->set_sensitive(u"edit"_ustr, false);
         mxContextMenu->set_sensitive(u"rename"_ustr, false);
         mxContextMenu->set_sensitive(u"delete"_ustr, false);
     }

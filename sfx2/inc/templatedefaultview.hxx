@@ -23,7 +23,7 @@ public:
 
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    void createContextMenu();
+    void createContextMenu(const bool bIsInternal);
 
 protected:
     void UpdateColors(const StyleSettings& rSettings) override;
