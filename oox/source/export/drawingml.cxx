@@ -4929,23 +4929,49 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
     return false;
 }
 
-OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const OUString& sNewStr)
+OUString GetFormula(const OUString& sEquation)
 {
+    assert(!sEquation.isEmpty() && "surely an equation would never be empty...");
+    // TODO: This needs to be completely re-written. It is extremely simplistic/minimal.
+    // What is needed here is the reverse of convertToOOEquation.
+
     // If the equation is numerical
     sal_Int64 nValue = sEquation.toInt64();
-    if (!sEquation.isEmpty() && OUString::number(nValue) == sEquation)
+    if (OUString::number(nValue) == sEquation)
         return "val " + sEquation;
 
     OUString sFormula = sEquation;
-    size_t nPos = sFormula.indexOf(sReplace);
-    if (nPos != std::string::npos)
+
+    /* replace LO native placeholders with OOXML placeholders
+     * #1: e.g. 'logwidth'
+     * #2: e.g. 'logwidth/2'
+     * #3: e.g. '1234*logwidth/5678'
+     */
+
+    if (sEquation == "logwidth") // #1
+        return "val w";
+    if (sEquation == "logheight")
+        return "val h";
+    if (sEquation.startsWith("logwidth/")) // #2
+        sFormula = u"*/ 1 w "_ustr + sEquation.subView(9);
+    else if (sEquation.startsWith("logheight/"))
+        sFormula = u"*/ 1 h "_ustr + sEquation.subView(10);
+    else
     {
-        OUString sModifiedEquation = sFormula.replaceAt(nPos, sReplace.getLength(), sNewStr);
-        sFormula = "*/ " + sModifiedEquation;
+        size_t nPos = sFormula.indexOf("*logwidth/"); //#3
+        if (nPos != std::string::npos)
+            sFormula = "*/ " + sFormula.replaceAt(nPos, 10, " w ");
+        else
+        {
+            nPos = sFormula.indexOf("*logheight/");
+            if (nPos != std::string::npos)
+                sFormula = "*/ " + sFormula.replaceAt(nPos, 11, " h ");
+        }
     }
 
     if (IsValidOOXMLFormula(sFormula))
         return sFormula;
+    else SAL_WARN("oox.shape","invalid OOXML formula["<<sFormula<<"]");
 
     return OUString();
 }
@@ -4953,44 +4979,60 @@ OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const O
 void prepareGluePoints(std::vector<Guide>& rGuideList,
                        const css::uno::Sequence<OUString>& aEquations,
                        const uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
-                       const bool bIsOOXML, const sal_Int32 nWidth, const sal_Int32 nHeight)
+                       const bool /*bIsOOXML*/, const sal_Int32 nWidth, const sal_Int32 nHeight)
 {
     if (rGluePoints.hasElements())
     {
-        sal_Int32 nIndex = 1;
+        sal_Int32 nIndex = 0;
         for (auto const& rGluePoint : rGluePoints)
         {
+            ++nIndex;
             sal_Int32 nIdx1 = -1;
             sal_Int32 nIdx2 = -1;
-            rGluePoint.First.Value >>= nIdx1;
-            rGluePoint.Second.Value >>= nIdx2;
-
-            if (nIdx1 != -1 && nIdx2 != -1)
+            bool bValidIdx1 = false;
+            bool bValidIdx2 = false;
+            if (rGluePoint.First.Value >>= nIdx1)
             {
-                Guide aGuideX;
-                aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
-
-                if (bIsOOXML && nIdx1 >= 0 && nIdx1 < aEquations.getLength())
-                    aGuideX.sFormula = GetFormula(aEquations[nIdx1], "*logwidth/", " w ").toUtf8();
-                if (aGuideX.sFormula.isEmpty())
-                    aGuideX.sFormula
-                        = "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
-
-                rGuideList.push_back(aGuideX);
-
-                Guide aGuideY;
-                aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
-
-                if (bIsOOXML && nIdx2 >= 0 && nIdx2 < aEquations.getLength())
-                    aGuideY.sFormula = GetFormula(aEquations[nIdx2], "*logheight/", " h ").toUtf8();
-                if (aGuideY.sFormula.isEmpty())
-                    aGuideY.sFormula
-                        = "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
-
-                rGuideList.push_back(aGuideY);
+                bValidIdx1 = rGluePoint.First.Type == EnhancedCustomShapeParameterType::EQUATION;
+                // I would assume that any EQUATION must define a valid index value.
+                assert(!bValidIdx1 || (nIdx1 >= 0 && nIdx1 < aEquations.getLength()));
             }
+            else
+                continue;
 
-            nIndex++;
+            if (rGluePoint.Second.Value >>= nIdx2)
+            {
+                bValidIdx2 = rGluePoint.Second.Type == EnhancedCustomShapeParameterType::EQUATION;
+                assert(!bValidIdx2 || (nIdx2 >= 0 && nIdx2 < aEquations.getLength()));
+            }
+            else
+                continue;
+
+            Guide aGuideX;
+            Guide aGuideY;
+            if (bValidIdx1)
+            {
+                aGuideX.sFormula = GetFormula(aEquations[nIdx1]).toUtf8();
+                if (aGuideX.sFormula.isEmpty()) // !IsValidOOXMLFormula
+                    continue;
+            }
+            else
+                aGuideX.sFormula = "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
+            if (bValidIdx2)
+            {
+                aGuideY.sFormula = GetFormula(aEquations[nIdx2]).toUtf8();
+                if (aGuideY.sFormula.isEmpty()) // !IsValidOOXMLFormula
+                    continue;
+            }
+            else
+                aGuideY.sFormula
+                    = "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
+
+            aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
+            rGuideList.push_back(aGuideX);
+
+            aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
+            rGuideList.push_back(aGuideY);
         }
     }
 }
@@ -5184,6 +5226,7 @@ bool DrawingML::WriteCustomGeometry(
         mpFS->startElementNS(XML_a, XML_gdLst);
         for (auto const& elem : aGuideList)
         {
+            assert(IsValidOOXMLFormula(OUString::fromUtf8(elem.sFormula)));
             mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
         }
         mpFS->endElementNS(XML_a, XML_gdLst);
