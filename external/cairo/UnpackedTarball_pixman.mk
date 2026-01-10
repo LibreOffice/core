@@ -12,7 +12,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,pixman))
 $(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL),,cairo))
 
 ifeq ($(OS)-$(ENABLE_HEADLESS),WNT-TRUE)
-$(eval $(call gb_UnpackedTarball_add_file,pixman,config.h,external/cairo/configs/wnt_pixman_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,pixman,pixman/pixman-config.h,external/cairo/configs/wnt_pixman_pixman-config.h))
+$(eval $(call gb_UnpackedTarball_add_file,pixman,pixman/pixman-version.h,external/cairo/configs/wnt_pixman_pixman-version.h))
 endif
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,pixman,2))
