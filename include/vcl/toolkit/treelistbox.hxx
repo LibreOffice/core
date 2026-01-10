@@ -364,7 +364,7 @@ public:
         return pModel ? pModel->Last() : nullptr;
     }
 
-    SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
+    SvTreeListEntry* FirstChild(const SvTreeListEntry* pParent) const;
 
     sal_uInt32 GetEntryPos(const SvTreeListEntry* pEntry) const;
 

@@ -558,7 +558,7 @@ TriState SvTreeListBox::NotifyCopying(
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
 
-SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
+SvTreeListEntry* SvTreeListBox::FirstChild(const SvTreeListEntry* pParent) const
 {
     return pModel->FirstChild(pParent);
 }

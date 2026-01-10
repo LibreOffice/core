@@ -145,7 +145,7 @@ public:
     SvTreeListEntry*    Prev( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    Last() const;
 
-    SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
+    SvTreeListEntry* FirstChild(const SvTreeListEntry* pParent) const;
 
     sal_uInt32          Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uInt32 nPos = TREELIST_APPEND);
     sal_uInt32          Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos = TREELIST_APPEND )

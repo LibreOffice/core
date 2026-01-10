@@ -769,8 +769,7 @@ SvTreeListEntry* SvTreeList::FirstSelected( const SvListView* pView) const
     return pActSelEntry;
 }
 
-
-SvTreeListEntry* SvTreeList::FirstChild( SvTreeListEntry* pParent ) const
+SvTreeListEntry* SvTreeList::FirstChild(const SvTreeListEntry* pParent) const
 {
     if ( !pParent )
         pParent = pRootItem.get();
