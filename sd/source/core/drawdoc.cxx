@@ -463,26 +463,31 @@ void SdDrawDocument::ResizeCurrentPage(
 
     // TODO: handle undo action for new master page creation
 
-    SdPage* pMasterPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+    bool bIsMasterPage = pPage->IsMasterPage();
 
-    // Count how many pages uses pMasterPage
-    sal_uInt16 nCount = 0;
-    for (sal_uInt16 i = 0; i < nPageCnt && nCount <= 1; i++)
+    SdPage* pMasterPage = bIsMasterPage ? pPage : static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+
+    if (!bIsMasterPage)
     {
-        SdPage* pDrawPage = GetSdPage(i, ePageKind);
-        if (pDrawPage->TRG_HasMasterPage() &&
-            static_cast<SdPage*>(&pDrawPage->TRG_GetMasterPage()) == pMasterPage)
+        // Count how many pages uses pMasterPage
+        sal_uInt16 nCount = 0;
+        for (sal_uInt16 i = 0; i < nPageCnt && nCount <= 1; i++)
         {
-            nCount++;
+            SdPage* pDrawPage = GetSdPage(i, ePageKind);
+            if (pDrawPage->TRG_HasMasterPage() &&
+                static_cast<SdPage*>(&pDrawPage->TRG_GetMasterPage()) == pMasterPage)
+            {
+                nCount++;
+            }
         }
-    }
 
-    // If pMasterPage is used by other pages, create a new master page
-    if (nCount > 1)
-    {
-        SdPage* pNewMasterPage = AddNewMasterPageFromExisting(pMasterPage);
-        pPage->TRG_SetMasterPage(static_cast<SdrPage&>(*pNewMasterPage));
-        pMasterPage = pNewMasterPage;
+        // If pMasterPage is used by other pages, create a new master page
+        if (nCount > 1)
+        {
+            SdPage* pNewMasterPage = AddNewMasterPageFromExisting(pMasterPage);
+            pPage->TRG_SetMasterPage(static_cast<SdrPage&>(*pNewMasterPage));
+            pMasterPage = pNewMasterPage;
+        }
     }
 
     AdaptPageSize(pMasterPage,
@@ -502,17 +507,42 @@ void SdDrawDocument::ResizeCurrentPage(
     //         GetMasterSdPage(i, PageKind::Notes)->CreateTitleAndLayout();
     //     }
 
-    AdaptPageSize(pPage,
-                  rNewSize,
-                  pUndoGroup,
-                  nLeft,
-                  nRight,
-                  nUpper,
-                  nLower,
-                  bScaleAll,
-                  eOrientation,
-                  nPaperBin,
-                  bBackgroundFullSize);
+    if (!bIsMasterPage)
+    {
+        AdaptPageSize(pPage,
+                      rNewSize,
+                      pUndoGroup,
+                      nLeft,
+                      nRight,
+                      nUpper,
+                      nLower,
+                      bScaleAll,
+                      eOrientation,
+                      nPaperBin,
+                      bBackgroundFullSize);
+    }
+    else
+    {
+        for (sal_uInt16 i = 0; i < nPageCnt; i++)
+        {
+            SdPage* pDrawPage = GetSdPage(i, ePageKind);
+            if (pDrawPage->TRG_HasMasterPage() &&
+                static_cast<SdPage*>(&pDrawPage->TRG_GetMasterPage()) == pPage)
+            {
+                AdaptPageSize(pDrawPage,
+                              rNewSize,
+                              pUndoGroup,
+                              nLeft,
+                              nRight,
+                              nUpper,
+                              nLower,
+                              bScaleAll,
+                              eOrientation,
+                              nPaperBin,
+                              bBackgroundFullSize);
+            }
+        }
+    }
 
     // if ( ePageKind == PageKind::Standard )
     // {
