@@ -1,1 +1,3 @@
-make: *** No targets specified and no makefile found.  Stop.
+make -j 32  -rs -f C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/Makefile.gbuild build  
+/cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/cppuhelper/Library_cppuhelper.mk:57: *** No such source file C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/cppuhelper/source/typemanager.cxx.  Stop.
+make: *** [Makefile:310: build] Error 2
