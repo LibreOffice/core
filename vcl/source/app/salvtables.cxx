@@ -4507,15 +4507,6 @@ bool SalInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
     return true;
 }
 
-bool SalInstanceTreeView::iter_next(weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xTreeView->Next(rVclIter.iter);
-    if (rVclIter.iter && IsDummyEntry(rVclIter.iter))
-        return iter_next(rVclIter);
-    return rVclIter.iter != nullptr;
-}
-
 bool SalInstanceTreeView::iter_previous(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);

@@ -127,6 +127,24 @@ bool weld::TreeView::is_selected(int pos) const
     return false;
 }
 
+bool weld::TreeView::iter_next(TreeIter& rIter) const
+{
+    if (iter_children(rIter))
+        return true;
+
+    if (iter_next_sibling(rIter))
+        return true;
+
+    // Move up level(s) until we find the level where the next node exists.
+    while (iter_parent(rIter))
+    {
+        if (iter_next_sibling(rIter))
+            return true;
+    }
+
+    return false;
+}
+
 bool weld::TreeView::iter_children(TreeIter& rIter) const
 {
     if (get_children_on_demand(rIter))

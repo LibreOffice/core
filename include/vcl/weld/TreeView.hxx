@@ -315,7 +315,7 @@ public:
     // set iter to point to previous node at the current level
     virtual bool iter_previous_sibling(TreeIter& rIter) const = 0;
     // set iter to point to next node, depth first, then sibling
-    virtual bool iter_next(TreeIter& rIter) const = 0;
+    bool iter_next(TreeIter& rIter) const;
     // set iter to point to previous node, sibling first then depth
     virtual bool iter_previous(TreeIter& rIter) const = 0;
     // set iter to point to first child node
