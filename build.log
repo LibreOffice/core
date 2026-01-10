@@ -1,3 +1,471 @@
+Reading autogen.lastrun. Please rename it to autogen.input to avoid this message.
+Running './configure PKG_CONFIG=/cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/pkgconf-2.4.3.exe --with-visual-studio=2026 --with-product-name="OfficeLabs" --with-lang=en-US --disable-odk --disable-postgresql-sdbc --without-help --without-myspell-dicts --disable-ccache --disable-firebird-sdbc --disable-mariadb-sdbc --without-java --without-doxygen --disable-skia --disable-pdfium --enable-release-build --srcdir=/cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork --enable-option-checking=fatal'
+********************************************************************
+*
+*   Running LibreOffice build configuration.
+*
+********************************************************************
+
+checking build system type... x86_64-pc-cygwin
+checking host system type... x86_64-pc-cygwin
+checking for product name... "OfficeLabs"
+checking for package version... 26.8.0.0.alpha0+
+checking for product version... 26.8
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for grep... (cached) /usr/bin/grep
+checking for GNU Make... /usr/bin/make
+checking for explicit COMSPEC... found: C:\WINDOWS\system32\cmd.exe
+checking for sed... /usr/bin/sed
+checking for pkgconf-2.4.3.exe... /cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/pkgconf-2.4.3.exe
+checking whether to use link-time optimization... no
+checking whether to enable gcov... no
+configure: VCL platform has a usable dynamic loading API: yes
+configure: VCL platform uses freetype+fontconfig: no
+configure: VCL platform uses headless plugin: no
+configure: VCL platform uses X11: no
+checking for explicit AFLAGS... no
+checking for explicit CFLAGS... no
+checking for explicit CXXFLAGS... no
+checking for explicit OBJCFLAGS... no
+checking for explicit OBJCXXFLAGS... no
+checking for explicit LDFLAGS... no
+checking pkg-config is at least version 0.9.0... yes
+checking for library containing backtrace... no
+checking for libexecinfo... no
+checking whether to record build config... no
+checking whether build target is Release Build... yes
+checking whether build should auto use hardening compiler flags... no
+checking whether to sign windows build... no
+checking for gawk... gawk
+checking for gawk... /usr/bin/gawk
+checking for bash... /bin/sh
+checking for pigz... no
+checking for gzip... /usr/bin/gzip
+checking for GNU or BSD tar... tar
+checking for tar's option to strip components... --strip-components
+checking how to build and package galleries... internal src images for desktop
+checking build with or without template files... enable all templates
+checking whether to build with Java support... no
+checking whether to treat the installation as read-only... no
+checking Visual C++... 
+checking multi-arch compiler... C:/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x86/cl.exe
+checking build compiler... C:/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe
+checking for short pathname of VC product directory... /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC
+checking for UCRT location... C:/PROGRA~2/WI3CF2~1/10/ (10.0.26100.0)
+checking for MSBuild.exe location for: 18.0... /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/../MSBuild/Current/Bin/amd64
+configure: found Visual C++ 2026
+checking cl.exe is at least Visual Studio 2022 version 17.0... yes
+checking for a x86 compiler and libraries for 32-bit binaries required for TWAIN support... found
+checking whether the compiler is actually Clang... no
+checking the dependency generation prefix (cl.exe -showIncludes)... "Note: including file:"
+checking whether to build with additional debug utilities... no
+checking whether to do a debug build... no
+checking whether to enable (the UNO parts of) embindtest... no
+checking whether cl.exe supports -Xclang -debug-info-kind=constructor... no
+checking whether to generate debug information... no
+checking whether to compile with optimization flags... yes
+checking whether to build with .NET support... yes
+checking for dotnet.exe... no
+configure: WARNING: dotnet not found, disabling .NET support
+checking whether to enable Rust UNO support... no
+checking which package format to use... none
+checking which help to build... no
+checking if we need to build the help index tooling... yes
+checking whether to enable xapian-omega support for online help... no
+checking whether to include the XML-help support... yes
+checking for helppack integration... no integration
+checking which lockfile binary to use... internal
+checking for getopt.h... no
+checking for paths.h... no
+checking for sys/param.h... no
+checking for utime... no
+checking for utimes... no
+checking for syslog.h... no
+checking whether to turn warnings to errors... no
+checking whether to have assert() failures abort even without --enable-debug... no
+checking whether to build the pagein binaries for oosplash... no
+checking whether to enable CPDB support... no
+checking whether to enable CUPS support... no
+checking which fontconfig to use... not tested
+checking whether we want to fetch tarballs... yes, if we use them
+checking whether to include MySpell dictionaries... no
+checking whether to use dicts from external paths... no
+checking whether to enable pch feature... yes (full)
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe supports -fpch-instantiate-templates... no
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe supports -Xclang -building-pch-with-obj... no
+checking the GNU Make version... /usr/bin/make 4.4.1
+checking for --hash-style gcc linker support... no 
+checking for perl... /usr/bin/perl
+checking the Perl version... Perl 5
+checking for required Perl modules... all modules found
+checking for Windows SDK... 10.0.26100.0
+found Windows SDK 10.0 (C:/PROGRA~2/WI3CF2~1/10)
+checking for midl.exe... C:/PROGRA~2/WI3CF2~1/10//Bin/10.0.26100.0/x64/midl.exe
+checking for csc.exe... C:\Windows\Microsoft.NET\Framework\v4.0.30319\/csc.exe
+checking for al.exe... C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8.1 Tools\/al.exe
+checking .NET Framework... found: C:/PROGRA~2/WI3CF2~1/NETFXSDK/48D70E~1.1/
+checking whether jumbo sheets are supported... yes
+checking whether to enable runtime optimizations... yes
+checking for valgrind/valgrind.h... no
+checking for sys/sdt.h... no
+checking what the C++ library is... Microsoft
+checking for gperf... /usr/bin/gperf
+checking whether gperf is new enough... yes (3.1)
+checking which libcmis to use... internal
+checking whether cl.exe supports C++20... yes (-std:c++20 -permissive- -Zc:__cplusplus,preprocessor)
+checking whether cl.exe supports C++11 without Language Defect 757... yes
+checking whether cl.exe supports C++2a constinit sorted vectors... no
+checking whether cl.exe implements C++ DR P1155R3... yes
+checking whether cl.exe supports C++20 std::atomic_ref... yes
+checking whether cl.exe supports -Zc:dllexportInlines-... no
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile SSE2 intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile SSSE3 intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile SSE4.1 intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile SSE4.2 intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile AVX intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile AVX2 intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile AVX512 intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile F16C intrinsics... yes
+checking whether /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/cl.exe  can compile FMA intrinsics... yes
+checking for posix_fallocate... no
+checking whether to enable export file validation... no, as Java is disabled
+checking for Microsoft Binary File Format Validator... no
+checking whether to enable EPM for packing... no
+checking whether to build the ODK... no
+checking whether to enable fuzzers... no
+checking which zlib to use... internal
+checking which zstd to use... bundled
+checking which md4c to use... bundled
+checking which libjpeg to use... internal, libjpeg-turbo
+checking for nasm... nasm
+checking for object file format of host system... Win64-COFF
+checking for object file format specifier (NAFLAGS) ... -fwin64 -DWIN64 -D__x86_64__ -DPIC
+checking whether the assembler (nasm -fwin64 -DWIN64 -D__x86_64__ -DPIC) works... yes
+checking which clucene to use... internal
+checking which expat to use... internal
+checking which xmlsec to use... internal
+checking whether to enable Embedded OpenType support... yes
+checking which libeot to use... internal
+checking which librevenge to use... internal
+checking which libodfgen to use... internal
+checking which libepubgen to use... internal
+checking which libwpd to use... internal
+checking which libwpg to use... internal
+checking which libwps to use... internal
+checking which libvisio to use... internal
+checking which libcdr to use... internal
+checking which libmspub to use... internal
+checking which libmwaw to use... internal
+checking which libetonyek to use... internal
+checking which libfreehand to use... internal
+checking which libebook to use... internal
+checking which libabw to use... internal
+checking which libpagemaker to use... internal
+checking which libqxp to use... internal
+checking which libzmf to use... internal
+checking which libstaroffice to use... internal
+checking which lcms2 to use... internal
+checking which cppunit to use... internal
+checking which freetype to use... not tested
+checking which libxslt to use... internal
+checking which libxml to use... internal
+checking which Python to use for Pyuno... fully internal
+configure: WARNING: No system-provided python lxml, gla11y will only report widget classes and ids
+checking whether to build LibreLogo... yes
+checking whether to build the MariaDB/MySQL SDBC driver... no
+checking whether to build the PostgreSQL SDBC driver... no
+checking which curl to use... internal
+checking which boost to use... internal
+checking which mdds to use... internal
+checking which dragonbox to use... internal
+checking which fast_float to use... internal
+checking which frozen to use... internal
+checking which libfixmath to use... internal
+checking which glm to use... internal
+checking which odbc headers to use... external
+checking for sqlext.h... yes
+checking which nss to use... internal
+checking which TLS/SSL and cryptographic implementation to use... NSS
+checking which sane header to use... internal
+checking which icu to use... internal
+checking whether to enable breakpad... no
+checking which orcus to use... internal
+checking which graphite to use... internal
+checking which harfbuzz to use... internal
+checking whether to use Xrender... no
+checking whether to enable RandR support... no
+checking for WebDAV support... yes
+checking whether to execute CVE tests... yes
+checking whether to execute NaN payload tests... yes
+checking whether to disable OpenSSL usage... no
+checking which openssl to use... internal
+checking whether to enable the OpenSSL backend for rtl/cipher.h... no
+checking which argon2 to use... internal
+checking which redland to use... internal
+checking which libhunspell to use... internal
+checking which zxcvbn to use... internal
+checking whether to use zxing... yes
+checking which libzxing to use... internal
+checking whether zxing::tosvg function is available... no
+checking which box2d to use... internal
+checking which altlinuxhyph to use... internal
+checking which mythes to use... internal
+checking whether to build with CoinMP... yes
+checking whether to build with lpsolve... yes
+checking which lpsolve to use... internal
+checking which colamd to use... internal
+checking which libexttextcat to use... internal
+checking which libnumbertext to use... internal
+checking for bison... /usr/bin/bison
+checking the bison version... checking for flex... /usr/bin/flex
+checking the flex version... checking for diff... /usr/bin/diff
+checking for uniq... /usr/bin/uniq
+checking for patch... /usr/bin/patch
+checking for gnucp... no
+checking for cp... /usr/bin/cp
+checking whether /usr/bin/cp is GNU cp from coreutils with preserve= support... yes
+checking for the MSVC assembler (ml64.exe)... /cygdrive/c/PROGRA~1/MIB055~1/18/COMMUN~1/VC/Tools/MSVC/1450~1.357/bin/Hostx64/x64/ml64.exe
+checking for zip... /usr/bin/zip
+checking for unzip... /usr/bin/unzip
+checking for touch... /usr/bin/touch
+checking which epoxy to use... internal
+configure: VCLplugs to be built: win
+checking whether to enable DBUS support... no
+checking whether to enable Impress remote control... yes
+checking whether to enable Bluetooth support in Impress remote control... yes
+checking for dconf >= 0.40.0... no
+checking whether to enable dconf... no
+checking whether to build the PDF import feature... yes
+checking whether to build PDFium... no
+checking whether to build Poppler... yes
+checking which PDF import poppler to use... internal
+checking whether to build Skia... no
+checking whether to enable gpgmepp... yes
+checking which gpgmepp to use... internal
+checking for gpg... no
+checking whether to build Java Websocket for the UNO remote websocket client... no
+checking whether to build the Wiki Publisher extension... no
+checking whether to build the Report Builder... no
+checking whether to build support for scripts in BeanShell... no
+checking whether to build support for scripts in JavaScript... no
+checking whether to enable evolution 2 support... no
+checking which themes to include... breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg colibre_dark colibre_dark_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg sukapura sukapura_dark sukapura_dark_svg sukapura_svg
+checking for extensions integration... yes, use integration
+checking whether to build opens___.ttf... no
+checking whether to include third-party fonts... yes
+checking whether to include 'docrepair' fonts... checking whether to enable online update... no
+checking whether to enable mar online update... no
+checking for mar online update baseurl... no
+checking for mar online update certificateder... no
+checking for mar online update certificatename... no
+checking for mar online update certificatepath... no
+checking whether to use system bzip2... no
+checking which lzma to use... internal
+checking which sqlite3 to use... internal
+checking whether to enable extension update... yes
+checking whether to create MSI with LIMITUI=1 (silent install)... no
+no
+checking whether and how to use Xinerama... no
+checking whether to use non-standard RGBA32 cairo pixel order... no
+checking for ninja... assumed to be available from Visual Studio
+checking whether to use MSVC /analyze... no
+checking whether to use system liblangtag... no
+checking which libpng to use... internal
+checking which libtiff to use... internal
+checking which libwebp to use... internal
+checking which languages to be built... en-US
+checking for alternative branding images directory... none
+checking for 'intro' progress settings... none
+checking for extra build ID... not set
+checking for vendor... not set, using philh
+checking whether to install the compat oo* wrappers... no
+checking for install dirname... libreoffice
+checking for prefix... /usr/local
+checking for Google Drive client id and secret... not set
+checking for Alfresco Cloud client id and secret... not set
+checking for OneDrive client id and secret... not set
+checking whether to enable dependency tracking... yes
+checking for number of processors to use... 32
+checking whether cl.exe supports a working C++20 consteval... no
+checking whether cl.exe supports a working C++20 std::strong_order... yes
+checking whether to create huge library... no
+checking whether to use icerun wrapper... no
+checking MPL subset... no restrictions
+checking formula logger... no
+checking for active Antivirus software... ./configure: line 52881: cscript.exe: command not found
+found
+checking for coredumpctl support... no
+checking whether to keep the system awake/prevent it from going into sleep/standby... no
+checking for jom (parallel nmake)... checking for jom.exe... no
+configure: jom can help accelerate your build, but is completely optional. Get it from https://wiki.qt.io/Jom
+configure: and put it in PATH or add JOM=/unix/style/path/to/jom.exe to your autogen.input to use it
+configure: setting up the build environment variables...
+configure: creating ./config.status
+config.status: creating config_host_lang.mk
+config.status: creating Makefile
+config.status: creating bin/bffvalidator.sh
+config.status: creating bin/odfvalidator.sh
+config.status: creating bin/officeotron.sh
+config.status: creating instsetoo_native/util/openoffice.lst
+config.status: creating sysui/desktop/macosx/Info.plist
+config.status: creating sysui/desktop/macosx/LaunchConstraint.plist
+config.status: creating hardened_runtime.xcent
+config.status: creating lo.xcent
+config.status: creating extensions/source/macosx/quicklookpreview/appex/Info.plist
+config.status: creating extensions/source/macosx/quicklookthumbnail/appex/Info.plist
+config.status: creating config_host.mk
+config.status: creating vs-code.code-workspace.template
+config.status: creating config_host/config_probes.h
+config.status: config_host/config_probes.h is unchanged
+config.status: creating config_host/config_afdko.h
+config.status: config_host/config_afdko.h is unchanged
+config.status: creating config_host/config_atspi.h
+config.status: config_host/config_atspi.h is unchanged
+config.status: creating config_host/config_buildconfig.h
+config.status: config_host/config_buildconfig.h is unchanged
+config.status: creating config_host/config_buildid.h
+config.status: config_host/config_buildid.h is unchanged
+config.status: creating config_host/config_box2d.h
+config.status: config_host/config_box2d.h is unchanged
+config.status: creating config_host/config_clang.h
+config.status: config_host/config_clang.h is unchanged
+config.status: creating config_host/config_cpdb.h
+config.status: config_host/config_cpdb.h is unchanged
+config.status: creating config_host/config_crypto.h
+config.status: config_host/config_crypto.h is unchanged
+config.status: creating config_host/config_cups.h
+config.status: config_host/config_cups.h is unchanged
+config.status: creating config_host/config_dconf.h
+config.status: config_host/config_dconf.h is unchanged
+config.status: creating config_host/config_eot.h
+config.status: config_host/config_eot.h is unchanged
+config.status: creating config_host/config_extensions.h
+config.status: config_host/config_extensions.h is unchanged
+config.status: creating config_host/config_cairo_canvas.h
+config.status: config_host/config_cairo_canvas.h is unchanged
+config.status: creating config_host/config_cairo_rgba.h
+config.status: config_host/config_cairo_rgba.h is unchanged
+config.status: creating config_host/config_collab.h
+config.status: config_host/config_collab.h is unchanged
+config.status: creating config_host/config_cxxabi.h
+config.status: config_host/config_cxxabi.h is unchanged
+config.status: creating config_host/config_dbus.h
+config.status: config_host/config_dbus.h is unchanged
+config.status: creating config_host/config_emscripten.h
+config.status: config_host/config_emscripten.h is unchanged
+config.status: creating config_host/config_features.h
+config.status: config_host/config_features.h is unchanged
+config.status: creating config_host/config_feature_desktop.h
+config.status: config_host/config_feature_desktop.h is unchanged
+config.status: creating config_host/config_feature_opencl.h
+config.status: config_host/config_feature_opencl.h is unchanged
+config.status: creating config_host/config_firebird.h
+config.status: config_host/config_firebird.h is unchanged
+config.status: creating config_host/config_folders.h
+config.status: config_host/config_folders.h is unchanged
+config.status: creating config_host/config_fonts.h
+config.status: config_host/config_fonts.h is unchanged
+config.status: creating config_host/config_fuzzers.h
+config.status: config_host/config_fuzzers.h is unchanged
+config.status: creating config_host/config_gio.h
+config.status: config_host/config_gio.h is unchanged
+config.status: creating config_host/config_global.h
+config.status: config_host/config_global.h is unchanged
+config.status: creating config_host/config_gpgme.h
+config.status: config_host/config_gpgme.h is unchanged
+config.status: creating config_host/config_java.h
+config.status: config_host/config_java.h is unchanged
+config.status: creating config_host/config_langs.h
+config.status: config_host/config_langs.h is unchanged
+config.status: creating config_host/config_lgpl.h
+config.status: config_host/config_lgpl.h is unchanged
+config.status: creating config_host/config_libcxx.h
+config.status: config_host/config_libcxx.h is unchanged
+config.status: creating config_host/config_liblangtag.h
+config.status: config_host/config_liblangtag.h is unchanged
+config.status: creating config_host/config_locales.h
+config.status: config_host/config_locales.h is unchanged
+config.status: creating config_host/config_mpl.h
+config.status: config_host/config_mpl.h is unchanged
+config.status: creating config_host/config_oox.h
+config.status: config_host/config_oox.h is unchanged
+config.status: creating config_host/config_options.h
+config.status: config_host/config_options.h is unchanged
+config.status: creating config_host/config_options_calc.h
+config.status: config_host/config_options_calc.h is unchanged
+config.status: creating config_host/config_zxing.h
+config.status: config_host/config_zxing.h is unchanged
+config.status: creating config_host/config_skia.h
+config.status: config_host/config_skia.h is unchanged
+config.status: creating config_host/config_typesizes.h
+config.status: config_host/config_typesizes.h is unchanged
+config.status: creating config_host/config_validation.h
+config.status: config_host/config_validation.h is unchanged
+config.status: creating config_host/config_vendor.h
+config.status: config_host/config_vendor.h is unchanged
+config.status: creating config_host/config_vclplug.h
+config.status: config_host/config_vclplug.h is unchanged
+config.status: creating config_host/config_version.h
+config.status: config_host/config_version.h is unchanged
+config.status: creating config_host/config_oauth2.h
+config.status: config_host/config_oauth2.h is unchanged
+config.status: creating config_host/config_poppler.h
+config.status: config_host/config_poppler.h is unchanged
+config.status: creating config_host/config_python.h
+config.status: config_host/config_python.h is unchanged
+config.status: creating config_host/config_writerperfect.h
+config.status: config_host/config_writerperfect.h is unchanged
+config.status: creating config_host/config_wasm_strip.h
+config.status: config_host/config_wasm_strip.h is unchanged
+config.status: creating solenv/lockfile/autoconf.h
+config.status: solenv/lockfile/autoconf.h is unchanged
+Host Configuration unchanged - avoiding scp2 stamp update
+Language Configuration unchanged - avoiding scp2 stamp update
+****************************************************************************
+WARNING:
+Your make version is known to be horribly slow, and hard to debug
+problems with. To get a reasonably functional make please do:
+
+to install a pre-compiled binary make for Win32
+
+ mkdir -p /opt/lo/bin
+ cd /opt/lo/bin
+ wget https://dev-www.libreoffice.org/bin/cygwin/make-4.2.1-msvc.exe
+ cp make-4.2.1-msvc.exe make
+ chmod +x make
+
+to install from source:
+place yourself in a working directory of you choice.
+
+ git clone git://git.savannah.gnu.org/make.git
+
+ go to Start menu, open "Visual Studio 2022", and then click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"
+ set PATH=%PATH%;C:\Cygwin\bin
+ or Cygwin64, if that is what you have
+ cd path-to-make-repo-you-cloned-above
+ build_w32.bat --without-guile
+
+should result in a WinRel/gnumake.exe.
+Copy it to the Cygwin /opt/lo/bin directory as make.exe
+
+Then re-run autogen.sh
+
+Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GNUMAKE is not already defined.
+Alternatively, you can install the 'new' make where ever you want and make sure that /usr/bin/make finds it.
+
+****************************************************************************
+
+To show information on various make targets and make flags, run:
+/usr/bin/make help
+
+To just build, run:
+/usr/bin/make
+
+HOST config (config.warn)
+*************************************
+*[1;33;40m WARNING [0m: To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build and source directories associated with LibreOffice in the following Antivirus software: 
 make -j 32  -rs -f C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/Makefile.gbuild build  
-/cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/cppuhelper/Library_cppuhelper.mk:57: *** No such source file C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/cppuhelper/source/typemanager.cxx.  Stop.
+[info  ALL] Currently known libraries are: LanguageTool OGLTrans PresentationMinimizer UAccCOM WinUserInfoBe abp active_native ado affine_uno_uno analysis animcore avmedia avmediawin basctl basegfx basprov bib binaryurp bootstrap cached1 calc canvasfactory canvastools chart2 chart2api clew cli_cppuhelper cli_uno clucene comphelper configmgr cppcanvas cppu cppuhelper crashextension ctl cui date dba dbahsql dbase dbaxml dbp dbpool2 dbtools dbu deployment deploymentgui deploymentmisc directx9canvas dlgprov docmodel drawinglayer drawinglayercore editeng embobj emboleobj emfio emser epoxy etonyek evtatt file filterconfig flat for forui fps fps_office frm fsstorage fwk gdipluscanvas gpgmepp graphicfilter guesslang helplinker hwp hyphen i18nlangtag i18npool i18nsearch i18nutil icg inprocserv instooofiltmsi introspection invocadapt invocation io jumplist lng lnth localebe1 localedata_en localedata_es localedata_euro localedata_others log log_uno_uno lwpft migrationoo2 migrationoo3 mozbootstrap mscx_uno msfilter msforms msword mtfrenderer mwaw mysql_jdbc namingservice numbertext odbc odfflatxml odfgen offacc oglcanvas oleautobridge ooofilt oox opencl orcus orcus-parser package2 passive_native passwordcontainer pcr pdffilter pdfimport precompiled_system pricing propertyhdl protocolhandler proxyfac purpenvhelper pythonloader pyuno qslnkmsi raptor2 rasqal rdf reflection reg reg4allmsdoc reg_dlls regactivex revenge rpt rptui rust_uno-example sal sal_textenc salhelper sax sb sc scd scfilt scn scqahelper scriptframe scui sd sdbc2 sdbt sdd sdqahelper sdqsmsi sdui sellangmsi sfx shlxthdl shlxtmsi simplecanvas slideshow sm smd smoketest smplmail sn_tools so_activex sofficeapp solver sot spell spl spsupp_x64 spsupp_x86 srtrs1 staroffice stocservices storagefd store stringresource subsequenttest svgfilter svgio svl svt svx svxcore sw sw_writerfilter swd swqahelper swui syssh t602filter test test-setupvcl testtools_bridgetest testtools_bridgetest-common testtools_constructors testtools_cppobj textconversiondlgs textfd tk tl ucb1 ucbhelper ucpchelp1 ucpcmis1 ucpdav1 ucpexpand1 ucpext ucpfile1 ucphier1 ucpimage ucppkg1 ucptdoc1 unobootstrapprotector unoexceptionprotector unoidl unopkgapp unordf unotest unoxml unsafe_uno_uno updatefeed utl uui uuresolver vbaevents vbahelper vbaobj vbaswobj vcl vclbootstrapprotector vclcanvas vclplug_win winaccessibility wininetbe1 wpd wpftcalc wpftdraw wpftimpress wpftqahelper wpftwriter wpg wps writer writerperfect xmlfa xmlfd xmlreader xmlscript xmlsecurity xo xof xsec_xmlsec xsltdlg xsltfilter xstor
+/cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/officelabs/Library_officelabs.mk:3: *** Library officelabs must be registered in Repository.mk or RepositoryExternal.mk.  Stop.
 make: *** [Makefile:310: build] Error 2
