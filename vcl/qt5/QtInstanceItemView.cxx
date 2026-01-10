@@ -35,9 +35,11 @@ bool QtInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
     const QModelIndex aIndex = rQtIter.modelIndex();
     const QModelIndex aSiblingIndex = m_rModel.sibling(aIndex.row() + 1, 0, aIndex);
-    rQtIter.setModelIndex(aSiblingIndex);
+    if (!aSiblingIndex.isValid())
+        return false;
 
-    return aSiblingIndex.isValid();
+    rQtIter.setModelIndex(aSiblingIndex);
+    return true;
 }
 
 int QtInstanceItemView::get_iter_index_in_parent(const weld::TreeIter& rIter) const

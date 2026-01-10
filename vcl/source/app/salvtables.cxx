@@ -3530,8 +3530,12 @@ bool SalInstanceItemView::get_iter_first(weld::TreeIter& rIter) const
 bool SalInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = rVclIter.iter->NextSibling();
-    return rVclIter.iter != nullptr;
+    SvTreeListEntry* pSibling = rVclIter.iter->NextSibling();
+    if (!pSibling)
+        return false;
+
+    rVclIter.iter = pSibling;
+    return true;
 }
 
 int SalInstanceItemView::get_iter_index_in_parent(const weld::TreeIter& rIter) const
@@ -4491,8 +4495,12 @@ bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) c
 bool SalInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = rVclIter.iter->PrevSibling();
-    return rVclIter.iter != nullptr;
+    SvTreeListEntry* pSibling = rVclIter.iter->PrevSibling();
+    if (!pSibling)
+        return false;
+
+    rVclIter.iter = pSibling;
+    return true;
 }
 
 bool SalInstanceTreeView::iter_next(weld::TreeIter& rIter) const

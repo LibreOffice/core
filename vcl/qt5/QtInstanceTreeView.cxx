@@ -197,9 +197,11 @@ bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
     const QModelIndex aIndex = rQtIter.modelIndex();
     const QModelIndex aSiblingIndex = m_pModel->sibling(aIndex.row() - 1, 0, aIndex);
-    rQtIter.setModelIndex(aSiblingIndex);
+    if (!aSiblingIndex.isValid())
+        return false;
 
-    return aSiblingIndex.isValid();
+    rQtIter.setModelIndex(aSiblingIndex);
+    return true;
 }
 
 bool QtInstanceTreeView::iter_next(weld::TreeIter& rIter) const
