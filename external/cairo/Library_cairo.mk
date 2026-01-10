@@ -34,6 +34,7 @@ $(eval $(call gb_Library_add_defs,cairo,\
 	-wd5294 \
 	-wd5286 \
 	-wd5287 \
+	-DCAIRO_COMPILATION \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,cairo, \
@@ -177,5 +178,12 @@ $(eval $(call gb_Library_add_generated_cobjects,cairo,\
 		cairo-ft-font \
 	) \
 ))
+
+$(eval $(call gb_Library_add_generated_cobjects,cairo,\
+	$(addprefix UnpackedTarball/cairo/util/, \
+		cairo-missing/strndup \
+	) \
+))
+
 
 # vim: set noet sw=4 ts=4:

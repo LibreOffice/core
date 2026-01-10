@@ -65,6 +65,8 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,pixman,\
 		pixman-radial-gradient \
 		pixman-region16 \
 		pixman-region32 \
+		pixman-region64f \
+		pixman-riscv \
 		pixman-solid-fill \
 		$(if $(filter-out AARCH64,$(CPUNAME)), \
 			pixman-sse2 \
