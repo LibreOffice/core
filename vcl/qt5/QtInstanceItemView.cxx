@@ -26,8 +26,11 @@ bool QtInstanceItemView::get_iter_first(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
     const QModelIndex aIndex = modelIndex(0);
+    if (!aIndex.isValid())
+        return false;
+
     rQtIter.setModelIndex(aIndex);
-    return aIndex.isValid();
+    return true;
 }
 
 bool QtInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const

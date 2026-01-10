@@ -3523,8 +3523,12 @@ SalInstanceItemView::make_iterator(const weld::TreeIter* pOrig) const
 bool SalInstanceItemView::get_iter_first(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_pTreeListBox->GetEntry(0);
-    return rVclIter.iter != nullptr;
+    SvTreeListEntry* pFirst = m_pTreeListBox->GetEntry(0);
+    if (!pFirst)
+        return false;
+
+    rVclIter.iter = pFirst;
+    return true;
 }
 
 bool SalInstanceItemView::iter_next_sibling(weld::TreeIter& rIter) const
