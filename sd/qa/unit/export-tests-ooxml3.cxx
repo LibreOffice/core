@@ -1071,6 +1071,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf135843)
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnR/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnT/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnB/a:solidFill");
+
+    // tdf#166335: fmla must not be an empty string
+    static constexpr OString sGlueStart("/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:custGeom"_ostr);
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint2X']", "fmla", u"val w");
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint2Y']", "fmla", u"*/ 1 h 2");
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint3X']", "fmla", u"*/ 1 w 2");
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint3Y']", "fmla", u"val h");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf168736)
