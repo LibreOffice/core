@@ -204,12 +204,6 @@ bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
     return true;
 }
 
-bool QtInstanceTreeView::iter_previous(weld::TreeIter&) const
-{
-    assert(false && "Not implemented yet");
-    return false;
-}
-
 bool QtInstanceTreeView::do_iter_children(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);

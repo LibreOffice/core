@@ -15606,43 +15606,6 @@ public:
         return true;
     }
 
-    virtual bool iter_previous(weld::TreeIter& rIter) const override
-    {
-        bool ret = false;
-        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeIter iter = rGtkIter.iter;
-        GtkTreeIter tmp = iter;
-        if (gtk_tree_model_iter_previous(m_pTreeModel, &tmp))
-        {
-            // Move down level(s) until we find the level where the last node exists.
-            int nChildren = gtk_tree_model_iter_n_children(m_pTreeModel, &tmp);
-            if (!nChildren)
-                rGtkIter.iter = tmp;
-            else
-                last_child(m_pTreeModel, &rGtkIter.iter, &tmp, nChildren);
-            ret = true;
-        }
-        else
-        {
-            // Move up level
-            if (gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &iter))
-            {
-                rGtkIter.iter = tmp;
-                ret = true;
-            }
-        }
-
-        if (ret)
-        {
-            //on-demand dummy entry doesn't count
-            if (get_text(rGtkIter, -1) == "<dummy>")
-                return iter_previous(rGtkIter);
-            return true;
-        }
-
-        return false;
-    }
-
     virtual bool do_iter_children(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);

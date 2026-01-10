@@ -1728,8 +1728,6 @@ public:
 
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
 
-    virtual bool iter_previous(weld::TreeIter& rIter) const override;
-
     virtual bool do_iter_children(weld::TreeIter& rIter) const override;
 
     virtual bool iter_parent(weld::TreeIter& rIter) const override;

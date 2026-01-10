@@ -145,6 +145,30 @@ bool weld::TreeView::iter_next(TreeIter& rIter) const
     return false;
 }
 
+void weld::TreeView::last_child(weld::TreeIter& rIter, int nChildren) const
+{
+    iter_nth_child(rIter, nChildren - 1);
+    nChildren = iter_n_children(rIter);
+    if (nChildren)
+        last_child(rIter, nChildren);
+}
+
+bool weld::TreeView::iter_previous(weld::TreeIter& rIter) const
+{
+    if (iter_previous_sibling(rIter))
+    {
+        // Move down level(s) until we find the level where the last node exists.
+        const int nChildren = iter_n_children(rIter);
+        if (!nChildren)
+            return true;
+        last_child(rIter, nChildren);
+        return true;
+    }
+
+    // Move up level
+    return iter_parent(rIter);
+}
+
 bool weld::TreeView::iter_children(TreeIter& rIter) const
 {
     if (get_children_on_demand(rIter))
