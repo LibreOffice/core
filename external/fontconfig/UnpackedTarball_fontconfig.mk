@@ -30,6 +30,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 	external/fontconfig/windowsfonts.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_set_post_action,fontconfig,\
+	sed -e 's/@CACHE_VERSION@/9/' < fontconfig/fontconfig.h.in > fontconfig/fontconfig.h \
+))
+
+
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,config.h,external/fontconfig/configs/wnt_fontconfig_config.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-case/fccase.h,external/fontconfig/configs/wnt_fontconfig_fccase.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-lang/fclang.h,external/fontconfig/configs/wnt_fontconfig_fclang.h))
