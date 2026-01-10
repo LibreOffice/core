@@ -142,7 +142,6 @@ public:
     sal_uInt32          GetEntryCount() const { return nEntryCount; }
     SvTreeListEntry*    First() const;
     SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
-    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    Last() const;
 
     SvTreeListEntry* FirstChild(const SvTreeListEntry* pParent) const;

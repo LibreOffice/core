@@ -523,29 +523,6 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
     return nullptr;
 }
 
-SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
-{
-    assert(pActEntry && "Entry?");
-
-    if (SvTreeListEntry* pPrevSibling = pActEntry->PrevSibling())
-    {
-        pActEntry = pPrevSibling;
-        while (!pActEntry->m_Children.empty())
-            pActEntry = pActEntry->m_Children.back().get();
-        return pActEntry;
-    }
-    if ( pActEntry->pParent == pRootItem.get() )
-        return nullptr;
-
-    pActEntry = pActEntry->pParent;
-
-    if ( pActEntry )
-    {
-        return pActEntry;
-    }
-    return nullptr;
-}
-
 SvTreeListEntry* SvTreeList::Last() const
 {
     SvTreeListEntries* pActList = &pRootItem->m_Children;

@@ -355,10 +355,6 @@ public:
     {
          return pModel->Next(pEntry);
     }
-    SvTreeListEntry* Prev( SvTreeListEntry* pEntry ) const
-    {
-        return pModel->Prev(pEntry);
-    }
     SvTreeListEntry* Last() const
     {
         return pModel ? pModel->Last() : nullptr;
