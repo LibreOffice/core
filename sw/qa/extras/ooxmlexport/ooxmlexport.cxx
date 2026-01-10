@@ -814,9 +814,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 39
-    skipValidation();
-
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
