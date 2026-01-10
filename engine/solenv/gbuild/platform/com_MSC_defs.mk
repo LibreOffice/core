@@ -258,11 +258,7 @@ endif
 
 gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
-# VS2019 produces a warning C4857, that it doesn't support -std:c++20; it can't
-# be suppressed by -wd4857, only by -Wv:18. The warning seems incorrect, because
-# using -std:c++17 produces errors about undeclared 'char8_t'. VS2022 doesn't
-# have the problem, so drop -Wv:18 when bumping baseline.
-# Similarly, at least VS2022 Preview 17.12.0 Preview 2.1 with --with-latest-c++ emits a "warning
+# At least VS2022 Preview 17.12.0 Preview 2.1 with --with-latest-c++ emits a "warning
 # C4857: C++/CLI mode does not support C++ versions newer than C++20; setting language to
 # /std:c++20" that cannot be disabled by adding -wd4857, so hardcode a -std:c++20 substitution in
 # that case:
@@ -276,7 +272,6 @@ gb_CXXCLRFLAGS := \
 	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
 	-EHa \
 	-clr \
-	$(if $(filter 16.0,$(VCVER)),-Wv:18) \
 	-Zc:twoPhase- \
 
 
