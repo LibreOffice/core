@@ -691,11 +691,6 @@
         </info>
         <value>DefaultLayout</value>
       </prop>
-      <set oor:name="Accessibility" oor:node-type="PresenterString">
-        <info>
-          <desc>Strings that are used make the presenter console accessible.</desc>
-        </info>
-      </set>
       <prop oor:name="InitialViewMode" oor:type="xs:int">
         <info>
           <desc>The view mode on start up of the extension. Valid values are 0 for the Preview-only mode, 1 for the notes view, 2 for the slide overview.</desc>
