@@ -61,6 +61,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170285_controlsInGroupShape)
+{
+    createScDoc("xls/tdf170285_controlsInGroupShape.xls");
+
+    save(TestFilter::XLSM);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    // without the fix, this was 0
+    assertXPath(pDoc, "//mc:AlternateContent[1]/mc:Choice/x:control", "shapeId", u"1001");
+    // without the fix, this was also 0
+    assertXPath(pDoc, "//mc:AlternateContent[2]/mc:Choice/x:control", "shapeId", u"1002");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
 {
     // given a hand-modified document where the checkbox position was changed to not match anchor

@@ -236,15 +236,18 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
         if (IsVmlObject(rxObj.get()) || !IsValidObject(*rxObj))
             continue;
 
+        const auto pObj = dynamic_cast<XclObjAny*>(rxObj.get());
         if (nSkipObj == 0)
             aList.push_back(rxObj.get());
         else
+        {
             --nSkipObj;
+            // Don't skip objects that GroupShape doesn't know how to export
+            if (!pObj || !ShapeExport::IsShapeTypeKnown(pObj->GetShape()))
+                aList.push_back(rxObj.get());
+        }
 
-        XclObjAny* pObj = nullptr;
-        if (rxObj->GetObjType() == 0) // group (it can be a subgroup)
-            pObj = dynamic_cast<XclObjAny*>(rxObj.get());
-        if (pObj)
+        if (pObj && rxObj->GetObjType() == EXC_OBJTYPE_GROUP) // (it can be a subgroup)
         {
             css::uno::Reference<css::drawing::XShapes> xShapes(pObj->GetShape(), UNO_QUERY);
             if (xShapes)
