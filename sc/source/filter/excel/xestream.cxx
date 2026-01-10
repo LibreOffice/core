@@ -904,7 +904,22 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     }
 
     assert(!rFontData.maName.isEmpty() && "Font Name can't be empty");
-    pStream->singleElement(nFontId, XML_val, rFontData.maName);
+
+    constexpr sal_Int32 MAX_FONT_LENGTH = 31;
+    OUString sFont = rFontData.maName;
+    if (sFont.getLength() > MAX_FONT_LENGTH)
+    {
+        sFont = sFont.copy(0, MAX_FONT_LENGTH);
+        // Truncate till last semi-colon
+        if (rFontData.maName[MAX_FONT_LENGTH] != ';')
+        {
+            sal_Int32 nIndex = sFont.lastIndexOf(';');
+            if (nIndex != -1)
+                sFont = sFont.copy(0, nIndex);
+        }
+    }
+
+    pStream->singleElement(nFontId, XML_val, sFont);
     pStream->singleElement(XML_family, XML_val, OString::number(  rFontData.mnFamily ));
     if (rFontData.mnCharSet != 0)
         pStream->singleElement(XML_charset, XML_val, OString::number(rFontData.mnCharSet));
