@@ -339,7 +339,7 @@ public:
        then 0 is returned.
     */
     virtual int iter_compare(const TreeIter& a, const TreeIter& b) const = 0;
-    virtual bool iter_has_child(const TreeIter& rIter) const = 0;
+    bool iter_has_child(const TreeIter& rIter) const;
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
 

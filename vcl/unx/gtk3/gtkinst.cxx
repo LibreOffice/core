@@ -15760,12 +15760,6 @@ public:
         return ret;
     }
 
-    virtual bool iter_has_child(const weld::TreeIter& rIter) const override
-    {
-        GtkInstanceTreeIter aTempCopy(static_cast<const GtkInstanceTreeIter*>(&rIter));
-        return iter_children(aTempCopy);
-    }
-
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

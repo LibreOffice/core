@@ -4564,12 +4564,6 @@ int SalInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
     return m_xTreeView->GetModel()->GetDepth(rVclIter.iter);
 }
 
-bool SalInstanceTreeView::iter_has_child(const weld::TreeIter& rIter) const
-{
-    SalInstanceTreeIter aTempCopy(static_cast<const SalInstanceTreeIter*>(&rIter));
-    return iter_children(aTempCopy);
-}
-
 bool SalInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);

@@ -1746,8 +1746,6 @@ public:
 
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
 
-    virtual bool iter_has_child(const weld::TreeIter& rIter) const override;
-
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override;
 
     virtual bool get_children_on_demand(const weld::TreeIter& rIter) const override;

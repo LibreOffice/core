@@ -126,6 +126,12 @@ bool weld::TreeView::is_selected(int pos) const
 
     return false;
 }
+
+bool weld::TreeView::iter_has_child(const TreeIter& rIter) const
+{
+    std::unique_ptr<weld::TreeIter> pIter = make_iterator(&rIter);
+    return iter_children(*pIter);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
