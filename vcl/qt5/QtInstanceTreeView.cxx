@@ -237,18 +237,22 @@ bool QtInstanceTreeView::do_iter_children(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
     const QModelIndex aChildIndex = m_pModel->index(0, 0, rQtIter.modelIndex());
-    rQtIter.setModelIndex(aChildIndex);
+    if (!aChildIndex.isValid())
+        return false;
 
-    return aChildIndex.isValid();
+    rQtIter.setModelIndex(aChildIndex);
+    return true;
 }
 
 bool QtInstanceTreeView::iter_parent(weld::TreeIter& rIter) const
 {
     QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
     const QModelIndex aParentIndex = rQtIter.modelIndex().parent();
-    rQtIter.setModelIndex(aParentIndex);
+    if (!aParentIndex.isValid())
+        return false;
 
-    return aParentIndex.isValid();
+    rQtIter.setModelIndex(aParentIndex);
+    return true;
 }
 
 int QtInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const

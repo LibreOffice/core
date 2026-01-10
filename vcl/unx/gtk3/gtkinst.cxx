@@ -15673,18 +15673,21 @@ public:
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeIter tmp;
-        bool ret = gtk_tree_model_iter_children(m_pTreeModel, &tmp, &rGtkIter.iter);
+        if (!gtk_tree_model_iter_children(m_pTreeModel, &tmp, &rGtkIter.iter))
+            return false;
         rGtkIter.iter = tmp;
-        return ret;
+        return true;
     }
 
     virtual bool iter_parent(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeIter tmp;
-        bool ret = gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &rGtkIter.iter);
+        if (!gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &rGtkIter.iter))
+            return false;
+
         rGtkIter.iter = tmp;
-        return ret;
+        return true;
     }
 
     virtual void do_remove(const weld::TreeIter& rIter) override

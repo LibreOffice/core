@@ -4516,15 +4516,23 @@ bool SalInstanceTreeView::iter_previous(weld::TreeIter& rIter) const
 bool SalInstanceTreeView::do_iter_children(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xTreeView->FirstChild(rVclIter.iter);
-    return rVclIter.iter != nullptr;
+    SvTreeListEntry* pChild = m_xTreeView->FirstChild(rVclIter.iter);
+    if (!pChild)
+        return false;
+
+    rVclIter.iter = pChild;
+    return true;
 }
 
 bool SalInstanceTreeView::iter_parent(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-    rVclIter.iter = m_xTreeView->GetParent(rVclIter.iter);
-    return rVclIter.iter != nullptr;
+    SvTreeListEntry* pParent = m_xTreeView->GetParent(rVclIter.iter);
+    if (!pParent)
+        return false;
+
+    rVclIter.iter = pParent;
+    return true;
 }
 
 void SalInstanceTreeView::do_select(const weld::TreeIter& rIter)
