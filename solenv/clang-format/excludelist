@@ -3650,7 +3650,7 @@ extensions/test/ole/unoTocomCalls/XCallback_Impl/resource.h
 external/bluez_bluetooth/inc/bluetooth/bluetooth.h
 external/cairo/configs/wnt_cairo_config.h
 external/cairo/configs/wnt_cairo_features.h
-external/cairo/configs/wnt_pixman_config.h
+external/cairo/configs/wnt_pixman_pixman-version.h
 external/clew/source/clew.c
 external/clew/source/include/clew/clew.h
 external/clucene/configs/_clucene-config-LINUX.h
