@@ -1576,6 +1576,12 @@ struct ConventionXL_OOX : public ConventionXL_A1
         // Where N is a 1-based positive integer number of a file name in OOXML
         // xl/externalLinks/externalLinkN.xml
 
+        if (rTabName.isEmpty())
+        {
+            rBuffer.append(ScGlobal::GetErrorString(FormulaError::NoRef));
+            return;
+        }
+
         OUString aQuotedTab( rTabName);
         ScCompiler::CheckTabQuotes( aQuotedTab);
         if (!aQuotedTab.isEmpty() && aQuotedTab[0] == '\'')
@@ -1605,6 +1611,12 @@ struct ConventionXL_OOX : public ConventionXL_A1
         // simpler to produce and more logical form with independently quoted
         // sheet names as well. The [N] having to be within the quoted sheet
         // name is ugly enough...
+
+        if (rTabName.isEmpty())
+        {
+            rBuffer.append(ScGlobal::GetErrorString(FormulaError::NoRef));
+            return;
+        }
 
         ScRange aAbsRef = rRef.toAbs(rLimits, rPos);
 
