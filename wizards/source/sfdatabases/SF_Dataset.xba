@@ -1,0 +1,1672 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SF_Dataset" script:language="StarBasic" script:moduleType="normal">REM =======================================================================================================================
+REM ===			The ScriptForge library and its associated libraries are part of the LibreOffice project.				===
+REM	===						The SFDatabases library is one of the associated libraries.									===
+REM ===					Full documentation is available on https://help.libreoffice.org/								===
+REM =======================================================================================================================
+
+Option Compatible
+Option ClassModule
+
+Option Explicit
+
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
+&apos;&apos;&apos;	SF_Dataset
+&apos;&apos;&apos;	==========
+&apos;&apos;&apos;		A dataset represents a set of tabular data produced by a database.
+&apos;&apos;&apos;		In the user interface of LibreOffice a dataset corresponds with the data
+&apos;&apos;&apos;		displayed in a form or a data sheet (table, query).
+&apos;&apos;&apos;		To use datasets, the database instance must exist but the Base document may not be open.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		In the context of ScriptForge, a dataset may be created automatically by script code :
+&apos;&apos;&apos;			- at any moment =&gt; in this case the Base document may or may not be open.
+&apos;&apos;&apos;			- any SELECT SQL statement may define the dataset.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The proposed API supports next main purposes:
+&apos;&apos;&apos;			- browse for- and backward through the dataset to get its content
+&apos;&apos;&apos;			- update any record with new values
+&apos;&apos;&apos;			- create new records or delete some.
+&apos;&apos;&apos;		So-called &quot;CRUD&quot; operations (create, read, update, delete).
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Service invocation:
+&apos;&apos;&apos;			A dataset is characterized by
+&apos;&apos;&apos;				- the parent database
+&apos;&apos;&apos;				- a table/query name or an SQL SELECT statement
+&apos;&apos;&apos;				- the DirectSQL option to bypass the processing of SQL by LibreOffice
+&apos;&apos;&apos;				- an optional filter
+&apos;&apos;&apos;				- an optional sorting order
+&apos;&apos;&apos;			1) From a database class instance
+&apos;&apos;&apos;				Dim db As Object, FileName As String, Dataset As Object, Dataset2 As Object
+&apos;&apos;&apos;				Set db = CreateScriptService(&quot;SFDatabases.Database&quot;, FileName, , ReadOnly := False)
+&apos;&apos;&apos;				Set Dataset = db.CreateDataset(&quot;myTable&quot;, DirectSql := False, Filter := &quot;[City]=&apos;Brussels&apos;&quot;)
+&apos;&apos;&apos;			2) From an existing dataset
+&apos;&apos;&apos;				Set Dataset2 = Dataset.CreateDataset(Filter := &quot;[City]=&apos;Paris&apos;&quot;)
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Dataset browsing with the MoveNext(), MovePrevious(), ... methods
+&apos;&apos;&apos;			After creation of the dataset, the current record is positioned BEFORE the first record.
+&apos;&apos;&apos;			Every MoveXXX() method returns False when no record could be retrieved, otherwise True.
+&apos;&apos;&apos;			When False, the current record is reset either in BOF or EOF positions.
+&apos;&apos;&apos;			Typically:
+&apos;&apos;&apos;				Set dataset = db.CreateDataset(&quot;myTable&quot;)
+&apos;&apos;&apos;				With Dataset
+&apos;&apos;&apos;					Do While .MoveNext()
+&apos;&apos;&apos;						...
+&apos;&apos;&apos;					Loop
+&apos;&apos;&apos;					.CloseDataset()
+&apos;&apos;&apos;				End With
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Updates performance:
+&apos;&apos;&apos;			This module provides methods to update data stored in database tables.
+&apos;&apos;&apos;			Note that the proposed Update() and Insert() methods will always be
+&apos;&apos;&apos;			SLOWER or MUCH SLOWER than equivalent SQL statements.
+&apos;&apos;&apos;			Always privilege SQL when considering massive updates.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/SF_Dataset.html?DbPAR=BASIC
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
+
+REM ================================================================== EXCEPTIONS
+
+&apos;	Error in the dataset&apos;s initial SQL statement
+Private Const SQLSYNTAX2ERROR		=	&quot;SQLSYNTAX2ERROR&quot;
+&apos;	The current record could not be determined
+Private Const NOCURRENTRECORDERROR	=	&quot;NOCURRENTRECORDERROR&quot;
+&apos;	Database is read-only. Method rejected
+Private Const DBREADONLYERROR		=	&quot;DBREADONLYERROR&quot;
+&apos;	Database fields update error
+&apos;		Value to store does not fit the type of the field
+&apos;		Field is not nullable and value = Null
+&apos;		Field is not writable or autovalue
+&apos;		Input file does not exist or is empty
+&apos;		Field type is not supported
+Private Const RECORDUPDATEERROR		=	&quot;RECORDUPDATEERROR&quot;
+&apos;	The destination file exists and cannot be overwritten
+Private Const FIELDEXPORTERROR		=	&quot;FIELDEXPORTERROR&quot;
+
+REM ============================================================= PRIVATE MEMBERS
+
+Private [Me]				As Object
+Private ObjectType			As String		&apos; Must be DATASET
+Private ServiceName			As String
+
+Private _ParentDatabase		As Object		&apos; The parent SF_Database instance (must not be void)
+Private _DatasetType		As String		&apos; TABLE, QUERY or SQL
+Private _Command			As String		&apos; Table name, query name or SQL statement
+Private _Sql				As String		&apos; Equivalent SQL command
+Private _DirectSql			As Boolean		&apos; When True, SQL processed by RDBMS
+Private _Filter				As String		&apos; WHERE clause without WHERE
+Private _OrderBy			As String		&apos; ORDER BY clause without ORDER BY
+Private _ReadOnly			As Boolean		&apos; When True, updates are forbidden
+
+Private _RowSet				As Object		&apos; com.sun.star.sdb.RowSet
+
+Private _Fields				As Variant		&apos; Array of field names
+Private _UpdatableFields	As Variant		&apos; Array of updatable field names
+Private _DefaultValues		As Variant		&apos; Array of field default values // _Fields
+Private _AutoValue			As Long			&apos; Index of AutoValue field. None = -1
+
+Private _DatasetIndex		As Long			&apos; Index of the dataset in the _Datasets array of the parent database
+
+REM ============================================================ MODULE CONSTANTS
+
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
+
+REM -----------------------------------------------------------------------------
+Private Sub Class_Initialize()
+	Set [Me] = Nothing
+	ObjectType = &quot;DATASET&quot;
+	ServiceName = &quot;SFDatabases.Dataset&quot;
+	Set _ParentDatabase = Nothing
+	_DatasetType = &quot;&quot;
+	_Command = &quot;&quot;
+	_DirectSql = False
+	_Filter = &quot;&quot;
+	_OrderBy = &quot;&quot;
+	_ReadOnly = False
+	Set _RowSet = Nothing
+	_Fields = Array()
+	_UpdatableFields = Array()
+	_DefaultValues = Array()
+	_AutoValue = -1
+	_DatasetIndex = -1
+End Sub		&apos;	SFDatabases.SF_Dataset Constructor
+
+REM -----------------------------------------------------------------------------
+Private Sub Class_Terminate()
+	Call Class_Initialize()
+End Sub		&apos;	SFDatabases.SF_Dataset Destructor
+
+REM -----------------------------------------------------------------------------
+Public Function Dispose() As Variant
+	Call Class_Terminate()
+	Set Dispose = Nothing
+End Function	&apos;	SFDatabases.SF_Dataset Explicit Destructor
+
+REM ================================================================== PROPERTIES
+
+REM -----------------------------------------------------------------------------
+Property Get BOF() As Variant
+&apos;&apos;&apos;	The BOF property returns True if the current record position is before the first record
+&apos;&apos;&apos;	in the Dataset, otherwise it returns False.
+	Bof = _PropertyGet(&quot;BOF&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.BOF (get)
+
+REM -----------------------------------------------------------------------------
+Property Let BOF(Optional ByVal pvBOF As Variant)
+&apos;&apos;&apos;	Set the updatable property BOF.
+&apos;&apos;&apos;	Setting BOF to True positions the current record before the first record.
+&apos;&apos;&apos;	Setting it to False is ignored. True is the only relevant value.
+	_PropertySet(&quot;BOF&quot;, pvBOF)
+End Property	&apos;	SFDatabases.SF_Dataset.BOF (let)
+
+REM -----------------------------------------------------------------------------
+Property Get DefaultValues() As Variant
+&apos;&apos;&apos;	Returns a dictionary (field name =&gt; default value).
+&apos;&apos;&apos;	The database field type is converted to the corresponding Basic/Python variable types.
+&apos;&apos;&apos;	When undefined: returns either Null (field is nullable) or Empty
+&apos;&apos;&apos;	The output dictionary should be disposed by the user script
+	DefaultValues = _PropertyGet(&quot;DefaultValues&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.DefaultValues (get)
+
+REM -----------------------------------------------------------------------------
+Property Get EOF() As Variant
+&apos;&apos;&apos;	The EOF property returns True if the current record position is after the last record
+&apos;&apos;&apos;	in the Dataset, otherwise it returns False.
+	EOF = _PropertyGet(&quot;EOF&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.EOF (get)
+
+REM -----------------------------------------------------------------------------
+Property Let EOF(Optional ByVal pvEOF As Variant)
+&apos;&apos;&apos;	Set the updatable property EOF.
+&apos;&apos;&apos;	Setting EOF to True positions the current record after the last record.
+&apos;&apos;&apos;	Setting it to False is ignored. True is the only relevant value.
+	_PropertySet(&quot;EOF&quot;, pvEOF)
+End Property	&apos;	SFDatabases.SF_Dataset.EOF (let)
+
+REM -----------------------------------------------------------------------------
+Property Get Fields() As Variant
+&apos;&apos;&apos;	Returns the list of the field names contained in the dataset
+	Fields = _PropertyGet(&quot;Fields&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.Fields (get)
+
+REM -----------------------------------------------------------------------------
+Property Get Filter() As Variant
+&apos;&apos;&apos;	The Filter is a SQL WHERE clause without the WHERE keyword
+	Filter = _PropertyGet(&quot;Filter&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.Filter (get)
+
+REM -----------------------------------------------------------------------------
+Property Get OrderBy() As Variant
+&apos;&apos;&apos;	The OrderBy is an SQL ORDER BY clause without the ORDER BY keyword
+	OrderBy = _PropertyGet(&quot;OrderBy&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.OrderBy (get)
+
+REM -----------------------------------------------------------------------------
+Property Get ParentDatabase() As Object
+&apos;&apos;&apos;	Returns the database instance to which the dataset belongs
+	Set ParentDatabase = _PropertyGet(&quot;ParentDatabase&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.ParentDatabase
+
+REM -----------------------------------------------------------------------------
+Property Get RowCount() As Long
+&apos;&apos;&apos;	Returns the number of records present in the dataset
+&apos;&apos;&apos;	When that number exceeds a certain limit, its determination requires
+&apos;&apos;&apos;	that the whole dataset has been read first, up to its last row.
+&apos;&apos;&apos;	For huge datasets, this can represent a significant performance cost.
+	RowCount = _PropertyGet(&quot;RowCount&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.RowCount
+
+REM -----------------------------------------------------------------------------
+Property Get RowNumber() As Long
+&apos;&apos;&apos;	Returns the sequence number &gt;= 1 of the current record. Returns 0 if unknown.
+	RowNumber = _PropertyGet(&quot;RowNumber&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.RowNumber
+
+REM -----------------------------------------------------------------------------
+Property Get Source() As String
+&apos;&apos;&apos;	Returns the source of the data: table name, query name or sql statement
+	Source = _PropertyGet(&quot;Source&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.Source
+
+REM -----------------------------------------------------------------------------
+Property Get SourceType() As String
+&apos;&apos;&apos;	Returns the type of source of the data: TABLE, QUERY or SQL
+	SourceType = _PropertyGet(&quot;SourceType&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.SourceType
+
+REM -----------------------------------------------------------------------------
+Property Get UpdatableFields() As Variant
+&apos;&apos;&apos;	Returns the list of the names of the updatable fields contained in the dataset
+	UpdatableFields = _PropertyGet(&quot;UpdatableFields&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.UpdatableFields (get)
+
+REM -----------------------------------------------------------------------------
+Property Get Values() As Variant
+&apos;&apos;&apos;	Returns a dictionary (field name =&gt; field value) applied on the current record
+&apos;&apos;&apos;	Binary fields ? =&gt; their length is returned
+&apos;&apos;&apos;	The output dictionary should be disposed by the user script
+&apos;&apos;&apos;	Returns Nothing when there is no current record
+	Values = _PropertyGet(&quot;Values&quot;)
+End Property	&apos;	SFDatabases.SF_Dataset.Values (get)
+
+REM -----------------------------------------------------------------------------
+Property Get XRowSet() As Object
+&apos;&apos;&apos;	Returns the com.sun.star.sdb.RowSet UNO object representing the dataset
+	XRowSet = _PropertyGet(&quot;XRowSet&quot;)
+End Property	&apos;	SFDocuments.SF_Document.XRowSet
+
+REM ===================================================================== METHODS
+
+REM -----------------------------------------------------------------------------
+Public Function CloseDataset() As Boolean
+&apos;&apos;&apos; Close the actual dataset
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		dataset.CloseDataset()
+
+Dim bClose As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDatabases.Sataset.CloseDataset&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bClose = False
+
+Check:
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	If Not IsNull(_RowSet) Then
+		With _RowSet
+			.close()
+			.dispose()
+		End With
+		If _DatasetIndex &gt;= 0 Then Set _ParentDatabase._Datasets(_DatasetIndex) = Nothing
+		Dispose()
+		bClose = True
+	End If
+
+Finally:
+	CloseDataset = bClose
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;   SFDatabases.SF_Dataset.CloseDataset
+
+REM -----------------------------------------------------------------------------
+Public Function CreateDataset(Optional ByVal Filter As Variant _
+									, Optional ByVal OrderBy As Variant _
+									) As Object
+&apos;&apos;&apos;	Create and return a Dataset class instance based on the actual Dataset
+&apos;&apos;&apos;	Filter and OrderBy properties may be redefined.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Filter: an additional condition that records must match, expressed
+&apos;&apos;&apos;			as a valid SQL WHERE clause without the WHERE keyword
+&apos;&apos;&apos;			Default: the filter applied on the actual dataset.
+&apos;&apos;&apos;		OrderBy: the ordering of the dataset expressed as a valid SQL ORDER BY clause
+&apos;&apos;&apos;			without the ORDER BY keywords.
+&apos;&apos;&apos;			Default: the same sorting order as the actual dataset.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A SF_Dataset instance or Nothing when not successful
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		SQLSYNTAX2ERROR			The given SQL statement is incorrect
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim ds1 As Object, ds2 As Object, ds3 As Object, ds4 As Object
+&apos;&apos;&apos;		Set ds1 = dataset.CreateDataset()				&apos;	dataset and ds1 contain the same set of data
+&apos;&apos;&apos;		Set ds2 = dataset.CreateDataset(Filter := &quot;&quot;)	&apos;	Suppress the current filter
+&apos;&apos;&apos;		Set ds3 = dataset.CreateDataset(Filter := &quot;[Name] LIKE &apos;A%&apos;&quot;)
+&apos;&apos;&apos;														&apos;	Define a new filter
+&apos;&apos;&apos;		Set ds4 = dataset.CreateDataset(Filter := &quot;(&quot; &amp; dataset.Filter &amp; &quot;) AND [Name] LIKE &apos;A%&apos;&quot;)
+&apos;&apos;&apos;														&apos;	Combine actual filter with an additional condition
+
+Dim oDataset As Object			&apos;	Return value
+
+Const cstThisSub = &quot;SFDatabases.Dataset.CreateDataset&quot;
+Const cstSubArgs = &quot;[Filter=&quot;&quot;...filter...&quot;&quot;], [OrderBy=&quot;&quot;...orderby...&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oDataset = Nothing
+
+Check:
+	If IsMissing(Filter) Or IsEmpty(Filter) Then Filter = _Filter
+	If IsMissing(OrderBy) Or IsEmpty(OrderBy) Then OrderBy = _OrderBy
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(OrderBy, &quot;OrderBy&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oDataset = New SF_Dataset
+	With oDataset
+		Set .[Me] = oDataset
+		Set ._ParentDatabase = _ParentDatabase
+		._DatasetType = _DatasetType
+		._Command = _Command
+		._Sql = _Sql
+		._DirectSql = _DirectSql
+		._Filter = _ParentDatabase._ReplaceSquareBrackets(Filter)
+		._OrderBy = _ParentDatabase._ReplaceSquareBrackets(OrderBy)
+		._ReadOnly = _ReadOnly
+		&apos;	If creation not successful, then cancel everything
+		If Not ._Initialize() Then Set oDataset = .Dispose()
+	End With
+
+Finally:
+	Set CreateDataset = oDataset
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.CreateDataset
+
+REM -----------------------------------------------------------------------------
+Public Function Delete() As Boolean
+&apos;&apos;&apos;	Deletes the current record, from the dataset and from the database.
+&apos;&apos;&apos;	The cursor is set on the record following immediately the deleted record,
+&apos;&apos;&apos;	or after the last record if the deleted one was the last one.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DBREADONLYERROR			The actual method cannot be executed
+&apos;&apos;&apos;		NOCURRENTRECORDERROR	The current record could not be determined
+&apos;&apos;&apos;	Examples
+&apos;&apos;&apos;		dataset.Delete()
+
+Dim bDelete As Boolean			&apos;	Return value
+Dim bLast As Boolean			&apos;	True when the current record is the last one
+Const cstThisSub = &quot;SFDatabases.Dataset.Delete&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bDelete = False
+
+	With _RowSet
+
+Check:
+		ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+		If _ReadOnly Then GoTo CatchreadOnly
+		If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then GoTo CatchCurrent
+
+Try:
+		bLast = .isLast()
+		.deleteRow()
+		bDelete = .rowDeleted
+		If bLast Then .afterLast() Else .next()
+
+	End With
+
+Finally:
+	Delete = bDelete
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchCurrent:
+	ScriptForge.SF_Exception.RaiseFatal(NOCURRENTRECORDERROR)
+	GoTo Finally
+CatchReadOnly:
+	ScriptForge.SF_Exception.RaiseFatal(DBREADONLYERROR)
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.Delete
+
+REM -----------------------------------------------------------------------------
+Public Function ExportValueToFile(Optional ByVal FieldName As Variant _
+									, Optional ByVal FileName As Variant _
+									, Optional ByVal Overwrite As Variant _
+									) As Boolean
+&apos;&apos;&apos;	Export the content of a binary field to a given file
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FieldName: the name of a binary field as a case-sensitive string
+&apos;&apos;&apos;		FileName: the destination file name in ScriptForge.FileSystem service notation
+&apos;&apos;&apos;		Overwrite: when True, the destination file may be overwritten
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		NOCURRENTRECORDERROR	The current record could not be determined
+&apos;&apos;&apos;		FIELDEXPORTERROR		The destination has its readonly attribute set or overwriting rejected
+
+Dim bExport As Variant			&apos;	Return value
+Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
+Dim sFile As String				&apos;	Alias of FileName
+Dim lColIndex As Long			&apos;	Column index
+Dim oColumn As Object			&apos;	com.sun.star.sdb.ODataColumn
+Dim oStream As Object			&apos;	com.sun.star.io.XInputStream
+Const cstThisSub = &quot;SFDatabases.Dataset.ExportValueToFile&quot;
+Const cstSubArgs = &quot;FieldName, FileName, [Overwrite=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	 bExport = False
+
+Check:
+	If IsMissing(Overwrite) Or IsEmpty(Overwrite) Then Overwrite = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(FieldName, &quot;FieldName&quot;, V_STRING, _Fields, True) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+	&apos;	Check destination file overwriting
+	sFile = ConvertToUrl(FileName)
+	Set oSfa = ScriptForge.SF_Utils._GetUNOService(&quot;FileAccess&quot;)
+	If oSfa.exists(sFile) Then
+		If Not Overwrite Then GoTo CatchFile
+		If oSfa.isReadonly(sFile) Then GoTo CatchFile
+	End If
+
+	&apos;	Check the current record
+	With _RowSet
+		If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then GoTo CatchCurrent
+	End With
+
+Try:
+	lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, FieldName, CaseSensitive := True)
+	If lColIndex &gt;= 0 Then
+
+		&apos;	Establish the input stream
+		Set oColumn =  _RowSet.Columns.getByIndex(lColIndex)
+		With com.sun.star.sdbc.DataType
+			Select Case oColumn.Type
+				Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+					Set oStream = oColumn.getBinaryStream()
+				&apos;Case .VARCHAR, .LONGVARCHAR, .CLOB
+				Case Else
+					Set oStream = Nothing
+			End Select
+		End With
+
+		&apos;	Process NULL value
+		If Not IsNull(oStream) And oColumn.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then
+			If oColumn.wasNull() Then
+				oStream.closeInput()
+				Set oStream = Nothing
+			End If
+		End If
+		
+		&apos;	Dump field into file
+		If Not IsNull(oStream) Then
+			If oStream.getLength() &gt; 0 Then
+				oSfa.writeFile(sFile, oStream)
+			End If
+			oStream.closeInput()
+		End If
+	End If
+
+	bExport = True
+
+Finally:
+	ExportValueToFile = bExport
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchCurrent:
+	ScriptForge.SF_Exception.RaiseFatal(NOCURRENTRECORDERROR)
+	GoTo Finally
+CatchFile:
+	ScriptForge.SF_Exception.RaiseFatal(FIELDEXPORTERROR, &quot;FileName&quot;, FileName, &quot;Overwrite&quot;, Overwrite)
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.ExportValueToFile
+
+REM -----------------------------------------------------------------------------
+Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
+&apos;&apos;&apos;	Return the actual value of the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The actual value of the propRATTCerty
+&apos;&apos;&apos;		If the property does not exist, returns Null
+
+Const cstThisSub = &quot;SFDatabases.Dataset.GetProperty&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	GetProperty = Null
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	GetProperty = _PropertyGet(PropertyName)
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.GetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function GetRows(Optional ByVal Header As Variant _
+							, Optional ByVal MaxRows As Variant _
+							) As Variant
+&apos;&apos;&apos;	Return the content of the dataset as an array
+&apos;&apos;&apos;	This operation can be done in chunks:
+&apos;&apos;&apos;		- The collected data starts at the current row + 1
+&apos;&apos;&apos;		- When MaxRows &gt; 0 then the collection stops after this limit has been reached.
+&apos;&apos;&apos;		  Otherwise all the data up to the end is collected.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Header:		When True, a header row is inserted at the top of the array with the column names. Default = False
+&apos;&apos;&apos;		MaxRows:	The maximum number of returned rows. If absent, all records up to the end are returned
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		a 2D array(row, column), even if only 1 column and/or 1 record
+&apos;&apos;&apos;		an empty array if no records returned
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Dim a As Variant, lMaxRows As Long
+&apos;&apos;&apos;			lMaxRows = 100
+&apos;&apos;&apos;			Do
+&apos;&apos;&apos;				a = dataset.GetRows(Header := True, MaxRows := lMaxRows)
+&apos;&apos;&apos;				If UBound(a, 1) &gt;= 0 Then
+&apos;&apos;&apos;					&apos;	...
+&apos;&apos;&apos;				End If
+&apos;&apos;&apos;			Loop Until UBound(a, 1) &lt; lMaxRows	&apos;	Includes empty array - Use ... &lt; lMaxRows - 1 when Header := False
+
+Dim vResult As Variant			&apos;	Return value
+Dim lCols As Long				&apos;	Number of columns
+Dim lRows As Long				&apos;	Number of rows
+Dim oColumns As Object			&apos;	Collection of com.sun.star.sdb.ODataColumn
+Dim bRead As Boolean			&apos;	When True, next record has been read successfully
+Dim i As Long
+Const cstThisSub = &quot;SFDatabases.Dataset.GetRows&quot;
+Const cstSubArgs = &quot;[Header=False], [MaxRows=0]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vResult = Array()
+
+Check:
+	If IsMissing(Header) Or IsEmpty(Header) Then Header = False
+	If IsMissing(MaxRows) Or IsEmpty(MaxRows) Then MaxRows = 0
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Header, &quot;Header&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(MaxRows, &quot;MaxRows&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+	If MaxRows &lt; 0 Then MaxRows = 1
+
+Try:
+	With _RowSet
+
+		&apos;	Check if there is any data to collect
+		bRead = .next()
+
+		If bRead Then
+			&apos;Initialize output array with header row
+			Set oColumns = .getColumns()
+			lCols = oColumns.Count - 1
+			If Header Then
+				lRows = 0
+				ReDim vResult(0 To lRows, 0 To lCols)
+				For i = 0 To lCols
+					vResult(lRows, i) = oColumns.getByIndex(i).Name
+				Next i
+				If MaxRows &gt; 0 Then MaxRows = MaxRows + 1
+			Else
+				lRows = -1
+			End If
+
+			&apos;	Load data
+			Do While bRead
+				lRows = lRows + 1
+				If lRows = 0 Then
+					ReDim vResult(0 To lRows, 0 To lCols)
+				Else
+					ReDim Preserve vResult(0 To lRows, 0 To lCols)
+				End If
+				For i = 0 To lCols
+					vResult(lRows, i) = _ParentDatabase._GetColumnValue(_RowSet, i + 1)
+				Next i
+				If MaxRows = 0 Or lRows &lt; MaxRows - 1 Then bRead = .next() Else bRead = False
+			Loop
+
+		Else
+			vResult = Array()
+		End If
+
+	End With
+	
+Finally:
+	GetRows = vResult
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.GetRows
+
+REM -----------------------------------------------------------------------------
+Public Function GetValue(Optional ByVal FieldName As Variant) As Variant
+&apos;&apos;&apos;	Returns the value of a given field in the current record
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FieldName: the name of a field as a case-sensitive string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The found value as a Basic variable
+&apos;&apos;&apos;		The length of binary fields is returned,not their content.
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		NOCURRENTRECORDERROR	The current record could not be determined
+
+Dim vValue As Variant			&apos;	Return value
+Dim lColIndex As Long			&apos;	Column index
+Const cstThisSub = &quot;SFDatabases.Dataset.GetValue&quot;
+Const cstSubArgs = &quot;FieldName&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vValue = Null
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(FieldName, &quot;FieldName&quot;, V_STRING, _Fields, True) Then GoTo Catch
+	End If
+
+	With _RowSet
+		If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then GoTo CatchCurrent
+	End With
+
+Try:
+	lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, FieldName, CaseSensitive := True)
+	If lColIndex &gt;= 0 Then vValue = _ParentDatabase._GetColumnValue(_RowSet, lColIndex + 1)
+
+Finally:
+	GetValue = vValue
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchCurrent:
+	ScriptForge.SF_Exception.RaiseFatal(NOCURRENTRECORDERROR)
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.GetValue
+
+REM -----------------------------------------------------------------------------
+Public Function Insert(ParamArray pvArgs As Variant) As Long
+&apos;&apos;&apos;	Create a new record in the database and initialize its fields.
+&apos;&apos;&apos;	The current record is unchanged. The new record is inserted at the end of the dataset.
+&apos;&apos;&apos;	Updatable fields not mentioned in the arguments are initialized with their default value.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Either a single argument
+&apos;&apos;&apos;			UpdatesList: a ScriptForge.SF_Dictionary object listing pairs of key/item where
+&apos;&apos;&apos;				the key = an updatable field
+&apos;&apos;&apos;				the item = its value
+&apos;&apos;&apos;		or an even number of arguments alternating
+&apos;&apos;&apos;			FieldName: an updatable field
+&apos;&apos;&apos;			FieldValue: its value
+&apos;&apos;&apos;		The first form is particularly convenient in Python scripts
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		When the primary key is an AutoValue field: the autovalue of the new record
+&apos;&apos;&apos;			(to facilitate the use of the new primary key in foreign keys)
+&apos;&apos;&apos;		Otherwise: 0 (= successful), -1 (= not successful)
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DBREADONLYERROR			The actual method cannot be executed
+&apos;&apos;&apos;		RECORDUPDATEERROR		When value to store does not fit the type of the field
+&apos;&apos;&apos;								or when field is not nullable and value = Null
+&apos;&apos;&apos;								or when field is not writable or is an autovalue
+&apos;&apos;&apos;								or when input file does not exist or is empty
+&apos;&apos;&apos;								or when field type is not supported
+&apos;&apos;&apos;		TABLEPRIMARYKEYERROR	Primary key duplication
+&apos;&apos;&apos;	Examples
+&apos;&apos;&apos;		(Basic)
+&apos;&apos;&apos;			Dim newID As Long
+&apos;&apos;&apos;			newID = dataset.Insert(&quot;LastName&quot;, &quot;Doe&quot;, &quot;FirstName&quot;, &quot;John&quot;)
+&apos;&apos;&apos;				&apos;	... is equivalent to:
+&apos;&apos;&apos;			Dim dict As Object, newID As Long
+&apos;&apos;&apos;			Set dict = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+&apos;&apos;&apos;			dict.Add(&quot;LastName&quot;, &quot;Doe&quot;)
+&apos;&apos;&apos;			dict.Add(&quot;FirstName&quot;, &quot;John&quot;)
+&apos;&apos;&apos;			newID = dataset.Insert(dict)
+&apos;&apos;&apos;		(Python) - next statements are equivalent
+&apos;&apos;&apos;			newid = dataset.Insert(&apos;LastName&apos;, &apos;Doe&apos;, &apos;FirstName&apos;, &apos;John&apos;)
+&apos;&apos;&apos;			newid = dataset.Insert({&apos;LastName&apos;: &apos;Doe&apos;, &apos;FirstName&apos;: &apos;John&apos;})
+&apos;&apos;&apos;			newid = dataset.Insert(dict(LastName = &apos;Doe&apos;, FirstName = &apos;John&apos;))
+&apos;&apos;&apos;			newid = dataset.Insert(LastName = &apos;Doe&apos;, FirstName = &apos;John&apos;)
+
+Dim lInsert As Long				&apos;	Return value
+Dim sSubArgs As String			&apos;	Alias of cstSubArgs
+Dim sField As String			&apos;	A single field name
+Dim oUpdates As Object			&apos;	A SF_Dictionary object
+Dim lColIndex As Long			&apos;	Column index
+Dim vKeys As Variant			&apos;	List of keys in the dictionary
+Dim sKey As String				&apos;	A single key in vKeys
+Dim i As Long
+Const cstThisSub = &quot;SFDatabases.Dataset.Insert&quot;
+Const cstSubArgs1 = &quot;UpdatesList&quot;
+Const cstSubArgs2 = &quot;FieldName1, FieldValue1, [FieldName2, FieldValue2], ...&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	lInsert = -1
+
+Check:
+	If UBound(pvArgs) = 0 Then			&apos;	Dictionary case
+		sSubArgs = cstSubArgs1
+		If ScriptForge.SF_Utils._EnterFunction(cstThisSub, sSubArgs) Then
+			If Not ScriptForge.SF_Utils._Validate(pvArgs(0), &quot;UpdatesList&quot;, ScriptForge.V_OBJECT) Then GoTo Catch
+		End If
+		Set oUpdates = pvArgs(0)
+	Else
+		sSubArgs = cstSubArgs2			&apos;	Arguments list case
+		ScriptForge.SF_Utils._EnterFunction(cstThisSub, sSubArgs)
+		For i = 0 To UBound(pvArgs) Step 2
+			If Not ScriptForge.SF_Utils._Validate(pvArgs(i), &quot;FieldName&quot; &amp; i, V_STRING, _UpdatableFields, True) Then GoTo Catch
+		Next i
+	End If
+
+	If _ReadOnly Then GoTo CatchReadOnly
+
+Try:
+	With _RowSet
+
+		&apos;	Initialize the insertion row
+		.moveToInsertRow()
+		&apos;	Initial storage of default values
+		For Each sField In _UpdatableFields
+			lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, sField, CaseSensitive := True)
+			_SetColumnValue(lColIndex, _DefaultValues(lColIndex))
+		Next sField
+
+		If UBound(pvArgs) = 0 Then
+			With oUpdates
+				vKeys = .Keys
+				For Each sKey in vKeys
+					lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, sKey, CaseSensitive := True)
+					If lColIndex &gt;= 0 Then
+						_SetColumnValue(lColIndex, .Item(sKey))
+					Else	&apos;	To force an error
+						If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
+					End If
+				Next sKey
+			End With
+		Else
+			For i = 0 To UBound(pvArgs) Step 2
+				lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, pvArgs(i), CaseSensitive := True)
+				If lColIndex &gt;= 0 Then
+					If i &lt; UBound(pvArgs) Then _SetColumnValue(lColIndex, pvArgs(i + 1))
+				Else	&apos;	To force an error
+					If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
+				End If
+			Next i
+		End If
+
+		.insertRow()
+
+		&apos;	Compute the return value: either 0 or the new content of the pre-identified AUtoValue field
+		If _AutoValue &lt; 0 Then lInsert = 0 Else lInsert = _ParentDatabase._GetColumnValue(_RowSet, _AutoValue + 1)
+
+		.moveToCurrentRow()
+
+	End With
+
+Finally:
+	Insert = lInsert
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchReadOnly:
+	ScriptForge.SF_Exception.RaiseFatal(DBREADONLYERROR)
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.Insert
+
+REM -----------------------------------------------------------------------------
+Public Function Methods() As Variant
+&apos;&apos;&apos;	Return the list of public methods of the Model service as an array
+
+	Methods = Array( _
+					&quot;CloseDataset&quot; _
+					, &quot;CreateDataset&quot; _
+					, &quot;Delete&quot; _
+					, &quot;ExportValueToFile&quot; _
+					, &quot;GetRows&quot; _
+					, &quot;GetValue&quot; _
+					, &quot;Insert&quot; _
+					, &quot;MoveFirst&quot; _
+					, &quot;MoveLast&quot; _
+					, &quot;MoveNext&quot; _
+					, &quot;MovePrevious&quot; _
+					, &quot;Reload&quot; _
+					, &quot;Update&quot; _
+					)
+
+End Function	&apos;	SFDatabases.SF_Dataset.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function MoveFirst() As Boolean
+&apos;&apos;&apos;	Move the cursor to the 1st record
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False when the Move was unsuccessful
+&apos;&apos;&apos;		When False the cursor is reset before the first record
+
+Dim bMove As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDatabases.Dataset.MoveFirst&quot;
+Const cstSubArgs = &quot;&quot;
+
+Check:
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	with _RowSet
+		bMove = .first()
+		If Not bMove Then .beforeFirst()
+	End With
+
+Finally:
+	MoveFirst = bMove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.MoveFirst
+
+REM -----------------------------------------------------------------------------
+Public Function MoveLast() As Boolean
+&apos;&apos;&apos;	Move the cursor to the last record
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False when the Move was unsuccessful
+&apos;&apos;&apos;		When False the cursor is reset before the first record
+
+Dim bMove As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDatabases.Dataset.MoveLast&quot;
+Const cstSubArgs = &quot;&quot;
+
+Check:
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	with _RowSet
+		bMove = .last()
+		If Not bMove Then .beforeFirst()
+	End With
+
+Finally:
+	MoveLast = bMove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.MoveLast
+
+REM -----------------------------------------------------------------------------
+Public Function MoveNext(Optional ByVal Offset As Variant) As Boolean
+&apos;&apos;&apos;	Move the cursor N records forward. Deleted records are skipped.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Offset: number of records to go forward (may be negative). Default = 1
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False when the Move was unsuccessful
+&apos;&apos;&apos;		When False the cursor is reset before the first record when Offset &gt; 0, after the last record otherwise
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		dataset.MoveNext(3)		&apos;	3 records forward
+&apos;&apos;&apos;		dataset.MoveNext(-1)	&apos;	equivalent to MovePrevious()
+
+Dim bMove As Boolean		&apos;	Return value
+Dim lRow As Long			&apos;	Row number
+Const cstThisSub = &quot;SFDatabases.Dataset.MoveNext&quot;
+Const cstSubArgs = &quot;[Offset=1]&quot;
+
+Check:
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+	If IsMissing(Offset) Or IsEmpty(Offset) Then Offset = 1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Offset, &quot;Offset&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
+	End If
+
+Try:
+	with _RowSet
+		Select Case Offset
+			Case 0				:	bMove = True
+			Case 1				:	bMove = .next()
+			Case -1				:	bMove = .previous()
+			Case &gt; 1			:	bMove = .relative(Offset)	&apos;	RowSet.relative() stops at boundary when moving forward only !?
+			Case Else	&apos;	&lt; -1
+				lRow = .Row()
+				If lRow &gt; Abs(Offset) Then bMove = .relative(Offset) Else bMove = False
+		End Select
+		If bMove Then
+			If .rowDeleted() Then
+				If 	Offset &gt;= 0 Then bMove = MoveNext() Else bMove = MovePrevious()
+			End If
+		End If
+	End With
+
+Finally:
+	MoveNext = bMove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.MoveNext
+
+REM -----------------------------------------------------------------------------
+Public Function MovePrevious(Optional ByVal Offset As Variant) As Boolean
+&apos;&apos;&apos;	Move the cursor N records backward. Deleted records are skipped.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Offset: number of records to go backward (may be negative). Default = 1
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False when the Move was unsuccessful
+&apos;&apos;&apos;		When False the cursor is reset before the first record
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		dataset.MovePrevious(3)		&apos;	3 records backward
+&apos;&apos;&apos;		dataset.MovePrevious(-1)	&apos;	equivalent to MoveNext()
+
+Dim bMove As Boolean		&apos;	Return value
+Dim lRow As Long			&apos;	Row number
+Const cstThisSub = &quot;SFDatabases.Dataset.MovePrevious&quot;
+Const cstSubArgs = &quot;[Offset=1]&quot;
+
+Check:
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+	If IsMissing(Offset) Or IsEmpty(Offset) Then Offset = 1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Offset, &quot;Offset&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
+	End If
+
+Try:
+	with _RowSet
+		Select Case Offset
+			Case 0				:	bMove = True
+			Case 1				:	bMove = .previous()
+			Case -1				:	bMove = .next()
+			Case &lt; -1			:	bMove = .relative(- Offset)	&apos;	RowSet.relative() stops at boundary when moving forward only !?
+			Case Else	&apos;	&gt; 1
+				lRow = .Row()
+				If lRow &gt; Offset Then bMove = .relative(- Offset) Else bMove = False
+		End Select
+		If bMove Then
+			If .rowDeleted() Then
+				If 	Offset &lt; 0 Then bMove = MoveNext() Else bMove = MovePrevious()
+			End If
+		End If
+	End With
+
+Finally:
+	MovePrevious = bMove
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.MovePrevious
+
+REM -----------------------------------------------------------------------------
+Public Function Properties() As Variant
+&apos;&apos;&apos;	Return the list or properties of the Model class as an array
+
+	Properties = Array( _
+					&quot;BOF&quot; _
+					, &quot;DefaultValues&quot; _
+					, &quot;EOF&quot; _
+					, &quot;Fields&quot; _
+					, &quot;Filter&quot; _
+					, &quot;OrderBy&quot; _
+					, &quot;ParentDatabase&quot; _
+					, &quot;RowCount&quot; _
+					, &quot;RowNumber&quot; _
+					, &quot;Source&quot; _
+					, &quot;SourceType&quot; _
+					, &quot;UpdatableFields&quot; _
+					, &quot;Values&quot; _
+					, &quot;XRowSet&quot; _
+					)
+
+End Function	&apos;	SFDatabases.SF_Dataset.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function Reload(Optional ByVal Filter As Variant _
+									, Optional ByVal OrderBy As Variant _
+									) As Boolean
+&apos;&apos;&apos;	Reload the dataset from the database.
+&apos;&apos;&apos;	Useful in particular after record deletions and insertions.
+&apos;&apos;&apos;	Filter and OrderBy properties may be redefined.
+&apos;&apos;&apos;	The cursor is reset before the first record.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Filter: a condition that records must match, expressed
+&apos;&apos;&apos;			as a valid SQL WHERE clause without the WHERE keyword
+&apos;&apos;&apos;			Default: the actual filter is left unchanged.
+&apos;&apos;&apos;		OrderBy: the ordering of the dataset expressed as a valid SQL ORDER BY clause
+&apos;&apos;&apos;			without the ORDER BY keywords.
+&apos;&apos;&apos;			Default: the actual sorting order is left unchanged.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		SQLSYNTAX2ERROR			The given SQL statement is incorrect
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		dataset.Reload()				&apos;	dataset is refreshed
+&apos;&apos;&apos;		dataset.Reload(Filter := &quot;&quot;)	&apos;	Suppress the current filter
+&apos;&apos;&apos;		dataset.Reload(Filter := &quot;[Name] LIKE &apos;A%&apos;&quot;)
+&apos;&apos;&apos;										&apos;	Define a new filter
+&apos;&apos;&apos;		dataset.Reload(Filter := &quot;(&quot; &amp; dataset.Filter &amp; &quot;) AND [Name] LIKE &apos;A%&apos;&quot;)
+&apos;&apos;&apos;										&apos;	Combine actual filter with an additional condition
+
+Dim bReload As Boolean			&apos;	Return value
+Dim bErrorHandler As Boolean	&apos;	Can be set off to ease debugging of complex SQL statements
+Const cstThisSub = &quot;SFDatabases.Dataset.Reload&quot;
+Const cstSubArgs = &quot;[Filter=&quot;&quot;...filter...&quot;&quot;], [OrderBy=&quot;&quot;...orderby...&quot;&quot;]&quot;
+
+	bErrorHandler = ScriptForge.SF_Utils._ErrorHandling()
+	If bErrorHandler Then On Local Error GoTo Catch
+	bReload = False
+
+Check:
+	If IsMissing(Filter) Or IsEmpty(Filter) Then Filter = _Filter
+	If IsMissing(OrderBy) Or IsEmpty(OrderBy) Then OrderBy = _OrderBy
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(OrderBy, &quot;OrderBy&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	If Len(Filter) &gt; 0 Then _Filter = _ParentDatabase._ReplaceSquareBrackets(Filter) Else _Filter = &quot;&quot;
+	If Len(OrderBy) &gt; 0 Then _OrderBy = _ParentDatabase._ReplaceSquareBrackets(OrderBy) Else _OrderBy = &quot;&quot;
+	With _RowSet
+		.Filter = _Filter
+		.ApplyFilter = ( Len(_Filter) &gt; 0 )
+		.Order = _OrderBy
+		If bErrorhandler Then On Local Error GoTo CatchSql
+		.execute()
+	End With
+
+	bReload = True
+
+Finally:
+	Reload = bReload
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchSql:
+	On Local Error GoTo 0
+	ScriptForge.SF_Exception.RaiseFatal(SQLSYNTAX2ERROR, _Sql, &quot;WHERE &quot; &amp; _Filter, &quot;ORDER BY &quot; &amp; _OrderBy)
+	GoTo Catch
+End Function	&apos;	SFDatabases.SF_Dataset.Reload
+
+REM -----------------------------------------------------------------------------
+Public Function SetProperty(Optional ByVal PropertyName As Variant _
+								, Optional ByRef Value As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set a new value to the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;		Value: its new value
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;SFDatabases.Dataset.SetProperty&quot;
+Const cstSubArgs = &quot;PropertyName, Value&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	SetProperty = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	SetProperty = _PropertySet(PropertyName, Value)
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.SetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function Update(ParamArray pvArgs As Variant) As Boolean
+&apos;&apos;&apos;	Updates a set of fields in the current record
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Either a single argument
+&apos;&apos;&apos;			UpdatesList: a ScriptForge.SF_Dictionary object listing pairs of key/item where
+&apos;&apos;&apos;				the key = an updatable field
+&apos;&apos;&apos;				the item = its new value
+&apos;&apos;&apos;		or an even number of arguments alternating
+&apos;&apos;&apos;			FieldName: an updatable field
+&apos;&apos;&apos;			FieldValue: its new value
+&apos;&apos;&apos;		The first form is particularly convenient in Python scripts
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DBREADONLYERROR			The actual method cannot be executed
+&apos;&apos;&apos;		RECORDUPDATEERROR		When value to store does not fit the type of the field
+&apos;&apos;&apos;								or when field is not nullable and value = Null
+&apos;&apos;&apos;								or when field is not writable or is an autovalue
+&apos;&apos;&apos;								or when input file does not exist or is empty
+&apos;&apos;&apos;								or when field type is not supported
+&apos;&apos;&apos;		NOCURRENTRECORDERROR	The current record could not be determined
+&apos;&apos;&apos;	Examples
+&apos;&apos;&apos;		(Basic)
+&apos;&apos;&apos;			dataset.Update(&quot;LastName&quot;, &quot;Doe&quot;, &quot;FirstName&quot;, &quot;John&quot;)
+&apos;&apos;&apos;				&apos;	... is equivalent to:
+&apos;&apos;&apos;			Dim dict As Object
+&apos;&apos;&apos;			Set dict = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+&apos;&apos;&apos;			dict.Add(&quot;LastName&quot;, &quot;Doe&quot;)
+&apos;&apos;&apos;			dict.Add(&quot;FirstName&quot;, &quot;John&quot;)
+&apos;&apos;&apos;			dataset.Update(dict)
+&apos;&apos;&apos;		(Python) - next statements are equivalent
+&apos;&apos;&apos;			dataset.Update({&apos;LastName&apos;: &apos;Doe&apos;, &apos;FirstName&apos;: &apos;John&apos;})
+&apos;&apos;&apos;			dataset.Update(dict(LastName = &apos;Doe&apos;, FirstName = &apos;John&apos;))
+&apos;&apos;&apos;			dataset.Update(LastName = &apos;Doe&apos;, FirstName = &apos;John&apos;)
+
+Dim bUpdate As Boolean			&apos;	Return value
+Dim sSubArgs As String			&apos;	Alias of cstSubArgs
+Dim oUpdates As Object			&apos;	A SF_Dictionary object
+Dim lColIndex As Long			&apos;	Column index
+Dim vKeys As Variant			&apos;	List of keys in the dictionary
+Dim sKey As String				&apos;	A single key in vKeys
+Dim i As Long
+Const cstThisSub = &quot;SFDatabases.Dataset.Update&quot;
+Const cstSubArgs1 = &quot;UpdatesList&quot;
+Const cstSubArgs2 = &quot;FieldName1, FieldValue1, [FieldName2, FieldValue2], ...&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bUpdate = False
+
+Check:
+	If UBound(pvArgs) = 0 Then			&apos;	Dictionary case
+		sSubArgs = cstSubArgs1
+		If ScriptForge.SF_Utils._EnterFunction(cstThisSub, sSubArgs) Then
+			If Not ScriptForge.SF_Utils._Validate(pvArgs(0), &quot;UpdatesList&quot;, ScriptForge.V_OBJECT) Then GoTo Catch
+		End If
+		Set oUpdates = pvArgs(0)
+	Else
+		sSubArgs = cstSubArgs2			&apos;	Arguments list case
+		ScriptForge.SF_Utils._EnterFunction(cstThisSub, sSubArgs)
+		For i = 0 To UBound(pvArgs) Step 2
+			If Not ScriptForge.SF_Utils._Validate(pvArgs(i), &quot;FieldName&quot; &amp; i, V_STRING, _UpdatableFields, True) Then GoTo Catch
+		Next i
+	End If
+
+	If _ReadOnly Then GoTo CatchReadOnly
+	With _RowSet
+		If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then GoTo CatchCurrent
+	End With
+
+Try:
+	If UBound(pvArgs) = 0 Then
+		With oUpdates
+			vKeys = .Keys
+			For Each sKey in vKeys
+				lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, sKey, CaseSensitive := True)
+				If lColIndex &gt;= 0 Then
+					_SetColumnValue(lColIndex, .Item(sKey))
+				Else	&apos;	To force an error
+					If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
+				End If
+			Next sKey
+		End With
+	Else
+		For i = 0 To UBound(pvArgs) Step 2
+			lColIndex = ScriptForge.SF_Array.IndexOf(_Fields, pvArgs(i), CaseSensitive := True)
+			If lColIndex &gt;= 0 Then
+				If i &lt; UBound(pvArgs) Then _SetColumnValue(lColIndex, pvArgs(i + 1))
+			Else	&apos;	To force an error
+				If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
+			End If
+		Next i
+	End If
+
+	If _RowSet.IsModified Then _RowSet.updateRow()
+	bUpdate = True
+
+Finally:
+	Update = bUpdate
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchCurrent:
+	ScriptForge.SF_Exception.RaiseFatal(NOCURRENTRECORDERROR)
+	GoTo Finally
+CatchReadOnly:
+	ScriptForge.SF_Exception.RaiseFatal(DBREADONLYERROR)
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset.Update
+
+REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Private Function _ConvertDefaultValue(ByRef poColumn As Object) As Variant
+&apos;&apos;&apos;	Default values of table fields are stored in the Base file or in the database as strings.
+&apos;&apos;&apos;	The actual method converts those strings into a Basic native type.
+&apos;&apos;&apos;	Usage: facilitate the initialization of new records
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poColumn: a com.sun.star.sdb.ODataColumn UNO object
+&apos;&apos;&apos;	Returns
+&apos;&apos;&apos;		The default value for the column expressed as a string, a number, a date, ...
+&apos;&apos;&apos;		Nullable columns have probably a Null default value.
+
+Dim sValue As String			&apos;	The default value as a string
+Dim vValue As Variant			&apos;	The default value as a native Basic type
+Dim SESSION As Object			:	Set SESSION = ScriptForge.SF_Session
+
+Try:
+	With poColumn
+
+		&apos;	Determine the default value as a string
+		If SESSION.HasUnoProperty(poColumn, &quot;DefaultValue&quot;) Then			&apos;	Default value in database set via SQL statement
+			sValue = .DefaultValue
+		ElseIf SESSION.HasUnoProperty(poColumn, &quot;ControlDefault&quot;) Then	&apos;	Default value set in Base via table edition
+ 			If IsEmpty(.ControlDefault) Then sValue = &quot;&quot; Else sValue = .ControlDefault
+		Else
+			sValue = &quot;&quot;
+		End If
+
+		&apos;	Convert the string to a native type
+		If sValue = &quot;&quot; Then				&apos;	No default value =&gt; Null or Empty
+			If .IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then vValue = Null Else vValue = Empty
+		Else
+			vValue = sValue
+			With com.sun.star.sdbc.DataType
+				Select Case poColumn.Type
+					Case .CHAR, .VARCHAR, .LONGVARCHAR
+					Case .BIT, .BOOLEAN					:	vValue = CBool( sValue = &quot;1&quot; )
+					Case .TINYINT						:	vValue = CInt(sValue)
+					Case .SMALLINT, .INTEGER, .BIGINT	:	vValue = CLng(sValue)
+					Case .FLOAT							:	vValue = CSng(sValue)
+					Case .REAL, .DOUBLE					:	vValue = CDbl(sValue)
+					Case .NUMERIC, .DECIMAL
+						If SESSION.HasUnoProperty(poColumn, &quot;Scale&quot;) Then
+							If poColumn.Scale &gt; 0 Then vValue = CDbl(sValue)
+						End If
+					Case .DATE							:	vValue = DateValue(sValue)
+					Case .TIME							:	vValue = TimeValue(sValue)
+					Case .TIMESTAMP						:	vValue = DateValue(sValue) + TimeValue(sValue)
+					Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+					Case .CLOB
+					Case Else
+				End Select
+			End With
+		End If
+
+	End With
+
+Finally:
+	_ConvertDefaultValue = vValue
+	Exit Function
+End Function	&apos;	SFDatabases.SF_Dataset._ConvertDefaultValue
+
+REM -----------------------------------------------------------------------------
+Public Function _Initialize() As Boolean
+&apos;&apos;&apos;	Called immediately after instance creation to complete the initial values
+&apos;&apos;&apos;	An eventual error must be trapped in the calling routine to cancel the instance creation
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False when Dataset creation is unsuccessful. Typically because of SQL error
+
+Dim bDataset As Boolean			&apos;	Return value
+Dim bErrorHandler As Boolean	&apos;	Can be set off to ease debugging of complex SQL statements
+Dim sFields As String			&apos;	Comma-separated list of field names
+Dim sUpdatableFields As String	&apos;	Comma-separated list of updatable field names
+Dim oColumn As Object			&apos;	com.sun.star.sdb.ODataColumn
+Dim SESSION As Object			:	Set SESSION = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Session&quot;)
+Dim i As Long
+
+	bErrorHandler = ScriptForge.SF_Utils._ErrorHandling()
+	If bErrorHandler Then On Local Error GoTo Catch
+
+Try:
+	Set _RowSet = CreateUnoService(&quot;com.sun.star.sdb.RowSet&quot;)
+	With _RowSet
+		Set .ActiveConnection = _ParentDatabase._Connection
+		.Command = _Sql
+		Select Case _DatasetType
+			Case &quot;TABLE&quot;	:	.CommandType = com.sun.star.sdb.CommandType.TABLE
+			Case &quot;QUERY&quot;	:	.CommandType = com.sun.star.sdb.CommandType.QUERY
+			Case &quot;SQL&quot;		:	.CommandType = com.sun.star.sdb.CommandType.COMMAND
+		End Select
+
+		.EscapeProcessing = Not _DirectSql
+		.Filter = _Filter
+		.ApplyFilter = ( Len(_Filter) &gt; 0 )
+		.order = _OrderBy
+		If _ReadOnly Then
+			.TransactionIsolation = com.sun.star.sdbc.TransactionIsolation.READ_UNCOMMITTED
+		Else
+			.TransactionIsolation = com.sun.star.sdbc.TransactionIsolation.READ_COMMITTED
+		End If
+
+		If bErrorHandler Then On Local Error GoTo CatchSql
+		.execute()
+
+		If bErrorHandler Then On Local Error GoTo Catch
+		&apos;	Collect info about columns: field name, updatable, default value, AutoValue
+		With .Columns
+			sFields = &quot;&quot;
+			sUpdatableFields = &quot;&quot;
+			ReDim _DefaultValues (0 To .Count - 1)
+			&apos;	Columns are scanned by index to guarantee that names and indexes are aligned
+			For i = 0 To .Count - 1
+				Set oColumn = .getByIndex(i)
+				With oColumn
+					&apos;	Field names
+					sFields = sFields &amp; &quot;,&quot; &amp; .Name
+					&apos;	Updatable field names
+					If Not _ReadOnly And .IsWritable And Not .IsAutoIncrement Then sUpdatableFields = sUpdatableFields &amp; &quot;,&quot; &amp; .Name
+					&apos;	Default values
+					_DefaultValues(i) = _ConvertDefaultValue(oColumn)
+					&apos;	AutoValue
+					If _AutoValue &lt; 0 And .IsAutoIncrement Then _AutoValue = i
+				End With
+			Next i
+			If Len(sFields) &lt;= 1 Then _Fields = Array() Else _Fields = Split(Mid(sFields, 2), &quot;,&quot;)
+			If Len(sUpdatableFields) &lt;= 1 Then _UpdatableFields = Array() Else _UpdatableFields = Split(Mid(sUpdatableFields, 2), &quot;,&quot;)
+		End With
+	End With
+	
+	&apos;	Insert the instance in the _Datasets array of the parent database
+	_DatasetIndex = _ParentDatabase._AddToDatasets([Me])
+
+	bDataset = ( _DatasetIndex &gt;= 0 )
+
+Finally:
+	_Initialize = bDataset
+	Exit Function
+Catch:
+	bDataset = False
+	GoTo Finally
+CatchSql:
+	On Local Error GoTo 0
+	ScriptForge.SF_Exception.RaiseFatal(SQLSYNTAX2ERROR, _Sql, &quot;WHERE &quot; &amp; _Filter, &quot;ORDER BY &quot; &amp; _OrderBy)
+	GoTo Catch
+End Function	&apos;	SFDatabases.SF_Dataset._Initialize
+
+REM -----------------------------------------------------------------------------
+Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
+&apos;&apos;&apos;	Return the value of the named property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+
+Dim vBookmark As Variant			&apos;	Bookmark on the current record
+Dim vValue As Variant				&apos;	A single record  field value
+Dim vValuesDict As Object			&apos;	A dictionary (field name, field value)
+Dim i As Long
+
+Dim cstThisSub As String
+Const cstSubArgs = &quot;&quot;
+
+	cstThisSub = &quot;SFDatabases.Dataset.get&quot; &amp; psProperty
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+	With _RowSet
+		Select Case psProperty
+			Case &quot;BOF&quot;
+				_PropertyGet = .isBeforeFirst()
+			Case &quot;DefaultValues&quot;
+				&apos;	Load the pairs field name / field default value in the dictionary (with case-sensitive comparison of keys)
+				vValuesDict = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)
+				For i = 0 To UBound(_DefaultValues)
+					vValuesDict.Add(_Fields(i), _DefaultValues(i))
+				Next i
+				Set _PropertyGet = vValuesDict
+			Case &quot;EOF&quot;
+				_PropertyGet = .isAfterLast()
+			Case &quot;Fields&quot;
+				_PropertyGet = _Fields
+			Case &quot;Filter&quot;
+				_PropertyGet = _Filter
+			Case &quot;OrderBy&quot;
+				_PropertyGet = _OrderBy
+			Case &quot;ParentDatabase&quot;
+				Set _PropertyGet = _ParentDatabase
+			Case &quot;RowCount&quot;
+					If .IsRowCountFinal Then
+						_PropertyGet = .RowCount
+					Else
+						If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then vBookmark = Null Else vBookmark = .getBookmark
+						.last()
+						_PropertyGet = .RowCount
+						If IsNull(vBookmark) Then .beforeFirst() Else .moveToBookmark(vBookmark)
+					End If
+			Case &quot;RowNumber&quot;
+					If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then _PropertyGet = 0 Else _PropertyGet = .Row
+			Case &quot;Source&quot;
+				_PropertyGet = _Command
+			Case &quot;SourceType&quot;
+				_PropertyGet = _DatasetType
+			Case &quot;UpdatableFields&quot;
+				_PropertyGet = _UpdatableFields
+			Case &quot;Values&quot;
+					If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then
+						Set _PropertyGet = Nothing
+					Else
+						&apos;	Load the pairs field name / field value in the dictionary (with case-sensitive comparison of keys)
+						vValuesDict = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)
+						For i = 0 To UBound(_Fields)
+							vValue = _ParentDatabase._GetColumnValue(_RowSet, i + 1, False)
+							vValuesDict.Add(_Fields(i), vValue)
+						Next i
+						Set _PropertyGet = vValuesDict
+					End If
+			Case &quot;XRowSet&quot;
+				Set _PropertyGet = _RowSet
+			Case Else
+				_PropertyGet = Null
+		End Select
+	End With
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset._PropertyGet
+
+REM -----------------------------------------------------------------------------
+Private Function _PropertySet(Optional ByVal psProperty As String _
+								, Optional ByVal pvValue As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set the new value of the named property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psProperty: the name of the property
+&apos;&apos;&apos;		pvValue: the new value of the given property
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if successful
+
+Dim bSet As Boolean							&apos;	Return value
+Dim cstThisSub As String
+Const cstSubArgs = &quot;Value&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bSet = False
+
+	cstThisSub = &quot;SFDatabases.Dataset.set&quot; &amp; psProperty
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+	bSet = True
+	Select Case UCase(psProperty)
+		Case UCase(&quot;BOF&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;BOF&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+			If pvValue Then _RowSet.beforeFirst()		&apos;	Only True is valid
+		Case UCase(&quot;EOF&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;EOF&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+			If pvValue Then _RowSet.afterLast()			&apos;	Only True is valid
+		Case Else
+			bSet = False
+	End Select
+
+Finally:
+	_PropertySet = bSet
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset._PropertySet
+
+REM -----------------------------------------------------------------------------
+Private Function _Repr() As String
+&apos;&apos;&apos;	Convert the Dataset instance to a readable string, typically for debugging purposes (DebugPrint ...)
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Return:
+&apos;&apos;&apos;		&quot;[DATASET]: tablename,base file url&quot;
+
+	_Repr = &quot;[DATASET]: &quot; &amp; _Command &amp; &quot;,&quot; &amp; _ParentDatabase._Location
+
+End Function	&apos;	SFDatabases.SF_Dataset._Repr
+
+REM -----------------------------------------------------------------------------
+Private Function _SetColumnValue(ByVal plColIndex As Long _
+									, ByRef pvValue As Variant _
+									) As Boolean
+&apos;&apos;&apos;	Store a value in a given column of the current record
+&apos;&apos;&apos;	The resultset.insertRow() or resultset.updateRow() methods are supposed to be executed in the calling routine
+&apos;&apos;&apos;	The type of the column is found in the resultset&apos;s metadata
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		plColIndex: the index of the column to extract the value from. Starts at 0
+&apos;&apos;&apos;			Read-only columns are ignored.
+&apos;&apos;&apos;		pvValue:the Variant value to store in the column
+&apos;&apos;&apos;			Strings and numbers are supplied respectively as strings or numeric values
+&apos;&apos;&apos;			Dates and times are supplied as Basic dates
+&apos;&apos;&apos;			Null values are supplied as Null
+&apos;&apos;&apos;			Errors or other strange data types are ignored
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		RECORDUPDATEERROR		when value to store does not fit the type of the field
+&apos;&apos;&apos;								or when field is not nullable and value = Null
+&apos;&apos;&apos;								or when field is not writable or is an autovalue
+&apos;&apos;&apos;								or when input file does not exist or is empty
+&apos;&apos;&apos;								or when field type is not supported
+	
+Dim bSet As Boolean				&apos;	Return value
+Dim sColumn As String			&apos;	Column name
+Dim oColumn As Object			&apos;	com.sun.star.sdb.DataColumn
+Dim lType As Long				&apos;	SQL column type: com.sun.star.sdbc.DataType
+Dim vDateTime As Variant		&apos;	com.sun.star.util.DateTime
+Dim bNullable As Boolean		&apos;	The field is defined as accepting Null values
+Dim vTemp As Variant			&apos;	Work variable for date and time related conversions
+Dim sFile As String				&apos;	File name in FileSystem notation
+Dim oSimpleFileAccess As Object	&apos;	com.sun.star.ucb.SimpleFileAccess
+Dim oStream As Object			&apos;	com.sun.star.io.XInputStream
+Dim lFileLength As Long			&apos;	Binary file length in bytes
+
+Dim UTILS As Object				:	Set UTILS = ScriptForge.SF_Utils
+Dim SESS As Object				:	Set SESS = ScriptForge.SF_Session
+
+	bSet = False
+	On Local Error GoTo CatchError
+
+Check:
+	Set oColumn = _RowSet.Columns.getByIndex(plColIndex)
+	sColumn = oColumn.Name
+	If _ReadOnly Then GoTo CatchError
+	If Not ScriptForge.SF_Array.Contains(_UpdatableFields, sColumn, CaseSensitive := True) Then GoTo CatchError
+
+Try:
+	With com.sun.star.sdbc.DataType
+		If IsEmpty(pvValue) Then		&apos;	An empty default value means not nullable and no default =&gt; ignore
+		ElseIf IsNull(pvValue) Then
+			If oColumn.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then oColumn.updateNull() Else Goto CatchError
+		Else
+			Select Case oColumn.Type
+				Case .BIT, .BOOLEAN
+					If VarType(pvValue) &lt;&gt; UTILS.V_BOOLEAN Then GoTo CatchError
+					oColumn.updateBoolean(pvValue)
+				Case .TINYINT
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					If pvValue &lt; -128 Or pvValue &gt; +127 Then Goto CatchError
+					oColumn.updateShort(CInt(pvValue))
+				Case .SMALLINT
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					If pvValue &lt; -32768 Or pvValue &gt; 32767 Then Goto CatchError
+					oColumn.updateInt(CInt(pvValue))
+				Case .INTEGER
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					If pvValue &lt; -2147483648 Or pvValue &gt; 2147483647 Then Goto CatchError
+					oColumn.updateInt(CLng(pvValue))
+				Case .BIGINT
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					oColumn.updateLong(pvValue)		&apos;	No proper type conversion for HYPER data type
+				Case .FLOAT
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					If Abs(pvValue) &lt; 3.402823E38 And Abs(pvValue) &gt; 1.401298E-45 Then oColumn.updateFloat(CSng(pvValue)) Else Goto CatchError
+				Case .REAL, .DOUBLE
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then oColumn.updateDouble(CDbl(pvValue)) Else Goto CatchError
+					oColumn.updateDouble(CDbl(pvValue))
+				Case .NUMERIC, .DECIMAL
+					If UTILS._VarTypeExt(pvValue) &lt;&gt; UTILS.V_NUMERIC Then Goto CatchError
+					If SESS.HasUnoProperty(oColumn, &quot;Scale&quot;) Then
+						If oColumn.Scale &gt; 0 Then
+							&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then oColumn.updateDouble(CDbl(pvValue)) Else Goto CatchError
+							oColumn.updateDouble(CDbl(pvValue))
+						Else
+							oColumn.updateString(CStr(pvValue))
+						End If
+					Else
+						Column.updateString(CStr(pvValue))
+					End If
+				Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
+					If VarType(pvValue) &lt;&gt; V_STRING Then GoTo CatchError
+					If SESS.HasUnoProperty(oColumn, &quot;Precision&quot;) Then
+						If oColumn.Precision &gt; 0 And Len(pvValue) &gt; oColumn.Precision Then Goto CatchError
+					End If
+					oColumn.updateString(pvValue)
+				Case .DATE
+					If VarType(pvValue) &lt;&gt; V_DATE Then GoTo CatchError
+					vTemp = New com.sun.star.util.Date
+					With vTemp
+						.Day = Day(pvValue)
+						.Month = Month(pvValue)
+						.Year = Year(pvValue)
+					End With
+					oColumn.updateDate(vTemp)
+				Case .TIME
+					If VarType(pvValue) &lt;&gt; V_DATE Then GoTo CatchError
+					vTemp = New com.sun.star.util.Time
+					With vTemp
+						.Hours = Hour(pvValue)
+						.Minutes = Minute(pvValue)
+						.Seconds = Second(pvValue)
+						.NanoSeconds = 0
+					End With
+					oColumn.updateTime(vTemp)
+				Case .TIMESTAMP
+					If VarType(pvValue) &lt;&gt; V_DATE Then GoTo CatchError
+					vTemp = New com.sun.star.util.DaWHEREteTime
+					With vTemp
+						.Day = Day(pvValue)
+						.Month = Month(pvValue)
+						.Year = Year(pvValue)
+						.Hours = Hour(pvValue)
+						.Minutes = Minute(pvValue)
+						.Seconds = Second(pvValue)
+						.NanoSeconds = 0
+					End With
+					oColumn.updateTimestamp(vTemp)
+				Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+					If VarType(pvValue) &lt;&gt; V_STRING Then GoTo CatchError
+					If Not UTILS._ValidateFile(pvValue, &quot;FieldValue&quot;) Then GoTo CatchError
+					&apos;	Verify file
+					sFile = ConvertToUrl(pvValue)
+					oSimpleFileAccess = UTILS._GetUnoService(&quot;FileAccess&quot;)
+					If Not oSimpleFileAccess.exists(sFile) Then Goto CatchError
+					&apos;	Load the binary data
+					Set oStream = oSimpleFileAccess.openFileRead(sFile)
+					lFileLength = oStream.getLength()
+					If lFileLength = 0 Then Goto CatchError	&apos;	&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; PUT NULL
+					oColumn.updateBinaryStream(oStream, lFileLength)
+					oStream.closeInput()
+				Case Else
+					Goto CatchError
+			End Select
+		End If
+	End With
+
+	bSet = True
+
+Finally:
+	_SetColumnValue = bSet
+	Exit Function
+CatchError:
+	On Local Error GoTo 0
+	ScriptForge.SF_Exception.RaiseFatal(RECORDUPDATEERROR, sColumn, ScriptForge.SF_String.Represent(pvValue), oColumn.TypeName)
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Dataset._SetColumnValue
+
+REM ============================================ END OF SFDATABASES.SF_DATASET
+</script:module>

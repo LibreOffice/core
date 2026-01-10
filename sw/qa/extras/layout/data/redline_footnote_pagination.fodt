@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:officeooo="http://openoffice.org/2009/office" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ooo="http://openoffice.org/2004/office" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Arial1" svg:font-family="Arial"/>
+  <style:font-face style:name="StarSymbol" svg:font-family="StarSymbol"/>
+  <style:font-face style:name="Tahoma2" svg:font-family="Tahoma"/>
+  <style:font-face style:name="Courier New" svg:font-family="&apos;Courier New&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
+  <style:font-face style:name="Lucida Sans Unicode1" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial4" svg:font-family="Arial" style:font-adornments="Normal" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Helvetica" svg:font-family="Helvetica" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Lucida Sans Unicode" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="OpenSymbol" svg:font-family="OpenSymbol" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#000000" draw:fill-color="#99ccff" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in" draw:start-line-spacing-horizontal="0.1114in" draw:start-line-spacing-vertical="0.1114in" draw:end-line-spacing-horizontal="0.1114in" draw:end-line-spacing-vertical="0.1114in" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Arial" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Lucida Sans Unicode" style:font-size-asian="12pt" style:language-asian="de" style:country-asian="DE" style:font-name-complex="Tahoma" style:font-size-complex="12pt" style:language-complex="de" style:country-complex="DE"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="0.5in" style:writing-mode="lr-tb"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Arial" fo:font-size="12pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="Lucida Sans Unicode" style:font-size-asian="12pt" style:language-asian="de" style:country-asian="DE" style:font-name-complex="Tahoma" style:font-size-complex="12pt" style:language-complex="de" style:country-complex="DE" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:text-properties fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0835in" loext:contextual-spacing="false"/>
+  </style:style>
+  <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0">
+    <style:tab-stops>
+     <style:tab-stop style:position="3.5035in" style:type="center"/>
+     <style:tab-stop style:position="7.0075in" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+   <style:text-properties style:font-name="Arial1" fo:font-family="Arial" style:font-name-complex="Tahoma2" style:font-family-complex="Tahoma"/>
+  </style:style>
+  <style:style style:name="Fließtext" style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:line-height="0.1807in"/>
+   <style:text-properties fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="Seite" style:family="paragraph">
+   <style:paragraph-properties fo:margin-left="4.8035in" fo:margin-right="0in" fo:line-height="0.1374in" fo:text-indent="0in" style:auto-text-indent="false"/>
+   <style:text-properties fo:font-size="9pt"/>
+  </style:style>
+  <style:style style:name="Footnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:margin-left="0.1965in" fo:margin-right="0in" fo:text-indent="-0.1965in" style:auto-text-indent="false" text:number-lines="false" text:line-number="0"/>
+   <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="PLAN_5f_01_5f_Textkörper_5f_3xeingerückt" style:display-name="PLAN_01_Textkörper_3xeingerückt" style:family="paragraph" style:master-page-name="">
+   <style:paragraph-properties fo:margin-left="0.8957in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:line-height="0.1811in" fo:hyphenation-ladder-count="no-limit" fo:text-indent="0in" style:auto-text-indent="false" style:page-number="auto">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Arial4" fo:font-family="Arial" style:font-style-name="Normal" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="11pt" fo:font-weight="normal" style:font-name-asian="Courier New" style:font-family-asian="&apos;Courier New&apos;" style:font-family-generic-asian="modern" style:font-pitch-asian="fixed" style:font-size-asian="10pt" style:font-weight-asian="bold" style:font-name-complex="Courier New" style:font-family-complex="&apos;Courier New&apos;" style:font-family-generic-complex="modern" style:font-pitch-complex="fixed" style:font-size-complex="10pt" style:font-weight-complex="bold" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+  </style:style>
+  <style:style style:name="BeschlVorl" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties fo:margin-left="0.5902in" fo:margin-right="0in" fo:line-height="0.2083in" fo:text-indent="-0.2917in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="BeschlVorlFett" style:family="paragraph" style:parent-style-name="BeschlVorl">
+   <style:paragraph-properties fo:margin-left="0.2992in" fo:margin-right="0in" fo:margin-top="0in" fo:margin-bottom="0in" loext:contextual-spacing="false" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"/>
+  </style:style>
+  <style:style style:name="SatzBest" style:family="paragraph" style:parent-style-name="Text_20_body" style:next-style-name="Index_20_2">
+   <style:paragraph-properties fo:margin-left="0.4925in" fo:margin-right="0in" fo:margin-top="0.252in" fo:margin-bottom="0.0827in" loext:contextual-spacing="false" fo:text-indent="0in" style:auto-text-indent="false"/>
+   <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Index_20_2" style:display-name="Index 2" style:family="paragraph" style:parent-style-name="Index" style:class="index">
+   <style:paragraph-properties fo:margin-left="0.1965in" fo:margin-right="0in" fo:text-indent="0in" style:auto-text-indent="false"/>
+  </style:style>
+  <style:style style:name="Numbering_20_Symbols" style:display-name="Numbering Symbols" style:family="text"/>
+  <style:style style:name="Bullet_20_Symbols" style:display-name="Bullet Symbols" style:family="text">
+   <style:text-properties style:font-name="StarSymbol" fo:font-family="StarSymbol" fo:font-size="9pt" style:font-name-asian="StarSymbol" style:font-family-asian="StarSymbol" style:font-size-asian="9pt" style:font-name-complex="StarSymbol" style:font-family-complex="StarSymbol" style:font-size-complex="9pt"/>
+  </style:style>
+  <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
+   <style:text-properties fo:color="#000080" loext:opacity="100%" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="Fließtext" style:family="text">
+   <style:text-properties style:font-name="Arial" fo:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="11pt" style:text-underline-style="none"/>
+  </style:style>
+  <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text"/>
+  <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <style:style style:name="Default_20_Paragraph_20_Font" style:display-name="Default Paragraph Font" style:family="text"/>
+  <style:style style:name="ListLabel_20_1" style:display-name="ListLabel 1" style:family="text">
+   <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
+  </style:style>
+  <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text"/>
+  <style:style style:name="Endnote_20_anchor" style:display-name="Endnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" style:num-format="">
+    <style:list-level-properties text:min-label-distance="0.15in"/>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
+  <style:default-page-layout>
+   <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+  </style:default-page-layout>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="MP1" style:family="paragraph" style:parent-style-name="Footer">
+   <style:paragraph-properties fo:text-align="end" style:justify-single-word="false"/>
+   <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single" fo:font-size="8pt" style:font-size-asian="8pt"/>
+  </style:style>
+  <style:style style:name="MP2" style:family="paragraph" style:parent-style-name="Footer">
+   <style:paragraph-properties fo:text-align="end" style:justify-single-word="false"/>
+   <style:text-properties fo:font-size="8pt" style:font-size-asian="8pt"/>
+  </style:style>
+  <style:style style:name="MP3" style:family="paragraph" style:parent-style-name="Footer">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="MP4" style:family="paragraph" style:parent-style-name="BeschlVorlFett">
+   <style:paragraph-properties fo:margin-left="0in" fo:margin-right="0in" fo:text-indent="0in" style:auto-text-indent="false"/>
+  </style:style>
+  <style:style style:name="MT1" style:family="text"/>
+  <style:style style:name="MT2" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Arial" fo:font-size="11pt" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Helvetica" style:font-size-asian="11pt" style:language-asian="de" style:country-asian="DE" style:font-weight-asian="normal" style:font-name-complex="Helvetica" style:font-size-complex="11pt" style:language-complex="ar" style:country-complex="SA" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:page-layout style:name="Mpm1">
+   <style:page-layout-properties fo:page-width="8.2681in" fo:page-height="11.6929in" style:num-format="1" style:paper-tray-name="[From printer settings]" style:print-orientation="portrait" fo:margin-top="0.472in" fo:margin-bottom="0.8154in" fo:margin-left="0.9839in" fo:margin-right="0.8744in" fo:border="none" fo:padding="0in" style:shadow="none" fo:background-color="transparent" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.2165in" style:layout-grid-ruby-height="0in" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="true" style:layout-grid-display="true" style:layout-grid-base-width="0.1457in" style:layout-grid-snap-to="true" draw:fill="none" draw:fill-color="#99ccff" style:footnote-max-height="0in">
+    <style:columns fo:column-count="1" fo:column-gap="0in"/>
+    <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style>
+    <style:header-footer-properties svg:height="1.7319in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-bottom="1.5354in" fo:border="none" fo:padding="0in" style:shadow="none" fo:background-color="transparent" style:dynamic-spacing="false" draw:fill="none" draw:fill-color="#99ccff"/>
+   </style:header-style>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:style style:name="P7" style:family="paragraph" style:parent-style-name="PLAN_5f_01_5f_Textkörper_5f_3xeingerückt">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="P8" style:family="paragraph" style:parent-style-name="PLAN_5f_01_5f_Textkörper_5f_3xeingerückt">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="P9" style:family="paragraph" style:parent-style-name="PLAN_5f_01_5f_Textkörper_5f_3xeingerückt">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="P10" style:family="paragraph" style:parent-style-name="PLAN_5f_01_5f_Textkörper_5f_3xeingerückt">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0in" loext:contextual-spacing="false"/>
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="P12" style:family="paragraph" style:parent-style-name="Footnote">
+   <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
+  </style:style>
+  <style:style style:name="P13" style:family="paragraph" style:parent-style-name="Footnote">
+   <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
+  </style:style>
+  <style:style style:name="P14" style:family="paragraph" style:parent-style-name="Footnote">
+   <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
+  </style:style>
+  <style:style style:name="P17" style:family="paragraph" style:parent-style-name="Footnote">
+   <style:paragraph-properties fo:margin-left="0in" fo:margin-right="0in" fo:text-indent="0in" style:auto-text-indent="false"/>
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="P18" style:family="paragraph" style:parent-style-name="PLAN_5f_01_5f_Textkörper_5f_3xeingerückt">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Arial" fo:font-size="11pt" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Helvetica" style:font-size-asian="11pt" style:language-asian="de" style:country-asian="DE" style:font-weight-asian="normal" style:font-name-complex="Helvetica" style:font-size-complex="11pt" style:language-complex="ar" style:country-complex="SA" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" fo:background-color="#ffff00" loext:char-shading-value="0"/>
+  </style:style>
+  <style:style style:name="T4" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%"/>
+  </style:style>
+  <style:style style:name="T5" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%"/>
+  </style:style>
+  <style:style style:name="T6" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%"/>
+  </style:style>
+  <style:style style:name="T7" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-underline-style="dotted" style:text-underline-width="bold" style:text-underline-color="#000019"/>
+  </style:style>
+  <style:style style:name="T8" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-underline-style="none"/>
+  </style:style>
+  <style:style style:name="T9" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-underline-style="none"/>
+  </style:style>
+  <style:style style:name="T10" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%"/>
+  </style:style>
+  <style:style style:name="T11" style:family="text">
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" fo:background-color="#ffcc00" loext:char-shading-value="0"/>
+  </style:style>
+  <style:style style:name="T12" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T13" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T14" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T15" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T16" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T17" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T18" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T19" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T20" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T21" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T22" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T23" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T24" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T25" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T26" style:family="text">
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:font-style="normal" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" fo:background-color="transparent" loext:char-shading-value="0" style:font-name-asian="Courier New" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T27" style:family="text">
+   <style:text-properties style:text-line-through-style="none" style:text-line-through-type="none"/>
+  </style:style>
+  <style:style style:name="T28" style:family="text">
+   <style:text-properties style:text-line-through-style="none" style:text-line-through-type="none"/>
+  </style:style>
+  <style:style style:name="T29" style:family="text">
+   <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
+  </style:style>
+  <style:style style:name="T31" style:family="text">
+   <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="T32" style:family="text">
+   <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="T35" style:family="text">
+   <style:text-properties fo:background-color="#ffff00" loext:char-shading-value="0"/>
+  </style:style>
+  <style:style style:name="T37" style:family="text">
+   <style:text-properties style:text-underline-style="dotted" style:text-underline-width="bold" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="T46" style:family="text"/>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="Mpm1">
+   <style:header>
+    <text:p text:style-name="Seite">Seite <text:page-number text:select-page="current">2</text:page-number><text:s/>von <text:page-count>2</text:page-count></text:p>
+   </style:header>
+  </style:master-page>
+ </office:master-styles>
+
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct2659111309568" text:id="ct2659111309568">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111313312" text:id="ct2659111313312">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111304096" text:id="ct2659111304096">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="Footnote">Zahl?</text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112078816" text:id="ct2659112078816">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">Xx </text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112075648" text:id="ct2659112075648">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112072768" text:id="ct2659112072768">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T13">x</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112088032" text:id="ct2659112088032">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112088608" text:id="ct2659112088608">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T13">xx</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112088896" text:id="ct2659112088896">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112076224" text:id="ct2659112076224">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112075936" text:id="ct2659112075936">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T14"><text:s/>xxx</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112081696" text:id="ct2659112081696">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12"><text:s/>xx Xxxxxxx</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112080256" text:id="ct2659112080256">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112089184" text:id="ct2659112089184">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112076800" text:id="ct2659112076800">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112076512" text:id="ct2659112076512">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112073344" text:id="ct2659112073344">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T14"><text:s/>xxxxxx, </text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112073056" text:id="ct2659112073056">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T14">xxxx </text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112072480" text:id="ct2659112072480">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T14">xxxxxxxx xxxxxxx xxxxx</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112084864" text:id="ct2659112084864">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">xx xxxxxxxxxxxxxxx xxxxxxxxxx </text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112083712" text:id="ct2659112083712">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">xxxx </text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112084576" text:id="ct2659112084576">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112077088" text:id="ct2659112077088">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">,</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112085728" text:id="ct2659112085728">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">xx xxxxxxxxxxxxxxxx xxx</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112086016" text:id="ct2659112086016">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112071904" text:id="ct2659112071904">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">x</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112077664" text:id="ct2659112077664">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12">x</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112073632" text:id="ct2659112073632">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T15"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
+          <text:p text:style-name="P12">xxxxxxx?</text:p></text:note-body></text:note></text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112073920" text:id="ct2659112073920">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112074208" text:id="ct2659112074208">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P9"><text:span text:style-name="T12"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>2</text:note-citation><text:note-body>
+          <text:p text:style-name="P12">Xxx xxxxx xxxx xxxxx xxxxxxxxxx xxx xxxxxx xxxx? <text:span text:style-name="T27">(xxxx: xxxx. xxxxxxxxxxx. xxxxxx xxx </text:span><text:span text:style-name="T28">xxxxxxxxxxxx </text:span><text:span text:style-name="T27">xxx xxxxx xx xxx xx xxxxxxx xxxxxxxxx xxx xxxxxxxxxx xxx xxx. xxxx xxxxx)</text:span></text:p></text:note-body></text:note></text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112077952" text:id="ct2659112077952">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112080832" text:id="ct2659112080832">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112079104" text:id="ct2659112079104">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659112081120" text:id="ct2659112081120">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:span text:style-name="T1">xxxxxxxxxxxxxxxxxxx (</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111302080" text:id="ct2659111302080">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111302656" text:id="ct2659111302656">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:span text:style-name="T1">)</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111300352" text:id="ct2659111300352">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111310144" text:id="ct2659111310144">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:span text:style-name="T1"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>3</text:note-citation><text:note-body>
+          <text:p text:style-name="P13">xxx xxx xxx xxxxxxxxxxxxxxxxx xxx</text:p></text:note-body></text:note></text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111302944" text:id="ct2659111302944">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111305824" text:id="ct2659111305824">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111310720" text:id="ct2659111310720">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111303232" text:id="ct2659111303232">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:span text:style-name="T1"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>4</text:note-citation><text:note-body>
+          <text:p text:style-name="Footnote"><text:span text:style-name="T29">xxxxx xxxxxx xxxxxxxxx, xx xxxxxx xxxx xxxxxxxx</text:span>x? <text:span text:style-name="T46">(xxxx: </text:span><text:span text:style-name="T32">xxxx xxxxxxxxxx</text:span><text:span text:style-name="T46">, xxxx xxxx xx xxx xxxx xxx xx xxx xxx xxxxxxxxxxx)</text:span></text:p></text:note-body></text:note></text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111307264" text:id="ct2659111307264">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111313888" text:id="ct2659111313888">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:span text:style-name="T1"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>5</text:note-citation><text:note-body>
+          <text:p text:style-name="P14">xxxx?</text:p></text:note-body></text:note></text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111308416" text:id="ct2659111308416">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111301792" text:id="ct2659111301792">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>7</text:note-citation><text:note-body>
+         <text:p text:style-name="P14">xx xxxxx xxxxxxx xx xxxxxxx xxxxxxxxx xxx xxxxxxxxxxxx xxxxxxx.</text:p></text:note-body></text:note></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111308704" text:id="ct2659111308704">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111306112" text:id="ct2659111306112">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:note text:id="ftn3" text:note-class="footnote"><text:note-citation>9</text:note-citation><text:note-body>
+         <text:p text:style-name="Footnote">xxxx? / <text:span text:style-name="T46">xxxx xxxxxxxx</text:span></text:p></text:note-body></text:note></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111304672" text:id="ct2659111304672">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111314176" text:id="ct2659111314176">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111300928" text:id="ct2659111300928">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111311584" text:id="ct2659111311584">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+      <text:p text:style-name="P18"><text:span text:style-name="T46">xx</text:span></text:p>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct2659111307552" text:id="ct2659111307552">
+     <text:insertion>
+      <office:change-info>
+       <dc:creator/>
+       <dc:date>1970-01-01T00:00:00</dc:date>
+      </office:change-info>
+     </text:insertion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="P9"><text:span text:style-name="T21">x</text:span><text:span text:style-name="T12">xx xxxxxxxxx xxxxxxxxxxxxxxxxxx xxx xxxxxxxxxxxxx xxx xxxxxx xxxxxxx xxxx xxxxxxxxxxxx xxxxxxxxxxxx xxx xxx xxx xxxx xxxxxxxxxxx xxxxxxx xxx xxxxxxxxxxxx xxxxxxxxxxxxxx xxxx xxxxx xx x</text:span><text:span text:style-name="T16">x</text:span><text:span text:style-name="T12">x xxxxxx</text:span><text:span text:style-name="T16">x</text:span><text:span text:style-name="T12"> xxxxxxx xxxxxxxxxx. <text:line-break/></text:span><text:change text:change-id="ct2659112078816"/><text:span text:style-name="T12">X</text:span><text:change-start text:change-id="ct2659112075648"/><text:span text:style-name="T13">x</text:span><text:change-end text:change-id="ct2659112075648"/><text:change text:change-id="ct2659112072768"/><text:span text:style-name="T12">xx</text:span><text:change-start text:change-id="ct2659112088032"/><text:span text:style-name="T13">xxxx</text:span><text:change-end text:change-id="ct2659112088032"/><text:change text:change-id="ct2659112088608"/><text:change-start text:change-id="ct2659112088896"/><text:span text:style-name="T12"> </text:span><text:span text:style-name="T13">xxx xxxxxxxxxxxx</text:span><text:change-end text:change-id="ct2659112088896"/><text:span text:style-name="T12"> xxxx xxx xx. xxx xxxxxxxxxxxxx xxx xxxxxxx xxx xxxxxxxxxxxx xxx xx. xxx xxxxxxxxxxxxx</text:span><text:change-start text:change-id="ct2659112076224"/><text:span text:style-name="T12">, </text:span><text:change-end text:change-id="ct2659112076224"/><text:change text:change-id="ct2659112075936"/><text:span text:style-name="T12">xxxxxxxxxxxx xxx xxxxxxxxxxxxx xxx xxxxxxxxxxxxx xxx xxxxxxxxxxxxxxxxxxx</text:span><text:change text:change-id="ct2659112081696"/><text:span text:style-name="T12"> xxxxxxx </text:span><text:change-start text:change-id="ct2659112080256"/><text:span text:style-name="T14">xxx xxxxxxxxxx</text:span><text:change-end text:change-id="ct2659112080256"/><text:change-start text:change-id="ct2659112089184"/><text:span text:style-name="T14">x </text:span><text:change-end text:change-id="ct2659112089184"/><text:change-start text:change-id="ct2659112076800"/><text:span text:style-name="T14">xxxxxxxx </text:span><text:change-end text:change-id="ct2659112076800"/><text:change-start text:change-id="ct2659112076512"/><text:span text:style-name="T14">xxxxxxxxxxxxx xxxxxx</text:span><text:change-end text:change-id="ct2659112076512"/><text:change text:change-id="ct2659112073344"/><text:change text:change-id="ct2659112073056"/><text:change text:change-id="ct2659112072480"/><text:span text:style-name="T12">x. xxx xxxxx xxx xxxxxxxxxxxxx </text:span><text:change text:change-id="ct2659112084864"/><text:span text:style-name="T12">xxx </text:span><text:change text:change-id="ct2659112083712"/><text:span text:style-name="T12">xxxxxx xxxxxxxxx xxxxxxxxxxxxxxxxxxx </text:span><text:change-start text:change-id="ct2659112084576"/><text:span text:style-name="T12">xx xxxxxxxxxxxxxxx xxxxxxxxxx </text:span><text:change-end text:change-id="ct2659112084576"/><text:span text:style-name="T12">xxxxxxx. xx xxxxxxxx xxx xxx xxxx xxxx xxxxxxxxx </text:span><text:span text:style-name="T16">xx xxx xxxxxxxxxxxx xxxxxxxxxxxxxxxxxx (xxxx)</text:span><text:span text:style-name="T12"> xxx xxx xxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxx xxx xxxxxxxx xxxxxxxxxxxxxx xxx xxxxxx xxx xxxxxxxx xxxxxxxxxx xxx xxxxxxxxxxx. xxxxxxxxxx xxx xxxx xxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxx xxxxxxxxxxxxxxxx xxx xx xxxxx xxx xxxxx xxxxxxxxx xxxxxx xxx xxxxx xxx xxxxx xxxx xxxx xxxxxxx xxx xxxxxxxx xxxxxxx</text:span><text:change text:change-id="ct2659112077088"/><text:span text:style-name="T12"> xxx xxxxx xxxxxxxx xxx xxxxxxxxxxxxx xxxxxxxx.<text:line-break/>x</text:span><text:change text:change-id="ct2659112085728"/><text:change-start text:change-id="ct2659112086016"/><text:span text:style-name="T17">xx</text:span><text:change-end text:change-id="ct2659112086016"/><text:span text:style-name="T12"> xxxxxx xxxxxxxxx</text:span><text:change text:change-id="ct2659112071904"/><text:span text:style-name="T12"> xxxxxxxxxxxxx</text:span><text:change text:change-id="ct2659112077664"/><text:span text:style-name="T12"> xxxxxxxxxxxxxxxxxxxx </text:span><text:span text:style-name="T15">xxxxx</text:span><text:change text:change-id="ct2659112073632"/><text:change-start text:change-id="ct2659112073920"/><text:span text:style-name="T15"> </text:span><text:span text:style-name="T18">xxx xxxxxx xxxxxxxxxxxx</text:span><text:change-end text:change-id="ct2659112073920"/><text:span text:style-name="T15"> xxxx xxx xxxxx xxx xxx xxxxxxxxxxxx xxxxxxx xxx x</text:span><text:span text:style-name="T19">x</text:span><text:span text:style-name="T15">xxxxxxxxxxx </text:span><text:span text:style-name="T19">xxx xxx</text:span><text:span text:style-name="T12"> xxxxxxxxxxx</text:span><text:span text:style-name="T19">x</text:span><text:span text:style-name="T12"> xxxxxxxx</text:span><text:span text:style-name="T19">x</text:span><text:span text:style-name="T12"> xxxxxx</text:span><text:span text:style-name="T20">x</text:span><text:span text:style-name="T12"> xxxx xxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx </text:span><text:span text:style-name="T19">xx xxx xxxxxxxxxx xxxxxxxx</text:span><text:span text:style-name="T12">. xxxxxxxxx xx xxxxxxx xxx xxxxxxxxx xxx</text:span><text:span text:style-name="T20">x</text:span><text:span text:style-name="T12">xxxxxxxxxx xxxxx xxx xxxxxxxxxxxxxxxxxx xxxx xxxxxxx xxxxxxxxxx xxx xxxxxxxx xxx, xx xxx xxx</text:span><text:span text:style-name="T20">x</text:span><text:span text:style-name="T12">xxxxxxxxxx xxxx xxxxxxx xx xxxxxxxxxxxx.</text:span><text:change text:change-id="ct2659112074208"/><text:span text:style-name="T12"> <text:line-break/></text:span></text:p>
+   <text:p text:style-name="P18">xxx xxxxxxxx <text:span text:style-name="T31">xxxxxx</text:span> xxx xxxxxxxx xxx xxxxx xxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxx <text:change-start text:change-id="ct2659112077952"/><text:span text:style-name="T46">(xxx) </text:span><text:change-end text:change-id="ct2659112077952"/>xxx xxxx xxxxxx xxxx xxx xxx xxxx xxx xxxxxxxx xxxxxxxxxxx xx <text:span text:style-name="T46">x-x</text:span>x-xxxxxxx <text:span text:style-name="T46">xxxxxxxxxxx</text:span> xxxxxxxxxxxx <text:change-start text:change-id="ct2659112080832"/><text:span text:style-name="T46">xxx xxxxx xxxx xxxx </text:span><text:change-end text:change-id="ct2659112080832"/>xxxxxx xxx. <text:change-start text:change-id="ct2659112079104"/><text:span text:style-name="T1"><text:line-break/>xxx xxxxxxx xxx xxxxxxxxxxxx xxxxx xxxxxxxxxxx xxxxxxxx xxxxx xxxxx xxxx </text:span><text:change-end text:change-id="ct2659112079104"/><text:change text:change-id="ct2659112081120"/><text:change-start text:change-id="ct2659111302080"/><text:span text:style-name="T1">xxx</text:span><text:change-end text:change-id="ct2659111302080"/><text:change text:change-id="ct2659111302656"/><text:change-start text:change-id="ct2659111300352"/><text:span text:style-name="T1"> xxx xxx xxx. xxxx xxxxxxxxxxxxx xxxxxx</text:span><text:change-end text:change-id="ct2659111300352"/><text:change text:change-id="ct2659111310144"/><text:change-start text:change-id="ct2659111302944"/><text:span text:style-name="T1"> xxx xxx xxxx xxxxx xx xxxxxxxx xxxxxxxxxxxxxx</text:span><text:change-end text:change-id="ct2659111302944"/><text:change-start text:change-id="ct2659111305824"/><text:span text:style-name="T1"> </text:span><text:span text:style-name="T4">xxx xxxxxxxxxxx</text:span><text:change-end text:change-id="ct2659111305824"/><text:change-start text:change-id="ct2659111310720"/><text:span text:style-name="T1"> xx. xxxx</text:span><text:change-end text:change-id="ct2659111310720"/><text:change text:change-id="ct2659111303232"/><text:change-start text:change-id="ct2659111307264"/><text:span text:style-name="T1">, </text:span><text:span text:style-name="T5">xxx xxxxxxx xxxxxxxxxxx xxxxxxxxxxxx (xx) </text:span><text:span text:style-name="T1">xxxxxxx xx xxxx xxxx xx xxxxxxxxxxx xxxxxxx xxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxx. <text:line-break/></text:span><text:span text:style-name="T6">xxxx </text:span><text:span text:style-name="T7">xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxx xxxxxxx xxxxxxxxx, xxxxxxxxxxxx xxx xxxxxxxxxxxxxxx xxxxxx</text:span><text:span text:style-name="T8"> </text:span><text:span text:style-name="T9">xxx xxx xxxx xxxxxxxxxxxxx xxxxxxxxxxx xxxxx xxxxxxxx,</text:span><text:span text:style-name="T1"> </text:span><text:change-end text:change-id="ct2659111307264"/><text:change text:change-id="ct2659111313888"/><text:change-start text:change-id="ct2659111308416"/><text:span text:style-name="T6">xxxx xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxx</text:span><text:span text:style-name="T10">xxxxxxxxxxxxxx</text:span><text:span text:style-name="T6"> xxx. xxxxxxxxxxxx. </text:span><text:span text:style-name="T10">xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx xxxxxxxx xxxx xxxxxxxxxxx xxx xxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx xxxxxxxxx xxxxx xxxxxxxxxx, xxxxxxxxxxxxxxx, xxxxxxxxxxxxxxx xxx., xxx xxxxxxx xxx xxxxx xxxxxxxxxxxx xxx xxxxx xxxxxxxxxx xxxxxxx. </text:span><text:span text:style-name="T11"><text:s/></text:span><text:span text:style-name="T11"><text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
+       <text:p text:style-name="Footnote"><text:change-start text:change-id="ct2659111309568"/><text:span text:style-name="T31">xxxx xxxxxxxxxx</text:span>, x<text:change-end text:change-id="ct2659111309568"/><text:change-start text:change-id="ct2659111313312"/>x xxx xxx xxxxxxxx xxxx. xxxxxxxxx xxx xxx xxxx xxxxxx xxxxxxx ?<text:change-end text:change-id="ct2659111313312"/></text:p></text:note-body></text:note></text:span>xxx xxxxxxxxx xxxxx <text:span text:style-name="T46">xxxxxxxxxx </text:span>xxxxxxxxxxxxxxx yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy <text:soft-page-break/>zzz. zzz zzzz zzzz<text:change-end text:change-id="ct2659111308416"/><text:change text:change-id="ct2659111301792"/><text:change-start text:change-id="ct2659111308704"/> zzz zzz zzzzzzz zzz <text:span text:style-name="T46">zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz xxxxx xxxxxxxxxxxxxxx. xxxx xxx xxx xxxxxxxxx xxx xxxxxxxxxx xxx xxxxxxxxx xxx. xxx xxxx xxxxx xxxxxxxxxx </text:span>xxxxxxxxxxxxxxx<text:span text:style-name="T46">ster</text:span> xxxxxxxxxxxxxxx xxxxx xxxxxxxxxxxxxxx. <text:change-end text:change-id="ct2659111308704"/><text:note text:id="ftn2" text:note-class="footnote"><text:note-citation>2</text:note-citation><text:note-body>
+      <text:p text:style-name="Footnote"><text:change text:change-id="ct2659111304096"/></text:p></text:note-body></text:note><text:change text:change-id="ct2659111306112"/><text:change-start text:change-id="ct2659111304672"/><text:line-break/><text:change-end text:change-id="ct2659111304672"/><text:change-start text:change-id="ct2659111314176"/><text:span text:style-name="T1">xxx </text:span><text:span text:style-name="T3">xxxxxxxxxxxxx</text:span><text:span text:style-name="T1"> xxx xxxxx xxx xxxxxxxxxxxxxxx xxxxxx xxx xxx xxxxxxxxx xxxxx xxxxxxxxx xxxxxx. xxx xxx xxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxx xxx xxxxxxxxxxxxxxxxxxxxxxx xxxxxxx xxxx xxxx xxx xxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxx. </text:span>x<text:span text:style-name="T35">x xxxxxxxx xxx xxx xxxxxxx xxxxxxxxxxxxxx xx xxx xxxxx xxxxxxx xxx xxxx xxxxxxx xxx xxxxxxxxxx xxxxxxx xxxxx xxxxxxxx.</text:span> xxx xxxxx xxx xxxx xx x-<text:change-end text:change-id="ct2659111314176"/> <text:span text:style-name="T46">xxx </text:span><text:change-start text:change-id="ct2659111300928"/>x-xxxxxxx xxxxxxxxxxx xxx xxxxxxxxxxxxx xxx xxxx xxxxxxxxxxx<text:change-end text:change-id="ct2659111300928"/><text:change text:change-id="ct2659111311584"/><text:change-start text:change-id="ct2659111307552"/> xxxxxxxxxxxx xxx xx. xxx xxxxxxxxxxxxx xxx xxxxxx xxxxxxxxxxxx xxxxxx xxxxxxxx xxxxxx. <text:line-break/><text:change-end text:change-id="ct2659111307552"/></text:p>
+  </office:text>
+ </office:body>
+
+</office:document>

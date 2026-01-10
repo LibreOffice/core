@@ -1,0 +1,2372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name=".5" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name=".*(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=".*(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name="abbout" block-list:name="about"/>
+  <block-list:block block-list:abbreviated-name="abotu" block-list:name="about"/>
+  <block-list:block block-list:abbreviated-name="abouta" block-list:name="about a"/>
+  <block-list:block block-list:abbreviated-name="aboutit" block-list:name="about it"/>
+  <block-list:block block-list:abbreviated-name="abscence" block-list:name="absence"/>
+  <block-list:block block-list:abbreviated-name="accesories" block-list:name="accessories"/>
+  <block-list:block block-list:abbreviated-name="accidant" block-list:name="accident"/>
+  <block-list:block block-list:abbreviated-name="accomodate" block-list:name="accommodate"/>
+  <block-list:block block-list:abbreviated-name="accordingto" block-list:name="according to"/>
+  <block-list:block block-list:abbreviated-name="accross" block-list:name="across"/>
+  <block-list:block block-list:abbreviated-name="acheive" block-list:name="achieve"/>
+  <block-list:block block-list:abbreviated-name="acheived" block-list:name="achieved"/>
+  <block-list:block block-list:abbreviated-name="acheiving" block-list:name="achieving"/>
+  <block-list:block block-list:abbreviated-name="acn" block-list:name="can"/>
+  <block-list:block block-list:abbreviated-name="acommodate" block-list:name="accommodate"/>
+  <block-list:block block-list:abbreviated-name="acomodate" block-list:name="accommodate"/>
+  <block-list:block block-list:abbreviated-name="actualyl" block-list:name="actually"/>
+  <block-list:block block-list:abbreviated-name="additinal" block-list:name="additional"/>
+  <block-list:block block-list:abbreviated-name="addtional" block-list:name="additional"/>
+  <block-list:block block-list:abbreviated-name="adequit" block-list:name="adequate"/>
+  <block-list:block block-list:abbreviated-name="adequite" block-list:name="adequate"/>
+  <block-list:block block-list:abbreviated-name="adn" block-list:name="and"/>
+  <block-list:block block-list:abbreviated-name="advanage" block-list:name="advantage"/>
+  <block-list:block block-list:abbreviated-name="affraid" block-list:name="afraid"/>
+  <block-list:block block-list:abbreviated-name="afterthe" block-list:name="after the"/>
+  <block-list:block block-list:abbreviated-name="againstt he" block-list:name="against the"/>
+  <block-list:block block-list:abbreviated-name="aggresive" block-list:name="aggressive"/>
+  <block-list:block block-list:abbreviated-name="agian" block-list:name="again"/>
+  <block-list:block block-list:abbreviated-name="agreemeent" block-list:name="agreement"/>
+  <block-list:block block-list:abbreviated-name="agreemeents" block-list:name="agreements"/>
+  <block-list:block block-list:abbreviated-name="agreemnet" block-list:name="agreement"/>
+  <block-list:block block-list:abbreviated-name="agreemnets" block-list:name="agreements"/>
+  <block-list:block block-list:abbreviated-name="agressive" block-list:name="aggressive"/>
+  <block-list:block block-list:abbreviated-name="ahppen" block-list:name="happen"/>
+  <block-list:block block-list:abbreviated-name="ahve" block-list:name="have"/>
+  <block-list:block block-list:abbreviated-name="allready" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="allwasy" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="allwyas" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="almots" block-list:name="almost"/>
+  <block-list:block block-list:abbreviated-name="almsot" block-list:name="almost"/>
+  <block-list:block block-list:abbreviated-name="alomst" block-list:name="almost"/>
+  <block-list:block block-list:abbreviated-name="alot" block-list:name="a lot"/>
+  <block-list:block block-list:abbreviated-name="alraedy" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="alreayd" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="alreday" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="alwasy" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="alwats" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="alway" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="alwyas" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="amde" block-list:name="made"/>
+  <block-list:block block-list:abbreviated-name="Ameria" block-list:name="America"/>
+  <block-list:block block-list:abbreviated-name="amke" block-list:name="make"/>
+  <block-list:block block-list:abbreviated-name="amkes" block-list:name="makes"/>
+  <block-list:block block-list:abbreviated-name="anbd" block-list:name="and"/>
+  <block-list:block block-list:abbreviated-name="andone" block-list:name="and one"/>
+  <block-list:block block-list:abbreviated-name="andteh" block-list:name="and the"/>
+  <block-list:block block-list:abbreviated-name="andthe" block-list:name="and the"/>
+  <block-list:block block-list:abbreviated-name="andt he" block-list:name="and the"/>
+  <block-list:block block-list:abbreviated-name="anothe" block-list:name="another"/>
+  <block-list:block block-list:abbreviated-name="anual" block-list:name="annual"/>
+  <block-list:block block-list:abbreviated-name="apparant" block-list:name="apparent"/>
+  <block-list:block block-list:abbreviated-name="apparrent" block-list:name="apparent"/>
+  <block-list:block block-list:abbreviated-name="appearence" block-list:name="appearance"/>
+  <block-list:block block-list:abbreviated-name="appeares" block-list:name="appears"/>
+  <block-list:block block-list:abbreviated-name="applicaiton" block-list:name="application"/>
+  <block-list:block block-list:abbreviated-name="applicaitons" block-list:name="applications"/>
+  <block-list:block block-list:abbreviated-name="applyed" block-list:name="applied"/>
+  <block-list:block block-list:abbreviated-name="appointiment" block-list:name="appointment"/>
+  <block-list:block block-list:abbreviated-name="approrpiate" block-list:name="appropriate"/>
+  <block-list:block block-list:abbreviated-name="approrpriate" block-list:name="appropriate"/>
+  <block-list:block block-list:abbreviated-name="aquisition" block-list:name="acquisition"/>
+  <block-list:block block-list:abbreviated-name="aquisitions" block-list:name="acquisitions"/>
+  <block-list:block block-list:abbreviated-name="arguement" block-list:name="argument"/>
+  <block-list:block block-list:abbreviated-name="arguements" block-list:name="arguments"/>
+  <block-list:block block-list:abbreviated-name="arond" block-list:name="around"/>
+  <block-list:block block-list:abbreviated-name="artical" block-list:name="article"/>
+  <block-list:block block-list:abbreviated-name="articel" block-list:name="article"/>
+  <block-list:block block-list:abbreviated-name="asdvertising" block-list:name="advertising"/>
+  <block-list:block block-list:abbreviated-name="askt he" block-list:name="ask the"/>
+  <block-list:block block-list:abbreviated-name="atention" block-list:name="attention"/>
+  <block-list:block block-list:abbreviated-name="atmospher" block-list:name="atmosphere"/>
+  <block-list:block block-list:abbreviated-name="attentioin" block-list:name="attention"/>
+  <block-list:block block-list:abbreviated-name="atthe" block-list:name="at the"/>
+  <block-list:block block-list:abbreviated-name="audeince" block-list:name="audience"/>
+  <block-list:block block-list:abbreviated-name="audiance" block-list:name="audience"/>
+  <block-list:block block-list:abbreviated-name="availalbe" block-list:name="available"/>
+  <block-list:block block-list:abbreviated-name="awya" block-list:name="away"/>
+  <block-list:block block-list:abbreviated-name="aywa" block-list:name="away"/>
+  <block-list:block block-list:abbreviated-name="bakc" block-list:name="back"/>
+  <block-list:block block-list:abbreviated-name="balence" block-list:name="balance"/>
+  <block-list:block block-list:abbreviated-name="ballance" block-list:name="balance"/>
+  <block-list:block block-list:abbreviated-name="baout" block-list:name="about"/>
+  <block-list:block block-list:abbreviated-name="bcak" block-list:name="back"/>
+  <block-list:block block-list:abbreviated-name="beacuse" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becasue" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becaus" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becausea" block-list:name="because a"/>
+  <block-list:block block-list:abbreviated-name="becauseof" block-list:name="because of"/>
+  <block-list:block block-list:abbreviated-name="becausethe" block-list:name="because the"/>
+  <block-list:block block-list:abbreviated-name="becauseyou" block-list:name="because you"/>
+  <block-list:block block-list:abbreviated-name="becomeing" block-list:name="becoming"/>
+  <block-list:block block-list:abbreviated-name="becomming" block-list:name="becoming"/>
+  <block-list:block block-list:abbreviated-name="becuase" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becuse" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="befoer" block-list:name="before"/>
+  <block-list:block block-list:abbreviated-name="beggining" block-list:name="beginning"/>
+  <block-list:block block-list:abbreviated-name="begining" block-list:name="beginning"/>
+  <block-list:block block-list:abbreviated-name="beginining" block-list:name="beginning"/>
+  <block-list:block block-list:abbreviated-name="beleiev" block-list:name="believe"/>
+  <block-list:block block-list:abbreviated-name="beleieve" block-list:name="believe"/>
+  <block-list:block block-list:abbreviated-name="beleif" block-list:name="belief"/>
+  <block-list:block block-list:abbreviated-name="beleive" block-list:name="believe"/>
+  <block-list:block block-list:abbreviated-name="beleived" block-list:name="believed"/>
+  <block-list:block block-list:abbreviated-name="beleives" block-list:name="believes"/>
+  <block-list:block block-list:abbreviated-name="benifit" block-list:name="benefit"/>
+  <block-list:block block-list:abbreviated-name="benifits" block-list:name="benefits"/>
+  <block-list:block block-list:abbreviated-name="betwen" block-list:name="between"/>
+  <block-list:block block-list:abbreviated-name="beutiful" block-list:name="beautiful"/>
+  <block-list:block block-list:abbreviated-name="blase" block-list:name="blasé"/>
+  <block-list:block block-list:abbreviated-name="boxs" block-list:name="boxes"/>
+  <block-list:block block-list:abbreviated-name="brodcast" block-list:name="broadcast"/>
+  <block-list:block block-list:abbreviated-name="butthe" block-list:name="but the"/>
+  <block-list:block block-list:abbreviated-name="bve" block-list:name="be"/>
+  <block-list:block block-list:abbreviated-name="byt he" block-list:name="by the"/>
+  <block-list:block block-list:abbreviated-name="caharcter" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="calcullated" block-list:name="calculated"/>
+  <block-list:block block-list:abbreviated-name="calulated" block-list:name="calculated"/>
+  <block-list:block block-list:abbreviated-name="candidtae" block-list:name="candidate"/>
+  <block-list:block block-list:abbreviated-name="candidtaes" block-list:name="candidates"/>
+  <block-list:block block-list:abbreviated-name="catagory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="categiory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="certian" block-list:name="certain"/>
+  <block-list:block block-list:abbreviated-name="challange" block-list:name="challenge"/>
+  <block-list:block block-list:abbreviated-name="challanges" block-list:name="challenges"/>
+  <block-list:block block-list:abbreviated-name="chaneg" block-list:name="change"/>
+  <block-list:block block-list:abbreviated-name="chanegs" block-list:name="changes"/>
+  <block-list:block block-list:abbreviated-name="changable" block-list:name="changeable"/>
+  <block-list:block block-list:abbreviated-name="changeing" block-list:name="changing"/>
+  <block-list:block block-list:abbreviated-name="changng" block-list:name="changing"/>
+  <block-list:block block-list:abbreviated-name="charachter" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="charachters" block-list:name="characters"/>
+  <block-list:block block-list:abbreviated-name="charactor" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="charecter" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="charector" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="cheif" block-list:name="chief"/>
+  <block-list:block block-list:abbreviated-name="chekc" block-list:name="check"/>
+  <block-list:block block-list:abbreviated-name="chnage" block-list:name="change"/>
+  <block-list:block block-list:abbreviated-name="cieling" block-list:name="ceiling"/>
+  <block-list:block block-list:abbreviated-name="circut" block-list:name="circuit"/>
+  <block-list:block block-list:abbreviated-name="claer" block-list:name="clear"/>
+  <block-list:block block-list:abbreviated-name="claered" block-list:name="cleared"/>
+  <block-list:block block-list:abbreviated-name="claerly" block-list:name="clearly"/>
+  <block-list:block block-list:abbreviated-name="cliant" block-list:name="client"/>
+  <block-list:block block-list:abbreviated-name="cliche" block-list:name="cliché"/>
+  <block-list:block block-list:abbreviated-name="cna" block-list:name="can"/>
+  <block-list:block block-list:abbreviated-name="colection" block-list:name="collection"/>
+  <block-list:block block-list:abbreviated-name="comanies" block-list:name="companies"/>
+  <block-list:block block-list:abbreviated-name="comany" block-list:name="company"/>
+  <block-list:block block-list:abbreviated-name="comapnies" block-list:name="companies"/>
+  <block-list:block block-list:abbreviated-name="comapny" block-list:name="company"/>
+  <block-list:block block-list:abbreviated-name="combintation" block-list:name="combination"/>
+  <block-list:block block-list:abbreviated-name="comited" block-list:name="committed"/>
+  <block-list:block block-list:abbreviated-name="comittee" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="commadn" block-list:name="command"/>
+  <block-list:block block-list:abbreviated-name="comming" block-list:name="coming"/>
+  <block-list:block block-list:abbreviated-name="commitee" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="committe" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="committment" block-list:name="commitment"/>
+  <block-list:block block-list:abbreviated-name="committments" block-list:name="commitments"/>
+  <block-list:block block-list:abbreviated-name="committy" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="comntain" block-list:name="contain"/>
+  <block-list:block block-list:abbreviated-name="comntains" block-list:name="contains"/>
+  <block-list:block block-list:abbreviated-name="compair" block-list:name="compare"/>
+  <block-list:block block-list:abbreviated-name="compleated" block-list:name="completed"/>
+  <block-list:block block-list:abbreviated-name="compleatly" block-list:name="completely"/>
+  <block-list:block block-list:abbreviated-name="compleatness" block-list:name="completeness"/>
+  <block-list:block block-list:abbreviated-name="completly" block-list:name="completely"/>
+  <block-list:block block-list:abbreviated-name="completness" block-list:name="completeness"/>
+  <block-list:block block-list:abbreviated-name="composate" block-list:name="composite"/>
+  <block-list:block block-list:abbreviated-name="comtain" block-list:name="contain"/>
+  <block-list:block block-list:abbreviated-name="comtains" block-list:name="contains"/>
+  <block-list:block block-list:abbreviated-name="comunicate" block-list:name="communicate"/>
+  <block-list:block block-list:abbreviated-name="comunity" block-list:name="community"/>
+  <block-list:block block-list:abbreviated-name="condolances" block-list:name="condolences"/>
+  <block-list:block block-list:abbreviated-name="conected" block-list:name="connected"/>
+  <block-list:block block-list:abbreviated-name="conferance" block-list:name="conference"/>
+  <block-list:block block-list:abbreviated-name="confirmmation" block-list:name="confirmation"/>
+  <block-list:block block-list:abbreviated-name="considerit" block-list:name="considerate"/>
+  <block-list:block block-list:abbreviated-name="considerite" block-list:name="considerate"/>
+  <block-list:block block-list:abbreviated-name="consonent" block-list:name="consonant"/>
+  <block-list:block block-list:abbreviated-name="conspiricy" block-list:name="conspiracy"/>
+  <block-list:block block-list:abbreviated-name="consultent" block-list:name="consultant"/>
+  <block-list:block block-list:abbreviated-name="convertable" block-list:name="convertible"/>
+  <block-list:block block-list:abbreviated-name="cooparate" block-list:name="cooperate"/>
+  <block-list:block block-list:abbreviated-name="cooporate" block-list:name="cooperate"/>
+  <block-list:block block-list:abbreviated-name="corproation" block-list:name="corporation"/>
+  <block-list:block block-list:abbreviated-name="corproations" block-list:name="corporations"/>
+  <block-list:block block-list:abbreviated-name="corruptable" block-list:name="corruptible"/>
+  <block-list:block block-list:abbreviated-name="cotten" block-list:name="cotton"/>
+  <block-list:block block-list:abbreviated-name="coudl" block-list:name="could"/>
+  <block-list:block block-list:abbreviated-name="could of been" block-list:name="could have been"/>
+  <block-list:block block-list:abbreviated-name="could of had" block-list:name="could have had"/>
+  <block-list:block block-list:abbreviated-name="couldthe" block-list:name="could the"/>
+  <block-list:block block-list:abbreviated-name="cpoy" block-list:name="copy"/>
+  <block-list:block block-list:abbreviated-name="creme" block-list:name="crème"/>
+  <block-list:block block-list:abbreviated-name="ctaegory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="cusotmer" block-list:name="customer"/>
+  <block-list:block block-list:abbreviated-name="cusotmers" block-list:name="customers"/>
+  <block-list:block block-list:abbreviated-name="cutsomer" block-list:name="customer"/>
+  <block-list:block block-list:abbreviated-name="cutsomers" block-list:name="customer"/>
+  <block-list:block block-list:abbreviated-name="cxan" block-list:name="can"/>
+  <block-list:block block-list:abbreviated-name="danceing" block-list:name="dancing"/>
+  <block-list:block block-list:abbreviated-name="dcument" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="deatils" block-list:name="details"/>
+  <block-list:block block-list:abbreviated-name="decison" block-list:name="decision"/>
+  <block-list:block block-list:abbreviated-name="decisons" block-list:name="decisions"/>
+  <block-list:block block-list:abbreviated-name="decor" block-list:name="décor"/>
+  <block-list:block block-list:abbreviated-name="defendent" block-list:name="defendant"/>
+  <block-list:block block-list:abbreviated-name="definately" block-list:name="definitely"/>
+  <block-list:block block-list:abbreviated-name="deptartment" block-list:name="department"/>
+  <block-list:block block-list:abbreviated-name="desicion" block-list:name="decision"/>
+  <block-list:block block-list:abbreviated-name="desicions" block-list:name="decisions"/>
+  <block-list:block block-list:abbreviated-name="desision" block-list:name="decision"/>
+  <block-list:block block-list:abbreviated-name="desisions" block-list:name="decisions"/>
+  <block-list:block block-list:abbreviated-name="develeoprs" block-list:name="developers"/>
+  <block-list:block block-list:abbreviated-name="devellop" block-list:name="develop"/>
+  <block-list:block block-list:abbreviated-name="develloped" block-list:name="developed"/>
+  <block-list:block block-list:abbreviated-name="develloper" block-list:name="developer"/>
+  <block-list:block block-list:abbreviated-name="devellopers" block-list:name="developers"/>
+  <block-list:block block-list:abbreviated-name="develloping" block-list:name="developing"/>
+  <block-list:block block-list:abbreviated-name="devellopment" block-list:name="development"/>
+  <block-list:block block-list:abbreviated-name="devellopments" block-list:name="developments"/>
+  <block-list:block block-list:abbreviated-name="devellops" block-list:name="develop"/>
+  <block-list:block block-list:abbreviated-name="develope" block-list:name="develop"/>
+  <block-list:block block-list:abbreviated-name="developement" block-list:name="development"/>
+  <block-list:block block-list:abbreviated-name="developements" block-list:name="developments"/>
+  <block-list:block block-list:abbreviated-name="developor" block-list:name="developer"/>
+  <block-list:block block-list:abbreviated-name="developors" block-list:name="developers"/>
+  <block-list:block block-list:abbreviated-name="develpment" block-list:name="development"/>
+  <block-list:block block-list:abbreviated-name="diaplay" block-list:name="display"/>
+  <block-list:block block-list:abbreviated-name="didnot" block-list:name="did not"/>
+  <block-list:block block-list:abbreviated-name="difefrent" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="diferences" block-list:name="differences"/>
+  <block-list:block block-list:abbreviated-name="differance" block-list:name="difference"/>
+  <block-list:block block-list:abbreviated-name="differances" block-list:name="differences"/>
+  <block-list:block block-list:abbreviated-name="differant" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="differemt" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="differnt" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="diffrent" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="directer" block-list:name="director"/>
+  <block-list:block block-list:abbreviated-name="directers" block-list:name="directors"/>
+  <block-list:block block-list:abbreviated-name="directiosn" block-list:name="direction"/>
+  <block-list:block block-list:abbreviated-name="disatisfied" block-list:name="dissatisfied"/>
+  <block-list:block block-list:abbreviated-name="discoverd" block-list:name="discovered"/>
+  <block-list:block block-list:abbreviated-name="disign" block-list:name="design"/>
+  <block-list:block block-list:abbreviated-name="dispaly" block-list:name="display"/>
+  <block-list:block block-list:abbreviated-name="dissonent" block-list:name="dissonant"/>
+  <block-list:block block-list:abbreviated-name="distribusion" block-list:name="distribution"/>
+  <block-list:block block-list:abbreviated-name="divsion" block-list:name="division"/>
+  <block-list:block block-list:abbreviated-name="docuement" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="docuemnt" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="documetn" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="documnet" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="documnets" block-list:name="documents"/>
+  <block-list:block block-list:abbreviated-name="doese" block-list:name="does"/>
+  <block-list:block block-list:abbreviated-name="doe snot" block-list:name="does not"/>
+  <block-list:block block-list:abbreviated-name="doign" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="doimg" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="doind" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="dollers" block-list:name="dollars"/>
+  <block-list:block block-list:abbreviated-name="donig" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="driveing" block-list:name="driving"/>
+  <block-list:block block-list:abbreviated-name="drnik" block-list:name="drink"/>
+  <block-list:block block-list:abbreviated-name="efel" block-list:name="feel"/>
+  <block-list:block block-list:abbreviated-name="effecient" block-list:name="efficient"/>
+  <block-list:block block-list:abbreviated-name="efort" block-list:name="effort"/>
+  <block-list:block block-list:abbreviated-name="eforts" block-list:name="efforts"/>
+  <block-list:block block-list:abbreviated-name="ehr" block-list:name="her"/>
+  <block-list:block block-list:abbreviated-name="eligable" block-list:name="eligible"/>
+  <block-list:block block-list:abbreviated-name="embarass" block-list:name="embarrass"/>
+  <block-list:block block-list:abbreviated-name="enought" block-list:name="enough"/>
+  <block-list:block block-list:abbreviated-name="equippment" block-list:name="equipment"/>
+  <block-list:block block-list:abbreviated-name="equivalant" block-list:name="equivalent"/>
+  <block-list:block block-list:abbreviated-name="esle" block-list:name="else"/>
+  <block-list:block block-list:abbreviated-name="especally" block-list:name="especially"/>
+  <block-list:block block-list:abbreviated-name="especialyl" block-list:name="especially"/>
+  <block-list:block block-list:abbreviated-name="espesially" block-list:name="especially"/>
+  <block-list:block block-list:abbreviated-name="excellant" block-list:name="excellent"/>
+  <block-list:block block-list:abbreviated-name="excercise" block-list:name="exercise"/>
+  <block-list:block block-list:abbreviated-name="exchagne" block-list:name="exchange"/>
+  <block-list:block block-list:abbreviated-name="exchagnes" block-list:name="exchanges"/>
+  <block-list:block block-list:abbreviated-name="excitment" block-list:name="excitement"/>
+  <block-list:block block-list:abbreviated-name="exhcange" block-list:name="exchange"/>
+  <block-list:block block-list:abbreviated-name="exhcanges" block-list:name="exchanges"/>
+  <block-list:block block-list:abbreviated-name="experiance" block-list:name="experience"/>
+  <block-list:block block-list:abbreviated-name="experienc" block-list:name="experience"/>
+  <block-list:block block-list:abbreviated-name="exprience" block-list:name="experience"/>
+  <block-list:block block-list:abbreviated-name="exprienced" block-list:name="experienced"/>
+  <block-list:block block-list:abbreviated-name="eyt" block-list:name="yet"/>
+  <block-list:block block-list:abbreviated-name="faeture" block-list:name="feature"/>
+  <block-list:block block-list:abbreviated-name="faetures" block-list:name="features"/>
+  <block-list:block block-list:abbreviated-name="familair" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="familar" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="familliar" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="fammiliar" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="feild" block-list:name="field"/>
+  <block-list:block block-list:abbreviated-name="feilds" block-list:name="fields"/>
+  <block-list:block block-list:abbreviated-name="fianlly" block-list:name="finally"/>
+  <block-list:block block-list:abbreviated-name="fidn" block-list:name="find"/>
+  <block-list:block block-list:abbreviated-name="finalyl" block-list:name="finally"/>
+  <block-list:block block-list:abbreviated-name="firends" block-list:name="friends"/>
+  <block-list:block block-list:abbreviated-name="firts" block-list:name="first"/>
+  <block-list:block block-list:abbreviated-name="follwo" block-list:name="follow"/>
+  <block-list:block block-list:abbreviated-name="follwoing" block-list:name="following"/>
+  <block-list:block block-list:abbreviated-name="fora" block-list:name="for a"/>
+  <block-list:block block-list:abbreviated-name="foriegn" block-list:name="foreign"/>
+  <block-list:block block-list:abbreviated-name="forthe" block-list:name="for the"/>
+  <block-list:block block-list:abbreviated-name="forwrd" block-list:name="forward"/>
+  <block-list:block block-list:abbreviated-name="forwrds" block-list:name="forwards"/>
+  <block-list:block block-list:abbreviated-name="foudn" block-list:name="found"/>
+  <block-list:block block-list:abbreviated-name="foward" block-list:name="forward"/>
+  <block-list:block block-list:abbreviated-name="fowards" block-list:name="forwards"/>
+  <block-list:block block-list:abbreviated-name="freind" block-list:name="friend"/>
+  <block-list:block block-list:abbreviated-name="freindly" block-list:name="friendly"/>
+  <block-list:block block-list:abbreviated-name="freinds" block-list:name="friends"/>
+  <block-list:block block-list:abbreviated-name="frmo" block-list:name="from"/>
+  <block-list:block block-list:abbreviated-name="fromthe" block-list:name="from the"/>
+  <block-list:block block-list:abbreviated-name="fromt he" block-list:name="from the"/>
+  <block-list:block block-list:abbreviated-name="furneral" block-list:name="funeral"/>
+  <block-list:block block-list:abbreviated-name="fwe" block-list:name="few"/>
+  <block-list:block block-list:abbreviated-name="garantee" block-list:name="guarantee"/>
+  <block-list:block block-list:abbreviated-name="gaurd" block-list:name="guard"/>
+  <block-list:block block-list:abbreviated-name="gemeral" block-list:name="general"/>
+  <block-list:block block-list:abbreviated-name="gerat" block-list:name="great"/>
+  <block-list:block block-list:abbreviated-name="geting" block-list:name="getting"/>
+  <block-list:block block-list:abbreviated-name="gettin" block-list:name="getting"/>
+  <block-list:block block-list:abbreviated-name="gievn" block-list:name="given"/>
+  <block-list:block block-list:abbreviated-name="giveing" block-list:name="giving"/>
+  <block-list:block block-list:abbreviated-name="gloabl" block-list:name="global"/>
+  <block-list:block block-list:abbreviated-name="goign" block-list:name="going"/>
+  <block-list:block block-list:abbreviated-name="gonig" block-list:name="going"/>
+  <block-list:block block-list:abbreviated-name="govenment" block-list:name="government"/>
+  <block-list:block block-list:abbreviated-name="goverment" block-list:name="government"/>
+  <block-list:block block-list:abbreviated-name="gruop" block-list:name="group"/>
+  <block-list:block block-list:abbreviated-name="gruops" block-list:name="groups"/>
+  <block-list:block block-list:abbreviated-name="grwo" block-list:name="grow"/>
+  <block-list:block block-list:abbreviated-name="guidlines" block-list:name="guidelines"/>
+  <block-list:block block-list:abbreviated-name="hadbeen" block-list:name="had been"/>
+  <block-list:block block-list:abbreviated-name="haev" block-list:name="have"/>
+  <block-list:block block-list:abbreviated-name="hapen" block-list:name="happen"/>
+  <block-list:block block-list:abbreviated-name="hapened" block-list:name="happened"/>
+  <block-list:block block-list:abbreviated-name="hapening" block-list:name="happening"/>
+  <block-list:block block-list:abbreviated-name="hapens" block-list:name="happens"/>
+  <block-list:block block-list:abbreviated-name="happend" block-list:name="happened"/>
+  <block-list:block block-list:abbreviated-name="hasbeen" block-list:name="has been"/>
+  <block-list:block block-list:abbreviated-name="havebeen" block-list:name="have been"/>
+  <block-list:block block-list:abbreviated-name="haveing" block-list:name="having"/>
+  <block-list:block block-list:abbreviated-name="hearign" block-list:name="hearing"/>
+  <block-list:block block-list:abbreviated-name="helpfull" block-list:name="helpful"/>
+  <block-list:block block-list:abbreviated-name="herat" block-list:name="heart"/>
+  <block-list:block block-list:abbreviated-name="hesaid" block-list:name="he said"/>
+  <block-list:block block-list:abbreviated-name="hewas" block-list:name="he was"/>
+  <block-list:block block-list:abbreviated-name="hge" block-list:name="he"/>
+  <block-list:block block-list:abbreviated-name="hismelf" block-list:name="himself"/>
+  <block-list:block block-list:abbreviated-name="hlep" block-list:name="help"/>
+  <block-list:block block-list:abbreviated-name="hsa" block-list:name="has"/>
+  <block-list:block block-list:abbreviated-name="hsi" block-list:name="his"/>
+  <block-list:block block-list:abbreviated-name="hte" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="htere" block-list:name="there"/>
+  <block-list:block block-list:abbreviated-name="htese" block-list:name="these"/>
+  <block-list:block block-list:abbreviated-name="htey" block-list:name="they"/>
+  <block-list:block block-list:abbreviated-name="hting" block-list:name="thing"/>
+  <block-list:block block-list:abbreviated-name="htink" block-list:name="think"/>
+  <block-list:block block-list:abbreviated-name="htis" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="hvae" block-list:name="have"/>
+  <block-list:block block-list:abbreviated-name="hvaing" block-list:name="having"/>
+  <block-list:block block-list:abbreviated-name="hwich" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="idae" block-list:name="idea"/>
+  <block-list:block block-list:abbreviated-name="idaes" block-list:name="ideas"/>
+  <block-list:block block-list:abbreviated-name="identofy" block-list:name="identify"/>
+  <block-list:block block-list:abbreviated-name="ihs" block-list:name="his"/>
+  <block-list:block block-list:abbreviated-name="imediate" block-list:name="immediate"/>
+  <block-list:block block-list:abbreviated-name="imediatly" block-list:name="immediately"/>
+  <block-list:block block-list:abbreviated-name="immediatly" block-list:name="immediately"/>
+  <block-list:block block-list:abbreviated-name="importent" block-list:name="important"/>
+  <block-list:block block-list:abbreviated-name="importnat" block-list:name="important"/>
+  <block-list:block block-list:abbreviated-name="impossable" block-list:name="impossible"/>
+  <block-list:block block-list:abbreviated-name="improvemnt" block-list:name="improvement"/>
+  <block-list:block block-list:abbreviated-name="improvment" block-list:name="improvement"/>
+  <block-list:block block-list:abbreviated-name="includ" block-list:name="include"/>
+  <block-list:block block-list:abbreviated-name="indecate" block-list:name="indicate"/>
+  <block-list:block block-list:abbreviated-name="indenpendence" block-list:name="independence"/>
+  <block-list:block block-list:abbreviated-name="indenpendent" block-list:name="independent"/>
+  <block-list:block block-list:abbreviated-name="indepedent" block-list:name="independent"/>
+  <block-list:block block-list:abbreviated-name="independance" block-list:name="independence"/>
+  <block-list:block block-list:abbreviated-name="independant" block-list:name="independent"/>
+  <block-list:block block-list:abbreviated-name="influance" block-list:name="influence"/>
+  <block-list:block block-list:abbreviated-name="infomation" block-list:name="information"/>
+  <block-list:block block-list:abbreviated-name="informatoin" block-list:name="information"/>
+  <block-list:block block-list:abbreviated-name="inital" block-list:name="initial"/>
+  <block-list:block block-list:abbreviated-name="instaleld" block-list:name="installed"/>
+  <block-list:block block-list:abbreviated-name="insted" block-list:name="instead"/>
+  <block-list:block block-list:abbreviated-name="insurence" block-list:name="insurance"/>
+  <block-list:block block-list:abbreviated-name="inteh" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="interum" block-list:name="interim"/>
+  <block-list:block block-list:abbreviated-name="inthe" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="int he" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="inwhich" block-list:name="in which"/>
+  <block-list:block block-list:abbreviated-name="i snot" block-list:name="is not"/>
+  <block-list:block block-list:abbreviated-name="isthe" block-list:name="is the"/>
+  <block-list:block block-list:abbreviated-name="itis" block-list:name="it is"/>
+  <block-list:block block-list:abbreviated-name="ititial" block-list:name="initial"/>
+  <block-list:block block-list:abbreviated-name="itnerest" block-list:name="interest"/>
+  <block-list:block block-list:abbreviated-name="itnerested" block-list:name="interested"/>
+  <block-list:block block-list:abbreviated-name="itneresting" block-list:name="interesting"/>
+  <block-list:block block-list:abbreviated-name="itnerests" block-list:name="interests"/>
+  <block-list:block block-list:abbreviated-name="iwll" block-list:name="will"/>
+  <block-list:block block-list:abbreviated-name="iwth" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="jsut" block-list:name="just"/>
+  <block-list:block block-list:abbreviated-name="jugment" block-list:name="judgment"/>
+  <block-list:block block-list:abbreviated-name="knowldge" block-list:name="knowledge"/>
+  <block-list:block block-list:abbreviated-name="knowlege" block-list:name="knowledge"/>
+  <block-list:block block-list:abbreviated-name="knwo" block-list:name="know"/>
+  <block-list:block block-list:abbreviated-name="knwon" block-list:name="known"/>
+  <block-list:block block-list:abbreviated-name="knwos" block-list:name="knows"/>
+  <block-list:block block-list:abbreviated-name="konwn" block-list:name="known"/>
+  <block-list:block block-list:abbreviated-name="konws" block-list:name="knows"/>
+  <block-list:block block-list:abbreviated-name="labratory" block-list:name="laboratory"/>
+  <block-list:block block-list:abbreviated-name="lastyear" block-list:name="last year"/>
+  <block-list:block block-list:abbreviated-name="learnign" block-list:name="learning"/>
+  <block-list:block block-list:abbreviated-name="lenght" block-list:name="length"/>
+  <block-list:block block-list:abbreviated-name="levle" block-list:name="level"/>
+  <block-list:block block-list:abbreviated-name="libary" block-list:name="library"/>
+  <block-list:block block-list:abbreviated-name="librarry" block-list:name="library"/>
+  <block-list:block block-list:abbreviated-name="librery" block-list:name="library"/>
+  <block-list:block block-list:abbreviated-name="liek" block-list:name="like"/>
+  <block-list:block block-list:abbreviated-name="liekd" block-list:name="liked"/>
+  <block-list:block block-list:abbreviated-name="lieutenent" block-list:name="lieutenant"/>
+  <block-list:block block-list:abbreviated-name="liev" block-list:name="live"/>
+  <block-list:block block-list:abbreviated-name="likly" block-list:name="likely"/>
+  <block-list:block block-list:abbreviated-name="lisense" block-list:name="license"/>
+  <block-list:block block-list:abbreviated-name="littel" block-list:name="little"/>
+  <block-list:block block-list:abbreviated-name="litttle" block-list:name="little"/>
+  <block-list:block block-list:abbreviated-name="liuke" block-list:name="like"/>
+  <block-list:block block-list:abbreviated-name="liveing" block-list:name="living"/>
+  <block-list:block block-list:abbreviated-name="loev" block-list:name="love"/>
+  <block-list:block block-list:abbreviated-name="lonly" block-list:name="lonely"/>
+  <block-list:block block-list:abbreviated-name="lookign" block-list:name="looking"/>
+  <block-list:block block-list:abbreviated-name="maintenence" block-list:name="maintenance"/>
+  <block-list:block block-list:abbreviated-name="makeing" block-list:name="making"/>
+  <block-list:block block-list:abbreviated-name="managment" block-list:name="management"/>
+  <block-list:block block-list:abbreviated-name="mantain" block-list:name="maintain"/>
+  <block-list:block block-list:abbreviated-name="marraige" block-list:name="marriage"/>
+  <block-list:block block-list:abbreviated-name="may of been" block-list:name="may have been"/>
+  <block-list:block block-list:abbreviated-name="may of had" block-list:name="may have had"/>
+  <block-list:block block-list:abbreviated-name="memeber" block-list:name="member"/>
+  <block-list:block block-list:abbreviated-name="merchent" block-list:name="merchant"/>
+  <block-list:block block-list:abbreviated-name="mesage" block-list:name="message"/>
+  <block-list:block block-list:abbreviated-name="mesages" block-list:name="messages"/>
+  <block-list:block block-list:abbreviated-name="might of been" block-list:name="might have been"/>
+  <block-list:block block-list:abbreviated-name="might of had" block-list:name="might have had"/>
+  <block-list:block block-list:abbreviated-name="mispell" block-list:name="misspell"/>
+  <block-list:block block-list:abbreviated-name="mispelling" block-list:name="misspelling"/>
+  <block-list:block block-list:abbreviated-name="mispellings" block-list:name="misspellings"/>
+  <block-list:block block-list:abbreviated-name="mkae" block-list:name="make"/>
+  <block-list:block block-list:abbreviated-name="mkaes" block-list:name="makes"/>
+  <block-list:block block-list:abbreviated-name="mkaing" block-list:name="making"/>
+  <block-list:block block-list:abbreviated-name="moeny" block-list:name="money"/>
+  <block-list:block block-list:abbreviated-name="morgage" block-list:name="mortgage"/>
+  <block-list:block block-list:abbreviated-name="mroe" block-list:name="more"/>
+  <block-list:block block-list:abbreviated-name="must of been" block-list:name="must have been"/>
+  <block-list:block block-list:abbreviated-name="must of had" block-list:name="must have had"/>
+  <block-list:block block-list:abbreviated-name="mysefl" block-list:name="myself"/>
+  <block-list:block block-list:abbreviated-name="myu" block-list:name="my"/>
+  <block-list:block block-list:abbreviated-name="necassarily" block-list:name="necessarily"/>
+  <block-list:block block-list:abbreviated-name="necassary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="neccessarily" block-list:name="necessarily"/>
+  <block-list:block block-list:abbreviated-name="neccessary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="necesarily" block-list:name="necessarily"/>
+  <block-list:block block-list:abbreviated-name="necesary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="negotiaing" block-list:name="negotiating"/>
+  <block-list:block block-list:abbreviated-name="nkow" block-list:name="know"/>
+  <block-list:block block-list:abbreviated-name="nothign" block-list:name="nothing"/>
+  <block-list:block block-list:abbreviated-name="nver" block-list:name="never"/>
+  <block-list:block block-list:abbreviated-name="nwe" block-list:name="new"/>
+  <block-list:block block-list:abbreviated-name="nwo" block-list:name="now"/>
+  <block-list:block block-list:abbreviated-name="obediant" block-list:name="obedient"/>
+  <block-list:block block-list:abbreviated-name="ocasion" block-list:name="occasion"/>
+  <block-list:block block-list:abbreviated-name="occassion" block-list:name="occasion"/>
+  <block-list:block block-list:abbreviated-name="occured" block-list:name="occurred"/>
+  <block-list:block block-list:abbreviated-name="occurence" block-list:name="occurrence"/>
+  <block-list:block block-list:abbreviated-name="occurrance" block-list:name="occurrence"/>
+  <block-list:block block-list:abbreviated-name="ocur" block-list:name="occur"/>
+  <block-list:block block-list:abbreviated-name="oeprator" block-list:name="operator"/>
+  <block-list:block block-list:abbreviated-name="ofits" block-list:name="of its"/>
+  <block-list:block block-list:abbreviated-name="ofthe" block-list:name="of the"/>
+  <block-list:block block-list:abbreviated-name="oft he" block-list:name="of the"/>
+  <block-list:block block-list:abbreviated-name="oging" block-list:name="going"/>
+  <block-list:block block-list:abbreviated-name="ohter" block-list:name="other"/>
+  <block-list:block block-list:abbreviated-name="omre" block-list:name="more"/>
+  <block-list:block block-list:abbreviated-name="oneof" block-list:name="one of"/>
+  <block-list:block block-list:abbreviated-name="onepoint" block-list:name="one point"/>
+  <block-list:block block-list:abbreviated-name="onthe" block-list:name="on the"/>
+  <block-list:block block-list:abbreviated-name="ont he" block-list:name="on the"/>
+  <block-list:block block-list:abbreviated-name="onyl" block-list:name="only"/>
+  <block-list:block block-list:abbreviated-name="oppasite" block-list:name="opposite"/>
+  <block-list:block block-list:abbreviated-name="opperation" block-list:name="operation"/>
+  <block-list:block block-list:abbreviated-name="oppertunity" block-list:name="opportunity"/>
+  <block-list:block block-list:abbreviated-name="opposate" block-list:name="opposite"/>
+  <block-list:block block-list:abbreviated-name="opposible" block-list:name="opposable"/>
+  <block-list:block block-list:abbreviated-name="opposit" block-list:name="opposite"/>
+  <block-list:block block-list:abbreviated-name="oppotunities" block-list:name="opportunities"/>
+  <block-list:block block-list:abbreviated-name="oppotunity" block-list:name="opportunity"/>
+  <block-list:block block-list:abbreviated-name="orginization" block-list:name="organization"/>
+  <block-list:block block-list:abbreviated-name="orginized" block-list:name="organized"/>
+  <block-list:block block-list:abbreviated-name="otehr" block-list:name="other"/>
+  <block-list:block block-list:abbreviated-name="otu" block-list:name="out"/>
+  <block-list:block block-list:abbreviated-name="outof" block-list:name="out of"/>
+  <block-list:block block-list:abbreviated-name="overthe" block-list:name="over the"/>
+  <block-list:block block-list:abbreviated-name="owrk" block-list:name="work"/>
+  <block-list:block block-list:abbreviated-name="owuld" block-list:name="would"/>
+  <block-list:block block-list:abbreviated-name="oxident" block-list:name="oxidant"/>
+  <block-list:block block-list:abbreviated-name="papaer" block-list:name="paper"/>
+  <block-list:block block-list:abbreviated-name="parliment" block-list:name="parliament"/>
+  <block-list:block block-list:abbreviated-name="partof" block-list:name="part of"/>
+  <block-list:block block-list:abbreviated-name="paymetn" block-list:name="payment"/>
+  <block-list:block block-list:abbreviated-name="paymetns" block-list:name="payments"/>
+  <block-list:block block-list:abbreviated-name="pciture" block-list:name="picture"/>
+  <block-list:block block-list:abbreviated-name="peice" block-list:name="piece"/>
+  <block-list:block block-list:abbreviated-name="peices" block-list:name="pieces"/>
+  <block-list:block block-list:abbreviated-name="peolpe" block-list:name="people"/>
+  <block-list:block block-list:abbreviated-name="peopel" block-list:name="people"/>
+  <block-list:block block-list:abbreviated-name="percentof" block-list:name="percent of"/>
+  <block-list:block block-list:abbreviated-name="percentto" block-list:name="percent to"/>
+  <block-list:block block-list:abbreviated-name="performence" block-list:name="performance"/>
+  <block-list:block block-list:abbreviated-name="perhasp" block-list:name="perhaps"/>
+  <block-list:block block-list:abbreviated-name="perhpas" block-list:name="perhaps"/>
+  <block-list:block block-list:abbreviated-name="permanant" block-list:name="permanent"/>
+  <block-list:block block-list:abbreviated-name="perminent" block-list:name="permanent"/>
+  <block-list:block block-list:abbreviated-name="personalyl" block-list:name="personally"/>
+  <block-list:block block-list:abbreviated-name="pleasent" block-list:name="pleasant"/>
+  <block-list:block block-list:abbreviated-name="poeple" block-list:name="people"/>
+  <block-list:block block-list:abbreviated-name="porblem" block-list:name="problem"/>
+  <block-list:block block-list:abbreviated-name="porblems" block-list:name="problems"/>
+  <block-list:block block-list:abbreviated-name="porvide" block-list:name="provide"/>
+  <block-list:block block-list:abbreviated-name="possable" block-list:name="possible"/>
+  <block-list:block block-list:abbreviated-name="postition" block-list:name="position"/>
+  <block-list:block block-list:abbreviated-name="potentialy" block-list:name="potentially"/>
+  <block-list:block block-list:abbreviated-name="pregnent" block-list:name="pregnant"/>
+  <block-list:block block-list:abbreviated-name="presance" block-list:name="presence"/>
+  <block-list:block block-list:abbreviated-name="probelm" block-list:name="problem"/>
+  <block-list:block block-list:abbreviated-name="probelms" block-list:name="problems"/>
+  <block-list:block block-list:abbreviated-name="prominant" block-list:name="prominent"/>
+  <block-list:block block-list:abbreviated-name="psoition" block-list:name="position"/>
+  <block-list:block block-list:abbreviated-name="ptogress" block-list:name="progress"/>
+  <block-list:block block-list:abbreviated-name="puting" block-list:name="putting"/>
+  <block-list:block block-list:abbreviated-name="pwoer" block-list:name="power"/>
+  <block-list:block block-list:abbreviated-name="quater" block-list:name="quarter"/>
+  <block-list:block block-list:abbreviated-name="quaters" block-list:name="quarters"/>
+  <block-list:block block-list:abbreviated-name="quesion" block-list:name="question"/>
+  <block-list:block block-list:abbreviated-name="quesions" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="questioms" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="questiosn" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="questoin" block-list:name="question"/>
+  <block-list:block block-list:abbreviated-name="quetion" block-list:name="question"/>
+  <block-list:block block-list:abbreviated-name="quetions" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="realyl" block-list:name="really"/>
+  <block-list:block block-list:abbreviated-name="reccomend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="reccommend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="receieve" block-list:name="receive"/>
+  <block-list:block block-list:abbreviated-name="recieve" block-list:name="receive"/>
+  <block-list:block block-list:abbreviated-name="recieved" block-list:name="received"/>
+  <block-list:block block-list:abbreviated-name="recieving" block-list:name="receiving"/>
+  <block-list:block block-list:abbreviated-name="recomend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="recomendation" block-list:name="recommendation"/>
+  <block-list:block block-list:abbreviated-name="recomendations" block-list:name="recommendations"/>
+  <block-list:block block-list:abbreviated-name="recomended" block-list:name="recommended"/>
+  <block-list:block block-list:abbreviated-name="reconize" block-list:name="recognize"/>
+  <block-list:block block-list:abbreviated-name="recrod" block-list:name="record"/>
+  <block-list:block block-list:abbreviated-name="religous" block-list:name="religious"/>
+  <block-list:block block-list:abbreviated-name="reluctent" block-list:name="reluctant"/>
+  <block-list:block block-list:abbreviated-name="remeber" block-list:name="remember"/>
+  <block-list:block block-list:abbreviated-name="reommend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="representativs" block-list:name="representatives"/>
+  <block-list:block block-list:abbreviated-name="representives" block-list:name="representatives"/>
+  <block-list:block block-list:abbreviated-name="represetned" block-list:name="represented"/>
+  <block-list:block block-list:abbreviated-name="represnt" block-list:name="represent"/>
+  <block-list:block block-list:abbreviated-name="reserach" block-list:name="research"/>
+  <block-list:block block-list:abbreviated-name="resollution" block-list:name="resolution"/>
+  <block-list:block block-list:abbreviated-name="resorces" block-list:name="resources"/>
+  <block-list:block block-list:abbreviated-name="respomd" block-list:name="respond"/>
+  <block-list:block block-list:abbreviated-name="respomse" block-list:name="response"/>
+  <block-list:block block-list:abbreviated-name="responce" block-list:name="response"/>
+  <block-list:block block-list:abbreviated-name="responsability" block-list:name="responsibility"/>
+  <block-list:block block-list:abbreviated-name="responsable" block-list:name="responsible"/>
+  <block-list:block block-list:abbreviated-name="responsibile" block-list:name="responsible"/>
+  <block-list:block block-list:abbreviated-name="responsiblity" block-list:name="responsibility"/>
+  <block-list:block block-list:abbreviated-name="restaraunt" block-list:name="restaurant"/>
+  <block-list:block block-list:abbreviated-name="restuarant" block-list:name="restaurant"/>
+  <block-list:block block-list:abbreviated-name="reult" block-list:name="result"/>
+  <block-list:block block-list:abbreviated-name="reveiw" block-list:name="review"/>
+  <block-list:block block-list:abbreviated-name="reveiwing" block-list:name="reviewing"/>
+  <block-list:block block-list:abbreviated-name="rumers" block-list:name="rumors"/>
+  <block-list:block block-list:abbreviated-name="rwite" block-list:name="write"/>
+  <block-list:block block-list:abbreviated-name="rythm" block-list:name="rhythm"/>
+  <block-list:block block-list:abbreviated-name="saidhe" block-list:name="said he"/>
+  <block-list:block block-list:abbreviated-name="saidit" block-list:name="said it"/>
+  <block-list:block block-list:abbreviated-name="saidthat" block-list:name="said that"/>
+  <block-list:block block-list:abbreviated-name="saidthe" block-list:name="said the"/>
+  <block-list:block block-list:abbreviated-name="saidt he" block-list:name="said the"/>
+  <block-list:block block-list:abbreviated-name="scedule" block-list:name="schedule"/>
+  <block-list:block block-list:abbreviated-name="sceduled" block-list:name="scheduled"/>
+  <block-list:block block-list:abbreviated-name="seance" block-list:name="séance"/>
+  <block-list:block block-list:abbreviated-name="secratary" block-list:name="secretary"/>
+  <block-list:block block-list:abbreviated-name="sectino" block-list:name="section"/>
+  <block-list:block block-list:abbreviated-name="seh" block-list:name="she"/>
+  <block-list:block block-list:abbreviated-name="selectoin" block-list:name="selection"/>
+  <block-list:block block-list:abbreviated-name="sentance" block-list:name="sentence"/>
+  <block-list:block block-list:abbreviated-name="separeate" block-list:name="separate"/>
+  <block-list:block block-list:abbreviated-name="sercumstances" block-list:name="circumstances"/>
+  <block-list:block block-list:abbreviated-name="shcool" block-list:name="school"/>
+  <block-list:block block-list:abbreviated-name="shesaid" block-list:name="she said"/>
+  <block-list:block block-list:abbreviated-name="shineing" block-list:name="shining"/>
+  <block-list:block block-list:abbreviated-name="shiped" block-list:name="shipped"/>
+  <block-list:block block-list:abbreviated-name="shoudl" block-list:name="should"/>
+  <block-list:block block-list:abbreviated-name="should of been" block-list:name="should have been"/>
+  <block-list:block block-list:abbreviated-name="should of had" block-list:name="should have had"/>
+  <block-list:block block-list:abbreviated-name="showinf" block-list:name="showing"/>
+  <block-list:block block-list:abbreviated-name="signifacnt" block-list:name="significant"/>
+  <block-list:block block-list:abbreviated-name="simalar" block-list:name="similar"/>
+  <block-list:block block-list:abbreviated-name="similiar" block-list:name="similar"/>
+  <block-list:block block-list:abbreviated-name="simpyl" block-list:name="simply"/>
+  <block-list:block block-list:abbreviated-name="sincerly" block-list:name="sincerely"/>
+  <block-list:block block-list:abbreviated-name="sitll" block-list:name="still"/>
+  <block-list:block block-list:abbreviated-name="smae" block-list:name="same"/>
+  <block-list:block block-list:abbreviated-name="smoe" block-list:name="some"/>
+  <block-list:block block-list:abbreviated-name="soem" block-list:name="some"/>
+  <block-list:block block-list:abbreviated-name="sohw" block-list:name="show"/>
+  <block-list:block block-list:abbreviated-name="soical" block-list:name="social"/>
+  <block-list:block block-list:abbreviated-name="somethign" block-list:name="something"/>
+  <block-list:block block-list:abbreviated-name="someting" block-list:name="something"/>
+  <block-list:block block-list:abbreviated-name="somewaht" block-list:name="somewhat"/>
+  <block-list:block block-list:abbreviated-name="somthing" block-list:name="something"/>
+  <block-list:block block-list:abbreviated-name="somtimes" block-list:name="sometimes"/>
+  <block-list:block block-list:abbreviated-name="sot hat" block-list:name="so that"/>
+  <block-list:block block-list:abbreviated-name="soudn" block-list:name="sound"/>
+  <block-list:block block-list:abbreviated-name="soudns" block-list:name="sounds"/>
+  <block-list:block block-list:abbreviated-name="speach" block-list:name="speech"/>
+  <block-list:block block-list:abbreviated-name="specificaly" block-list:name="specifically"/>
+  <block-list:block block-list:abbreviated-name="specificalyl" block-list:name="specifically"/>
+  <block-list:block block-list:abbreviated-name="statment" block-list:name="statement"/>
+  <block-list:block block-list:abbreviated-name="statments" block-list:name="statements"/>
+  <block-list:block block-list:abbreviated-name="stnad" block-list:name="stand"/>
+  <block-list:block block-list:abbreviated-name="stopry" block-list:name="story"/>
+  <block-list:block block-list:abbreviated-name="stoyr" block-list:name="story"/>
+  <block-list:block block-list:abbreviated-name="stpo" block-list:name="stop"/>
+  <block-list:block block-list:abbreviated-name="strentgh" block-list:name="strength"/>
+  <block-list:block block-list:abbreviated-name="stroy" block-list:name="story"/>
+  <block-list:block block-list:abbreviated-name="struggel" block-list:name="struggle"/>
+  <block-list:block block-list:abbreviated-name="strugle" block-list:name="struggle"/>
+  <block-list:block block-list:abbreviated-name="studnet" block-list:name="student"/>
+  <block-list:block block-list:abbreviated-name="successfull" block-list:name="successful"/>
+  <block-list:block block-list:abbreviated-name="successfuly" block-list:name="successfully"/>
+  <block-list:block block-list:abbreviated-name="successfulyl" block-list:name="successfully"/>
+  <block-list:block block-list:abbreviated-name="sucess" block-list:name="success"/>
+  <block-list:block block-list:abbreviated-name="sucessfull" block-list:name="successful"/>
+  <block-list:block block-list:abbreviated-name="sufficiant" block-list:name="sufficient"/>
+  <block-list:block block-list:abbreviated-name="suposed" block-list:name="supposed"/>
+  <block-list:block block-list:abbreviated-name="suppossed" block-list:name="supposed"/>
+  <block-list:block block-list:abbreviated-name="suprised" block-list:name="surprised"/>
+  <block-list:block block-list:abbreviated-name="swiming" block-list:name="swimming"/>
+  <block-list:block block-list:abbreviated-name="tahn" block-list:name="than"/>
+  <block-list:block block-list:abbreviated-name="taht" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="talekd" block-list:name="talked"/>
+  <block-list:block block-list:abbreviated-name="talkign" block-list:name="talking"/>
+  <block-list:block block-list:abbreviated-name="tath" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="tecnical" block-list:name="technical"/>
+  <block-list:block block-list:abbreviated-name="teh" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tehy" block-list:name="they"/>
+  <block-list:block block-list:abbreviated-name="tellt he" block-list:name="tell the"/>
+  <block-list:block block-list:abbreviated-name="termoil" block-list:name="turmoil"/>
+  <block-list:block block-list:abbreviated-name="tets" block-list:name="test"/>
+  <block-list:block block-list:abbreviated-name="tghe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tghis" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="thansk" block-list:name="thanks"/>
+  <block-list:block block-list:abbreviated-name="thatthe" block-list:name="that the"/>
+  <block-list:block block-list:abbreviated-name="thatt he" block-list:name="that the"/>
+  <block-list:block block-list:abbreviated-name="thecompany" block-list:name="the company"/>
+  <block-list:block block-list:abbreviated-name="thefirst" block-list:name="the first"/>
+  <block-list:block block-list:abbreviated-name="thegovernment" block-list:name="the government"/>
+  <block-list:block block-list:abbreviated-name="their are" block-list:name="there are"/>
+  <block-list:block block-list:abbreviated-name="their is" block-list:name="there is"/>
+  <block-list:block block-list:abbreviated-name="themself" block-list:name="themselves"/>
+  <block-list:block block-list:abbreviated-name="themselfs" block-list:name="themselves"/>
+  <block-list:block block-list:abbreviated-name="thenew" block-list:name="the new"/>
+  <block-list:block block-list:abbreviated-name="theri" block-list:name="their"/>
+  <block-list:block block-list:abbreviated-name="thesame" block-list:name="the same"/>
+  <block-list:block block-list:abbreviated-name="thetwo" block-list:name="the two"/>
+  <block-list:block block-list:abbreviated-name="thgat" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="thge" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="thier" block-list:name="their"/>
+  <block-list:block block-list:abbreviated-name="thigsn" block-list:name="things"/>
+  <block-list:block block-list:abbreviated-name="thisyear" block-list:name="this year"/>
+  <block-list:block block-list:abbreviated-name="thme" block-list:name="them"/>
+  <block-list:block block-list:abbreviated-name="thna" block-list:name="than"/>
+  <block-list:block block-list:abbreviated-name="thne" block-list:name="then"/>
+  <block-list:block block-list:abbreviated-name="thnig" block-list:name="thing"/>
+  <block-list:block block-list:abbreviated-name="thnigs" block-list:name="things"/>
+  <block-list:block block-list:abbreviated-name="threatend" block-list:name="threatened"/>
+  <block-list:block block-list:abbreviated-name="thsi" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="thsoe" block-list:name="those"/>
+  <block-list:block block-list:abbreviated-name="thta" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="tihs" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="timne" block-list:name="time"/>
+  <block-list:block block-list:abbreviated-name="tiogether" block-list:name="together"/>
+  <block-list:block block-list:abbreviated-name="tje" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tjhe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tkae" block-list:name="take"/>
+  <block-list:block block-list:abbreviated-name="tkaes" block-list:name="takes"/>
+  <block-list:block block-list:abbreviated-name="tkaing" block-list:name="taking"/>
+  <block-list:block block-list:abbreviated-name="tlaking" block-list:name="talking"/>
+  <block-list:block block-list:abbreviated-name="todya" block-list:name="today"/>
+  <block-list:block block-list:abbreviated-name="togehter" block-list:name="together"/>
+  <block-list:block block-list:abbreviated-name="toldt he" block-list:name="told the"/>
+  <block-list:block block-list:abbreviated-name="tomorow" block-list:name="tomorrow"/>
+  <block-list:block block-list:abbreviated-name="tongiht" block-list:name="tonight"/>
+  <block-list:block block-list:abbreviated-name="tonihgt" block-list:name="tonight"/>
+  <block-list:block block-list:abbreviated-name="totaly" block-list:name="totally"/>
+  <block-list:block block-list:abbreviated-name="totalyl" block-list:name="totally"/>
+  <block-list:block block-list:abbreviated-name="tothe" block-list:name="to the"/>
+  <block-list:block block-list:abbreviated-name="towrad" block-list:name="toward"/>
+  <block-list:block block-list:abbreviated-name="traditionalyl" block-list:name="traditionally"/>
+  <block-list:block block-list:abbreviated-name="transfered" block-list:name="transferred"/>
+  <block-list:block block-list:abbreviated-name="truely" block-list:name="truly"/>
+  <block-list:block block-list:abbreviated-name="truley" block-list:name="truly"/>
+  <block-list:block block-list:abbreviated-name="tryed" block-list:name="tried"/>
+  <block-list:block block-list:abbreviated-name="tthe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tyhat" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="tyhe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="udnerstand" block-list:name="understand"/>
+  <block-list:block block-list:abbreviated-name="understnad" block-list:name="understand"/>
+  <block-list:block block-list:abbreviated-name="undert he" block-list:name="under the"/>
+  <block-list:block block-list:abbreviated-name="UnitedStates" block-list:name="United States"/>
+  <block-list:block block-list:abbreviated-name="unliek" block-list:name="unlike"/>
+  <block-list:block block-list:abbreviated-name="unpleasently" block-list:name="unpleasantly"/>
+  <block-list:block block-list:abbreviated-name="untill" block-list:name="until"/>
+  <block-list:block block-list:abbreviated-name="untilll" block-list:name="until"/>
+  <block-list:block block-list:abbreviated-name="useing" block-list:name="using"/>
+  <block-list:block block-list:abbreviated-name="usualyl" block-list:name="usually"/>
+  <block-list:block block-list:abbreviated-name="veyr" block-list:name="very"/>
+  <block-list:block block-list:abbreviated-name="virtualyl" block-list:name="virtually"/>
+  <block-list:block block-list:abbreviated-name="vrey" block-list:name="very"/>
+  <block-list:block block-list:abbreviated-name="vulnerible" block-list:name="vulnerable"/>
+  <block-list:block block-list:abbreviated-name="waht" block-list:name="what"/>
+  <block-list:block block-list:abbreviated-name="warrent" block-list:name="warrant"/>
+  <block-list:block block-list:abbreviated-name="wa snot" block-list:name="was not"/>
+  <block-list:block block-list:abbreviated-name="watn" block-list:name="want"/>
+  <block-list:block block-list:abbreviated-name="wehn" block-list:name="when"/>
+  <block-list:block block-list:abbreviated-name="werre" block-list:name="were"/>
+  <block-list:block block-list:abbreviated-name="whcih" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="whent he" block-list:name="when the"/>
+  <block-list:block block-list:abbreviated-name="wherre" block-list:name="where"/>
+  <block-list:block block-list:abbreviated-name="whic" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="whicht he" block-list:name="which the"/>
+  <block-list:block block-list:abbreviated-name="whihc" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="who;ve" block-list:name="who’ve"/>
+  <block-list:block block-list:abbreviated-name="whta" block-list:name="what"/>
+  <block-list:block block-list:abbreviated-name="wief" block-list:name="wife"/>
+  <block-list:block block-list:abbreviated-name="wierd" block-list:name="weird"/>
+  <block-list:block block-list:abbreviated-name="wihch" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="wiht" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="willbe" block-list:name="will be"/>
+  <block-list:block block-list:abbreviated-name="will of been" block-list:name="will have been"/>
+  <block-list:block block-list:abbreviated-name="windoes" block-list:name="windows"/>
+  <block-list:block block-list:abbreviated-name="witha" block-list:name="with a"/>
+  <block-list:block block-list:abbreviated-name="withe" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="withthe" block-list:name="with the"/>
+  <block-list:block block-list:abbreviated-name="witht he" block-list:name="with the"/>
+  <block-list:block block-list:abbreviated-name="wiull" block-list:name="will"/>
+  <block-list:block block-list:abbreviated-name="wnat" block-list:name="want"/>
+  <block-list:block block-list:abbreviated-name="wnated" block-list:name="wanted"/>
+  <block-list:block block-list:abbreviated-name="wnats" block-list:name="wants"/>
+  <block-list:block block-list:abbreviated-name="woh" block-list:name="who"/>
+  <block-list:block block-list:abbreviated-name="wohle" block-list:name="whole"/>
+  <block-list:block block-list:abbreviated-name="wokr" block-list:name="work"/>
+  <block-list:block block-list:abbreviated-name="woudl" block-list:name="would"/>
+  <block-list:block block-list:abbreviated-name="wouldbe" block-list:name="would be"/>
+  <block-list:block block-list:abbreviated-name="would of been" block-list:name="would have been"/>
+  <block-list:block block-list:abbreviated-name="would of had" block-list:name="would have had"/>
+  <block-list:block block-list:abbreviated-name="wriet" block-list:name="write"/>
+  <block-list:block block-list:abbreviated-name="writting" block-list:name="writing"/>
+  <block-list:block block-list:abbreviated-name="wrod" block-list:name="word"/>
+  <block-list:block block-list:abbreviated-name="wroet" block-list:name="wrote"/>
+  <block-list:block block-list:abbreviated-name="wroking" block-list:name="working"/>
+  <block-list:block block-list:abbreviated-name="wtih" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="wuould" block-list:name="would"/>
+  <block-list:block block-list:abbreviated-name="wya" block-list:name="way"/>
+  <block-list:block block-list:abbreviated-name="yera" block-list:name="year"/>
+  <block-list:block block-list:abbreviated-name="yeras" block-list:name="years"/>
+  <block-list:block block-list:abbreviated-name="yersa" block-list:name="years"/>
+  <block-list:block block-list:abbreviated-name="yoiu" block-list:name="you"/>
+  <block-list:block block-list:abbreviated-name="youare" block-list:name="you are"/>
+  <block-list:block block-list:abbreviated-name="ytou" block-list:name="you"/>
+  <block-list:block block-list:abbreviated-name="yuo" block-list:name="you"/>
+  <block-list:block block-list:abbreviated-name="yuor" block-list:name="your"/>
+  <block-list:block block-list:abbreviated-name=":alpha:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":black circle:" block-list:name="⚫"/>
+  <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":chick:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name=":eighth note:" block-list:name="𝅘𝅥𝅮"/>
+  <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name=":football:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":globe:" block-list:name="🌍"/>
+  <block-list:block block-list:abbreviated-name=":heartpulse:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":ice cream:" block-list:name="🍨"/>
+  <block-list:block block-list:abbreviated-name=":iota:" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name=":moon2:" block-list:name="🌜"/>
+  <block-list:block block-list:abbreviated-name=":moon:" block-list:name="🌛"/>
+  <block-list:block block-list:abbreviated-name=":mu:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":nu:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name=":omicron:" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name=":phi:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":quarter note:" block-list:name="𝅘𝅥"/>
+  <block-list:block block-list:abbreviated-name=":rho:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name=":sixteenth note:" block-list:name="𝅘𝅥𝅯"/>
+  <block-list:block block-list:abbreviated-name=":smaller square2:" block-list:name="◾"/>
+  <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":telephone:" block-list:name="✆"/>
+  <block-list:block block-list:abbreviated-name=":theta:" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name=":upsilon:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":white circle:" block-list:name="⚪"/>
+  <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
+  <block-list:block block-list:abbreviated-name=":xi:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":angry:" block-list:name="😠"/>
+  <block-list:block block-list:abbreviated-name=":dizzy face:" block-list:name="😵"/>
+  <block-list:block block-list:abbreviated-name=":flushed:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":person frowning:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":扩音器:" block-list:name="🕫"/>
+  <block-list:block block-list:abbreviated-name=":链接:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":三角旗:" block-list:name="🏲"/>
+  <block-list:block block-list:abbreviated-name=":小型空心正方形:" block-list:name="◽"/>
+  <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
+  <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
+  <block-list:block block-list:abbreviated-name=":100分:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name=":1/3:" block-list:name="⅓"/>
+  <block-list:block block-list:abbreviated-name=":1/4:" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
+  <block-list:block block-list:abbreviated-name=":18禁:" block-list:name="🔞"/>
+  <block-list:block block-list:abbreviated-name=":^1:" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name=":_1:" block-list:name="₁"/>
+  <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
+  <block-list:block block-list:abbreviated-name=":^2:" block-list:name="²"/>
+  <block-list:block block-list:abbreviated-name=":_2:" block-list:name="₂"/>
+  <block-list:block block-list:abbreviated-name=":3/4:" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":3/8:" block-list:name="⅜"/>
+  <block-list:block block-list:abbreviated-name=":^3:" block-list:name="³"/>
+  <block-list:block block-list:abbreviated-name=":_3:" block-list:name="₃"/>
+  <block-list:block block-list:abbreviated-name=":^4:" block-list:name="⁴"/>
+  <block-list:block block-list:abbreviated-name=":_4:" block-list:name="₄"/>
+  <block-list:block block-list:abbreviated-name=":5/8:" block-list:name="⅝"/>
+  <block-list:block block-list:abbreviated-name=":^5:" block-list:name="⁵"/>
+  <block-list:block block-list:abbreviated-name=":_5:" block-list:name="₅"/>
+  <block-list:block block-list:abbreviated-name=":^6:" block-list:name="⁶"/>
+  <block-list:block block-list:abbreviated-name=":_6:" block-list:name="₆"/>
+  <block-list:block block-list:abbreviated-name=":7/8:" block-list:name="⅞"/>
+  <block-list:block block-list:abbreviated-name=":^7:" block-list:name="⁷"/>
+  <block-list:block block-list:abbreviated-name=":_7:" block-list:name="₇"/>
+  <block-list:block block-list:abbreviated-name=":^8:" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name=":_8:" block-list:name="₈"/>
+  <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
+  <block-list:block block-list:abbreviated-name=":A:" block-list:name="🂡"/>
+  <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>
+  <block-list:block block-list:abbreviated-name=":_a:" block-list:name="ₐ"/>
+  <block-list:block block-list:abbreviated-name=":^A:" block-list:name="ᴬ"/>
+  <block-list:block block-list:abbreviated-name=":^alpha:" block-list:name="ᵅ"/>
+  <block-list:block block-list:abbreviated-name=":angle2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":^b:" block-list:name="ᵇ"/>
+  <block-list:block block-list:abbreviated-name=":^B:" block-list:name="ᴮ"/>
+  <block-list:block block-list:abbreviated-name=":^beta:" block-list:name="ᵝ"/>
+  <block-list:block block-list:abbreviated-name=":_beta:" block-list:name="ᵦ"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":^=:" block-list:name="⁼"/>
+  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":_+:" block-list:name="₊"/>
+  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name=":_=:" block-list:name="₌"/>
+  <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
+  <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
+  <block-list:block block-list:abbreviated-name=":_chi:" block-list:name="ᵪ"/>
+  <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
+  <block-list:block block-list:abbreviated-name=":DIVISION_SLASH:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":down2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":DVD光盘:" block-list:name="📀"/>
+  <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
+  <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
+  <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
+  <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
+  <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":^gamma:" block-list:name="ᵞ"/>
+  <block-list:block block-list:abbreviated-name=":_gamma:" block-list:name="ᵧ"/>
+  <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
+  <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
+  <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
+  <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
+  <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
+  <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
+  <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
+  <block-list:block block-list:abbreviated-name=":^iota:" block-list:name="ᶥ"/>
+  <block-list:block block-list:abbreviated-name=":J:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":^j:" block-list:name="ʲ"/>
+  <block-list:block block-list:abbreviated-name=":_j:" block-list:name="ⱼ"/>
+  <block-list:block block-list:abbreviated-name=":^J:" block-list:name="ᴶ"/>
+  <block-list:block block-list:abbreviated-name=":Joker:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":K:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":^k:" block-list:name="ᵏ"/>
+  <block-list:block block-list:abbreviated-name=":_k:" block-list:name="ₖ"/>
+  <block-list:block block-list:abbreviated-name=":^K:" block-list:name="ᴷ"/>
+  <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
+  <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
+  <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
+  <block-list:block block-list:abbreviated-name=":left2:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
+  <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
+  <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
+  <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
+  <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
+  <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":^o:" block-list:name="ᵒ"/>
+  <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
+  <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
+  <block-list:block block-list:abbreviated-name=":OK2:" block-list:name="🖏"/>
+  <block-list:block block-list:abbreviated-name=":OK:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
+  <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
+  <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
+  <block-list:block block-list:abbreviated-name=":^Phi:" block-list:name="ᶲ"/>
+  <block-list:block block-list:abbreviated-name=":^phi:" block-list:name="ᵠ"/>
+  <block-list:block block-list:abbreviated-name=":_phi:" block-list:name="ᵩ"/>
+  <block-list:block block-list:abbreviated-name=":Q:" block-list:name="🂭"/>
+  <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
+  <block-list:block block-list:abbreviated-name=":_r:" block-list:name="ᵣ"/>
+  <block-list:block block-list:abbreviated-name=":^R:" block-list:name="ᴿ"/>
+  <block-list:block block-list:abbreviated-name=":_rho:" block-list:name="ᵨ"/>
+  <block-list:block block-list:abbreviated-name=":right2:" block-list:name="👉"/>
+  <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
+  <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
+  <block-list:block block-list:abbreviated-name=":small in:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":small ni:" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
+  <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
+  <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
+  <block-list:block block-list:abbreviated-name=":^theta:" block-list:name="ᶿ"/>
+  <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
+  <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
+  <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
+  <block-list:block block-list:abbreviated-name=":up2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
+  <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
+  <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
+  <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
+  <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
+  <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
+  <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
+  <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
+  <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
+  <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":一点半:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":一点钟:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":七夕竹树:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":七点半:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":七点钟:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":万分号:" block-list:name="‱"/>
+  <block-list:block block-list:abbreviated-name=":万圣节:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":三叉戟:" block-list:name="🔱"/>
+  <block-list:block block-list:abbreviated-name=":三明治:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":三点半:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":三点钟:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":三角形 3:" block-list:name="🛆"/>
+  <block-list:block block-list:abbreviated-name=":三角形项目符号:" block-list:name="‣"/>
+  <block-list:block block-list:abbreviated-name=":三角旗 2:" block-list:name="🏱"/>
+  <block-list:block block-list:abbreviated-name=":三角旗:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":三重积分:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":上 3:" block-list:name="🖞"/>
+  <block-list:block block-list:abbreviated-name=":上 4:" block-list:name="🖠"/>
+  <block-list:block block-list:abbreviated-name=":上 5:" block-list:name="🖢"/>
+  <block-list:block block-list:abbreviated-name=":上:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":上下双箭头:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":上下箭头:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":上下颠倒脸:" block-list:name="🙃"/>
+  <block-list:block block-list:abbreviated-name=":上弦月:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":上箭头:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":下 3:" block-list:name="🖟"/>
+  <block-list:block block-list:abbreviated-name=":下 4:" block-list:name="🖗"/>
+  <block-list:block block-list:abbreviated-name=":下 5:" block-list:name="🖣"/>
+  <block-list:block block-list:abbreviated-name=":下 6:" block-list:name="🖡"/>
+  <block-list:block block-list:abbreviated-name=":下:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":下弦月:" block-list:name="🌗"/>
+  <block-list:block block-list:abbreviated-name=":下箭头:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":不 2:" block-list:name="🖓"/>
+  <block-list:block block-list:abbreviated-name=":不准盗版:" block-list:name="🕲"/>
+  <block-list:block block-list:abbreviated-name=":不包含:" block-list:name="∌"/>
+  <block-list:block block-list:abbreviated-name=":不可被除于:" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=":不响铃:" block-list:name="🔕"/>
+  <block-list:block block-list:abbreviated-name=":不存在:" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=":不属于:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":不平行:" block-list:name="∦"/>
+  <block-list:block block-list:abbreviated-name=":不感兴趣:" block-list:name="😒"/>
+  <block-list:block block-list:abbreviated-name=":不等于:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":与:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":东京塔:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":丝带 2:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":丝带:" block-list:name="🎗"/>
+  <block-list:block block-list:abbreviated-name=":两个八分音符:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":两点半:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":两点钟:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":两颗爱心:" block-list:name="💕"/>
+  <block-list:block block-list:abbreviated-name=":中型实心正方形:" block-list:name="◼"/>
+  <block-list:block block-list:abbreviated-name=":中型星号:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":中型空心正方形:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":中性表情:" block-list:name="😐"/>
+  <block-list:block block-list:abbreviated-name=":中音量:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":举双手庆祝:" block-list:name="🙌"/>
+  <block-list:block block-list:abbreviated-name=":举重者:" block-list:name="🏋"/>
+  <block-list:block block-list:abbreviated-name=":乌贼:" block-list:name="🦑"/>
+  <block-list:block block-list:abbreviated-name=":乌龟:" block-list:name="🐢"/>
+  <block-list:block block-list:abbreviated-name=":乐谱:" block-list:name="🎼"/>
+  <block-list:block block-list:abbreviated-name=":乒乓球:" block-list:name="🏓"/>
+  <block-list:block block-list:abbreviated-name=":乘号:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":乘积:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":九点半:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":九点钟:" block-list:name="🕘"/>
+  <block-list:block block-list:abbreviated-name=":书写之手:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":书包:" block-list:name="🎒"/>
+  <block-list:block block-list:abbreviated-name=":书签2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":书签:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":书籍 2:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":书籍 3:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":书籍:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":二分休止符:" block-list:name="𝄼"/>
+  <block-list:block block-list:abbreviated-name=":二分音符:" block-list:name="𝅗𝅥"/>
+  <block-list:block block-list:abbreviated-name=":二重积分:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":亏凸月:" block-list:name="🌖"/>
+  <block-list:block block-list:abbreviated-name=":云:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":云轨:" block-list:name="🚟"/>
+  <block-list:block block-list:abbreviated-name=":五点半:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":五点钟:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":五角星:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":五边形 2:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":五边形:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":五重积分:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":交叉的剑:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":交通信号灯 (横排):" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":交通信号灯 (竖排):" block-list:name="🚦"/>
+  <block-list:block block-list:abbreviated-name=":交集:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":亲亲:" block-list:name="😗"/>
+  <block-list:block block-list:abbreviated-name=":人鱼:" block-list:name="🧜"/>
+  <block-list:block block-list:abbreviated-name=":仓鼠:" block-list:name="🐹"/>
+  <block-list:block block-list:abbreviated-name=":仙人掌:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":仙子:" block-list:name="🧚"/>
+  <block-list:block block-list:abbreviated-name=":仙贝:" block-list:name="🍘"/>
+  <block-list:block block-list:abbreviated-name=":企鹅:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":伊朗国徽:" block-list:name="☫"/>
+  <block-list:block block-list:abbreviated-name=":会话气泡:" block-list:name="💬"/>
+  <block-list:block block-list:abbreviated-name=":伞:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":传声筒:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":传真机 2:" block-list:name="🖷"/>
+  <block-list:block block-list:abbreviated-name=":传真机:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":伽玛:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":低音量:" block-list:name="🔈"/>
+  <block-list:block block-list:abbreviated-name=":体操:" block-list:name="🤸"/>
+  <block-list:block block-list:abbreviated-name=":体育馆:" block-list:name="🏟"/>
+  <block-list:block block-list:abbreviated-name=":依塔:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":侦探:" block-list:name="🕵"/>
+  <block-list:block block-list:abbreviated-name=":便当:" block-list:name="🍱"/>
+  <block-list:block block-list:abbreviated-name=":保龄球:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":信封 2:" block-list:name="🖃"/>
+  <block-list:block block-list:abbreviated-name=":信封 3:" block-list:name="🖂"/>
+  <block-list:block block-list:abbreviated-name=":信封 4:" block-list:name="🖆"/>
+  <block-list:block block-list:abbreviated-name=":信封 5:" block-list:name="🖄"/>
+  <block-list:block block-list:abbreviated-name=":信封 6:" block-list:name="🖅"/>
+  <block-list:block block-list:abbreviated-name=":信封:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":信息 2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":信息 3:" block-list:name="🛈"/>
+  <block-list:block block-list:abbreviated-name=":信息:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":信用卡:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":偏:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":停止 2:" block-list:name="⏹"/>
+  <block-list:block block-list:abbreviated-name=":停止:" block-list:name="🛑"/>
+  <block-list:block block-list:abbreviated-name=":僵尸:" block-list:name="🧟"/>
+  <block-list:block block-list:abbreviated-name=":儿童:" block-list:name="🧒"/>
+  <block-list:block block-list:abbreviated-name=":光盘:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":光线 2:" block-list:name="🗥"/>
+  <block-list:block block-list:abbreviated-name=":光线 3:" block-list:name="🗤"/>
+  <block-list:block block-list:abbreviated-name=":光线 4:" block-list:name="🗧"/>
+  <block-list:block block-list:abbreviated-name=":光线:" block-list:name="🗦"/>
+  <block-list:block block-list:abbreviated-name=":克尔白:" block-list:name="🕋"/>
+  <block-list:block block-list:abbreviated-name=":克西:" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name=":兔子 2:" block-list:name="🐰"/>
+  <block-list:block block-list:abbreviated-name=":兔子:" block-list:name="🐇"/>
+  <block-list:block block-list:abbreviated-name=":兔子耳朵:" block-list:name="👯"/>
+  <block-list:block block-list:abbreviated-name=":入场券 2:" block-list:name="🎟"/>
+  <block-list:block block-list:abbreviated-name=":入场券:" block-list:name="🎫"/>
+  <block-list:block block-list:abbreviated-name=":全休止符:" block-list:name="𝄻"/>
+  <block-list:block block-list:abbreviated-name=":全称量化:" block-list:name="∀"/>
+  <block-list:block block-list:abbreviated-name=":全音符:" block-list:name="𝅝"/>
+  <block-list:block block-list:abbreviated-name=":八分休止符:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":八分音符:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":八月十五夜:" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":八点半:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":八点钟:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":公主:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":公交车2:" block-list:name="🚍"/>
+  <block-list:block block-list:abbreviated-name=":公交车:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":公交车站:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":公园:" block-list:name="🏞"/>
+  <block-list:block block-list:abbreviated-name=":公文包:" block-list:name="💼"/>
+  <block-list:block block-list:abbreviated-name=":公羊:" block-list:name="🐏"/>
+  <block-list:block block-list:abbreviated-name=":公鸡:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":六点半:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":六点钟:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":六边形 2:" block-list:name="⬢"/>
+  <block-list:block block-list:abbreviated-name=":六边形:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":关东煮:" block-list:name="🍢"/>
+  <block-list:block block-list:abbreviated-name=":关闭的信箱 (发件标志放倒):" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":关闭的信箱 (发件标志竖起):" block-list:name="📫"/>
+  <block-list:block block-list:abbreviated-name=":兴奋:" block-list:name="🤩"/>
+  <block-list:block block-list:abbreviated-name=":再生纸:" block-list:name="♼"/>
+  <block-list:block block-list:abbreviated-name=":冥王星:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":冰壶:" block-list:name="🥌"/>
+  <block-list:block block-list:abbreviated-name=":冰淇淋:" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":冰球 2:" block-list:name="🏑"/>
+  <block-list:block block-list:abbreviated-name=":冰球:" block-list:name="🏒"/>
+  <block-list:block block-list:abbreviated-name=":冲浪者:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":冷汗:" block-list:name="😓"/>
+  <block-list:block block-list:abbreviated-name=":冷汗担忧:" block-list:name="😰"/>
+  <block-list:block block-list:abbreviated-name=":凉鞋:" block-list:name="👡"/>
+  <block-list:block block-list:abbreviated-name=":减:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":减加:" block-list:name="∓"/>
+  <block-list:block block-list:abbreviated-name=":凯乐符号:" block-list:name="☧"/>
+  <block-list:block block-list:abbreviated-name=":凯尔特十字架:" block-list:name="🕈"/>
+  <block-list:block block-list:abbreviated-name=":出发:" block-list:name="🛫"/>
+  <block-list:block block-list:abbreviated-name=":出租车2:" block-list:name="🚖"/>
+  <block-list:block block-list:abbreviated-name=":出租车:" block-list:name="🚕"/>
+  <block-list:block block-list:abbreviated-name=":刀子 2:" block-list:name="🗡"/>
+  <block-list:block block-list:abbreviated-name=":刨冰:" block-list:name="🍧"/>
+  <block-list:block block-list:abbreviated-name=":刺猬:" block-list:name="🦔"/>
+  <block-list:block block-list:abbreviated-name=":剑标:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":剧毒:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":剧院:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":剪刀 2:" block-list:name="✄"/>
+  <block-list:block block-list:abbreviated-name=":剪刀 3:" block-list:name="✁"/>
+  <block-list:block block-list:abbreviated-name=":剪刀 4:" block-list:name="✃"/>
+  <block-list:block block-list:abbreviated-name=":剪刀:" block-list:name="✂"/>
+  <block-list:block block-list:abbreviated-name=":剪贴板:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":办公室:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":加减号:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":加油机:" block-list:name="⛽"/>
+  <block-list:block block-list:abbreviated-name=":勺子:" block-list:name="🥄"/>
+  <block-list:block block-list:abbreviated-name=":包含:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":包头巾:" block-list:name="👳"/>
+  <block-list:block block-list:abbreviated-name=":包裹:" block-list:name="📦"/>
+  <block-list:block block-list:abbreviated-name=":医院:" block-list:name="🏥"/>
+  <block-list:block block-list:abbreviated-name=":十一点半:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":十一点钟:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":十二点半:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":十二点钟:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":十六分音符:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":十点半:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":十点钟:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":千分号:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":升华锅:" block-list:name="⚗"/>
+  <block-list:block block-list:abbreviated-name=":升号:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":半身像:" block-list:name="👤"/>
+  <block-list:block block-list:abbreviated-name=":单板滑雪者:" block-list:name="🏂"/>
+  <block-list:block block-list:abbreviated-name=":单片镜:" block-list:name="🧐"/>
+  <block-list:block block-list:abbreviated-name=":单轨列车:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":单选框:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":博物馆:" block-list:name="🏛"/>
+  <block-list:block block-list:abbreviated-name=":卡片索引:" block-list:name="📇"/>
+  <block-list:block block-list:abbreviated-name=":卡车:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":卢比:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":卫兵:" block-list:name="💂"/>
+  <block-list:block block-list:abbreviated-name=":卫星:" block-list:name="🛰"/>
+  <block-list:block block-list:abbreviated-name=":卷轴:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":卷饼:" block-list:name="🌯"/>
+  <block-list:block block-list:abbreviated-name=":厌倦:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":厌倦尖叫的猫脸:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":厌恶:" block-list:name="😖"/>
+  <block-list:block block-list:abbreviated-name=":原子:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":厨刀:" block-list:name="🔪"/>
+  <block-list:block block-list:abbreviated-name=":叉号 2:" block-list:name="✖"/>
+  <block-list:block block-list:abbreviated-name=":叉号 3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":双人半身像:" block-list:name="👥"/>
+  <block-list:block block-list:abbreviated-name=":双剑标:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":双叹号:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":双子座:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":双手合十:" block-list:name="🙏"/>
+  <block-list:block block-list:abbreviated-name=":双蛇杖:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":双鱼座:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":发件箱:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":取消:" block-list:name="🗙"/>
+  <block-list:block block-list:abbreviated-name=":可爱:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":可被除于:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":台球:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":右 3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":右 4:" block-list:name="🖛"/>
+  <block-list:block block-list:abbreviated-name=":右 5:" block-list:name="🖙"/>
+  <block-list:block block-list:abbreviated-name=":右 6:" block-list:name="🖝"/>
+  <block-list:block block-list:abbreviated-name=":右:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":右上双箭头:" block-list:name="⇗"/>
+  <block-list:block block-list:abbreviated-name=":右上箭头:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":右下双箭头:" block-list:name="⇘"/>
+  <block-list:block block-list:abbreviated-name=":右下箭头:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":右向双箭头:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":右箭头:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":叶子 2:" block-list:name="🍂"/>
+  <block-list:block block-list:abbreviated-name=":叶子 3:" block-list:name="🍃"/>
+  <block-list:block block-list:abbreviated-name=":叶子:" block-list:name="🍁"/>
+  <block-list:block block-list:abbreviated-name=":号角:" block-list:name="🤘"/>
+  <block-list:block block-list:abbreviated-name=":叹号 2:" block-list:name="❗"/>
+  <block-list:block block-list:abbreviated-name=":叹号:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":叹问号:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":合字ff:" block-list:name="ﬀ"/>
+  <block-list:block block-list:abbreviated-name=":合字ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":合字ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":合字fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":合字fl:" block-list:name="ﬂ"/>
+  <block-list:block block-list:abbreviated-name=":合成器:" block-list:name="🎘"/>
+  <block-list:block block-list:abbreviated-name=":吉它:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":同意的手势:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":吐舌头:" block-list:name="😛"/>
+  <block-list:block block-list:abbreviated-name=":向上双箭头:" block-list:name="⇑"/>
+  <block-list:block block-list:abbreviated-name=":向下双箭头:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":向日葵:" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":否定:" block-list:name="👎"/>
+  <block-list:block block-list:abbreviated-name=":否定符号:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":吸烟标志:" block-list:name="🚬"/>
+  <block-list:block block-list:abbreviated-name=":吸血鬼:" block-list:name="🧛"/>
+  <block-list:block block-list:abbreviated-name=":吻:" block-list:name="💏"/>
+  <block-list:block block-list:abbreviated-name=":呆子:" block-list:name="🤓"/>
+  <block-list:block block-list:abbreviated-name=":呕吐:" block-list:name="🤮"/>
+  <block-list:block block-list:abbreviated-name=":呼叫:" block-list:name="🤙"/>
+  <block-list:block block-list:abbreviated-name=":和平符号:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":和服:" block-list:name="👘"/>
+  <block-list:block block-list:abbreviated-name=":咖啡:" block-list:name="☕"/>
+  <block-list:block block-list:abbreviated-name=":咖喱:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":响铃:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":哭泣:" block-list:name="😢"/>
+  <block-list:block block-list:abbreviated-name=":哭泣的猫脸:" block-list:name="😿"/>
+  <block-list:block block-list:abbreviated-name=":唇印:" block-list:name="💋"/>
+  <block-list:block block-list:abbreviated-name=":唇膏:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":唱片:" block-list:name="⏺"/>
+  <block-list:block block-list:abbreviated-name=":唵:" block-list:name="🕉"/>
+  <block-list:block block-list:abbreviated-name=":商店 2:" block-list:name="🏬"/>
+  <block-list:block block-list:abbreviated-name=":商店:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":商标:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":啤酒 2:" block-list:name="🍻"/>
+  <block-list:block block-list:abbreviated-name=":啤酒:" block-list:name="🍺"/>
+  <block-list:block block-list:abbreviated-name=":喀帕:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":喜极而泣:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":喜极而泣的猫脸:" block-list:name="😹"/>
+  <block-list:block block-list:abbreviated-name=":喷泉:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":嘘:" block-list:name="🤫"/>
+  <block-list:block block-list:abbreviated-name=":嘴:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":嘴上拉链:" block-list:name="🤐"/>
+  <block-list:block block-list:abbreviated-name=":嘴唇:" block-list:name="🗢"/>
+  <block-list:block block-list:abbreviated-name=":器:" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=":四分休止符:" block-list:name="𝄽"/>
+  <block-list:block block-list:abbreviated-name=":四分音符:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":四次方根:" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=":四点半:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":四点钟:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":四重积分:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":回形针 2:" block-list:name="🖇"/>
+  <block-list:block block-list:abbreviated-name=":回形针:" block-list:name="📎"/>
+  <block-list:block block-list:abbreviated-name=":团子:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":困倦:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":围巾:" block-list:name="🧣"/>
+  <block-list:block block-list:abbreviated-name=":图片:" block-list:name="🖼"/>
+  <block-list:block block-list:abbreviated-name=":图表 2:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":图表 3:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":图表 4:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":图表 5:" block-list:name="🗠"/>
+  <block-list:block block-list:abbreviated-name=":图表:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":图钉:" block-list:name="📌"/>
+  <block-list:block block-list:abbreviated-name=":圆 3:" block-list:name="🔾"/>
+  <block-list:block block-list:abbreviated-name=":圆 4:" block-list:name="🔿"/>
+  <block-list:block block-list:abbreviated-name=":圆图钉:" block-list:name="📍"/>
+  <block-list:block block-list:abbreviated-name=":土星:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":土耳其里拉:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":土豆:" block-list:name="🥔"/>
+  <block-list:block block-list:abbreviated-name=":圣安得烈十字:" block-list:name="☓"/>
+  <block-list:block block-list:abbreviated-name=":圣诞老人:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":圣诞老奶奶:" block-list:name="🤶"/>
+  <block-list:block block-list:abbreviated-name=":圣诞节:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":地图:" block-list:name="🗺"/>
+  <block-list:block block-list:abbreviated-name=":地球 2:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":地球 3:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":地球 4:" block-list:name="🌐"/>
+  <block-list:block block-list:abbreviated-name=":地球:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":地瓜:" block-list:name="🍠"/>
+  <block-list:block block-list:abbreviated-name=":地精:" block-list:name="👺"/>
+  <block-list:block block-list:abbreviated-name=":地铁:" block-list:name="🚇"/>
+  <block-list:block block-list:abbreviated-name=":场记板:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":坚韧不屈:" block-list:name="😣"/>
+  <block-list:block block-list:abbreviated-name=":垃圾入桶标志:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":城堡 2:" block-list:name="🏯"/>
+  <block-list:block block-list:abbreviated-name=":城堡:" block-list:name="🏰"/>
+  <block-list:block block-list:abbreviated-name=":城市:" block-list:name="🏙"/>
+  <block-list:block block-list:abbreviated-name=":培根:" block-list:name="🥓"/>
+  <block-list:block block-list:abbreviated-name=":墨盒:" block-list:name="🖭"/>
+  <block-list:block block-list:abbreviated-name=":处女座:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":备忘录:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":复选框6:" block-list:name="🗵"/>
+  <block-list:block block-list:abbreviated-name=":复选框:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":外卖:" block-list:name="🥡"/>
+  <block-list:block block-list:abbreviated-name=":外套:" block-list:name="🧥"/>
+  <block-list:block block-list:abbreviated-name=":外星人 2:" block-list:name="👾"/>
+  <block-list:block block-list:abbreviated-name=":外星人:" block-list:name="👽"/>
+  <block-list:block block-list:abbreviated-name=":多云 2:" block-list:name="⛅"/>
+  <block-list:block block-list:abbreviated-name=":多云 3:" block-list:name="⛈"/>
+  <block-list:block block-list:abbreviated-name=":多云:" block-list:name="🌤"/>
+  <block-list:block block-list:abbreviated-name=":多米诺骨牌:" block-list:name="🁠"/>
+  <block-list:block block-list:abbreviated-name=":多页:" block-list:name="🗐"/>
+  <block-list:block block-list:abbreviated-name=":夜晚:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":大于或等于:" block-list:name="≥"/>
+  <block-list:block block-list:abbreviated-name=":大卫之星:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":大哭:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":大圆 2:" block-list:name="⬤"/>
+  <block-list:block block-list:abbreviated-name=":大圆:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":大头钉:" block-list:name="🖈"/>
+  <block-list:block block-list:abbreviated-name=":大正方形 2:" block-list:name="⬛"/>
+  <block-list:block block-list:abbreviated-name=":大正方形:" block-list:name="⬜"/>
+  <block-list:block block-list:abbreviated-name=":大熊猫:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":大猩猩:" block-list:name="🦍"/>
+  <block-list:block block-list:abbreviated-name=":大笑:" block-list:name="😆"/>
+  <block-list:block block-list:abbreviated-name=":大老鼠:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":大象:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":天使:" block-list:name="👼"/>
+  <block-list:block block-list:abbreviated-name=":天妇罗:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":天平:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":天王星:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":天秤座:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":天线:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":天蝎座:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":太初之母性力量:" block-list:name="☬"/>
+  <block-list:block block-list:abbreviated-name=":太阳 2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":太阳:" block-list:name="🌞"/>
+  <block-list:block block-list:abbreviated-name=":太阳镜:" block-list:name="🕶"/>
+  <block-list:block block-list:abbreviated-name=":夫妻 2:" block-list:name="👬"/>
+  <block-list:block block-list:abbreviated-name=":夫妻 3:" block-list:name="👭"/>
+  <block-list:block block-list:abbreviated-name=":夫妻 4:" block-list:name="💑"/>
+  <block-list:block block-list:abbreviated-name=":夫妻:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":失望:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":失望但释然:" block-list:name="😥"/>
+  <block-list:block block-list:abbreviated-name=":头:" block-list:name="🗣"/>
+  <block-list:block block-list:abbreviated-name=":头上有光环的笑脸:" block-list:name="😇"/>
+  <block-list:block block-list:abbreviated-name=":头戴式耳机:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":头盔:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":头脑:" block-list:name="🧠"/>
+  <block-list:block block-list:abbreviated-name=":夹子:" block-list:name="🗜"/>
+  <block-list:block block-list:abbreviated-name=":夹饼:" block-list:name="🌮"/>
+  <block-list:block block-list:abbreviated-name=":奔跑者:" block-list:name="🏃"/>
+  <block-list:block block-list:abbreviated-name=":奖杯:" block-list:name="🏆"/>
+  <block-list:block block-list:abbreviated-name=":奖牌 2:" block-list:name="🎖"/>
+  <block-list:block block-list:abbreviated-name=":奖牌:" block-list:name="🏅"/>
+  <block-list:block block-list:abbreviated-name=":套:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":女人:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":女孩:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":女性:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":女洗手间:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":奶牛 2:" block-list:name="🐮"/>
+  <block-list:block block-list:abbreviated-name=":奶牛:" block-list:name="🐄"/>
+  <block-list:block block-list:abbreviated-name=":奶酪:" block-list:name="🧀"/>
+  <block-list:block block-list:abbreviated-name=":奶黄:" block-list:name="🍮"/>
+  <block-list:block block-list:abbreviated-name=":好运:" block-list:name="🤞"/>
+  <block-list:block block-list:abbreviated-name=":姓名牌:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":婚姻:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":婚礼:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":婴儿2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":婴儿 3:" block-list:name="🤱"/>
+  <block-list:block block-list:abbreviated-name=":婴儿:" block-list:name="👶"/>
+  <block-list:block block-list:abbreviated-name=":婴儿奶瓶:" block-list:name="🍼"/>
+  <block-list:block block-list:abbreviated-name=":子弹头高铁:" block-list:name="🚅"/>
+  <block-list:block block-list:abbreviated-name=":子集:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":字体 2:" block-list:name="🗚"/>
+  <block-list:block block-list:abbreviated-name=":字体:" block-list:name="🗛"/>
+  <block-list:block block-list:abbreviated-name=":存在量词:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":学校:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":宇普西龙:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":安静下来:" block-list:name="😯"/>
+  <block-list:block block-list:abbreviated-name=":定时器:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":宝石:" block-list:name="💎"/>
+  <block-list:block block-list:abbreviated-name=":实心三角形:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":实心圆:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":实心平行四边形:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":实心循环再造标志:" block-list:name="♻"/>
+  <block-list:block block-list:abbreviated-name=":实心星星:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":实心正方形:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":实心长方形:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":宴会 2:" block-list:name="🕄"/>
+  <block-list:block block-list:abbreviated-name=":宴会:" block-list:name="🕃"/>
+  <block-list:block block-list:abbreviated-name=":家庭:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":富士山:" block-list:name="🗻"/>
+  <block-list:block block-list:abbreviated-name=":对勾 2:" block-list:name="✔"/>
+  <block-list:block block-list:abbreviated-name=":对勾 3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":对勾4:" block-list:name="🗴"/>
+  <block-list:block block-list:abbreviated-name=":对勾5:" block-list:name="🗸"/>
+  <block-list:block block-list:abbreviated-name=":对勾:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":寻呼机:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":寿司:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":射手座:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":小丑:" block-list:name="🤡"/>
+  <block-list:block block-list:abbreviated-name=":小于或等于:" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=":小包:" block-list:name="👝"/>
+  <block-list:block block-list:abbreviated-name=":小号:" block-list:name="🎺"/>
+  <block-list:block block-list:abbreviated-name=":小型实心正方形:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":小型星号 2:" block-list:name="⭑"/>
+  <block-list:block block-list:abbreviated-name=":小型星号:" block-list:name="⭒"/>
+  <block-list:block block-list:abbreviated-name=":小型空心正方形:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":小巴车:" block-list:name="🚐"/>
+  <block-list:block block-list:abbreviated-name=":小恶魔:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":小提琴:" block-list:name="🎻"/>
+  <block-list:block block-list:abbreviated-name=":小老鼠 2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":小老鼠:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":小鸡 2:" block-list:name="🐤"/>
+  <block-list:block block-list:abbreviated-name=":小鸡 3:" block-list:name="🐥"/>
+  <block-list:block block-list:abbreviated-name=":小鸡:" block-list:name="🐔"/>
+  <block-list:block block-list:abbreviated-name=":尴尬笑:" block-list:name="😅"/>
+  <block-list:block block-list:abbreviated-name=":屏幕:" block-list:name="🖵"/>
+  <block-list:block block-list:abbreviated-name=":属于:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":山区铁路:" block-list:name="🚞"/>
+  <block-list:block block-list:abbreviated-name=":山峰:" block-list:name="⛰"/>
+  <block-list:block block-list:abbreviated-name=":山羊:" block-list:name="🐐"/>
+  <block-list:block block-list:abbreviated-name=":岛屿:" block-list:name="🏝"/>
+  <block-list:block block-list:abbreviated-name=":工人:" block-list:name="👷"/>
+  <block-list:block block-list:abbreviated-name=":工厂:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":左 3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":左 4:" block-list:name="🖚"/>
+  <block-list:block block-list:abbreviated-name=":左 5:" block-list:name="🖜"/>
+  <block-list:block block-list:abbreviated-name=":左 6:" block-list:name="🖘"/>
+  <block-list:block block-list:abbreviated-name=":左:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":左上双箭头:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":左上箭头:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":左下双箭头:" block-list:name="⇙"/>
+  <block-list:block block-list:abbreviated-name=":左下箭头:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":左右双箭头:" block-list:name="⇔"/>
+  <block-list:block block-list:abbreviated-name=":左右箭头:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":左向双箭头:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":左箭头:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":巧克力:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":巨蟹座:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":帆船:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":希腊十字架 2:" block-list:name="✙"/>
+  <block-list:block block-list:abbreviated-name=":希腊十字架:" block-list:name="✚"/>
+  <block-list:block block-list:abbreviated-name=":帐本:" block-list:name="📒"/>
+  <block-list:block block-list:abbreviated-name=":帐篷:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":带下箭头的信封:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":带有右箭头的手机:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":帽子 2:" block-list:name="👲"/>
+  <block-list:block block-list:abbreviated-name=":帽子:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":平方根:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":平行:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":并集:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":幼苗:" block-list:name="🌱"/>
+  <block-list:block block-list:abbreviated-name=":床:" block-list:name="🛏"/>
+  <block-list:block block-list:abbreviated-name=":废纸篓:" block-list:name="🗑"/>
+  <block-list:block block-list:abbreviated-name=":度:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":座椅:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":开口弯眼笑:" block-list:name="😄"/>
+  <block-list:block block-list:abbreviated-name=":开口笑:" block-list:name="😃"/>
+  <block-list:block block-list:abbreviated-name=":弓箭:" block-list:name="🏹"/>
+  <block-list:block block-list:abbreviated-name=":张口惊讶:" block-list:name="😮"/>
+  <block-list:block block-list:abbreviated-name=":张口皱眉:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":张口笑的猫脸:" block-list:name="😺"/>
+  <block-list:block block-list:abbreviated-name=":张开的手:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":录像带:" block-list:name="📼"/>
+  <block-list:block block-list:abbreviated-name=":彗星:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":彩虹:" block-list:name="🌈"/>
+  <block-list:block block-list:abbreviated-name=":很多火花:" block-list:name="✨"/>
+  <block-list:block block-list:abbreviated-name=":循环 2:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":循环:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":微笑 2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":微笑3:" block-list:name="🙂"/>
+  <block-list:block block-list:abbreviated-name=":微笑 4:" block-list:name="🤭"/>
+  <block-list:block block-list:abbreviated-name=":微笑:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":微笑的小鬼:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":德尔塔:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":心形:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":心花怒放的猫脸:" block-list:name="😻"/>
+  <block-list:block block-list:abbreviated-name=":心花怒放脸:" block-list:name="😍"/>
+  <block-list:block block-list:abbreviated-name=":心跳:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":忧伤:" block-list:name="😔"/>
+  <block-list:block block-list:abbreviated-name=":怀孕:" block-list:name="🤰"/>
+  <block-list:block block-list:abbreviated-name=":思考:" block-list:name="🤔"/>
+  <block-list:block block-list:abbreviated-name=":思考气泡:" block-list:name="💭"/>
+  <block-list:block block-list:abbreviated-name=":恐惧:" block-list:name="😨"/>
+  <block-list:block block-list:abbreviated-name=":恐惧尖叫:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":恐龙 2:" block-list:name="🦖"/>
+  <block-list:block block-list:abbreviated-name=":恐龙:" block-list:name="🦕"/>
+  <block-list:block block-list:abbreviated-name=":恶心想吐:" block-list:name="🤢"/>
+  <block-list:block block-list:abbreviated-name=":悲痛:" block-list:name="😧"/>
+  <block-list:block block-list:abbreviated-name=":情书:" block-list:name="💌"/>
+  <block-list:block block-list:abbreviated-name=":惊讶:" block-list:name="😲"/>
+  <block-list:block block-list:abbreviated-name=":意大利面:" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":愤怒:" block-list:name="💢"/>
+  <block-list:block block-list:abbreviated-name=":成人:" block-list:name="🧑"/>
+  <block-list:block block-list:abbreviated-name=":我不听的猴脸:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":我不看的猴脸:" block-list:name="🙈"/>
+  <block-list:block block-list:abbreviated-name=":我不说的猴脸:" block-list:name="🙊"/>
+  <block-list:block block-list:abbreviated-name=":戒指:" block-list:name="💍"/>
+  <block-list:block block-list:abbreviated-name=":或:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":戴口罩:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":戴太阳镜的笑脸:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":房子 2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":房子 3:" block-list:name="🏚"/>
+  <block-list:block block-list:abbreviated-name=":房子:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":手 2:" block-list:name="🖐"/>
+  <block-list:block block-list:abbreviated-name=":手 3:" block-list:name="🖑"/>
+  <block-list:block block-list:abbreviated-name=":手 4:" block-list:name="🤚"/>
+  <block-list:block block-list:abbreviated-name=":手:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":手套:" block-list:name="🧤"/>
+  <block-list:block block-list:abbreviated-name=":手持烟花:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":手掌 2:" block-list:name="🤲"/>
+  <block-list:block block-list:abbreviated-name=":手推车:" block-list:name="🛒"/>
+  <block-list:block block-list:abbreviated-name=":手提包:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":手机 2:" block-list:name="🖁"/>
+  <block-list:block block-list:abbreviated-name=":手机:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":手机信号:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":手机关机:" block-list:name="📴"/>
+  <block-list:block block-list:abbreviated-name=":手枪:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":手柄向右的放大镜:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":手柄向左的放大镜:" block-list:name="🔎"/>
+  <block-list:block block-list:abbreviated-name=":手球:" block-list:name="🤾"/>
+  <block-list:block block-list:abbreviated-name=":手电筒:" block-list:name="🔦"/>
+  <block-list:block block-list:abbreviated-name=":手表:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":手袋:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":打印机 2:" block-list:name="🖶"/>
+  <block-list:block block-list:abbreviated-name=":打印机:" block-list:name="🖨"/>
+  <block-list:block block-list:abbreviated-name=":打喷嚏:" block-list:name="🤧"/>
+  <block-list:block block-list:abbreviated-name=":打开的信箱 (发件标志放倒):" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":打开的信箱 (发件标志竖起):" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":打开的锁:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":打滑的汽车:" block-list:name="⛐"/>
+  <block-list:block block-list:abbreviated-name=":扩音器 2:" block-list:name="🕬"/>
+  <block-list:block block-list:abbreviated-name=":扩音器:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":扮鬼脸:" block-list:name="😬"/>
+  <block-list:block block-list:abbreviated-name=":扳手:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":投影仪:" block-list:name="📽"/>
+  <block-list:block block-list:abbreviated-name=":护照:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":报纸 2:" block-list:name="🗞"/>
+  <block-list:block block-list:abbreviated-name=":报纸:" block-list:name="📰"/>
+  <block-list:block block-list:abbreviated-name=":披萨饼:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":抵达:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":抽水马桶:" block-list:name="🚽"/>
+  <block-list:block block-list:abbreviated-name=":担忧:" block-list:name="😟"/>
+  <block-list:block block-list:abbreviated-name=":拉丁十字架 2:" block-list:name="🕆"/>
+  <block-list:block block-list:abbreviated-name=":拉丁十字架 3:" block-list:name="🕇"/>
+  <block-list:block block-list:abbreviated-name=":拉丁十字架:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":拉姆达:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":拉粑粑:" block-list:name="💩"/>
+  <block-list:block block-list:abbreviated-name=":拉面:" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":拍手:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":拍球的人:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":拖拉机:" block-list:name="🚜"/>
+  <block-list:block block-list:abbreviated-name=":拗:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":拥抱:" block-list:name="🤗"/>
+  <block-list:block block-list:abbreviated-name=":拳击:" block-list:name="🥊"/>
+  <block-list:block block-list:abbreviated-name=":拳头 2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":拳头 3:" block-list:name="🤛"/>
+  <block-list:block block-list:abbreviated-name=":拳头 4:" block-list:name="🤜"/>
+  <block-list:block block-list:abbreviated-name=":拳头:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":按摩:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":挤眼吐舌头:" block-list:name="😜"/>
+  <block-list:block block-list:abbreviated-name=":挥手:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":捂脸:" block-list:name="🤦"/>
+  <block-list:block block-list:abbreviated-name=":捧腹大笑:" block-list:name="🤣"/>
+  <block-list:block block-list:abbreviated-name=":捷塔:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":排球:" block-list:name="🏐"/>
+  <block-list:block block-list:abbreviated-name=":接收器 2:" block-list:name="🕻"/>
+  <block-list:block block-list:abbreviated-name=":接收器 3:" block-list:name="🕽"/>
+  <block-list:block block-list:abbreviated-name=":接收器 4:" block-list:name="🕼"/>
+  <block-list:block block-list:abbreviated-name=":控制:" block-list:name="🎛"/>
+  <block-list:block block-list:abbreviated-name=":插头:" block-list:name="🔌"/>
+  <block-list:block block-list:abbreviated-name=":握手:" block-list:name="🤝"/>
+  <block-list:block block-list:abbreviated-name=":摄像机:" block-list:name="📹"/>
+  <block-list:block block-list:abbreviated-name=":摔跤:" block-list:name="🤼"/>
+  <block-list:block block-list:abbreviated-name=":摩天轮:" block-list:name="🎡"/>
+  <block-list:block block-list:abbreviated-name=":摩托艇:" block-list:name="🛥"/>
+  <block-list:block block-list:abbreviated-name=":摩托车:" block-list:name="🏍"/>
+  <block-list:block block-list:abbreviated-name=":摩羯座:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":摩艾石像:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":撅嘴:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":撅嘴生气的猫脸:" block-list:name="😾"/>
+  <block-list:block block-list:abbreviated-name=":收件箱:" block-list:name="📥"/>
+  <block-list:block block-list:abbreviated-name=":收到的信封:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":收音机:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":救护车:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":教堂:" block-list:name="⛪"/>
+  <block-list:block block-list:abbreviated-name=":文件夹 2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":文件夹 3:" block-list:name="🗀"/>
+  <block-list:block block-list:abbreviated-name=":文件夹 4:" block-list:name="🗁"/>
+  <block-list:block block-list:abbreviated-name=":文件夹 5:" block-list:name="🖿"/>
+  <block-list:block block-list:abbreviated-name=":文件夹:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":文档 2:" block-list:name="🖹"/>
+  <block-list:block block-list:abbreviated-name=":文档 3:" block-list:name="🖻"/>
+  <block-list:block block-list:abbreviated-name=":文档 4:" block-list:name="🖺"/>
+  <block-list:block block-list:abbreviated-name=":文档:" block-list:name="🗎"/>
+  <block-list:block block-list:abbreviated-name=":文章 2:" block-list:name="🖎"/>
+  <block-list:block block-list:abbreviated-name=":斑马:" block-list:name="🦓"/>
+  <block-list:block block-list:abbreviated-name=":斑马线:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":新娘:" block-list:name="👰"/>
+  <block-list:block block-list:abbreviated-name=":新月 2:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":新月:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":新郎:" block-list:name="🤵"/>
+  <block-list:block block-list:abbreviated-name=":方块:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":方巾:" block-list:name="🧕"/>
+  <block-list:block block-list:abbreviated-name=":施工标志:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":旅馆 2:" block-list:name="🏩"/>
+  <block-list:block block-list:abbreviated-name=":旅馆:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":旋转木马:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":旋转爱心:" block-list:name="💞"/>
+  <block-list:block block-list:abbreviated-name=":旋转警灯:" block-list:name="🚨"/>
+  <block-list:block block-list:abbreviated-name=":旗子 2:" block-list:name="🎏"/>
+  <block-list:block block-list:abbreviated-name=":旗子:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":旗帜 3:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":旗帜 4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":无口表情:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":无穷:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":无轨电车:" block-list:name="🚎"/>
+  <block-list:block block-list:abbreviated-name=":无酸纸:" block-list:name="♾"/>
+  <block-list:block block-list:abbreviated-name=":日:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":日元 2:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":日元:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":日出 2:" block-list:name="🌄"/>
+  <block-list:block block-list:abbreviated-name=":日出:" block-list:name="🌅"/>
+  <block-list:block block-list:abbreviated-name=":日历 2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":日历 3:" block-list:name="🗓"/>
+  <block-list:block block-list:abbreviated-name=":日历:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":日本:" block-list:name="🗾"/>
+  <block-list:block block-list:abbreviated-name=":日本新手驾驶标志:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":日本清酒:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":日落 3:" block-list:name="🌇"/>
+  <block-list:block block-list:abbreviated-name=":日落:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":星星 3:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":星星 4:" block-list:name="🌠"/>
+  <block-list:block block-list:abbreviated-name=":星月:" block-list:name="☪"/>
+  <block-list:block block-list:abbreviated-name=":是 2:" block-list:name="🖒"/>
+  <block-list:block block-list:abbreviated-name=":显微镜:" block-list:name="🔬"/>
+  <block-list:block block-list:abbreviated-name=":普赛:" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name=":晴朗:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":暂停:" block-list:name="⏸"/>
+  <block-list:block block-list:abbreviated-name=":暴怒:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":暴风雨 2:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":暴风雨:" block-list:name="🌧"/>
+  <block-list:block block-list:abbreviated-name=":曲奇饼:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":最大化:" block-list:name="🗖"/>
+  <block-list:block block-list:abbreviated-name=":最小化:" block-list:name="🗕"/>
+  <block-list:block block-list:abbreviated-name=":月亮 2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":月亮:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":有轨电车2:" block-list:name="🚋"/>
+  <block-list:block block-list:abbreviated-name=":有轨电车:" block-list:name="🚊"/>
+  <block-list:block block-list:abbreviated-name=":有雨 2:" block-list:name="⛆"/>
+  <block-list:block block-list:abbreviated-name=":有雨:" block-list:name="🌦"/>
+  <block-list:block block-list:abbreviated-name=":有雾:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":服艾:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":望远镜:" block-list:name="🔭"/>
+  <block-list:block block-list:abbreviated-name=":木星:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":木槿:" block-list:name="🌺"/>
+  <block-list:block block-list:abbreviated-name=":机器人:" block-list:name="🤖"/>
+  <block-list:block block-list:abbreviated-name=":杂耍:" block-list:name="🤹"/>
+  <block-list:block block-list:abbreviated-name=":权杖:" block-list:name="⚚"/>
+  <block-list:block block-list:abbreviated-name=":松树:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":板栗:" block-list:name="🌰"/>
+  <block-list:block block-list:abbreviated-name=":板球 2:" block-list:name="🦗"/>
+  <block-list:block block-list:abbreviated-name=":板球:" block-list:name="🏏"/>
+  <block-list:block block-list:abbreviated-name=":柔:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":柔道:" block-list:name="🥋"/>
+  <block-list:block block-list:abbreviated-name=":柜子:" block-list:name="🗄"/>
+  <block-list:block block-list:abbreviated-name=":柠檬:" block-list:name="🍋"/>
+  <block-list:block block-list:abbreviated-name=":标签:" block-list:name="🏷"/>
+  <block-list:block block-list:abbreviated-name=":标记章节:" block-list:name="🕅"/>
+  <block-list:block block-list:abbreviated-name=":树:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":格里夫纳:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":桃子:" block-list:name="🍑"/>
+  <block-list:block block-list:abbreviated-name=":框架 2:" block-list:name="🖽"/>
+  <block-list:block block-list:abbreviated-name=":框架:" block-list:name="🖾"/>
+  <block-list:block block-list:abbreviated-name=":桑拿:" block-list:name="🧖"/>
+  <block-list:block block-list:abbreviated-name=":桥梁:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":梅花:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":梨子:" block-list:name="🍐"/>
+  <block-list:block block-list:abbreviated-name=":梯形:" block-list:name="⏢"/>
+  <block-list:block block-list:abbreviated-name=":棒棒糖:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":棒球:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":棕榈:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":棺材:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":椒盐卷饼:" block-list:name="🥨"/>
+  <block-list:block block-list:abbreviated-name=":椭圆:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":椰子:" block-list:name="🥥"/>
+  <block-list:block block-list:abbreviated-name=":樱桃:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":橄榄球:" block-list:name="🏉"/>
+  <block-list:block block-list:abbreviated-name=":橘子:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":橙色爱心:" block-list:name="🧡"/>
+  <block-list:block block-list:abbreviated-name=":欧元 2:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":欧元:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":欧米伽:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":欧米克伦:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":正教会十字:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":正装:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":残月:" block-list:name="🌘"/>
+  <block-list:block block-list:abbreviated-name=":比基尼:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":比特币:" block-list:name="₿"/>
+  <block-list:block block-list:abbreviated-name=":比索:" block-list:name="₱"/>
+  <block-list:block block-list:abbreviated-name=":毕业:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":气球:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":水星:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":水晶球:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":水滴 2:" block-list:name="🌢"/>
+  <block-list:block block-list:abbreviated-name=":水滴:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":水牛:" block-list:name="🐃"/>
+  <block-list:block block-list:abbreviated-name=":水球:" block-list:name="🤽"/>
+  <block-list:block block-list:abbreviated-name=":水瓶座:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":求和符号:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":汉堡:" block-list:name="🍔"/>
+  <block-list:block block-list:abbreviated-name=":汗滴:" block-list:name="💦"/>
+  <block-list:block block-list:abbreviated-name=":汽艇:" block-list:name="🚤"/>
+  <block-list:block block-list:abbreviated-name=":汽车2:" block-list:name="🚘"/>
+  <block-list:block block-list:abbreviated-name=":汽车3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":汽车 4:" block-list:name="🏎"/>
+  <block-list:block block-list:abbreviated-name=":汽车:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":沉睡:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":沙发:" block-list:name="🛋"/>
+  <block-list:block block-list:abbreviated-name=":沙拉:" block-list:name="🥗"/>
+  <block-list:block block-list:abbreviated-name=":沙漏 2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":沙漏:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":沙漠:" block-list:name="🏜"/>
+  <block-list:block block-list:abbreviated-name=":油桶:" block-list:name="🛢"/>
+  <block-list:block block-list:abbreviated-name=":泡泡10:" block-list:name="🗩"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 2:" block-list:name="🗪"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 3:" block-list:name="🗫"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 4:" block-list:name="🗯"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 5:" block-list:name="🗭"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 6:" block-list:name="🗱"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 7:" block-list:name="🗬"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 8:" block-list:name="🗮"/>
+  <block-list:block block-list:abbreviated-name=":泡泡 9:" block-list:name="🗰"/>
+  <block-list:block block-list:abbreviated-name=":泡泡:" block-list:name="🗨"/>
+  <block-list:block block-list:abbreviated-name=":泡澡的人:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":注册商标符号:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=":注射器:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":泰铢:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":洗手间:" block-list:name="🚻"/>
+  <block-list:block block-list:abbreviated-name=":洛林十字:" block-list:name="☨"/>
+  <block-list:block block-list:abbreviated-name=":洞穴:" block-list:name="🕳"/>
+  <block-list:block block-list:abbreviated-name=":派:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":派对 2:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":派对 3:" block-list:name="🥂"/>
+  <block-list:block block-list:abbreviated-name=":派对4:" block-list:name="🍾"/>
+  <block-list:block block-list:abbreviated-name=":派对:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":流口水:" block-list:name="🤤"/>
+  <block-list:block block-list:abbreviated-name=":浓汤:" block-list:name="🍲"/>
+  <block-list:block block-list:abbreviated-name=":浴缸:" block-list:name="🛁"/>
+  <block-list:block block-list:abbreviated-name=":海关:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":海洋:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":海滩:" block-list:name="🏖"/>
+  <block-list:block block-list:abbreviated-name=":海王星:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":海盗:" block-list:name="🕱"/>
+  <block-list:block block-list:abbreviated-name=":海豚:" block-list:name="🐬"/>
+  <block-list:block block-list:abbreviated-name=":消防车 2:" block-list:name="🛱"/>
+  <block-list:block block-list:abbreviated-name=":消防车:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":淋雨:" block-list:name="🚿"/>
+  <block-list:block block-list:abbreviated-name=":清真寺:" block-list:name="🕌"/>
+  <block-list:block block-list:abbreviated-name=":温度计2:" block-list:name="🤒"/>
+  <block-list:block block-list:abbreviated-name=":温度计:" block-list:name="🌡"/>
+  <block-list:block block-list:abbreviated-name=":温泉记号:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":游戏手柄:" block-list:name="🕹"/>
+  <block-list:block block-list:abbreviated-name=":游泳者:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":滑冰:" block-list:name="⛸"/>
+  <block-list:block block-list:abbreviated-name=":滑块:" block-list:name="🎚"/>
+  <block-list:block block-list:abbreviated-name=":滑板车 2:" block-list:name="🛵"/>
+  <block-list:block block-list:abbreviated-name=":滑板车:" block-list:name="🛴"/>
+  <block-list:block block-list:abbreviated-name=":滑稽:" block-list:name="🤪"/>
+  <block-list:block block-list:abbreviated-name=":滑雪:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":滑雪者:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":满月 2:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":满月:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":火:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":火山:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":火箭:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":火花:" block-list:name="❇"/>
+  <block-list:block block-list:abbreviated-name=":火车:" block-list:name="🚆"/>
+  <block-list:block block-list:abbreviated-name=":火车头 2:" block-list:name="🛲"/>
+  <block-list:block block-list:abbreviated-name=":火车头:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":火车车厢:" block-list:name="🚃"/>
+  <block-list:block block-list:abbreviated-name=":火鸡:" block-list:name="🦃"/>
+  <block-list:block block-list:abbreviated-name=":灯泡:" block-list:name="💡"/>
+  <block-list:block block-list:abbreviated-name=":灯神:" block-list:name="🧞"/>
+  <block-list:block block-list:abbreviated-name=":灯笼:" block-list:name="🏮"/>
+  <block-list:block block-list:abbreviated-name=":炸弹:" block-list:name="💣"/>
+  <block-list:block block-list:abbreviated-name=":烧饭:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":热狗:" block-list:name="🌭"/>
+  <block-list:block block-list:abbreviated-name=":焰火:" block-list:name="🎆"/>
+  <block-list:block block-list:abbreviated-name=":煎饼:" block-list:name="🥞"/>
+  <block-list:block block-list:abbreviated-name=":照相机:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":熊:" block-list:name="🐻"/>
+  <block-list:block block-list:abbreviated-name=":爆炸:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":爆米花:" block-list:name="🍿"/>
+  <block-list:block block-list:abbreviated-name=":爱 2:" block-list:name="🤟"/>
+  <block-list:block block-list:abbreviated-name=":爱:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":爱心 2:" block-list:name="🎔"/>
+  <block-list:block block-list:abbreviated-name=":爱心装饰:" block-list:name="💟"/>
+  <block-list:block block-list:abbreviated-name=":版权符号:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":牛:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":牛仔:" block-list:name="🤠"/>
+  <block-list:block block-list:abbreviated-name=":牛仔裤:" block-list:name="👖"/>
+  <block-list:block block-list:abbreviated-name=":牛奶:" block-list:name="🥛"/>
+  <block-list:block block-list:abbreviated-name=":牛排:" block-list:name="🥩"/>
+  <block-list:block block-list:abbreviated-name=":牛油果:" block-list:name="🥑"/>
+  <block-list:block block-list:abbreviated-name=":牛角面包:" block-list:name="🥐"/>
+  <block-list:block block-list:abbreviated-name=":犀牛:" block-list:name="🦏"/>
+  <block-list:block block-list:abbreviated-name=":犹太教堂:" block-list:name="🕍"/>
+  <block-list:block block-list:abbreviated-name=":犹太教灯台:" block-list:name="🕎"/>
+  <block-list:block block-list:abbreviated-name=":狐狸:" block-list:name="🦊"/>
+  <block-list:block block-list:abbreviated-name=":狗 2:" block-list:name="🐶"/>
+  <block-list:block block-list:abbreviated-name=":狗:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":独木舟:" block-list:name="🛶"/>
+  <block-list:block block-list:abbreviated-name=":独角兽:" block-list:name="🦄"/>
+  <block-list:block block-list:abbreviated-name=":狮子:" block-list:name="🦁"/>
+  <block-list:block block-list:abbreviated-name=":狮子座:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":狼:" block-list:name="🐺"/>
+  <block-list:block block-list:abbreviated-name=":猕猴桃:" block-list:name="🥝"/>
+  <block-list:block block-list:abbreviated-name=":猪 2:" block-list:name="🐷"/>
+  <block-list:block block-list:abbreviated-name=":猪:" block-list:name="🐖"/>
+  <block-list:block block-list:abbreviated-name=":猪鼻子:" block-list:name="🐽"/>
+  <block-list:block block-list:abbreviated-name=":猫 2:" block-list:name="🐱"/>
+  <block-list:block block-list:abbreviated-name=":猫:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":猫头鹰:" block-list:name="🦉"/>
+  <block-list:block block-list:abbreviated-name=":猴子 2:" block-list:name="🐵"/>
+  <block-list:block block-list:abbreviated-name=":猴子:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":玉米:" block-list:name="🌽"/>
+  <block-list:block block-list:abbreviated-name=":王冠:" block-list:name="👑"/>
+  <block-list:block block-list:abbreviated-name=":王子:" block-list:name="🤴"/>
+  <block-list:block block-list:abbreviated-name=":玩具娃娃:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":玫瑰:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":玫瑰纹饰 2:" block-list:name="🏶"/>
+  <block-list:block block-list:abbreviated-name=":玫瑰花饰:" block-list:name="🏵"/>
+  <block-list:block block-list:abbreviated-name=":玻璃杯 3:" block-list:name="🥃"/>
+  <block-list:block block-list:abbreviated-name=":玻璃杯:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":珠子:" block-list:name="📿"/>
+  <block-list:block block-list:abbreviated-name=":理发:" block-list:name="💇"/>
+  <block-list:block block-list:abbreviated-name=":理发师:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":瑜伽:" block-list:name="🧘"/>
+  <block-list:block block-list:abbreviated-name=":瓢虫:" block-list:name="🐞"/>
+  <block-list:block block-list:abbreviated-name=":瓦肯举手礼:" block-list:name="🖖"/>
+  <block-list:block block-list:abbreviated-name=":甜瓜:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":甜甜圈:" block-list:name="🍩"/>
+  <block-list:block block-list:abbreviated-name=":生命之符:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":生日:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":生物危害:" block-list:name="☣"/>
+  <block-list:block block-list:abbreviated-name=":电子游戏:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":电子邮件:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":电影摄像机:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":电影院:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":电池:" block-list:name="🔋"/>
+  <block-list:block block-list:abbreviated-name=":电脑:" block-list:name="🖳"/>
+  <block-list:block block-list:abbreviated-name=":电视机:" block-list:name="📺"/>
+  <block-list:block block-list:abbreviated-name=":电话 2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":电话 3:" block-list:name="🕾"/>
+  <block-list:block block-list:abbreviated-name=":电话 4:" block-list:name="🕿"/>
+  <block-list:block block-list:abbreviated-name=":电话:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":电话听筒:" block-list:name="📞"/>
+  <block-list:block block-list:abbreviated-name=":男人:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":男孩:" block-list:name="👦"/>
+  <block-list:block block-list:abbreviated-name=":男性:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":男洗手间:" block-list:name="🚹"/>
+  <block-list:block block-list:abbreviated-name=":画笔:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":疲倦:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":疾走:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":登山者:" block-list:name="🧗"/>
+  <block-list:block block-list:abbreviated-name=":白棋兵:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":白棋国王:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":白棋王后:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":白棋象:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":白棋车:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":白棋马:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":白羊座:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":白色方形按钮:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":白花:" block-list:name="💮"/>
+  <block-list:block block-list:abbreviated-name=":百合花饰:" block-list:name="⚜"/>
+  <block-list:block block-list:abbreviated-name=":皮划艇:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":皮肤 1:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":皮肤 2:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":皮肤 3:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":皮肤 4:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":皮肤 5:" block-list:name="🏿"/>
+  <block-list:block block-list:abbreviated-name=":皱眉2:" block-list:name="🙁"/>
+  <block-list:block block-list:abbreviated-name=":皱眉:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":盈凸月:" block-list:name="🌔"/>
+  <block-list:block block-list:abbreviated-name=":盘子:" block-list:name="🍽"/>
+  <block-list:block block-list:abbreviated-name=":盥洗室:" block-list:name="🚾"/>
+  <block-list:block block-list:abbreviated-name=":直升机:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":直尺 2:" block-list:name="📐"/>
+  <block-list:block block-list:abbreviated-name=":直尺:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":直角三角形:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":盾牌 2:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":盾牌:" block-list:name="🛡"/>
+  <block-list:block block-list:abbreviated-name=":省略号:" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=":眉毛:" block-list:name="🤨"/>
+  <block-list:block block-list:abbreviated-name=":眨眼:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":眩晕:" block-list:name="💫"/>
+  <block-list:block block-list:abbreviated-name=":眼睛:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":眼镜:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":睡眠:" block-list:name="💤"/>
+  <block-list:block block-list:abbreviated-name=":破碎的心:" block-list:name="💔"/>
+  <block-list:block block-list:abbreviated-name=":硬盘:" block-list:name="🖴"/>
+  <block-list:block block-list:abbreviated-name=":确定:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":碗:" block-list:name="🥣"/>
+  <block-list:block block-list:abbreviated-name=":礼拜:" block-list:name="🛐"/>
+  <block-list:block block-list:abbreviated-name=":礼物:" block-list:name="🎁"/>
+  <block-list:block block-list:abbreviated-name=":礼物爱心:" block-list:name="💝"/>
+  <block-list:block block-list:abbreviated-name=":禁止:" block-list:name="🛇"/>
+  <block-list:block block-list:abbreviated-name=":禁止乱丢垃圾:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":禁止使用手机:" block-list:name="📵"/>
+  <block-list:block block-list:abbreviated-name=":禁止吸烟:" block-list:name="🚭"/>
+  <block-list:block block-list:abbreviated-name=":禁止进入:" block-list:name="⛔"/>
+  <block-list:block block-list:abbreviated-name=":禁止进入标志:" block-list:name="🚫"/>
+  <block-list:block block-list:abbreviated-name=":离婚:" block-list:name="⚮"/>
+  <block-list:block block-list:abbreviated-name=":秒表:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":积分:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":空心三角形:" block-list:name="△"/>
+  <block-list:block block-list:abbreviated-name=":空心圆:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":空心圆项目符号:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":空心平行四边形:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":空心循环再造标志:" block-list:name="♲"/>
+  <block-list:block block-list:abbreviated-name=":空心方块:" block-list:name="♢"/>
+  <block-list:block block-list:abbreviated-name=":空心星星:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":空心梅花:" block-list:name="♧"/>
+  <block-list:block block-list:abbreviated-name=":空心正方形:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":空心红心:" block-list:name="♡"/>
+  <block-list:block block-list:abbreviated-name=":空心菱形:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":空心长方形:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":空心黑桃:" block-list:name="♤"/>
+  <block-list:block block-list:abbreviated-name=":空白文档:" block-list:name="🗋"/>
+  <block-list:block block-list:abbreviated-name=":空白笔记:" block-list:name="🗅"/>
+  <block-list:block block-list:abbreviated-name=":空白笔记页:" block-list:name="🗆"/>
+  <block-list:block block-list:abbreviated-name=":空白记事本:" block-list:name="🗇"/>
+  <block-list:block block-list:abbreviated-name=":空白页面:" block-list:name="🗌"/>
+  <block-list:block block-list:abbreviated-name=":空集:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":窗口:" block-list:name="🗔"/>
+  <block-list:block block-list:abbreviated-name=":立体声:" block-list:name="📾"/>
+  <block-list:block block-list:abbreviated-name=":立方根:" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=":章节符号:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":章鱼:" block-list:name="🐙"/>
+  <block-list:block block-list:abbreviated-name=":竹子:" block-list:name="🎍"/>
+  <block-list:block block-list:abbreviated-name=":笑弯眼的猫脸:" block-list:name="😸"/>
+  <block-list:block block-list:abbreviated-name=":笑脸亲亲:" block-list:name="😙"/>
+  <block-list:block block-list:abbreviated-name=":笔记 3:" block-list:name="🎝"/>
+  <block-list:block block-list:abbreviated-name=":笔记 4:" block-list:name="🎜"/>
+  <block-list:block block-list:abbreviated-name=":笔记本 2:" block-list:name="📔"/>
+  <block-list:block block-list:abbreviated-name=":笔记本:" block-list:name="📓"/>
+  <block-list:block block-list:abbreviated-name=":笔记页:" block-list:name="🗉"/>
+  <block-list:block block-list:abbreviated-name=":筷子:" block-list:name="🥢"/>
+  <block-list:block block-list:abbreviated-name=":箭头:" block-list:name="🗘"/>
+  <block-list:block block-list:abbreviated-name=":箱子:" block-list:name="🗃"/>
+  <block-list:block block-list:abbreviated-name=":篮球:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":米饭:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":粗体美元符号:" block-list:name="💲"/>
+  <block-list:block block-list:abbreviated-name=":精灵:" block-list:name="🧝"/>
+  <block-list:block block-list:abbreviated-name=":糖果:" block-list:name="🍬"/>
+  <block-list:block block-list:abbreviated-name=":索引:" block-list:name="🗂"/>
+  <block-list:block block-list:abbreviated-name=":索道缆车:" block-list:name="🚡"/>
+  <block-list:block block-list:abbreviated-name=":红心:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":约等于:" block-list:name="≈"/>
+  <block-list:block block-list:abbreviated-name=":纸张 2:" block-list:name="🗏"/>
+  <block-list:block block-list:abbreviated-name=":纸张 3:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":纸张 4:" block-list:name="🗟"/>
+  <block-list:block block-list:abbreviated-name=":纸张:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":纸牌:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":绵羊:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":绷带:" block-list:name="🤕"/>
+  <block-list:block block-list:abbreviated-name=":绿苹果:" block-list:name="🍏"/>
+  <block-list:block block-list:abbreviated-name=":缪:" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=":罐:" block-list:name="🥫"/>
+  <block-list:block block-list:abbreviated-name=":网球:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":网络:" block-list:name="🖧"/>
+  <block-list:block block-list:abbreviated-name=":美元 2:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":美分:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":美味:" block-list:name="😋"/>
+  <block-list:block block-list:abbreviated-name=":美甲:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":羽毛球:" block-list:name="🏸"/>
+  <block-list:block block-list:abbreviated-name=":翻白眼:" block-list:name="🙄"/>
+  <block-list:block block-list:abbreviated-name=":老年人:" block-list:name="🧓"/>
+  <block-list:block block-list:abbreviated-name=":老年女性:" block-list:name="👵"/>
+  <block-list:block block-list:abbreviated-name=":老年男性:" block-list:name="👴"/>
+  <block-list:block block-list:abbreviated-name=":老虎 2:" block-list:name="🐯"/>
+  <block-list:block block-list:abbreviated-name=":老虎:" block-list:name="🐅"/>
+  <block-list:block block-list:abbreviated-name=":老虎机:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":考拉:" block-list:name="🐨"/>
+  <block-list:block block-list:abbreviated-name=":耳朵:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":耶路撒冷十字:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":耸肩:" block-list:name="🤷"/>
+  <block-list:block block-list:abbreviated-name=":肉:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":肌肉:" block-list:name="💪"/>
+  <block-list:block block-list:abbreviated-name=":胜利 2:" block-list:name="🖔"/>
+  <block-list:block block-list:abbreviated-name=":胜利:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":胡椒:" block-list:name="🌶"/>
+  <block-list:block block-list:abbreviated-name=":胡萝卜:" block-list:name="🥕"/>
+  <block-list:block block-list:abbreviated-name=":胡须:" block-list:name="🧔"/>
+  <block-list:block block-list:abbreviated-name=":胶片:" block-list:name="🎞"/>
+  <block-list:block block-list:abbreviated-name=":脚:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":脚印:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":脸红:" block-list:name="😊"/>
+  <block-list:block block-list:abbreviated-name=":膜拜:" block-list:name="🙇"/>
+  <block-list:block block-list:abbreviated-name=":自动取款机:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":自拍:" block-list:name="🤳"/>
+  <block-list:block block-list:abbreviated-name=":自由女神像:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":自行车:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":自行车禁行:" block-list:name="🚳"/>
+  <block-list:block block-list:abbreviated-name=":自鸣得意:" block-list:name="😏"/>
+  <block-list:block block-list:abbreviated-name=":舌头:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":舞者2:" block-list:name="🕺"/>
+  <block-list:block block-list:abbreviated-name=":舞者:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":船 2:" block-list:name="🛳"/>
+  <block-list:block block-list:abbreviated-name=":艺术:" block-list:name="🎨"/>
+  <block-list:block block-list:abbreviated-name=":艾普西龙:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":艾欧塔:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":花朵 2:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":花朵:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":花束 2:" block-list:name="🎕"/>
+  <block-list:block block-list:abbreviated-name=":花束:" block-list:name="💐"/>
+  <block-list:block block-list:abbreviated-name=":花栗鼠:" block-list:name="🐿"/>
+  <block-list:block block-list:abbreviated-name=":花椰菜:" block-list:name="🥦"/>
+  <block-list:block block-list:abbreviated-name=":花生:" block-list:name="🥜"/>
+  <block-list:block block-list:abbreviated-name=":苜蓿:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":苦笑的猫脸:" block-list:name="😼"/>
+  <block-list:block block-list:abbreviated-name=":英镑 2:" block-list:name="💷"/>
+  <block-list:block block-list:abbreviated-name=":英镑:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":苹果:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":茄子:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":茶:" block-list:name="🍵"/>
+  <block-list:block block-list:abbreviated-name=":草:" block-list:name="🌾"/>
+  <block-list:block block-list:abbreviated-name=":草莓:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":药片:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":菠萝:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":萨克斯:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":葡萄:" block-list:name="🍇"/>
+  <block-list:block block-list:abbreviated-name=":薄饼:" block-list:name="🥙"/>
+  <block-list:block block-list:abbreviated-name=":薯条:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":蘑菇:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":虫子:" block-list:name="🐛"/>
+  <block-list:block block-list:abbreviated-name=":虾:" block-list:name="🦐"/>
+  <block-list:block block-list:abbreviated-name=":蚂蚁:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":蛇:" block-list:name="🐍"/>
+  <block-list:block block-list:abbreviated-name=":蛇夫座:" block-list:name="⛎"/>
+  <block-list:block block-list:abbreviated-name=":蛋糕:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":蛾眉月 2:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":蛾眉月:" block-list:name="🌒"/>
+  <block-list:block block-list:abbreviated-name=":蜂蜜:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":蜗牛:" block-list:name="🐌"/>
+  <block-list:block block-list:abbreviated-name=":蜘蛛:" block-list:name="🕷"/>
+  <block-list:block block-list:abbreviated-name=":蜘蛛网:" block-list:name="🕸"/>
+  <block-list:block block-list:abbreviated-name=":蜜蜂:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":蜡烛:" block-list:name="🕯"/>
+  <block-list:block block-list:abbreviated-name=":蜡笔:" block-list:name="🖍"/>
+  <block-list:block block-list:abbreviated-name=":蜥蜴:" block-list:name="🦎"/>
+  <block-list:block block-list:abbreviated-name=":蝎子:" block-list:name="🦂"/>
+  <block-list:block block-list:abbreviated-name=":蝙蝠:" block-list:name="🦇"/>
+  <block-list:block block-list:abbreviated-name=":蝴蝶:" block-list:name="🦋"/>
+  <block-list:block block-list:abbreviated-name=":螃蟹:" block-list:name="🦀"/>
+  <block-list:block block-list:abbreviated-name=":螺母和螺栓:" block-list:name="🔩"/>
+  <block-list:block block-list:abbreviated-name=":行人:" block-list:name="🚶"/>
+  <block-list:block block-list:abbreviated-name=":行人禁行:" block-list:name="🚷"/>
+  <block-list:block block-list:abbreviated-name=":行李寄存处:" block-list:name="🛅"/>
+  <block-list:block block-list:abbreviated-name=":行李领取处:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":衣服:" block-list:name="👚"/>
+  <block-list:block block-list:abbreviated-name=":衬衫 2:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":衬衫:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":袜子:" block-list:name="🧦"/>
+  <block-list:block block-list:abbreviated-name=":西塔:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":西格玛 2:" block-list:name="ς"/>
+  <block-list:block block-list:abbreviated-name=":西格玛:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":西洋剑:" block-list:name="🤺"/>
+  <block-list:block block-list:abbreviated-name=":西瓜:" block-list:name="🍉"/>
+  <block-list:block block-list:abbreviated-name=":西红柿:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":西装:" block-list:name="🕴"/>
+  <block-list:block block-list:abbreviated-name=":角:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":角分符号:" block-list:name="′"/>
+  <block-list:block block-list:abbreviated-name=":角秒符号:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":警告:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":警察:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":警示:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":警车2:" block-list:name="🚔"/>
+  <block-list:block block-list:abbreviated-name=":警车:" block-list:name="🚓"/>
+  <block-list:block block-list:abbreviated-name=":计算器:" block-list:name="🖩"/>
+  <block-list:block block-list:abbreviated-name=":计算机 2:" block-list:name="🖥"/>
+  <block-list:block block-list:abbreviated-name=":计算机:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":记事本:" block-list:name="🗒"/>
+  <block-list:block block-list:abbreviated-name=":证明完毕:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":诅咒:" block-list:name="🤬"/>
+  <block-list:block block-list:abbreviated-name=":说不的手势:" block-list:name="🙅"/>
+  <block-list:block block-list:abbreviated-name=":调低亮度:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":调制解调器:" block-list:name="🖀"/>
+  <block-list:block block-list:abbreviated-name=":调高亮度:" block-list:name="🔆"/>
+  <block-list:block block-list:abbreviated-name=":谢克尔:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":谱号:" block-list:name="𝄞"/>
+  <block-list:block block-list:abbreviated-name=":豹:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":贝塔:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":贝壳:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":货币兑换:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":货运卡车:" block-list:name="🚚"/>
+  <block-list:block block-list:abbreviated-name=":贵宾犬:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":起重机:" block-list:name="🏗"/>
+  <block-list:block block-list:abbreviated-name=":超集:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":足球 2:" block-list:name="🥅"/>
+  <block-list:block block-list:abbreviated-name=":足球:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":车站:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":轨迹球:" block-list:name="🖲"/>
+  <block-list:block block-list:abbreviated-name=":轮椅:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":轮渡:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":轮船:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":软盘 2:" block-list:name="🖬"/>
+  <block-list:block block-list:abbreviated-name=":软盘 3:" block-list:name="🖫"/>
+  <block-list:block block-list:abbreviated-name=":软盘 4:" block-list:name="🖪"/>
+  <block-list:block block-list:abbreviated-name=":软盘:" block-list:name="💾"/>
+  <block-list:block block-list:abbreviated-name=":轻轨:" block-list:name="🚈"/>
+  <block-list:block block-list:abbreviated-name=":载重卡车:" block-list:name="🚛"/>
+  <block-list:block block-list:abbreviated-name=":辐射:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":输入拉丁字母:" block-list:name="🔤"/>
+  <block-list:block block-list:abbreviated-name=":过山车:" block-list:name="🎢"/>
+  <block-list:block block-list:abbreviated-name=":还原号:" block-list:name="♮"/>
+  <block-list:block block-list:abbreviated-name=":远大于:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":远小于:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":迷你光盘:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":迷惑:" block-list:name="😕"/>
+  <block-list:block block-list:abbreviated-name=":选中状态的复选框 2:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":选中状态的复选框:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":选框 4:" block-list:name="🗷"/>
+  <block-list:block block-list:abbreviated-name=":选框5:" block-list:name="🗹"/>
+  <block-list:block block-list:abbreviated-name=":选票:" block-list:name="🗳"/>
+  <block-list:block block-list:abbreviated-name=":邮号:" block-list:name="📯"/>
+  <block-list:block block-list:abbreviated-name=":邮局 2:" block-list:name="🏣"/>
+  <block-list:block block-list:abbreviated-name=":邮局:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":邮筒:" block-list:name="📮"/>
+  <block-list:block block-list:abbreviated-name=":郁金香:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":释然:" block-list:name="😌"/>
+  <block-list:block block-list:abbreviated-name=":里拉:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":重升号:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":重叠:" block-list:name="🗗"/>
+  <block-list:block block-list:abbreviated-name=":重降号:" block-list:name="𝄫"/>
+  <block-list:block block-list:abbreviated-name=":野猪:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":金:" block-list:name="🥇"/>
+  <block-list:block block-list:abbreviated-name=":金牛座:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":金色头发:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":钓鱼:" block-list:name="🎣"/>
+  <block-list:block block-list:abbreviated-name=":钟表:" block-list:name="🕰"/>
+  <block-list:block block-list:abbreviated-name=":钢琴:" block-list:name="🎹"/>
+  <block-list:block block-list:abbreviated-name=":钢笔 2:" block-list:name="🖋"/>
+  <block-list:block block-list:abbreviated-name=":钢笔:" block-list:name="🖊"/>
+  <block-list:block block-list:abbreviated-name=":钢笔尖 2:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":钢笔尖:" block-list:name="✑"/>
+  <block-list:block block-list:abbreviated-name=":钥匙 2:" block-list:name="🗝"/>
+  <block-list:block block-list:abbreviated-name=":钥匙:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":钱3:" block-list:name="🤑"/>
+  <block-list:block block-list:abbreviated-name=":钱袋:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":铁轨:" block-list:name="🛤"/>
+  <block-list:block block-list:abbreviated-name=":铃铛 2:" block-list:name="🛎"/>
+  <block-list:block block-list:abbreviated-name=":铃铛 3:" block-list:name="🕭"/>
+  <block-list:block block-list:abbreviated-name=":铅笔 2:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":铅笔 3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":铅笔 4:" block-list:name="🖉"/>
+  <block-list:block block-list:abbreviated-name=":铅笔:" block-list:name="✎"/>
+  <block-list:block block-list:abbreviated-name=":铜:" block-list:name="🥉"/>
+  <block-list:block block-list:abbreviated-name=":银:" block-list:name="🥈"/>
+  <block-list:block block-list:abbreviated-name=":银河:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":银行:" block-list:name="🏦"/>
+  <block-list:block block-list:abbreviated-name=":锁:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":锁和钢笔:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":锁和钥匙:" block-list:name="🔐"/>
+  <block-list:block block-list:abbreviated-name=":锁链:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":锚:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":锤子:" block-list:name="🔨"/>
+  <block-list:block block-list:abbreviated-name=":锤子与镐:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":锤子与镰刀:" block-list:name="☭"/>
+  <block-list:block block-list:abbreviated-name=":锤子和扳手:" block-list:name="🛠"/>
+  <block-list:block block-list:abbreviated-name=":键盘 2:" block-list:name="🖮"/>
+  <block-list:block block-list:abbreviated-name=":键盘 3:" block-list:name="🖦"/>
+  <block-list:block block-list:abbreviated-name=":键盘:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":镐:" block-list:name="⛏"/>
+  <block-list:block block-list:abbreviated-name=":长翅膀的钱:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":长颈鹿:" block-list:name="🦒"/>
+  <block-list:block block-list:abbreviated-name=":门:" block-list:name="🚪"/>
+  <block-list:block block-list:abbreviated-name=":闪光灯:" block-list:name="📸"/>
+  <block-list:block block-list:abbreviated-name=":闪电 2:" block-list:name="🗲"/>
+  <block-list:block block-list:abbreviated-name=":闪电 3:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":闪电:" block-list:name="🌩"/>
+  <block-list:block block-list:abbreviated-name=":闪耀爱心:" block-list:name="💖"/>
+  <block-list:block block-list:abbreviated-name=":闭眼亲亲:" block-list:name="😚"/>
+  <block-list:block block-list:abbreviated-name=":闭眼亲吻的猫脸:" block-list:name="😽"/>
+  <block-list:block block-list:abbreviated-name=":闭眼吐舌头:" block-list:name="😝"/>
+  <block-list:block block-list:abbreviated-name=":问号 2:" block-list:name="❔"/>
+  <block-list:block block-list:abbreviated-name=":问号:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":间隔号:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":闹钟:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":阴阳:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":阿尔法:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":阿斯克勒庇俄斯之杖:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":降号:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":陶罐:" block-list:name="🏺"/>
+  <block-list:block block-list:abbreviated-name=":雨:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":雨伞 2:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":雨伞 3:" block-list:name="⛱"/>
+  <block-list:block block-list:abbreviated-name=":雪:" block-list:name="🌨"/>
+  <block-list:block block-list:abbreviated-name=":雪人 2:" block-list:name="⛄"/>
+  <block-list:block block-list:abbreviated-name=":雪人:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":雪橇:" block-list:name="🛷"/>
+  <block-list:block block-list:abbreviated-name=":雪花:" block-list:name="❄"/>
+  <block-list:block block-list:abbreviated-name=":雾:" block-list:name="🌫"/>
+  <block-list:block block-list:abbreviated-name=":震动模式:" block-list:name="📳"/>
+  <block-list:block block-list:abbreviated-name=":震惊:" block-list:name="🤯"/>
+  <block-list:block block-list:abbreviated-name=":露营:" block-list:name="🏕"/>
+  <block-list:block block-list:abbreviated-name=":露齿弯眼笑:" block-list:name="😁"/>
+  <block-list:block block-list:abbreviated-name=":露齿笑:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":青蛙:" block-list:name="🐸"/>
+  <block-list:block block-list:abbreviated-name=":静音:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":非子集:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":非超集:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":非饮用水:" block-list:name="🚱"/>
+  <block-list:block block-list:abbreviated-name=":面包 2:" block-list:name="🥖"/>
+  <block-list:block block-list:abbreviated-name=":面包:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":面无表情:" block-list:name="😑"/>
+  <block-list:block block-list:abbreviated-name=":靴子:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":鞋子 2:" block-list:name="👟"/>
+  <block-list:block block-list:abbreviated-name=":鞋子 3:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":鞋子:" block-list:name="👞"/>
+  <block-list:block block-list:abbreviated-name=":韩元:" block-list:name="₩"/>
+  <block-list:block block-list:abbreviated-name=":音乐 2:" block-list:name="🎵"/>
+  <block-list:block block-list:abbreviated-name=":音乐:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":音箱 2:" block-list:name="🕩"/>
+  <block-list:block block-list:abbreviated-name=":音箱 3:" block-list:name="🕨"/>
+  <block-list:block block-list:abbreviated-name=":音箱 4:" block-list:name="🕪"/>
+  <block-list:block block-list:abbreviated-name=":项目符号:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":领带:" block-list:name="👔"/>
+  <block-list:block block-list:abbreviated-name=":风:" block-list:name="🌬"/>
+  <block-list:block block-list:abbreviated-name=":风铃:" block-list:name="🎐"/>
+  <block-list:block block-list:abbreviated-name=":飓风:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":飞吻:" block-list:name="😘"/>
+  <block-list:block block-list:abbreviated-name=":飞机 2:" block-list:name="🛩"/>
+  <block-list:block block-list:abbreviated-name=":飞机 3:" block-list:name="🛧"/>
+  <block-list:block block-list:abbreviated-name=":飞机 4:" block-list:name="🛨"/>
+  <block-list:block block-list:abbreviated-name=":飞机 5:" block-list:name="🛦"/>
+  <block-list:block block-list:abbreviated-name=":飞机 6:" block-list:name="🛪"/>
+  <block-list:block block-list:abbreviated-name=":飞机:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":飞碟:" block-list:name="🛸"/>
+  <block-list:block block-list:abbreviated-name=":飞镖击中靶心:" block-list:name="🎯"/>
+  <block-list:block block-list:abbreviated-name=":食人魔:" block-list:name="👹"/>
+  <block-list:block block-list:abbreviated-name=":食指:" block-list:name="🖕"/>
+  <block-list:block block-list:abbreviated-name=":食物:" block-list:name="🥘"/>
+  <block-list:block block-list:abbreviated-name=":饭团:" block-list:name="🍙"/>
+  <block-list:block block-list:abbreviated-name=":饭店:" block-list:name="🍴"/>
+  <block-list:block block-list:abbreviated-name=":饮品 2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":饮品:" block-list:name="🥤"/>
+  <block-list:block block-list:abbreviated-name=":饮用水:" block-list:name="🚰"/>
+  <block-list:block block-list:abbreviated-name=":饺子:" block-list:name="🥟"/>
+  <block-list:block block-list:abbreviated-name=":饼干 2:" block-list:name="🥠"/>
+  <block-list:block block-list:abbreviated-name=":香草:" block-list:name="🌿"/>
+  <block-list:block block-list:abbreviated-name=":香蕉:" block-list:name="🍌"/>
+  <block-list:block block-list:abbreviated-name=":马 2:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":马 3:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":马:" block-list:name="🐎"/>
+  <block-list:block block-list:abbreviated-name=":马戏团:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":马耳他十字架:" block-list:name="✠"/>
+  <block-list:block block-list:abbreviated-name=":骆驼 2:" block-list:name="🐫"/>
+  <block-list:block block-list:abbreviated-name=":骆驼:" block-list:name="🐪"/>
+  <block-list:block block-list:abbreviated-name=":骑山地自行车者:" block-list:name="🚵"/>
+  <block-list:block block-list:abbreviated-name=":骑自行车者:" block-list:name="🚴"/>
+  <block-list:block block-list:abbreviated-name=":骗子:" block-list:name="🤥"/>
+  <block-list:block block-list:abbreviated-name=":骨灰罐:" block-list:name="⚱"/>
+  <block-list:block block-list:abbreviated-name=":骰子 1:" block-list:name="⚀"/>
+  <block-list:block block-list:abbreviated-name=":骰子 2:" block-list:name="⚁"/>
+  <block-list:block block-list:abbreviated-name=":骰子 3:" block-list:name="⚂"/>
+  <block-list:block block-list:abbreviated-name=":骰子 4:" block-list:name="⚃"/>
+  <block-list:block block-list:abbreviated-name=":骰子 5:" block-list:name="⚄"/>
+  <block-list:block block-list:abbreviated-name=":骰子 6:" block-list:name="⚅"/>
+  <block-list:block block-list:abbreviated-name=":骰子:" block-list:name="🎲"/>
+  <block-list:block block-list:abbreviated-name=":骷髅:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":高兴举手:" block-list:name="🙋"/>
+  <block-list:block block-list:abbreviated-name=":高压电:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":高尔夫 2:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":高尔夫:" block-list:name="🏌"/>
+  <block-list:block block-list:abbreviated-name=":高山 2:" block-list:name="🏔"/>
+  <block-list:block block-list:abbreviated-name=":高山索道缆车:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":高速公路:" block-list:name="🛣"/>
+  <block-list:block block-list:abbreviated-name=":高铁:" block-list:name="🚄"/>
+  <block-list:block block-list:abbreviated-name=":高音量:" block-list:name="🔊"/>
+  <block-list:block block-list:abbreviated-name=":高顶礼帽:" block-list:name="🎩"/>
+  <block-list:block block-list:abbreviated-name=":鬼:" block-list:name="👻"/>
+  <block-list:block block-list:abbreviated-name=":魔法师:" block-list:name="🧙"/>
+  <block-list:block block-list:abbreviated-name=":鱼 2:" block-list:name="🐠"/>
+  <block-list:block block-list:abbreviated-name=":鱼 3:" block-list:name="🐡"/>
+  <block-list:block block-list:abbreviated-name=":鱼:" block-list:name="🐟"/>
+  <block-list:block block-list:abbreviated-name=":鱼饼:" block-list:name="🍥"/>
+  <block-list:block block-list:abbreviated-name=":鲜花 2:" block-list:name="🥀"/>
+  <block-list:block block-list:abbreviated-name=":鲜花:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":鲨鱼:" block-list:name="🦈"/>
+  <block-list:block block-list:abbreviated-name=":鲸 2:" block-list:name="🐋"/>
+  <block-list:block block-list:abbreviated-name=":鲸:" block-list:name="🐳"/>
+  <block-list:block block-list:abbreviated-name=":鳄鱼:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":鸟:" block-list:name="🐦"/>
+  <block-list:block block-list:abbreviated-name=":鸡尾酒:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":鸡腿:" block-list:name="🍗"/>
+  <block-list:block block-list:abbreviated-name=":鸡蛋:" block-list:name="🥚"/>
+  <block-list:block block-list:abbreviated-name=":鸭子:" block-list:name="🦆"/>
+  <block-list:block block-list:abbreviated-name=":鸽子:" block-list:name="🕊"/>
+  <block-list:block block-list:abbreviated-name=":鹰:" block-list:name="🦅"/>
+  <block-list:block block-list:abbreviated-name=":鹿:" block-list:name="🦌"/>
+  <block-list:block block-list:abbreviated-name=":麦克风 2:" block-list:name="🎙"/>
+  <block-list:block block-list:abbreviated-name=":麦克风:" block-list:name="🎤"/>
+  <block-list:block block-list:abbreviated-name=":麻将:" block-list:name="🀄"/>
+  <block-list:block block-list:abbreviated-name=":黄瓜:" block-list:name="🥒"/>
+  <block-list:block block-list:abbreviated-name=":黑桃:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":黑棋兵:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":黑棋国王:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":黑棋王后:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":黑棋象:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":黑棋车:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":黑棋马:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":黑白方格旗:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":黑色方形按钮:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":黑色爱心:" block-list:name="🖤"/>
+  <block-list:block block-list:abbreviated-name=":鼓 2:" block-list:name="🥁"/>
+  <block-list:block block-list:abbreviated-name=":鼠标 3:" block-list:name="🖱"/>
+  <block-list:block block-list:abbreviated-name=":鼠标 4:" block-list:name="🖰"/>
+  <block-list:block block-list:abbreviated-name=":鼠标 5:" block-list:name="🖯"/>
+  <block-list:block block-list:abbreviated-name=":鼻子:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":鼻子喷气 (获胜):" block-list:name="😤"/>
+  <block-list:block block-list:abbreviated-name=":齿轮:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":龙 2:" block-list:name="🐲"/>
+  <block-list:block block-list:abbreviated-name=":龙:" block-list:name="🐉"/>
+  <block-list:block block-list:abbreviated-name=":龙卷风:" block-list:name="🌪"/>
+</block-list:block-list>
