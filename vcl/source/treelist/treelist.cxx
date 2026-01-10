@@ -529,17 +529,11 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
 {
     assert(pActEntry && "Entry?");
 
-    SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
-    sal_uInt32 nActualPos = pActEntry->GetChildListPos();
-
-    if ( nActualPos > 0 )
+    if (SvTreeListEntry* pPrevSibling = pActEntry->PrevSibling())
     {
-        pActEntry = (*pActualList)[nActualPos-1].get();
+        pActEntry = pPrevSibling;
         while (!pActEntry->m_Children.empty())
-        {
-            pActualList = &pActEntry->m_Children;
-            pActEntry = pActualList->back().get();
-        }
+            pActEntry = pActEntry->m_Children.back().get();
         return pActEntry;
     }
     if ( pActEntry->pParent == pRootItem.get() )
