@@ -671,6 +671,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
     // - Expected: 2
     // - Actual  : 1
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    // tdf#166335: fmla must not be an empty string
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // without the fix, this was 8. Having an a:gd fmla="" causes MSOffice to report a corrupt doc.
+    assertXPath(pXmlDoc, "//a:gdLst/a:gd[@fmla='']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
