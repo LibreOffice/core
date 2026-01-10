@@ -31,6 +31,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4100) // unreferenced formal parameter
 #pragma warning(disable : 4310) // cast truncates constant value
+#pragma warning(disable : 6011) // dereferencing NULL pointer
 #endif
 
 #include <GfxState.h>
