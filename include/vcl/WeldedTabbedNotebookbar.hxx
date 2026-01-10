@@ -14,6 +14,7 @@
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com::sun::star::frame

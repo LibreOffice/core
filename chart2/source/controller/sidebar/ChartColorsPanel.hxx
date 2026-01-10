@@ -16,6 +16,8 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/weld/Toolbar.hxx>
+
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
 

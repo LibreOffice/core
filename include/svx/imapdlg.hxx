@@ -25,6 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <memory>
 #include <vector>
 

@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

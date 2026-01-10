@@ -25,6 +25,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>

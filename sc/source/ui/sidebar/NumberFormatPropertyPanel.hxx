@@ -25,6 +25,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 namespace sc::sidebar {
 

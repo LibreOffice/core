@@ -23,6 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/weldutils.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 class SfxRecordingFloatWrapper_Impl final : public SfxChildWindow
 {

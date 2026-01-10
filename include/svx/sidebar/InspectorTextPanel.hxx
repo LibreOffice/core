@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 namespace svx::sidebar

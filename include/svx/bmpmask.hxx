@@ -31,6 +31,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <memory>
 
 namespace vcl { class Window; }

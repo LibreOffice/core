@@ -22,6 +22,7 @@
 
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 #include <deque>
 #include <memory>

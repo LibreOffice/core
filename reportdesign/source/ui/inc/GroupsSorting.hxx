@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 

@@ -31,6 +31,7 @@
 #include <tools/fldunit.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 class ToolbarUnoDispatcher;
 

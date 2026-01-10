@@ -41,6 +41,7 @@
 
 #include <tools/link.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>

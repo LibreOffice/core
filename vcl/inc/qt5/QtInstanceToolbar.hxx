@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Toolbar.hxx>
+
 #include <QtWidgets/QToolBar>
 
 class QtInstanceToolbar : public QtInstanceWidget, public virtual weld::Toolbar

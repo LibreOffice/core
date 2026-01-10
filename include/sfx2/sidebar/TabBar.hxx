@@ -22,6 +22,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 
