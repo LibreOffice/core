@@ -1731,7 +1731,7 @@ static NSString* getCurrentSelection()
                 // Related: tdf#170149 Calling [self interpretKeyEvents:] with
                 // a delete key event calls [self insertText:replacementRange:]
                 // and maybe [self deleteBackward:] or [self deleteForward:] so
-                // ignore those calls since the marked tecxt has already been
+                // ignore those calls since the marked text has already been
                 // discarded or committed.
                 mbInTextInputDelete = YES;
             }
@@ -1782,7 +1782,7 @@ static NSString* getCurrentSelection()
                 bool bCommitText = false;
                 if ( nKeyCode == KEY_ESCAPE )
                 {
-                    // Pressing escape should not commmit when using input
+                    // Pressing escape should not commit when using input
                     // methods such as Japanese or Chinese so only commit
                     // if the marked text is a single character below the
                     // start of the Devanagari Unicode block.
