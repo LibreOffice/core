@@ -32,9 +32,10 @@ $(eval $(call gb_Library_use_externals,officelabs,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,officelabs,\
-    officelabs/source/agent/AgentConnection \
-    officelabs/source/agent/DocumentController \
-    officelabs/source/ui/ChatPanel \
+    officelabs/source/AgentConnection \
+    officelabs/source/DocumentController \
+    officelabs/source/ChatPanel \
+    officelabs/source/ChatPanelChildWindow \
 ))
 
 # vim: set noet sw=4 ts=4:

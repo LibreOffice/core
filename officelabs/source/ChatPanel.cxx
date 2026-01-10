@@ -1,3 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * OfficeLabs AI Assistant - Chat Panel Docking Window Implementation
+ */
+
 #include <officelabs/ChatPanel.hxx>
 #include <officelabs/AgentConnection.hxx>
 #include <officelabs/DocumentController.hxx>
@@ -9,12 +14,8 @@
 
 namespace officelabs {
 
-
-// SFX Child Window Implementation
-SFX_IMPL_DOCKINGWINDOW_WITHID(ChatPanel, SID_AI_CHAT);
-
 ChatPanel::ChatPanel(SfxBindings* pBindings, SfxChildWindow* pChildWin, vcl::Window* pParent)
-    : SfxDockingWindow(pBindings, pChildWin, pParent, "ChatPanel", "officelabs/ui/chatpanel.ui")
+    : SfxDockingWindow(pBindings, pChildWin, pParent, WB_STDDOCKWIN | WB_CLOSEABLE | WB_SIZEABLE)
     , m_connected(false)
     , m_processing(false)
 {
@@ -87,11 +88,7 @@ void ChatPanel::dispose() {
     m_pAcceptButton.disposeAndClear();
     m_pRejectButton.disposeAndClear();
     m_pRegenerateButton.disposeAndClear();
-    DockingWindow::dispose();
-}
-
-VclPtr<ChatPanel> ChatPanel::Create(vcl::Window* pParent) {
-    return VclPtr<ChatPanel>::Create(pParent);
+    SfxDockingWindow::dispose();
 }
 
 void ChatPanel::CheckConnection() {
@@ -196,7 +193,7 @@ void ChatPanel::SendMessage(const OUString& message) {
     ChatMessage userMsg;
     userMsg.role = ChatMessage::Role::USER;
     userMsg.content = message;
-    userMsg.timestamp = DateTime::GetCurrentDateTime().GetTimeInFormat();
+    userMsg.timestamp = u""_ustr;
     m_messages.push_back(userMsg);
     
     Invalidate();
@@ -217,7 +214,7 @@ void ChatPanel::SendToAgent(const OUString& message) {
     ChatMessage aiMsg;
     aiMsg.role = ChatMessage::Role::ASSISTANT;
     aiMsg.content = response.message;
-    aiMsg.timestamp = DateTime::GetCurrentDateTime().GetTimeInFormat();
+    aiMsg.timestamp = u""_ustr;
     m_messages.push_back(aiMsg);
     
     // Show patch if available
@@ -280,3 +277,5 @@ void ChatPanel::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 }
 
 } // namespace officelabs
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

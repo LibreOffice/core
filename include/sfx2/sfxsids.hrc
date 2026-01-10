@@ -754,6 +754,10 @@ class SvxZoomItem;
 #define FID_CHG_RECORD          TypedWhichId<SfxBoolItem>(EDIT_MENU_START + 18)
 #define SID_CHG_PROTECT         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 84)
 
+// OfficeLabs AI Integration
+#define SID_AI_CHAT                         (SID_SFX_START + 1700)
+#define SID_AI_CHAT_DOCKING_WINDOW          (SID_SFX_START + 1701)
+
 #endif  // #ifndef INCLUDED_SFX2_SFXSIDS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
