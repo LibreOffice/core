@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build): $(call gb_Execut
 			--disable-doc \
 			--disable-tests \
 			$(gb_WIN_GPG_platform_switches) \
-	    && $(MAKE) \
+	    && $(MAKE) -k || true \
 	)
 	$(call gb_Trace_EndRange,libgpg-error,EXTERNAL)
 else

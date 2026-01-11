@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_api,oleautobridge,\
 ))
 
 $(eval $(call gb_Library_set_include,oleautobridge,\
-	$(foreach inc,$(ATL_INCLUDE),-I$(inc)) \
+	-I$(ATL_INCLUDE) \
 	$$(INCLUDE) \
 ))
 

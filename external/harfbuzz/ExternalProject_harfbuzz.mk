@@ -23,8 +23,14 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 # so we're going to have to generate one on-the-fly.
 # mungle variables into python list format
 python_listify = '$(subst $(WHITESPACE),'$(COMMA)',$(strip $(1)))'
+# Convert cygwin paths to Windows paths for meson on WNT
+ifeq ($(OS),WNT)
+cross_c = $(call python_listify,$(shell cygpath -m '$(gb_CC)'))
+cross_cxx = $(call python_listify,$(shell cygpath -m '$(gb_CXX)'))
+else
 cross_c = $(call python_listify,$(gb_CC))
 cross_cxx = $(call python_listify,$(gb_CXX))
+endif
 cross_ld := $(call python_listify,$(subst -fuse-ld=,,$(USE_LD)))
 
 define gb_harfbuzz_cross_compile

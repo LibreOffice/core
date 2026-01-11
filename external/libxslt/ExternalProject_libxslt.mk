@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_use_nmake,libxslt,build))
 $(call gb_ExternalProject_get_state_target,libxslt,build):
 	$(call gb_Trace_StartRange,libxslt,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		cscript /e:javascript configure.js \
+		cscript //E:JScript configure.js \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 			vcmanifest=yes \

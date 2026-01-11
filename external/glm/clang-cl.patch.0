@@ -1,9 +1,12 @@
---- glm/detail/func_integer.inl
-+++ glm/detail/func_integer.inl
-@@ -4,4 +4,6 @@
+--- glm/detail/func_integer.inl.orig	2026-01-11 00:12:36.148855800 +0100
++++ glm/detail/func_integer.inl	2026-01-11 00:12:40.096850900 +0100
+@@ -3,7 +3,9 @@
+ #include "_vectorize.hpp"
  #if(GLM_ARCH & GLM_ARCH_X86 && GLM_COMPILER & GLM_COMPILER_VC)
  #	include <intrin.h>
 +#if !defined __clang__
  #	pragma intrinsic(_BitScanReverse)
 +#endif
  #endif//(GLM_ARCH & GLM_ARCH_X86 && GLM_COMPILER & GLM_COMPILER_VC)
+ #include <limits>
+ 

@@ -15,7 +15,7 @@ $(eval $(call gb_Library_use_custom_headers,so_activex,extensions/source/activex
 
 $(eval $(call gb_Library_set_include,so_activex,\
 	$$(INCLUDE) \
-	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
+	-I$(ATL_INCLUDE) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,so_activex))

@@ -21,6 +21,8 @@ $(eval $(call gb_UnpackedTarball_add_file,redland,src/librdf.h,external/redland/
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,redland,0))
 
+$(eval $(call gb_UnpackedTarball_set_patchflags,redland,--fuzz=3))
+
 # redland-format.patch.0 sent upstream as
 #  <https://github.com/dajobe/librdf/pull/6>
 $(eval $(call gb_UnpackedTarball_add_patches,redland,\
