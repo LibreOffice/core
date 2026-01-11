@@ -201,7 +201,5 @@ gdbtrace.log
 # xml unit tests sometimes leave these lying around
 **/secmod.db
 
-# Build logs
-build.log
-build-*.log
+# Build config backups (not the main log)
 config_host-*.mk
