@@ -5807,7 +5807,11 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                     aBuffer.append("[0]"
                         + OUStringChar(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR)));
                 }
-                aBuffer.append(pData->GetName());
+                OUString sName = pData->GetName();
+                // If the name is a valid reference then add underscore to the name
+                if (ScAddress().Parse(sName, rDoc, FormulaGrammar::CONV_XL_A1) & ScRefFlags::VALID)
+                    sName = "_" + sName;
+                aBuffer.append(sName);
             }
         }
         break;
