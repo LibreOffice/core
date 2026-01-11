@@ -41,6 +41,9 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		   $(gb_WIN_GPG_platform_switches) \
 		   MAKE=$(MAKE) \
 	    && sed -i 's/^gpgme_res = versioninfo.lo$$/gpgme_res =/' src/Makefile \
+	    && sed -i 's|/\* #undef HAVE_W32_SYSTEM \*/|#define HAVE_W32_SYSTEM 1|' conf/config.h \
+	    && sed -i 's|/\* #undef HAVE_W64_SYSTEM \*/|#define HAVE_W64_SYSTEM 1|' conf/config.h \
+	    && sed -i 's|/\* #undef HAVE_DOSISH_SYSTEM \*/|#define HAVE_DOSISH_SYSTEM 1|' conf/config.h \
 	    && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,gpgmepp,EXTERNAL)
