@@ -120,7 +120,7 @@ gb_CFLAGS := \
 	-wd4505 \
 	-bigobj \
 
-gb_CXXFLAGS_DISABLE_WARNINGS = -w -analyze-
+gb_CXXFLAGS_DISABLE_WARNINGS = -w -analyze- -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
 gb_CXXFLAGS := \
 	-utf-8 \
