@@ -1707,13 +1707,21 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             if (! bNum)
             {
                 uno::Sequence<OUString> aBulletSymbols(
-                    officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+                    officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
                 uno::Sequence<OUString> aBulletSymbolsFonts(
-                    officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
-                sal_Int32 nBulletSymbolIndex = nLvl < aBulletSymbols.getLength() ? nLvl : 0;
+                    officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
+                if (!aBulletSymbols.hasElements())
+                {
+                    // Add a single element even if user cleared the list in the config
+                    aBulletSymbols.realloc(1);
+                    aBulletSymbols.getArray()[0] = u"•"_ustr;
+                    aBulletSymbolsFonts.realloc(1);
+                    aBulletSymbolsFonts.getArray()[0] = "OpenSymbol";
+                }
+                sal_Int32 nBulletSymbolIndex = nLvl % aBulletSymbols.getLength();
                 aFormat.SetBulletChar(aBulletSymbols[nBulletSymbolIndex].toChar());
                 vcl::Font aFont;
-                sal_Int32 nBulletSymbolsFontIndex = nLvl < aBulletSymbolsFonts.getLength() ? nLvl : 0;
+                sal_Int32 nBulletSymbolsFontIndex = nLvl % aBulletSymbolsFonts.getLength();
                 aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolsFontIndex]);
                 aFormat.SetBulletFont(&aFont);
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
