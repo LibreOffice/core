@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="page">Pachina</string>
+    <string name="sheet">Fuella</string>
+    <string name="slide">Diapositiva</string>
+    <string name="pref_category_general">Cheneral</string>
+    <string name="default_document_name">sin títol</string>
+    <string name="tabhost_character">Carácter</string>
+    <string name="tabhost_paragraph">Paragrafo</string>
+    <string name="tabhost_insert">Ficar</string>
+    <string name="tabhost_style">Estilo</string>
+    <string name="action_print">Imprentar</string>
+    <string name="automatic">Automatico</string>
+    <string name="calc_hide">Amagar</string>
+    <string name="action_about">Arredol de</string>
+    <string name="action_undo">Desfer</string>
+    <string name="action_save">Alzar</string>
+    <string name="save_document">ALZAR</string>
+    <string name="action_copy">Copiar</string>
+    <string name="calc_insert_before">Ficar</string>
+    <string name="no_save_document">NO</string>
+    <string name="action_redo">Refer</string>
+    <string name="title_recents">Ficheros recients</string>
+</resources>
