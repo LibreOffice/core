@@ -43,15 +43,15 @@ import java.io.*;
 /* A simple Applet that contains the SimpleBean.
  *
  * This applet is a sample implementation of the
- * OpenOffice.org bean.
- * When initially loaded the applet has two buttons
+ * LibreOffice OfficeBean.
+ * When initially loaded the application has two buttons
  * one for opening an existent file and one to open
  * a blank document of a given type supported by
- * OpenOffice.org eg. Writer, Calc, Impress, ...
+ * LibreOffice eg. Writer, Calc, Impress, ...
  *
  */
 
-public class OOoBeanViewer extends java.applet.Applet
+public class OOoBeanViewer extends java.awt.Panel
 {
 
    /**
@@ -81,7 +81,7 @@ public class OOoBeanViewer extends java.applet.Applet
    private OOoBean aBean;
 
    /**
-    * Initialize the Applet
+    * Initialize the example UI
     */
    public void init()
    {
@@ -302,7 +302,7 @@ public class OOoBeanViewer extends java.applet.Applet
    /**
     * Create a blank document of type <code>desc</code>
     *
-    * @param url The private internal URL of the OpenOffice.org
+    * @param url The private internal URL of the LibreOffice
     *            document describing the document
     * @param desc A description of the document to be created
     */
@@ -341,7 +341,6 @@ public class OOoBeanViewer extends java.applet.Applet
    {
             setVisible(false);
             aBean.stopOOoConnection();
-            stop();
             System.exit(0);
    }
 
@@ -356,7 +355,6 @@ public class OOoBeanViewer extends java.applet.Applet
             }
             catch ( com.sun.star.comp.beans.NoConnectionException aExc ) {} // ignore
             aBean.stopOOoConnection();
-            stop();
             if ( xDesktop != null )
                 xDesktop.terminate();
             System.exit(0);
@@ -390,7 +388,7 @@ public class OOoBeanViewer extends java.applet.Applet
 
    public static void main(String args[])
    {
-       java.awt.Frame frame = new java.awt.Frame("OpenOffice.org Demo");
+       java.awt.Frame frame = new java.awt.Frame("LibreOffice Demo");
        OOoBeanViewer aViewer = new OOoBeanViewer();
 
        frame.setLayout(new java.awt.BorderLayout());
@@ -398,7 +396,6 @@ public class OOoBeanViewer extends java.applet.Applet
        frame.addWindowListener( aViewer.new ExitListener() );
 
        aViewer.init();
-       aViewer.start();
 
        frame.add(aViewer);
        frame.setLocation( 200, 200 );

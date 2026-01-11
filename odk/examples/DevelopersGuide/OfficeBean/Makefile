@@ -79,7 +79,9 @@ OOoBeanViewer: $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(CLASSFILES)
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(subst /,.,$(PACKAGE)).$(basename $@)
+	export SAL_USE_VCLPLUGIN=gen && \
+	export LD_LIBRARY_PATH="$(OO_SDK_JAVA_HOME)/lib" && \
+	$(SDK_JAVA) --enable-native-access=ALL-UNNAMED -classpath "$(SDK_CLASSPATH)" $(subst /,.,$(PACKAGE)).$(basename $@)
 
 %.dbg: $(JAR1_JAR)
 	jdb -classpath "$(SDK_CLASSPATH)" $(subst /,.,$(PACKAGE)).$(basename $@)
