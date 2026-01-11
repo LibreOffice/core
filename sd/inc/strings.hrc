@@ -479,4 +479,7 @@
 #define STR_A11Y_PRESENTER_PREVIEW                      NC_("STR_A11Y_PRESENTER_PREVIEW", "Current Slide Info")
 #define STR_A11Y_PRESENTER_NOTES                        NC_("STR_A11Y_PRESENTER_NOTES", "Presenter Notes")
 
+#define STR_CLICKTOEXITPRESENTATION_TEXT                NC_("STR_CLICKTOEXITPRESENTATION_TEXT", "Click to exit presentation...")
+#define STR_CLICKTOEXITPRESENTATION_TITLE               NC_("STR_CLICKTOEXITPRESENTATION_TITLE", "Current Slide (end)")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1887,18 +1887,6 @@
         <prop oor:name="IsOpaque">
           <value>true</value>
         </prop>
-        <node oor:name="Strings">
-          <node oor:name="ClickToExitPresentationText" oor:op="replace">
-            <prop oor:name="String">
-              <value xml:lang="en-US">Click to exit presentation...</value>
-            </prop>
-          </node>
-          <node oor:name="ClickToExitPresentationTitle" oor:op="replace">
-            <prop oor:name="String">
-              <value xml:lang="en-US">Current Slide (end)</value>
-            </prop>
-          </node>
-        </node>
       </node>
       <node oor:name="NextSlidePreview" oor:op="replace">
         <prop oor:name="ViewURL">
