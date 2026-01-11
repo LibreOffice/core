@@ -1,0 +1,11 @@
+--- src/Makefile.in.orig
++++ src/Makefile.in
+@@ -646,7 +646,7 @@
+ @HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RCCOMPILE)
+ @HAVE_W32_SYSTEM_TRUE@SUFFIXES = .rc .lo
+ @HAVE_W32_SYSTEM_FALSE@gpgme_res =
+-@HAVE_W32_SYSTEM_TRUE@gpgme_res = versioninfo.lo
++@HAVE_W32_SYSTEM_TRUE@gpgme_res =
+ @HAVE_W32_SYSTEM_FALSE@no_undefined =
+ @HAVE_W32_SYSTEM_TRUE@no_undefined = -no-undefined
+ @HAVE_W32_SYSTEM_FALSE@export_symbols =

@@ -24,7 +24,8 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_get_target_for_build,cpp)
 	$(call gb_Trace_StartRange,gpgmepp,EXTERNAL)
 	$(call gb_ExternalProject_run,build, \
-		$(gb_WIN_GPG_cross_setup_exports) \
+		export PATH="$$HOME/.local/bin:$$PATH" \
+		&& $(gb_WIN_GPG_cross_setup_exports) \
 		&& $(WSL) autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
 		   $(gb_CONFIGURE_PLATFORMS) \
@@ -39,6 +40,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 				$(call gb_ExternalProject_get_build_flags,gpgmepp)' \
 		   $(gb_WIN_GPG_platform_switches) \
 		   MAKE=$(MAKE) \
+	    && sed -i 's/^gpgme_res = versioninfo.lo$$/gpgme_res =/' src/Makefile \
 	    && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,gpgmepp,EXTERNAL)

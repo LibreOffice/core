@@ -21,6 +21,10 @@ else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_ExternalPackage_add_file,libassuan,$(LIBO_LIB_FOLDER)/libassuan.9.dylib,src/.libs/libassuan.9.dylib))
 
+else ifeq ($(OS),WNT)
+
+$(eval $(call gb_ExternalPackage_add_file,libassuan,$(LIBO_LIB_FOLDER)/libassuan.lib,src/.libs/libassuan.lib))
+
 endif
 
 endif # $(DISABLE_DYNLOADING)

@@ -34,6 +34,7 @@ $(eval $(call gb_Library_set_include,gpgmepp,\
 $(eval $(call gb_Library_add_libs,gpgmepp,\
        ws2_32.lib shell32.lib \
        -LIBPATH:$(gb_UnpackedTarball_workdir)/gpgmepp/src/.libs libgpgme.lib \
+       -LIBPATH:$(INSTDIR)/$(LIBO_LIB_FOLDER) libgpg-error.lib libassuan.lib \
 ))
 
 $(eval $(call gb_Library_add_defs,gpgmepp,\

@@ -21,6 +21,10 @@ else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.0.dylib,src/.libs/libgpg-error.0.dylib))
 
+else ifeq ($(OS),WNT)
+
+$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.lib,src/.libs/libgpg-error.lib))
+
 endif
 
 endif # $(DISABLE_DYNLOADING)

@@ -28,7 +28,8 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build): $(call gb_Execut
 			--disable-doc \
 			--disable-tests \
 			$(gb_WIN_GPG_platform_switches) \
-	    && $(MAKE) -k || true \
+	    && sed -i 's/^gpg_error_res = versioninfo.lo$$/gpg_error_res =/' src/Makefile \
+	    && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,libgpg-error,EXTERNAL)
 else

@@ -36,7 +36,8 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		$(gb_WIN_GPG_platform_switches) \
 		MAKE=$(MAKE) \
-	  && $(MAKE) -k || true \
+	  && sed -i 's/^assuan_res = versioninfo.lo$$/assuan_res =/' src/Makefile \
+	  && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,libassuan,EXTERNAL)
 else
