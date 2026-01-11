@@ -74,6 +74,7 @@ void impl_cairo_set_hairline(cairo_t* pRT,
                              const drawinglayer::geometry::ViewInformation2D& rViewInformation,
                              bool bCairoCoordinateLimitWorkaroundActive)
 {
+#ifndef _WIN32
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 18, 0)
     void* addr(dlsym(nullptr, "cairo_set_hairline"));
     if (nullptr != addr)
@@ -95,6 +96,13 @@ void impl_cairo_set_hairline(cairo_t* pRT,
                 .getLength());
         cairo_set_line_width(pRT, fPx);
     }
+#else
+    // No system cairo on Windows, so cairo is by necessity one built by us, and we know that it is
+    // the right version with cairo_set_hairline().
+    (void)rViewInformation;
+    (void)bCairoCoordinateLimitWorkaroundActive;
+    cairo_set_hairline(pRT, true);
+#endif
 }
 
 void addB2DPolygonToPathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolygon)
@@ -4447,8 +4455,8 @@ basegfx::BColor CairoPixelProcessor2D::getFillColor(const basegfx::BColor& rColo
 
 basegfx::BColor CairoPixelProcessor2D::getTextColor(const basegfx::BColor& rColor) const
 {
-    constexpr DrawModeFlags TEXT(DrawModeFlags::BlackText | DrawModeFlags::GrayText
-                                 | DrawModeFlags::SettingsText);
+    constexpr DrawModeFlags TEXT
+        = DrawModeFlags::BlackText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText;
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
 
     if (!(aDrawModeFlags & TEXT))
