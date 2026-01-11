@@ -21,7 +21,7 @@ $(eval $(call gb_Library_add_defs,install_updateservice, \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,install_updateservice, \
-    $(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
+    $(if $(MSVC_USE_DEBUG_RUNTIME),-MTd,-MT) \
     $(if $(filter -fsanitize=%,$(CC)),,/fno-sanitize-address-vcasan-lib) \
 ))
 
