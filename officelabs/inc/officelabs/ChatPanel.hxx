@@ -8,9 +8,9 @@
 
 #include <sfx2/dockwin.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/fixed.hxx>
+#include <vcl/toolkit/edit.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <memory>
 #include <vector>
