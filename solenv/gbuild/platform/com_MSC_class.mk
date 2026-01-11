@@ -40,7 +40,7 @@ endef
 gb_Helper_remove_overridden_flags = \
     $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2 -Zc:inline -Zc:inline- \
         -Zc:dllexportInlines -Zc:dllexportInlines- -EHs -EHa -DNOMINMAX -UNOMINMAX -D_X86_=1 -U_X86_ \
-        -D_AMD64_=1 -U_AMD64_ $(MSVC_ANALYZE_FLAGS) -analyze-,$(1)) \
+        -D_AMD64_=1 -U_AMD64_ -D_DLL -U_DLL $(MSVC_ANALYZE_FLAGS) -analyze-,$(1)) \
     $(lastword $(filter -W4 -w,$(1))) \
     $(lastword $(filter -Od -O2,$(1))) \
     $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1))) \
@@ -48,6 +48,7 @@ gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -DNOMINMAX -UNOMINMAX,$(1))) \
     $(lastword $(filter -D_X86_=1 -U_X86_,$(1))) \
     $(lastword $(filter -D_AMD64_=1 -U_AMD64_,$(1))) \
+    $(lastword $(filter -D_DLL -U_DLL,$(1))) \
     $(lastword $(filter -Zc:inline -Zc:inline-,$(1))) \
     $(lastword $(filter -Zc:dllexportInlines -Zc:dllexportInlines-,$(1))) \
     $(lastword $(filter $(MSVC_ANALYZE_FLAGS) -analyze-,$(1)))
