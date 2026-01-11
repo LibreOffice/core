@@ -340,6 +340,13 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
         SAL_WARN("sc.filter",
                  "'" << maOrigName << "' is an invalid name, using '" << sName << "' instead.");
     }
+    else
+    {
+        // If the name is a valid reference then add underscore to the name
+        if (ScAddress().Parse(sName, GetDoc(), ::formula::FormulaGrammar::CONV_XL_A1)
+            & ScRefFlags::VALID)
+            sName = "_" + sName;
+    }
 
     rWorkbook->startElement( XML_definedName,
             // OOXTODO: XML_comment, "",

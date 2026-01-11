@@ -2041,6 +2041,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf170249)
                        u"INDEX($B2:$XFD2, 1, 2)");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf170292)
+{
+    createScDoc("ods/tdf170292.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:workbook/x:definedNames/x:definedName[1]", "name", u"_cat1");
+    assertXPathContent(pSheet, "/x:workbook/x:definedNames/x:definedName[2]",
+                       u"OFFSET(_cat1,0,2,,)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
