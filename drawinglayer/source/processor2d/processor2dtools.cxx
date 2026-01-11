@@ -22,11 +22,11 @@
 #include "vclmetafileprocessor2d.hxx"
 #include <config_vclplug.h>
 
-#if defined(_WIN32)
+#if USE_HEADLESS_CODE
+#include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
+#elif defined(_WIN32)
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
 #include <vcl/sysdata.hxx>
-#elif USE_HEADLESS_CODE
-#include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -77,32 +77,7 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     OutputDevice& rTargetOutDev,
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
 {
-#if defined(_WIN32)
-    // Windows: make dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
-    static bool bUsePrimitiveRenderer(nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
-
-    if (bUsePrimitiveRenderer)
-    {
-        drawinglayer::geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
-
-        // if mnOutOffX/mnOutOffY is set (a 'hack' to get a cheap additional offset), apply it additionally
-        // NOTE: This will also need to take extended size of target device into
-        //       consideration, using D2DPixelProcessor2D *will* have to clip
-        //       against that. Thus for now this is *not* sufficient (see tdf#163125)
-        if(0 != rTargetOutDev.GetOutOffXPixel() || 0 != rTargetOutDev.GetOutOffYPixel())
-        {
-            basegfx::B2DHomMatrix aTransform(aViewInformation2D.getViewTransformation());
-            aTransform.translate(rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel());
-            aViewInformation2D.setViewTransformation(aTransform);
-        }
-
-        SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
-        std::unique_ptr<D2DPixelProcessor2D> aRetval(
-            std::make_unique<D2DPixelProcessor2D>(aViewInformation2D, aData.hDC));
-        if (aRetval->valid())
-            return aRetval;
-    }
-#elif USE_HEADLESS_CODE
+#if USE_HEADLESS_CODE
     // Linux/Cairo: now globally activated in master. Leave a
     // possibility to deactivate for easy test/request testing
     static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
@@ -129,6 +104,31 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
                 return aRetval;
             }
         }
+    }
+#elif defined(_WIN32)
+    // Windows: make dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
+    static bool bUsePrimitiveRenderer(nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
+
+    if (bUsePrimitiveRenderer)
+    {
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
+
+        // if mnOutOffX/mnOutOffY is set (a 'hack' to get a cheap additional offset), apply it additionally
+        // NOTE: This will also need to take extended size of target device into
+        //       consideration, using D2DPixelProcessor2D *will* have to clip
+        //       against that. Thus for now this is *not* sufficient (see tdf#163125)
+        if(0 != rTargetOutDev.GetOutOffXPixel() || 0 != rTargetOutDev.GetOutOffYPixel())
+        {
+            basegfx::B2DHomMatrix aTransform(aViewInformation2D.getViewTransformation());
+            aTransform.translate(rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel());
+            aViewInformation2D.setViewTransformation(aTransform);
+        }
+
+        SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
+        std::unique_ptr<D2DPixelProcessor2D> aRetval(
+            std::make_unique<D2DPixelProcessor2D>(aViewInformation2D, aData.hDC));
+        if (aRetval->valid())
+            return aRetval;
     }
 #endif
 
