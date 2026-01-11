@@ -1,0 +1,49 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <unotools/resmgr.hxx>
+#include <utility>
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+const std::pair<TranslateId, TranslateId> HelpStrings[] =
+{
+    { NC_("STR_PRESCONHTEXT_A_KEY", "Left click, right or down arrow, spacebar, page down, enter, return"), NC_("STR_PRESCONHTEXT_A_DESC", "Next slide, or next effect") },
+    { NC_("STR_PRESCONHTEXT_B_KEY", "Right click, left or up arrow, page up, backspace"),                   NC_("STR_PRESCONHTEXT_B_DESC", "Previous slide, or previous effect") },
+    { NC_("STR_PRESCONHTEXT_C_KEY", "'P'"),                                                                 NC_("STR_PRESCONHTEXT_C_DESC", "Use mouse pointer as pen") },
+    { NC_("STR_PRESCONHTEXT_D_KEY", "Home"),                                                                NC_("STR_PRESCONHTEXT_D_DESC", "First slide") },
+    { NC_("STR_PRESCONHTEXT_E_KEY", "End"),                                                                 NC_("STR_PRESCONHTEXT_E_DESC", "Last slide") },
+    { NC_("STR_PRESCONHTEXT_F_KEY", "'E'"),                                                                 NC_("STR_PRESCONHTEXT_F_DESC", "Erase all ink on slide") },
+    { NC_("STR_PRESCONHTEXT_G_KEY", "Alt-Page Up"),                                                         NC_("STR_PRESCONHTEXT_G_DESC", "Previous slide without effects") },
+    { NC_("STR_PRESCONHTEXT_H_KEY", "Alt-Page Down"),                                                       NC_("STR_PRESCONHTEXT_H_DESC", "Next slide without effects") },
+    { NC_("STR_PRESCONHTEXT_J_KEY", "'B', '.'"),                                                            NC_("STR_PRESCONHTEXT_J_DESC", "Blacks/Unblacks the screen") },
+    { NC_("STR_PRESCONHTEXT_K_KEY", "'W', ','"),                                                            NC_("STR_PRESCONHTEXT_K_DESC", "Whites/Unwhites the screen") },
+    { NC_("STR_PRESCONHTEXT_M_KEY", "Esc, '-'"),                                                            NC_("STR_PRESCONHTEXT_M_DESC", "End slide show") },
+    { NC_("STR_PRESCONHTEXT_O_KEY", "Number followed by Enter"),                                            NC_("STR_PRESCONHTEXT_O_DESC", "Go to that slide") },
+    { NC_("STR_PRESCONHTEXT_Q_KEY", "'G', 'S'"),                                                            NC_("STR_PRESCONHTEXT_Q_DESC", "Grow/Shrink size of notes font") },
+    { NC_("STR_PRESCONHTEXT_R_KEY", "'A', 'Z'"),                                                            NC_("STR_PRESCONHTEXT_R_DESC", "Scroll notes up/down") },
+    { NC_("STR_PRESCONHTEXT_S_KEY", "'H', 'L'"),                                                            NC_("STR_PRESCONHTEXT_S_DESC", "Move caret in notes view backward/forward") },
+    { NC_("STR_PRESCONHTEXT_U_KEY", "Ctrl-'1'"),                                                            NC_("STR_PRESCONHTEXT_U_DESC", "Shows the Presenter Console") },
+    { NC_("STR_PRESCONHTEXT_V_KEY", "Ctrl-'2'"),                                                            NC_("STR_PRESCONHTEXT_V_DESC", "Shows the Presentation Notes") },
+    { NC_("STR_PRESCONHTEXT_W_KEY", "Ctrl-'3'"),                                                            NC_("STR_PRESCONHTEXT_W_DESC", "Shows the Slides Overview") },
+    { NC_("STR_PRESCONHTEXT_X_KEY", "Ctrl-'4'"),                                                            NC_("STR_PRESCONHTEXT_X_DESC", "Switches monitors") },
+    { NC_("STR_PRESCONHTEXT_Z_KEY", "Ctrl-'A'"),                                                            NC_("STR_PRESCONHTEXT_Z_DESC", "Turn off pointer as pen mode") }
+};

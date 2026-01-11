@@ -25,8 +25,9 @@
 #include "PresenterGeometryHelper.hxx"
 #include <DrawController.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <sdresid.hxx>
+#include <pchelp.hrc>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/Color.hpp>
@@ -342,35 +343,12 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
 
 void PresenterHelpView::ReadHelpStrings()
 {
+    // Read help strings stored in pchelp.hrc
     mpTextContainer.reset(new TextContainer);
-    PresenterConfigurationAccess aConfiguration (
-        mxComponentContext,
-        u"/org.openoffice.Office.PresenterScreen/"_ustr,
-        PresenterConfigurationAccess::READ_ONLY);
-    Reference<container::XNameAccess> xStrings (
-        aConfiguration.GetConfigurationNode(u"PresenterScreenSettings/HelpView/HelpStrings"_ustr),
-        UNO_QUERY);
-    PresenterConfigurationAccess::ForAll(
-        xStrings,
-        [this](OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
-        {
-            return this->ProcessString(xProps);
-        });
-}
-
-void PresenterHelpView::ProcessString (
-    const Reference<beans::XPropertySet>& rsProperties)
-{
-    if ( ! rsProperties.is())
-        return;
-
-    OUString sLeftText;
-    PresenterConfigurationAccess::GetProperty(rsProperties, u"Left"_ustr) >>= sLeftText;
-    OUString sRightText;
-    PresenterConfigurationAccess::GetProperty(rsProperties, u"Right"_ustr) >>= sRightText;
-    mpTextContainer->push_back(
+    for (const auto& pair: HelpStrings)
+        mpTextContainer->push_back(
         std::make_shared<Block>(
-            sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth));
+            SdResId(pair.first), SdResId(pair.second), mpFont->mxFont, mnMaximalWidth));
 }
 
 void PresenterHelpView::CheckFontSize()

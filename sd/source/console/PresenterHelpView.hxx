@@ -99,8 +99,6 @@ private:
     void Resize();
     void Paint (const css::awt::Rectangle& rRedrawArea);
     void ReadHelpStrings();
-    void ProcessString (
-        const css::uno::Reference<css::beans::XPropertySet>& rsProperties);
 
     /** Find a font size, so that all text can be displayed at the same
         time.
