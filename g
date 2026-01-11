@@ -311,7 +311,17 @@ if [ "$#" -eq "0" ] ; then
 fi
 
 
+# Try to find git in common locations
 if [ ! "$(type -p git)" ]; then
+    for git_path in "/cygdrive/c/Program Files/Git/mingw64/bin/git.exe" "/cygdrive/c/Program Files/Git/bin/git.exe" "/mingw64/bin/git.exe"; do
+        if [ -x "$git_path" ]; then
+            git() { "$git_path" "$@"; }
+            export -f git
+            break
+        fi
+    done
+fi
+if [ ! "$(type -p git)" ] && ! type git >/dev/null 2>&1; then
     echo "Cannot find the git binary! Is git installed and is in PATH?"
     exit 1
 fi

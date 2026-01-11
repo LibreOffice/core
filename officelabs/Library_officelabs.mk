@@ -3,8 +3,8 @@
 $(eval $(call gb_Library_Library,officelabs))
 
 $(eval $(call gb_Library_set_include,officelabs,\
-    $(INCLUDE) \
     -I$(SRCDIR)/officelabs/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,officelabs))

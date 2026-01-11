@@ -12,7 +12,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,skia))
 $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 
 skia_patches := \
-    fix-pch.patch.1 \
     fix-ddi.patch \
     make-api-visible.patch.1 \
     no-trace-resources-on-exit.patch.1 \
@@ -43,7 +42,6 @@ skia_patches := \
 	0003-loong64-Fix-missing-rounding-in-loong64-scaled_mult-.patch \
 	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
     msvc-unknown-attributes.patch.1 \
-	fix-semaphore-include.patch.1 \
 
 ifneq ($(MSYSTEM),)
 # use binary flag so patch from git-bash won't choke on mixed line-endings in patches
