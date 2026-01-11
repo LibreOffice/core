@@ -1810,7 +1810,7 @@ endef
 # call gb_LinkTarget_add_scanner,linktarget,lexfile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_scanner
 $(call gb_LexTarget_LexTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3) $(if $(filter GCC,$(COM)),-Wno-unused-macros),$(4))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3) $(gb_CXXFLAGS_DISABLE_WARNINGS),$(4))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
 
 endef
