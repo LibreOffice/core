@@ -182,6 +182,8 @@ private Q_SLOTS:
     void handleDataChanged(const QModelIndex& rTopLeft, const QModelIndex& rBottomRight,
                            const QVector<int>& rRoles);
     void handleSelectionChanged();
+    void signalCollapsing(const QModelIndex& rIndex);
+    void signalExpanding(const QModelIndex& rIndex);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

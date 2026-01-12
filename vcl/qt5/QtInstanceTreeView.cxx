@@ -41,6 +41,8 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
             &QtInstanceTreeView::handleSelectionChanged);
     connect(m_pModel, &QSortFilterProxyModel::dataChanged, this,
             &QtInstanceTreeView::handleDataChanged);
+    connect(m_pTreeView, &QTreeView::collapsed, this, &QtInstanceTreeView::signalCollapsing);
+    connect(m_pTreeView, &QTreeView::expanded, this, &QtInstanceTreeView::signalExpanding);
 
     assert(m_pTreeView->viewport());
     m_pTreeView->viewport()->installEventFilter(this);
@@ -863,6 +865,20 @@ void QtInstanceTreeView::handleSelectionChanged()
 {
     SolarMutexGuard g;
     signal_selection_changed();
+}
+
+void QtInstanceTreeView::signalCollapsing(const QModelIndex& rIndex)
+{
+    SolarMutexGuard g;
+
+    signal_collapsing(QtInstanceTreeIter(rIndex));
+}
+
+void QtInstanceTreeView::signalExpanding(const QModelIndex& rIndex)
+{
+    SolarMutexGuard g;
+
+    signal_expanding(QtInstanceTreeIter(rIndex));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
