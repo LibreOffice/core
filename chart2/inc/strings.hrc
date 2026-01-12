@@ -175,6 +175,7 @@
 #define STR_MIN_GREATER_MAX                         NC_("STR_MIN_GREATER_MAX", "The minimum must be lower than the maximum. Check your input.")
 #define STR_INVALID_INTERVALS                       NC_("STR_INVALID_INTERVALS", "The major interval needs to be greater than the minor interval. Check your input.")
 #define STR_INVALID_TIME_UNIT                       NC_("STR_INVALID_TIME_UNIT", "The major and minor interval need to be greater or equal to the resolution. Check your input.")
+#define STR_UNSUPPORTED_CHART_TYPE                  NC_("STR_UNSUPPORTED_CHART_TYPE", "One or more chart types are unsupported in this version of LibreOffice")
 
 #endif
 
