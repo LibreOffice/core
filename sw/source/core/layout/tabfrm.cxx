@@ -1411,7 +1411,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     }
 
     SwRowFrame* pLastRow = nullptr;     // points to the last remaining line in master
-    SwRowFrame* pFollowRow = nullptr;   // points to either the follow flow line or the
+    SwRowFrame* pFollowRow;             // points to either the follow flow line or the
                                         // first regular line in the follow
 
     if ( bSplitRowAllowed )
