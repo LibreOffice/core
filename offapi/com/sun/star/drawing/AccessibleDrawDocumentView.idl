@@ -105,10 +105,7 @@ service AccessibleDrawDocumentView
         of the currently visible area and to let the user find children
         (i.e. shapes) that cover a given test point.  The more interesting
         part of the graphical representation of a draw page lies in its
-        children.  See the AccessibleShape service for more
-        information about shapes.</p>
-
-        @see AccessibleShape
+        children.</p>
     */
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 };

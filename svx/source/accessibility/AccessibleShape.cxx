@@ -778,22 +778,6 @@ OUString SAL_CALL AccessibleShape::getExtendedAttributes()
     return OUString();
 }
 
-// XServiceInfo
-OUString SAL_CALL
-    AccessibleShape::getImplementationName()
-{
-    return u"AccessibleShape"_ustr;
-}
-
-
-uno::Sequence<OUString> SAL_CALL
-    AccessibleShape::getSupportedServiceNames()
-{
-    ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleShape"_ustr };
-    return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
 // XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes()

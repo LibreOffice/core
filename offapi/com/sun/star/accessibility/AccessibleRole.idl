@@ -432,8 +432,6 @@ constants AccessibleRole
 
     /** Object with graphical representation used to represent content on
         draw pages.
-
-        @see com::sun::star::drawing::AccessibleShape
     */
     const short SHAPE = 52;
 

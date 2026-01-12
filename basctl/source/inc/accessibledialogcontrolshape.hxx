@@ -34,7 +34,7 @@ class DlgEdObj;
 class DialogWindow;
 
 class AccessibleDialogControlShape final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::beans::XPropertyChangeListener>
 {
     friend class AccessibleDialogWindow;
@@ -78,11 +78,6 @@ public:
 
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& rEvent ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

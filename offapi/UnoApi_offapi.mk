@@ -751,7 +751,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	AccessibleDrawDocumentView \
 	AccessibleGraphControl \
 	AccessibleImageBullet \
-	AccessibleShape \
 	AppletShape \
 	Background \
 	BitmapTable \
