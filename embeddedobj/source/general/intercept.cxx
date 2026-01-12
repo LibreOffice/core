@@ -74,13 +74,13 @@ Interceptor::dispatch(
         return;
 
     if(URL.Complete == m_aInterceptedURL[0])
-        m_pDocHolder->GetEmbedObject()->SaveObject_Impl();
+        m_pDocHolder->GetEmbedObject().SaveObject_Impl();
     else if(URL.Complete == m_aInterceptedURL[2] ||
             URL.Complete == m_aInterceptedURL[3] ||
             URL.Complete == m_aInterceptedURL[4])
     {
         try {
-            m_pDocHolder->GetEmbedObject()->changeState( embed::EmbedStates::RUNNING );
+            m_pDocHolder->GetEmbedObject().changeState( embed::EmbedStates::RUNNING );
         }
         catch( const uno::Exception& )
         {

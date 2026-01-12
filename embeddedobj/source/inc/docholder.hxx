@@ -54,7 +54,7 @@ class DocumentHolder :
 {
 private:
 
-    OCommonEmbeddedObject* m_pEmbedObj;
+    OCommonEmbeddedObject& m_rEmbedObj;
 
     rtl::Reference<Interceptor>        m_xInterceptor;
     css::uno::Reference< css::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
@@ -116,10 +116,10 @@ public:
 
 
     DocumentHolder( css::uno::Reference< css::uno::XComponentContext > xContext,
-                    OCommonEmbeddedObject* pEmbObj );
+                    OCommonEmbeddedObject& rEmbObj );
     virtual ~DocumentHolder() override;
 
-    OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
+    OCommonEmbeddedObject& GetEmbedObject() { return m_rEmbedObj; }
 
     void SetComponent( const css::uno::Reference< css::util::XCloseable >& xDoc, bool bReadOnly );
     void ResizeHatchWindow();

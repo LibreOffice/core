@@ -69,8 +69,8 @@
 #include <commonembobj.hxx>
 #include <intercept.hxx>
 
-#define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
-                            m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
+#define HATCH_BORDER_WIDTH (((m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
+                            m_rEmbedObj.getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 
 using namespace ::com::sun::star;
 
@@ -152,8 +152,8 @@ namespace embeddedobj
 {
 
 DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContext,
-                                OCommonEmbeddedObject* pEmbObj )
-: m_pEmbedObj( pEmbObj ),
+                                OCommonEmbeddedObject& rEmbObj )
+: m_rEmbedObj( rEmbObj ),
   m_xContext(std::move( xContext )),
   m_bReadOnly( false ),
   m_bWaitForClose( false ),
@@ -954,12 +954,12 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
 
         // set document title to show in the title bar
         css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
-        if( xModelTitle.is() && m_pEmbedObj && !m_pEmbedObj->getContainerName().isEmpty() )
+        if( xModelTitle.is() && !m_rEmbedObj.getContainerName().isEmpty() )
         {
             std::locale aResLoc = Translate::Create("sfx");
             OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
-            xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
-            m_aContainerName = m_pEmbedObj->getContainerName();
+            xModelTitle->setTitle( m_rEmbedObj.getContainerName() + sEmbedded );
+            m_aContainerName = m_rEmbedObj.getContainerName();
             // TODO: get real m_aDocumentNamePart
             m_aDocumentNamePart = sEmbedded;
         }
@@ -1161,14 +1161,14 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
 {
     // if the component does not support document::XEventBroadcaster
     // the modify notifications are used as workaround, but only for running state
-    if( aEvent.Source == m_xComponent && m_pEmbedObj && m_pEmbedObj->getCurrentState() == embed::EmbedStates::RUNNING )
-        m_pEmbedObj->PostEvent_Impl( u"OnVisAreaChanged"_ustr );
+    if( aEvent.Source == m_xComponent && m_rEmbedObj.getCurrentState() == embed::EmbedStates::RUNNING )
+        m_rEmbedObj.PostEvent_Impl( u"OnVisAreaChanged"_ustr );
 }
 
 
 void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
 {
-    if( m_pEmbedObj && Event.Source == m_xComponent )
+    if( Event.Source == m_xComponent )
     {
         // for now the ignored events are not forwarded, but sent by the object itself
         if ( !Event.EventName.startsWith( "OnSave" )
@@ -1176,7 +1176,7 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
           && !Event.EventName.startsWith( "OnSaveAs" )
           && !Event.EventName.startsWith( "OnSaveAsDone" )
           && !( Event.EventName.startsWith( "OnVisAreaChanged" ) && m_nNoResizeReact ) )
-            m_pEmbedObj->PostEvent_Impl( Event.EventName );
+            m_rEmbedObj.PostEvent_Impl( Event.EventName );
     }
 }
 
@@ -1185,7 +1185,7 @@ void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XI
                                                     const frame::BorderWidths& aNewSize )
 {
     // TODO: may require mutex introduction ???
-    if ( m_pEmbedObj && m_xFrame.is() && aObject == m_xFrame->getController() )
+    if ( m_xFrame.is() && aObject == m_xFrame->getController() )
     {
         if ( m_aBorderWidths.Left != aNewSize.Left
           || m_aBorderWidths.Right != aNewSize.Right
@@ -1203,13 +1203,10 @@ void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XI
 void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
 {
     // TODO: may require mutex introduction ???
-    if ( m_pEmbedObj )
-    {
-        // borders should not be counted
-        awt::Rectangle aObjRect = CalculateBorderedArea( aRect );
-        IntCounterGuard aGuard( m_nNoResizeReact );
-        m_pEmbedObj->requestPositioning( aObjRect );
-    }
+    // borders should not be counted
+    awt::Rectangle aObjRect = CalculateBorderedArea( aRect );
+    IntCounterGuard aGuard( m_nNoResizeReact );
+    m_rEmbedObj.requestPositioning( aObjRect );
 }
 
 
@@ -1241,15 +1238,15 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
 
 void SAL_CALL DocumentHolder::activated(  )
 {
-    if ( !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
+    if ( !(m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
         return;
 
-    if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
-    !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
+    if ( m_rEmbedObj.getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
+    !(m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
     {
         try
         {
-            m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
+            m_rEmbedObj.changeState( embed::EmbedStates::UI_ACTIVE );
         }
         catch ( const css::embed::StateChangeInProgressException& )
         {
