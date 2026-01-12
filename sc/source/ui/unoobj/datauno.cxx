@@ -386,7 +386,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 sal_Int32 i;
                 if ( nCount > nSortSize )
                 {
-                    nCount = nSortSize;
+                    nSortSize = nCount;
                     rParam.maKeyState.resize(nCount);
                 }
                 const table::TableSortField* pFieldArray = aNewSeq.getConstArray();

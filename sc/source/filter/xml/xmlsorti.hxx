@@ -23,7 +23,7 @@
 
 #include "importcontext.hxx"
 
-namespace com::sun::star::util { struct SortField; }
+namespace com::sun::star::table { struct TableSortField; }
 namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLImport;
@@ -33,7 +33,7 @@ class ScXMLSortContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
-    css::uno::Sequence <css::util::SortField> aSortFields;
+    css::uno::Sequence <css::table::TableSortField> aSortFields;
     css::table::CellAddress aOutputPosition;
     LanguageTagODF maLanguageTagODF;
     OUString    sAlgorithm;
