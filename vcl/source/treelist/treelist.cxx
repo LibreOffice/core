@@ -481,10 +481,6 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
         bWithDepth = true;
     }
 
-    // Get the list where the current entry belongs to (from its parent).
-    SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
-    sal_uInt32 nActualPos = pActEntry->GetChildListPos();
-
     if (!pActEntry->m_Children.empty())
     {
         // The current entry has children. Get its first child entry.
@@ -495,6 +491,9 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
         return pActEntry;
     }
 
+    // Get the list where the current entry belongs to (from its parent).
+    SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
+    sal_uInt32 nActualPos = pActEntry->GetChildListPos();
     if (pActualList->size() > (nActualPos+1))
     {
         // Get the next sibling of the current entry.
