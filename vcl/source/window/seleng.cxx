@@ -20,6 +20,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 
@@ -30,6 +31,22 @@ FunctionSet::~FunctionSet()
 inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 {
     return eSelMode != SelectionMode::Multiple || !bModifierKey1;
+}
+
+bool SelectionEngine::IsDragEnabled() const
+{
+    // Check if drag is enabled via flag
+    if (nFlags & SelectionEngineFlags::DRG_ENAB)
+        return true;
+
+    // Extensions might have registered drag gesture listeners
+    // while the drag flag is not set - in this case we also
+    // want to allow drag operations. Otherwise D&D from
+    // extensions would not work properly (esp. with multiple selection).
+    if (!pWin)
+        return false;
+    rtl::Reference<DNDListenerContainer> rDropTarget = pWin->GetDropTarget();
+    return rDropTarget.is() && rDropTarget->hasDragGestureListeners();
 }
 
 // TODO: throw out FunctionSet::SelectAtPoint
@@ -153,8 +170,9 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
         case 0:     // KEY_NO_KEY
         {
             bool bSelAtPoint = pFunctionSet->IsSelectionAtPoint( aPos );
+            bool bDragEnabled = IsDragEnabled();
             nFlags &= ~SelectionEngineFlags::IN_ADD;
-            if ( (nFlags & SelectionEngineFlags::DRG_ENAB) && bSelAtPoint )
+            if ( bDragEnabled && bSelAtPoint )
             {
                 nFlags |= SelectionEngineFlags::WAIT_UPEVT;
                 nFlags &= ~SelectionEngineFlags::IN_SEL;
@@ -171,7 +189,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             // special case Single-Selection, to enable simple Select+Drag
-            if (eSelMode == SelectionMode::Single && (nFlags & SelectionEngineFlags::DRG_ENAB))
+            if (eSelMode == SelectionMode::Single && bDragEnabled)
                 nFlags |= SelectionEngineFlags::WAIT_UPEVT;
             return true;
         }
@@ -375,7 +393,7 @@ bool SelectionEngine::Command( const CommandEvent& rCEvt )
         return false;
 
     nFlags |= SelectionEngineFlags::CMDEVT;
-    if ( nFlags & SelectionEngineFlags::DRG_ENAB )
+    if ( IsDragEnabled() )
     {
         SAL_WARN_IF( !rCEvt.IsMouseEvent(), "vcl", "STARTDRAG: Not a MouseEvent" );
         if ( pFunctionSet->IsSelectionAtPoint( rCEvt.GetMousePosPixel() ) )

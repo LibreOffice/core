@@ -91,6 +91,8 @@ private:
 
     inline bool         ShouldDeselect( bool bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
+    bool                IsDragEnabled() const;
+                                // checks if dragging is enabled via flag or drag gesture listeners
 public:
 
                         SelectionEngine( vcl::Window* pWindow,
