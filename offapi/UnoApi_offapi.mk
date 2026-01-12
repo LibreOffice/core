@@ -917,7 +917,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/form/validatio
 	ValidatableControlModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/formula,\
-	AccessibleFormulaView \
 	FormulaProperties \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/frame,\
