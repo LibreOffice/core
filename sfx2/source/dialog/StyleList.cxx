@@ -1795,7 +1795,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetWindowTextColor());
 
     bool bSuccess = false;
 
