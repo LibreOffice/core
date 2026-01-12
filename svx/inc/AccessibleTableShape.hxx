@@ -34,14 +34,13 @@ namespace sdr::table { class SvxTableController; }
 
 namespace accessibility
 {
-    class AccessibleTableShapeImpl;
-    class AccessibleCell;
+class AccessibleTableShapeImpl;
+class AccessibleCell;
 
-    typedef ::cppu::ImplInheritanceHelper< AccessibleShape,
-                                            css::accessibility::XAccessibleTable,
-                                            css::view::XSelectionChangeListener
-                                          > AccessibleTableShape_Base;
-class AccessibleTableShape final : public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
+class AccessibleTableShape final
+    : public cppu::ImplInheritanceHelper<AccessibleShape, css::accessibility::XAccessibleTable,
+                                         css::accessibility::XAccessibleTableSelection,
+                                         css::view::XSelectionChangeListener>
 {
     sal_Int32 mnPreviousSelectionCount;
 public:
@@ -51,11 +50,6 @@ public:
     AccessibleTableShape& operator=(const AccessibleTableShape&) = delete;
 
     virtual void Init() override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount( ) override;
