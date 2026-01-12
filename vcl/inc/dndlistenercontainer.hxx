@@ -103,6 +103,9 @@ public:
     virtual void SAL_CALL removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
     virtual void SAL_CALL resetRecognizer(  ) override;
 
+    // Helper method to check if there are any drag gesture listeners registered
+    bool hasDragGestureListeners() const;
+
        /*
      * XDropTargetDragContext
      */
