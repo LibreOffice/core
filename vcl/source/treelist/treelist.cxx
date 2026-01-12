@@ -508,7 +508,6 @@ SvTreeListEntry* SvTreeList::Next( SvTreeListEntry* pActEntry, sal_uInt16* pDept
     nDepth--;
     while( pParent != pRootItem.get() && pParent != nullptr )
     {
-        DBG_ASSERT(pParent!=nullptr,"TreeData corrupt!");
         pActualList = &pParent->pParent->m_Children;
         nActualPos = pParent->GetChildListPos();
         if (pActualList->size() > (nActualPos+1))
