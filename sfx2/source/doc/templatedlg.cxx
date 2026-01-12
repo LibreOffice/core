@@ -167,7 +167,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxLocalViewWeld(new weld::CustomWeld(*m_xBuilder, u"template_view"_ustr, maLocalView))
     , mxListViewButton(m_xBuilder->weld_toggle_button(u"list_view_btn"_ustr))
     , mxThumbnailViewButton(m_xBuilder->weld_toggle_button(u"thumbnail_view_btn"_ustr))
-    , mViewMode(TemplateViewMode::eThumbnailView)
+    , mViewMode(TemplateViewMode::ThumbnailView)
 {
     // Create popup menus
     mxActionBar->append_item(MNI_ACTION_NEW_FOLDER, SfxResId(STR_CATEGORY_NEW), BMP_ACTION_NEW_CATEGORY);
@@ -287,7 +287,7 @@ void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel>
 
 void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
 {
-    if(eViewMode == TemplateViewMode::eThumbnailView && mViewMode != TemplateViewMode::eThumbnailView)
+    if (eViewMode == TemplateViewMode::ThumbnailView && mViewMode != TemplateViewMode::ThumbnailView)
     {
         mxThumbnailViewButton->set_active(true);
         mxListViewButton->set_active(false);
@@ -296,7 +296,7 @@ void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
         maLocalView.setTemplateViewMode(eViewMode);
         maLocalView.Show();
     }
-    if(eViewMode == TemplateViewMode::eListView && mViewMode != TemplateViewMode::eListView)
+    if (eViewMode == TemplateViewMode::ListView && mViewMode != TemplateViewMode::ListView)
     {
         mxListViewButton->set_active(true);
         mxThumbnailViewButton->set_active(false);
@@ -439,8 +439,8 @@ void SfxTemplateManagerDlg::readSettings ()
         mxActionBar->set_item_sensitive(MNI_ACTION_DELETE_FOLDER, !bIsBuiltInRegion);
     }
 
-    if(nViewMode == static_cast<sal_Int16>(TemplateViewMode::eListView) ||
-        nViewMode == static_cast<sal_Int16>(TemplateViewMode::eThumbnailView))
+    if (nViewMode == static_cast<sal_Int16>(TemplateViewMode::ListView)
+        || nViewMode == static_cast<sal_Int16>(TemplateViewMode::ThumbnailView))
     {
         TemplateViewMode eViewMode = static_cast<TemplateViewMode>(nViewMode);
         setTemplateViewMode(eViewMode);
@@ -448,7 +448,7 @@ void SfxTemplateManagerDlg::readSettings ()
     else
     {
         //Default ViewMode
-        setTemplateViewMode(TemplateViewMode::eThumbnailView);
+        setTemplateViewMode(TemplateViewMode::ThumbnailView);
     }
 }
 
@@ -804,12 +804,12 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, LoseFocusHdl, weld::Widget&, void)
 
 IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::Toggleable&, void )
 {
-    setTemplateViewMode(TemplateViewMode::eListView);
+    setTemplateViewMode(TemplateViewMode::ListView);
 }
 
 IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ThumbnailViewHdl, weld::Toggleable&, void )
 {
-    setTemplateViewMode(TemplateViewMode::eThumbnailView);
+    setTemplateViewMode(TemplateViewMode::ThumbnailView);
     bMakeSelItemVisible = true;
 }
 
@@ -1344,7 +1344,7 @@ short SfxTemplateSelectionDlg::run()
     maIdle.SetPriority(TaskPriority::LOWEST);
     maIdle.SetInvokeHandler(LINK(this,SfxTemplateSelectionDlg,TimeOut));
     maIdle.Start();
-    setTemplateViewMode(TemplateViewMode::eThumbnailView);
+    setTemplateViewMode(TemplateViewMode::ThumbnailView);
 
     return weld::GenericDialogController::run();
 }

@@ -27,7 +27,7 @@ TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow>
                                            std::unique_ptr<weld::TreeView> xTreeView)
     : TemplateLocalView(std::move(xWindow), std::move(xMenu))
     , ListView(std::move(xTreeView))
-    , mViewMode(TemplateViewMode::eThumbnailView)
+    , mViewMode(TemplateViewMode::ThumbnailView)
 {
     mxTreeView->connect_row_activated(LINK(this, TemplateDlgLocalView, RowActivatedHdl));
     mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
@@ -135,13 +135,13 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
         mxContextMenu->set_sensitive(u"rename"_ustr, false);
         mxContextMenu->set_sensitive(u"delete"_ustr, false);
     }
-    if (mViewMode == TemplateViewMode::eThumbnailView)
+    if (mViewMode == TemplateViewMode::ThumbnailView)
     {
         ContextMenuSelectHdl(mxContextMenu->popup_at_rect(
             GetDrawingArea(), tools::Rectangle(maPosition, Size(1, 1))));
         Invalidate();
     }
-    else if (mViewMode == TemplateViewMode::eListView)
+    else if (mViewMode == TemplateViewMode::ListView)
         ContextMenuSelectHdl(mxContextMenu->popup_at_rect(
             mxTreeView.get(), tools::Rectangle(maPosition, Size(1, 1))));
 }
@@ -242,7 +242,7 @@ void TemplateDlgLocalView::setTemplateViewMode(TemplateViewMode eMode) { mViewMo
 
 void TemplateDlgLocalView::Show()
 {
-    if (mViewMode == TemplateViewMode::eListView)
+    if (mViewMode == TemplateViewMode::ListView)
     {
         ThumbnailView::Hide();
         ListView::ShowListView();
@@ -267,7 +267,7 @@ bool TemplateDlgLocalView::IsVisible() const
 
 void TemplateDlgLocalView::syncCursor()
 {
-    if (mViewMode == TemplateViewMode::eListView)
+    if (mViewMode == TemplateViewMode::ListView)
     {
         ListView::unselect_all();
         int nIndex = -1;
