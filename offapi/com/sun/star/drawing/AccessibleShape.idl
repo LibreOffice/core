@@ -161,7 +161,6 @@ service AccessibleShape
     /** Give extended access to the graphical representation of a shape.
 
         <p>The functions
-        ::com::sun::star::accessibility::XAccessibleExtendedComponent::getFont(),
         ::com::sun::star::accessibility::XAccessibleExtendedComponent::getTitledBorderText(), and
         ::com::sun::star::accessibility::XAccessibleExtendedComponent::getToolTipText()
         are not supported and return empty references respectively empty
