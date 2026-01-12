@@ -2188,7 +2188,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 weld::Window* pWin = SfxGetpApp()->GetTopWindow();
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                                          VclMessageType::Info, VclButtonsType::Ok,
-                                                                         SfxResId(STR_ERROR_SEND_MAIL)));
+                                                                         SfxResId(STR_BLUETOOTH_SEND_ERROR)));
                 xBox->run();
                 rReq.Ignore();
             }
