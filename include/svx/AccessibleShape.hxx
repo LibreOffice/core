@@ -59,12 +59,7 @@ class AccessibleTextHelper;
 class ChildrenManager;
 class IAccessibleParent;
 
-/** This base class provides a base implementation for all shapes.  For more
-    detailed documentation about the methods refer to the descriptions of
-    the implemented interfaces.  These are, among others,
-    XAccessible, <type>XAccessibleContext</type>,
-    XAccessibleComponent and
-    XAccessibleExtendedComponent.
+/** This base class provides a base implementation for all shapes.
 
     <p>The children of a shape can stem from two sources which, in case of
     SVX and SD shapes, are mutually exclusive.  This implementation,
