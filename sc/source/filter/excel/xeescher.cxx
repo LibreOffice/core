@@ -1413,7 +1413,7 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
     {
         case EXC_OBJTYPE_CHECKBOX:
         {
-            const sal_Int32 nDrawing = DrawingML::getNewDrawingUniqueId();
+            const sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
             sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
                     XclXmlUtils::GetStreamName( "xl/", "ctrlProps/ctrlProps", nDrawing ),
                     XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProps", nDrawing ),
@@ -1463,7 +1463,7 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
         }
         case EXC_OBJTYPE_BUTTON:
         {
-            sal_Int32 nDrawing = DrawingML::getNewDrawingUniqueId();
+            sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
             sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
                 XclXmlUtils::GetStreamName("xl/", "ctrlProps/ctrlProps", nDrawing),
                 XclXmlUtils::GetStreamName("../", "ctrlProps/ctrlProps", nDrawing),
@@ -1641,7 +1641,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         ChartExport aChartExport(XML_xdr, pDrawing, GetChartDoc(), &rStrm, drawingml::DOCUMENT_XLSX);
         auto pURLTransformer = std::make_shared<ScURLTransformer>(*mpDoc);
         aChartExport.SetURLTranslator(pURLTransformer);
-        sal_Int32 nChartCount = oox::drawingml::DrawingML::getNewChartUniqueId();
+        sal_Int32 nChartCount = rStrm.getNewChartUniqueId();
         sal_Int32 nID = rStrm.GetUniqueId();
         aChartExport.WriteChartObj( mxShape, nID, nChartCount );
         // TODO: get the correcto chart number

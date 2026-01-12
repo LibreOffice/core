@@ -326,7 +326,6 @@ namespace oox::drawingml {
 
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport, bool bUserShapes )
     : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
-    , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
     , mbUserShapes( bUserShapes )
     , mnXmlNamespace( nXmlNamespace )
@@ -2846,7 +2845,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         // TODO: With Chart extracted this cannot really happen since
         // no Chart could've been added at all
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xChartDoc, GetFB(), GetDocumentType() );
-        aChartExport.WriteChartObj( xShape, GetNewShapeID( xShape ), ++mnChartCount );
+        aChartExport.WriteChartObj(xShape, GetNewShapeID(xShape), mpFB->getNewChartUniqueId());
 #endif
         return *this;
     }
@@ -2964,7 +2963,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         assert(!sRelationType.isEmpty());
         assert(!sSuffix.isEmpty());
 
-        OUString sNumber = OUString::number(++m_nEmbeddedObjects);
+        OUString sNumber = OUString::number(mpFB->getNewOLEUniqueId());
         OUString sFileName = u"embeddings/oleObject"_ustr + sNumber + u"."_ustr + sSuffix;
         OUString sFilePath = GetComponentDir() + u"/"_ustr + sFileName;
         uno::Reference<io::XOutputStream> const xOutStream(mpFB->openFragmentStream(sFilePath, sMediaType));
