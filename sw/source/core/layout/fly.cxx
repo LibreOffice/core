@@ -1474,6 +1474,14 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 {
     OSL_ENSURE( pAttrs, "FlyFrame::Format, pAttrs is 0." );
 
+    if (GetDrawObj() && !GetDrawObj()->IsVisible())
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.setSwRect(SwRect());
+        setFrameAreaSizeValid(true);
+        return;
+    }
+
     ColLock();
 
     if ( !isFrameAreaSizeValid() )

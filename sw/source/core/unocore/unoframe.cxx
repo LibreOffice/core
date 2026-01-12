@@ -1408,7 +1408,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, getXWeak() );
 
         SwDoc* pDoc = pFormat->GetDoc();
-        if ( ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
+        if (m_eType == FLYCNTTYPE_GRF && RES_GRFATR_VISIBLE == pEntry->nWID)
+        {
+            bool bVisible = true;
+            aValue >>= bVisible;
+            SdrObject* pObject = GetOrCreateSdrObject(static_cast<SwFlyFrameFormat&>(*pFormat));
+            pObject->SetVisible(bVisible);
+        }
+        else if ( ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
             (FN_PARAM_CONTOUR_PP         == pEntry->nWID) ||
             (FN_UNO_IS_AUTOMATIC_CONTOUR == pEntry->nWID) ||
             (FN_UNO_IS_PIXEL_CONTOUR     == pEntry->nWID) )
@@ -1959,7 +1966,12 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else if(pFormat)
     {
-        if( ((m_eType == FLYCNTTYPE_GRF) || (m_eType == FLYCNTTYPE_OLE)) &&
+        if (m_eType == FLYCNTTYPE_GRF && RES_GRFATR_VISIBLE == pEntry->nWID)
+        {
+            SdrObject* pObject = GetOrCreateSdrObject(static_cast<SwFlyFrameFormat&>(*pFormat));
+            aAny <<= pObject->IsVisible();
+        }
+        else if( ((m_eType == FLYCNTTYPE_GRF) || (m_eType == FLYCNTTYPE_OLE)) &&
                 (isGRFATR(pEntry->nWID) ||
                         pEntry->nWID == FN_PARAM_CONTOUR_PP ||
                         pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
@@ -3046,6 +3058,9 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
     {
         setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
     }
+    if (const uno::Any* pVisible = m_pProps->GetProperty(RES_GRFATR_VISIBLE, 0))
+        setPropertyValue(UNO_NAME_VISIBLE, *pVisible);
+
 
     // For grabbag
     if (const uno::Any* pFrameIntropgrabbagItem = m_pProps->GetProperty(RES_FRMATR_GRABBAG, 0))

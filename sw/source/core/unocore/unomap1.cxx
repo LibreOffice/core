@@ -850,6 +850,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetGraphicPro
         { UNO_NAME_GAMMA, RES_GRFATR_GAMMA,        cppu::UnoType<double>::get(),     0,   0},
         { UNO_NAME_GRAPHIC_IS_INVERTED, RES_GRFATR_INVERT,         cppu::UnoType<bool>::get(),    0,   0},
         { UNO_NAME_TRANSPARENCY, RES_GRFATR_TRANSPARENCY, cppu::UnoType<sal_Int16>::get(),   0,   0},
+        { UNO_NAME_VISIBLE, RES_GRFATR_VISIBLE,           cppu::UnoType<bool>::get(), 0, 0 },
         { UNO_NAME_GRAPHIC_COLOR_MODE, RES_GRFATR_DRAWMODE,    cppu::UnoType<css::drawing::ColorMode>::get(),      0,   0},
 
         // added FillProperties for SW, same as FILL_PROPERTIES in svx

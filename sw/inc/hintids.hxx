@@ -397,7 +397,7 @@ inline constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(151);
 inline constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(152);
 inline constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(153);
 
-inline constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4(154);
+inline constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_VISIBLE(154);
 inline constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY5(155);
 inline constexpr sal_uInt16 RES_GRFATR_END(156);
 
