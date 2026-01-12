@@ -411,8 +411,8 @@ inline constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA(RES_GRFATR_BEGIN + 8)
 inline constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(RES_GRFATR_BEGIN + 9);
 inline constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(RES_GRFATR_BEGIN + 10);
 inline constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(RES_GRFATR_BEGIN + 11);
+inline constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_VISIBLE(RES_GRFATR_BEGIN + 12);
 
-inline constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4(RES_GRFATR_BEGIN + 12);
 inline constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY5(RES_GRFATR_BEGIN + 13);
 inline constexpr sal_uInt16 RES_GRFATR_END(RES_GRFATR_BEGIN + 14);
 
