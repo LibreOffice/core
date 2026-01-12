@@ -261,7 +261,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     if (aList.empty())
         return;
 
-    sal_Int32 nDrawing = drawingml::DrawingML::getNewDrawingUniqueId();
+    sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
     OUString sId;
     // export in [Content_Types].xml
     sax_fastparser::FSHelperPtr pDrawing = rStrm.CreateOutputStream(
@@ -348,7 +348,7 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     if( GetVmlObjectCount( rList ) == 0 )
         return;
 
-    sal_Int32 nDrawing = drawingml::DrawingML::getNewVMLUniqueId();
+    sal_Int32 nDrawing = rStrm.getNewVMLUniqueId();
     OUString sId;
     sax_fastparser::FSHelperPtr pVmlDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/vmlDrawing", nDrawing ),

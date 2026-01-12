@@ -1124,6 +1124,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169524)
         pXmlDoc, "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr", "marL");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952)
+{
+    createSdImpressDoc("odp/tdf169952.odp");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart2.xml"_ustr);
+
+    CPPUNIT_ASSERT_MESSAGE("Without the fix chart2.xml is not exported", pXmlDoc);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
