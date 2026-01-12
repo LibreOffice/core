@@ -51,7 +51,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <unomodel.hxx>
 
 using namespace com::sun::star;
 
