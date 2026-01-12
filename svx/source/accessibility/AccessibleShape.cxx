@@ -93,14 +93,13 @@ OUString GetOptionalProperty (
 } // end of anonymous namespace
 
 // internal
-AccessibleShape::AccessibleShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
-      mxShape (rShapeInfo.mxShape),
-      maShapeTreeInfo (rShapeTreeInfo),
-      m_nIndexInParent(-1),
-      mpParent (rShapeInfo.mpChildrenManager)
+AccessibleShape::AccessibleShape(const AccessibleShapeInfo& rShapeInfo,
+                                 const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : ImplInheritanceHelper(rShapeInfo.mxParent, AccessibleRole::SHAPE)
+    , mxShape(rShapeInfo.mxShape)
+    , maShapeTreeInfo(rShapeTreeInfo)
+    , m_nIndexInParent(-1)
+    , mpParent(rShapeInfo.mpChildrenManager)
 {
     m_pShape = SdrObject::getSdrObjectFromXShape(mxShape);
     UpdateNameAndDescription();
@@ -650,39 +649,6 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
     AccessibleContextBase::removeAccessibleEventListener (rxListener);
     if (mpText != nullptr)
         mpText->RemoveEventListener (rxListener);
-}
-
-// XInterface
-css::uno::Any SAL_CALL
-    AccessibleShape::queryInterface (const css::uno::Type & rType)
-{
-    css::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-            static_cast< css::accessibility::XAccessibleSelection* >(this),
-            static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this),
-            static_cast<document::XShapeEventListener*>(this),
-            static_cast<lang::XUnoTunnel*>(this),
-            static_cast<XAccessibleGroupPosition*>(this),
-            static_cast<XAccessibleHypertext*>(this)
-            );
-    return aReturn;
-}
-
-
-void SAL_CALL
-    AccessibleShape::acquire()
-    noexcept
-{
-    AccessibleContextBase::acquire ();
-}
-
-
-void SAL_CALL
-    AccessibleShape::release()
-    noexcept
-{
-    AccessibleContextBase::release ();
 }
 
 // XAccessibleSelection

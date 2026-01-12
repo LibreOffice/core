@@ -79,14 +79,12 @@ class IAccessibleParent;
     container, who can then call dispose() at the accessible object.</p>
 */
 class SVX_DLLPUBLIC AccessibleShape
-    :   public AccessibleContextBase,
-        public css::accessibility::XAccessibleSelection,
-        public css::accessibility::XAccessibleExtendedAttributes,
-        public css::accessibility::XAccessibleGroupPosition,
-        public css::accessibility::XAccessibleHypertext,
-        public IAccessibleViewForwarderListener,
-        public css::document::XShapeEventListener,
-        public css::lang::XUnoTunnel
+    : public cppu::ImplInheritanceHelper<
+          AccessibleContextBase, css::accessibility::XAccessibleSelection,
+          css::accessibility::XAccessibleExtendedAttributes,
+          css::accessibility::XAccessibleGroupPosition, css::accessibility::XAccessibleHypertext,
+          css::document::XShapeEventListener, css::lang::XUnoTunnel>,
+      public IAccessibleViewForwarderListener
 {
 public:
     /** Create a new accessible object that makes the given shape accessible.
@@ -256,20 +254,6 @@ public:
         removeAccessibleEventListener (
             const css::uno::Reference<
             css::accessibility::XAccessibleEventListener >& rxListener) override;
-
-
-    //=====  XInterface  ======================================================
-
-    virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
-
-    virtual void SAL_CALL
-        acquire()
-        noexcept override;
-
-    virtual void SAL_CALL
-        release()
-        noexcept override;
 
     //=====  XTypeProvider  ===================================================
 
