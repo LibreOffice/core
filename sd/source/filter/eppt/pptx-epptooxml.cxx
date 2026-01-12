@@ -443,7 +443,6 @@ bool PowerPointExport::importDocument() noexcept
 
 bool PowerPointExport::exportDocument()
 {
-    drawingml::DrawingML::ResetMlCounters();
     auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
 
     rGraphicExportCache.push();

@@ -295,9 +295,6 @@ class DrawingML
 {
 
 private:
-    OOX_DLLPUBLIC static sal_Int32 mnDrawingMLCount;
-    OOX_DLLPUBLIC static sal_Int32 mnVmlCount;
-
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
     /// Parent exporter, used for text callback.
@@ -311,7 +308,6 @@ protected:
     /// If set, this is the parent of the currently handled shape.
     css::uno::Reference<css::drawing::XShape> m_xParent;
     bool                                      mbIsBackgroundDark;
-    OOX_DLLPUBLIC static sal_Int32 mnChartCount;
 
     /// True when exporting presentation placeholder shape.
     bool mbPlaceholder;
@@ -521,12 +517,6 @@ public:
 
     static bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape );
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
-
-    OOX_DLLPUBLIC static void ResetMlCounters();
-
-    static sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
-    static sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
-    static sal_Int32 getNewChartUniqueId() { return ++mnChartCount; }
 
     // A Helper to decide the script type for given text in order to call WriteRunProperties.
     static sal_Int16 GetScriptType(const OUString& rStr);

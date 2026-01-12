@@ -1678,7 +1678,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
             OUString sId;
             const char* sFullPath = nullptr;
             const char* sRelativePath = nullptr;
-            sal_Int32 nDrawing = getNewDrawingUniqueId();
+            sal_Int32 nDrawing = GetFB()->getNewDrawingUniqueId();
 
             switch (GetDocumentType())
             {

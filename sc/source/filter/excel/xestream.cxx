@@ -1037,7 +1037,6 @@ bool XclExpXmlStream::exportDocument()
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
     rtl::Reference<SotStorage> rStorage;
-    drawingml::DrawingML::ResetMlCounters();
 
     auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
 
