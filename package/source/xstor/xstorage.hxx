@@ -283,6 +283,9 @@ class OStorage final : public css::lang::XTypeProvider
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
     ::std::optional< ::cppu::OTypeCollection> m_oTypeCollection;
+    // m_nStorageType is both here, and in m_pImpl->m_nStorageType because
+    // sometimes we need the value when m_pImpl is nullptr.
+    sal_Int32 m_nStorageType; // the mode in which the storage is used
     bool m_bReadOnlyWrap;
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
     ::std::vector< css::uno::WeakReference< css::lang::XComponent > > m_aOpenSubComponentsVector;
