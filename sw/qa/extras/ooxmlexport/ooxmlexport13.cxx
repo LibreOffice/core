@@ -703,6 +703,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf156484, "tdf156484.docx")
     CPPUNIT_ASSERT_MESSAGE("Third shape should not be printable.", !getProperty<bool>(xShape, u"Printable"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162527_hidden_image)
+{
+    createSwDoc("tdf162527_hidden_image.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix this element would have no 'hidden' attribute
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/wp:docPr", "hidden",
+                u"1");
+
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_MESSAGE("Shape should not be visible.",
+                           !getProperty<bool>(xShape, u"Visible"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169802_hidden_shape)
+{
+    createSwDoc("tdf169802_hidden_shape.docx");
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    // Just to check that the layout has sane content
+    int nTextNodes = countXPathNodes(pDump, "//*[contains(@type, 'PortionType::Text')]");
+    CPPUNIT_ASSERT_MESSAGE("Layout must contain text nodes", 0 < nTextNodes);
+    // Layout mustn't contain fly portion, without the fix it would contain several
+    int nFlyNodes = countXPathNodes(pDump, "//*[contains(@type, 'PortionType::Fly')]");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No fly portion nodes must exist in the layout", 0, nFlyNodes);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 {
     xmlDocUniquePtr pDump = parseLayoutDump();

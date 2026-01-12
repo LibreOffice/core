@@ -5527,6 +5527,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     OUString const title(pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
     auto const docPrattrList(CreateDocPrAttrList(
         GetExport(), pFrameFormat->GetName(), title, descr));
+    if (pSdrObj && !pSdrObj->IsVisible())
+        docPrattrList->add(XML_hidden, "1");
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;

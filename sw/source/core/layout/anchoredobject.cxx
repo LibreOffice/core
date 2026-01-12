@@ -564,6 +564,11 @@ bool SwAnchoredObject::HasClearedEnvironment() const
 */
 const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
 {
+    static const SwRect aEmptyRect;
+    // invisible objects have no area
+    if (!GetDrawObj()->IsVisible())
+        return aEmptyRect;
+
     if ( mbObjRectWithSpacesValid &&
          maLastObjRect != GetObjRect() )
     {

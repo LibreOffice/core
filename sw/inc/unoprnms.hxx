@@ -587,6 +587,7 @@ inline constexpr OUString UNO_NAME_ADJUST_BLUE = u"AdjustBlue"_ustr;
 inline constexpr OUString UNO_NAME_GAMMA = u"Gamma"_ustr;
 inline constexpr OUString UNO_NAME_GRAPHIC_IS_INVERTED = u"GraphicIsInverted"_ustr;
 inline constexpr OUString UNO_NAME_TRANSPARENCY = u"Transparency"_ustr;
+inline constexpr OUString UNO_NAME_VISIBLE = u"Visible"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_AUTHOR = u"RedlineAuthor"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_DATE_TIME = u"RedlineDateTime"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_MOVED_ID = u"RedlineMovedID"_ustr;

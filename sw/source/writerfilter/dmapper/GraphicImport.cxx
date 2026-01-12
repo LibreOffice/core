@@ -1899,6 +1899,9 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
             sal_Int32 nWidth = - m_pImpl->m_nLeftPosition;
             if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
+                if (m_pImpl->m_bHidden)
+                    xGraphicObject->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+
                 if (m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
                     && (m_pImpl->m_nHoriOrient == text::HoriOrientation::LEFT
                         || m_pImpl->m_nHoriOrient == text::HoriOrientation::RIGHT

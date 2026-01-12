@@ -3437,7 +3437,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_GRFATR_TRANSPARENCY */       nullptr,
 /* RES_GRFATR_DRWAMODE */           nullptr,
 /* RES_GRFATR_DUMMY3 */             nullptr,
-/* RES_GRFATR_DUMMY4 */             nullptr,
+/* RES_GRFATR_VISIBLE */            nullptr,
 /* RES_GRFATR_DUMMY5 */             nullptr,
 
 /* RES_BOXATR_FORMAT */             nullptr,
