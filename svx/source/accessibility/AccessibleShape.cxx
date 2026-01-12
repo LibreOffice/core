@@ -659,8 +659,6 @@ css::uno::Any SAL_CALL
     css::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
-            static_cast<XAccessibleComponent*>(this),
-            static_cast<XAccessibleExtendedComponent*>(this),
             static_cast< css::accessibility::XAccessibleSelection* >(this),
             static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this),
             static_cast<document::XShapeEventListener*>(this),
