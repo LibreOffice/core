@@ -1614,15 +1614,15 @@ std::vector<SwFormatField*> SwPostItMgr::UpdatePostItsParentInfo()
     std::vector<SwFormatField*> vFormatFields;
     pType->CollectPostIts(vFormatFields, rIDRA, mpWrtShell->GetLayout()->IsHideRedlines());
 
-    for (std::vector<SwFormatField*>::iterator i = vFormatFields.begin(); i != vFormatFields.end(); i++)
+    for (SwFormatField* pChildFormatField : vFormatFields)
     {
-        SwPostItField *pChildPostIt = static_cast<SwPostItField*>((*i)->GetField());
+        SwPostItField *pChildPostIt = static_cast<SwPostItField*>(pChildFormatField->GetField());
 
         if (pChildPostIt->GetParentId() != 0 || !pChildPostIt->GetParentName().isEmpty())
         {
-            for (std::vector<SwFormatField*>::iterator j = vFormatFields.begin(); j != vFormatFields.end(); j++)
+            for (SwFormatField* pParentFormatField : vFormatFields)
             {
-                SwPostItField *pParentPostIt = static_cast<SwPostItField*>((*j)->GetField());
+                SwPostItField *pParentPostIt = static_cast<SwPostItField*>(pParentFormatField->GetField());
                 if (pChildPostIt->GetParentId() != 0 && pParentPostIt->GetParaId() == pChildPostIt->GetParentId())
                 {
                     pChildPostIt->SetParentPostItId(pParentPostIt->GetPostItId());
