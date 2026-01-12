@@ -50,7 +50,6 @@ private:
     std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSize;
     std::unique_ptr<weld::Widget> m_xSizeGrid;
     std::unique_ptr<weld::Widget> m_xCustomizationFrame;
-    OUString m_sAutoStr;
 
     sal_Int32 nInitialToolbarIconSizeSel;
     sal_Int32 nInitialSidebarIconSizeSel;
