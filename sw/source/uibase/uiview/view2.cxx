@@ -163,6 +163,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <svx/dialog/gotodlg.hxx>
+#include <unotools/tempfile.hxx>
 
 const char sStatusDelim[] = " : ";
 
@@ -2810,6 +2811,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 
 tools::Long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUString& rFilterName, sal_Int16 nVersion )
 {
+    std::unique_ptr<utl::TempFileNamed> pTempFile;
     std::unique_ptr<SfxMedium> pMed;
     SwDocShell* pDocSh = GetDocShell();
 
@@ -2819,7 +2821,20 @@ tools::Long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, co
         std::shared_ptr<const SfxFilter> pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
         if ( !pFilter )
         {
-            pMed.reset(new SfxMedium(rFileName, StreamMode::READ, nullptr, nullptr ));
+            INetURLObject aURL(rFileName);
+            OUString aFileName = rFileName;
+            if (aURL.GetProtocol() != INetProtocol::File)
+            {
+                // Fetch the remote data only once, since it's possible it gets deleted after the
+                // first access.
+                std::unique_ptr<SvStream> pStream
+                    = utl::UcbStreamHelper::CreateStream(rFileName, StreamMode::READ);
+                pTempFile.reset(new utl::TempFileNamed());
+                pTempFile->GetStream(StreamMode::READWRITE)->WriteStream(*pStream);
+                aFileName = pTempFile->GetURL();
+            }
+            pMed.reset(new SfxMedium(aFileName, StreamMode::READ, nullptr, nullptr));
+
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( true );
             ErrCode nErr = aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE);
