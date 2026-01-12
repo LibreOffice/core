@@ -4358,8 +4358,11 @@ void SalInstanceTreeView::set_extra_row_indent(const weld::TreeIter& rIter, int 
     rVclIter.iter->SetExtraIndent(nIndentLevel);
 }
 
-void SalInstanceTreeView::set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col)
+void SalInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col)
 {
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    SvTreeListEntry* pEntry = rVclIter.iter;
+
     if (col == -1)
     {
         for (size_t nCur = 0; nCur < pEntry->ItemCount(); ++nCur)
@@ -4381,12 +4384,6 @@ void SalInstanceTreeView::set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, i
     static_cast<SvLBoxString&>(rItem).Emphasize(bOn);
 
     InvalidateModelEntry(pEntry);
-}
-
-void SalInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col)
-{
-    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-    set_text_emphasis(rVclIter.iter, bOn, col);
 }
 
 bool SalInstanceTreeView::get_text_emphasis(const weld::TreeIter& rIter, int col) const

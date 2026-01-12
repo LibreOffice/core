@@ -1693,8 +1693,6 @@ public:
 
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
 
-    void set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col = -1);
-
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override;
 
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override;
