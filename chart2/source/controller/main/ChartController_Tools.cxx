@@ -212,9 +212,9 @@ css::uno::Reference<css::beans::XPropertySet> getSelectedGraphObject(ChartContro
 
 ReferenceSizeProvider ChartController::impl_createReferenceSizeProvider()
 {
-    awt::Size aPageSize( getChartModel()->getPageSize() );
-
-    return ReferenceSizeProvider(aPageSize, getChartModel());
+    rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
+    awt::Size aPageSize = xChartModel.is() ? xChartModel->getPageSize() : awt::Size(DEFAULT_PAGE_WIDTH, DEFAULT_PAGE_HEIGHT );
+    return ReferenceSizeProvider(aPageSize, xChartModel);
 }
 
 void ChartController::impl_adaptDataSeriesAutoResize()
