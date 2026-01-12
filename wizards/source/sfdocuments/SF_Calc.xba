@@ -492,7 +492,7 @@ Public Function AlignRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.AlignRange(&quot;SheetX.A1:J30&quot;, &quot;Middle,Center&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.AlignRange(&quot;SheetX.A1:J30&quot;, &quot;Middle,Center&quot;, FilterFormula := &quot;=IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Align to the middle of the cells, horizontally and vertically
 
 Dim sAlign As String			&apos;	Return value
@@ -578,7 +578,7 @@ Public Function BorderRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.BorderRange(&quot;SheetX.A1:J30&quot;, &quot;HB&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.BorderRange(&quot;SheetX.A1:J30&quot;, &quot;HB&quot;, FilterFormula := &quot;=IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Border with a bottom line, including the horizontal inner lines
 
 Dim sBorder As String			&apos;	Return value
@@ -729,7 +729,7 @@ Public Function ColorizeRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.ColorizeRange(&quot;SheetX.A1:J30&quot;, Background := RGB(255, 0, 0), FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.ColorizeRange(&quot;SheetX.A1:J30&quot;, Background := RGB(255, 0, 0), FilterFormula := &quot;=IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Paint the cell(s) in red.
 
 Dim sColorize As String			&apos;	Return value
@@ -1814,7 +1814,7 @@ Public Function DecorateFont(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.DecorateFont(&quot;SheetX.A1:J30&quot;, FontSize := 15, Decoration := &quot;BU&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.DecorateFont(&quot;SheetX.A1:J30&quot;, FontSize := 15, Decoration := &quot;BU&quot;, FilterFormula := &quot;=IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Modify the font size and apply bold and underline properties to the numeric cells
 
 Dim sDecorate As String			&apos;	Return value
@@ -2083,7 +2083,7 @@ Public Function FormatRange(Optional ByVal TargetRange As Variant _
 							) As String
 &apos;&apos;&apos;	Apply a given number format to a cell or a range of cells.
 &apos;&apos;&apos;	The cells range may be filtered with a filter formula and its scope.
-&apos;&apos;&apos;	If the given format does not exist, it is created and suppressed immediately.
+&apos;&apos;&apos;	If the given format does not exist, it is created.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		TargetRange : the cell or the range as a string that should receive the format
 &apos;&apos;&apos;		NumberFormat: the format to apply, as a string
@@ -2096,7 +2096,7 @@ Public Function FormatRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.FormatRange(&quot;SheetX.A1:J30&quot;, &quot;0,00E+00&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.FormatRange(&quot;SheetX.A1:J30&quot;, &quot;0,00E+00&quot;, FilterFormula := &quot;=IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Format only the cells containing a numeric value
 
 Dim sFormat As String			&apos;	Return value
@@ -2156,9 +2156,6 @@ Try:
 		For Each oFRange In vRanges
 			oFRange.XCellRange.NumberFormat = lFormatID
 		Next oFRange
-
-		&apos;	Delete the new format
-		If bNew Then .removeByKey(lFormatID)
 	End With
 
 	sFormat = oRange.RangeName
