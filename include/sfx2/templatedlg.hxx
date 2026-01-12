@@ -131,7 +131,7 @@ protected:
     std::unique_ptr<weld::Button> mxOKButton;
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
-    std::unique_ptr<TemplateDlgLocalView> mxLocalView;
+    TemplateDlgLocalView maLocalView;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
     std::unique_ptr<weld::Toggleable> mxListViewButton;
     std::unique_ptr<weld::Toggleable> mxThumbnailViewButton;
