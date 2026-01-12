@@ -100,6 +100,8 @@ private:
                 const css::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
                 const OUString& aContModuleName );
 
+    sal_Int32 getHatchBorderWidth();
+
 public:
     /// @throws css::uno::Exception
     static void FindConnectPoints(

@@ -69,9 +69,6 @@
 #include <commonembobj.hxx>
 #include <intercept.hxx>
 
-#define HATCH_BORDER_WIDTH (((m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
-                            m_rEmbedObj.getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
-
 using namespace ::com::sun::star;
 
 namespace {
@@ -322,12 +319,13 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
 {
     OSL_ENSURE( m_xFrame.is() && m_xOwnWindow.is() /*&& m_xHatchWindow.is()*/,
                 "The object does not have windows required for inplace mode!" );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
     if ( m_xHatchWindow.is() )
     {
-        m_xOwnWindow->setPosSize( HATCH_BORDER_WIDTH,
-                                  HATCH_BORDER_WIDTH,
-                                  aHatchRect.Width - 2*HATCH_BORDER_WIDTH,
-                                  aHatchRect.Height - 2*HATCH_BORDER_WIDTH,
+        m_xOwnWindow->setPosSize( nHatchBorderWidth,
+                                  nHatchBorderWidth,
+                                  aHatchRect.Width - 2*nHatchBorderWidth,
+                                  aHatchRect.Height - 2*nHatchBorderWidth,
                                   awt::PosSize::POSSIZE );
 
 
@@ -338,10 +336,10 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
                                     awt::PosSize::POSSIZE );
     }
     else
-        m_xOwnWindow->setPosSize( aHatchRect.X + HATCH_BORDER_WIDTH,
-                                  aHatchRect.Y + HATCH_BORDER_WIDTH,
-                                  aHatchRect.Width - 2*HATCH_BORDER_WIDTH,
-                                  aHatchRect.Height - 2*HATCH_BORDER_WIDTH,
+        m_xOwnWindow->setPosSize( aHatchRect.X + nHatchBorderWidth,
+                                  aHatchRect.Y + nHatchBorderWidth,
+                                  aHatchRect.Width - 2*nHatchBorderWidth,
+                                  aHatchRect.Height - 2*nHatchBorderWidth,
                                   awt::PosSize::POSSIZE );
 }
 
@@ -387,10 +385,11 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         uno::Reference < frame::XModel > xModel( GetComponent(), uno::UNO_QUERY );
         awt::Rectangle aHatchRectangle = AddBorderToArea( aRectangleToShow );
 
-        awt::Rectangle aOwnRectangle(  HATCH_BORDER_WIDTH,
-                                    HATCH_BORDER_WIDTH,
-                                    aHatchRectangle.Width - 2*HATCH_BORDER_WIDTH,
-                                    aHatchRectangle.Height - 2*HATCH_BORDER_WIDTH );
+        sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+        awt::Rectangle aOwnRectangle( nHatchBorderWidth,
+                                    nHatchBorderWidth,
+                                    aHatchRectangle.Width - 2*nHatchBorderWidth,
+                                    aHatchRectangle.Height - 2*nHatchBorderWidth );
         uno::Reference< awt::XWindow > xHWindow;
         uno::Reference< awt::XWindowPeer > xMyParent( xParent );
 
@@ -403,7 +402,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
             uno::Reference< embed::XHatchWindow > xHatchWindow =
                             xHatchFactory->createHatchWindowInstance( xParent,
                                                                       aHatchRectangle,
-                                                                      awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
+                                                                      awt::Size( nHatchBorderWidth, nHatchBorderWidth ) );
 
             uno::Reference< awt::XWindowPeer > xHatchWinPeer( xHatchWindow, uno::UNO_QUERY );
             xHWindow.set( xHatchWinPeer, uno::UNO_QUERY_THROW );
@@ -1074,19 +1073,21 @@ sal_Int32 DocumentHolder::GetMapUnit( sal_Int64 nAspect )
 
 awt::Rectangle DocumentHolder::CalculateBorderedArea( const awt::Rectangle& aRect )
 {
-    return awt::Rectangle( aRect.X + m_aBorderWidths.Left + HATCH_BORDER_WIDTH,
-                             aRect.Y + m_aBorderWidths.Top + HATCH_BORDER_WIDTH,
-                             aRect.Width - m_aBorderWidths.Left - m_aBorderWidths.Right - 2*HATCH_BORDER_WIDTH,
-                             aRect.Height - m_aBorderWidths.Top - m_aBorderWidths.Bottom - 2*HATCH_BORDER_WIDTH );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+    return awt::Rectangle( aRect.X + m_aBorderWidths.Left + nHatchBorderWidth,
+                             aRect.Y + m_aBorderWidths.Top + nHatchBorderWidth,
+                             aRect.Width - m_aBorderWidths.Left - m_aBorderWidths.Right - 2*nHatchBorderWidth,
+                             aRect.Height - m_aBorderWidths.Top - m_aBorderWidths.Bottom - 2*nHatchBorderWidth );
 }
 
 
 awt::Rectangle DocumentHolder::AddBorderToArea( const awt::Rectangle& aRect )
 {
-    return awt::Rectangle( aRect.X - m_aBorderWidths.Left - HATCH_BORDER_WIDTH,
-                             aRect.Y - m_aBorderWidths.Top - HATCH_BORDER_WIDTH,
-                             aRect.Width + m_aBorderWidths.Left + m_aBorderWidths.Right + 2*HATCH_BORDER_WIDTH,
-                             aRect.Height + m_aBorderWidths.Top + m_aBorderWidths.Bottom + 2*HATCH_BORDER_WIDTH );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+    return awt::Rectangle( aRect.X - m_aBorderWidths.Left - nHatchBorderWidth,
+                             aRect.Y - m_aBorderWidths.Top - nHatchBorderWidth,
+                             aRect.Width + m_aBorderWidths.Left + m_aBorderWidths.Right + 2*nHatchBorderWidth,
+                             aRect.Height + m_aBorderWidths.Top + m_aBorderWidths.Bottom + 2*nHatchBorderWidth );
 }
 
 
@@ -1270,7 +1271,14 @@ void DocumentHolder::ResizeHatchWindow()
     awt::Rectangle aHatchRect = AddBorderToArea( m_aObjRect );
     ResizeWindows_Impl( aHatchRect );
     uno::Reference< embed::XHatchWindow > xHatchWindow( m_xHatchWindow, uno::UNO_QUERY );
-    xHatchWindow->setHatchBorderSize( awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+    xHatchWindow->setHatchBorderSize( awt::Size( nHatchBorderWidth, nHatchBorderWidth ) );
+}
+
+sal_Int32 DocumentHolder::getHatchBorderWidth()
+{
+    return m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE && \
+                            m_rEmbedObj.getCurrentState() != embed::EmbedStates::UI_ACTIVE ? 0 : 4;
 }
 
 void SAL_CALL DocumentHolder::deactivated(  )
