@@ -4775,38 +4775,46 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
     return mxISC;
 }
 
+static bool hasColorContrast(const Color& rColor, const Color& rBackgroundColor)
+{
+    if (rColor.IsDark() && !rBackgroundColor.IsDark())
+        return true;
+    if (rColor.IsBright() && !rBackgroundColor.IsBright())
+        return true;
+    return false;
+}
+
 Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
 {
     Color aColor;
 
+    Color aBackgroundColor;
+    if (pFont) //check for char background color
+        aBackgroundColor = pFont->GetFillColor();
+    if (aBackgroundColor == COL_AUTO) // check for aother background (i.e: cell color)
+        aBackgroundColor = GetBackgroundColor();
+
     const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
     {
-        Color aBackgroundColor;
-        if (pFont) //check for char backgound color
-            aBackgroundColor = pFont->GetFillColor();
-        if (aBackgroundColor == COL_AUTO) // check for aother backgound (i.e: cell color)
-            aBackgroundColor = GetBackgroundColor();
-        if (aBackgroundColor == COL_AUTO) // if everything is auto/transperent then use doc color
+        if (aBackgroundColor == COL_AUTO) // if everything is auto/transparent then use doc color
             aBackgroundColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
-
-        if (aBackgroundColor.IsDark())
-            aColor = COL_WHITE;
-        else
-            aColor = COL_BLACK;
     }
     else
     {
+        if (aBackgroundColor == COL_AUTO) // if everything is auto/transparent then use doc color
+            aBackgroundColor = GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
         aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
 
-        if ( aColor == COL_AUTO )
-        {
-            if ( GetBackgroundColor().IsDark()  )
-                aColor = COL_WHITE;
-            else
-                aColor = COL_BLACK;
-        }
+        // allow using FONTCOLOR if it provides contrast to the current background color
+        if (aColor != COL_AUTO && hasColorContrast(aColor, aBackgroundColor))
+            return aColor;
     }
+
+    if (aBackgroundColor.IsDark())
+        aColor = COL_WHITE;
+    else
+        aColor = COL_BLACK;
 
     return aColor;
 }
