@@ -752,7 +752,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	AccessibleGraphControl \
 	AccessibleGraphicShape \
 	AccessibleImageBullet \
-	AccessibleOLEShape \
 	AccessibleShape \
 	AppletShape \
 	Background \

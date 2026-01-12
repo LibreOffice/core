@@ -75,14 +75,6 @@ public:
         release()
         noexcept override;
 
-    //=====  XServiceInfo  ====================================================
-
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     //=====  XTypeProvider  ===================================================
 
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL

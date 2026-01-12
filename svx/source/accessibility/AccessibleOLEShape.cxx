@@ -99,22 +99,6 @@ void SAL_CALL
     AccessibleShape::release ();
 }
 
-// XServiceInfo
-OUString SAL_CALL
-    AccessibleOLEShape::getImplementationName()
-{
-    return u"AccessibleOLEShape"_ustr;
-}
-
-
-css::uno::Sequence< OUString> SAL_CALL
-    AccessibleOLEShape::getSupportedServiceNames()
-{
-    ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleOLEShape"_ustr };
-    return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
-}
-
 // XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
 {
