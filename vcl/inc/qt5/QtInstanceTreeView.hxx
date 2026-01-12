@@ -174,6 +174,7 @@ private:
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
     void setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol);
+    void setTextEmphasis(const QModelIndex& rIndex, bool bOn);
 
     bool handleViewPortToolTipEvent(const QHelpEvent& rEvent);
 

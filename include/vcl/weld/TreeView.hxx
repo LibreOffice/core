@@ -259,6 +259,7 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
 
+    // col index -1 sets text emphasis for all columns
     void set_text_emphasis(int row, bool bOn, int col);
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     bool get_text_emphasis(int row, int col) const;

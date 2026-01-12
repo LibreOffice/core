@@ -308,15 +308,46 @@ bool QtInstanceTreeView::get_sensitive(const weld::TreeIter& rIter, int nCol) co
     return bSensitive;
 }
 
-void QtInstanceTreeView::set_text_emphasis(const weld::TreeIter&, bool, int)
+void QtInstanceTreeView::setTextEmphasis(const QModelIndex& rIndex, bool bOn)
 {
-    assert(false && "Not implemented yet");
+    assert(GetQtInstance().IsMainThread());
+
+    QFont aFont = m_pTreeView->font();
+    const QVariant aFontData = m_pModel->data(rIndex, Qt::FontRole);
+    if (aFontData.canConvert<QFont>())
+        aFont = aFontData.value<QFont>();
+    aFont.setBold(bOn);
+    m_pModel->setData(rIndex, aFont, Qt::FontRole);
 }
 
-bool QtInstanceTreeView::get_text_emphasis(const weld::TreeIter&, int) const
+void QtInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int nCol)
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        // column index -1 means "all columns"
+        if (nCol == -1)
+        {
+            for (int i = 0; i < m_pModel->columnCount(); ++i)
+                setTextEmphasis(modelIndex(rIter, i), bOn);
+            return;
+        }
+
+        setTextEmphasis(modelIndex(rIter, nCol), bOn);
+    });
+}
+
+bool QtInstanceTreeView::get_text_emphasis(const weld::TreeIter& rIter, int nCol) const
+{
+    SolarMutexGuard g;
+
+    bool bEmphasis = false;
+    GetQtInstance().RunInMainThread([&] {
+        const QVariant aFontData = m_pModel->data(modelIndex(rIter, nCol), Qt::FontRole);
+        bEmphasis = aFontData.canConvert<bool>() && aFontData.toBool();
+    });
+
+    return bEmphasis;
 }
 
 void QtInstanceTreeView::set_text_align(const weld::TreeIter& rIter, TxtAlign eAlign, int nCol)
