@@ -69,9 +69,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161631)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     // test with 2 properties: font size, italic (toggle)
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
@@ -566,9 +563,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 317
-    skipValidation();
-
     // given an in-table, group-shape vertically aligned -1.35 cm (above) the top page margin
     // (which is actually forced to layoutInCell, so that turns into 1.35cm above the cell margin)
 
@@ -689,9 +683,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 11
-    skipValidation();
-
     // given a compat12 VML document with wrap-through blue rect that doesn't mention allowInCell
 
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
@@ -928,9 +919,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     //Unit test for bug fix in tdf#154369
     // Docx file contains ordered list formatted with Heading 1 style, font color set as Accent 1 from theme
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1286,9 +1274,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
 CPPUNIT_TEST_FIXTURE(Test, testTdf164065)
 {
     createSwDoc("tdf164065.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());

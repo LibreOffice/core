@@ -123,9 +123,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // an exception was prematurely ending finishParagraph, losing numbering and CRs
     // so before the patch, this was 6.
     CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
@@ -169,9 +166,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStriket
 CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 {
     createSwDoc("tdf154478.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
@@ -777,9 +771,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 {
     createSwDoc("embedded_chart.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
@@ -862,9 +853,6 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 {
     // This must not fail assertions
     createSwDoc("UnknownStyleInRedline.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     // Check that the original unknown style name "UnknownStyle" is roundtripped
