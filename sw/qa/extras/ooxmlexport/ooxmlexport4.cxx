@@ -546,9 +546,6 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedXlsx)
     createSwDoc("embedded-xlsx.docx");
     verify();
 
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify();
 
@@ -609,9 +606,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreak)
 CPPUNIT_TEST_FIXTURE(Test, testOleObject)
 {
     createSwDoc("test_ole_object.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -952,9 +946,6 @@ CPPUNIT_TEST_FIXTURE(Test, testOLEObjectinHeader)
 {
     createSwDoc("2129393649.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 22
-    skipValidation();
-
     save(TestFilter::DOCX);
     // fdo#76015 : Document contains oleobject in header xml.
     // Problem was relationship entry for oleobject from header was
@@ -1051,9 +1042,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeDOCX)
 {
     createSwDoc("fdo80410.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1146,9 +1134,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)
 {
     createSwDoc("EmbeddedExcelChart.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);

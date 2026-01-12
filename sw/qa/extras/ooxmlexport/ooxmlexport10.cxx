@@ -45,9 +45,6 @@ public:
 
 DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     auto MyShape = getShape(1);
@@ -169,9 +166,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXExport)
 
 DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was nearly 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(548005), xShape->getPosition().X);
@@ -679,9 +673,6 @@ DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -691,9 +682,6 @@ DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
 
 DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
     // (Since w:gridBefore is worked around by faking another cell in the row, so column count is thus 5
     // instead of 4, therefore compare height of cells 4 and 5 rather than 3 and 4.)
@@ -761,9 +749,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 {
     createSwDoc("tdf134606.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     // The problem was that the importer lost the nested table structure with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -795,9 +780,6 @@ DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testInlineGroupshape, "inline-groupshape.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Inline groupshape was in the background, so it was hidden sometimes by other shapes.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), u"Opaque"_ustr));
 }
@@ -827,9 +809,6 @@ DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchanges.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Shape text was completely missing, ensure inserted text is available.

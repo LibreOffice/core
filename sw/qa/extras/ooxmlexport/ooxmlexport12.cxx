@@ -730,9 +730,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTd112202)
     createSwDoc("090716_Studentische_Arbeit_VWS.docx");
     verify();
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -997,9 +994,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
 {
     createSwDoc("tdf99631.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1028,9 +1022,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
 CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
 {
     createSwDoc("tdf122563.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -1064,9 +1055,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     // test import/export of ActiveTable (visible sheet) of embedded XLSX OLE objects
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent,
                                                                                 uno::UNO_QUERY);
@@ -1374,9 +1362,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157011)
     // check tracked table column insertions and deletions with empty cells
     createSwDoc("tdf157011_ins_del_empty_cols.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 11
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -1491,9 +1476,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
 {
     createSwDoc("tdf149708.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 14
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

@@ -57,9 +57,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125778_lostPageBreakTOX, "tdf125778_lostPageBrea
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
 }
 
@@ -175,9 +172,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     OUString listId;
     OUString listStyle;
     {
@@ -704,9 +698,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameSizeExport)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Visibility of shapes wasn't imported/exported, for now base printable property on that, too
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_MESSAGE("First shape should be visible.", getProperty<bool>(xShape, u"Visible"_ustr));
@@ -848,9 +839,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
     createSwDoc("tdf123460.docx");
     verify();
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -858,9 +846,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 {
     createSwDoc("tdf123460.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1389,9 +1374,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
 {
     createSwDoc("tdf128304.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());

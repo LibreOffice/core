@@ -136,9 +136,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128245)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 5
-    skipValidation();
-
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -399,9 +396,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 {
     createSwDoc("tdf123757.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
@@ -814,9 +808,6 @@ CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 {
     createSwDoc("tdf131539.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
