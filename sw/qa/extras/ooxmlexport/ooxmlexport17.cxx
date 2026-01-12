@@ -216,9 +216,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 7
-    skipValidation();
-
     // There is a group shape with text box inside having an embedded VML formula,
     // check if something missing.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Where is the formula?", 2, getShapes());
@@ -1059,9 +1056,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     {
         uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
         auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
@@ -1091,8 +1085,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 16
-    skipValidation();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing pages!", 7, getPages());
 }
 

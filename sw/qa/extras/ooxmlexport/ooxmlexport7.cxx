@@ -687,7 +687,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle2, "tdf126533_axialAngle2.docx"
 {
     //FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
-
     // axial gradient is purple foreground/lime background in the middle (top-right to bottom-left)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
@@ -941,9 +940,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
 
 DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShape> xShape = getShape(1);
     comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
 

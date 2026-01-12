@@ -527,9 +527,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo51550)
 {
     createSwDoc("fdo51550.odt");
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());

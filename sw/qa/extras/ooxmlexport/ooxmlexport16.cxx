@@ -115,9 +115,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
 {
     createSwDoc("tdf143432_Frame_WrapTextMode.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -150,9 +147,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
     // Test fails on reload without fix with left: expected 1461 actual 2455; right: expected 1302
     // actual 4177; top: expected 1522 actual 2457; bottom: expected 1296, actual 4179
     verify();
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     verify();
@@ -220,9 +214,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     // This bugdoc has a groupshape (WPG) with a table inside its each member shape.
     // Before there was no table after import at all. From now, there must be 2 tables.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -497,9 +488,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     // Don't crash when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
@@ -512,18 +500,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149649, "tdf149649.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Don't crash when document is imported
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf168017, "tdf168017.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 20
-    skipValidation();
-
     // Don't crash when document is imported
 }
 
@@ -536,9 +518,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
 CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
     createSwDoc("tdf134619_numberingProps.doc");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     // Get the third paragraph's numbering style's 1st level's bullet size
@@ -728,9 +707,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
 {
     createSwDoc("tdf139580.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 21
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     // Without the fix in place, this test would have crashed at export time
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
@@ -891,9 +867,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Collect the z-order values of the textboxes
     std::vector<sal_uInt64> ShapeZorders;
     std::vector<sal_uInt64> FrameZorders;
@@ -1139,9 +1112,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 {
     createSwDoc("embedded_images.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -1163,9 +1133,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
 {
     createSwDoc("artistic_effects.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
 

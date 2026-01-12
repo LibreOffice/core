@@ -1260,12 +1260,21 @@ sal_uInt32 VMLExport::GenerateShapeId()
 OString VMLExport::GetVMLShapeTypeDefinition(
     std::string_view sShapeID, const bool bIsPictureFrame )
 {
+    // officeotron says that o:spt needs to be numeric
+    sal_Int32 nSptId = 0;
+    std::string_view sRest;
+    if (o3tl::starts_with(sShapeID, "ole_rId", &sRest))
+        nSptId = o3tl::toInt32(sRest);
+    else
+        nSptId = o3tl::toInt32(sShapeID);
+    SAL_WARN_IF(nSptId == 0, "oox", "o:spt needs to be numeric, but we have " << sShapeID);
+    assert(nSptId != 0);
     OString sShapeType;
     if ( !bIsPictureFrame )
         // We don't have a shape definition for host control in presetShapeDefinitions.xml
         // So use a definition copied from DOCX file created with MSO
         sShapeType = OString::Concat("<v:shapetype id=\"_x0000_t") + sShapeID +
-                        "\" coordsize=\"21600,21600\" o:spt=\"" + sShapeID +
+                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(nSptId) +
                         "\" path=\"m,l,21600l21600,21600l21600,xe\">\n"
                         "<v:stroke joinstyle=\"miter\"/>\n"
                         "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" o:connecttype=\"rect\"/>\n"
@@ -1275,7 +1284,7 @@ OString VMLExport::GetVMLShapeTypeDefinition(
         // We don't have a shape definition for picture frame in presetShapeDefinitions.xml
         // So use a definition copied from DOCX file created with MSO
         sShapeType = OString::Concat("<v:shapetype id=\"_x0000_t") + sShapeID +
-                        "\" coordsize=\"21600,21600\" o:spt=\"" + sShapeID +
+                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(nSptId) +
                         "\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n"
                         "<v:stroke joinstyle=\"miter\"/>\n"
                         "<v:formulas>\n"

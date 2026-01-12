@@ -414,9 +414,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf66496, "tdf66496.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     /*
      * OLE object shape: default vertical position is top in MSO, not bottom
      */
