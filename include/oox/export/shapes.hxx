@@ -77,9 +77,6 @@ namespace oox::drawingml {
 
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
-private:
-    int m_nEmbeddedObjects;
-
 public:
     typedef std::unordered_map< css::uno::Reference< css::drawing::XShape>, sal_Int32> ShapeHashMap;
 

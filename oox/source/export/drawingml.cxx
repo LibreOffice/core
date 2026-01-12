@@ -249,11 +249,6 @@ void WriteGradientPath(const basegfx::BGradient& rBGradient, const FSHelperPtr& 
 }
 }
 
-// not thread safe
-sal_Int32 DrawingML::mnDrawingMLCount = 0;
-sal_Int32 DrawingML::mnVmlCount = 0;
-sal_Int32 DrawingML::mnChartCount = 0;
-
 DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport)
     : meDocumentType(eDocumentType)
     , mpTextExport(pTextExport)
@@ -297,13 +292,6 @@ sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
     }
 
     return css::i18n::ScriptType::LATIN;
-}
-
-void DrawingML::ResetMlCounters()
-{
-    mnDrawingMLCount = 0;
-    mnVmlCount = 0;
-    mnChartCount = 0;
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
