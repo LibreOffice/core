@@ -1,0 +1,38 @@
+name: BlackRoad Upstream Sync
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git config user.name "BlackRoad Sync Bot"
+          git config user.email "sync@blackroad.io"
+      - name: Sync from upstream
+        run: |
+          UPSTREAM=$(gh api repos/${{ github.repository }} --jq '.parent.full_name // empty')
+          [ -z "$UPSTREAM" ] && exit 0
+          git remote add upstream https://github.com/$UPSTREAM.git || true
+          git fetch upstream
+          BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+          CHANGES=$(git rev-list --count HEAD..upstream/$BRANCH 2>/dev/null || echo "0")
+          [ "$CHANGES" = "0" ] && echo "✅ Up to date" && exit 0
+          if git merge upstream/$BRANCH -m "🔄 Auto-sync from upstream ($CHANGES commits)"; then
+            git push origin $BRANCH
+            echo "✅ Synced $CHANGES commits"
+          else
+            git merge --abort
+            B="sync-$(date +%Y%m%d-%H%M)"
+            git checkout -b $B && git reset --hard upstream/$BRANCH && git push -u origin $B
+            gh pr create --title "🔄 Upstream sync needs merge" --body "Automated sync has conflicts. Please merge manually." --head $B --base $BRANCH
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
