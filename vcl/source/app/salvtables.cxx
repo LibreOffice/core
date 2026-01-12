@@ -4652,11 +4652,12 @@ void SalInstanceTreeView::all_foreach(const std::function<bool(weld::TreeIter&)>
     UpdateGuardIfHidden aGuard(*m_xTreeView);
 
     SalInstanceTreeIter aVclIter(m_xTreeView->First());
-    while (aVclIter.iter)
+    bool bContinue = aVclIter.iter;
+    while (bContinue)
     {
         if (func(aVclIter))
             return;
-        iter_next(aVclIter);
+        bContinue = iter_next(aVclIter);
     }
 }
 
