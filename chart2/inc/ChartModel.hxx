@@ -60,6 +60,9 @@
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
+#define DEFAULT_PAGE_WIDTH  16000
+#define DEFAULT_PAGE_HEIGHT 9000
+
 namespace com::sun::star::awt { class XRequestCallback; }
 namespace com::sun::star::chart2::data { class XDataProvider; }
 namespace com::sun::star::document { class XFilter; }
