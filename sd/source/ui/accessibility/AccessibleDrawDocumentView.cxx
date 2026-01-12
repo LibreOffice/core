@@ -83,8 +83,8 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     ::sd::ViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
-    : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
-      mpSdViewSh( pViewShell )
+    : ImplInheritanceHelper(pSdWindow, pViewShell, rxController, rxParent)
+    , mpSdViewSh(pViewShell)
 {
     UpdateAccessibleName();
 }
@@ -387,31 +387,6 @@ css::uno::Sequence< OUString> SAL_CALL
     return comphelper::concatSequences(aServiceNames, vals);
 }
 
-//=====  XInterface  ==========================================================
-
-uno::Any SAL_CALL
-    AccessibleDrawDocumentView::queryInterface (const uno::Type & rType)
-{
-    uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-            static_cast<XAccessibleGroupPosition*>(this)
-            );
-    return aReturn;
-}
-
-void SAL_CALL
-    AccessibleDrawDocumentView::acquire()
-    noexcept
-{
-    AccessibleDocumentViewBase::acquire ();
-}
-void SAL_CALL
-    AccessibleDrawDocumentView::release()
-    noexcept
-{
-    AccessibleDocumentViewBase::release ();
-}
 //=====  XAccessibleGroupPosition  =========================================
 uno::Sequence< sal_Int32 > SAL_CALL
     AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
