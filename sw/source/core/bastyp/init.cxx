@@ -454,9 +454,9 @@ std::unique_ptr<ItemInfoPackage> createItemInfoPackageSwAttributes()
             { RES_GRFATR_INVERT, new SwInvertGrf, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_TRANSPARENCY, new SwTransparencyGrf, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_DRAWMODE, new SwDrawModeGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_VISIBLE, new SfxBoolItem(RES_GRFATR_VISIBLE, true), 0, SFX_ITEMINFOFLAG_NONE },
 
             // GraphicAttr - Dummies
-            { RES_GRFATR_DUMMY4, new SfxBoolItem( RES_GRFATR_DUMMY4 ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_DUMMY5, new SfxBoolItem( RES_GRFATR_DUMMY5 ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BOXATR_FORMAT, new SwTableBoxNumFormat, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BOXATR_FORMULA, new SwTableBoxFormula( OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
