@@ -995,6 +995,7 @@ AbstractTrueTypeFont::~AbstractTrueTypeFont()
 TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
     : AbstractTrueTypeFont(pFileName, xCharMap)
     , fsize(-1)
+    , mmhandle(0)
     , ptr(nullptr)
     , ntables(0)
 {
