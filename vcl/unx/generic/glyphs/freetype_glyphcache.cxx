@@ -78,7 +78,8 @@ FreetypeFontFile::FreetypeFontFile( OString aNativeFileName )
     mpFileMap( nullptr ),
     mnFileSize( 0 ),
     mnRefCount( 0 ),
-    mnLangBoost( 0 )
+    mnLangBoost( 0 ),
+    mnHandle( 0 )
 {
     // boost font preference if UI language is mentioned in filename
     int nPos = maNativeFileName.lastIndexOf( '_' );
