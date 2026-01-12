@@ -5667,7 +5667,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:ReportWhenIdle")
     {
-        assert(pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be uset");
+        assert(pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be unset");
         pDocument->maIdleHelper.mpCallbackFlushHandler = pDocument->mpCallbackFlushHandlers[nView];
 
         for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
