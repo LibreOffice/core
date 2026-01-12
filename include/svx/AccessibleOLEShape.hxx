@@ -23,10 +23,8 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <svx/AccessibleShape.hxx>
 #include <svx/svxdllapi.h>
 
@@ -41,8 +39,7 @@ class AccessibleShapeTreeInfo;
         XAccessibleAction interface.
 */
 class SVX_DLLPUBLIC AccessibleOLEShape
-    :   public AccessibleShape,
-        public css::accessibility::XAccessibleAction
+    : public cppu::ImplInheritanceHelper<AccessibleShape, css::accessibility::XAccessibleAction>
 {
 public:
     AccessibleOLEShape (
@@ -62,23 +59,6 @@ public:
         css::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
             sal_Int32 nIndex) override;
 
-    //=====  XInterface  ======================================================
-
-    virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
-
-    virtual void SAL_CALL
-        acquire()
-        noexcept override;
-
-    virtual void SAL_CALL
-        release()
-        noexcept override;
-
-    //=====  XTypeProvider  ===================================================
-
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes() override;
 // ====== XAccessibleExtendedAttributes =====================================
     virtual OUString SAL_CALL getExtendedAttributes() override;
 protected:

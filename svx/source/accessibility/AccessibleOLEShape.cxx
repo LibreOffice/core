@@ -36,10 +36,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 // internal
-AccessibleOLEShape::AccessibleOLEShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleShape (rShapeInfo, rShapeTreeInfo)
+AccessibleOLEShape::AccessibleOLEShape(const AccessibleShapeInfo& rShapeInfo,
+                                       const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : ImplInheritanceHelper(rShapeInfo, rShapeTreeInfo)
 {
 }
 
@@ -70,41 +69,6 @@ OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 
 Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
 {
     throw lang::IndexOutOfBoundsException();
-}
-
-// XInterface
-css::uno::Any SAL_CALL
-    AccessibleOLEShape::queryInterface (const css::uno::Type & rType)
-{
-    css::uno::Any aReturn = AccessibleShape::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-            static_cast<XAccessibleAction*>(this));
-    return aReturn;
-}
-
-
-void SAL_CALL
-    AccessibleOLEShape::acquire()
-    noexcept
-{
-    AccessibleShape::acquire ();
-}
-
-
-void SAL_CALL
-    AccessibleOLEShape::release()
-    noexcept
-{
-    AccessibleShape::release ();
-}
-
-// XTypeProvider
-uno::Sequence<uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
-{
-    // Get list of types from the context base implementation...
-    return comphelper::concatSequences(AccessibleShape::getTypes(),
-            uno::Sequence { cppu::UnoType<XAccessibleAction>::get() } );
 }
 
 // XAccessibleExtendedAttributes
