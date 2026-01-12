@@ -119,7 +119,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xNotebookbarIconSize(m_xBuilder->weld_combo_box(u"notebookbariconsdropdown"_ustr))
     , m_xSizeGrid(m_xBuilder->weld_widget(u"grdIconSize"_ustr))
     , m_xCustomizationFrame(m_xBuilder->weld_widget(u"items"_ustr))
-    , m_sAutoStr(m_xIconsDropDown->get_text(0))
     , m_xVerticalToolbars(m_xBuilder->weld_radio_button(u"rbVertical"_ustr))
     , m_xHorizontalToolbars(m_xBuilder->weld_radio_button(u"rbHorizontal"_ustr))
 {
@@ -555,7 +554,8 @@ void SvxAppearanceTabPage::InitIcons()
     const vcl::IconThemeInfo& autoIconTheme
         = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
-    OUString entryForAuto = m_sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
+    OUString sAutoStr(CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC));
+    OUString entryForAuto = sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
     m_xIconsDropDown->append(u"auto"_ustr,
                              entryForAuto); // index 0 means choose style automatically
 
