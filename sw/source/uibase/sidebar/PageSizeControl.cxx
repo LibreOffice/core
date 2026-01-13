@@ -79,11 +79,20 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     mxWidthHeightField->set_increments(10, 100, FieldUnit::NONE);
     SetFieldUnit( *mxWidthHeightField, lcl_GetFieldUnit() );
 
+    maPaperList.push_back( PAPER_A0 );
+    maPaperList.push_back( PAPER_A1 );
+    maPaperList.push_back( PAPER_A2 );
     maPaperList.push_back( PAPER_A3 );
     maPaperList.push_back( PAPER_A4 );
     maPaperList.push_back( PAPER_A5 );
+    maPaperList.push_back( PAPER_A6 );
+    maPaperList.push_back( PAPER_B0_ISO );
+    maPaperList.push_back( PAPER_B1_ISO );
+    maPaperList.push_back( PAPER_B2_ISO );
+    maPaperList.push_back( PAPER_B3_ISO );
     maPaperList.push_back( PAPER_B4_ISO );
     maPaperList.push_back( PAPER_B5_ISO );
+    maPaperList.push_back( PAPER_B6_ISO );
     maPaperList.push_back( PAPER_ENV_C5 );
     maPaperList.push_back( PAPER_LETTER );
     maPaperList.push_back( PAPER_LEGAL );
