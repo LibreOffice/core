@@ -190,17 +190,6 @@ OUString filterValidationResults(const OUString& s)
     // But officeotron only knows the old version...
     result = filterOut(result, u"Invalid content was found starting with element 'p:pic'. No child element is expected at this point.");
 
-    {
-        /* While the spec says the core-properties relationship must be
-         *     officedocument/2006/relationships/metadata/core-properties
-         * MS Office actually just writes the ECMA-376-1ST EDITION version
-         * for both ECMA_Transitional and ISO_Transitional formats.
-         *
-         * officeotron doesn't care that clause 15.2.12.1 fails on all MSWord-produced output.
-         */
-        result = filterOut(result, u"Entry with MIME type \"application/vnd.openxmlformats-package.core-properties+xml\" has unrecognized relationship type \"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties\" (see ISO/IEC 29500-1:2008, Clause 15.2.12.1)");
-    }
-
     return result;
 }
 }
