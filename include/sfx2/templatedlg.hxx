@@ -49,7 +49,6 @@ public:
 
     SAL_DLLPRIVATE void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
     SAL_DLLPRIVATE void setTemplateViewMode(TemplateViewMode eViewMode);
-    SAL_DLLPRIVATE TemplateViewMode getTemplateViewMode() const;
 
 protected:
     SAL_DLLPRIVATE void getApplicationSpecificSettings();

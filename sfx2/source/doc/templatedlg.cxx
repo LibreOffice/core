@@ -307,12 +307,6 @@ void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
     }
 }
 
-TemplateViewMode SfxTemplateManagerDlg::getTemplateViewMode() const
-{
-    return mViewMode;
-}
-
-
 FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter() const
 {
     const sal_Int16 nCurAppId = mxCBApp->get_active();
@@ -464,7 +458,7 @@ void SfxTemplateManagerDlg::writeSettings ()
     {
         { TM_SETTING_LASTFOLDER, css::uno::Any(aLastFolder) },
         { TM_SETTING_LASTAPPLICATION,     css::uno::Any(sal_uInt16(mxCBApp->get_active())) },
-        { TM_SETTING_VIEWMODE, css::uno::Any(static_cast<sal_Int16>(getTemplateViewMode()))}
+        { TM_SETTING_VIEWMODE, css::uno::Any(static_cast<sal_Int16>(mViewMode)) }
     };
 
     // write
