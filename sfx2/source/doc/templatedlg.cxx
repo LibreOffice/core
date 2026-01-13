@@ -287,24 +287,26 @@ void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel>
 
 void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
 {
-    if (eViewMode == TemplateViewMode::ThumbnailView && mViewMode != TemplateViewMode::ThumbnailView)
+    if (mViewMode == eViewMode)
+        return;
+
+    if (eViewMode == TemplateViewMode::ThumbnailView)
     {
         mxThumbnailViewButton->set_active(true);
         mxListViewButton->set_active(false);
         maLocalView.ThumbnailView::GrabFocus();
-        mViewMode = eViewMode;
-        maLocalView.setTemplateViewMode(eViewMode);
-        maLocalView.Show();
     }
-    if (eViewMode == TemplateViewMode::ListView && mViewMode != TemplateViewMode::ListView)
+    else
     {
+        assert(eViewMode == TemplateViewMode::ListView);
         mxListViewButton->set_active(true);
         mxThumbnailViewButton->set_active(false);
         maLocalView.ListView::grab_focus();
-        mViewMode = eViewMode;
-        maLocalView.setTemplateViewMode(eViewMode);
-        maLocalView.Show();
     }
+
+    mViewMode = eViewMode;
+    maLocalView.setTemplateViewMode(eViewMode);
+    maLocalView.Show();
 }
 
 FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter() const
