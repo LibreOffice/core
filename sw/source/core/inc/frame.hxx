@@ -418,7 +418,7 @@ class SAL_DLLPUBLIC_RTTI SwFrame : public SwFrameAreaDefinition, public SwClient
 
     const SwLayoutFrame* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
-    SwPageFrame* ImplFindPageFrame();
+    SW_DLLPUBLIC SwPageFrame* ImplFindPageFrame();
 
 protected:
     std::unique_ptr<SwSortedObjs> m_pDrawObjs; // draw objects, can be null

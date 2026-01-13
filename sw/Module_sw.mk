@@ -197,6 +197,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_writerfilter_rtftok \
     CppunitTest_sw_writerfilter_filter \
     CppunitTest_sw_snap_to_grid \
+    CppunitTest_sw_page_line_spacing \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)
