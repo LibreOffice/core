@@ -114,6 +114,11 @@
                 <property name="height-request">260</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="preview-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="outlinenumberingpage|preview-atkobject">Preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
