@@ -3067,6 +3067,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153636)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf168157_crash_after_pasting_and_undoing)
+{
+    createSwDoc("tdf168157.docx");
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
 {
     // Unit test for tdf#157129
