@@ -1397,7 +1397,7 @@ void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,
                 SdrModel& rModel = pPage->getSdrModelFromSdrPage();
                 SdrOutliner& rOutl = rModel.GetDrawOutliner();
                 aOldBackColor = rOutl.GetBackgroundColor();
-                rOutl.SetBackgroundColor(pPage->GetPageBackgroundColor());
+                rOutl.SetBackgroundColor(pPage->GetPageBackgroundColor(nullptr, !bPrn));
             }
 
             bDone = paintUsingPrimitivesHelper(

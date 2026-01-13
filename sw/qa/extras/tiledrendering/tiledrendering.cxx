@@ -30,6 +30,7 @@
 #include <svx/svdview.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/wghtitem.hxx>
@@ -3859,6 +3860,61 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
     CPPUNIT_ASSERT(nBlackPixels > 0);
     CPPUNIT_ASSERT(nWhitePixels > 0);
     CPPUNIT_ASSERT(nBlackPixels > nWhitePixels);
+}
+
+// Toggle chart into dark mode and print as pdf. The automatic text
+// color should render into pdf as black and not as the white of
+// the on-screen representation
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPrintDarkModeChart)
+{
+    addDarkLightThemes(COL_BLACK, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc("large-chart-labels.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwView* pView = getSwDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(u"Dark"_ustr) },
+        }
+    );
+    comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
+    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());
+
+    uno::Sequence<css::beans::PropertyValue> args{
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
+    };
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
+
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+
+    if (pPDFium)
+    {
+        SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(aPDFFile);
+
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        CPPUNIT_ASSERT(pPdfDocument);
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+        auto pPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPage);
+
+        int nPageObjectCount = pPage->getObjectCount();
+
+        auto pTextPage = pPage->getTextPage();
+
+        for (int i = 0; i < nPageObjectCount; ++i)
+        {
+            std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(i);
+            // The text should all be black.
+            if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+                CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_yellowPatternFill)
