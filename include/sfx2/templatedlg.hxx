@@ -134,7 +134,6 @@ protected:
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
     std::unique_ptr<weld::Toggleable> mxListViewButton;
     std::unique_ptr<weld::Toggleable> mxThumbnailViewButton;
-    TemplateViewMode mViewMode;
     bool bMakeSelItemVisible;
 };
 

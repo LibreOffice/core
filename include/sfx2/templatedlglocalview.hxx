@@ -19,6 +19,7 @@ public:
                          std::unique_ptr<weld::TreeView> xTreeView);
 
     void setTemplateViewMode(TemplateViewMode eMode);
+    TemplateViewMode getTemplateViewMode() const;
 
     virtual void showAllTemplates() override;
 

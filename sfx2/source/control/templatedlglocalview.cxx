@@ -240,6 +240,8 @@ void TemplateDlgLocalView::insertItems(const std::vector<TemplateItemProperties>
 
 void TemplateDlgLocalView::setTemplateViewMode(TemplateViewMode eMode) { mViewMode = eMode; }
 
+TemplateViewMode TemplateDlgLocalView::getTemplateViewMode() const { return mViewMode; }
+
 void TemplateDlgLocalView::Show()
 {
     if (mViewMode == TemplateViewMode::ListView)
