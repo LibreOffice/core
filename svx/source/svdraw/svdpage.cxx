@@ -1798,7 +1798,7 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
 Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDisplay ) const
 {
-    Color aColor;
+    Color aColor(COL_WHITE);
 
     if(bScreenDisplay && (!pView || pView->GetApplicationDocumentColor() == COL_AUTO))
     {
@@ -1810,7 +1810,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
             aColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
         }
     }
-    else
+    else if (pView)
     {
         aColor = pView->GetApplicationDocumentColor();
     }
