@@ -62,11 +62,13 @@
 #include <svx/sxekitm.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
+#include <tools/json_writer.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include "PageListWatcher.hxx"
 #include <strings.hxx>
 #include <unokywds.hxx>
@@ -523,6 +525,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
             DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
             pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
         }
+        NotifyLOKHasOverviewPage(false);
         mpCanvasPage = nullptr;
     }
     pSdPage->DisconnectLink();
@@ -1549,6 +1552,24 @@ void SdDrawDocument::ImportCanvasPage()
         populatePagePreviewsGrid();
         connectPagePreviews();
     }
+    NotifyLOKHasOverviewPage(true);
+}
+
+void SdDrawDocument::NotifyLOKHasOverviewPage(bool bHasOverviewPage)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+    DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
+    if (!pDrawViewSh)
+        return;
+    SfxViewShell* pViewShell = pDrawViewSh->GetViewShell();
+    if (!pViewShell)
+        return;
+    ::tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("commandName", ".uno:HasOverviewPage");
+    aJsonWriter.put("state", bHasOverviewPage ? std::string_view("true") : std::string_view("false"));
+    pViewShell->libreOfficeKitViewCallback(
+        LOK_CALLBACK_STATE_CHANGED, aJsonWriter.finishAndGetAsOString());
 }
 
 void SdDrawDocument::ReshufflePages()

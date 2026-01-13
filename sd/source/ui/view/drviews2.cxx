@@ -1406,6 +1406,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             sal_uInt16 nCanvasPageIndex = GetDoc()->GetOrInsertCanvasPage();
             Cancel(); // Don't know what this does
             SwitchPage(nCanvasPageIndex);
+            GetDoc()->NotifyLOKHasOverviewPage(true);
             rReq.Done();
         }
         break;

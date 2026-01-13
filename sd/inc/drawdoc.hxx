@@ -424,6 +424,8 @@ private:
 
 public:
 
+    void NotifyLOKHasOverviewPage(bool bHasOverviewPage);
+
     /**
      * Initialize the bookmark document for page/object operations
      */
