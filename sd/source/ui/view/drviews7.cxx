@@ -861,6 +861,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_PRESENTATION_LAYOUT);
             rSet.DisableItem(SID_HIDE_SLIDE);
             rSet.DisableItem(SID_SHOW_SLIDE);
+            rSet.DisableItem(SID_COPY_SLIDE);
         }
     }
     else
