@@ -820,7 +820,12 @@ OUString XclXmlUtils::ToOUString(
     else
     {
         if (nErrCode != FormulaError::NONE)
-            aCompiler.AppendErrorConstant( aBuffer, nErrCode);
+        {
+            if (nErrCode == FormulaError::NoMacro)
+                aCompiler.AppendErrorConstant(aBuffer, FormulaError::NoRef);
+            else
+                aCompiler.AppendErrorConstant(aBuffer, nErrCode);
+        }
         else
         {
             // No code SHOULD be an "error cell", assert caller thought of that

@@ -1015,15 +1015,47 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
     if (bWriteFormula)
     {
+        ScTokenArray aTokenArray(*mrScFmlaCell.GetCode());
+        // If XLSX export then remove macro tokens from the array
+        if (!rStrm.IsExportVBA())
+        {
+            formula::FormulaTokenArrayPlainIterator aIter(aTokenArray);
+            formula::FormulaToken* t = aIter.First();
+            while (t)
+            {
+                if (t->GetOpCode() == ocMacro)
+                {
+                    sal_uInt16 nStart = aIter.GetIndex() - 1;
+                    formula::FormulaToken* pNext = aIter.PeekNext();
+                    if (pNext && pNext->GetOpCode() == ocOpen)
+                    {
+                        sal_uInt16 nParenthesis = 0;
+                        do
+                        {
+                            if (pNext->GetOpCode() == ocOpen)
+                                nParenthesis++;
+                            else if (pNext->GetOpCode() == ocClose)
+                                nParenthesis--;
+
+                            aIter.Next();
+                            pNext = aIter.PeekNext();
+                        } while (nParenthesis > 0 && pNext);
+                    }
+                    aTokenArray.RemoveToken(nStart, aIter.GetIndex() - nStart);
+                    aIter.AfterRemoveToken(nStart, aIter.GetIndex() - nStart);
+                }
+                t = aIter.Next();
+            }
+        }
         if (!bTagStarted)
         {
             rWorksheet->startElement( XML_f,
                     XML_aca, ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
                         (mxAddRec && mxAddRec->IsVolatile()) ) );
         }
-        rWorksheet->writeEscaped( XclXmlUtils::ToOUString(
-                    rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode(),
-                    mrScFmlaCell.GetErrCode()));
+        rWorksheet->writeEscaped(XclXmlUtils::ToOUString(rStrm.GetRoot().GetCompileFormulaContext(),
+                                                         mrScFmlaCell.aPos, &aTokenArray,
+                                                         mrScFmlaCell.GetErrCode()));
         rWorksheet->endElement( XML_f );
     }
 

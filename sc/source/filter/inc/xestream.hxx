@@ -291,6 +291,8 @@ public:
     /** Returns the filter root data. */
     const XclExpRoot& GetRoot() const { return *mpRoot; }
 
+    bool IsExportVBA() const { return mbExportVBA; }
+
     sax_fastparser::FSHelperPtr& GetCurrentStream();
     void PushStream( sax_fastparser::FSHelperPtr const & aStream );
     void PopStream();
