@@ -21,7 +21,6 @@
 #include <pdfparse.hxx>
 
 #include <boost/spirit/include/classic.hpp>
-#include <boost/bind/bind.hpp>
 
 #include <string.h>
 
@@ -127,24 +126,22 @@ public:
     {
         explicit definition( const PDFGrammar<iteratorT>& rSelf )
         {
-            using namespace boost::placeholders;
-
             PDFGrammar<iteratorT>* pSelf = const_cast< PDFGrammar<iteratorT>* >( &rSelf );
 
             // workaround workshop compiler: comment_p doesn't work
             // comment     = comment_p("%")[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )];
-            comment     = lexeme_d[ (ch_p('%') >> *(~ch_p('\r') & ~ch_p('\n')) >> eol_p)[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )] ];
+            comment     = lexeme_d[ (ch_p('%') >> *(~ch_p('\r') & ~ch_p('\n')) >> eol_p)[( [pSelf] (auto start, auto end) { pSelf->pushComment(start, end); } )] ];
 
-            boolean     = (str_p("true") | str_p("false"))[boost::bind(&PDFGrammar::pushBool, pSelf, _1, _2)];
+            boolean     = (str_p("true") | str_p("false"))[( [pSelf] (auto start, auto end) { pSelf->pushBool(start, end); } )];
 
             // workaround workshop compiler: confix_p doesn't work
             //stream      = confix_p( "stream", *anychar_p, "endstream" )[boost::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
-            stream      = (str_p("stream") >> *(anychar_p - str_p("endstream")) >> str_p("endstream"))[boost::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
+            stream      = (str_p("stream") >> *(anychar_p - str_p("endstream")) >> str_p("endstream"))[( [pSelf] (auto start, auto end) { pSelf->emitStream(start, end); } )];
 
             name        = lexeme_d[
                             ch_p('/')
                             >> (*(anychar_p-chset_p("\t\n\f\r ()<>[]{}/%")-ch_p('\0')))
-                               [boost::bind(&PDFGrammar::pushName, pSelf, _1, _2)] ];
+                               [( [pSelf] (auto start, auto end) { pSelf->pushName(start, end); } )] ];
 
             // workaround workshop compiler: confix_p doesn't work
             //stringtype  = ( confix_p("(",*anychar_p, ")") |
@@ -153,31 +150,31 @@ public:
 
             stringtype  = ( ( ch_p('(') >> functor_parser<pdf_string_parser>() >> ch_p(')') ) |
                             ( ch_p('<') >> *xdigit_p >> ch_p('>') ) )
-                          [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
+                          [( [pSelf] (auto start, auto end) { pSelf->pushString(start, end); } )];
 
-            null_object = str_p( "null" )[boost::bind(&PDFGrammar::pushNull, pSelf, _1, _2)];
+            null_object = str_p( "null" )[( [pSelf] (auto start, auto end) { pSelf->pushNull(start, end); } )];
 
-            objectref   = ( uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                            >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
+            objectref   = ( uint_p[( [pSelf] (auto val) { pSelf->push_back_action_uint(val); } )]
+                            >> uint_p[( [pSelf] (auto val) { pSelf->push_back_action_uint(val); } )]
                             >> ch_p('R')
                             >> eps_p
-                          )[boost::bind(&PDFGrammar::pushObjectRef, pSelf, _1, _2)];
+                          )[( [pSelf] (auto start, auto end) { pSelf->pushObjectRef(start, end); } )];
 
             simple_type = objectref | name |
-                          ( real_p[boost::bind(&PDFGrammar::assign_action_double, pSelf, _1)] >> eps_p )
-                          [boost::bind(&PDFGrammar::pushDouble, pSelf, _1, _2)]
+                          ( real_p[( [pSelf] (auto val) { pSelf->assign_action_double(val); } )] >> eps_p )
+                          [( [pSelf] (auto start, auto end) { pSelf->pushDouble(start, end); } )]
                           | stringtype | boolean | null_object;
 
-            dict_begin  = str_p( "<<" )[boost::bind(&PDFGrammar::beginDict, pSelf, _1, _2)];
-            dict_end    = str_p( ">>" )[boost::bind(&PDFGrammar::endDict, pSelf, _1, _2)];
+            dict_begin  = str_p( "<<" )[( [pSelf] (auto start, auto end) { pSelf->beginDict(start, end); } )];
+            dict_end    = str_p( ">>" )[( [pSelf] (auto start, auto end) { pSelf->endDict(start, end); } )];
 
-            array_begin = str_p("[")[boost::bind(&PDFGrammar::beginArray,pSelf, _1, _2)];
-            array_end   = str_p("]")[boost::bind(&PDFGrammar::endArray,pSelf, _1, _2)];
+            array_begin = str_p("[")[( [pSelf] (auto start, auto  end) { pSelf->beginArray(start, end); } )];
+            array_end   = str_p("]")[( [pSelf] (auto start, auto end) { pSelf->endArray(start, end); } )];
 
-            object_begin= uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                          >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                          >> str_p("obj" )[boost::bind(&PDFGrammar::beginObject, pSelf, _1, _2)];
-            object_end  = str_p( "endobj" )[boost::bind(&PDFGrammar::endObject, pSelf, _1, _2)];
+            object_begin= uint_p[( [pSelf] (auto val) { pSelf->push_back_action_uint(val); } )]
+                          >> uint_p[( [pSelf] (auto val) { pSelf->push_back_action_uint(val); } )]
+                          >> str_p("obj" )[( [pSelf] (auto start, auto  end) { pSelf->beginObject(start, end); } )];
+            object_end  = str_p( "endobj" )[( [pSelf] (auto start, auto  end) { pSelf->endObject(start, end); } )];
 
             xref        = str_p( "xref" ) >> uint_p >> uint_p
                           >> lexeme_d[
@@ -197,20 +194,20 @@ public:
                           >> !stream
                           >> object_end;
 
-            trailer     = str_p( "trailer" )[boost::bind(&PDFGrammar::beginTrailer,pSelf,_1,_2)]
+            trailer     = str_p( "trailer" )[( [pSelf] (auto start, auto end) { pSelf->beginTrailer(start, end); } )]
                           >> *dict_element
                           >> str_p("startxref")
                           >> uint_p
-                          >> str_p("%%EOF")[boost::bind(&PDFGrammar::endTrailer,pSelf,_1,_2)];
+                          >> str_p("%%EOF")[( [pSelf] (auto start, auto end) { pSelf->endTrailer(start, end); } )];
 
             pdfrule     = ! (lexeme_d[
                                 str_p( "%PDF-" )
-                                >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
+                                >> uint_p[( [pSelf] (auto val) { pSelf->push_back_action_uint(val); } )]
                                 >> ch_p('.')
-                                >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
+                                >> uint_p[( [pSelf] (auto val) { pSelf->push_back_action_uint(val); } )]
                                 >> *(~ch_p('\r') & ~ch_p('\n'))
                                 >> eol_p
-                             ])[boost::bind(&PDFGrammar::haveFile,pSelf, _1, _2)]
+                             ])[( [pSelf] (auto start, auto end) { pSelf->haveFile(start, end); } )]
                           >> *( comment | object | ( xref >> trailer ) );
         }
         rule< ScannerT > comment, stream, boolean, name, stringtype, null_object, simple_type,
