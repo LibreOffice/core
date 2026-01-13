@@ -75,7 +75,7 @@ struct _LibreOfficeKitClass
     /// dynamic library (like the one this code goes into) where it
     /// might have been allocated by calling malloc() (etc) in a C
     /// runtime library that is different from the one used by your
-    /// code. That will lead to a crash. Alays call the free() in the
+    /// code. That will lead to a crash. Always call the free() in the
     /// same C runtime where the malloc() that allocated the pointer
     /// is.
 
