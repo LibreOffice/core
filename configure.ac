@@ -4323,6 +4323,14 @@ fi
 
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
+    if test "$_os" = "Linux"; then
+        if test -d /usr/lib/$host_cpu-$host_os/pkgconfig; then
+            export PKG_CONFIG_LIBDIR=/usr/lib/$host_cpu-$host_os/pkgconfig
+            if test -d /usr/share/pkgconfig; then
+                export PKG_CONFIG_PATH=/usr/share/pkgconfig
+            fi
+        fi
+    fi
     if test "$enable_dynamic_loading" != yes -a "$enable_wasm_strip" = yes; then
         ENABLE_WASM_STRIP=TRUE
     fi
