@@ -18,4 +18,10 @@ QtTreeViewModel::QtTreeViewModel(QWidget* pParent)
     setSourceModel(new QStandardItemModel(pParent));
 }
 
+Qt::ItemFlags QtTreeViewModel::flags(const QModelIndex& rIndex) const
+{
+    // weld::TreeView columns are not editable by default
+    return QSortFilterProxyModel::flags(rIndex) & ~Qt::ItemIsEditable;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

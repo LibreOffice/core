@@ -21,6 +21,8 @@ class QtTreeViewModel : public QSortFilterProxyModel
 
 public:
     QtTreeViewModel(QWidget* pParent);
+
+    virtual Qt::ItemFlags flags(const QModelIndex& rIndex) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
