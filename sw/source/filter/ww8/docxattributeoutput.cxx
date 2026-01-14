@@ -1631,16 +1631,22 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         WriteCollectedParagraphProperties();
     Redline( pRedlineData );
 
-    WriteCollectedParagraphProperties();
-
-    // Write w:framePr
     if (!m_bWritingHeaderFooter && m_aFramePr.Frame())
     {
+        // write the collected paragraph properties __without__ the <framePr> element
+        m_rExport.SdrExporter().getFlyAttrList().clear();
+        WriteCollectedParagraphProperties();
+
+        // Write w:framePr
         const SwFrameFormat& rFrameFormat = m_aFramePr.Frame()->GetFrameFormat();
         assert(SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
 
         const Size aSize = m_aFramePr.Frame()->GetSize();
         PopulateFrameProperties(&rFrameFormat, aSize);
+    }
+    else
+    {
+        WriteCollectedParagraphProperties();
     }
 
     // Write 'Paragraph Mark' properties
