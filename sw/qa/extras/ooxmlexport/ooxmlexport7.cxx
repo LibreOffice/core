@@ -796,6 +796,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRubyHyperlink)
     createSwDoc("rubyhyperlink.fodt");
 
     //FIXME: validation error in OOXML export: Errors: 4
+    // We have hyperlink inside rubyBase here, like:
+    //    <w:rubyBase>
+    //         <w:hyperlink r:id="rId3">
+    // but not obvious what the right output should be.
     skipValidation();
 
     saveAndReload(TestFilter::DOCX);
