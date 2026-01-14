@@ -755,9 +755,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     // There are a WPG shape and a picture
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -803,9 +800,6 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146851_1, "tdf146851_1.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<beans::XPropertySet> xPara;
 
     xPara.set(getParagraph(1, u"qwerty"_ustr), uno::UNO_QUERY);
@@ -989,9 +983,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
     createSwDoc("tdf146955.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
