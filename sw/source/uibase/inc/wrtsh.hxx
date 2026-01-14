@@ -539,6 +539,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
+    void SortChapters(const SwOutlineNodes::size_type nOutlineNodePos = SwOutlineNodes::npos);
+
 private:
 
     void  OpenMark();

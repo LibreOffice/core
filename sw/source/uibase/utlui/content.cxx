@@ -135,6 +135,8 @@
 #include <sfx2/passwd.hxx>
 #include <svl/PasswordHelper.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -1945,26 +1947,38 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveFootnoteTracking = true;
     bool bRemoveEndnoteTracking = true;
 
+    // display the content type content in alphabetical order (does not change the document)
     bool bRemoveSortEntry = true;
+    // sort outline content in alphabetical order (changes the document)
+    bool bRemoveSortOutlineAlphabeticallyInDocument = true;
 
     bool bRemoveProtectSection = true;
     bool bRemoveHideSection = true;
 
     if (xEntry)
     {
+        bool bIsContentType;
         const SwContentType* pType;
-        if (lcl_IsContentType(*xEntry, *m_xTreeView))
+        if ((bIsContentType = lcl_IsContentType(*xEntry, *m_xTreeView)))
             pType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
         else
             pType = weld::fromId<SwContent*>(
                         m_xTreeView->get_id(*xEntry))->GetParent();
         const ContentTypeId nContentType = pType->GetType();
 
-        if (nContentType != ContentTypeId::FOOTNOTE && nContentType != ContentTypeId::ENDNOTE
-            && nContentType != ContentTypeId::POSTIT && nContentType != ContentTypeId::UNKNOWN)
+        if (bIsContentType && nContentType != ContentTypeId::FOOTNOTE
+            && nContentType != ContentTypeId::ENDNOTE && nContentType != ContentTypeId::POSTIT
+            && nContentType != ContentTypeId::UNKNOWN)
         {
             bRemoveSortEntry = false;
             xPop->set_active(u"sort"_ustr, pType->IsAlphabeticSort());
+        }
+
+        if (officecfg::Office::Common::Misc::ExperimentalMode::get()
+            && nContentType == ContentTypeId::OUTLINE)
+        {
+            if (bIsContentType || m_xTreeView->iter_has_child(*xEntry))
+                bRemoveSortOutlineAlphabeticallyInDocument = false;
         }
 
         OUString aIdent;
@@ -2406,19 +2420,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveCopyEntry)
         xPop->remove(u"copy"_ustr);
 
-    if (bRemoveGotoEntry &&
-            bRemoveCopyEntry &&
-            bRemoveSelectEntry &&
-            bRemoveDeleteEntry &&
-            bRemoveMakeFootnotesEndnotesViceVersaEntry &&
-            bRemoveChapterEntries &&
-            bRemovePostItEntries &&
-            bRemoveRenameEntry &&
-            bRemoveIndexEntry &&
-            bRemoveUpdateIndexEntry &&
-            bRemoveReadonlyIndexEntry &&
-            bRemoveUnprotectEntry &&
-            bRemoveEditEntry)
+    if (bRemoveGotoEntry && bRemoveCopyEntry && bRemoveSelectEntry && bRemoveDeleteEntry
+        && bRemoveMakeFootnotesEndnotesViceVersaEntry && bRemoveChapterEntries
+        && bRemovePostItEntries && bRemoveRenameEntry && bRemoveIndexEntry
+        && bRemoveUpdateIndexEntry && bRemoveReadonlyIndexEntry && bRemoveUnprotectEntry
+        && bRemoveEditEntry && bRemoveSortOutlineAlphabeticallyInDocument)
         xPop->remove(u"separator2"_ustr);
 
     if (!bOutline)
@@ -2470,6 +2476,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(u"endnotetracking"_ustr);
     if (bRemoveSortEntry)
         xPop->remove(u"sort"_ustr);
+    if (bRemoveSortOutlineAlphabeticallyInDocument)
+        xPop->remove(u"sortalphabeticallyindocument"_ustr);
     if (bRemoveProtectSection)
         xPop->remove(u"protectsection"_ustr);
     if (bRemoveHideSection)
@@ -6104,7 +6112,17 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         EditEntry(*xFirst, EditEntryMode::TEXT_ALTERNATIVE);
         return;
     }
-
+    else if (rSelectedPopupEntry == "sortalphabeticallyindocument")
+    {
+        SwOutlineNodes::size_type nOutlineNodePos = SwOutlineNodes::npos;
+        if (lcl_IsContent(*xFirst, *m_xTreeView))
+        {
+            nOutlineNodePos
+                = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xFirst))->GetOutlinePos();
+        }
+        m_pActiveShell->SortChapters(nOutlineNodePos);
+        return;
+    }
 
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)

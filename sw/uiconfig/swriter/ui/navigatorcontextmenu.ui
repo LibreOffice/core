@@ -99,6 +99,14 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="sortalphabeticallyindocument">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_SORT_ALPHABETICALLY_IN_DOCUMENT">Sort Alphabetically in Document</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="401">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -608,7 +616,7 @@
       <object class="GtkCheckMenuItem" id="sort">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_SORT_ALPHABETICALLY">Sort Alphabetically</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_SORT_ALPHABETICALLY">Display Alphabetically</property>
         <property name="use-underline">True</property>
       </object>
     </child>
