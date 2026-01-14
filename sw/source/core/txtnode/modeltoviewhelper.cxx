@@ -203,7 +203,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                 }
                 case CH_TXT_ATR_FIELDEND:
                 {
-                    assert(startedFields.back().first == rIDMA.getFieldmarkAt(SwPosition(rNode, i)));
+                    assert(!startedFields.empty() && startedFields.back().first == rIDMA.getFieldmarkAt(SwPosition(rNode, i)));
                     if (!startedFields.empty())
                     {
                         startedFields.pop_back();
