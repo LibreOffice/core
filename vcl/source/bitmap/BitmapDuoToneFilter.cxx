@@ -41,10 +41,12 @@ Bitmap BitmapDuoToneFilter::execute(Bitmap const& rBitmap) const
             BitmapColor aColor = pReadAcc->GetColor(y, x);
             sal_uInt8 nLuminance = aColor.GetLuminance();
             BitmapColor aResultColor(
+                ColorAlpha,
                 lcl_getDuotoneColorComponent(nLuminance, aColorOne.GetRed(), aColorTwo.GetRed()),
                 lcl_getDuotoneColorComponent(nLuminance, aColorOne.GetGreen(),
                                              aColorTwo.GetGreen()),
-                lcl_getDuotoneColorComponent(nLuminance, aColorOne.GetBlue(), aColorTwo.GetBlue()));
+                lcl_getDuotoneColorComponent(nLuminance, aColorOne.GetBlue(), aColorTwo.GetBlue()),
+                aColor.GetAlpha());
             pWriteAcc->SetPixel(y, x, aResultColor);
         }
     }
