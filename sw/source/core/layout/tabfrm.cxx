@@ -4889,11 +4889,11 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
                         // I do not want to remove the first calculation because
                         // if clipping has been applied, using the GetCurrRelPos
                         // might be the better option to calculate nHeight.
-                        const SwTwips nDistOfFlyBottomToAnchorTop2 = aRectFnSet.YDiff(
+                        const tools::Long nDistOfFlyBottomToAnchorTop2 = aRectFnSet.YDiff(
                                                                         aRectFnSet.GetBottom(pAnchoredObj->GetObjRect()),
                                                                         aRectFnSet.GetBottom(pFrame->getFrameArea()) );
 
-                        nHeight = std::max( nHeight, tools::Long(nDistOfFlyBottomToAnchorTop2 ));
+                        nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop2 );
                     }
                 }
             }
