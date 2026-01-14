@@ -11,6 +11,7 @@
 #pragma once
 
 #include <memory>
+#include <stdint.h>
 
 #include <vcl/dllapi.h>
 #include <basegfx/range/b2drectangle.hxx>
