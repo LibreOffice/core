@@ -926,6 +926,8 @@ protected:
 
     virtual bool IsDummyFloattableAnchor(SwNode& /*rNode*/) const { return false; }
 
+    virtual void ClearFlyAttrList() = 0;
+
 public:
     MSWordExportBase(SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam);
     virtual ~MSWordExportBase();
@@ -1224,6 +1226,8 @@ protected:
     virtual void OutputLinkedOLE( const OUString& ) override;
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) override;
+
+    virtual void ClearFlyAttrList() override {}
 
 private:
     WW8Export(const WW8Export&) = delete;
