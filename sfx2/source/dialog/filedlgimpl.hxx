@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX
 #define INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/graph.hxx>
