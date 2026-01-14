@@ -16,10 +16,10 @@
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceTreeView.hxx>
 #include <QtHyperlinkLabel.hxx>
+#include <QtTreeViewModel.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
 
-#include <QtCore/QSortFilterProxyModel>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtGui/QActionGroup>
 #endif
@@ -420,10 +420,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkTreeView")
     {
         QTreeView* pTreeView = new QTreeView(pParentWidget);
-        QStandardItemModel* pItemModel = new QStandardItemModel(pTreeView);
-        QSortFilterProxyModel* pProxyModel = new QSortFilterProxyModel(pTreeView);
-        pProxyModel->setSourceModel(pItemModel);
-        pTreeView->setModel(pProxyModel);
+        QtTreeViewModel* pTreeViewModel = new QtTreeViewModel(pTreeView);
+        pTreeView->setModel(pTreeViewModel);
         pTreeView->setHeaderHidden(!extractHeadersVisible(rMap));
         pTreeView->setRootIsDecorated(extractShowExpanders(rMap));
         setItemViewProperties(*pTreeView, rMap);

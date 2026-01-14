@@ -11,10 +11,10 @@
 
 #include "QtInstanceTreeIter.hxx"
 #include "QtInstanceItemView.hxx"
+#include "QtTreeViewModel.hxx"
 
 #include <vcl/weld/TreeView.hxx>
 
-#include <QtCore/QSortFilterProxyModel>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QTreeView>
 
@@ -26,7 +26,7 @@ class QtInstanceTreeView : public QtInstanceItemView, public virtual weld::TreeV
 
     /** The model displayed in the tree view. The proxy model takes care of sorting
      *  if sorting is enabled. */
-    QSortFilterProxyModel* m_pModel;
+    QtTreeViewModel* m_pModel;
 
     /** The QStandardItemModel used as the source model for `m_pModel`. */
     QStandardItemModel* m_pSourceModel;

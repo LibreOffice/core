@@ -24,7 +24,7 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
 {
     assert(m_pTreeView);
 
-    m_pModel = qobject_cast<QSortFilterProxyModel*>(m_pTreeView->model());
+    m_pModel = qobject_cast<QtTreeViewModel*>(m_pTreeView->model());
     assert(m_pModel && "tree view doesn't have expected QSortFilterProxyModel set");
 
     m_pSourceModel = qobject_cast<QStandardItemModel*>(m_pModel->sourceModel());
