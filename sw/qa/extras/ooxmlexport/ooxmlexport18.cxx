@@ -193,9 +193,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     // This was only one page b/c the textbox was missing.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -305,9 +302,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 
     createSwDoc("tdf154703_framePr2.rtf");
     verify();
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
