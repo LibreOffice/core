@@ -188,7 +188,7 @@ namespace
         // Unlike on Unixes, we can't pass a NULL module parameter to
         // osl_getAsciiFunctionSymbol(), i.e. GetProcAddress(), and
         // have it look through all modules loaded, like dlsym() does.
-        // Instead, we "know" that FT_Done_MM_Var will wither be in
+        // Instead, we "know" that FT_Done_MM_Var will either be in
         // mergedlo.dll or vcllo.dll.
         void(*func)(FT_Library, FT_MM_Var*) = nullptr;
         oslModule module;
