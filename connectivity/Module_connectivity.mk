@@ -90,6 +90,9 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mysql \
 	Library_mysqlc \
 ))
+$(eval $(call gb_Module_add_check_targets,connectivity,\
+    CppunitTest_connectivity_mysql_test \
+))
 endif
 
 ifneq ($(BUILD_POSTGRESQL_SDBC),)
@@ -118,10 +121,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 # JunitTest_complex \
 
 endif
-
-$(eval $(call gb_Module_add_check_targets,connectivity,\
-    CppunitTest_connectivity_mysql_test \
-))
 
 # general tests
 $(eval $(call gb_Module_add_check_targets,connectivity,\
