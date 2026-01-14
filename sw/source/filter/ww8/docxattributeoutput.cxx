@@ -10317,6 +10317,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             rGrabBagElement.second >>= aGrabBagSeq;
 
+            bool bAddedValAttr = false;
             for (const auto& rProp : aGrabBagSeq)
             {
                 OUString sVal = rProp.Value.get<OUString>();
@@ -10325,7 +10326,10 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     continue;
 
                 if (rProp.Name == "val")
+                {
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_val), sVal);
+                    bAddedValAttr = true;
+                }
                 else if (rProp.Name == "color")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_color), sVal);
                 else if (rProp.Name == "themeColor")
@@ -10345,6 +10349,9 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 else if (rProp.Name == "originalColor")
                     rProp.Value >>= m_sOriginalBackgroundColor;
             }
+            // w:val attribute is required
+            if (!bAddedValAttr)
+                AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_val), "clear");
         }
         else if (rGrabBagElement.first == "SdtPr")
         {
