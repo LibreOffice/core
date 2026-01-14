@@ -216,6 +216,7 @@ Private Sub Class_Initialize()
 	_OnMouseDragged = &quot;&quot;
 	_OnMouseMoved = &quot;&quot;
 	_MouseMotionCounter = 0
+
 	_ControlCache = Array()
 End Sub		&apos;	SFDialogs.SF_Dialog Constructor
 
@@ -502,6 +503,7 @@ REM ----------------------------------------------------------------------------
 Public Function Center(Optional ByRef Parent As Variant) As Boolean
 &apos;&apos;&apos;	Center the actual dialog instance in the middle of a parent window
 &apos;&apos;&apos;	Without arguments, the method centers the dialog in the middle of the current window
+&apos;&apos;&apos;	NB: centering a dynamic dialog makes it de facto visible. Static dialogs are made visible when executed.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Parent: an object, either
 &apos;&apos;&apos;			- a ScriptForge dialog object
@@ -524,10 +526,10 @@ Dim oUi As Object					&apos;	ScriptForge.SF_UI
 Dim oObjDesc As Object				&apos;	_ObjectDescriptor type
 Dim sObjectType As String			&apos;	Can be uno or sf object type
 Dim oParent As Object				&apos;	UNO alias of parent
-Dim oParentPosSize As Object		&apos;	Parent com.sun.star.awt.Rectangle
+Dim oParentPosSize As Object		&apos;	Parent com.sun.star.awt.Rectangle (in pixels)
 Dim lParentX As Long				&apos;	X position of parent dialog
 Dim lParentY As Long				&apos;	Y position of parent dialog
-Dim oPosSize As Object				&apos;	Dialog com.sun.star.awt.Rectangle
+Dim oPosSize As Object				&apos;	Dialog com.sun.star.awt.Rectangle (in pixels)
 Const cstThisSub = &quot;SFDialogs.Dialog.Center&quot;
 Const cstSubArgs = &quot;[Parent]&quot;
 
@@ -551,7 +553,8 @@ Check:
 		If oObjDesc.iVarType = ScriptForge.V_SFOBJECT Then		&apos;	ScriptForge object
 			sObjectType = oObjDesc.sObjectType
 			&apos;	Document or dialog ?
-			If Not ScriptForge.SF_Array.Contains(Array(&quot;BASE&quot;, &quot;CALC&quot;, &quot;DIALOG&quot;, &quot;DOCUMENT&quot;, &quot;WRITER&quot;), sObjectType, CaseSensitive := True) Then GoTo Finally
+			If Not ScriptForge.SF_Array.Contains(Array(&quot;BASE&quot;, &quot;CALC&quot;, &quot;DATASHEET&quot;, &quot;DIALOG&quot;, &quot;DOCUMENT&quot;, &quot;FORMDOCUMENT&quot;, &quot;WRITER&quot;) _
+									, sObjectType, CaseSensitive := True) Then GoTo Finally
 			If sObjectType = &quot;DIALOG&quot; Then
 				Set oParent = Parent._DialogControl
 				Set oParentPosSize = oParent.getPosSize()
@@ -568,6 +571,9 @@ Check:
 	If IsNull(oParentPosSize) Then GoTo Finally
 
 Try:
+	&apos;	A dynamic dialog has no stable view before it is made visible =&gt; The top-left coordinate cannot be computed
+	If _BuiltFromScratch And Not _DialogControl.IsVisible() Then _DialogControl.setVisible(True)
+	&apos;	The nosition is computed in pixels
 	Set oPosSize = _DialogControl.getPosSize()
 	With oPosSize
 		_DialogControl.setPosSize( _
@@ -577,6 +583,7 @@ Try:
 					, .Height _
 					, com.sun.star.awt.PosSize.POSSIZE)
 	End With
+
 	bCenter = True
 
 Finally:
@@ -2070,7 +2077,8 @@ Try:
 		_Modal = True
 		_Displayed = True
 		&apos;	In dynamic dialogs, injection of sizes and positions from model to view is done with setVisible()
-		_DialogControl.setVisible(True)
+		If Not _DialogControl.IsVisible() Then _DialogControl.setVisible(True)
+		&apos;	Run the dialog now !
 		lExecute = _DialogControl.execute()
 		Select Case lExecute
 			Case 1		:	lExecute = OKBUTTON
@@ -2083,7 +2091,7 @@ Try:
 		_Displayed = True
 		&apos;	To make visible an on-the-fly designed dialog when macro triggered from Python
 		_DialogModel.DesktopAsParent = Not ( _BuiltFromScratch And _BuiltInPython )
-		_DialogControl.setVisible(True)
+		If Not _DialogControl.IsVisible() Then _DialogControl.setVisible(True)
 		&apos;	Watch the window Close button
 		Set _TopWindowListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFNONMODAL_&quot; _
 											, &quot;com.sun.star.awt.XTopWindowListener&quot;)
