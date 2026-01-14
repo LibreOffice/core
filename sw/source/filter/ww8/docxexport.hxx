@@ -240,6 +240,8 @@ protected:
                                      const SwPageDesc* pNewPgDesc,
                                      bool bExtraPageBreak = false) override;
 
+    virtual void ClearFlyAttrList() override;
+
 private:
     /// Setup pStyles and write styles.xml
     void InitStyles();
