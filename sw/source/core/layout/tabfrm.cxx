@@ -4814,7 +4814,7 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
 
         if ( pMaster )
         {
-            pObjs = static_cast<const SwTextFrame*>(pTmp)->FindMaster()->GetDrawObjs();
+            pObjs = pMaster->GetDrawObjs();
             bIsFollow = true;
         }
     }
