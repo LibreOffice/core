@@ -151,6 +151,8 @@ protected:
     void AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat* pFormat,
                        sal_uLong nLnNum) override;
 
+    void ClearFlyAttrList() override {}
+
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
     RtfExport(RtfExportFilter* pFilter, SwDoc& rDocument, std::shared_ptr<SwUnoCursor>& pCurrentPam,

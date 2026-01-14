@@ -739,6 +739,11 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 
 }
 
+void DocxExport::ClearFlyAttrList()
+{
+    SdrExporter().getFlyAttrList().clear();
+}
+
 void DocxExport::InitStyles()
 {
     m_pStyles.reset(new MSWordStyles( *this, /*bListStyles =*/ true ));
