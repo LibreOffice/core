@@ -148,6 +148,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableBadFlyPos)
     CPPUNIT_ASSERT(pPage4);
     CPPUNIT_ASSERT(pPage4->GetSortedObjs());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage4->GetSortedObjs()->size());
+
+    // tdf#170337: Make sure that page 4's toplevel table has the correct height (it was 517, not
+    // taking inner floating table height into account):
+    auto pBody = pPage4->FindBodyCont();
+    CPPUNIT_ASSERT(pBody);
+    auto pTable = pBody->GetLower();
+    CPPUNIT_ASSERT(pTable);
+    CPPUNIT_ASSERT(pTable->IsTabFrame());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(3658), pTable->getFrameArea().Height());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFullPageShapeWrap)
