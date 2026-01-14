@@ -1302,9 +1302,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164474)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     }
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     // Test also after save-and-reload:
     saveAndReload(TestFilter::DOCX);
     {
