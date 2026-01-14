@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 
 #include <vector>
+#include <stdint.h>
 
 #include <com/sun/star/style/TabStop.hpp>
 #include <drawingml/textparagraphproperties.hxx>
