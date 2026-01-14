@@ -36,6 +36,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/toolkit/floatwin.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/Paned.hxx>

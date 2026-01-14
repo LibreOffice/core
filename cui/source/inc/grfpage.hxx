@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/graph.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <sfx2/tabdlg.hxx>

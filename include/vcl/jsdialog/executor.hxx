@@ -12,6 +12,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/IconView.hxx>

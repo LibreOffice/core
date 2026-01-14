@@ -12,6 +12,7 @@
 #include "QtInstanceWidget.hxx"
 
 #include <comphelper/OAccessible.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 
 #include <QtWidgets/QLabel>
 

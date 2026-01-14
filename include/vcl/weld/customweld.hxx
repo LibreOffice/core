@@ -11,6 +11,7 @@
 
 #include <comphelper/OAccessible.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/weld.hxx>
 
 class InputContext;

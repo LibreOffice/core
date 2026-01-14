@@ -20,6 +20,7 @@
 
 #include <sfx2/thumbnailview.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/weld.hxx>
 #include <AppElementType.hxx>
 

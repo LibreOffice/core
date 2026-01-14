@@ -29,6 +29,7 @@
 #include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
