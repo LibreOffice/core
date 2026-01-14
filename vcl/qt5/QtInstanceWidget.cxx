@@ -602,9 +602,11 @@ OUString QtInstanceWidget::get_accessible_id() const
 #endif
 }
 
-void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*)
+void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget* pLabel)
 {
-    assert(false && "Not implemented yet");
+    // QWidget doesn't have API to set a random widget as a11y label,
+    // take over the accessible name from the labelling widget instead
+    set_accessible_name(pLabel->get_accessible_name());
 }
 
 void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
