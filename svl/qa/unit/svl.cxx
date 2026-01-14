@@ -1239,7 +1239,7 @@ void Test::testIsNumberFormatSpecific()
         std::vector<FormatInputOutput> aIO = {
             { "005-12-14", true, "0005-12-14", 0 },
             {   "5-12-14", true, "2005-12-14", 0 },
-            {  "32-12-14", true, "1932-12-14", 0 }
+            {  "52-12-14", true, "1952-12-14", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[en-US] date");
@@ -1253,7 +1253,7 @@ void Test::testIsNumberFormatSpecific()
         std::vector<FormatInputOutput> aIO = {
             { "005-12-14", true, "0005-12-14", 0 },
             {   "5-12-14", true, "2005-12-14", 0 },
-            {  "32-12-14", true, "1932-12-14", 0 }
+            {  "52-12-14", true, "1952-12-14", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[de-DE] date");

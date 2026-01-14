@@ -3598,7 +3598,7 @@
           two-digit-year date formats.</desc>
           <label>First two-digit year</label>
         </info>
-        <value>1930</value>
+        <value>1950</value>
       </prop>
     </group>
     <group oor:name="Filter">
