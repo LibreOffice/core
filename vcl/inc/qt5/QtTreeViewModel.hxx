@@ -28,7 +28,12 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex& rIndex) const override;
 
+    virtual bool hasChildren(const QModelIndex& rIndex = QModelIndex()) const override;
+
     void setEditableColumns(const std::unordered_set<int>& rEditableColumns);
+
+    bool getChildrenOnDemand(const QModelIndex& rIndex) const;
+    void setChildrenOnDemand(const QModelIndex& rIndex, bool bOnDemandChildren);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

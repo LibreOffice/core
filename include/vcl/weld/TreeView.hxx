@@ -377,24 +377,26 @@ public:
     /* expanding on-demand node details
 
     When a node is added with children-on-demand (typically via 'insert' with
-    bChildrenOnDemand of true), then initially in reality the
-    children-on-demand node is given a 'placeholder' child entry to indicate
-    the load-on-demand state.
+    bChildrenOnDemand of true), then it shows an expander indicator even if
+    it doesn't have any "real" child entries (yet).
 
-    The 'placeholder' needs to be there for the expander indicator to be
-    drawn/shown even when there are no "real" entries yet. This child doesn't
-    exist for the purposes of any of the iterator methods, e.g. iter_has_child
-    on an on-demand node which hasn't been expanded yet is false. Likewise the
-    rest of the iterator methods skip over or otherwise ignore that node.
+    (Depending on the underlying toolkit, implementations may in reality give
+    the children-on-demand node a 'placeholder' child entry to indicate the
+    load-on-demand state and ensure the treeview draws/shows the expander
+    indicator even when there are no "real" entries yet. In that case, this
+    child doesn't exist for the purposes of any of the iterator methods,
+    e.g. iter_has_child on an on-demand node which hasn't been expanded yet
+    is false. Likewise the rest of the iterator methods skip over or otherwise
+    ignore that node.)
 
     Normal usage is the user clicks on the expander, the expansion mechanism
-    removes the 'placeholder' entry (set_children_on_demand(false)) and calls
+    disables on-demand nodes (set_children_on_demand(false)) and calls
     any installed expanding-callback (installable via connect_expanding) which
     has the opportunity to populate the node with children.
 
     If you decide to directly populate the children of an on-demand node
-    outside of the expanding-callback then you also need to explicitly remove
-    the 'placeholder' with set_children_on_demand(false) otherwise the treeview
+    outside of the expanding-callback then you also need to explicitly disable
+    on-demand mode with set_children_on_demand(false); otherwise the treeview
     is in an inconsistent state.  */
 
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;

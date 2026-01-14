@@ -53,10 +53,6 @@ void QtInstanceTreeView::do_insert(const weld::TreeIter* pParent, int nPos, cons
                                    VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                                    weld::TreeIter* pRet)
 {
-    assert(!bChildrenOnDemand && "Not implemented yet");
-    // avoid -Werror=unused-parameter for release build
-    (void)bChildrenOnDemand;
-
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
         const QModelIndex aParentIndex
@@ -89,6 +85,9 @@ void QtInstanceTreeView::do_insert(const weld::TreeIter* pParent, int nPos, cons
             QSignalBlocker aSignalBlocker(m_pModel);
             itemFromIndex(toggleButtonModelIndex(QtInstanceTreeIter(aIndex)))->setCheckable(true);
         }
+
+        if (bChildrenOnDemand)
+            m_pModel->setChildrenOnDemand(aIndex, true);
 
         if (pRet)
             static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(aIndex);
@@ -534,15 +533,24 @@ void QtInstanceTreeView::collapse_row(const weld::TreeIter& rIter)
     GetQtInstance().RunInMainThread([&] { m_pTreeView->collapse(modelIndex(rIter)); });
 }
 
-void QtInstanceTreeView::do_set_children_on_demand(const weld::TreeIter&, bool)
+void QtInstanceTreeView::do_set_children_on_demand(const weld::TreeIter& rIter,
+                                                   bool bChildrenOnDemand)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { m_pModel->setChildrenOnDemand(modelIndex(rIter), bChildrenOnDemand); });
 }
 
-bool QtInstanceTreeView::get_children_on_demand(const weld::TreeIter&) const
+bool QtInstanceTreeView::get_children_on_demand(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bChildrenOnDemand = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bChildrenOnDemand = m_pModel->getChildrenOnDemand(modelIndex(rIter)); });
+
+    return bChildrenOnDemand;
 }
 
 void QtInstanceTreeView::set_show_expanders(bool) { assert(false && "Not implemented yet"); }
