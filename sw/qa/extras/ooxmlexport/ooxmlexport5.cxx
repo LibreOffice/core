@@ -501,6 +501,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
     createSwDoc("fdo78420.docx");
 
     //FIXME: validation error in OOXML export: Errors: 10
+    // We are storing cp:contentType in docProps/core.xml and that is not a valid element.
     skipValidation();
 
     save(TestFilter::DOCX);
