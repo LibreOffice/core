@@ -7788,15 +7788,15 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
 
             m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
 
-            if (bListsAreDifferent)
-            {
-                GetExport().NumberingLevel(rRule, nLevel);
-            }
             if (levelOverride != rLevelOverrides.end())
             {
                 // list numbering restart override
                 m_pSerializer->singleElementNS(XML_w, XML_startOverride,
                     FSNS(XML_w, XML_val), OString::number(levelOverride->second));
+            }
+            if (bListsAreDifferent)
+            {
+                GetExport().NumberingLevel(rRule, nLevel);
             }
 
             m_pSerializer->endElementNS(XML_w, XML_lvlOverride);
