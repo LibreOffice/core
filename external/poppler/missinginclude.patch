@@ -1,0 +1,40 @@
+--- poppler/Function.cc
++++ poppler/Function.cc
+@@ -33,6 +33,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ #include <cctype>
++#include <climits>
+ #include <cmath>
+ #include "goo/gmem.h"
+ #include "goo/gstrtod.h"
+--- poppler/Gfx.cc
++++ poppler/Gfx.cc
+@@ -63,6 +63,7 @@
+ #include <cstdlib>
+ #include <cstdio>
+ #include <cstring>
++#include <climits>
+ #include <cmath>
+ #include <memory>
+ #include "goo/GooTimer.h"
+--- poppler/Parser.cc
++++ poppler/Parser.cc
+@@ -33,6 +33,7 @@
+ 
+ #include <config.h>
+ 
++#include <climits>
+ #include "Object.h"
+ #include "Array.h"
+ #include "Dict.h"
+--- poppler/SplashOutputDev.cc
++++ poppler/SplashOutputDev.cc
+@@ -54,6 +54,7 @@
+ #include <config.h>
+ 
+ #include <cstring>
++#include <climits>
+ #include <cmath>
+ #include <vector>
+ #include "Stream.h"
