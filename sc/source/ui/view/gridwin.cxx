@@ -955,6 +955,18 @@ void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow) {
     }
 }
 
+void ScGridWindow::SendAutofilterChange() {
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    if (pViewShell)
+    {
+        tools::JsonWriter writer;
+        writer.put("commandName", "AutoFilterChange");
+        writer.put("state", true);
+        OString info = writer.finishAndGetAsOString();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+    }
+}
+
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = mrViewData.CurrentTabForData();
@@ -1328,6 +1340,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         }
     }
 
+    SendAutofilterChange();
     mrViewData.GetView()->Query(aParam, nullptr, true);
     pDBData->SetQueryParam(aParam);
 }
