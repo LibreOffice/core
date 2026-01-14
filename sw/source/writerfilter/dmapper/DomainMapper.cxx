@@ -4884,6 +4884,8 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                         m_pImpl->m_pSdtHelper->createPlainTextControl();
                     else if (!m_pImpl->m_pSdtHelper->isFieldStartRangeSet())
                         m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+                    // MS Word says plainText control containing a field is a corrupt file
+                    m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
                 }
                 m_pImpl->AppendFieldCommand(sText);
             }
