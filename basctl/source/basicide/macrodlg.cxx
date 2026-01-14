@@ -63,7 +63,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     , m_xMacroNameEdit(m_xBuilder->weld_entry(u"macronameedit"_ustr))
     , m_xMacroLibsFrame(m_xBuilder->weld_frame(u"librariesframe"_ustr))
     , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr), m_xDialog.get()))
-    , m_xMacrosInTxt(m_xBuilder->weld_label(u"existingmacrosft"_ustr))
+    , m_xExistingMacrosFrame(m_xBuilder->weld_frame(u"existingmacrosframe"_ustr))
     , m_xMacroBox(m_xBuilder->weld_tree_view(u"macros"_ustr))
     , m_xMacroBoxIter(m_xMacroBox->make_iterator())
     , m_xRunButton(m_xBuilder->weld_button(u"ok"_ustr))
@@ -79,7 +79,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
 
-    m_aMacrosInTxtBaseStr = m_xMacrosInTxt->get_label();
+    m_aMacrosInTxtBaseStr = m_xExistingMacrosFrame->get_label();
 
     m_xRunButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xCloseButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
@@ -495,7 +495,7 @@ IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
     m_xMacroBox->clear();
     if (pModule)
     {
-        m_xMacrosInTxt->set_label(m_aMacrosInTxtBaseStr + " " + pModule->GetName());
+        m_xExistingMacrosFrame->set_label(m_aMacrosInTxtBaseStr + " " + pModule->GetName());
 
         m_xMacroBox->freeze();
 

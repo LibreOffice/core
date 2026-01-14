@@ -111,7 +111,7 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkFrame" id="frame3">
+                  <object class="GtkFrame" id="existingmacrosframe">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -161,7 +161,7 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="existingmacrosft">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="basicmacrodialog|existingmacrosft">Existing Macros In:</property>
