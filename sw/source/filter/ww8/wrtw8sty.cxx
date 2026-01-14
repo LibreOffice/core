@@ -1867,6 +1867,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             }
 
             AttrOutput().OutputStyleItemSet( pPdFormat->GetAttrSet(), false );
+            ClearFlyAttrList(); // so they do not leak into other elements
 
             if (titlePage)
             {
