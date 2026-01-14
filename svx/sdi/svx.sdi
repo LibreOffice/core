@@ -5914,7 +5914,12 @@ SvxULSpaceItem BelowSpacing SID_ATTR_PARA_BELOWSPACE
 
 
 SvxLineItem LineStyle SID_FRAME_LINESTYLE
-(SfxInt16Item LineStyle FN_PARAM_1, SfxInt16Item InnerLineWidth FN_PARAM_2, SfxInt16Item OuterLineWidth FN_PARAM_3, SfxInt16Item LineDistance FN_PARAM_4)
+(
+    SvxLineItem LineStyle SID_FRAME_LINESTYLE,
+    SfxInt16Item InnerLineWidth FN_PARAM_1,
+    SfxInt16Item OuterLineWidth FN_PARAM_2,
+    SfxInt16Item LineDistance FN_PARAM_3
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
