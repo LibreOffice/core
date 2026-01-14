@@ -271,9 +271,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 {
     createSwDoc("tdf77796.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
