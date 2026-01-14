@@ -15,6 +15,13 @@
 #endif
 #include <memory>
 
+#ifdef LINUX
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <limits.h>
+#endif
+
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
@@ -533,6 +540,53 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 #endif
 }
 
+#ifdef LINUX
+
+std::string get_filesystem_type(const char* path)
+{
+    char resolved[PATH_MAX];
+    if (!realpath(path, resolved))
+        return "";
+
+    std::ifstream file("/proc/self/mountinfo");
+    std::string line;
+
+    std::string bestMatch;
+    std::string fsType;
+
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string token;
+
+        // Skip first fields until mount point
+        for (int i = 0; i < 4; ++i)
+            iss >> token;
+
+        std::string mountPoint;
+        iss >> mountPoint;
+
+        // Find separator "-"
+        while (iss >> token && token != "-")
+            ;
+
+        if (!(iss >> token))
+            continue;
+
+        std::string type = token;
+
+        if (std::string(resolved).starts_with(mountPoint) &&
+            mountPoint.length() > bestMatch.length()) {
+            bestMatch = mountPoint;
+            fsType = type;
+        }
+    }
+
+    return fsType;
+}
+
+#endif
+
+
 CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 {
 #ifndef _WIN32
@@ -556,8 +610,18 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     // coverity[fs_check_call] - this is legitimate in the context of this test
     nRet = stat(aOld.getStr(), &buf);
     CPPUNIT_ASSERT_EQUAL(0, nRet);
+
     // This failed: hard link count was 1, the hard link broke on store.
-    CPPUNIT_ASSERT(buf.st_nlink > 1);
+    bool doCheckNlink(true);
+
+#ifdef LINUX
+    // Some file system types are know to have quite non-POSIX semantics.
+    std::string fsType = get_filesystem_type(aOld.getStr());
+    if (fsType == "fuse.prl_fsd")
+        doCheckNlink = false;
+#endif
+
+    CPPUNIT_ASSERT(!doCheckNlink || buf.st_nlink > 1);
 
     // Test that symlinks are preserved as well.
     nRet = remove(aNew.getStr());
