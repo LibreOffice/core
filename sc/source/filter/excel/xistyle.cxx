@@ -1997,8 +1997,14 @@ void XclImpXFRangeBuffer::SetHyperlink( const XclRange& rXclRange, const OUStrin
 
 void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2 )
 {
-    if( (nScCol1 < nScCol2) || (nScRow1 < nScRow2) )
-        maMergeList.push_back( ScRange( nScCol1, nScRow1, 0, nScCol2, nScRow2, 0 ) );
+    if ((nScCol1 < nScCol2) || (nScRow1 < nScRow2))
+    {
+        ScRange aRange(nScCol1, nScRow1, 0, nScCol2, nScRow2, 0);
+        // If merge range intersects with existing merge ranges then discard it.
+        if (maMergeList.Intersects(aRange))
+            return;
+        maMergeList.push_back(aRange);
+    }
 }
 
 void XclImpXFRangeBuffer::Finalize()
