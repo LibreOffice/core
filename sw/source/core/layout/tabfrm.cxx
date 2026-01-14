@@ -4800,7 +4800,7 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
     bool bIsFollow( false );
     if ( pTmp->IsTextFrame() && static_cast<const SwTextFrame*>(pTmp)->IsFollow() )
     {
-        const SwFrame* pMaster;
+        const SwTextFrame* pMaster;
         // #i46450# Master does not necessarily have
         // to exist if this function is called from JoinFrame() ->
         // Cut() -> Shrink()
@@ -4814,6 +4814,11 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
 
         if ( pMaster )
         {
+            while (pMaster->IsFollow())
+            {
+                pMaster = pMaster->FindMaster();
+                assert(pMaster);
+            }
             pObjs = pMaster->GetDrawObjs();
             bIsFollow = true;
         }
