@@ -20,8 +20,17 @@ QtTreeViewModel::QtTreeViewModel(QWidget* pParent)
 
 Qt::ItemFlags QtTreeViewModel::flags(const QModelIndex& rIndex) const
 {
-    // weld::TreeView columns are not editable by default
-    return QSortFilterProxyModel::flags(rIndex) & ~Qt::ItemIsEditable;
+    Qt::ItemFlags eFlags = QSortFilterProxyModel::flags(rIndex);
+
+    if (!m_aEditableColumns.contains(rIndex.column()))
+        eFlags &= ~Qt::ItemIsEditable;
+
+    return eFlags;
+}
+
+void QtTreeViewModel::setEditableColumns(const std::unordered_set<int>& rEditableColumns)
+{
+    m_aEditableColumns = rEditableColumns;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

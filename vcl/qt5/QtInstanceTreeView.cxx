@@ -669,9 +669,16 @@ void QtInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidths
     });
 }
 
-void QtInstanceTreeView::set_column_editables(const std::vector<bool>&)
+void QtInstanceTreeView::set_column_editables(const std::vector<bool>& rEditables)
 {
-    assert(false && "Not implemented yet");
+    std::unordered_set<int> aEditableColumns;
+    for (size_t i = 0; i < rEditables.size(); i++)
+    {
+        if (rEditables.at(i))
+            aEditableColumns.insert(i);
+    }
+
+    m_pModel->setEditableColumns(aEditableColumns);
 }
 
 int QtInstanceTreeView::get_column_width(int nCol) const

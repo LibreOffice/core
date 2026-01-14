@@ -14,15 +14,21 @@
 #include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QWidget>
 
+#include <unordered_set>
+
 /** Item model for QtInstanceTreeView. */
 class QtTreeViewModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
+    std::unordered_set<int> m_aEditableColumns;
+
 public:
     QtTreeViewModel(QWidget* pParent);
 
     virtual Qt::ItemFlags flags(const QModelIndex& rIndex) const override;
+
+    void setEditableColumns(const std::unordered_set<int>& rEditableColumns);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
