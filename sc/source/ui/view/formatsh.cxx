@@ -1092,33 +1092,21 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     // Update default line
                     ::editeng::SvxBorderLine aLine;
-                    const ::editeng::SvxBorderLine* pLine = nullptr;
-                    const SfxInt16Item* lineStyleItem = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+                    const ::editeng::SvxBorderLine* pLine = pNewAttrs->Get(SID_FRAME_LINESTYLE).GetLine();
 
-                    if (lineStyleItem)
+                    const SfxPoolItem *pItem1, *pItem2, *pItem3;
+                    if (pNewAttrs->HasItem(FN_PARAM_1, &pItem1) &&
+                            pNewAttrs->HasItem(FN_PARAM_2, &pItem2) &&
+                            pNewAttrs->HasItem(FN_PARAM_3, &pItem3))
                     {
-                        const SfxInt16Item* InnerLineWidthItem
-                            = rReq.GetArg<SfxInt16Item>(FN_PARAM_2);
-                        const SfxInt16Item* OuterLineWidthItem
-                            = rReq.GetArg<SfxInt16Item>(FN_PARAM_3);
-                        const SfxInt16Item* LineDistanceItem
-                            = rReq.GetArg<SfxInt16Item>(FN_PARAM_4);
-
-                        sal_uInt16 InnerLineWidth, OuterLineWidth, LineDistance;
-                        SvxBorderLineStyle lineStyle
-                            = static_cast<SvxBorderLineStyle>(lineStyleItem->GetValue());
-                        InnerLineWidth = InnerLineWidthItem ? InnerLineWidthItem->GetValue() : 0;
-                        OuterLineWidth = OuterLineWidthItem ? OuterLineWidthItem->GetValue() : 0;
-                        LineDistance = LineDistanceItem ? LineDistanceItem->GetValue() : 0;
+                        sal_uInt16 nInnerLineWidth = static_cast<const SfxUInt16Item*>(pItem1)->GetValue();
+                        sal_uInt16 nOuterLineWidth = static_cast<const SfxUInt16Item*>(pItem2)->GetValue();
+                        sal_uInt16 nLineDistanceItem = static_cast<const SfxUInt16Item*>(pItem3)->GetValue();
 
                         aLine.GuessLinesWidths(
-                            lineStyle, InnerLineWidth, OuterLineWidth, LineDistance);
+                            pLine->GetBorderLineStyle(), nInnerLineWidth, nOuterLineWidth, nLineDistanceItem);
 
                         pLine = &aLine;
-                    }
-                    else
-                    {
-                        pLine = pNewAttrs->Get(SID_FRAME_LINESTYLE).GetLine();
                     }
 
                     if ( pLine )
