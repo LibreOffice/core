@@ -48,6 +48,7 @@
 #include <memory>
 
 #if defined _WIN32
+#include <tools/mapunit.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/outdev.hxx>
 #endif
