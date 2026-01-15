@@ -2647,6 +2647,44 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
         CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
     }
+
+    // Scenario 4
+    // View1 - enters text edit mode in a shape on page A
+    // View2 - enters text edit mode in a shape on page B
+    // there is a view switch from B to A and back to B.
+    // View2 should remain in shape edit mode and not exit
+    // shape edit mode on switching back to view2
+    {
+        CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // Switch to view 1
+        SfxLokHelper::setView(nView1);
+        pView1->SdrBeginTextEdit(pTextBoxObject);
+
+        SfxLokHelper::setView(nView2);
+        pXImpressDocument->setPart(2);
+        SdPage* pPage3 = pViewShell2->GetActualPage();
+
+        CPPUNIT_ASSERT_MESSAGE("Page Change didn't work", pPage1 != pPage3);
+
+        SdrObject* pPage3TextBoxObject = pPage3->GetObj(0);
+        CPPUNIT_ASSERT_EQUAL(u"Text Box 1"_ustr, pPage3TextBoxObject->GetName());
+
+        pView2->SdrBeginTextEdit(pPage3TextBoxObject);
+        CPPUNIT_ASSERT_EQUAL(true, pView2->IsTextEdit());
+
+        SfxLokHelper::setView(nView1);
+        pXImpressDocument->setPart(0);
+
+        CPPUNIT_ASSERT_EQUAL(true, pView2->IsTextEdit());
+
+        SfxLokHelper::setView(nView2);
+        pXImpressDocument->setPart(2);
+
+        // Fails before fix
+        CPPUNIT_ASSERT_EQUAL(true, pView2->IsTextEdit());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
