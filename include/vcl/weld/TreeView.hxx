@@ -37,7 +37,7 @@ public:
     typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
         render_args;
 
-protected:
+private:
     Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
@@ -50,6 +50,8 @@ protected:
     Link<const TreeIter&, bool> m_aCollapsingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
+
+protected:
     // if handler returns true, drag is disallowed, consumer can change bool
     // arg to false to disable the treeview default dnd icon
     Link<bool&, bool> m_aDragBeginHdl;
