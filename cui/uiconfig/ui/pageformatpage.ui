@@ -220,6 +220,11 @@
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="drawingareaPageDirection-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="pageformatpage|drawingareaPageDirection-atkobject">Page Direction</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
