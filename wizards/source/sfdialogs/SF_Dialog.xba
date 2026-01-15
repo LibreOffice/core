@@ -573,7 +573,7 @@ Check:
 Try:
 	&apos;	A dynamic dialog has no stable view before it is made visible =&gt; The top-left coordinate cannot be computed
 	If _BuiltFromScratch And Not _DialogControl.IsVisible() Then _DialogControl.setVisible(True)
-	&apos;	The nosition is computed in pixels
+	&apos;	The position is computed in pixels
 	Set oPosSize = _DialogControl.getPosSize()
 	With oPosSize
 		_DialogControl.setPosSize( _
