@@ -31,6 +31,9 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <unordered_map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -63,39 +66,31 @@ enum FormulaCommand
     FC_VAL
 };
 
-struct FormulaCommandNameTable
-{
-    const char*     pS;
-    FormulaCommand pE;
-};
-
 }
 
-const FormulaCommandNameTable pFormulaCommandNameTable[] =
+constexpr auto aCommandHashMap = frozen::make_unordered_map<std::u16string_view, FormulaCommand>(
 {
-    { "*/",     FC_MULDIV },
-    { "+-",     FC_PLUSMINUS },
-    { "+/",     FC_PLUSDIV },
-    { "ifelse", FC_IFELSE },
-    { "?:",     FC_IFELSE1 },
-    { "abs",    FC_ABS },
-    { "at2",    FC_AT2 },
-    { "cat2",   FC_CAT2 },
-    { "cos",    FC_COS },
-    { "max",    FC_MAX },
-    { "min",    FC_MIN },
-    { "mod",    FC_MOD },
-    { "pin",    FC_PIN },
-    { "sat2",   FC_SAT2 },
-    { "sin",    FC_SIN },
-    { "sqrt",   FC_SQRT },
-    { "tan",    FC_TAN },
-    { "val",    FC_VAL }
+    { u"*/",     FC_MULDIV },
+    { u"+-",     FC_PLUSMINUS },
+    { u"+/",     FC_PLUSDIV },
+    { u"ifelse", FC_IFELSE },
+    { u"?:",     FC_IFELSE1 },
+    { u"abs",    FC_ABS },
+    { u"at2",    FC_AT2 },
+    { u"cat2",   FC_CAT2 },
+    { u"cos",    FC_COS },
+    { u"max",    FC_MAX },
+    { u"min",    FC_MIN },
+    { u"mod",    FC_MOD },
+    { u"pin",    FC_PIN },
+    { u"sat2",   FC_SAT2 },
+    { u"sin",    FC_SIN },
+    { u"sqrt",   FC_SQRT },
+    { u"tan",    FC_TAN },
+    { u"val",    FC_VAL }
+});
 
-};
-typedef std::unordered_map< OUString, FormulaCommand > FormulaCommandHMap;
 
-static const FormulaCommandHMap* pCommandHashMap;
 
 static OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
 {
@@ -459,14 +454,6 @@ GeomGuideListContext::GeomGuideListContext( ContextHandler2Helper const & rParen
 
 static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperties, std::u16string_view rSource )
 {
-    if ( !pCommandHashMap )
-    {
-        FormulaCommandHMap* pHM = new FormulaCommandHMap;
-        for(const FormulaCommandNameTable& i : pFormulaCommandNameTable)
-            (*pHM)[ OUString::createFromAscii( i.pS ) ] =  i.pE;
-        pCommandHashMap = pHM;
-    }
-
     std::vector< OUString > aTokens;
     sal_Int32 nIndex = 0;
     do
@@ -489,8 +476,8 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
     for ( sal_Int32 i = 0; i < nParameters; i++ )
         sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], false ) );
 
-    const FormulaCommandHMap::const_iterator aIter( pCommandHashMap->find( aTokens[ 0 ] ) );
-    if ( aIter == pCommandHashMap->end() )
+    const auto aIter( aCommandHashMap.find( aTokens[ 0 ] ) );
+    if ( aIter == aCommandHashMap.end() )
         return OUString();
 
     OUString aEquation;
