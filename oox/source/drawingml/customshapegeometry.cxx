@@ -477,148 +477,148 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
     }
     while ( nIndex >= 0 );
 
+    if ( aTokens.empty() )
+        return OUString();
+
+    sal_Int32 nParameters = aTokens.size() - 1;
+    if ( nParameters > 3 )
+        nParameters = 3;
+
+    OUString sParameters[ 3 ];
+
+    for ( sal_Int32 i = 0; i < nParameters; i++ )
+        sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], false ) );
+
+    const FormulaCommandHMap::const_iterator aIter( pCommandHashMap->find( aTokens[ 0 ] ) );
+    if ( aIter == pCommandHashMap->end() )
+        return OUString();
+
     OUString aEquation;
-    if ( !aTokens.empty() )
+    switch( aIter->second )
     {
-        sal_Int32 i, nParameters = aTokens.size() - 1;
-        if ( nParameters > 3 )
-            nParameters = 3;
-
-        OUString sParameters[ 3 ];
-
-        for ( i = 0; i < nParameters; i++ )
-            sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], false ) );
-
-        const FormulaCommandHMap::const_iterator aIter( pCommandHashMap->find( aTokens[ 0 ] ) );
-        if ( aIter != pCommandHashMap->end() )
+        case FC_MULDIV :
         {
-            switch( aIter->second )
-            {
-                case FC_MULDIV :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + "*" + sParameters[ 1 ]
-                            + "/" + sParameters[ 2 ];
-                }
-                break;
-                case FC_PLUSMINUS :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + "+" + sParameters[ 1 ]
-                            + "-" + sParameters[ 2 ];
-                }
-                break;
-                case FC_PLUSDIV :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = "(" + sParameters[ 0 ] + "+"
-                            + sParameters[ 1 ] + ")/" + sParameters[ 2 ];
-                }
-                break;
-                case FC_IFELSE :
-                case FC_IFELSE1 :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = "if(" + sParameters[ 0 ] + ","
-                            + sParameters[ 1 ] + "," + sParameters[ 2 ] + ")";
-                }
-                break;
-                case FC_ABS :
-                {
-                    if ( nParameters == 1 )
-                        aEquation = "abs(" + sParameters[ 0 ] + ")";
-                }
-                break;
-                case FC_AT2 :
-                {
-                    if ( nParameters == 2 )
-                        aEquation = "(10800000*atan2(" + sParameters[ 1 ] + ","
-                        + sParameters[ 0 ] + "))/pi";
-                }
-                break;
-                case FC_CAT2 :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + "*(cos(atan2(" +
-                            sParameters[ 2 ] + "," + sParameters[ 1 ] + ")))";
-                }
-                break;
-                case FC_COS :
-                {
-                    if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + "*cos(pi*(" +
-                        sParameters[ 1 ] + ")/10800000)";
-                }
-                break;
-                case FC_MAX :
-                {
-                    if ( nParameters == 2 )
-                        aEquation = "max(" + sParameters[ 0 ] + "," +
-                            sParameters[ 1 ] + ")";
-                }
-                break;
-                case FC_MIN :
-                {
-                    if ( nParameters == 2 )
-                        aEquation = "min(" + sParameters[ 0 ] + "," +
-                            sParameters[ 1 ] + ")";
-                }
-                break;
-                case FC_MOD :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = "sqrt("
-                            + sParameters[ 0 ] + "*" + sParameters[ 0 ] + "+"
-                            + sParameters[ 1 ] + "*" + sParameters[ 1 ] + "+"
-                            + sParameters[ 2 ] + "*" + sParameters[ 2 ] + ")";
-                }
-                break;
-                case FC_PIN :
-                {
-                    if ( nParameters == 3 ) // if(x-y,x,if(y-z,z,y))
-                        aEquation = "if(" + sParameters[ 0 ] + "-" + sParameters[ 1 ]
-                            + "," + sParameters[ 0 ] + ",if(" + sParameters[ 2 ]
-                            + "-" + sParameters[ 1 ] + "," + sParameters[ 1 ]
-                            + "," + sParameters[ 2 ] + "))";
-                }
-                break;
-                case FC_SAT2 :
-                {
-                    if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + "*(sin(atan2(" +
-                            sParameters[ 2 ] + "," + sParameters[ 1 ] + ")))";
-                }
-                break;
-                case FC_SIN :
-                {
-                    if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + "*sin(pi*(" +
-                        sParameters[ 1 ] + ")/10800000)";
-                }
-                break;
-                case FC_SQRT :
-                {
-                    if ( nParameters == 1 )
-                        aEquation = "sqrt(" + sParameters[ 0 ] + ")";
-                }
-                break;
-                case FC_TAN :
-                {
-                    if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + "*tan(pi*(" +
-                        sParameters[ 1 ] + ")/10800000)";
-                }
-                break;
-                case FC_VAL :
-                {
-                    if ( nParameters == 1 )
-                        aEquation = sParameters[ 0 ];
-                }
-                break;
-                default :
-                    break;
-            }
+            if ( nParameters == 3 )
+                aEquation = sParameters[ 0 ] + "*" + sParameters[ 1 ]
+                    + "/" + sParameters[ 2 ];
         }
+        break;
+        case FC_PLUSMINUS :
+        {
+            if ( nParameters == 3 )
+                aEquation = sParameters[ 0 ] + "+" + sParameters[ 1 ]
+                    + "-" + sParameters[ 2 ];
+        }
+        break;
+        case FC_PLUSDIV :
+        {
+            if ( nParameters == 3 )
+                aEquation = "(" + sParameters[ 0 ] + "+"
+                    + sParameters[ 1 ] + ")/" + sParameters[ 2 ];
+        }
+        break;
+        case FC_IFELSE :
+        case FC_IFELSE1 :
+        {
+            if ( nParameters == 3 )
+                aEquation = "if(" + sParameters[ 0 ] + ","
+                    + sParameters[ 1 ] + "," + sParameters[ 2 ] + ")";
+        }
+        break;
+        case FC_ABS :
+        {
+            if ( nParameters == 1 )
+                aEquation = "abs(" + sParameters[ 0 ] + ")";
+        }
+        break;
+        case FC_AT2 :
+        {
+            if ( nParameters == 2 )
+                aEquation = "(10800000*atan2(" + sParameters[ 1 ] + ","
+                + sParameters[ 0 ] + "))/pi";
+        }
+        break;
+        case FC_CAT2 :
+        {
+            if ( nParameters == 3 )
+                aEquation = sParameters[ 0 ] + "*(cos(atan2(" +
+                    sParameters[ 2 ] + "," + sParameters[ 1 ] + ")))";
+        }
+        break;
+        case FC_COS :
+        {
+            if ( nParameters == 2 )
+                aEquation = sParameters[ 0 ] + "*cos(pi*(" +
+                sParameters[ 1 ] + ")/10800000)";
+        }
+        break;
+        case FC_MAX :
+        {
+            if ( nParameters == 2 )
+                aEquation = "max(" + sParameters[ 0 ] + "," +
+                    sParameters[ 1 ] + ")";
+        }
+        break;
+        case FC_MIN :
+        {
+            if ( nParameters == 2 )
+                aEquation = "min(" + sParameters[ 0 ] + "," +
+                    sParameters[ 1 ] + ")";
+        }
+        break;
+        case FC_MOD :
+        {
+            if ( nParameters == 3 )
+                aEquation = "sqrt("
+                    + sParameters[ 0 ] + "*" + sParameters[ 0 ] + "+"
+                    + sParameters[ 1 ] + "*" + sParameters[ 1 ] + "+"
+                    + sParameters[ 2 ] + "*" + sParameters[ 2 ] + ")";
+        }
+        break;
+        case FC_PIN :
+        {
+            if ( nParameters == 3 ) // if(x-y,x,if(y-z,z,y))
+                aEquation = "if(" + sParameters[ 0 ] + "-" + sParameters[ 1 ]
+                    + "," + sParameters[ 0 ] + ",if(" + sParameters[ 2 ]
+                    + "-" + sParameters[ 1 ] + "," + sParameters[ 1 ]
+                    + "," + sParameters[ 2 ] + "))";
+        }
+        break;
+        case FC_SAT2 :
+        {
+            if ( nParameters == 3 )
+                aEquation = sParameters[ 0 ] + "*(sin(atan2(" +
+                    sParameters[ 2 ] + "," + sParameters[ 1 ] + ")))";
+        }
+        break;
+        case FC_SIN :
+        {
+            if ( nParameters == 2 )
+                aEquation = sParameters[ 0 ] + "*sin(pi*(" +
+                sParameters[ 1 ] + ")/10800000)";
+        }
+        break;
+        case FC_SQRT :
+        {
+            if ( nParameters == 1 )
+                aEquation = "sqrt(" + sParameters[ 0 ] + ")";
+        }
+        break;
+        case FC_TAN :
+        {
+            if ( nParameters == 2 )
+                aEquation = sParameters[ 0 ] + "*tan(pi*(" +
+                sParameters[ 1 ] + ")/10800000)";
+        }
+        break;
+        case FC_VAL :
+        {
+            if ( nParameters == 1 )
+                aEquation = sParameters[ 0 ];
+        }
+        break;
+        default :
+            break;
     }
     return aEquation;
 }
