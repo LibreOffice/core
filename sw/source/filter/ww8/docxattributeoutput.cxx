@@ -2267,6 +2267,9 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(std::u16string_view bookmarkN
                     : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8));
     if (!bNoDate)
         pAttributeList->add(FSNS(XML_w, XML_date ), DateTimeToOString( aDateTime ));
+    else
+        // w:data is a required attribute, so just use a placeholder date
+        pAttributeList->add(FSNS(XML_w, XML_date ), "1970-01-01T00:00:00Z");
     pAttributeList->add(FSNS(XML_w, XML_name), bookmarkName);
     m_pSerializer->singleElementNS( XML_w, bFrom ? XML_moveFromRangeStart : XML_moveToRangeStart, pAttributeList );
 
