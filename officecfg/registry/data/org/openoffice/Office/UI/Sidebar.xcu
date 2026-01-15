@@ -2100,6 +2100,12 @@
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Colors</value>
         </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>ChartColorsPanel</value>
         </prop>

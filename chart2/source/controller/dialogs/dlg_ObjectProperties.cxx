@@ -21,6 +21,8 @@
 
 #include <cstddef>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <dlg_ObjectProperties.hxx>
 #include "tp_AxisLabel.hxx"
 #include "tp_DataLabel.hxx"
@@ -369,8 +371,9 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                        RID_M + RID_TAB_AREA.sIconName);
             AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel), RID_SVXPAGE_TRANSPARENCE,
                        RID_M + RID_TAB_TRANSPARENCE.sIconName);
-            AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
-                       RID_M + RID_TAB_COLORPALETTE.sIconName);
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
+                           RID_M + RID_TAB_COLORPALETTE.sIconName);
             AddTabPage(u"gradients"_ustr, TabResId(RID_TAB_GRADIENT_PRESETS.aLabel), ChartGradientsTabPage::Create,
                        RID_M + RID_TAB_GRADIENT_PRESETS.sIconName);
             AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
@@ -413,8 +416,9 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                 AddTabPage(u"border"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
                            RID_M + RID_TAB_LINE.sIconName);
 
-            AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
-                       RID_M + RID_TAB_COLORPALETTE.sIconName);
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
+                           RID_M + RID_TAB_COLORPALETTE.sIconName);
             AddTabPage(u"gradients"_ustr, TabResId(RID_TAB_GRADIENT_PRESETS.aLabel), ChartGradientsTabPage::Create,
                        RID_M + RID_TAB_GRADIENT_PRESETS.sIconName);
             break;
@@ -508,8 +512,9 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                        RID_M + RID_TAB_TRANSPARENCE.sIconName);
             if (eType != OBJECTTYPE_DATA_STOCK_LOSS && eType != OBJECTTYPE_DATA_STOCK_GAIN)
             {
-                AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
-                           RID_M + RID_TAB_COLORPALETTE.sIconName);
+                if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                    AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
+                               RID_M + RID_TAB_COLORPALETTE.sIconName);
                 AddTabPage(u"gradients"_ustr, TabResId(RID_TAB_GRADIENT_PRESETS.aLabel), ChartGradientsTabPage::Create,
                            RID_M + RID_TAB_GRADIENT_PRESETS.sIconName);
             }
@@ -699,10 +704,13 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
     }
     else if (rId == "colorpalette")
     {
-        auto* pColorPaletteTabPage = dynamic_cast<ChartColorPaletteTabPage*>( &rPage );
-        if (pColorPaletteTabPage)
+        if (officecfg::Office::Common::Misc::ExperimentalMode::get())
         {
-            pColorPaletteTabPage->init(m_rParameter.getDocument());
+            auto* pColorPaletteTabPage = dynamic_cast<ChartColorPaletteTabPage*>( &rPage );
+            if (pColorPaletteTabPage)
+            {
+                pColorPaletteTabPage->init(m_rParameter.getDocument());
+            }
         }
     }
     else if (rId == "gradients")
