@@ -111,7 +111,10 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
                  && officecfg::Office::Common::Misc::ExperimentalMode::get())
             xPanel = ChartThemePanel::Create(pParent, xFrame, pController);
         else if (rsResourceURL.endsWith("/GradientsPanel"))
-            xPanel = ChartGradientsPanel::Create(pParent, xFrame, pController);
+        {
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                xPanel = ChartGradientsPanel::Create(pParent, xFrame, pController);
+        }
 
         if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
