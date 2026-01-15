@@ -709,6 +709,11 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                              rPor.GetNextPortion()->InFixMargGrp() ||
                              rPor.GetNextPortion()->IsHolePortion() );
 
+    if (m_bOmitPaint)
+    {
+        aDrawInf.SetOmitPaint(m_bOmitPaint);
+    }
+
     // Draw text next to the left border
     Point aFontPos(m_aPos);
     if( m_pFnt->GetLeftBorder() && rPor.InTextGrp() && !static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithPrev() )

@@ -366,6 +366,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
     SwRect      m_aPaintRect; // Original paint rect (from Layout paint)
 
     sal_uInt16 m_nSpaceIdx;
+    bool m_bOmitPaint = false;
     void DrawText_(const OUString &rText, const SwLinePortion &rPor,
                    const TextFrameIndex nIdx, const TextFrameIndex nLen,
                    const bool bKern, const bool bWrong = false,
@@ -482,6 +483,7 @@ public:
 
     void SetSmartTags(sw::WrongListIterator *const pNew) { m_pSmartTags = pNew; }
     sw::WrongListIterator* GetSmartTags() const { return m_pSmartTags; }
+    void SetOmitPaint(bool bOmitPaint) { m_bOmitPaint = bOmitPaint; }
 };
 
 class SwTextFormatInfo : public SwTextPaintInfo
