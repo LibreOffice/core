@@ -3980,6 +3980,7 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_bHasFtr(false)
     , m_bSubstituteBullets(true)
     , m_bTabInTOC(false)
+    , m_bSuppressBidi(false)
     , m_bHideTabLeaderAndPageNumbers(false)
     , m_bExportModeRTF(false)
     , m_bFontSizeWritten(false)

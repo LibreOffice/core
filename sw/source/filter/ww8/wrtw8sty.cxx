@@ -1763,14 +1763,17 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             const SfxItemSet* pOldI = m_pISet;
             m_pISet = &aSet;
 
+            const bool bBiDi = SvxFrameDirection::Horizontal_RL_TB == TrueFrameDirection( *rSepInfo.pSectionFormat );
+            m_bSuppressBidi = bBiDi; // prevent duplicate <w:bidi/> elements
             // Switch off test on default item values, if page description
             // set (value of <bOutPgDscSet>) isn't written.
             AttrOutput().OutputStyleItemSet( aSet, bOutPgDscSet );
             bOutputStyleItemSet = true;
+            m_bSuppressBidi = false;
 
             //Cannot export as normal page framedir, as continuous sections
             //cannot contain any grid settings like proper sections
-            AttrOutput().SectionBiDi( SvxFrameDirection::Horizontal_RL_TB == TrueFrameDirection( *rSepInfo.pSectionFormat ) );
+            AttrOutput().SectionBiDi( bBiDi );
 
             m_pISet = pOldI;
         }
