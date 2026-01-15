@@ -1292,7 +1292,10 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
     {
         DocxTableExportContext aTableExportContext(*this);
         m_aFramePr.SetFrame(pFrame.get(), !m_xTableWrt ? -1 : m_tableReference.m_nTableDepth);
+        const bool bOldStartedSdt = m_aParagraphSdt.m_bStartedSdt;
         m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
+        if (!bOldStartedSdt && m_aParagraphSdt.m_bStartedSdt)
+            m_aParagraphSdt.EndSdtBlock(m_pSerializer);
         m_aFramePr.SetFrame(nullptr);
     }
 
