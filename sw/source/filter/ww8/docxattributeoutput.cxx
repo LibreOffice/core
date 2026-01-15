@@ -10447,7 +10447,7 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     if ( m_rExport.m_bOutPageDescs )
     {
         m_pSerializer->singleElementNS(XML_w, XML_textDirection, FSNS(XML_w, XML_val), sTextFlow);
-        if ( bBiDi )
+        if ( bBiDi && !m_rExport.m_bSuppressBidi )
             m_pSerializer->singleElementNS(XML_w, XML_bidi);
     }
     else if ( !m_rExport.m_bOutFlyFrameAttrs )
