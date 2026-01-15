@@ -370,6 +370,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
 
     sal_uInt16 m_nSpaceIdx;
     SwLineInfo const* m_pLineInfo{nullptr}; // hack: need this to get line props
+    bool m_bOmitPaint = false;
 
     void DrawText_(const OUString &rText, const SwLinePortion &rPor,
                    const TextFrameIndex nIdx, const TextFrameIndex nLen,
@@ -494,6 +495,7 @@ public:
     void SetSmartTags(sw::WrongListIterator *const pNew) { m_pSmartTags = pNew; }
     sw::WrongListIterator* GetSmartTags() const { return m_pSmartTags; }
     void SetLineInfo(SwLineInfo const*const pLineInfo) { m_pLineInfo = pLineInfo; }
+    void SetOmitPaint(bool bOmitPaint) { m_bOmitPaint = bOmitPaint; }
 };
 
 class SwTextFormatInfo : public SwTextPaintInfo

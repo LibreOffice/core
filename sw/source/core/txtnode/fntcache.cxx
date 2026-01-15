@@ -1048,6 +1048,25 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     Color aOldColor( pTmpFont->GetColor() );
     bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
+
+    if (rInf.GetOmitPaint())
+    {
+        Color aColor = pTmpFont->GetColor();
+        sal_uInt16 nHue;
+        sal_uInt16 nSaturation;
+        sal_uInt16 nBrightness;
+        aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
+        // 50% lightness: balance between completely omitting the paint and hard-to-notice small
+        // difference.
+        nBrightness = 50;
+        aColor = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
+        if (aColor != pTmpFont->GetColor())
+        {
+            bChgColor = true;
+            pTmpFont->SetColor(aColor);
+        }
+    }
+
     if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
         rInf.GetOut().SetFont( *pTmpFont );
     if ( bChgColor )

@@ -91,6 +91,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     // GetModelPositionForViewPoint should not return the next position if screen position is
     // inside second half of bound rect, used for Accessibility
     bool m_bPosMatchesBounds : 1 = false;
+    bool m_bOmitPaint = false;
 
 #ifdef DBG_UTIL
     // These flags should control that the appropriate Set-function has been
@@ -658,6 +659,9 @@ public:
     // as argument, the change if made to the font otherwise the font at the
     // output device is changed returns if the font has been changed
     bool ApplyAutoColor( vcl::Font* pFnt = nullptr );
+
+    void SetOmitPaint(bool bOmitPaint) { m_bOmitPaint = bOmitPaint; }
+    bool GetOmitPaint() const { return m_bOmitPaint; }
 };
 
 #endif
