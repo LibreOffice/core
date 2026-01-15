@@ -852,6 +852,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem (SID_RENAME_MASTER_PAGE);
         rSet.DisableItem (SID_CLOSE_MASTER_VIEW);
 
+        // tdf#112327 - disable master layouts in page view
+        rSet.DisableItem(SID_MASTER_LAYOUTS);
+
         if (mpActualPage->IsCanvasPage())
         {
             rSet.DisableItem(SID_INSERTPAGE);
