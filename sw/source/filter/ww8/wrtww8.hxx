@@ -570,6 +570,7 @@ public:
     bool m_bHasFtr : 1;
     bool m_bSubstituteBullets : 1; // true: SubstituteBullet() gets called
     bool m_bTabInTOC : 1; //true for TOC field flag 'w'
+    bool m_bSuppressBidi : 1; // prevent duplicate bidi elements
 
     bool m_bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
     bool m_bExportModeRTF;
