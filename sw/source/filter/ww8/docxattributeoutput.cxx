@@ -7103,6 +7103,8 @@ void DocxAttributeOutput::PageBreakBefore( bool bBreak )
 
 void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo, bool bExtraPageBreak)
 {
+    if (m_bWritingHeaderFooter && m_bOpenedParaPr)
+        return; // do not put a run inside <w:hdr>..<w:p>..<w:pPr>
     switch ( nC )
     {
         case msword::ColumnBreak:
