@@ -11,6 +11,7 @@
 
 #include <tools/stream.hxx>
 
+#include <bitmap/BitmapDuoToneFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/bitmap/BitmapArithmeticBlendFilter.hxx>
@@ -52,6 +53,8 @@ public:
     void testLightenBlendFilter();
     void testScreenBlendFilter();
     void testArithmeticBlendFilter();
+    void testDuoToneFilter_24_BPP();
+    void testDuoToneFilter_32_BPP();
 
     CPPUNIT_TEST_SUITE(BitmapFilterTest);
     CPPUNIT_TEST(testClampAlpha);
@@ -65,6 +68,8 @@ public:
     CPPUNIT_TEST(testLightenBlendFilter);
     CPPUNIT_TEST(testScreenBlendFilter);
     CPPUNIT_TEST(testArithmeticBlendFilter);
+    CPPUNIT_TEST(testDuoToneFilter_24_BPP);
+    CPPUNIT_TEST(testDuoToneFilter_32_BPP);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -779,6 +784,245 @@ void BitmapFilterTest::testArithmeticBlendFilter()
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0xFF, 0xFF),
                              aResBitmap.GetPixelColor(0, 0));
+    }
+}
+
+void BitmapFilterTest::testDuoToneFilter_24_BPP()
+{
+    Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aRedBitmap);
+        aWriteAccess->Erase(COL_LIGHTRED);
+    }
+
+    Bitmap aTransparentBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aTransparentBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aTransparentBitmap);
+        aWriteAccess->Erase(COL_AUTO);
+    }
+
+    // same color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x7F, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x00, 0x7F, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    // different color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x25, 0x5A, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x5A, 0x25, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xA5, 0x4B, 0x4B),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xD9, 0xB4, 0xB4),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    // same color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x80, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x00, 0x80, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    // different color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x80, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x00, 0x80, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x80, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+}
+
+void BitmapFilterTest::testDuoToneFilter_32_BPP()
+{
+    Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aRedBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aRedBitmap);
+        aWriteAccess->Erase(COL_LIGHTRED);
+    }
+
+    Bitmap aTransparentBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aTransparentBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aTransparentBitmap);
+        aWriteAccess->Erase(COL_AUTO);
+    }
+    CPPUNIT_ASSERT(aTransparentBitmap.GetPixelColor(2, 2).IsTransparent());
+
+    // same color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x7F, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x00, 0x7F, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    // different color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x25, 0x5A, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x5A, 0x25, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xA5, 0x4B, 0x4B),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xD9, 0xB4, 0xB4),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    // same color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    // different color
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_GREEN, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_GREEN);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_RED, COL_AUTO);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapDuoToneFilter* pDuoToneFilter = new BitmapDuoToneFilter(COL_AUTO, COL_RED);
+        Bitmap aResBitmap = pDuoToneFilter->execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
     }
 }
 
