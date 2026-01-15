@@ -111,9 +111,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
     createSwDoc("tdf121374_sectionHF.odt");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, u"FooterText"_ustr);
