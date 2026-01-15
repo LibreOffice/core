@@ -173,6 +173,11 @@
               <object class="GtkDrawingArea" id="drawingareaWIN_TABLEFT">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="drawingareaWIN_TABLEFT-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="paratabspage|drawingareaWIN_TABLEFT-atkobject">Left tab preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -183,6 +188,11 @@
               <object class="GtkDrawingArea" id="drawingareaWIN_TABRIGHT">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="drawingareaWIN_TABRIGHT-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="paratabspage|drawingareaWIN_TABRIGHT-atkobject">Right tab preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -193,6 +203,11 @@
               <object class="GtkDrawingArea" id="drawingareaWIN_TABCENTER">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="drawingareaWIN_TABCENTER-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="paratabspage|drawingareaWIN_TABCENTER-atkobject">Center tab preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -203,6 +218,11 @@
               <object class="GtkDrawingArea" id="drawingareaWIN_TABDECIMAL">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="drawingareaWIN_TABDECIMAL-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="paratabspage|drawingareaWIN_TABDECIMAL-atkobject">Decimal tab preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>

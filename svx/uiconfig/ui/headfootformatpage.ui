@@ -372,6 +372,11 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="drawingareaPageHF-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="headfootformatpage|drawingareaPageHF-atkobject">Header and Footer Preview</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
