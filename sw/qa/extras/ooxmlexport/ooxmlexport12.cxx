@@ -1209,9 +1209,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     // check moveFrom and moveTo
     CPPUNIT_ASSERT_EQUAL(u"Will this sentence be duplicated?"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, getRun(getParagraph(1), 1)->getString());
@@ -1250,9 +1247,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145720)
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
     createSwDoc("tdf104797.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 0 (missing move*FromRange* elements)
@@ -1269,10 +1263,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145720)
     // mandatory authors and dates
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeStart", "author", u"Tekijä");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeStart", "author", u"Tekijä");
-    // no date (anonymized change)
-    // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeStart", "date");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeStart", "date");
+    // anonymized date
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeStart", "date",
+                u"1970-01-01T00:00:00Z");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeStart", "date",
+                u"1970-01-01T00:00:00Z");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150166)
