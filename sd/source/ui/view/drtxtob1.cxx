@@ -707,7 +707,7 @@ SET_ADJUST:
             {
                 bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
-                SvxAdjust nAdjust = SvxAdjust::Left;
+                SvxAdjust nAdjust = SvxAdjust::ParaStart;
                 if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST) )
                     nAdjust = pAdjustItem->GetAdjust();
 

@@ -292,14 +292,6 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         m_xDoc->getIDocumentSettingAccess().set( DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND, true);
     }
 
-    /* #106748# If the default frame direction of a document is RTL
-        the default adjustment is to the right. */
-    if( !bHTMLTemplSet &&
-        SvxFrameDirection::Horizontal_RL_TB == GetDefaultFrameDirection(GetAppLanguage()) )
-    {
-        m_xDoc->SetDefault( SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST ) );
-    }
-
 // #i29550#
     m_xDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, true ) );
 // <-- collapsing

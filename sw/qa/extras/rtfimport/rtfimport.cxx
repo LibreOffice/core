@@ -784,8 +784,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo67365)
                              xRows->getByIndex(2), u"TableColumnSeparators"_ustr)[0]
                              .Position);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
-    // Paragraph was aligned to center, should be left.
-    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
+    // Paragraph was aligned to center, should be start.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_START,
                          static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(
                              getParagraphOfText(1, xCell->getText()), u"ParaAdjust"_ustr)));
 }

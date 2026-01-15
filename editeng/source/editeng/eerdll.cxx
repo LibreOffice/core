@@ -115,7 +115,7 @@ ItemInfoPackage& getItemInfoPackageEditEngine()
             { EE_PARA_LRSPACE, new SvxLRSpaceItem( EE_PARA_LRSPACE ), SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_ULSPACE, new SvxULSpaceItem( EE_PARA_ULSPACE ), SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_SBL, new SvxLineSpacingItem( 0, EE_PARA_SBL ), SID_ATTR_PARA_LINESPACE, SFX_ITEMINFOFLAG_NONE  },
-            { EE_PARA_JUST, new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ), SID_ATTR_PARA_ADJUST, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_JUST, new SvxAdjustItem( SvxAdjust::ParaStart, EE_PARA_JUST ), SID_ATTR_PARA_ADJUST, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_TABS, new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS ), SID_ATTR_TABSTOP, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_JUST_METHOD, new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD ), SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEMINFOFLAG_NONE  },
             { EE_PARA_VER_JUST, new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST ), SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEMINFOFLAG_NONE  },

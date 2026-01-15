@@ -425,6 +425,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testExtrudedShapeSelection)
     CPPUNIT_ASSERT(xSelections.is());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf169035ParaStartDefault)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(short(5),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"ParaAdjust"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

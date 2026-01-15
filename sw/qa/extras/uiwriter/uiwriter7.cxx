@@ -162,8 +162,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     sal_uInt16 initialCount = pNewSet->Count();
     SvxAdjustItem AdjustItem = rAttrSet.GetAdjust();
     SvxAdjust initialAdjust = AdjustItem.GetAdjust();
-    //By default the adjust is LEFT
-    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, initialAdjust);
+    //By default the adjust is START
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::ParaStart, initialAdjust);
     //Changing the adjust to RIGHT
     AdjustItem.SetAdjust(SvxAdjust::Right);
     //Checking whether the change is made or not
@@ -189,8 +189,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
-    //The adjust should be back to default, LEFT
-    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust3);
+    //The adjust should be back to default, START
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::ParaStart, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
     SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
@@ -205,8 +205,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
-    //The adjust should be back to default, LEFT
-    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust5);
+    //The adjust should be back to default, START
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::ParaStart, Adjust5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)

@@ -2597,10 +2597,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
     createSwDoc("tdf105413.fodt");
     SwDoc* pDoc = getSwDoc();
 
-    // all paragraphs are left-aligned with preset single line spacing
+    // all paragraphs are start-aligned with preset single line spacing
     for (int i = 1; i < 4; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
                              getProperty<sal_Int32>(getParagraph(i), u"ParaAdjust"_ustr));
         dispatchCommand(mxComponent, u".uno:SpacePara1"_ustr, {});
     }
@@ -2629,7 +2629,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
                          getProperty<style::LineSpacing>(getParagraph(3), u"ParaLineSpacing"_ustr)
                              .Height); // double line spacing
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // left-aligned
+        sal_Int32(5), getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // left-aligned
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
                          getProperty<style::LineSpacing>(getParagraph(2), u"ParaLineSpacing"_ustr)
                              .Height); // single line spacing

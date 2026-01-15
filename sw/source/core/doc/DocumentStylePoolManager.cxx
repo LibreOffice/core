@@ -682,12 +682,6 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             if (bRegardLanguage)
             {
                 LanguageType nAppLanguage = GetAppLanguage();
-                if (GetDefaultFrameDirection(nAppLanguage) ==
-                    SvxFrameDirection::Horizontal_RL_TB)
-                {
-                    SvxAdjustItem aAdjust(SvxAdjust::Right, RES_PARATR_ADJUST );
-                    aSet.Put(aAdjust);
-                }
                 if (nAppLanguage == LANGUAGE_KOREAN)
                 {
                     SvxScriptSpaceItem aScriptSpace(false, RES_PARATR_SCRIPTSPACE);

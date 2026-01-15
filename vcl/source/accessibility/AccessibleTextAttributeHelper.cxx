@@ -235,6 +235,10 @@ OUString lcl_ConvertParagraphAdjust(css::style::ParagraphAdjust eParaAdjust)
             return u"justify"_ustr;
         case css::style::ParagraphAdjust_CENTER:
             return u"center"_ustr;
+        case css::style::ParagraphAdjust_START:
+            return u"start"_ustr;
+        case css::style::ParagraphAdjust_END:
+            return u"end"_ustr;
         default:
             assert(false && "Unhandled ParagraphAdjust value");
             return u""_ustr;

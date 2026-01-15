@@ -807,7 +807,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 m_nBreakPos = rInf.GetIdx() - TextFrameIndex(1);
             }
 
-            if( aAdjust != SvxAdjust::Left )
+            if( aAdjust != SvxAdjust::ParaStart && aAdjust != SvxAdjust::Left )
             {
                 // Delete any blanks at the end of a line, but be careful:
                 // If a field has been expanded, we do not want to delete any

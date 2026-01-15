@@ -181,8 +181,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", u"Times New Roman");
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", u"ar-SA");
     // pPrDefault contains only one hyphenation property
-    // tdf#169035: also contains alignment, because Start is not yet the default
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 2);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 1);
 
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);

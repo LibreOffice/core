@@ -92,7 +92,7 @@
    <style:paragraph-properties fo:text-align="end" style:justify-single-word="false"/>
   </style:style>
   <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties style:writing-mode="rl-tb"/>
+   <style:paragraph-properties fo:text-align="left" style:writing-mode="rl-tb"/>
   </style:style>
   <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Standard">
    <style:paragraph-properties fo:text-align="start" style:justify-single-word="false" style:writing-mode="rl-tb"/>
