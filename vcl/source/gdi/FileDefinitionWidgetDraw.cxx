@@ -80,8 +80,10 @@ std::shared_ptr<WidgetDefinition> const&
 getWidgetDefinitionForTheme(std::u16string_view rThemenName)
 {
     static std::shared_ptr<WidgetDefinition> spDefinition;
-    if (!spDefinition)
+    static bool bAlreadyChecked = false;
+    if (!bAlreadyChecked)
     {
+        bAlreadyChecked = true;
         OUString sSharedDefinitionBasePath = lcl_getThemeDefinitionPath();
         OUString sThemeFolder = sSharedDefinitionBasePath + rThemenName + "/";
         OUString sThemeDefinitionFile = sThemeFolder + "definition.xml";
