@@ -1089,11 +1089,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159259)
     CPPUNIT_ASSERT_EQUAL(paraHeight, flyHeight);
 
     // tdf#170322: MS Word considers the document corrupt if a plainText control contains a field
-    // save(TestFilter::DOCX);
-    // xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
-    // assertXPath(pXmlDocument, "//w:sdt/w:sdtPr", 1);
-    // // the sdtPr must be a richText control, not plainText
-    // assertXPath(pXmlDocument, "//w:sdt/w:sdtPr/w:text", 0);
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDocument, "//w:sdt/w:sdtPr", 1);
+    // the sdtPr must be a richText control, not plainText
+    assertXPath(pXmlDocument, "//w:sdt/w:sdtPr/w:text", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testLargeTopParaMarginAfterHiddenSection)
