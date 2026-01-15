@@ -36,6 +36,7 @@
 #include <redline.hxx>
 #include <unoframe.hxx>
 #include <textboxhelper.hxx>
+#include <SwStyleNameMapper.hxx>
 #include <rdfhelper.hxx>
 #include "wrtww8.hxx"
 
@@ -8523,6 +8524,11 @@ void DocxAttributeOutput::CharScriptHint(const SvxScriptHintItem& rHint)
 void DocxAttributeOutput::TextINetFormat( const SwFormatINetFormat& rLink )
 {
     const SwCharFormat* pFormat = m_rExport.m_rDoc.FindCharFormatByName(rLink.GetINetFormat());
+    if (!pFormat)
+    {
+        pFormat = m_rExport.m_rDoc.FindCharFormatByName(
+            SwStyleNameMapper::GetUIName(rLink.GetINetFormatId(), ProgName()));
+    }
     if (pFormat)
     {
         OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pFormat)));
