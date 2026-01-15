@@ -3701,12 +3701,15 @@ public:
 
     virtual OUString get_accessible_id() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 21, 5)
+        g_autofree char* pId = gtk_accessible_get_accessible_id(GTK_ACCESSIBLE(m_pWidget));
+        return OUString(pId, pId ? strlen(pId) : 0, RTL_TEXTENCODING_UTF8);
+#elif GTK_CHECK_VERSION(4, 0, 0)
+        return OUString();
+#else
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_accessible_id(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-#else
-        return OUString();
 #endif
     }
 
@@ -18379,16 +18382,14 @@ public:
 #endif
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual OUString get_accessible_id() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_accessible_id(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-#else
-        return OUString();
-#endif
     }
+#endif
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
     {
