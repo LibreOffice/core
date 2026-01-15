@@ -19,6 +19,8 @@ class masterElements(UITestCase):
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
+            # tdf#112327 - switch to master page view since master elements are disabled in normal mode
+            self.xUITest.executeCommand(".uno:SlideMasterPage")
             with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
 
                 xpagenumber = xDialog.getChild("pagenumber")
