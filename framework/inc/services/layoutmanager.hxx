@@ -43,230 +43,251 @@
 
 namespace framework
 {
-    class MenuBarWrapper;
-    class ProgressBarWrapper;
-    class ToolbarLayoutManager;
-    class GlobalSettings;
-    namespace detail
+class MenuBarWrapper;
+class ProgressBarWrapper;
+class ToolbarLayoutManager;
+class GlobalSettings;
+namespace detail
+{
+class InfoHelperBuilder;
+}
+typedef ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::frame::XLayoutManager2,
+                               css::awt::XWindowListener>
+    LayoutManager_Base;
+typedef ::comphelper::OPropertyContainer LayoutManager_PBase;
+
+class LayoutManager final : public LayoutManager_Base,
+                            private cppu::BaseMutex,
+                            public ::cppu::OBroadcastHelper,
+                            public LayoutManager_PBase
+{
+public:
+    LayoutManager(const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    virtual ~LayoutManager() override;
+
+    /** declaration of XInterface, XTypeProvider, XServiceInfo */
+    DECLARE_XINTERFACE()
+    DECLARE_XTYPEPROVIDER()
+    virtual OUString SAL_CALL getImplementationName() override
     {
-        class InfoHelperBuilder;
+        return u"com.sun.star.comp.framework.LayoutManager"_ustr;
     }
-    typedef ::cppu::WeakImplHelper <   css::lang::XServiceInfo
-                                    ,   css::frame::XLayoutManager2
-                                    ,   css::awt::XWindowListener
-                                    >   LayoutManager_Base;
-    typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
-    class LayoutManager final : public  LayoutManager_Base                    ,
-                          private cppu::BaseMutex,
-                          public  ::cppu::OBroadcastHelper              ,
-                          public  LayoutManager_PBase
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
     {
-        public:
-            LayoutManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~LayoutManager() override;
+        return cppu::supportsService(this, ServiceName);
+    }
 
-            /** declaration of XInterface, XTypeProvider, XServiceInfo */
-            DECLARE_XINTERFACE()
-            DECLARE_XTYPEPROVIDER()
-            virtual OUString SAL_CALL getImplementationName() override
-            {
-                return u"com.sun.star.comp.framework.LayoutManager"_ustr;
-            }
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    {
+        css::uno::Sequence<OUString> aSeq{ u"com.sun.star.frame.LayoutManager"_ustr };
+        return aSeq;
+    }
 
-            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
-            {
-                return cppu::supportsService(this, ServiceName);
-            }
+    // XLayoutManager
+    virtual void SAL_CALL
+    attachFrame(const css::uno::Reference<css::frame::XFrame>& Frame) override;
+    virtual void SAL_CALL reset() override;
+    virtual css::awt::Rectangle SAL_CALL getCurrentDockingArea() override;
+    virtual css::uno::Reference<css::ui::XDockingAreaAcceptor>
+        SAL_CALL getDockingAreaAcceptor() override;
+    virtual void SAL_CALL setDockingAreaAcceptor(
+        const css::uno::Reference<css::ui::XDockingAreaAcceptor>& xDockingAreaAcceptor)
+        final override;
+    virtual void SAL_CALL createElement(const OUString& aName) override;
+    virtual void SAL_CALL destroyElement(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL requestElement(const OUString& ResourceURL) override;
+    virtual css::uno::Reference<css::ui::XUIElement>
+        SAL_CALL getElement(const OUString& aName) override;
+    virtual css::uno::Sequence<css::uno::Reference<css::ui::XUIElement>>
+        SAL_CALL getElements() override;
+    virtual sal_Bool SAL_CALL showElement(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL hideElement(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL dockWindow(const OUString& aName, css::ui::DockingArea DockingArea,
+                                         const css::awt::Point& Pos) override;
+    virtual sal_Bool SAL_CALL dockAllWindows(::sal_Int16 nElementType) override;
+    virtual sal_Bool SAL_CALL floatWindow(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL lockWindow(const OUString& ResourceURL) override;
+    virtual sal_Bool SAL_CALL unlockWindow(const OUString& ResourceURL) override;
+    virtual void SAL_CALL setElementSize(const OUString& aName,
+                                         const css::awt::Size& aSize) override;
+    virtual void SAL_CALL setElementPos(const OUString& aName,
+                                        const css::awt::Point& aPos) override;
+    virtual void SAL_CALL setElementPosSize(const OUString& aName, const css::awt::Point& aPos,
+                                            const css::awt::Size& aSize) override;
+    virtual sal_Bool SAL_CALL isElementVisible(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL isElementFloating(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL isElementDocked(const OUString& aName) override;
+    virtual sal_Bool SAL_CALL isElementLocked(const OUString& ResourceURL) override;
+    virtual css::awt::Size SAL_CALL getElementSize(const OUString& aName) override;
+    virtual css::awt::Point SAL_CALL getElementPos(const OUString& aName) override;
+    virtual void SAL_CALL lock() override;
+    virtual void SAL_CALL unlock() override;
+    virtual void SAL_CALL doLayout() override;
+    virtual void SAL_CALL setVisible(sal_Bool bVisible) override;
+    virtual sal_Bool SAL_CALL isVisible() override;
 
-            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-            {
-                css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.LayoutManager"_ustr };
-                return aSeq;
-            }
+    // XMenuBarMergingAcceptor
 
-            // XLayoutManager
-            virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& Frame ) override;
-            virtual void SAL_CALL reset() override;
-            virtual css::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) override;
-            virtual css::uno::Reference< css::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() override;
-            virtual void SAL_CALL setDockingAreaAcceptor( const css::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) final override;
-            virtual void SAL_CALL createElement( const OUString& aName ) override;
-            virtual void SAL_CALL destroyElement( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL requestElement( const OUString& ResourceURL ) override;
-            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) override;
-            virtual css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > SAL_CALL getElements(  ) override;
-            virtual sal_Bool SAL_CALL showElement( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL hideElement( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;
-            virtual sal_Bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) override;
-            virtual sal_Bool SAL_CALL floatWindow( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL lockWindow( const OUString& ResourceURL ) override;
-            virtual sal_Bool SAL_CALL unlockWindow( const OUString& ResourceURL ) override;
-            virtual void SAL_CALL setElementSize( const OUString& aName, const css::awt::Size& aSize ) override;
-            virtual void SAL_CALL setElementPos( const OUString& aName, const css::awt::Point& aPos ) override;
-            virtual void SAL_CALL setElementPosSize( const OUString& aName, const css::awt::Point& aPos, const css::awt::Size& aSize ) override;
-            virtual sal_Bool SAL_CALL isElementVisible( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL isElementFloating( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL isElementDocked( const OUString& aName ) override;
-            virtual sal_Bool SAL_CALL isElementLocked( const OUString& ResourceURL ) override;
-            virtual css::awt::Size SAL_CALL getElementSize( const OUString& aName ) override;
-            virtual css::awt::Point SAL_CALL getElementPos( const OUString& aName ) override;
-            virtual void SAL_CALL lock(  ) override;
-            virtual void SAL_CALL unlock(  ) override;
-            virtual void SAL_CALL doLayout(  ) override;
-            virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
-            virtual sal_Bool SAL_CALL isVisible() override;
+    virtual sal_Bool SAL_CALL setMergedMenuBar(
+        const css::uno::Reference<css::container::XIndexAccess>& xMergedMenuBar) override;
+    virtual void SAL_CALL removeMergedMenuBar() override;
 
-            // XMenuBarMergingAcceptor
+    //  XWindowListener
+    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aEvent) override;
+    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aEvent) override;
+    virtual void SAL_CALL windowShown(const css::lang::EventObject& aEvent) override;
+    virtual void SAL_CALL windowHidden(const css::lang::EventObject& aEvent) override;
 
-            virtual sal_Bool SAL_CALL setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
-            virtual void SAL_CALL removeMergedMenuBar(  ) override;
+    //   XFrameActionListener
+    virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
-            //  XWindowListener
-            virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) override;
-            virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) override;
-            virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) override;
-            virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
+    //  XEventListener
+    using cppu::OPropertySetHelper::disposing;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
-            //   XFrameActionListener
-            virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) override;
+    //  XUIConfigurationListener
+    virtual void SAL_CALL elementInserted(const css::ui::ConfigurationEvent& Event) override;
+    virtual void SAL_CALL elementRemoved(const css::ui::ConfigurationEvent& Event) override;
+    virtual void SAL_CALL elementReplaced(const css::ui::ConfigurationEvent& Event) override;
 
-            //  XEventListener
-            using cppu::OPropertySetHelper::disposing;
-            virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
+    //  XLayoutManagerEventBroadcaster
+    virtual void SAL_CALL addLayoutManagerEventListener(
+        const css::uno::Reference<css::frame::XLayoutManagerListener>& aLayoutManagerListener)
+        override;
+    virtual void SAL_CALL removeLayoutManagerEventListener(
+        const css::uno::Reference<css::frame::XLayoutManagerListener>& aLayoutManagerListener)
+        override;
 
-            //  XUIConfigurationListener
-            virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
-            virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
-            virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
+    DECL_LINK(MenuBarClose, void*, void);
+    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 
-            //  XLayoutManagerEventBroadcaster
-            virtual void SAL_CALL addLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
-            virtual void SAL_CALL removeLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
+    //  called from ToolbarLayoutManager
+    void requestLayout();
 
-            DECL_LINK( MenuBarClose, void *, void);
-            DECL_LINK( WindowEventListener, VclWindowEvent&, void );
+    /// Reading of settings - shared with ToolbarLayoutManager.
+    static bool readWindowStateData(
+        const OUString& rName, UIElement& rElementData,
+        const css::uno::Reference<css::container::XNameAccess>& rPersistentWindowState,
+        std::unique_ptr<GlobalSettings>& rGlobalSettings, bool& bInGlobalSettings,
+        const css::uno::Reference<css::uno::XComponentContext>& rComponentContext);
 
-            //  called from ToolbarLayoutManager
-            void requestLayout();
+private:
+    DECL_LINK(AsyncLayoutHdl, Timer*, void);
 
-            /// Reading of settings - shared with ToolbarLayoutManager.
-            static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
-                    const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
-                    std::unique_ptr<GlobalSettings> &rGlobalSettings, bool &bInGlobalSettings,
-                    const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
+    //  menu bar
 
-        private:
-            DECL_LINK(AsyncLayoutHdl, Timer *, void);
+    void implts_createMenuBar(const OUString& rMenuBarName);
+    void impl_clearUpMenuBar();
+    void implts_reset(bool bAttach);
+    void implts_updateMenuBarClose();
+    bool implts_resetMenuBar();
+    void implts_createMSCompatibleMenuBar(const OUString& rName);
 
-            //  menu bar
+    //  locking
 
-            void implts_createMenuBar( const OUString& rMenuBarName );
-            void impl_clearUpMenuBar();
-            void implts_reset( bool bAttach );
-            void implts_updateMenuBarClose();
-            bool implts_resetMenuBar();
-            void implts_createMSCompatibleMenuBar(const OUString& rName);
+    void implts_lock();
+    bool implts_unlock();
 
-            //  locking
+    //  query
 
-            void implts_lock();
-            bool implts_unlock();
+    css::uno::Reference<css::ui::XUIElement> implts_findElement(std::u16string_view aName);
 
-            //  query
+    bool implts_readWindowStateData(const OUString& rName, UIElement& rElementData);
+    void implts_writeWindowStateData(const OUString& rName, const UIElement& rElementData);
+    void implts_destroyElements();
+    void implts_toggleFloatingUIElementsVisibility(bool bActive);
+    void implts_reparentChildWindows();
+    css::uno::Reference<css::ui::XUIElement>
+    implts_createDockingWindow(const OUString& aElementName);
 
-            css::uno::Reference< css::ui::XUIElement > implts_findElement( std::u16string_view aName );
+    bool implts_isEmbeddedLayoutManager() const;
+    css::uno::Reference<css::ui::XUIElement> implts_createElement(const OUString& aName);
 
-            bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
-            void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
-            void implts_destroyElements();
-            void implts_toggleFloatingUIElementsVisibility( bool bActive );
-            void implts_reparentChildWindows();
-            css::uno::Reference< css::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
+    // layouting methods
+    bool implts_resizeContainerWindow(const css::awt::Size& rContainerSize,
+                                      const css::awt::Point& rComponentPos);
+    ::Size implts_getContainerWindowOutputSize();
 
-            bool implts_isEmbeddedLayoutManager() const;
-            css::uno::Reference< css::ui::XUIElement > implts_createElement( const OUString& aName );
+    void implts_setDockingAreaWindowSizes();
+    css::awt::Rectangle implts_calcDockingAreaSizes();
+    bool implts_doLayout(bool bForceRequestBorderSpace, bool bOuterResize);
+    void implts_doLayout_notify(bool bOuterResize);
 
-            // layouting methods
-            bool implts_resizeContainerWindow( const css::awt::Size& rContainerSize, const css::awt::Point& rComponentPos );
-            ::Size  implts_getContainerWindowOutputSize();
+    // internal methods to control status/progress bar
+    ::Size implts_getStatusBarSize();
+    void implts_destroyStatusBar();
+    void implts_createStatusBar(const OUString& rStatusBarName);
+    void implts_createProgressBar();
+    void implts_destroyProgressBar();
+    void implts_setStatusBarPosSize(const ::Point& rPos, const ::Size& rSize);
+    bool implts_showStatusBar(bool bStoreState = false);
+    bool implts_hideStatusBar(bool bStoreState = false);
+    void implts_readStatusBarState(const OUString& rStatusBarName);
+    bool implts_showProgressBar();
+    bool implts_hideProgressBar();
+    void implts_backupProgressBarWrapper();
+    void implts_setOffset(const sal_Int32 nBottomOffset);
 
-            void implts_setDockingAreaWindowSizes();
-            css::awt::Rectangle implts_calcDockingAreaSizes();
-            bool implts_doLayout( bool bForceRequestBorderSpace, bool bOuterResize );
-            void implts_doLayout_notify( bool bOuterResize );
+    /// @throws css::uno::RuntimeException
+    void implts_setInplaceMenuBar(
+        const css::uno::Reference<css::container::XIndexAccess>& xMergedMenuBar);
+    /// @throws css::uno::RuntimeException
+    void implts_resetInplaceMenuBar();
 
-            // internal methods to control status/progress bar
-            ::Size      implts_getStatusBarSize();
-            void        implts_destroyStatusBar();
-            void        implts_createStatusBar( const OUString& rStatusBarName );
-            void        implts_createProgressBar();
-            void        implts_destroyProgressBar();
-            void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
-            bool    implts_showStatusBar( bool bStoreState=false );
-            bool    implts_hideStatusBar( bool bStoreState=false );
-            void        implts_readStatusBarState( const OUString& rStatusBarName );
-            bool    implts_showProgressBar();
-            bool    implts_hideProgressBar();
-            void        implts_backupProgressBarWrapper();
-            void        implts_setOffset( const sal_Int32 nBottomOffset );
+    void implts_setVisibleState(bool bShow);
+    void implts_updateUIElementsVisibleState(bool bShow);
+    void implts_setCurrentUIVisibility(bool bShow);
+    void implts_notifyListeners(short nEvent, const css::uno::Any& rInfoParam);
 
-            /// @throws css::uno::RuntimeException
-            void    implts_setInplaceMenuBar(
-                        const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar );
-            /// @throws css::uno::RuntimeException
-            void    implts_resetInplaceMenuBar();
+    //  OPropertySetHelper
 
-            void    implts_setVisibleState( bool bShow );
-            void    implts_updateUIElementsVisibleState( bool bShow );
-            void    implts_setCurrentUIVisibility( bool bShow );
-            void    implts_notifyListeners(short nEvent, const css::uno::Any& rInfoParam);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
+                                                           const css::uno::Any& aValue) override;
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo>
+        SAL_CALL getPropertySetInfo() override;
 
-            //  OPropertySetHelper
+    css::uno::Reference<css::uno::XComponentContext>
+        m_xContext; /** reference to factory, which has created this instance. */
+    css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    css::uno::Reference<css::ui::XUIConfigurationManager> m_xModuleCfgMgr;
+    css::uno::Reference<css::ui::XUIConfigurationManager> m_xDocCfgMgr;
+    css::uno::Reference<css::awt::XWindow> m_xContainerWindow;
+    css::uno::Reference<css::awt::XTopWindow2> m_xContainerTopWindow;
+    sal_Int32 m_nLockCount;
+    bool m_bInplaceMenuSet;
+    bool m_bMenuVisible;
+    bool m_bVisible;
+    bool m_bParentWindowVisible;
+    bool m_bMustDoLayout;
+    bool m_bAutomaticToolbars;
+    bool m_bHideCurrentUI;
+    bool m_bGlobalSettings;
+    bool m_bPreserveContentSize;
+    bool m_bMenuBarCloseButton;
+    css::awt::Rectangle m_aDockingArea;
+    css::uno::Reference<css::ui::XDockingAreaAcceptor> m_xDockingAreaAcceptor;
+    rtl::Reference<MenuBarManager> m_xInplaceMenuBar;
+    rtl::Reference<MenuBarWrapper> m_xMenuBar;
+    UIElement m_aStatusBarElement;
+    UIElement m_aProgressBarElement;
+    rtl::Reference<ProgressBarWrapper> m_xProgressBarBackup;
+    css::uno::Reference<css::frame::XModuleManager2> m_xModuleManager;
+    css::uno::Reference<css::ui::XUIElementFactoryManager> m_xUIElementFactoryManager;
+    css::uno::Reference<css::container::XNameAccess> m_xPersistentWindowState;
+    css::uno::Reference<css::container::XNameAccess> m_xPersistentWindowStateSupplier;
+    std::unique_ptr<GlobalSettings> m_pGlobalSettings;
+    OUString m_aModuleIdentifier;
+    Timer m_aAsyncLayoutTimer;
+    // container for ALL Listener
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenerContainer;
+    rtl::Reference<ToolbarLayoutManager> m_xToolbarManager;
+    bool m_bInSetCurrentUIVisibility;
 
-            virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
-                                                                                                                const css::uno::Any&  aValue          ) override;
-            virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-
-            css::uno::Reference< css::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
-            css::uno::Reference< css::util::XURLTransformer >              m_xURLTransformer;
-            css::uno::Reference< css::frame::XFrame >                      m_xFrame;
-            css::uno::Reference< css::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
-            css::uno::Reference< css::ui::XUIConfigurationManager >        m_xDocCfgMgr;
-            css::uno::Reference< css::awt::XWindow >                       m_xContainerWindow;
-            css::uno::Reference< css::awt::XTopWindow2 >                   m_xContainerTopWindow;
-            sal_Int32                                                      m_nLockCount;
-            bool                                                           m_bInplaceMenuSet;
-            bool                                                           m_bMenuVisible;
-            bool                                                           m_bVisible;
-            bool                                                           m_bParentWindowVisible;
-            bool                                                           m_bMustDoLayout;
-            bool                                                           m_bAutomaticToolbars;
-            bool                                                           m_bHideCurrentUI;
-            bool                                                           m_bGlobalSettings;
-            bool                                                           m_bPreserveContentSize;
-            bool                                                           m_bMenuBarCloseButton;
-            css::awt::Rectangle                                            m_aDockingArea;
-            css::uno::Reference< css::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
-            rtl::Reference< MenuBarManager >                               m_xInplaceMenuBar;
-            rtl::Reference< MenuBarWrapper >                               m_xMenuBar;
-            UIElement                                                      m_aStatusBarElement;
-            UIElement                                                      m_aProgressBarElement;
-            rtl::Reference< ProgressBarWrapper >                           m_xProgressBarBackup;
-            css::uno::Reference< css::frame::XModuleManager2 >             m_xModuleManager;
-            css::uno::Reference< css::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
-            css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowState;
-            css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowStateSupplier;
-            std::unique_ptr<GlobalSettings>                                m_pGlobalSettings;
-            OUString                                                       m_aModuleIdentifier;
-            Timer                                                          m_aAsyncLayoutTimer;
-            comphelper::OMultiTypeInterfaceContainerHelper2                m_aListenerContainer; // container for ALL Listener
-            rtl::Reference< ToolbarLayoutManager >                         m_xToolbarManager;
-            bool                                                           m_bInSetCurrentUIVisibility;
-
-        friend class detail::InfoHelperBuilder;
-    };
+    friend class detail::InfoHelperBuilder;
+};
 
 } // namespace framework
 

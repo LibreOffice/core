@@ -4102,7 +4102,6 @@ framework/inc/protocols.h
 framework/inc/recording/dispatchrecorder.hxx
 framework/inc/recording/dispatchrecordersupplier.hxx
 framework/inc/services.h
-framework/inc/services/layoutmanager.hxx
 framework/inc/services/mediatypedetectionhelper.hxx
 framework/inc/statusbarconfiguration.hxx
 framework/inc/stdtypes.h
