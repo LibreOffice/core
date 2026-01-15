@@ -21,6 +21,8 @@
 
 #include <cstddef>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <dlg_ObjectProperties.hxx>
 #include <strings.hrc>
 #include "tp_AxisLabel.hxx"
@@ -366,7 +368,8 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage(u"border"_ustr, SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
             AddTabPage(u"area"_ustr, SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
             AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
-            AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
             AddTabPage(u"gradients"_ustr, SchResId(STR_PAGE_GRADIENT_PRESETS), ChartGradientsTabPage::Create);
             AddTabPage(u"fontname"_ustr, SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             AddTabPage(u"effects"_ustr, SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
@@ -393,7 +396,8 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                 AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             }
             AddTabPage(u"border"_ustr, SchResId( m_pParameter->HasAreaProperties() ? STR_PAGE_BORDER : STR_PAGE_LINE ), RID_SVXPAGE_LINE);
-            AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
             AddTabPage(u"gradients"_ustr, SchResId(STR_PAGE_GRADIENT_PRESETS), ChartGradientsTabPage::Create);
             break;
 
@@ -463,7 +467,8 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage(u"transparent"_ustr, SchResId(STR_PAGE_TRANSPARENCY), RID_SVXPAGE_TRANSPARENCE);
             if (eType != OBJECTTYPE_DATA_STOCK_LOSS && eType != OBJECTTYPE_DATA_STOCK_GAIN)
             {
-                AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
+                if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                    AddTabPage(u"colorpalette"_ustr, SchResId(STR_PAGE_COLOR_PALETTE), ChartColorPaletteTabPage::Create);
                 AddTabPage(u"gradients"_ustr, SchResId(STR_PAGE_GRADIENT_PRESETS), ChartGradientsTabPage::Create);
             }
             break;
@@ -639,10 +644,13 @@ void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
     }
     else if (rId == "colorpalette")
     {
-        auto* pColorPaletteTabPage = dynamic_cast<ChartColorPaletteTabPage*>( &rPage );
-        if (pColorPaletteTabPage)
+        if (officecfg::Office::Common::Misc::ExperimentalMode::get())
         {
-            pColorPaletteTabPage->init(m_pParameter->getDocument());
+            auto* pColorPaletteTabPage = dynamic_cast<ChartColorPaletteTabPage*>( &rPage );
+            if (pColorPaletteTabPage)
+            {
+                pColorPaletteTabPage->init(m_pParameter->getDocument());
+            }
         }
     }
     else if (rId == "gradients")

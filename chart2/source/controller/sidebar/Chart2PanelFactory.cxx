@@ -103,7 +103,10 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         else if (rsResourceURL.endsWith("/LinePanel"))
             xPanel = ChartLinePanel::Create(pParent, xFrame, pController);
         else if (rsResourceURL.endsWith("/ColorsPanel"))
-            xPanel = ChartColorsPanel::Create(pParent, xFrame, pController);
+        {
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+                xPanel = ChartColorsPanel::Create(pParent, xFrame, pController);
+        }
         else if (rsResourceURL.endsWith("/ThemePanel")
                  && officecfg::Office::Common::Misc::ExperimentalMode::get())
             xPanel = ChartThemePanel::Create(pParent, xFrame, pController);
