@@ -113,6 +113,68 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf98446_switch_to_single_page_on_hide_whitespace)
+{
+    createSwDoc();
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwView* pView = pDocShell->GetView();
+
+    // Enable hide whitespace view mode
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // --- Case 1: Multiple pages per row -------------------------------------
+
+    // Switch to multiple pages per row
+    dispatchCommand(mxComponent, u".uno:MultiplePagesPerRow"_ustr, {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in multi-column mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // Re-apply hide whitespace in multi-column mode
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in multi-column mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsViewLayoutBookMode());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetViewOptions()->GetViewLayoutColumns());
+
+    // --- Case 2: Book mode --------------------------------------------------
+    dispatchCommand(mxComponent, u".uno:BookView"_ustr, {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in book mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // Re-apply hide whitespace in multi-column mode
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in book mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsViewLayoutBookMode());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetViewOptions()->GetViewLayoutColumns());
+
+    // --- Case 3: Manual layout changes --------------------------------------
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Multi-column layout disables whitespace hiding
+    // - Actual  : Whitespace remained hidden in multi-column mode
+    pView->SetViewLayout(/*nColumns=*/0, /*bBookMode=*/false);
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Multi-column layout disables whitespace hiding
+    // - Actual  : Whitespace remained hidden in multi-column mode
+    pView->SetViewLayout(/*nColumns=*/2, /*bBookMode=*/true);
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+}
+
 static OUString lcl_translitTest(SwDoc& rDoc, const SwPaM& rPaM, TransliterationFlags const nType)
 {
     utl::TransliterationWrapper aTrans(::comphelper::getProcessComponentContext(), nType);
