@@ -389,9 +389,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 
 DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShape> xSignatureLineShape = getShape(1);
     uno::Reference<beans::XPropertySet> xPropSet(xSignatureLineShape, uno::UNO_QUERY);
 
