@@ -369,6 +369,7 @@ void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState
 
     GetQtInstance().RunInMainThread([&] {
         QModelIndex aIndex = nCol == -1 ? toggleButtonModelIndex(rIter) : modelIndex(rIter, nCol);
+        itemFromIndex(aIndex)->setCheckable(true);
         itemFromIndex(aIndex)->setCheckState(toQtCheckState(eState));
     });
 }
