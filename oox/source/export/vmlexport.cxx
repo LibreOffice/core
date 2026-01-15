@@ -711,7 +711,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         {
                             pAttrListSignatureLine->add(XML_signinginstructionsset, "t");
                             pAttrListSignatureLine->add(
-                                FSNS(XML_o, XML_signinginstructions),
+                                XML_signinginstructions,
                                 pSdrGrafObj->getSignatureLineSigningInstructions());
                         }
                         pAttrListSignatureLine->add(

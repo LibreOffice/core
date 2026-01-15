@@ -649,7 +649,12 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
             mrShapeModel.maSignatureLineSuggestedSignerEmail
                 = rAttribs.getStringDefaulted(O_TOKEN(suggestedsigneremail));
             mrShapeModel.maSignatureLineSigningInstructions
-                = rAttribs.getStringDefaulted(O_TOKEN(signinginstructions));
+                = rAttribs.getStringDefaulted(XML_signinginstructions);
+            // we used to save this with an "o:" prefix, which is incorrect, so to support older
+            // data, try the older way if the correct way is empty.
+            if (mrShapeModel.maSignatureLineSigningInstructions.isEmpty())
+                mrShapeModel.maSignatureLineSigningInstructions
+                    = rAttribs.getStringDefaulted(O_TOKEN(signinginstructions));
             mrShapeModel.mbSignatureLineShowSignDate = ConversionHelper::decodeBool(
                 rAttribs.getString(XML_showsigndate, u"t"_ustr)); // default is true
             mrShapeModel.mbSignatureLineCanAddComment = ConversionHelper::decodeBool(
