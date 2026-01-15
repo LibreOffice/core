@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <uielement/menubarmanager.hxx>
 #include <uielement/uielement.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,6 +29,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -39,10 +39,13 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
+#include <tools/gen.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclevent.hxx>
 
 namespace framework
 {
+class MenuBarManager;
 class MenuBarWrapper;
 class ProgressBarWrapper;
 class ToolbarLayoutManager;
