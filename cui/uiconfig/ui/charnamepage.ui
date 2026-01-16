@@ -340,18 +340,6 @@
             <property name="tab-fill">False</property>
           </packing>
         </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child type="tab">
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child type="tab">
-          <placeholder/>
-        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -876,12 +864,6 @@
             <property name="position">1</property>
             <property name="tab-fill">False</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child type="tab">
-          <placeholder/>
         </child>
       </object>
       <packing>
