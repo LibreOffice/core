@@ -2153,7 +2153,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             const SdrObject* pObj = pFormat->FindRealSdrObject();
             if( pObj == nullptr )
                 pObj = pFormat->FindSdrObject();
-            if( pObj )
+            if (pObj && pObj->getParentSdrObjListFromSdrObject())
             {
                 aAny <<= static_cast<sal_Int32>(pObj->GetOrdNum());
             }
