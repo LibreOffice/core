@@ -37,6 +37,8 @@
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 #include <fuinsert.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
@@ -112,6 +114,16 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                         ScAnchorType aAnchorType = SCA_CELL )
 {
     Graphic& rGraphic1 = const_cast<Graphic &>(rGraphic);
+    GraphicNativeMetadata aMetadata;
+    if ( aMetadata.read(rGraphic1) )
+    {
+        const Degree10 aRotation = aMetadata.getRotation();
+        if (aRotation)
+        {
+            GraphicNativeTransform aTransform( rGraphic1 );
+            aTransform.rotate( aRotation );
+        }
+    }
     ScDrawView* pDrawView = rViewSh.GetScDrawView();
 
     // #i123922# check if an existing object is selected; if yes, evtl. replace
