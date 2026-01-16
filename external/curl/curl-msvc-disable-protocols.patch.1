@@ -2,7 +2,7 @@ disable protocols nobody needs in MSVC build
 
 --- curl/lib/config-win32.h.orig	2017-08-09 16:43:29.464000000 +0200
 +++ curl/lib/config-win32.h	2017-08-09 16:47:38.549200000 +0200
-@@ -500,6 +500,22 @@
+@@ -500,6 +500,23 @@
  #  endif /* UNDER_CE */
  #endif /* !CURL_OS */
  
@@ -12,6 +12,7 @@ disable protocols nobody needs in MSVC build
 +#define CURL_DISABLE_GOPHER 1
 +#undef CURL_DISABLE_HTTP
 +#define CURL_DISABLE_IMAP 1
++#define CURL_DISABLE_IPFS 1
 +#define CURL_DISABLE_LDAP 1
 +#define CURL_DISABLE_LDAPS 1
 +#define CURL_DISABLE_MQTT 1
