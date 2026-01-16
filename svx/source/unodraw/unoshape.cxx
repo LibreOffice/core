@@ -2571,7 +2571,10 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
 
     case OWN_ATTR_ZORDER:
     {
-        rValue <<= static_cast<sal_Int32>(GetSdrObject()->GetOrdNum());
+        if (GetSdrObject()->getParentSdrObjListFromSdrObject())
+        {
+            rValue <<= static_cast<sal_Int32>(GetSdrObject()->GetOrdNum());
+        }
         break;
     }
 
