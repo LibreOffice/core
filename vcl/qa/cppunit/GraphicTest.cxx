@@ -27,6 +27,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wmf.hxx>
 #include "CommonTools.hxx"
 

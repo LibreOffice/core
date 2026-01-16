@@ -22,6 +22,7 @@
 #include <vcl/bitmap.hxx>
 #include <mutex>
 #include <memory>
+#include <vector>
 
 class SdrPage;
 

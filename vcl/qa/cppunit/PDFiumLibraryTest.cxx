@@ -21,6 +21,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>

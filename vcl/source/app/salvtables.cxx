@@ -59,6 +59,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <slider.hxx>

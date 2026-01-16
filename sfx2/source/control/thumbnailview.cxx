@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/weld/weldutils.hxx>
 

@@ -20,6 +20,7 @@
 #include <impglyphitem.hxx>
 #include <utility>
 #include <vcl/glyphitemcache.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/vcllayout.hxx>
 #include <tools/lazydelete.hxx>
 #include <tools/stream.hxx>

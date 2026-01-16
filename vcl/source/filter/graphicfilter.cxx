@@ -35,6 +35,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <impgraph.hxx>

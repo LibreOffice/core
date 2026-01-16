@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 

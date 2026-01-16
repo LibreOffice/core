@@ -13,6 +13,8 @@
 #include <string_view>
 
 #include <unotest/bootstrapfixturebase.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <tools/stream.hxx>

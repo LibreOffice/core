@@ -21,8 +21,10 @@
 
 #include <cstddef>
 
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>

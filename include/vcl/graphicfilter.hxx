@@ -20,28 +20,31 @@
 #ifndef INCLUDED_VCL_GRAPHICFILTER_HXX
 #define INCLUDED_VCL_GRAPHICFILTER_HXX
 
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/graph.hxx>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
-#include <vcl/gfxlink.hxx>
-#include <vcl/vectorgraphicdata.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
+#include <vector>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::task { class XInteractionHandler; }
 
+class BinaryDataContainer;
+class Graphic;
 class INetURLObject;
 
 class FilterConfigCache;
+class Size;
 class SvStream;
 struct ConvertData;
+enum class GfxLinkType;
+enum class VectorGraphicDataType;
 
 #define ERRCODE_GRFILTER_OPENERROR    ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 1)
 #define ERRCODE_GRFILTER_IOERROR      ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 2)

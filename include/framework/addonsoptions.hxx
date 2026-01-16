@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <framework/fwkdllapi.h>
 #include <memory>
+#include <vector>
 
 namespace osl { class Mutex; }
 

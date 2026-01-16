@@ -27,8 +27,7 @@
 #include <algorithm>
 #include <optional>
 
-namespace com::sun::star::graphic { class XPrimitive2D; }
-
+#include <com/sun/star/graphic/XPrimitive2D.hpp>
 
 // helper to convert any Primitive2DSequence to a good quality Bitmap,
 // using default parameters and graphic::XPrimitive2DRenderer

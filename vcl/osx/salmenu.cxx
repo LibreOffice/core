@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

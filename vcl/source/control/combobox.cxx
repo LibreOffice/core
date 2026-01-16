@@ -33,6 +33,7 @@
 #include <accessibility/vclxaccessiblecombobox.hxx>
 #include <listbox.hxx>
 #include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
 #include <o3tl/string_view.hxx>
 
 struct ComboBoxBounds

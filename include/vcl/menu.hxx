@@ -23,17 +23,14 @@
 #include <memory>
 #include <string_view>
 
-#include <comphelper/OAccessible.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/keycod.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <tools/json_writer.hxx>
 #include <list>
 
 class OutputDevice;
@@ -56,9 +53,12 @@ struct SystemMenuData;
 enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
+namespace comphelper { class OAccessible; }
+namespace tools { class JsonWriter; }
 
 namespace vcl
 {
+class KeyCode;
 class Window;
 struct MenuLayoutData;
 typedef OutputDevice RenderContext; // same as in include/vcl/outdev.hxx

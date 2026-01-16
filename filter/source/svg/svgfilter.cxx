@@ -48,6 +48,7 @@
 
 #include <svx/unopage.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>

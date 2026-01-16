@@ -26,6 +26,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
+#include <vcl/region.hxx>
 
 class VCL_DLLPUBLIC AlphaMask final
 {

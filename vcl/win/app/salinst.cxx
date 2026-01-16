@@ -34,6 +34,7 @@
 #include <o3tl/temporary.hxx>
 
 #include <dndhelper.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>

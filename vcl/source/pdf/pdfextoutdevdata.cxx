@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
+#include <deque>
 #include <memory>
 #include <map>
 #include <variant>

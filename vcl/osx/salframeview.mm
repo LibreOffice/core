@@ -23,6 +23,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>

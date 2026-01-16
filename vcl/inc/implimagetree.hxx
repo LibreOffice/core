@@ -32,6 +32,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/ImageTree.hxx>
 
+class SvStream;
+
 namespace com::sun::star::container {
     class XNameAccess;
 }

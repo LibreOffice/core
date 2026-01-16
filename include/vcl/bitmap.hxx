@@ -22,16 +22,16 @@
 #include <sal/config.h>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/degree.hxx>
+#include <tools/gen.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
-#include <vcl/region.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <config_vclplug.h>
 
 #include <o3tl/typed_flags_set.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <memory>
 
@@ -40,6 +40,12 @@ namespace basegfx { class BColorModifierStack; }
 namespace com::sun::star::rendering {
     class XBitmapCanvas;
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
+namespace basegfx { class B2DHomMatrix; }
+namespace basegfx { class B2DRange; }
+namespace tools { class Polygon; }
+namespace vcl { class Region; }
 
 inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
 {

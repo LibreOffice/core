@@ -14,6 +14,7 @@
 #include <vcl/bitmap.hxx>
 
 #include <tools/stream.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>

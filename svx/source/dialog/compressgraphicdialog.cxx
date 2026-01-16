@@ -20,6 +20,7 @@
 #include "dlgunit.hxx"
 #include <utility>
 #include <vcl/fieldvalues.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>

@@ -21,6 +21,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/toolbox.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <map>
 
 namespace com::sun::star::frame { class XToolbarController; }

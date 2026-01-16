@@ -354,6 +354,9 @@ excludelist:
     - com/sun/star/frame/XTerminateListener.hpp
     - com/sun/star/datatransfer/dnd/XDragGestureListener.hpp
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
+    include/vcl/vectorgraphicdata.hxx:
+    # TODO Needed on Android NDK 27 for some reason
+    - com/sun/star/graphic/XPrimitive2D.hpp
     include/toolkit/awt/vclxwindow.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XWindow2.hpp

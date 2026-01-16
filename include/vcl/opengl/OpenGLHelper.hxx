@@ -12,12 +12,14 @@
 
 #include <epoxy/gl.h>
 #include <sal/detail/log.h>
+#include <tools/long.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/bitmap.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sstream>
 #include <string_view>
+
+class Bitmap;
 
 /// Helper to do a SAL_INFO as well as a GL log.
 #define VCL_GL_INFO(stream) \

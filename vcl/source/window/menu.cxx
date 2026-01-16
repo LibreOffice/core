@@ -23,6 +23,7 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
+#include <tools/json_writer.hxx>
 
 #include <comphelper/types.hxx>
 #include <comphelper/lok.hxx>

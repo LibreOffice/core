@@ -30,6 +30,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/gfxlink.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>

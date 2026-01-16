@@ -26,11 +26,21 @@
 #include <o3tl/lru_map.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/dropcache.hxx>
+#include <vcl/mapmod.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/vclptr.hxx>
 
 #include <optional>
+
+class OutputDevice;
+namespace vcl::text
+{
+class TextLayoutCache;
+}
+namespace vcl::text
+{
+enum class ComplexTextLayoutFlags : sal_uInt8;
+}
+template <class reference_type> class VclPtr;
 
 /**
 A cache for SalLayoutGlyphs objects.

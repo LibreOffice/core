@@ -20,8 +20,10 @@
 #include <sal/log.hxx>
 #include <sal/main.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/scopeguard.hxx>

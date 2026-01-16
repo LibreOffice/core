@@ -17,6 +17,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>

@@ -26,6 +26,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
+#include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>

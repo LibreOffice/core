@@ -24,6 +24,8 @@
 #include <vcl/BitmapPalette.hxx>
 #include <tools/solar.h>
 
+#include <vector>
+
 struct OctreeNode
 {
     sal_uLong nCount = 0;

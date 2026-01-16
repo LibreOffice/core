@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sfx2/templateproperties.hxx>
+#include <vector>
 
 class TemplateContainerItem final
 {

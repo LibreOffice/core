@@ -20,6 +20,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/hash.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/vcompat.hxx>

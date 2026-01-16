@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
+#include <tools/json_writer.hxx>
 
 #include <vcl/builder.hxx>
 #include <vcl/event.hxx>

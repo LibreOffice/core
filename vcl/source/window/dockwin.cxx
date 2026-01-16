@@ -24,6 +24,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

@@ -21,11 +21,14 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/json_writer.hxx>
 
 #include <vcl/builder.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/toolkit/edit.hxx>

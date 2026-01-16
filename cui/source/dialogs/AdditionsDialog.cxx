@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 

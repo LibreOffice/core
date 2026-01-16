@@ -25,6 +25,8 @@
 #include <tools/debug.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdpntv.hxx>

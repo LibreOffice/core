@@ -32,6 +32,7 @@
 #include <svx/sdtfsitm.hxx>
 #include <editeng/outlobj.hxx>
 #include <utility>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>

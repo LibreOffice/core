@@ -18,6 +18,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/EnumContext.hxx>
 

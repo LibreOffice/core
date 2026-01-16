@@ -23,6 +23,7 @@
 #include <tools/color.hxx>
 
 #include <memory>
+#include <vector>
 
 namespace vcl { class Font; }
 

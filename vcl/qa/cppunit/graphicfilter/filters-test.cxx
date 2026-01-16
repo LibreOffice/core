@@ -18,6 +18,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 #include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

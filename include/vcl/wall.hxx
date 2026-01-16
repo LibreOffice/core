@@ -27,6 +27,8 @@
 #include <vcl/dllapi.h>
 #include <optional>
 
+class SvStream;
+
 enum class WallpaperStyle
 {
     NONE,

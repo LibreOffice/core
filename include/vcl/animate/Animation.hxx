@@ -25,6 +25,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
 
+#include <vector>
+
+class SvStream;
 struct AnimationFrame;
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L

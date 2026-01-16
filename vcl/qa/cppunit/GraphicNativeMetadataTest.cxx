@@ -16,6 +16,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 
 #include <vcl/GraphicNativeMetadata.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 
