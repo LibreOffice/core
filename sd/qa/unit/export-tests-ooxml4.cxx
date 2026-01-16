@@ -1984,6 +1984,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOmitCanvasSlideExport)
     assertXPath(pXmlDocContent, "/p:presentation/p:sldIdLst/p:sldId", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testParaAlignStartEnd)
+{
+    createSdImpressDoc("odp/para-align-start-end.fodp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // PresentationML doesn't support start and end paragraph alignment.
+    // Paragraphs should be exported as left/right alignment, depending on para direction.
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[1]/a:pPr[@algn='l']", 1);
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[2]/a:pPr[@algn='r']", 1);
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[3]/a:pPr[@algn='r']", 1);
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[4]/a:pPr[@algn='l']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
