@@ -80,6 +80,9 @@
 #include <vcl/errinf.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
+
 #include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
@@ -153,6 +156,16 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 
     if( nError == ERRCODE_NONE )
     {
+        GraphicNativeMetadata aMetadata;
+        if ( aMetadata.read(aGraphic) )
+        {
+            const Degree10 aRotation = aMetadata.getRotation();
+            if (aRotation)
+            {
+                GraphicNativeTransform aTransform( aGraphic );
+                aTransform.rotate( aRotation );
+            }
+        }
         if( dynamic_cast< DrawViewShell *>( &mrViewShell ) )
         {
             sal_Int8    nAction = DND_ACTION_COPY;
