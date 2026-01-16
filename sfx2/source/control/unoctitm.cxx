@@ -1458,6 +1458,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"ChangeTheme", { PayloadType::None, true } },
         { u"DeleteSlide", { PayloadType::None, true } },
         { u"DuplicateSlide", { PayloadType::None, true } },
+        { u"EditStyle", { PayloadType::None, true } },
         { u"InsertSlide", { PayloadType::None, true } },
         { u"JumpToMark", { PayloadType::None, true } },
         { u"MoveKeepInsertMode", { PayloadType::None, true } },
