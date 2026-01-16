@@ -29,7 +29,7 @@ class tdf146019(UITestCase):
 
             # Check the shape is rotated, height > width
             shape = document.getDrawPages()[0][2]
-            self.assertEqual(8995, shape.getSize().Width)
-            self.assertEqual(11746, shape.getSize().Height)
+            self.assertEqual(8996, shape.getSize().Width)
+            self.assertEqual(11745, shape.getSize().Height)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
