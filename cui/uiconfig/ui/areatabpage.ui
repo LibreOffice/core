@@ -36,6 +36,7 @@
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tablelb-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="areatabpage|tablelb-atkobject">Apply to</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|tablelb">Set the fill options for the selected drawing object or document element.</property>
                   </object>
                 </child>
