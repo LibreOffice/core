@@ -219,25 +219,26 @@ sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
 /// Get reserved slot number during building the style table.
 static sal_uInt16 BuildGetSlot(const SwFormat& rFormat)
 {
-    switch (sal_uInt16 nId = rFormat.GetPoolFormatId())
+    switch (SwPoolFormatId nId = rFormat.GetPoolFormatId())
     {
-        case RES_POOLCOLL_STANDARD:
+        case SwPoolFormatId::COLL_STANDARD:
             return 0;
 
-        case RES_POOLCOLL_HEADLINE1:
-        case RES_POOLCOLL_HEADLINE2:
-        case RES_POOLCOLL_HEADLINE3:
-        case RES_POOLCOLL_HEADLINE4:
-        case RES_POOLCOLL_HEADLINE5:
-        case RES_POOLCOLL_HEADLINE6:
-        case RES_POOLCOLL_HEADLINE7:
-        case RES_POOLCOLL_HEADLINE8:
-        case RES_POOLCOLL_HEADLINE9:
+        case SwPoolFormatId::COLL_HEADLINE1:
+        case SwPoolFormatId::COLL_HEADLINE2:
+        case SwPoolFormatId::COLL_HEADLINE3:
+        case SwPoolFormatId::COLL_HEADLINE4:
+        case SwPoolFormatId::COLL_HEADLINE5:
+        case SwPoolFormatId::COLL_HEADLINE6:
+        case SwPoolFormatId::COLL_HEADLINE7:
+        case SwPoolFormatId::COLL_HEADLINE8:
+        case SwPoolFormatId::COLL_HEADLINE9:
         {
-            sal_uInt16 nRet = nId - (RES_POOLCOLL_HEADLINE1 - 1);
+            sal_uInt16 nRet = sal_uInt16(nId - (SwPoolFormatId::COLL_HEADLINE1 - 1));
             assert(nRet < WW8_RESERVED_SLOTS);
             return nRet;
         }
+        default: break;
     }
     return 0xfff;
 }
@@ -247,68 +248,69 @@ static sal_uInt16 BuildGetSlot(const SwFormat& rFormat)
 sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
 {
     sal_uInt16 nRet = ww::stiUser;    // user style as default
-    sal_uInt16 nPoolId = rFormat.GetPoolFormatId();
-    if( nPoolId == RES_POOLCOLL_STANDARD )
+    SwPoolFormatId nPoolId = rFormat.GetPoolFormatId();
+    if( nPoolId == SwPoolFormatId::COLL_STANDARD )
         nRet = ww::stiNormal;
-    else if( nPoolId >= RES_POOLCOLL_HEADLINE1 &&
-             nPoolId <= RES_POOLCOLL_HEADLINE9 )
-        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiLevFirst - RES_POOLCOLL_HEADLINE1);
-    else if( nPoolId >= RES_POOLCOLL_TOX_IDX1 &&
-             nPoolId <= RES_POOLCOLL_TOX_IDX3 )
-        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiIndexFirst - RES_POOLCOLL_TOX_IDX1);
-    else if( nPoolId >= RES_POOLCOLL_TOX_CNTNT1 &&
-             nPoolId <= RES_POOLCOLL_TOX_CNTNT5 )
-        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiToc1 - RES_POOLCOLL_TOX_CNTNT1);
-    else if( nPoolId >= RES_POOLCOLL_TOX_CNTNT6 &&
-             nPoolId <= RES_POOLCOLL_TOX_CNTNT9 )
-        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiToc6 - RES_POOLCOLL_TOX_CNTNT6);
+    else if( nPoolId >= SwPoolFormatId::COLL_HEADLINE1 &&
+             nPoolId <= SwPoolFormatId::COLL_HEADLINE9 )
+        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiLevFirst - SwPoolFormatId::COLL_HEADLINE1);
+    else if( nPoolId >= SwPoolFormatId::COLL_TOX_IDX1 &&
+             nPoolId <= SwPoolFormatId::COLL_TOX_IDX3 )
+        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiIndexFirst - SwPoolFormatId::COLL_TOX_IDX1);
+    else if( nPoolId >= SwPoolFormatId::COLL_TOX_CNTNT1 &&
+             nPoolId <= SwPoolFormatId::COLL_TOX_CNTNT5 )
+        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiToc1 - SwPoolFormatId::COLL_TOX_CNTNT1);
+    else if( nPoolId >= SwPoolFormatId::COLL_TOX_CNTNT6 &&
+             nPoolId <= SwPoolFormatId::COLL_TOX_CNTNT9 )
+        nRet = static_cast< sal_uInt16 >(nPoolId + ww::stiToc6 - SwPoolFormatId::COLL_TOX_CNTNT6);
     else
         switch( nPoolId )
         {
-        case RES_POOLCOLL_FOOTNOTE:         nRet = ww::stiFootnoteText;      break;
-        case RES_POOLCOLL_MARGINAL:         nRet = ww::stiAtnText;           break;
-        case RES_POOLCOLL_HEADER:           nRet = ww::stiHeader;            break;
-        case RES_POOLCOLL_FOOTER:           nRet = ww::stiFooter;            break;
-        case RES_POOLCOLL_TOX_IDXH:         nRet = ww::stiIndexHeading;      break;
-        case RES_POOLCOLL_LABEL:            nRet = ww::stiCaption;           break;
-        case RES_POOLCOLL_TOX_ILLUS1:       nRet = ww::stiToCaption;         break;
-        case RES_POOLCOLL_ENVELOPE_ADDRESS: nRet = ww::stiEnvAddr;           break;
-        case RES_POOLCOLL_SEND_ADDRESS:     nRet = ww::stiEnvRet;            break;
-        case RES_POOLCHR_FOOTNOTE_ANCHOR:   nRet = ww::stiFootnoteRef;       break;
-        case RES_POOLCHR_LINENUM:           nRet = ww::stiLnn;               break;
-        case RES_POOLCHR_PAGENO:            nRet = ww::stiPgn;               break;
-        case RES_POOLCHR_ENDNOTE_ANCHOR:    nRet = ww::stiEdnRef;            break;
-        case RES_POOLCOLL_ENDNOTE:          nRet = ww::stiEdnText;           break;
-        case RES_POOLCOLL_TOX_AUTHORITIESH: nRet = ww::stiToa;               break;
-        case RES_POOLCOLL_TOX_CNTNTH:       nRet = ww::stiToaHeading;        break;
-        case RES_POOLCOLL_LISTS_BEGIN:      nRet = ww::stiList;              break;
-        case RES_POOLCOLL_BULLET_LEVEL1:    nRet = ww::stiListBullet;        break;
-        case RES_POOLCOLL_NUM_LEVEL1:       nRet = ww::stiListNumber;        break;
-        case RES_POOLCOLL_BULLET_LEVEL2:    nRet = ww::stiListBullet2;       break;
-        case RES_POOLCOLL_BULLET_LEVEL3:    nRet = ww::stiListBullet3;       break;
-        case RES_POOLCOLL_BULLET_LEVEL4:    nRet = ww::stiListBullet4;       break;
-        case RES_POOLCOLL_BULLET_LEVEL5:    nRet = ww::stiListBullet5;       break;
-        case RES_POOLCOLL_NUM_LEVEL2:       nRet = ww::stiListNumber2;       break;
-        case RES_POOLCOLL_NUM_LEVEL3:       nRet = ww::stiListNumber3;       break;
-        case RES_POOLCOLL_NUM_LEVEL4:       nRet = ww::stiListNumber4;       break;
-        case RES_POOLCOLL_NUM_LEVEL5:       nRet = ww::stiListNumber5;       break;
-        case RES_POOLCOLL_DOC_TITLE:        nRet = ww::stiTitle;             break;
-        case RES_POOLCOLL_DOC_APPENDIX:     nRet = ww::stiClosing;           break;
-        case RES_POOLCOLL_SIGNATURE:        nRet = ww::stiSignature;         break;
-        case RES_POOLCOLL_TEXT:             nRet = ww::stiBodyText;          break;
-        case RES_POOLCOLL_TEXT_MOVE:        nRet = ww::stiBodyTextInd1;      break;
-        case RES_POOLCOLL_BULLET_NONUM1:    nRet = ww::stiListCont;          break;
-        case RES_POOLCOLL_BULLET_NONUM2:    nRet = ww::stiListCont2;         break;
-        case RES_POOLCOLL_BULLET_NONUM3:    nRet = ww::stiListCont3;         break;
-        case RES_POOLCOLL_BULLET_NONUM4:    nRet = ww::stiListCont4;         break;
-        case RES_POOLCOLL_BULLET_NONUM5:    nRet = ww::stiListCont5;         break;
-        case RES_POOLCOLL_DOC_SUBTITLE:     nRet = ww::stiSubtitle;          break;
-        case RES_POOLCOLL_GREETING:         nRet = ww::stiSalutation;        break;
-        case RES_POOLCOLL_TEXT_IDENT:       nRet = ww::stiBodyText1I;        break;
-        case RES_POOLCHR_INET_NORMAL:       nRet = ww::stiHyperlink;         break;
-        case RES_POOLCHR_INET_VISIT:        nRet = ww::stiHyperlinkFollowed; break;
-        case RES_POOLCHR_HTML_STRONG:       nRet = ww::stiStrong;            break;
-        case RES_POOLCHR_HTML_EMPHASIS:     nRet = ww::stiEmphasis;          break;
+        case SwPoolFormatId::COLL_FOOTNOTE:         nRet = ww::stiFootnoteText;      break;
+        case SwPoolFormatId::COLL_MARGINAL:         nRet = ww::stiAtnText;           break;
+        case SwPoolFormatId::COLL_HEADER:           nRet = ww::stiHeader;            break;
+        case SwPoolFormatId::COLL_FOOTER:           nRet = ww::stiFooter;            break;
+        case SwPoolFormatId::COLL_TOX_IDXH:         nRet = ww::stiIndexHeading;      break;
+        case SwPoolFormatId::COLL_LABEL:            nRet = ww::stiCaption;           break;
+        case SwPoolFormatId::COLL_TOX_ILLUS1:       nRet = ww::stiToCaption;         break;
+        case SwPoolFormatId::COLL_ENVELOPE_ADDRESS: nRet = ww::stiEnvAddr;           break;
+        case SwPoolFormatId::COLL_SEND_ADDRESS:     nRet = ww::stiEnvRet;            break;
+        case SwPoolFormatId::CHR_FOOTNOTE_ANCHOR:   nRet = ww::stiFootnoteRef;       break;
+        case SwPoolFormatId::CHR_LINENUM:           nRet = ww::stiLnn;               break;
+        case SwPoolFormatId::CHR_PAGENO:            nRet = ww::stiPgn;               break;
+        case SwPoolFormatId::CHR_ENDNOTE_ANCHOR:    nRet = ww::stiEdnRef;            break;
+        case SwPoolFormatId::COLL_ENDNOTE:          nRet = ww::stiEdnText;           break;
+        case SwPoolFormatId::COLL_TOX_AUTHORITIESH: nRet = ww::stiToa;               break;
+        case SwPoolFormatId::COLL_TOX_CNTNTH:       nRet = ww::stiToaHeading;        break;
+        case SwPoolFormatId::COLL_LISTS_BEGIN:      nRet = ww::stiList;              break;
+        case SwPoolFormatId::COLL_BULLET_LEVEL1:    nRet = ww::stiListBullet;        break;
+        case SwPoolFormatId::COLL_NUM_LEVEL1:       nRet = ww::stiListNumber;        break;
+        case SwPoolFormatId::COLL_BULLET_LEVEL2:    nRet = ww::stiListBullet2;       break;
+        case SwPoolFormatId::COLL_BULLET_LEVEL3:    nRet = ww::stiListBullet3;       break;
+        case SwPoolFormatId::COLL_BULLET_LEVEL4:    nRet = ww::stiListBullet4;       break;
+        case SwPoolFormatId::COLL_BULLET_LEVEL5:    nRet = ww::stiListBullet5;       break;
+        case SwPoolFormatId::COLL_NUM_LEVEL2:       nRet = ww::stiListNumber2;       break;
+        case SwPoolFormatId::COLL_NUM_LEVEL3:       nRet = ww::stiListNumber3;       break;
+        case SwPoolFormatId::COLL_NUM_LEVEL4:       nRet = ww::stiListNumber4;       break;
+        case SwPoolFormatId::COLL_NUM_LEVEL5:       nRet = ww::stiListNumber5;       break;
+        case SwPoolFormatId::COLL_DOC_TITLE:        nRet = ww::stiTitle;             break;
+        case SwPoolFormatId::COLL_DOC_APPENDIX:     nRet = ww::stiClosing;           break;
+        case SwPoolFormatId::COLL_SIGNATURE:        nRet = ww::stiSignature;         break;
+        case SwPoolFormatId::COLL_TEXT:             nRet = ww::stiBodyText;          break;
+        case SwPoolFormatId::COLL_TEXT_MOVE:        nRet = ww::stiBodyTextInd1;      break;
+        case SwPoolFormatId::COLL_BULLET_NONUM1:    nRet = ww::stiListCont;          break;
+        case SwPoolFormatId::COLL_BULLET_NONUM2:    nRet = ww::stiListCont2;         break;
+        case SwPoolFormatId::COLL_BULLET_NONUM3:    nRet = ww::stiListCont3;         break;
+        case SwPoolFormatId::COLL_BULLET_NONUM4:    nRet = ww::stiListCont4;         break;
+        case SwPoolFormatId::COLL_BULLET_NONUM5:    nRet = ww::stiListCont5;         break;
+        case SwPoolFormatId::COLL_DOC_SUBTITLE:     nRet = ww::stiSubtitle;          break;
+        case SwPoolFormatId::COLL_GREETING:         nRet = ww::stiSalutation;        break;
+        case SwPoolFormatId::COLL_TEXT_IDENT:       nRet = ww::stiBodyText1I;        break;
+        case SwPoolFormatId::CHR_INET_NORMAL:       nRet = ww::stiHyperlink;         break;
+        case SwPoolFormatId::CHR_INET_VISIT:        nRet = ww::stiHyperlinkFollowed; break;
+        case SwPoolFormatId::CHR_HTML_STRONG:       nRet = ww::stiStrong;            break;
+        case SwPoolFormatId::CHR_HTML_EMPHASIS:     nRet = ww::stiEmphasis;          break;
+        default: break;
         }
     return nRet;
 }

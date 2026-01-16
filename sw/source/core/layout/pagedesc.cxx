@@ -659,8 +659,8 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const UIName& rName)
     {
         if (rName == SwResId(STR_POOLPAGE[i]))
         {
-            return rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast< sal_uInt16 >(
-                        i + RES_POOLPAGE_BEGIN) );
+            return rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(
+                        SwPoolFormatId::PAGE_BEGIN + i );
         }
     }
 

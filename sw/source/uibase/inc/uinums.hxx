@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwNumRulesWithName final
         friend class SwNumRulesWithName;
         SwNumFormat m_aFormat;
         UIName m_sCharFormatName;
-        sal_uInt16 m_nCharPoolId;
+        SwPoolFormatId m_nCharPoolId;
         std::vector<std::unique_ptr<SfxPoolItem>> m_Items;
 
         SwNumFormatGlobal& operator=( const SwNumFormatGlobal& ) = delete;

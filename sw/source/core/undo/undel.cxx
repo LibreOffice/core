@@ -1289,7 +1289,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
                 // than add again a Node at the end
                 const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
                 rDoc.GetNodes().MakeTextNode( aTmpIdx.GetNode(),
-                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
             }
 
             SwContentNode* pNextNd = rDoc.GetNodes()[

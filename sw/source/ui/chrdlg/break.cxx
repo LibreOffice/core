@@ -170,14 +170,14 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     }
 
     UIName aFormatName;
-    for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+    for (SwPoolFormatId i = SwPoolFormatId::PAGE_BEGIN; i < SwPoolFormatId::PAGE_END; i = i + 1)
     {
         aFormatName = SwStyleNameMapper::GetUIName( i, ProgName() );
         if (m_xPageCollBox->find_text(aFormatName.toString()) == -1)
             ::InsertStringSorted(u""_ustr, aFormatName.toString(), *m_xPageCollBox, 1 );
     }
     //add landscape page
-    aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, ProgName() );
+    aFormatName = SwStyleNameMapper::GetUIName( SwPoolFormatId::PAGE_LANDSCAPE, ProgName() );
     if (m_xPageCollBox->find_text(aFormatName.toString()) == -1)
         ::InsertStringSorted(u""_ustr, aFormatName.toString(), *m_xPageCollBox, 1);
     CheckEnable();

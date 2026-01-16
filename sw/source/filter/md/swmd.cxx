@@ -217,8 +217,8 @@ void SwMarkdownParser::AddBlockQuote()
     else
         AddParSpace();
 
-    SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_BLOCKQUOTE);
+    SwTextFormatColl* pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
+        SwPoolFormatId::COLL_HTML_BLOCKQUOTE);
 
     m_nBlockQuoteDepth++;
 
@@ -236,7 +236,7 @@ void SwMarkdownParser::EndBlockQuote()
     if (m_nBlockQuoteDepth == 0)
     {
         SwTextFormatColl* pColl
-            = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+            = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
         m_xDoc->SetTextFormatColl(*m_pPam, pColl);
     }
 
@@ -249,7 +249,7 @@ void SwMarkdownParser::AddHR()
         AppendTextNode(AM_SPACE);
 
     SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_HR);
+        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_HTML_HR);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 }
 
@@ -257,7 +257,7 @@ void SwMarkdownParser::EndHR()
 {
     AppendTextNode(AM_SPACE);
     SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 }
 
@@ -285,7 +285,7 @@ void SwMarkdownParser::StartHeading(sal_uInt8 nLvl)
         AddParSpace();
 
     SwTextFormatColl* pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
-        RES_POOLCOLL_HEADLINE_BASE + nLvl);
+        SwPoolFormatId::COLL_HEADLINE_BASE + nLvl);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 }
 
@@ -297,7 +297,7 @@ void SwMarkdownParser::EndHeading()
         AddParSpace();
 
     SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 }
 
@@ -329,11 +329,11 @@ void SwMarkdownParser::StartNumberedBulletList(MD_BLOCKTYPE aListType)
     rInfo.SetNodeStartValue(nLevel);
     if (bNewNumFormat)
     {
-        sal_uInt16 nChrFormatPoolId = 0;
+        SwPoolFormatId nChrFormatPoolId = SwPoolFormatId::ZERO;
         if (aListType == MD_BLOCK_OL)
         {
             aNumFormat.SetNumberingType(SVX_NUM_ARABIC);
-            nChrFormatPoolId = RES_POOLCHR_NUM_LEVEL;
+            nChrFormatPoolId = SwPoolFormatId::CHR_NUM_LEVEL;
         }
         else
         {
@@ -343,7 +343,7 @@ void SwMarkdownParser::StartNumberedBulletList(MD_BLOCKTYPE aListType)
             }
             aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFormat.SetBulletChar(cBulletChar);
-            nChrFormatPoolId = RES_POOLCHR_BULLET_LEVEL;
+            nChrFormatPoolId = SwPoolFormatId::CHR_BULLET_LEVEL;
         }
 
         sal_Int32 nAbsLSpace = MD_NUMBER_BULLET_MARGINLEFT;
@@ -521,8 +521,8 @@ void SwMarkdownParser::StartNumberedBulletListItem(MD_BLOCK_LI_DETAIL aDetail)
         }
         aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFormat.SetBulletChar(cBulletChar);
-        aNumFormat.SetCharFormat(
-            m_xDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_BULLET_LEVEL));
+        aNumFormat.SetCharFormat(m_xDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+            SwPoolFormatId::CHR_BULLET_LEVEL));
         aNumFormat.SetFirstLineOffset(MD_NUMBER_BULLET_INDENT);
         aNumRule.Set(0, aNumFormat);
 
@@ -583,7 +583,7 @@ void SwMarkdownParser::BeginCodeBlock()
         AddParSpace();
 
     SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 
     SvxBrushItem aBrushItem(COL_CODE_BLOCK, RES_BACKGROUND);
@@ -598,7 +598,7 @@ void SwMarkdownParser::EndCodeBlock()
         AddParSpace();
 
     SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
     ClearAttrs();
 }
@@ -892,7 +892,7 @@ ErrCode SwMarkdownParser::CallParser()
     ::StartProgress(STR_STATSTR_W4WREAD, 0, sUtf8Data.getLength(), m_xDoc->GetDocShell());
 
     SwTextFormatColl* pColl
-        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+        = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
     m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 
     ErrCode nRet;

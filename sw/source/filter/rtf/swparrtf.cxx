@@ -82,8 +82,8 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
 
     // Step 4: Insert all content into the new node
     rPam.Move(fnMoveBackward);
-    rDoc.SetTextFormatColl(
-        rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
+    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
+                                     SwPoolFormatId::COLL_STANDARD, false));
 
     auto ret = ERRCODE_NONE;
     SwDocShell* pDocShell(rDoc.GetDocShell());

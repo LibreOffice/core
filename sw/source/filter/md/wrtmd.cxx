@@ -277,7 +277,7 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             const SvxFontItem& rFontItem = rItem.StaticWhichCast(RES_CHRATR_FONT);
             SwDoc* pDoc = rWrt.m_pDoc;
             IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
-            SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+            SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
             if (rFontItem == pColl->GetFont())
             {
                 // We know the import uses this font for code spans, so map this back to a code
@@ -657,7 +657,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 
         const SwFormatColl* pFormatColl = rNode.GetFormatColl();
-        if (pFormatColl && pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_BLOCKQUOTE)
+        if (pFormatColl && pFormatColl->GetPoolFormatId() == SwPoolFormatId::COLL_HTML_BLOCKQUOTE)
         {
             // <https://spec.commonmark.org/0.31.2/#block-quotes> first block quote, then heading.
             rWrt.Strm().WriteUnicodeOrByteText(u"> ");
@@ -667,39 +667,41 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         for (const SwFormat* pFormat = &rNode.GetAnyFormatColl(); pFormat;
              pFormat = pFormat->DerivedFrom())
         {
-            sal_uInt16 nPoolId = pFormat->GetPoolFormatId();
+            SwPoolFormatId nPoolId = pFormat->GetPoolFormatId();
             switch (nPoolId)
             {
-                case RES_POOLCOLL_HEADLINE1:
+                case SwPoolFormatId::COLL_HEADLINE1:
                     if (!nHeadingLevel)
                         nHeadingLevel = 1;
                     break;
-                case RES_POOLCOLL_HEADLINE2:
+                case SwPoolFormatId::COLL_HEADLINE2:
                     if (!nHeadingLevel)
                         nHeadingLevel = 2;
                     break;
-                case RES_POOLCOLL_HEADLINE3:
+                case SwPoolFormatId::COLL_HEADLINE3:
                     if (!nHeadingLevel)
                         nHeadingLevel = 3;
                     break;
-                case RES_POOLCOLL_HEADLINE4:
+                case SwPoolFormatId::COLL_HEADLINE4:
                     if (!nHeadingLevel)
                         nHeadingLevel = 4;
                     break;
-                case RES_POOLCOLL_HEADLINE5:
+                case SwPoolFormatId::COLL_HEADLINE5:
                     if (!nHeadingLevel)
                         nHeadingLevel = 5;
                     break;
-                case RES_POOLCOLL_HEADLINE6:
+                case SwPoolFormatId::COLL_HEADLINE6:
                     if (!nHeadingLevel)
                         nHeadingLevel = 6;
                     break;
-                case RES_POOLCOLL_HTML_HR:
+                case SwPoolFormatId::COLL_HTML_HR:
                     if (rNodeText.isEmpty())
                     {
                         rWrt.Strm().WriteUnicodeOrByteText(u"___\n");
                         return;
                     }
+                    break;
+                default:
                     break;
             }
         }
@@ -737,13 +739,13 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             }
         }
 
-        if (pFormatColl && pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_PRE)
+        if (pFormatColl && pFormatColl->GetPoolFormatId() == SwPoolFormatId::COLL_HTML_PRE)
         {
             // Before the first paragraph of a code block, see
             // <https://spec.commonmark.org/0.31.2/#fenced-code-blocks>.
             SwTextNode* pPrevNode = rWrt.m_pDoc->GetNodes()[rNode.GetIndex() - 1]->GetTextNode();
             const SwFormatColl* pPrevColl = pPrevNode ? pPrevNode->GetFormatColl() : nullptr;
-            if (!pPrevColl || pPrevColl->GetPoolFormatId() != RES_POOLCOLL_HTML_PRE)
+            if (!pPrevColl || pPrevColl->GetPoolFormatId() != SwPoolFormatId::COLL_HTML_PRE)
             {
                 rWrt.Strm().WriteUnicodeOrByteText(u"```" SAL_NEWLINE_STRING);
             }
@@ -858,12 +860,12 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         // Output final closing attributes
         OutFormattingChange(rWrt, positions, nEnd, currentStatus);
 
-        if (pFormatColl && pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_PRE)
+        if (pFormatColl && pFormatColl->GetPoolFormatId() == SwPoolFormatId::COLL_HTML_PRE)
         {
             // After the last paragraph of a code block.
             SwTextNode* pNextNode = rWrt.m_pDoc->GetNodes()[rNode.GetIndex() + 1]->GetTextNode();
             const SwFormatColl* pNextColl = pNextNode ? pNextNode->GetFormatColl() : nullptr;
-            if (!pNextColl || pNextColl->GetPoolFormatId() != RES_POOLCOLL_HTML_PRE)
+            if (!pNextColl || pNextColl->GetPoolFormatId() != SwPoolFormatId::COLL_HTML_PRE)
             {
                 rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING "```");
             }

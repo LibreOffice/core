@@ -407,13 +407,13 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // Start with inserting the Nodes and get the AutoFormat for the Table
-    SwTextFormatColl *pBodyColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ),
+    SwTextFormatColl *pBodyColl = getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TABLE ),
                  *pHeadColl = pBodyColl;
 
     bool bDfltBorders( rInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder );
 
     if( (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) && (1 != nRows || !bDfltBorders) )
-        pHeadColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN );
+        pHeadColl = getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TABLE_HDLN );
 
     const sal_uInt16 nRowsToRepeat =
             SwInsertTableFlags::Headline == (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) ?
@@ -771,7 +771,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     SwTableNode* pTableNd = GetNodes().TextToTable(
             aRg, cCh, pTableFormat, pLineFormat, pBoxFormat,
-            getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
+            getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ), pUndo );
 
     SwTable& rNdTable = pTableNd->GetTable();
 
@@ -2062,7 +2062,7 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         {
             const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
             GetNodes().MakeTextNode( aTmpIdx.GetNode(),
-                        getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+                        getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
         }
 
         // Save the cursors (UNO and otherwise)
@@ -2125,7 +2125,7 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         {
             const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
             GetNodes().MakeTextNode( aTmpIdx.GetNode(),
-                        getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+                        getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
         }
 
         // Save the cursors (UNO and otherwise)
@@ -3323,7 +3323,7 @@ void SwNodes::SplitFloatingTableFrame(SwTableNode & rNewTableNode,
 
     // create new anchor node *before* existing one
     SwTextNode *const pNewAnchorNode{MakeTextNode(rAnchorNode,
-        m_rMyDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT))};
+        m_rMyDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT))};
     SwFormatAnchor anchor{rFlyFormat.GetAnchor()};
     SwPosition const pos{*pNewAnchorNode};
     anchor.SetAnchor(&pos);
@@ -3464,7 +3464,7 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
 
             // Insert a paragraph between the tables
             GetNodes().MakeTextNode( *pNew,
-                                getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+                                getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ) );
         }
     }
 

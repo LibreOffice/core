@@ -68,7 +68,7 @@ class SwCSS1Parser : public SvxCSS1Parser
 
     bool m_bLinkCharFormatsSet : 1;
 
-    const SwPageDesc* GetPageDesc( sal_uInt16 nPoolId, bool bCreate );
+    const SwPageDesc* GetPageDesc( SwPoolFormatId nPoolId, bool bCreate );
 
     void SetTableTextColl( bool bHeader );
     void SetLinkCharFormats();
@@ -97,12 +97,12 @@ public:
     SwCharFormat* GetChrFormat( HtmlTokenId nToken, const OUString& rClass ) const;
 
     // determine a TextFormatColl of a Pool-Id
-    SwTextFormatColl *GetTextFormatColl( sal_uInt16 nTextColl, const OUString& rClass );
+    SwTextFormatColl *GetTextFormatColl( SwPoolFormatId nTextColl, const OUString& rClass );
 
     // This methods do the same as the one of SwDoc, but change the
     // encoding if required.
-    SwTextFormatColl *GetTextCollFromPool( sal_uInt16 nPoolId ) const;
-    SwCharFormat *GetCharFormatFromPool( sal_uInt16 nPoolId ) const;
+    SwTextFormatColl *GetTextCollFromPool( SwPoolFormatId nPoolId ) const;
+    SwCharFormat *GetCharFormatFromPool( SwPoolFormatId nPoolId ) const;
 
     // Fetch the left or right page style. In documents with only
     // one style there is only a right page.
@@ -167,17 +167,17 @@ public:
 
 inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( bool bCreate )
 {
-    return GetPageDesc( RES_POOLPAGE_FIRST, bCreate );
+    return GetPageDesc( SwPoolFormatId::PAGE_FIRST, bCreate );
 }
 
 inline const SwPageDesc* SwCSS1Parser::GetRightPageDesc( bool bCreate )
 {
-    return GetPageDesc( RES_POOLPAGE_RIGHT, bCreate );
+    return GetPageDesc( SwPoolFormatId::PAGE_RIGHT, bCreate );
 }
 
 inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( bool bCreate )
 {
-    return GetPageDesc( RES_POOLPAGE_LEFT, bCreate );
+    return GetPageDesc( SwPoolFormatId::PAGE_LEFT, bCreate );
 }
 
 inline void SwCSS1Parser::SetTHTagStyles()

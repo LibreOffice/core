@@ -120,7 +120,7 @@ namespace
             bool bAsChar = rAnchor.GetAnchorId() ==
                     static_cast<RndStdIds>(css::text::TextContentAnchorType_AS_CHARACTER);
             if ( bAsChar &&
-                    !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+                    !(pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING) )
             {
                 continue;
             }
@@ -450,9 +450,9 @@ namespace sw
             if (!pColl)
             {
                 // Collection not found, try in Pool ?
-                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
+                SwPoolFormatId n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     SwGetPoolIdFromName::TxtColl);
-                if (n != SAL_MAX_UINT16)       // found or standard
+                if (n != SwPoolFormatId::UNKNOWN)       // found or standard
                     pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(n, false);
             }
             return pColl;
@@ -464,9 +464,9 @@ namespace sw
             if (!pFormat)
             {
                 // Collection not found, try in Pool ?
-                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
+                SwPoolFormatId n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     SwGetPoolIdFromName::ChrFmt);
-                if (n != SAL_MAX_UINT16)       // found or standard
+                if (n != SwPoolFormatId::UNKNOWN)       // found or standard
                     pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(n);
             }
             return pFormat;

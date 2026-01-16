@@ -947,20 +947,21 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         OUString sTmp(GetPar1());
         if(ReferencesSubtype::SequenceField == m_nSubType)
         {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(sTmp), SwGetPoolIdFromName::TxtColl );
+            SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(sTmp), SwGetPoolIdFromName::TxtColl );
             switch( nPoolId )
             {
-                case RES_POOLCOLL_LABEL_ABB:
-                case RES_POOLCOLL_LABEL_TABLE:
-                case RES_POOLCOLL_LABEL_FRAME:
-                case RES_POOLCOLL_LABEL_DRAWING:
-                case RES_POOLCOLL_LABEL_FIGURE:
+                case SwPoolFormatId::COLL_LABEL_ABB:
+                case SwPoolFormatId::COLL_LABEL_TABLE:
+                case SwPoolFormatId::COLL_LABEL_FRAME:
+                case SwPoolFormatId::COLL_LABEL_DRAWING:
+                case SwPoolFormatId::COLL_LABEL_FIGURE:
                 {
                     ProgName sTmp2(sTmp);
                     SwStyleNameMapper::FillProgName(nPoolId, sTmp2) ;
                     sTmp = sTmp2.toString();
                 }
                 break;
+                default: break;
             }
         }
         else if (ReferencesSubtype::Style == m_nSubType)
@@ -1119,25 +1120,26 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     if (rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         return;
 
-    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( ProgName(rPar1), SwGetPoolIdFromName::TxtColl );
+    SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( ProgName(rPar1), SwGetPoolIdFromName::TxtColl );
     TranslateId pResId;
     switch( nPoolId )
     {
-        case RES_POOLCOLL_LABEL_ABB:
+        case SwPoolFormatId::COLL_LABEL_ABB:
             pResId = STR_POOLCOLL_LABEL_ABB;
         break;
-        case RES_POOLCOLL_LABEL_TABLE:
+        case SwPoolFormatId::COLL_LABEL_TABLE:
             pResId = STR_POOLCOLL_LABEL_TABLE;
         break;
-        case RES_POOLCOLL_LABEL_FRAME:
+        case SwPoolFormatId::COLL_LABEL_FRAME:
             pResId = STR_POOLCOLL_LABEL_FRAME;
         break;
-        case RES_POOLCOLL_LABEL_DRAWING:
+        case SwPoolFormatId::COLL_LABEL_DRAWING:
             pResId = STR_POOLCOLL_LABEL_DRAWING;
         break;
-        case RES_POOLCOLL_LABEL_FIGURE:
+        case SwPoolFormatId::COLL_LABEL_FIGURE:
             pResId = STR_POOLCOLL_LABEL_FIGURE;
         break;
+        default: break;
     }
     if (pResId)
         SetPar1(SwResId(pResId));
@@ -1547,7 +1549,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const SwMarkName&
     const OUString& sRefMarkStr = rRefMark.toString();
     OUString const styleName(
         (sRefMarkStr.getLength() == 1 && '1' <= sRefMarkStr[0] && sRefMarkStr[0] <= '9')
-        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + sRefMarkStr[0] - '1', UIName(sRefMarkStr)).toString()
+        ? SwStyleNameMapper::GetProgName(SwPoolFormatId::COLL_HEADLINE1 + sRefMarkStr[0] - '1', UIName(sRefMarkStr)).toString()
         : sRefMarkStr);
 
     switch (elementType)

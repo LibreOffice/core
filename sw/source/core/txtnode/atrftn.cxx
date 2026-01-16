@@ -445,17 +445,17 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
     // set the footnote style on the SwTextNode
     SwTextFormatColl *pFormatColl;
     const SwEndNoteInfo* pInfo;
-    sal_uInt16 nPoolId;
+    SwPoolFormatId nPoolId;
 
     if( GetFootnote().IsEndNote() )
     {
         pInfo = &rNodes.GetDoc().GetEndNoteInfo();
-        nPoolId = RES_POOLCOLL_ENDNOTE;
+        nPoolId = SwPoolFormatId::COLL_ENDNOTE;
     }
     else
     {
         pInfo = &rNodes.GetDoc().GetFootnoteInfo();
-        nPoolId = RES_POOLCOLL_FOOTNOTE;
+        nPoolId = SwPoolFormatId::COLL_FOOTNOTE;
     }
 
     pFormatColl = pInfo->GetFootnoteTextColl();

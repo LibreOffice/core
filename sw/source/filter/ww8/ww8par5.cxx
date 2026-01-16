@@ -2314,7 +2314,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             OUString sURL = "#" + sBookmarkName.toString();
             SwFormatINetFormat aURL( sURL, u""_ustr );
             static constexpr OUString sLinkStyle(u"Index Link"_ustr);
-            const sal_uInt16 nPoolId =
+            const SwPoolFormatId nPoolId =
                 SwStyleNameMapper::GetPoolIdFromProgName( ProgName(sLinkStyle), SwGetPoolIdFromName::ChrFmt );
             aURL.SetVisitedFormatAndId( UIName(sLinkStyle), nPoolId);
             aURL.SetINetFormatAndId( UIName(sLinkStyle), nPoolId );
@@ -2861,7 +2861,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     {
         UIName aNm;
         //Take this as the base name
-        SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
+        SwStyleNameMapper::FillUIName(SwPoolFormatId::CHR_RUBYTEXT,aNm);
         aNm = UIName(aNm.toString() + OUString::number(m_aRubyCharFormats.size()+1));
         SwCharFormat *pFormat = m_rDoc.MakeCharFormat(aNm, m_rDoc.GetDfltCharFormat());
         SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
@@ -3633,7 +3633,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     if (m_bLoadingTOXCache)
     {
         OUString sLinkStyle(u"Index Link"_ustr);
-        sal_uInt16 nPoolId =
+        SwPoolFormatId nPoolId =
             SwStyleNameMapper::GetPoolIdFromProgName( ProgName(sLinkStyle), SwGetPoolIdFromName::ChrFmt );
         aURL.SetVisitedFormatAndId( UIName(sLinkStyle), nPoolId );
         aURL.SetINetFormatAndId( UIName(sLinkStyle), nPoolId );

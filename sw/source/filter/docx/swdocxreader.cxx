@@ -53,7 +53,7 @@ ErrCodeMsg SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM
     // We want to work in an empty paragraph.
     const SwPosition* pPos = rPam.GetPoint();
     rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
-    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
+    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false));
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.WriterFilter"_ustr), uno::UNO_SET_THROW);
@@ -162,7 +162,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
     if( aStart < aDocEnd && ( aDocEnd.GetIndex() - aStart.GetIndex() > SwNodeOffset(2) ) )
     {
         SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
-            (RES_POOLCOLL_STANDARD, false);
+            (SwPoolFormatId::COLL_STANDARD, false);
         SwContentNode* pCNd = nullptr;
         bRet = true;
         do {

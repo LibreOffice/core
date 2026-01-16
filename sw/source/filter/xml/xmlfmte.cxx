@@ -33,6 +33,7 @@
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
 #include <cellatr.hxx>
+#include <poolfmt.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Color.hpp>
@@ -83,7 +84,7 @@ void SwXMLExport::ExportFormat(const SwFormat& rFormat, enum XMLTokenEnum eFamil
     // Only adopt parent name, if it's not the default
     OSL_ENSURE( !pParent || pParent->IsDefault(), "unexpected parent" );
 
-    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolFormatId(), "pool ids aren't supported" );
+    OSL_ENSURE( SwPoolFormatId::UNKNOWN == rFormat.GetPoolFormatId(), "pool ids aren't supported" );
     OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId(), "help ids aren't supported" );
     OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId() ||
             UCHAR_MAX == rFormat.GetPoolHlpFileId(), "help file ids aren't supported" );

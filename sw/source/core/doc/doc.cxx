@@ -1695,10 +1695,10 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
             {
                 SwTextFormatColl* pMyColl = pNd->GetTextColl();
 
-                const sal_uInt16 nHeadLine = o3tl::narrowing<sal_uInt16>(
+                const SwPoolFormatId nHeadLine =
                             !pMyColl->IsAssignedToListLevelOfOutlineStyle()
-                            ? RES_POOLCOLL_HEADLINE2
-                            : RES_POOLCOLL_HEADLINE1 );
+                            ? SwPoolFormatId::COLL_HEADLINE2
+                            : SwPoolFormatId::COLL_HEADLINE1;
                 pMyColl = rExtDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nHeadLine );
                 pNd->ChgFormatColl( pMyColl );
             }

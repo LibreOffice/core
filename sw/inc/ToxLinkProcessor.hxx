@@ -53,7 +53,7 @@ private:
      * @internal
      * This method is overridden in the unittests. You should not override it yourself.
      */
-    virtual sal_uInt16
+    virtual SwPoolFormatId
     ObtainPoolId(const UIName& characterStyle) const;
 
     /** Information about a started link */

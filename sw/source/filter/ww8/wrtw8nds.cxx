@@ -183,7 +183,7 @@ lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
 static bool lcl_IsInlineHeading(const ww8::Frame &rFrame)
 {
     const SwFormat* pParent = rFrame.GetFrameFormat().DerivedFrom();
-    return pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING;
+    return pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING;
 }
 
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )

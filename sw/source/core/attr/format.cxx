@@ -25,6 +25,7 @@
 #include <frmatr.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <poolfmt.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -42,7 +43,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const UIName& rFormatNm,
     m_aFormatName( rFormatNm ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
-    m_nPoolFormatId( USHRT_MAX ),
+    m_nPoolFormatId( SwPoolFormatId::UNKNOWN ),
     m_nPoolHelpId( USHRT_MAX ),
     m_nPoolHlpFileId( UCHAR_MAX )
 {

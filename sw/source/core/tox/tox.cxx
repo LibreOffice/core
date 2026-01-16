@@ -718,7 +718,7 @@ OUString SwFormToken::GetString() const
         break;
     }
 
-    OUString sData = " " + sCharStyleName.toString() + "," + OUString::number( nPoolId ) + ",";
+    OUString sData = " " + sCharStyleName.toString() + "," + OUString::number( sal_uInt16(nPoolId) ) + ",";
 
     // TabStopPosition and TabAlign or ChapterInfoFormat
     switch (eTokenType)
@@ -872,7 +872,7 @@ lcl_BuildToken(std::u16string_view sPattern, size_t & nCurPatternPos)
     eRet.sCharStyleName = UIName(OUString(o3tl::getToken(sToken, 0, ',', nIdx )));
     std::u16string_view sTmp( o3tl::getToken(sToken, 0, ',', nIdx ));
     if( !sTmp.empty() )
-        eRet.nPoolId = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp));
+        eRet.nPoolId = SwPoolFormatId(o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp)));
 
     switch( eTokenType )
     {

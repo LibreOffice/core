@@ -296,7 +296,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
             if (!aCharStyleName.isEmpty())
             {
                 SwCharFormat* pCharFormat;
-                if( USHRT_MAX != aToken.nPoolId )
+                if( SwPoolFormatId::UNKNOWN != aToken.nPoolId )
                     pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( aToken.nPoolId );
                 else
                     pCharFormat = rDoc.FindCharFormatByName(aCharStyleName);

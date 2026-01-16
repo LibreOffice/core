@@ -912,7 +912,7 @@ std::unique_ptr<SfxTabPage> SwStdFontTabPage::Create( weld::Container* pPage, we
     return std::make_unique<SwStdFontTabPage>(pPage, pController, *rAttrSet);
 }
 
-static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
+static void lcl_SetColl(SwWrtShell* pWrtShell, SwPoolFormatId nType,
                     SfxPrinter const * pPrt, const OUString& rStyle,
                     sal_uInt16 nFontWhich)
 {
@@ -924,7 +924,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                 OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
 }
 
-static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
+static void lcl_SetColl(SwWrtShell* pWrtShell, SwPoolFormatId nType,
                     sal_Int32 nHeight, sal_uInt16 nFontHeightWhich)
 {
     float fSize = static_cast<float>(nHeight) / 10;
@@ -1015,7 +1015,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
                 aFont = pPrinter->GetFontMetric( aFont );
             m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
                                   OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
-            SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
             pColl->ResetFormatAttr(nFontWhich);
             bMod = true;
         }
@@ -1023,52 +1023,52 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
         {
             float fSize = static_cast<float>(m_xStandardHeightLB->get_value()) / 10;
             m_pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, MapUnit::MapTwip ), 100, nFontHeightWhich ) );
-            SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
             pColl->ResetFormatAttr(nFontHeightWhich);
             bMod = true;
         }
 
         if(sTitle != m_sShellTitle )
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_HEADLINE_BASE, pPrinter, sTitle, nFontWhich);
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_HEADLINE_BASE, pPrinter, sTitle, nFontWhich);
             bMod = true;
         }
         if(bTitleHeightChanged)
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_HEADLINE_BASE,
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_HEADLINE_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(m_xTitleHeightLB->get_value()), nFontHeightWhich);
             bMod = true;
         }
         if(sList != m_sShellList && (!m_bListDefault || !m_bSetListDefault ))
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBER_BULLET_BASE, pPrinter, sList, nFontWhich);
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_NUMBER_BULLET_BASE, pPrinter, sList, nFontWhich);
             bMod = true;
         }
         if(bListHeightChanged)
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBER_BULLET_BASE,
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_NUMBER_BULLET_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(m_xListHeightLB->get_value()), nFontHeightWhich);
             bMod = true;
         }
         if(sLabel != m_sShellLabel && (!m_bLabelDefault || !m_bSetLabelDefault))
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_LABEL, pPrinter, sLabel, nFontWhich);
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_LABEL, pPrinter, sLabel, nFontWhich);
             bMod = true;
         }
         if(bLabelHeightChanged)
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_LABEL,
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_LABEL,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(m_xLabelHeightLB->get_value()), nFontHeightWhich);
             bMod = true;
         }
         if(sIdx != m_sShellIndex && (!m_bIdxDefault || !m_bSetIdxDefault))
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_REGISTER_BASE, pPrinter, sIdx, nFontWhich);
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_REGISTER_BASE, pPrinter, sIdx, nFontWhich);
             bMod = true;
         }
         if(bIndexHeightChanged)
         {
-            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_REGISTER_BASE,
+            lcl_SetColl(m_pWrtShell, SwPoolFormatId::COLL_REGISTER_BASE,
                 sal::static_int_cast< sal_uInt16, sal_Int64 >(m_xIndexHeightLB->get_value()), nFontHeightWhich);
             bMod = true;
         }
@@ -1180,7 +1180,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     }
     else
     {
-        SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+        SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
         const SvxFontItem& rFont = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellStd = sStdBackup =  rFont.GetFamilyName();
@@ -1191,7 +1191,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontHeightItem& rFontHeightStandard = pColl->GetFormatAttr(nFontHeightWhich);
         nStandardHeight = static_cast<sal_Int32>(rFontHeightStandard.GetHeight());
 
-        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
+        pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_HEADLINE_BASE);
         const SvxFontItem& rFontHL = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellTitle = sOutBackup = rFontHL.GetFamilyName();
@@ -1202,7 +1202,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const sal_uInt16 nFontWhich =
             m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
             FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT;
-        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_NUMBER_BULLET_BASE);
+        pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_NUMBER_BULLET_BASE);
         const SvxFontItem& rFontLS = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
@@ -1211,7 +1211,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontHeightItem& rFontHeightList = pColl->GetFormatAttr(nFontHeightWhich);
         nListHeight = static_cast<sal_Int32>(rFontHeightList.GetHeight());
 
-        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_LABEL);
+        pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_LABEL);
         m_bLabelDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         const SvxFontItem& rFontCP = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
@@ -1219,7 +1219,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontHeightItem& rFontHeightLabel = pColl->GetFormatAttr(nFontHeightWhich);
         nLabelHeight = static_cast<sal_Int32>(rFontHeightLabel.GetHeight());
 
-        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_REGISTER_BASE);
+        pColl = m_pWrtShell->GetTextCollFromPool(SwPoolFormatId::COLL_REGISTER_BASE);
         m_bIdxDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         const SvxFontItem& rFontIDX = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();

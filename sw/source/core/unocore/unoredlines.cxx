@@ -103,7 +103,7 @@ css::uno::Reference<css::beans::XPropertySet> SwXRedlines::GetObject(SwRangeRedl
 {
     SwXRedline* pXRedline(nullptr);
     sw::FindRedlineHint aHint(rRedline, &pXRedline);
-    rRedline.GetDoc().getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier().Broadcast(aHint);
+    rRedline.GetDoc().getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier().Broadcast(aHint);
     return pXRedline ? pXRedline : new SwXRedline(rRedline);
 }
 
@@ -111,7 +111,7 @@ SwXRedlineEnumeration::SwXRedlineEnumeration(SwDoc& rDoc) :
     m_pDoc(&rDoc),
     m_nCurrentIndex(0)
 {
-    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 }
 
 SwXRedlineEnumeration::~SwXRedlineEnumeration()

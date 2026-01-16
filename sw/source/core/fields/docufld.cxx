@@ -2657,7 +2657,7 @@ void SwJumpEditFieldType::SwClientNotify(const SwModify& rModify, const SfxHint&
 
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
-    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( SwPoolFormatId::CHR_JUMPEDIT );
     if (!m_aDep.IsListeningTo(pFormat))
         m_aDep.StartListening(pFormat);
     return pFormat;

@@ -183,9 +183,9 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
 
     bool bMaybeResetNumbering = false;
 
-    mpTitleDesc = rWrtShell.GetPageDescFromPool(RES_POOLPAGE_FIRST);
-    mpIndexDesc = rWrtShell.GetPageDescFromPool(RES_POOLPAGE_REGISTER);
-    mpNormalDesc = rWrtShell.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+    mpTitleDesc = rWrtShell.GetPageDescFromPool(SwPoolFormatId::PAGE_FIRST);
+    mpIndexDesc = rWrtShell.GetPageDescFromPool(SwPoolFormatId::PAGE_REGISTER);
+    mpNormalDesc = rWrtShell.GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD);
 
     rWrtShell.StartOfSection();
     if (lcl_GetPageDesc(rWrtShell, nSetPage, &mpPageFormatDesc))

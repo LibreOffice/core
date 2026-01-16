@@ -134,8 +134,8 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         else if ( !rURL.GetURL().isEmpty() )
             bVisited = rSh.GetDoc()->IsVisitedURL( rURL.GetURL() );
 
-        SwFormat *pFormat = rSh.GetDoc()->getIDocumentStylePoolAccess().GetFormatFromPool( o3tl::narrowing<sal_uInt16>
-            (bVisited ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL ) );
+        SwFormat *pFormat = rSh.GetDoc()->getIDocumentStylePoolAccess().GetFormatFromPool(
+            bVisited ? SwPoolFormatId::CHR_INET_VISIT : SwPoolFormatId::CHR_INET_NORMAL );
         aCol = pFormat->GetColor().GetValue();
         eUnderline = pFormat->GetUnderline().GetLineStyle();
     }

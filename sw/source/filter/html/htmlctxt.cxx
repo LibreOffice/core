@@ -118,7 +118,7 @@ HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
     return m_pSaveDocContext.get();
 }
 
-HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUString aClass,
+HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, SwPoolFormatId nPoolId, OUString aClass,
                   bool bDfltColl ) :
     m_aClass(std::move( aClass )),
     m_nToken( nTokn ),
@@ -143,7 +143,7 @@ HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUStrin
 
 HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn ) :
     m_nToken( nTokn ),
-    m_nTextFormatColl( 0 ),
+    m_nTextFormatColl( SwPoolFormatId::ZERO ),
     m_nLeftMargin( 0 ),
     m_nRightMargin( 0 ),
     m_nFirstLineIndent( 0 ),

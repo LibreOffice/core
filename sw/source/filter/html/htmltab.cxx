@@ -1485,7 +1485,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             // the same.
             SwTableAutoFormatTable& rTable = m_pParser->GetDoc()->GetTableStyles();
             SwTableAutoFormat* pTableFormat = rTable.FindAutoFormat(
-                TableStyleName(SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName()).toString()));
+                TableStyleName(SwStyleNameMapper::GetUIName(SwPoolFormatId::TABLESTYLE_DEFAULT, ProgName()).toString()));
             if (pTableFormat)
             {
                 sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);
@@ -2565,7 +2565,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     OSL_ENSURE( pPrevStNd, "Start-Node is NULL" );
 
     m_pCSS1Parser->SetTDTagStyles();
-    SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TABLE );
+    SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_TABLE );
 
     const SwStartNode *pStNd;
     if (m_xTable->m_bFirstCell )
@@ -2605,16 +2605,17 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     return pStNd;
 }
 
-const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
+const SwStartNode *SwHTMLParser::InsertTableSection( SwPoolFormatId nPoolId )
 {
     switch( nPoolId )
     {
-    case RES_POOLCOLL_TABLE_HDLN:
+    case SwPoolFormatId::COLL_TABLE_HDLN:
         m_pCSS1Parser->SetTHTagStyles();
         break;
-    case RES_POOLCOLL_TABLE:
+    case SwPoolFormatId::COLL_TABLE:
         m_pCSS1Parser->SetTDTagStyles();
         break;
+    default: break;
     }
 
     SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( nPoolId );
@@ -2667,7 +2668,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 
 SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
 {
-    SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT );
+    SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_TEXT );
     SwStartNode *pStNd = m_xDoc->GetNodes().MakeTextSection( m_xDoc->GetNodes().GetEndOfExtras(),
                                           SwNormalStartNode, pColl );
 
@@ -3016,16 +3017,16 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
     // Create a new context but don't anchor the drawing::Alignment attribute there,
     // since there's no section yet
     HtmlTokenId nToken;
-    sal_uInt16 nColl;
+    SwPoolFormatId nColl;
     if( m_bHead )
     {
         nToken = HtmlTokenId::TABLEHEADER_ON;
-        nColl = RES_POOLCOLL_TABLE_HDLN;
+        nColl = SwPoolFormatId::COLL_TABLE_HDLN;
     }
     else
     {
         nToken = HtmlTokenId::TABLEDATA_ON;
-        nColl = RES_POOLCOLL_TABLE;
+        nColl = SwPoolFormatId::COLL_TABLE;
     }
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, OUString(), true));
     if( SvxAdjust::End != eAdjust )
@@ -3167,8 +3168,8 @@ std::unique_ptr<HTMLTableCnts> SwHTMLParser::InsertTableContents(
 {
     // create a new section, the PaM is gonna be there
     const SwStartNode *pStNd =
-        InsertTableSection( static_cast< sal_uInt16 >(bHead ? RES_POOLCOLL_TABLE_HDLN
-                                           : RES_POOLCOLL_TABLE) );
+        InsertTableSection( bHead ? SwPoolFormatId::COLL_TABLE_HDLN
+                                  : SwPoolFormatId::COLL_TABLE );
 
     if( GetNumInfo().GetNumRule() )
     {
@@ -3330,7 +3331,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     {
                         //Set default to CJK and CTL
                         m_xDoc->SetTextFormatColl( *m_pPam,
-                            m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_STANDARD) );
+                            m_pCSS1Parser->GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD) );
                         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
 
                         HTMLAttr* pTmp =
@@ -3820,9 +3821,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 !xSaveStruct->IsInSection(),
                 "Section or not, that is the question here" );
         const SwStartNode *pStNd =
-            InsertTableSection( static_cast< sal_uInt16 >(xSaveStruct->IsHeaderCell()
-                                        ? RES_POOLCOLL_TABLE_HDLN
-                                        : RES_POOLCOLL_TABLE ));
+            InsertTableSection( xSaveStruct->IsHeaderCell()
+                                        ? SwPoolFormatId::COLL_TABLE_HDLN
+                                        : SwPoolFormatId::COLL_TABLE );
 
         if (!pStNd)
             eState = SvParserState::Error;
@@ -4581,7 +4582,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         if (m_xTable.get() == pCurTable)
             pStNd = InsertTempTableCaptionSection();
         else
-            pStNd = InsertTableSection( RES_POOLCOLL_TEXT );
+            pStNd = InsertTableSection( SwPoolFormatId::COLL_TEXT );
 
         std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(HtmlTokenId::CAPTION_ON));
 

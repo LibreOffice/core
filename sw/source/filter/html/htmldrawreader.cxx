@@ -387,7 +387,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // set the default colour (from the default template), so that a meaningful
     // colour is set at all
     const Color& rDfltColor =
-        m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
+        m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD )
             ->GetColor().GetValue();
     aItemSet.Put( SvxColorItem( rDfltColor, EE_CHAR_COLOR ) );
 

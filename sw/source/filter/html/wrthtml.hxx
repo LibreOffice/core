@@ -580,10 +580,10 @@ public:
     static const SdrObject* GetHTMLControl( const SwDrawFrameFormat& rFormat );
     static const SdrObject* GetMarqueeTextObj( const SwDrawFrameFormat& rFormat );
     static sal_uInt16 GetCSS1Selector( const SwFormat *pFormat, OString& rToken,
-                                   OUString& rClass, sal_uInt16& rRefPoolId,
+                                   OUString& rClass, SwPoolFormatId& rRefPoolId,
                                    OUString *pPseudo=nullptr );
 
-    static const SwFormat *GetTemplateFormat( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
+    static const SwFormat *GetTemplateFormat( SwPoolFormatId nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
     static const SwFormat *GetParentFormat( const SwFormat& rFormat, sal_uInt16 nDeep );
 
     static void SubtractItemSet( SfxItemSet& rItemSet,
@@ -597,7 +597,7 @@ public:
     static void GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                       const SdrObject *pObj );
 
-    static sal_uInt16 GetDefListLvl( const UIName& rNm, sal_uInt16 nPoolId );
+    static sal_uInt16 GetDefListLvl( const UIName& rNm, SwPoolFormatId nPoolId );
 
     sal_uInt32 GetHTMLMode() const
     {
@@ -619,7 +619,7 @@ public:
 
     FieldUnit GetCSS1Unit() const { return m_eCSS1Unit; }
 
-    sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, std::u16string_view rText );
+    sal_Int32 indexOfDotLeaders( SwPoolFormatId nPoolId, std::u16string_view rText );
 
     /// Determines the prefix string needed to respect the requested namespace alias.
     OString GetNamespace() const { return maNamespace; }

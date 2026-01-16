@@ -631,8 +631,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     {
         // If the page style is a pool style, then we maybe have to create it
         // first if it hasn't been used by now.
-        const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sUIName, SwGetPoolIdFromName::PageDesc );
-        if( USHRT_MAX != nPoolId )
+        const SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sUIName, SwGetPoolIdFromName::PageDesc );
+        if( SwPoolFormatId::UNKNOWN != nPoolId )
             pPageDesc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId, false );
     }
 

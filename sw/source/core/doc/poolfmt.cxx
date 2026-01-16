@@ -166,16 +166,16 @@ size_t SwDoc::SetDocPattern(const OUString& rPatternName)
     }
 }
 
-sal_uInt16 GetPoolParent( sal_uInt16 nId )
+SwPoolFormatId GetPoolParent( SwPoolFormatId nId )
 {
-    sal_uInt16 nRet = USHRT_MAX;
-    if( POOLGRP_NOCOLLID & nId )        // 1 == Formats / 0 == Collections
+    SwPoolFormatId nRet = SwPoolFormatId::UNKNOWN;
+    if( POOLGRP_NOCOLLID & sal_uInt16(nId) )        // 1 == Formats / 0 == Collections
     {
-        switch( ( COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID ) & nId )
+        switch( ( COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID ) & sal_uInt16(nId) )
         {
         case POOLGRP_CHARFMT:
         case POOLGRP_FRAMEFMT:
-            nRet = 0;           // derived from the default
+            nRet = SwPoolFormatId::ZERO;           // derived from the default
             break;
         case POOLGRP_PAGEDESC:
         case POOLGRP_NUMRULE:
@@ -184,110 +184,112 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
     }
     else
     {
-        switch( COLL_GET_RANGE_BITS & nId )
+        switch( COLL_GET_RANGE_BITS & sal_uInt16(nId) )
         {
         case COLL_TEXT_BITS:
             switch( nId )
             {
-            case RES_POOLCOLL_STANDARD:
-                    nRet = 0;                                   break;
-            case RES_POOLCOLL_TEXT_IDENT:
-            case RES_POOLCOLL_TEXT_NEGIDENT:
-            case RES_POOLCOLL_TEXT_MOVE:
-            case RES_POOLCOLL_CONFRONTATION:
-            case RES_POOLCOLL_MARGINAL:
-                    nRet = RES_POOLCOLL_TEXT;                   break;
+            case SwPoolFormatId::COLL_STANDARD:
+                    nRet = SwPoolFormatId::ZERO;                        break;
+            case SwPoolFormatId::COLL_TEXT_IDENT:
+            case SwPoolFormatId::COLL_TEXT_NEGIDENT:
+            case SwPoolFormatId::COLL_TEXT_MOVE:
+            case SwPoolFormatId::COLL_CONFRONTATION:
+            case SwPoolFormatId::COLL_MARGINAL:
+                    nRet = SwPoolFormatId::COLL_TEXT;                   break;
 
-            case RES_POOLCOLL_TEXT:
-            case RES_POOLCOLL_GREETING:
-            case RES_POOLCOLL_SIGNATURE:
-                    nRet = RES_POOLCOLL_STANDARD;               break;
+            case SwPoolFormatId::COLL_TEXT:
+            case SwPoolFormatId::COLL_GREETING:
+            case SwPoolFormatId::COLL_SIGNATURE:
+                    nRet = SwPoolFormatId::COLL_STANDARD;               break;
+            default: break;
             }
             break;
 
         case COLL_LISTS_BITS:
             switch( nId )
             {
-            case RES_POOLCOLL_NUMBER_BULLET_BASE:
-                    nRet = RES_POOLCOLL_TEXT;                   break;
+            case SwPoolFormatId::COLL_NUMBER_BULLET_BASE:
+                    nRet = SwPoolFormatId::COLL_TEXT;                   break;
 
             default:
-                nRet = RES_POOLCOLL_NUMBER_BULLET_BASE;                break;
+                nRet = SwPoolFormatId::COLL_NUMBER_BULLET_BASE;                break;
             }
             break;
 
         case COLL_EXTRA_BITS:
             switch( nId )
             {
-            case RES_POOLCOLL_TABLE_HDLN:
-                    nRet = RES_POOLCOLL_TABLE;                 break;
+            case SwPoolFormatId::COLL_TABLE_HDLN:
+                    nRet = SwPoolFormatId::COLL_TABLE;                 break;
 
-            case RES_POOLCOLL_FRAME:
-            case RES_POOLCOLL_TABLE:
-            case RES_POOLCOLL_FOOTNOTE:
-            case RES_POOLCOLL_ENDNOTE:
-            case RES_POOLCOLL_ENVELOPE_ADDRESS:
-            case RES_POOLCOLL_SEND_ADDRESS:
-            case RES_POOLCOLL_HEADERFOOTER:
-            case RES_POOLCOLL_LABEL:
-            case RES_POOLCOLL_COMMENT:
-                    nRet = RES_POOLCOLL_STANDARD;              break;
-            case RES_POOLCOLL_HEADER:
-                    nRet = RES_POOLCOLL_HEADERFOOTER;          break;
-            case RES_POOLCOLL_HEADERL:
-            case RES_POOLCOLL_HEADERR:
-                    nRet = RES_POOLCOLL_HEADER;                break;
-            case RES_POOLCOLL_FOOTER:
-                    nRet = RES_POOLCOLL_HEADERFOOTER;          break;
-            case RES_POOLCOLL_FOOTERL:
-            case RES_POOLCOLL_FOOTERR:
-                    nRet = RES_POOLCOLL_FOOTER;                break;
+            case SwPoolFormatId::COLL_FRAME:
+            case SwPoolFormatId::COLL_TABLE:
+            case SwPoolFormatId::COLL_FOOTNOTE:
+            case SwPoolFormatId::COLL_ENDNOTE:
+            case SwPoolFormatId::COLL_ENVELOPE_ADDRESS:
+            case SwPoolFormatId::COLL_SEND_ADDRESS:
+            case SwPoolFormatId::COLL_HEADERFOOTER:
+            case SwPoolFormatId::COLL_LABEL:
+            case SwPoolFormatId::COLL_COMMENT:
+                    nRet = SwPoolFormatId::COLL_STANDARD;              break;
+            case SwPoolFormatId::COLL_HEADER:
+                    nRet = SwPoolFormatId::COLL_HEADERFOOTER;          break;
+            case SwPoolFormatId::COLL_HEADERL:
+            case SwPoolFormatId::COLL_HEADERR:
+                    nRet = SwPoolFormatId::COLL_HEADER;                break;
+            case SwPoolFormatId::COLL_FOOTER:
+                    nRet = SwPoolFormatId::COLL_HEADERFOOTER;          break;
+            case SwPoolFormatId::COLL_FOOTERL:
+            case SwPoolFormatId::COLL_FOOTERR:
+                    nRet = SwPoolFormatId::COLL_FOOTER;                break;
 
-            case RES_POOLCOLL_LABEL_ABB:
-            case RES_POOLCOLL_LABEL_TABLE:
-            case RES_POOLCOLL_LABEL_FRAME:
-            case RES_POOLCOLL_LABEL_DRAWING:
-            case RES_POOLCOLL_LABEL_FIGURE:
-                    nRet = RES_POOLCOLL_LABEL;                  break;
+            case SwPoolFormatId::COLL_LABEL_ABB:
+            case SwPoolFormatId::COLL_LABEL_TABLE:
+            case SwPoolFormatId::COLL_LABEL_FRAME:
+            case SwPoolFormatId::COLL_LABEL_DRAWING:
+            case SwPoolFormatId::COLL_LABEL_FIGURE:
+                    nRet = SwPoolFormatId::COLL_LABEL;                  break;
+            default: break;
             }
             break;
 
         case COLL_REGISTER_BITS:
             switch( nId )
             {
-            case RES_POOLCOLL_REGISTER_BASE:
-                    nRet = RES_POOLCOLL_STANDARD;               break;
+            case SwPoolFormatId::COLL_REGISTER_BASE:
+                    nRet = SwPoolFormatId::COLL_STANDARD;               break;
 
-            case RES_POOLCOLL_TOX_IDXH:
-                    nRet = RES_POOLCOLL_HEADLINE_BASE;          break;
+            case SwPoolFormatId::COLL_TOX_IDXH:
+                    nRet = SwPoolFormatId::COLL_HEADLINE_BASE;          break;
 
-            case RES_POOLCOLL_TOX_USERH:
-            case RES_POOLCOLL_TOX_CNTNTH:
-            case RES_POOLCOLL_TOX_ILLUSH:
-            case RES_POOLCOLL_TOX_OBJECTH:
-            case RES_POOLCOLL_TOX_TABLESH:
-            case RES_POOLCOLL_TOX_AUTHORITIESH:
-                    nRet = RES_POOLCOLL_TOX_IDXH;               break;
+            case SwPoolFormatId::COLL_TOX_USERH:
+            case SwPoolFormatId::COLL_TOX_CNTNTH:
+            case SwPoolFormatId::COLL_TOX_ILLUSH:
+            case SwPoolFormatId::COLL_TOX_OBJECTH:
+            case SwPoolFormatId::COLL_TOX_TABLESH:
+            case SwPoolFormatId::COLL_TOX_AUTHORITIESH:
+                    nRet = SwPoolFormatId::COLL_TOX_IDXH;               break;
 
             default:
-                    nRet = RES_POOLCOLL_REGISTER_BASE;          break;
+                    nRet = SwPoolFormatId::COLL_REGISTER_BASE;          break;
             }
             break;
 
         case COLL_DOC_BITS:
             switch (nId)
             {
-                case RES_POOLCOLL_HEADLINE_BASE:
-                    nRet = RES_POOLCOLL_STANDARD;
+                case SwPoolFormatId::COLL_HEADLINE_BASE:
+                    nRet = SwPoolFormatId::COLL_STANDARD;
                     break;
                 default:
-                    nRet = RES_POOLCOLL_HEADLINE_BASE;
+                    nRet = SwPoolFormatId::COLL_HEADLINE_BASE;
                     break;
             }
             break;
 
         case COLL_HTML_BITS:
-            nRet = RES_POOLCOLL_STANDARD;
+            nRet = SwPoolFormatId::COLL_STANDARD;
             break;
         }
     }
@@ -300,7 +302,7 @@ void SwDoc::RemoveAllFormatLanguageDependencies()
     /* Restore the language independent pool defaults and styles. */
     GetAttrPool().ResetUserDefaultItem( RES_PARATR_ADJUST );
 
-    SwTextFormatColl * pTextFormatColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
+    SwTextFormatColl * pTextFormatColl = getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD );
 
     pTextFormatColl->ResetFormatAttr( RES_PARATR_ADJUST );
     /* koreans do not like SvxScriptItem(TRUE) */

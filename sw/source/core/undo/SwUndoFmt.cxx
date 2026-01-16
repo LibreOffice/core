@@ -56,7 +56,7 @@ void SwUndoFormatCreate::UndoImpl(::sw::UndoRedoContext &)
     if (m_pNew)
     {
         m_pNewSet.reset(new SfxItemSet(m_pNew->GetAttrSet()));
-        m_nId = m_pNew->GetPoolFormatId() & COLL_GET_RANGE_BITS;
+        m_nId = sal_uInt16(m_pNew->GetPoolFormatId()) & COLL_GET_RANGE_BITS;
         m_bAuto = m_pNew->IsAuto();
 
         Delete();
@@ -72,9 +72,10 @@ void SwUndoFormatCreate::RedoImpl(::sw::UndoRedoContext &)
     {
         pFormat->SetAuto(m_bAuto);
         m_rDoc.ChgFormat(*pFormat, *m_pNewSet);
-        pFormat->SetPoolFormatId((pFormat->GetPoolFormatId()
-                            & ~COLL_GET_RANGE_BITS)
-                           | m_nId);
+        SwPoolFormatId nPoolId =
+            SwPoolFormatId((sal_uInt16(pFormat->GetPoolFormatId()) & ~COLL_GET_RANGE_BITS)
+                       | m_nId);
+        pFormat->SetPoolFormatId(nPoolId);
 
         m_pNew = pFormat;
     }
@@ -101,7 +102,7 @@ SwUndoFormatDelete::SwUndoFormatDelete
       m_aOldSet(_pOld->GetAttrSet())
 {
     m_sDerivedFrom = _pOld->DerivedFrom()->GetName();
-    m_nId = _pOld->GetPoolFormatId() & COLL_GET_RANGE_BITS;
+    m_nId = sal_uInt16(_pOld->GetPoolFormatId()) & COLL_GET_RANGE_BITS;
     m_bAuto = _pOld->IsAuto();
 }
 
@@ -119,9 +120,10 @@ void SwUndoFormatDelete::UndoImpl(::sw::UndoRedoContext &)
     {
         m_rDoc.ChgFormat(*pFormat, m_aOldSet);
         pFormat->SetAuto(m_bAuto);
-        pFormat->SetPoolFormatId((pFormat->GetPoolFormatId() &
-                                ~COLL_GET_RANGE_BITS)
-                               | m_nId);
+        auto nFormatId =
+            SwPoolFormatId((sal_uInt16(pFormat->GetPoolFormatId()) & ~COLL_GET_RANGE_BITS)
+                           | m_nId);
+        pFormat->SetPoolFormatId(nFormatId);
     }
 }
 

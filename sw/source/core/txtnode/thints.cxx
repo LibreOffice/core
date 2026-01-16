@@ -220,7 +220,7 @@ void SwTextINetFormat::InitINetFormat(SwTextNode & rNode)
 {
     ChgTextNode(&rNode);
     SwCharFormat * const pFormat(
-         rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_INET_NORMAL) );
+         rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(SwPoolFormatId::CHR_INET_NORMAL) );
     pFormat->Add(*this);
 }
 
@@ -228,7 +228,7 @@ void SwTextRuby::InitRuby(SwTextNode & rNode)
 {
     ChgTextNode(&rNode);
     SwCharFormat * const pFormat(
-        rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_RUBYTEXT) );
+        rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(SwPoolFormatId::CHR_RUBYTEXT) );
     EndListeningAll();
     StartListening(pFormat->GetNotifier());
 }

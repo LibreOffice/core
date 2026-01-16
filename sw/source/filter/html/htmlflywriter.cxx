@@ -333,7 +333,7 @@ void SwHTMLWriter::CollectFlyFrames()
             break;
         case RndStdIds::FLY_AS_CHAR:
             // keep only Inline Heading frames from the frames anchored as characters
-            if ( !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+            if ( !(pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING) )
                 continue;
             [[fallthrough]];
         case RndStdIds::FLY_AT_CHAR:
@@ -504,7 +504,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
     case HtmlOut::GraphicFrame:
         // skip already exported inline headings
         const SwFormat* pParent = rFrameFormat.DerivedFrom();
-        if ( !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+        if ( !(pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING) )
             OutHTML_FrameFormatAsImage( *this, rFrameFormat, /*bPNGFallback=*/true );
         break;
     }

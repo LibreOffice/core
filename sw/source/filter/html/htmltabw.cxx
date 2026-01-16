@@ -285,10 +285,10 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
                 // where the style is one of the two table related styles
                 // or inherits from one of these.
                 const SwFormat *pFormat = &static_cast<SwTextNode*>(pNd)->GetAnyFormatColl();
-                sal_uInt16 nPoolId = pFormat->GetPoolFormatId();
+                SwPoolFormatId nPoolId = pFormat->GetPoolFormatId();
                 while( !pFormat->IsDefault() &&
-                       RES_POOLCOLL_TABLE_HDLN!=nPoolId &&
-                       RES_POOLCOLL_TABLE!=nPoolId )
+                       SwPoolFormatId::COLL_TABLE_HDLN!=nPoolId &&
+                       SwPoolFormatId::COLL_TABLE!=nPoolId )
                 {
                     pFormat = pFormat->DerivedFrom();
                     nPoolId = pFormat->GetPoolFormatId();
@@ -296,7 +296,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
                 if( !pFormat->IsDefault() )
                 {
-                    bHead = (RES_POOLCOLL_TABLE_HDLN==nPoolId);
+                    bHead = (SwPoolFormatId::COLL_TABLE_HDLN==nPoolId);
                     break;
                 }
             }

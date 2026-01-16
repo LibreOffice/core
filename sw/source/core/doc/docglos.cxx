@@ -268,7 +268,7 @@ static void ConvertGlossaryFields(SwDoc& rDoc)
                 rIDCO.DeleteAndJoin(aPaM);
 
                 SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess()
-                    .GetTextCollFromPool(RES_POOLCOLL_BULLET_LEVEL1);
+                    .GetTextCollFromPool(SwPoolFormatId::COLL_BULLET_LEVEL1);
                 if (pColl)
                     pTextNode->ChgFormatColl(pColl);
                 // nPos stays the same -- we deleted but didn't insert

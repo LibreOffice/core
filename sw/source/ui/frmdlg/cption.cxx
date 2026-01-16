@@ -146,15 +146,15 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     }
 
     OUString sString;
-    sal_uInt16 nPoolId = 0;
+    SwPoolFormatId nPoolId = SwPoolFormatId::ZERO;
     if (eType & SelectionType::Graphic)
     {
-        nPoolId = RES_POOLCOLL_LABEL_FIGURE;
+        nPoolId = SwPoolFormatId::COLL_LABEL_FIGURE;
 
         SwSetExpFieldType* pTypeIll= static_cast<SwSetExpFieldType*>(rSh.GetFieldType(SwFieldIds::SetExp, SwResId(STR_POOLCOLL_LABEL_ABB)));
         if(rSh.IsUsed(*pTypeIll)) //default to illustration for legacy docs
         {
-            nPoolId = RES_POOLCOLL_LABEL_ABB;
+            nPoolId = SwPoolFormatId::COLL_LABEL_ABB;
 
         }
 
@@ -169,27 +169,27 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     }
     else if( eType & SelectionType::Table )
     {
-        nPoolId = RES_POOLCOLL_LABEL_TABLE;
+        nPoolId = SwPoolFormatId::COLL_LABEL_TABLE;
         sString = m_rView.GetOldTabCat();
         m_xNameAccess = xModel->getTextTables();
     }
     else if( eType & SelectionType::Frame )
     {
-        nPoolId = RES_POOLCOLL_LABEL_FRAME;
+        nPoolId = SwPoolFormatId::COLL_LABEL_FRAME;
         sString = m_rView.GetOldFrameCat();
         m_xNameAccess = xModel->getTextFrames();
     }
     else if( eType == SelectionType::Text )
     {
-        nPoolId = RES_POOLCOLL_LABEL_FRAME;
+        nPoolId = SwPoolFormatId::COLL_LABEL_FRAME;
         sString = m_rView.GetOldFrameCat();
     }
     else if( eType & SelectionType::DrawObject )
     {
-        nPoolId = RES_POOLCOLL_LABEL_DRAWING;
+        nPoolId = SwPoolFormatId::COLL_LABEL_DRAWING;
         sString = m_rView.GetOldDrwCat();
     }
-    if( nPoolId )
+    if( nPoolId != SwPoolFormatId::ZERO )
     {
         if (sString.isEmpty())
             sString = SwStyleNameMapper::GetUIName(nPoolId, ProgName()).toString();

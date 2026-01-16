@@ -33,6 +33,7 @@
 #include <tabfrm.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
+#include <poolfmt.hxx>
 #include <osl/diagnose.h>
 
 size_t SwFEShell::GetPageDescCnt() const
@@ -135,8 +136,8 @@ SwPageDesc* SwFEShell::FindPageDescByName( const UIName& rName,
     SwPageDesc* pDesc = GetDoc()->FindPageDesc(rName, pPos);
     if( !pDesc && bGetFromPool )
     {
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, SwGetPoolIdFromName::PageDesc );
-        if( USHRT_MAX != nPoolId &&
+        SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, SwGetPoolIdFromName::PageDesc );
+        if( SwPoolFormatId::UNKNOWN != nPoolId &&
             nullptr != (pDesc = GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId ))
             && pPos )
                 // appended always

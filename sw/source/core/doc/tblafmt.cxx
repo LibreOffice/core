@@ -757,9 +757,9 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
         {
             rStream.ReadUInt16( m_nStrResId );
             // start from 3d because default is added via constructor
-            if( m_nStrResId < RES_POOLTABLESTYLE_END - RES_POOLTABLESTYLE_3D )
+            if( m_nStrResId < sal_uInt16(SwPoolFormatId::TABLESTYLE_END - SwPoolFormatId::TABLESTYLE_3D) )
             {
-                m_aName = TableStyleName(SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_3D + m_nStrResId, ProgName(m_aName.toString())).toString());
+                m_aName = TableStyleName(SwStyleNameMapper::GetUIName(SwPoolFormatId::TABLESTYLE_3D + m_nStrResId, ProgName(m_aName.toString())).toString());
             }
             else
                 m_nStrResId = USHRT_MAX;
@@ -1021,7 +1021,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable() = default;
 SwTableAutoFormatTable::Impl::Impl()
 {
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
-                TableStyleName(SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName()).toString())));
+                TableStyleName(SwStyleNameMapper::GetUIName(SwPoolFormatId::TABLESTYLE_DEFAULT, ProgName()).toString())));
 
     sal_uInt8 i;
 

@@ -1886,7 +1886,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     CHECKTABLE(pTableNd->GetTable())
 
     SwSelBoxes aSelBoxes;
-    SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
+    SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD );
 
     for (const auto& rBox : m_Boxes)
     {

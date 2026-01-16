@@ -955,10 +955,10 @@ SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogControlle
 
     m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, m_sTable);
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, m_sText);
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, m_sDrawing);
+    SwStyleNameMapper::FillUIName(SwPoolFormatId::COLL_LABEL_ABB, m_sIllustration);
+    SwStyleNameMapper::FillUIName(SwPoolFormatId::COLL_LABEL_TABLE, m_sTable);
+    SwStyleNameMapper::FillUIName(SwPoolFormatId::COLL_LABEL_FRAME, m_sText);
+    SwStyleNameMapper::FillUIName(SwPoolFormatId::COLL_LABEL_DRAWING, m_sDrawing);
 
 
     // m_xFormatBox

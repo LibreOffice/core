@@ -232,14 +232,14 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             const SfxPoolItem& rItem = pArgs->Get( nWhich );
 
             SwFormatINetFormat aINetFormat( static_cast<const SwFormatINetFormat&>(rItem) );
-            if ( USHRT_MAX == aINetFormat.GetVisitedFormatId() )
+            if ( SwPoolFormatId::UNKNOWN == aINetFormat.GetVisitedFormatId() )
             {
                 OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected visited character format ID at hyperlink attribute" );
                 aINetFormat.SetVisitedFormatAndId(
                         aINetFormat.GetVisitedFormat(),
                         SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetVisitedFormat(), SwGetPoolIdFromName::ChrFmt ) );
             }
-            if ( USHRT_MAX == aINetFormat.GetINetFormatId() )
+            if ( SwPoolFormatId::UNKNOWN == aINetFormat.GetINetFormatId() )
             {
                 OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected unvisited character format ID at hyperlink attribute" );
                 aINetFormat.SetINetFormatAndId(
