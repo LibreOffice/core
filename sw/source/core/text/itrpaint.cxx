@@ -121,6 +121,61 @@ SwLinePortion *SwTextPainter::CalcPaintOfst(const SwRect &rPaint, bool& rbSkippe
     return pPor;
 }
 
+namespace
+{
+/// See if the redline render mode requires to omit the paint of the text portion.
+class SwTextPaintOmitter
+{
+    SwTextPainter& m_rPainter;
+    bool m_bOmitPaint;
+
+public:
+    SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineTable& rRedlineTable);
+    ~SwTextPaintOmitter();
+};
+
+SwTextPaintOmitter::SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineTable& rRedlineTable)
+    : m_rPainter(rPainter)
+    , m_bOmitPaint(false)
+{
+    if (!rPainter.GetRedln() || !rPainter.GetRedln()->IsOn())
+    {
+        return;
+    }
+
+    SwRedlineTable::size_type nRedline = rPainter.GetRedln()->GetAct();
+    if (nRedline == SwRedlineTable::npos)
+    {
+        return;
+    }
+
+    SwRedlineRenderMode eRedlineRenderMode = rPainter.GetInfo().GetOpt().GetRedlineRenderMode();
+    const SwRangeRedline* pRedline = rRedlineTable[nRedline];
+    RedlineType eType = pRedline->GetType();
+    if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && eType == RedlineType::Insert)
+    {
+        m_bOmitPaint = true;
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && eType == RedlineType::Delete)
+    {
+        m_bOmitPaint = true;
+    }
+
+    if (m_bOmitPaint)
+    {
+        rPainter.GetInfo().SetOmitPaint(true);
+    }
+}
+
+SwTextPaintOmitter::~SwTextPaintOmitter()
+{
+    if (m_bOmitPaint)
+    {
+        m_rPainter.GetInfo().SetOmitPaint(false);
+    }
+}
+}
+
 // There are two possibilities to output transparent font:
 // 1) DrawRect on the whole line and DrawText afterwards
 //    (objectively fast, subjectively slow)
@@ -424,37 +479,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             roTaggedLabel.emplace(nullptr, nullptr, &aPorInfo, *pOut);
         }
 
-        // See if the redline render mode requires to omit the paint of the text portion.
-        SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
-        SwRedlineRenderMode eRedlineRenderMode = SwRedlineRenderMode::Standard;
-        if (GetRedln() && GetRedln()->IsOn())
         {
-            nRedline = GetRedln()->GetAct();
-            eRedlineRenderMode = GetInfo().GetOpt().GetRedlineRenderMode();
-        }
-        bool bOmitPaint = false;
-        if (nRedline != SwRedlineTable::npos)
-        {
-            const SwRangeRedline* pRedline = rRedlineTable[nRedline];
-            RedlineType eType = pRedline->GetType();
-            if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts
-                && eType == RedlineType::Insert)
-            {
-                bOmitPaint = true;
-            }
-            else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes
-                     && eType == RedlineType::Delete)
-            {
-                bOmitPaint = true;
-            }
-        }
+            SwTextPaintOmitter aTextPaintOmitter(*this, rRedlineTable);
 
-        if (bOmitPaint)
-        {
-            GetInfo().SetOmitPaint(true);
-        }
-
-        {
             // #i16816# tagged pdf support
             Por_Info aPorInfo(*pPor, *this, 0);
             SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, &aPorInfo, *pOut );
@@ -463,11 +490,6 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor) );
             else
                 pPor->Paint( GetInfo() );
-        }
-
-        if (bOmitPaint)
-        {
-            GetInfo().SetOmitPaint(false);
         }
 
         // lazy open LBody and paragraph tag after num portions have been painted to Lbl
