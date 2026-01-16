@@ -637,6 +637,19 @@ DECLARE_ODFEXPORT_TEST(tdf149420, "tdf149420.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(567), getProperty<sal_uInt16>(getParagraph(4), u"ParaHyphenationZone"_ustr));
 }
 
+DECLARE_ODFEXPORT_TEST(zIndexHeader, "z-index-header.odt")
+{
+    uno::Reference<beans::XPropertySet> xOrder0(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xOrder1(getShape(2), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xOrder2(getShape(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xOrder0, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xOrder1, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xOrder2, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"HeaderFrameIndex0"_ustr, uno::Reference<container::XNamed>(xOrder0, uno::UNO_QUERY_THROW)->getName());
+    CPPUNIT_ASSERT_EQUAL(u"BodyFrameIndex1"_ustr, uno::Reference<container::XNamed>(xOrder1, uno::UNO_QUERY_THROW)->getName());
+    CPPUNIT_ASSERT_EQUAL(u"HeaderFrameIndex2"_ustr, uno::Reference<container::XNamed>(xOrder2, uno::UNO_QUERY_THROW)->getName());
+}
+
 DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
