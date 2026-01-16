@@ -118,18 +118,18 @@ SwCharFormat* SwEditShell::MakeCharFormat( const UIName& rName )
     return GetDoc()->MakeCharFormat( rName, pDerivedFrom );
 }
 
-SwTextFormatColl* SwEditShell::GetTextCollFromPool( sal_uInt16 nId )
+SwTextFormatColl* SwEditShell::GetTextCollFromPool( SwPoolFormatId nId )
 {
     return GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
 }
 
 /// return the requested automatic format - base-class !
-SwFormat* SwEditShell::GetFormatFromPool( sal_uInt16 nId )
+SwFormat* SwEditShell::GetFormatFromPool( SwPoolFormatId nId )
 {
     return GetDoc()->getIDocumentStylePoolAccess().GetFormatFromPool( nId );
 }
 
-SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
+SwPageDesc* SwEditShell::GetPageDescFromPool( SwPoolFormatId nId )
 {
     return GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nId );
 }

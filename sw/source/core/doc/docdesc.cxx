@@ -63,7 +63,7 @@
 
 using namespace com::sun::star;
 
-static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
+static void lcl_DefaultPageFormat( SwPoolFormatId nPoolFormatId,
                                 SwFrameFormat &rFormat1,
                                 SwFrameFormat &rFormat2,
                                 SwFrameFormat &rFormat3,
@@ -88,7 +88,7 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     // In the long term, this needs to be changed to always keep the
     // margins from the page desc.
     sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
-    if( RES_POOLPAGE_HTML == nPoolFormatId )
+    if( SwPoolFormatId::PAGE_HTML == nPoolFormatId )
     {
         nMinRight = nMinTop = nMinBottom = o3tl::toTwips(1, o3tl::Length::cm);
         nMinLeft = o3tl::toTwips(2, o3tl::Length::cm);
@@ -786,7 +786,7 @@ SwPageDesc* SwDoc::MakePageDesc(const UIName &rName, const SwPageDesc *pCpy,
         pNew->SetName( rName );
         if( rName != pCpy->GetName() )
         {
-            pNew->SetPoolFormatId( USHRT_MAX );
+            pNew->SetPoolFormatId( SwPoolFormatId::UNKNOWN );
             pNew->SetPoolHelpId( USHRT_MAX );
             pNew->SetPoolHlpFileId( UCHAR_MAX );
         }
@@ -795,7 +795,7 @@ SwPageDesc* SwDoc::MakePageDesc(const UIName &rName, const SwPageDesc *pCpy,
     {
         pNew = new SwPageDesc( rName, GetDfltFrameFormat(), *this );
         // Set the default page format.
-        lcl_DefaultPageFormat( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(), pNew->GetFirstMaster(), pNew->GetFirstLeft() );
+        lcl_DefaultPageFormat( SwPoolFormatId::UNKNOWN, pNew->GetMaster(), pNew->GetLeft(), pNew->GetFirstMaster(), pNew->GetFirstLeft() );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
             GetDefaultFrameDirection(GetAppLanguage())

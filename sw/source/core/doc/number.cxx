@@ -28,6 +28,7 @@
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <charfmt.hxx>
+#include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <docary.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -228,9 +229,9 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
         SwCharFormat* pCFormat = pDoc->FindCharFormatByName( rCharStyleName );
         if( !pCFormat )
         {
-            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
+            SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
                                             SwGetPoolIdFromName::ChrFmt );
-            pCFormat = nId != USHRT_MAX
+            pCFormat = nId != SwPoolFormatId::UNKNOWN
                         ? pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId )
                         : pDoc->MakeCharFormat( rCharStyleName, nullptr );
         }
@@ -397,7 +398,7 @@ SwNumRule::SwNumRule( UIName aNm,
   : mpNumRuleMap(nullptr),
     msName( std::move(aNm) ),
     meRuleType( eType ),
-    mnPoolFormatId( USHRT_MAX ),
+    mnPoolFormatId( SwPoolFormatId::UNKNOWN ),
     mnPoolHelpId( USHRT_MAX ),
     mnPoolHlpFileId( UCHAR_MAX ),
     mbAutoRuleFlag( true ),
@@ -608,7 +609,7 @@ void SwNumRule::Reset( const UIName& rName )
     mbContinusNum = false;
     mbAbsSpaces = false;
     mbHidden = false;
-    mnPoolFormatId = USHRT_MAX;
+    mnPoolFormatId = SwPoolFormatId::UNKNOWN;
     mnPoolHelpId = USHRT_MAX;
     mnPoolHlpFileId = UCHAR_MAX;
 }
@@ -1242,7 +1243,7 @@ void SwNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwNumRule"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("msName"), BAD_CAST(msName.toString().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mnPoolFormatId"), BAD_CAST(OString::number(mnPoolFormatId).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mnPoolFormatId"), BAD_CAST(OString::number(sal_uInt16(mnPoolFormatId)).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAutoRuleFlag"), BAD_CAST(OString::boolean(mbAutoRuleFlag).getStr()));
 
     for (const auto& pFormat : maFormats)

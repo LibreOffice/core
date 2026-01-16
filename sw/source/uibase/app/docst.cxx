@@ -190,7 +190,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     else if (auto pColl = pShell->GetCurTextFormatColl())
                     {
                         aName = pColl->GetName();
-                        sal_uInt16 nId = pColl->GetPoolFormatId();
+                        SwPoolFormatId nId = pColl->GetPoolFormatId();
                         SwStyleNameMapper::FillProgName(nId, aProgName);
                     }
 
@@ -851,8 +851,8 @@ void SwDocShell::Edit(
                     SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
                     if(!pColl)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
-                        if(USHRT_MAX != nId)
+                        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
+                        if(SwPoolFormatId::UNKNOWN != nId)
                             pColl = m_pWrtShell->GetTextCollFromPool( nId );
                     }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
@@ -874,8 +874,8 @@ void SwDocShell::Edit(
                     SwCharFormat* pCFormat = m_pWrtShell->FindCharFormatByName(rParent);
                     if(!pCFormat)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::ChrFmt);
-                        if(USHRT_MAX != nId)
+                        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::ChrFmt);
+                        if(SwPoolFormatId::UNKNOWN != nId)
                             pCFormat = m_pWrtShell->GetCharFormatFromPool( nId );
                     }
 
@@ -898,8 +898,8 @@ void SwDocShell::Edit(
                     SwFrameFormat* pFFormat = m_pWrtShell->GetDoc()->FindFrameFormatByName( rParent );
                     if(!pFFormat)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::FrmFmt);
-                        if(USHRT_MAX != nId)
+                        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::FrmFmt);
+                        if(SwPoolFormatId::UNKNOWN != nId)
                             pFFormat = m_pWrtShell->GetFrameFormatFromPool( nId );
                     }
                     pDStyle->GetFrameFormat()->SetDerivedFrom( pFFormat );
@@ -1543,7 +1543,7 @@ void SwDocShell::MakeByExample( const UIName &rName, SfxStyleFamily nFamily,
                 pColl->SetDerivedFrom(pDerivedFrom);
 
                     // set the mask at the Collection:
-                sal_uInt16 nId = pColl->GetPoolFormatId() & 0x87ff;
+                sal_uInt16 nId = sal_uInt16(pColl->GetPoolFormatId()) & 0x87ff;
                 switch( nMask & static_cast<SfxStyleSearchBits>(0x0fff) )
                 {
                     case SfxStyleSearchBits::SwText:
@@ -1566,7 +1566,7 @@ void SwDocShell::MakeByExample( const UIName &rName, SfxStyleFamily nFamily,
                         break;
                     default: break;
                 }
-                pColl->SetPoolFormatId(nId);
+                pColl->SetPoolFormatId(SwPoolFormatId(nId));
 
                 if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                 {
@@ -1636,7 +1636,7 @@ void SwDocShell::MakeByExample( const UIName &rName, SfxStyleFamily nFamily,
             SwPageDesc& rSrc = const_cast<SwPageDesc&>(pCurrWrtShell->GetPageDesc( nPgDsc ));
             SwPageDesc& rDest = *const_cast<SwPageDesc*>(pStyle->GetPageDesc());
 
-            sal_uInt16 nPoolId = rDest.GetPoolFormatId();
+            SwPoolFormatId nPoolId = rDest.GetPoolFormatId();
             sal_uInt16 nHId = rDest.GetPoolHelpId();
             sal_uInt8 nHFId = rDest.GetPoolHlpFileId();
 

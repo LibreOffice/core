@@ -1683,11 +1683,11 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 
         if (bNum)
         {
-            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_NUM_LEVEL );
+            pChrFormat = GetCharFormatFromPool( SwPoolFormatId::CHR_NUM_LEVEL );
         }
         else
         {
-            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_BULLET_LEVEL );
+            pChrFormat = GetCharFormatFromPool( SwPoolFormatId::CHR_BULLET_LEVEL );
         }
 
         const SwTextNode *const pTextNode = sw::GetParaPropsNode(*GetLayout(),
@@ -1941,8 +1941,8 @@ SwTextFormatColl *SwWrtShell::GetParaStyle(const UIName &rCollName, GetStyle eCr
     SwTextFormatColl* pColl = FindTextFormatCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, SwGetPoolIdFromName::TxtColl );
-        if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
+        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, SwGetPoolIdFromName::TxtColl );
+        if( SwPoolFormatId::UNKNOWN != nId || GETSTYLE_CREATEANY == eCreate )
             pColl = GetTextCollFromPool( nId );
     }
     return pColl;
@@ -1958,8 +1958,8 @@ SwCharFormat *SwWrtShell::GetCharStyle(const UIName &rFormatName, GetStyle eCrea
     SwCharFormat* pFormat = FindCharFormatByName( rFormatName );
     if( !pFormat && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, SwGetPoolIdFromName::ChrFmt );
-        if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
+        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, SwGetPoolIdFromName::ChrFmt );
+        if( SwPoolFormatId::UNKNOWN != nId || GETSTYLE_CREATEANY == eCreate )
             pFormat = static_cast<SwCharFormat*>(GetFormatFromPool( nId ));
     }
     return pFormat;

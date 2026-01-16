@@ -174,8 +174,8 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
     SwWrtShell* pSh = GetParentSwEnvDlg()->m_pSh;
     assert(pSh && "Shell missing");
 
-    SwTextFormatColl* pColl = pSh->GetTextCollFromPool( static_cast< sal_uInt16 >(
-        bSender ? RES_POOLCOLL_SEND_ADDRESS : RES_POOLCOLL_ENVELOPE_ADDRESS));
+    SwTextFormatColl* pColl = pSh->GetTextCollFromPool(
+        bSender ? SwPoolFormatId::COLL_SEND_ADDRESS : SwPoolFormatId::COLL_ENVELOPE_ADDRESS);
     assert(pColl && "Text collection missing");
 
     if (o3tl::starts_with(rIdent, u"character"))

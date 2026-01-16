@@ -2064,8 +2064,8 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
     SwDoc& rSrcDoc = GetFrameFormat()->GetDoc();
     if( &rSrcDoc != &rInsDoc )
     {
-        rInsDoc.CopyTextColl( *rSrcDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ) );
-        rInsDoc.CopyTextColl( *rSrcDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
+        rInsDoc.CopyTextColl( *rSrcDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TABLE ) );
+        rInsDoc.CopyTextColl( *rSrcDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TABLE_HDLN ) );
     }
 
     SwTable* pNewTable = const_cast<SwTable*>(rInsDoc.InsertTable(

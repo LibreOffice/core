@@ -578,7 +578,7 @@ void SwXMLImport::startDocument()
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
             pDoc->SetTextFormatColl
-                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false ) );
+                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false ) );
         }
     }
 

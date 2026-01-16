@@ -85,7 +85,7 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
 
     rSh.UnSelectFrame();  //Frame was selected automatically
 
-    rSh.SetTextFormatColl( rSh.GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+    rSh.SetTextFormatColl( rSh.GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
 
     if(!rItem.m_bSynchron || !(nCol|nRow))
     {
@@ -120,7 +120,7 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
 
     rSh.UnSelectFrame();  //Frame was selected automatically
 
-    rSh.SetTextFormatColl( rSh.GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+    rSh.SetTextFormatColl( rSh.GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
 
     // If applicable "next dataset"
     OUString sDBName;
@@ -272,7 +272,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         pFieldMgr->SetEvalExpFields(false);
 
         // Prepare border template
-        SwFrameFormat* pFormat = pSh->GetFrameFormatFromPool( RES_POOLFRM_LABEL );
+        SwFrameFormat* pFormat = pSh->GetFrameFormatFromPool( SwPoolFormatId::FRM_LABEL );
         sal_Int32 iResultWidth = rItem.m_lLeft + (rItem.m_nCols - 1) * rItem.m_lHDist + rItem.m_lWidth - rItem.m_lPWidth;
         sal_Int32 iResultHeight = rItem.m_lUpper + (rItem.m_nRows - 1) * rItem.m_lVDist + rItem.m_lHeight - rItem.m_lPHeight;
         sal_Int32 iWidth = (iResultWidth > 0 ? rItem.m_lWidth - (iResultWidth / rItem.m_nCols) - 1 : rItem.m_lWidth);

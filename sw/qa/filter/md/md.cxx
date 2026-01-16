@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SwView& rView = pWrtShell->GetView();
-    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
     aSet.Put(pColl->GetFont());
     pWrtShell->SetAttrSet(aSet);
@@ -425,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdImport)
     SwFormatColl* pActual = pTextNode->GetFormatColl();
     SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
-    SwFormatColl* pExpected = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_BLOCKQUOTE);
+    SwFormatColl* pExpected = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_BLOCKQUOTE);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Block Quotation
     // - Actual  : Body Text
@@ -442,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdExport)
     SwCursor* pCursor = pWrtShell->GetCursor();
     SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
-    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_BLOCKQUOTE);
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_BLOCKQUOTE);
     pDoc->SetTextFormatColl(*pCursor, pColl);
     pWrtShell->Insert(u"test"_ustr);
 
@@ -471,13 +471,13 @@ CPPUNIT_TEST_FIXTURE(Test, testCodeBlockMdExport)
     SwCursor* pCursor = pWrtShell->GetCursor();
     SwDoc* pDoc = pDocShell->GetDoc();
     IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
-    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE);
     pDoc->SetTextFormatColl(*pCursor, pColl);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"C"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"D"_ustr);
-    pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+    pColl = rIDSPA.GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
     pDoc->SetTextFormatColl(*pCursor, pColl);
 
     // When saving that to markdown:

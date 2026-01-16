@@ -624,10 +624,10 @@ void Reader::ResetFrameFormatAttrs( SfxItemSet &rFrameSet )
 
 void Reader::ResetFrameFormats( SwDoc& rDoc )
 {
-    sal_uInt16 const s_ids[3] = {
-        RES_POOLFRM_FRAME, RES_POOLFRM_GRAPHIC, RES_POOLFRM_OLE
+    SwPoolFormatId const s_ids[3] = {
+        SwPoolFormatId::FRM_FRAME, SwPoolFormatId::FRM_GRAPHIC, SwPoolFormatId::FRM_OLE
     };
-    for (sal_uInt16 i : s_ids)
+    for (SwPoolFormatId i : s_ids)
     {
         SwFrameFormat *const pFrameFormat = rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( i );
 
@@ -836,7 +836,7 @@ ErrCodeMsg SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFil
     if ( xDoc.is() && !pOutDoc->getIDocumentDeviceAccess().getPrinter( false ) )
     {
         const SwPageDesc& rPgDsc = pOutDoc->GetPageDesc( 0 );
-        //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+        //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( SwPoolFormatId::PAGE_STANDARD );
         const SwFormatFrameSize& rSz = rPgDsc.GetMaster().GetFrameSize();
         // Clipboard-Document is always created w/o printer; thus the
         // default PageDesc is always aug LONG_MAX !! Set then to DIN A4
@@ -927,8 +927,8 @@ bool SetHTMLTemplate( SwDoc & rDoc )
     if( pCNd )
     {
         pCNd->SetAttr
-            ( SwFormatPageDesc(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_HTML, false) ) );
-        pCNd->ChgFormatColl( rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false ));
+            ( SwFormatPageDesc(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_HTML, false) ) );
+        pCNd->ChgFormatColl( rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT, false ));
     }
 
     return bRet;

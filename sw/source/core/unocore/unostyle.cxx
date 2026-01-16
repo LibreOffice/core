@@ -137,23 +137,22 @@ using namespace css::uno;
 
 namespace {
 
-    // these should really be constexprs, but MSVC still is apparently too stupid for them
-    #define nPoolChrNormalRange (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN)
-    #define nPoolChrHtmlRange   (RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN)
-    #define nPoolCollTextRange     ( RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN)
-    #define nPoolCollListsRange    ( RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN)
-    #define nPoolCollExtraRange    ( RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN)
-    #define nPoolCollRegisterRange ( RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN)
-    #define nPoolCollDocRange      ( RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN)
-    #define nPoolCollHtmlRange     ( RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN)
-    #define nPoolFrameRange ( RES_POOLFRM_END - RES_POOLFRM_BEGIN)
-    #define nPoolPageRange  ( RES_POOLPAGE_END - RES_POOLPAGE_BEGIN)
-    #define nPoolNumRange   ( RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN)
-    #define nPoolCollListsStackedStart    ( nPoolCollTextRange)
-    #define nPoolCollExtraStackedStart    ( nPoolCollListsStackedStart    + nPoolCollListsRange)
-    #define nPoolCollRegisterStackedStart ( nPoolCollExtraStackedStart    + nPoolCollExtraRange)
-    #define nPoolCollDocStackedStart      ( nPoolCollRegisterStackedStart + nPoolCollRegisterRange)
-    #define nPoolCollHtmlStackedStart     ( nPoolCollDocStackedStart      + nPoolCollDocRange)
+    constexpr sal_uInt16 nPoolChrNormalRange  = sal_uInt16(SwPoolFormatId::CHR_NORMAL_END - SwPoolFormatId::CHR_NORMAL_BEGIN);
+    constexpr sal_uInt16 nPoolChrHtmlRange   = sal_uInt16(SwPoolFormatId::CHR_HTML_END   - SwPoolFormatId::CHR_HTML_BEGIN);
+    constexpr sal_uInt16 nPoolCollTextRange     = sal_uInt16( SwPoolFormatId::COLL_TEXT_END  - SwPoolFormatId::COLL_TEXT_BEGIN);
+    constexpr sal_uInt16 nPoolCollListsRange    = sal_uInt16( SwPoolFormatId::COLL_LISTS_END    - SwPoolFormatId::COLL_LISTS_BEGIN);
+    constexpr sal_uInt16 nPoolCollExtraRange    = sal_uInt16( SwPoolFormatId::COLL_EXTRA_END    - SwPoolFormatId::COLL_EXTRA_BEGIN);
+    constexpr sal_uInt16 nPoolCollRegisterRange = sal_uInt16( SwPoolFormatId::COLL_REGISTER_END - SwPoolFormatId::COLL_REGISTER_BEGIN);
+    constexpr sal_uInt16 nPoolCollDocRange      = sal_uInt16( SwPoolFormatId::COLL_DOC_END      - SwPoolFormatId::COLL_DOC_BEGIN);
+    constexpr sal_uInt16 nPoolCollHtmlRange     = sal_uInt16( SwPoolFormatId::COLL_HTML_END     - SwPoolFormatId::COLL_HTML_BEGIN);
+    constexpr sal_uInt16 nPoolFrameRange = sal_uInt16( SwPoolFormatId::FRM_END - SwPoolFormatId::FRM_BEGIN);
+    constexpr sal_uInt16 nPoolPageRange  = sal_uInt16( SwPoolFormatId::PAGE_END - SwPoolFormatId::PAGE_BEGIN);
+    constexpr sal_uInt16 nPoolNumRange   = sal_uInt16( SwPoolFormatId::NUMRULE_END - SwPoolFormatId::NUMRULE_BEGIN);
+    constexpr sal_uInt16 nPoolCollListsStackedStart    ( nPoolCollTextRange);
+    constexpr sal_uInt16 nPoolCollExtraStackedStart    ( nPoolCollListsStackedStart    + nPoolCollListsRange);
+    constexpr sal_uInt16 nPoolCollRegisterStackedStart ( nPoolCollExtraStackedStart    + nPoolCollExtraRange);
+    constexpr sal_uInt16 nPoolCollDocStackedStart      ( nPoolCollRegisterStackedStart + nPoolCollRegisterRange);
+    constexpr sal_uInt16 nPoolCollHtmlStackedStart     ( nPoolCollDocStackedStart      + nPoolCollDocRange);
     using paragraphstyle_t = std::remove_const<decltype(style::ParagraphStyleCategory::TEXT)>::type;
     using collectionbits_t = sal_uInt16;
     struct ParagraphStyleCategoryEntry
@@ -196,11 +195,11 @@ public:
     const TranslateId& resId() const { return m_pResId; }
 
     sal_Int32 getCountOrName(const SwDoc& rDoc, UIName* pString, sal_Int32 nIndex) const { return m_fGetCountOrName(rDoc, pString, nIndex); }
-    sal_uInt16 translateIndex(const sal_uInt16 nIndex) const { return m_fTranslateIndex(nIndex); }
+    SwPoolFormatId translateIndex(const sal_uInt16 nIndex) const { return m_fTranslateIndex(nIndex); }
 
 private:
     using GetCountOrName_t = sal_Int32 (*)(const SwDoc&, UIName*, sal_Int32);
-    using TranslateIndex_t = sal_uInt16(*)(const sal_uInt16);
+    using TranslateIndex_t = SwPoolFormatId(*)(const sal_uInt16);
     SfxStyleFamily m_eFamily;
     sal_uInt16 m_nPropMapType;
     uno::Reference<beans::XPropertySetInfo> m_xPSInfo;
@@ -220,7 +219,7 @@ private:
             , m_fTranslateIndex(fTranslateIndex)
         { }
     template<SfxStyleFamily> static inline sal_Int32 GetCountOrName(const SwDoc& rDoc, UIName* pString, sal_Int32 nIndex);
-    template<SfxStyleFamily> static inline sal_uInt16 TranslateIndex(const sal_uInt16 nIndex) { return nIndex; }
+    template<SfxStyleFamily> static inline SwPoolFormatId TranslateIndex(const sal_uInt16 nIndex) { return SwPoolFormatId(nIndex); }
 };
 
 template<>
@@ -374,56 +373,56 @@ sal_Int32 StyleFamilyEntry::GetCountOrName<SfxStyleFamily::Cell>(const SwDoc& rD
 }
 
 template<>
-sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Char>(const sal_uInt16 nIndex)
+SwPoolFormatId StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Char>(const sal_uInt16 nIndex)
 {
     static_assert(nPoolChrNormalRange > 0 && nPoolChrHtmlRange > 0, "invalid pool range");
     if (nIndex < nPoolChrNormalRange)
-        return nIndex + RES_POOLCHR_NORMAL_BEGIN;
+        return SwPoolFormatId::CHR_NORMAL_BEGIN + nIndex;
     else if (nIndex < (nPoolChrHtmlRange + nPoolChrNormalRange))
-        return nIndex + RES_POOLCHR_HTML_BEGIN - nPoolChrNormalRange;
+        return SwPoolFormatId::CHR_HTML_BEGIN - nPoolChrNormalRange + nIndex;
     throw lang::IndexOutOfBoundsException();
 }
 
 template<>
-sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Para>(const sal_uInt16 nIndex)
+SwPoolFormatId StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Para>(const sal_uInt16 nIndex)
 {
     static_assert(nPoolCollTextRange > 0 && nPoolCollListsRange > 0 && nPoolCollExtraRange > 0 && nPoolCollRegisterRange > 0 && nPoolCollDocRange > 0 && nPoolCollHtmlRange > 0, "weird pool range");
     if (nIndex < nPoolCollListsStackedStart)
-        return nIndex + RES_POOLCOLL_TEXT_BEGIN;
+        return SwPoolFormatId::COLL_TEXT_BEGIN + nIndex;
     else if (nIndex < nPoolCollExtraStackedStart)
-        return nIndex + RES_POOLCOLL_LISTS_BEGIN - nPoolCollListsStackedStart;
+        return SwPoolFormatId::COLL_LISTS_BEGIN - nPoolCollListsStackedStart + nIndex;
     else if (nIndex < nPoolCollRegisterStackedStart)
-        return nIndex + RES_POOLCOLL_EXTRA_BEGIN - nPoolCollExtraStackedStart;
+        return SwPoolFormatId::COLL_EXTRA_BEGIN - nPoolCollExtraStackedStart + nIndex;
     else if (nIndex < nPoolCollDocStackedStart)
-        return nIndex + RES_POOLCOLL_REGISTER_BEGIN - nPoolCollRegisterStackedStart;
+        return SwPoolFormatId::COLL_REGISTER_BEGIN - nPoolCollRegisterStackedStart + nIndex;
     else if (nIndex < nPoolCollHtmlStackedStart)
-        return nIndex + RES_POOLCOLL_DOC_BEGIN - nPoolCollDocStackedStart;
+        return SwPoolFormatId::COLL_DOC_BEGIN - nPoolCollDocStackedStart + nIndex;
     else if (nIndex < nPoolCollHtmlStackedStart + nPoolCollTextRange)
-        return nIndex + RES_POOLCOLL_HTML_BEGIN - nPoolCollHtmlStackedStart;
+        return SwPoolFormatId::COLL_HTML_BEGIN - nPoolCollHtmlStackedStart + nIndex;
     throw lang::IndexOutOfBoundsException();
 }
 
 template<>
-sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Page>(const sal_uInt16 nIndex)
+SwPoolFormatId StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Page>(const sal_uInt16 nIndex)
 {
     if (nIndex < nPoolPageRange)
-        return nIndex + RES_POOLPAGE_BEGIN;
+        return SwPoolFormatId::PAGE_BEGIN + nIndex;
     throw lang::IndexOutOfBoundsException();
 }
 
 template<>
-sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Frame>(const sal_uInt16 nIndex)
+SwPoolFormatId StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Frame>(const sal_uInt16 nIndex)
 {
     if (nIndex < nPoolFrameRange)
-        return nIndex + RES_POOLFRM_BEGIN;
+        return SwPoolFormatId::FRM_BEGIN + nIndex;
     throw lang::IndexOutOfBoundsException();
 }
 
 template<>
-sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Pseudo>(const sal_uInt16 nIndex)
+SwPoolFormatId StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Pseudo>(const sal_uInt16 nIndex)
 {
     if (nIndex < nPoolNumRange)
-        return nIndex + RES_POOLNUMRULE_BEGIN;
+        return SwPoolFormatId::NUMRULE_BEGIN + nIndex;
     throw lang::IndexOutOfBoundsException();
 }
 
@@ -1329,8 +1328,8 @@ static bool lcl_InitConditional(SfxStyleSheetBasePool* pBasePool, const SfxStyle
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?" );
     if(!pBase)
         return false;
-    const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(rStyleName, SwGetPoolIdFromName::TxtColl));
-    if(nId != USHRT_MAX)
+    const SwPoolFormatId nId(SwStyleNameMapper::GetPoolIdFromUIName(rStyleName, SwGetPoolIdFromName::TxtColl));
+    if(nId != SwPoolFormatId::UNKNOWN)
         return ::IsConditionalByPoolId(nId);
     return RES_CONDTXTFMTCOLL == static_cast<SwDocStyleSheet*>(pBase)->GetCollection()->Which();
 }
@@ -1355,7 +1354,7 @@ SwXStyle::SwXStyle(SwDoc* pDoc, SfxStyleFamily eFamily, bool bConditional)
 {
     assert(!m_bIsConditional || m_rEntry.family() == SfxStyleFamily::Para); // only paragraph styles are conditional
     // Register ourselves as a listener to the document (via the page descriptor)
-    SvtListener::StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    SvtListener::StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
     m_pPropertiesImpl = std::make_unique<SwStyleProperties_Impl>(
             aSwMapProvider.GetPropertySet(m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE :  m_rEntry.propMapType())->getPropertyMap());
 }
@@ -1548,7 +1547,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
             {
                 if (SwResId(STR_POOLPAGE_ARY[i]) == m_sStyleUIName)
                 {
-                    m_pOldPageDesc = m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_BEGIN + i);
+                    m_pOldPageDesc = m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_BEGIN + i);
                     break;
                 }
             }
@@ -1944,10 +1943,10 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
     UIName sStyle;
     SwStyleNameMapper::FillUIName(ProgName(sValue), sStyle, SwGetPoolIdFromName::ChrFmt);
     pRuby->SetCharFormatName(sStyle);
-    pRuby->SetCharFormatId(0);
+    pRuby->SetCharFormatId(SwPoolFormatId::ZERO);
     if(!sValue.isEmpty())
     {
-        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sStyle, SwGetPoolIdFromName::ChrFmt));
+        const SwPoolFormatId nId(SwStyleNameMapper::GetPoolIdFromUIName(sStyle, SwGetPoolIdFromName::ChrFmt));
         pRuby->SetCharFormatId(nId);
     }
     rStyleSet.Put(std::move(pRuby));
@@ -2285,8 +2284,8 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertyMapEnt
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::make_pair(rEntry.m_nCollectionBits, rEntry.m_eCategory); });
         return map;
     }();
-    const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
-    const auto pUnoToCoreIt(aUnoToCore.find(COLL_GET_RANGE_BITS & nPoolId));
+    const SwPoolFormatId nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
+    const auto pUnoToCoreIt(aUnoToCore.find(COLL_GET_RANGE_BITS & sal_uInt16(nPoolId)));
     if(pUnoToCoreIt == aUnoToCore.end())
         return uno::Any(sal_Int16(-1));
     return uno::Any(pUnoToCoreIt->second);
@@ -2801,10 +2800,10 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         rPageDesc.ResetAllMasterAttr();
 
         pPageFormat->SetPageFormatToDefault();
-        SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+        SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD);
         std::shared_ptr<SwFormatFrameSize> aFrameSz(std::make_shared<SwFormatFrameSize>(SwFrameSize::Fixed));
 
-        if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFormatId())
+        if(SwPoolFormatId::PAGE_STANDARD == rPageDesc.GetPoolFormatId())
         {
             if(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))
             {
@@ -3612,7 +3611,7 @@ SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoS
     m_pDocShell( pDocSh ), m_eFamily(nFamily)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    StartListening(pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStyleFamily::~SwXAutoStyleFamily()
@@ -3941,7 +3940,7 @@ SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc& rDoc, IStyleAccess::SwA
 : m_pImpl( new SwAutoStylesEnumImpl( rDoc, eFam ) )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    StartListening(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
@@ -3991,7 +3990,7 @@ SwXAutoStyle::SwXAutoStyle(
     mrDoc(*pDoc)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    //StartListening(mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    //StartListening(mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStyle::~SwXAutoStyle()

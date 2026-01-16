@@ -2623,7 +2623,7 @@ std::unique_ptr<SwFieldType> SwJumpEditFieldType::Copy() const
 
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
-    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( SwPoolFormatId::CHR_JUMPEDIT );
     m_aDep.StartListening(pFormat);
     return pFormat;
 }

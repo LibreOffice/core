@@ -85,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteCheckboxContentControl)
                       RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
     aSet.Put(aFont);
     SwTextFormatColl* pStyle
-        = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+        = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
     pStyle->SetFormatAttr(aSet);
 
     // When inserting a content control:

@@ -1410,9 +1410,9 @@ void DocxExport::WriteSettings()
     pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
 
     // Hyphenation details set depending on default style, otherwise on body style
-    SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, /*bRegardLanguage=*/false);
     if (!pColl || !pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false))
-        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT, /*bRegardLanguage=*/false);
+        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT, /*bRegardLanguage=*/false);
     const SvxHyphenZoneItem* pZoneItem = nullptr;
     bool bHyphenationKeep = false;
     bool bHyphenationZone = false;

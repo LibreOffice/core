@@ -587,9 +587,9 @@ IMAGE_SETEVENT:
                 static_cast<const SwFormatINetFormat&>(m_xAttrTab->pINetFormat->GetItem()).GetValue();
 
             m_pCSS1Parser->SetATagStyles();
-            sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(m_xDoc->IsVisitedURL( rURL )
-                                    ? RES_POOLCHR_INET_VISIT
-                                    : RES_POOLCHR_INET_NORMAL);
+            SwPoolFormatId nPoolId = m_xDoc->IsVisitedURL( rURL )
+                                    ? SwPoolFormatId::CHR_INET_VISIT
+                                    : SwPoolFormatId::CHR_INET_NORMAL;
             const SwCharFormat *pCharFormat = m_pCSS1Parser->GetCharFormatFromPool( nPoolId );
             aHBorderLine.SetColor( pCharFormat->GetColor().GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
@@ -950,7 +950,7 @@ IMAGE_SETEVENT:
 void SwHTMLParser::InsertBodyOptions()
 {
     m_xDoc->SetTextFormatColl( *m_pPam,
-                         m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+                         m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ) );
 
     OUString aBackGround, aId, aStyle, aLang, aDir;
     Color aBGColor, aTextColor, aLinkColor, aVLinkColor;
@@ -1054,7 +1054,7 @@ void SwHTMLParser::InsertBodyOptions()
     if( bTextColor && !m_pCSS1Parser->IsBodyTextSet() )
     {
         // The font colour is set in the default style
-        m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
+        m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD )
             ->SetFormatAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
         m_pCSS1Parser->SetBodyTextSet();
     }
@@ -1120,7 +1120,7 @@ void SwHTMLParser::InsertBodyOptions()
         }
 
         // all remaining options can be set on the default style
-        m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
+        m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD )
             ->SetFormatAttr( aItemSet );
     }
     else if( bSetBrush )
@@ -1131,14 +1131,14 @@ void SwHTMLParser::InsertBodyOptions()
     if( bLinkColor && !m_pCSS1Parser->IsBodyLinkSet() )
     {
         SwCharFormat *pCharFormat =
-            m_pCSS1Parser->GetCharFormatFromPool(RES_POOLCHR_INET_NORMAL);
+            m_pCSS1Parser->GetCharFormatFromPool(SwPoolFormatId::CHR_INET_NORMAL);
         pCharFormat->SetFormatAttr( SvxColorItem(aLinkColor, RES_CHRATR_COLOR) );
         m_pCSS1Parser->SetBodyLinkSet();
     }
     if( bVLinkColor && !m_pCSS1Parser->IsBodyVLinkSet() )
     {
         SwCharFormat *pCharFormat =
-            m_pCSS1Parser->GetCharFormatFromPool(RES_POOLCHR_INET_VISIT);
+            m_pCSS1Parser->GetCharFormatFromPool(SwPoolFormatId::CHR_INET_VISIT);
         pCharFormat->SetFormatAttr( SvxColorItem(aVLinkColor, RES_CHRATR_COLOR) );
         m_pCSS1Parser->SetBodyVLinkSet();
     }

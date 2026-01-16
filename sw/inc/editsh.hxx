@@ -348,21 +348,21 @@ public:
     SW_DLLPUBLIC SwTextFormatColl* FindTextFormatCollByName( const UIName& rName ) const;
 
     /// @return "Auto-Collection" with given Id. If it does not exist create it.
-    SW_DLLPUBLIC SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId );
+    SW_DLLPUBLIC SwTextFormatColl* GetTextCollFromPool( SwPoolFormatId nId );
 
     /// @return required automatic format base class.
-    SwFormat* GetFormatFromPool( sal_uInt16 nId );
+    SwFormat* GetFormatFromPool( SwPoolFormatId nId );
 
     /// @return required automatic page style.
-    SW_DLLPUBLIC SwPageDesc* GetPageDescFromPool( sal_uInt16 nId );
+    SW_DLLPUBLIC SwPageDesc* GetPageDescFromPool( SwPoolFormatId nId );
 
     /// Query if the paragraph-/character-/frame-/page-style is used.
     SW_DLLPUBLIC bool IsUsed( const sw::BroadcastingModify& ) const;
 
     /// @return required automatic format.
-    SwFrameFormat* GetFrameFormatFromPool( sal_uInt16 nId )
+    SwFrameFormat* GetFrameFormatFromPool( SwPoolFormatId nId )
         { return static_cast<SwFrameFormat*>(SwEditShell::GetFormatFromPool( nId )); }
-    SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId )
+    SwCharFormat* GetCharFormatFromPool( SwPoolFormatId nId )
         { return static_cast<SwCharFormat*>(SwEditShell::GetFormatFromPool( nId )); }
 
     void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);

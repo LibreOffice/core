@@ -1249,7 +1249,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
 void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemSet& rSet)
 {
     SwTextFormatColl* pC = m_rExport.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool
-        (RES_POOLCOLL_STANDARD, false);
+        (SwPoolFormatId::COLL_STANDARD, false);
 
     SfxWhichIter aWhichIter(rSet);
     for (sal_uInt16 nEEWhich = aWhichIter.FirstWhich(); nEEWhich; nEEWhich = aWhichIter.NextWhich())

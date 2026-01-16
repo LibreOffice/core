@@ -573,7 +573,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 {
                     UIName sName;
                     SwStyleNameMapper::FillUIName(ProgName(sTmp), sName, SwGetPoolIdFromName::ChrFmt );
-                    const sal_uInt16 nPoolId = sName.isEmpty() ? 0
+                    const SwPoolFormatId nPoolId = sName.isEmpty() ? SwPoolFormatId::ZERO
                         : SwStyleNameMapper::GetPoolIdFromUIName(sName,
                                 SwGetPoolIdFromName::ChrFmt );
 

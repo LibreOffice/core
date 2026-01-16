@@ -546,7 +546,7 @@ SwXRedline::SwXRedline(SwRangeRedline& rRedline) :
     SwXText(&rRedline.GetDoc(), CursorType::Redline),
     m_pRedline(&rRedline)
 {
-    StartListening(GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 }
 
 SwXRedline::~SwXRedline()

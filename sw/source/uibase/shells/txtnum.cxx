@@ -304,8 +304,8 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                                                     : aNewNumRule.MakeSvxNumRule();
 
                     UIName aNumCharFormat, aBulletCharFormat;
-                    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, aNumCharFormat );
-                    SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, aBulletCharFormat );
+                    SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_NUM_LEVEL, aNumCharFormat );
+                    SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_BULLET_LEVEL, aBulletCharFormat );
 
                     SfxAllItemSet aSet( GetPool() );
                     aSet.Put( SfxStringItem( SID_NUM_CHAR_FMT, aNumCharFormat.toString() ) );

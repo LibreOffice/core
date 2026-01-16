@@ -6547,7 +6547,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
 
                 // skip also inline headings already exported before
                 const SwFormat* pParent = rFrame.GetFrameFormat().DerivedFrom();
-                if ( pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING )
+                if ( pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING )
                     break;
 
                 // The frame output is postponed to the end of the anchor paragraph

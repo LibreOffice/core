@@ -317,7 +317,7 @@ SwDoc::SwDoc()
 
     // Create PageDesc, EmptyPageFormat and ColumnFormat
     if (m_PageDescs.empty())
-        getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+        getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_STANDARD );
 
     // Set to "Empty Page"
     mpEmptyPageFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Fixed ) );
@@ -339,7 +339,7 @@ SwDoc::SwDoc()
             GetUndoManager().GetUndoNodes().GetEndOfContent(),
             mpDfltTextFormatColl.get() );
     new SwTextNode( GetNodes().GetEndOfContent(),
-                    getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
+                    getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ));
 
     maOLEModifiedIdle.SetPriority( TaskPriority::LOWEST );
     maOLEModifiedIdle.SetInvokeHandler( LINK( this, SwDoc, DoUpdateModifiedOLE ));
@@ -775,8 +775,8 @@ void SwDoc::ClearDoc()
         delete mpNumberFormatter; mpNumberFormatter= nullptr;
     }
 
-    getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-    pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
+    getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_STANDARD );
+    pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ));
     nDummyPgDsc = m_PageDescs.size();
     m_PageDescs.push_back( pDummyPgDsc );
     // set the layout back to the new standard pagedesc

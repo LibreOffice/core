@@ -224,7 +224,7 @@ ErrCodeMsg HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam,
         if( !rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && m_aNamespace != "reqif-xhtml" )
         {
             rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFormatPageDesc(
-                rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )) );
+                rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_HTML, false )) );
         }
     }
 
@@ -593,7 +593,7 @@ SvParserState SwHTMLParser::CallParser()
         }
 
         m_xDoc->SetTextFormatColl( *m_pPam,
-                m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
+                m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ));
     }
 
     if( GetMedium() )
@@ -1726,7 +1726,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::ADDRESS_ON:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewTextFormatColl(HtmlTokenId::ADDRESS_ON, RES_POOLCOLL_SEND_ADDRESS);
+        NewTextFormatColl(HtmlTokenId::ADDRESS_ON, SwPoolFormatId::COLL_SEND_ADDRESS);
         break;
 
     case HtmlTokenId::ADDRESS_OFF:
@@ -1739,7 +1739,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::BLOCKQUOTE30_ON:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewTextFormatColl( HtmlTokenId::BLOCKQUOTE_ON, RES_POOLCOLL_HTML_BLOCKQUOTE );
+        NewTextFormatColl( HtmlTokenId::BLOCKQUOTE_ON, SwPoolFormatId::COLL_HTML_BLOCKQUOTE );
         break;
 
     case HtmlTokenId::BLOCKQUOTE_OFF:
@@ -1754,7 +1754,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::XMP_ON:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewTextFormatColl( nToken, RES_POOLCOLL_HTML_PRE );
+        NewTextFormatColl( nToken, SwPoolFormatId::COLL_HTML_PRE );
         break;
 
     case HtmlTokenId::PREFORMTXT_OFF:
@@ -3815,17 +3815,17 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         // In headings the current heading sets the font height
         // and not BASEFONT.
         const SwFormatColl *pColl = GetCurrFormatColl();
-        sal_uInt16 nPoolId = pColl ? pColl->GetPoolFormatId() : 0;
-        if( nPoolId>=RES_POOLCOLL_HEADLINE1 &&
-            nPoolId<=RES_POOLCOLL_HEADLINE6 )
+        SwPoolFormatId nPoolId = pColl ? pColl->GetPoolFormatId() : SwPoolFormatId::ZERO;
+        if( nPoolId>=SwPoolFormatId::COLL_HEADLINE1 &&
+            nPoolId<=SwPoolFormatId::COLL_HEADLINE6 )
         {
             // If the font height in the heading wasn't changed yet,
             // then take the one from the style.
             if( m_nFontStHeadStart==m_aFontStack.size() )
-                nFontSize = static_cast< sal_uInt16 >(6 - (nPoolId - RES_POOLCOLL_HEADLINE1));
+                nFontSize = static_cast< sal_uInt16 >(6 - sal_uInt16(nPoolId - SwPoolFormatId::COLL_HEADLINE1));
         }
         else
-            nPoolId = 0;
+            nPoolId = SwPoolFormatId::ZERO;
 
         if( HtmlTokenId::BIGPRINT_ON == nToken )
             nSize = ( nFontSize<7 ? nFontSize+1 : 7 );
@@ -3834,10 +3834,10 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
 
         // If possible in headlines we fetch the new font height
         // from the style.
-        if( nPoolId && nSize>=1 && nSize <=6 )
+        if( nPoolId != SwPoolFormatId::ZERO && nSize>=1 && nSize <=6 )
             nFontHeight =
                 m_pCSS1Parser->GetTextCollFromPool(
-                    RES_POOLCOLL_HEADLINE1+6-nSize )->GetSize().GetHeight();
+                    SwPoolFormatId::COLL_HEADLINE1+6-nSize )->GetSize().GetHeight();
         else
             nFontHeight = m_aFontHeights[nSize-1];
     }
@@ -4010,7 +4010,7 @@ void SwHTMLParser::NewPara()
     // create a new context
     std::unique_ptr<HTMLAttrContext> xCntxt(
         !aClass.isEmpty() ? new HTMLAttrContext( HtmlTokenId::PARABREAK_ON,
-                                             RES_POOLCOLL_TEXT, aClass )
+                                             SwPoolFormatId::COLL_TEXT, aClass )
                      : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON ));
 
     // parse styles (Don't consider class. This is only possible as long as none of
@@ -4138,16 +4138,16 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
         AddParSpace();
 
     // search for the matching style
-    sal_uInt16 nTextColl;
+    SwPoolFormatId nTextColl;
     switch( nToken )
     {
-    case HtmlTokenId::HEAD1_ON:         nTextColl = RES_POOLCOLL_HEADLINE1;  break;
-    case HtmlTokenId::HEAD2_ON:         nTextColl = RES_POOLCOLL_HEADLINE2;  break;
-    case HtmlTokenId::HEAD3_ON:         nTextColl = RES_POOLCOLL_HEADLINE3;  break;
-    case HtmlTokenId::HEAD4_ON:         nTextColl = RES_POOLCOLL_HEADLINE4;  break;
-    case HtmlTokenId::HEAD5_ON:         nTextColl = RES_POOLCOLL_HEADLINE5;  break;
-    case HtmlTokenId::HEAD6_ON:         nTextColl = RES_POOLCOLL_HEADLINE6;  break;
-    default:                    nTextColl = RES_POOLCOLL_STANDARD;   break;
+    case HtmlTokenId::HEAD1_ON:         nTextColl = SwPoolFormatId::COLL_HEADLINE1;  break;
+    case HtmlTokenId::HEAD2_ON:         nTextColl = SwPoolFormatId::COLL_HEADLINE2;  break;
+    case HtmlTokenId::HEAD3_ON:         nTextColl = SwPoolFormatId::COLL_HEADLINE3;  break;
+    case HtmlTokenId::HEAD4_ON:         nTextColl = SwPoolFormatId::COLL_HEADLINE4;  break;
+    case HtmlTokenId::HEAD5_ON:         nTextColl = SwPoolFormatId::COLL_HEADLINE5;  break;
+    case HtmlTokenId::HEAD6_ON:         nTextColl = SwPoolFormatId::COLL_HEADLINE6;  break;
+    default:                    nTextColl = SwPoolFormatId::COLL_STANDARD;   break;
     }
 
     // create the context
@@ -4225,7 +4225,7 @@ void SwHTMLParser::EndHeading()
     m_nFontStHeadStart = m_nFontStMin;
 }
 
-void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
+void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, SwPoolFormatId nColl )
 {
     OUString aId, aStyle, aClass, aLang, aDir;
 
@@ -4430,7 +4430,7 @@ void SwHTMLParser::NewDefList()
 
         // and the one of the DT-style of the current level
         SvxTextLeftMarginItem const& rTextLeftMargin =
-            m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DD, OUString())
+            m_pCSS1Parser->GetTextFormatColl(SwPoolFormatId::COLL_HTML_DD, OUString())
                        ->GetTextLeftMargin();
         nLeft = nLeft + static_cast<sal_uInt16>(rTextLeftMargin.ResolveTextLeft({}));
     }
@@ -4516,8 +4516,8 @@ void SwHTMLParser::NewDefListItem( HtmlTokenId nToken )
         m_nOpenParaToken = nToken;
     }
 
-    NewTextFormatColl( nToken, static_cast< sal_uInt16 >(nToken==HtmlTokenId::DD_ON ? RES_POOLCOLL_HTML_DD
-                                              : RES_POOLCOLL_HTML_DT) );
+    NewTextFormatColl( nToken, nToken==HtmlTokenId::DD_ON ? SwPoolFormatId::COLL_HTML_DD
+                                                          : SwPoolFormatId::COLL_HTML_DT );
 }
 
 void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
@@ -4647,9 +4647,9 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 {
     SwTextFormatColl *pCollToSet = nullptr; // the style to set
     SfxItemSet *pItemSet = nullptr;         // set of hard attributes
-    sal_uInt16 nTopColl = pContext ? pContext->GetTextFormatColl() : 0;
+    SwPoolFormatId nTopColl = pContext ? pContext->GetTextFormatColl() : SwPoolFormatId::ZERO;
     const OUString rTopClass = pContext ? pContext->GetClass() : OUString();
-    sal_uInt16 nDfltColl = RES_POOLCOLL_TEXT;
+    SwPoolFormatId nDfltColl = SwPoolFormatId::COLL_TEXT;
 
     bool bInPRE=false;                          // some context info
 
@@ -4667,24 +4667,24 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     {
         const HTMLAttrContext *pCntxt = m_aContexts[i].get();
 
-        sal_uInt16 nColl = pCntxt->GetTextFormatColl();
-        if( nColl )
+        SwPoolFormatId nColl = pCntxt->GetTextFormatColl();
+        if( nColl != SwPoolFormatId::ZERO )
         {
             // There is a style to set. Then at first we must decide,
             // if the style can be set.
             bool bSetThis = true;
             switch( nColl )
             {
-            case RES_POOLCOLL_HTML_PRE:
+            case SwPoolFormatId::COLL_HTML_PRE:
                 bInPRE = true;
                 break;
-            case RES_POOLCOLL_TEXT:
+            case SwPoolFormatId::COLL_TEXT:
                 // <TD><P CLASS=xxx> must become TD.xxx
-                if( nDfltColl==RES_POOLCOLL_TABLE ||
-                    nDfltColl==RES_POOLCOLL_TABLE_HDLN )
+                if( nDfltColl==SwPoolFormatId::COLL_TABLE ||
+                    nDfltColl==SwPoolFormatId::COLL_TABLE_HDLN )
                     nColl = nDfltColl;
                 break;
-            case RES_POOLCOLL_HTML_HR:
+            case SwPoolFormatId::COLL_HTML_HR:
                 // also <HR> in <PRE> set as style, otherwise it can't
                 // be exported anymore
                 break;
@@ -4741,7 +4741,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         {
             // Maybe a default style exists?
             nColl = pCntxt->GetDefaultTextFormatColl();
-            if( nColl )
+            if( nColl != SwPoolFormatId::ZERO )
                 nDfltColl = nColl;
         }
 
@@ -4758,12 +4758,12 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 
     // If in current context a new style should be set,
     // its paragraph margins must be inserted in the context.
-    if( pContext && nTopColl )
+    if( pContext && nTopColl != SwPoolFormatId::ZERO )
     {
         // <TD><P CLASS=xxx> must become TD.xxx
-        if( nTopColl==RES_POOLCOLL_TEXT &&
-            (nDfltColl==RES_POOLCOLL_TABLE ||
-             nDfltColl==RES_POOLCOLL_TABLE_HDLN) )
+        if( nTopColl==SwPoolFormatId::COLL_TEXT &&
+            (nDfltColl==SwPoolFormatId::COLL_TABLE ||
+             nDfltColl==SwPoolFormatId::COLL_TABLE_HDLN) )
             nTopColl = nDfltColl;
 
         const SwTextFormatColl *pTopColl =
@@ -4778,13 +4778,13 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             nFirstLineIndent = rItemSet.Get(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({});
 
             // In Definition lists the margins also contain the margins from the previous levels
-            if( RES_POOLCOLL_HTML_DD == nTopColl )
+            if( SwPoolFormatId::COLL_HTML_DD == nTopColl )
             {
-                auto const*const pColl(m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DT, OUString()));
+                auto const*const pColl(m_pCSS1Parser->GetTextFormatColl(SwPoolFormatId::COLL_HTML_DT, OUString()));
                 nLeft -= pColl->GetTextLeftMargin().ResolveTextLeft({});
                 nRight -= pColl->GetRightMargin().ResolveRight({});
             }
-            else if( RES_POOLCOLL_HTML_DT == nTopColl )
+            else if( SwPoolFormatId::COLL_HTML_DT == nTopColl )
             {
                 nLeft = 0;
                 nRight = 0;
@@ -5337,7 +5337,7 @@ void SwHTMLParser::InsertHorzRule()
 
     // ...and save in a context
     std::unique_ptr<HTMLAttrContext> xCntxt(
-        new HTMLAttrContext(HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, OUString()));
+        new HTMLAttrContext(HtmlTokenId::HORZRULE, SwPoolFormatId::COLL_HTML_HR, OUString()));
 
     PushContext(xCntxt);
 

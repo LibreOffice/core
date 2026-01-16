@@ -423,10 +423,10 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     SwStyleNameMapper::FillUIName(ProgName(sTmp), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     pRuby->SetCharFormatName(sStyle);
-    pRuby->SetCharFormatId(0);
+    pRuby->SetCharFormatId(SwPoolFormatId::ZERO);
     if (!sStyle.isEmpty())
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(
                 sStyle, SwGetPoolIdFromName::ChrFmt);
         pRuby->SetCharFormatId(nId);
     }

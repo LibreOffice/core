@@ -4324,7 +4324,7 @@ int SwTextNode::GetAttrOutlineLevel(bool bInlineHeading) const
                 const SwFormat* pParent = pFrameFormat->DerivedFrom();
                 SwFormatAnchor const& rAnchor(pFrameFormat->GetAnchor());
                 bool bInlineHeadingFrame = pParent &&
-                        pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING &&
+                        pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING &&
                         RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId();
                 const SwNodeIndex* pNdIdx = bInlineHeadingFrame
                                              ? pFrameFormat->GetContent().GetContentIdx()

@@ -126,7 +126,7 @@ private:
 
     UIName msName;
     SwNumRuleType meRuleType;
-    sal_uInt16 mnPoolFormatId;      ///< Id-for NumRules created "automatically"
+    SwPoolFormatId mnPoolFormatId;      ///< Id-for NumRules created "automatically"
     sal_uInt16 mnPoolHelpId;     ///< HelpId for this Pool-style.
     sal_uInt8 mnPoolHlpFileId;   ///< FilePos at Doc on style helps.
     bool mbAutoRuleFlag : 1;
@@ -250,8 +250,8 @@ public:
     void SetUsedByRedline(bool bUsed )  { mbUsedByRedline = bUsed; }
 
     /// Query and set PoolFormat IDs.
-    sal_uInt16 GetPoolFormatId() const         { return mnPoolFormatId; }
-    void SetPoolFormatId( sal_uInt16 nId )     { mnPoolFormatId = nId; }
+    SwPoolFormatId GetPoolFormatId() const         { return mnPoolFormatId; }
+    void SetPoolFormatId( SwPoolFormatId nId )     { mnPoolFormatId = nId; }
 
     /// Query and set Help-IDs for document styles.
     sal_uInt16 GetPoolHelpId() const        { return mnPoolHelpId; }

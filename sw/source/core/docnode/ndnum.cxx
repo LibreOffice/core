@@ -40,7 +40,7 @@ static const SwNode* getNodeOrAnchorNode(const SwNode* pNode, bool bCheckInlineH
         const SwFormat* pParent = pFlyFormat->DerivedFrom();
         if ( pAnchorNode && pParent && ( !bCheckInlineHeading || (
                 RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId() &&
-                pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING ) ) )
+                pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING ) ) )
         {
             return pAnchorNode;
         }

@@ -589,12 +589,12 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                 break;
         }
 
-        sal_uInt16 nChrFormat;
+        SwPoolFormatId nChrFormat;
 
         if (IsVisitedURL(pURLField->GetURL()))
-            nChrFormat = RES_POOLCHR_INET_VISIT;
+            nChrFormat = SwPoolFormatId::CHR_INET_VISIT;
         else
-            nChrFormat = RES_POOLCHR_INET_NORMAL;
+            nChrFormat = SwPoolFormatId::CHR_INET_NORMAL;
 
         SwFormat *pFormat = getIDocumentStylePoolAccess().GetCharFormatFromPool(nChrFormat);
 

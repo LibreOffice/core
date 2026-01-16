@@ -258,7 +258,7 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
             n++;
 
             SwTextFormatColl *aTmpColl =
-                getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
+                getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_HEADLINE1 + n);
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )
@@ -287,7 +287,7 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
             n--;
 
             SwTextFormatColl *aTmpColl =
-                getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
+                getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_HEADLINE1 + n);
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )
@@ -2650,7 +2650,7 @@ sal_uInt16 SwDoc::MakeNumRule( const UIName &rName,
 
         if( pNew->GetName() != rName )
         {
-            pNew->SetPoolFormatId( USHRT_MAX );
+            pNew->SetPoolFormatId( SwPoolFormatId::UNKNOWN );
             pNew->SetPoolHelpId( USHRT_MAX );
             pNew->SetPoolHlpFileId( UCHAR_MAX );
             pNew->SetDefaultListId( OUString() );

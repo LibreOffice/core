@@ -3628,7 +3628,7 @@ ErrCode WW8Export::ExportDocument_Impl()
     // set AutoHyphenation flag if found in default para style
     const SvxHyphenZoneItem* pItem;
     SwTextFormatColl* pStdTextFormatColl =
-        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
+        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false);
     if (pStdTextFormatColl && (pItem = pStdTextFormatColl->GetItemIfSet(
         RES_PARATR_HYPHENZONE, false)))
     {

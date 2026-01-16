@@ -223,11 +223,11 @@ void SwCSS1Parser::SetLinkCharFormats()
         SfxItemSet& rItemSet = pStyleEntry->GetItemSet();
         bool bColorSet = (SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
                                                               false));
-        pUnvisited = GetCharFormatFromPool( RES_POOLCHR_INET_NORMAL );
+        pUnvisited = GetCharFormatFromPool( SwPoolFormatId::CHR_INET_NORMAL );
         SetCharFormatAttrs( pUnvisited, rItemSet );
         m_bBodyLinkSet |= bColorSet;
 
-        pVisited = GetCharFormatFromPool( RES_POOLCHR_INET_VISIT );
+        pVisited = GetCharFormatFromPool( SwPoolFormatId::CHR_INET_VISIT );
         SetCharFormatAttrs( pVisited, rItemSet );
         m_bBodyVLinkSet |= bColorSet;
     }
@@ -241,7 +241,7 @@ void SwCSS1Parser::SetLinkCharFormats()
         bool bColorSet = (SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
                                                               false));
         if( !pUnvisited )
-            pUnvisited = GetCharFormatFromPool( RES_POOLCHR_INET_NORMAL );
+            pUnvisited = GetCharFormatFromPool( SwPoolFormatId::CHR_INET_NORMAL );
         SetCharFormatAttrs( pUnvisited, rItemSet );
         m_bBodyLinkSet |= bColorSet;
     }
@@ -255,7 +255,7 @@ void SwCSS1Parser::SetLinkCharFormats()
         bool bColorSet = (SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
                                                               false));
         if( !pVisited )
-            pVisited = GetCharFormatFromPool( RES_POOLCHR_INET_VISIT );
+            pVisited = GetCharFormatFromPool( SwPoolFormatId::CHR_INET_VISIT );
         SetCharFormatAttrs( pVisited, rItemSet );
         m_bBodyVLinkSet |= bColorSet;
     }
@@ -314,16 +314,16 @@ void SwCSS1Parser::SetTableTextColl( bool bHeader )
     OSL_ENSURE( !(bHeader ? m_bTableHeaderTextCollSet : m_bTableTextCollSet),
             "Call SetTableTextColl unnecessary" );
 
-    sal_uInt16 nPoolId;
+    SwPoolFormatId nPoolId;
     OUString sTag;
     if( bHeader )
     {
-        nPoolId = RES_POOLCOLL_TABLE_HDLN;
+        nPoolId = SwPoolFormatId::COLL_TABLE_HDLN;
         sTag = OOO_STRING_SVTOOLS_HTML_tableheader;
     }
     else
     {
-        nPoolId = RES_POOLCOLL_TABLE;
+        nPoolId = SwPoolFormatId::COLL_TABLE;
         sTag = OOO_STRING_SVTOOLS_HTML_tabledata;
     }
 
@@ -394,9 +394,9 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     if( !(bSetBrush || bSetBox || bSetFrameDir) )
         return;
 
-    static const sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
-                                           RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
-    for(sal_uInt16 i : aPoolIds)
+    static const SwPoolFormatId aPoolIds[] = { SwPoolFormatId::PAGE_HTML, SwPoolFormatId::PAGE_FIRST,
+                                            SwPoolFormatId::PAGE_LEFT, SwPoolFormatId::PAGE_RIGHT };
+    for(SwPoolFormatId i : aPoolIds)
     {
         const SwPageDesc *pPageDesc = GetPageDesc( i, false );
         if( pPageDesc )
@@ -546,7 +546,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 
 std::unique_ptr<SvxBrushItem> SwCSS1Parser::makePageDescBackground() const
 {
-    return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )
+    return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_HTML, false )
         ->GetMaster().makeBackgroundBrushItem();
 }
 
@@ -820,7 +820,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 if( SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,false) )
                     m_bBodyTextSet = true;
                 SetTextCollAttrs(
-                    GetTextCollFromPool( RES_POOLCOLL_STANDARD ),
+                    GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ),
                     rItemSet, rPropInfo, this );
 
                 return;
@@ -833,12 +833,12 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
              !pNext && aClass.getLength() >= 9 &&
              ('s' == aClass[0] || 'S' == aClass[0]) )
     {
-        sal_uInt16 nPoolFormatId = 0;
+        SwPoolFormatId nPoolFormatId = SwPoolFormatId::ZERO;
         if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote_sym) )
-            nPoolFormatId = RES_POOLCHR_ENDNOTE;
+            nPoolFormatId = SwPoolFormatId::CHR_ENDNOTE;
         else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym) )
-            nPoolFormatId = RES_POOLCHR_FOOTNOTE;
-        if( nPoolFormatId )
+            nPoolFormatId = SwPoolFormatId::CHR_FOOTNOTE;
+        if( nPoolFormatId != SwPoolFormatId::ZERO )
         {
             if( Css1ScriptFlags::AllMask == nScript )
             {
@@ -856,60 +856,60 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     }
 
     // Now the selectors are processed which belong to a paragraph style
-    sal_uInt16 nPoolCollId = 0;
+    SwPoolFormatId nPoolCollId = SwPoolFormatId::ZERO;
     switch( nToken2 )
     {
     case HtmlTokenId::HEAD1_ON:
-        nPoolCollId = RES_POOLCOLL_HEADLINE1;
+        nPoolCollId = SwPoolFormatId::COLL_HEADLINE1;
         break;
     case HtmlTokenId::HEAD2_ON:
-        nPoolCollId = RES_POOLCOLL_HEADLINE2;
+        nPoolCollId = SwPoolFormatId::COLL_HEADLINE2;
         break;
     case HtmlTokenId::HEAD3_ON:
-        nPoolCollId = RES_POOLCOLL_HEADLINE3;
+        nPoolCollId = SwPoolFormatId::COLL_HEADLINE3;
         break;
     case HtmlTokenId::HEAD4_ON:
-        nPoolCollId = RES_POOLCOLL_HEADLINE4;
+        nPoolCollId = SwPoolFormatId::COLL_HEADLINE4;
         break;
     case HtmlTokenId::HEAD5_ON:
-        nPoolCollId = RES_POOLCOLL_HEADLINE5;
+        nPoolCollId = SwPoolFormatId::COLL_HEADLINE5;
         break;
     case HtmlTokenId::HEAD6_ON:
-        nPoolCollId = RES_POOLCOLL_HEADLINE6;
+        nPoolCollId = SwPoolFormatId::COLL_HEADLINE6;
         break;
     case HtmlTokenId::PARABREAK_ON:
         if( aClass.getLength() >= 9 &&
             ('s' == aClass[0] || 'S' == aClass[0]) )
         {
             if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote) )
-                nPoolCollId = RES_POOLCOLL_ENDNOTE;
+                nPoolCollId = SwPoolFormatId::COLL_ENDNOTE;
             else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
-                nPoolCollId = RES_POOLCOLL_FOOTNOTE;
+                nPoolCollId = SwPoolFormatId::COLL_FOOTNOTE;
 
-            if( nPoolCollId )
+            if( nPoolCollId != SwPoolFormatId::ZERO )
                 aClass.clear();
             else
-                nPoolCollId = RES_POOLCOLL_TEXT;
+                nPoolCollId = SwPoolFormatId::COLL_TEXT;
         }
         else
         {
-            nPoolCollId = RES_POOLCOLL_TEXT;
+            nPoolCollId = SwPoolFormatId::COLL_TEXT;
         }
         break;
     case HtmlTokenId::ADDRESS_ON:
-        nPoolCollId = RES_POOLCOLL_SEND_ADDRESS;
+        nPoolCollId = SwPoolFormatId::COLL_SEND_ADDRESS;
         break;
     case HtmlTokenId::BLOCKQUOTE_ON:
-        nPoolCollId = RES_POOLCOLL_HTML_BLOCKQUOTE;
+        nPoolCollId = SwPoolFormatId::COLL_HTML_BLOCKQUOTE;
         break;
     case HtmlTokenId::DT_ON:
-        nPoolCollId = RES_POOLCOLL_HTML_DT;
+        nPoolCollId = SwPoolFormatId::COLL_HTML_DT;
         break;
     case HtmlTokenId::DD_ON:
-        nPoolCollId = RES_POOLCOLL_HTML_DD;
+        nPoolCollId = SwPoolFormatId::COLL_HTML_DD;
         break;
     case HtmlTokenId::PREFORMTXT_ON:
-        nPoolCollId = RES_POOLCOLL_HTML_PRE;
+        nPoolCollId = SwPoolFormatId::COLL_HTML_PRE;
         break;
     case HtmlTokenId::TABLEHEADER_ON:
     case HtmlTokenId::TABLEDATA_ON:
@@ -933,9 +933,9 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
 
                 if( !aClass.isEmpty() || pNext )
                 {
-                    nPoolCollId = static_cast< sal_uInt16 >(
-                        HtmlTokenId::TABLEHEADER_ON == nToken2 ? RES_POOLCOLL_TABLE_HDLN
-                                                      : RES_POOLCOLL_TABLE );
+                    nPoolCollId =
+                        HtmlTokenId::TABLEHEADER_ON == nToken2 ? SwPoolFormatId::COLL_TABLE_HDLN
+                                                      : SwPoolFormatId::COLL_TABLE;
                 }
                 else
                 {
@@ -962,7 +962,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         ;
     }
 
-    if( nPoolCollId )
+    if( nPoolCollId != SwPoolFormatId::ZERO )
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
@@ -1117,19 +1117,19 @@ const FontList *SwCSS1Parser::GetFontList() const
 SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& rClass ) const
 {
     // search the corresponding style
-    sal_uInt16 nPoolId = 0;
+    SwPoolFormatId nPoolId = SwPoolFormatId::ZERO;
     const char* sName = nullptr;
     switch( nToken2 )
     {
-    case HtmlTokenId::EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
-    case HtmlTokenId::CITATION_ON:      nPoolId = RES_POOLCHR_HTML_CITATION;   break;
-    case HtmlTokenId::STRONG_ON:        nPoolId = RES_POOLCHR_HTML_STRONG;      break;
-    case HtmlTokenId::CODE_ON:          nPoolId = RES_POOLCHR_HTML_CODE;        break;
-    case HtmlTokenId::SAMPLE_ON:        nPoolId = RES_POOLCHR_HTML_SAMPLE;      break;
-    case HtmlTokenId::KEYBOARD_ON:      nPoolId = RES_POOLCHR_HTML_KEYBOARD;    break;
-    case HtmlTokenId::VARIABLE_ON:      nPoolId = RES_POOLCHR_HTML_VARIABLE;    break;
-    case HtmlTokenId::DEFINSTANCE_ON:   nPoolId = RES_POOLCHR_HTML_DEFINSTANCE; break;
-    case HtmlTokenId::TELETYPE_ON:      nPoolId = RES_POOLCHR_HTML_TELETYPE;    break;
+    case HtmlTokenId::EMPHASIS_ON:      nPoolId = SwPoolFormatId::CHR_HTML_EMPHASIS;    break;
+    case HtmlTokenId::CITATION_ON:      nPoolId = SwPoolFormatId::CHR_HTML_CITATION;   break;
+    case HtmlTokenId::STRONG_ON:        nPoolId = SwPoolFormatId::CHR_HTML_STRONG;      break;
+    case HtmlTokenId::CODE_ON:          nPoolId = SwPoolFormatId::CHR_HTML_CODE;        break;
+    case HtmlTokenId::SAMPLE_ON:        nPoolId = SwPoolFormatId::CHR_HTML_SAMPLE;      break;
+    case HtmlTokenId::KEYBOARD_ON:      nPoolId = SwPoolFormatId::CHR_HTML_KEYBOARD;    break;
+    case HtmlTokenId::VARIABLE_ON:      nPoolId = SwPoolFormatId::CHR_HTML_VARIABLE;    break;
+    case HtmlTokenId::DEFINSTANCE_ON:   nPoolId = SwPoolFormatId::CHR_HTML_DEFINSTANCE; break;
+    case HtmlTokenId::TELETYPE_ON:      nPoolId = SwPoolFormatId::CHR_HTML_TELETYPE;    break;
 
     case HtmlTokenId::SHORTQUOTE_ON:    sName = OOO_STRING_SVTOOLS_HTML_shortquote;     break;
     case HtmlTokenId::LANGUAGE_ON:      sName = OOO_STRING_SVTOOLS_HTML_language;   break;
@@ -1143,12 +1143,12 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
     }
 
     // search or create the style (only possible with name)
-    if( !nPoolId && !sName )
+    if( nPoolId == SwPoolFormatId::ZERO && !sName )
         return nullptr;
 
     // search or create style (without class)
     SwCharFormat *pCFormat = nullptr;
-    if( nPoolId )
+    if( nPoolId != SwPoolFormatId::ZERO )
     {
         pCFormat = GetCharFormatFromPool( nPoolId );
     }
@@ -1194,7 +1194,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
     return pCFormat;
 }
 
-SwTextFormatColl *SwCSS1Parser::GetTextCollFromPool( sal_uInt16 nPoolId ) const
+SwTextFormatColl *SwCSS1Parser::GetTextCollFromPool( SwPoolFormatId nPoolId ) const
 {
     const SwTextFormatColls::size_type nOldArrLen = m_pDoc->GetTextFormatColls()->size();
 
@@ -1211,7 +1211,7 @@ SwTextFormatColl *SwCSS1Parser::GetTextCollFromPool( sal_uInt16 nPoolId ) const
     return pColl;
 }
 
-SwCharFormat *SwCSS1Parser::GetCharFormatFromPool( sal_uInt16 nPoolId ) const
+SwCharFormat *SwCSS1Parser::GetCharFormatFromPool( SwPoolFormatId nPoolId ) const
 {
     const SwCharFormats::size_type nOldArrLen = m_pDoc->GetCharFormats()->size();
 
@@ -1229,32 +1229,32 @@ SwCharFormat *SwCSS1Parser::GetCharFormatFromPool( sal_uInt16 nPoolId ) const
     return pCharFormat;
 }
 
-SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( sal_uInt16 nTextColl,
+SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( SwPoolFormatId nTextColl,
                                            const OUString& rClass )
 {
     SwTextFormatColl* pColl = nullptr;
 
     OUString aClass( rClass );
     GetScriptFromClass( aClass, false );
-    if( RES_POOLCOLL_TEXT == nTextColl && aClass.getLength() >= 9 &&
+    if( SwPoolFormatId::COLL_TEXT == nTextColl && aClass.getLength() >= 9 &&
         ('s' == aClass[0] || 'S' == aClass[0] ) )
     {
         if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote) )
         {
-            nTextColl = RES_POOLCOLL_ENDNOTE;
+            nTextColl = SwPoolFormatId::COLL_ENDNOTE;
             aClass.clear();
         }
         else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
         {
-            nTextColl = RES_POOLCOLL_FOOTNOTE;
+            nTextColl = SwPoolFormatId::COLL_FOOTNOTE;
             aClass.clear();
         }
     }
 
-    if( USER_FMT & nTextColl )       // one created by Reader
+    if( USER_FMT & sal_uInt16(nTextColl) )       // one created by Reader
     {
         OSL_ENSURE( false, "Where does the user style comes from?" );
-        pColl = GetTextCollFromPool( RES_POOLCOLL_STANDARD );
+        pColl = GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD );
     }
     else
     {
@@ -1269,13 +1269,13 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( sal_uInt16 nTextColl,
         SwTextFormatColl* pClassColl = m_pDoc->FindTextFormatCollByName( aTmp );
 
         if( !pClassColl &&
-            (nTextColl==RES_POOLCOLL_TABLE ||
-             nTextColl==RES_POOLCOLL_TABLE_HDLN) )
+            (nTextColl==SwPoolFormatId::COLL_TABLE ||
+             nTextColl==SwPoolFormatId::COLL_TABLE_HDLN) )
         {
             // In this case there was a <TD><P CLASS=foo>, but no TD.foo
             // style was found. The we must use P.foo, if available.
             SwTextFormatColl* pCollText =
-                GetTextCollFromPool( RES_POOLCOLL_TEXT );
+                GetTextCollFromPool( SwPoolFormatId::COLL_TEXT );
             aTmp = pCollText->GetName();
             AddClassName( aTmp, aClass );
             pClassColl = m_pDoc->FindTextFormatCollByName( aTmp );
@@ -1312,10 +1312,10 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( sal_uInt16 nTextColl,
 
 SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
 {
-    return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+    return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_HTML, false );
 }
 
-static SwPageDesc *FindPageDesc(SwDoc *pDoc, sal_uInt16 nPoolId)
+static SwPageDesc *FindPageDesc(SwDoc *pDoc, SwPoolFormatId nPoolId)
 {
     size_t nPageDescs = pDoc->GetPageDescCnt();
     size_t nPage;
@@ -1326,10 +1326,10 @@ static SwPageDesc *FindPageDesc(SwDoc *pDoc, sal_uInt16 nPoolId)
     return nPage < nPageDescs ? &pDoc->GetPageDesc(nPage) : nullptr;
 }
 
-const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
+const SwPageDesc *SwCSS1Parser::GetPageDesc( SwPoolFormatId nPoolId, bool bCreate )
 {
-    if( RES_POOLPAGE_HTML == nPoolId )
-        return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+    if( SwPoolFormatId::PAGE_HTML == nPoolId )
+        return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_HTML, false );
 
     const SwPageDesc *pPageDesc = FindPageDesc(m_pDoc, nPoolId);
     if( !pPageDesc && bCreate )
@@ -1342,10 +1342,10 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
 
         // The first page is created from the right page, if there is one.
         SwPageDesc *pMasterPageDesc = nullptr;
-        if( RES_POOLPAGE_FIRST == nPoolId )
-            pMasterPageDesc = FindPageDesc(m_pDoc, RES_POOLPAGE_RIGHT);
+        if( SwPoolFormatId::PAGE_FIRST == nPoolId )
+            pMasterPageDesc = FindPageDesc(m_pDoc, SwPoolFormatId::PAGE_RIGHT);
         if( !pMasterPageDesc )
-            pMasterPageDesc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+            pMasterPageDesc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_HTML, false );
 
         // The new page style is created by copying from master
         SwPageDesc *pNewPageDesc = m_pDoc->
@@ -1361,7 +1361,7 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
         bool bSetFollowFollow = false;
         switch( nPoolId )
         {
-        case RES_POOLPAGE_FIRST:
+        case SwPoolFormatId::PAGE_FIRST:
             // If there is already a left page, then is it the follow-up
             // style, else it is the HTML style.
             pFollow = GetLeftPageDesc();
@@ -1369,14 +1369,14 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
                 pFollow = pMasterPageDesc;
             break;
 
-        case RES_POOLPAGE_RIGHT:
+        case SwPoolFormatId::PAGE_RIGHT:
             // If the left style is already created, nothing will happen here.
             // Otherwise the left style is created and ensures the link with
             // the right style.
             GetLeftPageDesc( true );
             break;
 
-        case RES_POOLPAGE_LEFT:
+        case SwPoolFormatId::PAGE_LEFT:
             // The right style is created if none exists. No links are created.
             // If there is already a first page style, then the left style becomes
             // follow-up style of the first page.
@@ -1392,6 +1392,8 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
                 }
             }
             break;
+
+        default: break;
         }
 
         if( pFollow )
@@ -1802,7 +1804,7 @@ bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         return false;
 
     SwPageDesc *pMasterPageDesc =
-        m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
+        m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_HTML, false );
 
     SvxCSS1MapEntry* pPageEntry = GetPage(OUString(), false);
     if( pPageEntry )
@@ -2194,7 +2196,7 @@ void SwHTMLParser::GetMarginsFromContextWithNumberBullet( sal_uInt16& nLeft,
 void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
                                           sal_uInt16& nLower ) const
 {
-    sal_uInt16 nDefaultColl = 0;
+    SwPoolFormatId nDefaultColl = SwPoolFormatId::ZERO;
     OUString aDefaultClass;
 
     HTMLAttrContexts::size_type nPos = m_aContexts.size();
@@ -2206,16 +2208,16 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
             pCntxt->GetULSpace( nUpper, nLower );
             return;
         }
-        else if (!nDefaultColl)
+        else if (nDefaultColl == SwPoolFormatId::ZERO)
         {
             nDefaultColl = pCntxt->GetDefaultTextFormatColl();
-            if (nDefaultColl)
+            if (nDefaultColl != SwPoolFormatId::ZERO)
                 aDefaultClass = pCntxt->GetClass();
         }
     }
 
-    if (!nDefaultColl)
-        nDefaultColl = RES_POOLCOLL_TEXT;
+    if (nDefaultColl == SwPoolFormatId::ZERO)
+        nDefaultColl = SwPoolFormatId::COLL_TEXT;
 
     const SwTextFormatColl *pColl =
         m_pCSS1Parser->GetTextFormatColl(nDefaultColl, aDefaultClass);

@@ -1537,7 +1537,7 @@ public:
     void SetAutoFormatRedline( bool bFlag )    { mbIsAutoFormatRedline = bFlag; }
 
     // For AutoFormat: with Undo/Redlining.
-    void SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nPoolId,
+    void SetTextFormatCollByAutoFormat( const SwPosition& rPos, SwPoolFormatId nPoolId,
                                 const SfxItemSet* pSet );
     void SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& );
 

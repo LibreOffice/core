@@ -1129,7 +1129,7 @@ void SwRedlineExtraData::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( UIName aColl,
-                                                sal_uInt16 nPoolFormatId,
+                                                SwPoolFormatId nPoolFormatId,
                                                 const std::shared_ptr<SfxItemSet>& pItemSet,
                                                 bool bFormatAll )
     : m_sFormatNm(std::move(aColl)), m_nPoolId(nPoolFormatId), m_bFormatAll(bFormatAll)
@@ -1152,7 +1152,7 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
     SwDoc& rDoc = rPam.GetDoc();
 
     // What about Undo? Is it turned off?
-    SwTextFormatColl* pColl = USHRT_MAX == m_nPoolId
+    SwTextFormatColl* pColl = SwPoolFormatId::UNKNOWN == m_nPoolId
                             ? rDoc.FindTextFormatCollByName( m_sFormatNm )
                             : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( m_nPoolId );
 
@@ -1214,7 +1214,7 @@ void SwRedlineExtraData_FormatColl::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineExtraData_FormatColl"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format-name"), BAD_CAST(m_sFormatNm.toString().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pool-id"), BAD_CAST(OString::number(m_nPoolId).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pool-id"), BAD_CAST(OString::number(sal_uInt16(m_nPoolId)).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format-all"), BAD_CAST(OString::boolean(m_bFormatAll).getStr()));
 
     SwRedlineExtraData::dumpAsXml(pWriter);
@@ -1952,7 +1952,7 @@ void SwRangeRedline::MoveToSection()
                                     ? pCSttNd->GetTextNode()->GetTextColl()
                                     : (pCEndNd && pCEndNd->IsTextNode() )
                                         ? pCEndNd->GetTextNode()->GetTextColl()
-                                        : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+                                        : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
 
             pSttNd = rNds.MakeTextSection( rNds.GetEndOfRedlines(),
                                             SwNormalStartNode, pColl );
@@ -2019,7 +2019,7 @@ void SwRangeRedline::CopyToSection()
     {
         SwTextFormatColl* pColl = pCSttNd->IsTextNode()
                                 ? pCSttNd->GetTextNode()->GetTextColl()
-                                : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+                                : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
 
         pSttNd = rNds.MakeTextSection( rNds.GetEndOfRedlines(),
                                         SwNormalStartNode, pColl );

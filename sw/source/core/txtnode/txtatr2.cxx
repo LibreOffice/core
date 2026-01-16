@@ -181,7 +181,7 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
             SetVisitedValid( true );
         }
 
-        const sal_uInt16 nId = IsVisited() ? rFormat.GetVisitedFormatId() : rFormat.GetINetFormatId();
+        const SwPoolFormatId nId = IsVisited() ? rFormat.GetVisitedFormatId() : rFormat.GetINetFormatId();
         const UIName& rStr = IsVisited() ? rFormat.GetVisitedFormat() : rFormat.GetINetFormat();
         if (rStr.isEmpty())
         {
@@ -301,8 +301,8 @@ SwCharFormat* SwTextRuby::GetCharFormat()
     {
         const SwDoc& rDoc = GetTextNode().GetDoc();
         const UIName& rStr = rFormat.GetCharFormatName();
-        const sal_uInt16 nId = rStr.isEmpty()
-                             ? o3tl::narrowing<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
+        const SwPoolFormatId nId = rStr.isEmpty()
+                             ? SwPoolFormatId::CHR_RUBYTEXT
                              : rFormat.GetCharFormatId();
 
         // JP 10.02.2000, Bug 72806: don't modify the doc for getting the

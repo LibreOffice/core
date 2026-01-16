@@ -202,7 +202,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             m_xDoc->SetDefault(*pFontItem);
             if( !bHTMLTemplSet )
             {
-                SwTextFormatColl *pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+                SwTextFormatColl *pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
                 pColl->ResetFormatAttr(nFontWhich);
             }
             pFontItem.reset();
@@ -212,56 +212,56 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             m_xDoc->SetDefault(SvxFontHeightItem( nFontHeight, 100, aFontHeightWhich[i] ));
             if( !bHTMLTemplSet )
             {
-                SwTextFormatColl *pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+                SwTextFormatColl *pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
                 pColl->ResetFormatAttr(aFontHeightWhich[i]);
             }
 
         }
-        sal_uInt16 aFontIdPoolId[] =
+        static constexpr std::pair<sal_uInt16, SwPoolFormatId> aFontIdPoolId[] =
         {
-            FONT_OUTLINE,       RES_POOLCOLL_HEADLINE_BASE,
-            FONT_LIST,          RES_POOLCOLL_NUMBER_BULLET_BASE,
-            FONT_CAPTION,       RES_POOLCOLL_LABEL,
-            FONT_INDEX,         RES_POOLCOLL_REGISTER_BASE,
-            FONT_OUTLINE_CJK,   RES_POOLCOLL_HEADLINE_BASE,
-            FONT_LIST_CJK,      RES_POOLCOLL_NUMBER_BULLET_BASE,
-            FONT_CAPTION_CJK,   RES_POOLCOLL_LABEL,
-            FONT_INDEX_CJK,     RES_POOLCOLL_REGISTER_BASE,
-            FONT_OUTLINE_CTL,   RES_POOLCOLL_HEADLINE_BASE,
-            FONT_LIST_CTL,      RES_POOLCOLL_NUMBER_BULLET_BASE,
-            FONT_CAPTION_CTL,   RES_POOLCOLL_LABEL,
-            FONT_INDEX_CTL,     RES_POOLCOLL_REGISTER_BASE
+            { FONT_OUTLINE,       SwPoolFormatId::COLL_HEADLINE_BASE },
+            { FONT_LIST,          SwPoolFormatId::COLL_NUMBER_BULLET_BASE },
+            { FONT_CAPTION,       SwPoolFormatId::COLL_LABEL },
+            { FONT_INDEX,         SwPoolFormatId::COLL_REGISTER_BASE },
+            { FONT_OUTLINE_CJK,   SwPoolFormatId::COLL_HEADLINE_BASE },
+            { FONT_LIST_CJK,      SwPoolFormatId::COLL_NUMBER_BULLET_BASE },
+            { FONT_CAPTION_CJK,   SwPoolFormatId::COLL_LABEL },
+            { FONT_INDEX_CJK,     SwPoolFormatId::COLL_REGISTER_BASE },
+            { FONT_OUTLINE_CTL,   SwPoolFormatId::COLL_HEADLINE_BASE },
+            { FONT_LIST_CTL,      SwPoolFormatId::COLL_NUMBER_BULLET_BASE },
+            { FONT_CAPTION_CTL,   SwPoolFormatId::COLL_LABEL },
+            { FONT_INDEX_CTL,     SwPoolFormatId::COLL_REGISTER_BASE }
         };
 
         TypedWhichId<SvxFontItem> nFontWhich = RES_CHRATR_FONT;
         TypedWhichId<SvxFontHeightItem> nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = m_xDoc->GetDefault( RES_CHRATR_LANGUAGE ).GetLanguage();
         bool bDisableBuiltinStyles = !bFuzzing && officecfg::Office::Common::Load::DisableBuiltinStyles::get();
-        sal_uInt8 nLimit = bDisableBuiltinStyles ? 0 : 24;
-        for(sal_uInt8 nIdx = 0; nIdx < nLimit; nIdx += 2)
+        sal_uInt8 nLimit = bDisableBuiltinStyles ? 0 : 12;
+        for(sal_uInt8 nIdx = 0; nIdx < nLimit; nIdx++)
         {
-            if(nIdx == 8)
+            if(nIdx == 4)
             {
                 nFontWhich = RES_CHRATR_CJK_FONT;
                 nFontHeightWhich = RES_CHRATR_CJK_FONTSIZE;
                 eLanguage = m_xDoc->GetDefault( RES_CHRATR_CJK_LANGUAGE ).GetLanguage();
             }
-            else if(nIdx == 16)
+            else if(nIdx == 8)
             {
                 nFontWhich = RES_CHRATR_CTL_FONT;
                 nFontHeightWhich = RES_CHRATR_CTL_FONTSIZE;
                 eLanguage = m_xDoc->GetDefault( RES_CHRATR_CTL_LANGUAGE ).GetLanguage();
             }
             SwTextFormatColl *pColl = nullptr;
-            if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
+            if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx].first))
             {
-                sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
+                sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx].first);
 
                 vcl::Font aFont( sEntry, Size( 0, 10 ) );
                 if( pPrt )
                     aFont = pPrt->GetFontMetric( aFont );
 
-                pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx + 1]);
+                pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx].second);
                 assert(pColl);
                 if( !bHTMLTemplSet ||
                     SfxItemState::SET != pColl->GetAttrSet().GetItemState(
@@ -271,11 +271,11 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                                                   OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
                 }
             }
-            sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
+            sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx].first), 0, eLanguage );
             if(nFontHeight <= 0)
-                nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
+                nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx].first, eLanguage );
             if(!pColl)
-                pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx + 1]);
+                pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx].second);
             SvxFontHeightItem aFontHeight( pColl->GetFormatAttr( nFontHeightWhich ) );
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {

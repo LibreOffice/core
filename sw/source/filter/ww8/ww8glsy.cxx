@@ -109,7 +109,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     if( aStart < aDocEnd )
     {
         SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
-            (RES_POOLCOLL_STANDARD, false);
+            (SwPoolFormatId::COLL_STANDARD, false);
         sal_uInt16 nGlosEntry = 0;
         SwContentNode* pCNd = nullptr;
         do {

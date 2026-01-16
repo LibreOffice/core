@@ -519,7 +519,7 @@ SwXFieldMaster::getSupportedServiceNames()
 }
 
 SwXFieldMaster::SwXFieldMaster(SwDoc& rDoc, SwFieldIds const nResId)
-    : m_pImpl(new Impl(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD), &rDoc, nResId))
+    : m_pImpl(new Impl(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD), &rDoc, nResId))
 {
 }
 
@@ -583,11 +583,11 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             const OUString sTypeName = pType->GetName().toString();
             static const sal_uInt16 nIds[] =
             {
-                RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
-                RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
-                RES_POOLCOLL_LABEL_TABLE - RES_POOLCOLL_EXTRA_BEGIN,
-                RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
-                RES_POOLCOLL_LABEL_FIGURE - RES_POOLCOLL_EXTRA_BEGIN,
+                sal_uInt16(SwPoolFormatId::COLL_LABEL_DRAWING - SwPoolFormatId::COLL_EXTRA_BEGIN),
+                sal_uInt16(SwPoolFormatId::COLL_LABEL_ABB - SwPoolFormatId::COLL_EXTRA_BEGIN),
+                sal_uInt16(SwPoolFormatId::COLL_LABEL_TABLE - SwPoolFormatId::COLL_EXTRA_BEGIN),
+                sal_uInt16(SwPoolFormatId::COLL_LABEL_FRAME- SwPoolFormatId::COLL_EXTRA_BEGIN),
+                sal_uInt16(SwPoolFormatId::COLL_LABEL_FIGURE - SwPoolFormatId::COLL_EXTRA_BEGIN),
                 0
             };
             for(const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
@@ -3013,7 +3013,7 @@ public:
         : m_pDoc(&rDoc)
         , m_nNextIndex(0)
     {
-        StartListening(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+        StartListening(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
     }
 
     virtual void Notify(const SfxHint& rHint) override

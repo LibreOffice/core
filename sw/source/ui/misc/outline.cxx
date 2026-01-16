@@ -177,7 +177,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     {
         // if the style wasn't created yet, it's still at this position
         sHeadline =
-            SwStyleNameMapper::GetUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
+            SwStyleNameMapper::GetUIName( SwPoolFormatId::COLL_HEADLINE1 + i,
                                           ProgName() );
         if( !m_rWrtSh.GetParaStyle( sHeadline ) )
             m_aCollNames[i] = sHeadline;
@@ -362,13 +362,13 @@ short SwOutlineTabDialog::Ok()
     for(i = 0; i < MAXLEVEL; ++i )
     {
         UIName sHeadline;
-        ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
+        ::SwStyleNameMapper::FillUIName( SwPoolFormatId::COLL_HEADLINE1 + i,
                                          sHeadline );
         SwTextFormatColl* pColl = m_rWrtSh.FindTextFormatCollByName( sHeadline );
         if( !pColl && m_aCollNames[i] != sHeadline)
         {
             SwTextFormatColl* pTextColl = m_rWrtSh.GetTextCollFromPool(
-                static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
+                SwPoolFormatId::COLL_HEADLINE1 + i );
             pTextColl->DeleteAssignmentToListLevelOfOutlineStyle();
             pTextColl->ResetFormatAttr(RES_PARATR_NUMRULE);
 
@@ -749,7 +749,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_xCollBox->append_text( SwStyleNameMapper::GetUIName(
-                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), ProgName()).toString());
+                                    SwPoolFormatId::COLL_HEADLINE1 + i, ProgName()).toString());
         m_xLevelLB->append_text( OUString::number(i + 1) );
     }
     OUString sStr = "1 - " + OUString::number(MAXLEVEL);

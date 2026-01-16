@@ -195,7 +195,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             // document-level section
             SwNodeIndex aSttIdx( rContentStIdx, 1 );
             m_xDoc->GetNodes().MakeTextNode( aSttIdx.GetNode(),
-                            m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
+                            m_pCSS1Parser->GetTextCollFromPool(SwPoolFormatId::COLL_TEXT));
 
             // delete the current content of the section
             SwPaM aDelPam( aSttIdx );
@@ -212,7 +212,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             // update page style
             for( size_t i=0; i < m_xDoc->GetPageDescCnt(); i++ )
             {
-                if( RES_POOLPAGE_HTML == m_xDoc->GetPageDesc(i).GetPoolFormatId() )
+                if( SwPoolFormatId::PAGE_HTML == m_xDoc->GetPageDesc(i).GetPoolFormatId() )
                 {
                     m_xDoc->ChgPageDesc( i, *pPageDesc );
                     break;

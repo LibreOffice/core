@@ -117,7 +117,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUStrin
     return sRet;
 }
 
-static void lcl_CopyCollAttr(SwWrtShell const * pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
+static void lcl_CopyCollAttr(SwWrtShell const * pOldSh, SwWrtShell* pNewSh, SwPoolFormatId nCollId)
 {
     sal_uInt16 nCollCnt = pOldSh->GetTextFormatCollCount();
     for( sal_uInt16 nCnt = 0; nCnt < nCollCnt; ++nCnt )
@@ -160,8 +160,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     // a new document
     if ( pOldSh )
     {
-        ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_ENVELOPE_ADDRESS);
-        ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_SEND_ADDRESS);
+        ::lcl_CopyCollAttr(pOldSh, pSh, SwPoolFormatId::COLL_ENVELOPE_ADDRESS);
+        ::lcl_CopyCollAttr(pOldSh, pSh, SwPoolFormatId::COLL_SEND_ADDRESS);
     }
 
     // Read SwEnvItem from config
@@ -178,7 +178,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
         UIName sEnvelope;
-        SwStyleNameMapper::FillUIName( RES_POOLPAGE_ENVELOPE, sEnvelope );
+        SwStyleNameMapper::FillUIName( SwPoolFormatId::PAGE_ENVELOPE, sEnvelope );
         bEnvChange = rCurPageDesc.GetName() == sEnvelope;
 
         IDocumentDeviceAccess& rIDDA_old = pOldSh->getIDocumentDeviceAccess();
@@ -228,13 +228,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue(static_cast<sal_uInt8>(pSh->getIDocumentDeviceAccess().getPrinter(true)->GetPaperBin()));
-            pOldSh->GetPageDescFromPool(RES_POOLPAGE_ENVELOPE)->GetMaster().SetFormatAttr(aItem);
+            pOldSh->GetPageDescFromPool(SwPoolFormatId::PAGE_ENVELOPE)->GetMaster().SetFormatAttr(aItem);
         }
 
         SwWrtShell *pTmp = nMode == ENV_INSERT ? pOldSh : pSh;
         const SwPageDesc* pFollow = nullptr;
-        SwTextFormatColl *pSend = pTmp->GetTextCollFromPool(RES_POOLCOLL_SEND_ADDRESS),
-                     *pAddr = pTmp->GetTextCollFromPool(RES_POOLCOLL_ENVELOPE_ADDRESS);
+        SwTextFormatColl *pSend = pTmp->GetTextCollFromPool(SwPoolFormatId::COLL_SEND_ADDRESS),
+                     *pAddr = pTmp->GetTextCollFromPool(SwPoolFormatId::COLL_ENVELOPE_ADDRESS);
         const UIName sSendMark = pSend->GetName();
         const UIName sAddrMark = pAddr->GetName();
 
@@ -307,8 +307,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             // a new document
             if ( pOldSh )
             {
-                ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_ENVELOPE_ADDRESS);
-                ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_SEND_ADDRESS);
+                ::lcl_CopyCollAttr(pOldSh, pSh, SwPoolFormatId::COLL_ENVELOPE_ADDRESS);
+                ::lcl_CopyCollAttr(pOldSh, pSh, SwPoolFormatId::COLL_SEND_ADDRESS);
             }
         }
 
@@ -321,7 +321,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             pSh->GetPageObjs( aFlyArr );
 
         // Get page description
-        SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_ENVELOPE);
+        SwPageDesc* pDesc = pSh->GetPageDescFromPool(SwPoolFormatId::PAGE_ENVELOPE);
         SwFrameFormat&   rFormat  = pDesc->GetMaster();
 
         Printer *pPrt = pSh->getIDocumentDeviceAccess().getPrinter( true );

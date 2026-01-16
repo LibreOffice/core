@@ -170,12 +170,12 @@ void SwNumRulesWithName::SetNumFormat(
 {
     m_aFormats[nIndex].reset( new SwNumFormatGlobal(rNumFormat) );
     m_aFormats[nIndex]->m_sCharFormatName = rName;
-    m_aFormats[nIndex]->m_nCharPoolId = USHRT_MAX;
+    m_aFormats[nIndex]->m_nCharPoolId = SwPoolFormatId::UNKNOWN;
     m_aFormats[nIndex]->m_Items.clear();
 }
 
 SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFormat )
-    : m_aFormat( rFormat ), m_nCharPoolId( USHRT_MAX )
+    : m_aFormat( rFormat ), m_nCharPoolId( SwPoolFormatId::UNKNOWN )
 {
     // relative gaps?????
 

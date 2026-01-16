@@ -127,32 +127,32 @@ namespace myImplHelpers
 
     SwTextFormatColl* MapperImpl<SwTextFormatColl>::GetBuiltInStyle(ww::sti eSti)
     {
-        const RES_POOL_COLLFMT_TYPE RES_NONE  = RES_POOLCOLL_DOC_END;
-        static const RES_POOL_COLLFMT_TYPE aArr[]=
+        const SwPoolFormatId RES_NONE  = SwPoolFormatId::COLL_DOC_END;
+        static const SwPoolFormatId aArr[]=
         {
-            RES_POOLCOLL_STANDARD, RES_POOLCOLL_HEADLINE1,
-            RES_POOLCOLL_HEADLINE2, RES_POOLCOLL_HEADLINE3,
-            RES_POOLCOLL_HEADLINE4, RES_POOLCOLL_HEADLINE5,
-            RES_POOLCOLL_HEADLINE6, RES_POOLCOLL_HEADLINE7,
-            RES_POOLCOLL_HEADLINE8, RES_POOLCOLL_HEADLINE9,
-            RES_POOLCOLL_TOX_IDX1, RES_POOLCOLL_TOX_IDX2,
-            RES_POOLCOLL_TOX_IDX3, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-            RES_NONE, RES_NONE, RES_POOLCOLL_TOX_CNTNT1,
-            RES_POOLCOLL_TOX_CNTNT2, RES_POOLCOLL_TOX_CNTNT3,
-            RES_POOLCOLL_TOX_CNTNT4, RES_POOLCOLL_TOX_CNTNT5,
-            RES_POOLCOLL_TOX_CNTNT6, RES_POOLCOLL_TOX_CNTNT7,
-            RES_POOLCOLL_TOX_CNTNT8, RES_POOLCOLL_TOX_CNTNT9, RES_NONE,
-            RES_POOLCOLL_FOOTNOTE, RES_NONE, RES_POOLCOLL_HEADER,
-            RES_POOLCOLL_FOOTER, RES_POOLCOLL_TOX_IDXH, RES_NONE, RES_NONE,
-            RES_POOLCOLL_ENVELOPE_ADDRESS, RES_POOLCOLL_SEND_ADDRESS, RES_NONE,
-            RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_ENDNOTE,
-            RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_LISTS_BEGIN,
+            SwPoolFormatId::COLL_STANDARD, SwPoolFormatId::COLL_HEADLINE1,
+            SwPoolFormatId::COLL_HEADLINE2, SwPoolFormatId::COLL_HEADLINE3,
+            SwPoolFormatId::COLL_HEADLINE4, SwPoolFormatId::COLL_HEADLINE5,
+            SwPoolFormatId::COLL_HEADLINE6, SwPoolFormatId::COLL_HEADLINE7,
+            SwPoolFormatId::COLL_HEADLINE8, SwPoolFormatId::COLL_HEADLINE9,
+            SwPoolFormatId::COLL_TOX_IDX1, SwPoolFormatId::COLL_TOX_IDX2,
+            SwPoolFormatId::COLL_TOX_IDX3, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
+            RES_NONE, RES_NONE, SwPoolFormatId::COLL_TOX_CNTNT1,
+            SwPoolFormatId::COLL_TOX_CNTNT2, SwPoolFormatId::COLL_TOX_CNTNT3,
+            SwPoolFormatId::COLL_TOX_CNTNT4, SwPoolFormatId::COLL_TOX_CNTNT5,
+            SwPoolFormatId::COLL_TOX_CNTNT6, SwPoolFormatId::COLL_TOX_CNTNT7,
+            SwPoolFormatId::COLL_TOX_CNTNT8, SwPoolFormatId::COLL_TOX_CNTNT9, RES_NONE,
+            SwPoolFormatId::COLL_FOOTNOTE, RES_NONE, SwPoolFormatId::COLL_HEADER,
+            SwPoolFormatId::COLL_FOOTER, SwPoolFormatId::COLL_TOX_IDXH, RES_NONE, RES_NONE,
+            SwPoolFormatId::COLL_ENVELOPE_ADDRESS, SwPoolFormatId::COLL_SEND_ADDRESS, RES_NONE,
+            RES_NONE, RES_NONE, RES_NONE, RES_NONE, SwPoolFormatId::COLL_ENDNOTE,
+            RES_NONE, RES_NONE, RES_NONE, SwPoolFormatId::COLL_LISTS_BEGIN,
             RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
             RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-            RES_NONE, RES_NONE, RES_POOLCOLL_HEADLINE_BASE, RES_NONE,
-            RES_POOLCOLL_SIGNATURE, RES_NONE, RES_POOLCOLL_TEXT,
-            RES_POOLCOLL_TEXT_MOVE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-            RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITLE
+            RES_NONE, RES_NONE, SwPoolFormatId::COLL_HEADLINE_BASE, RES_NONE,
+            SwPoolFormatId::COLL_SIGNATURE, RES_NONE, SwPoolFormatId::COLL_TEXT,
+            SwPoolFormatId::COLL_TEXT_MOVE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
+            RES_NONE, RES_NONE, SwPoolFormatId::COLL_DOC_SUBTITLE
         };
 
         OSL_ENSURE(SAL_N_ELEMENTS(aArr) == 75, "Style Array has false size");
@@ -162,7 +162,7 @@ namespace myImplHelpers
         //equivalent, then map it to one of our built in styles regardless
         //of its name
         if (sal::static_int_cast< size_t >(eSti) < SAL_N_ELEMENTS(aArr) && aArr[eSti] != RES_NONE)
-            pRet = mrDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
+            pRet = mrDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( aArr[eSti], false);
         return pRet;
     }
 
@@ -190,40 +190,40 @@ namespace myImplHelpers
 
     SwCharFormat* MapperImpl<SwCharFormat>::GetBuiltInStyle(ww::sti eSti)
     {
-        RES_POOL_CHRFMT_TYPE eLookup = RES_POOLCHR_NORMAL_END;
+        SwPoolFormatId eLookup = SwPoolFormatId::CHR_NORMAL_END;
         switch (eSti)
         {
             case ww::stiFootnoteRef:
-                eLookup = RES_POOLCHR_FOOTNOTE;
+                eLookup = SwPoolFormatId::CHR_FOOTNOTE;
                 break;
             case ww::stiLnn:
-                eLookup = RES_POOLCHR_LINENUM;
+                eLookup = SwPoolFormatId::CHR_LINENUM;
                 break;
             case ww::stiPgn:
-                eLookup = RES_POOLCHR_PAGENO;
+                eLookup = SwPoolFormatId::CHR_PAGENO;
                 break;
             case ww::stiEdnRef:
-                eLookup = RES_POOLCHR_ENDNOTE;
+                eLookup = SwPoolFormatId::CHR_ENDNOTE;
                 break;
             case ww::stiHyperlink:
-                eLookup = RES_POOLCHR_INET_NORMAL;
+                eLookup = SwPoolFormatId::CHR_INET_NORMAL;
                 break;
             case ww::stiHyperlinkFollowed:
-                eLookup = RES_POOLCHR_INET_VISIT;
+                eLookup = SwPoolFormatId::CHR_INET_VISIT;
                 break;
             case ww::stiStrong:
-                eLookup = RES_POOLCHR_HTML_STRONG;
+                eLookup = SwPoolFormatId::CHR_HTML_STRONG;
                 break;
             case ww::stiEmphasis:
-                eLookup = RES_POOLCHR_HTML_EMPHASIS;
+                eLookup = SwPoolFormatId::CHR_HTML_EMPHASIS;
                 break;
             default:
-                eLookup = RES_POOLCHR_NORMAL_END;
+                eLookup = SwPoolFormatId::CHR_NORMAL_END;
                 break;
         }
         SwCharFormat *pRet = nullptr;
-        if (eLookup != RES_POOLCHR_NORMAL_END)
-            pRet = mrDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast< sal_uInt16 >(eLookup) );
+        if (eLookup != SwPoolFormatId::CHR_NORMAL_END)
+            pRet = mrDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( eLookup );
         return pRet;
     }
 

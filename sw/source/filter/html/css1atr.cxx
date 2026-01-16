@@ -124,7 +124,7 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
                               IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate );
 static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& rFormat,
                                    IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate,
-                                   sal_uInt16 nRefPoolId, bool bExtRef,
+                                   SwPoolFormatId nRefPoolId, bool bExtRef,
                                    bool bPseudo=true );
 static SwHTMLWriter& OutCSS1_SwFootnoteInfo( SwHTMLWriter& rWrt, const SwEndNoteInfo& rInfo,
                                   SwDoc *pDoc, bool bHasNotes, bool bEndNote );
@@ -480,7 +480,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
     if( IsHTMLMode(HTMLMODE_PRINT_EXT) )
     {
         const SwPageDesc *pFirstPageDesc = nullptr;
-        sal_uInt16 nFirstRefPoolId = RES_POOLPAGE_HTML;
+        SwPoolFormatId nFirstRefPoolId = SwPoolFormatId::PAGE_HTML;
         m_bCSS1IgnoreFirstPageDesc = true;
 
         // First we try to guess how the document is constructed.
@@ -490,7 +490,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
         // If other templates are used, only very simple cases are exported.
         const SwPageDesc *pPageDesc = &rPageDesc;
         const SwPageDesc *pFollow = rPageDesc.GetFollow();
-        if( RES_POOLPAGE_FIRST == pPageDesc->GetPoolFormatId() &&
+        if( SwPoolFormatId::PAGE_FIRST == pPageDesc->GetPoolFormatId() &&
             pFollow != pPageDesc &&
             !IsPoolUserFormat( pFollow->GetPoolFormatId() ) )
         {
@@ -506,20 +506,20 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
             // The document is one-sided; no matter what page, we do not create a 2-sided doc.
             // The attribute is exported relative to the HTML page template.
             OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, m_xTemplate.get(),
-                                RES_POOLPAGE_HTML, true, false );
+                                SwPoolFormatId::PAGE_HTML, true, false );
             nFirstRefPoolId = pFollow->GetPoolFormatId();
         }
-        else if( (RES_POOLPAGE_LEFT == pPageDesc->GetPoolFormatId() &&
-                  RES_POOLPAGE_RIGHT == pFollow->GetPoolFormatId()) ||
-                 (RES_POOLPAGE_RIGHT == pPageDesc->GetPoolFormatId() &&
-                  RES_POOLPAGE_LEFT == pFollow->GetPoolFormatId()) )
+        else if( (SwPoolFormatId::PAGE_LEFT == pPageDesc->GetPoolFormatId() &&
+                  SwPoolFormatId::PAGE_RIGHT == pFollow->GetPoolFormatId()) ||
+                 (SwPoolFormatId::PAGE_RIGHT == pPageDesc->GetPoolFormatId() &&
+                  SwPoolFormatId::PAGE_LEFT == pFollow->GetPoolFormatId()) )
         {
             // the document is double-sided
             OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, m_xTemplate.get(),
-                                RES_POOLPAGE_HTML, true );
+                                SwPoolFormatId::PAGE_HTML, true );
             OutCSS1_SwPageDesc( *this, *pFollow, pStylePoolAccess, m_xTemplate.get(),
-                                RES_POOLPAGE_HTML, true );
-            nFirstRefPoolId = RES_POOLPAGE_RIGHT;
+                                SwPoolFormatId::PAGE_HTML, true );
+            nFirstRefPoolId = SwPoolFormatId::PAGE_RIGHT;
             m_bCSS1IgnoreFirstPageDesc = false;
         }
         // other cases we miss
@@ -532,7 +532,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
     // The text body style has to be exported always (if it is changed compared
     // to the template), because it is used as reference for any style
     // that maps to <P>, and that's especially the standard style
-    getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
+    getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT, false );
 
     // the Default-TextStyle is not also exported !!
     // 0-Style is the Default; is never exported !!
@@ -540,8 +540,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
     for( size_t i = 1; i < nTextFormats; ++i )
     {
         const SwTextFormatColl* pColl = (*m_pDoc->GetTextFormatColls())[i];
-        sal_uInt16 nPoolId = pColl->GetPoolFormatId();
-        if( nPoolId == RES_POOLCOLL_TEXT || m_pDoc->IsUsed( *pColl ) )
+        SwPoolFormatId nPoolId = pColl->GetPoolFormatId();
+        if( nPoolId == SwPoolFormatId::COLL_TEXT || m_pDoc->IsUsed( *pColl ) )
             OutCSS1_SwFormat( *this, *pColl, &m_pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
     }
 
@@ -550,9 +550,9 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
     for( size_t i = 1; i < nCharFormats; ++i )
     {
         const SwCharFormat *pCFormat = (*m_pDoc->GetCharFormats())[i];
-        sal_uInt16 nPoolId = pCFormat->GetPoolFormatId();
-        if( nPoolId == RES_POOLCHR_INET_NORMAL ||
-            nPoolId == RES_POOLCHR_INET_VISIT ||
+        SwPoolFormatId nPoolId = pCFormat->GetPoolFormatId();
+        if( nPoolId == SwPoolFormatId::CHR_INET_NORMAL ||
+            nPoolId == SwPoolFormatId::CHR_INET_VISIT ||
             m_pDoc->IsUsed( *pCFormat ) )
             OutCSS1_SwFormat( *this, *pCFormat, &m_pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
     }
@@ -597,13 +597,13 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
 // if pPseudo is set, Styles-Sheets will be exported;
 // otherwise we only search for Token and Class for a Format
 sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rToken,
-                                      OUString& rClass, sal_uInt16& rRefPoolId,
+                                      OUString& rClass, SwPoolFormatId& rRefPoolId,
                                       OUString *pPseudo )
 {
     sal_uInt16 nDeep = 0;
     rToken.clear();
     rClass.clear();
-    rRefPoolId = 0;
+    rRefPoolId = SwPoolFormatId::ZERO;
     if( pPseudo )
         pPseudo->clear();
 
@@ -614,30 +614,30 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
     while( pPFormat && !pPFormat->IsDefault() )
     {
         bool bStop = false;
-        sal_uInt16 nPoolId = pPFormat->GetPoolFormatId();
-        if( USER_FMT & nPoolId )
+        SwPoolFormatId nPoolId = pPFormat->GetPoolFormatId();
+        if( USER_FMT & sal_uInt16(nPoolId) )
         {
             // user templates
             const UIName& aNm(pPFormat->GetName());
 
             if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
             {
-                rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
+                rRefPoolId = SwPoolFormatId::COLL_HTML_BLOCKQUOTE;
                 rToken = OOO_STRING_SVTOOLS_HTML_blockquote ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_citation)
             {
-                rRefPoolId = RES_POOLCHR_HTML_CITATION;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_CITATION;
                 rToken = OOO_STRING_SVTOOLS_HTML_citation ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_code)
             {
-                rRefPoolId = RES_POOLCHR_HTML_CODE;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_CODE;
                 rToken = OOO_STRING_SVTOOLS_HTML_code ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_definstance)
             {
-                rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_DEFINSTANCE;
                 rToken = OOO_STRING_SVTOOLS_HTML_definstance ""_ostr;
             }
             else if (!bChrFormat && (aNm == OOO_STRING_SVTOOLS_HTML_dd ||
@@ -655,19 +655,19 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                     }
                     else if (nDefListLvl & HTML_DLCOLL_DD)
                     {
-                        rRefPoolId = RES_POOLCOLL_HTML_DD;
+                        rRefPoolId = SwPoolFormatId::COLL_HTML_DD;
                         rToken = OOO_STRING_SVTOOLS_HTML_dd ""_ostr;
                     }
                     else
                     {
-                        rRefPoolId = RES_POOLCOLL_HTML_DT;
+                        rRefPoolId = SwPoolFormatId::COLL_HTML_DT;
                         rToken = OOO_STRING_SVTOOLS_HTML_dt ""_ostr;
                     }
                 }
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_emphasis)
             {
-                rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_EMPHASIS;
                 rToken = OOO_STRING_SVTOOLS_HTML_emphasis ""_ostr;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_horzrule)
@@ -677,51 +677,51 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_keyboard)
             {
-                rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_KEYBOARD;
                 rToken = OOO_STRING_SVTOOLS_HTML_keyboard ""_ostr;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_listing)
             {
                 // Export Listings as PRE or PRE-derived template
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
-                rRefPoolId = RES_POOLCOLL_HTML_PRE;
+                rRefPoolId = SwPoolFormatId::COLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_preformtxt)
             {
-                rRefPoolId = RES_POOLCOLL_HTML_PRE;
+                rRefPoolId = SwPoolFormatId::COLL_HTML_PRE;
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_sample)
             {
-                rRefPoolId = RES_POOLCHR_HTML_SAMPLE;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_SAMPLE;
                 rToken = OOO_STRING_SVTOOLS_HTML_sample ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_strong)
             {
-                rRefPoolId = RES_POOLCHR_HTML_STRONG;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_STRONG;
                 rToken = OOO_STRING_SVTOOLS_HTML_strong ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_teletype)
             {
-                rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_TELETYPE;
                 rToken = OOO_STRING_SVTOOLS_HTML_teletype ""_ostr;
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_variable)
             {
-                rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
+                rRefPoolId = SwPoolFormatId::CHR_HTML_VARIABLE;
                 rToken = OOO_STRING_SVTOOLS_HTML_variable ""_ostr;
             }
             else if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_xmp)
             {
                 // export XMP as PRE (but not the template as Style)
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
-                rRefPoolId = RES_POOLCOLL_HTML_PRE;
+                rRefPoolId = SwPoolFormatId::COLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
             }
 
             // if a PoolId is set, the Name of the template is that of the related Token
-            OSL_ENSURE( (rRefPoolId != 0) == (!rToken.isEmpty()),
+            OSL_ENSURE( (rRefPoolId != SwPoolFormatId::ZERO) == (!rToken.isEmpty()),
                     "Token missing" );
         }
         else
@@ -730,52 +730,52 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             switch( nPoolId )
             {
             // paragraph templates
-            case RES_POOLCOLL_HEADLINE_BASE:
-            case RES_POOLCOLL_STANDARD:
+            case SwPoolFormatId::COLL_HEADLINE_BASE:
+            case SwPoolFormatId::COLL_STANDARD:
                 // do not export this template
-            case RES_POOLCOLL_HTML_HR:
+            case SwPoolFormatId::COLL_HTML_HR:
                 // do not export HR !
                 bStop = (nDeep==0);
                 break;
-            case RES_POOLCOLL_TEXT:
+            case SwPoolFormatId::COLL_TEXT:
                 rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 break;
-            case RES_POOLCOLL_HEADLINE1:
+            case SwPoolFormatId::COLL_HEADLINE1:
                 rToken = OOO_STRING_SVTOOLS_HTML_head1 ""_ostr;
                 break;
-            case RES_POOLCOLL_HEADLINE2:
+            case SwPoolFormatId::COLL_HEADLINE2:
                 rToken = OOO_STRING_SVTOOLS_HTML_head2 ""_ostr;
                 break;
-            case RES_POOLCOLL_HEADLINE3:
+            case SwPoolFormatId::COLL_HEADLINE3:
                 rToken = OOO_STRING_SVTOOLS_HTML_head3 ""_ostr;
                 break;
-            case RES_POOLCOLL_HEADLINE4:
+            case SwPoolFormatId::COLL_HEADLINE4:
                 rToken = OOO_STRING_SVTOOLS_HTML_head4 ""_ostr;
                 break;
-            case RES_POOLCOLL_HEADLINE5:
+            case SwPoolFormatId::COLL_HEADLINE5:
                 rToken = OOO_STRING_SVTOOLS_HTML_head5 ""_ostr;
                 break;
-            case RES_POOLCOLL_HEADLINE6:
+            case SwPoolFormatId::COLL_HEADLINE6:
                 rToken = OOO_STRING_SVTOOLS_HTML_head6 ""_ostr;
                 break;
-            case RES_POOLCOLL_SEND_ADDRESS:
+            case SwPoolFormatId::COLL_SEND_ADDRESS:
                 rToken = OOO_STRING_SVTOOLS_HTML_address ""_ostr;
                 break;
-            case RES_POOLCOLL_HTML_BLOCKQUOTE:
+            case SwPoolFormatId::COLL_HTML_BLOCKQUOTE:
                 rToken = OOO_STRING_SVTOOLS_HTML_blockquote ""_ostr;
                 break;
-            case RES_POOLCOLL_HTML_PRE:
+            case SwPoolFormatId::COLL_HTML_PRE:
                 rToken = OOO_STRING_SVTOOLS_HTML_preformtxt ""_ostr;
                 break;
 
-            case RES_POOLCOLL_HTML_DD:
+            case SwPoolFormatId::COLL_HTML_DD:
                 rToken = OOO_STRING_SVTOOLS_HTML_dd ""_ostr;
                 break;
-            case RES_POOLCOLL_HTML_DT:
+            case SwPoolFormatId::COLL_HTML_DT:
                 rToken = OOO_STRING_SVTOOLS_HTML_dt ""_ostr;
                 break;
 
-            case RES_POOLCOLL_TABLE:
+            case SwPoolFormatId::COLL_TABLE:
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_tabledata " "
@@ -784,7 +784,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 else
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 break;
-            case RES_POOLCOLL_TABLE_HDLN:
+            case SwPoolFormatId::COLL_TABLE_HDLN:
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_tableheader " "
@@ -793,72 +793,73 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 else
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                 break;
-            case RES_POOLCOLL_FOOTNOTE:
+            case SwPoolFormatId::COLL_FOOTNOTE:
                 if( !nDeep )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                     rClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-                    rRefPoolId = RES_POOLCOLL_TEXT;
+                    rRefPoolId = SwPoolFormatId::COLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
                 }
                 break;
-            case RES_POOLCOLL_ENDNOTE:
+            case SwPoolFormatId::COLL_ENDNOTE:
                 if( !nDeep )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
                     rClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
-                    rRefPoolId = RES_POOLCOLL_TEXT;
+                    rRefPoolId = SwPoolFormatId::COLL_TEXT;
                     nDeep = CSS1_FMT_CMPREF;
                 }
                 break;
 
             // character templates
-            case RES_POOLCHR_HTML_EMPHASIS:
+            case SwPoolFormatId::CHR_HTML_EMPHASIS:
                 rToken = OOO_STRING_SVTOOLS_HTML_emphasis ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_CITATION:
+            case SwPoolFormatId::CHR_HTML_CITATION:
                 rToken = OOO_STRING_SVTOOLS_HTML_citation ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_STRONG:
+            case SwPoolFormatId::CHR_HTML_STRONG:
                 rToken = OOO_STRING_SVTOOLS_HTML_strong ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_CODE:
+            case SwPoolFormatId::CHR_HTML_CODE:
                 rToken = OOO_STRING_SVTOOLS_HTML_code ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_SAMPLE:
+            case SwPoolFormatId::CHR_HTML_SAMPLE:
                 rToken = OOO_STRING_SVTOOLS_HTML_sample ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_KEYBOARD:
+            case SwPoolFormatId::CHR_HTML_KEYBOARD:
                 rToken = OOO_STRING_SVTOOLS_HTML_keyboard ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_VARIABLE:
+            case SwPoolFormatId::CHR_HTML_VARIABLE:
                 rToken = OOO_STRING_SVTOOLS_HTML_variable ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_DEFINSTANCE:
+            case SwPoolFormatId::CHR_HTML_DEFINSTANCE:
                 rToken = OOO_STRING_SVTOOLS_HTML_definstance ""_ostr;
                 break;
-            case RES_POOLCHR_HTML_TELETYPE:
+            case SwPoolFormatId::CHR_HTML_TELETYPE:
                 rToken = OOO_STRING_SVTOOLS_HTML_teletype ""_ostr;
                 break;
 
-            case RES_POOLCHR_INET_NORMAL:
+            case SwPoolFormatId::CHR_INET_NORMAL:
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_anchor ""_ostr;
                     *pPseudo = sCSS1_link;
                 }
                 break;
-            case RES_POOLCHR_INET_VISIT:
+            case SwPoolFormatId::CHR_INET_VISIT:
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_anchor ""_ostr;
                     *pPseudo = sCSS1_visited;
                 }
                 break;
+            default: break;
             }
 
             // if a token is set, PoolId contains the related template
-            if( !rToken.isEmpty() && !rRefPoolId )
+            if( !rToken.isEmpty() && rRefPoolId == SwPoolFormatId::ZERO )
                 rRefPoolId = nPoolId;
         }
 
@@ -909,7 +910,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
 }
 
 static sal_uInt16 GetCSS1Selector( const SwFormat *pFormat, OUString& rSelector,
-                               sal_uInt16& rRefPoolId )
+                               SwPoolFormatId& rRefPoolId )
 {
     OString aToken;
     OUString aClass;
@@ -933,16 +934,16 @@ static sal_uInt16 GetCSS1Selector( const SwFormat *pFormat, OUString& rSelector,
     return nDeep;
 }
 
-const SwFormat *SwHTMLWriter::GetTemplateFormat( sal_uInt16 nPoolFormatId,
+const SwFormat *SwHTMLWriter::GetTemplateFormat( SwPoolFormatId nPoolFormatId,
                                            IDocumentStylePoolAccess* pTemplate /*SwDoc *pTemplate*/)
 {
     const SwFormat *pRefFormat = nullptr;
 
     if( pTemplate )
     {
-        OSL_ENSURE( !(USER_FMT & nPoolFormatId),
+        OSL_ENSURE( !(USER_FMT & sal_uInt16(nPoolFormatId)),
                 "No user templates found" );
-        if( POOLGRP_NOCOLLID & nPoolFormatId )
+        if( POOLGRP_NOCOLLID & sal_uInt16(nPoolFormatId) )
             pRefFormat = pTemplate->GetCharFormatFromPool( nPoolFormatId );
         else
             pRefFormat = pTemplate->GetTextCollFromPool( nPoolFormatId, false );
@@ -1452,12 +1453,12 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
 
     // determine Selector and the to-be-exported Attr-Set-depth
     OUString aSelector;
-    sal_uInt16 nRefPoolId = 0;
+    SwPoolFormatId nRefPoolId = SwPoolFormatId::ZERO;
     sal_uInt16 nDeep = GetCSS1Selector( &rFormat, aSelector, nRefPoolId );
     if( !nDeep )
         return rWrt;    // not derived from a HTML-template
 
-    sal_uInt16 nPoolFormatId = rFormat.GetPoolFormatId();
+    SwPoolFormatId nPoolFormatId = rFormat.GetPoolFormatId();
 
     // Determine the to-be-exported Attr-Set. We have to distinguish 3 cases:
     // - HTML-Tag templates (nDeep==USHRT_MAX):
@@ -1521,7 +1522,7 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
         // case that there is no reference template)
         rWrt.m_nDfltTopMargin = 0;
         rWrt.m_nDfltBottomMargin = HTML_PARSPACE;
-        if( USER_FMT & nPoolFormatId )
+        if( USER_FMT & sal_uInt16(nPoolFormatId) )
         {
             // user templates
             const UIName& aNm(rFormat.GetName());
@@ -1540,20 +1541,21 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
             // Pool templates
             switch( nPoolFormatId )
             {
-            case RES_POOLCOLL_HEADLINE1:
-            case RES_POOLCOLL_HEADLINE2:
-            case RES_POOLCOLL_HEADLINE3:
-            case RES_POOLCOLL_HEADLINE4:
-            case RES_POOLCOLL_HEADLINE5:
-            case RES_POOLCOLL_HEADLINE6:
+            case SwPoolFormatId::COLL_HEADLINE1:
+            case SwPoolFormatId::COLL_HEADLINE2:
+            case SwPoolFormatId::COLL_HEADLINE3:
+            case SwPoolFormatId::COLL_HEADLINE4:
+            case SwPoolFormatId::COLL_HEADLINE5:
+            case SwPoolFormatId::COLL_HEADLINE6:
                 rWrt.m_nDfltTopMargin = HTML_HEADSPACE;
                 break;
-            case RES_POOLCOLL_SEND_ADDRESS:
-            case RES_POOLCOLL_HTML_DT:
-            case RES_POOLCOLL_HTML_DD:
-            case RES_POOLCOLL_HTML_PRE:
+            case SwPoolFormatId::COLL_SEND_ADDRESS:
+            case SwPoolFormatId::COLL_HTML_DT:
+            case SwPoolFormatId::COLL_HTML_DD:
+            case SwPoolFormatId::COLL_HTML_PRE:
                 rWrt.m_nDfltBottomMargin = 0;
                 break;
+            default: break;
             }
         }
     }
@@ -1565,8 +1567,8 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
     // There is no support for script dependent hyperlinks by now.
     bool bCheckForPseudo = false;
     if( bCharFormat &&
-        (RES_POOLCHR_INET_NORMAL==nRefPoolId ||
-         RES_POOLCHR_INET_VISIT==nRefPoolId) )
+        (SwPoolFormatId::CHR_INET_NORMAL==nRefPoolId ||
+         SwPoolFormatId::CHR_INET_VISIT==nRefPoolId) )
         bCheckForPseudo = true;
 
     // export now the Attributes (incl. selector)
@@ -1578,8 +1580,8 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
             rWrt.m_aScriptTextStyles.insert( rFormat.GetName() );
         else
         {
-            if( nPoolFormatId==RES_POOLCOLL_TEXT )
-                rWrt.m_aScriptParaStyles.insert( pDoc->GetTextCollFromPool( RES_POOLCOLL_STANDARD, false )->GetName().toString() );
+            if( nPoolFormatId==SwPoolFormatId::COLL_TEXT )
+                rWrt.m_aScriptParaStyles.insert( pDoc->GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD, false )->GetName().toString() );
             rWrt.m_aScriptParaStyles.insert( rFormat.GetName().toString() );
         }
         bHasScriptDependencies = true;
@@ -1597,7 +1599,7 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
 
 static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& rPageDesc,
                                    IDocumentStylePoolAccess/*SwDoc*/ *pDoc, SwDoc *pTemplate,
-                                   sal_uInt16 nRefPoolId, bool bExtRef,
+                                   SwPoolFormatId nRefPoolId, bool bExtRef,
                                    bool bPseudo )
 {
     const SwPageDesc* pRefPageDesc = nullptr;
@@ -1613,9 +1615,10 @@ static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& r
         std::u16string_view pPseudo;
         switch( rPageDesc.GetPoolFormatId() )
         {
-        case RES_POOLPAGE_FIRST:    pPseudo = sCSS1_first;  break;
-        case RES_POOLPAGE_LEFT:     pPseudo = sCSS1_left;   break;
-        case RES_POOLPAGE_RIGHT:    pPseudo = sCSS1_right;  break;
+        case SwPoolFormatId::PAGE_FIRST:    pPseudo = sCSS1_first;  break;
+        case SwPoolFormatId::PAGE_LEFT:     pPseudo = sCSS1_left;   break;
+        case SwPoolFormatId::PAGE_RIGHT:    pPseudo = sCSS1_right;  break;
+        default: break;
         }
         if( !pPseudo.empty() )
             aSelector += OUString::Concat(":") + pPseudo;
@@ -1727,7 +1730,7 @@ static SwHTMLWriter& OutCSS1_SwFootnoteInfo( SwHTMLWriter& rWrt, const SwEndNote
         if( !bHasNotes && rWrt.m_xTemplate.is() )
         {
             SwFormat *pRefFormat = rWrt.m_xTemplate->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                        static_cast< sal_uInt16 >(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE) );
+                        bEndNote ? SwPoolFormatId::CHR_ENDNOTE : SwPoolFormatId::CHR_FOOTNOTE );
             if( pRefFormat )
                 SwHTMLWriter::SubtractItemSet( aItemSet, pRefFormat->GetAttrSet(),
                                                true );
@@ -2994,8 +2997,8 @@ static SwHTMLWriter& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( SwHTMLW
         {
             switch( pPDesc->GetPoolFormatId() )
             {
-            case RES_POOLPAGE_LEFT:     pBreakBefore = sCSS1_PV_left;   break;
-            case RES_POOLPAGE_RIGHT:    pBreakBefore = sCSS1_PV_right;  break;
+            case SwPoolFormatId::PAGE_LEFT:     pBreakBefore = sCSS1_PV_left;   break;
+            case SwPoolFormatId::PAGE_RIGHT:    pBreakBefore = sCSS1_PV_right;  break;
             default:                    pBreakBefore = sCSS1_PV_always; break;
             }
         }

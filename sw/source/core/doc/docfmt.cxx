@@ -1812,7 +1812,7 @@ SwTableNumFormatMerge::~SwTableNumFormatMerge()
         pNFormat->ClearMergeTable();
 }
 
-void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nPoolId,
+void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, SwPoolFormatId nPoolId,
                                     const SfxItemSet* pSet )
 {
     SwPaM aPam( rPos );

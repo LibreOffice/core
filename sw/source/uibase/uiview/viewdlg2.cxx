@@ -217,14 +217,14 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwWrtShell &rSh = GetWrtShell();
     if(!rName.isEmpty())
     {
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(UIName(rName), SwGetPoolIdFromName::TxtColl);
-        if( USHRT_MAX != nPoolId )
+        SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(UIName(rName), SwGetPoolIdFromName::TxtColl);
+        if( SwPoolFormatId::UNKNOWN != nPoolId )
             rSh.GetTextCollFromPool(nPoolId);
             // Pool template does not exist: Does it exist on the document?
         else if( !rSh.GetParaStyle(UIName(rName)) )
         {
             // It also does not exist in the document: generate
-            SwTextFormatColl* pDerivedFrom = rSh.GetTextCollFromPool(RES_POOLCOLL_LABEL);
+            SwTextFormatColl* pDerivedFrom = rSh.GetTextCollFromPool(SwPoolFormatId::COLL_LABEL);
             rSh.MakeTextFormatColl(UIName(rName), pDerivedFrom);
         }
     }

@@ -37,6 +37,7 @@
 #include "swtypes.hxx"
 #include "toxe.hxx"
 #include "chpfld.hxx"
+#include "poolfmt.hxx"
 
 class SwTOXType;
 class SwTOXMark;
@@ -248,7 +249,7 @@ struct SW_DLLPUBLIC SwFormToken
     UIName          sCharStyleName;
     SwTwips         nTabStopPosition;
     FormTokenType   eTokenType;
-    sal_uInt16          nPoolId;
+    SwPoolFormatId  nPoolId;
     SvxTabAdjust    eTabAlign;
     SwChapterFormat     nChapterFormat;     //SwChapterFormat;
     sal_uInt16          nOutlineLevel;//the maximum permitted outline level in numbering
@@ -261,7 +262,7 @@ struct SW_DLLPUBLIC SwFormToken
     SwFormToken(FormTokenType eType ) :
         nTabStopPosition(0),
         eTokenType(eType),
-        nPoolId(USHRT_MAX),
+        nPoolId(SwPoolFormatId::UNKNOWN),
         eTabAlign( SvxTabAdjust::Left ),
         nChapterFormat(SwChapterFormat::Number),
         nOutlineLevel(MAXLEVEL),   //default to maximum outline level

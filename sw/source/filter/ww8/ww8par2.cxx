@@ -4520,7 +4520,7 @@ void WW8RStyle::Import()
 {
     mpIo->m_pDfltTextFormatColl  = mpIo->m_rDoc.GetDfltTextFormatColl();
     mpIo->m_pStandardFormatColl =
-        mpIo->m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
+        mpIo->m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false);
 
     if( mpIo->m_nIniFlags & WW8FL_NO_STYLES )
         return;

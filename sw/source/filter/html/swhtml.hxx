@@ -219,7 +219,7 @@ class HTMLAttrContext
 
     HtmlTokenId m_nToken;  // the token of the context
 
-    sal_uInt16  m_nTextFormatColl; // a style created in the context or zero
+    SwPoolFormatId m_nTextFormatColl; // a style created in the context or zero
 
     sal_uInt16  m_nLeftMargin;        // a changed left border
     sal_uInt16  m_nRightMargin;       // a changed right border
@@ -246,15 +246,15 @@ class HTMLAttrContext
 public:
     void ClearSaveDocContext();
 
-    HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUString aClass,
+    HTMLAttrContext( HtmlTokenId nTokn, SwPoolFormatId nPoolId, OUString aClass,
                       bool bDfltColl=false );
     explicit HTMLAttrContext( HtmlTokenId nTokn );
     ~HTMLAttrContext();
 
     HtmlTokenId GetToken() const { return m_nToken; }
 
-    sal_uInt16 GetTextFormatColl() const { return m_bDefaultTextFormatColl ? 0 : m_nTextFormatColl; }
-    sal_uInt16 GetDefaultTextFormatColl() const { return m_bDefaultTextFormatColl ? m_nTextFormatColl : 0; }
+    SwPoolFormatId GetTextFormatColl() const { return m_bDefaultTextFormatColl ? SwPoolFormatId::ZERO : m_nTextFormatColl; }
+    SwPoolFormatId GetDefaultTextFormatColl() const { return m_bDefaultTextFormatColl ? m_nTextFormatColl : SwPoolFormatId::ZERO; }
 
     const OUString& GetClass() const { return m_aClass; }
 
@@ -605,7 +605,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     void EndHeading();
 
     // <ADDRESS>, <BLOCKQUOTE> and <PRE>
-    void NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nPoolId );
+    void NewTextFormatColl( HtmlTokenId nToken, SwPoolFormatId nPoolId );
     void EndTextFormatColl( HtmlTokenId nToken );
 
     // <DIV> and <CENTER>
@@ -833,7 +833,7 @@ public:
 
     // Insert box content at the end of the table containing the PaM
     // and move the PaM into the cell
-    const SwStartNode *InsertTableSection( sal_uInt16 nPoolId );
+    const SwStartNode *InsertTableSection( SwPoolFormatId nPoolId );
 
     // Insert methods for various table tags
     std::unique_ptr<HTMLTableCnts> InsertTableContents( bool bHead );

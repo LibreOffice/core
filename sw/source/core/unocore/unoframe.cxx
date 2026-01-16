@@ -970,7 +970,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc& rDoc, SfxItemSet& rSet, SfxItem
     }
     else
     {
-        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
+        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_FRAME )->GetAttrSet();
         bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         FillCol(rSet, *pItemSet);
     }
@@ -1053,7 +1053,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     }
     else
     {
-        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
+        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_GRAPHIC )->GetAttrSet();
         bRet = FillBaseProperties(rFrameSet, *pItemSet, rSizeFound);
         bRet &= FillMirror(rGrSet, *pItemSet);
     }
@@ -1141,7 +1141,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
         return;
 
     // Register ourselves as a listener to the document (via the page descriptor)
-    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
     // get the property set for the default style data
     // First get the model
     rtl::Reference < SwXTextDocument > xModel = pShell->GetBaseModel();

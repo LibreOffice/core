@@ -2221,14 +2221,14 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat, const bool bReset
         {
             // store previous paragraph style for track changes
             UIName sParaStyleName;
-            sal_uInt16 nPoolId = USHRT_MAX;
+            SwPoolFormatId nPoolId = SwPoolFormatId::UNKNOWN;
             SwContentNode * pCnt = rPaM.Start()->GetNode().GetContentNode();
             if ( pCnt && pCnt->GetTextNode() && GetDoc()->getIDocumentRedlineAccess().IsRedlineOn() )
             {
                 const SwTextFormatColl* pTextFormatColl = pCnt->GetTextNode()->GetTextColl();
-                sal_uInt16 nStylePoolId = pTextFormatColl->GetPoolFormatId();
+                SwPoolFormatId nStylePoolId = pTextFormatColl->GetPoolFormatId();
                 // default paragraph style
-                if ( nStylePoolId == RES_POOLCOLL_STANDARD )
+                if ( nStylePoolId == SwPoolFormatId::COLL_STANDARD )
                     nPoolId = nStylePoolId;
                 else
                     sParaStyleName = pTextFormatColl->GetName();
@@ -2259,7 +2259,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat, const bool bReset
                 auto const result(GetDoc()->getIDocumentRedlineAccess().AppendRedline( pRedline, true));
                 // store original paragraph style to reject formatting change
                 if ( IDocumentRedlineAccess::AppendResult::IGNORED != result &&
-                    ( nPoolId == RES_POOLCOLL_STANDARD || !sParaStyleName.isEmpty() ) )
+                    ( nPoolId == SwPoolFormatId::COLL_STANDARD || !sParaStyleName.isEmpty() ) )
                 {
                     std::unique_ptr<SwRedlineExtraData_FormatColl> xExtra;
                     xExtra.reset(new SwRedlineExtraData_FormatColl(std::move(sParaStyleName), nPoolId, nullptr));

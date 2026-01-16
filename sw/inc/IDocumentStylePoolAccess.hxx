@@ -27,6 +27,7 @@ class SwFormat;
 class SwFrameFormat;
 class SwNumRule;
 class SwPageDesc;
+enum class SwPoolFormatId : sal_uInt16;
 
 /** Access to the style pool
  */
@@ -38,29 +39,30 @@ public:
         If string pointer is defined request only description
         of attributes, do not create style sheet!
     */
-    virtual SwTextFormatColl* GetTextCollFromPool(sal_uInt16 nId, bool bRegardLanguage = true) = 0;
+    virtual SwTextFormatColl* GetTextCollFromPool(SwPoolFormatId nId, bool bRegardLanguage = true)
+        = 0;
 
     /** Return required automatic format base class.
     */
-    virtual SwFormat* GetFormatFromPool(sal_uInt16 nId) = 0;
+    virtual SwFormat* GetFormatFromPool(SwPoolFormatId nId) = 0;
 
     /** Return required automatic format.
      */
-    virtual SwFrameFormat* GetFrameFormatFromPool(sal_uInt16 nId) = 0;
+    virtual SwFrameFormat* GetFrameFormatFromPool(SwPoolFormatId nId) = 0;
 
-    virtual SwCharFormat* GetCharFormatFromPool(sal_uInt16 nId) = 0;
+    virtual SwCharFormat* GetCharFormatFromPool(SwPoolFormatId nId) = 0;
 
     /** Return required automatic page style.
      */
-    virtual SwPageDesc* GetPageDescFromPool(sal_uInt16 nId, bool bRegardLanguage = true) = 0;
+    virtual SwPageDesc* GetPageDescFromPool(SwPoolFormatId nId, bool bRegardLanguage = true) = 0;
 
-    virtual SwNumRule* GetNumRuleFromPool(sal_uInt16 nId) = 0;
+    virtual SwNumRule* GetNumRuleFromPool(SwPoolFormatId nId) = 0;
 
     /** Check whether this "auto-collection" is used in document.
      */
-    virtual bool IsPoolTextCollUsed(sal_uInt16 nId) const = 0;
-    virtual bool IsPoolFormatUsed(sal_uInt16 nId) const = 0;
-    virtual bool IsPoolPageDescUsed(sal_uInt16 nId) const = 0;
+    virtual bool IsPoolTextCollUsed(SwPoolFormatId nId) const = 0;
+    virtual bool IsPoolFormatUsed(SwPoolFormatId nId) const = 0;
+    virtual bool IsPoolPageDescUsed(SwPoolFormatId nId) const = 0;
 
 protected:
     virtual ~IDocumentStylePoolAccess(){};

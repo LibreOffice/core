@@ -4331,7 +4331,7 @@ SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter const &rIter,
     if (mrReader.m_bNewDoc && rIter == rStart)
     {
         rIter->mpPage =
-            mrReader.m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+            mrReader.m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD);
     }
     else
     {
@@ -4474,7 +4474,7 @@ void wwSectionManager::InsertSegments()
             {
                 pTextNd =
                     mrReader.m_rDoc.GetNodes().MakeTextNode(aAnchor.GetNode(),
-                    mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
+                    mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ));
 
                 aSectPaM.GetPoint()->Assign(*pTextNd, 0);
             }
@@ -5095,7 +5095,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         {
             SwNodeIndex aIdx( m_rDoc.GetNodes().GetEndOfContent());
             SwTextFormatColl* pColl =
-                m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,
+                m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD,
                 false);
             SwStartNode *pNode =
                 m_rDoc.GetNodes().MakeTextSection(aIdx.GetNode(),

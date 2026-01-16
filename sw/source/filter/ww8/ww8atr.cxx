@@ -1758,7 +1758,7 @@ const SwCharFormat* GetSwCharFormat(const SwFormatINetFormat& rINet, SwDoc& rDoc
     if (rINet.GetValue().isEmpty())
         return nullptr;
 
-    const sal_uInt16 nId = rINet.GetINetFormatId();
+    const SwPoolFormatId nId = rINet.GetINetFormatId();
     const UIName& rStr = rINet.GetINetFormat();
     if (rStr.isEmpty())
     {
@@ -2540,10 +2540,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         for( n = rColls.size(); n; )
                         {
                             const SwTextFormatColl* pColl = rColls[ --n ];
-                            sal_uInt16 nPoolId = pColl->GetPoolFormatId();
+                            SwPoolFormatId nPoolId = pColl->GetPoolFormatId();
                             if (
                                 //Is a Non-Standard Outline Style
-                                (RES_POOLCOLL_HEADLINE1 > nPoolId || RES_POOLCOLL_HEADLINE9 < nPoolId) &&
+                                (SwPoolFormatId::COLL_HEADLINE1 > nPoolId || SwPoolFormatId::COLL_HEADLINE9 < nPoolId) &&
                                 //Has a valid outline level
                                 (pColl->IsAssignedToListLevelOfOutlineStyle()) &&
                                 // Is less than the lowest known non-standard level

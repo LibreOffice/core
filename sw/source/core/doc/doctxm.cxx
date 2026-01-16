@@ -416,7 +416,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
             SwNodeIndex aIdx( *pSectNd, +1 );
 
             SwTextNode* pHeadNd = GetNodes().MakeTextNode( aIdx.GetNode(),
-                            getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+                            getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
 
             SwSectionData headerData( SectionType::ToxHeader, UIName(pNewSection->GetTOXName().toString()+"_Head") );
 
@@ -1096,7 +1096,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
         pFirstEmptyNd = rDoc.GetNodes().MakeTextNode( aEndIdx.GetNode(),
-                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ) );
 
         {
             // Task 70995 - save and restore PageDesc and Break Attributes
@@ -1335,30 +1335,30 @@ SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
     SwTextFormatColl* pColl = !rName.isEmpty() ? rDoc.FindTextFormatCollByName(rName) :nullptr;
     if( !pColl )
     {
-        sal_uInt16 nPoolFormat = 0;
+        SwPoolFormatId nPoolFormat = SwPoolFormatId::ZERO;
         const TOXTypes eMyType = SwTOXBase::GetType();
         switch( eMyType )
         {
-        case TOX_INDEX:         nPoolFormat = RES_POOLCOLL_TOX_IDXH;       break;
+        case TOX_INDEX:         nPoolFormat = SwPoolFormatId::COLL_TOX_IDXH;       break;
         case TOX_USER:
             if( nLevel < 6 )
-                nPoolFormat = RES_POOLCOLL_TOX_USERH;
+                nPoolFormat = SwPoolFormatId::COLL_TOX_USERH;
             else
-                nPoolFormat = RES_POOLCOLL_TOX_USER6 - 6;
+                nPoolFormat = SwPoolFormatId::COLL_TOX_USER6 - 6;
             break;
-        case TOX_ILLUSTRATIONS: nPoolFormat = RES_POOLCOLL_TOX_ILLUSH;     break;
-        case TOX_OBJECTS:       nPoolFormat = RES_POOLCOLL_TOX_OBJECTH;    break;
-        case TOX_TABLES:        nPoolFormat = RES_POOLCOLL_TOX_TABLESH;    break;
+        case TOX_ILLUSTRATIONS: nPoolFormat = SwPoolFormatId::COLL_TOX_ILLUSH;     break;
+        case TOX_OBJECTS:       nPoolFormat = SwPoolFormatId::COLL_TOX_OBJECTH;    break;
+        case TOX_TABLES:        nPoolFormat = SwPoolFormatId::COLL_TOX_TABLESH;    break;
         case TOX_AUTHORITIES:
         case TOX_BIBLIOGRAPHY:
-            nPoolFormat = RES_POOLCOLL_TOX_AUTHORITIESH; break;
+            nPoolFormat = SwPoolFormatId::COLL_TOX_AUTHORITIESH; break;
         case  TOX_CITATION: /** TODO */break;
         case TOX_CONTENT:
             // There's a jump in the ContentArea!
             if( nLevel < 6 )
-                nPoolFormat = RES_POOLCOLL_TOX_CNTNTH;
+                nPoolFormat = SwPoolFormatId::COLL_TOX_CNTNTH;
             else
-                nPoolFormat = RES_POOLCOLL_TOX_CNTNT6 - 6;
+                nPoolFormat = SwPoolFormatId::COLL_TOX_CNTNT6 - 6;
             break;
         }
 
@@ -1368,7 +1368,7 @@ SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
         {
             // pool: Level 1,2,3, Delimiter
             // SwForm: Delimiter, Level 1,2,3
-            nPoolFormat += 1 == nLevel ? nLevel + 3 : nLevel - 1;
+            nPoolFormat = nPoolFormat + (1 == nLevel ? nLevel + 3 : nLevel - 1);
         }
         else
             nPoolFormat = nPoolFormat + nLevel;
@@ -2076,9 +2076,9 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
 
     // search by name
     SwDoc& rDoc = pNd->GetDoc();
-    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SwGetPoolIdFromName::ChrFmt );
+    SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SwGetPoolIdFromName::ChrFmt );
     SwCharFormat* pCharFormat = nullptr;
-    if(USHRT_MAX != nPoolId)
+    if(SwPoolFormatId::UNKNOWN != nPoolId)
         pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(nPoolId);
     else
         pCharFormat = rDoc.FindCharFormatByName( GetMainEntryCharStyle() );

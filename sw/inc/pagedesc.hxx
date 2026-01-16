@@ -275,8 +275,8 @@ public:
     void RegisterChange();
 
     /// Query and set PoolFormat-Id.
-    sal_uInt16 GetPoolFormatId() const         { return m_Master.GetPoolFormatId(); }
-    void SetPoolFormatId(sal_uInt16 const nId) { m_Master.SetPoolFormatId(nId); }
+    SwPoolFormatId GetPoolFormatId() const         { return m_Master.GetPoolFormatId(); }
+    void SetPoolFormatId(SwPoolFormatId const nId) { m_Master.SetPoolFormatId(nId); }
     sal_uInt16 GetPoolHelpId() const        { return m_Master.GetPoolHelpId(); }
     void SetPoolHelpId(sal_uInt32 const nId){ m_Master.SetPoolHelpId(nId); }
     sal_uInt8 GetPoolHlpFileId() const      { return m_Master.GetPoolHlpFileId(); }

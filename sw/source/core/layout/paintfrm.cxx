@@ -6240,7 +6240,7 @@ void SwPageFrame::PaintBaselineGrid(OutputDevice& rOututDevice) const
             return;
         }
         const SwTextFormatColl* pDefaultFormat
-            = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+            = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
         if (!pDefaultFormat)
         {
             return;

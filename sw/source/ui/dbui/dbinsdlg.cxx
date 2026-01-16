@@ -1177,9 +1177,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pColl = rSh.FindTextFormatCollByName( UIName(sTmplNm) );
                     if( !pColl )
                     {
-                        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+                        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(
                             UIName(sTmplNm), SwGetPoolIdFromName::TxtColl );
-                        if( USHRT_MAX != nId )
+                        if( SwPoolFormatId::UNKNOWN != nId )
                             pColl = rSh.GetTextCollFromPool( nId );
                         else
                             pColl = rSh.MakeTextFormatColl( UIName(sTmplNm) );
@@ -1560,7 +1560,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pSubValues[3].Value <<= pColumn->bIsDBFormat;
 
         UIName sTmpUIName;
-        SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sTmpUIName );
+        SwStyleNameMapper::FillUIName( SwPoolFormatId::COLL_STANDARD, sTmpUIName );
         const SvNumberformat* pNF = rNFormatr.GetEntry( pColumn->nUsrNumFormat );
         LanguageType eLang;
         if( pNF )

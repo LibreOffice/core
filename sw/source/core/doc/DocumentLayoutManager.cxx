@@ -137,14 +137,14 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
                 m_rDoc.GetNodes().MakeTextSection
                 ( rEndOfAutotext,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                  m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>( bHeader
+                  m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(bHeader
                                      ? ( eRequest == RndStdIds::HEADERL
-                                         ? RES_POOLCOLL_HEADERL
+                                         ? SwPoolFormatId::COLL_HEADERL
                                          : eRequest == RndStdIds::HEADERR
-                                         ? RES_POOLCOLL_HEADERR
-                                         : RES_POOLCOLL_HEADER )
-                                     : RES_POOLCOLL_FOOTER
-                                     ) ) );
+                                         ? SwPoolFormatId::COLL_HEADERR
+                                         : SwPoolFormatId::COLL_HEADER )
+                                     : SwPoolFormatId::COLL_FOOTER
+                                     ) );
             pFormat->SetFormatAttr( SwFormatContent( pSttNd ));
 
             if( pSet )      // Set a few more attributes

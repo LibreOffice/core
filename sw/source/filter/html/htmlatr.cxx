@@ -93,13 +93,13 @@ HTMLOutEvent const aAnchorEventTable[] =
 
 static SwHTMLWriter& OutHTML_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
 
-sal_uInt16 SwHTMLWriter::GetDefListLvl( const UIName& rNm, sal_uInt16 nPoolId )
+sal_uInt16 SwHTMLWriter::GetDefListLvl( const UIName& rNm, SwPoolFormatId nPoolId )
 {
-    if( nPoolId == RES_POOLCOLL_HTML_DD )
+    if( nPoolId == SwPoolFormatId::COLL_HTML_DD )
     {
         return 1 | HTML_DLCOLL_DD;
     }
-    else if( nPoolId == RES_POOLCOLL_HTML_DT )
+    else if( nPoolId == SwPoolFormatId::COLL_HTML_DT )
     {
         return 1 | HTML_DLCOLL_DT;
     }
@@ -236,13 +236,13 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
     , nBottomMargin(0)
     , bScriptDependent( false )
 {
-    sal_uInt16 nRefPoolId = 0;
+    SwPoolFormatId nRefPoolId = SwPoolFormatId::ZERO;
     // Get the selector of the format
     sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFormat, aToken, aClass,
                                                   nRefPoolId );
     OSL_ENSURE( nDeep ? !aToken.isEmpty() : aToken.isEmpty(),
             "Something seems to be wrong with this token!" );
-    OSL_ENSURE( nDeep ? nRefPoolId != 0 : nRefPoolId == 0,
+    OSL_ENSURE( nDeep ? nRefPoolId != SwPoolFormatId::ZERO : nRefPoolId == SwPoolFormatId::ZERO,
             "Something seems to be wrong with the comparison style!" );
 
     bool bTextColl = pFormat->Which() == RES_TXTFMTCOLL ||
@@ -287,9 +287,9 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         // style. For a 'not-styles' export, the one of the HTML style
         // should be used as a reference
         if( !bOutStyles && pTemplate )
-            pReferenceFormat = pTemplate->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFormat = pTemplate->getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT, false );
         else
-            pReferenceFormat = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFormat = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT, false );
     }
 
     if( pReferenceFormat || nDeep==0 )
@@ -1785,11 +1785,11 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
     case RES_TXTATR_INETFMT:
         {
             if (GetFormatInfo(*m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                                  RES_POOLCHR_INET_NORMAL),
+                                  SwPoolFormatId::CHR_INET_NORMAL),
                               rFormatInfos)
                     ->bScriptDependent
                 || GetFormatInfo(*m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                                     RES_POOLCHR_INET_VISIT),
+                                     SwPoolFormatId::CHR_INET_VISIT),
                                  rFormatInfos)
                        ->bScriptDependent)
             {
@@ -2057,11 +2057,11 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
     // special case: empty node and HR style (horizontal rule)
     //               output a <HR>, only
-    sal_uInt16 nPoolId = pNd->GetAnyFormatColl().GetPoolFormatId();
+    SwPoolFormatId nPoolId = pNd->GetAnyFormatColl().GetPoolFormatId();
 
     // Handle horizontal rule <hr>
     if (!nEnd &&
-        (RES_POOLCOLL_HTML_HR==nPoolId || pNd->GetAnyFormatColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule))
+        (SwPoolFormatId::COLL_HTML_HR==nPoolId || pNd->GetAnyFormatColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule))
     {
         // then, the paragraph-anchored graphics/OLE objects in the paragraph
         // MIB 8.7.97: We enclose the line in a <PRE>. This means that the
@@ -2100,7 +2100,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             {
                 const SwFrameFormat& rPgFormat =
                     rWrt.m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool
-                    ( RES_POOLPAGE_HTML, false )->GetMaster();
+                    ( SwPoolFormatId::PAGE_HTML, false )->GetMaster();
                 const SwFormatFrameSize& rSz   = rPgFormat.GetFrameSize();
                 const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
                 const SwFormatCol& rCol = rPgFormat.GetCol();
@@ -2160,9 +2160,9 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     // Do not export the empty nodes with 2pt fonts and standard style that
     // are inserted before tables and sections, but do export bookmarks
     // and paragraph anchored frames.
-    if( !nEnd && (nPoolId == RES_POOLCOLL_STANDARD ||
-                  nPoolId == RES_POOLCOLL_TABLE ||
-                  nPoolId == RES_POOLCOLL_TABLE_HDLN) )
+    if( !nEnd && (nPoolId == SwPoolFormatId::COLL_STANDARD ||
+                  nPoolId == SwPoolFormatId::COLL_TABLE ||
+                  nPoolId == SwPoolFormatId::COLL_TABLE_HDLN) )
     {
         // The current node is empty and contains the standard style ...
         const SvxFontHeightItem* pFontHeightItem;
@@ -2175,7 +2175,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             SwNodeOffset nNdPos = rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex();
             const SwNode *pNextNd = rWrt.m_pDoc->GetNodes()[nNdPos+1];
             const SwNode *pPrevNd = rWrt.m_pDoc->GetNodes()[nNdPos-1];
-            bool bStdColl = nPoolId == RES_POOLCOLL_STANDARD;
+            bool bStdColl = nPoolId == SwPoolFormatId::COLL_STANDARD;
             if( ( bStdColl && (pNextNd->IsTableNode() || pNextNd->IsSectionNode()) ) ||
                 ( !bStdColl &&
                    pNextNd->IsEndNode() &&
@@ -3027,7 +3027,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
     bool bScriptDependent = false;
     {
         const SwCharFormat* pFormat = rWrt.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                 RES_POOLCHR_INET_NORMAL );
+                 SwPoolFormatId::CHR_INET_NORMAL );
         std::unique_ptr<SwHTMLFormatInfo> pFormatInfo(new SwHTMLFormatInfo(pFormat));
         auto const it = rWrt.m_CharFormatInfos.find( pFormatInfo );
         if (it != rWrt.m_CharFormatInfos.end())
@@ -3038,7 +3038,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
     if( !bScriptDependent )
     {
         const SwCharFormat* pFormat = rWrt.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                 RES_POOLCHR_INET_VISIT );
+                 SwPoolFormatId::CHR_INET_VISIT );
         std::unique_ptr<SwHTMLFormatInfo> pFormatInfo(new SwHTMLFormatInfo(pFormat));
         auto const it = rWrt.m_CharFormatInfos.find( pFormatInfo );
         if (it != rWrt.m_CharFormatInfos.end())

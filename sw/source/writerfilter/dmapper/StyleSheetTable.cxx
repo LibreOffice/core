@@ -1632,143 +1632,143 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
     // These are from the w:latentStyles in the styles.xml of a Word 15.0 DOCX,
     // plus some pre-existing additions and variants.
     static const std::map< OUString, OUString> StyleNameMap {
-        { "Normal", "Standard" }, // RES_POOLCOLL_STANDARD
-        { "heading 1", "Heading 1" }, // RES_POOLCOLL_HEADLINE1
-        { "heading 2", "Heading 2" }, // RES_POOLCOLL_HEADLINE2
-        { "heading 3", "Heading 3" }, // RES_POOLCOLL_HEADLINE3
-        { "heading 4", "Heading 4" }, // RES_POOLCOLL_HEADLINE4
-        { "heading 5", "Heading 5" }, // RES_POOLCOLL_HEADLINE5
-        { "heading 6", "Heading 6" }, // RES_POOLCOLL_HEADLINE6
-        { "heading 7", "Heading 7" }, // RES_POOLCOLL_HEADLINE7
-        { "heading 8", "Heading 8" }, // RES_POOLCOLL_HEADLINE8
-        { "heading 9", "Heading 9" }, // RES_POOLCOLL_HEADLINE9
-        { "Heading 1", "Heading 1" }, // RES_POOLCOLL_HEADLINE1
-        { "Heading 2", "Heading 2" }, // RES_POOLCOLL_HEADLINE2
-        { "Heading 3", "Heading 3" }, // RES_POOLCOLL_HEADLINE3
-        { "Heading 4", "Heading 4" }, // RES_POOLCOLL_HEADLINE4
-        { "Heading 5", "Heading 5" }, // RES_POOLCOLL_HEADLINE5
-        { "Heading 6", "Heading 6" }, // RES_POOLCOLL_HEADLINE6
-        { "Heading 7", "Heading 7" }, // RES_POOLCOLL_HEADLINE7
-        { "Heading 8", "Heading 8" }, // RES_POOLCOLL_HEADLINE8
-        { "Heading 9", "Heading 9" }, // RES_POOLCOLL_HEADLINE9
-        { "Index 1", "Index 1" }, // RES_POOLCOLL_TOX_IDX1
-        { "Index 2", "Index 2" }, // RES_POOLCOLL_TOX_IDX2
-        { "Index 3", "Index 3" }, // RES_POOLCOLL_TOX_IDX3
+        { "Normal", "Standard" }, // SwPoolFormatId::COLL_STANDARD
+        { "heading 1", "Heading 1" }, // SwPoolFormatId::COLL_HEADLINE1
+        { "heading 2", "Heading 2" }, // SwPoolFormatId::COLL_HEADLINE2
+        { "heading 3", "Heading 3" }, // SwPoolFormatId::COLL_HEADLINE3
+        { "heading 4", "Heading 4" }, // SwPoolFormatId::COLL_HEADLINE4
+        { "heading 5", "Heading 5" }, // SwPoolFormatId::COLL_HEADLINE5
+        { "heading 6", "Heading 6" }, // SwPoolFormatId::COLL_HEADLINE6
+        { "heading 7", "Heading 7" }, // SwPoolFormatId::COLL_HEADLINE7
+        { "heading 8", "Heading 8" }, // SwPoolFormatId::COLL_HEADLINE8
+        { "heading 9", "Heading 9" }, // SwPoolFormatId::COLL_HEADLINE9
+        { "Heading 1", "Heading 1" }, // SwPoolFormatId::COLL_HEADLINE1
+        { "Heading 2", "Heading 2" }, // SwPoolFormatId::COLL_HEADLINE2
+        { "Heading 3", "Heading 3" }, // SwPoolFormatId::COLL_HEADLINE3
+        { "Heading 4", "Heading 4" }, // SwPoolFormatId::COLL_HEADLINE4
+        { "Heading 5", "Heading 5" }, // SwPoolFormatId::COLL_HEADLINE5
+        { "Heading 6", "Heading 6" }, // SwPoolFormatId::COLL_HEADLINE6
+        { "Heading 7", "Heading 7" }, // SwPoolFormatId::COLL_HEADLINE7
+        { "Heading 8", "Heading 8" }, // SwPoolFormatId::COLL_HEADLINE8
+        { "Heading 9", "Heading 9" }, // SwPoolFormatId::COLL_HEADLINE9
+        { "Index 1", "Index 1" }, // SwPoolFormatId::COLL_TOX_IDX1
+        { "Index 2", "Index 2" }, // SwPoolFormatId::COLL_TOX_IDX2
+        { "Index 3", "Index 3" }, // SwPoolFormatId::COLL_TOX_IDX3
         { "Index 4", "" },
         { "Index 5", "" },
         { "Index 6", "" },
         { "Index 7", "" },
         { "Index 8", "" },
         { "Index 9", "" },
-        { "index 1", "Index 1" }, // RES_POOLCOLL_TOX_IDX1
-        { "index 2", "Index 2" }, // RES_POOLCOLL_TOX_IDX2
-        { "index 3", "Index 3" }, // RES_POOLCOLL_TOX_IDX3
+        { "index 1", "Index 1" }, // SwPoolFormatId::COLL_TOX_IDX1
+        { "index 2", "Index 2" }, // SwPoolFormatId::COLL_TOX_IDX2
+        { "index 3", "Index 3" }, // SwPoolFormatId::COLL_TOX_IDX3
         { "index 4", "" },
         { "index 5", "" },
         { "index 6", "" },
         { "index 7", "" },
         { "index 8", "" },
         { "index 9", "" },
-        { "TOC 1", "Contents 1" }, // RES_POOLCOLL_TOX_CNTNT1
-        { "TOC 2", "Contents 2" }, // RES_POOLCOLL_TOX_CNTNT2
-        { "TOC 3", "Contents 3" }, // RES_POOLCOLL_TOX_CNTNT3
-        { "TOC 4", "Contents 4" }, // RES_POOLCOLL_TOX_CNTNT4
-        { "TOC 5", "Contents 5" }, // RES_POOLCOLL_TOX_CNTNT5
-        { "TOC 6", "Contents 6" }, // RES_POOLCOLL_TOX_CNTNT6
-        { "TOC 7", "Contents 7" }, // RES_POOLCOLL_TOX_CNTNT7
-        { "TOC 8", "Contents 8" }, // RES_POOLCOLL_TOX_CNTNT8
-        { "TOC 9", "Contents 9" }, // RES_POOLCOLL_TOX_CNTNT9
-        { "toc 1", "Contents 1" }, // RES_POOLCOLL_TOX_CNTNT1
-        { "toc 2", "Contents 2" }, // RES_POOLCOLL_TOX_CNTNT2
-        { "toc 3", "Contents 3" }, // RES_POOLCOLL_TOX_CNTNT3
-        { "toc 4", "Contents 4" }, // RES_POOLCOLL_TOX_CNTNT4
-        { "toc 5", "Contents 5" }, // RES_POOLCOLL_TOX_CNTNT5
-        { "toc 6", "Contents 6" }, // RES_POOLCOLL_TOX_CNTNT6
-        { "toc 7", "Contents 7" }, // RES_POOLCOLL_TOX_CNTNT7
-        { "toc 8", "Contents 8" }, // RES_POOLCOLL_TOX_CNTNT8
-        { "toc 9", "Contents 9" }, // RES_POOLCOLL_TOX_CNTNT9
-        { "TOC1", "Contents 1" }, // RES_POOLCOLL_TOX_CNTNT1
-        { "TOC2", "Contents 2" }, // RES_POOLCOLL_TOX_CNTNT2
-        { "TOC3", "Contents 3" }, // RES_POOLCOLL_TOX_CNTNT3
-        { "TOC4", "Contents 4" }, // RES_POOLCOLL_TOX_CNTNT4
-        { "TOC5", "Contents 5" }, // RES_POOLCOLL_TOX_CNTNT5
-        { "TOC6", "Contents 6" }, // RES_POOLCOLL_TOX_CNTNT6
-        { "TOC7", "Contents 7" }, // RES_POOLCOLL_TOX_CNTNT7
-        { "TOC8", "Contents 8" }, // RES_POOLCOLL_TOX_CNTNT8
-        { "TOC9", "Contents 9" }, // RES_POOLCOLL_TOX_CNTNT9
+        { "TOC 1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { "TOC 2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { "TOC 3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { "TOC 4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { "TOC 5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { "TOC 6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { "TOC 7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { "TOC 8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { "TOC 9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { "toc 1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { "toc 2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { "toc 3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { "toc 4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { "toc 5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { "toc 6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { "toc 7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { "toc 8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { "toc 9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
+        { "TOC1", "Contents 1" }, // SwPoolFormatId::COLL_TOX_CNTNT1
+        { "TOC2", "Contents 2" }, // SwPoolFormatId::COLL_TOX_CNTNT2
+        { "TOC3", "Contents 3" }, // SwPoolFormatId::COLL_TOX_CNTNT3
+        { "TOC4", "Contents 4" }, // SwPoolFormatId::COLL_TOX_CNTNT4
+        { "TOC5", "Contents 5" }, // SwPoolFormatId::COLL_TOX_CNTNT5
+        { "TOC6", "Contents 6" }, // SwPoolFormatId::COLL_TOX_CNTNT6
+        { "TOC7", "Contents 7" }, // SwPoolFormatId::COLL_TOX_CNTNT7
+        { "TOC8", "Contents 8" }, // SwPoolFormatId::COLL_TOX_CNTNT8
+        { "TOC9", "Contents 9" }, // SwPoolFormatId::COLL_TOX_CNTNT9
         { "Normal Indent", "" },
-        { "footnote text", "Footnote" }, // RES_POOLCOLL_FOOTNOTE
-        { "Footnote Text", "Footnote" }, // RES_POOLCOLL_FOOTNOTE
-        { "Annotation Text", "Marginalia" }, // RES_POOLCOLL_MARGINAL
-        { "annotation text", "Marginalia" }, // RES_POOLCOLL_MARGINAL
-        { "Header", "Header" }, // RES_POOLCOLL_HEADER
-        { "header", "Header" }, // RES_POOLCOLL_HEADER
-        { "Footer", "Footer" }, // RES_POOLCOLL_FOOTER
-        { "footer", "Footer" }, // RES_POOLCOLL_FOOTER
-        { "Index Heading", "Index Heading" }, // RES_POOLCOLL_TOX_IDXH
-        { "index heading", "Index Heading" }, // RES_POOLCOLL_TOX_IDXH
-        { "Caption", "Caption" }, // RES_POOLCOLL_LABEL
-        { "caption", "Caption" }, // RES_POOLCOLL_LABEL
-        { "table of figures", "Figure Index 1" }, // RES_POOLCOLL_TOX_ILLUS1
-        { "Table of Figures", "Figure Index 1" }, // RES_POOLCOLL_TOX_ILLUS1
-        { "Envelope Address", "Addressee" }, // RES_POOLCOLL_ENVELOPE_ADDRESS
-        { "envelope address", "Addressee" }, // RES_POOLCOLL_ENVELOPE_ADDRESS
-        { "Envelope Return", "Sender" }, // RES_POOLCOLL_SEND_ADDRESS
-        { "envelope return", "Sender" }, // RES_POOLCOLL_SEND_ADDRESS
-        { "footnote reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173 tdf#162884
-        { "Footnote Reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173 tdf#162884
+        { "footnote text", "Footnote" }, // SwPoolFormatId::COLL_FOOTNOTE
+        { "Footnote Text", "Footnote" }, // SwPoolFormatId::COLL_FOOTNOTE
+        { "Annotation Text", "Marginalia" }, // SwPoolFormatId::COLL_MARGINAL
+        { "annotation text", "Marginalia" }, // SwPoolFormatId::COLL_MARGINAL
+        { "Header", "Header" }, // SwPoolFormatId::COLL_HEADER
+        { "header", "Header" }, // SwPoolFormatId::COLL_HEADER
+        { "Footer", "Footer" }, // SwPoolFormatId::COLL_FOOTER
+        { "footer", "Footer" }, // SwPoolFormatId::COLL_FOOTER
+        { "Index Heading", "Index Heading" }, // SwPoolFormatId::COLL_TOX_IDXH
+        { "index heading", "Index Heading" }, // SwPoolFormatId::COLL_TOX_IDXH
+        { "Caption", "Caption" }, // SwPoolFormatId::COLL_LABEL
+        { "caption", "Caption" }, // SwPoolFormatId::COLL_LABEL
+        { "table of figures", "Figure Index 1" }, // SwPoolFormatId::COLL_TOX_ILLUS1
+        { "Table of Figures", "Figure Index 1" }, // SwPoolFormatId::COLL_TOX_ILLUS1
+        { "Envelope Address", "Addressee" }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
+        { "envelope address", "Addressee" }, // SwPoolFormatId::COLL_ENVELOPE_ADDRESS
+        { "Envelope Return", "Sender" }, // SwPoolFormatId::COLL_SEND_ADDRESS
+        { "envelope return", "Sender" }, // SwPoolFormatId::COLL_SEND_ADDRESS
+        { "footnote reference", "Footnote Symbol" }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
+        { "Footnote Reference", "Footnote Symbol" }, // SwPoolFormatId::CHR_FOOTNOTE; tdf#82173 tdf#162884
         { "Annotation Reference", "" },
         { "annotation reference", "" },
-        { "Line Number", "Line numbering" }, // RES_POOLCHR_LINENUM
-        { "line number", "Line numbering" }, // RES_POOLCHR_LINENUM
-        { "Page Number", "Page Number" }, // RES_POOLCHR_PAGENO
-        { "page number", "Page Number" }, // RES_POOLCHR_PAGENO
-        { "PageNumber", "Page Number" }, // RES_POOLCHR_PAGENO
-        { "endnote reference", "Endnote Symbol" }, // RES_POOLCHR_ENDNOTE; tdf#82173 tdf#162884
-        { "Endnote Reference", "Endnote Symbol" }, // RES_POOLCHR_ENDNOTE; tdf#82173 tdf#162884
-        { "endnote text", "Endnote" }, // RES_POOLCOLL_ENDNOTE
-        { "Endnote Text", "Endnote" }, // RES_POOLCOLL_ENDNOTE
-        { "Table of Authorities", "Bibliography Heading" }, // RES_POOLCOLL_TOX_AUTHORITIESH
-        { "table of authorities", "Bibliography Heading" }, // RES_POOLCOLL_TOX_AUTHORITIESH
+        { "Line Number", "Line numbering" }, // SwPoolFormatId::CHR_LINENUM
+        { "line number", "Line numbering" }, // SwPoolFormatId::CHR_LINENUM
+        { "Page Number", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
+        { "page number", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
+        { "PageNumber", "Page Number" }, // SwPoolFormatId::CHR_PAGENO
+        { "endnote reference", "Endnote Symbol" }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
+        { "Endnote Reference", "Endnote Symbol" }, // SwPoolFormatId::CHR_ENDNOTE; tdf#82173 tdf#162884
+        { "endnote text", "Endnote" }, // SwPoolFormatId::COLL_ENDNOTE
+        { "Endnote Text", "Endnote" }, // SwPoolFormatId::COLL_ENDNOTE
+        { "Table of Authorities", "Bibliography Heading" }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
+        { "table of authorities", "Bibliography Heading" }, // SwPoolFormatId::COLL_TOX_AUTHORITIESH
         { "macro", "" },
         { "TOA Heading", "" },
         { "toa heading", "" },
-        { "List", "List" }, // RES_POOLCOLL_NUMBER_BULLET_BASE
+        { "List", "List" }, // SwPoolFormatId::COLL_NUMBER_BULLET_BASE
         { "List 2", "" },
         { "List 3", "" },
         { "List 4", "" },
         { "List 5", "" },
-        { "List Bullet", "List 1" }, // RES_POOLCOLL_BULLET_LEVEL1
-        { "List Bullet 2", "List 2" }, // RES_POOLCOLL_BULLET_LEVEL2
-        { "List Bullet 3", "List 3" }, // RES_POOLCOLL_BULLET_LEVEL3
-        { "List Bullet 4", "List 4" }, // RES_POOLCOLL_BULLET_LEVEL4
-        { "List Bullet 5", "List 5" }, // RES_POOLCOLL_BULLET_LEVEL5
-        { "List Number", "Numbering 1" }, // RES_POOLCOLL_NUM_LEVEL1
-        { "List Number 2", "Numbering 2" }, // RES_POOLCOLL_NUM_LEVEL2
-        { "List Number 3", "Numbering 3" }, // RES_POOLCOLL_NUM_LEVEL3
-        { "List Number 4", "Numbering 4" }, // RES_POOLCOLL_NUM_LEVEL4
-        { "List Number 5", "Numbering 5" }, // RES_POOLCOLL_NUM_LEVEL5
-        { "Title", "Title" }, // RES_POOLCOLL_DOC_TITLE
-        { "Closing", "Appendix" }, // RES_POOLCOLL_DOC_APPENDIX
-        { "Signature", "Signature" }, // RES_POOLCOLL_SIGNATURE
+        { "List Bullet", "List 1" }, // SwPoolFormatId::COLL_BULLET_LEVEL1
+        { "List Bullet 2", "List 2" }, // SwPoolFormatId::COLL_BULLET_LEVEL2
+        { "List Bullet 3", "List 3" }, // SwPoolFormatId::COLL_BULLET_LEVEL3
+        { "List Bullet 4", "List 4" }, // SwPoolFormatId::COLL_BULLET_LEVEL4
+        { "List Bullet 5", "List 5" }, // SwPoolFormatId::COLL_BULLET_LEVEL5
+        { "List Number", "Numbering 1" }, // SwPoolFormatId::COLL_NUM_LEVEL1
+        { "List Number 2", "Numbering 2" }, // SwPoolFormatId::COLL_NUM_LEVEL2
+        { "List Number 3", "Numbering 3" }, // SwPoolFormatId::COLL_NUM_LEVEL3
+        { "List Number 4", "Numbering 4" }, // SwPoolFormatId::COLL_NUM_LEVEL4
+        { "List Number 5", "Numbering 5" }, // SwPoolFormatId::COLL_NUM_LEVEL5
+        { "Title", "Title" }, // SwPoolFormatId::COLL_DOC_TITLE
+        { "Closing", "Appendix" }, // SwPoolFormatId::COLL_DOC_APPENDIX
+        { "Signature", "Signature" }, // SwPoolFormatId::COLL_SIGNATURE
         { "Default Paragraph Font", "" },
         { "DefaultParagraphFont", "" },
-        { "Body Text", "Text body" }, // RES_POOLCOLL_TEXT
-        { "BodyText", "Text body" }, // RES_POOLCOLL_TEXT
+        { "Body Text", "Text body" }, // SwPoolFormatId::COLL_TEXT
+        { "BodyText", "Text body" }, // SwPoolFormatId::COLL_TEXT
         { "BodyTextIndentItalic", "" },
-        { "Body Text Indent", "Text body indent" }, // RES_POOLCOLL_TEXT_MOVE
-        { "BodyTextIndent", "Text body indent" }, // RES_POOLCOLL_TEXT_MOVE
+        { "Body Text Indent", "Text body indent" }, // SwPoolFormatId::COLL_TEXT_MOVE
+        { "BodyTextIndent", "Text body indent" }, // SwPoolFormatId::COLL_TEXT_MOVE
         { "BodyTextIndent2", "" },
-        { "List Continue", "List 1 Cont." }, // RES_POOLCOLL_BULLET_NONUM1
-        { "List Continue 2", "List 2 Cont." }, // RES_POOLCOLL_BULLET_NONUM2
-        { "List Continue 3", "List 3 Cont." }, // RES_POOLCOLL_BULLET_NONUM3
-        { "List Continue 4", "List 4 Cont." }, // RES_POOLCOLL_BULLET_NONUM4
-        { "List Continue 5", "List 5 Cont." }, // RES_POOLCOLL_BULLET_NONUM5
+        { "List Continue", "List 1 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM1
+        { "List Continue 2", "List 2 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM2
+        { "List Continue 3", "List 3 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM3
+        { "List Continue 4", "List 4 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM4
+        { "List Continue 5", "List 5 Cont." }, // SwPoolFormatId::COLL_BULLET_NONUM5
         { "Message Header", "" },
-        { "Subtitle", "Subtitle" }, // RES_POOLCOLL_DOC_SUBTITLE
-        { "Salutation", "Salutation" }, // RES_POOLCOLL_GREETING
+        { "Subtitle", "Subtitle" }, // SwPoolFormatId::COLL_DOC_SUBTITLE
+        { "Salutation", "Salutation" }, // SwPoolFormatId::COLL_GREETING
         { "Date", "" },
-        { "Body Text First Indent", "First line indent" }, // RES_POOLCOLL_TEXT_IDENT
+        { "Body Text First Indent", "First line indent" }, // SwPoolFormatId::COLL_TEXT_IDENT
         { "Body Text First Indent 2", "" },
         { "Note Heading", "" },
         { "Body Text 2", "" },
@@ -1776,10 +1776,10 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "Body Text Indent 2", "" },
         { "Body Text Indent 3", "" },
         { "Block Text", "" },
-        { "Hyperlink", "Internet link" }, // RES_POOLCHR_INET_NORMAL
-        { "FollowedHyperlink", "Visited Internet Link" }, // RES_POOLCHR_INET_VISIT
-        { "Strong", "Strong Emphasis" }, // RES_POOLCHR_HTML_STRONG
-        { "Emphasis", "Emphasis" }, // RES_POOLCHR_HTML_EMPHASIS
+        { "Hyperlink", "Internet link" }, // SwPoolFormatId::CHR_INET_NORMAL
+        { "FollowedHyperlink", "Visited Internet Link" }, // SwPoolFormatId::CHR_INET_VISIT
+        { "Strong", "Strong Emphasis" }, // SwPoolFormatId::CHR_HTML_STRONG
+        { "Emphasis", "Emphasis" }, // SwPoolFormatId::CHR_HTML_EMPHASIS
         { "Document Map", "" },
         { "DocumentMap", "" },
         { "Plain Text", "" },
@@ -1802,8 +1802,8 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "", "" },
         { "Normal Table", "" },
         { "annotation subject", "" },
-        { "No List", "No List" }, // RES_POOLNUMRULE_NOLIST
-        { "NoList", "No List" }, // RES_POOLNUMRULE_NOLIST
+        { "No List", "No List" }, // SwPoolFormatId::NUMRULE_NOLIST
+        { "NoList", "No List" }, // SwPoolFormatId::NUMRULE_NOLIST
         { "Outline List 1", "" },
         { "Outline List 2", "" },
         { "Outline List 3", "" },
@@ -1962,8 +1962,8 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "Intense Reference", "" },
         { "Book Title", "" },
         { "Bibliography", "" },
-        { "TOC Heading", "Contents Heading" }, // RES_POOLCOLL_TOX_CNTNTH
-        { "TOCHeading", "Contents Heading" }, // RES_POOLCOLL_TOX_CNTNTH
+        { "TOC Heading", "Contents Heading" }, // SwPoolFormatId::COLL_TOX_CNTNTH
+        { "TOCHeading", "Contents Heading" }, // SwPoolFormatId::COLL_TOX_CNTNTH
         { "Plain Table 1", "" },
         { "Plain Table 2", "" },
         { "Plain Table 3", "" },

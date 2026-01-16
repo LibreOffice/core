@@ -132,7 +132,7 @@ class SwAutoFormat
     static bool IsSpace( const sal_Unicode c )
         { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */); }
 
-    void SetColl( sal_uInt16 nId, bool bHdLineOrText = false );
+    void SetColl( SwPoolFormatId nId, bool bHdLineOrText = false );
     void GoNextPara();
     static bool HasObjects(const SwTextFrame &);
 
@@ -442,7 +442,7 @@ sal_uInt16 SwAutoFormat::CalcLevel(const SwTextFrame & rFrame,
     if( pDigitLvl )
         *pDigitLvl = USHRT_MAX;
 
-    if (RES_POOLCOLL_TEXT_MOVE == rFrame.GetTextNodeForParaProps()->GetTextColl()->GetPoolFormatId())
+    if (SwPoolFormatId::COLL_TEXT_MOVE == rFrame.GetTextNodeForParaProps()->GetTextColl()->GetPoolFormatId())
     {
         if( m_aFlags.bAFormatByInput )
         {
@@ -1000,7 +1000,7 @@ CHECK_ROMAN_5:
     return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)
 }
 
-void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
+void SwAutoFormat::SetColl( SwPoolFormatId nId, bool bHdLineOrText )
 {
     m_aDelPam.DeleteMark();
     m_aDelPam.GetPoint()->Assign( *m_pCurTextFrame->GetTextNodeForParaProps() );
@@ -1357,7 +1357,7 @@ void SwAutoFormat::BuildIndent()
         bBreak = !IsFastFullLine(*m_pCurTextFrame)
                 || IsBlanksInString(*m_pCurTextFrame)
                 || IsSentenceAtEnd(*m_pCurTextFrame);
-    SetColl( RES_POOLCOLL_TEXT_IDENT );
+    SetColl( SwPoolFormatId::COLL_TEXT_IDENT );
     if( !bBreak )
     {
         SetRedlineText( STR_AUTOFMTREDL_DEL_MORELINES );
@@ -1402,7 +1402,7 @@ void SwAutoFormat::BuildTextIndent()
                 static_cast<sal_uInt8>(CalcLevel(*m_pCurTextFrame)));
     }
 
-    SetColl( RES_POOLCOLL_TEXT_MOVE );
+    SetColl( SwPoolFormatId::COLL_TEXT_MOVE );
     if( !bBreak )
     {
         SetRedlineText( STR_AUTOFMTREDL_DEL_MORELINES );
@@ -1539,7 +1539,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             if( m_aFlags.bSetNumRule)
             {
                 SwCharFormat* pCFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                                            RES_POOLCHR_BULLET_LEVEL );
+                                            SwPoolFormatId::CHR_BULLET_LEVEL );
                 bChgBullet = true;
                 // Was the format already somewhere adjusted?
                 if( !aRule.GetNumFormat( nLvl ) )
@@ -1597,7 +1597,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         else
         {
             bChgBullet = true;
-            SetColl( o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_BULLET_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 )) );
+            SetColl( SwPoolFormatId::COLL_BULLET_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 ) );
         }
     }
     else
@@ -1627,7 +1627,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             if( !pCur )         // adjust NumRule if it is new
             {
                 SwCharFormat* pCFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
-                                            RES_POOLCHR_NUM_LEVEL );
+                                            SwPoolFormatId::CHR_NUM_LEVEL );
 
                 sal_Int32 nPrefixIdx{ 0 };
                 if( !nDigitLevel )
@@ -1693,7 +1693,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             }
         }
         else if( !m_aFlags.bAFormatByInput )
-            SetColl( o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_NUM_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 ) ));
+            SetColl( SwPoolFormatId::COLL_NUM_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 ) );
         else
             bChgEnum = false;
     }
@@ -1819,9 +1819,9 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             || (!nTextPos && IsBlanksInString(*m_pCurTextFrame))
             || IsSentenceAtEnd(*m_pCurTextFrame);
 
-    SetColl( o3tl::narrowing<sal_uInt16>( nTextPos
-                ? RES_POOLCOLL_CONFRONTATION
-                : RES_POOLCOLL_TEXT_NEGIDENT ) );
+    SetColl( nTextPos
+                ? SwPoolFormatId::COLL_CONFRONTATION
+                : SwPoolFormatId::COLL_TEXT_NEGIDENT );
 
     if( nTextPos )
     {
@@ -1897,7 +1897,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment( &sText );
     }
 
-    SetColl( o3tl::narrowing<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + nLvl ), true );
+    SetColl( SwPoolFormatId::COLL_HEADLINE1 + nLvl, true );
     if( m_aFlags.bAFormatByInput )
     {
         SwTextFormatColl& rNxtColl = m_pCurTextFrame->GetTextNodeForParaProps()->GetTextColl()->GetNextTextFormatColl();
@@ -2458,7 +2458,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 // underlined and the current be deleted!
                 if( !DoUnderline() && bReplaceStyles )
                 {
-                    SetColl( RES_POOLCOLL_STANDARD, true );
+                    SetColl( SwPoolFormatId::COLL_STANDARD, true );
                     bEmptyLine = true;
                 }
                 eStat = READ_NEXT_PARA;
@@ -2486,13 +2486,13 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 aFInfo.SetFrame( m_pCurTextFrame );
 
                 // so far: if there were templates assigned, keep these and go to next node
-                sal_uInt16 nPoolId = m_pCurTextFrame->GetTextNodeForParaProps()->GetTextColl()->GetPoolFormatId();
+                SwPoolFormatId nPoolId = m_pCurTextFrame->GetTextNodeForParaProps()->GetTextColl()->GetPoolFormatId();
                 if( IsPoolUserFormat( nPoolId )
                         ? !m_aFlags.bChgUserColl
-                        : ( RES_POOLCOLL_STANDARD != nPoolId &&
+                        : ( SwPoolFormatId::COLL_STANDARD != nPoolId &&
                            ( !m_aFlags.bAFormatByInput ||
-                            (RES_POOLCOLL_TEXT_MOVE != nPoolId &&
-                             RES_POOLCOLL_TEXT != nPoolId )) ))
+                            (SwPoolFormatId::COLL_TEXT_MOVE != nPoolId &&
+                             SwPoolFormatId::COLL_TEXT != nPoolId )) ))
                 {
                     eStat = HAS_FMTCOLL;
                     break;
@@ -2501,12 +2501,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 // replace custom styles with text body
                 if ( IsPoolUserFormat( nPoolId ) && m_aFlags.bChgUserColl )
                 {
-                    SetColl( RES_POOLCOLL_TEXT, true );
+                    SetColl( SwPoolFormatId::COLL_TEXT, true );
                 }
 
                 // check for left margin set by the style
                 if( IsPoolUserFormat( nPoolId ) ||
-                    RES_POOLCOLL_STANDARD == nPoolId )
+                    SwPoolFormatId::COLL_STANDARD == nPoolId )
                 {
                     SvxFirstLineIndentItem const*const pFirstLineIndent(
                         m_pCurTextFrame->GetTextNodeForParaProps()
