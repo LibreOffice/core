@@ -131,6 +131,8 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -419,6 +421,20 @@ namespace
         rSrcWrtShell.Copy(rDest, /*pNewClpText=*/nullptr, bDeleteRedlines);
 
         rDest.GetMetaFieldManager().copyDocumentProperties(rSrc);
+    }
+
+    void lclCheckAndPerformRotation(Graphic& aGraphic)
+    {
+        GraphicNativeMetadata aMetadata;
+        if ( !aMetadata.read(aGraphic) )
+            return;
+
+        Degree10 aRotation = aMetadata.getRotation();
+        if (aRotation)
+        {
+            GraphicNativeTransform aTransform( aGraphic );
+            aTransform.rotate( aRotation );
+        }
     }
 }
 
@@ -2588,6 +2604,9 @@ bool SwTransferable::PasteTargetURL( const TransferableDataHelper& rData,
 
             if( bRet )
             {
+                //Check and Perform rotation if needed
+                lclCheckAndPerformRotation(aGraphic);
+
                 switch( nAction )
                 {
                 case SwPasteSdr::Insert:
@@ -2996,6 +3015,9 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
 
     if( bRet )
     {
+        //Check and Perform rotation if needed
+        lclCheckAndPerformRotation(aGraphic);
+
         OUString sURL;
         if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr
             // #i123922# if link action is noted, also take URL
