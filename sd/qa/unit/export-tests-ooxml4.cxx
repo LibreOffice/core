@@ -1490,6 +1490,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testBadPercentageValue)
     saveAndReload(TestFilter::PPTX);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidAudio)
+{
+    createSdImpressDoc("odp/invalidAudio.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    // - validation error in OOXML export: Errors: 1
+    saveAndReload(TestFilter::PPTX);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidPrstDashEnumValue)
 {
     createSdImpressDoc("odp/invalidPrstDashEnumValue.odp");
