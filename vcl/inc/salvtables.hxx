@@ -929,6 +929,10 @@ class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
 private:
     DECL_LINK(SelectHdl, ListBox&, void);
 
+protected:
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership);
@@ -936,9 +940,6 @@ public:
     virtual OUString get_active_text() const override;
 
     virtual void remove(int pos) override;
-
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override;
 
@@ -1001,6 +1002,10 @@ private:
     WeldTextFilter m_aTextFilter;
     bool m_bInSelect;
 
+protected:
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
                                 bool bTakeOwnership);
@@ -1014,9 +1019,6 @@ public:
     virtual OUString get_active_text() const override;
 
     virtual void remove(int pos) override;
-
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override;
 

@@ -22,11 +22,12 @@ class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBo
     QComboBox* m_pComboBox;
     bool m_bSorted;
 
+    virtual void do_insert(int nPos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     QtInstanceComboBox(QComboBox* pComboBox);
 
-    virtual void insert(int nPos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
                                bool bKeepExisting) override;
 

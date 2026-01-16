@@ -20152,7 +20152,7 @@ public:
         remove_including_mru(pos);
     }
 
-    virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void do_insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         insert_including_mru(include_mru(pos), rText, pId, pIconName, pImageSurface);
     }
@@ -22104,7 +22104,7 @@ public:
         remove_including_mru(pos);
     }
 
-    virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void do_insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         insert_including_mru(include_mru(pos), rText, pId, pIconName, pImageSurface);
     }

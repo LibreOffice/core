@@ -1247,10 +1247,10 @@ JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBu
 {
 }
 
-void JSListBox::insert(int pos, const OUString& rStr, const OUString* pId,
-                       const OUString* pIconName, VirtualDevice* pImageSurface)
+void JSListBox::do_insert(int pos, const OUString& rStr, const OUString* pId,
+                          const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    SalInstanceComboBoxWithoutEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
+    SalInstanceComboBoxWithoutEdit::do_insert(pos, rStr, pId, pIconName, pImageSurface);
     sendUpdate();
 }
 
@@ -1273,10 +1273,10 @@ JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstan
 {
 }
 
-void JSComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface)
+void JSComboBox::do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    SalInstanceComboBoxWithEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
+    SalInstanceComboBoxWithEdit::do_insert(pos, rStr, pId, pIconName, pImageSurface);
     sendUpdate();
 }
 

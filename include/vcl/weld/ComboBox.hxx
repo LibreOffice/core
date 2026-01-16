@@ -75,13 +75,15 @@ protected:
     Link<vcl::RenderContext&, Size> m_aGetSizeHdl;
     Size signal_custom_get_size(vcl::RenderContext& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
 
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface)
+        = 0;
     virtual void do_set_active(int pos) = 0;
     virtual void do_set_active_id(const OUString& rStr) = 0;
 
 public:
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface)
-        = 0;
+    void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName,
+                VirtualDevice* pImageSurface);
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting)
         = 0;
     void insert(int pos, const weld::ComboBoxEntry& rItem)

@@ -6051,8 +6051,9 @@ OUString SalInstanceComboBoxWithoutEdit::get_active_text() const
 
 void SalInstanceComboBoxWithoutEdit::remove(int pos) { m_xComboBox->RemoveEntry(pos); }
 
-void SalInstanceComboBoxWithoutEdit::insert(int pos, const OUString& rStr, const OUString* pId,
-                                            const OUString* pIconName, VirtualDevice* pImageSurface)
+void SalInstanceComboBoxWithoutEdit::do_insert(int pos, const OUString& rStr, const OUString* pId,
+                                               const OUString* pIconName,
+                                               VirtualDevice* pImageSurface)
 {
     auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
     sal_Int32 nInsertedAt;
@@ -6206,8 +6207,8 @@ OUString SalInstanceComboBoxWithEdit::get_active_text() const { return m_xComboB
 
 void SalInstanceComboBoxWithEdit::remove(int pos) { m_xComboBox->RemoveEntryAt(pos); }
 
-void SalInstanceComboBoxWithEdit::insert(int pos, const OUString& rStr, const OUString* pId,
-                                         const OUString* pIconName, VirtualDevice* pImageSurface)
+void SalInstanceComboBoxWithEdit::do_insert(int pos, const OUString& rStr, const OUString* pId,
+                                            const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
     sal_Int32 nInsertedAt;
