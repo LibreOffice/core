@@ -1422,6 +1422,10 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     sal_uInt16 nNotesPageNum;
     OUString aNotesPageName(sNotesPageName);
 
+    sal_uInt16 nCount = GetPageCount();
+    if (nInsertPosition > nCount)
+        nInsertPosition = nCount;
+
     // Gather some information about the standard page and the notes page
     // that are to be inserted. This makes sure that there is always one
     // standard page followed by one notes page.
