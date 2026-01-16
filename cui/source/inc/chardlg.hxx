@@ -71,7 +71,7 @@ private:
 
     std::unique_ptr<weld::Notebook> m_xWestern;
     std::unique_ptr<weld::Label> m_xWestFontNameFT;
-    std::unique_ptr<weld::ComboBox> m_xWestFontNameLB;
+    std::unique_ptr<weld::EntryTreeView> m_xWestFontNameLB;
     std::unique_ptr<weld::Label> m_xWestFontStyleFT;
     std::unique_ptr<FontStyleBox> m_xWestFontStyleLB;
     std::unique_ptr<weld::Label> m_xWestFontSizeFT;
@@ -83,7 +83,7 @@ private:
 
     std::unique_ptr<weld::Notebook> m_xCJK_CTL;
     std::unique_ptr<weld::Label> m_xEastFontNameFT;
-    std::unique_ptr<weld::ComboBox> m_xEastFontNameLB;
+    std::unique_ptr<weld::EntryTreeView> m_xEastFontNameLB;
     std::unique_ptr<weld::Label> m_xEastFontStyleFT;
     std::unique_ptr<FontStyleBox> m_xEastFontStyleLB;
     std::unique_ptr<weld::Label> m_xEastFontSizeFT;
@@ -94,7 +94,7 @@ private:
     std::unique_ptr<weld::Label> m_xEastFontTypeFT;
 
     std::unique_ptr<weld::Label> m_xCTLFontNameFT;
-    std::unique_ptr<weld::ComboBox> m_xCTLFontNameLB;
+    std::unique_ptr<weld::EntryTreeView> m_xCTLFontNameLB;
     std::unique_ptr<weld::Label> m_xCTLFontStyleFT;
     std::unique_ptr<FontStyleBox> m_xCTLFontStyleLB;
     std::unique_ptr<weld::Label> m_xCTLFontSizeFT;

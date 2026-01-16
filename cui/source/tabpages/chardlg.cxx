@@ -235,18 +235,14 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
 #endif
     m_pImpl->m_aNoStyleText = CuiResId( RID_CUISTR_CHARNAME_NOSTYLE );
 
-    std::unique_ptr<weld::EntryTreeView> xWestFontName = m_xBuilder->weld_entry_tree_view(u"gdWestern"_ustr, u"edWestFontName"_ustr, u"trWestFontName"_ustr);
-    std::unique_ptr<weld::EntryTreeView> xCJKFontName = m_xBuilder->weld_entry_tree_view(u"gdCJK"_ustr, u"edCJKFontName"_ustr, u"trCJKFontName"_ustr);
-    std::unique_ptr<weld::EntryTreeView> xCTLFontName = m_xBuilder->weld_entry_tree_view(u"gdCTL"_ustr, u"edCTLFontName"_ustr, u"trCTLFontName"_ustr);
+    m_xWestFontNameLB = m_xBuilder->weld_entry_tree_view(u"gdWestern"_ustr, u"edWestFontName"_ustr, u"trWestFontName"_ustr);
+    m_xEastFontNameLB = m_xBuilder->weld_entry_tree_view(u"gdCJK"_ustr, u"edCJKFontName"_ustr, u"trCJKFontName"_ustr);
+    m_xCTLFontNameLB = m_xBuilder->weld_entry_tree_view(u"gdCTL"_ustr, u"edCTLFontName"_ustr, u"trCTLFontName"_ustr);
 
     // 7 lines in the treeview
-    xWestFontName->set_height_request_by_rows(7);
-    xCJKFontName->set_height_request_by_rows(7);
-    xCTLFontName->set_height_request_by_rows(7);
-
-    m_xWestFontNameLB = std::move(xWestFontName);
-    m_xEastFontNameLB = std::move(xCJKFontName);
-    m_xCTLFontNameLB = std::move(xCTLFontName);
+    m_xWestFontNameLB->set_height_request_by_rows(7);
+    m_xEastFontNameLB->set_height_request_by_rows(7);
+    m_xCTLFontNameLB->set_height_request_by_rows(7);
 
     bool bShowCJK = SvtCJKOptions::IsCJKFontEnabled();
     bool bShowCTL = SvtCTLOptions::IsCTLFontEnabled();
