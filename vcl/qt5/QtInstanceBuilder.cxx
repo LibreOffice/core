@@ -163,6 +163,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/scalc/ui/ztestdialog.ui"_ustr,
         u"modules/schart/ui/charttypedialog.ui"_ustr,
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
+        u"modules/schart/ui/inserttitledlg.ui"_ustr,
         u"modules/sdraw/ui/dlgsnap.ui"_ustr,
         u"modules/sdraw/ui/insertlayer.ui"_ustr,
         u"modules/simpress/ui/customslideshows.ui"_ustr,
