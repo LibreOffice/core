@@ -35,7 +35,7 @@ well.
 -_ensureWin32GettersReady ();
  #endif
  
- static FcChar8 *__fc_userdir = NULL;
+ static void
 @@ -1330,23 +1330,29 @@
  	strcat ((char *)path, "\\..\\share\\fonts");
      } else if (strcmp ((const char *)path, "WINDOWSUSERFONTDIR") == 0) {
