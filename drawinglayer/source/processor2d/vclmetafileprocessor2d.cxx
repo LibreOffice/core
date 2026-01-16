@@ -1656,9 +1656,9 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
                 rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
             sal_Int32 nNextSentenceBreak(
                 rBreakIterator.endOfSentence(rTxt, nTextPosition, rLocale));
-            static constexpr OStringLiteral aCommentStringA("XTEXT_EOC");
-            static constexpr OStringLiteral aCommentStringB("XTEXT_EOW");
-            static constexpr OStringLiteral aCommentStringC("XTEXT_EOS");
+            static constexpr OString aCommentStringA("XTEXT_EOC"_ostr);
+            static constexpr OString aCommentStringB("XTEXT_EOW"_ostr);
+            static constexpr OString aCommentStringC("XTEXT_EOS"_ostr);
 
             for (sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
             {
