@@ -3103,10 +3103,10 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     OUString sZOrder( u"ZOrder"_ustr  );
     if( xPropSetInfo->hasPropertyByName( sZOrder ) )
     {
-        sal_Int32 nZIndex = 0;
-        rPropSet->getPropertyValue( sZOrder ) >>= nZIndex;
-        if( -1 != nZIndex )
+        sal_Int32 nZIndex{-1};
+        if (rPropSet->getPropertyValue(sZOrder) >>= nZIndex)
         {
+            assert(0 <= nZIndex);
             GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_ZINDEX,
                                       OUString::number( nZIndex ) );
         }
