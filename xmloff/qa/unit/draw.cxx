@@ -1128,6 +1128,17 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testXmlEscapeDirection)
+{
+    loadFromFile(u"draw-escape-direction.odp");
+    save(TestFilter::ODP);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    assertXPath(pXmlDoc, "//draw:glue-point[@draw:escape-direction]",
+                countXPathNodes(pXmlDoc, "//draw:glue-point"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
