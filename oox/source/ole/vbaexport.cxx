@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <random>
 #include <string_view>
 
 #include <oox/ole/vbaexport.hxx>
@@ -30,6 +29,7 @@
 
 #include <sot/storage.hxx>
 
+#include <comphelper/random.hxx>
 #include <comphelper/xmltools.hxx>
 #include <utility>
 #include <rtl/tencinfo.h>
@@ -376,14 +376,10 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length,
     ,mnEncryptedByte2(0)
     ,mnProjKey(nProjKey)
     ,mnIgnoredLength(0)
-    ,mnSeed(0x00)
+    ,mnSeed(comphelper::rng::uniform_uint_distribution(0, 255))
     ,mnVersionEnc(0)
     ,meTextEncoding(eTextEncoding)
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, 255);
-    mnSeed = dis(gen);
 }
 
 void VBAEncryption::writeSeed()
