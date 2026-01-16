@@ -3971,6 +3971,25 @@ void SalInstanceTreeView::columns_autosize()
         aColWidths.push_back(aWidths[1] + aWidths[0]);
         for (size_t i = 2; i < aWidths.size(); ++i)
             aColWidths.push_back(aWidths[i]);
+
+        // take column headers into account
+        if (VclPtr<SvHeaderTabListBox> pTabListBox
+            = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get()))
+        {
+            if (VclPtr<HeaderBar> pHeaderBar = pTabListBox->GetHeaderBar())
+            {
+                const size_t nCount
+                    = std::min(aColWidths.size(), size_t(pHeaderBar->GetItemCount()));
+                for (size_t i = 0; i < nCount; ++i)
+                {
+                    const OUString sHeaderText = pHeaderBar->GetItemText(pHeaderBar->GetItemId(i));
+                    constexpr int PADDING = 6;
+                    const int nHeaderColWidth = pHeaderBar->GetTextWidth(sHeaderText) + PADDING;
+                    aColWidths[i] = std::max(aColWidths.at(i), nHeaderColWidth);
+                }
+            }
+        }
+
         set_column_fixed_widths(aColWidths);
     }
 }
