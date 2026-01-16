@@ -30,7 +30,6 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 
-#include <memory>
 #include <new>
 #include <unordered_map>
 #include <vector>
@@ -49,6 +48,7 @@
 
 #if defined USE_DOUBLE_MMAP
 #include <fcntl.h>
+#include <rtl/strbuf.hxx>
 #endif
 
 #if defined MACOSX && defined __aarch64__
@@ -258,28 +258,29 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     }
 
     osl::Security aSecurity;
-    OUString strDirectory;
+    OString strDirectory;
     OUString strURLDirectory;
     if (aSecurity.getHomeDir(strURLDirectory))
-        osl::File::getSystemPathFromFileURL(strURLDirectory, strDirectory);
+    {
+        OUString s;
+        osl::File::getSystemPathFromFileURL(strURLDirectory, s);
+        strDirectory = OUStringToOString(s, osl_getThreadTextEncoding());
+    }
 
     for (int i = strDirectory.isEmpty() ? 1 : 0; i < 2; ++i)
     {
-        if (strDirectory.isEmpty())
-            strDirectory = "/tmp";
+        OStringBuffer aTmpName(strDirectory);
+        if (aTmpName.isEmpty())
+            aTmpName = "/tmp";
 
-        strDirectory += "/.execoooXXXXXX";
-        OString aTmpName = OUStringToOString(strDirectory, osl_getThreadTextEncoding());
-        std::unique_ptr<char[]> tmpfname(new char[aTmpName.getLength()+1]);
-        strncpy(tmpfname.get(), aTmpName.getStr(), aTmpName.getLength()+1);
-        if ((block.fd = mkstemp(tmpfname.get())) == -1)
-            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname.get(), strerror(errno));
+        aTmpName.append("/.execoooXXXXXX");
+        if ((block.fd = mkstemp(aTmpName.getMutableStr())) == -1)
+            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", aTmpName.getStr(), strerror(errno));
         if (block.fd == -1)
         {
             break;
         }
-        unlink(tmpfname.get());
-        tmpfname.reset();
+        unlink(aTmpName.getStr());
 
         int err;
 #if defined(HAVE_POSIX_FALLOCATE)
