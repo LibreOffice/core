@@ -334,6 +334,34 @@ int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const char* p
     return nRet;
 }
 
+int XmlTestTools::getXPathAttributePosition(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttributeName)
+{
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of nodes is incorrect").getStr(),
+                                 1,
+                                 xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    int nRet = 0;
+    bool bFound = false;
+    for (xmlAttrPtr pAttribute = pXmlNode->properties; pAttribute; pAttribute = pAttribute->next)
+    {
+        if (oconvert(pAttribute->name) == pAttributeName)
+        {
+            bFound = true;
+            break;
+        }
+        ++nRet;
+    }
+    xmlXPathFreeObject(pXmlObj);
+    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath
+                                   + "' attribute '" + pAttributeName + "' not found")
+                               .getStr(),
+        bFound);
+    return nRet;
+}
+
 void XmlTestTools::assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
                                        std::string_view rExpectedName)
 {
