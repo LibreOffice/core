@@ -1076,19 +1076,38 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocB)
     verify(/*bIsExport*/ true);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_headerBehind.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_headerBehind)
 {
-    // given a blue star (not marked as behind text) anchored in the header
-    // and an overlapping yellow rectangle anchored in the body text.
-    // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    // I don't know why the star is the lowest order in ODT import (maybe header weirdness),
-    // but it certainly needs to be the lowest on docx round-trip (also for header weirdness)
-    CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+    createSwDoc("tdf159158_zOrder_headerBehind.odt");
+
+    {
+        // given a blue star (not marked as behind text) anchored in the header
+        // and an overlapping yellow rectangle anchored in the body text.
+        // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder1, u"Name"_ustr));
+    }
+
+    maTempFile.EnableKillingFile(false);
+    saveAndReload(mpFilter);
+
+    {
+        // given a blue star (not marked as behind text) anchored in the header
+        // and an overlapping yellow rectangle anchored in the body text.
+        // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder1, u"Name"_ustr));
+    }
+
+    maTempFile.EnableKillingFile();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_headerBehind2.docx")

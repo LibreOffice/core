@@ -621,8 +621,12 @@ void ShapeGroupContext::popGroupAndPostProcess()
                        [](const ZOrderHint& rLeft, const ZOrderHint& rRight)
                        { return rLeft.nShould < rRight.nShould; } );
 
-    if (bSorted)
+    if (maZOrderList.empty() || (bSorted
+        // check that no content.xml shape goes before last styles.xml shape
+            && maUnsortedList.size() <= o3tl::make_unsigned(maZOrderList.front().nShould)))
+    {
         return; // nothin' to do
+    }
 
     // sort z-ordered shapes by nShould field
     std::sort(maZOrderList.begin(), maZOrderList.end());
@@ -634,27 +638,37 @@ void ShapeGroupContext::popGroupAndPostProcess()
         auto pNewOrder = aNewOrder.getArray();
         sal_Int32 nIndex = 0;
 
+        auto itU{maUnsortedList.begin()};
         for (const ZOrderHint& rHint : maZOrderList)
         {
             // fill in the gaps from unordered list
-            for (std::vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
+            for (; itU != maUnsortedList.end() && nIndex < rHint.nShould; ++itU)
             {
-                pNewOrder[nIndex++] = (*aIt).nIs;
-                aIt = maUnsortedList.erase(aIt);
+                pNewOrder[nIndex] = (*itU).nIs;
+                ++nIndex;
             }
 
             pNewOrder[nIndex] = rHint.nIs;
             nIndex++;
         }
+        for (; itU != maUnsortedList.end(); ++itU)
+        {
+            pNewOrder[nIndex] = (*itU).nIs;
+            ++nIndex;
+        }
+        assert(nIndex == aNewOrder.getLength());
 
         try
         {
             xShapes3->sort(aNewOrder);
+            maUnsortedList.clear();
             maZOrderList.clear();
             return;
         }
-        catch (const css::lang::IllegalArgumentException& /*e*/)
-        {}
+        catch (const css::lang::IllegalArgumentException&)
+        {
+            TOOLS_WARN_EXCEPTION("xmloff.draw", "XShapes3::sort() throws: ");
+        }
     }
 
     // this is the current index, all shapes before that
@@ -674,6 +688,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
 
         nIndex++;
     }
+    maUnsortedList.clear(); // it's not necessary to move remaining elements
     maZOrderList.clear();
 }
 
@@ -724,7 +739,7 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawi
     aNewHint.nShould = nZIndex;
     aNewHint.pShape = xShape.get();
 
-    if( nZIndex == -1 )
+    if (nZIndex < 0) // not set or invalid value
     {
         // don't care, so add to unsorted list
         mpImpl->mpGroupContext->maUnsortedList.push_back(aNewHint);
