@@ -756,6 +756,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169802_hidden_shape)
     // Layout mustn't contain fly portion, without the fix it would contain several
     int nFlyNodes = countXPathNodes(pDump, "//*[contains(@type, 'PortionType::Fly')]");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No fly portion nodes must exist in the layout", 0, nFlyNodes);
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    const char* const sPath("/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor");
+    CPPUNIT_ASSERT_EQUAL(0, getXPathAttributePosition(pXmlDoc, sPath, "distT"));
+    CPPUNIT_ASSERT_EQUAL(1, getXPathAttributePosition(pXmlDoc, sPath, "distB"));
+    CPPUNIT_ASSERT_EQUAL(2, getXPathAttributePosition(pXmlDoc, sPath, "distL"));
+    CPPUNIT_ASSERT_EQUAL(3, getXPathAttributePosition(pXmlDoc, sPath, "distR"));
+    CPPUNIT_ASSERT_EQUAL(4, getXPathAttributePosition(pXmlDoc, sPath, "simplePos"));
+    CPPUNIT_ASSERT_EQUAL(5, getXPathAttributePosition(pXmlDoc, sPath, "relativeHeight"));
+    CPPUNIT_ASSERT_EQUAL(6, getXPathAttributePosition(pXmlDoc, sPath, "behindDoc"));
+    CPPUNIT_ASSERT_EQUAL(7, getXPathAttributePosition(pXmlDoc, sPath, "locked"));
+    CPPUNIT_ASSERT_EQUAL(8, getXPathAttributePosition(pXmlDoc, sPath, "layoutInCell"));
+    CPPUNIT_ASSERT_EQUAL(9, getXPathAttributePosition(pXmlDoc, sPath, "allowOverlap"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")

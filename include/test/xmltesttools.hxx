@@ -74,6 +74,11 @@ protected:
      */
     int           getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pChildName);
     /**
+     * Get the position of the attribute named rName of the parent node specified by pXPath.
+     * Useful for checking relative order of elements.
+     */
+    int           getXPathAttributePosition(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttributeName);
+    /**
      * Get the number of the nodes returned by the pXPath.
      */
     int           countXPathNodes(const xmlDocUniquePtr& pXmlDoc, const char* pXPath);
