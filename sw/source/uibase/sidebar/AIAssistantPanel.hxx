@@ -7,7 +7,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_AIASSISTANTPANEL_HXX
 
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 class SfxBindings;

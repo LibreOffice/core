@@ -26,6 +26,11 @@ ChatPanelChildWindow::~ChatPanelChildWindow()
 {
 }
 
+SfxChildWinInfo ChatPanelChildWindow::GetInfo() const
+{
+    return SfxChildWindow::GetInfo();
+}
+
 } // namespace officelabs
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

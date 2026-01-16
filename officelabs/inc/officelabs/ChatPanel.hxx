@@ -6,6 +6,10 @@
 #ifndef INCLUDED_OFFICELABS_CHATPANEL_HXX
 #define INCLUDED_OFFICELABS_CHATPANEL_HXX
 
+// Allow deprecated VCL toolkit headers for legacy docking window code
+// TODO: Migrate to weld framework in future
+#define VCL_INTERNALS
+
 #include <sfx2/dockwin.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/fixed.hxx>

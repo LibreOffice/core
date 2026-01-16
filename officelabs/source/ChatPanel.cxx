@@ -270,7 +270,7 @@ void ChatPanel::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     // Simple message rendering
     Point aPos(12, 70);
     for (const auto& msg : m_messages) {
-        OUString prefix = (msg.role == ChatMessage::Role::USER) ? "You: " : "AI: ";
+        OUString prefix = (msg.role == ChatMessage::Role::USER) ? u"You: "_ustr : u"AI: "_ustr;
         rRenderContext.DrawText(aPos, prefix + msg.content);
         aPos.AdjustY(20);
     }
