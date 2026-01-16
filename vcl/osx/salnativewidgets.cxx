@@ -466,9 +466,21 @@ static bool useTahoeNativeBounds()
     return false;
 }
 
+static bool adjustPreTahoeBuildForTahoeNativeBounds()
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 260000
+    if (@available(macOS 26.2, *))
+        return true;
+#endif
+
+    return false;
+}
+
 static int spinButtonWidth()
 {
-    if (useTahoeNativeBounds())
+    // Builds on pre-Tahoe macOS versions still render the pre-Tahoe style
+    // so further adjustments are needed when running on macOS Tahoe.
+    if (useTahoeNativeBounds() && !adjustPreTahoeBuildForTahoeNativeBounds())
         return 23;
     else
         return 16;
@@ -651,6 +663,27 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                         {
                             rc.origin.y += 1;
                             rc.size.height -= FOCUS_RING_WIDTH;
+                        }
+
+                        // Builds on pre-Tahoe macOS versions still render
+                        // the pre-Tahoe style so further adjustments are
+                        // needed when running on macOS Tahoe.
+                        if (adjustPreTahoeBuildForTahoeNativeBounds())
+                        {
+                            if (eBezelStyle == NSBezelStyleFlexiblePush)
+                            {
+                                rc.origin.x -= FOCUS_RING_WIDTH;
+                                rc.size.width += FOCUS_RING_WIDTH * 2;
+                                rc.origin.y -= (FOCUS_RING_WIDTH / 2) - 1;
+                                rc.size.height += FOCUS_RING_WIDTH;
+                            }
+                            else
+                            {
+                                rc.origin.x -= FOCUS_RING_WIDTH * 2;
+                                rc.size.width += FOCUS_RING_WIDTH * 4;
+                                rc.origin.y -= FOCUS_RING_WIDTH * 2;
+                                rc.size.height += FOCUS_RING_WIDTH * 4;
+                            }
                         }
                     }
                     else
@@ -1051,6 +1084,20 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                         {
                             rc.origin.y += FOCUS_RING_WIDTH / 4;
                             rc.size.height -= FOCUS_RING_WIDTH / 2;
+
+                            // Builds on pre-Tahoe macOS versions still render
+                            // the pre-Tahoe style so further adjustments are
+                            // needed when running on macOS Tahoe.
+                            if (adjustPreTahoeBuildForTahoeNativeBounds())
+                            {
+                                rc.size.width -= 1;
+                                rc.origin.y += 1;
+                                rc.size.height -= FOCUS_RING_WIDTH / 2;
+                            }
+                        }
+                        else
+                        {
+                            rc.size.width -= 1;
                         }
                     }
                     else
@@ -1067,18 +1114,40 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                             else
                                 rc.size.width -= FOCUS_RING_WIDTH * 3 / 4;
                             rc.size.height -= FOCUS_RING_WIDTH;
+
+                            // Builds on pre-Tahoe macOS versions still render
+                            // the pre-Tahoe style so further adjustments are
+                            // needed when running on macOS Tahoe.
+                            if (adjustPreTahoeBuildForTahoeNativeBounds())
+                            {
+                                if (nPaintIndex == 0)
+                                {
+                                    rc.origin.x -= FOCUS_RING_WIDTH / 2;
+                                    rc.size.width += FOCUS_RING_WIDTH / 2;
+                                }
+                                else if (nPaintIndex == 1)
+                                {
+                                    rc.origin.x -= FOCUS_RING_WIDTH / 2 + 1;
+                                    rc.size.width += FOCUS_RING_WIDTH;
+                                }
+                                else if (nPaintIndex == 2)
+                                {
+                                    rc.origin.x -= FOCUS_RING_WIDTH / 2;
+                                    rc.size.width += FOCUS_RING_WIDTH;
+                                }
+                            }
                         }
                         else
                         {
-                            if (nPaintIndex == 0)
+                            if (nPaintIndex == 1)
                             {
-                                rc.origin.x += FOCUS_RING_WIDTH / 2;
-                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                                rc.origin.x -= 1;
+                                rc.size.width += 1;
                             }
                             else if (nPaintIndex == 2)
                             {
-                                rc.size.width -= FOCUS_RING_WIDTH / 2;
-                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                                rc.origin.x -= 1;
+                                rc.size.width += 1;
                             }
                         }
                     }
