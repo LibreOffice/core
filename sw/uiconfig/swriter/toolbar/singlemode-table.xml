@@ -40,9 +40,9 @@
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:StartPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:EndPara"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CommonAlignTop"/>

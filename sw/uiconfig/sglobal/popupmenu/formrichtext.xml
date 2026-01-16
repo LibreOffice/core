@@ -30,9 +30,9 @@
   </menu:menu>
   <menu:menu menu:id=".uno:TextAlign">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:LeftPara" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:StartPara" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:CenterPara" menu:style="radio"/>
-      <menu:menuitem menu:id=".uno:RightPara" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:EndPara" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:JustifyPara" menu:style="radio"/>
     </menu:menupopup>
   </menu:menu>

@@ -93,7 +93,7 @@
                 <property name="show-arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id=".uno:LeftPara">
+                  <object class="GtkToolButton" id=".uno:StartPara">
                     <property name="visible">True</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -113,7 +113,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:RightPara">
+                  <object class="GtkToolButton" id=".uno:EndPara">
                     <property name="visible">True</property>
                     <property name="use-underline">True</property>
                   </object>

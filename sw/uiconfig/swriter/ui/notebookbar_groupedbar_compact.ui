@@ -4252,7 +4252,7 @@
                                     <child>
                                       <object class="GtkToolButton" id="Default-LeftPara">
                                         <property name="visible">True</property>
-                                        <property name="action_name">.uno:LeftPara</property>
+                                        <property name="action_name">.uno:StartPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4272,7 +4272,7 @@
                                     <child>
                                       <object class="GtkToolButton" id="Default-RightPara">
                                         <property name="visible">True</property>
-                                        <property name="action_name">.uno:RightPara</property>
+                                        <property name="action_name">.uno:EndPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5559,7 +5559,7 @@
                                     <child>
                                       <object class="GtkToolButton" id="Table-LeftPara">
                                         <property name="visible">True</property>
-                                        <property name="action_name">.uno:LeftPara</property>
+                                        <property name="action_name">.uno:StartPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5579,7 +5579,7 @@
                                     <child>
                                       <object class="GtkToolButton" id="Table-RightPara">
                                         <property name="visible">True</property>
-                                        <property name="action_name">.uno:RightPara</property>
+                                        <property name="action_name">.uno:EndPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
