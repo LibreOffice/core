@@ -49,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--without-ngtcp2 --without-quiche \
 			--without-zstd --without-hyper --without-libgsasl \
 			$(if $(WITH_GSSAPI),--with-gssapi,--without-gssapi) \
-			--disable-mqtt --disable-ares \
+			--disable-ipfs --disable-mqtt --disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
 			--disable-rtsp --disable-smb --disable-smtp --disable-telnet  \
