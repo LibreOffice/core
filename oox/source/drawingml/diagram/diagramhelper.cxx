@@ -204,11 +204,11 @@ bool AdvancedDiagramHelper::removeDiagramNode(const OUString& rNodeId)
 
     if(hasDiagramData())
     {
-        const svx::diagram::DomMapFlags aResult = mpDiagramPtr->getData()->removeDiagramNode(rNodeId);
+        svx::diagram::DomMapFlags aResult = mpDiagramPtr->getData()->removeDiagramNode(rNodeId);
         bRetval = !aResult.empty();
 
         // reset Dom properties at DiagramData
-        mpDiagramPtr->resetOOXDomValues(aResult);
+        mpDiagramPtr->resetOOXDomValues(std::move(aResult));
 
         // reset temporary buffered ModelData association lists & rebuild them
         // and the Diagram DataModel
@@ -230,12 +230,12 @@ void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataMo
     }
 
     // try text change for model part in DiagramData
-    const svx::diagram::DomMapFlags aDomMapFlags(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
+    svx::diagram::DomMapFlags aDomMapFlags(mpDiagramPtr->getData()->TextInformationChange(rDiagramDataModelID, rOutl));
 
     if(!aDomMapFlags.empty())
     {
         // reset Dom properties at DiagramData
-        mpDiagramPtr->resetOOXDomValues(aDomMapFlags);
+        mpDiagramPtr->resetOOXDomValues(std::move(aDomMapFlags));
 
         // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
         // entries anymore, but others like "mso-rotation-angle" and others
