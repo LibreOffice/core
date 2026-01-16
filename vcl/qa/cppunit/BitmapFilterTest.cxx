@@ -42,37 +42,7 @@ public:
     {
     }
 
-    void testClampAlpha();
-    void testBlurCorrectness();
-    void testBasicMorphology();
-    void testPerformance();
-    void testGenerateStripRanges();
-    void testMultiplyBlendFilter();
-    void testNormalBlendFilter();
-    void testDarkenBlendFilter();
-    void testLightenBlendFilter();
-    void testScreenBlendFilter();
-    void testArithmeticBlendFilter();
-    void testDuoToneFilter_24_BPP();
-    void testDuoToneFilter_32_BPP();
-
-    CPPUNIT_TEST_SUITE(BitmapFilterTest);
-    CPPUNIT_TEST(testClampAlpha);
-    CPPUNIT_TEST(testBlurCorrectness);
-    CPPUNIT_TEST(testBasicMorphology);
-    CPPUNIT_TEST(testPerformance);
-    CPPUNIT_TEST(testGenerateStripRanges);
-    CPPUNIT_TEST(testMultiplyBlendFilter);
-    CPPUNIT_TEST(testNormalBlendFilter);
-    CPPUNIT_TEST(testDarkenBlendFilter);
-    CPPUNIT_TEST(testLightenBlendFilter);
-    CPPUNIT_TEST(testScreenBlendFilter);
-    CPPUNIT_TEST(testArithmeticBlendFilter);
-    CPPUNIT_TEST(testDuoToneFilter_24_BPP);
-    CPPUNIT_TEST(testDuoToneFilter_32_BPP);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(u"vcl/qa/cppunit/data/") + sFileName;
@@ -97,7 +67,7 @@ private:
     }
 };
 
-void BitmapFilterTest::testClampAlpha()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testClampAlpha)
 {
     // Setup test bitmap
     Size aSize(1, 1);
@@ -112,7 +82,7 @@ void BitmapFilterTest::testClampAlpha()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0xFF), aBitmap24Bit.GetPixelColor(0, 0).GetAlpha());
 }
 
-void BitmapFilterTest::testBlurCorrectness()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testBlurCorrectness)
 {
     // Setup test bitmap
     Size aSize(41, 31);
@@ -174,7 +144,7 @@ void BitmapFilterTest::testBlurCorrectness()
     }
 }
 
-void BitmapFilterTest::testBasicMorphology()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testBasicMorphology)
 {
     const Bitmap aOrigBitmap = loadBitmap(u"testBasicMorphology.png");
     const Bitmap aRefBitmapDilated1 = loadBitmap(u"testBasicMorphologyDilated1.png");
@@ -203,7 +173,7 @@ void BitmapFilterTest::testBasicMorphology()
     CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated2Eroded1.GetChecksum(), aTransformBitmap.GetChecksum());
 }
 
-void BitmapFilterTest::testPerformance()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testPerformance)
 {
     if (!constEnablePerformanceTest)
         return;
@@ -250,7 +220,7 @@ void BitmapFilterTest::testPerformance()
     }
 }
 
-void BitmapFilterTest::testGenerateStripRanges()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testGenerateStripRanges)
 {
     {
         constexpr tools::Long nFirstIndex = 0;
@@ -313,7 +283,7 @@ void BitmapFilterTest::testGenerateStripRanges()
     }
 }
 
-void BitmapFilterTest::testMultiplyBlendFilter()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testMultiplyBlendFilter)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -363,7 +333,7 @@ void BitmapFilterTest::testMultiplyBlendFilter()
     }
 }
 
-void BitmapFilterTest::testNormalBlendFilter()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testNormalBlendFilter)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -413,7 +383,7 @@ void BitmapFilterTest::testNormalBlendFilter()
     }
 }
 
-void BitmapFilterTest::testDarkenBlendFilter()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testDarkenBlendFilter)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -460,7 +430,7 @@ void BitmapFilterTest::testDarkenBlendFilter()
     }
 }
 
-void BitmapFilterTest::testLightenBlendFilter()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testLightenBlendFilter)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -510,7 +480,7 @@ void BitmapFilterTest::testLightenBlendFilter()
     }
 }
 
-void BitmapFilterTest::testScreenBlendFilter()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testScreenBlendFilter)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -560,7 +530,7 @@ void BitmapFilterTest::testScreenBlendFilter()
     }
 }
 
-void BitmapFilterTest::testArithmeticBlendFilter()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testArithmeticBlendFilter)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -787,7 +757,7 @@ void BitmapFilterTest::testArithmeticBlendFilter()
     }
 }
 
-void BitmapFilterTest::testDuoToneFilter_24_BPP()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testDuoToneFilter_24_BPP)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
@@ -906,7 +876,7 @@ void BitmapFilterTest::testDuoToneFilter_24_BPP()
     }
 }
 
-void BitmapFilterTest::testDuoToneFilter_32_BPP()
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testDuoToneFilter_32_BPP)
 {
     Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aRedBitmap.getPixelFormat());
@@ -1028,6 +998,6 @@ void BitmapFilterTest::testDuoToneFilter_32_BPP()
 
 } // namespace
 
-CPPUNIT_TEST_SUITE_REGISTRATION(BitmapFilterTest);
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
