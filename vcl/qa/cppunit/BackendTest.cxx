@@ -22,6 +22,8 @@
 
 #include <test/outputdevice.hxx>
 
+#include <config_cairo_rgba.h>
+
 // Run tests from visualbackendtest ('bin/run visualbackendtest').
 class BackendTest : public test::BootstrapFixture
 {
