@@ -293,7 +293,7 @@ void SdOptionsMisc::GetPropNameArray( const char* const*& ppNames, sal_uLong& rC
         "TabBarVisible"
     };
 
-    rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 15 );
+    rCount = ( IsImpress() ? std::size(aPropNames) : 15 );
     ppNames = aPropNames;
 }
 
@@ -544,7 +544,7 @@ void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rC
             "Option/VisibleGrid"
         };
         ppNames = aPropNamesMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
+        rCount = std::size(aPropNamesMetric);
     }
     else
     {
@@ -559,7 +559,7 @@ void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rC
             "Option/VisibleGrid"
         };
         ppNames = aPropNamesNonMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
+        rCount = std::size(aPropNamesNonMetric);
     }
 }
 
@@ -724,7 +724,7 @@ void SdOptionsPrint::GetPropNameArray( const char* const*& ppNames, sal_uLong& r
             "Other/HandoutHorizontal",
             "Other/PagesPerHandout"
         };
-        rCount = SAL_N_ELEMENTS(aImpressPropNames);
+        rCount = std::size(aImpressPropNames);
         ppNames = aImpressPropNames;
     }
     else
@@ -748,7 +748,7 @@ void SdOptionsPrint::GetPropNameArray( const char* const*& ppNames, sal_uLong& r
             "Other/Quality",
             "Content/Drawing",
         };
-        rCount = SAL_N_ELEMENTS(aDrawPropNames);
+        rCount = std::size(aDrawPropNames);
         ppNames = aDrawPropNames;
     }
 }
