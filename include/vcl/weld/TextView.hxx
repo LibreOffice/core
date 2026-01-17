@@ -21,16 +21,8 @@ class VCL_DLLPUBLIC TextView : virtual public TextWidget
 protected:
     Link<TextView&, void> m_aChangeHdl;
     Link<TextView&, void> m_aVValueChangeHdl;
-    Link<TextView&, void> m_aCursorPositionHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
-
-    void signal_cursor_position()
-    {
-        if (notify_events_disabled())
-            return;
-        m_aCursorPositionHdl.Call(*this);
-    }
 
     void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
@@ -41,10 +33,6 @@ public:
     int get_height_rows(int nRows) const;
 
     void connect_changed(const Link<TextView&, void>& rLink) { m_aChangeHdl = rLink; }
-    virtual void connect_cursor_position(const Link<TextView&, void>& rLink)
-    {
-        m_aCursorPositionHdl = rLink;
-    }
 
     // returns true if pressing up would move the cursor
     // doesn't matter if that move is to a previous line or to the start of the

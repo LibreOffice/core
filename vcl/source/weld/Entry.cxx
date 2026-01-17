@@ -25,13 +25,6 @@ void Entry::signal_activated()
     m_aActivateHdl.Call(*this);
 }
 
-void Entry::signal_cursor_position()
-{
-    if (notify_events_disabled())
-        return;
-    m_aCursorPositionHdl.Call(*this);
-}
-
 void Entry::set_position(int nCursorPos)
 {
     disable_notify_events();

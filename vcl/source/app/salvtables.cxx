@@ -3393,7 +3393,7 @@ void SalInstanceEntry::set_font_color(const Color& rColor)
         m_xEntry->SetControlForeground(rColor);
 }
 
-void SalInstanceEntry::connect_cursor_position(const Link<Entry&, void>& rLink)
+void SalInstanceEntry::connect_cursor_position(const Link<TextWidget&, void>& rLink)
 {
     assert(!m_aCursorPositionHdl.IsSet());
     m_xEntry->AddEventListener(LINK(this, SalInstanceEntry, CursorListener));
@@ -5667,7 +5667,7 @@ void SalInstanceTextView::set_font(const vcl::Font& rFont)
     m_xTextView->Invalidate();
 }
 
-void SalInstanceTextView::connect_cursor_position(const Link<TextView&, void>& rLink)
+void SalInstanceTextView::connect_cursor_position(const Link<TextWidget&, void>& rLink)
 {
     assert(!m_aCursorPositionHdl.IsSet());
     m_xTextView->AddEventListener(LINK(this, SalInstanceTextView, CursorListener));

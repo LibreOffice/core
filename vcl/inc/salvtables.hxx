@@ -655,7 +655,7 @@ public:
 
     virtual void set_font_color(const Color& rColor) override;
 
-    virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override;
+    virtual void connect_cursor_position(const Link<TextWidget&, void>& rLink) override;
 
     virtual void set_placeholder_text(const OUString& rText) override;
 
@@ -1447,7 +1447,7 @@ public:
 
     virtual void set_font_color(const Color& rColor) override;
 
-    virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override;
+    virtual void connect_cursor_position(const Link<TextWidget&, void>& rLink) override;
 
     virtual bool can_move_cursor_with_up() const override;
 

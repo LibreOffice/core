@@ -318,7 +318,7 @@ public:
 private:
     DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
     DECL_DLLPRIVATE_LINK(ParseInputHdl, const OUString&, Formatter::ParseResult);
-    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::TextWidget&, void);
 
     SAL_DLLPRIVATE void Init();
 

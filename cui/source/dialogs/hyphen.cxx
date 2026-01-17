@@ -35,7 +35,7 @@
 
 using namespace css;
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, CursorChangeHdl_Impl, weld::Entry&, void)
+IMPL_LINK_NOARG(SvxHyphenWordDialog, CursorChangeHdl_Impl, weld::TextWidget&, void)
 {
     int nStart, nEnd;
     m_xWordEdit->get_selection_bounds(nStart, nEnd);

@@ -3163,7 +3163,7 @@ namespace weld
         return Formatter::ParseResult(bRet ? TRISTATE_TRUE : TRISTATE_FALSE, fValue);
     }
 
-    IMPL_LINK(TimeFormatter, CursorChangedHdl, weld::Entry&, rEntry, void)
+    IMPL_LINK(TimeFormatter, CursorChangedHdl, weld::TextWidget&, rEntry, void)
     {
         int nStartPos, nEndPos;
         rEntry.get_selection_bounds(nStartPos, nEndPos);

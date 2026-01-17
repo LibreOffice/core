@@ -19,7 +19,6 @@ class VCL_DLLPUBLIC Entry : virtual public TextWidget
 protected:
     Link<Entry&, void> m_aChangeHdl;
     Link<OUString&, bool> m_aInsertTextHdl;
-    Link<Entry&, void> m_aCursorPositionHdl;
     Link<Entry&, bool> m_aActivateHdl;
 
     friend class ::LOKTrigger;
@@ -27,8 +26,6 @@ protected:
     void signal_changed();
 
     void signal_activated();
-
-    void signal_cursor_position();
 
     virtual void do_set_position(int nCursorPos) = 0;
 
@@ -53,10 +50,6 @@ public:
     void connect_insert_text(const Link<OUString&, bool>& rLink) { m_aInsertTextHdl = rLink; }
     // callback returns true to indicated no further processing of activate wanted
     void connect_activate(const Link<Entry&, bool>& rLink) { m_aActivateHdl = rLink; }
-    virtual void connect_cursor_position(const Link<Entry&, void>& rLink)
-    {
-        m_aCursorPositionHdl = rLink;
-    }
 
     virtual void set_alignment(TxtAlign eXAlign) = 0;
 };
