@@ -235,6 +235,7 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="frmaddpage|label2">_Vertical alignment:</property>
                 <property name="use-underline">True</property>
+                <property name="mnemonic-widget">vertalign</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
