@@ -1260,6 +1260,9 @@
                 <property name="use-underline">True</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="parastyle"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="useparastyle-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|useparastyle">Include paragraphs that have the selected style applied in the index.</property>
@@ -1276,6 +1279,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="useparastyle"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="parastyle-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|parastyle">Select the paragraph style for which you want to create index entries.</property>
