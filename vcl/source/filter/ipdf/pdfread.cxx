@@ -21,6 +21,8 @@
 #include <tools/UnitConversion.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationMarker.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <sal/log.hxx>
 

@@ -30,6 +30,8 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/pdf/PDFAnnotationMarker.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #include <Annotation.hxx>
 #include <DrawDocShell.hxx>

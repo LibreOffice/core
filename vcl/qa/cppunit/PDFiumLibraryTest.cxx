@@ -25,6 +25,8 @@
 #include <tools/stream.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationMarker.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/pdf/PDFTextRenderMode.hxx>
 #include <vcl/pdfread.hxx>
