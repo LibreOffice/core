@@ -263,8 +263,10 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
 
     m_xLbRanges->thaw();
 
-    if (m_xLbRanges->n_children() >= 1)
+    if (m_xLbRanges->n_children() >= 1) {
         m_xLbRanges->select(0);
+        m_xLbRanges->set_sensitive(true);
+    }
     else
     {
         m_xLbRanges->append_text(ScResId(STR_NO_NAMED_RANGES_AVAILABLE));
