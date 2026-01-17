@@ -666,6 +666,43 @@
                                             <property name="row-spacing">3</property>
                                             <property name="column-spacing">6</property>
                                             <child>
+                                              <object class="GtkLabel" id="includeevenodd">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
+                                                <property name="use-underline">True</property>
+                                                <property name="mnemonic-widget">evenoddbox</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="evenoddbox">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="active">0</property>
+                                                <items>
+                                                  <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
+                                                </items>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="evenoddbox-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|evenoddbox">Select the subset of pages to print.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkLabel" id="fromwhich">
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">start</property>
@@ -742,26 +779,6 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkCheckButton" id="reverseorder">
-                                                <property name="label" translatable="yes" context="printdialog|reverseorder">Print in _reverse order</property>
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">True</property>
-                                                <property name="receives-default">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="use-underline">True</property>
-                                                <property name="draw-indicator">True</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="reverseorder-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|reverseorder">Check to print pages in reverse order.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">5</property>
-                                              </packing>
-                                            </child>
-                                            <child>
                                               <object class="GtkBox" id="box9">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
@@ -825,40 +842,23 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel" id="includeevenodd">
+                                              <object class="GtkCheckButton" id="reverseorder">
+                                                <property name="label" translatable="yes" context="printdialog|reverseorder">Print in _reverse order</property>
                                                 <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
+                                                <property name="can-focus">True</property>
+                                                <property name="receives-default">False</property>
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
                                                 <property name="use-underline">True</property>
-                                                <property name="mnemonic-widget">evenoddbox</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkComboBoxText" id="evenoddbox">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="hexpand">True</property>
-                                                <property name="active">0</property>
-                                                <items>
-                                                  <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
-                                                </items>
+                                                <property name="draw-indicator">True</property>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="evenoddbox-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|evenoddbox">Select the subset of pages to print.</property>
+                                                  <object class="AtkObject" id="reverseorder-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|reverseorder">Check to print pages in reverse order.</property>
                                                   </object>
                                                 </child>
                                               </object>
                                               <packing>
                                                 <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
+                                                <property name="top-attach">5</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -924,21 +924,6 @@
                                         <property name="row-spacing">6</property>
                                         <property name="column-spacing">6</property>
                                         <child>
-                                          <object class="GtkLabel" id="labelorientation">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label" translatable="yes" context="printdialog|labelorientation">Orientation:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">pageorientationbox</property>
-                                            <property name="xalign">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <object class="GtkLabel" id="labelsize">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
@@ -951,6 +936,37 @@
                                           <packing>
                                             <property name="left-attach">0</property>
                                             <property name="top-attach">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBoxText" id="papersizebox">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="hexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="papersizebox-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|papersizebox">Set the paper size you would like to use. The preview will show how the document would look on a paper of the given size.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">1</property>
+                                            <property name="top-attach">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="labelorientation">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes" context="printdialog|labelorientation">Orientation:</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="mnemonic-widget">pageorientationbox</property>
+                                            <property name="xalign">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">0</property>
+                                            <property name="top-attach">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -973,22 +989,6 @@
                                           <packing>
                                             <property name="left-attach">1</property>
                                             <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBoxText" id="papersizebox">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="hexpand">True</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="papersizebox-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|papersizebox">Set the paper size you would like to use. The preview will show how the document would look on a paper of the given size.</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
                                           </packing>
                                         </child>
                                       </object>
