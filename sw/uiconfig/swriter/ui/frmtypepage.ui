@@ -129,6 +129,9 @@
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="relwidthrelation"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relwidth-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|relwidth">Calculates the width of the selected object as a percentage of the width of the page text area.</property>
@@ -145,6 +148,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="relwidth"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relwidthrelation-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|relwidthrelation">Decides what 100% width means: either text area (excluding margins) or the entire page (including margins).</property>
@@ -246,6 +252,9 @@
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="relheightrelation"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relheight-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|relheight">Calculates the height of the selected object as a percentage of the height of the page text area.</property>
@@ -262,6 +271,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="relheight"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relheightrelation-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|relheightrelation">Decides what 100% height means: either text area (excluding margins) or the entire page (including margins).</property>
