@@ -3282,8 +3282,38 @@ OUString WeldTextFilter::filter(const OUString& rText)
     return sText;
 }
 
-SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+SalInstanceTextWidget::SalInstanceTextWidget(Edit* pEntry, SalInstanceBuilder* pBuilder,
+                                             bool bTakeOwnership)
     : SalInstanceWidget(pEntry, pBuilder, bTakeOwnership)
+    , m_pEntry(pEntry)
+{
+}
+
+SalInstanceTextWidget::~SalInstanceTextWidget()
+{
+    if (m_pEntry->isDisposed())
+        return;
+
+    if (m_aCursorPositionHdl.IsSet())
+        m_pEntry->RemoveEventListener(LINK(this, SalInstanceTextWidget, CursorListener));
+}
+
+IMPL_LINK(SalInstanceTextWidget, CursorListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::EditSelectionChanged
+        || rEvent.GetId() == VclEventId::EditCaretChanged)
+        signal_cursor_position();
+}
+
+void SalInstanceTextWidget::connect_cursor_position(const Link<TextWidget&, void>& rLink)
+{
+    assert(!m_aCursorPositionHdl.IsSet());
+    m_pEntry->AddEventListener(LINK(this, SalInstanceTextWidget, CursorListener));
+    weld::TextWidget::connect_cursor_position(rLink);
+}
+
+SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceTextWidget(pEntry, pBuilder, bTakeOwnership)
     , m_xEntry(pEntry)
     , m_aTextFilter(m_aInsertTextHdl)
 {
@@ -3393,13 +3423,6 @@ void SalInstanceEntry::set_font_color(const Color& rColor)
         m_xEntry->SetControlForeground(rColor);
 }
 
-void SalInstanceEntry::connect_cursor_position(const Link<TextWidget&, void>& rLink)
-{
-    assert(!m_aCursorPositionHdl.IsSet());
-    m_xEntry->AddEventListener(LINK(this, SalInstanceEntry, CursorListener));
-    weld::Entry::connect_cursor_position(rLink);
-}
-
 void SalInstanceEntry::set_placeholder_text(const OUString& rText)
 {
     m_xEntry->SetPlaceholderText(rText);
@@ -3450,21 +3473,12 @@ void SalInstanceEntry::set_alignment(TxtAlign eXAlign) { ::set_alignment(*m_xEnt
 
 SalInstanceEntry::~SalInstanceEntry()
 {
-    if (m_aCursorPositionHdl.IsSet())
-        m_xEntry->RemoveEventListener(LINK(this, SalInstanceEntry, CursorListener));
     m_xEntry->SetTextFilter(nullptr);
     m_xEntry->SetActivateHdl(Link<Edit&, bool>());
     m_xEntry->SetModifyHdl(Link<Edit&, void>());
 }
 
 IMPL_LINK_NOARG(SalInstanceEntry, ChangeHdl, Edit&, void) { signal_changed(); }
-
-IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::EditSelectionChanged
-        || rEvent.GetId() == VclEventId::EditCaretChanged)
-        signal_cursor_position();
-}
 
 IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool) { return m_aActivateHdl.Call(*this); }
 
@@ -5597,7 +5611,7 @@ void SalInstanceLabel::set_font(const vcl::Font& rFont)
 
 SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
-    : SalInstanceWidget(pTextView, pBuilder, bTakeOwnership)
+    : SalInstanceTextWidget(pTextView, pBuilder, bTakeOwnership)
     , m_xTextView(pTextView)
 {
     // tdf#150397 don't select text when receiving keyboard focus,
@@ -5667,13 +5681,6 @@ void SalInstanceTextView::set_font(const vcl::Font& rFont)
     m_xTextView->Invalidate();
 }
 
-void SalInstanceTextView::connect_cursor_position(const Link<TextWidget&, void>& rLink)
-{
-    assert(!m_aCursorPositionHdl.IsSet());
-    m_xTextView->AddEventListener(LINK(this, SalInstanceTextView, CursorListener));
-    weld::TextView::connect_cursor_position(rLink);
-}
-
 bool SalInstanceTextView::can_move_cursor_with_up() const
 {
     bool bNoSelection = !m_xTextView->GetSelection();
@@ -5728,8 +5735,6 @@ SalInstanceTextView::~SalInstanceTextView()
 {
     if (!m_xTextView->isDisposed())
     {
-        if (m_aCursorPositionHdl.IsSet())
-            m_xTextView->RemoveEventListener(LINK(this, SalInstanceTextView, CursorListener));
         m_xTextView->SetModifyHdl(Link<Edit&, void>());
         ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
         rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
@@ -5743,13 +5748,6 @@ IMPL_LINK(SalInstanceTextView, VscrollHdl, ScrollBar*, pScrollBar, void)
 }
 
 IMPL_LINK_NOARG(SalInstanceTextView, ChangeHdl, Edit&, void) { signal_changed(); }
-
-IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::EditSelectionChanged
-        || rEvent.GetId() == VclEventId::EditCaretChanged)
-        signal_cursor_position();
-}
 
 SalInstanceExpander::SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
