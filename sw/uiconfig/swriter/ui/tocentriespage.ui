@@ -559,6 +559,7 @@
                             <property name="no-show-all">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="authfield-atkobject">
+                                  <property name="AtkObject::accessible-name" translatable="yes" context="tocentriespage|authfield-atkobject">Authority field</property>
                                 <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|authfield">To add an entry to the Structure line, click the entry, click in an empty box on the Structure line, and then click Insert.</property>
                               </object>
                             </child>
@@ -986,6 +987,7 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="tocentriespage|label15">_1:</property>
                         <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">key1lb</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -1015,6 +1017,7 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="tocentriespage|label16">_2:</property>
                         <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">key2lb</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -1027,6 +1030,7 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="tocentriespage|label17">_3:</property>
                         <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">key3lb</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
