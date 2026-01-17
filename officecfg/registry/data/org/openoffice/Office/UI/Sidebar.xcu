@@ -420,6 +420,29 @@
         </prop>
       </node>
 
+      <node oor:name="AIDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">AI Assistant</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>AIDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/cmd/lc_editdoc.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>950</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+
     </node>
 
     <node oor:name="PanelList">
@@ -2280,7 +2303,37 @@
         </prop>
       </node>
 
-
+      <node oor:name="AIAssistantPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">AI Chat</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>AIAssistantPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>AIDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value></value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/AIAssistantPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
 
     </node>
   </node>

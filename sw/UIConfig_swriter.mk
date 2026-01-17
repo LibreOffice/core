@@ -292,6 +292,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/commentwidget \
 	sw/uiconfig/swriter/ui/commentcontextmenu \
 	sw/uiconfig/swriter/ui/a11ycheckissuespanel \
+	sw/uiconfig/swriter/ui/chatpanel \
 	sw/uiconfig/swriter/ui/poseditbox \
 	sw/uiconfig/swriter/ui/sidebarwrap \
 	sw/uiconfig/swriter/ui/sidebarstylepresets \

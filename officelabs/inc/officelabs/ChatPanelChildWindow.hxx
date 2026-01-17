@@ -6,11 +6,12 @@
 #ifndef INCLUDED_OFFICELABS_CHATPANELCHILDWINDOW_HXX
 #define INCLUDED_OFFICELABS_CHATPANELCHILDWINDOW_HXX
 
+#include <officelabs/officelabsdllapi.h>
 #include <sfx2/childwin.hxx>
 
 namespace officelabs {
 
-class ChatPanelChildWindow final : public SfxChildWindow
+class OFFICELABS_DLLPUBLIC ChatPanelChildWindow final : public SfxChildWindow
 {
 public:
     ChatPanelChildWindow(vcl::Window* pParent, sal_uInt16 nId,

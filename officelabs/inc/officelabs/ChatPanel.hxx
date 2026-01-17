@@ -10,6 +10,7 @@
 // TODO: Migrate to weld framework in future
 #define VCL_INTERNALS
 
+#include <officelabs/officelabsdllapi.h>
 #include <sfx2/dockwin.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/fixed.hxx>

@@ -169,3 +169,6 @@ sw/uiconfig/swriter/ui/wordcount.ui://GtkLabel[@id='doccjkchars'] orphan-label
 sw/uiconfig/swriter/ui/wordcount.ui://GtkLabel[@id='standardizedpages'] orphan-label
 sw/uiconfig/swriter/ui/wordcount.ui://GtkLabel[@id='selectstandardizedpages'] orphan-label
 sw/uiconfig/swriter/ui/wordcount.ui://GtkLabel[@id='docstandardizedpages'] orphan-label
+sw/uiconfig/swriter/ui/chatpanel.ui://GtkLabel[@id='status_label'] orphan-label
+sw/uiconfig/swriter/ui/chatpanel.ui://GtkTextView[@id='chat_history'] no-labelled-by
+sw/uiconfig/swriter/ui/chatpanel.ui://GtkEntry[@id='input_field'] no-labelled-by

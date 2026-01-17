@@ -1,0 +1,49 @@
+make -j 32  -rs -f C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/Makefile.gbuild build  
+[build DEP] LNK:Library/officelabslo.dll.d
+[build ECH] CustomTarget/instsetoo_native/setup/setup.ini
+[build ECH] CustomTarget/instsetoo_native/setup/version.ini
+make[1]: Circular C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/workdir/AutoInstall/.dir <- C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/workdir/AutoInstall/.dir dependency dropped.
+[build LOC] top level modules: libreoffice
+[build DEP] LNK:Library/chart2lo.dll.d
+[build LNK] Library/chart2lo.dll
+[build DEP] LNK:Library/dbaxmllo.dll.d
+[build LNK] Library/dbaxmllo.dll
+[build DEP] LNK:Library/basctllo.dll.d
+[build LNK] Library/basctllo.dll
+[build DEP] LNK:Library/sdbtlo.dll.d
+[build LNK] Library/sdbtlo.dll
+[build DEP] LNK:Library/sofficeapp.dll.d
+[build LNK] Library/sofficeapp.dll
+[build DEP] LNK:Library/abplo.dll.d
+[build LNK] Library/abplo.dll
+[build DEP] LNK:Library/pcrlo.dll.d
+[build LNK] Library/pcrlo.dll
+[build DEP] LNK:Library/pdffilterlo.dll.d
+[build LNK] Library/pdffilterlo.dll
+[build CMP] oox/util/oox
+[build DEP] LNK:Library/vbahelperlo.dll.d
+[build LNK] Library/vbahelperlo.dll
+[build DEP] LNK:Library/vbaeventslo.dll.d
+[build LNK] Library/vbaeventslo.dll
+[build DEP] LNK:Library/smlo.dll.d
+[build LNK] Library/smlo.dll
+[build DEP] LNK:Library/uuilo.dll.d
+[build LNK] Library/uuilo.dll
+[build DEP] LNK:Library/writerperfectlo.dll.d
+[build LNK] Library/writerperfectlo.dll
+[build MOD] forms
+[build CUS] instsetoo_native/setup
+[build PKG] instsetoo_native_setup
+[build MOD] lotuswordpro
+[build DEP] LNK:Library/officelabslo.dll.d
+[build LNK] Library/officelabslo.dll
+[build BIN] oox
+[build MOD] slideshow
+[build BIN] svx
+[build DEP] LNK:Executable/pdfverify.exe.d
+[build LNK] Executable/pdfverify.exe
+ChatPanelChildWindow.o : error LNK2001: unresolved external symbol "public: virtual struct SfxChildWinInfo __cdecl officelabs::ChatPanelChildWindow::GetInfo(void)const " (?GetInfo@ChatPanelChildWindow@officelabs@@UEBA?AUSfxChildWinInfo@@XZ)
+C:\Users\philh\dev\officelabs-suite\officelabs-master\libreoffice-fork\instdir\program\officelabslo.dll : fatal error LNK1120: 1 unresolved externals
+make[1]: *** [/cygdrive/c/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/officelabs/Library_officelabs.mk:3: C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/instdir/program/officelabslo.dll] Error 42
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:310: build] Error 2

@@ -30,6 +30,7 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/source/uibase/inc \
     -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/officelabs/inc \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     $$(INCLUDE) \
 ))
@@ -67,6 +68,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
     i18nutil \
     lng \
     msfilter \
+    officelabs \
     sal \
     salhelper \
 	sax \

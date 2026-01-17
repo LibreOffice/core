@@ -1717,6 +1717,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libebook/src/lib/.libs/libe-book-0.1$(gb_StaticLibrary_PLAINEXT) \
+	$(gb_UnpackedTarball_workdir)/libebook/src/lib/.libs/libe-book-internal$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libebook)
 
@@ -1815,6 +1816,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libfreehand/src/lib/.libs/libfreehand-0.1$(gb_StaticLibrary_PLAINEXT) \
+	$(gb_UnpackedTarball_workdir)/libfreehand/src/lib/.libs/libfreehand-internal$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libfreehand)
 
@@ -1904,6 +1906,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libepubgen/src/lib/.libs/libepubgen-0.1$(gb_StaticLibrary_PLAINEXT) \
+	$(gb_UnpackedTarball_workdir)/libepubgen/src/lib/.libs/libepubgen_internal$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libepubgen)
 
@@ -2097,6 +2100,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libqxp/src/lib/.libs/libqxp-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(gb_UnpackedTarball_workdir)/libqxp/src/lib/.libs/libqxp_internal$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libqxp)
 
@@ -2130,6 +2134,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(gb_UnpackedTarball_workdir)/libzmf/src/lib/.libs/libzmf-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(gb_UnpackedTarball_workdir)/libzmf/src/lib/.libs/libzmf_internal$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libzmf)
 

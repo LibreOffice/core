@@ -1,26 +1,69 @@
-make: wslpath: Not a directory
-make -j 32  -rs -f C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/Makefile.gbuild build  
-make[1]: wslpath: No such file or directory
-make[1]: wslpath: No such file or directory
-make[1]: wslpath: No such file or directory
-make[1]: wslpath: No such file or directory
-make[1]: wslpath: No such file or directory
-[build ECH] CustomTarget/instsetoo_native/setup/setup.ini
-[build ECH] CustomTarget/instsetoo_native/setup/version.ini
-make[1]: Circular C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/workdir/AutoInstall/.dir <- C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/workdir/AutoInstall/.dir dependency dropped.
-[build LOC] top level modules: libreoffice
-[build UPK] gpgme-1.24.3.tar.bz2
-[build CUS] instsetoo_native/setup
-[build PKG] instsetoo_native_setup
-[build BIN] instsetoo_native
-[build MOD] instsetoo_native
-[build PAT] gpgmepp
 make -j 32  -rs -f C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/Makefile.gbuild build  
 [build ECH] CustomTarget/instsetoo_native/setup/setup.ini
 [build ECH] CustomTarget/instsetoo_native/setup/version.ini
 make[1]: Circular C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/workdir/AutoInstall/.dir <- C:/Users/philh/dev/officelabs-suite/officelabs-master/libreoffice-fork/workdir/AutoInstall/.dir dependency dropped.
+[build IMO] scp2/draw
+[build IMO] scp2/extensions
+[build IMO] scp2/graphicfilter
+[build INM] scp2/impress
+[build INM] scp2/math
+[build INM] scp2/onlineupdate
+[build INM] scp2/ooo
+[build INM] scp2/python
+[build INM] scp2/spsupp
+[build SCP] scp2/source/ooo/ure
+[build INM] scp2/writer
+[build INM] scp2/xsltfilter
+[build INM] scp2/activex
+[build INM] scp2/quickstart
+[build INM] scp2/winexplorerext
 [build LOC] top level modules: libreoffice
+[build DEP] LNK:Library/scfiltlo.dll.d
+[build LNK] Library/scfiltlo.dll
+[build CMP] sc/util/scui
+[build CMP] sc/util/vbaobj
 [build CUS] instsetoo_native/setup
 [build PKG] instsetoo_native_setup
+[build BIN] officelabs
+[build IMO] scp2/impress
+[build IMO] scp2/math
+[build IMO] scp2/onlineupdate
+[build IMO] scp2/ooo
+[build IMO] scp2/python
+[build IMO] scp2/spsupp
+[build INM] scp2/ure
+[build IMO] scp2/writer
+[build IMO] scp2/xsltfilter
+[build IMO] scp2/activex
+[build IMO] scp2/quickstart
+[build IMO] scp2/winexplorerext
+[build BIN] sd
+[build BIN] sw
+[build BIN] writerperfect
+[build CMP] sc/util/scfilt
 [build BIN] instsetoo_native
+[build MOD] officelabs
+[build BIN] sc
+[build IMO] scp2/ure
+[build MOD] sd
+[build MOD] sw
+[build MOD] writerperfect
+[build RDB] services
 [build MOD] instsetoo_native
+[build MOD] sc
+[build INS] setup_osl
+[build BIN] postprocess
+[build GAL] backgrounds
+[build GAL] sounds
+[build MOD] postprocess
+[build BIN] scp2
+[build MOD] scp2
+[build STR] sounds/sounds
+[build STR] backgrounds/backgrounds
+[build PKG] Gallery/sounds
+[build PKG] Gallery/backgrounds
+[build BIN] extras
+[build MOD] extras
+[build MOD] libreoffice
+[build BIN] top level modules: libreoffice
+[build ALL] top level modules: build-non-l10n-only build-l10n-only

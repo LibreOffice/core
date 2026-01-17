@@ -2,6 +2,10 @@
 
 $(eval $(call gb_Library_Library,officelabs))
 
+$(eval $(call gb_Library_add_defs,officelabs,\
+    -DOFFICELABS_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_set_include,officelabs,\
     -I$(SRCDIR)/officelabs/inc \
     $$(INCLUDE) \

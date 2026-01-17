@@ -1,13 +1,14 @@
 #ifndef INCLUDED_OFFICELABS_AGENTCONNECTION_HXX
 #define INCLUDED_OFFICELABS_AGENTCONNECTION_HXX
 
+#include <officelabs/officelabsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <string>
 #include <optional>
 
 namespace officelabs {
 
-struct AgentResponse {
+struct OFFICELABS_DLLPUBLIC AgentResponse {
     OUString message;
     bool hasPatch;
     OUString patchType;
@@ -17,7 +18,7 @@ struct AgentResponse {
     OUString patchDiff;
 };
 
-class AgentConnection {
+class OFFICELABS_DLLPUBLIC AgentConnection {
 private:
     std::string m_backendUrl;
     bool m_connected;
