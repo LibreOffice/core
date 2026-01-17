@@ -10,6 +10,11 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
+#include <doc.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <poolfmt.hxx>
+#include <editeng/wghtitem.hxx>
+#include <svl/itemset.hxx>
 
 namespace sw::sidebar {
 
@@ -224,6 +229,82 @@ IMPL_LINK_NOARG(AIAssistantPanel, InputActivateHdl, weld::Entry&, bool)
     return true;
 }
 
+void AIAssistantPanel::InsertFormattedText(const OUString& text)
+{
+    // Parse markdown-like formatting and insert with Writer styles
+    // Split text into lines
+    sal_Int32 nIndex = 0;
+    bool bFirstParagraph = true;
+
+    while (nIndex < text.getLength())
+    {
+        // Find end of line
+        sal_Int32 nLineEnd = text.indexOf('\n', nIndex);
+        if (nLineEnd < 0)
+            nLineEnd = text.getLength();
+
+        OUString sLine = text.copy(nIndex, nLineEnd - nIndex).trim();
+        nIndex = nLineEnd + 1;
+
+        // Skip empty lines but add paragraph break
+        if (sLine.isEmpty())
+        {
+            if (!bFirstParagraph)
+                m_pWrtShell->SplitNode();
+            continue;
+        }
+
+        // Add paragraph break between paragraphs
+        if (!bFirstParagraph)
+            m_pWrtShell->SplitNode();
+        bFirstParagraph = false;
+
+        // Check for heading (## or #)
+        if (sLine.startsWith(u"## "))
+        {
+            // Heading 2
+            OUString sHeadingText = sLine.copy(3);
+            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE2));
+            m_pWrtShell->Insert(sHeadingText);
+        }
+        else if (sLine.startsWith(u"# "))
+        {
+            // Heading 1
+            OUString sHeadingText = sLine.copy(2);
+            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE1));
+            m_pWrtShell->Insert(sHeadingText);
+        }
+        else if (sLine.startsWith(u"- ") || sLine.startsWith(u"* "))
+        {
+            // Bullet point - insert with bullet character
+            OUString sBulletText = sLine.copy(2);
+            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+            m_pWrtShell->Insert(u"\u2022 "_ustr + sBulletText);  // Unicode bullet
+        }
+        else if (sLine.startsWith(u"**") && sLine.endsWith(u"**") && sLine.getLength() > 4)
+        {
+            // Bold line
+            OUString sBoldText = sLine.copy(2, sLine.getLength() - 4);
+            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+
+            // Apply bold
+            SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
+            aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+            m_pWrtShell->Insert(sBoldText);
+        }
+        else
+        {
+            // Regular paragraph - handle inline **bold** markers
+            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+
+            // Simple approach: just insert text, could enhance for inline bold later
+            // Replace escaped newlines with nothing for cleaner text
+            OUString sCleanLine = sLine.replaceAll(u"\\n", u" ");
+            m_pWrtShell->Insert(sCleanLine);
+        }
+    }
+}
+
 IMPL_LINK_NOARG(AIAssistantPanel, InsertClickHdl, weld::Button&, void)
 {
     if (m_sLastAIResponse.isEmpty())
@@ -246,12 +327,12 @@ IMPL_LINK_NOARG(AIAssistantPanel, InsertClickHdl, weld::Button&, void)
         return;
     }
 
-    // Insert at cursor position
+    // Insert formatted text at cursor position
     m_pWrtShell->StartAllAction();
-    m_pWrtShell->Insert(m_sLastAIResponse);
+    InsertFormattedText(m_sLastAIResponse);
     m_pWrtShell->EndAllAction();
 
-    AppendToChat(u"System"_ustr, u"Text inserted into document"_ustr);
+    AppendToChat(u"System"_ustr, u"Formatted text inserted into document"_ustr);
     UpdateStatus(u"Text inserted"_ustr);
 }
 

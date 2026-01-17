@@ -45,6 +45,7 @@ private:
     void AppendToChat(const OUString& sender, const OUString& message);
     OUString GetDocumentContext();
     void ProcessResponse(const officelabs::AgentResponse& response);
+    void InsertFormattedText(const OUString& text);
 
 public:
     static std::unique_ptr<PanelLayout> Create(
