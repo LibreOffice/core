@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>

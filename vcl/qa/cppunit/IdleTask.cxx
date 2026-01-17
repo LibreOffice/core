@@ -11,6 +11,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idletask.hxx>
 #include <salhelper/thread.hxx>

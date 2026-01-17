@@ -29,6 +29,7 @@
 #include <primitive2d/textlineprimitive2d.hxx>
 #include <primitive2d/textstrikeoutprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
+#include <tools/gen.hxx>
 #include <vcl/vcllayout.hxx>
 
 namespace drawinglayer::primitive2d

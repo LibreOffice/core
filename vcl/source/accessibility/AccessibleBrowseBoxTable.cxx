@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 
 using ::com::sun::star::uno::Reference;

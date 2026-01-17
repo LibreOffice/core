@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace framework;

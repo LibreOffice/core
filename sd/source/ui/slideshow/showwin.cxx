@@ -38,6 +38,7 @@
 #include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/vclevent.hxx>
 #include <tools/duration.hxx>
 
 using namespace ::com::sun::star;

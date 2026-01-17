@@ -27,6 +27,7 @@
 #include <vcl/event.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/i18nhelp.hxx>

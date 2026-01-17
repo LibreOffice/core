@@ -23,6 +23,7 @@
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <comphelper/anytostring.hxx>

@@ -21,6 +21,7 @@
 
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/vclptr.hxx>
 
 class SvHeaderTabListBox;
 

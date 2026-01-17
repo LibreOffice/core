@@ -23,6 +23,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <unotools/resmgr.hxx>
 #include <bubblewindow.hxx>
 #include <bitmaps.hlst>

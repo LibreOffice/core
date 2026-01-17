@@ -24,6 +24,7 @@
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
+#include <vcl/vclevent.hxx>
 
 // class AccessibleTabListBoxTable ---------------------------------------------
 

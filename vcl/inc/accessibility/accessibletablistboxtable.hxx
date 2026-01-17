@@ -21,6 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
+#include <vcl/vclptr.hxx>
 
 class SvHeaderTabListBox;
 

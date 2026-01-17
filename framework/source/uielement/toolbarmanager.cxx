@@ -75,6 +75,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 

@@ -27,6 +27,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/svapp.hxx>
+
+#include <functional>
 #include <span>
 
 // predefines

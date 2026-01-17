@@ -29,6 +29,7 @@
 #include <vcl/print.hxx>
 #include <vcl/PrinterSupport.hxx>
 #include <vcl/event.hxx>
+#include <vcl/vclevent.hxx>
 #include <sal/log.hxx>
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,

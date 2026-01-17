@@ -49,11 +49,13 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/fcm.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 
 using namespace ::ucbhelper;
 using namespace ::com::sun::star::task;

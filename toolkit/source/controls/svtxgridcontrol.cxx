@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <algorithm>
 

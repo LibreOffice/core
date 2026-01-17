@@ -42,6 +42,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/themecolors.hxx>
+#include <vcl/vclevent.hxx>
 #include <officecfg/Office/UI.hxx>
 #include <officecfg/Office/Common.hxx>
 

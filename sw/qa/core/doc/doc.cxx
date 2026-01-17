@@ -21,6 +21,7 @@
 #include <vcl/event.hxx>
 #include <editeng/langitem.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 

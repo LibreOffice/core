@@ -35,6 +35,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <utility>
+#include <vcl/exceptiontypes.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>

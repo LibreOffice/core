@@ -33,6 +33,7 @@
 #include <vcl/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>

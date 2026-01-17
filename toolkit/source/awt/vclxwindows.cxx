@@ -56,6 +56,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 

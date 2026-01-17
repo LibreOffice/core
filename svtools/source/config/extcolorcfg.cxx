@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#include <vcl/vclevent.hxx>
 
 
 using namespace utl;

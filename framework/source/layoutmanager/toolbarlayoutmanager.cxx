@@ -44,6 +44,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 #include <sal/log.hxx>
 #include <tools/gen.hxx>
 

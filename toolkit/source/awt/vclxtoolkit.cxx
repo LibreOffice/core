@@ -64,6 +64,7 @@
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/idletask.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/wintypes.hxx>
 
 #include <frozen/bits/defines.h>

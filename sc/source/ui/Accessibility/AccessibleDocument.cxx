@@ -59,6 +59,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/SvxShapeTypes.hxx>

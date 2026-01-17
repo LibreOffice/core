@@ -22,6 +22,7 @@
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 

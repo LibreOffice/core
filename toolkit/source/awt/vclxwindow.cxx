@@ -54,6 +54,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/commandevent.hxx>
 #include <comphelper/flagguard.hxx>

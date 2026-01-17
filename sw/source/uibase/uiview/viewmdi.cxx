@@ -25,6 +25,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
+#include <vcl/vclevent.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

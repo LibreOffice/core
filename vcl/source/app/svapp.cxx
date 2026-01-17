@@ -40,6 +40,7 @@
 
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/exceptiontypes.hxx>
 #include <vcl/lok.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>

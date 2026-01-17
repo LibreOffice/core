@@ -33,6 +33,7 @@
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <vcl/vclevent.hxx>
 #include <uiobject-internal.hxx>
 #include <verticaltabctrl.hxx>
 

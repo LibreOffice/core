@@ -28,6 +28,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
+#include <vcl/vclevent.hxx>
 #include <memory>
 
 #include <com/sun/star/io/XOutputStream.hpp>

@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 
 namespace accessibility
 {

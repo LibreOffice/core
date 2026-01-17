@@ -66,6 +66,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

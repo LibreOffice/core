@@ -58,6 +58,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <osl/diagnose.h>
 #include <utility>
+#include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <sfx2/strings.hrc>

@@ -18,6 +18,8 @@
  */
 
 
+#include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 
 #include <vcl/accessibletableprovider.hxx>

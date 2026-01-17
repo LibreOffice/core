@@ -24,6 +24,7 @@
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

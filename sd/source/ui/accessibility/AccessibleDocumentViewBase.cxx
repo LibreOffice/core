@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <svx/svdobj.hxx>

@@ -31,19 +31,15 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/inputtypes.hxx>
-#include <vcl/exceptiontypes.hxx>
-#include <vcl/vclevent.hxx>
-#include <vcl/vclenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <com/sun/star/uno/Reference.h>
 
-
+class AbsoluteScreenPixelRectangle;
 class Bitmap;
 namespace tools { class JsonWriter; }
 namespace weld
@@ -69,11 +65,20 @@ class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
 class GestureEventPan;
+class VclSimpleEvent;
+class VclWindowEvent;
 struct ImplSVEvent;
 struct ConvertData;
 namespace basegfx { class SystemDependentDataManager; }
+namespace rtl { template <class reference_type> class Reference; }
+
+enum class ExceptionCategory;
+enum class VclButtonsType;
+enum class VclEventId;
+enum class VclMessageType;
 
 namespace com::sun::star::uno {
+    template <class interface_type> class Reference;
     class XComponentContext;
 }
 namespace com::sun::star::ui::dialogs {

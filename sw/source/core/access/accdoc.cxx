@@ -27,6 +27,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <accmap.hxx>

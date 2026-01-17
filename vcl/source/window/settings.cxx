@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <officecfg/Office/Common.hxx>
 

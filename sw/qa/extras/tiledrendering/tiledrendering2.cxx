@@ -20,6 +20,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/lokhelper.hxx>

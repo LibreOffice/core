@@ -54,6 +54,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/status.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

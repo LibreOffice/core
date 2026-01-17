@@ -24,6 +24,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
