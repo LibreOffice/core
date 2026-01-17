@@ -47,6 +47,7 @@
 #include <osl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <svl/cryptosign.hxx>
+#include <officecfg/Office/Security.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
@@ -876,6 +877,23 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
 
         }
 
+        // Optionally disable certificate revocation checking.
+        // Revocation checking (CRL) can cause significant delays during signature verification.
+        // They typically occur when the revocation endpoints listed in the certificate are
+        // unreachable, misconfigured, or slow to respond.
+        // In such cases, blocking network calls wait for TCP connection attempts to time out,
+        // which may take several seconds per certificate in the chain.
+        // Disabling revocation checking avoids these network timeouts and allows verification
+        // to complete without waiting for external revocation services.
+        DWORD revocationFlag = 0;
+        bool bDisableCRLCheck = officecfg::Office::Security::Certificate::DisableCertificateRevocationCheck::get();
+        if (!bDisableCRLCheck)
+        {
+            revocationFlag =
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN |
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT;
+        }
+
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
         //We do not check revocation of the root. In most cases there are none.
         //Then we would get CERT_TRUST_REVOCATION_STATUS_UNKNOWN
@@ -886,7 +904,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
             nullptr , //use current system time
             hCollectionStore,
             &chainPara ,
-            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
+            revocationFlag,
             nullptr ,
             &pChainContext);
 
