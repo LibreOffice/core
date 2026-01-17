@@ -3314,10 +3314,7 @@ void SalInstanceTextWidget::connect_cursor_position(const Link<TextWidget&, void
 
 void SalInstanceTextWidget::do_set_position(int nCursorPos)
 {
-    if (nCursorPos < 0)
-        m_pEntry->SetCursorAtLast();
-    else
-        m_pEntry->SetSelection(Selection(nCursorPos, nCursorPos));
+    m_pEntry->SetSelection(Selection(nCursorPos, nCursorPos));
 }
 
 int SalInstanceTextWidget::get_position() const { return m_pEntry->GetSelection().Max(); }

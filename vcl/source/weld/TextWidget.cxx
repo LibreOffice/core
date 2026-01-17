@@ -31,6 +31,8 @@ void TextWidget::set_text(const OUString& rText)
 void TextWidget::set_position(int nCursorPos)
 {
     disable_notify_events();
+    if (nCursorPos == -1)
+        nCursorPos = get_text().getLength();
     do_set_position(nCursorPos);
     enable_notify_events();
 }

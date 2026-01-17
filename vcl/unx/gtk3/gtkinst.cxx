@@ -17702,9 +17702,6 @@ public:
 
     virtual void do_set_position(int nCursorPos) override
     {
-        if (nCursorPos == -1)
-            nCursorPos = gtk_text_buffer_get_char_count(m_pTextBuffer);
-
         GtkTextIter aTextIter;
         gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &aTextIter, nCursorPos);
         gtk_text_buffer_place_cursor(m_pTextBuffer, &aTextIter);
