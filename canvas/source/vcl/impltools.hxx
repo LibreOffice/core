@@ -21,6 +21,7 @@
 
 #include <osl/mutex.hxx>
 
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 

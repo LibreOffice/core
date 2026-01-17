@@ -24,11 +24,13 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
+#include <unotools/fontdefs.hxx>
 #include <editeng/numitem.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svx/gallery.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/numvset.hxx>
 #include <com/sun/star/style/NumberingType.hpp>

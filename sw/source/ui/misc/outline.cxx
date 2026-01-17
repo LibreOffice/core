@@ -19,11 +19,13 @@
 
 #include <hintids.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <num.hxx>
 #include <view.hxx>

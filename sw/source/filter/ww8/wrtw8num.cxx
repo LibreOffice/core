@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <vcl/font.hxx>
 #include <editeng/langitem.hxx>
+#include <unotools/fontdefs.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <numrule.hxx>

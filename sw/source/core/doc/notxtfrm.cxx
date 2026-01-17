@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/imap.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/printer.hxx>

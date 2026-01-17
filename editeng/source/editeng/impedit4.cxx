@@ -66,6 +66,7 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <unotools/fontdefs.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>

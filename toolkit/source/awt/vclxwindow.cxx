@@ -50,6 +50,7 @@
 #include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>

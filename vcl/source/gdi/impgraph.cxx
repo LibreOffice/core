@@ -33,12 +33,14 @@
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <impgraph.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

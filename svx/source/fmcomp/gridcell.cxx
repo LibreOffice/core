@@ -62,6 +62,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <connectivity/CommonTools.hxx>

@@ -50,6 +50,7 @@
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/UnitConversion.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>

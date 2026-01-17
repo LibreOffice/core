@@ -26,6 +26,8 @@
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/vclevent.hxx>
 

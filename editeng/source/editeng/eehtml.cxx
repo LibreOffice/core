@@ -31,8 +31,10 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <tools/tenccvt.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 
 #include <editeng/editeng.hxx>
 #include <utility>

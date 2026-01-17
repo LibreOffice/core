@@ -29,6 +29,7 @@
 #include <unotools/syslocale.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/unohelp.hxx>
 #include <svtools/unitconv.hxx>
 

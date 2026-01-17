@@ -35,6 +35,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/pdf/PDFNote.hxx>
 #include <svx/unoapi.hxx>

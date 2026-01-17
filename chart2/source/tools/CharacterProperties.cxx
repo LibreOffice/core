@@ -33,11 +33,13 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <osl/diagnose.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

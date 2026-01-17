@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 
 #include "canvascustomsprite.hxx"
 

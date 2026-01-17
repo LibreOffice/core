@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>

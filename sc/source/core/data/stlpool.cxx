@@ -33,7 +33,9 @@
 #include <svl/zforlist.hxx>
 #include <svl/IndexedStyleSheets.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/diagnose.h>

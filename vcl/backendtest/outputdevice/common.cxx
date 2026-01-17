@@ -12,6 +12,7 @@
 
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <salgdi.hxx>
 
 #include <map>

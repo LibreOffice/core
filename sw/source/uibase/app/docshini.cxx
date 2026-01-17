@@ -25,6 +25,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/ctrltool.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -46,6 +47,7 @@
 #include <editeng/orphitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <prtopt.hxx>

@@ -20,6 +20,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
 
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>

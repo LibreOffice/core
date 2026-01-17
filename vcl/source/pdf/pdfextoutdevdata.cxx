@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/pdf/PDFNote.hxx>

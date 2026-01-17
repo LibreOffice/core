@@ -30,6 +30,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>

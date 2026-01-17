@@ -19,6 +19,7 @@
 #include <ReportComponent.hxx>
 
 #include <comphelper/solarmutex.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
@@ -29,6 +30,7 @@
 #include <ReportControlModel.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/uno3.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

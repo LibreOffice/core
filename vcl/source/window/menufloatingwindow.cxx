@@ -27,6 +27,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <window.h>
 

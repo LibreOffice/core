@@ -21,6 +21,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 

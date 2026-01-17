@@ -33,6 +33,8 @@
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/print.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 

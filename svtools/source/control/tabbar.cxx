@@ -25,6 +25,7 @@
 #include <utility>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>

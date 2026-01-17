@@ -22,6 +22,8 @@
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/lstbox.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sal/log.hxx>

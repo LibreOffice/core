@@ -33,6 +33,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
 

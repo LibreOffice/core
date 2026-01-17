@@ -24,6 +24,7 @@
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 

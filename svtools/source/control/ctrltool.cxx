@@ -35,6 +35,7 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
+#include <unotools/fontdefs.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/lok.hxx>

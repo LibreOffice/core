@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <imagerepository.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>

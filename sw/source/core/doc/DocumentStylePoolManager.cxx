@@ -62,6 +62,8 @@
 #include <svx/dialmgr.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <unotools/fontdefs.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <strings.hrc>
 #include <frmatr.hxx>
 #include <frameformats.hxx>

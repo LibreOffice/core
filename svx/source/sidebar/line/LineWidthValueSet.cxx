@@ -20,7 +20,9 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/mapunit.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

@@ -24,6 +24,7 @@
 #include <svx/svdopath.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <vcl/virdev.hxx>

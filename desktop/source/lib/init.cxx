@@ -168,6 +168,7 @@
 #include <svx/ucsubset.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/GestureEventPan.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/debug.hxx>
@@ -187,6 +188,7 @@
 #include <vcl/BitmapTools.hxx>
 #endif
 #include <unicode/uchar.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>

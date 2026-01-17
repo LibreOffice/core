@@ -34,6 +34,7 @@
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
 #include <vcl/PrinterSupport.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <jobset.h>
 #include <print.h>
@@ -50,6 +51,7 @@
 #include <salvd.hxx>
 #include <svdata.hxx>
 
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

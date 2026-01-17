@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

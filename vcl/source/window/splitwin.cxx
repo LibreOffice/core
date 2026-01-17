@@ -25,6 +25,7 @@
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/help.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>

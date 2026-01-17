@@ -40,6 +40,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/gradient.hxx>

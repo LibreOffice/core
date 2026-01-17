@@ -53,6 +53,7 @@
 
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vcllayout.hxx>
 #include <o3tl/string_view.hxx>

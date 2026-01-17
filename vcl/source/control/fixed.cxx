@@ -22,6 +22,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/settings.hxx>
 

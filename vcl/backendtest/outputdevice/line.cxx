@@ -12,6 +12,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <list>
 

@@ -20,7 +20,9 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/toolkit/spinfld.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sal/log.hxx>

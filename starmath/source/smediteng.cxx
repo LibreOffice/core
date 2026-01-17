@@ -17,7 +17,9 @@
 #include <editeng/fontitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 
 SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)

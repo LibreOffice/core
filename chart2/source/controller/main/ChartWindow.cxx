@@ -24,6 +24,8 @@
 #include <uiobject.hxx>
 
 #include <vcl/help.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 
 #include <sfx2/ipclient.hxx>

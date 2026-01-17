@@ -51,6 +51,7 @@
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/settings.hxx>

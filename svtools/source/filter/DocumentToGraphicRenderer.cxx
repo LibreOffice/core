@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <tools/fract.hxx>
 

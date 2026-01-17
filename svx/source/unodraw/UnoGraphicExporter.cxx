@@ -44,6 +44,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/outstrm.hxx>

@@ -15,6 +15,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>

@@ -32,6 +32,7 @@
 #include <salhelper/thread.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>

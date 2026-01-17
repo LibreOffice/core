@@ -21,6 +21,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <svdata.hxx>

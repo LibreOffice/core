@@ -26,6 +26,7 @@
 #include <vcl/textrectinfo.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/toolkit/floatwin.hxx>

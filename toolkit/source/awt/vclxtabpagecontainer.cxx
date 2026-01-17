@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <helper/property.hxx>
 #include <vcl/image.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/svapp.hxx>

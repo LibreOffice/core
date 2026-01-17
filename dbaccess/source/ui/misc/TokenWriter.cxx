@@ -48,11 +48,13 @@
 #include <svtools/htmlout.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svl/numuno.hxx>
+#include <unotools/fontdefs.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <UITools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/rtfout.hxx>
 #include <o3tl/string_view.hxx>

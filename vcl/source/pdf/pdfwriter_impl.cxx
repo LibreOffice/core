@@ -78,6 +78,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <strhelper.hxx>
 #include <vcl/svapp.hxx>

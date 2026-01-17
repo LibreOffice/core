@@ -19,6 +19,7 @@
 #include <vcl/CairoFormats.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>

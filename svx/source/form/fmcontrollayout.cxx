@@ -34,6 +34,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/confignode.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -41,6 +42,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 
 
 namespace svxform

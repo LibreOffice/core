@@ -66,7 +66,9 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <unotools/fontdefs.hxx>
 
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

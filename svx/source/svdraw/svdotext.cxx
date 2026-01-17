@@ -48,6 +48,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
@@ -56,6 +57,7 @@
 #include <comphelper/configuration.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <unotools/fontdefs.hxx>
 
 using namespace com::sun::star;
 

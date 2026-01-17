@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/whiter.hxx>
 #include <svl/asiancfg.hxx>
@@ -66,6 +67,7 @@
 #include <unotools/syslocale.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>

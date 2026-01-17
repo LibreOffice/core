@@ -14,6 +14,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>

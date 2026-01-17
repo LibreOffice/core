@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <svtools/sampletext.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

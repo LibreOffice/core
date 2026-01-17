@@ -25,6 +25,7 @@
 #include <svl/typedwhich.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <vcl/prntypes.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <o3tl/deleter.hxx>
 #include <pres.hxx>
 #include "View.hxx"

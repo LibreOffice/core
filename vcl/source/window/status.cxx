@@ -23,6 +23,7 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/glyphitemcache.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vcllayout.hxx>

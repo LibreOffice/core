@@ -25,6 +25,7 @@
 
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>

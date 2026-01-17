@@ -59,6 +59,7 @@
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/useroptions.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -86,6 +87,7 @@
 #include <svx/svxdlg.hxx>
 
 #include <vcl/EnumContext.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>

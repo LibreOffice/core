@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/fileurl.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/style.hxx>

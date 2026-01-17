@@ -43,6 +43,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>

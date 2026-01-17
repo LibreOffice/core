@@ -18,7 +18,9 @@
  */
 
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/toolkit/spin.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
 

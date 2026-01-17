@@ -21,6 +21,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/lineinfo.hxx>

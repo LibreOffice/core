@@ -27,6 +27,7 @@
 #include <font/LogicalFontInstance.hxx>
 #include <o3tl/test_info.hxx>
 #include <tools/debug.hxx>
+#include <unotools/fontdefs.hxx>
 #include <impfontcache.hxx>
 
 using namespace vcl::font;

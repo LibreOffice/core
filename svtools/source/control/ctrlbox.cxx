@@ -27,6 +27,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>

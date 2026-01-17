@@ -18,6 +18,7 @@
  */
 
 #include <vcl/event.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/status.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/settings.hxx>

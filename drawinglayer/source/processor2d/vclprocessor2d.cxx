@@ -32,6 +32,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

@@ -24,6 +24,7 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>

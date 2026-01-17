@@ -30,6 +30,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/multisel.hxx>

@@ -39,11 +39,13 @@
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/bootstrap.hxx>
 #include <comphelper/configuration.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <vcl/idle.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

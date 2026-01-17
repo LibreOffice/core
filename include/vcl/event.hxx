@@ -24,6 +24,7 @@
 #include <tools/gen.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 #include <optional>

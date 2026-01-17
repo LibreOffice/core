@@ -39,6 +39,7 @@
 #include <editeng/colritem.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <svx/xflhtit.hxx>

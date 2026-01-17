@@ -28,6 +28,8 @@
 #include <tools/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/toolkit/unowrap.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
@@ -38,6 +40,7 @@
 #include <window.h>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>

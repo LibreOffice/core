@@ -36,6 +36,7 @@
 #include <dcontact.hxx>
 #include <dview.hxx>
 #include <flyfrm.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/canvastools.hxx>

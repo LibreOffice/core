@@ -18,6 +18,7 @@
  */
 
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <salgdi.hxx>
 

@@ -37,6 +37,7 @@
 #include <awt/vclxwindows.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>

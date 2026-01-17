@@ -18,6 +18,7 @@
  */
 
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>

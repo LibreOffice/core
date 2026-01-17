@@ -25,6 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>

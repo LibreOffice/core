@@ -37,8 +37,10 @@
 #include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/svxdlg.hxx>

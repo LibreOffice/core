@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>

@@ -35,6 +35,7 @@
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
 #include <vcl/PrinterSupport.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

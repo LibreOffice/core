@@ -24,8 +24,10 @@
 #include <svx/dialmgr.hxx>
 #include <svx/numberingpreview.hxx>
 #include <svx/pagenumberlistbox.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <numberingtype.hrc>
 

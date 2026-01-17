@@ -28,6 +28,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>

@@ -25,6 +25,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/string.hxx>
 #include <utility>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -38,6 +39,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <unotools/fontdefs.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>

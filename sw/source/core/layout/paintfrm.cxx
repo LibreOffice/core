@@ -104,6 +104,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit0.hxx>
+#include <unotools/fontdefs.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/utils/b2dclipstate.hxx>
@@ -130,6 +131,9 @@
 #include <ndtxt.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <poolfmt.hxx>
 
 using namespace ::editeng;

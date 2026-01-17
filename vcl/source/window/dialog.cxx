@@ -55,6 +55,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/weld.hxx>

@@ -23,7 +23,9 @@
 
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/itemiter.hxx>

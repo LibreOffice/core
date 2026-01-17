@@ -18,8 +18,10 @@
  */
 
 #include <tools/mapunit.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>

@@ -23,6 +23,7 @@
 #include <font/PhysicalFontCollection.hxx>
 #include <font/fontsubstitution.hxx>
 #include <unx/fontmanager.hxx>
+#include <unotools/fontdefs.hxx>
 
 // platform specific font substitution hooks
 

@@ -22,7 +22,9 @@
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <comphelper/configuration.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>

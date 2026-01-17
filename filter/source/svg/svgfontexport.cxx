@@ -24,6 +24,7 @@
 
 #include <vcl/unohelp.hxx>
 #include <vcl/font.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

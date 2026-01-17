@@ -28,6 +28,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/region.hxx>

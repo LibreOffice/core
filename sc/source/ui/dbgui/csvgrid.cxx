@@ -34,8 +34,11 @@
 
 // *** edit engine ***
 #include <editeng/eeitem.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

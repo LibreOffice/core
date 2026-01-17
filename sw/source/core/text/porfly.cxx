@@ -39,6 +39,7 @@
 
 #include <sortedobjs.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <PostItMgr.hxx>
 #include <viewopt.hxx>
 

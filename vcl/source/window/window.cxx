@@ -29,6 +29,8 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclevent.hxx>
@@ -78,6 +80,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/json_writer.hxx>
+#include <unotools/fontdefs.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 #include <cassert>

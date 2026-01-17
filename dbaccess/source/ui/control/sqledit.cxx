@@ -33,10 +33,12 @@
 #include <sqledit.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/fontdefs.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/svapp.hxx>

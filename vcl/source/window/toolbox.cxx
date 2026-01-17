@@ -21,6 +21,7 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/floatwin.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/mnemonic.hxx>

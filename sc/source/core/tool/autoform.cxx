@@ -26,6 +26,7 @@
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/rotmodit.hxx>
@@ -49,6 +50,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/fileformat.h>
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>

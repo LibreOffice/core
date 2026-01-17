@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/virdev.hxx>
 
 #include <ImplOutDevData.hxx>

@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
+#include <unotools/fontdefs.hxx>
 #include <comphelper/configuration.hxx>
 
 #include <vcl/ctrl.hxx>
@@ -32,6 +33,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>

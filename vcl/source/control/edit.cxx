@@ -30,6 +30,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/transfer.hxx>

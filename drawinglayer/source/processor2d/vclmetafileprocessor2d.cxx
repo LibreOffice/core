@@ -37,6 +37,7 @@
 #include <vcl/graphictools.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/graph.hxx> // for PDFExtOutDevData Graphic support
 #include <vcl/formpdfexport.hxx> // for PDFExtOutDevData Graphic support
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>

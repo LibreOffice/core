@@ -28,6 +28,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>

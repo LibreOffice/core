@@ -20,6 +20,7 @@
 #include <OutlineView.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/outliner.hxx>
@@ -36,6 +37,7 @@
 #include <xmloff/autolayout.hxx>
 #include <tools/debug.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/editund2.hxx>

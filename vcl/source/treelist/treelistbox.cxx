@@ -28,6 +28,7 @@
 #include <vcl/toolkit/treelistbox.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/help.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/edit.hxx>

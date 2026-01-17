@@ -34,6 +34,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

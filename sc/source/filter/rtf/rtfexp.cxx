@@ -30,6 +30,7 @@
 #include <svtools/rtfout.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <tools/stream.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include <rtfexp.hxx>
 #include <cellvalue.hxx>

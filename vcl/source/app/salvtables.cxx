@@ -47,6 +47,7 @@
 #include <treeglue.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <utility>
 #include <tools/helpers.hxx>
 #include <vcl/abstdlg.hxx>
@@ -63,6 +64,7 @@
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <slider.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/svtabbx.hxx>

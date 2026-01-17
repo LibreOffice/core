@@ -29,6 +29,7 @@
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/pdf/PDFSegmentType.hxx>
 #include <vcl/pdf/PDFTextRenderMode.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 
 #include <editeng/eeitem.hxx>

@@ -22,11 +22,15 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/print.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bufferdevice.hxx>
