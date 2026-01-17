@@ -26,12 +26,17 @@ protected:
     void signal_cursor_position();
 
     virtual void do_set_text(const OUString& rText) = 0;
+    virtual void do_set_position(int nCursorPos) = 0;
     virtual void do_select_region(int nStartPos, int nEndPos) = 0;
     virtual void do_replace_selection(const OUString& rText) = 0;
 
 public:
     void set_text(const OUString& rText);
     virtual OUString get_text() const = 0;
+
+    // nCursorPos can be -1 to set to the end
+    void set_position(int nCursorPos);
+    virtual int get_position() const = 0;
 
     // if nStartPos or nEndPos is -1 the max available text pos will be used
     void select_region(int nStartPos, int nEndPos);

@@ -45,6 +45,30 @@ OUString QtInstanceTextView::get_text() const
     return sText;
 }
 
+void QtInstanceTextView::do_set_position(int nCursorPos)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (nCursorPos == -1)
+            nCursorPos = m_pTextEdit->toPlainText().length();
+
+        QTextCursor aCursor = m_pTextEdit->textCursor();
+        aCursor.setPosition(nCursorPos);
+        m_pTextEdit->setTextCursor(aCursor);
+    });
+}
+
+int QtInstanceTextView::get_position() const
+{
+    SolarMutexGuard g;
+
+    int nCursorPos = -1;
+    GetQtInstance().RunInMainThread([&] { nCursorPos = m_pTextEdit->textCursor().position(); });
+
+    return nCursorPos;
+}
+
 void QtInstanceTextView::do_select_region(int nStartPos, int nEndPos)
 {
     SolarMutexGuard g;

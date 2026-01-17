@@ -616,6 +616,11 @@ public:
     virtual ~SalInstanceTextWidget() override;
 
     virtual void connect_cursor_position(const Link<TextWidget&, void>& rLink) override;
+
+    virtual int get_position() const override;
+
+protected:
+    virtual void do_set_position(int nCursorPos) override;
 };
 
 class SalInstanceEntry : public SalInstanceTextWidget, public virtual weld::Entry
@@ -646,10 +651,6 @@ public:
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
     virtual void do_replace_selection(const OUString& rText) override;
-
-    virtual void do_set_position(int nCursorPos) override;
-
-    virtual int get_position() const override;
 
     virtual void set_editable(bool bEditable) override;
 

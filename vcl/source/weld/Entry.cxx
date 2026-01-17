@@ -24,13 +24,6 @@ void Entry::signal_activated()
         return;
     m_aActivateHdl.Call(*this);
 }
-
-void Entry::set_position(int nCursorPos)
-{
-    disable_notify_events();
-    do_set_position(nCursorPos);
-    enable_notify_events();
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

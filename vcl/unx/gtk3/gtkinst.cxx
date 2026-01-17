@@ -17700,6 +17700,24 @@ public:
         return sRet;
     }
 
+    virtual void do_set_position(int nCursorPos) override
+    {
+        if (nCursorPos == -1)
+            nCursorPos = gtk_text_buffer_get_char_count(m_pTextBuffer);
+
+        GtkTextIter aTextIter;
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &aTextIter, nCursorPos);
+        gtk_text_buffer_place_cursor(m_pTextBuffer, &aTextIter);
+    }
+
+    virtual int get_position() const override
+    {
+        GtkTextIter aTextIter;
+        GtkTextMark* pInsertionMark = gtk_text_buffer_get_insert(m_pTextBuffer);
+        gtk_text_buffer_get_iter_at_mark(m_pTextBuffer, &aTextIter, pInsertionMark);
+        return gtk_text_iter_get_offset(&aTextIter);
+    }
+
     virtual void do_replace_selection(const OUString& rText) override
     {
         disable_notify_events();

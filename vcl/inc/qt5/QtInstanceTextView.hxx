@@ -26,6 +26,7 @@ public:
 
     virtual void do_set_text(const OUString& rText) override;
     virtual OUString get_text() const override;
+    virtual int get_position() const override;
     virtual void do_select_region(int nStartPos, int nEndPos) override;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
     virtual void do_replace_selection(const OUString& rText) override;
@@ -43,6 +44,9 @@ public:
     virtual int vadjustment_get_upper() const override;
     virtual int vadjustment_get_page_size() const override;
     virtual void vadjustment_set_value(int nValue) override;
+
+protected:
+    virtual void do_set_position(int nCursorPos) override;
 
 private Q_SLOTS:
     void handleCursorPositionChanged();

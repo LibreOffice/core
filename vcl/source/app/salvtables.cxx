@@ -3312,6 +3312,16 @@ void SalInstanceTextWidget::connect_cursor_position(const Link<TextWidget&, void
     weld::TextWidget::connect_cursor_position(rLink);
 }
 
+void SalInstanceTextWidget::do_set_position(int nCursorPos)
+{
+    if (nCursorPos < 0)
+        m_pEntry->SetCursorAtLast();
+    else
+        m_pEntry->SetSelection(Selection(nCursorPos, nCursorPos));
+}
+
+int SalInstanceTextWidget::get_position() const { return m_pEntry->GetSelection().Max(); }
+
 SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceTextWidget(pEntry, pBuilder, bTakeOwnership)
     , m_xEntry(pEntry)
@@ -3351,16 +3361,6 @@ void SalInstanceEntry::do_replace_selection(const OUString& rText)
 {
     m_xEntry->ReplaceSelected(rText);
 }
-
-void SalInstanceEntry::do_set_position(int nCursorPos)
-{
-    if (nCursorPos < 0)
-        m_xEntry->SetCursorAtLast();
-    else
-        m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
-}
-
-int SalInstanceEntry::get_position() const { return m_xEntry->GetSelection().Max(); }
 
 void SalInstanceEntry::set_editable(bool bEditable) { m_xEntry->SetReadOnly(!bEditable); }
 

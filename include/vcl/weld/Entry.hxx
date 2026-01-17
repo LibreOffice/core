@@ -27,18 +27,12 @@ protected:
 
     void signal_activated();
 
-    virtual void do_set_position(int nCursorPos) = 0;
-
 public:
     virtual void set_width_chars(int nChars) = 0;
     virtual int get_width_chars() const = 0;
     // The maximum length of the entry. Use 0 for no maximum
     virtual void set_max_length(int nChars) = 0;
 
-    // nCursorPos can be -1 to set to the end
-    void set_position(int nCursorPos);
-
-    virtual int get_position() const = 0;
     virtual void set_visibility(bool bVisible) = 0;
     virtual void set_message_type(EntryMessageType eType) = 0;
     virtual void set_placeholder_text(const OUString& rText) = 0;
