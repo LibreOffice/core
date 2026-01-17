@@ -76,14 +76,9 @@ SwList::~SwList() COVERITY_NOEXCEPT_FALSE
 
 bool SwList::HasNodes() const
 {
-    for (auto const& rNumberTree : maListTrees)
-    {
-        if (rNumberTree.pRoot->GetChildCount() != 0)
-        {
-            return true;
-        }
-    }
-    return false;
+    return std::ranges::any_of(maListTrees, [] (auto const& rNumberTree) {
+        return rNumberTree.pRoot->GetChildCount() != 0;
+    });
 }
 
 void SwList::InsertListItem(SwNodeNum& rNodeNum, SwListRedlineType const eRedline,
