@@ -56,6 +56,7 @@ public:
     bool         IsVBName() const { return mbVBName; }
     bool IsMacro() const { return mbMacro; }
     void ConvertTokens();
+    bool HasTokens() const { return mpTokensData != nullptr; }
 
 private:
     void InsertName(const ScTokenArray* pArray);
