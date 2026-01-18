@@ -5229,7 +5229,11 @@ void ChartExport::writeLabelProperties(
             if (xPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
             {
                 if (!rLabelParam.maAllowedValues.count(nLabelPlacement))
+                {
+                    SAL_WARN("oox", "this label placement not allowed in OOXML for current chart type: "
+                                        + OString::number(nLabelPlacement));
                     nLabelPlacement = rLabelParam.meDefault;
+                }
                 pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement));
             }
         }
@@ -5293,6 +5297,8 @@ void ChartExport::exportDataLabels(
     // We must not export label placement property when the chart type doesn't
     // support this option in MS Office, else MS Office would think the file
     // is corrupt & refuse to open it.
+    // For allowed values see 2.1.1456 Part 1 Section 21.2.2.48,
+    // dLblPos (Data Label Position) in [MS-OI29500].
 
     const chart::TypeGroupInfo& rInfo = chart::GetTypeGroupInfo(static_cast<chart::TypeId>(eChartType));
     LabelPlacementParam aParam(!mbIs3DChart, rInfo.mnDefLabelPos);
@@ -5302,8 +5308,16 @@ void ChartExport::exportDataLabels(
             if(getChartType() == chart::TYPEID_DOUGHNUT)
                 aParam.mbExport = false;
             else
-            // All pie charts support label placement.
-            aParam.mbExport = true;
+            {
+                // All pie charts support label placement.
+                aParam.mbExport = true;
+                aParam.maAllowedValues.clear();
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::OUTSIDE);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::INSIDE);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::AVOID_OVERLAP);
+                aParam.meDefault = css::chart::DataLabelPlacement::AVOID_OVERLAP;
+            }
         break;
         case chart::TYPEID_AREA:
         case chart::TYPEID_RADARLINE:
