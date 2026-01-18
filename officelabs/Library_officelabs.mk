@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_externals,officelabs,\
 
 $(eval $(call gb_Library_add_exception_objects,officelabs,\
     officelabs/source/AgentConnection \
+    officelabs/source/AgenticPanel \
     officelabs/source/DocumentController \
     officelabs/source/ChatPanel \
     officelabs/source/ChatPanelChildWindow \

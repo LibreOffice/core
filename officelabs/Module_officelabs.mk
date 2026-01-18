@@ -4,6 +4,7 @@ $(eval $(call gb_Module_Module,officelabs))
 
 $(eval $(call gb_Module_add_targets,officelabs,\
     Library_officelabs \
+    UIConfig_officelabs \
 ))
 
 # vim: set noet sw=4 ts=4:
