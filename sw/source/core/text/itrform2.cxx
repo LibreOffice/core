@@ -2080,15 +2080,10 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         if( GetInfo().IsStop() )
         {
             m_pCurr->SetLen(TextFrameIndex(0));
-            m_pCurr->Height( GetFrameRstHeight() + 1, false );
-            m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
-
-            // Don't oversize the line in case of split flys, so we don't try to move the anchor
-            // of a precede fly forward, next to its follow.
-            if (m_pFrame->HasNonLastSplitFlyDrawObj())
-            {
-                m_pCurr->SetRealHeight(GetFrameRstHeight());
-            }
+            auto nFrameRstHeight = GetFrameRstHeight();
+            m_pCurr->Height(nFrameRstHeight + 1, false);
+            if (!m_pFrame->HasNonLastSplitFlyDrawObj())
+                m_pCurr->SetRealHeight(nFrameRstHeight + 1);
 
             m_pCurr->Width(0);
             m_pCurr->Truncate();

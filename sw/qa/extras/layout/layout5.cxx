@@ -2049,6 +2049,277 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169399)
     assertXPath(pXmlDoc, "/root/page", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf170381_split_float_table_in_normal_table)
+{
+    // Given a document with a normal table containing a floating table which is split across
+    // pages:
+    createSwDoc("tdf170381-split-float-table-in-normal-table.docx");
+
+    // 1. It must not hang.
+    // 2. Check some correct layout aspects:
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Exactly two pages:
+    assertXPath(pXmlDoc, "//page", 2);
+
+    // Exactly one object anchored at each page:
+    assertXPath(pXmlDoc, "//page[1]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "//page[2]/sorted_objs/fly", 1);
+
+    // Get the ids of the two flys (for both pages):
+    OString f1 = getXPath(pXmlDoc, "//page[1]/sorted_objs/fly", "ptr").toUtf8();
+    OString f2 = getXPath(pXmlDoc, "//page[2]/sorted_objs/fly", "ptr").toUtf8();
+    CPPUNIT_ASSERT(f1 != f2);
+    assertXPath(pXmlDoc, "//anchored/fly", 2);
+    OString aP1FlyTab = "//anchored/fly[@ptr='" + f1 + "']/tab";
+    OString aP2FlyTab = "//anchored/fly[@ptr='" + f2 + "']/tab";
+
+    // Exactly one normal (master / follow) table on each page:
+    assertXPath(pXmlDoc, "//page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab", 1);
+    assertXPathNoAttribute(pXmlDoc, "//page[1]/body/tab", "precede");
+    assertXPath(pXmlDoc, "//page[1]/body/tab", "follow",
+                getXPath(pXmlDoc, "//page[2]/body/tab", "id"));
+    assertXPathNoAttribute(pXmlDoc, "//page[2]/body/tab", "follow");
+    assertXPath(pXmlDoc, "//page[2]/body/tab", "precede",
+                getXPath(pXmlDoc, "//page[1]/body/tab", "id"));
+
+    // Exactly two rows in the first page's normal table:
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 2);
+
+    // Check the text of the first (repeating) row's cell text:
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[1]/cell", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[1]/cell/txt[1]//SwLineLayout", "portion",
+                u"elit ipsum lorem dolor");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[1]/cell/txt[2]//SwLineLayout", "portion",
+                u"amet elit amet sit adipiscing adipiscing consectetur consectetur elit dolor");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[1]/cell/txt[3]//SwLineLayout", "portion", u"");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[1]/cell/txt[4]//SwLineLayout", "portion", u"");
+
+    // The second row's cell has a single master paragraph with two anchored flys:
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[2]/cell", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[2]/cell/txt", 1);
+    OUString followId = getXPath(pXmlDoc, "//page[1]/body/tab/row[2]/cell/txt", "follow");
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), followId.toInt32());
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[2]/cell/txt/anchored/fly", 2);
+
+    // Exactly four rows in the second page's normal table:
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row", 4);
+
+    // Check the text of the first (repeating) row's cell text:
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell/txt[1]//SwLineLayout", "portion",
+                u"elit ipsum lorem dolor");
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell/txt[2]//SwLineLayout", "portion",
+                u"amet elit amet sit adipiscing adipiscing consectetur consectetur elit dolor");
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell/txt[3]//SwLineLayout", "portion", u"");
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[1]/cell/txt[4]//SwLineLayout", "portion", u"");
+
+    // The second row's cell has a single follow paragraph:
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[2]/cell", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[2]/cell/txt", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[2]/cell/txt", "id", followId);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row[2]/cell/txt", "precede",
+                getXPath(pXmlDoc, "//page[1]/body/tab/row[2]/cell/txt", "id"));
+
+    // Test floating tables' content (the line split must be correct).
+
+    auto assertCellLines
+        = [&](int page, int row, std::initializer_list<std::u16string_view> lines) {
+              OString base = (page == 1 ? aP1FlyTab : aP2FlyTab) + "/row[" + OString::number(row)
+                             + "]/cell/txt/SwParaPortion/SwLineLayout[";
+              int i = 1;
+              for (const auto& line : lines)
+                  assertXPath(pXmlDoc, base + OString::number(i++) + "]", "portion", line);
+          };
+
+    // Page 1's floating table:
+    // NB: the *intended correct layout* is, when the first page's floating table has 5 rows!
+    // Currently asserting 6 rows on page 1, but row 6 must move to page 2, when fixed properly.
+
+    std::initializer_list<std::u16string_view> page1cells[] = {
+        { u"amet sit consectetur ", u"elit" },
+        { u"" },
+        { u"dolor dolor dolor ", u"ipsum" },
+        { u"amet ipsum amet dolor ", u"elit sit" },
+        { u"ipsum consectetur ", u"consectetur amet ", u"adipiscing ipsum" },
+        // NB: this must move to the follow!
+        { u"" },
+    };
+
+    assertXPath(pXmlDoc, aP1FlyTab + "/row", std::size(page1cells));
+    for (size_t r = 0; r < std::size(page1cells); ++r)
+        assertCellLines(1, r + 1, page1cells[r]);
+
+    // Page 2's floating table:
+
+    std::initializer_list<std::u16string_view> page2cells[] = {
+        { u"adipiscing ipsum elit ", u"lorem" },
+        { u"lorem adipiscing sit sit ", u"lorem lorem" },
+        { u"ipsum lorem ", u"consectetur amet amet ", u"ipsum" },
+        { u"" },
+        { u"sit consectetur ", u"adipiscing sit" },
+        { u"elit consectetur lorem ", u"consectetur ", u"consectetur lorem sit ",
+          u"sit dolor elit adipiscing ", u"consectetur sit" },
+        { u"consectetur dolor ", u"dolor sit elit lorem ", u"consectetur dolor ", u"lorem ipsum" },
+    };
+
+    assertXPath(pXmlDoc, aP2FlyTab + "/row", std::size(page2cells));
+    for (size_t r = 0; r < std::size(page2cells); ++r)
+        assertCellLines(2, r + 1, page2cells[r]);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf170381_split_float_table_in_float_table)
+{
+    // Given a document with a floating table containing another floating table which is split
+    // across pages:
+    createSwDoc("tdf170381-split-float-table-in-float-table.docx");
+
+    // 1. It must not hang.
+    // 2. Check some correct layout aspects:
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Exactly two pages:
+    assertXPath(pXmlDoc, "//page", 2);
+
+    // Exactly two objects anchored at each page:
+    assertXPath(pXmlDoc, "//page[1]/sorted_objs/fly", 2);
+    assertXPath(pXmlDoc, "//page[2]/sorted_objs/fly", 2);
+
+    // Exactly one (master/follow) paragraph on each page:
+    assertXPath(pXmlDoc, "//page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/txt", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/txt", "follow",
+                getXPath(pXmlDoc, "//page[2]/body/txt", "id"));
+    assertXPath(pXmlDoc, "//page[2]/body/txt", "precede",
+                getXPath(pXmlDoc, "//page[1]/body/txt", "id"));
+
+    // Page 1's paragraph has two anchored flys:
+    assertXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly", 2);
+
+    // Get the ids of the two outer flys.
+    // Page 1:
+    OString f1 = getXPath(pXmlDoc, "//page[1]/sorted_objs/fly[1]", "ptr").toUtf8();
+    OString f2 = getXPath(pXmlDoc, "//page[1]/sorted_objs/fly[2]", "ptr").toUtf8();
+    CPPUNIT_ASSERT(f1 != f2);
+    OString filter1 = "@ptr='" + f1 + "' or @ptr='" + f2 + "'";
+    OUString id = getXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly[" + filter1 + "]", "id");
+    OString aP1OuterFlyTab = "//anchored/fly[@id='" + id.toUtf8() + "']/tab";
+
+    // Page 2:
+    f1 = getXPath(pXmlDoc, "//page[2]/sorted_objs/fly[1]", "ptr").toUtf8();
+    f2 = getXPath(pXmlDoc, "//page[2]/sorted_objs/fly[2]", "ptr").toUtf8();
+    CPPUNIT_ASSERT(f1 != f2);
+    OString filter2 = "@ptr='" + f1 + "' or @ptr='" + f2 + "'";
+    id = getXPath(pXmlDoc, "//page[1]/body/txt/anchored/fly[" + filter2 + "]", "id");
+    OString aP2OuterFlyTab = "//anchored/fly[@id='" + id.toUtf8() + "']/tab";
+
+    // Exactly one row in both top-level floating tables:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row", 1);
+    assertXPath(pXmlDoc, aP2OuterFlyTab + "/row", 1);
+
+    // Exactly one cell in both top-level floating tables:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell", 1);
+    assertXPath(pXmlDoc, aP2OuterFlyTab + "/row/cell", 1);
+
+    // First page's top-level floating table's cell has three paragraphs:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt", 3);
+    // Check text in the first two paragraphs:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[1]//SwLineLayout", "portion",
+                u"Table1 A1 dolor elit");
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[2]//SwLineLayout", "portion",
+                u"adipiscing dolor adipiscing amet ipsum elit sit elit lorem elit adipiscing "
+                "dolor ipsum");
+    // The third paragraph has two attached inner floating tables:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[3]/anchored/fly", 2);
+
+    // Get the ids of the two inner flys.
+    // Page 1:
+    id = getXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[3]/anchored/fly[" + filter1 + "]", "id");
+    OString aP1InnerFlyTab = "//anchored/fly[@id='" + id.toUtf8() + "']/tab";
+
+    // Page 2:
+    id = getXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[3]/anchored/fly[" + filter2 + "]", "id");
+    OString aP2InnerFlyTab = "//anchored/fly[@id='" + id.toUtf8() + "']/tab";
+
+    // Check the layout of the inner tables (splitting of lines and rows).
+
+    auto assertCellLines
+        = [&](int page, int row, std::initializer_list<std::u16string_view> lines) {
+              OString base = (page == 1 ? aP1InnerFlyTab : aP2InnerFlyTab) + "/row["
+                             + OString::number(row) + "]/cell[1]/txt/SwParaPortion/SwLineLayout[";
+              int i = 1;
+              for (const auto& line : lines)
+                  assertXPath(pXmlDoc, base + OString::number(i++) + "]", "portion", line);
+          };
+
+    // Page 1's inner table:
+    // NB: the *intended correct layout* is, when the first page's inner floating table is split
+    // after row 21! Currently part of row 22 is on page 1, but must move to page 2, when fixed.
+
+    std::initializer_list<std::u16string_view> page1cells[] = {
+        { u"Table2 A1 sit amet ", u"ipsum consectetur ", u"ipsum amet ", u"adipiscing amet elit ",
+          u"dolor consectetur" },
+        { u"Table2 A2 ", u"consectetur ", u"adipiscing adipiscing ", u"consectetur dolor sit ",
+          u"amet lorem" },
+        { u"Table2 A3 dolor elit ", u"amet ipsum ", u"adipiscing ipsum ", u"dolor lorem" },
+        { u"Table2 A4" },
+        { u"Table2 A5 amet dolor ", u"elit consectetur lorem ", u"dolor sit amet" },
+        { u"Table2 A6 sit dolor ", u"elit consectetur elit sit ", u"dolor adipiscing" },
+        { u"Table2 A7" },
+        { u"Table2 A8 ", u"consectetur ipsum ", u"dolor adipiscing ", u"ipsum dolor dolor ",
+          u"sit elit consectetur ", u"adipiscing" },
+        { u"Table2 A9 adipiscing ", u"amet dolor amet ", u"lorem elit sit amet" },
+        { u"Table2 A10 amet ", u"lorem elit elit elit ", u"adipiscing elit sit" },
+        { u"Table2 A11" },
+        { u"Table2 A12 sit ", u"adipiscing adipiscing ", u"consectetur sit ipsum ",
+          u"consectetur ipsum" },
+        { u"Table2 A13 amet ", u"dolor consectetur ", u"amet dolor ipsum sit ", u"sit" },
+        { u"Table2 A14" },
+        { u"Table2 A15 dolor ", u"dolor elit dolor ", u"dolor ipsum ", u"consectetur amet ",
+          u"elit sit" },
+        { u"Table2 A16 ipsum ", u"lorem adipiscing sit ", u"sit dolor lorem elit" },
+        { u"Table2 A17 sit dolor ", u"adipiscing ", u"consectetur elit ", u"ipsum lorem sit" },
+        { u"Table2 A18" },
+        { u"Table2 A19 sit ", u"adipiscing ", u"consectetur ", u"adipiscing lorem ",
+          u"ipsum amet elit" },
+        { u"Table2 A20 ipsum ", u"amet consectetur elit ", u"amet amet sit sit ", u"adipiscing" },
+        { u"Table2 A21" },
+        // NB: this must merge to the first row of the follow!
+        { u"Table2 A22 elit ", u"ipsum elit elit sit elit " },
+    };
+
+    assertXPath(pXmlDoc, aP1InnerFlyTab + "/row", std::size(page1cells));
+    for (size_t r = 0; r < std::size(page1cells); ++r)
+        assertCellLines(1, r + 1, page1cells[r]);
+
+    // Page 2's inner table:
+
+    std::initializer_list<std::u16string_view> page2cells[] = {
+        { u"sit consectetur ", u"amet sit" },
+        { u"Table2 A23 ", u"consectetur amet ", u"lorem consectetur elit ", u"dolor sit elit" },
+        { u"Table2 A24 ipsum ", u"amet ipsum amet ", u"consectetur lorem ", u"amet sit" },
+        { u"Table2 A25" },
+        { u"Table2 A26 ", u"consectetur dolor ", u"consectetur ", u"adipiscing dolor dolor ",
+          u"lorem adipiscing" },
+        { u"Table2 A27 dolor sit ", u"elit dolor ipsum lorem ", u"dolor elit" },
+        { u"Table2 A28" },
+        { u"Table2 A29 ipsum ", u"ipsum amet ipsum" },
+        { u"Table2 A30 amet ", u"ipsum lorem ", u"consectetur ipsum ", u"ipsum lorem ipsum ",
+          u"ipsum sit consectetur ", u"consectetur" },
+        { u"Table2 A31 ", u"consectetur elit sit ", u"ipsum adipiscing ", u"ipsum ipsum ",
+          u"consectetur" },
+    };
+
+    assertXPath(pXmlDoc, aP2InnerFlyTab + "/row", std::size(page2cells));
+    for (size_t r = 0; r < std::size(page2cells); ++r)
+        assertCellLines(2, r + 1, page2cells[r]);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
