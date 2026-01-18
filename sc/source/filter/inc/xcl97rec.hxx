@@ -399,6 +399,8 @@ public:
     virtual std::size_t         GetLen() const override;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
+
+    const std::vector<ExcEScenarioCell>& GetCells() { return aCells; }
 };
 
 class ExcEScenarioManager : public ExcRecord

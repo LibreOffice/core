@@ -1653,7 +1653,17 @@ void ExcEScenarioManager::Save( XclExpStream& rStrm )
 
 void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( aScenes.empty() )
+    bool bValidScenarios = false;
+    for (ExcEScenario& rScenario : aScenes)
+    {
+        if (rScenario.GetCells().size())
+        {
+            bValidScenarios = true;
+            break;
+        }
+    }
+
+    if (!bValidScenarios)
         return;
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -1663,8 +1673,11 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_sqref
     );
 
-    for( ExcEScenario& rScenario : aScenes )
-        rScenario.SaveXml( rStrm );
+    for (ExcEScenario& rScenario : aScenes)
+    {
+        if (rScenario.GetCells().size())
+            rScenario.SaveXml(rStrm);
+    }
 
     rWorkbook->endElement( XML_scenarios );
 }
