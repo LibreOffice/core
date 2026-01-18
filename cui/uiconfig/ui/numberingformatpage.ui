@@ -158,6 +158,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="commentft-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -533,6 +538,7 @@
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="currencylb-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="numberingformatpage|currencylb-atkobject">Currency</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|currencylb">Select a currency, and then scroll to the top of the Format list to view the formatting options for the currency.</property>
                       </object>
                     </child>
