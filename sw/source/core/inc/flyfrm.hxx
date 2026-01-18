@@ -308,6 +308,8 @@ public:
 
     SW_DLLPUBLIC SwFlyAtContentFrame* DynCastFlyAtContentFrame();
 
+    bool IsSplitButNotYetMovedFollow() const;
+
 private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;

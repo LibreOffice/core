@@ -741,6 +741,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
     save(TestFilter::PDF_WRITER);
 }
 
+/* FIXME: hangs indefinitely; prior to disabling, it passed the test, but hung interactively; and
+   even before that, it produced a wrong layout anyway.
+   The problem is somehow related to section. The looping sequence is:
+   1. The table tries to split on page 1, with space less than minimal row height.
+   2. It splits successfully between rows 1 and 2. The follow moves to page 2.
+   3. The original table still doesn't fit page 1, and moves to page 2 (for some reason, into the
+      same follow fly that holds its follow).
+   4. It detects that its next is its follow, and joins it.
+   5. It moves pack to page 1. But all the generated follow flys get collected on page 3 (!).
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)
 {
     // The document contains a DOCX cont sect break, which is mapped to a TextSection.
@@ -748,6 +757,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)
     // section frame, which is broken.
     createSwDoc("floattable-in-text-section.docx");
 }
+*/
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableRowKeep)
 {

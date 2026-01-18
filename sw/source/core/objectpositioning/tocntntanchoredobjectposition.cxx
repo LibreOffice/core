@@ -964,7 +964,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     nDist = aRectFnSet.BottomDist( GetAnchoredObj().GetObjRect(),
                         aRectFnSet.GetPrtBottom(*pUpperOfOrientFrame) );
                     if ( nDist < 0 &&
-                         pOrientFrame == &rAnchorTextFrame && !pOrientFrame->GetIndPrev() )
+                         pOrientFrame == &rAnchorTextFrame && !pOrientFrame->GetIndPrev() &&
+                         pUpperOfOrientFrame->isFrameAreaDefinitionValid() )
                     {
                         const_cast<SwTabFrame*>(pOrientFrame->FindTabFrame())
                                                         ->SetDoesObjsFit( false );
@@ -1224,6 +1225,9 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
     SwFlyFrame* pFlyFrame = GetAnchoredObj().DynCastFlyFrame();
     if (pFlyFrame && pFlyFrame->IsFlySplitAllowed())
     {
+        if (pFlyFrame->IsSplitButNotYetMovedFollow())
+            return; // Don't check overlaps until the follow is moved.
+
         // At least for split flys we need to consider objects on the same page, but anchored in
         // different text frames.
         bSplitFly = true;
@@ -1269,6 +1273,9 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
                 // This is a split fly, then overlap is only checked against other split flys.
                 continue;
             }
+
+            if (pAnchoredObjFly->IsSplitButNotYetMovedFollow())
+                continue; // Don't check overlaps with not-yet-moved objects.
 
             if (pAnchoredObjFly->getRootFrame()->IsInFlyDelList(pAnchoredObjFly))
             {
