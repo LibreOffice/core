@@ -57,7 +57,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogC
     , m_bLabelAlignmentPosAndSpaceModeActive(false)
     , m_xLevelLB(m_xBuilder->weld_tree_view(u"levellb"_ustr))
     , m_xPositionFrame(m_xBuilder->weld_widget(u"numberingframe"_ustr))
-    , m_xDistBorderFT(m_xBuilder->weld_label(u"indent"_ustr))
+    , m_xDistBorderFT(m_xBuilder->weld_label(u"lbindent"_ustr))
     , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button(u"indentmf"_ustr, FieldUnit::CM))
     , m_xRelativeCB(m_xBuilder->weld_check_button(u"relative"_ustr))
     , m_xIndentFT(m_xBuilder->weld_label(u"numberingwidth"_ustr))
