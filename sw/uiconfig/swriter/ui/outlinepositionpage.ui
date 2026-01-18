@@ -253,7 +253,7 @@ numbering and text:</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="indent">
+              <object class="GtkLabel" id="lbindent">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="outlinepositionpage|indent">Indent:</property>
