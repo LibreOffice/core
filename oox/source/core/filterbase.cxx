@@ -113,11 +113,11 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
 }
 
 /** Specifies whether this filter is an import or export filter. */
-enum FilterDirection
+enum class FilterDirection
 {
-    FILTERDIRECTION_UNKNOWN,
-    FILTERDIRECTION_IMPORT,
-    FILTERDIRECTION_EXPORT
+    Unknown,
+    Import,
+    Export
 };
 
 } // namespace
@@ -165,7 +165,7 @@ struct FilterBaseImpl
 };
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
-    meDirection( FILTERDIRECTION_UNKNOWN ),
+    meDirection( FilterDirection::Unknown ),
     meVersion(ECMA_376_1ST_EDITION),
     mxComponentContext( rxContext, UNO_SET_THROW ),
     mbExportVBA(false),
@@ -197,12 +197,12 @@ FilterBase::~FilterBase()
 
 bool FilterBase::isImportFilter() const
 {
-    return mxImpl->meDirection == FILTERDIRECTION_IMPORT;
+    return mxImpl->meDirection == FilterDirection::Import;
 }
 
 bool FilterBase::isExportFilter() const
 {
-    return mxImpl->meDirection == FILTERDIRECTION_EXPORT;
+    return mxImpl->meDirection == FilterDirection::Export;
 }
 
 OoxmlVersion FilterBase::getVersion() const
@@ -445,7 +445,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
 void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument )
 {
     mxImpl->setDocumentModel( rxDocument );
-    mxImpl->meDirection = FILTERDIRECTION_IMPORT;
+    mxImpl->meDirection = FilterDirection::Import;
 }
 
 // com.sun.star.document.XExporter interface
@@ -453,14 +453,14 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
 void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument )
 {
     mxImpl->setDocumentModel( rxDocument );
-    mxImpl->meDirection = FILTERDIRECTION_EXPORT;
+    mxImpl->meDirection = FilterDirection::Export;
 }
 
 // com.sun.star.document.XFilter interface
 
 sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq )
 {
-    if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FILTERDIRECTION_UNKNOWN) )
+    if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FilterDirection::Unknown) )
         throw RuntimeException();
 
     bool bRet = false;
@@ -476,16 +476,16 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
 
         switch( mxImpl->meDirection )
         {
-            case FILTERDIRECTION_UNKNOWN:
+            case FilterDirection::Unknown:
             break;
-            case FILTERDIRECTION_IMPORT:
+            case FilterDirection::Import:
                 if( mxImpl->mxInStream.is() )
                 {
                     mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream );
                     bRet = mxImpl->mxStorage && importDocument();
                 }
             break;
-            case FILTERDIRECTION_EXPORT:
+            case FilterDirection::Export:
                 if( mxImpl->mxOutStream.is() )
                 {
                     mxImpl->mxStorage = implCreateStorage( mxImpl->mxOutStream );
@@ -531,15 +531,15 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
 
     switch( mxImpl->meDirection )
     {
-        case FILTERDIRECTION_UNKNOWN:
+        case FilterDirection::Unknown:
             OSL_FAIL( "FilterBase::setMediaDescriptor - invalid filter direction" );
         break;
-        case FILTERDIRECTION_IMPORT:
+        case FilterDirection::Import:
             utl::MediaDescriptor::addInputStream(mxImpl->maMediaDesc);
             mxImpl->mxInStream = implGetInputStream( mxImpl->maMediaDesc );
             OSL_ENSURE( mxImpl->mxInStream.is(), "FilterBase::setMediaDescriptor - missing input stream" );
         break;
-        case FILTERDIRECTION_EXPORT:
+        case FilterDirection::Export:
             mxImpl->mxOutStream = implGetOutputStream( mxImpl->maMediaDesc );
             OSL_ENSURE( mxImpl->mxOutStream.is(), "FilterBase::setMediaDescriptor - missing output stream" );
         break;
