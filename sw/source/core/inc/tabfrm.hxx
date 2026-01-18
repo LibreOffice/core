@@ -237,6 +237,8 @@ public:
 
     sal_uInt16 GetBottomLineSize() const;
 
+    bool IsSplitButNotYetMovedFloatingFollow() const;
+
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 

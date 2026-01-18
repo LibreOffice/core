@@ -898,7 +898,7 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
     // #i68520#
     mpAnchoredObjList.reset(new SwAnchoredObjList);
 
-    if( nCount && bWrapAllowed )
+    if (nCount && bWrapAllowed && !m_pCurrFrame->IsInSplitButNotYetMovedFollow())
     {
         SwRect const aRect(GetFrameArea());
         // Make ourselves a little smaller than we are,
@@ -927,7 +927,8 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
-                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() )
+                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() ) ||
+                 ( pAnchoredObj->DynCastFlyFrame()  && pAnchoredObj->DynCastFlyFrame()->IsSplitButNotYetMovedFollow() )
                )
             {
                 continue;
