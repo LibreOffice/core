@@ -84,6 +84,31 @@ using namespace ::com::sun::star;
 
 namespace
 {
+// True if the anchor is (directly or indirectly) in the document body.
+bool isAnchorInDocBody(const SwFrame& rAnchor)
+{
+    for (auto p = &rAnchor; p; p = p->FindFlyFrame()->GetAnchorFrame())
+    {
+        if (p->IsInDocBody())
+            return true;
+        if (!p->IsInFly())
+            return false;
+    }
+    return false;
+}
+
+// True means Word <= 2010 behavior
+bool isLegacyBehavior(const SwFlyFrame& rFly, const SwFrame& rAnchor)
+{
+    const auto* pFrameFormat = rFly.GetFrameFormat();
+    if (!pFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN))
+        return false;
+    // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
+    bool bVertPageFrame
+        = pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
+    return bVertPageFrame || !isAnchorInDocBody(rAnchor);
+}
+
 /// Gets the bottom position which is a deadline for a split fly.
 SwTwips GetFlyAnchorBottom(SwFlyFrame& rFly, const SwFrame& rAnchor)
 {
@@ -101,13 +126,7 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame& rFly, const SwFrame& rAnchor)
         return 0;
     }
 
-    const auto* pFrameFormat = rFly.GetFrameFormat();
-    const IDocumentSettingAccess& rIDSA = pFrameFormat->getIDocumentSettingAccess();
-    // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
-    bool bVertPageFrame = pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
-    bool bInBody = rAnchor.IsInDocBody();
-    bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) && (bVertPageFrame || !bInBody);
-    if (bLegacy)
+    if (isLegacyBehavior(rFly, rAnchor))
     {
         // Word <= 2010 style: the fly can overlap with the bottom margin / footer area in case the
         // fly height fits the body height and the fly bottom fits the page.
@@ -2286,6 +2305,30 @@ void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
 SwFlyAtContentFrame* SwFlyFrame::DynCastFlyAtContentFrame()
 {
     return IsFlyAtContentFrame() ? static_cast<SwFlyAtContentFrame*>(this) : nullptr;
+}
+
+bool SwFlyFrame::IsSplitButNotYetMovedFollow() const
+{
+    if (IsFlySplitAllowed())
+    {
+        auto& rFlyAtContentFrame = static_cast<SwFlyAtContentFrame&>(const_cast<SwFlyFrame&>(*this));
+        if (rFlyAtContentFrame.IsFollow())
+        {
+            auto pThisAnchor = rFlyAtContentFrame.FindAnchorCharFrame();
+            if (!pThisAnchor)
+                return true; // no anchor frame has been created yet
+            auto pPrecedeAnchor = rFlyAtContentFrame.GetPrecede()->FindAnchorCharFrame();
+            assert(pPrecedeAnchor);
+            if (pThisAnchor->GetUpper() == pPrecedeAnchor->GetUpper())
+            {
+                // This is a just-split follow fly, and it is waiting to be moved to the next page
+                // together with its anchor. See SwFrame::GetNextFlyLeaf and its "nesting" case
+                // handling.
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)

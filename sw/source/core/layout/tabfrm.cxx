@@ -1515,6 +1515,18 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     return bRet;
 }
 
+bool SwTabFrame::IsSplitButNotYetMovedFloatingFollow() const
+{
+    if (IsFollow() && GetUpper() && GetUpper()->IsFlyFrame())
+    {
+        // Test if this is a just-split follow nested floating table, and it is waiting to be moved
+        // to the next page together with its anchor. We get here while formatting all the outer
+        // cells' anchored objects, before the outer table splits eventually.
+        return static_cast<const SwFlyFrame*>(GetUpper())->IsSplitButNotYetMovedFollow();
+    }
+    return false;
+}
+
 namespace
 {
     bool CanDeleteFollow(const SwTabFrame *pFoll)
