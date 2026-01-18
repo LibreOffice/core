@@ -524,10 +524,15 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
                         "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
-                if(pName && !pName->GetScRangeData())
-                    aStack << aPool.Store( ocMacro, pName->GetXclName() );
-                else
-                    aStack << aPool.StoreName(nUINT16, -1);
+                if(pName)
+                {
+                    if (pName->IsMacro())
+                        aStack << aPool.Store(ocMacro, pName->GetXclName());
+                    else if (pName->GetScRangeData())
+                        aStack << aPool.StoreName(nUINT16, -1);
+                    else
+                        aStack << aPool.Store(ocExternal, pName->GetXclName());
+                }
             }
                 break;
             case 0x44:
@@ -1545,10 +1550,10 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
                 aPool << pFuncInfo->meOpCode;
             else
                 aPool << n;
-            nCnt--;
         }
         else
             aPool << eId;
+        nCnt--;
     }
     else
         aPool << eId;
