@@ -976,6 +976,8 @@ public:
 
     /// Determines if the upper margin of this frame should be ignored.
     bool IsCollapseUpper() const;
+
+    bool IsInSplitButNotYetMovedFollow() const;
 };
 
 inline void SwFrame::InvalidateInfFlags()
