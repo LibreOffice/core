@@ -1661,25 +1661,27 @@ void SwInsertSectionTabPage::ChangePasswd(bool bChange)
     {
         if(!m_aNewPasswd.hasElements() || bChange)
         {
-            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
-            aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
-            if (RET_OK == aPasswdDlg.run())
-            {
-                const OUString sNewPasswd(aPasswdDlg.GetPassword());
-                if (aPasswdDlg.GetConfirm() == sNewPasswd)
-                {
-                    SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
+            auto xPasswdDlg = std::make_shared<SfxPasswordDialog>(GetFrameWeld());
+            xPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
+            xPasswdDlg->PreRun();
+            weld::GenericDialogController::runAsync(xPasswdDlg, [xPasswdDlg, this, bChange](sal_Int32 nResult){
+                if (nResult == RET_OK) {
+                    const OUString sNewPasswd(xPasswdDlg->GetPassword());
+                    if (xPasswdDlg->GetConfirm() == sNewPasswd)
+                    {
+                        SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
+                    }
+                    else
+                    {
+                        std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                                      SwResId(STR_WRONG_PASSWD_REPEAT)));
+                        xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
+                    }
                 }
-                else
-                {
-                    std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                  VclMessageType::Info, VclButtonsType::Ok,
-                                                                  SwResId(STR_WRONG_PASSWD_REPEAT)));
-                    xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
-                }
-            }
-            else if(!bChange)
-                m_xPasswdCB->set_active(false);
+                else if(!bChange)
+                    m_xPasswdCB->set_active(false);
+            });
         }
     }
     else
