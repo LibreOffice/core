@@ -148,14 +148,14 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 class SVX_DLLPUBLIC SvxColumnItem final : public SfxPoolItem
 {
-    std::vector<SvxColumnDescription>  aColumns; // Column array
+    std::vector<SvxColumnDescription>  m_aColumns; // Column array
 
-    tools::Long nLeft;             // Left edge for the table
-    tools::Long nRight;            // Right edge for the table; for columns always
+    tools::Long m_nLeft;             // Left edge for the table
+    tools::Long m_nRight;            // Right edge for the table; for columns always
                             // equal to the surrounding frame
-    sal_uInt16 nActColumn;  // the current column
-    bool       bTable;      // table?
-    bool       bOrtho;      // evenly spread columns
+    sal_uInt16 m_nActColumn;  // the current column
+    bool       m_bTable;      // table?
+    bool       m_bOrtho;      // evenly spread columns
 
     virtual bool operator==( const SfxPoolItem& ) const override;
 
@@ -186,12 +186,12 @@ public:
     void        Append(const SvxColumnDescription& rDesc);
     void        SetLeft(tools::Long aLeft);
     void        SetRight(tools::Long aRight);
-    sal_uInt16  GetActColumn() const { return nActColumn;}
+    sal_uInt16  GetActColumn() const { return m_nActColumn;}
     bool        IsFirstAct() const;
     bool        IsLastAct() const;
-    tools::Long        GetLeft() const { return nLeft;}
-    tools::Long        GetRight() const { return nRight;}
-    bool        IsTable() const { return bTable;}
+    tools::Long        GetLeft() const { return m_nLeft;}
+    tools::Long        GetRight() const { return m_nRight;}
+    bool        IsTable() const { return m_bTable;}
     bool        CalcOrtho() const;
     void        SetOrtho(bool bVal);
     bool        IsConsistent() const;

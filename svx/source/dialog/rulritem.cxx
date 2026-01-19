@@ -387,10 +387,10 @@ SvxPagePosSizeItem::SvxPagePosSizeItem() :
 bool SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 {
     if(!SfxPoolItem::operator==(rCmp) ||
-       nActColumn != static_cast<const SvxColumnItem&>(rCmp).nActColumn ||
-       nLeft != static_cast<const SvxColumnItem&>(rCmp).nLeft ||
-       nRight != static_cast<const SvxColumnItem&>(rCmp).nRight ||
-       bTable != static_cast<const SvxColumnItem&>(rCmp).bTable ||
+       m_nActColumn != static_cast<const SvxColumnItem&>(rCmp).m_nActColumn ||
+       m_nLeft != static_cast<const SvxColumnItem&>(rCmp).m_nLeft ||
+       m_nRight != static_cast<const SvxColumnItem&>(rCmp).m_nRight ||
+       m_bTable != static_cast<const SvxColumnItem&>(rCmp).m_bTable ||
        Count() != static_cast<const SvxColumnItem&>(rCmp).Count())
         return false;
 
@@ -405,21 +405,21 @@ bool SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
     SfxPoolItem (SID_RULER_BORDERS ),
-    nLeft       (0),
-    nRight      (0),
-    nActColumn  (nAct),
-    bTable      (false),
-    bOrtho      (true)
+    m_nLeft       (0),
+    m_nRight      (0),
+    m_nActColumn  (nAct),
+    m_bTable      (false),
+    m_bOrtho      (true)
 
 {}
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 right ) :
     SfxPoolItem (SID_RULER_BORDERS),
-    nLeft       (left),
-    nRight      (right),
-    nActColumn  (nActCol),
-    bTable      (true),
-    bOrtho      (true)
+    m_nLeft       (left),
+    m_nRight      (right),
+    m_nActColumn  (nActCol),
+    m_bTable      (true),
+    m_bOrtho      (true)
 {}
 
 bool SvxColumnItem::GetPresentation(
@@ -465,19 +465,19 @@ bool SvxColumnItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_COLUMNARRAY:
             return false;
         case MID_RIGHT:
-            rVal <<= nRight;
+            rVal <<= m_nRight;
             break;
         case MID_LEFT:
-            rVal <<= nLeft;
+            rVal <<= m_nLeft;
             break;
         case MID_ORTHO:
-            rVal <<= bOrtho;
+            rVal <<= m_bOrtho;
             break;
         case MID_ACTUAL:
-            rVal <<= static_cast<sal_Int32>(nActColumn);
+            rVal <<= static_cast<sal_Int32>(m_nActColumn);
             break;
         case MID_TABLE:
-            rVal <<= bTable;
+            rVal <<= m_bTable;
             break;
         default:
             SAL_WARN("svx", "Wrong MemberId!");
@@ -498,22 +498,22 @@ bool SvxColumnItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             return false;
         }
         case MID_RIGHT:
-            rVal >>= nRight;
+            rVal >>= m_nRight;
             break;
         case MID_LEFT:
-            rVal >>= nLeft;
+            rVal >>= m_nLeft;
             break;
         case MID_ORTHO:
             rVal >>= nVal;
-            bOrtho = static_cast<bool>(nVal);
+            m_bOrtho = static_cast<bool>(nVal);
             break;
         case MID_ACTUAL:
             rVal >>= nVal;
-            nActColumn = static_cast<sal_uInt16>(nVal);
+            m_nActColumn = static_cast<sal_uInt16>(nVal);
             break;
         case MID_TABLE:
             rVal >>= nVal;
-            bTable = static_cast<bool>(nVal);
+            m_bTable = static_cast<bool>(nVal);
             break;
         default:
             OSL_FAIL("Wrong MemberId!");
@@ -525,53 +525,53 @@ bool SvxColumnItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
 sal_uInt16 SvxColumnItem::Count() const
 {
-    return aColumns.size();
+    return m_aColumns.size();
 }
 
 SvxColumnDescription& SvxColumnItem::At(sal_uInt16 index)
 {
-    return aColumns[index];
+    return m_aColumns[index];
 }
 
 SvxColumnDescription& SvxColumnItem::GetActiveColumnDescription()
 {
-    return aColumns[GetActColumn()];
+    return m_aColumns[GetActColumn()];
 }
 
 SvxColumnDescription& SvxColumnItem::operator[](sal_uInt16 index)
 {
-    return aColumns[index];
+    return m_aColumns[index];
 }
 
 const SvxColumnDescription& SvxColumnItem::operator[](sal_uInt16 index) const
 {
-    return aColumns[index];
+    return m_aColumns[index];
 }
 
 void SvxColumnItem::Append(const SvxColumnDescription &rDesc)
 {
-    aColumns.push_back(rDesc);
+    m_aColumns.push_back(rDesc);
 }
 
 void SvxColumnItem::SetLeft(tools::Long left)
 {
-    nLeft = left;
+    m_nLeft = left;
 }
 
 void SvxColumnItem::SetRight(tools::Long right)
 {
-    nRight = right;
+    m_nRight = right;
 }
 
 
 bool SvxColumnItem::IsFirstAct() const
 {
-    return nActColumn == 0;
+    return m_nActColumn == 0;
 }
 
 bool SvxColumnItem::IsLastAct() const
 {
-    return nActColumn == Count() - 1;
+    return m_nActColumn == Count() - 1;
 }
 
 SvxColumnDescription::SvxColumnDescription(tools::Long start, tools::Long end, bool bVis) :
@@ -613,12 +613,12 @@ tools::Long SvxColumnDescription::GetWidth() const
 /* SvxColumnItem */
 void SvxColumnItem::SetOrtho(bool bVal)
 {
-    bOrtho = bVal;
+    m_bOrtho = bVal;
 }
 
 bool SvxColumnItem::IsConsistent() const
 {
-    return nActColumn < aColumns.size();
+    return m_nActColumn < m_aColumns.size();
 }
 
 bool SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
