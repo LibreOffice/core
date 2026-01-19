@@ -592,6 +592,7 @@ void DocxAttributeOutput::TableBackgrounds(
     }
     else
     {
+        bool bAddedValAttr = false;
         rtl::Reference<sax_fastparser::FastAttributeList> pAttrList;
 
         for (const auto & [ name, val ] : rGrabBag)
@@ -616,8 +617,14 @@ void DocxAttributeOutput::TableBackgrounds(
             else if (name == "color")
                 AddToAttrList(pAttrList, FSNS(XML_w, XML_color), val.get<OUString>());
             else if (name == "val")
+            {
                 AddToAttrList(pAttrList, FSNS(XML_w, XML_val), val.get<OUString>());
+                bAddedValAttr = true;
+            }
         }
+        // w:val attribute is required
+        if (!bAddedValAttr)
+            AddToAttrList(pAttrList, FSNS(XML_w, XML_val), "clear");
         m_pSerializer->singleElementNS(XML_w, XML_shd, pAttrList);
     }
 }
