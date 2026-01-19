@@ -9,20 +9,15 @@
 
 #include "sdmodeltestbase.hxx"
 
-#include <com/sun/star/frame/Desktop.hpp>
-
 #include <vcl/scheduler.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdpagv.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
-
+#include <Outliner.hxx>
 #include <DrawDocShell.hxx>
 #include <unomodel.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
-
-using namespace css;
 
 class TextFittingTest : public SdModelTestBase
 {
@@ -120,6 +115,90 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTextObject->GetFontScale(), 1E-4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTextObject->GetSpacingScale(), 1E-4);
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testTestBulletDifferenceViewAndEdit)
+{
+    createSdImpressDoc("TextFittingBulletEditVsView.odp");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    auto pTextObject = DynCastSdrTextObj(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTextObject);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.475, pTextObject->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, pTextObject->GetSpacingScale(), 1E-4);
+
+    // Enter edit mode
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pTextObject);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(true, pView->IsTextEdit());
+
+    auto* pOLV = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOLV);
+    auto& rEditView = pOLV->GetEditView();
+    auto& rEditEngine = rEditView.getEditEngine();
+
+    // Verify that font and spacing scaling match between view and edit mode
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(pTextObject->GetFontScale(),
+                                 rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(pTextObject->GetSpacingScale(),
+                                 rEditEngine.getScalingParameters().fSpacingY, 1E-4);
+
+    Outliner* pEditOutliner = pView->GetTextEditOutliner();
+    CPPUNIT_ASSERT(pEditOutliner);
+
+    // Get bullet sizes at current scaling
+    std::vector<Size> aBulletSizesBefore;
+    for (sal_Int32 nPara = 0; nPara < pEditOutliner->GetParagraphCount(); ++nPara)
+    {
+        EBulletInfo aBulletInfo = pEditOutliner->GetBulletInfo(nPara);
+        aBulletSizesBefore.push_back(aBulletInfo.aBounds.GetSize());
+    }
+
+    // Add a paragraph to trigger a scaling change
+    rEditView.SetSelection(ESelection(rEditEngine.GetParagraphCount() - 1, EE_TEXTPOS_MAX));
+    rEditView.InsertText(u"\nNew"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Delete the paragraph to restore original scaling
+    sal_Int32 nLastPara = rEditEngine.GetParagraphCount() - 1;
+    rEditView.SetSelection(ESelection(nLastPara - 1, EE_TEXTPOS_MAX, nLastPara, EE_TEXTPOS_MAX));
+    rEditView.DeleteSelected();
+    Scheduler::ProcessEventsToIdle();
+
+    // Scaling should be back to original
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(pTextObject->GetFontScale(),
+                                 rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(pTextObject->GetSpacingScale(),
+                                 rEditEngine.getScalingParameters().fSpacingY, 1E-4);
+
+    // Get bullet sizes after scaling was changed and restored
+    std::vector<Size> aBulletSizesAfter;
+    for (sal_Int32 nPara = 0; nPara < pEditOutliner->GetParagraphCount(); ++nPara)
+    {
+        EBulletInfo aBulletInfo = pEditOutliner->GetBulletInfo(nPara);
+        aBulletSizesAfter.push_back(aBulletInfo.aBounds.GetSize());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(aBulletSizesBefore.size(), aBulletSizesAfter.size());
+
+    // Bullet sizes should match after scaling round-trip
+    for (size_t i = 0; i < aBulletSizesBefore.size(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph " + std::to_string(i)
+                                         + " bullet width changed after scaling round-trip",
+                                     aBulletSizesBefore[i].Width(), aBulletSizesAfter[i].Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph " + std::to_string(i)
+                                         + " bullet height changed after scaling round-trip",
+                                     aBulletSizesBefore[i].Height(), aBulletSizesAfter[i].Height());
+    }
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT_EQUAL(false, pView->IsTextEdit());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
