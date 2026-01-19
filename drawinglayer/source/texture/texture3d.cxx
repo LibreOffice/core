@@ -56,7 +56,7 @@ namespace drawinglayer::texture
         }
 
 
-        GeoTexSvxBitmapEx::GeoTexSvxBitmapEx(
+        GeoTexSvxBitmap::GeoTexSvxBitmap(
             const Bitmap& rBitmap,
             const basegfx::B2DRange& rRange)
         :   maBitmap(rBitmap),
@@ -67,7 +67,7 @@ namespace drawinglayer::texture
         {
             if (!maBitmap.IsEmpty())
                 mpReadBitmap = maBitmap;
-            SAL_WARN_IF(!mpReadBitmap, "drawinglayer", "GeoTexSvxBitmapEx: Got no read access to Bitmap");
+            SAL_WARN_IF(!mpReadBitmap, "drawinglayer", "GeoTexSvxBitmap: Got no read access to Bitmap");
             if (mpReadBitmap)
             {
                 mfMulX = static_cast<double>(mpReadBitmap->Width()) / maSize.getX();
@@ -85,11 +85,11 @@ namespace drawinglayer::texture
             }
         }
 
-        GeoTexSvxBitmapEx::~GeoTexSvxBitmapEx()
+        GeoTexSvxBitmap::~GeoTexSvxBitmap()
         {
         }
 
-        bool GeoTexSvxBitmapEx::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
+        bool GeoTexSvxBitmap::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
         {
             if(mpReadBitmap)
             {
@@ -106,7 +106,7 @@ namespace drawinglayer::texture
             return false;
         }
 
-        void GeoTexSvxBitmapEx::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void GeoTexSvxBitmap::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
         {
             sal_Int32 nX, nY;
 
@@ -139,7 +139,7 @@ namespace drawinglayer::texture
             }
         }
 
-        void GeoTexSvxBitmapEx::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void GeoTexSvxBitmap::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             sal_Int32 nX, nY;
 
@@ -169,7 +169,7 @@ namespace drawinglayer::texture
         }
 
 
-        basegfx::B2DPoint GeoTexSvxBitmapExTiled::impGetCorrected(const basegfx::B2DPoint& rUV) const
+        basegfx::B2DPoint GeoTexSvxBitmapTiled::impGetCorrected(const basegfx::B2DPoint& rUV) const
         {
             double fX(rUV.getX() - maTopLeft.getX());
             double fY(rUV.getY() - maTopLeft.getY());
@@ -209,12 +209,12 @@ namespace drawinglayer::texture
             return basegfx::B2DPoint(fX + maTopLeft.getX(), fY + maTopLeft.getY());
         }
 
-        GeoTexSvxBitmapExTiled::GeoTexSvxBitmapExTiled(
+        GeoTexSvxBitmapTiled::GeoTexSvxBitmapTiled(
             const Bitmap& rBitmap,
             const basegfx::B2DRange& rRange,
             double fOffsetX,
             double fOffsetY)
-        :   GeoTexSvxBitmapEx(rBitmap, rRange),
+        :   GeoTexSvxBitmap(rBitmap, rRange),
             mfOffsetX(std::clamp(fOffsetX, 0.0, 1.0)),
             mfOffsetY(std::clamp(fOffsetY, 0.0, 1.0)),
             mbUseOffsetX(!basegfx::fTools::equalZero(mfOffsetX)),
@@ -222,19 +222,19 @@ namespace drawinglayer::texture
         {
         }
 
-        void GeoTexSvxBitmapExTiled::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void GeoTexSvxBitmapTiled::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
         {
             if(mpReadBitmap)
             {
-                GeoTexSvxBitmapEx::modifyBColor(impGetCorrected(rUV), rBColor, rfOpacity);
+                GeoTexSvxBitmap::modifyBColor(impGetCorrected(rUV), rBColor, rfOpacity);
             }
         }
 
-        void GeoTexSvxBitmapExTiled::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void GeoTexSvxBitmapTiled::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             if(mpReadBitmap)
             {
-                GeoTexSvxBitmapEx::modifyOpacity(impGetCorrected(rUV), rfOpacity);
+                GeoTexSvxBitmap::modifyOpacity(impGetCorrected(rUV), rfOpacity);
             }
         }
 

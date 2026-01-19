@@ -517,7 +517,7 @@ merge detail::ScVbaHlinkContainerMember with ScVbaHyperlinks
 merge drawinglayer::primitive2d::ObjectAndViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::DiscreteBitmapPrimitive2D
 merge drawinglayer::primitive2d::ViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::WallpaperBitmapPrimitive2D
 merge drawinglayer::processor3d::DefaultProcessor3D with drawinglayer::processor3d::ZBufferProcessor3D
-merge drawinglayer::texture::GeoTexSvxBitmapEx with drawinglayer::texture::GeoTexSvxBitmapExTiled
+merge drawinglayer::texture::GeoTexSvxBitmap with drawinglayer::texture::GeoTexSvxBitmapTiled
 merge fileaccess::Notifier with fileaccess::BaseContent
 maybe merge filter::config::BaseContainer with cppu::ImplInheritanceHelper, in modules filter and cppuhelper
 maybe merge formula::ExternalReferenceHelper with ScExternalRefManager, in modules formula and sc
