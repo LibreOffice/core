@@ -1706,23 +1706,27 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 
             if (! bNum)
             {
+                static constexpr OUString sDefaultBulletSymbol = u"•"_ustr;
+                static constexpr OUString sDefaultBulletSymbolFont = u"OpenSymbol"_ustr;
                 uno::Sequence<OUString> aBulletSymbols(
                     officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
                 uno::Sequence<OUString> aBulletSymbolsFonts(
                     officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
                 if (!aBulletSymbols.hasElements())
                 {
+                    SAL_WARN("sw", "empty DefaultListBullets config, adding a default single bullet");
                     // Add a single element even if user cleared the list in the config
                     aBulletSymbols.realloc(1);
-                    aBulletSymbols.getArray()[0] = u"•"_ustr;
-                    aBulletSymbolsFonts.realloc(1);
-                    aBulletSymbolsFonts.getArray()[0] = "OpenSymbol";
+                    aBulletSymbols.getArray()[0] = sDefaultBulletSymbol;
                 }
-                sal_Int32 nBulletSymbolIndex = nLvl % aBulletSymbols.getLength();
+                const sal_Int32 nBulletSymbolIndex = nLvl % aBulletSymbols.getLength();
                 aFormat.SetBulletChar(aBulletSymbols[nBulletSymbolIndex].toChar());
                 vcl::Font aFont;
-                sal_Int32 nBulletSymbolsFontIndex = nLvl % aBulletSymbolsFonts.getLength();
-                aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolsFontIndex]);
+                // Symbol and font correspond to each other, use same index
+                if (nBulletSymbolIndex < aBulletSymbolsFonts.getLength())
+                    aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolIndex]);
+                else
+                    aFont.SetFamilyName(sDefaultBulletSymbolFont);
                 aFormat.SetBulletFont(&aFont);
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
