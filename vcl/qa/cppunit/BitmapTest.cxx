@@ -27,41 +27,6 @@ namespace
 {
 class BitmapTest : public CppUnit::TestFixture
 {
-    void testCreation();
-    void testEmpty();
-    void testMonochrome();
-    void testN8Greyscale();
-    void testConvert();
-    void testCRC();
-    void testGreyPalette();
-    void testCustom8BitPalette();
-    void testErase();
-    void testBitmap32();
-    void testOctree();
-    void testEmptyAccess();
-    void testDitherSize();
-    void testMirror();
-    void testCrop();
-    void testCroppedDownsampledBitmap();
-
-    CPPUNIT_TEST_SUITE(BitmapTest);
-    CPPUNIT_TEST(testCreation);
-    CPPUNIT_TEST(testEmpty);
-    CPPUNIT_TEST(testMonochrome);
-    CPPUNIT_TEST(testConvert);
-    CPPUNIT_TEST(testN8Greyscale);
-    CPPUNIT_TEST(testCRC);
-    CPPUNIT_TEST(testGreyPalette);
-    CPPUNIT_TEST(testCustom8BitPalette);
-    CPPUNIT_TEST(testErase);
-    CPPUNIT_TEST(testBitmap32);
-    CPPUNIT_TEST(testOctree);
-    CPPUNIT_TEST(testEmptyAccess);
-    CPPUNIT_TEST(testDitherSize);
-    CPPUNIT_TEST(testMirror);
-    CPPUNIT_TEST(testCrop);
-    CPPUNIT_TEST(testCroppedDownsampledBitmap);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 void assertColorsAreSimilar(int maxDifference, const std::string& message,
@@ -73,7 +38,7 @@ void assertColorsAreSimilar(int maxDifference, const std::string& message,
     CPPUNIT_ASSERT_EQUAL_MESSAGE(message, expected, actual);
 }
 
-void BitmapTest::testCreation()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCreation)
 {
     {
         Bitmap aBmp;
@@ -128,7 +93,7 @@ void BitmapTest::testCreation()
     }
 }
 
-void BitmapTest::testEmpty()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testEmpty)
 {
     Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N8_BPP);
     aBitmap.Erase(COL_LIGHTGRAYBLUE);
@@ -171,7 +136,7 @@ Bitmap createTestBitmap()
     return aBmp;
 }
 
-void BitmapTest::testMonochrome()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testMonochrome)
 {
     Bitmap aBmp = createTestBitmap();
 
@@ -212,7 +177,7 @@ void BitmapTest::testMonochrome()
                                  aBmpReadAccess.GetColor(3, 3));
 }
 
-void BitmapTest::testN8Greyscale()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testN8Greyscale)
 {
     Bitmap aBmp = createTestBitmap();
     BitmapPalette aGreyscalePalette = Bitmap::GetGreyPalette(256);
@@ -254,7 +219,7 @@ void BitmapTest::testN8Greyscale()
                            aBmpReadAccess.GetColor(3, 3));
 }
 
-void BitmapTest::testConvert()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testConvert)
 {
     Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N8_BPP);
 
@@ -338,7 +303,7 @@ Bitmap getAsBitmap(VclPtr<OutputDevice> const& pOut)
     return pOut->GetBitmap(Point(), pOut->GetOutputSizePixel());
 }
 
-void BitmapTest::testCRC()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCRC)
 {
     CRCHash aCRCs;
 
@@ -365,7 +330,7 @@ void BitmapTest::testCRC()
     checkAndInsert(aCRCs, aChecker, "inverted checkerboard");
 }
 
-void BitmapTest::testGreyPalette()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testGreyPalette)
 {
     {
         BitmapPalette aPalette = Bitmap::GetGreyPalette(2);
@@ -419,7 +384,7 @@ void BitmapTest::testGreyPalette()
     }
 }
 
-void BitmapTest::testCustom8BitPalette()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCustom8BitPalette)
 {
     BitmapPalette aCustomPalette;
     aCustomPalette.SetEntryCount(256);
@@ -462,7 +427,7 @@ void BitmapTest::testCustom8BitPalette()
     }
 }
 
-void BitmapTest::testErase()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testErase)
 {
     Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
     {
@@ -476,7 +441,7 @@ void BitmapTest::testErase()
     }
 }
 
-void BitmapTest::testBitmap32()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testBitmap32)
 {
     Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N32_BPP);
     {
@@ -498,7 +463,7 @@ void BitmapTest::testBitmap32()
     }
 }
 
-void BitmapTest::testOctree()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testOctree)
 {
     Size aSize(1000, 100);
     Bitmap aBitmap(aSize, vcl::PixelFormat::N24_BPP);
@@ -546,7 +511,7 @@ void BitmapTest::testOctree()
     }
 }
 
-void BitmapTest::testEmptyAccess()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testEmptyAccess)
 {
     Bitmap empty;
     BitmapInfoAccess access(empty);
@@ -554,7 +519,7 @@ void BitmapTest::testEmptyAccess()
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Height());
 }
 
-void BitmapTest::testDitherSize()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testDitherSize)
 {
     // no need to do anything for a 1x1 pixel bitmap
     {
@@ -586,7 +551,7 @@ void BitmapTest::testDitherSize()
     }
 }
 
-void BitmapTest::testMirror()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testMirror)
 {
     vcl::PixelFormat bppArray[]
         = { vcl::PixelFormat::N8_BPP, vcl::PixelFormat::N24_BPP, vcl::PixelFormat::N32_BPP };
@@ -652,7 +617,7 @@ void BitmapTest::testMirror()
     }
 }
 
-void BitmapTest::testCroppedDownsampledBitmap()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCroppedDownsampledBitmap)
 {
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
     Bitmap aDownsampledBmp(vcl::bitmap::GetDownsampledBitmap(Size(10, 10), Point(20, 20),
@@ -660,7 +625,7 @@ void BitmapTest::testCroppedDownsampledBitmap()
     CPPUNIT_ASSERT(aDownsampledBmp.IsEmpty());
 }
 
-void BitmapTest::testCrop()
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCrop)
 {
     Bitmap aBitmap(Bitmap(Size(16, 16), vcl::PixelFormat::N24_BPP));
 
@@ -700,8 +665,6 @@ void BitmapTest::testCrop()
     }
 }
 } // namespace
-
-CPPUNIT_TEST_SUITE_REGISTRATION(BitmapTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
