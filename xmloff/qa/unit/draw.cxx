@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
     // Make sure that the shape is still a textbox.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     bool bTextBox = false;
     xShape->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
 
