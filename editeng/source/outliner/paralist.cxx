@@ -43,28 +43,16 @@ bool ParagraphData::operator==(const ParagraphData& rCandidate) const
 }
 
 Paragraph::Paragraph( sal_Int16 nDDepth )
-: aBulSize( -1, -1)
 {
-
     DBG_ASSERT(  ( nDDepth >= -1 ) && ( nDDepth < SVX_MAX_NUM ), "Paragraph-CTOR: nDepth invalid!" );
-
     nDepth = nDDepth;
-    nFlags = ParaFlag::NONE;
-    bVisible = true;
 }
 
 Paragraph::Paragraph( const ParagraphData& rData )
-: aBulSize( -1, -1)
-, nFlags( ParaFlag::NONE )
-, bVisible( true )
 {
     nDepth = rData.nDepth;
     mnNumberingStartValue = rData.mnNumberingStartValue;
     mbParaIsNumberingRestart = rData.mbParaIsNumberingRestart;
-}
-
-Paragraph::~Paragraph()
-{
 }
 
 void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
