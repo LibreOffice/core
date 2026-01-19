@@ -480,28 +480,23 @@ OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
 
     if (mpViewShell)
     {
-        OUString strFor = mpViewShell->GetFormula(maCellAddress) ;
-        if (!strFor.isEmpty())
-        {
-            strFor = strFor.copy(1);
-            strFor = ReplaceFourChar(strFor);
-        }
-        strFor = "Formula:" + strFor +
-            ";Note:" +
-            ReplaceFourChar(GetAllDisplayNote()) + ";" +
+        const OUString sFormula = mpViewShell->GetFormula(maCellAddress) ;
+        if (!sFormula.isEmpty())
+            sAttributes += u"Formula:" + ReplaceFourChar(sFormula.copy(1)) + u";";
+
+        sAttributes += "Note:" + ReplaceFourChar(GetAllDisplayNote()) + ";" +
             getShadowAttrs() + //the string returned contains the spliter ";"
             getBorderAttrs();//the string returned contains the spliter ";"
         //end of cell attributes
         if( mpDoc )
         {
-            strFor += "isdropdown:";
+            sAttributes += "isdropdown:";
             if( IsDropdown() )
-                strFor += "true";
+                sAttributes += "true";
             else
-                strFor += "false";
-            strFor += ";";
+                sAttributes += "false";
+            sAttributes += ";";
         }
-        sAttributes += strFor ;
     }
 
     return sAttributes;
