@@ -109,6 +109,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
     CPPUNIT_ASSERT_EQUAL(nCellBottom, nTextBottom);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
+{
+    createSwDoc("tdf170389_manyTabstops.odt");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if it has more than 64 tabstops defined
+    // The paragraph itself defines 40, and inherits 40. Without the fix, this was 80
+    assertXPath(pXmlDoc, "//w:tabs/w:tab", 64);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf169413_asciiTheme)
 {
     // the document failed to reload without errors after a round-trip

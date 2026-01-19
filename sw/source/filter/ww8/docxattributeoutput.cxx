@@ -9266,6 +9266,9 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
     m_pSerializer->startElementNS(XML_w, XML_tabs);
 
+    // <w:tabs> may contain 64 <w:tab> entries at most, or else MS Word reports the file as corrupt
+    sal_uInt32 nWrittenTabs = 0;
+
     // Get offset for tabs
     // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
     // But in ODT, zero position could be page margins or paragraph indent according to used settings.
@@ -9275,6 +9278,9 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     sal_Int32 nCurrTab = 0;
     for ( sal_uInt16 i = 0; i < nInheritedTabCount; ++i )
     {
+        if (nWrittenTabs == 64)
+            break; // maximum allowed number of entries reached
+
         while ( nCurrTab < nCount && rTabStop[nCurrTab] < pInheritedTabs->At(i) )
             ++nCurrTab;
 
@@ -9283,13 +9289,20 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
             m_pSerializer->singleElementNS( XML_w, XML_tab,
                 FSNS( XML_w, XML_val ), "clear",
                 FSNS( XML_w, XML_pos ), OString::number(pInheritedTabs->At(i).GetTabPos()) );
+            ++nWrittenTabs;
         }
     }
 
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
         if( rTabStop[i].GetAdjustment() != SvxTabAdjust::Default )
-            impl_WriteTabElement( m_pSerializer, rTabStop[i], tabsOffset );
+        {
+            if (nWrittenTabs < 64)
+            {
+                impl_WriteTabElement( m_pSerializer, rTabStop[i], tabsOffset );
+                ++nWrittenTabs;
+            }
+        }
         else
             GetExport().setDefaultTabStop( rTabStop[i].GetTabPos());
     }
