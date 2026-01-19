@@ -141,6 +141,9 @@ class SW_DLLPUBLIC SwDocShell
         SfxRequest* pRequest = nullptr,
         sal_uInt16 nSlot = 0);
 
+    SAL_DLLPRIVATE void ApplyStyleSheetRequest(const OUString& aParam, sal_uInt16 nSlot, SfxRequest& rReq, SfxStyleFamily nFamily,
+                                               SfxStyleSearchBits nMask, SwWrtShell* pActShell);
+
     SAL_DLLPRIVATE void                  Delete(const OUString &rName, SfxStyleFamily nFamily);
     SAL_DLLPRIVATE void                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
     SAL_DLLPRIVATE bool                  MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl,
