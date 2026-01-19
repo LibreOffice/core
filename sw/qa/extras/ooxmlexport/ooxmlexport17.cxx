@@ -923,6 +923,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81507)
 
     // Ensure that we have <w:text/>
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:text");
+    // (related tdf#170322) The last one did NOT import with a <w:text/> type identifier,
+    // however it IS plainText in MS Word - apparently because it has a dataBinding
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text");
 }
 
