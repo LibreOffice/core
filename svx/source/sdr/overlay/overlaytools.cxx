@@ -120,7 +120,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
 
 
-        OverlayBitmapExPrimitive::OverlayBitmapExPrimitive(
+        OverlayBitmapPrimitive::OverlayBitmapPrimitive(
             const Bitmap& rBitmap,
             const basegfx::B2DPoint& rBasePosition,
             sal_uInt16 nCenterX,
@@ -135,7 +135,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             mfRotation(fRotation)
         {}
 
-        Primitive2DReference OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference OverlayBitmapPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const Size aBitmapSize(getBitmap().GetSizePixel());
 
@@ -178,11 +178,11 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             return new BitmapPrimitive2D(getBitmap(), aTransform);
         }
 
-        bool OverlayBitmapExPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
+        bool OverlayBitmapPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
         {
             if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
             {
-                const OverlayBitmapExPrimitive& rCompare = static_cast< const OverlayBitmapExPrimitive& >(rPrimitive);
+                const OverlayBitmapPrimitive& rCompare = static_cast< const OverlayBitmapPrimitive& >(rPrimitive);
 
                 return (getBitmap() == rCompare.getBitmap()
                     && getBasePosition() == rCompare.getBasePosition()
@@ -195,7 +195,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             return false;
         }
 
-        sal_uInt32 OverlayBitmapExPrimitive::getPrimitive2DID() const
+        sal_uInt32 OverlayBitmapPrimitive::getPrimitive2DID() const
         {
             return PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE;
         }

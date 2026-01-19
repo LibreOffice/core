@@ -26,7 +26,7 @@
 
 namespace sdr::overlay
     {
-        class SVXCORE_DLLPUBLIC OverlayAnimatedBitmapEx final : public OverlayObjectWithBasePosition
+        class SVXCORE_DLLPUBLIC OverlayAnimatedBitmap final : public OverlayObjectWithBasePosition
         {
             // the Bitmaps
             Bitmap                                  maBitmap1;
@@ -52,7 +52,7 @@ namespace sdr::overlay
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
-            OverlayAnimatedBitmapEx(
+            OverlayAnimatedBitmap(
                 const basegfx::B2DPoint& rBasePos,
                 const Bitmap& rBitmap1,
                 const Bitmap& rBitmap2,
@@ -63,7 +63,7 @@ namespace sdr::overlay
                 sal_uInt16 nCenY2 = 0,
                 double fShearX = 0.0,
                 double fRotation = 0.0);
-            virtual ~OverlayAnimatedBitmapEx() override;
+            virtual ~OverlayAnimatedBitmap() override;
 
             // execute event from base class sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.

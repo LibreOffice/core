@@ -14891,11 +14891,11 @@ sdr::contact::ViewObjectContact::triggerLazyInvalidate()
 sdr::contact::ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
 sdr::contact::ViewObjectContactOfSdrObj::getSdrObject() const
 sdr::contact::ViewObjectContactOfSdrObj::isObjectVisibleOnAnyLayer(SdrObject const&, SdrLayerIDSet const&)
-sdr::overlay::OverlayAnimatedBitmapEx::Trigger(unsigned int)
-sdr::overlay::OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
-sdr::overlay::OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()
-sdr::overlay::OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
-sdr::overlay::OverlayBitmapEx::~OverlayBitmapEx()
+sdr::overlay::OverlayAnimatedBitmap::Trigger(unsigned int)
+sdr::overlay::OverlayAnimatedBitmap::createOverlayObjectPrimitive2DSequence()
+sdr::overlay::OverlayAnimatedBitmap::~OverlayAnimatedBitmap()
+sdr::overlay::OverlayBitmap::createOverlayObjectPrimitive2DSequence()
+sdr::overlay::OverlayBitmap::~OverlayBitmap()
 sdr::overlay::OverlayManager::ImpDrawMembers(basegfx::B2DRange const&, OutputDevice&) const
 sdr::overlay::OverlayManager::ImpStripeDefinitionChanged()
 sdr::overlay::OverlayManager::OverlayManager(OutputDevice&)

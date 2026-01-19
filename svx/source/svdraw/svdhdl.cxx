@@ -42,8 +42,8 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
-#include <svx/sdr/overlay/overlaybitmapex.hxx>
+#include <svx/sdr/overlay/overlayanimatedbitmap.hxx>
+#include <svx/sdr/overlay/overlaybitmap.hxx>
 #include <sdr/overlay/overlayline.hxx>
 #include <sdr/overlay/overlaytriangle.hxx>
 #include <sdr/overlay/overlayhandle.hxx>
@@ -861,19 +861,19 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // when anchor is used take upper left as reference point inside the handle
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmp1, aBmp2, nBlinkTime));
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmap(rPos, aBmp1, aBmp2, nBlinkTime));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmp1, aBmp2, nBlinkTime,
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmap(rPos, aBmp1, aBmp2, nBlinkTime,
                 static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1), 0,
                 static_cast<sal_uInt16>(aBmp2.GetSizePixel().Width() - 1), 0));
         }
         else
         {
             // create centered handle as default
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmp1, aBmp2, nBlinkTime,
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmap(rPos, aBmp1, aBmp2, nBlinkTime,
                 static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,
                 static_cast<sal_uInt16>(aBmp1.GetSizePixel().Height() - 1) >> 1,
                 static_cast<sal_uInt16>(aBmp2.GetSizePixel().Width() - 1) >> 1,
@@ -901,12 +901,12 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // upper left as reference point inside the handle for AnchorPressed, too
-            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmp));
+            pRetval.reset(new sdr::overlay::OverlayBitmap(rPos, aBmp));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmp,
+            pRetval.reset(new sdr::overlay::OverlayBitmap(rPos, aBmp,
                 static_cast<sal_uInt16>(aBmp.GetSizePixel().Width() - 1), 0));
         }
         else
@@ -933,7 +933,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
             }
 
             // create centered handle as default
-            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmp, nCenX, nCenY));
+            pRetval.reset(new sdr::overlay::OverlayBitmap(rPos, aBmp, nCenX, nCenY));
         }
     }
 
@@ -1152,7 +1152,7 @@ void SdrHdlColor::CreateB2dIAObject()
                 Bitmap aBmpCol(CreateColorDropper(m_aMarkerColor));
                 basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
-                    sdr::overlay::OverlayBitmapEx(
+                    sdr::overlay::OverlayBitmap(
                         aPosition,
                         aBmpCol,
                         static_cast<sal_uInt16>(aBmpCol.GetSizePixel().Width() - 1) >> 1,
@@ -2423,7 +2423,7 @@ void SdrCropHdl::CreateB2dIAObject()
 
                     const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
-                    pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(
+                    pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmap(
                         aPosition,
                         aBmp1,
                         aBmp2,
@@ -2438,7 +2438,7 @@ void SdrCropHdl::CreateB2dIAObject()
                 else
                 {
                     // create centered handle as default
-                    pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx(
+                    pOverlayObject.reset(new sdr::overlay::OverlayBitmap(
                         aPosition,
                         aBmp1,
                         static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,

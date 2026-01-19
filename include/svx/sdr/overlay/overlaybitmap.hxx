@@ -26,7 +26,7 @@
 
 namespace sdr::overlay
     {
-        class SVXCORE_DLLPUBLIC OverlayBitmapEx final : public OverlayObjectWithBasePosition
+        class SVXCORE_DLLPUBLIC OverlayBitmap final : public OverlayObjectWithBasePosition
         {
             // the Bitmap itself
             Bitmap                                  maBitmap;
@@ -43,7 +43,7 @@ namespace sdr::overlay
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
-            OverlayBitmapEx(
+            OverlayBitmap(
                 const basegfx::B2DPoint& rBasePos,
                 const Bitmap& rBitmap,
                 sal_uInt16 nCenX = 0,
@@ -51,7 +51,7 @@ namespace sdr::overlay
                 double fAlpha = 0.0,
                 double fShearX = 0.0,
                 double fRotation = 0.0);
-            virtual ~OverlayBitmapEx() override;
+            virtual ~OverlayBitmap() override;
         };
 } // end of namespace sdr::overlay
 

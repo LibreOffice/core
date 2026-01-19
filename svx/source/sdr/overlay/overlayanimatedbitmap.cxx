@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
+#include <svx/sdr/overlay/overlayanimatedbitmap.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 
 
 namespace sdr::overlay
 {
-        drawinglayer::primitive2d::Primitive2DContainer OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayAnimatedBitmap::createOverlayObjectPrimitive2DSequence()
         {
             if(mbOverlayState)
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                    new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
+                    new drawinglayer::primitive2d::OverlayBitmapPrimitive(
                         maBitmap1,
                         getBasePosition(),
                         mnCenterX1,
@@ -42,7 +42,7 @@ namespace sdr::overlay
             else
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                    new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
+                    new drawinglayer::primitive2d::OverlayBitmapPrimitive(
                         maBitmap2,
                         getBasePosition(),
                         mnCenterX2,
@@ -54,7 +54,7 @@ namespace sdr::overlay
             }
         }
 
-        OverlayAnimatedBitmapEx::OverlayAnimatedBitmapEx(
+        OverlayAnimatedBitmap::OverlayAnimatedBitmap(
             const basegfx::B2DPoint& rBasePos,
             const Bitmap& rBitmap1,
             const Bitmap& rBitmap2,
@@ -79,11 +79,11 @@ namespace sdr::overlay
             mbAllowsAnimation = true;
         }
 
-        OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()
+        OverlayAnimatedBitmap::~OverlayAnimatedBitmap()
         {
         }
 
-        void OverlayAnimatedBitmapEx::Trigger(sal_uInt32 nTime)
+        void OverlayAnimatedBitmap::Trigger(sal_uInt32 nTime)
         {
             if(!getOverlayManager())
                 return;

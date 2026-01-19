@@ -19,8 +19,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld/weldutils.hxx>
 
-#include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
-#include <svx/sdr/overlay/overlaybitmapex.hxx>
+#include <svx/sdr/overlay/overlayanimatedbitmap.hxx>
+#include <svx/sdr/overlay/overlaybitmap.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>

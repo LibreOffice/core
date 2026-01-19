@@ -5686,8 +5686,8 @@ include/svx/sdr/contact/viewcontactofe3dscene.hxx
 include/svx/sdr/contact/viewcontactofsdrobj.hxx
 include/svx/sdr/contact/viewobjectcontact.hxx
 include/svx/sdr/contact/viewobjectcontactredirector.hxx
-include/svx/sdr/overlay/overlayanimatedbitmapex.hxx
-include/svx/sdr/overlay/overlaybitmapex.hxx
+include/svx/sdr/overlay/overlayanimatedbitmap.hxx
+include/svx/sdr/overlay/overlaybitmap.hxx
 include/svx/sdr/overlay/overlaymanager.hxx
 include/svx/sdr/overlay/overlayobject.hxx
 include/svx/sdr/overlay/overlayobjectlist.hxx
@@ -11387,8 +11387,8 @@ svx/source/sdr/contact/viewobjectcontactofsdrobj.cxx
 svx/source/sdr/contact/viewobjectcontactofsdrole2obj.cxx
 svx/source/sdr/contact/viewobjectcontactofsdrpage.cxx
 svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx
-svx/source/sdr/overlay/overlayanimatedbitmapex.cxx
-svx/source/sdr/overlay/overlaybitmapex.cxx
+svx/source/sdr/overlay/overlayanimatedbitmap.cxx
+svx/source/sdr/overlay/overlaybitmap.cxx
 svx/source/sdr/overlay/overlaycrosshair.cxx
 svx/source/sdr/overlay/overlayhandle.cxx
 svx/source/sdr/overlay/overlayhelpline.cxx

@@ -390,8 +390,8 @@ include/svx/EnhancedCustomShape2d.hxx:108
     EnhancedCustomShape2d::EquationResult bReady _Bool
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<VirtualDevice>
-include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
-    sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
+include/svx/sdr/overlay/overlayanimatedbitmap.hxx:49
+    sdr::overlay::OverlayAnimatedBitmap mbOverlayState _Bool
 include/svx/svdetc.hxx:175
     SdrGlobalData maSysLocale SvtSysLocale
 include/svx/svdmark.hxx:139

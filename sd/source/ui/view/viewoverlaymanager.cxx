@@ -30,7 +30,7 @@
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/sdr/overlay/overlaybitmapex.hxx>
+#include <svx/sdr/overlay/overlaybitmap.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
@@ -289,7 +289,7 @@ void ImageButtonHdl::CreateB2dIAObject()
         if(rPaintWindow.OutputToWindow() && xManager.is() )
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
-                new sdr::overlay::OverlayBitmapEx( aPosition, aBitmap, 0, 0 ));
+                new sdr::overlay::OverlayBitmap( aPosition, aBitmap, 0, 0 ));
 
             // OVERLAYMANAGER
             insertNewlyCreatedOverlayObjectForSdrHdl(

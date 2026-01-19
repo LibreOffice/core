@@ -18,16 +18,16 @@
  */
 
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-#include <svx/sdr/overlay/overlaybitmapex.hxx>
+#include <svx/sdr/overlay/overlaybitmap.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 
 
 namespace sdr::overlay
 {
-        drawinglayer::primitive2d::Primitive2DContainer OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
+        drawinglayer::primitive2d::Primitive2DContainer OverlayBitmap::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DReference aReference(
-                new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
+                new drawinglayer::primitive2d::OverlayBitmapPrimitive(
                     maBitmap,
                     getBasePosition(),
                     mnCenterX,
@@ -44,7 +44,7 @@ namespace sdr::overlay
             return drawinglayer::primitive2d::Primitive2DContainer { aReference };
         }
 
-        OverlayBitmapEx::OverlayBitmapEx(
+        OverlayBitmap::OverlayBitmap(
             const basegfx::B2DPoint& rBasePos,
             const Bitmap& rBitmap,
             sal_uInt16 nCenX,
@@ -62,7 +62,7 @@ namespace sdr::overlay
         {
         }
 
-        OverlayBitmapEx::~OverlayBitmapEx()
+        OverlayBitmap::~OverlayBitmap()
         {
         }
 

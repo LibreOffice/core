@@ -279,10 +279,10 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/overlay/overlaytriangle \
     svx/source/sdr/overlay/overlayselection \
     svx/source/sdr/overlay/overlayrectangle \
-    svx/source/sdr/overlay/overlaybitmapex \
+    svx/source/sdr/overlay/overlaybitmap \
     svx/source/sdr/overlay/overlaymanagerbuffered \
     svx/source/sdr/overlay/overlayhelpline \
-    svx/source/sdr/overlay/overlayanimatedbitmapex \
+    svx/source/sdr/overlay/overlayanimatedbitmap \
     svx/source/sdr/overlay/overlaypolypolygon \
     svx/source/sdr/overlay/overlayobjectcell \
     svx/source/sdr/overlay/overlaytools \

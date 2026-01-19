@@ -65,7 +65,7 @@ public:
 // with the target position is given in discrete X,Y coordinates
 namespace drawinglayer::primitive2d
     {
-        class OverlayBitmapExPrimitive final : public DiscreteMetricDependentPrimitive2D
+        class OverlayBitmapPrimitive final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // The Bitmap to use, PixelSize is used
@@ -86,7 +86,7 @@ namespace drawinglayer::primitive2d
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
-            OverlayBitmapExPrimitive(
+            OverlayBitmapPrimitive(
                 const Bitmap& rBitmap,
                 const basegfx::B2DPoint& rBasePosition,
                 sal_uInt16 nCenterX,
