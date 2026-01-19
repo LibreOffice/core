@@ -546,10 +546,10 @@ void ChatPanel::CheckConnection() {
         m_connected = m_pAgent->checkConnection();
     }
     if (m_pStatusLabel) {
-        m_pStatusLabel->SetText(m_connected ? "Connected" : "Offline - start localhost:8765");
+        m_pStatusLabel->SetText(m_connected ? u"Connected"_ustr : u"Offline - start localhost:8765"_ustr);
     }
     if (m_pModelLabel) {
-        m_pModelLabel->SetText("Model: GPT-4");
+        m_pModelLabel->SetText(u"Model: GPT-4"_ustr);
     }
 }
 
@@ -557,7 +557,7 @@ void ChatPanel::CheckConnection() {
 OUString ChatPanel::CreateNewSession(const OUString& name) {
     ChatSession session;
     session.id = GenerateId();
-    session.name = name.isEmpty() ? "Chat " + OUString::number(m_nextSessionNum++) : name;
+    session.name = name.isEmpty() ? u"Chat "_ustr + OUString::number(m_nextSessionNum++) : name;
 
     m_sessions[session.id] = session;
     m_currentSessionId = session.id;
@@ -633,12 +633,12 @@ IMPL_LINK_NOARG(ChatPanel, ExpandClickHdl, Button*, void) { DoExpand(); }
 IMPL_LINK_NOARG(ChatPanel, CondenseClickHdl, Button*, void) { DoCondense(); }
 
 // ==================== EVENT HANDLERS - FORMATTING ====================
-IMPL_LINK_NOARG(ChatPanel, BoldClickHdl, Button*, void) { ApplyFormatting("bold"); }
-IMPL_LINK_NOARG(ChatPanel, ItalicClickHdl, Button*, void) { ApplyFormatting("italic"); }
-IMPL_LINK_NOARG(ChatPanel, UnderlineClickHdl, Button*, void) { ApplyFormatting("underline"); }
-IMPL_LINK_NOARG(ChatPanel, HeadingClickHdl, Button*, void) { ApplyFormatting("heading"); }
-IMPL_LINK_NOARG(ChatPanel, BulletClickHdl, Button*, void) { ApplyFormatting("bullet"); }
-IMPL_LINK_NOARG(ChatPanel, NumberClickHdl, Button*, void) { ApplyFormatting("number"); }
+IMPL_LINK_NOARG(ChatPanel, BoldClickHdl, Button*, void) { ApplyFormatting(u"bold"_ustr); }
+IMPL_LINK_NOARG(ChatPanel, ItalicClickHdl, Button*, void) { ApplyFormatting(u"italic"_ustr); }
+IMPL_LINK_NOARG(ChatPanel, UnderlineClickHdl, Button*, void) { ApplyFormatting(u"underline"_ustr); }
+IMPL_LINK_NOARG(ChatPanel, HeadingClickHdl, Button*, void) { ApplyFormatting(u"heading"_ustr); }
+IMPL_LINK_NOARG(ChatPanel, BulletClickHdl, Button*, void) { ApplyFormatting(u"bullet"_ustr); }
+IMPL_LINK_NOARG(ChatPanel, NumberClickHdl, Button*, void) { ApplyFormatting(u"number"_ustr); }
 
 // ==================== EVENT HANDLERS - CHAT ====================
 IMPL_LINK_NOARG(ChatPanel, SendClickHdl, Button*, void) {
@@ -771,7 +771,7 @@ void ChatPanel::SetProcessing(bool processing) {
     m_processing = processing;
     if (m_pSendButton) m_pSendButton->Enable(!processing);
     if (m_pStopButton) m_pStopButton->Enable(processing);
-    if (m_pStatusLabel) m_pStatusLabel->SetText(processing ? "Processing..." : (m_connected ? "Ready" : "Offline"));
+    if (m_pStatusLabel) m_pStatusLabel->SetText(processing ? u"Processing..."_ustr : (m_connected ? u"Ready"_ustr : u"Offline"_ustr));
 }
 
 // ==================== AI QUICK ACTIONS ====================
@@ -927,31 +927,34 @@ OUString ChatPanel::BuildMessageWithReferences(const OUString& message) {
     OUString result = message;
 
     // Replace @selection
-    if (result.indexOf("@selection") >= 0) {
+    if (result.indexOf(u"@selection"_ustr) >= 0) {
         OUString sel = GetSelectedText();
         if (!sel.isEmpty()) {
-            result = result.replaceAll("@selection", u"\n[Selection: \""_ustr + sel + u"\"]\n"_ustr);
+            OUString replacement = u"\n[Selection: \""_ustr + sel + u"\"]\n"_ustr;
+            result = result.replaceAll(u"@selection"_ustr, replacement);
         }
     }
 
     // Replace @document
-    if (result.indexOf("@document") >= 0) {
+    if (result.indexOf(u"@document"_ustr) >= 0) {
         OUString doc = GetDocumentText();
         if (!doc.isEmpty()) {
             // Truncate if too long
             if (doc.getLength() > 2000) {
                 doc = doc.copy(0, 2000) + u"... [truncated]"_ustr;
             }
-            result = result.replaceAll("@document", u"\n[Document:\n"_ustr + doc + u"\n]\n"_ustr);
+            OUString replacement = u"\n[Document:\n"_ustr + doc + u"\n]\n"_ustr;
+            result = result.replaceAll(u"@document"_ustr, replacement);
         }
     }
 
     // Replace other references
     for (const auto& elem : m_docElements) {
-        OUString ref = "@" + elem.id;
+        OUString ref = u"@"_ustr + elem.id;
         if (result.indexOf(ref) >= 0) {
             OUString content = GetReferenceContent(ref);
-            result = result.replaceAll(ref, u"\n["_ustr + elem.type + u" "_ustr + elem.id + u": "_ustr + content + u"]\n"_ustr);
+            OUString replacement = u"\n["_ustr + elem.type + u" "_ustr + elem.id + u": "_ustr + content + u"]\n"_ustr;
+            result = result.replaceAll(ref, replacement);
         }
     }
 
@@ -1002,12 +1005,12 @@ void ChatPanel::ApplyFormatting(const OUString& formatType) {
         return;
     }
 
-    if (formatType == "bold") m_pDocController->applyBold();
-    else if (formatType == "italic") m_pDocController->applyItalic();
-    else if (formatType == "underline") m_pDocController->applyUnderline();
-    else if (formatType == "heading") m_pDocController->applyHeading(1);
-    else if (formatType == "bullet") m_pDocController->applyBulletList();
-    else if (formatType == "number") m_pDocController->applyNumberedList();
+    if (formatType == u"bold"_ustr) m_pDocController->applyBold();
+    else if (formatType == u"italic"_ustr) m_pDocController->applyItalic();
+    else if (formatType == u"underline"_ustr) m_pDocController->applyUnderline();
+    else if (formatType == u"heading"_ustr) m_pDocController->applyHeading(1);
+    else if (formatType == u"bullet"_ustr) m_pDocController->applyBulletList();
+    else if (formatType == u"number"_ustr) m_pDocController->applyNumberedList();
 }
 
 // ==================== PENDING EDITS ====================

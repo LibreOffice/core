@@ -54,7 +54,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/button.hxx>
-#include <vcl/toolkit/tabctrl.hxx>
+#include <vcl/tabctrl.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <memory>
 #include <vector>
