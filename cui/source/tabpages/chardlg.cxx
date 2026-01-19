@@ -1151,12 +1151,13 @@ IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, voi
 
     if (!sFontName.isEmpty() && pNameBox)
     {
-        cui::FontFeaturesDialog aDialog(GetFrameWeld(), sFontName);
-        if (aDialog.run() == RET_OK)
-        {
-            pNameBox->set_entry_text(aDialog.getResultFontName());
-            UpdatePreview_Impl();
-        }
+        auto xDlg = std::make_shared<cui::FontFeaturesDialog>(GetFrameWeld(), sFontName);
+        weld::GenericDialogController::runAsync(xDlg, [xDlg, pNameBox, this](sal_Int32 nResult){
+            if (nResult == RET_OK) {
+                pNameBox->set_entry_text(xDlg->createFontNameWithFeatures());
+                UpdatePreview_Impl();
+            }
+        });
     }
 }
 
