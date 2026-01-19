@@ -9,8 +9,8 @@
 
 namespace officelabs {
 
-// DISABLED: Replaced by AgenticPanel which uses the same SID
-// SFX_IMPL_CHILDWINDOW_WITHID(ChatPanelChildWindow, SID_AI_CHAT);
+// ChatPanel - Main AI Assistant panel with AI tools and document integration
+SFX_IMPL_CHILDWINDOW_WITHID(ChatPanelChildWindow, SID_AI_CHAT);
 
 ChatPanelChildWindow::ChatPanelChildWindow(vcl::Window* pParent, sal_uInt16 nId,
                                            SfxBindings* pBindings, SfxChildWinInfo* pInfo)
@@ -19,7 +19,7 @@ ChatPanelChildWindow::ChatPanelChildWindow(vcl::Window* pParent, sal_uInt16 nId,
     VclPtr<ChatPanel> pPanel = VclPtr<ChatPanel>::Create(pBindings, this, pParent);
     SetWindow(pPanel);
     SetAlignment(SfxChildAlignment::RIGHT);
-    pPanel->SetSizePixel(Size(350, 0));  // Width of 350px, height fills available space
+    pPanel->SetSizePixel(Size(450, 0));  // Width of 450px for full AI assistant
     pPanel->Initialize(pInfo);
 }
 

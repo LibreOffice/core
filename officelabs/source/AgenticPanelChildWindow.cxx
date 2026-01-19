@@ -9,9 +9,10 @@
 
 namespace officelabs {
 
-// Replace the old ChatPanel with AgenticPanel
-// Use the same SID_AI_CHAT so the menu item opens our new panel
-SFX_IMPL_CHILDWINDOW_WITHID(AgenticPanelChildWindow, SID_AI_CHAT);
+// AgenticPanel - Advanced agentic AI panel with multi-session tabs
+// Uses SID_AI_CHAT + 1 to allow both panels to exist
+// ChatPanel (SID_AI_CHAT) is the main panel with simple AI tools
+SFX_IMPL_CHILDWINDOW_WITHID(AgenticPanelChildWindow, SID_AI_CHAT + 1);
 
 AgenticPanelChildWindow::AgenticPanelChildWindow(vcl::Window* pParent, sal_uInt16 nId,
                                                  SfxBindings* pBindings, SfxChildWinInfo* pInfo)
