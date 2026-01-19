@@ -1424,19 +1424,20 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xSimilarityBtn.get())
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(m_xDialog.get(),
+        VclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(m_xDialog.get(),
                                                                     pSearchItem->IsLEVRelaxed(),
                                                                     pSearchItem->GetLEVOther(),
                                                                     pSearchItem->GetLEVShorter(),
                                                                     pSearchItem->GetLEVLonger() ));
-        if ( executeSubDialog(pDlg.get()) == RET_OK )
-        {
-            pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
-            pSearchItem->SetLEVOther( pDlg->GetOther() );
-            pSearchItem->SetLEVShorter( pDlg->GetShorter() );
-            pSearchItem->SetLEVLonger( pDlg->GetLonger() );
-            SaveToModule_Impl();
-        }
+        executeSubDialog(pDlg, [pDlg, this](sal_Int32 nResult) {
+            if (nResult == RET_OK ) {
+                pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
+                pSearchItem->SetLEVOther( pDlg->GetOther() );
+                pSearchItem->SetLEVShorter( pDlg->GetShorter() );
+                pSearchItem->SetLEVLonger( pDlg->GetLonger() );
+                SaveToModule_Impl();
+            };
+        });
     }
     else if (&rBtn == m_xJapOptionsBtn.get())
     {
@@ -2363,6 +2364,17 @@ short SvxSearchDialog::executeSubDialog(VclAbstractDialog * dialog) {
     comphelper::ScopeGuard g([this] { m_executingSubDialog = false; });
     m_executingSubDialog = true;
     return dialog->Execute();
+}
+
+void SvxSearchDialog::executeSubDialog(VclPtr<VclAbstractDialog> dialog, const std::function<void(sal_Int32)>& func) {
+    assert(!m_executingSubDialog);
+    m_executingSubDialog = true;
+
+    dialog->StartExecuteAsync([dialog, func, this](sal_Int32 nResult) {
+        func(nResult);
+        dialog->disposeOnce();
+        m_executingSubDialog = false;
+    });
 }
 
 SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);
