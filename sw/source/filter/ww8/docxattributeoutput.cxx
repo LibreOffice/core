@@ -9290,6 +9290,8 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
     // <w:tabs> may contain 64 <w:tab> entries at most, or else MS Word reports the file as corrupt
     sal_uInt32 nWrittenTabs = 0;
+    // do not output inherited tabs multiple times (inside styles and inside inline properties)
+    std::vector<bool> vInherited(nCount, false);
 
     // Get offset for tabs
     // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
@@ -9313,13 +9315,15 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
                 FSNS( XML_w, XML_pos ), OString::number(pInheritedTabs->At(i).GetTabPos()) );
             ++nWrittenTabs;
         }
+        else if (pInheritedTabs->At(i) == rTabStop[nCurrTab])
+            vInherited[nCurrTab] = true;
     }
 
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
         if( rTabStop[i].GetAdjustment() != SvxTabAdjust::Default )
         {
-            if (nWrittenTabs < 64)
+            if (!vInherited[i] && nWrittenTabs < 64)
             {
                 impl_WriteTabElement( m_pSerializer, rTabStop[i], tabsOffset );
                 ++nWrittenTabs;
