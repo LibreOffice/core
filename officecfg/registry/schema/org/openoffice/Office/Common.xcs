@@ -3408,7 +3408,7 @@
       </prop>
       <prop oor:name="DefaultListBullets" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>List of default bullets in unordered list</desc>
+          <desc>List of default bullet sequence when unordered list is toggled in Writer</desc>
         </info>
         <value>
           <it>•</it>
@@ -3418,7 +3418,7 @@
       </prop>
       <prop oor:name="DefaultListBulletsFonts" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>List of default bullet fonts in unordered list. Matching font for `DefaultListBullets`.</desc>
+          <desc>List of default bullet fonts in unordered list. Matching font for 'DefaultListBullets'.</desc>
         </info>
         <value>
           <it>OpenSymbol</it>
