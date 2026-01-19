@@ -468,12 +468,18 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
                         SfxStyleSheetBasePool& rPool = *GetStyleSheetPool();
-                        SfxNewStyleDlg aDlg(GetView()->GetFrameWeld(), rPool, nFamily);
-                        if (aDlg.run() == RET_OK)
-                        {
-                            aParam = aDlg.GetName();
-                            rReq.AppendItem(SfxStringItem(nSlot, aParam));
-                        }
+                        auto xDlg = std::make_shared<SfxNewStyleDlg>(GetView()->GetFrameWeld(), rPool, SfxStyleFamily::Para);
+                        auto xRequest = std::make_shared<SfxRequest>(rReq);
+                        rReq.Ignore();
+                        weld::GenericDialogController::runAsync(xDlg, [xDlg, xRequest=std::move(xRequest), this](sal_Int32 nResult){
+                            if (nResult == RET_OK) {
+                                OUString sName = xDlg->GetName();
+                                xRequest->AppendItem(SfxStringItem(SID_STYLE_NEW_BY_EXAMPLE, sName));
+                                ApplyStyleSheetRequest(sName, SID_STYLE_NEW_BY_EXAMPLE, *xRequest, SfxStyleFamily::Para,
+                                                       SfxStyleSearchBits::Auto, nullptr);
+                            }
+                        });
+                        return;
                     }
                     break;
 
