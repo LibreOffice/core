@@ -1668,10 +1668,10 @@ void SwInsertSectionTabPage::ChangePasswd(bool bChange)
                 }
                 else
                 {
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                    std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   SwResId(STR_WRONG_PASSWD_REPEAT)));
-                    xInfoBox->run();
+                    xInfoBox->runAsync(xInfoBox, [](sal_uInt32) {});
                 }
             }
             else if(!bChange)
