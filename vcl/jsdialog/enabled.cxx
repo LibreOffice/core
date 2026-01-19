@@ -662,6 +662,55 @@ std::vector<OUString> completeWriterDialogList(const o3tl::sorted_vector<OUStrin
     return missing;
 }
 
+std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    auto processCategory = [&](const auto& category) {
+        for (const auto& entry : category)
+        {
+            // Skip this one, I don't think it can appear in practice
+            if (entry == u"sfx/ui/cmisinfopage.ui")
+                continue;
+            // Skip this one, I don't think it can appear in practice
+            else if (entry == u"cui/ui/colorpickerdialog.ui")
+                continue;
+            // Skip this one, is the query dialog about enabling overwrite
+            // mode which is disabled in the default config
+            else if (entry == u"cui/ui/querysetinsmodedialog.ui")
+                continue;
+            // Skip this one, its actually a sd-only one (with code in sd), but
+            // somehow the .ui is in cui
+            else if (entry == u"cui/ui/bulletandposition.ui")
+                continue;
+            // Skip this one for now, it requires smartart to already exist in a .docx
+            else if (entry == u"cui/ui/diagramdialog.ui")
+                continue;
+            // Skip this one, it cannot appear in writer
+            else if (entry == u"cui/ui/possizetabpage.ui")
+                continue;
+            // Skip this one, it cannot appear in writer, only calc in practice
+            else if (entry == u"cui/ui/cellalignment.ui")
+                continue;
+            // Skip this one, it cannot appear in writer, only impress/draw in
+            // practice
+            else if (entry == u"cui/ui/formatcellsdialog.ui")
+                continue;
+            // Skip this one, it cannot appear in writer (until autotext dialogs
+            // are enabled, in which case that is likely disabled. Maybe possible
+            // from calc.
+            else if (entry == u"cui/ui/eventassigndialog.ui")
+                continue;
+            OUString sEntry(entry);
+            if (!entries.contains(sEntry))
+                missing.push_back(sEntry);
+        }
+    };
+    processCategory(SfxDialogList);
+    processCategory(CuiDialogList);
+    return missing;
+}
+
+
 } // end of jsdialog
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

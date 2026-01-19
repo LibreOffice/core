@@ -212,6 +212,15 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
         for (const auto& entry : missingWriterDialogUIs)
             rJson.putSimpleValue(entry);
     }
+
+    std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries);
+    rJson.put("CompleteCommonDialogCoverage", missingCommonDialogUIs.empty());
+    if (!missingCommonDialogUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingCommonDialogCoverage");
+        for (const auto& entry : missingCommonDialogUIs)
+            rJson.putSimpleValue(entry);
+    }
 }
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
