@@ -313,6 +313,17 @@ OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()
     if (sFormula.isEmpty())
         return OUString();
 
+    // ensure the use of readable cell references (like "<A1>") instead of internal pointers
+    if (const SwTabFrame* pTabFrame = m_pAccTable ? m_pAccTable->GetTabFrame() : nullptr)
+    {
+        if (const SwTable* pTable = pTabFrame->GetTable())
+        {
+            SwTableBoxFormula aFormulaCopy(tbl_formula);
+            aFormulaCopy.PtrToBoxNm(pTable);
+            sFormula = aFormulaCopy.GetFormula();
+        }
+    }
+
     sFormula = sFormula.replaceAll(u"\\", u"\\\\")
                    .replaceAll(u";", u"\\;")
                    .replaceAll(u"=", u"\\=")
