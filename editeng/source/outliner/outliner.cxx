@@ -26,6 +26,7 @@
 #include <editeng/lrspitem.hxx>
 
 #include <math.h>
+#include <rtl/math.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include "paralist.hxx"
@@ -677,7 +678,7 @@ void Outliner::ImplCheckNumBulletItem( sal_Int32 nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     if (pPara)
-        pPara->aBulSize.setWidth( -1 );
+        pPara->Invalidate();
 }
 
 void Outliner::ImplSetLevelDependentStyleSheet( sal_Int32 nPara )
@@ -1016,14 +1017,14 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                         DrawBulletInfo aDrawBulletInfo(
                             *pFmt->GetBrush()->GetGraphicObject(),
                             aBulletPos,
-                            pPara->aBulSize);
+                            pPara->GetBulletSize());
 
                         aDrawBulletHdl.Call(&aDrawBulletInfo);
                     }
                 }
                 else
                 {
-                    pFmt->GetBrush()->GetGraphicObject()->Draw(rOutDev, aBulletPos, pPara->aBulSize);
+                    pFmt->GetBrush()->GetGraphicObject()->Draw(rOutDev, aBulletPos, pPara->GetBulletSize());
                 }
             }
         }
@@ -1378,14 +1379,16 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
     if (!pPara)
         return Size();
 
-    if( pPara->aBulSize.Width() == -1 )
+    auto aScalingParameters = getScalingParameters();
+    Size aSize;
+
+    if (pPara->IsBulletInvalid(aScalingParameters))
     {
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
         assert(pFmt && "ImplGetBulletSize - no Bullet!");
-
         if ( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE )
         {
-            pPara->aBulSize = Size( 0, 0 );
+            aSize = Size(0, 0);
         }
         else if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
         {
@@ -1394,19 +1397,22 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
             vcl::Font aBulletFont( ImpCalcBulletFont( nPara ) );
             vcl::Font aRefFont( pRefDev->GetFont());
             pRefDev->SetFont( aBulletFont );
-            pPara->aBulSize.setWidth( pRefDev->GetTextWidth( aBulletText ) );
-            pPara->aBulSize.setHeight( pRefDev->GetTextHeight() );
+            tools::Long x = pRefDev->GetTextWidth(aBulletText);
+            tools::Long y = pRefDev->GetTextHeight();
+            aSize = Size(x, y);
             pRefDev->SetFont( aRefFont );
         }
         else
         {
-            pPara->aBulSize = OutputDevice::LogicToLogic(pFmt->GetGraphicSize(),
+            aSize = OutputDevice::LogicToLogic(pFmt->GetGraphicSize(),
                     MapMode(MapUnit::Map100thMM),
                     pEditEngine->GetRefDevice()->GetMapMode());
         }
+
+        pPara->SetBulletSize(aSize, aScalingParameters);
     }
 
-    return pPara->aBulSize;
+    return pPara->GetBulletSize();
 }
 
 void Outliner::ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd )
@@ -1875,7 +1881,7 @@ void Outliner::SetFlatMode( bool bFlat )
     if( bFlat != pEditEngine->IsFlatMode() )
     {
         for ( sal_Int32 nPara = pParaList->GetParagraphCount(); nPara; )
-            pParaList->GetParagraph( --nPara )->aBulSize.setWidth( -1 );
+            pParaList->GetParagraph( --nPara )->Invalidate();
 
         pEditEngine->SetFlatMode( bFlat );
     }
