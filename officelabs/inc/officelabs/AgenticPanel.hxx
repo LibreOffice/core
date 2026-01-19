@@ -13,7 +13,7 @@
 #define INCLUDED_OFFICELABS_AGENTICPANEL_HXX
 
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weld/weld.hxx>
 #include <memory>
 #include <vector>
 #include <map>

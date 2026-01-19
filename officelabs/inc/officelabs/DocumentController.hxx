@@ -15,6 +15,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 namespace officelabs {
 

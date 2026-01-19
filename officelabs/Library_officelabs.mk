@@ -35,9 +35,10 @@ $(eval $(call gb_Library_use_externals,officelabs,\
     curl \
 ))
 
+# NOTE: AgenticPanel temporarily disabled - needs weld API fixes
+# TODO: Fix AgenticPanel to use correct VCL/weld APIs
 $(eval $(call gb_Library_add_exception_objects,officelabs,\
     officelabs/source/AgentConnection \
-    officelabs/source/AgenticPanel \
     officelabs/source/DocumentController \
     officelabs/source/ChatPanel \
     officelabs/source/ChatPanelChildWindow \

@@ -1277,6 +1277,7 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	svx \
 	uui \
 	vcl \
+	officelabs \
 	writerperfect \
 	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),xmlsec) \
 ))

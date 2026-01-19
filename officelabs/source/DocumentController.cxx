@@ -13,6 +13,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -61,10 +62,10 @@ OUString DocumentController::getDocumentTitle()
     if (!m_xDocument.is())
         return OUString();
 
-    uno::Reference<frame::XModel> xModel(m_xDocument, uno::UNO_QUERY);
-    if (xModel.is())
+    uno::Reference<frame::XTitle> xTitle(m_xDocument, uno::UNO_QUERY);
+    if (xTitle.is())
     {
-        return xModel->getTitle();
+        return xTitle->getTitle();
     }
     return OUString();
 }

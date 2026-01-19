@@ -186,6 +186,9 @@
             <property name="right-margin">8</property>
             <property name="top-margin">8</property>
             <property name="bottom-margin">8</property>
+            <accessibility>
+              <property name="label" translatable="yes">Chat conversation history</property>
+            </accessibility>
           </object>
         </child>
       </object>
