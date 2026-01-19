@@ -577,7 +577,7 @@ SwAccessibleTable::SwAccessibleTable(
     StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
     SetName( pFrameFormat->GetName().toString() + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
 
-    const OUString sArg1( static_cast< const SwTabFrame * >( GetFrame() )->GetFormat()->GetName().toString() );
+    const OUString sArg1 = GetTabFrame()->GetFormat()->GetName().toString();
     const OUString sArg2( GetFormattedPageNumber() );
 
     m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
@@ -593,7 +593,7 @@ SwAccessibleTable::~SwAccessibleTable()
 
 void SwAccessibleTable::Notify(const SfxHint& rHint)
 {
-    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
+    const SwTabFrame* pTabFrame = GetTabFrame();
     if(rHint.GetId() == SfxHintId::Dying)
     {
         EndListeningAll();
@@ -627,8 +627,8 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
 // #i77106#
 std::unique_ptr<SwAccessibleTableData_Impl> SwAccessibleTable::CreateNewTableData()
 {
-    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>( GetFrame() );
-    return std::unique_ptr<SwAccessibleTableData_Impl>(new SwAccessibleTableData_Impl( *GetMap(), pTabFrame, IsInPagePreview() ));
+    return std::unique_ptr<SwAccessibleTableData_Impl>(
+        new SwAccessibleTableData_Impl(*GetMap(), GetTabFrame(), IsInPagePreview()));
 }
 
 void SwAccessibleTable::UpdateTableData()
@@ -809,9 +809,8 @@ uno::Reference< XAccessibleTable > SAL_CALL
 
     // #i87532# - assure that return accessible object is empty,
     // if no column header exists.
-    rtl::Reference<SwAccessibleTableColHeaders> pTableColHeaders =
-        new SwAccessibleTableColHeaders(GetMap()->shared_from_this(),
-                    static_cast<const SwTabFrame *>(GetFrame()));
+    rtl::Reference<SwAccessibleTableColHeaders> pTableColHeaders
+        = new SwAccessibleTableColHeaders(GetMap()->shared_from_this(), GetTabFrame());
     if ( pTableColHeaders->getAccessibleChildCount() <= 0 )
     {
         return uno::Reference< XAccessibleTable >();
@@ -1387,6 +1386,11 @@ sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
     return sal_Int32(crBack);
 }
 
+const SwTabFrame* SwAccessibleTable::GetTabFrame() const
+{
+    return static_cast<const SwTabFrame*>(GetFrame());
+}
+
 void SwAccessibleTable::FireSelectionEvent( )
 {
     for (const unotools::WeakReference<SwAccessibleContext>& rxCell : m_vecCellRemove)
@@ -1528,8 +1532,8 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders(
 
 std::unique_ptr<SwAccessibleTableData_Impl> SwAccessibleTableColHeaders::CreateNewTableData()
 {
-    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>( GetFrame() );
-    return std::unique_ptr<SwAccessibleTableData_Impl>(new SwAccessibleTableData_Impl( *(GetMap()), pTabFrame, IsInPagePreview(), true ));
+    return std::unique_ptr<SwAccessibleTableData_Impl>(
+        new SwAccessibleTableData_Impl(*(GetMap()), GetTabFrame(), IsInPagePreview(), true));
 }
 
 void SwAccessibleTableColHeaders::Notify(const SfxHint& )
@@ -1545,7 +1549,7 @@ sal_Int64 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
 
     sal_Int32 nCount = 0;
 
-    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>( GetFrame() );
+    const SwTabFrame* pTabFrame = GetTabFrame();
     const SwAccessibleChildSList aVisList( GetVisArea(), *pTabFrame, *(GetMap()) );
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
