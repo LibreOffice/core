@@ -1739,11 +1739,9 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
         }
     }
 
-    auto pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pDrawObject);
-    if (pSwFlyDraw)
-    {
-        pSwFlyDraw->SetTextBox(true);
-    }
+    SdrObject* const pFlyObject{ pNewTextBox->FindSdrObject() };
+    assert(dynamic_cast<SwFlyDrawObj*>(pFlyObject));
+    static_cast<SwFlyDrawObj*>(pFlyObject)->SetTextBox(true);
     m_pTextBoxes.push_back(aElem);
 }
 
