@@ -25,3 +25,8 @@ sd/uiconfig/simpress/ui/presentationdialog.ui://GtkLabel[@id='external_str'] orp
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkComboBoxText[@id='masterslide'] no-labelled-by
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='masterlabel'] orphan-label
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='customlabel'] orphan-label
+sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Home-CharFontName'] button-no-label
+sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Home-FontHeight'] button-no-label
+sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='MasterSlide-MasterSlidePane'] button-no-label
+sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Transitions-SlideTransitionsPane'] button-no-label
+
