@@ -85,7 +85,7 @@ const SwNode* SwTableField::GetNodeOfFormula() const
 
 OUString SwTableField::GetCommand()
 {
-    if (EXTRNL_NAME != GetNameType())
+    if (NameType::External != GetNameType())
     {
         SwNode const*const pNd = GetNodeOfFormula();
         SwTableNode const*const pTableNd = pNd ? pNd->FindTableNode() : nullptr;
@@ -94,7 +94,7 @@ OUString SwTableField::GetCommand()
             PtrToBoxNm( &pTableNd->GetTable() );
         }
     }
-    return (EXTRNL_NAME == GetNameType())
+    return (NameType::External == GetNameType())
         ? SwTableFormula::GetFormula()
         : OUString();
 }

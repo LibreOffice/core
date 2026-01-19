@@ -89,7 +89,7 @@ typedef void (SwTableFormula::*FnScanFormula)( const SwTable&, OUStringBuffer&,
     static const SwTable* FindTable( SwDoc& rDoc, std::u16string_view rNm );
 
 protected:
-    enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
+    enum class NameType { External, Internal, Relative };
 
     OUString    m_sFormula;         ///< current formula
     NameType    m_eNmType;          ///< current display method
@@ -128,7 +128,7 @@ public:
     /// gets called before/after merging/splitting of tables
     void ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd );
 
-    bool IsIntrnlName() const               { return m_eNmType == INTRNL_NAME; }
+    bool IsIntrnlName() const               { return m_eNmType == NameType::Internal; }
     NameType GetNameType() const            { return m_eNmType; }
 
     bool IsValid() const                    { return m_bValidValue; }
@@ -138,7 +138,7 @@ public:
     void SetFormula( const OUString& rNew )
     {
         m_sFormula = rNew;
-        m_eNmType = EXTRNL_NAME;
+        m_eNmType = NameType::External;
         m_bValidValue = false;
     }
 

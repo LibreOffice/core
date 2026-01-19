@@ -323,7 +323,7 @@ bool SwTableCalcPara::CalcWithStackOverflow()
 
 SwTableFormula::SwTableFormula( OUString aFormula )
 : m_sFormula( std::move(aFormula) )
-, m_eNmType( EXTRNL_NAME )
+, m_eNmType( NameType::External )
 , m_bValidValue( false )
 {
 }
@@ -511,13 +511,13 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTable, OUStringBuffer& rNewS
     if( pLastBox )
     {
         rNewStr.append(lcl_BoxNmToRel( rTable, *pTableNd, sRefBoxNm, *pLastBox,
-                                m_eNmType == EXTRNL_NAME ));
+                                m_eNmType == NameType::External ));
         rNewStr.append(":");
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
     rNewStr.append(lcl_BoxNmToRel( rTable, *pTableNd, sRefBoxNm, rFirstBox,
-                            m_eNmType == EXTRNL_NAME ));
+                            m_eNmType == NameType::External ));
 
     // get label for the box
     rNewStr.append(rFirstBox[ rFirstBox.getLength()-1 ]);
@@ -583,23 +583,23 @@ void SwTableFormula::PtrToBoxNm( const SwTable* pTable )
     FnScanFormula fnFormula = nullptr;
     switch (m_eNmType)
     {
-    case INTRNL_NAME:
+    case NameType::Internal:
         if( pTable )
             fnFormula = &SwTableFormula::PtrToBoxNms;
         break;
-    case REL_NAME:
+    case NameType::Relative:
         if( pTable )
         {
             fnFormula = &SwTableFormula::RelNmsToBoxNms;
             pNd = GetNodeOfFormula();
         }
         break;
-    case EXTRNL_NAME:
+    case NameType::External:
         return;
     }
     assert(pTable);
     m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
-    m_eNmType = EXTRNL_NAME;
+    m_eNmType = NameType::External;
 }
 
 /// create internal formula (in CORE)
@@ -609,23 +609,23 @@ void SwTableFormula::BoxNmToPtr( const SwTable* pTable )
     FnScanFormula fnFormula = nullptr;
     switch (m_eNmType)
     {
-    case EXTRNL_NAME:
+    case NameType::External:
         if( pTable )
             fnFormula = &SwTableFormula::BoxNmsToPtr;
         break;
-    case REL_NAME:
+    case NameType::Relative:
         if( pTable )
         {
             fnFormula = &SwTableFormula::RelBoxNmsToPtr;
             pNd = GetNodeOfFormula();
         }
         break;
-    case INTRNL_NAME:
+    case NameType::Internal:
         return;
     }
     assert(pTable);
     m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
-    m_eNmType = INTRNL_NAME;
+    m_eNmType = NameType::Internal;
 }
 
 /// create relative formula (for copy)
@@ -635,20 +635,20 @@ void SwTableFormula::ToRelBoxNm( const SwTable* pTable )
     FnScanFormula fnFormula = nullptr;
     switch (m_eNmType)
     {
-    case INTRNL_NAME:
-    case EXTRNL_NAME:
+    case NameType::Internal:
+    case NameType::External:
         if( pTable )
         {
             fnFormula = &SwTableFormula::BoxNmsToRelNm;
             pNd = GetNodeOfFormula();
         }
         break;
-    case REL_NAME:
+    case NameType::Relative:
         return;
     }
     assert(pTable);
     m_sFormula = ScanString( fnFormula, *pTable, const_cast<void*>(static_cast<void const *>(pNd)) );
-    m_eNmType = REL_NAME;
+    m_eNmType = NameType::Relative;
 }
 
 OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTable,
@@ -1040,13 +1040,13 @@ void SwTableFormula::HasValidBoxes_( const SwTable& rTable, OUStringBuffer& ,
 
     switch (m_eNmType)
     {
-    case INTRNL_NAME:
+    case NameType::Internal:
         if( pLastBox )
             pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->toInt64()));
         pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.toInt64()));
         break;
 
-    case REL_NAME:
+    case NameType::Relative:
         {
             const SwNode* pNd = GetNodeOfFormula();
             const SwTableBox* pBox = !pNd ? nullptr
@@ -1058,7 +1058,7 @@ void SwTableFormula::HasValidBoxes_( const SwTable& rTable, OUStringBuffer& ,
         }
         break;
 
-    case EXTRNL_NAME:
+    case NameType::External:
         if( pLastBox )
             pEndBox = const_cast<SwTableBox*>(rTable.GetTableBox( *pLastBox ));
         pSttBox = const_cast<SwTableBox*>(rTable.GetTableBox( rFirstBox ));
@@ -1154,13 +1154,13 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     SwTableBox* pSttBox = nullptr, *pEndBox = nullptr;
     switch (m_eNmType)
     {
-    case INTRNL_NAME:
+    case NameType::Internal:
         if( pLastBox )
             pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->toInt64()));
         pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.toInt64()));
         break;
 
-    case REL_NAME:
+    case NameType::Relative:
         {
             const SwNode* pNd = GetNodeOfFormula();
             const SwTableBox* pBox = pNd ? pTable->GetTableBox(
@@ -1171,7 +1171,7 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
         }
         break;
 
-    case EXTRNL_NAME:
+    case NameType::External:
         if( pLastBox )
             pEndBox = const_cast<SwTableBox*>(pTable->GetTableBox( *pLastBox ));
         pSttBox = const_cast<SwTableBox*>(pTable->GetTableBox( rFirstBox ));
@@ -1259,7 +1259,7 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd )
         pTable = rTableUpd.m_pTable;
 
     m_sFormula = ScanString( &SwTableFormula::SplitMergeBoxNm_, *pTable, static_cast<void*>(&rTableUpd) );
-    m_eNmType = INTRNL_NAME;
+    m_eNmType = NameType::Internal;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

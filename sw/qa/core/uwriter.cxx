@@ -1404,7 +1404,7 @@ namespace
             : SwTableFormula(rStr)
             , m_pNode(pNode)
         {
-            m_eNmType = INTRNL_NAME;
+            m_eNmType = NameType::Internal;
         }
         virtual const SwNode* GetNodeOfFormula() const override
         {
