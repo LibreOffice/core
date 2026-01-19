@@ -2450,12 +2450,10 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 }
         }
 
-        if( IsRegisterOn() )
+        SwRectFnSet aRectFnSet(*m_pFrame);
+        if( IsRegisterOn() && !aRectFnSet.IsVert() )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
-            SwRectFnSet aRectFnSet(*m_pFrame);
-            if ( aRectFnSet.IsVert() )
-                nTmpY = m_pFrame->SwitchHorizontalToVertical( nTmpY );
             nTmpY = aRectFnSet.YDiff( nTmpY, RegStart() );
             const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )

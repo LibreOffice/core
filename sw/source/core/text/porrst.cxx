@@ -543,14 +543,23 @@ bool SwTextFrame::FormatEmpty()
 
 bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 {
-    const SwFrame *pFrame = this;
     rRegDiff = 0;
+    rRegStart = 0;
+    if(IsVertical())
+    {
+        return false;
+    }
+    const SwFrame *pFrame = this;
     while( !( ( SwFrameType::Body | SwFrameType::Fly )
            & pFrame->GetType() ) && pFrame->GetUpper() )
         pFrame = pFrame->GetUpper();
     if( ( SwFrameType::Body| SwFrameType::Fly ) & pFrame->GetType() )
     {
         SwRectFnSet aRectFnSet(*pFrame);
+        if(aRectFnSet.IsVert())
+        {
+            return false;
+        }
         rRegStart = aRectFnSet.GetPrtTop(*pFrame);
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )
@@ -574,10 +583,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                     }
                 }
                 const tools::Long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
-                if ( aRectFnSet.IsVert() )
-                    rRegStart -= nTmpDiff;
-                else
-                    rRegStart += nTmpDiff;
+                rRegStart += nTmpDiff;
             }
         }
     }

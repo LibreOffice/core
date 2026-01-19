@@ -34,7 +34,10 @@ public:
 protected:
     void checkTextAlignedToBaselineGrid(const bool bAligned = true);
 
-    void applyPageLineSpacing(uint16_t nPage, bool bEnable, const OUString& rReferenceStyle);
+    void applyPageLineSpacing(const uint16_t nPage, const bool bEnable,
+                              const OUString& rReferenceStyle);
+
+    Size getTextFrameSize(const uint16_t nTextFrame, const OUString& rTextContent);
 
 private:
     void checkTextAlignedToBaselineGrid(SwTextFrame* pTextFrame, const bool bAligned);
@@ -102,7 +105,7 @@ void SwPageLineSpacingTest::checkTextAlignedToBaselineGrid(const bool bAligned)
     };
 }
 
-void SwPageLineSpacingTest::applyPageLineSpacing(uint16_t nPage, bool bEnable,
+void SwPageLineSpacingTest::applyPageLineSpacing(const uint16_t nPage, const bool bEnable,
                                                  const OUString& rReferenceStyle)
 {
     SwDocShell* pDocShell = getSwDocShell();
@@ -150,6 +153,56 @@ void SwPageLineSpacingTest::applyPageLineSpacing(uint16_t nPage, bool bEnable,
         }
         pNextFrame = pNextFrame->GetLower();
     };
+    calcLayout();
+}
+
+Size SwPageLineSpacingTest::getTextFrameSize(const uint16_t nTextFrame,
+                                             const OUString& rTextContent)
+{
+    SwDocShell* pDocShell = getSwDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pRoot);
+
+    SwFrame* pNextFrame = pRoot;
+    bool bLowerFinished = false;
+    uint16_t nCurrentTextFrame = 1;
+    while (pNextFrame)
+    {
+        if (pNextFrame->IsTextFrame())
+        {
+            if (nCurrentTextFrame == nTextFrame)
+            {
+                auto pTextFrame = dynamic_cast<SwTextFrame*>(pNextFrame);
+                CPPUNIT_ASSERT(pTextFrame);
+                CPPUNIT_ASSERT_EQUAL(rTextContent, pTextFrame->GetText());
+                return pTextFrame->getFrameArea().SSize();
+            }
+            nCurrentTextFrame += 1;
+        }
+
+        // Traverse to the next frame in the layout.
+        if (pNextFrame->GetLower() && !bLowerFinished)
+        {
+            pNextFrame = pNextFrame->GetLower();
+        }
+        else if (pNextFrame->GetNext())
+        {
+            pNextFrame = pNextFrame->GetNext();
+            bLowerFinished = false;
+        }
+        else
+        {
+            pNextFrame = pNextFrame->GetUpper();
+            bLowerFinished = true;
+        }
+    };
+
+    return { 0, 0 };
 }
 
 void SwPageLineSpacingTest::checkTextAlignedToBaselineGrid(SwTextFrame* pTextFrame,
@@ -182,7 +235,10 @@ void SwPageLineSpacingTest::checkTextAlignedToBaselineGrid(SwTextFrame* pTextFra
 
     // Make sure the first line of the paragraph is aligned with the baseline grid.
     SwLineLayout* pPara = pTextFrame->GetPara();
-    CPPUNIT_ASSERT(pPara);
+    if (!pPara)
+    {
+        return;
+    }
     const SwTwips nLineAscent = pPara->GetAscent();
     const SwTwips nHeightDiff = pPara->GetRealHeight() - pPara->Height();
     const SwTwips nBaseline = pTextFrame->getFrameArea().Top()
@@ -371,7 +427,7 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testChangeReferenceStyle)
 /* This use case does not work properly (tdf#169922)
 CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testRemovePage)
 {
-    createSwDoc("remove.fodt");
+    createSwDoc("removePage.fodt");
 
     checkTextAlignedToBaselineGrid();
 
@@ -387,6 +443,43 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testRemovePage)
     checkTextAlignedToBaselineGrid();
 }
 */
+
+CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testVerticalTextInsideTable)
+{
+    createSwDoc("verticalTextInsideTable.fodt");
+
+    // The original size should not change after applying page line-spacing.
+    const Size aBottomToTopSize = getTextFrameSize(1, u"BottomToTop"_ustr);
+    const Size aTopToBottomSize = getTextFrameSize(2, u"TopToBottom"_ustr);
+
+    applyPageLineSpacing(1, true, u"Body Text"_ustr);
+
+    const Size aNewTopToBottomSize = getTextFrameSize(2, u"TopToBottom"_ustr);
+    CPPUNIT_ASSERT(aNewTopToBottomSize.Width() > 0); // Width was negative (tdf#169821).
+    CPPUNIT_ASSERT_EQUAL(aBottomToTopSize, getTextFrameSize(1, u"BottomToTop"_ustr));
+    CPPUNIT_ASSERT_EQUAL(aTopToBottomSize, aNewTopToBottomSize);
+
+    applyPageLineSpacing(1, false, "");
+
+    CPPUNIT_ASSERT_EQUAL(aBottomToTopSize, getTextFrameSize(1, u"BottomToTop"_ustr));
+    CPPUNIT_ASSERT_EQUAL(aTopToBottomSize, getTextFrameSize(2, u"TopToBottom"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testVerticalPageStyle)
+{
+    createSwDoc("verticalPageStyle.fodt");
+
+    // The original size should not change after applying page line-spacing.
+    const Size aOriginalSize = getTextFrameSize(1, u"RightToLeft"_ustr);
+
+    applyPageLineSpacing(1, true, u"Body Text"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(aOriginalSize, getTextFrameSize(1, u"RightToLeft"_ustr));
+
+    applyPageLineSpacing(1, false, "");
+
+    CPPUNIT_ASSERT_EQUAL(aOriginalSize, getTextFrameSize(1, u"RightToLeft"_ustr));
+}
 
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
