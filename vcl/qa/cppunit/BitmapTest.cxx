@@ -11,6 +11,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <vcl/alpha.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
@@ -664,6 +665,205 @@ CPPUNIT_TEST_FIXTURE(BitmapTest, testCrop)
         CPPUNIT_ASSERT_EQUAL(Size(10, 10), aCroppedBmp.GetSizePixel());
     }
 }
+
+CPPUNIT_TEST_FIXTURE(BitmapTest, testGetPixelColor24_8)
+{
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
+    }
+    AlphaMask aMask(Size(3, 3));
+    {
+        BitmapScopedWriteAccess pWriteAccess(aMask);
+        pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
+    }
+
+    Bitmap aBitmap2(aBitmap, aMask);
+
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0xFF, 0x00), aBitmap2.GetPixelColor(0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapTest, testGetPixelColor32)
+{
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N32_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00));
+    }
+
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00),
+                         aBitmap.GetPixelColor(0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapTest, testTransformBitmap)
+{
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 8; ++i)
+        {
+            for (int j = 0; j < 8; ++j)
+            {
+                pWriteAccess->SetPixel(i, j, COL_BLACK);
+            }
+        }
+    }
+
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.rotate(M_PI / 2);
+    Bitmap aTransformed = aBitmap.TransformBitmap(16, 16, aMatrix);
+    aBitmap = aTransformed.CreateColorBitmap();
+    BitmapScopedReadAccess pAccess(aBitmap);
+    for (int i = 0; i < 16; ++i)
+    {
+        for (int j = 0; j < 16; ++j)
+        {
+            BitmapColor aColor = pAccess->GetPixel(i, j);
+            std::stringstream ss;
+            ss << "Color is expected to be white or black, is '" << aColor.AsRGBHexString() << "'";
+            // Without the accompanying fix in place, this test would have failed with:
+            // - Expression: aColor == COL_WHITE || aColor == COL_BLACK
+            // - Color is expected to be white or black, is 'bfbfbf'
+            // i.e. smoothing introduced noise for a simple 90 deg rotation.
+            CPPUNIT_ASSERT_MESSAGE(ss.str(), aColor == COL_WHITE || aColor == COL_BLACK);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapTest, testAlphaBlendWith)
+{
+    AlphaMask alpha(Size(1, 1));
+    AlphaMask bitmap(Size(1, 1));
+
+    // Just test a handful of combinations to make sure the algorithm doesn't
+    // change (as happened when I did some 32-bit alpha changes)
+
+    // Note that Erase() takes a transparency value, but we get alpha values in GetPixelIndex.
+
+    alpha.Erase(64);
+    bitmap.Erase(64);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 112),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(12);
+    bitmap.Erase(64);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 73),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(12);
+    bitmap.Erase(12);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 24),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(127);
+    bitmap.Erase(13);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 134),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(255);
+    bitmap.Erase(255);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(0);
+    bitmap.Erase(255);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(255);
+    bitmap.Erase(0);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(0);
+    bitmap.Erase(0);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 0),
+                         BitmapScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCreateMask)
+{
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 3; ++i)
+            pWriteAccess->SetPixel(i, i, COL_RED);
+    }
+    aBitmap = aBitmap.CreateMask(COL_RED, 1);
+    BitmapScopedReadAccess pAccess(aBitmap);
+    // the output is a greyscale palette bitmap
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(0, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(0, 2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(1, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(2, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(2, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 2));
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapTest, testCombineMaskOr)
+{
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 3; ++i)
+            pWriteAccess->SetPixel(1, i, COL_RED);
+    }
+    AlphaMask aAlphaBitmap(Size(3, 3));
+    {
+        BitmapScopedWriteAccess pWriteAccess(aAlphaBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 1; i < 3; ++i)
+        {
+            pWriteAccess->SetPixel(i, 0, COL_BLACK);
+            pWriteAccess->SetPixel(i, 1, COL_GRAY);
+            pWriteAccess->SetPixel(i, 0, Color(0xef, 0xef, 0xef));
+        }
+    }
+
+    {
+        AlphaMask aMask = aBitmap.CreateAlphaMask(COL_RED, 1);
+        BitmapScopedReadAccess pAccess(aMask);
+        // the output is a greyscale palette bitmap
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 2));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 2));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 2));
+    }
+
+    Bitmap aBitmap2(aBitmap, aAlphaBitmap);
+    aBitmap2.CombineMaskOr(COL_RED, 1);
+
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(0, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(0, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(1, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(1, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(1, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(2, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(2, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(2, 2));
+}
+
 } // namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
