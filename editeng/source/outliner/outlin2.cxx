@@ -479,15 +479,6 @@ const ScalingParameters & Outliner::getScalingParameters() const
 
 void Outliner::setScalingParameters(ScalingParameters const& rScalingParameters)
 {
-    // reset bullet size
-    sal_Int32 nParagraphs = pParaList->GetParagraphCount();
-    for ( sal_Int32 nPara = 0; nPara < nParagraphs; nPara++ )
-    {
-        Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if ( pPara )
-            pPara->aBulSize.setWidth( -1 );
-    }
-
     pEditEngine->setScalingParameters(rScalingParameters);
 }
 
