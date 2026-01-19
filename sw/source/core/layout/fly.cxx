@@ -175,6 +175,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     m_bAutoPosition( false ),
     m_bDeleted( false ),
     m_nAuthor( std::string::npos ),
+    m_bInserted( false ),
     m_bValidContentPos( false )
 {
     mnFrameType = SwFrameType::Fly;
@@ -3447,6 +3448,10 @@ void SwFlyFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("fly"));
     dumpAsXmlAttributes(writer);
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("deleted"), "%s",
+                                            BAD_CAST(OString::boolean(m_bDeleted).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("inserted"), "%s",
+                                            BAD_CAST(OString::boolean(m_bInserted).getStr()));
 
     SwLayoutFrame::dumpAsXml(writer);
 

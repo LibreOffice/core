@@ -134,6 +134,7 @@ protected:
     bool m_bAutoPosition :1; ///< RndStdIds::FLY_AT_CHAR, anchored at character
     bool m_bDeleted :1;      ///< Anchored to a tracked deletion
     size_t m_nAuthor;        ///< Redline author index for colored crossing out
+    bool m_bInserted;        ///< Anchored to a tracked insertion
 
     friend class SwNoTextFrame; // is allowed to call NotifyBackground
 
@@ -221,6 +222,8 @@ public:
     void SetDeleted(bool bDeleted) { m_bDeleted = bDeleted; }
     void SetAuthor( size_t nAuthor ) { m_nAuthor = nAuthor; }
     size_t GetAuthor() const { return m_nAuthor; }
+    bool IsInserted() const { return m_bInserted; }
+    void SetInserted(bool bInserted) { m_bInserted = bInserted; }
 
     bool IsNotifyBack() const { return m_bNotifyBack; }
     void SetNotifyBack()      { m_bNotifyBack = true; }
