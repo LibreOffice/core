@@ -59,7 +59,7 @@ namespace pcr
         , m_xFtTitle(m_xBuilder->weld_label(u"label"_ustr))
         , m_xBrowseButton(m_xBuilder->weld_button(u"browse"_ustr))
         , m_xAdditionalBrowseButton(m_xBuilder->weld_button(u"morebrowse"_ustr))
-        , m_pInitialControlParent(pInitialControlParent) // controls start with this as their parent and need to be moved into m_xContainer
+        , m_pInitialControlParent(pInitialControlParent) // controls start with this as their parent and need to be moved into m_xGrid
         , m_pParent(pParent)
         , m_pControlWindow( nullptr )
         , m_pBrowseButton(nullptr)
