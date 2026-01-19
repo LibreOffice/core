@@ -53,7 +53,6 @@ class FontFeaturesDialog : public weld::GenericDialogController
 private:
     std::vector<std::unique_ptr<FontFeatureItem>> m_aFeatureItems;
     OUString m_sFontName;
-    OUString m_sResultFontName;
 
     SvxFontPrevWindow m_aPreviewWindow;
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
@@ -66,7 +65,6 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xPreviewWindow;
 
     void initialize();
-    OUString createFontNameWithFeatures();
 
     // returns the max height of a row
     int fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
@@ -77,9 +75,8 @@ private:
 public:
     FontFeaturesDialog(weld::Window* pParent, OUString aFontName);
     ~FontFeaturesDialog() override;
-    virtual short run() override;
 
-    OUString const& getResultFontName() const { return m_sResultFontName; }
+    OUString createFontNameWithFeatures() const;
 
     void updateFontPreview();
 };
