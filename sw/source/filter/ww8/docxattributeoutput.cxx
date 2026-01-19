@@ -9280,10 +9280,10 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     }
 
     // do not output inherited tabs twice (inside styles and inside inline properties)
-    if ( nCount == nInheritedTabCount && nCount > 0 )
+    if (nCount == nInheritedTabCount)
     {
         if ( *pInheritedTabs == rTabStop )
-            return;
+            return; // <w:tabs> must contain at least one <w:tab>, so don't write it empty
     }
 
     m_pSerializer->startElementNS(XML_w, XML_tabs);
