@@ -115,6 +115,15 @@ namespace o3tl
 #define OLUNDO_INSERT           EDITUNDO_USER+6
 // #define OLUNDO_MOVEPARAGRAPHS    EDITUNDO_USER+7
 
+/** Information about the bullet in the paragraph*/
+struct BulletInfo
+{
+public:
+    OUString maText;
+    Size maSize = Size(-1, -1);
+    ScalingParameters maScalingParameters;
+};
+
 class Paragraph : protected ParagraphData
 {
 private:
@@ -128,17 +137,61 @@ private:
 
     Paragraph& operator=(const Paragraph& rPara ) = delete;
 
-    OUString            aBulText;
-    Size                aBulSize;
-    ParaFlag            nFlags;
-    bool                bVisible;
+    BulletInfo maBullet;
+    ParaFlag nFlags = ParaFlag::NONE;
+    bool bVisible = true;
 
     bool                IsVisible() const { return bVisible; }
-    void                SetText( const OUString& rText ) { aBulText = rText; aBulSize.setWidth(-1); }
-    void                Invalidate() { aBulSize.setWidth(-1); }
-    void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.setWidth(-1); }
-    const OUString&     GetText() const { return aBulText; }
 
+    void SetText(const OUString& rText)
+    {
+        maBullet.maText = rText;
+        Invalidate();
+    }
+
+    /// Sets the bullet size as well as the scaling parameters used to calculate the size
+    void SetBulletSize(Size const& rSize, ScalingParameters const& rScalingParameters)
+    {
+        maBullet.maSize = rSize;
+        maBullet.maScalingParameters = rScalingParameters;
+    }
+
+    /// Current size of the bullet
+    Size const& GetBulletSize()
+    {
+        return maBullet.maSize;
+    }
+
+    /// Is the bullet size invalid for the current scaling parameters
+    bool IsBulletInvalid(ScalingParameters const& rCurrentScalingParameters)
+    {
+        return rCurrentScalingParameters != maBullet.maScalingParameters
+            || maBullet.maSize.Width() == -1
+            || maBullet.maSize.Height() == -1;
+    }
+
+    /// Invalidate paragraph calculated information: bullet size
+    void Invalidate()
+    {
+        maBullet.maSize.setWidth(-1);
+        maBullet.maSize.setHeight(-1);
+    }
+
+    void SetDepth(sal_Int16 nNewDepth)
+    {
+        nDepth = nNewDepth;
+        Invalidate();
+    }
+
+    const OUString& GetText() const
+    {
+        return maBullet.maText;
+    }
+
+    BulletInfo const& GetBullet()
+    {
+        return maBullet;
+    }
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& ) = delete;
                         Paragraph( const ParagraphData& );
@@ -154,9 +207,9 @@ private:
     void                SetFlag( ParaFlag nFlag ) { nFlags |= nFlag; }
     void                RemoveFlag( ParaFlag nFlag ) { nFlags &= ~nFlag; }
     bool                HasFlag( ParaFlag nFlag ) const { return bool(nFlags & nFlag); }
+
 public:
-                        ~Paragraph();
-    void                dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 struct ParaRange
