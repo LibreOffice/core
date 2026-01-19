@@ -321,6 +321,62 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     }
 }
 
+void SwDocShell::ApplyStyleSheetRequest(const OUString& aParam, sal_uInt16 nSlot, SfxRequest& rReq, SfxStyleFamily nFamily, SfxStyleSearchBits nMask, SwWrtShell* pActShell)
+{
+    if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
+    {
+        sal_uInt16 nRet = 0xffff;
+        bool bReturns = false;
+
+        switch(nSlot)
+        {
+            case SID_STYLE_EDIT:
+            case SID_STYLE_FONT:
+                Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? u"font"_ustr : OUString(), pActShell);
+                break;
+            case SID_STYLE_DELETE:
+                Delete(aParam, nFamily);
+                break;
+            case SID_STYLE_HIDE:
+            case SID_STYLE_SHOW:
+                Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
+                break;
+            case SID_STYLE_APPLY:
+                // Shell-switch in ApplyStyles
+                nRet = static_cast<sal_uInt16>(ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() ));
+                bReturns = true;
+                break;
+            case SID_STYLE_WATERCAN:
+                nRet = static_cast<sal_uInt16>(DoWaterCan(aParam, nFamily));
+                bReturns = true;
+                break;
+            case SID_STYLE_UPDATE_BY_EXAMPLE:
+                UpdateStyle(aParam, nFamily, pActShell);
+                break;
+            case SID_STYLE_NEW_BY_EXAMPLE:
+                MakeByExample(aParam, nFamily, nMask, pActShell);
+                break;
+
+            default:
+                OSL_FAIL("Invalid SlotId");
+        }
+
+        // Update formatting toolbar buttons status
+        if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
+            GetView()->GetViewFrame().GetBindings().InvalidateAll(false);
+
+        if (bReturns)
+        {
+            if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
+                rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
+            else
+                rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
+        }
+
+        rReq.Done();
+    }
+}
+
 // evaluate StyleSheet-Requests
 void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 {
@@ -521,58 +577,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     rReq.AppendItem(SfxStringItem(nSlot, aParam));
                 }
             }
-            if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
-            {
-                sal_uInt16 nRet = 0xffff;
-                bool bReturns = false;
 
-                switch(nSlot)
-                {
-                    case SID_STYLE_EDIT:
-                    case SID_STYLE_FONT:
-                        Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? u"font"_ustr : OUString(), pActShell);
-                        break;
-                    case SID_STYLE_DELETE:
-                        Delete(aParam, nFamily);
-                        break;
-                    case SID_STYLE_HIDE:
-                    case SID_STYLE_SHOW:
-                        Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
-                        break;
-                    case SID_STYLE_APPLY:
-                        // Shell-switch in ApplyStyles
-                        nRet = static_cast<sal_uInt16>(ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() ));
-                        bReturns = true;
-                        break;
-                    case SID_STYLE_WATERCAN:
-                        nRet = static_cast<sal_uInt16>(DoWaterCan(aParam, nFamily));
-                        bReturns = true;
-                        break;
-                    case SID_STYLE_UPDATE_BY_EXAMPLE:
-                        UpdateStyle(aParam, nFamily, pActShell);
-                        break;
-                    case SID_STYLE_NEW_BY_EXAMPLE:
-                        MakeByExample(aParam, nFamily, nMask, pActShell);
-                        break;
-
-                    default:
-                        OSL_FAIL("Invalid SlotId");
-                }
-
-                // Update formatting toolbar buttons status
-                if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
-                    GetView()->GetViewFrame().GetBindings().InvalidateAll(false);
-
-                if (bReturns)
-                {
-                    if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
-                        rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
-                    else
-                        rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
-                }
-
-                rReq.Done();
-            }
+            ApplyStyleSheetRequest(aParam, nSlot, rReq, nFamily, nMask, pActShell);
 
             break;
         }
