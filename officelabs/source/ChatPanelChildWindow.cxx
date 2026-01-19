@@ -9,7 +9,8 @@
 
 namespace officelabs {
 
-SFX_IMPL_CHILDWINDOW_WITHID(ChatPanelChildWindow, SID_AI_CHAT);
+// DISABLED: Replaced by AgenticPanel which uses the same SID
+// SFX_IMPL_CHILDWINDOW_WITHID(ChatPanelChildWindow, SID_AI_CHAT);
 
 ChatPanelChildWindow::ChatPanelChildWindow(vcl::Window* pParent, sal_uInt16 nId,
                                            SfxBindings* pBindings, SfxChildWinInfo* pInfo)
