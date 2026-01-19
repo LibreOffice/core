@@ -309,13 +309,16 @@ OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()
 
     const SwTableBoxFormula& tbl_formula = pFrameFormat->GetTableBoxFormula();
 
-    OUString strFormula = tbl_formula.GetFormula()
-                              .replaceAll(u"\\", u"\\\\")
-                              .replaceAll(u";", u"\\;")
-                              .replaceAll(u"=", u"\\=")
-                              .replaceAll(u",", u"\\,")
-                              .replaceAll(u":", u"\\:");
-    return "Formula:" + strFormula + ";";
+    OUString sFormula = tbl_formula.GetFormula();
+    if (sFormula.isEmpty())
+        return OUString();
+
+    sFormula = sFormula.replaceAll(u"\\", u"\\\\")
+                   .replaceAll(u";", u"\\;")
+                   .replaceAll(u"=", u"\\=")
+                   .replaceAll(u",", u"\\,")
+                   .replaceAll(u":", u"\\:");
+    return "Formula:" + sFormula + ";";
 }
 
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
