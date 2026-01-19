@@ -934,6 +934,14 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         case SwNodeType::Grf:
         {
             auto pNoTextNode = static_cast<const SwNoTextNode*>(this);
+
+            if (pNoTextNode->HasSwAttrSet())
+            {
+                (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwAttrSet"));
+                pNoTextNode->GetSwAttrSet().dumpAsXml(pWriter);
+                (void)xmlTextWriterEndElement(pWriter);
+            }
+
             const tools::PolyPolygon* pContour = pNoTextNode->HasContour();
             if (pContour)
             {

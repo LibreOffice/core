@@ -702,6 +702,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                     {
                         bool bDeleted = false;
+                        bool bInserted = false;
                         size_t nAuthor = std::string::npos;
                         const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat()->GetAnchor();
                         if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
@@ -715,9 +716,14 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 bDeleted = true;
                                 nAuthor = pFnd->GetAuthor();
                             }
+                            else if (pFnd && pFnd->GetType() == RedlineType::Insert)
+                            {
+                                bInserted = true;
+                            }
                         }
                         pFly->SetDeleted(bDeleted);
                         pFly->SetAuthor(nAuthor);
+                        pFly->SetInserted(bInserted);
                     }
                 }
             }
