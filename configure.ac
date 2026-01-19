@@ -6410,6 +6410,7 @@ if test "$cross_compiling" = "yes"; then
         LIBO_URE_MISC_FOLDER
         OS
         SDKDIRNAME
+        SYSTEM_PYTHON
         SYSTEM_LIBXML
         SYSTEM_LIBXSLT
 "
@@ -6496,6 +6497,7 @@ else
     LIBO_URE_MISC_FOLDER_FOR_BUILD="$LIBO_URE_MISC_FOLDER"
     SDKDIRNAME_FOR_BUILD="$SDKDIRNAME"
     WORKDIR_FOR_BUILD="$WORKDIR"
+    SYSTEM_PYTHON_FOR_BUILD="$SYSTEM_PYTHON"
 fi
 AC_SUBST(OS_FOR_BUILD)
 AC_SUBST(INSTDIR_FOR_BUILD)
@@ -6509,6 +6511,7 @@ AC_SUBST(WORKDIR_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
 AC_SUBST(CPPU_ENV_FOR_BUILD)
+AC_SUBST(SYSTEM_PYTHON_FOR_BUILD)
 
 dnl ===================================================================
 dnl Check for lockfile deps
@@ -10526,7 +10529,11 @@ if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
         # Clean PYTHON_VERSION checked below if cross-compiling
         PYTHON_VERSION=""
         if test "$PYTHON" != ":"; then
-            PYTHON_FOR_BUILD=$PYTHON
+            if test -n "$CROSS_COMPILING" -a -z "$SYSTEM_PYTHON_FOR_BUILD"; then
+                PYTHON_FOR_BUILD="$INSTDIR_FOR_BUILD/$LIBO_BIN_FOLDER_FOR_BUILD/python"
+            else
+                PYTHON_FOR_BUILD=$PYTHON
+            fi
         fi
     fi
 fi

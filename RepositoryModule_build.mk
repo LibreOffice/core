@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	officecfg \
 	oovbaapi \
 	pch \
+	$(if $(filter PYTHON,$(BUILD_TYPE_FOR_HOST)),pyuno) \
 	registry \
 	remotebridges \
 	ridljar \

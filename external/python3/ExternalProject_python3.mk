@@ -94,8 +94,16 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				ac_cv_func_clock_gettime=no \
 			) \
 		) \
+		$(if $(CROSS_COMPILING), \
+			$(if $(filter LINUX,$(OS)), \
+				ac_cv_buggy_getaddrinfo=no \
+				ac_cv_file__dev_ptmx=yes \
+				ac_cv_file__dev_ptc=yes \
+			) \
+		) \
 		$(gb_RUN_CONFIGURE) ./configure \
 		$(gb_CONFIGURE_PLATFORMS) \
+		$(if $(CROSS_COMPILING),--with-build-python="$(PYTHON_FOR_BUILD)") \
 		$(if $(ENABLE_VALGRIND),--with-valgrind) \
 		$(if $(ENABLE_DBGUTIL),--with-pydebug) \
 		--prefix=/python-inst \
