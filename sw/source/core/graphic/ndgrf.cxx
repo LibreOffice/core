@@ -47,6 +47,10 @@
 #include <hints.hxx>
 #include <swbaslnk.hxx>
 #include <pagefrm.hxx>
+#include <flyfrm.hxx>
+#include <rootfrm.hxx>
+#include <viewsh.hxx>
+#include <viewopt.hxx>
 
 #include <rtl/ustring.hxx>
 #include <o3tl/deleter.hxx>
@@ -711,7 +715,38 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 {
     const SwAttrSet& rSet = GetSwAttrSet();
 
-    rGA.SetDrawMode( rSet.GetDrawModeGrf().GetValue() );
+    bool bOmitPaint = false;
+    if (pFrame)
+    {
+        SwViewShell* pViewShell = pFrame->getRootFrame()->GetCurrShell();
+        const SwViewOption* pViewOptions = pViewShell ? pViewShell->GetViewOptions() : nullptr;
+        if (pViewOptions)
+        {
+            SwRedlineRenderMode eRedlineRenderMode = pViewOptions->GetRedlineRenderMode();
+            const SwFlyFrame* pFlyFrame = pFrame->FindFlyFrame();
+            if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && pFlyFrame
+                && pFlyFrame->IsDeleted())
+            {
+                // Want to omit deletes and this is a delete: omit paint.
+                bOmitPaint = true;
+            }
+            else if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && pFlyFrame
+                     && pFlyFrame->IsInserted())
+            {
+                // Want to omit inserts and this is an insert: omit paint.
+                bOmitPaint = true;
+            }
+        }
+    }
+    if (bOmitPaint)
+    {
+        // Omit paint by drawing the image grayscale.
+        rGA.SetDrawMode(GraphicDrawMode::Greys);
+    }
+    else
+    {
+        rGA.SetDrawMode(rSet.GetDrawModeGrf().GetValue());
+    }
 
     const SwMirrorGrf & rMirror = rSet.GetMirrorGrf();
     BmpMirrorFlags nMirror = BmpMirrorFlags::NONE;
