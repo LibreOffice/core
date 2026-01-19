@@ -66,21 +66,43 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf146272)
 {
     createSwDoc("tdf146272.odt");
 
-    uno::Reference<beans::XPropertySet> xPicture(getShape(2), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDrawing(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xDrawing->getPropertyValue(u"TextBoxContent"_ustr),
-                                               uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPicture1(getShapeByName(u"graphics1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDrawing1(getShapeByName(u"Shape2"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame1(xDrawing1->getPropertyValue(u"TextBoxContent"_ustr),
+                                                uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT(xPicture);
-    CPPUNIT_ASSERT(xDrawing);
-    CPPUNIT_ASSERT(xFrame);
+    CPPUNIT_ASSERT(xPicture1);
+    CPPUNIT_ASSERT(xDrawing1);
+    CPPUNIT_ASSERT(xFrame1);
 
-    const sal_uInt64 nPitureZorder = xPicture->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
-    const sal_uInt64 nDrawingZorder = xDrawing->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
-    const sal_uInt64 nFrameZorder = xFrame->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
+    const sal_uInt64 nPicture1Zorder
+        = xPicture1->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
+    const sal_uInt64 nDrawing1Zorder
+        = xDrawing1->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
+    const sal_uInt64 nFrame1Zorder = xFrame1->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
 
-    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawingZorder < nFrameZorder);
-    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nFrameZorder < nPitureZorder);
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawing1Zorder < nFrame1Zorder);
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nFrame1Zorder < nPicture1Zorder);
+
+    uno::Reference<beans::XPropertySet> xPicture2(getShapeByName(u"Image423"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDrawing2(getShapeByName(u"Shape3"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(xDrawing2->getPropertyValue(u"TextBoxContent"_ustr),
+                                                uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT(xPicture2);
+    CPPUNIT_ASSERT(xDrawing2);
+    CPPUNIT_ASSERT(xFrame2);
+
+    const sal_uInt64 nPicture2Zorder
+        = xPicture2->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
+    const sal_uInt64 nDrawing2Zorder
+        = xDrawing2->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
+    const sal_uInt64 nFrame2Zorder = xFrame2->getPropertyValue(u"ZOrder"_ustr).get<sal_uInt64>();
+
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawing2Zorder < nFrame2Zorder);
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nFrame2Zorder < nPicture2Zorder);
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawing1Zorder < nDrawing2Zorder);
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawing2Zorder < nPicture1Zorder);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf138773)
