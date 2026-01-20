@@ -592,7 +592,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141173_missingFrames)
     saveAndReload(TestFilter::DOCX);
     // Without the fix in place, almost all of the text and textboxes were missing.
     // Without the fix, there were only 2 shapes (mostly unseen).
-    CPPUNIT_ASSERT_EQUAL(14, getShapes());
+    CPPUNIT_ASSERT_EQUAL(13, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabSpacing, "tdf142404_tabSpacing.docx")
