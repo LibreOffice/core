@@ -30,7 +30,7 @@ private:
     weld::Container* m_pParent;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
-    std::unique_ptr<OBrowserListBox, o3tl::default_delete<OBrowserListBox>> m_xListBox;
+    OBrowserListBox m_aBrowserListBox;
 
 public:
     // TODO inherit from BuilderPage
@@ -39,8 +39,8 @@ public:
 
     void SetHelpId(const OUString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
 
-    OBrowserListBox& getListBox() { return *m_xListBox; }
-    const OBrowserListBox& getListBox() const { return *m_xListBox; }
+    OBrowserListBox& getListBox() { return m_aBrowserListBox; }
+    const OBrowserListBox& getListBox() const { return m_aBrowserListBox; }
 
     void detach()
     {
