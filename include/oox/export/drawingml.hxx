@@ -518,7 +518,7 @@ public:
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
 
     // Diagram helpers
-    OOX_DLLPUBLIC static bool PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape);
+    OOX_DLLPUBLIC bool PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXRootShape);
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
     void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,

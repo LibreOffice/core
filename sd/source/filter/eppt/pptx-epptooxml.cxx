@@ -2369,7 +2369,7 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
             bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
 
             // check if export as Diagram is possible
-            if (bIsDiagram && !oox::drawingml::DrawingML::PrepareToWriteAsDiagram(mXShape))
+            if (bIsDiagram && !aDML.PrepareToWriteAsDiagram(mXShape))
                 bIsDiagram = false;
 
             if (bIsDiagram)

@@ -410,7 +410,7 @@ IDiagramHelper::IDiagramHelper(bool bSelfCreated)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
 , mbSelfCreated(bSelfCreated)
-, mpAssociatedSdrObjGroup(nullptr)
+, mxGroupShape()
 {
 }
 
@@ -418,26 +418,35 @@ IDiagramHelper::~IDiagramHelper() {}
 
 void IDiagramHelper::disconnectFromSdrObjGroup()
 {
-    if (nullptr != mpAssociatedSdrObjGroup)
+    SdrObjGroup* pGroupObject(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape)));
+    if (nullptr != pGroupObject)
     {
-        auto const p = mpAssociatedSdrObjGroup;
-        mpAssociatedSdrObjGroup = nullptr;
-        p->mp_DiagramHelper.reset();
+        mxGroupShape.clear();
+        pGroupObject->mp_DiagramHelper.reset();
     }
 }
 
-void IDiagramHelper::connectToSdrObjGroup(SdrObjGroup& rTarget)
+void IDiagramHelper::connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget)
 {
-    if (mpAssociatedSdrObjGroup == &rTarget && rTarget.mp_DiagramHelper.get() == this)
-        // connection already established
-        return;
+    SdrObjGroup* pGroupObject(nullptr);
+    if (pGroupObject && mxGroupShape && rTarget == mxGroupShape)
+    {
+        pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape));
+        if (pGroupObject != nullptr &&  pGroupObject->mp_DiagramHelper.get() == this)
+        {
+            // connection already established
+            return;
+        }
+    }
 
     // ensure unconnect if already connected
     disconnectFromSdrObjGroup();
 
     // connect to target
-    mpAssociatedSdrObjGroup = &rTarget;
-    rTarget.mp_DiagramHelper.reset(this);
+    mxGroupShape = rTarget;
+    pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape));
+    if (nullptr != pGroupObject)
+        pGroupObject->mp_DiagramHelper.reset(this);;
 }
 
 void IDiagramHelper::AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList)

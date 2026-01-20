@@ -54,8 +54,8 @@
 #include <oox/mathml/imexport.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <oox/token/properties.hxx>
-#include "diagram/datamodel.hxx"
-#include "diagram/diagramhelper.hxx"
+#include "diagram/datamodel_oox.hxx"
+#include <oox/drawingml/diagram/diagramhelper.hxx>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -274,11 +274,9 @@ void Shape::propagateDiagramHelper()
     // Propagate collected Diagram data to data holder
     if (FRAMETYPE_DIAGRAM == meFrameType && nullptr != mpDiagramHelper)
     {
-        SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxShape));
-
-        if(pAnchorObj)
+        if (mxShape)
         {
-            mpDiagramHelper->doAnchor(*pAnchorObj, *this);
+            mpDiagramHelper->doAnchor(mxShape, *this);
             mpDiagramHelper = nullptr;
         }
     }

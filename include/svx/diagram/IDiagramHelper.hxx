@@ -86,7 +86,7 @@ private:
 
 protected:
     // remember associated SdrObjGroup
-    SdrObjGroup* mpAssociatedSdrObjGroup;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxGroupShape;
 
 public:
     IDiagramHelper(bool bSelfCreated);
@@ -122,16 +122,13 @@ public:
     void setSelfCreated() { mbSelfCreated = true; }
 
     // connect/disconnect to/from Group
-    void connectToSdrObjGroup(SdrObjGroup& rTarget);
+    void connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget);
     void disconnectFromSdrObjGroup();
 
     static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);
 
     // access to PropertyValues
     virtual com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const = 0;
-
-    // check if mandatory DiagramDomS exist (or can be created)
-    virtual bool checkOrCreateMinimalDataDoms() = 0;
 };
 
 }} // end of namespace

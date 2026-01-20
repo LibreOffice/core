@@ -44,7 +44,7 @@
 #include <svx/svdoashp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <svx/diagram/datamodel.hxx>
+#include <svx/diagram/datamodel_svx.hxx>
 #include <svx/diagram/IDiagramHelper.hxx>
 #include <tools/debug.hxx>
 

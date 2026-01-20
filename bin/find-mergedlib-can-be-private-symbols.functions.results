@@ -15746,8 +15746,8 @@ svx::administrateDatabaseRegistration(weld::Window*)
 svx::checkForFontWork(SdrObject const*)
 svx::classification::containsProperty(com::sun::star::uno::Sequence<com::sun::star::beans::Property> const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 svx::classification::convertClassificationResultToString(std::vector<svx::ClassificationResult, std::allocator<svx::ClassificationResult> > const&)
-svx::diagram::DiagramData::addConnection(svx::diagram::TypeConstant, rtl::OUString const&, rtl::OUString const&)
-svx::diagram::DiagramData::getChildrenString(rtl::OUStringBuffer&, svx::diagram::Point const*, int) const
+svx::diagram::DiagramData_svx::addConnection(svx::diagram::TypeConstant, rtl::OUString const&, rtl::OUString const&)
+svx::diagram::DiagramData_svx::getChildrenString(rtl::OUStringBuffer&, svx::diagram::Point const*, int) const
 svx::diagram::DiagramFrameHdl::CreateB2dIAObject()
 svx::diagram::DiagramFrameHdl::DiagramFrameHdl(basegfx::B2DHomMatrix const&)
 svx::diagram::IDiagramHelper::AddAdditionalVisualization(SdrObjGroup const&, SdrHdlList&)

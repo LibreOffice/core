@@ -5149,6 +5149,7 @@ include/oox/drawingml/clrscheme.hxx
 include/oox/drawingml/color.hxx
 include/oox/drawingml/connectorshapecontext.hxx
 include/oox/drawingml/diagram/diagram.hxx
+include/oox/drawingml/diagram/diagramhelper.hxx
 include/oox/drawingml/drawingmltypes.hxx
 include/oox/drawingml/graphicshapecontext.hxx
 include/oox/drawingml/shape.hxx
@@ -5673,7 +5674,7 @@ include/svx/sdgmoitm.hxx
 include/svx/sdmetitm.hxx
 include/svx/sdooitm.hxx
 include/svx/sdprcitm.hxx
-include/svx/diagram/datamodel.hxx
+include/svx/diagram/datamodel_svx.hxx
 include/svx/diagram/IDiagramHelper.hxx
 include/svx/sdr/animation/animationstate.hxx
 include/svx/sdr/animation/objectanimator.hxx
@@ -6830,10 +6831,9 @@ oox/source/drawingml/customshapegeometry.cxx
 oox/source/drawingml/customshapeproperties.cxx
 oox/source/drawingml/diagram/constraintlistcontext.cxx
 oox/source/drawingml/diagram/constraintlistcontext.hxx
-oox/source/drawingml/diagram/datamodel.cxx
-oox/source/drawingml/diagram/datamodel.hxx
+oox/source/drawingml/diagram/datamodel_oox.cxx
+oox/source/drawingml/diagram/datamodel_oox.hxx
 oox/source/drawingml/diagram/diagramhelper.cxx
-oox/source/drawingml/diagram/diagramhelper.hxx
 oox/source/drawingml/diagram/datamodelcontext.cxx
 oox/source/drawingml/diagram/datamodelcontext.hxx
 oox/source/drawingml/diagram/diagram.cxx
@@ -11121,7 +11121,7 @@ svx/source/customshapes/EnhancedCustomShapeGeometry.cxx
 svx/source/customshapes/EnhancedCustomShapeHandle.cxx
 svx/source/customshapes/EnhancedCustomShapeHandle.hxx
 svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx
-svx/source/diagram/datamodel.cxx
+svx/source/diagram/datamodel_svx.cxx
 svx/source/diagram/IDiagramHelper.cxx
 svx/source/dialog/ClassificationDialog.cxx
 svx/source/dialog/ClassificationEditView.cxx

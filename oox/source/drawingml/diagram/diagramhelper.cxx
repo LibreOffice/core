@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "diagramhelper.hxx"
+#include <oox/drawingml/diagram/diagramhelper.hxx>
 #include "diagram.hxx"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -110,7 +111,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     if(UseDiagramThemeData() || !isSelfCreated())
         xFilter->setCurrentTheme(getOrCreateThemePtr(xFilter));
 
-    css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
+    uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
     xFilter->setTargetDocument(aComponentModel);
 
     // set DiagramFontHeights
@@ -239,7 +240,9 @@ void AdvancedDiagramHelper::TextInformationChange(const OUString& rDiagramDataMo
 
         // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
         // entries anymore, but others like "mso-rotation-angle" and others
-        mpAssociatedSdrObjGroup->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
+        uno::Reference<beans::XPropertySet> xPropSet(mxGroupShape, uno::UNO_QUERY);
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            xPropSet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(uno::Sequence<beans::PropertyValue>()));
     }
 }
 
@@ -263,9 +266,9 @@ void AdvancedDiagramHelper::applyDiagramDataState(const svx::diagram::DiagramDat
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
 }
 
-void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape)
+void AdvancedDiagramHelper::doAnchor(uno::Reference<drawing::XShape>& rTarget, ::oox::drawingml::Shape& rRootShape)
 {
-    if(!mpDiagramPtr)
+    if(!mpDiagramPtr || !rTarget)
     {
         return;
     }
@@ -325,12 +328,20 @@ uno::Any AdvancedDiagramHelper::getOOXDomValue(svx::diagram::DomMapFlag aDomMapF
     return uno::Any();
 }
 
-bool AdvancedDiagramHelper::checkOrCreateMinimalDataDoms()
+bool AdvancedDiagramHelper::checkMinimalDataDoms() const
 {
     if (!mpDiagramPtr)
         return false;
 
-    return mpDiagramPtr->checkOrCreateMinimalDataDoms();
+    return mpDiagramPtr->checkMinimalDataDoms();
+}
+
+void AdvancedDiagramHelper::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB)
+{
+    if (!mpDiagramPtr)
+        return;
+
+    mpDiagramPtr->tryToCreateMissingDataDoms(rFB, mxGroupShape);
 }
 
 }

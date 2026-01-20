@@ -26,6 +26,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <sal/log.hxx>
 #include <editeng/unoprnms.hxx>
 #include <drawingml/fillproperties.hxx>
@@ -37,10 +39,16 @@
 #include <svx/svdpage.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <comphelper/xmltools.hxx>
-
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
 #include "diagramfragmenthandler.hxx"
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/io/TempFile.hpp>
+
+#ifdef DBG_UTIL
+#include <osl/file.hxx>
+#include <iostream>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -175,7 +183,7 @@ void Diagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
     }
 }
 
-bool Diagram::checkOrCreateMinimalDataDoms()
+bool Diagram::checkMinimalDataDoms() const
 {
     if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
         return false;
@@ -190,6 +198,57 @@ bool Diagram::checkOrCreateMinimalDataDoms()
         return false;
 
     return true;
+}
+
+void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const css::uno::Reference<css::drawing::XShape>& rXRootShape)
+{
+    // internal testing: allow to force to always recreate
+    static bool bForceAlwaysReCreate(false);
+
+    // check if activated, return if not to stay compatible for now
+    static bool bReCreateDiagramDataDoms(nullptr != std::getenv("ACTIVATE_RECREATE_DIAGRAM_DATADOMS"));
+#ifdef DBG_UTIL
+    std::cout << "DiagramReCreate: always==" << bForceAlwaysReCreate << ",bReCreate==" << bReCreateDiagramDataDoms << std::endl;
+#endif
+    if (!bForceAlwaysReCreate && !bReCreateDiagramDataDoms)
+        return;
+
+    if (bForceAlwaysReCreate || maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
+    {
+        // re-create OOXData DomFile from model data
+#ifdef DBG_UTIL
+        std::cout << "DiagramReCreate: creating DomMapFlag::OOXData" << std::endl;
+#endif
+        uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(comphelper::getProcessComponentContext());
+        uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
+
+        if (xOutput)
+        {
+            sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutput, true);
+            getData()->writeDiagramData(rFB, aFS, rXRootShape);
+            xOutput->flush();
+
+            // this call is *important*, without it xDocBuilder->parse below fails and some strange
+            // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+            xOutput->closeOutput();
+
+            uno::Reference<xml::dom::XDocumentBuilder> xDocBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
+            if (xDocBuilder)
+            {
+                uno::Reference<xml::dom::XDocument> xInstance = xDocBuilder->parse(xTempFile->getInputStream());
+                if (xInstance)
+                {
+                    maDiagramPRDomMap[svx::diagram::DomMapFlag::OOXData] <<= xInstance;
+                }
+            }
+
+#ifdef DBG_UTIL
+            osl::File::move(xTempFile->getUri(), "file:///home/alg/Downloads/tonne/test.xml");
+#endif
+        }
+    }
+
+    // more to do...
 }
 
 using ShapePairs
@@ -328,7 +387,7 @@ void loadDiagram( ShapePtr const & pShape,
 {
     DiagramPtr pDiagram = std::make_shared<Diagram>();
 
-    OoxDiagramDataPtr pData = std::make_shared<DiagramData>();
+    OoxDiagramDataPtr pData = std::make_shared<DiagramData_oox>();
     pDiagram->setData( pData );
 
     DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);

@@ -80,7 +80,7 @@ public:
     virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
     virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
-    void doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape);
+    void doAnchor(com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rTarget, ::oox::drawingml::Shape& rRootShape);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 
@@ -89,7 +89,8 @@ public:
     virtual com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
 
     // check if mandatory DiagramDomS exist (or can be created)
-    virtual bool checkOrCreateMinimalDataDoms() override;
+    bool checkMinimalDataDoms() const;
+    void tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB);
 };
 
 }

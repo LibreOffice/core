@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
-#include "datamodel.hxx"
+#include "datamodel_oox.hxx"
 
 namespace oox::drawingml {
 

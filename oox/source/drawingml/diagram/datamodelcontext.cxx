@@ -123,7 +123,7 @@ public:
                 mrPoint.mbOrgChartEnabled = rAttribs.getBool( XML_val, false );
                 break;
             case DGM_TOKEN( resizeHandles ):
-                mrPoint.mnResizeHandles = rAttribs.getToken( XML_val, XML_rel );
+                mrPoint.msResizeHandles = rAttribs.getStringDefaulted( XML_val );
                 break;
             default:
                 break;
@@ -208,7 +208,7 @@ public:
     PtContext( ContextHandler2Helper const& rParent,
                const AttributeList& rAttribs,
                svx::diagram::Point& rPoint,
-               DiagramData& rDiagramData):
+               DiagramData_oox& rDiagramData):
         ContextHandler2( rParent ),
         mrPoint( rPoint ),
         mrDiagramData( rDiagramData )
@@ -254,7 +254,7 @@ public:
 
 private:
     svx::diagram::Point& mrPoint;
-    DiagramData& mrDiagramData;
+    DiagramData_oox& mrDiagramData;
 };
 
 // CT_PtList
@@ -262,7 +262,7 @@ class PtListContext
     : public ContextHandler2
 {
 public:
-    PtListContext( ContextHandler2Helper const & rParent,  svx::diagram::Points& rPoints, DiagramData& rDiagramData) :
+    PtListContext( ContextHandler2Helper const & rParent,  svx::diagram::Points& rPoints, DiagramData_oox& rDiagramData) :
         ContextHandler2( rParent ),
         mrPoints( rPoints ),
         mrDiagramData( rDiagramData )
@@ -287,7 +287,7 @@ public:
 
 private:
     svx::diagram::Points& mrPoints;
-    DiagramData& mrDiagramData;
+    DiagramData_oox& mrDiagramData;
 };
 
 // CT_BackgroundFormatting

@@ -14,7 +14,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdundo.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svx/diagram/datamodel.hxx>
+#include <svx/diagram/datamodel_svx.hxx>
 #include <svx/diagram/IDiagramHelper.hxx>
 
 DiagramDialog::DiagramDialog(weld::Window* pWindow, SdrObjGroup& rDiagram)

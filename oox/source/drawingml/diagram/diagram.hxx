@@ -26,7 +26,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "datamodel.hxx"
+#include "datamodel_oox.hxx"
 #include <oox/drawingml/shape.hxx>
 
 namespace com::sun::star {
@@ -152,7 +152,8 @@ public:
     void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
 
     // check if mandatory DiagramDomS exist (or can be created)
-    bool checkOrCreateMinimalDataDoms();
+    bool checkMinimalDataDoms() const;
+    void tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const com::sun::star::uno::Reference<css::drawing::XShape>& rXRootShape);
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.

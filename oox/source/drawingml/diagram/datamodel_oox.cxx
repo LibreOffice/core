@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "datamodel.hxx"
+#include "datamodel_oox.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -29,7 +29,11 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <editeng/unoprnms.hxx>
+#include <svx/svdobj.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/export/drawingml.hxx>
 
 #include <unordered_set>
 
@@ -37,11 +41,11 @@ using namespace ::com::sun::star;
 
 namespace oox::drawingml {
 
-Shape* DiagramData::getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand) const
+Shape* DiagramData_oox::getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand) const
 {
     if(maPointShapeMap.end() == maPointShapeMap.find(rPoint.msModelId))
     {
-        const_cast<DiagramData*>(this)->maPointShapeMap[rPoint.msModelId] = ShapePtr();
+        const_cast<DiagramData_oox*>(this)->maPointShapeMap[rPoint.msModelId] = ShapePtr();
     }
 
     const ShapePtr& rShapePtr = maPointShapeMap.find(rPoint.msModelId)->second;
@@ -58,7 +62,7 @@ Shape* DiagramData::getOrCreateAssociatedShape(const svx::diagram::Point& rPoint
     return rShapePtr.get();
 }
 
-void DiagramData::restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape)
+void DiagramData_oox::restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape)
 {
     // If we did create a new oox::drawingml::Shape, directly apply
     // available data from the Diagram ModelData to it as preparation
@@ -86,6 +90,93 @@ void DiagramData::restoreDataFromModelToShapeAfterReCreation(const svx::diagram:
     }
 }
 
+void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const css::uno::Reference<css::drawing::XShape>& rXShape)
+{
+    if (!rTarget)
+        return;
+
+    // write header infos
+    const OUString aNsDmlDiagram(rFB.getNamespaceURL(OOX_NS(dmlDiagram)));
+    const OUString aNsDml(rFB.getNamespaceURL(NMSP_dmlDiagram));
+    rTarget->startElementNS(XML_dgm, XML_dataModel,
+        FSNS(XML_xmlns, XML_dgm), aNsDmlDiagram,
+        FSNS(XML_xmlns, XML_a), aNsDml);
+
+    // write PointList
+    rTarget->startElementNS(XML_dgm, XML_ptLst);
+    for (auto& rPoint : getPoints())
+        rPoint.writeDiagramData(rTarget);
+    rTarget->endElementNS(XML_dgm, XML_ptLst);
+
+    // write ConnectorList
+    rTarget->startElementNS(XML_dgm, XML_cxnLst);
+    for (auto& rConnection : getConnections())
+        rConnection.writeDiagramData(rTarget);
+    rTarget->endElementNS(XML_dgm, XML_cxnLst);
+
+    // write BGFill
+    rTarget->startElementNS(XML_dgm, XML_bg);
+
+    // there is *no* export for oox::drawingml::FillProperties which we have in mpBackgroundShapeFillProperties.
+    // searching for 'XML_.*XML_noFill' shows that there is also a pretty direct export for FillStyle in Chart2,
+    // maybe that could be adapted for general use.
+    // But there is DrawingML::WriteFill, that needs the XShape, sax_fastparser::FSHelper and a XmlFilterBase. We
+    // can organize all that and then export from XShape model data.
+    // For The BGShape is is okay since in MSO Diagram data no shape for that exists anyways, it's just
+    // FillAttributes and a XShape for BG needs to exist in DrawObject model anytime anyways, see
+    // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
+    // and more for later offering changing the Background of a Diagram.
+    // Note that an incarnation of BG as XShape is also needed to 'carry' the correct Size for that Diagram.
+    uno::Reference<drawing::XShape> xBgShape;
+    uno::Reference<drawing::XShapes> xGroup(rXShape, uno::UNO_QUERY);
+    if (xGroup.is() && 0 != xGroup->getCount())
+    {
+        // access the BGShape, it *should* always exist and be the 1st shape (to *be* in the BG)
+        uno::Reference<drawing::XShape> xCandidate(xGroup->getByIndex(0), uno::UNO_QUERY);
+        if (xCandidate.is())
+        {
+            // check comparing the DiagramDataModelID created at BackgroundSHape creation for the oox::Shape
+            // that got transferend to the XShape when it was created
+            SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(xCandidate));
+            if (nullptr != pCandidate && pCandidate->getDiagramDataModelID() == getBackgroundShapeModelID())
+                xBgShape = xCandidate;
+        }
+    }
+
+    if (xBgShape.is())
+    {
+        // if we have the BGShape as XShape, export using a temp DrawingML which uses
+        // the target file combined with the XmlFilterBase representing the ongoing Diagram export
+        DrawingML aTempML(rTarget, &rFB);
+        uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
+        aTempML.WriteFill( xProps, xBgShape->getSize());
+    }
+
+    rTarget->endElementNS(XML_dgm, XML_bg);
+
+    rTarget->singleElementNS(XML_dgm, XML_whole);
+
+    // write ExtList & it's contents
+    // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
+    // for this case where the only relevant data is the 'relId' entzry I will allow
+    // to construct the XML statement by own string concatenation
+    rTarget->startElementNS(XML_dgm, XML_extLst);
+    const OUString rNsDsp(rFB.getNamespaceURL(OOX_NS(dsp)));
+    rTarget->startElementNS(XML_a, XML_ext, XML_uri, rNsDsp);
+    OUString aDspLine("<dsp:dataModelExt xmlns:dsp=\"" + rNsDsp + "\" ");
+    if (!getExtDrawings().empty())
+    {
+        aDspLine += "relId=\"" + getExtDrawings().front() + "\" ";
+    }
+    aDspLine += "minVer=\"" + aNsDml + "\"/>";
+    rTarget->write(aDspLine);
+    rTarget->endElementNS(XML_a, XML_ext);
+    rTarget->endElementNS(XML_dgm, XML_extLst);
+
+    rTarget->endElementNS(XML_dgm, XML_dataModel);
+    rTarget->endDocument();
+}
+
 static void addProperty(const OUString& rName,
     const css::uno::Reference< css::beans::XPropertySetInfo >& xInfo,
     std::vector< std::pair< OUString, css::uno::Any >>& rTarget,
@@ -95,7 +186,7 @@ static void addProperty(const OUString& rName,
             rTarget.push_back(std::pair(OUString(rName), xPropSet->getPropertyValue(rName)));
 }
 
-void DiagramData::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape)
+void DiagramData_oox::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape)
 {
     const std::vector< ShapePtr >& rChildren(rShape.getChildren());
 
@@ -122,7 +213,7 @@ void DiagramData::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShap
 
     // define target to save to
     svx::diagram::PointStyle* pTarget(nullptr);
-    const bool bIsBackgroundShape(rShape.getDiagramDataModelID() == msBackgroundShapeModelID);
+    const bool bIsBackgroundShape(rShape.getDiagramDataModelID() == getBackgroundShapeModelID());
 
     if(bIsBackgroundShape)
     {
@@ -270,7 +361,7 @@ void DiagramData::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShap
     }
 }
 
-void DiagramData::secureDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape)
+void DiagramData_oox::secureDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape)
 {
     const std::vector< ShapePtr >& rChildren(rRootShape.getChildren());
 
@@ -323,7 +414,7 @@ void DiagramData::secureDataFromShapeToModelAfterDiagramImport(::oox::drawingml:
     }
 }
 
-void DiagramData::restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape)
+void DiagramData_oox::restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape)
 {
     const std::vector< ShapePtr >& rChildren(rShape.getChildren());
 
@@ -351,7 +442,7 @@ void DiagramData::restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rSha
     // define source to save to
     svx::diagram::PointStyle* pSource(nullptr);
 
-    if(rShape.getDiagramDataModelID() == msBackgroundShapeModelID)
+    if(rShape.getDiagramDataModelID() == getBackgroundShapeModelID())
     {
         // if BackgroundShape, set BackgroundShapeStyle as source
         if(maBackgroundShapeStyle)
@@ -389,7 +480,7 @@ void DiagramData::restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rSha
     }
 }
 
-void DiagramData::restoreDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape)
+void DiagramData_oox::restoreDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape)
 {
     const std::vector< ShapePtr >& rChildren(rRootShape.getChildren());
 
@@ -399,13 +490,13 @@ void DiagramData::restoreDataFromShapeToModelAfterDiagramImport(::oox::drawingml
     }
 }
 
-DiagramData::DiagramData()
-: svx::diagram::DiagramData()
+DiagramData_oox::DiagramData_oox()
+: svx::diagram::DiagramData_svx()
 , mpBackgroundShapeFillProperties( std::make_shared<FillProperties>() )
 {
 }
 
-DiagramData::~DiagramData()
+DiagramData_oox::~DiagramData_oox()
 {
 }
 
@@ -427,18 +518,18 @@ static void Point_dump(const svx::diagram::Point& rPoint, const Shape* pShape)
             << rPoint.msModelId << ", type " << rPoint.mnXMLType);
 }
 
-void DiagramData::dump() const
+void DiagramData_oox::dump() const
 {
-    SAL_INFO("oox.drawingml", "Dgm: DiagramData # of cnx: " << maConnections.size() );
+    SAL_INFO("oox.drawingml", "Dgm: DiagramData_oox # of cnx: " << maConnections.size() );
     for (const auto& rConnection : maConnections)
         Connection_dump(rConnection);
 
-    SAL_INFO("oox.drawingml", "Dgm: DiagramData # of pt: " << maPoints.size() );
+    SAL_INFO("oox.drawingml", "Dgm: DiagramData_oox # of pt: " << maPoints.size() );
     for (const auto& rPoint : maPoints)
         Point_dump(rPoint, getOrCreateAssociatedShape(rPoint));
 }
 
-void DiagramData::buildDiagramDataModel(bool bClearOoxShapes)
+void DiagramData_oox::buildDiagramDataModel(bool bClearOoxShapes)
 {
     if(bClearOoxShapes)
     {
@@ -447,7 +538,7 @@ void DiagramData::buildDiagramDataModel(bool bClearOoxShapes)
     }
 
     // call parent
-    svx::diagram::DiagramData::buildDiagramDataModel(bClearOoxShapes);
+    svx::diagram::DiagramData_svx::buildDiagramDataModel(bClearOoxShapes);
 
     if(bClearOoxShapes)
     {

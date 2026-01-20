@@ -34,6 +34,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <oox/token/tokens.hxx>
+#include <sax/fshelper.hxx>
 
 class Outliner;
 
@@ -71,6 +72,7 @@ struct SVXCORE_DLLPUBLIC Connection
     sal_Int32 mnSourceOrder;
     sal_Int32 mnDestOrder;
 
+    void writeDiagramData(sax_fastparser::FSHelperPtr& rTarget);
 };
 
 typedef std::vector< Connection > Connections;
@@ -128,13 +130,13 @@ struct SVXCORE_DLLPUBLIC Point
     OUString msPresentationLayoutStyleLabel;
     OUString msQuickStyleCategoryId;
     OUString msQuickStyleTypeId;
+    OUString msResizeHandles;
 
     TypeConstant mnXMLType;
     sal_Int32     mnMaxChildren;
     sal_Int32     mnPreferredChildren;
     sal_Int32     mnDirection;
     std::optional<sal_Int32> moHierarchyBranch;
-    sal_Int32     mnResizeHandles;
     sal_Int32     mnCustomAngle;
     sal_Int32     mnPercentageNeighbourWidth;
     sal_Int32     mnPercentageNeighbourHeight;
@@ -156,6 +158,8 @@ struct SVXCORE_DLLPUBLIC Point
     bool          mbCustomVerticalFlip;
     bool          mbCustomText;
     bool          mbIsPlaceholder;
+
+    void writeDiagramData(sax_fastparser::FSHelperPtr& rTarget);
 };
 
 typedef std::vector< Point >        Points;
@@ -178,7 +182,7 @@ typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;
 
 /** The collected Diagram ModelData
  */
-class SVXCORE_DLLPUBLIC DiagramData
+class SVXCORE_DLLPUBLIC DiagramData_svx
 {
 public:
     typedef std::map< OUString, Point* > PointNameMap;
@@ -196,11 +200,11 @@ public:
 
 protected:
     // Make constructor protected to signal that this anyway pure virtual class
-    // shall not be incarnated - target to use is oox::drawingml::DiagramData
-    DiagramData();
+    // shall not be incarnated - target to use is oox::drawingml::DiagramData_oox
+    DiagramData_svx();
 
 public:
-    virtual ~DiagramData();
+    virtual ~DiagramData_svx();
 
     // creates temporary processing data from model data
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
@@ -243,7 +247,7 @@ protected:
     ::std::vector<OUString>  maExtDrawings;
 
     // The model definition, the parts available in svx.
-    // See evtl. parts in oox::drawingml::DiagramData that may need t obe accessed
+    // See evtl. parts in oox::drawingml::DiagramData_oox that may need t obe accessed
     // - logic connections/associations
     Connections maConnections;
 
@@ -272,7 +276,7 @@ protected:
     OUString          msBackgroundShapeModelID;
 };
 
-typedef std::shared_ptr< DiagramData > DiagramDataPtr;
+typedef std::shared_ptr< DiagramData_svx > DiagramDataPtr_svx;
 
 }
 

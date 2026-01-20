@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <oox/drawingml/diagram/diagramhelper.hxx>
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
@@ -6807,9 +6808,9 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
 }
 
-bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape)
+bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXRootShape)
 {
-    SdrObject* pObj(SdrObject::getSdrObjectFromXShape(rXShape));
+    SdrObject* pObj(SdrObject::getSdrObjectFromXShape(rXRootShape));
 
     if (nullptr == pObj)
         return false;
@@ -6819,7 +6820,15 @@ bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::
     if (!rIDiagramHelper)
         return false;
 
-    if (!rIDiagramHelper->checkOrCreateMinimalDataDoms())
+    AdvancedDiagramHelper* pAdvancedDiagramHelper = static_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get());
+
+    if (nullptr == pAdvancedDiagramHelper)
+        return false;
+
+    // try to re-create (if needed is decided there)
+    pAdvancedDiagramHelper->tryToCreateMissingDataDoms(*GetFB());
+
+    if (!pAdvancedDiagramHelper->checkMinimalDataDoms())
         return false;
 
     return true;
@@ -6827,15 +6836,18 @@ bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::
 
 void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
-    if (!PrepareToWriteAsDiagram(rXShape))
-        return;
-
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
     assert(pObj && "no SdrObject");
     assert(pObj->isDiagram() && "is no Diagram");
 
     const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
     assert(rIDiagramHelper && "has no DiagramHelper");
+
+    const AdvancedDiagramHelper* pAdvancedDiagramHelper = static_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get());
+    assert(pAdvancedDiagramHelper && "has no DiagramHelper");
+
+    if (!pAdvancedDiagramHelper->checkMinimalDataDoms())
+        return;
 
     // get/check mandatory DomS
     uno::Reference<xml::dom::XDocument> dataDom;
