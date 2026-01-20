@@ -47,13 +47,24 @@ sal_Int16 GetColorLightness(std::u16string_view rRGB)
     return nBrightness;
 }
 
+int GetColorHue(std::u16string_view rRGB)
+{
+    Color aColor(o3tl::toInt32(rRGB.substr(1, 2), 16), o3tl::toInt32(rRGB.substr(3, 2), 16),
+                 o3tl::toInt32(rRGB.substr(5, 2), 16));
+    sal_uInt16 nHue;
+    sal_uInt16 nSaturation;
+    sal_uInt16 nBrightness;
+    aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
+    return nHue;
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
 {
     // Reset redline author IDs to a predictable default.
     SwGlobals::ensure();
     SwModule::get()->ClearRedlineAuthors();
 
-    // Default rendering: default, normal lightness, normal lightness.
+    // Default rendering: default, delete, insert.
     createSwDoc("redline.docx");
 
     SwDocShell* pDocShell = getSwDocShell();
@@ -84,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
         = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::textcolor[1]", "color");
     CPPUNIT_ASSERT_EQUAL(aRedlineColorString, aColor3);
 
-    // Omit inserts: default, normal lightness, increased lightness.
+    // Omit inserts, color deletes: default, red-like, increased lightness.
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwViewOption aOpt(*pWrtShell->GetViewOptions());
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
@@ -103,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
     nLength2 = getXPath(pXmlDoc, "(//textarray)[2]", "length").toInt32();
     CPPUNIT_ASSERT_EQUAL(u"oldcontent"_ustr, aContent.copy(nIndex2, nLength2));
     aColor2 = getXPath(pXmlDoc, "(//textarray)[2]/preceding-sibling::textcolor[1]", "color");
-    CPPUNIT_ASSERT_EQUAL(u"#000000"_ustr, aColor2);
+    CPPUNIT_ASSERT_EQUAL(0, GetColorHue(aColor2));
     nIndex3 = getXPath(pXmlDoc, "(//textarray)[3]", "index").toInt32();
     nLength3 = getXPath(pXmlDoc, "(//textarray)[3]", "length").toInt32();
     CPPUNIT_ASSERT_EQUAL(u"newcontent"_ustr, aContent.copy(nIndex3, nLength3));
@@ -114,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
     // i.e. the 3rd text portion had no increased lightness from black.
     CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int16>(49), GetColorLightness(aColor3));
 
-    // Omit deletes: default, de-saturated, normal saturation.
+    // Omit deletes, color inserts: default, increased lightness, green-like.
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
     pWrtShell->ApplyViewOptions(aOpt);
 
@@ -136,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
     nLength3 = getXPath(pXmlDoc, "(//textarray)[3]", "length").toInt32();
     CPPUNIT_ASSERT_EQUAL(u"newcontent"_ustr, aContent.copy(nIndex3, nLength3));
     aColor3 = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::textcolor[1]", "color");
-    CPPUNIT_ASSERT_EQUAL(u"#000000"_ustr, aColor3);
+    CPPUNIT_ASSERT_EQUAL(120, GetColorHue(aColor3));
 }
 
 bool IsGrayScale(const Bitmap& rBitmap)
