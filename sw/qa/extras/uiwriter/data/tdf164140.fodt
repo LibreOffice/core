@@ -85,7 +85,7 @@
   </office:styles>
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" style:writing-mode="rl-tb"/>
+   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" style:writing-mode="rl-tb" style:writing-mode-automatic="false"/>
    <style:text-properties style:font-name="Noto Sans" style:font-name-complex="Noto Sans Arabic" style:language-complex="ar" style:country-complex="SA"/>
   </style:style>
   <style:page-layout style:name="pm1">

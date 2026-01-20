@@ -2538,9 +2538,6 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     UpdateSelectionsDelete(deleted);
     UpdateSelections();
 
-    // tdf#162120: Automatically adjust paragraph directions after edit
-    UpdateAutoParaDirection(rCurSel);
-
     TextModified();
     return aStartPaM;
 }
@@ -2788,7 +2785,7 @@ void ImpEditEngine::UpdateAutoParaDirection(const EditSelection& rCurSel)
     EditPaM aPaM(rCurSel.Min());
 
     auto nPara = maEditDoc.GetPos(aPaM.GetNode());
-    if (nPara >= GetParaPortions().Count() || !HasParaAttrib(nPara, EE_PARA_AUTOWRITINGDIR))
+    if (nPara >= GetParaPortions().Count())
     {
         return;
     }

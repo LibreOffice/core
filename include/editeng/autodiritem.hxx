@@ -24,6 +24,7 @@
 class EDITENG_DLLPUBLIC SvxAutoFrameDirectionItem final : public SfxBoolItem
 {
 public:
+    static SfxPoolItem* CreateDefault();
     DECLARE_ITEM_TYPE_FUNCTION(SvxAutoFrameDirectionItem)
     SvxAutoFrameDirectionItem(const bool bValue, const sal_uInt16 nId);
 

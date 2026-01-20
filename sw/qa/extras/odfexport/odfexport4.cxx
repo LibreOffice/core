@@ -1736,11 +1736,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162120StyleWritingModeAutomaticSerialization)
 
     auto pStylesDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 1);
+    assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic='true']",
+                0);
+    assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic='false']",
+                1);
     assertXPath(pStylesDoc, "//style:style[@style:name='AutoStyle']/style:paragraph-properties",
-                "writing-mode-automatic", u"true");
+                "writing-mode-automatic", u"false");
 
     auto pContentDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 2);
+    assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic='true']",
+                0);
+    assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic='false']",
+                2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf169882)

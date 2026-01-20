@@ -53,7 +53,7 @@
 
 using namespace ::com::sun::star;
 
-
+SfxPoolItem* SvxAutoFrameDirectionItem::CreateDefault() { return new SvxAutoFrameDirectionItem(true, 0); }
 SfxPoolItem* SvxLineSpacingItem::CreateDefault() { return new  SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0);}
 SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SvxAdjust::ParaStart, 0);}
 SfxPoolItem* SvxWidowsItem::CreateDefault() { return new  SvxWidowsItem(0, 0);}

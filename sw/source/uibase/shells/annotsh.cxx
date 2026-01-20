@@ -316,6 +316,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_CHAR_SCALEWIDTH:   nEEWhich = EE_CHAR_FONTWIDTH; break;
         case SID_ATTR_CHAR_AUTOKERN  :   nEEWhich = EE_CHAR_PAIRKERNING; break;
         case SID_ATTR_CHAR_ESCAPEMENT:   nEEWhich = EE_CHAR_ESCAPEMENT; break;
+        case SID_ATTR_PARA_AUTOFRAMEDIRECTION: nEEWhich = EE_PARA_AUTOWRITINGDIR; break;
         case SID_ATTR_PARA_ADJUST_LEFT:
             aNewAttr.Put(SvxAdjustItem(SvxAdjust::Left, EE_PARA_JUST));
         break;
@@ -602,7 +603,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
             SfxItemSet aAttr(SfxItemSet::makeFixedSfxItemSet<
                 EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                EE_PARA_JUST, EE_PARA_JUST>(*aNewAttr.GetPool()));
+                EE_PARA_JUST, EE_PARA_JUST,
+                EE_PARA_AUTOWRITINGDIR, EE_PARA_AUTOWRITINGDIR>(*aNewAttr.GetPool()));
 
             SvxAdjust nAdjust = SvxAdjust::Left;
             if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST ) )
@@ -620,6 +622,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 if( nAdjust == SvxAdjust::Left )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             }
+
+            // tdf#162120: The paragraph direction has been manually set by the user.
+            // Don't automatically adjust the paragraph direction anymore.
+            aAttr.Put(SvxAutoFrameDirectionItem{ false, EE_PARA_AUTOWRITINGDIR });
+
             pOLV->SetAttribs(aAttr);
             break;
         }

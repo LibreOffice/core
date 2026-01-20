@@ -27,6 +27,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
@@ -723,6 +724,10 @@ SET_ADJUST:
                     if( nAdjust == SvxAdjust::Left )
                         aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
                 }
+
+                // tdf#162120: The paragraph direction has been manually set by the user.
+                // Don't automatically adjust the paragraph direction anymore.
+                aNewAttr.Put(SvxAutoFrameDirectionItem{ false, EE_PARA_AUTOWRITINGDIR });
 
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();

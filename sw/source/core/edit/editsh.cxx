@@ -72,9 +72,7 @@ void SwEditShell::UpdateSelectionAutoParaDirection()
             continue;
         }
 
-        const SvxAutoFrameDirectionItem* pAutoItem
-            = pNode->GetSwAttrSet().GetItemIfSet(RES_PARATR_AUTOFRAMEDIR);
-        if (!pAutoItem || !pAutoItem->GetValue())
+        if (!pNode->GetSwAttrSet().GetItem(RES_PARATR_AUTOFRAMEDIR)->GetValue())
         {
             continue;
         }
@@ -83,6 +81,10 @@ void SwEditShell::UpdateSelectionAutoParaDirection()
         std::pair<Point, bool> const tmp(aPt, false);
         const SwTextFrame* pFrame
             = static_cast<SwTextFrame*>(pNode->getLayoutFrame(GetLayout(), rPaM.GetPoint(), &tmp));
+        if (!pFrame)
+        {
+            continue;
+        }
 
         bool bIsAlreadyRtl = pFrame->IsRightToLeft();
 

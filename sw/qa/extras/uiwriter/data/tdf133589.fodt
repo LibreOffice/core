@@ -8,7 +8,7 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:text-align="end" style:justify-single-word="false" style:writing-mode="rl-tb"/>
+   <style:paragraph-properties fo:text-align="end" style:justify-single-word="false" style:writing-mode="rl-tb" style:writing-mode-automatic="false"/>
   </style:style>
  </office:automatic-styles>
  <office:body>

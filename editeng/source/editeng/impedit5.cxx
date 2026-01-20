@@ -1116,6 +1116,10 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                     pEditView->getImpl().DrawSelectionXOR();
                     UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = DeleteLeftOrRight( aCurSel, nDel, nMode );
+
+                    // tdf#162120: Automatically adjust paragraph directions after edit
+                    UpdateAutoParaDirection(aCurSel);
+
                     UndoActionEnd();
                     bModified = true;
                     bAllowIdle = false;

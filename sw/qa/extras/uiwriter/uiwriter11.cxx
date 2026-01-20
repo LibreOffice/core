@@ -397,6 +397,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf162120AutoRTL)
                          getProperty<short>(getRun(getParagraph(1), 1), u"WritingMode"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf162120AutoRTLAfterDirSwitch)
+{
+    // Tests that Writer no longer tries to update the writing direction after
+    // an explicit override.
+
+    createSwDoc("tdf162120-auto-rtl.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // The initial direction should be RTL
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"WritingMode"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
+
+    // Explicitly set the direction to RTL
+    // This should clear the auto writing mode flag
+    dispatchCommand(mxComponent, u".uno:ParaRightToLeft"_ustr, {});
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
+
+    // Insert a strong LTR character at the start of the paragraph.
+    // Since the flag is gone, the writing mode should not automatically switch to LTR.
+    pWrtShell->Insert(u"a"_ustr);
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(1), 1), u"WritingMode"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testFontworkSelection)
 {
     // Load a document with a Fontwork shape and select the shape
@@ -433,6 +459,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf169035ParaStartDefault)
 
     CPPUNIT_ASSERT_EQUAL(short(5),
                          getProperty<short>(getRun(getParagraph(1), 1), u"ParaAdjust"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf162120AutoRTLDefault)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), u"WritingModeAutomatic"_ustr));
 }
 
 } // end of anonymous namespace
