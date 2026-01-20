@@ -63,7 +63,7 @@ private:
 class SortConditionContext final : public WorksheetContextBase
 {
 public:
-    explicit            SortConditionContext( WorksheetContextBase& rFragment, SortCondition& rSortCondition );
+    explicit            SortConditionContext( WorksheetContextBase& rParent, SortCondition& rSortCondition );
 
 private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -80,7 +80,7 @@ private:
 class SortStateContext final : public WorksheetContextBase
 {
 public:
-    explicit            SortStateContext( WorksheetContextBase& rFragment, AutoFilter& rAutoFilter );
+    explicit            SortStateContext( WorksheetContextBase& rParent, AutoFilter& rAutoFilter );
 
 private:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;

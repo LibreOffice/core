@@ -43,6 +43,7 @@
 #include <extlstcontext.hxx>
 #include <viewsettings.hxx>
 #include <worksheetsettings.hxx>
+#include <NamedSheetViewFragment.hxx>
 
 namespace oox::xls {
 
@@ -347,6 +348,10 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
     OUString aCommentsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"comments" );
     if( !aCommentsFragmentPath.isEmpty() )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
+
+    OUString aNamedSheetViewPath = getFragmentPathFromFirstType(u"http://schemas.microsoft.com/office/2019/04/relationships/namedSheetView");
+    if (!aNamedSheetViewPath.isEmpty())
+        importOoxFragment(new oox::xls::nsv::NamedSheetViewFragment(*this, aNamedSheetViewPath));
 
     // store threaded comments path for later (imported after comments are finalized)
     OUString aThreadedCommentsPath = getFragmentPathFromFirstType(
