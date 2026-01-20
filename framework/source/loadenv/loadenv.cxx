@@ -22,7 +22,6 @@
 #include <loadenv/loadenvexception.hxx>
 #include <loadenv/targethelper.hxx>
 #include <framework/framelistanalyzer.hxx>
-#include <pattern/frame.hxx>
 
 #include <interaction/quietinteraction.hxx>
 #include <properties.h>
@@ -1467,24 +1466,12 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier = css::frame::Desktop::create( m_xContext );
     FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameAnalyzerFlags::BackingComponent);
-
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {
-        // new docs should recycle the backing window
-        if (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateFactory)
-            || m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE,
-                                                            false))
+        if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
         {
-            if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
-            {
-                m_bReactivateControllerOnError = true;
-                return aTasksAnalyzer.m_xBackingComponent;
-            }
-        }
-        // for docs with saved window state, let's create a new frame for their own size/pos
-        else
-        {
-            return {};
+            m_bReactivateControllerOnError = true;
+            return aTasksAnalyzer.m_xBackingComponent;
         }
     }
 
@@ -1646,13 +1633,6 @@ void LoadEnv::impl_reactForLoadingState()
             // On the other side "_beamer" is a valid name :-)
             if (TargetHelper::isValidNameForFrame(sFrameName))
                 m_xTargetFrame->setName(sFrameName);
-        }
-        // if a new frame is created without reusing backing window, close the backing window afterwards
-        FrameListAnalyzer aTasksAnalyzer(css::frame::Desktop::create(m_xContext), m_xTargetFrame,
-                                         FrameAnalyzerFlags::BackingComponent);
-        if (aTasksAnalyzer.m_xBackingComponent.is())
-        {
-            framework::pattern::frame::closeIt(aTasksAnalyzer.m_xBackingComponent);
         }
     }
     else if (m_bReactivateControllerOnError)
