@@ -528,7 +528,7 @@ sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
         = mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
 
     const bool bMovingEffect = ( mxDndEffectDragging != nullptr );
-    const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && mxTreeView->iter_compare(*xDndEffectInsertBefore, *mxDndEffectDragging) != 0);
+    const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && !xDndEffectInsertBefore->equal(*mxDndEffectDragging));
     const bool bHaveSequence(mpMainSequence);
 
     if( bMovingEffect && bMoveNotSelf && bHaveSequence )

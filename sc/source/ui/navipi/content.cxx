@@ -276,13 +276,13 @@ void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChild
         ScContentId nRoot = static_cast<ScContentId>(i);
         if (!m_aRootNodes[nRoot])
             continue;
-        if (m_xTreeView->iter_compare(*pEntry, *m_aRootNodes[nRoot]) == 0)
+        if (pEntry->equal(*m_aRootNodes[nRoot]))
         {
             rnRootIndex = nRoot;
             rnChildIndex = ~0UL;
             bFound = true;
         }
-        else if (xParent && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[nRoot]) == 0)
+        else if (xParent && xParent->equal(*m_aRootNodes[nRoot]))
         {
             rnRootIndex = nRoot;
 
@@ -292,7 +292,7 @@ void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChild
             bool bIterEntry = m_xTreeView->iter_children(*xIterEntry);
             while (!bFound && bIterEntry)
             {
-                if (m_xTreeView->iter_compare(*pEntry, *xIterEntry) == 0)
+                if (pEntry->equal(*xIterEntry))
                 {
                     rnChildIndex = nEntry;
                     bFound = true;  // exit the while loop
@@ -674,11 +674,11 @@ IMPL_LINK(ScContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
         aHelpText = OUString::number(m_xTreeView->iter_n_children(rEntry)) +
                     " " + m_xTreeView->get_text(rEntry);
     }
-    else if (m_aRootNodes[ScContentId::NOTE] && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::NOTE]) == 0)
+    else if (m_aRootNodes[ScContentId::NOTE] && xParent->equal(*m_aRootNodes[ScContentId::NOTE]))
     {
         aHelpText = m_xTreeView->get_text(rEntry);     // notes as help text
     }
-    else if (m_aRootNodes[ScContentId::AREALINK] && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::AREALINK]) == 0)
+    else if (m_aRootNodes[ScContentId::AREALINK] && xParent->equal(*m_aRootNodes[ScContentId::AREALINK]))
     {
         auto nIndex = GetChildIndex(&rEntry);
         if (nIndex != SC_CONTENT_NOCHILD)
@@ -1386,8 +1386,8 @@ void ScContentTree::ToggleRoot()        // after selection
             {
                 if (!m_aRootNodes[static_cast<ScContentId>(i)])
                     continue;
-                if ((m_xTreeView->iter_compare(*xEntry, *m_aRootNodes[static_cast<ScContentId>(i)]) == 0) ||
-                    (xParent && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[static_cast<ScContentId>(i)]) == 0))
+                if (xEntry->equal(*m_aRootNodes[static_cast<ScContentId>(i)]) ||
+                    (xParent && xParent->equal(*m_aRootNodes[static_cast<ScContentId>(i)])))
                 {
                     nNew = static_cast<ScContentId>(i);
                 }

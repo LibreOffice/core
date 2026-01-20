@@ -206,7 +206,7 @@ namespace svxform
             ::std::vector< sal_uInt32 > aCurrentPath;
 
             std::unique_ptr<weld::TreeIter> xLoop(pTreeBox->make_iterator(rCurrentEntry.get()));
-            while (pTreeBox->iter_compare(*xLoop, *pRoot) != 0)
+            while (!xLoop->equal(*pRoot))
             {
                 aCurrentPath.push_back(pTreeBox->get_iter_index_in_parent(*xLoop));
                 bool bLoop = pTreeBox->iter_parent(*xLoop);

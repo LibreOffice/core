@@ -732,7 +732,7 @@ namespace svxform
         {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
 
             // hidden controls can be copied to a form only
-            if (m_xTreeView->iter_compare(*_pTargetEntry, *m_xRootEntry) == 0 || !IsFormEntry(*_pTargetEntry))
+            if (_pTargetEntry->equal(*m_xRootEntry) || !IsFormEntry(*_pTargetEntry))
                 return DND_ACTION_NONE;
 
             return bSelfSource ? ( DND_ACTION_COPYMOVE & _nAction ) : DND_ACTION_COPY;
@@ -811,18 +811,18 @@ namespace svxform
         for (const auto& rCurrent : rDropped)
         {
             // test for 0)
-            if (m_xTreeView->iter_compare(*rCurrent, *m_xRootEntry) == 0)
+            if (rCurrent->equal(*m_xRootEntry))
                 return DND_ACTION_NONE;
 
             std::unique_ptr<weld::TreeIter> xCurrentParent(m_xTreeView->make_iterator(rCurrent.get()));
             m_xTreeView->iter_parent(*xCurrentParent);
 
             // test for 1)
-            if (m_xTreeView->iter_compare(*_pTargetEntry, *xCurrentParent) == 0)
+            if (_pTargetEntry->equal(*xCurrentParent))
                 return DND_ACTION_NONE;
 
             // test for 2)
-            if (m_xTreeView->iter_compare(*rCurrent, *_pTargetEntry) == 0)
+            if (rCurrent->equal(*_pTargetEntry))
                 return DND_ACTION_NONE;
 
             // test for 5)
@@ -833,8 +833,8 @@ namespace svxform
             if (IsFormEntry(*rCurrent))
             {
                 auto aIter = std::find_if(arrDropAncestors.begin(), arrDropAncestors.end(),
-                                          [this, &rCurrent](const auto& rElem) {
-                                            return m_xTreeView->iter_compare(*rElem, *rCurrent) == 0;
+                                          [&rCurrent](const auto& rElem) {
+                                            return rElem->equal(*rCurrent);
                                           });
 
                 if ( aIter != arrDropAncestors.end() )
@@ -843,7 +843,7 @@ namespace svxform
             else if (IsFormComponentEntry(*rCurrent))
             {
                 // test for 4)
-                if (m_xTreeView->iter_compare(*_pTargetEntry, *m_xRootEntry) == 0)
+                if (_pTargetEntry->equal(*m_xRootEntry))
                     return DND_ACTION_NONE;
             }
         }
@@ -893,7 +893,7 @@ namespace svxform
 #ifdef DBG_UTIL
             DBG_ASSERT( bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: copy allowed for hidden controls only!" );
 #endif
-            DBG_ASSERT( _pTargetEntry && m_xTreeView->iter_compare(*_pTargetEntry, *m_xRootEntry) != 0 && IsFormEntry( *_pTargetEntry ),
+            DBG_ASSERT( _pTargetEntry && !_pTargetEntry->equal(*m_xRootEntry) && IsFormEntry( *_pTargetEntry ),
                 "NavigatorTree::implExecuteDataTransfer: should not be here!" );
                 // implAcceptDataTransfer should have caught both cases
 
@@ -1184,8 +1184,8 @@ namespace svxform
         if (doingKeyboardCut())
         {
             auto aIter = std::find_if(m_aCutEntries.begin(), m_aCutEntries.end(),
-                                      [this, pTypedEntry](const auto& rElem) {
-                                        return m_xTreeView->iter_compare(*rElem, *pTypedEntry) == 0;
+                                      [pTypedEntry](const auto& rElem) {
+                                        return rElem->equal(*pTypedEntry);
                                       });
             if (aIter != m_aCutEntries.end())
                 m_aCutEntries.erase(aIter);
@@ -1700,7 +1700,7 @@ namespace svxform
 
         m_xTreeView->selected_foreach([this, sdiHow](weld::TreeIter& rSelectionLoop){
             // count different elements
-            if (m_xTreeView->iter_compare(rSelectionLoop, *m_xRootEntry) == 0)
+            if (rSelectionLoop.equal(*m_xRootEntry))
                 m_bRootSelected = true;
             else
             {
@@ -1717,7 +1717,7 @@ namespace svxform
             if (sdiHow == SDI_NORMALIZED)
             {
                 // don't take something with a selected ancestor
-                if (m_xTreeView->iter_compare(rSelectionLoop, *m_xRootEntry) == 0)
+                if (rSelectionLoop.equal(*m_xRootEntry))
                     m_arrCurrentSelection.emplace(m_xTreeView->make_iterator(&rSelectionLoop));
                 else
                 {
@@ -1733,7 +1733,7 @@ namespace svxform
                             break;
                         else
                         {
-                            if (m_xTreeView->iter_compare(*xParentLoop, *m_xRootEntry) == 0)
+                            if (xParentLoop->equal(*m_xRootEntry))
                             {
                                 // until root (exclusive), there was no selected parent -> entry belongs to normalized list
                                 m_arrCurrentSelection.emplace(m_xTreeView->make_iterator(&rSelectionLoop));
@@ -1847,7 +1847,7 @@ namespace svxform
         for (auto& rSelectionLoop : m_arrCurrentSelection)
         {
             // When form selection, mark all controls of form
-            if (IsFormEntry(*rSelectionLoop) && m_xTreeView->iter_compare(*rSelectionLoop, *m_xRootEntry) != 0)
+            if (IsFormEntry(*rSelectionLoop) && !rSelectionLoop->equal(*m_xRootEntry))
                 MarkViewObj(weld::fromId<FmFormData*>(m_xTreeView->get_id(*rSelectionLoop)), false/*deep*/);
 
             // When control selection, mark Control-SdrObjects

@@ -2267,7 +2267,7 @@ bool SbaTableQueryBrowser::ensureEntryObject(const weld::TreeIter& rEntry)
             std::unique_ptr<weld::TreeIter> xParent(rTreeView.make_iterator(&rEntry));
             if (rTreeView.iter_parent(*xParent))
             {
-                if (rTreeView.iter_compare(*xParent, *xDataSourceEntry) != 0)
+                if (!xParent->equal(*xDataSourceEntry))
                 {
                     OUString aName(rTreeView.get_text(rEntry));
                     DBTreeListUserData* pData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(*xParent));
@@ -2531,7 +2531,7 @@ bool SbaTableQueryBrowser::implSelect(const weld::TreeIter* pEntry)
         std::unique_ptr<weld::TreeIter> xNextTemp = rTreeView.make_iterator(xTemp.get());
         if (rTreeView.iter_parent(*xNextTemp))
         {
-            while (rTreeView.iter_compare(*xNextTemp, *xConnection) != 0)
+            while (!xNextTemp->equal(*xConnection))
             {
                 sNameBuffer.insert(0, rTreeView.get_text(*xTemp) + "/");
                 rTreeView.copy_iterator(*xNextTemp, *xTemp);
@@ -2789,7 +2789,7 @@ bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(std::u16string_view rName
     if (rTreeView.get_text(*m_xCurrentlyDisplayed) != rName)
         return false;
     std::unique_ptr<weld::TreeIter> xParent = rTreeView.make_iterator(m_xCurrentlyDisplayed.get());
-    return rTreeView.iter_parent(*xParent) && rTreeView.iter_compare(*xParent, rContainer) == 0;
+    return rTreeView.iter_parent(*xParent) && xParent->equal(rContainer);
 }
 
 void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent )
@@ -2976,7 +2976,7 @@ void SbaTableQueryBrowser::closeConnection(const weld::TreeIter& rDSEntry, bool 
     if (m_xCurrentlyDisplayed)
     {
         std::unique_ptr<weld::TreeIter> xRoot = m_pTreeView->GetRootLevelParent(m_xCurrentlyDisplayed.get());
-        if (rTreeView.iter_compare(*xRoot, rDSEntry) == 0)
+        if (xRoot->equal(rDSEntry))
             unloadAndCleanup(_bDisposeConnection);
     }
 
@@ -3329,8 +3329,7 @@ bool SbaTableQueryBrowser::impl_isDataSourceEntry(const weld::TreeIter* pEntry) 
     if (!pEntry)
         return false;
     std::unique_ptr<weld::TreeIter> xRoot(m_pTreeView->GetRootLevelParent(pEntry));
-    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-    return rTreeView.iter_compare(*xRoot, *pEntry) == 0;
+    return xRoot->equal(*pEntry);
 }
 
 bool SbaTableQueryBrowser::ensureConnection(const weld::TreeIter* pDSEntry, void* pDSData, SharedConnection& rConnection)

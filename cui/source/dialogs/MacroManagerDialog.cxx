@@ -177,7 +177,7 @@ void ScriptContainersListBox::Remove(const weld::TreeIter* pEntryIter, bool bRem
 
         // children must be removed from the tree in reverse order
         std::unique_ptr<weld::TreeIter> xRemoveIter = m_xTreeView->make_iterator();
-        while (m_xTreeView->iter_compare(*xIter, *pEntryIter) != 0)
+        while (!xIter->equal(*pEntryIter))
         {
             m_xTreeView->copy_iterator(*xIter, *xRemoveIter);
             (void)m_xTreeView->iter_previous(*xIter);

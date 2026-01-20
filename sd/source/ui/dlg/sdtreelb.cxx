@@ -160,7 +160,7 @@ bool SdPageObjsTLV::HasSelectedChildren( std::u16string_view rName )
                     m_xTreeView->selected_foreach([this, &bChildren, &xEntry](weld::TreeIter& rEntry){
                         std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
                         while (!bChildren && m_xTreeView->iter_parent(*xParent))
-                            bChildren = m_xTreeView->iter_compare(*xParent, *xEntry) == 0;
+                            bChildren = xParent->equal(*xEntry);
                         return bChildren;
                     });
 
@@ -552,8 +552,7 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     std::unique_ptr<weld::TreeIter> xTargetParent(m_rTreeView.make_iterator(xTarget.get()));
     while (m_rTreeView.get_iter_depth(*xTargetParent) > 1)
     {
-        if (!m_rTreeView.iter_parent(*xTargetParent) ||
-                m_rTreeView.iter_compare(*xSource, *xTargetParent) == 0)
+        if (!m_rTreeView.iter_parent(*xTargetParent) || xSource->equal(*xTargetParent))
             return DND_ACTION_NONE;
     }
 
@@ -564,7 +563,7 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
         m_rTreeView.iter_parent(*xTargetPage);
     while (m_rTreeView.get_iter_depth(*xSourcePage))
         m_rTreeView.iter_parent(*xSourcePage);
-    if (m_rTreeView.iter_compare(*xTargetPage, *xSourcePage) != 0)
+    if (!xTargetPage->equal(*xSourcePage))
         return DND_ACTION_NONE;
 
     return DND_ACTION_MOVE;
@@ -589,8 +588,7 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (!xTarget)
         return DND_ACTION_NONE;
 
-    auto nIterCompare = m_rTreeView.iter_compare(*xSource, *xTarget);
-    if (nIterCompare == 0)
+    if (xSource->equal(*xTarget))
     {
         // drop position is the same as source position
         return DND_ACTION_NONE;

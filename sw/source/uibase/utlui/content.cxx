@@ -1404,7 +1404,7 @@ IMPL_LINK(SwContentTree, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
     {
         if (!m_xOverlayCompareEntry)
             m_xOverlayCompareEntry.reset(m_xTreeView->make_iterator().release());
-        else if (m_xTreeView->iter_compare(*xEntry, *m_xOverlayCompareEntry) == 0)
+        else if (xEntry->equal(*m_xOverlayCompareEntry))
             return false; // The entry under the mouse has not changed.
         m_xTreeView->copy_iterator(*xEntry, *m_xOverlayCompareEntry);
         BringEntryToAttention(*xEntry);
@@ -4257,7 +4257,7 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
             std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
             for (bool bParent = m_xTreeView->iter_parent(*xParent); bParent; bParent = m_xTreeView->iter_parent(*xParent))
             {
-                if (m_xTreeView->iter_compare(*selected.back(), *xParent) == 0)
+                if (selected.back()->equal(*xParent))
                 {
                     return false;
                 }
@@ -4692,7 +4692,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             // get first selected for comparison
             std::unique_ptr<weld::TreeIter> xFirstSelected = rContentTree.get_selected();
             if (rContentTree.count_selected_rows() != 1 || !xFirstSelected ||
-                    rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
+                    !xIter->equal(*xFirstSelected))
             {
                 // unselect all entries and make passed entry visible and selected
                 rContentTree.set_cursor(*xIter);
@@ -4730,7 +4730,7 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
             // get first selected for comparison
             std::unique_ptr<weld::TreeIter> xFirstSelected = rContentTree.get_selected();
             if (rContentTree.count_selected_rows() != 1 || !xFirstSelected ||
-                    rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
+                    !xIter->equal(*xFirstSelected))
             {
                 // unselect all entries and make passed entry visible and selected
                 rContentTree.set_cursor(*xIter);
@@ -5060,7 +5060,7 @@ void SwContentTree::UpdateTracking()
                     std::unique_ptr<weld::TreeIter> xFirstSelected = m_xTreeView->get_selected();
                     // only select if not already selected or tree has multiple entries selected
                     if (m_xTreeView->count_selected_rows() != 1 || !xFirstSelected ||
-                            m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
+                            !rEntry.equal(*xFirstSelected))
                     {
                         if (m_nOutlineTracking == 2) // focused outline tracking
                         {
@@ -5250,7 +5250,7 @@ static bool lcl_IsSelectedCompareByContentTypeAndAddress(const weld::TreeIter& r
                 break;
         }
         if (ptr == p)
-            return rContentTree.iter_compare(*xIter, rEntry) == 0;
+            return xIter->equal(rEntry);
     }
     return false;
 }
@@ -5281,7 +5281,7 @@ static bool lcl_IsSelectedCompareByContentTypeAndName(const weld::TreeIter& rEnt
     {
         if (rName == rContentTree.get_text(*xIter))
         {
-            if (rContentTree.iter_compare(*xIter, rEntry) == 0)
+            if (xIter->equal(rEntry))
                 return true;
         }
     }
