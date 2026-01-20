@@ -29,6 +29,7 @@
 
 #define NO_BUTTON_SELECTED -1
 
+class AbstractSvxNameDialog;
 class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
@@ -514,6 +515,7 @@ private:
     void ClickDeleteHdl();
 
     void AddHatch(const OUString& aName, tools::Long nCount);
+    void runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
 
 public:
     SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

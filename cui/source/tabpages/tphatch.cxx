@@ -458,6 +458,37 @@ void SvxHatchTabPage::AddHatch(const OUString& aName, tools::Long nCount)
     ChangeHatchHdl_Impl();
 }
 
+void SvxHatchTabPage::runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount)
+{
+    pDlg->StartExecuteAsync([pDlg, nCount, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+        {
+            pDlg->disposeOnce();
+            return;
+        }
+
+        OUString aName = pDlg->GetName();
+
+        bool bValidHatchName = (SearchHatchList(aName) == -1);
+        if( bValidHatchName )
+        {
+            pDlg->disposeOnce();
+            AddHatch(aName, nCount);
+            return;
+        }
+
+        // Offer to try again
+        auto xWarnBox = std::make_shared<weld::MessageDialogController>(GetFrameWeld(),
+                "cui/ui/queryduplicatedialog.ui", "DuplicateNameDialog");
+        weld::DialogController::runAsync(xWarnBox, [pDlg, nCount, this](sal_Int32 nWarnResult) {
+            if (nWarnResult == RET_OK)
+                runNameDialog(pDlg, nCount);
+            else
+                pDlg->disposeOnce();
+        });
+    });
+}
+
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
     OUString aNewName( SvxResId( RID_SVXSTR_HATCH ) );
@@ -475,31 +506,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    sal_uInt16         nError   = 1;
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    while( pDlg->Execute() == RET_OK )
-    {
-        aName = pDlg->GetName();
-
-        bValidHatchName = (SearchHatchList(aName) == -1);
-        if( bValidHatchName )
-        {
-            nError = 0;
-            break;
-        }
-
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-        if (xWarnBox->run() != RET_OK)
-            break;
-    }
-    pDlg.disposeAndClear();
-
-    if( nError )
-        return;
-
-    AddHatch(aName, nCount);
+    runNameDialog(pDlg, nCount);
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
