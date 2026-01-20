@@ -20,23 +20,27 @@ QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
 
 void QtInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewParent)
 {
-    QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pWidget);
-    assert(pQtInstanceWidget);
-    QWidget* pQWidget = pQtInstanceWidget->getQWidget();
-    assert(pQWidget);
-    getLayout().removeWidget(pQWidget);
+    SolarMutexGuard g;
 
-    if (!pNewParent)
-    {
-        pQWidget->hide();
-        pQWidget->deleteLater();
-        return;
-    }
+    GetQtInstance().RunInMainThread([&] {
+        QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pWidget);
+        assert(pQtInstanceWidget);
+        QWidget* pQWidget = pQtInstanceWidget->getQWidget();
+        assert(pQWidget);
+        getLayout().removeWidget(pQWidget);
 
-    QtInstanceContainer* pNewContainer = dynamic_cast<QtInstanceContainer*>(pNewParent);
-    assert(pNewContainer);
-    QLayout& rNewLayout = pNewContainer->getLayout();
-    rNewLayout.addWidget(pQWidget);
+        if (!pNewParent)
+        {
+            pQWidget->hide();
+            pQWidget->deleteLater();
+            return;
+        }
+
+        QtInstanceContainer* pNewContainer = dynamic_cast<QtInstanceContainer*>(pNewParent);
+        assert(pNewContainer);
+        QLayout& rNewLayout = pNewContainer->getLayout();
+        rNewLayout.addWidget(pQWidget);
+    });
 }
 
 css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
