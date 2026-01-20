@@ -1192,6 +1192,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             }
         }
     }
+    // Although the spec allows some randomly larger 27273042316900,
+    // MS Word reports a document as corrupt if the effectExtent > SAL_MAX_INT32 or < SAL_MIN_INT32
+    nLeftExtEMU = std::clamp<sal_Int64>(nLeftExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+    nTopExtEMU = std::clamp<sal_Int64>(nTopExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+    nRightExtEMU = std::clamp<sal_Int64>(nRightExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+    nBottomExtEMU = std::clamp<sal_Int64>(nBottomExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+
     m_pImpl->getSerializer()->singleElementNS(
         XML_wp, XML_effectExtent, XML_l, OString::number(nLeftExtEMU), XML_t,
         OString::number(nTopExtEMU), XML_r, OString::number(nRightExtEMU), XML_b,
