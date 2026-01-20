@@ -295,7 +295,7 @@ void PropertyControlContext_Impl::impl_processEvent_throw(const ::comphelper::An
 
 OBrowserListBox::OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer)
     : m_xScrolledWindow(rBuilder.weld_scrolled_window(u"scrolledwindow"_ustr))
-    , m_xLinesPlayground(rBuilder.weld_box(u"playground"_ustr))
+    , m_xLinesPlayground(rBuilder.weld_grid(u"playground"_ustr))
     , m_xSizeGroup(rBuilder.create_size_group())
     , m_xHelpWindow(new InspectorHelpWindow(rBuilder))
     , m_pInitialControlParent(pContainer)
@@ -450,16 +450,21 @@ Reference<XPropertyControl> OBrowserListBox::GetPropertyControl(const OUString& 
 
 void OBrowserListBox::InsertEntry(const OLineDescriptor& rPropertyData, sal_uInt16 _nPos)
 {
-    // create a new line
-    BrowserLinePointer pBrowserLine = std::make_shared<OBrowserLine>(
-        rPropertyData.sName, m_xLinesPlayground.get(), m_xSizeGroup.get(), m_pInitialControlParent);
-
+    // row index to insert the new line at the end of the grid
+    int nGridRowIndex = 0;
     for (auto const& line : m_aLines)
     {
         // check that the name is unique
         assert(line.aName != rPropertyData.sName && "already have another line for this name!");
-        (void)line;
+
+        nGridRowIndex = std::max(
+            nGridRowIndex, m_xLinesPlayground->get_child_top_attach(line.pLine->GetGrid()) + 1);
     }
+
+    // create a new line
+    BrowserLinePointer pBrowserLine = std::make_shared<OBrowserLine>(
+        rPropertyData.sName, m_xLinesPlayground.get(), nGridRowIndex, m_xSizeGroup.get(),
+        m_pInitialControlParent);
 
     ListBoxLine aNewLine(rPropertyData.sName, pBrowserLine, rPropertyData.xPropertyHandler);
     ListBoxLines::size_type nInsertPos = _nPos;

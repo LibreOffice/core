@@ -28,16 +28,19 @@
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox" id="playground">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="playground">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="valign">start</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="border-width">6</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <property name="homogeneous">True</property>
+                    <property name="row-spacing">6</property>
+                    <property name="row-homogeneous">True</property>
                     <child>
                       <placeholder/>
                     </child>

@@ -49,8 +49,8 @@ using ::com::sun::star::graphic::XGraphic;
 
 namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-OBrowserLine::OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGroup* pLabelGroup,
-                           weld::Container* pInitialControlParent)
+OBrowserLine::OBrowserLine(OUString aEntryName, weld::Grid* pParent, int nGridRowIndex,
+                           weld::SizeGroup* pLabelGroup, weld::Container* pInitialControlParent)
     : m_sEntryName(std::move(aEntryName))
     , m_xBuilder(Application::CreateBuilder(pParent, u"modules/spropctrlr/ui/browserline.ui"_ustr))
     , m_xGrid(m_xBuilder->weld_grid(u"BrowserLine"_ustr))
@@ -69,6 +69,9 @@ OBrowserLine::OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGr
     , m_bIndentTitle(false)
     , m_bReadOnly(false)
 {
+    m_pParent->set_child_top_attach(*m_xGrid, nGridRowIndex);
+    m_pParent->set_child_left_attach(*m_xGrid, 0);
+
     pLabelGroup->add_widget(m_xFtTitle.get());
 }
 

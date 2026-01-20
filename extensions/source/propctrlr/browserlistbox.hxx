@@ -64,7 +64,7 @@ typedef std::vector<ListBoxLine> ListBoxLines;
 class OBrowserListBox final : public IButtonClickListener
 {
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
-    std::unique_ptr<weld::Box> m_xLinesPlayground;
+    std::unique_ptr<weld::Grid> m_xLinesPlayground;
     std::unique_ptr<weld::SizeGroup> m_xSizeGroup;
     std::unique_ptr<InspectorHelpWindow> m_xHelpWindow;
     weld::Container* m_pInitialControlParent;

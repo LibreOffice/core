@@ -52,7 +52,7 @@ private:
     std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
     css::uno::Reference<css::inspection::XPropertyControl> m_xControl;
     weld::Container* m_pInitialControlParent;
-    weld::Box* m_pParent;
+    weld::Grid* m_pParent;
     weld::Widget* m_pControlWindow;
     weld::Button* m_pBrowseButton;
     weld::Button* m_pAdditionalBrowseButton;
@@ -63,8 +63,8 @@ private:
     bool m_bReadOnly;
 
 public:
-    OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGroup* pLabelGroup,
-                 weld::Container* pInitialControlParent);
+    OBrowserLine(OUString aEntryName, weld::Grid* pParent, int nGridRowIndex,
+                 weld::SizeGroup* pLabelGroup, weld::Container* pInitialControlParent);
     ~OBrowserLine();
 
     void setControl(const css::uno::Reference<css::inspection::XPropertyControl>& rxControl);
@@ -86,6 +86,7 @@ public:
     int GetRowHeight() const { return m_xGrid->get_preferred_size().Height(); }
     void Show(bool bFlag = true);
     void Hide();
+    weld::Grid& GetGrid() const { return *m_xGrid; }
 
     bool GrabFocus();
     void ShowBrowseButton(const OUString& rImageURL, bool bPrimary);
