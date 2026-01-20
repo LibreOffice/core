@@ -11,6 +11,7 @@
 
 #include <tools/stream.hxx>
 
+#include <bitmap/BitmapColorizeFilter.hxx>
 #include <bitmap/BitmapDuoToneFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
@@ -1566,6 +1567,96 @@ CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testDuoToneFilter_32_BPP)
     {
         BitmapDuoToneFilter aDuoToneFilter(COL_AUTO, COL_RED);
         Bitmap aResBitmap = aDuoToneFilter.execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testColorizeFilter_24_BPP)
+{
+    Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aRedBitmap);
+        aWriteAccess->Erase(COL_LIGHTRED);
+    }
+
+    Bitmap aTransparentBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aTransparentBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aTransparentBitmap);
+        aWriteAccess->Erase(COL_AUTO);
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_RED);
+        Bitmap aResBitmap = aColorizeFilter.execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xBF, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_AUTO);
+        Bitmap aResBitmap = aColorizeFilter.execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x7F, 0x7F),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_RED);
+        Bitmap aResBitmap = aColorizeFilter.execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xBF, 0x7F, 0x7F),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_AUTO);
+        Bitmap aResBitmap = aColorizeFilter.execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testColorizeFilter_32_BPP)
+{
+    Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aRedBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aRedBitmap);
+        aWriteAccess->Erase(COL_LIGHTRED);
+    }
+
+    Bitmap aTransparentBitmap(Size(4, 4), vcl::PixelFormat::N32_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aTransparentBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aTransparentBitmap);
+        aWriteAccess->Erase(COL_AUTO);
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_RED);
+        Bitmap aResBitmap = aColorizeFilter.execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xBF, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_AUTO);
+        Bitmap aResBitmap = aColorizeFilter.execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x7F, 0x7F),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_RED);
+        Bitmap aResBitmap = aColorizeFilter.execute(aTransparentBitmap);
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                             aResBitmap.GetPixelColor(2, 2));
+    }
+
+    {
+        BitmapColorizeFilter aColorizeFilter(COL_AUTO);
+        Bitmap aResBitmap = aColorizeFilter.execute(aTransparentBitmap);
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
                              aResBitmap.GetPixelColor(2, 2));
     }
