@@ -128,8 +128,11 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                 if (!mbReverseSearch)
                 {
                     ++nCol;
-                    if (nCol > maParam.nCol2 || nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
+                    if (nCol > maParam.nCol2)
                         return;
+                    else if (!rItem.mbMatchEmpty
+                             && nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
+                         return;
                 }
                 else
                 {
@@ -142,7 +145,10 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                     AdvanceQueryParamEntryField();
                     nFirstQueryField = rEntry.nField;
                 }
-                pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
+                if (rItem.mbMatchEmpty)
+                    pCol = rDoc.maTabs[nTab]->FetchColumn(nCol);
+                else
+                    pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
             }
             while (!rItem.mbMatchEmpty && pCol->IsEmptyData());
 
@@ -1743,8 +1749,11 @@ sal_uInt64 ScCountIfCellIterator< accessType >::GetCount()
     // Keep Entry.nField in iterator on column change
     SetAdvanceQueryParamEntryField( true );
     assert(nTab < rDoc.GetTableCount() && "try to access index out of bounds, FIX IT");
-    maParam.nCol1 = rDoc.ClampToAllocatedColumns(nTab, maParam.nCol1);
-    maParam.nCol2 = rDoc.ClampToAllocatedColumns(nTab, maParam.nCol2);
+    if (!maParam.GetEntry(0).GetQueryItem().mbMatchEmpty)
+    {
+        maParam.nCol1 = rDoc.ClampToAllocatedColumns(nTab, maParam.nCol1);
+        maParam.nCol2 = rDoc.ClampToAllocatedColumns(nTab, maParam.nCol2);
+    }
     nCol = maParam.nCol1;
     InitPos();
     countIfCount = 0;
