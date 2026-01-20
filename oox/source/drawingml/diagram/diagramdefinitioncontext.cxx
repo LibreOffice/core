@@ -18,7 +18,7 @@
  */
 
 #include "diagramdefinitioncontext.hxx"
-#include "datamodel.hxx"
+#include "datamodel_oox.hxx"
 #include "datamodelcontext.hxx"
 #include "layoutnodecontext.hxx"
 #include <oox/helper/attributelist.hxx>
@@ -78,10 +78,10 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         // TODO, does not matter for the UI. skip.
         return nullptr;
     case DGM_TOKEN( sampData ):
-        mpLayout->getSampData() = std::make_shared<DiagramData>();
+        mpLayout->getSampData() = std::make_shared<DiagramData_oox>();
         return new DataModelContext( *this, mpLayout->getSampData() );
     case DGM_TOKEN( styleData ):
-        mpLayout->getStyleData() = std::make_shared<DiagramData>();
+        mpLayout->getStyleData() = std::make_shared<DiagramData_oox>();
         return new DataModelContext( *this, mpLayout->getStyleData() );
     case DGM_TOKEN( cat ):
     case DGM_TOKEN( catLst ):

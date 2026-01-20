@@ -26,20 +26,21 @@
 
 #include <rtl/ustring.hxx>
 
-#include <svx/diagram/datamodel.hxx>
+#include <svx/diagram/datamodel_svx.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/shape/ShapeFilterBase.hxx>
 
 namespace oox::drawingml {
 
-class DiagramData : public svx::diagram::DiagramData
+class DiagramData_oox : public svx::diagram::DiagramData_svx
 {
 public:
     typedef std::map< OUString, ShapePtr > PointShapeMap;
 
-    DiagramData();
-    virtual ~DiagramData();
+    DiagramData_oox();
+    virtual ~DiagramData_oox();
 
     // creates temporary processing data from model data
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
@@ -54,13 +55,15 @@ public:
     void restoreDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape);
     static void restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape);
 
+    void writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const css::uno::Reference<css::drawing::XShape>& rXShape);
+
 protected:
     void secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape);
     void restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape);
 
 private:
     // The model definition, the parts *only* available in oox. Also look for already
-    // defined ModelData in svx::diagram::DiagramData
+    // defined ModelData in svx::diagram::DiagramData_svx
 
     // - FillStyle for Diagram Background (empty constructed, may stay empty)
     FillPropertiesPtr mpBackgroundShapeFillProperties;
@@ -70,9 +73,9 @@ private:
     PointShapeMap     maPointShapeMap;
 };
 
-// Oox-local definition of DiagramData. Doing and using this on Oox
-// allows to do much less static_cast(s) - if at all from svx::diagram::DiagramData
-typedef std::shared_ptr< DiagramData > OoxDiagramDataPtr;
+// Oox-local definition of DiagramData_oox. Doing and using this on Oox
+// allows to do much less static_cast(s) - if at all from svx::diagram::DiagramData_svx
+typedef std::shared_ptr< DiagramData_oox > OoxDiagramDataPtr;
 
 }
 

@@ -684,7 +684,7 @@ merge svx::IControllerFeatureInvalidation with FmXFormShell
 merge svx::IFocusObserver with svx::FmTextControlShell
 maybe merge svx::ODataAccessObjectTransferable with dbaui::ODataClipboard, in modules svx and dbaccess
 merge svx::RegistrationItemSetHolder with svx::DatabaseRegistrationDialog
-maybe merge svx::diagram::DiagramData with oox::drawingml::DiagramData, in modules svx and oox
+maybe merge svx::diagram::DiagramData_svx with oox::drawingml::DiagramData, in modules svx and oox
 maybe merge svx::diagram::IDiagramHelper with oox::drawingml::AdvancedDiagramHelper, in modules svx and oox
 maybe merge svx::sidebar::InspectorTextPanel with sw::sidebar::WriterInspectorTextPanel, in modules svx and sw
 merge svx::sidebar::SvxShapeCommandsMap with svx::sidebar::DefaultShapesPanel

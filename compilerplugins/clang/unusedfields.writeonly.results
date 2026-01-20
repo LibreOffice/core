@@ -731,7 +731,7 @@ include/svx/diagram/datamodel.hxx:153
 include/svx/diagram/datamodel.hxx:155
     svx::diagram::Point mbIsPlaceholder _Bool
 include/svx/diagram/datamodel.hxx:266
-    svx::diagram::DiagramData maConnectionNameMap ConnectionNameMap
+    svx::diagram::DiagramData_svx maConnectionNameMap ConnectionNameMap
 include/svx/fillctrl.hxx:83
     FillControl mxColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
 include/svx/float3d.hxx:202
