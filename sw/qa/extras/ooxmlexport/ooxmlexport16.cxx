@@ -484,6 +484,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
     // Preserve tag on SDT blocks. (Before the fix, these were all lost)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", 3);
+
+    // Must not have an empty a:graphic a:graphicData.
+    // Header2 defines a simple (not visible) VML shape,
+    // which does not have a DML counterpart.
+    // Without the accompanying fix, an empty DML a:graphic was exported,
+    // which MS Word considered egregious enough to report it as corrupt.
+    xmlDocUniquePtr pXmlHeader = parseExport(u"word/header1.xml"_ustr);
+    assertXPath(pXmlHeader, "//mc:AlternateContent", 0); // no DML alternative
+    assertXPath(pXmlHeader, "//w:pict", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
@@ -592,7 +601,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141173_missingFrames)
     saveAndReload(TestFilter::DOCX);
     // Without the fix in place, almost all of the text and textboxes were missing.
     // Without the fix, there were only 2 shapes (mostly unseen).
-    CPPUNIT_ASSERT_EQUAL(13, getShapes());
+    CPPUNIT_ASSERT_EQUAL(14, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142404_tabSpacing, "tdf142404_tabSpacing.docx")
