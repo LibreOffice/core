@@ -49,17 +49,17 @@ using ::com::sun::star::graphic::XGraphic;
 
 namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-OBrowserLine::OBrowserLine(OUString aEntryName, weld::Grid* pParent, int nGridRowIndex,
+OBrowserLine::OBrowserLine(OUString aEntryName, weld::Grid& rParent, int nGridRowIndex,
                            weld::SizeGroup* pLabelGroup, weld::Container* pInitialControlParent)
     : m_sEntryName(std::move(aEntryName))
-    , m_xBuilder(Application::CreateBuilder(pParent, u"modules/spropctrlr/ui/browserline.ui"_ustr))
+    , m_xBuilder(Application::CreateBuilder(&rParent, u"modules/spropctrlr/ui/browserline.ui"_ustr))
     , m_xGrid(m_xBuilder->weld_grid(u"BrowserLine"_ustr))
     , m_xFtTitle(m_xBuilder->weld_label(u"label"_ustr))
     , m_xBrowseButton(m_xBuilder->weld_button(u"browse"_ustr))
     , m_xAdditionalBrowseButton(m_xBuilder->weld_button(u"morebrowse"_ustr))
     // controls start with this as their parent and need to be moved into m_xGrid
     , m_pInitialControlParent(pInitialControlParent)
-    , m_pParent(pParent)
+    , m_rParent(rParent)
     , m_pControlWindow(nullptr)
     , m_pBrowseButton(nullptr)
     , m_pAdditionalBrowseButton(nullptr)
@@ -69,8 +69,8 @@ OBrowserLine::OBrowserLine(OUString aEntryName, weld::Grid* pParent, int nGridRo
     , m_bIndentTitle(false)
     , m_bReadOnly(false)
 {
-    m_pParent->set_child_top_attach(*m_xGrid, nGridRowIndex);
-    m_pParent->set_child_left_attach(*m_xGrid, 0);
+    m_rParent.set_child_top_attach(*m_xGrid, nGridRowIndex);
+    m_rParent.set_child_left_attach(*m_xGrid, 0);
 
     pLabelGroup->add_widget(m_xFtTitle.get());
 }
@@ -79,7 +79,7 @@ OBrowserLine::~OBrowserLine()
 {
     implHideBrowseButton(true);
     implHideBrowseButton(false);
-    m_pParent->move(m_xGrid.get(), nullptr);
+    m_rParent.move(m_xGrid.get(), nullptr);
 }
 
 void OBrowserLine::IndentTitle(bool _bIndent)

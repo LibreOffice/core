@@ -462,9 +462,9 @@ void OBrowserListBox::InsertEntry(const OLineDescriptor& rPropertyData, sal_uInt
     }
 
     // create a new line
-    BrowserLinePointer pBrowserLine = std::make_shared<OBrowserLine>(
-        rPropertyData.sName, m_xLinesPlayground.get(), nGridRowIndex, m_xSizeGroup.get(),
-        m_pInitialControlParent);
+    BrowserLinePointer pBrowserLine
+        = std::make_shared<OBrowserLine>(rPropertyData.sName, *m_xLinesPlayground, nGridRowIndex,
+                                         m_xSizeGroup.get(), m_pInitialControlParent);
 
     ListBoxLine aNewLine(rPropertyData.sName, pBrowserLine, rPropertyData.xPropertyHandler);
     ListBoxLines::size_type nInsertPos = _nPos;

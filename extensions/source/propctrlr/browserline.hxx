@@ -52,7 +52,7 @@ private:
     std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
     css::uno::Reference<css::inspection::XPropertyControl> m_xControl;
     weld::Container* m_pInitialControlParent;
-    weld::Grid* m_pParent;
+    weld::Grid& m_rParent;
     weld::Widget* m_pControlWindow;
     weld::Button* m_pBrowseButton;
     weld::Button* m_pAdditionalBrowseButton;
@@ -63,7 +63,7 @@ private:
     bool m_bReadOnly;
 
 public:
-    OBrowserLine(OUString aEntryName, weld::Grid* pParent, int nGridRowIndex,
+    OBrowserLine(OUString aEntryName, weld::Grid& rParent, int nGridRowIndex,
                  weld::SizeGroup* pLabelGroup, weld::Container* pInitialControlParent);
     ~OBrowserLine();
 
