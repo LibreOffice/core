@@ -27,22 +27,16 @@
 
 namespace pcr
 {
-
-
-    //= FormController
-
-    class FormController;
     typedef ::cppu::OPropertySetHelper                                  FormController_PropertyBase1;
-    typedef ::comphelper::OPropertyArrayUsageHelper< FormController >   FormController_PropertyBase2;
 
     /** Legacy implementation of com.sun.star.form.PropertyBrowserController
 
         Nowadays only a wrapper around an ObjectInspector using a
         DefaultFormComponentInspectorModel.
     */
-    class FormController    :public OPropertyBrowserController
-                            ,public FormController_PropertyBase1
-                            ,public FormController_PropertyBase2
+    class FormController : public OPropertyBrowserController,
+                           public FormController_PropertyBase1,
+                           public comphelper::OPropertyArrayUsageHelper<FormController>
     {
     private:
         css::uno::Reference< css::beans::XPropertySet >
