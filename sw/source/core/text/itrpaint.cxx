@@ -129,6 +129,8 @@ class SwTextPaintOmitter
 {
     SwTextPainter& m_rPainter;
     bool m_bOmitPaint;
+    bool m_bInsertColorPaint;
+    bool m_bDeleteColorPaint;
 
 public:
     SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineTable& rRedlineTable);
@@ -138,6 +140,8 @@ public:
 SwTextPaintOmitter::SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineTable& rRedlineTable)
     : m_rPainter(rPainter)
     , m_bOmitPaint(false)
+    , m_bInsertColorPaint(false)
+    , m_bDeleteColorPaint(false)
 {
     if (!rPainter.GetRedln() || !rPainter.GetRedln()->IsOn())
     {
@@ -153,18 +157,38 @@ SwTextPaintOmitter::SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineT
     SwRedlineRenderMode eRedlineRenderMode = rPainter.GetInfo().GetOpt().GetRedlineRenderMode();
     const SwRangeRedline* pRedline = rRedlineTable[nRedline];
     RedlineType eType = pRedline->GetType();
+    // We have a matrix of redline render mode and redline types. The intent is to show the "omit
+    // inserts" mode on the left (inserts are semi-hidden, deletes are colored), and to show the
+    // "omit deletes" mode on the right (deletes are semi-hidden, inserts are colored). And do none
+    // of this in the standard (default) case.
     if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && eType == RedlineType::Insert)
     {
         m_bOmitPaint = true;
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && eType == RedlineType::Delete)
+    {
+        m_bDeleteColorPaint = true;
     }
     else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && eType == RedlineType::Delete)
     {
         m_bOmitPaint = true;
     }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && eType == RedlineType::Insert)
+    {
+        m_bInsertColorPaint = true;
+    }
 
     if (m_bOmitPaint)
     {
         rPainter.GetInfo().SetOmitPaint(true);
+    }
+    else if (m_bInsertColorPaint)
+    {
+        rPainter.GetInfo().SetInsertColorPaint(true);
+    }
+    else if (m_bDeleteColorPaint)
+    {
+        rPainter.GetInfo().SetDeleteColorPaint(true);
     }
 }
 
@@ -173,6 +197,14 @@ SwTextPaintOmitter::~SwTextPaintOmitter()
     if (m_bOmitPaint)
     {
         m_rPainter.GetInfo().SetOmitPaint(false);
+    }
+    else if (m_bInsertColorPaint)
+    {
+        m_rPainter.GetInfo().SetInsertColorPaint(false);
+    }
+    else if (m_bDeleteColorPaint)
+    {
+        m_rPainter.GetInfo().SetDeleteColorPaint(false);
     }
 }
 }

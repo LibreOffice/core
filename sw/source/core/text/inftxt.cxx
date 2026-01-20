@@ -729,6 +729,14 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     {
         aDrawInf.SetOmitPaint(m_bOmitPaint);
     }
+    else if (m_bInsertColorPaint)
+    {
+        aDrawInf.SetInsertColorPaint(m_bInsertColorPaint);
+    }
+    else if (m_bDeleteColorPaint)
+    {
+        aDrawInf.SetDeleteColorPaint(m_bDeleteColorPaint);
+    }
 
     // Draw text next to the left border
     Point aFontPos(m_aPos);
