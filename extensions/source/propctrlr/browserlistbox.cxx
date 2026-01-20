@@ -296,7 +296,6 @@ void PropertyControlContext_Impl::impl_processEvent_throw(const ::comphelper::An
 OBrowserListBox::OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer)
     : m_xScrolledWindow(rBuilder.weld_scrolled_window(u"scrolledwindow"_ustr))
     , m_xLinesPlayground(rBuilder.weld_grid(u"playground"_ustr))
-    , m_xSizeGroup(rBuilder.create_size_group())
     , m_xHelpWindow(new InspectorHelpWindow(rBuilder))
     , m_pInitialControlParent(pContainer)
     , m_pLineListener(nullptr)
@@ -462,9 +461,8 @@ void OBrowserListBox::InsertEntry(const OLineDescriptor& rPropertyData, sal_uInt
     }
 
     // create a new line
-    BrowserLinePointer pBrowserLine
-        = std::make_shared<OBrowserLine>(rPropertyData.sName, *m_xLinesPlayground, nGridRowIndex,
-                                         m_xSizeGroup.get(), m_pInitialControlParent);
+    BrowserLinePointer pBrowserLine = std::make_shared<OBrowserLine>(
+        rPropertyData.sName, *m_xLinesPlayground, nGridRowIndex, m_pInitialControlParent);
 
     ListBoxLine aNewLine(rPropertyData.sName, pBrowserLine, rPropertyData.xPropertyHandler);
     ListBoxLines::size_type nInsertPos = _nPos;

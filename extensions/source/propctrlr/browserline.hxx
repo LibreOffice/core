@@ -64,7 +64,7 @@ private:
 
 public:
     OBrowserLine(OUString aEntryName, weld::Grid& rParent, int nGridRowIndex,
-                 weld::SizeGroup* pLabelGroup, weld::Container* pInitialControlParent);
+                 weld::Container* pInitialControlParent);
     ~OBrowserLine();
 
     void setControl(const css::uno::Reference<css::inspection::XPropertyControl>& rxControl);

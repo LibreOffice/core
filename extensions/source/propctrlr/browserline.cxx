@@ -50,7 +50,7 @@ using ::com::sun::star::graphic::XGraphic;
 namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
 OBrowserLine::OBrowserLine(OUString aEntryName, weld::Grid& rParent, int nGridRowIndex,
-                           weld::SizeGroup* pLabelGroup, weld::Container* pInitialControlParent)
+                           weld::Container* pInitialControlParent)
     : m_sEntryName(std::move(aEntryName))
     , m_xBuilder(Application::CreateBuilder(&rParent, u"modules/spropctrlr/ui/browserline.ui"_ustr))
     , m_xGrid(m_xBuilder->weld_grid(u"BrowserLine"_ustr))
@@ -69,16 +69,20 @@ OBrowserLine::OBrowserLine(OUString aEntryName, weld::Grid& rParent, int nGridRo
     , m_bIndentTitle(false)
     , m_bReadOnly(false)
 {
-    m_rParent.set_child_top_attach(*m_xGrid, nGridRowIndex);
-    m_rParent.set_child_left_attach(*m_xGrid, 0);
+    // move label to first column of parent grid for same label/column width in all rows
+    m_xGrid->move(m_xFtTitle.get(), &m_rParent);
+    m_rParent.set_child_top_attach(*m_xFtTitle, nGridRowIndex);
+    m_rParent.set_child_left_attach(*m_xFtTitle, 0);
 
-    pLabelGroup->add_widget(m_xFtTitle.get());
+    m_rParent.set_child_top_attach(*m_xGrid, nGridRowIndex);
+    m_rParent.set_child_left_attach(*m_xGrid, 1);
 }
 
 OBrowserLine::~OBrowserLine()
 {
     implHideBrowseButton(true);
     implHideBrowseButton(false);
+    m_rParent.move(m_xFtTitle.get(), nullptr);
     m_rParent.move(m_xGrid.get(), nullptr);
 }
 
