@@ -3491,8 +3491,6 @@ extensions/source/ole/unotypewrapper.hxx
 extensions/source/ole/windata.hxx
 extensions/source/propctrlr/MasterDetailLinkDialog.cxx
 extensions/source/propctrlr/MasterDetailLinkDialog.hxx
-extensions/source/propctrlr/browserpage.cxx
-extensions/source/propctrlr/browserpage.hxx
 extensions/source/propctrlr/browserview.cxx
 extensions/source/propctrlr/browserview.hxx
 extensions/source/propctrlr/buttonnavigationhandler.cxx

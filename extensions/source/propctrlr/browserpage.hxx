@@ -24,38 +24,38 @@
 
 namespace pcr
 {
-    class OBrowserPage
+class OBrowserPage
+{
+private:
+    weld::Container* m_pParent;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<OBrowserListBox, o3tl::default_delete<OBrowserListBox>> m_xListBox;
+
+public:
+    // TODO inherit from BuilderPage
+    explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
+    ~OBrowserPage();
+
+    void SetHelpId(const OUString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
+
+    OBrowserListBox& getListBox() { return *m_xListBox; }
+    const OBrowserListBox& getListBox() const { return *m_xListBox; }
+
+    void detach()
     {
-    private:
-        weld::Container* m_pParent;
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Container> m_xContainer;
-        std::unique_ptr<OBrowserListBox, o3tl::default_delete<OBrowserListBox>> m_xListBox;
+        assert(m_pParent && "already attached");
+        m_pParent->move(m_xContainer.get(), nullptr);
+        m_pParent = nullptr;
+    }
 
-    public:
-        // TODO inherit from BuilderPage
-        explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
-        ~OBrowserPage();
-
-        void SetHelpId(const OUString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
-
-        OBrowserListBox& getListBox() { return *m_xListBox; }
-        const OBrowserListBox& getListBox() const { return *m_xListBox; }
-
-        void detach()
-        {
-            assert(m_pParent && "already attached");
-            m_pParent->move(m_xContainer.get(), nullptr);
-            m_pParent = nullptr;
-        }
-
-        void reattach(weld::Container* pNewParent)
-        {
-            assert(!m_pParent && "already attached");
-            m_pParent = pNewParent;
-            m_pParent->move(m_xContainer.get(), pNewParent);
-        }
-    };
+    void reattach(weld::Container* pNewParent)
+    {
+        assert(!m_pParent && "already attached");
+        m_pParent = pNewParent;
+        m_pParent->move(m_xContainer.get(), pNewParent);
+    }
+};
 } // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
