@@ -5724,8 +5724,8 @@ bool DrawingML::WriteCustomGeometrySegment(
             double fSwingAng = 0.0;
             rCustomShape2d.GetParameter(fSwingAng, rPairs[rnPairIndex + 1].Second, false, false);
             sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
-            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(fWR), XML_hR,
-                                OString::number(fHR), XML_stAng, OString::number(nStartAng),
+            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)),
+                                XML_hR, OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
                                 XML_swAng, OString::number(nSwingAng));
             double fPx = 0.0;
             double fPy = 0.0;
