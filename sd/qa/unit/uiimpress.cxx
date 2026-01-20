@@ -1715,12 +1715,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000),
-                             aComplexColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
                              aComplexColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000),
-                             aComplexColor.getTransformations()[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(8000), aComplexColor.getTransformations()[1].mnValue);
     }
 }
 
@@ -1765,12 +1763,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000),
-                             aComplexColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
                              aComplexColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
-                             aComplexColor.getTransformations()[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[1].mnValue);
     }
 }
 

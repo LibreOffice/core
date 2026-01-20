@@ -115,12 +115,10 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000),
-                             aComplexColor.getTransformations()[0].mnValue);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[0].mnValue);
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff,
                              aComplexColor.getTransformations()[1].meType);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6000),
-                             aComplexColor.getTransformations()[1].mnValue);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[1].mnValue);
     }
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
