@@ -28,6 +28,7 @@
 #include <svx/svdview.hxx>
 #include <vcl/hexcolorcontrol.hxx>
 
+class AbstractSvxNameDialog;
 class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
@@ -485,6 +486,7 @@ private:
     sal_Int32 SearchHatchList(std::u16string_view rHatchName);
 
     void AddHatch(const OUString& aName, tools::Long nCount);
+    void runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
 
 public:
     SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

@@ -746,7 +746,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDia
 namespace
 {
 class AbstractSvxNameDialog_Impl final
-    : public vcl::AbstractDialogImpl_Sync<AbstractSvxNameDialog, SvxNameDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxNameDialog, SvxNameDialog>
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
