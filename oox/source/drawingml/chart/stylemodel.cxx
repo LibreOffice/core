@@ -35,12 +35,11 @@ model::StyleEntry StyleEntryModel::toStyleEntry(oox::core::XmlFilterBase& rFilte
     // which can be set using pushTextDistances(). I'm not sure why the
     // interfaces are different, but that's why what's below is not parallel to
     // the above.
-    std::shared_ptr<PropertyMap> aBodyMap;
+    std::shared_ptr<PropertyMap> aBodyMap = std::make_shared<PropertyMap>();
     if (mxBodyPr)
     {
         mxBodyPr->pushTextDistances(Size(0, 0));
-        // Deep copy mxBodyPr->maPropertyMap so the shared_ptr can have ownership
-        aBodyMap = std::make_shared<PropertyMap>(mxBodyPr->maPropertyMap);
+        aBodyMap.reset(&mxBodyPr->maPropertyMap);
     }
 
     return model::StyleEntry(mxLnRef, mfLineWidthScale, mxFillRef, mxEffectRef, mxFontRef,

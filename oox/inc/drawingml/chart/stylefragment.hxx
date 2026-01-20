@@ -23,18 +23,18 @@
 
 namespace model
 {
-struct FontOrStyleRef;
+struct StyleColor;
 }
 
 namespace oox::drawingml::chart
 {
 /** Handler for a cs:CT_StyleReference or cs:CT_FontReference element.
  */
-class StyleReferenceContext final : public ContextBase<model::FontOrStyleRef>
+class StyleReferenceContext final : public ContextBase<model::StyleColor>
 {
 public:
     StyleReferenceContext(ContextHandler2Helper& rParent, sal_Int32 nIdx,
-                          model::FontOrStyleRef& rModel);
+                          model::StyleColor& rModel);
     virtual ~StyleReferenceContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,

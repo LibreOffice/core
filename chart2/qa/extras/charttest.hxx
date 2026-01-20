@@ -109,8 +109,6 @@ public:
     getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
                    const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
                    = nullptr);
-    Reference<chart2::XChartStyle>
-        getStyleFromDoc(Reference<chart2::XChartDocument> const& xChartDoc);
 };
 
 Reference< lang::XComponent > ChartTest::getChartCompFromSheet( sal_Int32 nSheet, sal_Int32 nChart )
@@ -507,17 +505,6 @@ ChartTest::getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const
         }
     }
     return uno::Reference<drawing::XShape>();
-}
-
-Reference<chart2::XChartStyle>
-    getStyleFromDoc(Reference<chart2::XChartDocument> const& xChartDoc)
-{
-    CPPUNIT_ASSERT( xChartDoc.is() );
-
-    Reference <chart2::XChartStyle > xStyle = xChartDoc->getStyles();
-    CPPUNIT_ASSERT( xStyle.is() );
-
-    return xStyle;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

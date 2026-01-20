@@ -2643,31 +2643,11 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
                 rFilter.importFragment( pChartSpaceFragment );
 
-                // Import styles file.
-                // Create the styles path from the path to the chart*.xml file
+                // Import styles file
                 sal_Int32 nLastSlash = mxChartShapeInfo->maFragmentPath.lastIndexOf('/');
                 const sal_Unicode *pFPath = mxChartShapeInfo->maFragmentPath.getStr();
                 OUString sStylePath(pFPath, nLastSlash + 1);
-                OUString sFullPath(pFPath);
-                sStylePath += u"style"_ustr;
-                OUString sChartFName(sFullPath.copy(nLastSlash + 1, sFullPath.getLength() - nLastSlash - 1));
-                OUString sTail;
-                // Verify that the path is the way we expect it, and extract the
-                // end bit. Don't put the startsWith() call inside an assert,
-                // because we don't want it optimized away.
-                const bool bWellFormed = sChartFName.startsWith(std::u16string_view(u"chart"), &sTail);
-                if (!bWellFormed) {
-                    assert(false);
-                }
-                // We should have something of the form 'chart1234.xml'. We
-                // want to get the numeric ('1234') part, since it should be
-                // the same for the style file.
-                sal_Int32 nPeriod = sTail.indexOf('.');
-                OUString sNumber(sTail.copy(0, nPeriod));
-
-                sStylePath += sNumber;
-                sStylePath += u".xml"_ustr;
-
+                sStylePath += u"style1.xml"_ustr;
                 chart::StyleModel aStyleModel;
                 rtl::Reference<chart::StyleFragment> pStyleFragment = new chart::StyleFragment(
                         rFilter, sStylePath, aStyleModel );
@@ -2719,8 +2699,14 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 }
 
                 // convert chart style model to docmodel style data
-                Reference<com::sun::star::chart2::XChartStyle> xStyle = xChartDoc->getStyles();
-                oox::drawingml::chart::ChartStyleConverter::convertFromModel(rFilter, aStyleModel, xStyle);
+                std::unique_ptr<chart::ChartStyleConverter> pChartStyleConv = std::make_unique<chart::ChartStyleConverter>();
+
+                if (pChartStyleConv) {
+                    Reference<com::sun::star::chart2::XChartStyle> xStyle = xChartDoc->getStyles();
+                    oox::drawingml::chart::ChartStyleConverter::convertFromModel(rFilter, aStyleModel, xStyle);
+
+
+                }
 
                 if (pPowerPointImport)
                 {
