@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <utility>
@@ -135,7 +136,15 @@ namespace drawinglayer::primitive2d
                 }
                 else
                 {
-                    aRetval.append(std::move(aTempContentText));
+                    if (getSdrLFSTAttribute().getText().isInEditMode())
+                    {
+                        drawinglayer::primitive2d::Primitive2DReference aWrapped(
+                            new drawinglayer::primitive2d::TextHierarchyEditPrimitive2D(
+                                std::move(aTempContentText)));
+                        aRetval.append(std::move(aWrapped));
+                    }
+                    else
+                        aRetval.append(std::move(aTempContentText));
                 }
             }
 
