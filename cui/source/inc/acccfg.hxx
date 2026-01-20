@@ -27,6 +27,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <config_features.h>
@@ -74,6 +75,8 @@ enum class StartFileDialogType
     SaveAs
 };
 
+class ComponentDisposedListener;
+
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
 private:
@@ -92,6 +95,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::ui::XAcceleratorConfiguration> m_xGlobal;
     css::uno::Reference<css::ui::XAcceleratorConfiguration> m_xModule;
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> m_xDocument;
     css::uno::Reference<css::ui::XAcceleratorConfiguration> m_xAct;
     css::uno::Reference<css::container::XNameAccess> m_xUICmdDescription;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
@@ -106,6 +110,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xEntriesBox;
     std::unique_ptr<weld::RadioButton> m_xOfficeButton;
     std::unique_ptr<weld::RadioButton> m_xModuleButton;
+    std::unique_ptr<weld::RadioButton> m_xDocumentButton;
     std::unique_ptr<weld::Button> m_xChangeButton;
     std::unique_ptr<weld::Button> m_xRemoveButton;
     std::unique_ptr<CuiConfigGroupListBox> m_xGroupLBox;
@@ -115,6 +120,10 @@ private:
     std::unique_ptr<weld::Button> m_xLoadButton;
     std::unique_ptr<weld::Button> m_xSaveButton;
     std::unique_ptr<weld::Button> m_xResetButton;
+    std::unique_ptr<weld::ComboBox> m_xSaveInListBox;
+
+    rtl::Reference<ComponentDisposedListener> m_xComponentDisposedListener;
+    friend class ComponentDisposedListener;
 
     DECL_LINK(ChangeHdl, weld::Button&, void);
     DECL_LINK(RemoveHdl, weld::Button&, void);
@@ -124,6 +133,8 @@ private:
     DECL_LINK(Load, weld::Button&, void);
     DECL_LINK(Default, weld::Button&, void);
     DECL_LINK(RadioHdl, weld::Toggleable&, void);
+    DECL_LINK(DocumentRadioHdl, weld::Toggleable&, void);
+    DECL_LINK(SelectSaveInLocation, weld::ComboBox&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(FocusOut_Impl, weld::Widget&, void);
 
@@ -140,6 +151,10 @@ private:
 
     void Init(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& pAccMgr);
     void ResetConfig();
+    void ClearSaveInComboBox();
+    void AddFrameToSaveInComboBox(const css::uno::Reference<css::frame::XFrame>& xFrame);
+    void FillSaveInComboBox();
+    void HandleScopeChanged();
 
 public:
     SfxAcceleratorConfigPage(weld::Container* pPage, weld::DialogController* pController,

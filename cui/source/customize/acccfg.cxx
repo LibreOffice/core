@@ -22,6 +22,7 @@
 #include <acccfg.hxx>
 #include <cfgutil.hxx>
 #include <dialmgr.hxx>
+#include <cfg.hxx>
 
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
@@ -44,10 +45,13 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 // include search util
@@ -56,12 +60,15 @@
 #include <unotools/textsearch.hxx>
 
 // include other projects
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <config_features.h>
+#include <unotools/configmgr.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -820,6 +827,81 @@ const sal_uInt16 KEYCODE_ARRAY[] = { KEY_F1,
 
 const sal_uInt16 KEYCODE_ARRAY_SIZE = std::size(KEYCODE_ARRAY);
 
+namespace
+{
+struct AcceleratorSaveInData
+{
+    AcceleratorSaveInData(const uno::Reference<frame::XModel>& xModel,
+                          const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr)
+        : m_xModel(xModel)
+        , m_xAccMgr(xAccMgr)
+    {
+    }
+
+    uno::Reference<frame::XModel> m_xModel;
+    uno::Reference<ui::XAcceleratorConfiguration> m_xAccMgr;
+};
+}
+
+// Helper class to listen for components being disposed so we can
+// remove them from the SaveIn combobox
+class ComponentDisposedListener : public ::cppu::WeakImplHelper<lang::XEventListener>
+{
+public:
+    ComponentDisposedListener(SfxAcceleratorConfigPage* pAccelCfgPage)
+        : m_pAccelCfgPage(pAccelCfgPage)
+    {
+    }
+
+    void SAL_CALL disposing(const lang::EventObject& rEvent) override;
+
+private:
+    SfxAcceleratorConfigPage* m_pAccelCfgPage;
+    friend class SfxAcceleratorConfigPage;
+};
+
+void ComponentDisposedListener::disposing(const lang::EventObject& rEvent)
+{
+    SolarMutexGuard aGuard;
+
+    if (!m_pAccelCfgPage)
+        return;
+
+    int cnt = m_pAccelCfgPage->m_xSaveInListBox->get_count();
+
+    for (int i = 0; i < cnt; ++i)
+    {
+        AcceleratorSaveInData* pData
+            = weld::fromId<AcceleratorSaveInData*>(m_pAccelCfgPage->m_xSaveInListBox->get_id(i));
+
+        if (pData->m_xModel == rEvent.Source)
+        {
+            int nOldActive = m_pAccelCfgPage->m_xSaveInListBox->get_active();
+
+            m_pAccelCfgPage->m_xSaveInListBox->remove(i);
+
+            if (m_pAccelCfgPage->m_xDocumentButton->get_active() && nOldActive == i)
+            {
+                m_pAccelCfgPage->m_xModuleButton->set_active(true);
+                m_pAccelCfgPage->m_xSaveInListBox->set_active(0);
+                m_pAccelCfgPage->HandleScopeChanged();
+            }
+
+            if (m_pAccelCfgPage->m_xSaveInListBox->get_count() <= 0)
+            {
+                m_pAccelCfgPage->m_xSaveInListBox->hide();
+                m_pAccelCfgPage->m_xDocumentButton->hide();
+            }
+
+            pData->m_xModel->removeEventListener(this);
+
+            delete pData;
+
+            break;
+        }
+    }
+}
+
 /** select the entry, which match the current key input ... excepting
     keys, which are used for the dialog itself.
   */
@@ -873,6 +955,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , m_xEntriesBox(m_xBuilder->weld_tree_view(u"shortcuts"_ustr))
     , m_xOfficeButton(m_xBuilder->weld_radio_button(u"office"_ustr))
     , m_xModuleButton(m_xBuilder->weld_radio_button(u"module"_ustr))
+    , m_xDocumentButton(m_xBuilder->weld_radio_button(u"document"_ustr))
     , m_xChangeButton(m_xBuilder->weld_button(u"change"_ustr))
     , m_xRemoveButton(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xGroupLBox(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view(u"category"_ustr)))
@@ -882,6 +965,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , m_xLoadButton(m_xBuilder->weld_button(u"load"_ustr))
     , m_xSaveButton(m_xBuilder->weld_button(u"save"_ustr))
     , m_xResetButton(m_xBuilder->weld_button(u"reset"_ustr))
+    , m_xSaveInListBox(m_xBuilder->weld_combo_box(u"savein"_ustr))
+    , m_xComponentDisposedListener(new ComponentDisposedListener(this))
 {
     Size aSize(m_xEntriesBox->get_approximate_digit_width() * 40,
                m_xEntriesBox->get_height_rows(10));
@@ -908,6 +993,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     m_xSaveButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Save));
     m_xResetButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Default));
     m_xOfficeButton->connect_toggled(LINK(this, SfxAcceleratorConfigPage, RadioHdl));
+    m_xDocumentButton->connect_toggled(LINK(this, SfxAcceleratorConfigPage, DocumentRadioHdl));
+    m_xSaveInListBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectSaveInLocation));
     m_xSearchEdit->connect_changed(LINK(this, SfxAcceleratorConfigPage, SearchUpdateHdl));
     m_xSearchEdit->connect_focus_out(LINK(this, SfxAcceleratorConfigPage, FocusOut_Impl));
 
@@ -949,6 +1036,11 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
         TAccInfo* pUserData = weld::fromId<TAccInfo*>(m_xEntriesBox->get_id(i));
         delete pUserData;
     }
+
+    // Free the dynamic user data for the SaveIn combobox
+    ClearSaveInComboBox();
+
+    m_xComponentDisposedListener->m_pAccelCfgPage = nullptr;
 }
 
 void SfxAcceleratorConfigPage::InitAccCfg()
@@ -1151,9 +1243,13 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save, weld::Button&, void)
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default, weld::Button&, void)
 {
-    uno::Reference<form::XReset> xReset(m_xAct, uno::UNO_QUERY);
-    if (xReset.is())
-        xReset->reset();
+    // XReset doesn’t work on document-based configs
+    if (!m_xDocumentButton->get_active())
+    {
+        uno::Reference<form::XReset> xReset(m_xAct, uno::UNO_QUERY);
+        if (xReset.is())
+            xReset->reset();
+    }
 
     m_xEntriesBox->freeze();
     ResetConfig();
@@ -1289,12 +1385,34 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::Toggleable&, void)
 {
+    HandleScopeChanged();
+}
+
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, DocumentRadioHdl, weld::Toggleable&, void)
+{
+    m_xSaveInListBox->set_sensitive(m_xDocumentButton->get_active());
+    HandleScopeChanged();
+}
+
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SelectSaveInLocation, weld::ComboBox&, void)
+{
+    m_xDocumentButton->set_active(true);
+    HandleScopeChanged();
+}
+
+void SfxAcceleratorConfigPage::HandleScopeChanged()
+{
     uno::Reference<ui::XAcceleratorConfiguration> xOld = m_xAct;
 
     if (m_xOfficeButton->get_active())
         m_xAct = m_xGlobal;
     else if (m_xModuleButton->get_active())
         m_xAct = m_xModule;
+    else if (m_xDocumentButton->get_active())
+    {
+        OUString sId = m_xSaveInListBox->get_active_id();
+        m_xAct = weld::fromId<AcceleratorSaveInData*>(sId)->m_xAccMgr;
+    }
 
     // nothing changed? => do nothing!
     if (m_xAct.is() && (xOld == m_xAct))
@@ -1514,6 +1632,107 @@ bool SfxAcceleratorConfigPage::FillItemSet(SfxItemSet*)
     return true;
 }
 
+void SfxAcceleratorConfigPage::ClearSaveInComboBox()
+{
+    int cnt = m_xSaveInListBox->get_count();
+
+    for (int i = 0; i < cnt; ++i)
+    {
+        AcceleratorSaveInData* pData
+            = weld::fromId<AcceleratorSaveInData*>(m_xSaveInListBox->get_id(i));
+
+        pData->m_xModel->removeEventListener(m_xComponentDisposedListener);
+
+        delete pData;
+    }
+
+    m_xSaveInListBox->clear();
+}
+
+void SfxAcceleratorConfigPage::AddFrameToSaveInComboBox(const uno::Reference<frame::XFrame>& xFrame)
+{
+    uno::Reference<frame::XController> xController = xFrame->getController();
+
+    if (!xController.is())
+        return;
+
+    uno::Reference<frame::XModel> xModel = xController->getModel();
+
+    if (!xModel.is())
+        return;
+
+    uno::Reference<css::ui::XUIConfigurationManagerSupplier> xCfgSupplier(xModel, uno::UNO_QUERY);
+
+    if (!xCfgSupplier.is())
+        return;
+
+    uno::Reference<css::ui::XUIConfigurationManager> xDocCfgMgr
+        = xCfgSupplier->getUIConfigurationManager();
+
+    if (!xCfgSupplier)
+        return;
+
+    uno::Reference<css::ui::XAcceleratorConfiguration> xAccMgr = xDocCfgMgr->getShortCutManager();
+
+    if (!xAccMgr)
+        return;
+
+    AcceleratorSaveInData* pDocData = new AcceleratorSaveInData(xModel, xAccMgr);
+    OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle(xModel);
+    m_xSaveInListBox->append(weld::toId(pDocData), aTitle);
+
+    xModel->addEventListener(m_xComponentDisposedListener);
+}
+
+void SfxAcceleratorConfigPage::FillSaveInComboBox()
+{
+    ClearSaveInComboBox();
+
+    if (!m_xModule.is() || !SvxConfigPage::CanConfig(m_sModuleLongName))
+        return;
+
+    // Add the current frame first
+    AddFrameToSaveInComboBox(m_xFrame);
+
+    // Add any other frames with the same module
+    uno::Reference<frame::XModuleManager2> xModuleManager
+        = frame::ModuleManager::create(m_xContext);
+
+    uno::Reference<frame::XDesktop2> xFramesSupplier = frame::Desktop::create(m_xContext);
+
+    uno::Reference<frame::XFrames> xFrames = xFramesSupplier->getFrames();
+
+    uno::Sequence<uno::Reference<frame::XFrame>> aFrameList
+        = xFrames->queryFrames(frame::FrameSearchFlag::ALL);
+
+    for (uno::Reference<frame::XFrame> const& xFrame : aFrameList)
+    {
+        if (!xFrame.is() || xFrame == m_xFrame)
+            continue;
+
+        OUString sFrameModule;
+
+        try
+        {
+            sFrameModule = xModuleManager->identify(xFrame);
+        }
+        catch (css::lang::IllegalArgumentException&)
+        {
+            continue;
+        }
+        catch (css::frame::UnknownModuleException&)
+        {
+            continue;
+        }
+
+        if (m_sModuleLongName == sFrameModule)
+            AddFrameToSaveInComboBox(xFrame);
+    }
+
+    if (m_xSaveInListBox->get_count() >= 1)
+        m_xSaveInListBox->set_active(0);
+}
+
 void SfxAcceleratorConfigPage::Reset(const SfxItemSet* rSet)
 {
     // open accelerator configs
@@ -1536,7 +1755,17 @@ void SfxAcceleratorConfigPage::Reset(const SfxItemSet* rSet)
         m_xOfficeButton->set_active(true);
     }
 
-    RadioHdl(*m_xOfficeButton);
+    FillSaveInComboBox();
+
+    if (m_xSaveInListBox->get_count() <= 0)
+    {
+        m_xDocumentButton->hide();
+        m_xSaveInListBox->hide();
+    }
+    else
+        m_xSaveInListBox->set_sensitive(false);
+
+    HandleScopeChanged();
 
 #if HAVE_FEATURE_SCRIPTING
     if (const SfxMacroInfoItem* pMacroItem = rSet->GetItemIfSet(SID_MACROINFO))

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -44,7 +44,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <!-- n-columns=1 n-rows=2 -->
+  <!-- n-columns=1 n-rows=3 -->
   <object class="GtkGrid" id="AccelConfigPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -142,59 +142,24 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box17">
+          <object class="GtkButtonBox" id="buttonbox1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
+            <property name="layout-style">start</property>
             <child>
-              <object class="GtkBox" id="box18">
+              <object class="GtkButton" id="change">
+                <property name="label" translatable="yes" context="accelconfigpage|change">_Assign</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkRadioButton" id="office">
-                    <property name="label" translatable="yes" context="accelconfigpage|office">%PRODUCTNAME</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="office-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|office">Displays shortcut keys that are common to all the office suite applications.</property>
-                      </object>
-                    </child>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="change-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|change">Assigns the key combination selected in the Shortcut keys list to the command selected in the Function list.</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="module">
-                    <property name="label" translatable="yes" context="accelconfigpage|module">$(MODULE)</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">office</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="module-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|module">Displays shortcut keys for the current office suite application.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
               <packing>
@@ -204,117 +169,83 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox" id="buttonbox1">
+              <object class="GtkButton" id="delete">
+                <property name="label" translatable="yes" context="stock">_Delete</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="vexpand">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <property name="layout-style">start</property>
-                <child>
-                  <object class="GtkButton" id="change">
-                    <property name="label" translatable="yes" context="accelconfigpage|change">_Assign</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="change-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|change">Assigns the key combination selected in the Shortcut keys list to the command selected in the Function list.</property>
-                      </object>
-                    </child>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|delete">Deletes the selected element or elements without requiring confirmation.</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="delete">
-                    <property name="label" translatable="yes" context="stock">_Delete</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="delete-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|delete">Deletes the selected element or elements without requiring confirmation.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="load">
-                    <property name="label" translatable="yes" context="accelconfigpage|load">_Load...</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="load-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|load">Replaces the shortcut key configuration with one that was previously saved.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                    <property name="secondary">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="save">
-                    <property name="label" translatable="yes" context="accelconfigpage|save">_Save...</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="save-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|save">Saves the current shortcut key configuration, so that you can load it later.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                    <property name="secondary">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="reset">
-                    <property name="label" translatable="yes" context="stock">_Reset</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="accelconfigpage|tooltip|reset">Unsaved modifications to shortcut keys are reverted.</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="reset-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|reset">Revert any changes made to keyboard shortcuts to the assignments that were present when this dialog was opened.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                    <property name="secondary">True</property>
-                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="load">
+                <property name="label" translatable="yes" context="accelconfigpage|load">_Load...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="load-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|load">Replaces the shortcut key configuration with one that was previously saved.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="save">
+                <property name="label" translatable="yes" context="accelconfigpage|save">_Save...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="save-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|save">Saves the current shortcut key configuration, so that you can load it later.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="reset">
+                <property name="label" translatable="yes" context="stock">_Reset</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="accelconfigpage|tooltip|reset">Unsaved modifications to shortcut keys are reverted.</property>
+                <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="reset-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|reset">Revert any changes made to keyboard shortcuts to the assignments that were present when this dialog was opened.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -326,7 +257,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
@@ -574,7 +505,127 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">1</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkBox" id="box18">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="hexpand">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkRadioButton" id="office">
+                <property name="label" translatable="yes" context="accelconfigpage|office">%PRODUCTNAME</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="active">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="office-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|office">Displays shortcut keys that are common to all the office suite applications.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="module">
+                <property name="label" translatable="yes" context="accelconfigpage|module">$(MODULE)</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <property name="group">office</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="module-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|module">Displays shortcut keys for the current office suite application.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="document">
+                <property name="label" translatable="yes" context="accelconfigpage|document">_Document</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <property name="group">office</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="document-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|document">Displays shortcut keys for the chosen document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkComboBoxText" id="savein">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="savein-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|savein">Select the document to make the shortcut be available only in that specific document.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="accelconfigpage|scopelabel">S_cope</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child internal-child="accessible">
