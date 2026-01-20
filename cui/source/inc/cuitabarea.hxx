@@ -513,6 +513,8 @@ private:
     void ClickRenameHdl();
     void ClickDeleteHdl();
 
+    void AddHatch(const OUString& aName, tools::Long nCount);
+
 public:
     SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxHatchTabPage() override;

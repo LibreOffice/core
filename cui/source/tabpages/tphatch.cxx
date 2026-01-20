@@ -435,6 +435,29 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
     m_xLbBackgroundColor->SaveValue();
 }
 
+void SvxHatchTabPage::AddHatch(const OUString& aName, tools::Long nCount)
+{
+    XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
+                    static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                    GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) );
+
+    m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
+
+    OUString sId = nCount > 0 ? m_xHatchLB->get_id( nCount - 1 ) : OUString();
+    sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
+    BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, aIconSize );
+    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+
+    m_xHatchLB->insert( nId + 1, &aName, &sId, pVDev, nullptr);
+    FillPresetListBox();
+    m_xHatchLB->select( nId + 1 );
+
+    m_nHatchingListState |= ChangeType::MODIFIED;
+
+    ChangeHatchHdl_Impl();
+}
+
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
     OUString aNewName( SvxResId( RID_SVXSTR_HATCH ) );
@@ -476,25 +499,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     if( nError )
         return;
 
-    XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
-                    static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
-                    GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) );
-
-    m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
-
-    OUString sId = nCount > 0 ? m_xHatchLB->get_id( nCount - 1 ) : OUString();
-    sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
-    BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, aIconSize );
-    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
-
-    m_xHatchLB->insert( nId + 1, &aName, &sId, pVDev, nullptr);
-    FillPresetListBox();
-    m_xHatchLB->select( nId + 1 );
-
-    m_nHatchingListState |= ChangeType::MODIFIED;
-
-    ChangeHatchHdl_Impl();
+    AddHatch(aName, nCount);
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
