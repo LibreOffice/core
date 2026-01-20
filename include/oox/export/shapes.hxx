@@ -113,6 +113,8 @@ public:
 
     static bool         NonEmptyText( const css::uno::Reference< css::uno::XInterface >& xIface );
     static bool         IsShapeTypeKnown( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static bool IsValidShape(const css::uno::Reference<css::drawing::XShape>& xShape,
+                             DocumentType eDocumentType);
 
     ShapeExport&
                         WritePolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bClosed );
