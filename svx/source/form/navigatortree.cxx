@@ -1193,7 +1193,7 @@ namespace svxform
 
         if (m_aControlExchange.isDataExchangeActive())
         {
-            if (0 == m_aControlExchange->onEntryRemoved(m_xTreeView.get(), pTypedEntry))
+            if (0 == m_aControlExchange->onEntryRemoved(pTypedEntry))
             {
                 // last of the entries which we put into the clipboard has been deleted from the tree.
                 // Give up the clipboard ownership.
