@@ -33,6 +33,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/misspellrange.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -4432,7 +4433,10 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
             return SotClipboardFormatId::UNIFORMRESOURCELOCATOR;
         else if ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) )
             return SotClipboardFormatId::NETSCAPE_BOOKMARK;
-        else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) )
+        // In FILEGRPDESCRIPTOR, we only need web links (see ScViewFunc::PasteDataFormat).
+        // Check if the descriptor really contains them.
+        else if (aDataHelper.GetINetBookmark(SotClipboardFormatId::FILEGRPDESCRIPTOR,
+                                             o3tl::temporary(INetBookmark())))
             return SotClipboardFormatId::FILEGRPDESCRIPTOR;
     }
 
