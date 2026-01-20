@@ -454,14 +454,11 @@ void OBrowserListBox::InsertEntry(const OLineDescriptor& rPropertyData, sal_uInt
     BrowserLinePointer pBrowserLine = std::make_shared<OBrowserLine>(
         rPropertyData.sName, m_xLinesPlayground.get(), m_xSizeGroup.get(), m_pInitialControlParent);
 
-    // check that the name is unique
     for (auto const& line : m_aLines)
     {
-        if (line.aName == rPropertyData.sName)
-        {
-            // already have another line for this name!
-            assert(false);
-        }
+        // check that the name is unique
+        assert(line.aName != rPropertyData.sName && "already have another line for this name!");
+        (void)line;
     }
 
     ListBoxLine aNewLine(rPropertyData.sName, pBrowserLine, rPropertyData.xPropertyHandler);
