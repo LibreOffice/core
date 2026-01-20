@@ -21,6 +21,7 @@
 #include <svx/svdobjkind.hxx>
 #include <svx/svditer.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <oox/export/shapes.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <textboxhelper.hxx>
@@ -1596,6 +1597,9 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
         if (eFillStyle == css::drawing::FillStyle_BITMAP)
             return false;
     }
+    if (!oox::drawingml::ShapeExport::IsValidShape(xShape, drawingml::DOCUMENT_DOCX))
+        return false;
+
     return true;
 }
 
