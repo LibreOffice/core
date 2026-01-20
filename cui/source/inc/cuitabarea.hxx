@@ -484,6 +484,8 @@ private:
 
     sal_Int32 SearchHatchList(std::u16string_view rHatchName);
 
+    void AddHatch(const OUString& aName, tools::Long nCount);
+
 public:
     SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxHatchTabPage() override;
