@@ -27,15 +27,13 @@
 
 namespace pcr
 {
-    typedef ::cppu::OPropertySetHelper                                  FormController_PropertyBase1;
-
     /** Legacy implementation of com.sun.star.form.PropertyBrowserController
 
         Nowadays only a wrapper around an ObjectInspector using a
         DefaultFormComponentInspectorModel.
     */
     class FormController : public OPropertyBrowserController,
-                           public FormController_PropertyBase1,
+                           public cppu::OPropertySetHelper,
                            public comphelper::OPropertyArrayUsageHelper<FormController>
     {
     private:
@@ -76,7 +74,7 @@ namespace pcr
                 css::uno::Any& rValue, sal_Int32 nHandle
             ) const override;
     private:
-        using FormController_PropertyBase1::getFastPropertyValue;
+        using cppu::OPropertySetHelper::getFastPropertyValue;
     };
 
 

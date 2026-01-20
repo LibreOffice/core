@@ -61,7 +61,7 @@ namespace pcr
             const css::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers )
         :OPropertyBrowserController( _rxContext )
-        ,FormController_PropertyBase1( m_aBHelper )
+        ,cppu::OPropertySetHelper(m_aBHelper)
         ,m_sImplementationName(std::move( sImplementationName ))
         ,m_aSupportedServiceNames( aSupportedServiceNames )
     {
@@ -82,7 +82,7 @@ namespace pcr
     }
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( FormController, OPropertyBrowserController, FormController_PropertyBase1 )
+    IMPLEMENT_FORWARD_XINTERFACE2(FormController, OPropertyBrowserController, cppu::OPropertySetHelper)
 
 
     Sequence< Type > SAL_CALL FormController::getTypes(  )
