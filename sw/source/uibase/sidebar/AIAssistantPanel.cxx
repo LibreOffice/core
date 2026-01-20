@@ -1,11 +1,18 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * OfficeLabs AI Assistant Panel
+ * OfficeLabs AI Assistant Panel - Full Featured Implementation
+ *
+ * Complete AI assistant with:
+ * - Quick AI actions (clean, review, summarize, adapt, improve, translate, expand, condense)
+ * - @ reference system for document elements
+ * - Direct formatting buttons
+ * - Document insert/replace operations
  */
 
 #include "AIAssistantPanel.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -14,7 +21,12 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <svl/itemset.hxx>
+#include <tools/fontenum.hxx>
+#include <numrule.hxx>
+#include <fmtcol.hxx>
 
 namespace sw::sidebar {
 
@@ -40,22 +52,91 @@ AIAssistantPanel::AIAssistantPanel(
     , m_pWrtShell(nullptr)
     , m_bProcessing(false)
 {
-    // Get UI components
+    // Get UI components - Status
     m_xStatusLabel = m_xBuilder->weld_label(u"status_label"_ustr);
+
+    // Quick action buttons row 1
+    m_xCleanButton = m_xBuilder->weld_button(u"clean_button"_ustr);
+    m_xReviewButton = m_xBuilder->weld_button(u"review_button"_ustr);
+    m_xSummarizeButton = m_xBuilder->weld_button(u"summarize_button"_ustr);
+    m_xAdaptButton = m_xBuilder->weld_button(u"adapt_button"_ustr);
+
+    // Quick action buttons row 2
+    m_xImproveButton = m_xBuilder->weld_button(u"improve_button"_ustr);
+    m_xTranslateButton = m_xBuilder->weld_button(u"translate_button"_ustr);
+    m_xExpandButton = m_xBuilder->weld_button(u"expand_button"_ustr);
+    m_xCondenseButton = m_xBuilder->weld_button(u"condense_button"_ustr);
+
+    // Formatting buttons
+    m_xBoldButton = m_xBuilder->weld_button(u"bold_button"_ustr);
+    m_xItalicButton = m_xBuilder->weld_button(u"italic_button"_ustr);
+    m_xUnderlineButton = m_xBuilder->weld_button(u"underline_button"_ustr);
+    m_xHeadingButton = m_xBuilder->weld_button(u"heading_button"_ustr);
+    m_xBulletButton = m_xBuilder->weld_button(u"bullet_button"_ustr);
+    m_xNumberButton = m_xBuilder->weld_button(u"number_button"_ustr);
+
+    // Chat area
     m_xChatHistory = m_xBuilder->weld_text_view(u"chat_history"_ustr);
+
+    // Input row
+    m_xAtRefButton = m_xBuilder->weld_button(u"at_ref_button"_ustr);
     m_xInputField = m_xBuilder->weld_entry(u"input_field"_ustr);
     m_xSendButton = m_xBuilder->weld_button(u"send_button"_ustr);
-    m_xInsertButton = m_xBuilder->weld_button(u"insert_button"_ustr);
 
-    // Set up event handlers
+    // Action buttons
+    m_xInsertButton = m_xBuilder->weld_button(u"insert_button"_ustr);
+    m_xReplaceButton = m_xBuilder->weld_button(u"replace_button"_ustr);
+    m_xResetButton = m_xBuilder->weld_button(u"reset_button"_ustr);
+
+    // Connect quick action handlers
+    if (m_xCleanButton)
+        m_xCleanButton->connect_clicked(LINK(this, AIAssistantPanel, CleanClickHdl));
+    if (m_xReviewButton)
+        m_xReviewButton->connect_clicked(LINK(this, AIAssistantPanel, ReviewClickHdl));
+    if (m_xSummarizeButton)
+        m_xSummarizeButton->connect_clicked(LINK(this, AIAssistantPanel, SummarizeClickHdl));
+    if (m_xAdaptButton)
+        m_xAdaptButton->connect_clicked(LINK(this, AIAssistantPanel, AdaptClickHdl));
+    if (m_xImproveButton)
+        m_xImproveButton->connect_clicked(LINK(this, AIAssistantPanel, ImproveClickHdl));
+    if (m_xTranslateButton)
+        m_xTranslateButton->connect_clicked(LINK(this, AIAssistantPanel, TranslateClickHdl));
+    if (m_xExpandButton)
+        m_xExpandButton->connect_clicked(LINK(this, AIAssistantPanel, ExpandClickHdl));
+    if (m_xCondenseButton)
+        m_xCondenseButton->connect_clicked(LINK(this, AIAssistantPanel, CondenseClickHdl));
+
+    // Connect formatting handlers
+    if (m_xBoldButton)
+        m_xBoldButton->connect_clicked(LINK(this, AIAssistantPanel, BoldClickHdl));
+    if (m_xItalicButton)
+        m_xItalicButton->connect_clicked(LINK(this, AIAssistantPanel, ItalicClickHdl));
+    if (m_xUnderlineButton)
+        m_xUnderlineButton->connect_clicked(LINK(this, AIAssistantPanel, UnderlineClickHdl));
+    if (m_xHeadingButton)
+        m_xHeadingButton->connect_clicked(LINK(this, AIAssistantPanel, HeadingClickHdl));
+    if (m_xBulletButton)
+        m_xBulletButton->connect_clicked(LINK(this, AIAssistantPanel, BulletClickHdl));
+    if (m_xNumberButton)
+        m_xNumberButton->connect_clicked(LINK(this, AIAssistantPanel, NumberClickHdl));
+
+    // Connect chat handlers
     if (m_xSendButton)
         m_xSendButton->connect_clicked(LINK(this, AIAssistantPanel, SendClickHdl));
-
     if (m_xInputField)
         m_xInputField->connect_activate(LINK(this, AIAssistantPanel, InputActivateHdl));
 
+    // Connect action handlers
     if (m_xInsertButton)
         m_xInsertButton->connect_clicked(LINK(this, AIAssistantPanel, InsertClickHdl));
+    if (m_xReplaceButton)
+        m_xReplaceButton->connect_clicked(LINK(this, AIAssistantPanel, ReplaceClickHdl));
+    if (m_xResetButton)
+        m_xResetButton->connect_clicked(LINK(this, AIAssistantPanel, ResetClickHdl));
+
+    // Connect @ reference button handler
+    if (m_xAtRefButton)
+        m_xAtRefButton->connect_clicked(LINK(this, AIAssistantPanel, AtRefClickHdl));
 
     // Configure chat history
     if (m_xChatHistory)
@@ -104,29 +185,66 @@ void AIAssistantPanel::AppendToChat(const OUString& sender, const OUString& mess
 
     newText += sender + u": "_ustr + message + u"\n"_ustr;
     m_xChatHistory->set_text(newText);
+    m_sChatLog = newText;
 
     // Scroll to bottom
     m_xChatHistory->select_region(-1, -1);
 }
 
-OUString AIAssistantPanel::GetDocumentContext()
+OUString AIAssistantPanel::GetSelectedText()
 {
     if (!m_pWrtShell)
-        return u"No document loaded"_ustr;
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
 
-    // Get selection if any
+    if (!m_pWrtShell)
+        return u""_ustr;
+
     OUString sSelection;
     if (m_pWrtShell->HasSelection())
     {
         m_pWrtShell->GetSelectedText(sSelection, ParaBreakType::ToBlank);
     }
+    return sSelection;
+}
 
-    // Build context string
+OUString AIAssistantPanel::GetDocumentText()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (!m_pWrtShell)
+        return u""_ustr;
+
+    // Get full document text using ExtendedSelectAll
+    m_pWrtShell->Push();
+    m_pWrtShell->ExtendedSelectAll();
+    OUString sDocText;
+    m_pWrtShell->GetSelectedText(sDocText, ParaBreakType::ToBlank);
+    m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+
+    // Limit to 10000 chars
+    if (sDocText.getLength() > 10000)
+        sDocText = sDocText.copy(0, 10000) + u"... [truncated]"_ustr;
+
+    return sDocText;
+}
+
+OUString AIAssistantPanel::GetDocumentContext()
+{
+    OUString sSelection = GetSelectedText();
+
     OUStringBuffer context;
     if (!sSelection.isEmpty())
     {
         context.append(u"Selected text: "_ustr);
-        // Limit to 500 chars
         if (sSelection.getLength() > 500)
             context.append(sSelection.subView(0, 500) + u"..."_ustr);
         else
@@ -144,7 +262,7 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
 {
     m_bProcessing = false;
 
-    // Re-enable send button
+    // Re-enable buttons
     if (m_xSendButton)
         m_xSendButton->set_sensitive(true);
 
@@ -159,12 +277,6 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
     {
         AppendToChat(u"System"_ustr, u"No response from AI"_ustr);
         UpdateStatus(u"Error occurred"_ustr);
-    }
-
-    // Handle patch if present
-    if (response.hasPatch && !response.patchDiff.isEmpty())
-    {
-        AppendToChat(u"System"_ustr, u"AI suggested document changes. Click 'Insert' to apply."_ustr);
     }
 }
 
@@ -203,13 +315,258 @@ void AIAssistantPanel::SendMessage(const OUString& message)
     if (m_xSendButton)
         m_xSendButton->set_sensitive(false);
 
-    // Get document context
-    OUString sContext = GetDocumentContext();
+    // Get document content and selection for the AI
+    OUString sDocumentContent = GetDocumentText();
+    OUString sSelection = GetSelectedText();
 
-    // Make HTTP call to backend
-    officelabs::AgentResponse response = m_pAgentConnection->sendMessage(message, sContext);
+    // Make HTTP call to backend with document content and selection
+    officelabs::AgentResponse response = m_pAgentConnection->sendMessage(message, sDocumentContent, sSelection);
     ProcessResponse(response);
 }
+
+void AIAssistantPanel::SendQuickAction(const OUString& action, const OUString& customPrompt)
+{
+    OUString selection = GetSelectedText();
+    OUString textToProcess = selection.isEmpty() ? GetDocumentText() : selection;
+
+    if (textToProcess.isEmpty())
+    {
+        AppendToChat(u"System"_ustr, u"No text to process. Select text or add content to document."_ustr);
+        return;
+    }
+
+    OUString prompt;
+    if (!customPrompt.isEmpty())
+    {
+        prompt = customPrompt;
+    }
+    else if (action == u"clean"_ustr)
+    {
+        prompt = u"Clean up this text. Fix spacing, punctuation, and formatting issues. Return only the cleaned text:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"review"_ustr)
+    {
+        prompt = u"Review this text for grammar, spelling, and punctuation errors. List each error found and suggest corrections:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"summarize"_ustr)
+    {
+        prompt = u"Summarize the following text in a concise manner. Keep the key points:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"adapt"_ustr)
+    {
+        prompt = u"Adapt this text to be more professional and formal while keeping the same meaning:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"improve"_ustr)
+    {
+        prompt = u"Improve this text to be clearer, more engaging, and better written. Return the improved version:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"translate"_ustr)
+    {
+        prompt = u"Translate this text to English (if not English) or to the user's language. Return only the translation:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"expand"_ustr)
+    {
+        prompt = u"Expand this text with more details, examples, and explanations while maintaining the original tone:\n\n"_ustr + textToProcess;
+    }
+    else if (action == u"condense"_ustr)
+    {
+        prompt = u"Condense this text to be shorter and more concise while keeping the essential meaning:\n\n"_ustr + textToProcess;
+    }
+    else
+    {
+        prompt = action + u":\n\n"_ustr + textToProcess;
+    }
+
+    SendMessage(prompt);
+}
+
+void AIAssistantPanel::InsertAtRefText(const OUString& ref)
+{
+    if (!m_xInputField)
+        return;
+
+    OUString current = m_xInputField->get_text();
+    m_xInputField->set_text(current + ref + u" "_ustr);
+    m_xInputField->grab_focus();
+}
+
+// ==================== QUICK ACTION HANDLERS ====================
+
+IMPL_LINK_NOARG(AIAssistantPanel, CleanClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"clean"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ReviewClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"review"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, SummarizeClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"summarize"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, AdaptClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"adapt"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ImproveClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"improve"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, TranslateClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"translate"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ExpandClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"expand"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, CondenseClickHdl, weld::Button&, void)
+{
+    SendQuickAction(u"condense"_ustr);
+}
+
+// ==================== FORMATTING HANDLERS ====================
+
+void AIAssistantPanel::ApplyBold()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell)
+    {
+        SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
+        aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+        m_pWrtShell->SetAttrSet(aSet);
+    }
+}
+
+void AIAssistantPanel::ApplyItalic()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell)
+    {
+        SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_POSTURE, RES_CHRATR_POSTURE>);
+        aSet.Put(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));
+        m_pWrtShell->SetAttrSet(aSet);
+    }
+}
+
+void AIAssistantPanel::ApplyUnderline()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell)
+    {
+        SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_UNDERLINE, RES_CHRATR_UNDERLINE>);
+        aSet.Put(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
+        m_pWrtShell->SetAttrSet(aSet);
+    }
+}
+
+void AIAssistantPanel::ApplyHeading()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell)
+    {
+        SwTextFormatColl* pColl = m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE1);
+        if (pColl)
+            m_pWrtShell->SetTextFormatColl(pColl);
+    }
+}
+
+void AIAssistantPanel::ApplyBulletList()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell)
+    {
+        m_pWrtShell->StartAllAction();
+        m_pWrtShell->NumOrBulletOn(false);  // false = bullets
+        m_pWrtShell->EndAllAction();
+    }
+}
+
+void AIAssistantPanel::ApplyNumberList()
+{
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell)
+    {
+        m_pWrtShell->StartAllAction();
+        m_pWrtShell->NumOrBulletOn(true);  // true = numbered
+        m_pWrtShell->EndAllAction();
+    }
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, BoldClickHdl, weld::Button&, void)
+{
+    ApplyBold();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ItalicClickHdl, weld::Button&, void)
+{
+    ApplyItalic();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, UnderlineClickHdl, weld::Button&, void)
+{
+    ApplyUnderline();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, HeadingClickHdl, weld::Button&, void)
+{
+    ApplyHeading();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, BulletClickHdl, weld::Button&, void)
+{
+    ApplyBulletList();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, NumberClickHdl, weld::Button&, void)
+{
+    ApplyNumberList();
+}
+
+// ==================== CHAT HANDLERS ====================
 
 IMPL_LINK_NOARG(AIAssistantPanel, SendClickHdl, weld::Button&, void)
 {
@@ -229,10 +586,21 @@ IMPL_LINK_NOARG(AIAssistantPanel, InputActivateHdl, weld::Entry&, bool)
     return true;
 }
 
+// ==================== ACTION HANDLERS ====================
+
 void AIAssistantPanel::InsertFormattedText(const OUString& text)
 {
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (!m_pWrtShell)
+        return;
+
     // Parse markdown-like formatting and insert with Writer styles
-    // Split text into lines
     sal_Int32 nIndex = 0;
     bool bFirstParagraph = true;
 
@@ -262,43 +630,33 @@ void AIAssistantPanel::InsertFormattedText(const OUString& text)
         // Check for heading (## or #)
         if (sLine.startsWith(u"## "))
         {
-            // Heading 2
             OUString sHeadingText = sLine.copy(3);
             m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE2));
             m_pWrtShell->Insert(sHeadingText);
         }
         else if (sLine.startsWith(u"# "))
         {
-            // Heading 1
             OUString sHeadingText = sLine.copy(2);
             m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE1));
             m_pWrtShell->Insert(sHeadingText);
         }
         else if (sLine.startsWith(u"- ") || sLine.startsWith(u"* "))
         {
-            // Bullet point - insert with bullet character
             OUString sBulletText = sLine.copy(2);
             m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
-            m_pWrtShell->Insert(u"\u2022 "_ustr + sBulletText);  // Unicode bullet
+            m_pWrtShell->Insert(u"\u2022 "_ustr + sBulletText);
         }
         else if (sLine.startsWith(u"**") && sLine.endsWith(u"**") && sLine.getLength() > 4)
         {
-            // Bold line
             OUString sBoldText = sLine.copy(2, sLine.getLength() - 4);
             m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
-
-            // Apply bold
             SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
             aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
             m_pWrtShell->Insert(sBoldText);
         }
         else
         {
-            // Regular paragraph - handle inline **bold** markers
             m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
-
-            // Simple approach: just insert text, could enhance for inline bold later
-            // Replace escaped newlines with nothing for cleaner text
             OUString sCleanLine = sLine.replaceAll(u"\\n", u" ");
             m_pWrtShell->Insert(sCleanLine);
         }
@@ -315,7 +673,6 @@ IMPL_LINK_NOARG(AIAssistantPanel, InsertClickHdl, weld::Button&, void)
 
     if (!m_pWrtShell)
     {
-        // Try to get the shell again
         SwView* pView = GetActiveView();
         if (pView)
             m_pWrtShell = &pView->GetWrtShell();
@@ -332,8 +689,71 @@ IMPL_LINK_NOARG(AIAssistantPanel, InsertClickHdl, weld::Button&, void)
     InsertFormattedText(m_sLastAIResponse);
     m_pWrtShell->EndAllAction();
 
-    AppendToChat(u"System"_ustr, u"Formatted text inserted into document"_ustr);
+    AppendToChat(u"System"_ustr, u"Text inserted into document"_ustr);
     UpdateStatus(u"Text inserted"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ReplaceClickHdl, weld::Button&, void)
+{
+    if (m_sLastAIResponse.isEmpty())
+    {
+        UpdateStatus(u"No AI response to replace with"_ustr);
+        return;
+    }
+
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (!m_pWrtShell)
+    {
+        UpdateStatus(u"No document available"_ustr);
+        return;
+    }
+
+    if (!m_pWrtShell->HasSelection())
+    {
+        UpdateStatus(u"Please select text to replace"_ustr);
+        return;
+    }
+
+    // Delete selection and insert AI response
+    m_pWrtShell->StartAllAction();
+    m_pWrtShell->DelRight();
+    InsertFormattedText(m_sLastAIResponse);
+    m_pWrtShell->EndAllAction();
+
+    AppendToChat(u"System"_ustr, u"Selection replaced with AI response"_ustr);
+    UpdateStatus(u"Text replaced"_ustr);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ResetClickHdl, weld::Button&, void)
+{
+    // Clear chat history
+    if (m_xChatHistory)
+        m_xChatHistory->set_text(u""_ustr);
+
+    m_sChatLog = u""_ustr;
+    m_sLastAIResponse = u""_ustr;
+
+    // Clear input
+    if (m_xInputField)
+        m_xInputField->set_text(u""_ustr);
+
+    UpdateStatus(u"Chat reset - Ready"_ustr);
+}
+
+// ==================== @ REFERENCE HANDLER ====================
+
+IMPL_LINK_NOARG(AIAssistantPanel, AtRefClickHdl, weld::Button&, void)
+{
+    // Insert @ symbol and show help text
+    InsertAtRefText(u"@"_ustr);
+    // Show quick help in status
+    UpdateStatus(u"Type: selection, document, table1, image1, section1"_ustr);
 }
 
 } // end of namespace sw::sidebar

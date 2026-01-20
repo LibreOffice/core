@@ -5,7 +5,9 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">4</property>
+
+    <!-- Status Label -->
     <child>
       <object class="GtkLabel" id="status_label">
         <property name="visible">True</property>
@@ -19,6 +21,191 @@
         <property name="position">0</property>
       </packing>
     </child>
+
+    <!-- Quick Actions Row 1: Clean, Review, Summary, Adapt -->
+    <child>
+      <object class="GtkBox" id="quick_actions_row1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">2</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="clean_button">
+            <property name="label" translatable="yes">Clean</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Clean document: fix spacing, formatting issues</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="review_button">
+            <property name="label" translatable="yes">Review</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Review: grammar, spelling, punctuation errors</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="summarize_button">
+            <property name="label" translatable="yes">Summary</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Summarize selected text or entire document</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="adapt_button">
+            <property name="label" translatable="yes">Adapt</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Adapt text: change tone, formality, style</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+
+    <!-- Quick Actions Row 2: Improve, Translate, Expand, Condense -->
+    <child>
+      <object class="GtkBox" id="quick_actions_row2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">2</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="improve_button">
+            <property name="label" translatable="yes">Improve</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Improve text clarity and quality</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="translate_button">
+            <property name="label" translatable="yes">Translate</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Translate selected text</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="expand_button">
+            <property name="label" translatable="yes">Expand</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Expand text with more details</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="condense_button">
+            <property name="label" translatable="yes">Condense</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Make text shorter and more concise</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+
+    <!-- Formatting Row: B, I, U, H1, List, 1.2 -->
+    <child>
+      <object class="GtkBox" id="formatting_row">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkButton" id="bold_button">
+            <property name="label" translatable="yes">B</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Apply bold formatting</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="italic_button">
+            <property name="label" translatable="yes">I</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Apply italic formatting</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="underline_button">
+            <property name="label" translatable="yes">U</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Apply underline formatting</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="heading_button">
+            <property name="label" translatable="yes">H1</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Apply heading style</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="bullet_button">
+            <property name="label" translatable="yes">List</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Apply bullet list</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="number_button">
+            <property name="label" translatable="yes">1.2</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Apply numbered list</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+
+    <!-- Chat History -->
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
@@ -37,26 +224,41 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="position">4</property>
       </packing>
     </child>
+
+    <!-- Input Row with @ button -->
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="input_row">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">horizontal</property>
-        <property name="spacing">6</property>
+        <property name="spacing">4</property>
+        <child>
+          <object class="GtkButton" id="at_ref_button">
+            <property name="label" translatable="yes">@</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Insert @ reference: @selection, @document, @table1, @image1, @section1</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkEntry" id="input_field">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="placeholder_text" translatable="yes">Type your message...</property>
+            <property name="placeholder_text" translatable="yes">Ask AI... Use @ to reference elements</property>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -69,20 +271,6 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="insert_button">
-            <property name="label" translatable="yes">Insert</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Insert AI response into document</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -90,8 +278,49 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+
+    <!-- Action Buttons Row: Insert, Replace, Reset -->
+    <child>
+      <object class="GtkBox" id="action_row">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">4</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="insert_button">
+            <property name="label" translatable="yes">Insert</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Insert AI response at cursor</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="replace_button">
+            <property name="label" translatable="yes">Replace</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Replace selection with AI response</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="reset_button">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Clear chat and start fresh</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
       </packing>
     </child>
   </object>
+
 </interface>

@@ -33,7 +33,7 @@ public:
     bool checkConnection();
     bool isConnected() const { return m_connected; }
     
-    AgentResponse sendMessage(const OUString& message, const OUString& documentContext);
+    AgentResponse sendMessage(const OUString& message, const OUString& documentContent, const OUString& selection = OUString());
     void setBackendUrl(const OUString& url);
 };
 

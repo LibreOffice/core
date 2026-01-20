@@ -97,9 +97,34 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
     return response;
 }
 
-AgentResponse AgentConnection::sendMessage(const OUString& message, const OUString& documentContext) {
+static OUString escapeJsonString(const OUString& str) {
+    OUStringBuffer result;
+    for (sal_Int32 i = 0; i < str.getLength(); ++i) {
+        sal_Unicode c = str[i];
+        switch (c) {
+            case '"': result.append("\\\""); break;
+            case '\\': result.append("\\\\"); break;
+            case '\n': result.append("\\n"); break;
+            case '\r': result.append("\\r"); break;
+            case '\t': result.append("\\t"); break;
+            default:
+                if (c < 32) {
+                    // Escape other control characters
+                    result.append("\\u00");
+                    result.append(static_cast<sal_Unicode>((c >> 4) < 10 ? '0' + (c >> 4) : 'a' + (c >> 4) - 10));
+                    result.append(static_cast<sal_Unicode>((c & 0xF) < 10 ? '0' + (c & 0xF) : 'a' + (c & 0xF) - 10));
+                } else {
+                    result.append(c);
+                }
+                break;
+        }
+    }
+    return result.makeStringAndClear();
+}
+
+AgentResponse AgentConnection::sendMessage(const OUString& message, const OUString& documentContent, const OUString& selection) {
     AgentResponse response;
-    
+
     if (!m_connected) {
         checkConnection();
         if (!m_connected) {
@@ -108,30 +133,32 @@ AgentResponse AgentConnection::sendMessage(const OUString& message, const OUStri
             return response;
         }
     }
-    
+
     CURL* curl = curl_easy_init();
     if (!curl) {
         response.message = "Error: Failed to initialize CURL";
         response.hasPatch = false;
         return response;
     }
-    
+
     std::string responseStr;
-    
-    // Build JSON payload
+
+    // Build JSON payload with proper escaping
     OUStringBuffer jsonBuf;
     jsonBuf.append("{");
     jsonBuf.append("\"message\":\"");
-    jsonBuf.append(message);
+    jsonBuf.append(escapeJsonString(message));
     jsonBuf.append("\",");
     jsonBuf.append("\"context\":{");
     jsonBuf.append("\"document\":\"");
-    jsonBuf.append(documentContext);
+    jsonBuf.append(escapeJsonString(documentContent));
     jsonBuf.append("\",");
-    jsonBuf.append("\"selection\":\"\"");
+    jsonBuf.append("\"selection\":\"");
+    jsonBuf.append(escapeJsonString(selection));
+    jsonBuf.append("\"");
     jsonBuf.append("}");
     jsonBuf.append("}");
-    
+
     std::string payload = jsonBuf.makeStringAndClear().toUtf8().getStr();
     std::string url = m_backendUrl + "/api/chat";
     
