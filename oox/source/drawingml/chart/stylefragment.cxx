@@ -40,6 +40,85 @@ using namespace ::oox::core;
 using namespace model;
 
 //=======
+// StyleReferenceContext
+//=======
+StyleReferenceContext::StyleReferenceContext(ContextHandler2Helper& rParent, sal_Int32 nIdx,
+                                             model::FontOrStyleRef& rModel)
+    : ContextBase<FontOrStyleRef>(rParent, rModel)
+{
+    mrModel.mnIdx = nIdx;
+}
+
+StyleReferenceContext::~StyleReferenceContext() {}
+
+ContextHandlerRef StyleReferenceContext::onCreateContext(sal_Int32 nElement,
+                                                         const AttributeList& rAttribs)
+{
+    if (isRootElement())
+        switch (nElement)
+        {
+            case CS_TOKEN(styleClr):
+            {
+                // The attribute here can be an integer, a string, or "auto" (which
+                // of course is also a string, but is considered special). So we
+                // need to try to convert the input string to an integer, and handle
+                // it as an int if we can. OUString provides toInt(), but it returns
+                // 0 in the case of failure, which is eminently unhelpful, sinze 0
+                // is a perfectly acceptable value. So convert it to a
+                // std::basic_string, which has stoi(), which throws if it can't do
+                // the conversion.
+                //
+                // Unfortunately OUString characters are sal_Unicode which can be
+                // uint16_t, and while there's string::stoi() and wstring::stoi(),
+                // there's no basic_string<uint16_t>::stoi(). So we use wstring and
+                // construct character by character.
+                std::optional<OUString> str = rAttribs.getString(XML_val);
+                if (str)
+                {
+                    FontOrStyleRef::StyleColorVal v;
+
+                    const sal_Unicode* pRawStr = str->getStr();
+                    std::wstring sBStr;
+                    sBStr.reserve(str->getLength());
+                    for (const sal_Unicode* pS = pRawStr; pS < pRawStr + str->getLength(); ++pS)
+                    {
+                        sBStr.push_back(*pS);
+                    }
+
+                    sal_uInt32 nIntVal = 0;
+                    try
+                    {
+                        nIntVal = stoi(sBStr);
+                        v = nIntVal;
+                    }
+                    catch (std::invalid_argument&)
+                    {
+                        // Not an integer, so see if it's the fixed enum
+                        if (*str == "auto")
+                        {
+                            v = FontOrStyleRef::StyleColorEnum::AUTO;
+                        }
+                        else
+                        {
+                            v = *str;
+                        }
+                    }
+                    mrModel.maStyleClr = std::make_unique<FontOrStyleRef::StyleColorVal>(v);
+                }
+                return nullptr;
+            }
+            case A_TOKEN(scrgbClr):
+            case A_TOKEN(srgbClr):
+            case A_TOKEN(hslClr):
+            case A_TOKEN(sysClr):
+            case A_TOKEN(schemeClr):
+            case A_TOKEN(prstClr):
+                return new ColorValueContext(*this, mrModel.maColor, &mrModel.maComplexColor);
+        }
+    return nullptr;
+}
+
+//=======
 // StyleEntryContext
 //=======
 StyleEntryContext::StyleEntryContext(ContextHandler2Helper& rParent, StyleEntryModel& rModel)
@@ -67,8 +146,8 @@ ContextHandlerRef StyleEntryContext::onCreateContext(sal_Int32 nElement,
                 return new StyleReferenceContext(*this, rAttribs.getInteger(XML_idx, -1),
                                                  mrModel.mxEffectRef.create());
             case CS_TOKEN(fontRef): // CT_FontReference
-                return new FontReferenceContext(*this, rAttribs.getString(XML_idx, ""),
-                                                mrModel.mxFontRef.create());
+                return new StyleReferenceContext(*this, rAttribs.getInteger(XML_idx, -1),
+                                                 mrModel.mxFontRef.create());
             case CS_TOKEN(spPr): // a:CT_ShapeProperties
                 return new ShapePropertiesContext(*this, mrModel.mxShapeProp.create());
             case CS_TOKEN(defRPr): // a:CT_TextCharacterProperties
@@ -92,70 +171,6 @@ void StyleEntryContext::onCharacters(const OUString& rChars)
         default:
             assert(false);
     }
-}
-
-//=======
-// StyleReferenceContext
-//=======
-StyleReferenceContext::StyleReferenceContext(ContextHandler2Helper& rParent, const sal_Int32 nIdx,
-                                             model::StyleRef& rModel)
-    : ContextBase<StyleRef>(rParent, rModel)
-{
-    mrModel.mnIdx = nIdx;
-}
-
-StyleReferenceContext::~StyleReferenceContext() {}
-
-ContextHandlerRef StyleReferenceContext::onCreateContext(sal_Int32 nElement,
-                                                         const AttributeList& rAttribs)
-{
-    if (isRootElement())
-        switch (nElement)
-        {
-            case CS_TOKEN(styleClr):
-                mrModel.setColorValStr(rAttribs.getString(XML_val));
-                return nullptr;
-            case A_TOKEN(scrgbClr):
-            case A_TOKEN(srgbClr):
-            case A_TOKEN(hslClr):
-            case A_TOKEN(sysClr):
-            case A_TOKEN(schemeClr):
-            case A_TOKEN(prstClr):
-                return new ColorValueContext(*this, mrModel.maColor, &mrModel.maComplexColor);
-        }
-    return nullptr;
-}
-
-//=======
-// FontReferenceContext
-//=======
-FontReferenceContext::FontReferenceContext(ContextHandler2Helper& rParent, std::u16string_view sIdx,
-                                           model::FontRef& rModel)
-    : ContextBase<FontRef>(rParent, rModel)
-{
-    mrModel.setFontCollectionIndex(sIdx);
-}
-
-FontReferenceContext::~FontReferenceContext() {}
-
-ContextHandlerRef FontReferenceContext::onCreateContext(sal_Int32 nElement,
-                                                        const AttributeList& rAttribs)
-{
-    if (isRootElement())
-        switch (nElement)
-        {
-            case CS_TOKEN(styleClr):
-                mrModel.setColorValStr(rAttribs.getString(XML_val));
-                return nullptr;
-            case A_TOKEN(scrgbClr):
-            case A_TOKEN(srgbClr):
-            case A_TOKEN(hslClr):
-            case A_TOKEN(sysClr):
-            case A_TOKEN(schemeClr):
-            case A_TOKEN(prstClr):
-                return new ColorValueContext(*this, mrModel.maColor, &mrModel.maComplexColor);
-        }
-    return nullptr;
 }
 
 //=======
