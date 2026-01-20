@@ -177,7 +177,6 @@ FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _
     , m_bInitialStateChange(true)
     , m_pParent(_pParent)
     , m_nAsyncGetFocusId(nullptr)
-    , m_xDialogBox(m_xBuilder->weld_box(u"dialog-vbox1"_ustr))
     , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
     , m_xORB(_xORB)
 {
@@ -395,7 +394,7 @@ void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 
 IMPL_LINK_NOARG( FmPropBrw, OnAsyncGetFocus, void*, void )
 {
-    m_xDialogBox->child_grab_focus();
+    m_xDialog->child_grab_focus();
     m_nAsyncGetFocusId = nullptr;
 }
 
