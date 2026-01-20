@@ -415,8 +415,7 @@ sal_uInt16 OBrowserListBox::GetPropertyPos(std::u16string_view _rEntryName) cons
     return EDITOR_LIST_ENTRY_NOTFOUND;
 }
 
-bool OBrowserListBox::impl_getBrowserLineForName(const OUString& _rEntryName,
-                                                 BrowserLinePointer& _out_rpLine) const
+BrowserLinePointer OBrowserListBox::impl_getBrowserLineForName(const OUString& _rEntryName) const
 {
     ListBoxLines::const_iterator line
         = std::find_if(m_aLines.begin(), m_aLines.end(), [&_rEntryName](const ListBoxLine& rLine) {
@@ -424,31 +423,27 @@ bool OBrowserListBox::impl_getBrowserLineForName(const OUString& _rEntryName,
           });
 
     if (line != m_aLines.end())
-        _out_rpLine = line->pLine;
-    else
-        _out_rpLine.reset();
-    return bool(_out_rpLine);
+        return line->pLine;
+
+    return {};
 }
 
 void OBrowserListBox::EnablePropertyControls(const OUString& _rEntryName, sal_Int16 _nControls,
                                              bool _bEnable)
 {
-    BrowserLinePointer pLine;
-    if (impl_getBrowserLineForName(_rEntryName, pLine))
+    if (BrowserLinePointer pLine = impl_getBrowserLineForName(_rEntryName))
         pLine->EnablePropertyControls(_nControls, _bEnable);
 }
 
 void OBrowserListBox::EnablePropertyLine(const OUString& _rEntryName, bool _bEnable)
 {
-    BrowserLinePointer pLine;
-    if (impl_getBrowserLineForName(_rEntryName, pLine))
+    if (BrowserLinePointer pLine = impl_getBrowserLineForName(_rEntryName))
         pLine->EnablePropertyLine(_bEnable);
 }
 
 Reference<XPropertyControl> OBrowserListBox::GetPropertyControl(const OUString& _rEntryName)
 {
-    BrowserLinePointer pLine;
-    if (impl_getBrowserLineForName(_rEntryName, pLine))
+    if (BrowserLinePointer pLine = impl_getBrowserLineForName(_rEntryName))
         return pLine->getControl();
     return nullptr;
 }

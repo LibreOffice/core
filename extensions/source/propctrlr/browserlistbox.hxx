@@ -145,14 +145,10 @@ private:
     /** retrieves the ->BrowserLinePointer for a given entry name
             @param  _rEntryName
                 the name whose line is to be looked up
-            @param  _out_rpLine
-                contains, upon return, the found browser line, if any
             @return
-                <TRUE/> if and only if a non-<NULL/> line for the given entry name could be
-                found.
+                The Found browser line, if any.
         */
-    bool impl_getBrowserLineForName(const OUString& _rEntryName,
-                                    BrowserLinePointer& _out_rpLine) const;
+    BrowserLinePointer impl_getBrowserLineForName(const OUString& _rEntryName) const;
 };
 
 } // namespace pcr
