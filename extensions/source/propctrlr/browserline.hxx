@@ -25,104 +25,94 @@
 
 namespace com::sun::star::inspection::PropertyLineElement
 {
-    const sal_Int16 CompleteLine = 0x4000;
+const sal_Int16 CompleteLine = 0x4000;
 }
-
 
 namespace pcr
 {
+class OBrowserLine;
 
+class IButtonClickListener
+{
+public:
+    virtual void buttonClicked(OBrowserLine* pLine, bool bPrimary) = 0;
 
-    class OBrowserLine;
+protected:
+    ~IButtonClickListener() {}
+};
 
+class OBrowserLine
+{
+private:
+    OUString m_sEntryName;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Grid> m_xGrid;
+    std::unique_ptr<weld::Label> m_xFtTitle;
+    std::unique_ptr<weld::Button> m_xBrowseButton;
+    std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
+    css::uno::Reference<css::inspection::XPropertyControl> m_xControl;
+    weld::Container* m_pInitialControlParent;
+    weld::Box* m_pParent;
+    weld::Widget* m_pControlWindow;
+    weld::Button* m_pBrowseButton;
+    weld::Button* m_pAdditionalBrowseButton;
+    IButtonClickListener* m_pClickListener;
+    sal_uInt16 m_nNameWidth;
+    sal_uInt16 m_nEnableFlags;
+    bool m_bIndentTitle;
+    bool m_bReadOnly;
 
-    class IButtonClickListener
+public:
+    OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGroup* pLabelGroup,
+                 weld::Container* pInitialControlParent);
+    ~OBrowserLine();
+
+    void setControl(const css::uno::Reference<css::inspection::XPropertyControl>& rxControl);
+    const css::uno::Reference<css::inspection::XPropertyControl>& getControl() const
     {
-    public:
-        virtual void    buttonClicked( OBrowserLine* pLine, bool bPrimary ) = 0;
+        return m_xControl;
+    }
+    weld::Widget* getControlWindow() const { return m_pControlWindow; }
 
-    protected:
-        ~IButtonClickListener() {}
-    };
+    const OUString& GetEntryName() const { return m_sEntryName; }
 
+    void SetComponentHelpIds(const OUString& rHelpId);
 
-    class OBrowserLine
-    {
-    private:
-        OUString                m_sEntryName;
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Grid> m_xGrid;
-        std::unique_ptr<weld::Label> m_xFtTitle;
-        std::unique_ptr<weld::Button> m_xBrowseButton;
-        std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
-        css::uno::Reference< css::inspection::XPropertyControl >
-                                m_xControl;
-        weld::Container*        m_pInitialControlParent;
-        weld::Box*              m_pParent;
-        weld::Widget*           m_pControlWindow;
-        weld::Button*           m_pBrowseButton;
-        weld::Button*           m_pAdditionalBrowseButton;
-        IButtonClickListener*   m_pClickListener;
-        sal_uInt16              m_nNameWidth;
-        sal_uInt16              m_nEnableFlags;
-        bool                    m_bIndentTitle;
-        bool                    m_bReadOnly;
+    void SetTitle(const OUString& rString);
+    void FullFillTitleString();
+    OUString GetTitle() const;
+    void SetTitleWidth(sal_uInt16);
 
-    public:
-        OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGroup* pLabelGroup,
-                     weld::Container* pInitialControlParent);
-        ~OBrowserLine();
+    int GetRowHeight() const { return m_xGrid->get_preferred_size().Height(); }
+    void Show(bool bFlag = true);
+    void Hide();
 
-        void setControl( const css::uno::Reference< css::inspection::XPropertyControl >& rxControl );
-        const css::uno::Reference< css::inspection::XPropertyControl >& getControl() const
-        {
-            return m_xControl;
-        }
-        weld::Widget* getControlWindow() const
-        {
-            return m_pControlWindow;
-        }
+    bool GrabFocus();
+    void ShowBrowseButton(const OUString& rImageURL, bool bPrimary);
+    void ShowBrowseButton(const css::uno::Reference<css::graphic::XGraphic>& rGraphic,
+                          bool bPrimary);
+    void ShowBrowseButton(bool bPrimary);
+    void HideBrowseButton(bool bPrimary);
 
-        const OUString&     GetEntryName() const { return m_sEntryName; }
+    void EnablePropertyControls(sal_Int16 nControls, bool bEnable);
+    void EnablePropertyLine(bool bEnable);
 
-        void                SetComponentHelpIds(const OUString& rHelpId);
+    void SetReadOnly(bool bReadOnly);
 
-        void                SetTitle(const OUString& rString );
-        void                FullFillTitleString();
-        OUString            GetTitle() const;
-        void                SetTitleWidth(sal_uInt16);
+    void SetClickListener(IButtonClickListener* pListener);
 
-        int                 GetRowHeight() const { return m_xGrid->get_preferred_size().Height(); }
-        void                Show(bool bFlag=true);
-        void                Hide();
+    void IndentTitle(bool bIndent);
 
-        bool                GrabFocus();
-        void                ShowBrowseButton( const OUString& rImageURL, bool bPrimary );
-        void                ShowBrowseButton( const css::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary );
-        void                ShowBrowseButton( bool bPrimary );
-        void                HideBrowseButton( bool bPrimary );
+private:
+    DECL_LINK(OnButtonClicked, weld::Button&, void);
+    DECL_LINK(OnButtonFocus, weld::Widget&, void);
 
-        void                EnablePropertyControls( sal_Int16 nControls, bool bEnable );
-        void                EnablePropertyLine( bool bEnable );
+    void implHideBrowseButton(bool bPrimary);
+    void implUpdateEnabledDisabled();
 
-        void                SetReadOnly( bool bReadOnly );
-
-        void                SetClickListener( IButtonClickListener* pListener );
-
-        void                IndentTitle( bool bIndent );
-
-    private:
-        DECL_LINK( OnButtonClicked, weld::Button&, void );
-        DECL_LINK( OnButtonFocus, weld::Widget&, void );
-
-        void    implHideBrowseButton(bool bPrimary);
-        void    implUpdateEnabledDisabled();
-
-        weld::Button& impl_ensureButton(bool bPrimary);
-    };
-
+    weld::Button& impl_ensureButton(bool bPrimary);
+};
 
 } // namespace pcr
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
