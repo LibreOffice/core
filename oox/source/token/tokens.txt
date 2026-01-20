@@ -1328,6 +1328,7 @@ colorsDefHdr
 colorsDefHdrLst
 cols
 column
+columnFilter
 columnSort
 comb
 combine
@@ -2274,6 +2275,7 @@ filltype
 film
 filter
 filterColumn
+filterId
 filterMode
 filterPrivacy
 filterUnique
@@ -3554,6 +3556,8 @@ name
 nameLen
 namespaceUri
 namespaceuri
+namedSheetView
+namedSheetViews
 narHorz
 narVert
 narrow
@@ -3682,6 +3686,7 @@ notesViewPr
 nothing
 np
 ns
+nsvFilter
 nsid
 null
 num
@@ -4911,6 +4916,8 @@ sortBy
 sortByTuple
 sortCondition
 sortMethod
+sortRule
+sortRules
 sortState
 sortType
 sorterViewPr
@@ -5191,6 +5198,7 @@ tableCellInsert
 tableColumn
 tableColumnId
 tableColumns
+tableId
 tablePart
 tableParts
 tableRowDelete

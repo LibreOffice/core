@@ -107,6 +107,7 @@ a16                     http://schemas.microsoft.com/office/drawing/2014/main
 
 adec                    http://schemas.microsoft.com/office/drawing/2017/decorative
 asvg                    http://schemas.microsoft.com/office/drawing/2016/SVG/main
+xnsv                    http://schemas.microsoft.com/office/spreadsheetml/2019/namedsheetviews
 
 # xls14Lst for features introduced by excel 2010
 xls14Lst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main

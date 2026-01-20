@@ -514,6 +514,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2017/revision16"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("asvg"),
                        BAD_CAST("http://schemas.microsoft.com/office/drawing/2016/SVG/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xnsv"),
+                       BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2019/namedsheetviews"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

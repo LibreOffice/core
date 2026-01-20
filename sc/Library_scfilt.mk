@@ -172,6 +172,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/chartsheetfragment \
 	sc/source/filter/oox/commentsbuffer \
 	sc/source/filter/oox/commentsfragment \
+	sc/source/filter/oox/NamedSheetViewFragment \
 	sc/source/filter/oox/condformatbuffer \
 	sc/source/filter/oox/condformatcontext \
 	sc/source/filter/oox/connectionsbuffer \

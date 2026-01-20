@@ -68,6 +68,7 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 #define WPC_TOKEN(token)        OOX_TOKEN(wpc, token)
 #define CX_TOKEN(token)         OOX_TOKEN(cx, token)
 #define CS_TOKEN(token)         OOX_TOKEN(cs, token)
+#define XNSV_TOKEN(token)       OOX_TOKEN(xnsv, token)
 
 
 } // namespace oox
