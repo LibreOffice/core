@@ -1426,7 +1426,10 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                         && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
 
     if (!xGraphic.is() && !bHasMediaURL)
+    {
         SAL_INFO("oox.shape", "no graphic or media URL found");
+        return;
+    }
 
     FSHelperPtr pFS = GetFS();
     XmlFilterBase* pFB = GetFB();
