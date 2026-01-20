@@ -286,6 +286,7 @@ public:
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
     void                        LoadScheme(const OUString& rScheme );
+    void                        SetupTheme();
     const OUString&             GetCurrentSchemeName() const;
     void                        SetCurrentSchemeName(const OUString& rScheme);
 

@@ -742,6 +742,11 @@ void EditableColorConfig::LoadScheme(const OUString& rScheme )
     m_pImpl->CommitCurrentSchemeName();
 }
 
+void EditableColorConfig::SetupTheme()
+{
+    m_pImpl->SetupTheme();
+}
+
 const OUString& EditableColorConfig::GetCurrentSchemeName()const
 {
     return m_pImpl->GetLoadedScheme();
