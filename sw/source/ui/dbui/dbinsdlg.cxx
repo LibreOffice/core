@@ -533,8 +533,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
 
         m_xLbTableDbColumn->clear();
         m_xLbTableCol->clear();
-        for (size_t n = 0; n < m_aDBColumns.size(); ++n)
-            m_xLbTableDbColumn->append_text(m_aDBColumns[n]->sColumn);
+        for (const auto& pColumn : m_aDBColumns)
+            m_xLbTableDbColumn->append_text(pColumn->sColumn);
 
         m_xLbTableDbColumn->thaw();
         m_xLbTableCol->thaw();
