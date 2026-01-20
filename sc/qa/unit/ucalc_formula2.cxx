@@ -4700,6 +4700,36 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testRegexForXLOOKUP)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testHoriQueryEmptyCell)
+{
+    //Tests for fix for tdf#170388 and tdf#170295
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    m_pDoc->SetString(0, 0, 0, u"x"_ustr); // col, row, tab
+    m_pDoc->SetString(1, 0, 0, u"y"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"z"_ustr);
+
+    // Count empty cells in range A1:H1
+    m_pDoc->SetFormula(ScAddress(0, 2, 0), "=COUNTIF(A1:H1;\"=\")",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Without fix, count was 0
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF equal empty", 5.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // Get address of first empty cell
+    m_pDoc->SetFormula(ScAddress(0, 3, 0), "=CELL(\"ADDRESS\"; XLOOKUP(;A1:H1;A1:H1))",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Without fix, reference was #N/A
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XLOOKUP empty", u"$D$1"_ustr,
+                                 m_pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // criterion <> counts empty cells too.
+    m_pDoc->SetFormula(ScAddress(0, 4, 0), "=COUNTIF(A1:H1;\"<>y\")",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Without fix, count was 2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF not equal", 7.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
