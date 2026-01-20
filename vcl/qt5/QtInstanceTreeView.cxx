@@ -241,12 +241,6 @@ int QtInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
     return nDepth;
 }
 
-int QtInstanceTreeView::iter_compare(const weld::TreeIter&, const weld::TreeIter&) const
-{
-    assert(false && "Not implemented yet");
-    return 0;
-}
-
 int QtInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
 {
     const QtInstanceTreeIter& rQtIter = static_cast<const QtInstanceTreeIter&>(rIter);

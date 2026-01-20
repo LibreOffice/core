@@ -177,6 +177,27 @@ bool weld::TreeView::iter_children(TreeIter& rIter) const
     return do_iter_children(rIter);
 }
 
+int weld::TreeView::iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const
+{
+    if (rIterA.equal(rIterB))
+        return 0;
+
+    std::unique_ptr<weld::TreeIter> pIter = make_iterator();
+    bool bValid = get_iter_first(*pIter);
+    while (bValid)
+    {
+        if (pIter->equal(rIterA))
+            return -1;
+        if (pIter->equal(rIterB))
+            return 1;
+
+        bValid = iter_next(*pIter);
+    }
+
+    assert(false && "None of the entries found in the tree");
+    return 0;
+}
+
 bool weld::TreeView::iter_has_child(const TreeIter& rIter) const
 {
     std::unique_ptr<weld::TreeIter> pIter = make_iterator(&rIter);

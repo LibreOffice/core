@@ -342,7 +342,7 @@ public:
        If b appears before a , then 1 is returned. If the two nodes are equal,
        then 0 is returned.
     */
-    virtual int iter_compare(const TreeIter& a, const TreeIter& b) const = 0;
+    virtual int iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const;
     bool iter_has_child(const TreeIter& rIter) const;
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
