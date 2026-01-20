@@ -13459,6 +13459,7 @@ public:
             gtk_label_set_xalign(m_pPlaceHolderLabel, bRTL ? 1.0 : 0.0);
 
             gtk_overlay_add_overlay(m_pPlaceHolderReplacement, GTK_WIDGET(m_pPlaceHolderLabel));
+            gtk_overlay_set_overlay_pass_through(m_pPlaceHolderReplacement, GTK_WIDGET(m_pPlaceHolderLabel), true);
             insertAsParent(GTK_WIDGET(m_pEntry), GTK_WIDGET(m_pPlaceHolderReplacement));
             m_nEntryFocusInSignalId = g_signal_connect_after(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
             m_nEntryFocusOutSignalId = g_signal_connect_after(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
