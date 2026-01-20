@@ -2225,6 +2225,42 @@ bool ShapeExport::IsShapeTypeKnown(const Reference<XShape>& xShape)
     return constMap.contains(sShapeType);
 }
 
+bool ShapeExport::IsValidShape(const Reference<XShape>& xShape, DocumentType eDocumentType)
+{
+    if (!xShape)
+        return false;
+
+    auto aConverterIterator = constMap.find(xShape->getShapeType());
+    if (aConverterIterator == constMap.end())
+        return false;
+
+    if (aConverterIterator->second == &ShapeExport::WriteGraphicObjectShape)
+    {
+        if (IsNonEmptySimpleText(xShape))
+            return true;
+
+        Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
+        Reference<XPropertySetInfo> xShapePropSetInfo
+            = xShapeProps.is() ? xShapeProps->getPropertySetInfo() : nullptr;
+        if (!xShapePropSetInfo.is())
+            return false;
+
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+
+        // tdf#155903 Only for PPTX. Microsoft does not support this feature in Word and Excel.
+        OUString sMediaURL;
+        bool bHasMediaURL = eDocumentType == DOCUMENT_PPTX
+                            && xShapePropSetInfo->hasPropertyByName(u"MediaURL"_ustr)
+                            && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
+
+        if (!xGraphic.is() && !bHasMediaURL)
+            return false;
+    }
+
+    return true;
+}
+
 ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
     if (!xShape)

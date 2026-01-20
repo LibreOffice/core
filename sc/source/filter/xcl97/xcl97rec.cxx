@@ -1307,10 +1307,10 @@ bool ScURLTransformer::isExternalURL(const OUString& rURL) const
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
-    // Return early if unknown shape type, otherwise bogus drawing XML gets written
-    if (!ShapeExport::IsShapeTypeKnown(mxShape))
+    // Return early if unknown/invalid shape; otherwise bogus drawing XML gets written
+    if (!ShapeExport::IsValidShape(mxShape, drawingml::DOCUMENT_XLSX))
     {
-        SAL_INFO("sc.filter", "unknown shape");
+        SAL_INFO("sc.filter", "unknown or invalid/incomplete shape");
         return;
     }
 
