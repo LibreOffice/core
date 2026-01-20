@@ -49,7 +49,35 @@ css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
     return css::uno::Reference<css::awt::XWindow>();
 }
 
-void QtInstanceContainer::child_grab_focus() { assert(false && "Not implemented yet"); }
+QWidget* QtInstanceContainer::findFocusableWidget(QWidget* pWidget)
+{
+    if (!pWidget)
+        return nullptr;
+
+    if (QWidget* pFocusWidget = pWidget->focusWidget())
+        return pFocusWidget;
+
+    if (pWidget->focusPolicy() & Qt::FocusPolicy::StrongFocus)
+        return pWidget;
+
+    for (QObject* pChild : pWidget->children())
+    {
+        if (pChild->isWidgetType())
+            return findFocusableWidget(static_cast<QWidget*>(pChild));
+    }
+
+    return nullptr;
+}
+
+void QtInstanceContainer::child_grab_focus()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QWidget* pFocusWidget = findFocusableWidget(getQWidget()))
+            pFocusWidget->setFocus();
+    });
+}
 
 void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>& rLink)
 {
