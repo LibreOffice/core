@@ -328,6 +328,20 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf166789)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7000, length.toInt32(), 100); // allow ~1.5% for rounding errors
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testDashedLine)
+{
+    // A dashed line
+    loadFromFile(u"dashedline.fodg");
+
+    save(u"draw_svg_Export"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The result must include 'stroke-dasharray' attribute
+    assertXPath(pXmlDoc, "/svg:svg/svg:g//svg:path", "stroke-dasharray", "800,300,90,300,90,300");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

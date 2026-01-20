@@ -2100,6 +2100,18 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
         }
     }
 
+    if (rAttrs.GetStyle() == LineStyle::Dash)
+    {
+        OUStringBuffer aDashArrayStr;
+        for (double x : rAttrs.GetDotDashArray())
+        {
+            if (!aDashArrayStr.isEmpty())
+                aDashArrayStr.append(",");
+            aDashArrayStr.append(x);
+        }
+        if (!aDashArrayStr.isEmpty())
+            mrExport.AddAttribute(u"stroke-dasharray"_ustr, aDashArrayStr.makeStringAndClear());
+    }
 }
 
 
