@@ -1008,16 +1008,33 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     Color aOldColor( pTmpFont->GetColor() );
     bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
 
-    if (rInf.GetOmitPaint())
+    if (rInf.GetOmitPaint() || rInf.GetInsertColorPaint() || rInf.GetDeleteColorPaint())
     {
         Color aColor = pTmpFont->GetColor();
         sal_uInt16 nHue;
         sal_uInt16 nSaturation;
         sal_uInt16 nBrightness;
         aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
-        // 50% lightness: balance between completely omitting the paint and hard-to-notice small
-        // difference.
-        nBrightness = 50;
+        if (rInf.GetOmitPaint())
+        {
+            // 50% lightness: balance between completely omitting the paint and hard-to-notice small
+            // difference.
+            nBrightness = 50;
+        }
+        else if (rInf.GetInsertColorPaint())
+        {
+            // Insert: color transform to produce a green-like color.
+            nHue = 120;
+            nSaturation = std::max<sal_uInt16>(nSaturation, 75);
+            nBrightness = std::clamp<sal_uInt16>(nBrightness, 40, 60);
+        }
+        else if (rInf.GetDeleteColorPaint())
+        {
+            // Delete: color transform to produce a red-like color.
+            nHue = 0;
+            nSaturation = std::max<sal_uInt16>(nSaturation, 75);
+            nBrightness = std::clamp<sal_uInt16>(nBrightness, 40, 60);
+        }
         aColor = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
         if (aColor != pTmpFont->GetColor())
         {
