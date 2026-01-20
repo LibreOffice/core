@@ -685,9 +685,10 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
         case SID_PROTECTSIZE:
         {
             ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-            if (!pDocSh)
+            ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
+            ::sd::View* pView = pViewSh ? pViewSh->GetView() : nullptr;
+            if (!pView)
                 break;
-            ::sd::View* pView = pDocSh->GetViewShell()->GetView();
 
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             assert ( rMarkList.GetMarkCount() == 1 );
@@ -1470,9 +1471,10 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_PROTECTSIZE:
                     {
                         ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>(SfxObjectShell::Current());
-                        if (pDocSh)
+                        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
+                        ::sd::View* pView = pViewSh ? pViewSh->GetView() : nullptr;
+                        if (pView)
                         {
-                            ::sd::View* pView = pDocSh->GetViewShell()->GetView();
                             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                             if ( rMarkList.GetMarkCount() == 1 ) // graphic menu only effective on single item
                             {
