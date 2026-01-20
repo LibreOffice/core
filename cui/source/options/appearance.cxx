@@ -162,8 +162,11 @@ void SvxAppearanceTabPage::LoadSchemeList()
 void SvxAppearanceTabPage::ImplDestroy()
 {
     if (m_bRestartRequired)
+    {
+        pColorConfig->SetupTheme();
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
                                         svtools::RESTART_REASON_THEME_CHANGE);
+    }
 }
 
 SvxAppearanceTabPage::~SvxAppearanceTabPage() { suppress_fun_call_w_exception(ImplDestroy()); }
