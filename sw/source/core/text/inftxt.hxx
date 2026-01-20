@@ -371,6 +371,8 @@ class SwTextPaintInfo : public SwTextSizeInfo
     sal_uInt16 m_nSpaceIdx;
     SwLineInfo const* m_pLineInfo{nullptr}; // hack: need this to get line props
     bool m_bOmitPaint = false;
+    bool m_bInsertColorPaint = false;
+    bool m_bDeleteColorPaint = false;
 
     void DrawText_(const OUString &rText, const SwLinePortion &rPor,
                    const TextFrameIndex nIdx, const TextFrameIndex nLen,
@@ -496,6 +498,8 @@ public:
     sw::WrongListIterator* GetSmartTags() const { return m_pSmartTags; }
     void SetLineInfo(SwLineInfo const*const pLineInfo) { m_pLineInfo = pLineInfo; }
     void SetOmitPaint(bool bOmitPaint) { m_bOmitPaint = bOmitPaint; }
+    void SetInsertColorPaint(bool bInsertColorPaint) { m_bInsertColorPaint = bInsertColorPaint; }
+    void SetDeleteColorPaint(bool bDeleteColorPaint) { m_bDeleteColorPaint = bDeleteColorPaint; }
 };
 
 class SwTextFormatInfo : public SwTextPaintInfo
