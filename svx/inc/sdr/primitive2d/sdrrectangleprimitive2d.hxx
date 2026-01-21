@@ -42,6 +42,12 @@ namespace drawinglayer::primitive2d
 
             // flag which decides if the presentation object has empty placeholder text or not
             bool                                        mbPlaceholderText : 1;
+
+            // flag which decides if the primitive should directly apply glow
+            // and soft edge effects, which is needed when the primitive is not wrapped
+            // in a custom primitive
+            bool                                        mbApplyEffects : 1;
+
             // local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -52,7 +58,8 @@ namespace drawinglayer::primitive2d
                 double fCornerRadiusX,
                 double fCornerRadiusY,
                 bool bForceFillForHitTest,
-                bool bPlaceholderText = false);
+                bool bPlaceholderText = false,
+                bool bApplyEffects = false);
 
             // data access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -61,6 +68,7 @@ namespace drawinglayer::primitive2d
             double getCornerRadiusY() const { return mfCornerRadiusY; }
             bool getForceFillForHitTest() const { return mbForceFillForHitTest; }
             bool getPlaceholderText() const { return mbPlaceholderText; }
+            bool getApplyEffects() const { return mbApplyEffects; }
 
 
             // compare operator

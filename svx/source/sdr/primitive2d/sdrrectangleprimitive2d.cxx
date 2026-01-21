@@ -91,14 +91,14 @@ namespace drawinglayer::primitive2d
             }
 
             // Soft edges should be before text, since text is not affected by soft edges
-            if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            if (mbApplyEffects && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
             {
                 aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
                     getSdrLFSTAttribute().getSoftEdgeRadius());
             }
 
             // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            if (mbApplyEffects &&!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
             {
                 // glow
                 aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
@@ -156,13 +156,15 @@ namespace drawinglayer::primitive2d
             double fCornerRadiusX,
             double fCornerRadiusY,
             bool bForceFillForHitTest,
-            bool bPlaceholderText)
+            bool bPlaceholderText,
+            bool bApplyEffects)
         :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
             mbForceFillForHitTest(bForceFillForHitTest),
-            mbPlaceholderText(bPlaceholderText)
+            mbPlaceholderText(bPlaceholderText),
+            mbApplyEffects(bApplyEffects)
         {
         }
 
@@ -177,7 +179,8 @@ namespace drawinglayer::primitive2d
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
                     && getForceFillForHitTest() == rCompare.getForceFillForHitTest()
-                    && getPlaceholderText() == rCompare.getPlaceholderText());
+                    && getPlaceholderText() == rCompare.getPlaceholderText()
+                    && getApplyEffects() == rCompare.getApplyEffects());
             }
 
             return false;
