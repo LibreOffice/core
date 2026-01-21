@@ -521,7 +521,7 @@ void LayoutMenu::Fill()
                 }
                 else
                 {
-                    mxLayoutIconView->insert(id, &sLayoutName, &sId, aVDev, nullptr);
+                    mxLayoutIconView->insert(id, nullptr, &sId, aVDev, nullptr);
                 }
                 maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;
 
