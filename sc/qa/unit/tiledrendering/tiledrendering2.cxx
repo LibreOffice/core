@@ -14,6 +14,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/scheduler.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -250,6 +251,32 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
     // - Expected : test1
     // - Actual :
     CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, pNote->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBreakPageView)
+{
+    // Give a file in page break view mode
+    ScModelObj* pModelObj = createDoc("page-view.xlsx");
+
+    // Paint a tile not at the top or left
+    size_t nCanvasSize = 1024;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+    xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
+                                                       Fraction(1.0), Point(), aPixmap.data());
+    pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, 3840, 3840, 3840, 3840);
+    xDevice->EnableMapMode(false);
+    Bitmap aBitmap = xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+
+    // Top left pixel should be white, not blue
+    BitmapScopedReadAccess pAccess(aBitmap);
+    Color aColor(pAccess->GetPixel(0, 0));
+    // Without the fix in place, this test fails with
+    // - Expected: rgba[ffffffff]
+    // - Actual  : rgba[000080ff]
+    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 255), aColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
