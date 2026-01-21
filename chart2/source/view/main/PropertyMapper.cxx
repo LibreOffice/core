@@ -47,12 +47,13 @@ void PropertyMapper::setMappedProperties(
     auto pNames = aNames.getArray();
     auto pValues = aValues.getArray();
     sal_Int32 nN=0;
+    uno::Reference< css::beans::XPropertySetInfo > xInfo = xSource->getPropertySetInfo();
 
     for (auto const& elem : rMap)
     {
         const OUString & rTarget = elem.first;
         const OUString & rSource = elem.second;
-        try
+        if (xInfo->hasPropertyByName(rSource))
         {
             uno::Any aAny( xSource->getPropertyValue(rSource) );
             if( aAny.hasValue() )
@@ -62,10 +63,6 @@ void PropertyMapper::setMappedProperties(
                 pValues[nN] = std::move(aAny);
                 ++nN;
             }
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
     if (nN == 0)
@@ -101,12 +98,13 @@ void PropertyMapper::setMappedProperties(
     auto pNames = aNames.getArray();
     aValues.realloc(nPropertyCount);
     auto pValues = aValues.getArray();
+    uno::Reference< css::beans::XPropertySetInfo > xInfo = xSource->getPropertySetInfo();
 
     for (auto const& elem : rMap)
     {
         const OUString & rTarget = elem.first;
         const OUString & rSource = elem.second;
-        try
+        if (xInfo->hasPropertyByName(rSource))
         {
             uno::Any aAny( xSource->getPropertyValue(rSource) );
             if( aAny.hasValue() )
@@ -116,10 +114,6 @@ void PropertyMapper::setMappedProperties(
                 pValues[nN] = std::move(aAny);
                 ++nN;
             }
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "exception mapping property from " << rSource << " to " << rTarget);
         }
     }
     if (nN == 0)
