@@ -139,13 +139,6 @@ LayoutMenu::LayoutMenu (
       maPreviewSize(0, 0),
       bInContextMenuOperation(false)
 {
-    implConstruct();
-    SAL_INFO("sd.ui", "created LayoutMenu at " << this);
-
-}
-
-void LayoutMenu::implConstruct()
-{
     mxLayoutIconView->connect_item_activated(LINK(this, LayoutMenu, LayoutSelected));
     mxLayoutIconView->connect_command(LINK(this, LayoutMenu, CommandHdl));
     InvalidateContent();

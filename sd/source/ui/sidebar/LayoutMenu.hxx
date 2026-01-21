@@ -151,9 +151,6 @@ private:
     */
     void UpdateSelection();
 
-    // internal ctor
-    void implConstruct();
-
     void MenuSelect(const OUString& rIdent);
 
     /** When clicked then set the current page of the view in the center pane.
