@@ -148,10 +148,7 @@ namespace drawinglayer::primitive2d
         {
             // check if TextEdit is active. If not, process. If yes, suppress the content
             // lok case: always decompose it when we're rendering a slide show
-            bool bSuppress = rViewInformation.getTextEditActive() || comphelper::LibreOfficeKit::isActive();
-            if (comphelper::LibreOfficeKit::isSlideshowRendering())
-                bSuppress = false;
-            if (!bSuppress)
+            if (!rViewInformation.getTextEditActive() || comphelper::LibreOfficeKit::isSlideshowRendering())
                 GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
