@@ -4756,7 +4756,7 @@ Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
 {
     Color aColor;
 
-    Color aBackgroundColor;
+    Color aBackgroundColor(COL_AUTO);
     if (pFont) //check for char background color
         aBackgroundColor = pFont->GetFillColor();
     if (aBackgroundColor == COL_AUTO) // check for aother background (i.e: cell color)
