@@ -64,8 +64,6 @@ public:
                css::uno::Reference<css::ui::XSidebar> xSidebar);
     virtual ~LayoutMenu() override;
 
-    void Dispose();
-
     /** Return a numerical value representing the currently selected
         layout.
     */
@@ -99,7 +97,6 @@ private:
     rtl::Reference<::sdtools::SlotStateListener> mxListener;
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
-    bool mbIsDisposed;
 
     // Store the size of preview image
     Size maPreviewSize;

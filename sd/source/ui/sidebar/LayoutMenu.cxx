@@ -135,7 +135,6 @@ LayoutMenu::LayoutMenu (
       mxLayoutIconView(m_xBuilder->weld_icon_view(u"layoutpanel_icons"_ustr)),
       mbIsMainViewChangePending(false),
       mxSidebar(std::move(xSidebar)),
-      mbIsDisposed(false),
       maPreviewSize(0, 0),
       bInContextMenuOperation(false)
 {
@@ -157,26 +156,14 @@ LayoutMenu::LayoutMenu (
 
 LayoutMenu::~LayoutMenu()
 {
-    SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
-    Dispose();
-    mxLayoutIconView.reset();
-}
-
-void LayoutMenu::Dispose()
-{
-    if (mbIsDisposed)
-        return;
-
-    SAL_INFO("sd.ui", "disposing LayoutMenu at " << this);
-
-    mbIsDisposed = true;
-
     if (mxListener.is())
         mxListener->dispose();
 
     Clear();
     Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
+
+    mxLayoutIconView.reset();
 }
 
 AutoLayout LayoutMenu::GetSelectedAutoLayout() const
