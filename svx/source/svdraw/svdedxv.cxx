@@ -933,19 +933,16 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
     if (!IsTextEdit())
         return;
 
-    const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
-    if (!pActiveOutliner)
-        return;
-
-    const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
-    if (!nViewCount)
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    OutlinerView* pOLV = pSdrView ? pSdrView->GetTextEditOutlinerView() : nullptr;
+    if (!pOLV)
         return;
 
     const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
     const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
-    OutlinerView* pOLV = pActiveOutliner->GetView(0);
-    SdrPage* pPage = GetSdrPageView()->GetPage();
+    SdrPage* pPage = pSdrView->GetSdrPageView()->GetPage();
     pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
     ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
 }
