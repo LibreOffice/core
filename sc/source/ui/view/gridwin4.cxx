@@ -953,7 +953,18 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if (!bGridFirst && (bGrid || bPage) && !bNoBackgroundAndGrid)
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
-    pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
+    if (bIsTiledRendering)
+    {
+        // Tiled offset nScrX, nScrY
+        MapMode aMap(MapUnit::MapPixel);
+        Point aOrigin(
+            o3tl::convert(aOriginalMode.GetOrigin(), o3tl::Length::twip, o3tl::Length::px));
+        aOrigin.Move(nScrX, nScrY);
+        aMap.SetOrigin(aOrigin);
+        pContentDev->SetMapMode(aMap);
+    }
+    else
+        pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     //tdf#128258 - draw a dotted line before hidden columns/rows
     DrawHiddenIndicator(nX1,nY1,nX2,nY2, *pContentDev);
@@ -967,6 +978,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             pContentDev->SetClipRegion();
         }
     }
+    if (bIsTiledRendering)
+        pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     aOutputData.DrawShadow();
     aOutputData.DrawFrame(*pContentDev);
