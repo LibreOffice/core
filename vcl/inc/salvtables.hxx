@@ -621,6 +621,8 @@ public:
 
     virtual int get_position() const override;
 
+    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
+
 protected:
     virtual void do_set_text(const OUString& rText) override;
     virtual void do_set_position(int nCursorPos) override;
@@ -646,8 +648,6 @@ public:
     virtual int get_width_chars() const override;
 
     virtual void set_max_length(int nChars) override;
-
-    bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
     virtual void set_editable(bool bEditable) override;
 
@@ -1433,8 +1433,6 @@ private:
 public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
-
-    bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;

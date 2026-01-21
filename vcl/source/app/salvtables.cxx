@@ -3331,6 +3331,14 @@ void SalInstanceTextWidget::do_select_region(int nStartPos, int nEndPos)
     m_pEntry->SetSelection(Selection(nStart, nEnd));
 }
 
+bool SalInstanceTextWidget::get_selection_bounds(int& rStartPos, int& rEndPos)
+{
+    const Selection& rSelection = m_pEntry->GetSelection();
+    rStartPos = rSelection.Min();
+    rEndPos = rSelection.Max();
+    return rSelection.Len();
+}
+
 void SalInstanceTextWidget::do_replace_selection(const OUString& rText)
 {
     m_pEntry->ReplaceSelected(rText);
@@ -3351,14 +3359,6 @@ void SalInstanceEntry::set_width_chars(int nChars) { m_xEntry->SetWidthInChars(n
 int SalInstanceEntry::get_width_chars() const { return m_xEntry->GetWidthInChars(); }
 
 void SalInstanceEntry::set_max_length(int nChars) { m_xEntry->SetMaxTextLen(nChars); }
-
-bool SalInstanceEntry::get_selection_bounds(int& rStartPos, int& rEndPos)
-{
-    const Selection& rSelection = m_xEntry->GetSelection();
-    rStartPos = rSelection.Min();
-    rEndPos = rSelection.Max();
-    return rSelection.Len();
-}
 
 void SalInstanceEntry::set_editable(bool bEditable) { m_xEntry->SetReadOnly(!bEditable); }
 
@@ -5620,14 +5620,6 @@ SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanc
     ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
     m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
     rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
-}
-
-bool SalInstanceTextView::get_selection_bounds(int& rStartPos, int& rEndPos)
-{
-    const Selection& rSelection = m_xTextView->GetSelection();
-    rStartPos = rSelection.Min();
-    rEndPos = rSelection.Max();
-    return rSelection.Len();
 }
 
 void SalInstanceTextView::set_editable(bool bEditable) { m_xTextView->SetReadOnly(!bEditable); }
