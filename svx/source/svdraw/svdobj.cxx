@@ -3642,6 +3642,7 @@ rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
                     pObj = new SdrRectObj(
                         rSdrModel, tools::Rectangle(), nIdentifier);
                 }
+                pObj->SetApplyEffects(true);
             }
             break;
             case SdrObjKind::CircleOrEllipse:

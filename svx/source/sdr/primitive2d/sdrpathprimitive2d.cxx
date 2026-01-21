@@ -98,14 +98,14 @@ namespace drawinglayer::primitive2d
             }
 
             // Soft edges should be before text, since text is not affected by soft edges
-            if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            if (mbApplyEffects && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
             {
                 aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
                     getSdrLFSTAttribute().getSoftEdgeRadius());
             }
 
             // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            if (mbApplyEffects && !aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
             {
                 // glow
                 aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
@@ -149,12 +149,14 @@ namespace drawinglayer::primitive2d
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             basegfx::B2DPolyPolygon aUnitPolyPolygon,
             basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon,
-            basegfx::B2DPolyPolygon aClipPolyPolygon)
+            basegfx::B2DPolyPolygon aClipPolyPolygon,
+            bool bApplyEffects)
         :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maUnitPolyPolygon(std::move(aUnitPolyPolygon)),
             maUnitDefinitionPolyPolygon(std::move(aUnitDefinitionPolyPolygon)),
-            maClipPolyPolygon(std::move(aClipPolyPolygon))
+            maClipPolyPolygon(std::move(aClipPolyPolygon)),
+            mbApplyEffects(bApplyEffects)
         {
         }
 
@@ -167,7 +169,9 @@ namespace drawinglayer::primitive2d
                 return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
                     && getUnitDefinitionPolyPolygon() == rCompare.getUnitDefinitionPolyPolygon()
                     && getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
+                    && getClipPolyPolygon() == rCompare.getClipPolyPolygon()
+                    && getApplyEffects() == rCompare.getApplyEffects());
             }
 
             return false;

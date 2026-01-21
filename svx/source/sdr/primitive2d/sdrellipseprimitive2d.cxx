@@ -86,8 +86,15 @@ namespace drawinglayer::primitive2d
                         attribute::SdrLineStartEndAttribute()));
             }
 
+            // Soft edges should be before text, since text is not affected by soft edges
+            if (mbApplyEffects && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            {
+                aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
+                    getSdrLFSTAttribute().getSoftEdgeRadius());
+            }
+
             // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            if (mbApplyEffects && !aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
             {
                 // glow
                 aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
@@ -119,9 +126,11 @@ namespace drawinglayer::primitive2d
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
             basegfx::B2DHomMatrix aTransform,
-            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
+            bool bApplyEffects)
         :   maTransform(std::move(aTransform)),
-            maSdrLFSTAttribute(rSdrLFSTAttribute)
+            maSdrLFSTAttribute(rSdrLFSTAttribute),
+            mbApplyEffects(bApplyEffects)
         {
         }
 
@@ -132,7 +141,8 @@ namespace drawinglayer::primitive2d
                 const SdrEllipsePrimitive2D& rCompare = static_cast<const SdrEllipsePrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
+                    && getApplyEffects() == rCompare.getApplyEffects());
             }
 
             return false;
@@ -205,6 +215,20 @@ namespace drawinglayer::primitive2d
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
                         getSdrLFSTAttribute().getLineStartEnd()));
+            }
+
+            // Soft edges should be before text, since text is not affected by soft edges
+            if (getApplyEffects() && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            {
+                aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
+                    getSdrLFSTAttribute().getSoftEdgeRadius());
+            }
+
+            // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
+            if (getApplyEffects() && !aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            {
+                // glow
+                aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
             }
 
             // add text

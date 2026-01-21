@@ -161,7 +161,8 @@ namespace sdr::contact
                     aAttribute,
                     std::move(aUnitPolyPolygon),
                     std::move(aUnitDefinitionPolyPolygon),
-                    std::move(aClipPolyPolygon)));
+                    std::move(aClipPolyPolygon),
+                    GetPathObj().GetApplyEffects()));
 
 #ifdef DBG_UTIL
             // helper to create something that uses InvertPrimitive2D to be able
