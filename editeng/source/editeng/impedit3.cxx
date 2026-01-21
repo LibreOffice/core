@@ -4782,7 +4782,7 @@ Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
     const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
     {
-        Color aBackgroundColor;
+        Color aBackgroundColor(COL_AUTO);
         if (pFont) //check for char backgound color
             aBackgroundColor = pFont->GetFillColor();
         if (aBackgroundColor == COL_AUTO) // check for aother backgound (i.e: cell color)
