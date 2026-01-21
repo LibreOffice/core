@@ -626,6 +626,8 @@ public:
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;
 
+    virtual void set_font_color(const Color& rColor) override;
+
 protected:
     virtual void do_set_text(const OUString& rText) override;
     virtual void do_set_position(int nCursorPos) override;
@@ -661,8 +663,6 @@ public:
     virtual void set_message_type(weld::EntryMessageType eType) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
-
-    virtual void set_font_color(const Color& rColor) override;
 
     virtual void set_placeholder_text(const OUString& rText) override;
 
@@ -1438,8 +1438,6 @@ public:
     virtual void set_monospace(bool bMonospace) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
-
-    virtual void set_font_color(const Color& rColor) override;
 
     virtual bool can_move_cursor_with_up() const override;
 

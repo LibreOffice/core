@@ -3348,6 +3348,14 @@ void SalInstanceTextWidget::set_editable(bool bEditable) { m_pEntry->SetReadOnly
 
 bool SalInstanceTextWidget::get_editable() const { return !m_pEntry->IsReadOnly(); }
 
+void SalInstanceTextWidget::set_font_color(const Color& rColor)
+{
+    if (rColor == COL_AUTO)
+        m_pEntry->SetControlForeground();
+    else
+        m_pEntry->SetControlForeground(rColor);
+}
+
 SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceTextWidget(pEntry, pBuilder, bTakeOwnership)
     , m_xEntry(pEntry)
@@ -3411,14 +3419,6 @@ void SalInstanceEntry::set_font(const vcl::Font& rFont)
 {
     m_xEntry->SetControlFont(rFont);
     m_xEntry->Invalidate();
-}
-
-void SalInstanceEntry::set_font_color(const Color& rColor)
-{
-    if (rColor == COL_AUTO)
-        m_xEntry->SetControlForeground();
-    else
-        m_xEntry->SetControlForeground(rColor);
 }
 
 void SalInstanceEntry::set_placeholder_text(const OUString& rText)
@@ -5636,14 +5636,6 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
         aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
     set_font(aFont);
-}
-
-void SalInstanceTextView::set_font_color(const Color& rColor)
-{
-    if (rColor != COL_AUTO)
-        m_xTextView->SetControlForeground(rColor);
-    else
-        m_xTextView->SetControlForeground();
 }
 
 void SalInstanceTextView::set_font(const vcl::Font& rFont)
