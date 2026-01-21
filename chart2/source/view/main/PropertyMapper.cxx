@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequence.hxx>
 #include <svx/unoshape.hxx>
 
 namespace chart
@@ -153,6 +154,34 @@ void PropertyMapper::setMappedProperties(
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
+}
+
+css::uno::Sequence<css::beans::PropertyValue> PropertyMapper::getPropVals(
+         const uno::Reference< beans::XPropertySet >& xSource
+        , const tPropertyNameMap& rMap )
+{
+    std::vector<css::beans::PropertyValue> aRet;
+    aRet.reserve(rMap.size());
+    uno::Reference< css::beans::XPropertySetInfo > xInfo = xSource->getPropertySetInfo();
+
+    for (auto const& elem : rMap)
+    {
+        const OUString & rTarget = elem.first;
+        const OUString & rSource = elem.second;
+        if (xInfo->hasPropertyByName(rSource))
+        {
+            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            if( aAny.hasValue() )
+            {
+                //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
+                css::beans::PropertyValue aPropVal;
+                aPropVal.Name = rTarget;
+                aPropVal.Value = std::move(aAny);
+                aRet.push_back(std::move(aPropVal));
+            }
+        }
+    }
+    return comphelper::containerToSequence(aRet);
 }
 
 void PropertyMapper::getValueMap(

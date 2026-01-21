@@ -22,6 +22,7 @@
 
 #include <unordered_map>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
@@ -53,6 +54,15 @@ public:
     static void setMappedProperties(
           SvxShape& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
+        , const tPropertyNameMap& rMap );
+
+    /**
+     * Fetch property values from source object and store them into
+     * a sequence of beans::PropertyValue. For use when passing
+     * data to css::text::XTextPortionAppend.
+     */
+    static css::uno::Sequence<css::beans::PropertyValue> getPropVals(
+          const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap );
 
     /**

@@ -51,6 +51,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdorect.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
@@ -2228,6 +2229,9 @@ rtl::Reference<SvxShapeText>
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
 
+            // Lock during property update to prevent unnecessary layout work.
+            xShape->addActionLock();
+
             uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
             if(bStackCharacters)
             {
@@ -2237,24 +2241,14 @@ rtl::Reference<SvxShapeText>
                 {
                     if (!rxFS->getString().isEmpty())
                     {
-                        xTextCursor->gotoEnd(false);
-                        xSelectionCursor->gotoEnd(false);
                         OUString aLabel = ShapeFactory::getStackedString(rxFS->getString(), bStackCharacters);
                         if (nLBreaks-- > 0)
                             aLabel += OUStringChar('\r');
-                        xShape->insertString(xTextCursor, aLabel, false);
-                        xSelectionCursor->gotoEnd(true); // select current paragraph
                         uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                        if (xFormattedString.size() > 1 && xSelectionProp.is())
-                        {
-                            PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
+                        uno::Sequence<beans::PropertyValue> aPropVals =
+                            PropertyMapper::getPropVals(xSourceProps,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                        }
-                        else
-                        {
-                            PropertyMapper::setMappedProperties(*xShape, xSourceProps,
-                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                        }
+                        xShape->appendTextPortion(aLabel, aPropVals);
                     }
                 }
             }
@@ -2264,25 +2258,16 @@ rtl::Reference<SvxShapeText>
                 {
                     if (!rxFS->getString().isEmpty())
                     {
-                        xTextCursor->gotoEnd(false);
-                        xSelectionCursor->gotoEnd(false);
-                        xShape->insertString(xTextCursor, rxFS->getString(), false);
-                        xSelectionCursor->gotoEnd(true); // select current paragraph
                         uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                        if (xFormattedString.size() > 1 && xSelectionProp.is())
-                        {
-                            PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
+                        uno::Sequence<beans::PropertyValue> aPropVals =
+                            PropertyMapper::getPropVals(xSourceProps,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                        }
-                        else
-                        {
-                            PropertyMapper::setMappedProperties(*xShape, xSourceProps,
-                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                        }
+                        xShape->appendTextPortion(rxFS->getString(), aPropVals);
                     }
                 }
-
             }
+
+            xShape->removeActionLock();
 
             // adapt font size according to page size
             awt::Size aOldRefSize;
