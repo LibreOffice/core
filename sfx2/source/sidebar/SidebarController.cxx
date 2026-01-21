@@ -62,6 +62,7 @@
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <officecfg/Office/Common.hxx>
 
 #include <bitmaps.hlst>
 
@@ -799,6 +800,12 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
         }
         else
         {
+            // Allow ChartTextPropertyPanel only in experimental mode
+            if (!officecfg::Office::Common::Misc::ExperimentalMode::get()
+                && rPanelContexDescriptor.msId == u"ChartTextPropertyPanel")
+            {
+                continue;
+            }
             auto aPanel = CreatePanel(rPanelContexDescriptor.msId,
                                       pDeck->GetPanelParentWindow(),
                                       rPanelContexDescriptor.mbIsInitiallyVisible,
