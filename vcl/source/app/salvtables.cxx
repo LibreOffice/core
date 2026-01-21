@@ -3344,6 +3344,10 @@ void SalInstanceTextWidget::do_replace_selection(const OUString& rText)
     m_pEntry->ReplaceSelected(rText);
 }
 
+void SalInstanceTextWidget::set_editable(bool bEditable) { m_pEntry->SetReadOnly(!bEditable); }
+
+bool SalInstanceTextWidget::get_editable() const { return !m_pEntry->IsReadOnly(); }
+
 SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceTextWidget(pEntry, pBuilder, bTakeOwnership)
     , m_xEntry(pEntry)
@@ -3359,10 +3363,6 @@ void SalInstanceEntry::set_width_chars(int nChars) { m_xEntry->SetWidthInChars(n
 int SalInstanceEntry::get_width_chars() const { return m_xEntry->GetWidthInChars(); }
 
 void SalInstanceEntry::set_max_length(int nChars) { m_xEntry->SetMaxTextLen(nChars); }
-
-void SalInstanceEntry::set_editable(bool bEditable) { m_xEntry->SetReadOnly(!bEditable); }
-
-bool SalInstanceEntry::get_editable() const { return !m_xEntry->IsReadOnly(); }
 
 void SalInstanceEntry::set_visibility(bool bVisible)
 {
@@ -5622,8 +5622,6 @@ SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanc
     rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
 }
 
-void SalInstanceTextView::set_editable(bool bEditable) { m_xTextView->SetReadOnly(!bEditable); }
-bool SalInstanceTextView::get_editable() const { return !m_xTextView->IsReadOnly(); }
 void SalInstanceTextView::set_max_length(int nChars) { m_xTextView->SetMaxTextLen(nChars); }
 
 void SalInstanceTextView::set_monospace(bool bMonospace)
