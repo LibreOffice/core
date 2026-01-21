@@ -152,7 +152,7 @@ private:
     void UpdateSelection();
 
     // internal ctor
-    void implConstruct(DrawDocShell& rDocumentShell);
+    void implConstruct();
 
     void MenuSelect(const OUString& rIdent);
 

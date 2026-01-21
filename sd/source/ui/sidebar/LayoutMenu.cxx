@@ -139,18 +139,13 @@ LayoutMenu::LayoutMenu (
       maPreviewSize(0, 0),
       bInContextMenuOperation(false)
 {
-    implConstruct( *mrBase.GetDocument()->GetDocSh() );
+    implConstruct();
     SAL_INFO("sd.ui", "created LayoutMenu at " << this);
 
 }
 
-void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
+void LayoutMenu::implConstruct()
 {
-    OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
-        "LayoutMenu::implConstruct: hmm?" );
-    // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
-    (void) rDocumentShell;
-
     mxLayoutIconView->connect_item_activated(LINK(this, LayoutMenu, LayoutSelected));
     mxLayoutIconView->connect_command(LINK(this, LayoutMenu, CommandHdl));
     InvalidateContent();
