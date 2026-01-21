@@ -624,6 +624,7 @@ public:
 protected:
     virtual void do_set_text(const OUString& rText) override;
     virtual void do_set_position(int nCursorPos) override;
+    virtual void do_select_region(int nStartPos, int nEndPos) override;
 };
 
 class SalInstanceEntry : public SalInstanceTextWidget, public virtual weld::Entry
@@ -644,8 +645,6 @@ public:
     virtual int get_width_chars() const override;
 
     virtual void set_max_length(int nChars) override;
-
-    virtual void do_select_region(int nStartPos, int nEndPos) override;
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
@@ -1439,8 +1438,6 @@ public:
     virtual void do_replace_selection(const OUString& rText) override;
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
-
-    virtual void do_select_region(int nStartPos, int nEndPos) override;
 
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;

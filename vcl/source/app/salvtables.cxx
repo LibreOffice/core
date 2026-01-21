@@ -3324,6 +3324,13 @@ void SalInstanceTextWidget::do_set_position(int nCursorPos)
 
 int SalInstanceTextWidget::get_position() const { return m_pEntry->GetSelection().Max(); }
 
+void SalInstanceTextWidget::do_select_region(int nStartPos, int nEndPos)
+{
+    tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
+    tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
+    m_pEntry->SetSelection(Selection(nStart, nEnd));
+}
+
 SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceTextWidget(pEntry, pBuilder, bTakeOwnership)
     , m_xEntry(pEntry)
@@ -3339,13 +3346,6 @@ void SalInstanceEntry::set_width_chars(int nChars) { m_xEntry->SetWidthInChars(n
 int SalInstanceEntry::get_width_chars() const { return m_xEntry->GetWidthInChars(); }
 
 void SalInstanceEntry::set_max_length(int nChars) { m_xEntry->SetMaxTextLen(nChars); }
-
-void SalInstanceEntry::do_select_region(int nStartPos, int nEndPos)
-{
-    tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
-    tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
-    m_xEntry->SetSelection(Selection(nStart, nEnd));
-}
 
 bool SalInstanceEntry::get_selection_bounds(int& rStartPos, int& rEndPos)
 {
@@ -5633,13 +5633,6 @@ bool SalInstanceTextView::get_selection_bounds(int& rStartPos, int& rEndPos)
     rStartPos = rSelection.Min();
     rEndPos = rSelection.Max();
     return rSelection.Len();
-}
-
-void SalInstanceTextView::do_select_region(int nStartPos, int nEndPos)
-{
-    tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
-    tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
-    m_xTextView->SetSelection(Selection(nStart, nEnd));
 }
 
 void SalInstanceTextView::set_editable(bool bEditable) { m_xTextView->SetReadOnly(!bEditable); }
