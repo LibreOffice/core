@@ -924,6 +924,10 @@ int QtFrame::toQtKeyCode(sal_uInt16 nVclCode)
             return Qt::Key_AsciiTilde;
         case KEY_QUOTELEFT:
             return Qt::Key_QuoteLeft;
+        case KEY_QUOTERIGHT:
+            return Qt::Key_Apostrophe;
+        case KEY_RIGHTCURLYBRACKET:
+            return Qt::Key_BraceRight;
         case KEY_BRACKETLEFT:
             return Qt::Key_BracketLeft;
         case KEY_BRACKETRIGHT:
