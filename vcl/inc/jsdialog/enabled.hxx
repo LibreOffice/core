@@ -26,9 +26,11 @@ bool isBuilderEnabledForNavigator(std::u16string_view rUIFile);
 bool isBuilderEnabledForQuickFind(std::u16string_view rUIFile);
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile);
 
-// returns vector of writer .ui files not seen that should be seen to have complete coverage
+// returns vector of writer dialog .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeWriterDialogList(const o3tl::sorted_vector<OUString>& entries);
-// returns vector of common/shared .ui files not seen that should be seen to have complete coverage
+// returns vector of writer sidebar .ui files not seen that should be seen to have complete coverage
+std::vector<OUString> completeWriterSidebarList(const o3tl::sorted_vector<OUString>& entries);
+// returns vector of common/shared dialog .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries);
 }
 

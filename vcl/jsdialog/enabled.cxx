@@ -662,6 +662,26 @@ std::vector<OUString> completeWriterDialogList(const o3tl::sorted_vector<OUStrin
     return missing;
 }
 
+std::vector<OUString> completeWriterSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+        // Skip these ones, I don't think they can appear in practice
+        if (entry == u"modules/swriter/ui/managechangessidebar.ui" ||
+            entry == u"modules/swriter/ui/pagefooterpanel.ui" ||
+            entry == u"modules/swriter/ui/pageheaderpanel.ui" ||
+            entry == u"modules/swriter/ui/pagestylespanel.ui" ||
+            entry == u"modules/swriter/ui/sidebarstylepresets.ui" ||
+            entry == u"modules/swriter/ui/sidebartheme.ui")
+            continue;
+        else if (sEntry.startsWith("modules/swriter/") && !entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries)
 {
     std::vector<OUString> missing;

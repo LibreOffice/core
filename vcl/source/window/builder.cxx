@@ -213,6 +213,15 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
             rJson.putSimpleValue(entry);
     }
 
+    std::vector<OUString> missingWriterSidebarUIs = jsdialog::completeWriterSidebarList(entries);
+    rJson.put("CompleteWriterSidebarCoverage", missingWriterSidebarUIs.empty());
+    if (!missingWriterSidebarUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingWriterSidebarCoverage");
+        for (const auto& entry : missingWriterSidebarUIs)
+            rJson.putSimpleValue(entry);
+    }
+
     std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries);
     rJson.put("CompleteCommonDialogCoverage", missingCommonDialogUIs.empty());
     if (!missingCommonDialogUIs.empty())
