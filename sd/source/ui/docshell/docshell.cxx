@@ -444,10 +444,10 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
     SdrObject* pObj = nullptr;
     SdrOutliner* pOutl = nullptr;
 
-    if(GetViewShell())
+    if(::sd::ViewShell* pViewSh = GetViewShell())
     {
-        pOutl = GetViewShell()->GetView()->GetTextEditOutliner();
-        pObj = GetViewShell()->GetView()->GetTextEditObject();
+        pOutl = pViewSh->GetView()->GetTextEditOutliner();
+        pObj = pViewSh->GetView()->GetTextEditObject();
     }
 
     mpDoc->ImpOnlineSpellCallback(&rInfo, pObj, pOutl);

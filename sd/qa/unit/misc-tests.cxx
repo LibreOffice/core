@@ -135,6 +135,7 @@ void SdMiscTest::testTdf99396()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
@@ -164,6 +165,7 @@ void SdMiscTest::testTableObjectUndoTest()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObject);
@@ -736,6 +738,7 @@ void SdMiscTest::testTdf119392()
     CPPUNIT_ASSERT(pXImpressDocument);
     // Insert layer "-P-", not visible, printable, not locked
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pView = pViewShell->GetView();
     pView->InsertNewLayer(u"-P-"_ustr, 6); // 0..4 standard layer, 5 layer "V--"
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -796,6 +799,7 @@ void SdMiscTest::testTdf119956()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     sd::GraphicViewShell* pGraphicViewShell = static_cast<sd::GraphicViewShell*>(pViewShell);
     CPPUNIT_ASSERT(pGraphicViewShell);
@@ -839,6 +843,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>(pPage->GetObj(0));
     pShape->Mirror(Point(4000, 2000), Point(4000, 10000));
@@ -865,6 +870,7 @@ void SdMiscTest::testTdf130988()
 
     //emulate command .uno:ConvertInto3DLathe
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0),
@@ -891,6 +897,7 @@ void SdMiscTest::testTdf131033()
     // It produces a rotation around a vertical axis, which is far away from the
     // generating shape.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0),
@@ -924,6 +931,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 
     // Verify view
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrPageView* pPageView = pViewShell->GetView()->GetSdrPageView();
     CPPUNIT_ASSERT(pPageView->IsLayerVisible(sName));
     CPPUNIT_ASSERT(pPageView->IsLayerPrintable(sName));
@@ -1064,6 +1072,7 @@ void SdMiscTest::testTdf157117()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     // insert two pages to make a total of 3 pages
     dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});

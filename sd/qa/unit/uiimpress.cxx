@@ -102,6 +102,7 @@ void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view 
 {
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pShape = pPage->GetObj(nObj);
     CPPUNIT_ASSERT_MESSAGE("No Shape", pShape);
@@ -126,6 +127,7 @@ sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell(
 {
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
     // Same as in sd/qa/unit/misc-tests.cxx
     for (int i = 0; i < 1000; i++)
@@ -306,10 +308,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     createSdImpressDoc("tdf111522.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
     sd::ViewShell* pViewShell1 = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1);
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
     sd::ViewShell* pViewShell2 = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
     CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
 
     // Have slide 1 in window 1, slide 2 in window 2.
@@ -369,10 +374,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
     createSdImpressDoc("tdf126197.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
     sd::ViewShell* pViewShell1 = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1);
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
     sd::ViewShell* pViewShell2 = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
     CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
 
     // Start text edit in window 1.
@@ -405,6 +413,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(16), pActualPage->GetObjCount());
 
@@ -426,6 +435,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf159666)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), pActualPage->GetObjCount());
 
@@ -447,6 +457,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
@@ -485,6 +496,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf155211_dashed_line)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
@@ -513,6 +525,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf169813_prevent_unintended_dashed_li
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
@@ -541,6 +554,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
@@ -1127,6 +1141,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
     createSdImpressDoc("tdf128651_CustomShapeUndo.odp");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pObject);
@@ -1315,6 +1330,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "PageName", uno::Any(u"Test 1"_ustr) },
@@ -1500,6 +1516,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
     typeKey(pXImpressDocument, KEY_ESCAPE);
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
     CPPUNIT_ASSERT(pTableObject);
@@ -1534,6 +1551,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf164855)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
 
@@ -1562,6 +1580,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
 
@@ -1594,6 +1613,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
     createSdImpressDoc("tdf126197.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     // Set FillPageColor
 
@@ -1619,6 +1639,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     createSdImpressDoc("tdf126197.odp");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     // Set FillPageColor
 
@@ -1654,6 +1675,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
     createSdImpressDoc("pptx/tdf134053_dashdot.pptx");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pShape = pActualPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("No Shape", pShape);
@@ -1810,6 +1832,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
 
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_PRESENTATION);
     pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow = true;
@@ -1838,6 +1861,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     dispatchCommand(mxComponent, u".uno:Text"_ustr, {});
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pView = pViewShell->GetView();
     CPPUNIT_ASSERT(pView->IsTextEdit());
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
@@ -1974,6 +1998,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
     createSdImpressDoc();
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
 
     // When dispatching a fill color that only has a fill style (no color), then make sure we don't
@@ -2168,6 +2193,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testNumToBullet)
     // Given a document with a shape, 2nd paragraph is a numbering:
     createSdImpressDoc("odp/num-to-bullet.odp");
     sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pShape = pPage->GetObj(0);
     CPPUNIT_ASSERT(pShape);
@@ -2216,6 +2242,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testBulletOffOn)
     // Given a document with a shape, last paragraph is has a bullet:
     createSdImpressDoc("odp/bullet-off-on.odp");
     sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pShape = pPage->GetObj(0);
     CPPUNIT_ASSERT(pShape);

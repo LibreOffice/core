@@ -100,8 +100,9 @@ void FuSearch::DoExecute( SfxRequest& )
 
 FuSearch::~FuSearch()
 {
-    if ( ! mpDocSh->IsInDestruction() && mpDocSh->GetViewShell()!=nullptr)
-        mpDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
+    if ( ! mpDocSh->IsInDestruction())
+        if (::sd::ViewShell* pViewSh = mpDocSh->GetViewShell())
+            pViewSh->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (m_pSdOutliner)
         m_pSdOutliner->EndSpelling();

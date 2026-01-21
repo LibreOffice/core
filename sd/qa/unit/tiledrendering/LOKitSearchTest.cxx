@@ -86,6 +86,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Search)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
     uno::Reference<container::XIndexAccess> xDrawPage(
         pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -120,6 +121,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAll)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"match"_ustr, /*bFindAll=*/true);
@@ -140,6 +142,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllSelections)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"third"_ustr, /*bFindAll=*/true);
@@ -153,6 +156,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllNotifications)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"third"_ustr, /*bFindAll=*/true);
@@ -166,6 +170,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllFollowedBySearch)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"third"_ustr, /*bFindAll=*/true);
@@ -182,6 +187,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, DontSearchInMasterPages)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     // This should trigger the not-found callback ("date" is present only on
@@ -768,6 +774,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Replace)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, getShapeText(pXImpressDocument, 0, 0));
@@ -797,6 +804,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceAll)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, getShapeText(pXImpressDocument, 0, 0));
@@ -826,6 +834,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceCombined)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_replace(u"bbb"_ustr, u"aaa"_ustr, false); // select

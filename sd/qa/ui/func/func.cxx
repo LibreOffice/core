@@ -39,6 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToBullet)
     // Given a document with a shape, the only paragraph has a numbering of type "none":
     createSdImpressDoc("odp/none-to-bullet.odp");
     sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pShape = pPage->GetObj(0);
     CPPUNIT_ASSERT(pShape);

@@ -107,7 +107,7 @@ public:
     using SfxObjectShell::GetVisArea;
     using SfxShell::GetViewShell;
 
-    sd::ViewShell* GetViewShell() { return mpViewShell; }
+    SAL_RET_MAYBENULL sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
 
     SdDrawDocument*         GetDoc() { return mpDoc;}

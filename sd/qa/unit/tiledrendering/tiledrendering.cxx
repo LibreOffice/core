@@ -91,6 +91,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegisterCallback)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     // Start text edit of the empty title shape.
@@ -110,6 +111,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEvent)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     CPPUNIT_ASSERT_EQUAL(SdrObjKind::TitleText, pObject->GetObjIdentifier());
@@ -138,6 +140,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     CPPUNIT_ASSERT_EQUAL(SdrObjKind::TitleText, pObject->GetObjIdentifier());
@@ -175,6 +178,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
     xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -203,6 +207,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetTextSelection)
     xShape->setString(u"Shape"_ustr);
     // Create a selection on the shape text.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -222,6 +227,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetGraphicSelection)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
     SdrHdlList handleList(nullptr);
@@ -281,6 +287,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResetSelection)
     xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -320,6 +327,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
@@ -424,6 +432,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertTable)
 
     // get the table
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(1);
     CPPUNIT_ASSERT(pObject);
@@ -447,6 +456,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteTable)
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     CPPUNIT_ASSERT(rMarkList.GetMarkCount());
@@ -477,6 +487,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTable)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
@@ -523,6 +534,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("table-column.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
@@ -577,6 +589,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursors)
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -600,6 +613,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursorParts)
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -631,6 +645,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pView = pViewShell->GetView();
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
@@ -674,6 +689,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
@@ -723,6 +739,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_DoubleClick)
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
@@ -755,6 +772,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1);
@@ -803,6 +821,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_Escape)
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
@@ -846,6 +865,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewLock)
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -864,9 +884,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1);
     int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
     CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
 
     // Begin text edit on the only object on the slide.
@@ -937,6 +959,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewGraphicSelection)
 
     // Select the only shape in the document and assert that the graphic selection is changed.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -973,6 +996,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewTextCursor)
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetView();
     CPPUNIT_ASSERT(pSdrView->IsTextEdit());
 
@@ -1013,6 +1037,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf102223)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf102223.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
     CPPUNIT_ASSERT(pTableObject);
@@ -1054,6 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf118354)
     SdXImpressDocument* pXImpressDocument = createDoc("tdf118354.odp");
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
@@ -1083,6 +1109,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
     SdTestViewCallback aView1;
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pView = pViewShell->GetView();
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
@@ -1097,6 +1124,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     SdTestViewCallback aView2;
     pXImpressDocument->setPart(1);
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
     SdrView* pView2 = pViewShell2->GetView();
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
@@ -1129,6 +1157,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
         CPPUNIT_ASSERT(pXImpressDocument);
 
         sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+        CPPUNIT_ASSERT(pViewShell);
         SdPage* pActualPage = pViewShell->GetActualPage();
 
         SdrObject* pObject1 = pActualPage->GetObj(1);
@@ -1200,6 +1229,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf104405.fodp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(2);
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
@@ -1250,6 +1280,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("tdf81754.pptx");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(1);
 
@@ -1279,6 +1310,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf105502.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     sd::Window* pWindow = pViewShell->GetActiveWindow();
     CPPUNIT_ASSERT(pWindow);
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1610,6 +1642,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
@@ -1659,12 +1692,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDisableUndoRepair)
     // Create View 1
     SfxViewShell* pView1 = SfxViewShell::Current();
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1);
     int nView1 = SfxLokHelper::getCurrentView();
 
     // Create View 2
     SfxLokHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
     int nView2 = SfxLokHelper::getCurrentView();
 
     // Check UNDO is disabled
@@ -1744,6 +1779,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDocumentRepair)
     SfxViewShell* pView2 = SfxViewShell::Current();
     int nView2 = SfxLokHelper::getCurrentView();
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
 
     CPPUNIT_ASSERT(pView1 != pView2);
     {
@@ -1835,6 +1871,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDefaultView)
     // Load the document with notes view.
     SdXImpressDocument* pXImpressDocument = createDoc("notes-view.odp");
     sd::ViewShell* pView = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pView);
     {
         std::unique_ptr<SfxBoolItem> pImpressView;
         std::unique_ptr<SfxBoolItem> pNotesView;
@@ -1853,6 +1890,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testIMESupport)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     VclPtr<vcl::Window> pDocWindow = pXImpressDocument->getDocWindow();
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
@@ -1889,6 +1927,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115783.fodp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
@@ -1995,7 +2034,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteTextOnSlide)
     Scheduler::ProcessEventsToIdle();
 
     // Check the position of the newly added text shape, created for pasted text
-    SdPage* pActualPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
     SdrObject* pObject = pActualPage->GetObj(2);
     CPPUNIT_ASSERT(pObject);
@@ -2020,6 +2061,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115873)
     rObjects.SelectEntry(u"Slide 1");
     rObjects.Select();
     sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pSdViewShell->GetView();
     pSdrView->UnmarkAllObj(pSdrView->GetSdrPageView());
 
@@ -2062,6 +2104,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCutSelectionChange)
     CPPUNIT_ASSERT(pXImpressDocument);
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
     Scheduler::ProcessEventsToIdle();
 
@@ -2215,7 +2258,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
     SdXImpressDocument* pXImpressDocument = createDoc("regenerate-diagram.pptx");
     CPPUNIT_ASSERT(pXImpressDocument);
 
-    SdPage* pActualPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pActualPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 
     // For new Diagram functionality entering group using UI is not allowed as long
@@ -2290,6 +2335,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideDuplicateUndo)
     {
         pXImpressDocument->setPart(2);
         sd::ViewShell* pViewShell0 = pXImpressDocument->GetDocShell()->GetViewShell();
+        CPPUNIT_ASSERT(pViewShell0);
         SdrView* pView = pViewShell0->GetView();
         SdPage* pActualPage = pViewShell0->GetActualPage();
         SdrObject* pObject = pActualPage->GetObj(1);
@@ -2319,6 +2365,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideDuplicateUndo)
     // Make sure that view 0 now doesn't have an outdated page view pointer.
     SfxLokHelper::setView(nView0);
     sd::ViewShell* pViewShell0 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell0);
     SdrView* pView0 = pViewShell0->GetView();
     CPPUNIT_ASSERT(!pView0->GetTextEditPageView());
 }
@@ -2354,6 +2401,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMoveShapeHandle)
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     SdTestViewCallback aView1;
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -2385,6 +2433,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)
     // Given a document with a textbox, containing "world":
     SdXImpressDocument* pXImpressDocument = createDoc("paste-undo.fodp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
@@ -2420,6 +2469,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
     // Create view 1
     const int nView1 = SfxLokHelper::getCurrentView();
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1);
     SdrView* pView1 = pViewShell1->GetView();
     Scheduler::ProcessEventsToIdle();
 
@@ -2429,6 +2479,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
     CPPUNIT_ASSERT(nView1 != nView2);
 
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell2);
     SdrView* pView2 = pViewShell2->GetView();
     Scheduler::ProcessEventsToIdle();
 

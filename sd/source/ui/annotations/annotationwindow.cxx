@@ -102,7 +102,8 @@ bool AnnotationTextWindow::KeyInput(const KeyEvent& rKeyEvt)
 
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN)))
     {
-        SfxDispatcher* pDispatcher = mrContents.DocShell()->GetViewShell()->GetViewFrame()->GetDispatcher();
+        ::sd::ViewShell* pViewSh = mrContents.DocShell()->GetViewShell();
+        SfxDispatcher* pDispatcher = pViewSh ? pViewSh->GetViewFrame()->GetDispatcher() : nullptr;
         if( pDispatcher )
             pDispatcher->Execute( nKey == KEY_PAGEDOWN ? SID_NEXT_POSTIT : SID_PREVIOUS_POSTIT );
         bDone = true;
@@ -306,7 +307,8 @@ void AnnotationWindow::InitControls()
 
 IMPL_LINK(AnnotationWindow, MenuItemSelectedHdl, const OUString&, rIdent, void)
 {
-    SfxDispatcher* pDispatcher = mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher();
+    ::sd::ViewShell* pViewSh = mpDocShell->GetViewShell();
+    SfxDispatcher* pDispatcher = pViewSh ? pViewSh->GetViewFrame()->GetDispatcher() : nullptr;
     if (!pDispatcher)
         return;
 
@@ -473,9 +475,12 @@ void AnnotationWindow::ToggleInsMode()
 {
     if( mpOutlinerView )
     {
-        SfxBindings &rBnd = mpDocShell->GetViewShell()->GetViewFrame()->GetBindings();
-        rBnd.Invalidate(SID_ATTR_INSERT);
-        rBnd.Update(SID_ATTR_INSERT);
+        if (::sd::ViewShell* pViewSh = mpDocShell->GetViewShell())
+        {
+            SfxBindings &rBnd = pViewSh->GetViewFrame()->GetBindings();
+            rBnd.Invalidate(SID_ATTR_INSERT);
+            rBnd.Update(SID_ATTR_INSERT);
+        }
     }
 }
 

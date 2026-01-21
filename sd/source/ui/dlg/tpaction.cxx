@@ -138,9 +138,12 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     if( pDocSh && pDocSh->GetViewShell() )
     {
         mpDoc = pDocSh->GetDoc();
-        SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
-        m_xLbTree->SetViewFrame( pFrame );
-        m_xLbTreeDocument->SetViewFrame( pFrame );
+        if (sd::ViewShell* pViewShell = pDocSh->GetViewShell())
+        {
+            SfxViewFrame* pFrame = pViewShell->GetViewFrame();
+            m_xLbTree->SetViewFrame( pFrame );
+            m_xLbTreeDocument->SetViewFrame( pFrame );
+        }
     }
     else
     {

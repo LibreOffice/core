@@ -56,6 +56,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     pImpressDocument->initializeForTiledRendering({});
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     sd::View* pView = pViewShell->GetView();
     pView->SetAuthor("myauthor");
     SdTestViewCallback aView;
