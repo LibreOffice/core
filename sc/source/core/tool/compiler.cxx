@@ -5855,7 +5855,10 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                 }
                 OUString sName = pData->GetName();
                 // If the name is a valid reference then add underscore to the name
-                if (ScAddress().Parse(sName, rDoc, FormulaGrammar::CONV_XL_A1) & ScRefFlags::VALID)
+                if ((ScAddress().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_A1)
+                     != ScRefFlags::ZERO)
+                    || (ScRange().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_R1C1)
+                        != ScRefFlags::ZERO))
                     sName = "_" + sName;
                 aBuffer.append(sName);
             }
