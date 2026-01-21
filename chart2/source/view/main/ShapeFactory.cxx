@@ -2216,23 +2216,23 @@ rtl::Reference<SvxShapeText>
             PropertyMapper::setMultiProperties( aPropNames, aPropValues, *xShape );
         }
 
-        bool bStackCharacters(false);
-        try
+        if( xFormattedString.hasElements() )
         {
-            xTextProperties->getPropertyValue( u"StackCharacters"_ustr ) >>= bStackCharacters;
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
-
-        if(bStackCharacters)
-        {
-            //if the characters should be stacked we use only the first character properties for code simplicity
-            if( xFormattedString.hasElements() )
+            bool bStackCharacters(false);
+            try
             {
+                xTextProperties->getPropertyValue( u"StackCharacters"_ustr ) >>= bStackCharacters;
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+
+            uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
+            if(bStackCharacters)
+            {
+                //if the characters should be stacked we use only the first character properties for code simplicity
                 size_t nLBreaks = xFormattedString.size() - 1;
-                uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
                 for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
                 {
                     if (!rxFS->getString().isEmpty())
@@ -2257,48 +2257,38 @@ rtl::Reference<SvxShapeText>
                         }
                     }
                 }
-
-                // adapt font size according to page size
-                awt::Size aOldRefSize;
-                if( xTextProperties->getPropertyValue( u"ReferencePageSize"_ustr) >>= aOldRefSize )
-                {
-                    RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
-                }
             }
-        }
-        else
-        {
-            uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
-            for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
+            else
             {
-                if (!rxFS->getString().isEmpty())
+                for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
                 {
-                    xTextCursor->gotoEnd(false);
-                    xSelectionCursor->gotoEnd(false);
-                    xShape->insertString(xTextCursor, rxFS->getString(), false);
-                    xSelectionCursor->gotoEnd(true); // select current paragraph
-                    uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                    if (xFormattedString.size() > 1 && xSelectionProp.is())
+                    if (!rxFS->getString().isEmpty())
                     {
-                        PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
-                            PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                    }
-                    else
-                    {
-                        PropertyMapper::setMappedProperties(*xShape, xSourceProps,
-                            PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        xTextCursor->gotoEnd(false);
+                        xSelectionCursor->gotoEnd(false);
+                        xShape->insertString(xTextCursor, rxFS->getString(), false);
+                        xSelectionCursor->gotoEnd(true); // select current paragraph
+                        uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
+                        if (xFormattedString.size() > 1 && xSelectionProp.is())
+                        {
+                            PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
+                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        }
+                        else
+                        {
+                            PropertyMapper::setMappedProperties(*xShape, xSourceProps,
+                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        }
                     }
                 }
+
             }
 
-            if( xFormattedString.hasElements() )
+            // adapt font size according to page size
+            awt::Size aOldRefSize;
+            if( xTextProperties->getPropertyValue(u"ReferencePageSize"_ustr) >>= aOldRefSize )
             {
-                // adapt font size according to page size
-                awt::Size aOldRefSize;
-                if( xTextProperties->getPropertyValue(u"ReferencePageSize"_ustr) >>= aOldRefSize )
-                {
-                    RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
-                }
+                RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
             }
         }
 
