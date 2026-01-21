@@ -428,6 +428,11 @@
                     <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="preview-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="swpossizepage|previewframe">Preview</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
