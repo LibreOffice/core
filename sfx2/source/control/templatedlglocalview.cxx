@@ -13,6 +13,7 @@
 #include <inputdlg.hxx>
 #include <templateviewitem.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/uiobject.hxx>
 #include <templatecontaineritem.hxx>
 #include <sfx2/strings.hrc>
 #include <vcl/commandevent.hxx>
@@ -426,4 +427,10 @@ IMPL_LINK(TemplateDlgLocalView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
     }
     return false;
 }
+
+FactoryFunction TemplateDlgLocalView::GetUITestFactory() const
+{
+    return TemplateDlgLocalViewUIObject::create;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
