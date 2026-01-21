@@ -851,152 +851,112 @@ void QtFrame::SetInputContext(SalInputContext* pContext)
 
 void QtFrame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/) { m_pQWidget->endExtTextInput(); }
 
+int QtFrame::toQtKeyCode(sal_uInt16 nVclCode)
+{
+    if (nVclCode >= KEY_0 && nVclCode <= KEY_9)
+        return (nVclCode - KEY_0) + Qt::Key_0;
+    if (nVclCode >= KEY_A && nVclCode <= KEY_Z)
+        return (nVclCode - KEY_A) + Qt::Key_A;
+    if (nVclCode >= KEY_F1 && nVclCode <= KEY_F26)
+        return (nVclCode - KEY_F1) + Qt::Key_F1;
+
+    switch (nVclCode)
+    {
+        case KEY_DOWN:
+            return Qt::Key_Down;
+        case KEY_UP:
+            return Qt::Key_Up;
+        case KEY_LEFT:
+            return Qt::Key_Left;
+        case KEY_RIGHT:
+            return Qt::Key_Right;
+        case KEY_HOME:
+            return Qt::Key_Home;
+        case KEY_END:
+            return Qt::Key_End;
+        case KEY_PAGEUP:
+            return Qt::Key_PageUp;
+        case KEY_PAGEDOWN:
+            return Qt::Key_PageDown;
+        case KEY_RETURN:
+            return Qt::Key_Return;
+        case KEY_ESCAPE:
+            return Qt::Key_Escape;
+        case KEY_TAB:
+            return Qt::Key_Tab;
+        case KEY_BACKSPACE:
+            return Qt::Key_Backspace;
+        case KEY_SPACE:
+            return Qt::Key_Space;
+        case KEY_INSERT:
+            return Qt::Key_Insert;
+        case KEY_DELETE:
+            return Qt::Key_Delete;
+        case KEY_ADD:
+            return Qt::Key_Plus;
+        case KEY_SUBTRACT:
+            return Qt::Key_Minus;
+        case KEY_MULTIPLY:
+            return Qt::Key_Asterisk;
+        case KEY_DIVIDE:
+            return Qt::Key_Slash;
+        case KEY_POINT:
+            return Qt::Key_Period;
+        case KEY_COMMA:
+            return Qt::Key_Comma;
+        case KEY_LESS:
+            return Qt::Key_Less;
+        case KEY_GREATER:
+            return Qt::Key_Greater;
+        case KEY_EQUAL:
+            return Qt::Key_Equal;
+        case KEY_FIND:
+            return Qt::Key_Find;
+        case KEY_CONTEXTMENU:
+            return Qt::Key_Menu;
+        case KEY_HELP:
+            return Qt::Key_Help;
+        case KEY_UNDO:
+            return Qt::Key_Undo;
+        case KEY_REPEAT:
+            return Qt::Key_Redo;
+        case KEY_TILDE:
+            return Qt::Key_AsciiTilde;
+        case KEY_QUOTELEFT:
+            return Qt::Key_QuoteLeft;
+        case KEY_BRACKETLEFT:
+            return Qt::Key_BracketLeft;
+        case KEY_BRACKETRIGHT:
+            return Qt::Key_BracketRight;
+        case KEY_NUMBERSIGN:
+            return Qt::Key_NumberSign;
+        case KEY_XF86FORWARD:
+            return Qt::Key_Forward;
+        case KEY_XF86BACK:
+            return Qt::Key_Back;
+        case KEY_COLON:
+            return Qt::Key_Colon;
+        case KEY_SEMICOLON:
+            return Qt::Key_Semicolon;
+
+        // Special cases
+        case KEY_COPY:
+            return Qt::Key_Copy;
+        case KEY_CUT:
+            return Qt::Key_Cut;
+        case KEY_PASTE:
+            return Qt::Key_Paste;
+        case KEY_OPEN:
+            return Qt::Key_Open;
+    }
+
+    return 0;
+}
+
 OUString QtFrame::GetKeyName(sal_uInt16 nKeyCode)
 {
     vcl::KeyCode vclKeyCode(nKeyCode);
-    int nCode = vclKeyCode.GetCode();
-    int nRetCode = 0;
-
-    if (nCode >= KEY_0 && nCode <= KEY_9)
-        nRetCode = (nCode - KEY_0) + Qt::Key_0;
-    else if (nCode >= KEY_A && nCode <= KEY_Z)
-        nRetCode = (nCode - KEY_A) + Qt::Key_A;
-    else if (nCode >= KEY_F1 && nCode <= KEY_F26)
-        nRetCode = (nCode - KEY_F1) + Qt::Key_F1;
-    else
-    {
-        switch (nCode)
-        {
-            case KEY_DOWN:
-                nRetCode = Qt::Key_Down;
-                break;
-            case KEY_UP:
-                nRetCode = Qt::Key_Up;
-                break;
-            case KEY_LEFT:
-                nRetCode = Qt::Key_Left;
-                break;
-            case KEY_RIGHT:
-                nRetCode = Qt::Key_Right;
-                break;
-            case KEY_HOME:
-                nRetCode = Qt::Key_Home;
-                break;
-            case KEY_END:
-                nRetCode = Qt::Key_End;
-                break;
-            case KEY_PAGEUP:
-                nRetCode = Qt::Key_PageUp;
-                break;
-            case KEY_PAGEDOWN:
-                nRetCode = Qt::Key_PageDown;
-                break;
-            case KEY_RETURN:
-                nRetCode = Qt::Key_Return;
-                break;
-            case KEY_ESCAPE:
-                nRetCode = Qt::Key_Escape;
-                break;
-            case KEY_TAB:
-                nRetCode = Qt::Key_Tab;
-                break;
-            case KEY_BACKSPACE:
-                nRetCode = Qt::Key_Backspace;
-                break;
-            case KEY_SPACE:
-                nRetCode = Qt::Key_Space;
-                break;
-            case KEY_INSERT:
-                nRetCode = Qt::Key_Insert;
-                break;
-            case KEY_DELETE:
-                nRetCode = Qt::Key_Delete;
-                break;
-            case KEY_ADD:
-                nRetCode = Qt::Key_Plus;
-                break;
-            case KEY_SUBTRACT:
-                nRetCode = Qt::Key_Minus;
-                break;
-            case KEY_MULTIPLY:
-                nRetCode = Qt::Key_Asterisk;
-                break;
-            case KEY_DIVIDE:
-                nRetCode = Qt::Key_Slash;
-                break;
-            case KEY_POINT:
-                nRetCode = Qt::Key_Period;
-                break;
-            case KEY_COMMA:
-                nRetCode = Qt::Key_Comma;
-                break;
-            case KEY_LESS:
-                nRetCode = Qt::Key_Less;
-                break;
-            case KEY_GREATER:
-                nRetCode = Qt::Key_Greater;
-                break;
-            case KEY_EQUAL:
-                nRetCode = Qt::Key_Equal;
-                break;
-            case KEY_FIND:
-                nRetCode = Qt::Key_Find;
-                break;
-            case KEY_CONTEXTMENU:
-                nRetCode = Qt::Key_Menu;
-                break;
-            case KEY_HELP:
-                nRetCode = Qt::Key_Help;
-                break;
-            case KEY_UNDO:
-                nRetCode = Qt::Key_Undo;
-                break;
-            case KEY_REPEAT:
-                nRetCode = Qt::Key_Redo;
-                break;
-            case KEY_TILDE:
-                nRetCode = Qt::Key_AsciiTilde;
-                break;
-            case KEY_QUOTELEFT:
-                nRetCode = Qt::Key_QuoteLeft;
-                break;
-            case KEY_BRACKETLEFT:
-                nRetCode = Qt::Key_BracketLeft;
-                break;
-            case KEY_BRACKETRIGHT:
-                nRetCode = Qt::Key_BracketRight;
-                break;
-            case KEY_NUMBERSIGN:
-                nRetCode = Qt::Key_NumberSign;
-                break;
-            case KEY_XF86FORWARD:
-                nRetCode = Qt::Key_Forward;
-                break;
-            case KEY_XF86BACK:
-                nRetCode = Qt::Key_Back;
-                break;
-            case KEY_COLON:
-                nRetCode = Qt::Key_Colon;
-                break;
-            case KEY_SEMICOLON:
-                nRetCode = Qt::Key_Semicolon;
-                break;
-
-            // Special cases
-            case KEY_COPY:
-                nRetCode = Qt::Key_Copy;
-                break;
-            case KEY_CUT:
-                nRetCode = Qt::Key_Cut;
-                break;
-            case KEY_PASTE:
-                nRetCode = Qt::Key_Paste;
-                break;
-            case KEY_OPEN:
-                nRetCode = Qt::Key_Open;
-                break;
-        }
-    }
+    int nRetCode = toQtKeyCode(vclKeyCode.GetCode());
 
     if (vclKeyCode.IsShift())
         nRetCode += Qt::SHIFT;
