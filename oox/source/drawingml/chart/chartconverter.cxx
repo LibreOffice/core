@@ -123,7 +123,6 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         {
             // create a single-row array from constant source data
             // (multiple levels in the case of complex categories)
-            assert( rDataSeq.mnPointCount > 0);
             std::vector<Any> aRow(rDataSeq.mnLevelCount * rDataSeq.mnPointCount);
             for (auto const& elem : rDataSeq.maData)
                 aRow.at(elem.first) = elem.second;

@@ -24,7 +24,6 @@
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <drawingml/chart/plotareacontext.hxx>
 #include <drawingml/chart/titlecontext.hxx>
-#include <drawingml/chart/datasourcecontext.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -143,7 +142,8 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
         case CX_TOKEN(chartSpace) :
             switch (nElement) {
                 case CX_TOKEN(chartData):
-                    return new DataSourceCxContext(*this, mrModel.maCxData.create());
+                    // TODO
+                    return nullptr;
                 case CX_TOKEN(chart):
                     return this;
                 case CX_TOKEN(spPr):

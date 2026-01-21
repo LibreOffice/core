@@ -39,7 +39,6 @@ struct ChartSpaceModel
     typedef ModelRef< View3DModel >     View3DRef;
     typedef ModelRef< TitleModel >      TitleRef;
     typedef ModelRef< LegendModel >     LegendRef;
-    typedef ModelRef< DataSourceCxModel > DataSourceRef;
 
     ShapeRef            mxShapeProp;        /// Chart frame formatting.
     TextBodyRef         mxTextProp;         /// Global chart text formatting.
@@ -60,7 +59,6 @@ struct ChartSpaceModel
     bool                mbPlotVisOnly;      /// True = plot visible cells in a sheet only.
     bool                mbShowLabelsOverMax;/// True = show labels over chart maximum.
     bool                mbPivotChart;       /// True = pivot chart.
-    DataSourceRef       maCxData;           /// Data for Chartex.
 
     explicit            ChartSpaceModel(bool bMSO2007Doc);
                         ~ChartSpaceModel();

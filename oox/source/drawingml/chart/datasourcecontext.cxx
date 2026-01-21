@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <oox/drawingml/chart/datasourcemodel.hxx>
-
-#include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/datasourcecontext.hxx>
+
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -82,23 +81,6 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
                     return this;
             }
         break;
-        case CX_TOKEN(numDim) :
-            switch (nElement) {
-                case CX_TOKEN(f):
-                    return this;
-                case CX_TOKEN(lvl):
-                    mrModel.mnPointCount = rAttribs.getInteger(XML_ptCount, -1);
-                    mrModel.maFormatCode = rAttribs.getString(XML_formatCode, "");
-                    return this;
-            }
-            break;
-        case CX_TOKEN(lvl) :
-            switch(nElement) {
-                case CX_TOKEN(pt):
-                    mnPtIndex = rAttribs.getInteger(XML_idx, -1);
-                    return this;
-            }
-            break;
     }
     return nullptr;
 }
@@ -108,14 +90,12 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
     switch( getCurrentElement() )
     {
         case C_TOKEN( f ):
-        case CX_TOKEN( f ):
             mrModel.maFormula = rChars;
         break;
         case C_TOKEN( formatCode ):
             mrModel.maFormatCode = rChars;
         break;
         case C_TOKEN( v ):
-        case CX_TOKEN(pt):
             if( mnPtIndex >= 0 )
             {
                 /* Import categories as String even though it could
@@ -264,11 +244,9 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
             break;
 
         case C_TOKEN( lvl ):
-        case CX_TOKEN( lvl ):
             switch (nElement)
             {
                 case C_TOKEN(pt):
-                case CX_TOKEN(pt):
                     mnPtIndex = rAttribs.getInteger(XML_idx, -1);
                     return this;
             }
@@ -281,14 +259,6 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
                     return this;
             }
         break;
-        case CX_TOKEN(strDim) :
-            switch (nElement) {
-                case CX_TOKEN(f):
-                    return this;
-                case CX_TOKEN(lvl):
-                    mrModel.mnPointCount = rAttribs.getInteger(XML_ptCount, -1);
-                    return this;
-            }
     }
     return nullptr;
 }
@@ -305,11 +275,8 @@ void StringSequenceContext::onCharacters( const OUString& rChars )
                 mrModel.maFormula = rChars;
         break;
         case C_TOKEN( v ):
-        case CX_TOKEN(pt):
-            if( mnPtIndex >= 0 ) {
-                assert(mrModel.mnPointCount > 0);
+            if( mnPtIndex >= 0 )
                 mrModel.maData[ (mrModel.mnLevelCount-1) * mrModel.mnPointCount + mnPtIndex ] <<= rChars;
-            }
         break;
     }
 }
@@ -323,8 +290,7 @@ DataSourceContext::~DataSourceContext()
 {
 }
 
-ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const
-        AttributeList&)
+ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -360,74 +326,6 @@ ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const
                     return new DoubleSequenceContext( *this, mrModel.mxDataSeq.create() );
             }
         break;
-    }
-    return nullptr;
-}
-
-// =====
-// DataSourceCxContext: handler for chartex data sources
-// =====
-DataSourceCxContext::DataSourceCxContext( ContextHandler2Helper& rParent,
-        DataSourceCxModel& rModel ) :
-    ContextBase< DataSourceCxModel >( rParent, rModel ),
-    paCurSource(nullptr)
-{
-}
-
-DataSourceCxContext::~DataSourceCxContext()
-{
-}
-
-ContextHandlerRef DataSourceCxContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
-{
-    switch( getCurrentElement() )
-    {
-        case CX_TOKEN(chartData) :
-            switch (nElement) {
-                case CX_TOKEN(externalData) :
-                    return nullptr; // TODO
-                case CX_TOKEN(data) :
-                    paCurSource = &mrModel.maSourceMap.create(rAttribs.getInteger(XML_id, -1));
-                    return this;
-            }
-            break;
-        case CX_TOKEN(data) :
-            switch (nElement) {
-                case CX_TOKEN(numDim) :
-                {
-                    assert(paCurSource);
-                    OUString sType = rAttribs.getString(XML_type, "val");
-                    if (sType == "cat") {
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::CATEGORIES);
-                        return new DoubleSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    } else {
-                        // default is VALUES
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::VALUES);
-                        return new DoubleSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    }
-                    break;
-                }
-
-                case CX_TOKEN(strDim) :
-                {
-                    assert(paCurSource);
-                    OUString sType = rAttribs.getString(XML_type, "cat");
-                    if (sType == "val") {
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::VALUES);
-                        return new StringSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    } else {
-                        // default is CATEGORIES
-                        DataSourceModel& rDataModel = paCurSource->create(DataSourceType::CATEGORIES);
-                        return new StringSequenceContext(*this,
-                                rDataModel.mxDataSeq.create());
-                    }
-                }
-            }
-            break;
-
     }
     return nullptr;
 }

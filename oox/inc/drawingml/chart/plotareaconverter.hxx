@@ -21,8 +21,6 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_PLOTAREACONVERTER_HXX
 
 #include <drawingml/chart/converterbase.hxx>
-#include <drawingml/chart/seriesmodel.hxx>
-#include <oox/drawingml/chart/datasourcemodel.hxx>
 
 namespace com::sun::star {
     namespace chart2 { class XDiagram; }
@@ -70,8 +68,7 @@ public:
     virtual             ~PlotAreaConverter() override;
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
-    void                convertFromModel( View3DModel& rView3DModel,
-            DataSourceCxModel& raDataMap );
+    void                convertFromModel( View3DModel& rView3DModel );
     /** Converts the manual plot area position and size, if set. */
     void                convertPositionFromModel();
 
