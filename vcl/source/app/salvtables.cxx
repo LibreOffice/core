@@ -3313,6 +3313,10 @@ void SalInstanceTextWidget::connect_cursor_position(const Link<TextWidget&, void
     weld::TextWidget::connect_cursor_position(rLink);
 }
 
+void SalInstanceTextWidget::do_set_text(const OUString& rText) { m_pEntry->SetText(rText); }
+
+OUString SalInstanceTextWidget::get_text() const { return m_pEntry->GetText(); }
+
 void SalInstanceTextWidget::do_set_position(int nCursorPos)
 {
     m_pEntry->SetSelection(Selection(nCursorPos, nCursorPos));
@@ -3329,10 +3333,6 @@ SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, b
     m_xEntry->SetActivateHdl(LINK(this, SalInstanceEntry, ActivateHdl));
     m_xEntry->SetTextFilter(&m_aTextFilter);
 }
-
-void SalInstanceEntry::do_set_text(const OUString& rText) { m_xEntry->SetText(rText); }
-
-OUString SalInstanceEntry::get_text() const { return m_xEntry->GetText(); }
 
 void SalInstanceEntry::set_width_chars(int nChars) { m_xEntry->SetWidthInChars(nChars); }
 
@@ -5622,14 +5622,10 @@ SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanc
     rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
 }
 
-void SalInstanceTextView::do_set_text(const OUString& rText) { m_xTextView->SetText(rText); }
-
 void SalInstanceTextView::do_replace_selection(const OUString& rText)
 {
     m_xTextView->ReplaceSelected(rText);
 }
-
-OUString SalInstanceTextView::get_text() const { return m_xTextView->GetText(); }
 
 bool SalInstanceTextView::get_selection_bounds(int& rStartPos, int& rEndPos)
 {

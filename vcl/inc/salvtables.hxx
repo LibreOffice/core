@@ -617,9 +617,12 @@ public:
 
     virtual void connect_cursor_position(const Link<TextWidget&, void>& rLink) override;
 
+    virtual OUString get_text() const override;
+
     virtual int get_position() const override;
 
 protected:
+    virtual void do_set_text(const OUString& rText) override;
     virtual void do_set_position(int nCursorPos) override;
 };
 
@@ -635,10 +638,6 @@ private:
 
 public:
     SalInstanceEntry(::Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
-
-    virtual void do_set_text(const OUString& rText) override;
-
-    virtual OUString get_text() const override;
 
     virtual void set_width_chars(int nChars) override;
 
@@ -1437,11 +1436,7 @@ public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
 
-    virtual void do_set_text(const OUString& rText) override;
-
     virtual void do_replace_selection(const OUString& rText) override;
-
-    virtual OUString get_text() const override;
 
     bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
