@@ -112,7 +112,7 @@ public:
 
     SvLockBytes() : m_bSync(false) {}
 
-    virtual ~SvLockBytes() override { close(); }
+    virtual ~SvLockBytes() override;
 
     void            SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
     bool            IsSynchronMode() const { return m_bSync; }
