@@ -155,6 +155,8 @@ void SvStream::writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize)
 }
 
 
+SvLockBytes::~SvLockBytes() { close(); }
+
 void SvLockBytes::close()
 {
     (void)this;
