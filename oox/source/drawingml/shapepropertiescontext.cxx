@@ -38,10 +38,9 @@ using namespace ::com::sun::star::drawing;
 namespace oox::drawingml {
 
 // CT_ShapeProperties
-ShapePropertiesContext::ShapePropertiesContext( ContextHandler2Helper const & rParent, Shape& rShape, bool bForChart )
+ShapePropertiesContext::ShapePropertiesContext( ContextHandler2Helper const & rParent, Shape& rShape )
 : ContextHandler2( rParent )
 , mrShape( rShape )
-, mbForChart(bForChart)
 {
 }
 
@@ -77,7 +76,7 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
 
     // CT_LineProperties
     case A_TOKEN( ln ):
-        return new LinePropertiesContext( *this, rAttribs, mrShape.getLineProperties(), nullptr, mbForChart );
+        return new LinePropertiesContext( *this, rAttribs, mrShape.getLineProperties() );
 
     // EffectPropertiesGroup
     // todo not supported by core

@@ -33,8 +33,7 @@ class LinePropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
     LinePropertiesContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes,
-            LineProperties& rLineProperties, model::LineStyle* pLineStyle = nullptr,
-            bool bForChart = false) noexcept;
+            LineProperties& rLineProperties, model::LineStyle* pLineStyle = nullptr) noexcept;
     virtual ~LinePropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef
