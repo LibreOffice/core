@@ -98,7 +98,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xLbFormat;
     std::unique_ptr<weld::Frame> m_xFrameLocale;
     std::unique_ptr<weld::CheckButton> m_xCbSourceFormat;
-    std::unique_ptr<weld::Label> m_xFtOptions;
+    std::unique_ptr<weld::Frame> m_xOptionsFrame;
     std::unique_ptr<weld::Label> m_xFtDecimals;
     std::unique_ptr<weld::SpinButton> m_xEdDecimals;
     std::unique_ptr<weld::Label> m_xFtDenominator;

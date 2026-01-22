@@ -203,7 +203,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
     , m_xFrameLocale(m_xBuilder->weld_frame(u"localeframe"_ustr))
     , m_xCbSourceFormat(m_xBuilder->weld_check_button(u"sourceformat"_ustr))
-    , m_xFtOptions(m_xBuilder->weld_label(u"optionsft"_ustr))
+    , m_xOptionsFrame(m_xBuilder->weld_frame(u"options"_ustr))
     , m_xFtDecimals(m_xBuilder->weld_label(u"decimalsft"_ustr))
     , m_xEdDecimals(m_xBuilder->weld_spin_button(u"decimalsed"_ustr))
     , m_xFtDenominator(m_xBuilder->weld_label(u"denominatorft"_ustr))
@@ -543,6 +543,7 @@ void SvxNumberFormatTabPage::Obstructing()
     m_xIbRemove->set_sensitive(false );
     m_xIbInfo->set_sensitive(false );
 
+    m_xOptionsFrame->set_sensitive(false);
     m_xBtnNegRed->set_sensitive(false);
     m_xBtnThousand->set_sensitive(false);
     m_xBtnEngineering->set_sensitive(false);
@@ -552,7 +553,6 @@ void SvxNumberFormatTabPage::Obstructing()
     m_xEdLeadZeroes->set_sensitive(false);
     m_xEdDecimals->set_sensitive(false);
     m_xEdDenominator->set_sensitive(false);
-    m_xFtOptions->set_sensitive(false);
     m_xEdDecimals->set_text( OUString() );
     m_xEdLeadZeroes->set_text( OUString() );
     m_xBtnNegRed->set_active( false );
@@ -584,6 +584,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_xLbCurrency->set_sensitive( bEnable );
     m_xLbFormat->set_sensitive( bEnable );
     m_xFrameLocale->set_sensitive(bEnable);
+    m_xOptionsFrame->set_sensitive(bEnable);
     m_xFtDecimals->set_sensitive( bEnable );
     m_xEdDecimals->set_sensitive( bEnable );
     m_xFtDenominator->set_sensitive( bEnable );
@@ -592,8 +593,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_xEdLeadZeroes->set_sensitive( bEnable );
     m_xBtnNegRed->set_sensitive( bEnable );
     m_xBtnThousand->set_sensitive( bEnable );
-    m_xBtnEngineering->set_sensitive( bEnable );
-    m_xFtOptions->set_sensitive( bEnable );
+    m_xBtnEngineering->set_sensitive(bEnable);
     m_xFormatCodeFrame->set_sensitive( bEnable );
 }
 
@@ -884,7 +884,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_CURRENCY:
         case CAT_FRACTION:
         case CAT_TIME:
-            m_xFtOptions->set_sensitive(true);
+            m_xOptionsFrame->set_sensitive(true);
             if ( nCategory == CAT_FRACTION )
             {
                 m_xFtDenominator->set_sensitive(true);
@@ -922,7 +922,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_DATE:
         case CAT_BOOLEAN:
         default:
-            m_xFtOptions->set_sensitive(false);
+            m_xOptionsFrame->set_sensitive(false);
             m_xFtDecimals->set_sensitive(false);
             m_xEdDecimals->set_sensitive(false);
             m_xFtDenominator->set_sensitive(false);
