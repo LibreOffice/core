@@ -201,7 +201,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xFtFormat(m_xBuilder->weld_label(u"formatft"_ustr))
     , m_xLbCurrency(m_xBuilder->weld_combo_box(u"currencylb"_ustr))
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
-    , m_xFtLocale(m_xBuilder->weld_label(u"localeft"_ustr))
+    , m_xFrameLocale(m_xBuilder->weld_frame(u"localeframe"_ustr))
     , m_xCbSourceFormat(m_xBuilder->weld_check_button(u"sourceformat"_ustr))
     , m_xFtOptions(m_xBuilder->weld_label(u"optionsft"_ustr))
     , m_xFtDecimals(m_xBuilder->weld_label(u"decimalsft"_ustr))
@@ -537,8 +537,7 @@ void SvxNumberFormatTabPage::Obstructing()
 {
     m_xLbFormat->unselect_all();
     m_xLbLocale->set_active(-1);
-    m_xFtLocale->set_sensitive(false);
-    m_xLbLocale->set_sensitive(false);
+    m_xFrameLocale->set_sensitive(false);
 
     m_xIbAdd->set_sensitive(false );
     m_xIbRemove->set_sensitive(false );
@@ -584,8 +583,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_xFtFormat->set_sensitive( bEnable );
     m_xLbCurrency->set_sensitive( bEnable );
     m_xLbFormat->set_sensitive( bEnable );
-    m_xFtLocale->set_sensitive( bEnable );
-    m_xLbLocale->set_sensitive( bEnable );
+    m_xFrameLocale->set_sensitive(bEnable);
     m_xFtDecimals->set_sensitive( bEnable );
     m_xEdDecimals->set_sensitive( bEnable );
     m_xFtDenominator->set_sensitive( bEnable );
@@ -601,10 +599,9 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 
 void SvxNumberFormatTabPage::EnableLocaleUi()
 {
-    if (!m_xFtLocale->get_sensitive())
+    if (!m_xFrameLocale->get_sensitive())
     {
-        m_xFtLocale->set_sensitive(true);
-        m_xLbLocale->set_sensitive(true);
+        m_xFrameLocale->set_sensitive(true);
         m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage());
     }
 }
@@ -622,8 +619,7 @@ void SvxNumberFormatTabPage::EnableLocaleUi()
 
 void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 {
-    m_xFtLocale->set_visible(!bFlag);
-    m_xLbLocale->set_visible(!bFlag);
+    m_xFrameLocale->set_visible(!bFlag);
 }
 
 /*************************************************************************
@@ -641,7 +637,7 @@ void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 
 bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    bool bDataChanged   = m_xFtLocale->get_sensitive() || m_xCbSourceFormat->get_sensitive();
+    bool bDataChanged = m_xFrameLocale->get_sensitive() || m_xCbSourceFormat->get_sensitive();
     if ( bDataChanged )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
