@@ -348,7 +348,7 @@ void PresenterHelpView::ReadHelpStrings()
     for (const auto& pair: HelpStrings)
         mpTextContainer->push_back(
         std::make_shared<Block>(
-            SdResId(pair.first), SdResId(pair.second), mpFont->mxFont, mnMaximalWidth));
+            SdResId(pair.first), SdResId(pair.second), mpFont ? mpFont->mxFont : nullptr, mnMaximalWidth));
 }
 
 void PresenterHelpView::CheckFontSize()
