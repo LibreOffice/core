@@ -787,8 +787,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     if (bIsChartex) {
         // Do the AlternateContent header
-        mpFS->startElementNS(XML_mc, XML_AlternateContent, FSNS(XML_xmlns, XML_mc),
-                "http://schemas.openxmlformats.org/markup-compatibility/2006");
+        mpFS->startElementNS(XML_mc, XML_AlternateContent);
         mpFS->startElementNS(XML_mc, XML_Choice,
                 FSNS(XML_xmlns, XML_cx2), "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex",
                 XML_Requires, "cx2");
@@ -894,29 +893,21 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
                             .appendAscii(sChartFnamePrefix)
                             .append(OUString::number(nChartCount) + ".xml" )
                             .makeStringAndClear();
-
-    const OUString sAppURL = bIsChartex?
-        u"application/vnd.ms-office.chartex+xml"_ustr :
-        u"application/vnd.openxmlformats-officedocument.drawingml.chart+xml"_ustr;
-
-    const Relationship eChartRel = bIsChartex ?
-        Relationship::CHARTEX :
-        Relationship::CHART;
-
     FSHelperPtr pChart = CreateOutputStream(
             sFullStream,
             sRelativeStream,
             pFS->getOutputStream(),
-            sAppURL,
-            oox::getRelationship(eChartRel),
+            u"application/vnd.openxmlformats-officedocument.drawingml.chart+xml"_ustr,
+            oox::getRelationship(Relationship::CHART),
             &sId );
 
     XmlFilterBase* pFB = GetFB();
 
     if (bIsChartex) {
-        // Use chartex namespace
+        // There's no dmlChartex namespace, but using that to avoid hard-coding
+        // the URL here
         pFS->singleElement(  FSNS( XML_cx, XML_chart ),
-                FSNS(XML_xmlns, XML_cx), pFB->getNamespaceURL(OOX_NS(cx)),
+                FSNS(XML_xmlns, XML_cx), pFB->getNamespaceURL(OOX_NS(dmlChartex)),
                 FSNS(XML_xmlns, XML_r), pFB->getNamespaceURL(OOX_NS(officeRel)),
                 FSNS(XML_r, XML_id), sId );
     } else {
@@ -934,6 +925,8 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
         // Do the AlternateContent fallback path
         pFS->endElementNS(XML_mc, XML_Choice);
         pFS->startElementNS(XML_mc, XML_Fallback);
+        // TODO: export bitmap shape as fallback
+
         pFS->startElementNS(XML_xdr, XML_sp, XML_macro, "", XML_textlink, "");
         pFS->startElementNS(XML_xdr, XML_nvSpPr);
         pFS->singleElementNS(XML_xdr, XML_cNvPr, XML_id, "0", XML_name, "");
@@ -1055,17 +1048,10 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
 
     const sal_Int32 nChartNS = bIsChartex ? XML_cx : XML_c;
 
-    if (bIsChartex) {
-        pFS->startElement( FSNS( nChartNS, XML_chartSpace ),
-                FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
-                FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)),
-                FSNS( XML_xmlns, XML_cx ), pFB->getNamespaceURL(OOX_NS(cx)));
-    } else {
-        pFS->startElement( FSNS( nChartNS, XML_chartSpace ),
-                FSNS( XML_xmlns, XML_c ), pFB->getNamespaceURL(OOX_NS(dmlChart)),
-                FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
-                FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)));
-    }
+    pFS->startElement( FSNS( nChartNS, XML_chartSpace ),
+            FSNS( XML_xmlns, nChartNS ), pFB->getNamespaceURL(OOX_NS(dmlChart)),
+            FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+            FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)));
 
     if( !bIncludeTable )
     {
@@ -1080,10 +1066,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     if (bIsChartex) {
         // chartData
         pFS->startElement(FSNS(XML_cx, XML_chartData));
-
         exportExternalData(xChartDoc, true);
-        exportData(xChartDoc, true);
-
         pFS->endElement(FSNS(XML_cx, XML_chartData));
     } else {
         pFS->singleElement(FSNS(XML_c, XML_lang), XML_val, "en-US");
@@ -1114,25 +1097,6 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     }
 
     pFS->endElement( FSNS( nChartNS, XML_chartSpace ) );
-}
-
-void ChartExport::exportData( [[maybe_unused]] const Reference< css::chart::XChartDocument >& xChartDoc,
-        bool bIsChartex)
-{
-    if (bIsChartex) {
-        FSHelperPtr pFS = GetFS();
-
-        pFS->startElement(FSNS(XML_cx, XML_data), XML_id, "0");
-        // Just hard-coding this for now
-        pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
-        pFS->startElement(FSNS(XML_cx, XML_f));
-        pFS->writeEscaped("_xlchart.v2.0");    // I have no idea what this
-                                                // means or what it should be in
-                                                // general
-        pFS->endElement(FSNS(XML_cx, XML_f));
-        pFS->endElement(FSNS(XML_cx, XML_numDim));
-        pFS->endElement(FSNS(XML_cx, XML_data));
-    }
 }
 
 void ChartExport::exportExternalData( const Reference< css::chart::XChartDocument >& xChartDoc,
@@ -1334,6 +1298,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     pFS->startElement(FSNS(nChartNS, XML_chart));
 
     // titles
+    const char * const sTitleDelVal = "1";
     if( bHasMainTitle )
     {
         exportTitle( xChartDoc->getTitle(), bIsChartex, xFormattedSubTitle);
@@ -1349,7 +1314,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         }
     }
     else if (!bIsChartex) {
-        pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "1");
+        pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, sTitleDelVal);
     }
 
     InitPlotArea( );
@@ -1686,20 +1651,12 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         pFS->endElement(FSNS(XML_cx, XML_v));
         pFS->endElement(FSNS(XML_cx, XML_txData));
         pFS->endElement(FSNS(XML_cx, XML_tx));
+
+        pFS->startElement(FSNS(XML_cx, XML_txPr));
     } else {
         pFS->startElement(FSNS(XML_c, XML_title));
         pFS->startElement(FSNS(XML_c, XML_tx));
         pFS->startElement(FSNS(XML_c, XML_rich));
-    }
-
-    if (bIsChartex) {
-        // shape properties
-        if( xPropSet.is() )
-        {
-            exportShapeProps( xPropSet, bIsChartex );
-        }
-
-        pFS->startElement(FSNS(XML_cx, XML_txPr));
     }
 
     // TODO: bodyPr
@@ -1825,12 +1782,10 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
         pFS->singleElement(FSNS(XML_c, XML_overlay), XML_val, "0");
     }
 
-    if (!bIsChartex) {
-        // shape properties
-        if( xPropSet.is() )
-        {
-            exportShapeProps( xPropSet, bIsChartex );
-        }
+    // shape properties
+    if( xPropSet.is() )
+    {
+        exportShapeProps( xPropSet, bIsChartex );
     }
 
     if (bIsChartex) {
@@ -2065,11 +2020,6 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
 
         }
     }
-
-    if (bIsChartex) {
-        pFS->endElement( FSNS( XML_cx, XML_plotAreaRegion ) );
-    }
-
     //Axis Data
     exportAxes( bIsChartex );
 
@@ -2108,6 +2058,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
     }
 
     if (bIsChartex) {
+        pFS->endElement( FSNS( XML_cx, XML_plotAreaRegion ) );
         pFS->endElement( FSNS( XML_cx, XML_plotArea ) );
     } else {
         pFS->endElement( FSNS( XML_c, XML_plotArea ) );
