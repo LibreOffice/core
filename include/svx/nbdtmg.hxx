@@ -29,7 +29,7 @@ class SfxItemSet;
 namespace svx::sidebar {
 
 #define DEFAULT_BULLET_TYPES                            8
-#define DEFAULT_NUM_VALUSET_COUNT                       8
+#define DEFAULT_NUM_VALUESET_COUNT                      8
 #define DEFAULT_NUMBERING_CACHE_FORMAT_VERSION          0x10
 
 enum class NBOType
@@ -201,8 +201,8 @@ class OutlineTypeMgr final : public NBOTypeMgrBase
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static OutlineTypeMgr& GetInstance();
     private:
-        OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
-        OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
+        OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUESET_COUNT];
+        OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUESET_COUNT];
 };
 }
 #endif

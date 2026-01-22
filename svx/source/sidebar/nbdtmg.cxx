@@ -179,7 +179,7 @@ void NBOTypeMgrBase::ImplLoad(std::u16string_view filename)
         if (nVersion==DEFAULT_NUMBERING_CACHE_FORMAT_VERSION) //first version
         {
             xIStm->ReadInt32( nNumIndex );
-            while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUSET_COUNT) {
+            while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUESET_COUNT) {
                 SvxNumRule aNum(*xIStm);
                 //bullet color in font properties is not stored correctly. Need set transparency bits manually
                 for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
@@ -215,7 +215,7 @@ void NBOTypeMgrBase::ImplStore(std::u16string_view filename)
         sal_Int32                       nNumIndex;
         nVersion = DEFAULT_NUMBERING_CACHE_FORMAT_VERSION;
         xOStm->WriteUInt32( nVersion );
-        for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ ) {
+        for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUESET_COUNT; nItem++ ) {
             if (IsCustomized(nItem)) {
                 SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR,
                     10, false,
@@ -571,7 +571,7 @@ bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 OutlineTypeMgr::OutlineTypeMgr()
 {
     Init();
-    for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
+    for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUESET_COUNT; nItem++ )
     {
         pDefaultOutlineSettingsArrs[nItem] = pOutlineSettingsArrs[nItem];
     }
@@ -601,7 +601,7 @@ void OutlineTypeMgr::Init()
             10, false,
             SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
 
-        auto nSize = std::min<sal_Int32>(aOutlineAccess.getLength(), DEFAULT_NUM_VALUSET_COUNT);
+        auto nSize = std::min<sal_Int32>(aOutlineAccess.getLength(), DEFAULT_NUM_VALUESET_COUNT);
         for(sal_Int32 nItem = 0; nItem < nSize; nItem++ )
         {
             pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
@@ -780,8 +780,8 @@ void OutlineTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
 
 void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 /*mLevel*/, bool isDefault, bool isResetSize)
 {
-    DBG_ASSERT(DEFAULT_NUM_VALUSET_COUNT > nIndex, "wrong index");
-    if(DEFAULT_NUM_VALUSET_COUNT <= nIndex)
+    DBG_ASSERT(DEFAULT_NUM_VALUESET_COUNT > nIndex, "wrong index");
+    if(DEFAULT_NUM_VALUESET_COUNT <= nIndex)
         return;
 
     const FontList* pList = nullptr;
