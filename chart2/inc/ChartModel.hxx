@@ -71,8 +71,6 @@ namespace com::sun::star::uno { class XAggregation; }
 class SvNumberFormatter;
 class SvNumberFormatsSupplierObj;
 
-class UnoChartStyle;
-
 namespace model { class Theme; }
 
 namespace chart
@@ -184,9 +182,6 @@ private:
 
     ChartColorPaletteType m_eColorPaletteType;
     sal_uInt32 m_nColorPaletteIndex;
-
-
-    rtl::Reference<UnoChartStyle> m_aStyles;
 
     ChartGradientVariation m_eGradientPaletteVariation;
     ChartGradientType m_nGradientPaletteType;
@@ -385,7 +380,6 @@ public:
         setChartTypeManager( const css::uno::Reference< css::chart2::XChartTypeManager >& xNewManager ) override;
     virtual css::uno::Reference< css::chart2::XChartTypeManager > SAL_CALL
         getChartTypeManager() override;
-    virtual css::uno::Reference< css::chart2::XChartStyle> SAL_CALL getStyles() override;
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
         getPageBackground() override;
 

@@ -100,7 +100,6 @@ cs                      http://schemas.microsoft.com/office/drawing/2012/chartSt
 # MSO 2014 extensions ---------------------------------------------------------
 
 cx                      http://schemas.microsoft.com/office/drawing/2014/chartex
-cs                      http://schemas.microsoft.com/office/drawing/2012/chartStyle
 a16                     http://schemas.microsoft.com/office/drawing/2014/main
 
 # extlst namespaces

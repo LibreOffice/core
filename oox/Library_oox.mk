@@ -115,8 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/chart/seriescontext \
     oox/source/drawingml/chart/seriesconverter \
     oox/source/drawingml/chart/seriesmodel \
-    oox/source/drawingml/chart/stylefragment \
-    oox/source/drawingml/chart/stylemodel \
     oox/source/drawingml/chart/titlecontext \
     oox/source/drawingml/chart/titleconverter \
     oox/source/drawingml/chart/titlemodel \

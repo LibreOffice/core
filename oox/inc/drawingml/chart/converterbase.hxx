@@ -52,7 +52,7 @@ class ConverterRoot
 public:
     explicit            ConverterRoot(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ChartConverter& rChartConverter,
+                            ChartConverter& rChartConverter,
                             const ChartSpaceModel& rChartModel,
                             const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
                             const css::awt::Size& rChartSize );
@@ -73,7 +73,7 @@ protected:
     /** Returns the filter object of the imported/exported document. */
     ::oox::core::XmlFilterBase& getFilter() const;
     /** Returns the chart converter. */
-    const ChartConverter&     getChartConverter() const;
+    ChartConverter&     getChartConverter() const;
     /** Returns the API chart document model. */
     css::uno::Reference< css::chart2::XChartDocument > const &
                         getChartDocument() const;

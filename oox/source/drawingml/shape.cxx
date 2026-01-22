@@ -37,8 +37,6 @@
 #include <drawingml/table/tableproperties.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <drawingml/chart/chartspacefragment.hxx>
-#include <drawingml/chart/stylefragment.hxx>
-#include <drawingml/chart/stylemodel.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -90,7 +88,6 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -2641,22 +2638,12 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 
                 rtl::Reference<chart::ChartSpaceFragment> pChartSpaceFragment = new chart::ChartSpaceFragment(
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
+                const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
+                        getFragmentPathFromFirstTypeFromOfficeDoc(u"themeOverride") );
                 rFilter.importFragment( pChartSpaceFragment );
-
-                // Import styles file
-                sal_Int32 nLastSlash = mxChartShapeInfo->maFragmentPath.lastIndexOf('/');
-                const sal_Unicode *pFPath = mxChartShapeInfo->maFragmentPath.getStr();
-                OUString sStylePath(pFPath, nLastSlash + 1);
-                sStylePath += u"style1.xml"_ustr;
-                chart::StyleModel aStyleModel;
-                rtl::Reference<chart::StyleFragment> pStyleFragment = new chart::StyleFragment(
-                        rFilter, sStylePath, aStyleModel );
-                rFilter.importFragment( pStyleFragment );
 
                 // The original theme.
                 ThemePtr pTheme;
-                const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
-                        getFragmentPathFromFirstTypeFromOfficeDoc(u"themeOverride") );
 
                 if (!aThemeOverrideFragmentPath.isEmpty() && pPowerPointImport)
                 {
@@ -2675,11 +2662,6 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 Reference< drawing::XShapes > xExternalPage;
                 if( !mxChartShapeInfo->mbEmbedShapes )
                     xExternalPage = rxShapes;
-
-                // There are several calls to rFilter.getChartConverter() here.
-                // Doing just one call and storing the result, as in
-                //     chart::ChartConverter *pChartConv = rFilter.getChartConverter();
-                // *doesn't work* (tests crash).
                 if( rFilter.getChartConverter() )
                 {
                     rFilter.getChartConverter()->convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
@@ -2695,16 +2677,6 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                             rFilter.useInternalChartDataTable( false );
                         }
                     }
-
-                }
-
-                // convert chart style model to docmodel style data
-                std::unique_ptr<chart::ChartStyleConverter> pChartStyleConv = std::make_unique<chart::ChartStyleConverter>();
-
-                if (pChartStyleConv) {
-                    Reference<com::sun::star::chart2::XChartStyle> xStyle = xChartDoc->getStyles();
-                    oox::drawingml::chart::ChartStyleConverter::convertFromModel(rFilter, aStyleModel, xStyle);
-
 
                 }
 

@@ -47,7 +47,6 @@ namespace com::sun::star {
 namespace oox {
     namespace drawingml { class Theme; }
     namespace drawingml::chart { class ChartConverter; }
-    namespace drawingml::chart { class ChartStyleConverter; }
     namespace drawingml::table {
         class TableStyleList;
         typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
@@ -102,7 +101,6 @@ public:
     /** Has to be implemented by each filter, returns a filter-specific chart
         converter object, that should be global per imported document. */
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() = 0;
-    //virtual ::oox::drawingml::chart::ChartStyleConverter* getChartStyleConverter() = 0;
 
     /** Helper to switch chart data table - specifically for xlsx imports */
     virtual void useInternalChartDataTable( bool /*bInternal*/ ) { }

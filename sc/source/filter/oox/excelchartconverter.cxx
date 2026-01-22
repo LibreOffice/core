@@ -48,8 +48,7 @@ ExcelChartConverter::~ExcelChartConverter()
 {
 }
 
-void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
-        rxChartDoc ) const
+void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >& rxChartDoc )
 {
     try
     {
@@ -65,7 +64,7 @@ void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
 
 Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq,
-    const OUString& /*rRole*/, const OUString& /*aRoleQualifier*/ ) const
+    const OUString& /*rRole*/, const OUString& /*aRoleQualifier*/ )
 {
     Reference< XDataSequence > xDataSeq;
     if (!rxDataProvider.is())

@@ -149,13 +149,13 @@ struct ConverterData
     std::map< TitleKey, TitleLayoutInfo >
                         maTitles;
     XmlFilterBase&      mrFilter;
-    const ChartConverter&     mrConverter;
+    ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
     awt::Size                maSize;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,
-                            const ChartConverter& rChartConverter,
+                            ChartConverter& rChartConverter,
                             const ChartSpaceModel& rChartModel,
                             const Reference< XChartDocument >& rxChartDoc,
                             const awt::Size& rChartSize );
@@ -164,7 +164,7 @@ struct ConverterData
 
 ConverterData::ConverterData(
         XmlFilterBase& rFilter,
-        const ChartConverter& rChartConverter,
+        ChartConverter& rChartConverter,
         const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
         const awt::Size& rChartSize ) :
@@ -207,7 +207,7 @@ ConverterData::~ConverterData()
 
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
-        const ChartConverter& rChartConverter,
+        ChartConverter& rChartConverter,
         const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
         const awt::Size& rChartSize ) :
@@ -245,7 +245,7 @@ XmlFilterBase& ConverterRoot::getFilter() const
     return mxData->mrFilter;
 }
 
-const ChartConverter& ConverterRoot::getChartConverter() const
+ChartConverter& ConverterRoot::getChartConverter() const
 {
     return mxData->mrConverter;
 }

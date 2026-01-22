@@ -1670,7 +1670,6 @@ dataField
 dataFields
 dataId
 dataLabel
-dataLabelCallout
 dataLabels
 dataModel
 dataModelExt
@@ -1680,7 +1679,6 @@ dataPoint
 dataPoint3D
 dataPointLine
 dataPointMarker
-dataPointMarkerLayout
 dataPointWireframe
 dataPosition
 dataPt
@@ -3190,7 +3188,6 @@ linePitch
 lineRule
 lineTo
 lineWeight
-lineWidthScale
 lineWrapLikeWord6
 linear
 linen

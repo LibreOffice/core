@@ -138,8 +138,7 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 
         // Check if top + bottom is more than text area height.
         // If yes, we need to adjust the values as defined in OOXML.
-        // (Overload zero height to mean don't adjust)
-        if (nHeight > 0 && nTop + nBottom >= nHeight)
+        if (nTop + nBottom >= nHeight)
         {
             double diffFactor = (nTop + nBottom - nHeight) / 2.0;
 

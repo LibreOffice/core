@@ -112,11 +112,6 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         you have to get its wall.  You can get the wall by calling
         XDiagram::getWall().</p>
      */
-
-    /** Get style information
-     */
-    XChartStyle getStyles();
-
     com::sun::star::beans::XPropertySet getPageBackground();
 
     /** Creates a default chart type for a brand-new chart object.

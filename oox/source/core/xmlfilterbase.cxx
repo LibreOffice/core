@@ -158,7 +158,6 @@ const Sequence< beans::Pair< OUString, sal_Int32 > >& NamespaceIds()
             {u"http://schemas.microsoft.com/office/drawing/2017/decorative"_ustr, NMSP_adec},
             {u"http://schemas.microsoft.com/office/drawing/2016/SVG/main"_ustr, NMSP_asvg},
             {u"http://schemas.microsoft.com/office/drawing/2014/chartex"_ustr, NMSP_cx},
-            {u"http://schemas.microsoft.com/office/drawing/2012/chartStyle"_ustr, NMSP_cs},
             {u"http://schemas.microsoft.com/office/spreadsheetml/2019/namedsheetviews"_ustr, NMSP_xnsv},
         };
     return SINGLETON;
