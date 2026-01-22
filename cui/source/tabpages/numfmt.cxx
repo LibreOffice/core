@@ -189,14 +189,6 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
 // class SvxNumberFormatTabPage ------------------------------------------
 
-#define REMOVE_DONTKNOW() \
-    if (!m_xFtLocale->get_sensitive())                              \
-    {                                                                 \
-        m_xFtLocale->set_sensitive(true);                           \
-        m_xLbLocale->set_sensitive(true);                           \
-        m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage()); \
-    }
-
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/numberingformatpage.ui"_ustr, u"NumberingFormatPage"_ustr, &rCoreAttrs)
@@ -607,6 +599,15 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_xFormatCodeFrame->set_sensitive( bEnable );
 }
 
+void SvxNumberFormatTabPage::EnableLocaleUi()
+{
+    if (!m_xFtLocale->get_sensitive())
+    {
+        m_xFtLocale->set_sensitive(true);
+        m_xLbLocale->set_sensitive(true);
+        m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage());
+    }
+}
 
 /*************************************************************************
 #*  Method:    HideLanguage
@@ -990,8 +991,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         pNumFmtShell->LanguageChanged(m_xLbLocale->get_active_id(),
                                       nFmtLbSelPos,aEntryList);
 
-    REMOVE_DONTKNOW() // possibly UI-Enable
-
+    EnableLocaleUi();
 
     if ( (!aEntryList.empty()) && (nFmtLbSelPos != SELPOS_NONE) )
     {
@@ -1199,7 +1199,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(weld::Widget* pLb)
             ChangePreviewText( static_cast<sal_uInt16>(nSelPos) );
         }
 
-        REMOVE_DONTKNOW() // possibly UI-Enable
+        EnableLocaleUi();
 
         if ( pNumFmtShell->FindEntry( aFormat) )
         {

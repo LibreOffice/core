@@ -127,6 +127,7 @@ private:
     void    UpdateDecimalsDenominatorEditBox();
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
+    void EnableLocaleUi();
     void    SetCategory( sal_uInt16 nPos );
     OUString  GetExpColorString( const Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const OUString& rFormat );
