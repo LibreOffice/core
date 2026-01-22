@@ -146,7 +146,10 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                     nFirstQueryField = rEntry.nField;
                 }
                 if (rItem.mbMatchEmpty)
+                {
                     pCol = rDoc.maTabs[nTab]->FetchColumn(nCol);
+                    assert(pCol && "FetchColumn will definitely return non-null");
+                }
                 else
                     pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
             }
