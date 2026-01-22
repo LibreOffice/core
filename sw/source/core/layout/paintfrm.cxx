@@ -4486,7 +4486,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     PaintDecorators();
 
     // crossing out for tracked deletion
-    const SwViewOption* pViewOptions = pShell->GetViewOptions();
+    const SwViewOption* pViewOptions = pShell ? pShell->GetViewOptions() : nullptr;
     SwRedlineRenderMode eRedlineRenderMode
         = pViewOptions ? pViewOptions->GetRedlineRenderMode() : SwRedlineRenderMode::Standard;
     if (GetAuthor() != std::string::npos && IsDeleted()
