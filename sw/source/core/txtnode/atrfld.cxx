@@ -600,7 +600,15 @@ SwTextField::SwTextField(
     , m_aExpand()
     , m_pTextNode( nullptr )
 {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
     SwFormatField& rSwFormatField(static_cast<SwFormatField&>(GetAttr()));
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
     m_aExpand = rSwFormatField.GetField()->ExpandField(bInClipboard, nullptr);
     rSwFormatField.SetTextField( *this );
     SetHasDummyChar(true);
