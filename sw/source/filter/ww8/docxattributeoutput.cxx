@@ -2887,9 +2887,10 @@ void DocxAttributeOutput::WriteSdtDropDownStart(
     for (auto const& rItem : rListItems)
     {
         auto const item(OUStringToOString(rItem, RTL_TEXTENCODING_UTF8));
+        OString sDisplayText = item.isEmpty() ? " "_ostr : item; // displayText must not be empty
         m_pSerializer->singleElementNS(XML_w, XML_listItem,
                 FSNS(XML_w, XML_value), item,
-                FSNS(XML_w, XML_displayText), item);
+                FSNS(XML_w, XML_displayText), sDisplayText);
     }
 
     m_pSerializer->endElementNS(XML_w, XML_dropDownList);
@@ -5899,8 +5900,9 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         for (const auto& rItem : aItems)
         {
+            OUString sDisplayText = rItem.isEmpty() ? " " : rItem; // displayText must not be empty
             m_pSerializer->singleElementNS(XML_w, XML_listItem,
-                                           FSNS(XML_w, XML_displayText), rItem,
+                                           FSNS(XML_w, XML_displayText), sDisplayText,
                                            FSNS(XML_w, XML_value), rItem);
         }
 
