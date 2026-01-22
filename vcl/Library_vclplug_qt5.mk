@@ -155,6 +155,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtTimer \
     vcl/qt5/QtTools \
     vcl/qt5/QtTransferable \
+    vcl/qt5/QtTreeViewItemDelegate \
     vcl/qt5/QtTreeViewModel \
     vcl/qt5/QtVirtualDevice \
     vcl/qt5/QtWidget \

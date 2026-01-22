@@ -9,6 +9,7 @@
 
 #include <QtInstanceTreeView.hxx>
 #include <QtInstanceTreeView.moc>
+#include <QtTreeViewItemDelegate.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
 
@@ -46,6 +47,13 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
 
     assert(m_pTreeView->viewport());
     m_pTreeView->viewport()->installEventFilter(this);
+
+    QtTreeViewItemDelegate* pDelegate = new QtTreeViewItemDelegate(
+        m_pTreeView, [this](const QModelIndex& rIndex) { return signalEditingStarted(rIndex); },
+        [this](const QModelIndex& rIndex, const QString& rNewText) {
+            return signalEditingDone(rIndex, rNewText);
+        });
+    m_pTreeView->setItemDelegate(pDelegate);
 }
 
 void QtInstanceTreeView::do_insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
@@ -808,6 +816,20 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
             assert(false && "unhandled selection mode");
             return QAbstractItemView::SingleSelection;
     }
+}
+
+bool QtInstanceTreeView::signalEditingStarted(const QModelIndex& rIndex)
+{
+    SolarMutexGuard g;
+
+    return signal_editing_started(QtInstanceTreeIter(rIndex));
+}
+
+bool QtInstanceTreeView::signalEditingDone(const QModelIndex& rIndex, const QString& rNewText)
+{
+    SolarMutexGuard g;
+
+    return signal_editing_done({ QtInstanceTreeIter(rIndex), toOUString(rNewText) });
 }
 
 QList<QList<Qt::ItemDataRole>> QtInstanceTreeView::columnRoles(QTreeView& rTreeView)

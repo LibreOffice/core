@@ -158,6 +158,9 @@ public:
     using QtInstanceWidget::set_sensitive;
     using QtInstanceWidget::get_sensitive;
 
+    bool signalEditingStarted(const QModelIndex& rIndex);
+    bool signalEditingDone(const QModelIndex& rIndex, const QString& rNewText);
+
     // methods to get/set which roles are supported by the individual columns
     // based on the underlying GtkTreeViewColumns and their GtkCellRenderers
     static QList<QList<Qt::ItemDataRole>> columnRoles(QTreeView& rTreeView);
