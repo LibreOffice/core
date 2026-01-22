@@ -120,12 +120,19 @@ void PivotTableFormat::finalizeImport()
     pSaveData->setFormats(aFormats);
 }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 PivotTableReference& PivotTableFormat::createReference()
 {
     auto xReference = std::make_shared<PivotTableReference>(*this);
     maReferences.push_back(xReference);
     return *xReference;
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 PivotTableReference::PivotTableReference(const PivotTableFormat& rFormat)
     : WorkbookHelper(rFormat)
