@@ -5409,6 +5409,48 @@ bool ScCompiler::IsCharFlagAllConventions(
         return ScGlobal::getCharClass().isLetterNumeric( rStr, nPos );
 }
 
+OUString ScCompiler::SanitizeDefinedName(const OUString& rStr, const ScDocument& rDoc)
+{
+    OUStringBuffer aBuffer;
+    bool bValidName = true;
+
+    for (sal_Int32 i = 0; i < rStr.getLength(); i++)
+    {
+        sal_Unicode c = rStr[i];
+
+        // Left/Right Quotations are allowed
+        bool bQuotations = (c == 0x2018 || c == 0x2019 || c == 0x201C || c == 0x201D);
+
+        if (ScCompiler::IsCharFlagAllConventions(rStr, i, ScCharFlags::Name) || bQuotations)
+        {
+            aBuffer.append(rStr[i]);
+
+            if (!i && !ScCompiler::IsCharFlagAllConventions(rStr, i, ScCharFlags::CharName)
+                && !bQuotations)
+                bValidName = false;
+        }
+        else
+            aBuffer.append('_');
+    }
+
+    OUString sName = aBuffer.makeStringAndClear();
+
+    // Name can't be a valid cell reference
+    if ((ScAddress().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_A1) != ScRefFlags::ZERO)
+        || (ScRange().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_R1C1)
+            != ScRefFlags::ZERO))
+        bValidName = false;
+
+    if (!bValidName || sName != rStr)
+    {
+        sName = bValidName ? sName : "_" + sName;
+        SAL_WARN("sc.filter",
+                 "'" << rStr << "' is an invalid name, using '" << sName << "' instead.");
+    }
+
+    return sName;
+}
+
 void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
 {
     const FormulaToken* t = pTokenP;
@@ -5853,13 +5895,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                     aBuffer.append("[0]"
                         + OUStringChar(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR)));
                 }
-                OUString sName = pData->GetName();
-                // If the name is a valid reference then add underscore to the name
-                if ((ScAddress().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_A1)
-                     != ScRefFlags::ZERO)
-                    || (ScRange().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_R1C1)
-                        != ScRefFlags::ZERO))
-                    sName = "_" + sName;
+                OUString sName = ScCompiler::SanitizeDefinedName(pData->GetName(), rDoc);
                 aBuffer.append(sName);
             }
         }
