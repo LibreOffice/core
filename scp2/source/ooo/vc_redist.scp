@@ -54,7 +54,8 @@ End
 
 #endif
 
-#if defined(WINDOWS_X64) && defined(WINDOWS_X64_MERGEMODULE)
+/* merge modules file for x64 contains the arm64 ones */
+#if (defined(WINDOWS_X64) || defined(WINDOWS_AARCH64)) && defined(WINDOWS_X64_MERGEMODULE)
 
 /* Attributes: msidbComponentAttributesPermanent = 0x10 */
 MergeModule WINDOWS_X64_MERGEMODULE
