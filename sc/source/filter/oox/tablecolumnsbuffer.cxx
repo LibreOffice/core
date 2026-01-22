@@ -102,12 +102,19 @@ void TableColumns::importTableColumns( SequenceInputStream& /*rStrm*/ )
     (void) mnCount;
 }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 TableColumn& TableColumns::createTableColumn()
 {
     TableColumnVector::value_type xTableColumn = std::make_shared<TableColumn>( *this );
     maTableColumnVector.push_back( xTableColumn );
     return *xTableColumn;
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 bool TableColumns::finalizeImport( ScDBData* pDBData )
 {
