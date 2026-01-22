@@ -196,9 +196,9 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_nLbFormatSelPosEdComment(SELPOS_NONE)
     , bLegacyAutomaticCurrency(false)
     , sAutomaticLangEntry(CuiResId(RID_CUISTR_AUTO_ENTRY))
-    , m_xFtCategory(m_xBuilder->weld_label(u"categoryft"_ustr))
+    , m_xCategoryFrame(m_xBuilder->weld_frame(u"categoryframe"_ustr))
     , m_xLbCategory(m_xBuilder->weld_tree_view(u"categorylb"_ustr))
-    , m_xFtFormat(m_xBuilder->weld_label(u"formatft"_ustr))
+    , m_xFormatFrame(m_xBuilder->weld_frame(u"formatframe"_ustr))
     , m_xLbCurrency(m_xBuilder->weld_combo_box(u"currencylb"_ustr))
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
     , m_xFrameLocale(m_xBuilder->weld_frame(u"localeframe"_ustr))
@@ -578,11 +578,8 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     bool bEnable = !m_xCbSourceFormat->get_active();
     if ( !bEnable )
         m_xCbSourceFormat->grab_focus();
-    m_xFtCategory->set_sensitive( bEnable );
-    m_xLbCategory->set_sensitive( bEnable );
-    m_xFtFormat->set_sensitive( bEnable );
-    m_xLbCurrency->set_sensitive( bEnable );
-    m_xLbFormat->set_sensitive( bEnable );
+    m_xCategoryFrame->set_sensitive(bEnable);
+    m_xFormatFrame->set_sensitive(bEnable);
     m_xFrameLocale->set_sensitive(bEnable);
     m_xOptionsFrame->set_sensitive(bEnable);
     m_xFtDecimals->set_sensitive( bEnable );

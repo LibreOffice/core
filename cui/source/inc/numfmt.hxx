@@ -91,9 +91,9 @@ private:
     OUString sAutomaticCurrencyEntry;
 
     SvxNumberPreview m_aWndPreview;
-    std::unique_ptr<weld::Label> m_xFtCategory;
+    std::unique_ptr<weld::Frame> m_xCategoryFrame;
     std::unique_ptr<weld::TreeView> m_xLbCategory;
-    std::unique_ptr<weld::Label> m_xFtFormat;
+    std::unique_ptr<weld::Frame> m_xFormatFrame;
     std::unique_ptr<weld::ComboBox> m_xLbCurrency;
     std::unique_ptr<weld::TreeView> m_xLbFormat;
     std::unique_ptr<weld::Frame> m_xFrameLocale;
