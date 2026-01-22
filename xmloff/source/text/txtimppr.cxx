@@ -608,7 +608,7 @@ void XMLTextImportPropertyMapper::finished(
 
     if( pVertOrient && pVertOrientRelAsChar )
     {
-        sal_Int16 nVertOrient;
+        sal_Int16 nVertOrient = 0;
         pVertOrient->maValue >>= nVertOrient;
         sal_Int16 nVertOrientRel = 0;
         pVertOrientRelAsChar->maValue >>= nVertOrientRel;
