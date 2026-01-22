@@ -1664,6 +1664,11 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         // Append the character template at the numbering.
         SwCharFormat* pChrFormat;
         SwDocShell* pDocSh = GetView().GetDocShell();
+        // #i63395#
+        // Only apply user defined default bullet font
+        const vcl::Font* pFnt = numfunc::IsDefBulletFontUserDefined()
+                           ? &numfunc::GetDefBulletFont()
+                           : nullptr;
 
         if (bNum)
         {
@@ -1690,14 +1695,13 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 
             if (! bNum)
             {
-                uno::Sequence<OUString> aBulletSymbols(
-                    officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
-                uno::Sequence<OUString> aBulletSymbolsFonts(
-                    officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
-                aFormat.SetBulletChar(aBulletSymbols[0].toChar());
-                vcl::Font aFont;
-                aFont.SetFamilyName(aBulletSymbolsFonts[0]);
-                aFormat.SetBulletFont(&aFont);
+                // #i63395#
+                // Only apply user defined default bullet font
+                if ( pFnt )
+                {
+                    aFormat.SetBulletFont( pFnt );
+                }
+                aFormat.SetBulletChar( numfunc::GetBulletChar(nLvl) );
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
                 aFormat.SetListFormat(u""_ustr, u""_ustr, nLvl);
