@@ -2776,12 +2776,6 @@ void DocxAttributeOutput::WriteContentControlStart()
                 xAttributes->add(FSNS(XML_w, XML_displayText), rItem.m_aDisplayText);
             }
 
-            OUString aValue = rItem.m_aValue;
-            if (aValue.isEmpty())
-            {
-                // Empty value would be invalid DOCX, default to the display text.
-                aValue = rItem.m_aDisplayText;
-            }
             xAttributes->add(FSNS(XML_w, XML_value), rItem.m_aValue);
             m_pSerializer->singleElementNS(XML_w, XML_listItem, xAttributes);
         }
