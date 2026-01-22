@@ -84,7 +84,14 @@ void OQueryContainer::init()
         m_aDocuments.push_back(m_aDocumentMap.emplace(definitionName, Documents::mapped_type()).first);
     }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
     setElementApproval( std::make_shared<ObjectNameApproval>( m_xConnection, ObjectNameApproval::TypeQuery ) );
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 }
 
 rtl::Reference<OQueryContainer> OQueryContainer::create(
