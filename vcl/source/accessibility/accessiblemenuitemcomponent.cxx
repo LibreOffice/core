@@ -26,6 +26,9 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
+#if defined(_WIN32)
+#include <vcl/keycod.hxx>
+#endif
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
