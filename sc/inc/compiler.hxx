@@ -523,6 +523,9 @@ public:
                                                   const ScAddress& rFormulaPos);
 
     bool HasUnhandledPossibleImplicitIntersections() const { return !mUnhandledPossibleImplicitIntersections.empty(); }
+
+    SC_DLLPUBLIC static OUString SanitizeDefinedName(const OUString& rStr, const ScDocument& rDoc);
+
 #ifdef DBG_UTIL
     const std::set<OpCode>& UnhandledPossibleImplicitIntersectionsOpCodes() { return mUnhandledPossibleImplicitIntersectionsOpCodes; }
 #endif

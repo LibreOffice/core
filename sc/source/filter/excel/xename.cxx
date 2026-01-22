@@ -346,33 +346,36 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
     // Sheets where IsExportTab is not true are not exported, so use mnXclTab
     // (1 based) to get the sheetid as of the exported document's perspective.
     SCTAB nXlsxTab = mnXclTab - 1;
-    OUString sName = maOrigName;
-    if (sName.indexOf(' ') != -1)
-    {
-        sName = sName.replace(' ', '_');
-        SAL_WARN("sc.filter",
-                 "'" << maOrigName << "' is an invalid name, using '" << sName << "' instead.");
-    }
-    else
-    {
-        // If the name is a valid reference then add underscore to the name
-        if ((ScAddress().Parse(sName, GetDoc(), ::formula::FormulaGrammar::CONV_XL_A1)
-             != ScRefFlags::ZERO)
-            || (ScRange().Parse(sName, GetDoc(), ::formula::FormulaGrammar::CONV_XL_R1C1)
-                != ScRefFlags::ZERO))
-            sName = "_" + sName;
-    }
+    OUString sName = ScCompiler::SanitizeDefinedName(maOrigName, GetDoc());
 
     // Regenerate symbol for external references
     if (ScTokenArray* pScTokArr = GetScTokenArray())
     {
         formula::FormulaTokenArrayPlainIterator aIter(*pScTokArr);
         formula::FormulaToken* t = aIter.First();
-        while (t && !t->IsExternalRef())
-            t = aIter.Next();
+        while (t)
+        {
+            if (t->GetType() == formula::svExternal)
+            {
+                formula::FormulaToken* pNext = aIter.PeekNext();
 
-        if (t)
-            msSymbol = XclXmlUtils::ToOUString(GetCompileFormulaContext(), GetPos(), pScTokArr);
+                /*  Excel import generates svExternal tokens for invalid names and
+                for external/invalid function calls. For undefined names, new defined
+                name is created (XclExpFmlaCompImpl::ProcessExternal), this defined
+                name should follow OOXML conventions */
+                if (!pNext || (pNext->GetOpCode() != ocOpen))
+                {
+                    msSymbol = ScCompiler::SanitizeDefinedName(t->GetExternal(), GetDoc());
+                    break;
+                }
+            }
+            else if (t->IsExternalRef())
+            {
+                msSymbol = XclXmlUtils::ToOUString(GetCompileFormulaContext(), GetPos(), pScTokArr);
+                break;
+            }
+            t = aIter.Next();
+        }
     }
 
     rWorkbook->startElement( XML_definedName,
