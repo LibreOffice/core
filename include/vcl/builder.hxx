@@ -13,6 +13,7 @@
 #include <sal/log.hxx>
 #include <vcl/dllapi.h>
 #include <utility>
+#include <vcl/menu.hxx>
 #include <vcl/widgetbuilder.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
@@ -34,7 +35,6 @@ class FormattedField;
 class ListBox;
 class MessageDialog;
 class NumericFormatter;
-class PopupMenu;
 class ScrollBar;
 class SvTabListBox;
 class Slider;
