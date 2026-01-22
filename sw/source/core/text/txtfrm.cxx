@@ -3244,6 +3244,15 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                             }
                         }
                     }
+                    if( !bFormat )
+                    {
+                        // Without a valid print area, page line-spacing can't be applied incrementally.
+                        // Do a full reformat.
+                        if (GetTextNodeForParaProps()->GetSwAttrSet().GetRegister().GetValue())
+                        {
+                            bFormat = !isFramePrintAreaValid();
+                        }
+                    }
                 }
             }
 

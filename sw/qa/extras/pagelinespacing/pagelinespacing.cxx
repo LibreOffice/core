@@ -424,17 +424,16 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testChangeReferenceStyle)
     checkTextAlignedToBaselineGrid();
 }
 
-/* This use case does not work properly (tdf#169922)
 CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testRemovePage)
 {
+    // tdf#169922: Text was not properly aligned to the baseline grid after removing a page.
     createSwDoc("removePage.fodt");
 
     checkTextAlignedToBaselineGrid();
 
-    // Remove the first, empty page
+    // Remove the first (empty) page.
     SwDocShell* pDocShell = getSwDocShell();
     CPPUNIT_ASSERT(pDocShell);
-
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->SttEndDoc(true);
@@ -442,10 +441,10 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testRemovePage)
 
     checkTextAlignedToBaselineGrid();
 }
-*/
 
 CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testVerticalTextInsideTable)
 {
+    // tdf#169821: Top-to-bottom vertical text disappeared from the table cell.
     createSwDoc("verticalTextInsideTable.fodt");
 
     // The original size should not change after applying page line-spacing.
@@ -455,7 +454,8 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testVerticalTextInsideTable)
     applyPageLineSpacing(1, true, u"Body Text"_ustr);
 
     const Size aNewTopToBottomSize = getTextFrameSize(2, u"TopToBottom"_ustr);
-    CPPUNIT_ASSERT(aNewTopToBottomSize.Width() > 0); // Width was negative (tdf#169821).
+    // The width was negative, so the text was invisible.
+    CPPUNIT_ASSERT(aNewTopToBottomSize.Width() > 0);
     CPPUNIT_ASSERT_EQUAL(aBottomToTopSize, getTextFrameSize(1, u"BottomToTop"_ustr));
     CPPUNIT_ASSERT_EQUAL(aTopToBottomSize, aNewTopToBottomSize);
 
