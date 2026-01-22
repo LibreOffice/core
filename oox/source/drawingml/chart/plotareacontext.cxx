@@ -172,13 +172,8 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                 case CX_TOKEN(plotAreaRegion) :
                     return new ChartexTypeGroupContext(*this, mrModel.maTypeGroups.create(nElement, false));
                 case CX_TOKEN(axis) :
-                    if (rAttribs.hasAttribute(XML_id)) {
-                        sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
-                        // TODO: also handle attribute "hidden"
-                        return new CxAxisContext(*this, mrModel.maAxes.create(nElement, false), nId);
-                    } else {
-                        return nullptr;
-                    }
+                    // TODO
+                    return nullptr;
                 case CX_TOKEN(spPr) :
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.getOrCreate() );
                 case CX_TOKEN(extLst) :

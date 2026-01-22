@@ -41,11 +41,7 @@ ShapePrWrapperContext::~ShapePrWrapperContext()
 
 ContextHandlerRef ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    if (isRootElement() && (nElement == C_TOKEN(spPr) || nElement == CX_TOKEN(spPr))) {
-        return new ShapePropertiesContext( *this, mrModel );
-    } else {
-        return nullptr;
-    }
+    return (isRootElement() && (nElement == C_TOKEN( spPr ))) ? new ShapePropertiesContext( *this, mrModel ) : nullptr;
 }
 
 LayoutContext::LayoutContext( ContextHandler2Helper& rParent, LayoutModel& rModel ) :

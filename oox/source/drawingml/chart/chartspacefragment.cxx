@@ -174,13 +174,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case CX_TOKEN(plotArea):
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case CX_TOKEN(legend):
-                {
-                    const bool bOverlay = rAttribs.getBool(XML_overlay, false);
-                    const sal_Int32 nPos = rAttribs.getToken(XML_pos, XML_t);
-
-                    return new LegendContext( *this, mrModel.mxLegend.create(),
-                            bOverlay, nPos);
-                }
+                    return new LegendContext( *this, mrModel.mxLegend.create() );
                 case CX_TOKEN(extLst):
                     // TODO
                     return nullptr;
