@@ -1447,9 +1447,9 @@ namespace numfunc
                     case 11:
                     case 12:
                     {
-                        sal_Unicode cChar = sal_Unicode();
-                        pValues[nProp] >>= cChar;
-                        mnLevelChars[nProp-3] = cChar;
+                        sal_Int16 nChar = 0;
+                        pValues[nProp] >>= nChar;
+                        mnLevelChars[nProp - 3] = static_cast<sal_Unicode>(nChar);
                     }
                     break;
                 }
