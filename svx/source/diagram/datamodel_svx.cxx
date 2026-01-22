@@ -220,7 +220,7 @@ void Point::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
         // be set there.
         // For now, just make a rough export to get this started. This will have to be enhanced in
         // the future, either by using XShape or by implementing exporting the raw MSO XML data we
-        // have here at the mnodel from import - which implies that that is what gets changed when
+        // have here at the model from import - which implies that this data is what gets changed when
         // text or textAttributes get changed, plus a re-creation of the XShapes in the GroupObject
         rTarget->startElementNS(XML_dgm, XML_t);
         rTarget->singleElementNS(XML_a, XML_bodyPr);
