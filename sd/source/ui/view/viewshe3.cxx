@@ -164,7 +164,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     SdPage* pPage,
     const sal_Int32 nInsertPosition)
 {
-    if (pPage->IsCanvasPage())
+    if (pPage && pPage->IsCanvasPage())
         return nullptr;
     sal_uInt16 nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
