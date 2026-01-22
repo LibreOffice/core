@@ -158,6 +158,23 @@ bool IsGrayScale(const Bitmap& rBitmap)
     return aColor.GetRed() == aColor.GetGreen() && aColor.GetRed() == aColor.GetBlue();
 }
 
+std::vector<Bitmap> GetMetaFileImages(const GDIMetaFile& rMetaFile)
+{
+    std::vector<Bitmap> aImages;
+    for (size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
+    {
+        MetaAction* pAction = rMetaFile.GetAction(nAction);
+        if (pAction->GetType() != MetaActionType::BMPEXSCALE)
+        {
+            continue;
+        }
+
+        auto pAct = static_cast<MetaBmpExScaleAction*>(pAction);
+        aImages.push_back(pAct->GetBitmap());
+    }
+    return aImages;
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
 {
     // Given a document with a normal, a deleted and an inserted image:
@@ -168,18 +185,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
 
     // Then make sure none of the images are grayscale:
-    std::vector<Bitmap> aImages;
-    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); ++nAction)
-    {
-        MetaAction* pAction = xMetaFile->GetAction(nAction);
-        if (pAction->GetType() != MetaActionType::BMPEXSCALE)
-        {
-            continue;
-        }
-
-        auto pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-        aImages.push_back(pAct->GetBitmap());
-    }
+    std::vector<Bitmap> aImages = GetMetaFileImages(*xMetaFile);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));
@@ -193,18 +199,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
 
     xMetaFile = pDocShell->GetPreviewMetaFile();
 
-    aImages.clear();
-    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); ++nAction)
-    {
-        MetaAction* pAction = xMetaFile->GetAction(nAction);
-        if (pAction->GetType() != MetaActionType::BMPEXSCALE)
-        {
-            continue;
-        }
-
-        auto pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-        aImages.push_back(pAct->GetBitmap());
-    }
+    aImages = GetMetaFileImages(*xMetaFile);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));
@@ -218,18 +213,52 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
 
     xMetaFile = pDocShell->GetPreviewMetaFile();
 
-    aImages.clear();
-    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); ++nAction)
-    {
-        MetaAction* pAction = xMetaFile->GetAction(nAction);
-        if (pAction->GetType() != MetaActionType::BMPEXSCALE)
-        {
-            continue;
-        }
+    aImages = GetMetaFileImages(*xMetaFile);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
+    CPPUNIT_ASSERT(IsGrayScale(aImages[1]));
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[2]));
+}
 
-        auto pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-        aImages.push_back(pAct->GetBitmap());
-    }
+CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
+{
+    // Given a document with a normal, a deleted and an inserted image:
+    createSwDoc("redline-image-inline.docx");
+
+    // When using the standard redline render mode:
+    SwDocShell* pDocShell = getSwDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure none of the images are grayscale:
+    std::vector<Bitmap> aImages = GetMetaFileImages(*xMetaFile);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[2]));
+
+    // Omit insert: default, default, grayscale.
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
+    pWrtShell->ApplyViewOptions(aOpt);
+
+    xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    aImages = GetMetaFileImages(*xMetaFile);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
+    CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));
+    // Without the accompanying fix in place, this test would have failed, the image's center pixel
+    // wasn't gray.
+    CPPUNIT_ASSERT(IsGrayScale(aImages[2]));
+
+    // Omit deletes: default, grayscale, default.
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
+    pWrtShell->ApplyViewOptions(aOpt);
+
+    xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    aImages = GetMetaFileImages(*xMetaFile);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(IsGrayScale(aImages[1]));
