@@ -671,7 +671,14 @@ DocumentDigitalSignatures::chooseCertificatesImpl(SfxViewShell* pViewShell,
     rProperties[u"Usage"_ustr] = aChooser->GetUsageText();
 
     return xCerts;
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
 {
