@@ -481,7 +481,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.emplace_back( sUNO_View_GridSnapWidthYDenominator, Any( GetSnapGridWidthY().GetDenominator() ) );
     aUserData.emplace_back( sUNO_View_IsAngleSnapEnabled, Any( IsAngleSnapEnabled() ) );
     aUserData.emplace_back( sUNO_View_SnapAngle, Any( static_cast<sal_Int32>(GetSnapAngle()) ) );
-    aUserData.emplace_back( sUNO_View_HasCanvasPage, Any( pDrawDocument->HasCanvasPage() ) );
+    aUserData.emplace_back( sUNO_View_HasCanvasPage, Any( pDrawDocument && pDrawDocument->HasCanvasPage() ) );
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc( nOldLength + aUserData.size() );
