@@ -1266,9 +1266,9 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
             continue;
         }
 
-        SwFlyFrame* pAnchoredObjFly = pAnchoredObj->DynCastFlyFrame();
         if (bSplitFly)
         {
+            SwFlyFrame* pAnchoredObjFly = pAnchoredObj->DynCastFlyFrame();
             if (!pAnchoredObjFly)
             {
                 // This is a split fly, then overlap is only checked against other split flys.
