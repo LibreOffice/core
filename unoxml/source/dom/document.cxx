@@ -85,6 +85,10 @@ namespace DOM
         return cur;
     }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
     CDocument::CDocument(xmlDocPtr const pDoc)
         : CDocument_Base(*this, m_Mutex,
                 NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(pDoc))
@@ -92,6 +96,9 @@ namespace DOM
         , m_pEventDispatcher(new events::CEventDispatcher)
     {
     }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
     ::rtl::Reference<CDocument> CDocument::CreateCDocument(xmlDocPtr const pDoc)
     {
