@@ -650,7 +650,14 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
 
                     pRes = new SbxVariable( SbxOBJECT );
                     pRes->SetName( aEnumName );
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
                     pRes->SetParent( this );
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
                     pRes->SetFlag( SbxFlagBits::Read );
                     if( bPrivate )
                     {
