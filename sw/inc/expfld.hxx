@@ -222,6 +222,7 @@ public:
 
     void SetFormatField(SwFormatField & rFormatField);
     SwFormatField* GetFormatField() { return mpFormatField;}
+    const SwFormatField* GetFormatField() const { return mpFormatField;}
 
     double      GetValue(SwRootFrame const* pLayout) const;
     void        SetValue(const double& rVal, SwRootFrame const* pLayout);
@@ -235,6 +236,9 @@ public:
 
     inline void                 SetInputFlag(bool bInp);
     inline bool                 GetInputFlag() const;
+
+    OUString                    GetFirstNWords(const OUString& rText, sal_Int32 nWords) const;
+    SwTextField*                GetTextField() const;
 
     virtual OUString            GetFieldName() const override;
 
