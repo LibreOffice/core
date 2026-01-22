@@ -14,14 +14,14 @@
 #include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QWidget>
 
-#include <unordered_set>
+#include <vector>
 
 /** Item model for QtInstanceTreeView. */
 class QtTreeViewModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-    std::unordered_set<int> m_aEditableColumns;
+    std::vector<int> m_aEditableColumns;
 
 public:
     QtTreeViewModel(QWidget* pParent);
@@ -30,7 +30,8 @@ public:
 
     virtual bool hasChildren(const QModelIndex& rIndex = QModelIndex()) const override;
 
-    void setEditableColumns(const std::unordered_set<int>& rEditableColumns);
+    std::vector<int> editableColumns() const;
+    void setEditableColumns(const std::vector<int>& rEditableColumns);
 
     bool getChildrenOnDemand(const QModelIndex& rIndex) const;
     void setChildrenOnDemand(const QModelIndex& rIndex, bool bOnDemandChildren);

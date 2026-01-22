@@ -550,9 +550,19 @@ bool QtInstanceTreeView::get_children_on_demand(const weld::TreeIter& rIter) con
 
 void QtInstanceTreeView::set_show_expanders(bool) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTreeView::start_editing(const weld::TreeIter&)
+void QtInstanceTreeView::start_editing(const weld::TreeIter& rEntry)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        // edit item in first editable column
+        const std::vector<int> aEditableColumns = m_pModel->editableColumns();
+        assert(!aEditableColumns.empty() && "No editable column");
+        const int nColumnIndex = aEditableColumns.front();
+        const QModelIndex aIndex = modelIndex(rEntry, nColumnIndex);
+        m_pTreeView->setCurrentIndex(aIndex);
+        m_pTreeView->edit(aIndex);
+    });
 }
 
 void QtInstanceTreeView::end_editing() { assert(false && "Not implemented yet"); }
@@ -674,11 +684,11 @@ void QtInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidths
 
 void QtInstanceTreeView::set_column_editables(const std::vector<bool>& rEditables)
 {
-    std::unordered_set<int> aEditableColumns;
+    std::vector<int> aEditableColumns;
     for (size_t i = 0; i < rEditables.size(); i++)
     {
         if (rEditables.at(i))
-            aEditableColumns.insert(i);
+            aEditableColumns.push_back(i);
     }
 
     m_pModel->setEditableColumns(aEditableColumns);

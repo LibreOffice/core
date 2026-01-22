@@ -25,7 +25,7 @@ Qt::ItemFlags QtTreeViewModel::flags(const QModelIndex& rIndex) const
 {
     Qt::ItemFlags eFlags = QSortFilterProxyModel::flags(rIndex);
 
-    if (!m_aEditableColumns.contains(rIndex.column()))
+    if (std::ranges::find(m_aEditableColumns, rIndex.column()) == m_aEditableColumns.end())
         eFlags &= ~Qt::ItemIsEditable;
 
     return eFlags;
@@ -39,8 +39,15 @@ bool QtTreeViewModel::hasChildren(const QModelIndex& rIndex) const
     return QSortFilterProxyModel::hasChildren(rIndex);
 }
 
-void QtTreeViewModel::setEditableColumns(const std::unordered_set<int>& rEditableColumns)
+std::vector<int> QtTreeViewModel::editableColumns() const
 {
+    assert(std::ranges::is_sorted(m_aEditableColumns));
+    return m_aEditableColumns;
+}
+
+void QtTreeViewModel::setEditableColumns(const std::vector<int>& rEditableColumns)
+{
+    assert(std::ranges::is_sorted(rEditableColumns));
     m_aEditableColumns = rEditableColumns;
 }
 
