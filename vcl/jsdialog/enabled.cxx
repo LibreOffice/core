@@ -682,6 +682,36 @@ std::vector<OUString> completeWriterSidebarList(const o3tl::sorted_vector<OUStri
     return missing;
 }
 
+std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+
+        if (sEntry.startsWith("modules/"))
+            continue;
+        // Skip this one, I don't think it can appear in practice
+        if (entry == u"svx/ui/sidebargallery.ui")
+            continue;
+        // Skip this one, its context means it cannot appear in writer
+        else if (entry == u"svx/ui/sidebarshadow.ui")
+            continue;
+        // Skip this one, its context means it cannot appear in writer
+        else if (entry == u"svx/ui/sidebartexteffect.ui")
+            continue;
+        // Skip this one, its context means it cannot appear in writer
+        else if (entry == u"svx/ui/sidebarlists.ui")
+            continue;
+        // Skip this one, its context means it can only appear in draw/impress
+        else if (entry == u"svx/ui/defaultshapespanel.ui")
+            continue;
+        else if (!entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries)
 {
     std::vector<OUString> missing;

@@ -230,6 +230,15 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
         for (const auto& entry : missingCommonDialogUIs)
             rJson.putSimpleValue(entry);
     }
+
+    std::vector<OUString> missingCommonSidebarUIs = jsdialog::completeCommonSidebarList(entries);
+    rJson.put("CompleteCommonSidebarCoverage", missingCommonSidebarUIs.empty());
+    if (!missingCommonSidebarUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingCommonSidebarCoverage");
+        for (const auto& entry : missingCommonSidebarUIs)
+            rJson.putSimpleValue(entry);
+    }
 }
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
