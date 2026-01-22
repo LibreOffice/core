@@ -356,10 +356,12 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if (rMEvt.GetClicks() == 2)
                         {
-                            SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
-                            sal_uInt16 nPageNum = (pPageObj->GetReferencedPage()->GetPageNum() - 1) / 2;
-                            DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell);
-                            pDrawViewShell->SwitchPage(nPageNum);
+                            if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell))
+                            {
+                                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+                                sal_uInt16 nPageNum = (pPageObj->GetReferencedPage()->GetPageNum() - 1) / 2;
+                                pDrawViewShell->SwitchPage(nPageNum);
+                            }
                         }
                     }
                 }
