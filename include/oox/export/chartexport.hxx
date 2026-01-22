@@ -231,7 +231,7 @@ private:
         bool& rPrimaryAxes, sal_uInt32& nIdx);
 
     void exportSeriesText(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, bool bIsChartex );
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq );
     void exportSeriesCategory(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, sal_Int32 nValueType = XML_cat );
     void exportSeriesValues(
@@ -258,22 +258,16 @@ private:
     void exportAxes( bool bIsChartex );
     void exportAxis(const AxisIdPair& rAxisIdPair,
             bool bIsChartex);
-    void exportOneAxis_chart(
+    void _exportAxis(
         const css::uno::Reference< css::beans::XPropertySet >& xAxisProp,
         const css::uno::Reference< css::drawing::XShape >& xAxisTitle,
         const css::uno::Reference< css::beans::XPropertySet >& xMajorGrid,
         const css::uno::Reference< css::beans::XPropertySet >& xMinorGrid,
         sal_Int32 nAxisType,
         const char* sAxisPos,
-        const AxisIdPair& rAxisIdPair);
-    void exportOneAxis_chartex(
-        const css::uno::Reference< css::beans::XPropertySet >& xAxisProp,
-        const css::uno::Reference< css::drawing::XShape >& xAxisTitle,
-        const css::uno::Reference< css::beans::XPropertySet >& xMajorGrid,
-        const css::uno::Reference< css::beans::XPropertySet >& xMinorGrid,
-        sal_Int32 nAxisType,
-        const AxisIdPair& rAxisIdPair);
-    void createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes);
+        const AxisIdPair& rAxisIdPair,
+        bool bIsChartex);
+    void exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes = false);
     void exportView3D();
     bool isDeep3dChart();
     // Determine if (at least one) chart exported is from the 2014 chartex

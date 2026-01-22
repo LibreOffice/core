@@ -1111,7 +1111,6 @@ cardinalText
 caseSensitive
 cat
 catAx
-catScaling
 catLst
 catalog
 category
@@ -3328,7 +3327,6 @@ majorFont
 majorGridlines
 majorHAnsi
 majorTickMark
-majorTickMarks
 majorTimeUnit
 majorUnit
 man
@@ -3483,7 +3481,6 @@ minorFont
 minorGridlines
 minorHAnsi
 minorTickMark
-minorTickMarks
 minorTimeUnit
 minorUnit
 mintCream
@@ -5416,7 +5413,6 @@ threePt
 thresh
 through
 thruBlk
-tickLabels
 tickLblPos
 tickLblSkip
 tickMarkSkip
@@ -5604,8 +5600,6 @@ uniqueName
 uniqueParent
 uniqueTag
 uniqueValues
-units
-unitsLabel
 unknown
 unknownRelationship
 unlocked
@@ -5706,7 +5700,6 @@ vSpace
 vacatedStyle
 val
 valAx
-valScaling
 value
 valueAxis
 valueBetween
