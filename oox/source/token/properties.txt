@@ -569,7 +569,6 @@ StartWith
 StartingAngle
 State
 StringItemList
-StyleIndex
 SubPieType
 SubViewSize
 Subtotals

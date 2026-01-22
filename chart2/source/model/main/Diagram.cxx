@@ -101,8 +101,7 @@ enum
     PROP_DIAGRAM_SPLIT_POS,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
-    PROP_DIAGRAM_EXTERNALDATA,
-    PROP_DIAGRAM_STYLE_INDEX
+    PROP_DIAGRAM_EXTERNALDATA
 };
 
 void lcl_AddPropertiesToVector(
@@ -196,10 +195,6 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEVOID );
     rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
-                  cppu::UnoType<OUString>::get(),
-                  beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "StyleIndex",
-                  PROP_DIAGRAM_STYLE_INDEX,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
 }
