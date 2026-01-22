@@ -194,6 +194,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/swriter/ui/footendnotedialog.ui"_ustr,
         u"modules/swriter/ui/footnotepage.ui"_ustr,
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
+        u"modules/swriter/ui/insertbookmark.ui"_ustr,
         u"modules/swriter/ui/insertbreak.ui"_ustr,
         u"modules/swriter/ui/insertcaption.ui"_ustr,
         u"modules/swriter/ui/inserttable.ui"_ustr,
