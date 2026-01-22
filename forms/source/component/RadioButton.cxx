@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <o3tl/any.hxx>
 
 namespace frm
 {
@@ -182,8 +183,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
     if (nHandle != PROPERTY_ID_DEFAULT_STATE)
         return;
 
-    sal_Int16 nValue;
-    rValue >>= nValue;
+    sal_Int16 nValue = *o3tl::doAccess<sal_Int16>(rValue);
     if (1 == nValue)
     {   // Reset the 'default checked' for all Radios of the same group.
         // Because (as the Highlander already knew): "There can be only one"
