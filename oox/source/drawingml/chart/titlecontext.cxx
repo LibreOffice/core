@@ -50,7 +50,6 @@ ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const Attrib
     if( isCurrentElement( C_TOKEN( tx ) ) ) switch( nElement )
     {
         case C_TOKEN( rich ):
-        case CX_TOKEN( rich ):
             return new TextBodyContext( *this, mrModel.mxTextBody.create() );
 
         case C_TOKEN( strRef ):
@@ -58,14 +57,8 @@ ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const Attrib
             return new StringSequenceContext( *this, mrModel.mxDataSeq.create() );
 
         case C_TOKEN( v ):
-        case CX_TOKEN( v ):
             OSL_ENSURE( !mrModel.mxDataSeq, "TextContext::onCreateContext - multiple data sequences" );
             return this;    // collect value in onCharacters()
-        case CX_TOKEN( txData ):
-            // CT_TextData can have a <cx:v> element or a sequence
-            // <cx:f> <cx:v>. The former case will be handled through the
-            // CX_TOKEN(v) above, but the latter is not handled. TODO
-            return this;
     }
     return nullptr;
 }

@@ -405,11 +405,6 @@ ChartexTypeGroupContext::~ChartexTypeGroupContext()
 {
 }
 
-void ChartexTypeGroupContext::CreateSeries()
-{
-    mrModel.maSeries.create(false);
-}
-
 ContextHandlerRef ChartexTypeGroupContext::onCreateContext( [[maybe_unused]] sal_Int32 nElement,
         [[maybe_unused]] const AttributeList& rAttribs )
 {

@@ -5816,9 +5816,7 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
     const Reference< XOutputStream >& xParentRelation,
     const OUString& sContentType,
     const OUString& sRelationshipType,
-    OUString* pRelationshipId,
-    // if bNoHeader is true, don't create a header (<?xml... ) line
-    bool bNoHeader /* = false */     )
+    OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
@@ -5829,8 +5827,7 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
 
-    sax_fastparser::FSHelperPtr p = GetFB()->openFragmentStreamWithSerializer(
-            sFullStream, sContentType, bNoHeader );
+    sax_fastparser::FSHelperPtr p = GetFB()->openFragmentStreamWithSerializer( sFullStream, sContentType );
 
     return p;
 }

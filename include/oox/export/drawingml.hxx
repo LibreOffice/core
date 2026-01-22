@@ -535,8 +535,7 @@ public:
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const OUString& sContentType,
                                         const OUString& sRelationshipType,
-                                        OUString* pRelationshipId,
-                                        bool bNoHeader = false); // Don't write a <?xml... header line
+                                        OUString* pRelationshipId );
 
     OOX_DLLPUBLIC std::shared_ptr<GraphicExport> createGraphicExport();
 };
