@@ -154,18 +154,6 @@ public:
 };
 
 
-/** Handler for chartex type group contexts
- */
-class ChartexTypeGroupContext final : public TypeGroupContextBase
-{
-public:
-    explicit            ChartexTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
-    virtual             ~ChartexTypeGroupContext() override;
-
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
-};
-
-
 } // namespace oox::drawingml::chart
 
 #endif
