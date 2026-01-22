@@ -165,10 +165,6 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN(dTable):
                     return new DataTableContext( *this, mrModel.mxDataTable.create() );
-#if 0
-                case CHARTEX_TOKEN( funnel ):
-                    return new FunnelTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement, false ) );
-#endif
             }
         break;
     }
