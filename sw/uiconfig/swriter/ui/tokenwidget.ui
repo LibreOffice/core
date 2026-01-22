@@ -25,6 +25,11 @@
         <property name="tooltip_text" translatable="yes" context="addressblockdialog|left|tooltip_text">Move left</property>
         <property name="image">image1</property>
         <property name="always-show-image">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="left-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="tokenwidget|left">Scroll left</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -88,6 +93,11 @@
         <property name="tooltip_text" translatable="yes" context="addressblockdialog|right|tooltip_text">Move right</property>
         <property name="image">image2</property>
         <property name="always-show-image">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="right-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="tokenwidget|right">Scroll right</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
