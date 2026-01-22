@@ -1272,7 +1272,7 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
             {
                 // If the SdtControlType is not defined, it really OUGHT to be richText
-                // (although the presense of dataBinding gets treated as plainText by MS Word).
+                // (although the presence of dataBinding gets treated as plainText by MS Word).
                 // HOWEVER, richText blockSDT is not working as a content control yet,
                 // so here we just convert blockSDT richText into plainText instead.
 
@@ -3436,7 +3436,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if (nSprmId == NS_ooxml::LN_CT_SdtPr_dataBinding)
         {
             // Although the absense of a <w:text/> element should mean that the control is richText,
-            // in practice, the presense of a dataBinding element makes it plainText
+            // in practice, the presence of a dataBinding element makes it plainText
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::richText)
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
         }
