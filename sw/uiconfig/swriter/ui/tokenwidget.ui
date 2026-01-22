@@ -24,6 +24,11 @@
         <property name="receives-default">True</property>
         <property name="image">image1</property>
         <property name="always-show-image">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="left-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="tokenwidget|left">Scroll left</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -86,6 +91,11 @@
         <property name="receives-default">True</property>
         <property name="image">image2</property>
         <property name="always-show-image">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="right-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="tokenwidget|right">Scroll right</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
