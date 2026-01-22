@@ -516,9 +516,10 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     auto pSdPage = static_cast<SdPage*>(pPage.get());
     if (pSdPage->IsCanvasPage())
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        DrawViewShell* pDrawViewSh = comphelper::LibreOfficeKit::isActive() ?
+            dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell()) : nullptr;
+        if (pDrawViewSh)
         {
-            DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
             pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
         }
         mpCanvasPage = nullptr;
