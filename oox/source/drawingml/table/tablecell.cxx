@@ -142,7 +142,8 @@ static void applyLineAttributes(const ::oox::core::XmlFilterBase& rFilterBase,
     }
 
     PropertySet aPropSet( rxPropSet );
-    aPropSet.setProperty( nPropId, aBorderLine );
+    if (aPropSet.hasProperty(nPropId))
+        aPropSet.setProperty( nPropId, aBorderLine );
 }
 
 static void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableStylePart& rTableStylePart, sal_Int32 nLineType, oox::drawingml::LineProperties& rLineProperties )
