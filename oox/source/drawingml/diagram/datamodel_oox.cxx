@@ -136,7 +136,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
         if (xCandidate.is())
         {
             // check comparing the DiagramDataModelID created at BackgroundSHape creation for the oox::Shape
-            // that got transferend to the XShape when it was created
+            // that got transferred to the XShape when it was created
             SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(xCandidate));
             if (nullptr != pCandidate && pCandidate->getDiagramDataModelID() == getBackgroundShapeModelID())
                 xBgShape = xCandidate;
@@ -158,7 +158,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
 
     // write ExtList & it's contents
     // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
-    // for this case where the only relevant data is the 'relId' entzry I will allow
+    // for this case where the only relevant data is the 'relId' entry I will allow
     // to construct the XML statement by own string concatenation
     rTarget->startElementNS(XML_dgm, XML_extLst);
     const OUString rNsDsp(rFB.getNamespaceURL(OOX_NS(dsp)));
