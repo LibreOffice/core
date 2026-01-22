@@ -5097,36 +5097,39 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
     const SwCellFrame* pLow = static_cast<const SwCellFrame*>(_pRow->Lower());
     while ( pLow )
     {
-        SwTwips nTmp = 0;
-        const tools::Long nRowSpan = pLow->GetLayoutRowSpan();
-        // --> NEW TABLES
-        // Consider height of
-        // 1. current cell if RowSpan == 1
-        // 2. current cell if cell is "follow" cell of a cell with RowSpan == -1
-        // 3. master cell if RowSpan == -1
-        if ( 1 == nRowSpan )
-        {
-            nTmp = ::lcl_CalcMinCellHeight( pLow, _bConsiderObjs );
-        }
-        else if ( -1 == nRowSpan )
-        {
-            // Height of the last cell of a row span is height of master cell
-            // minus the height of the other rows which are covered by the master
-            // cell:
-            const SwCellFrame& rMaster = pLow->FindStartEndOfRowSpanCell( true );
-            nTmp = ::lcl_CalcMinCellHeight( &rMaster, _bConsiderObjs );
-            const SwFrame* pMasterRow = rMaster.GetUpper();
-            while ( pMasterRow && pMasterRow != _pRow )
-            {
-                nTmp -= aRectFnSet.GetHeight(pMasterRow->getFrameArea());
-                pMasterRow = pMasterRow->GetNext();
-            }
-        }
-        // <-- NEW TABLES
-
         // Do not consider rotated cells:
-        if ( pLow->IsVertical() == aRectFnSet.IsVert() && nTmp > nHeight )
-            nHeight = nTmp;
+        if (pLow->IsVertical() == aRectFnSet.IsVert())
+        {
+            SwTwips nTmp = 0;
+            const tools::Long nRowSpan = pLow->GetLayoutRowSpan();
+            // --> NEW TABLES
+            // Consider height of
+            // 1. current cell if RowSpan == 1
+            // 2. current cell if cell is "follow" cell of a cell with RowSpan == -1
+            // 3. master cell if RowSpan == -1
+            if ( 1 == nRowSpan )
+            {
+                nTmp = ::lcl_CalcMinCellHeight( pLow, _bConsiderObjs );
+            }
+            else if ( -1 == nRowSpan )
+            {
+                // Height of the last cell of a row span is height of master cell
+                // minus the height of the other rows which are covered by the master
+                // cell:
+                const SwCellFrame& rMaster = pLow->FindStartEndOfRowSpanCell( true );
+                nTmp = ::lcl_CalcMinCellHeight( &rMaster, _bConsiderObjs );
+                const SwFrame* pMasterRow = rMaster.GetUpper();
+                while ( pMasterRow && pMasterRow != _pRow )
+                {
+                    nTmp -= aRectFnSet.GetHeight(pMasterRow->getFrameArea());
+                    pMasterRow = pMasterRow->GetNext();
+                }
+            }
+            // <-- NEW TABLES
+
+            if (nTmp > nHeight)
+                nHeight = nTmp;
+        }
 
         pLow = static_cast<const SwCellFrame*>(pLow->GetNext());
     }
