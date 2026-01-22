@@ -109,6 +109,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
     CPPUNIT_ASSERT_EQUAL(nCellBottom, nTextBottom);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170438_dropdown)
+{
+    createSwDoc("tdf170438_dropdown.odt");
+
+    saveAndReload(u"Office Open XML Text"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if displayText is empty
+    assertXPath(pXmlDoc, "//w:listItem[1]", "displayText", u" ");
+    assertXPath(pXmlDoc, "//w:listItem[1]", "value", u""); // value may be empty
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
 {
     createSwDoc("tdf170389_manyTabstops.odt");
