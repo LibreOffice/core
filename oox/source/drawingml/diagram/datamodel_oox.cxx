@@ -122,7 +122,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
     // maybe that could be adapted for general use.
     // But there is DrawingML::WriteFill, that needs the XShape, sax_fastparser::FSHelper and a XmlFilterBase. We
     // can organize all that and then export from XShape model data.
-    // For The BGShape is is okay since in MSO Diagram data no shape for that exists anyways, it's just
+    // For The BGShape it is okay since in MSO Diagram data no shape for that exists anyways, it's just
     // FillAttributes and a XShape for BG needs to exist in DrawObject model anytime anyways, see
     // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
     // and more for later offering changing the Background of a Diagram.
