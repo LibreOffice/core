@@ -82,6 +82,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <i18nutil/guessparadirection.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <sot/exchange.hxx>
 #include <svl/stritem.hxx>
@@ -89,7 +90,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <tools/globname.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/formatbreakitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -3817,6 +3820,59 @@ void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(SwPaM& rPaM )
         SwNodeOffset nEnd = rSel.End()->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
             RemoveLeadingWhiteSpace(SwPosition(rSel.GetBound().GetNodes(), nPos));
+    }
+}
+
+void DocumentContentOperationsManager::AutoSetParagraphDirections(SwPaM& rPaM,
+                                                                  const SwRootFrame* pLayout)
+{
+    for (SwPaM& rSel : rPaM.GetRingContainer())
+    {
+        auto* pNode = rSel.GetPointNode().GetTextNode();
+        if (!pNode)
+        {
+            continue;
+        }
+
+        if (!pNode->GetSwAttrSet().GetItem(RES_PARATR_AUTOFRAMEDIR)->GetValue())
+        {
+            continue;
+        }
+
+        std::optional<bool> bIsCurrentlyRtl;
+        if (pLayout)
+        {
+            Point aPt;
+            std::pair<Point, bool> const tmp(aPt, false);
+            const SwTextFrame* pFrame
+                = static_cast<SwTextFrame*>(pNode->getLayoutFrame(pLayout, rPaM.GetPoint(), &tmp));
+            if (pFrame)
+            {
+                bIsCurrentlyRtl = pFrame->IsRightToLeft();
+            }
+        }
+
+        switch (i18nutil::GuessParagraphDirection(pNode->GetText()))
+        {
+            case i18nutil::ParagraphDirection::Ambiguous:
+                break;
+
+            case i18nutil::ParagraphDirection::LeftToRight:
+                if (bIsCurrentlyRtl.value_or(true))
+                {
+                    InsertPoolItem(rSel, SvxFrameDirectionItem{ SvxFrameDirection::Horizontal_LR_TB,
+                                                                RES_FRAMEDIR });
+                }
+                break;
+
+            case i18nutil::ParagraphDirection::RightToLeft:
+                if (!bIsCurrentlyRtl.value_or(false))
+                {
+                    InsertPoolItem(rSel, SvxFrameDirectionItem{ SvxFrameDirection::Horizontal_RL_TB,
+                                                                RES_FRAMEDIR });
+                }
+                break;
+        }
     }
 }
 

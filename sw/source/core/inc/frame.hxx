@@ -414,7 +414,7 @@ class SAL_DLLPUBLIC_RTTI SwFrame : public SwFrameAreaDefinition, public SwClient
     void UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, SwFrameInvFlags & );
     static void UpdateAttrFrameForFormatChange( SwFrameInvFlags & );
     SwFrame* GetIndNext_();
-    void SetDirFlags( bool bVert );
+    SW_DLLPUBLIC void SetDirFlags( bool bVert );
 
     const SwLayoutFrame* ImplGetNextLayoutLeaf( bool bFwd ) const;
 

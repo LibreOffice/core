@@ -14,7 +14,9 @@
 #include <iodetect.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <txtfrm.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace
@@ -197,6 +199,29 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
 
     //Matching the paragraph text and created string
     CPPUNIT_ASSERT_EQUAL(aResStr, aPara);
+}
+
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf157037AutomaticDirection)
+{
+    createSwDoc("tdf157037-automatic-dir.txt");
+
+    auto* pDoc = getSwDoc();
+    SwNodeIndex stNodes{ pDoc->GetNodes().GetEndOfContent(), -1 };
+
+    std::vector<SwTextFrame const*> aFrames;
+    for (size_t i = 0; i < 5; ++i)
+    {
+        aFrames.push_back(&dynamic_cast<SwTextFrame const&>(
+            *stNodes.GetNode().GetTextNode()->getLayoutFrame(nullptr)));
+        --stNodes;
+        --stNodes;
+    }
+
+    CPPUNIT_ASSERT(!aFrames.at(0)->IsRightToLeft());
+    CPPUNIT_ASSERT(aFrames.at(1)->IsRightToLeft());
+    CPPUNIT_ASSERT(!aFrames.at(2)->IsRightToLeft());
+    CPPUNIT_ASSERT(aFrames.at(3)->IsRightToLeft());
+    CPPUNIT_ASSERT(!aFrames.at(4)->IsRightToLeft());
 }
 
 } // end of anonymous namespace

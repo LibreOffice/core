@@ -64,56 +64,8 @@ using namespace com::sun::star;
 
 void SwEditShell::UpdateSelectionAutoParaDirection()
 {
-    for (SwPaM& rPaM : getShellCursor(true)->GetRingContainer())
-    {
-        auto* pNode = rPaM.GetPointNode().GetTextNode();
-        if (!pNode)
-        {
-            continue;
-        }
-
-        if (!pNode->GetSwAttrSet().GetItem(RES_PARATR_AUTOFRAMEDIR)->GetValue())
-        {
-            continue;
-        }
-
-        Point aPt;
-        std::pair<Point, bool> const tmp(aPt, false);
-        const SwTextFrame* pFrame
-            = static_cast<SwTextFrame*>(pNode->getLayoutFrame(GetLayout(), rPaM.GetPoint(), &tmp));
-        if (!pFrame)
-        {
-            continue;
-        }
-
-        bool bIsAlreadyRtl = pFrame->IsRightToLeft();
-
-        bool bShouldBeRtl = bIsAlreadyRtl;
-        switch (i18nutil::GuessParagraphDirection(pNode->GetText()))
-        {
-            case i18nutil::ParagraphDirection::Ambiguous:
-                bShouldBeRtl = bIsAlreadyRtl;
-                break;
-
-            case i18nutil::ParagraphDirection::LeftToRight:
-                bShouldBeRtl = false;
-                break;
-
-            case i18nutil::ParagraphDirection::RightToLeft:
-                bShouldBeRtl = true;
-                break;
-        }
-
-        if (bShouldBeRtl == bIsAlreadyRtl)
-        {
-            continue;
-        }
-
-        SvxFrameDirection eNeeded = bShouldBeRtl ? SvxFrameDirection::Horizontal_RL_TB
-                                                 : SvxFrameDirection::Horizontal_LR_TB;
-        rPaM.GetDoc().getIDocumentContentOperations().InsertPoolItem(
-            rPaM, SvxFrameDirectionItem{ eNeeded, RES_FRAMEDIR });
-    }
+    GetDoc()->getIDocumentContentOperations().AutoSetParagraphDirections(*getShellCursor(true),
+                                                                         GetLayout());
 }
 
 void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCursor )

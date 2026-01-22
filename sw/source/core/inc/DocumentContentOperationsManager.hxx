@@ -94,6 +94,7 @@ public:
     void RemoveLeadingWhiteSpace(const SwPosition & rPos ) override;
     void RemoveLeadingWhiteSpace(SwPaM& rPaM) override;
 
+    void AutoSetParagraphDirections(SwPaM& rPaM, const SwRootFrame* pLayout = nullptr) override;
 
     //Non-Interface methods
 

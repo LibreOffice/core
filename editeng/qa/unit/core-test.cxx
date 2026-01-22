@@ -135,6 +135,7 @@ public:
     void testTdf154248MultilineFieldWrapping();
     void testTdf151748StaleKashidaArray();
     void testTdf162803StaleKashidaArray();
+    void testTdf157037PasteTextAutoDirection();
 
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
@@ -169,6 +170,7 @@ public:
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
+    CPPUNIT_TEST(testTdf157037PasteTextAutoDirection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2371,6 +2373,89 @@ void Test::testTdf162803StaleKashidaArray()
         // Without the bug fix, this will be 17:
         CPPUNIT_ASSERT_EQUAL(size_t(0), rArray.size());
     }
+}
+
+class TestTextTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable>
+{
+    std::vector<OUString> m_aContent;
+    std::vector<OUString> m_aMimeType;
+
+public:
+    TestTextTransferable(std::vector<OUString> rContent, std::vector<OUString> rMimeType)
+        : m_aContent(std::move(rContent))
+        , m_aMimeType(std::move(rMimeType))
+    {
+        CPPUNIT_ASSERT_EQUAL(m_aContent.size(), m_aMimeType.size());
+    }
+
+    uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override
+    {
+        for (size_t nType = 0; nType < m_aMimeType.size(); ++nType)
+        {
+            if (rFlavor.MimeType == m_aMimeType[nType])
+            {
+                uno::Any aRet;
+                aRet <<= m_aContent.at(nType);
+                return aRet;
+            }
+        }
+        return {};
+    }
+
+    uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+    {
+        std::vector<datatransfer::DataFlavor> aFlavourVac;
+        for (size_t nType = 0; nType < m_aMimeType.size(); ++nType)
+        {
+            datatransfer::DataFlavor aFlavor;
+            aFlavor.DataType = cppu::UnoType<OUString>::get();
+            aFlavor.MimeType = m_aMimeType[nType];
+            aFlavor.HumanPresentableName = aFlavor.MimeType;
+            aFlavourVac.push_back(aFlavor);
+        }
+        uno::Sequence<datatransfer::DataFlavor> aFlavors(aFlavourVac.data(), m_aMimeType.size());
+        return aFlavors;
+    }
+
+    sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override
+    {
+        for (size_t nType = 0; nType < m_aMimeType.size(); ++nType)
+        {
+            if (rFlavor.MimeType == m_aMimeType[nType]
+                && rFlavor.DataType == cppu::UnoType<OUString>::get())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+void Test::testTdf157037PasteTextAutoDirection()
+{
+    // Given an empty editeng document:
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+
+    std::vector<OUString> aContent{ u"Example\nمثال\nExample\nمثال\nExample"_ustr };
+    std::vector<OUString> aMime{ u"text/plain;charset=utf-16"_ustr };
+    uno::Reference<datatransfer::XTransferable> xData(
+        new TestTextTransferable(std::move(aContent), std::move(aMime)));
+    aEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), /*paste special*/ true);
+
+    // Check that the paste worked
+    CPPUNIT_ASSERT_EQUAL(29, rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL(u"Example"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    CPPUNIT_ASSERT_EQUAL(u"مثال"_ustr, rDoc.GetParaAsString(sal_Int32(1)));
+    CPPUNIT_ASSERT_EQUAL(u"Example"_ustr, rDoc.GetParaAsString(sal_Int32(2)));
+    CPPUNIT_ASSERT_EQUAL(u"مثال"_ustr, rDoc.GetParaAsString(sal_Int32(3)));
+    CPPUNIT_ASSERT_EQUAL(u"Example"_ustr, rDoc.GetParaAsString(sal_Int32(4)));
+
+    CPPUNIT_ASSERT(!aEditEngine.IsRightToLeft(0));
+    CPPUNIT_ASSERT(aEditEngine.IsRightToLeft(1));
+    CPPUNIT_ASSERT(!aEditEngine.IsRightToLeft(2));
+    CPPUNIT_ASSERT(aEditEngine.IsRightToLeft(3));
+    CPPUNIT_ASSERT(!aEditEngine.IsRightToLeft(4));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

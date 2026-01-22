@@ -512,6 +512,8 @@ ErrCode SwASCIIParser::ReadChars()
 void SwASCIIParser::InsertText( const OUString& rStr )
 {
     m_rDoc.getIDocumentContentOperations().InsertString(*m_oPam, rStr);
+    m_rDoc.getIDocumentContentOperations().AutoSetParagraphDirections(*m_oPam,
+                                                                      /*layout*/ nullptr);
 
     if (m_oItemSet && g_pBreakIt
         && m_nScript != (SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX))

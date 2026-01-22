@@ -2782,49 +2782,62 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
 
 void ImpEditEngine::UpdateAutoParaDirection(const EditSelection& rCurSel)
 {
-    EditPaM aPaM(rCurSel.Min());
-
-    auto nPara = maEditDoc.GetPos(aPaM.GetNode());
-    if (nPara >= GetParaPortions().Count())
+    sal_Int32 nStartNode = maEditDoc.GetPos(rCurSel.Min().GetNode());
+    sal_Int32 nEndNode = maEditDoc.GetPos(rCurSel.Max().GetNode());
+    if (nStartNode > nEndNode)
     {
-        return;
+        std::swap(nStartNode, nEndNode);
     }
 
-    const SvxAutoFrameDirectionItem& rItem = GetParaAttrib(nPara, EE_PARA_AUTOWRITINGDIR);
-    if (!rItem.GetValue())
+    for (sal_Int32 nPara = nStartNode; nPara <= nEndNode; ++nPara)
     {
-        return;
-    }
-
-    bool bIsAlreadyRtl = IsRightToLeft(nPara);
-
-    bool bShouldBeRtl = bIsAlreadyRtl;
-    switch (i18nutil::GuessParagraphDirection(aPaM.GetNode()->GetString()))
-    {
-        case i18nutil::ParagraphDirection::Ambiguous:
-            bShouldBeRtl = bIsAlreadyRtl;
+        if (nPara >= GetParaPortions().Count())
+        {
             break;
+        }
 
-        case i18nutil::ParagraphDirection::LeftToRight:
-            bShouldBeRtl = false;
-            break;
+        const SvxAutoFrameDirectionItem& rItem = GetParaAttrib(nPara, EE_PARA_AUTOWRITINGDIR);
+        if (!rItem.GetValue())
+        {
+            continue;
+        }
 
-        case i18nutil::ParagraphDirection::RightToLeft:
-            bShouldBeRtl = true;
-            break;
+        const auto* pPara = GetParaPortions().SafeGetObject(nPara);
+        if (!pPara)
+        {
+            continue;
+        }
+
+        bool bIsAlreadyRtl = IsRightToLeft(nPara);
+
+        bool bShouldBeRtl = bIsAlreadyRtl;
+        switch (i18nutil::GuessParagraphDirection(pPara->GetNode()->GetString()))
+        {
+            case i18nutil::ParagraphDirection::Ambiguous:
+                bShouldBeRtl = bIsAlreadyRtl;
+                break;
+
+            case i18nutil::ParagraphDirection::LeftToRight:
+                bShouldBeRtl = false;
+                break;
+
+            case i18nutil::ParagraphDirection::RightToLeft:
+                bShouldBeRtl = true;
+                break;
+        }
+
+        if (bShouldBeRtl == bIsAlreadyRtl)
+        {
+            continue;
+        }
+
+        SvxFrameDirection eNeeded = bShouldBeRtl ? SvxFrameDirection::Horizontal_RL_TB
+                                                 : SvxFrameDirection::Horizontal_LR_TB;
+
+        SfxItemSet aSet{ GetParaAttribs(nPara) };
+        aSet.Put(SvxFrameDirectionItem{ eNeeded, EE_PARA_WRITINGDIR });
+        SetParaAttribs(nPara, aSet);
     }
-
-    if (bShouldBeRtl == bIsAlreadyRtl)
-    {
-        return;
-    }
-
-    SvxFrameDirection eNeeded
-        = bShouldBeRtl ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
-
-    SfxItemSet aSet{ GetParaAttribs(nPara) };
-    aSet.Put(SvxFrameDirectionItem{ eNeeded, EE_PARA_WRITINGDIR });
-    SetParaAttribs(nPara, aSet);
 }
 
 EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUString& rStr)
@@ -4338,7 +4351,11 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 uno::Any aData = rxDataObj->getTransferData( aFlavor );
                 OUString aText;
                 aData >>= aText;
-                aNewSelection = ImpInsertText( EditSelection(rPaM), aText );
+                auto aNewPaM = ImpInsertText(EditSelection(rPaM), aText);
+                aNewSelection = aNewPaM;
+
+                // tdf#157037: Automatically adjust paragraph directions after pasting text
+                UpdateAutoParaDirection(EditSelection{ rPaM, aNewPaM });
             }
             catch( ... )
             {
