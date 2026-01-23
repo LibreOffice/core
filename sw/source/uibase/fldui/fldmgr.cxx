@@ -188,12 +188,13 @@ const TranslateId FMT_NUM_ARY[] =
     FMT_NUM_PAGESPECIAL
 };
 
+// tdf#170392 - this should be aligned with enum SwFileNameFormat in sw/inc/fldbas.hxx
 const TranslateId FMT_FF_ARY[] =
 {
-    FMT_FF_NAME,
-    FMT_FF_PATHNAME,
     FMT_FF_PATH,
+    FMT_FF_PATHNAME,
     FMT_FF_NAME_NOEXT,
+    FMT_FF_NAME,
     FMT_FF_UI_NAME,
     FMT_FF_UI_RANGE
 };
