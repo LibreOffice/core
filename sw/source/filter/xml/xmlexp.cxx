@@ -539,11 +539,14 @@ void SwXMLExport::ExportContent_()
 
     GetTextParagraphExport()->exportTrackedChanges( false );
     GetTextParagraphExport()->exportTextDeclarations();
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-
     GetTextParagraphExport()->exportFramesBoundToPage( m_bShowProgress );
-    GetTextParagraphExport()->exportText( xText, m_bShowProgress );
+
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    if (xTextDoc.is())
+    {
+        Reference < XText > xText = xTextDoc->getText();
+        GetTextParagraphExport()->exportText( xText, m_bShowProgress );
+    }
 }
 
 SwDoc* SwXMLExport::getDoc()
