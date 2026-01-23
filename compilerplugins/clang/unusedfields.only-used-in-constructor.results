@@ -249,9 +249,9 @@ include/filter/msfilter/svdfppt.hxx:886
 include/formula/formulahelper.hxx:39
     formula::FormulaHelper m_aSysLocale SvtSysLocale
 include/LibreOfficeKit/LibreOfficeKitGtk.h:41
-    _LOKDocView aDrawingArea GtkDrawingArea
+    LOKDocViewStruct aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:46
-    _LOKDocViewClass parent_class GtkDrawingAreaClass
+    LOKDocViewClassStruct parent_class GtkDrawingAreaClass
 include/oox/export/shapes.hxx:103
     oox::drawingml::ShapeExport maShapeMap ShapeHashMap
 include/registry/registry.hxx:34

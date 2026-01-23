@@ -32,16 +32,16 @@ G_BEGIN_DECLS
 #define LOK_IS_DOC_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  LOK_TYPE_DOC_VIEW))
 #define LOK_DOC_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
 
-typedef struct _LOKDocView        LOKDocView;
-typedef struct _LOKDocViewClass   LOKDocViewClass;
-typedef struct _LOKDocViewPrivate LOKDocViewPrivate;
+typedef struct LOKDocViewStruct        LOKDocView;
+typedef struct LOKDocViewClassStruct   LOKDocViewClass;
+typedef struct LOKDocViewPrivateStruct LOKDocViewPrivate;
 
-struct _LOKDocView
+struct LOKDocViewStruct
 {
     GtkDrawingArea aDrawingArea;
 };
 
-struct _LOKDocViewClass
+struct LOKDocViewClassStruct
 {
     GtkDrawingAreaClass parent_class;
 };

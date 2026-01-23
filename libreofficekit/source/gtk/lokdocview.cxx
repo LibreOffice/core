@@ -270,7 +270,7 @@ void setDocumentView(LibreOfficeKitDocument* pDoc, int viewId)
 }
 
 /// Wrapper around LOKDocViewPrivateImpl, managed by malloc/memset/free.
-struct _LOKDocViewPrivate
+struct LOKDocViewPrivateStruct
 {
     LOKDocViewPrivateImpl* m_pImpl;
 
