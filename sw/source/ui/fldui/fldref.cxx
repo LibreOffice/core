@@ -649,7 +649,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getOutlineText(nOutlIdx, pSh->GetLayout(), true, true, false));
                     if ((IsFieldEdit() && pRefField
-                            && pRefField->GetReferencedTextNode(nullptr, nullptr) == maOutlineNodes[nOutlIdx])
+                            && pRefField->GetReferencedTextNode() == maOutlineNodes[nOutlIdx])
                         || mpSavedSelectedTextNode == maOutlineNodes[nOutlIdx])
                     {
                         m_sSelectionToolTipLBId = sId;
@@ -684,7 +684,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getListItemText(*maNumItems[nNumItemIdx], *pSh->GetLayout()));
                     if ((IsFieldEdit() && pRefField
-                            && pRefField->GetReferencedTextNode(nullptr, nullptr) == maNumItems[nNumItemIdx]->GetTextNode())
+                            && pRefField->GetReferencedTextNode() == maNumItems[nNumItemIdx]->GetTextNode())
                         || mpSavedSelectedTextNode == maNumItems[nNumItemIdx]->GetTextNode())
                     {
                         m_sSelectionToolTipLBId = sId;

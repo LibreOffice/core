@@ -161,7 +161,7 @@ public:
     // --> #i81002#
     SW_DLLPUBLIC bool IsRefToHeadingCrossRefBookmark() const;
     SW_DLLPUBLIC bool IsRefToNumItemCrossRefBookmark() const;
-    SW_DLLPUBLIC const SwTextNode* GetReferencedTextNode(const SwTextNode* pTextNode, SwFrame* pFrame) const;
+    SW_DLLPUBLIC const SwTextNode* GetReferencedTextNode() const;
     // #i85090#
     SW_DLLPUBLIC OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
 

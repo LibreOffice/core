@@ -395,14 +395,14 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_sSetRefName);
 }
 
-const SwTextNode* SwGetRefField::GetReferencedTextNode(const SwTextNode* pTextNode, SwFrame* pFrame) const
+const SwTextNode* SwGetRefField::GetReferencedTextNode() const
 {
     SwGetRefFieldType *pTyp = dynamic_cast<SwGetRefFieldType*>(GetTyp());
     if (!pTyp)
         return nullptr;
     sal_Int32 nDummy = -1;
     return SwGetRefFieldType::FindAnchor( &pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, m_nFlags, &nDummy,
-                                          nullptr, nullptr, pTextNode, pFrame );
+                                          nullptr, nullptr, /*pTextNode*/nullptr, /*pFrame*/nullptr );
 }
 
 // strikethrough for tooltips using Unicode combining character
@@ -420,7 +420,7 @@ static OUString lcl_formatStringByCombiningCharacter(std::u16string_view sText, 
 OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
         SwRootFrame const& rLayout) const
 {
-    const SwTextNode* pReferencedTextNode( GetReferencedTextNode(/*pTextNode*/nullptr, /*pFrame*/nullptr) );
+    const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
     if ( !pReferencedTextNode )
         return OUString();
 
