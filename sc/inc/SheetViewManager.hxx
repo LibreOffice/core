@@ -69,7 +69,7 @@ public:
     static OUString defaultViewName();
 
     std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
-    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
+    void addOrderIndices(SortOrderInfo const& rSortInfo);
 };
 }
 

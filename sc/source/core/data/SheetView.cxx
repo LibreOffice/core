@@ -12,38 +12,49 @@
 
 namespace sc
 {
-void SortOrderReverser::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow,
-                                        SCROW lastRow)
+void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
-    mnFirstRow = firstRow;
-    mnLastRow = lastRow;
+    bool bKeyStatesEqual = std::equal(rSortInfo.maKeyStates.begin(), rSortInfo.maKeyStates.begin(),
+                                      maSortInfo.maKeyStates.begin());
 
-    if (maOrder.empty())
+    if (bKeyStatesEqual && maSortInfo.mnFirstRow == rSortInfo.mnFirstRow
+        && maSortInfo.mnLastRow == rSortInfo.mnLastRow)
     {
-        maOrder = rOrder;
+        if (maSortInfo.maOrder.empty())
+        {
+            // just set the order - no need to merge
+            maSortInfo.maOrder = rSortInfo.maOrder;
+        }
+        else
+        {
+            // merge the order
+            size_t nOrderSize = maSortInfo.maOrder.size();
+            assert(nOrderSize == rSortInfo.maOrder.size());
+
+            std::vector<SCCOLROW> aNewOrder(nOrderSize);
+            for (size_t nIndex = 0; nIndex < nOrderSize; ++nIndex)
+            {
+                size_t nSortedIndex = rSortInfo.maOrder[nIndex];
+                aNewOrder[nIndex] = maSortInfo.maOrder[nSortedIndex - 1];
+            }
+            maSortInfo.maOrder = aNewOrder;
+        }
     }
     else
     {
-        assert(maOrder.size() == rOrder.size());
-        std::vector<SCCOLROW> newOrder(maOrder.size());
-        for (size_t nIndex = 0; nIndex < maOrder.size(); ++nIndex)
-        {
-            size_t nSortedIndex = rOrder[nIndex];
-            newOrder[nIndex] = maOrder[nSortedIndex - 1];
-        }
-        maOrder = newOrder;
+        maSortInfo = rSortInfo;
     }
 }
 
 SCROW SortOrderReverser::unsort(SCROW nRow) const
 {
-    if (maOrder.empty())
+    if (maSortInfo.maOrder.empty())
         return nRow;
 
-    if (nRow >= mnFirstRow && nRow <= mnLastRow)
+    if (nRow >= maSortInfo.mnFirstRow && nRow <= maSortInfo.mnLastRow)
     {
-        size_t index = nRow - mnFirstRow;
-        auto nUnsortedRow = mnFirstRow + maOrder[index] - 1;
+        size_t index = nRow - maSortInfo.mnFirstRow;
+        auto nUnsortedRow = maSortInfo.mnFirstRow + maSortInfo.maOrder[index] - 1;
         return nUnsortedRow;
     }
     return nRow;
@@ -51,16 +62,16 @@ SCROW SortOrderReverser::unsort(SCROW nRow) const
 
 SCROW SortOrderReverser::resort(SCROW nRow) const
 {
-    if (maOrder.empty())
+    if (maSortInfo.maOrder.empty())
         return nRow;
 
-    if (nRow >= mnFirstRow && nRow <= mnLastRow)
+    if (nRow >= maSortInfo.mnFirstRow && nRow <= maSortInfo.mnLastRow)
     {
-        SCCOLROW nOrderValue = nRow - mnFirstRow + 1;
-        for (size_t nIndex = 0; nIndex < maOrder.size(); ++nIndex)
+        SCCOLROW nOrderValue = nRow - maSortInfo.mnFirstRow + 1;
+        for (size_t nIndex = 0; nIndex < maSortInfo.maOrder.size(); ++nIndex)
         {
-            if (maOrder[nIndex] == nOrderValue)
-                return mnFirstRow + nIndex;
+            if (maSortInfo.maOrder[nIndex] == nOrderValue)
+                return maSortInfo.mnFirstRow + nIndex;
         }
     }
     return nRow;
@@ -81,11 +92,11 @@ SCTAB SheetView::getTableNumber() const
     return mpTable->GetTab();
 }
 
-void SheetView::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow)
+void SheetView::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
     if (!moSortOrder)
         moSortOrder.emplace();
-    moSortOrder->addOrderIndices(rOrder, firstRow, lastRow);
+    moSortOrder->addOrderIndices(rSortInfo);
 }
 }
 
