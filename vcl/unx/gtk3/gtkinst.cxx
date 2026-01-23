@@ -13880,9 +13880,14 @@ int promote_arg(bool bArg)
 
 class GtkInstanceItemView : public GtkInstanceWidget, public virtual weld::ItemView
 {
+protected:
+    GtkTreeModel* m_pTreeModel;
+
 public:
-    GtkInstanceItemView(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+    GtkInstanceItemView(GtkWidget* pWidget, GtkTreeModel* pTreeModel, GtkInstanceBuilder* pBuilder,
+                        bool bTakeOwnership)
         : GtkInstanceWidget(pWidget, pBuilder, bTakeOwnership)
+        , m_pTreeModel(pTreeModel)
     {
     }
 
@@ -13898,7 +13903,6 @@ class GtkInstanceTreeView : public GtkInstanceItemView, public virtual weld::Tre
 {
 private:
     GtkTreeView* m_pTreeView;
-    GtkTreeModel* m_pTreeModel;
 
     typedef void(*setterFnc)(GtkTreeModel*, GtkTreeIter*, ...);
     setterFnc m_Setter;
@@ -14600,9 +14604,9 @@ private:
 
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceItemView(GTK_WIDGET(pTreeView), pBuilder, bTakeOwnership)
+        : GtkInstanceItemView(GTK_WIDGET(pTreeView), gtk_tree_view_get_model(pTreeView), pBuilder,
+                              bTakeOwnership)
         , m_pTreeView(pTreeView)
-        , m_pTreeModel(gtk_tree_view_get_model(m_pTreeView))
         , m_bWorkAroundBadDragRegion(false)
         , m_bInDrag(false)
         , m_bChangedByMouse(false)
@@ -16630,9 +16634,10 @@ private:
 
 public:
     GtkInstanceIconView(GtkIconView* pIconView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceItemView(GTK_WIDGET(pIconView), pBuilder, bTakeOwnership)
+        : GtkInstanceItemView(GTK_WIDGET(pIconView), gtk_icon_view_get_model(pIconView), pBuilder,
+                              bTakeOwnership)
         , m_pIconView(pIconView)
-        , m_pTreeStore(GTK_TREE_STORE(gtk_icon_view_get_model(m_pIconView)))
+        , m_pTreeStore(GTK_TREE_STORE(m_pTreeModel))
         , m_nTextCol(gtk_icon_view_get_text_column(m_pIconView)) // May be -1
         , m_nImageCol(gtk_icon_view_get_pixbuf_column(m_pIconView))
         , m_nSelectionChangedSignalId(g_signal_connect(pIconView, "selection-changed",
