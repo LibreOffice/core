@@ -215,10 +215,10 @@ void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 n
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
-            if ( nStart == nCurrentPos )
+            if (nStart == nCurrentPos && rAttrs.GetNode() == pMark->GetMarkStart().GetNode())
                 aStarts.push_back( pMark->GetName() );
 
-            if ( nEnd == nCurrentPos )
+            if (nEnd == nCurrentPos && rAttrs.GetNode() == pMark->GetMarkEnd().GetNode())
                 aEnds.push_back( pMark->GetName() );
         }
     }
