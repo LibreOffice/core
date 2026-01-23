@@ -154,7 +154,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             mrTextCharacterProperties.moUnderlineFillFollowText = true;
         break;
         case A_TOKEN( uFill ):      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
-            return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor, nullptr);
+            return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor);
 
         // CT_FontCollection
         case A_TOKEN( latin ):      // CT_TextFont
