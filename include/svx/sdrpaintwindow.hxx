@@ -62,9 +62,6 @@ private:
     // the OutputDevice this window represents
     VclPtr<OutputDevice>                                mpOutputDevice;
 
-    /// In case mrOutputDevice is a buffer for a vcl::Window, this is the window.
-    VclPtr<vcl::Window>                                 mpWindow;
-
     // the SdrPaintView this window belongs to
     SdrPaintView&                                       mrPaintView;
 
@@ -90,7 +87,7 @@ private:
     void impCreateOverlayManager();
 
 public:
-    SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow = nullptr);
+    SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut);
     ~SdrPaintWindow();
 
     // allow reference to patched, see patchPaintWindow/unpatchPaintWindow
@@ -99,7 +96,6 @@ public:
 
     // data read accesses
     OutputDevice& GetOutputDevice() const { return *mpOutputDevice; }
-    vcl::Window* GetWindow() const { return mpWindow; }
 
     // OVERLAYMANAGER
     rtl::Reference< sdr::overlay::OverlayManager > const & GetOverlayManager() const;
