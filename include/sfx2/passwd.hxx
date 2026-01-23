@@ -69,7 +69,10 @@ private:
 
     std::unique_ptr<weld::Button> m_xOKBtn;
 
-    std::array<std::unique_ptr<weld::ToggleButton>, 4> m_xPass;
+    std::unique_ptr<weld::ToggleButton> m_xBtn1;
+    std::unique_ptr<weld::ToggleButton> m_xBtn2;
+    std::unique_ptr<weld::ToggleButton> m_xBtn3;
+    std::unique_ptr<weld::ToggleButton> m_xBtn4;
 
     std::shared_ptr<weld::MessageDialog> m_xConfirmFailedDialog;
 
