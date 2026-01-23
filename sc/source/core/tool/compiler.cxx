@@ -5422,7 +5422,8 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
     switch (t->GetType())
     {
         case svExternalName:
-            rBuffer.append(pConv->makeExternalNameStr( nFileId, *pFileName, t->GetString().getString()));
+            rBuffer.append(
+                pConv->makeExternalNameStr(nUsedFileId, *pFileName, t->GetString().getString()));
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(rDoc.GetSheetLimits(),
