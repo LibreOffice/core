@@ -65,8 +65,7 @@ public:
 
     static void     ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame );
 
-    SC_DLLPUBLIC bool Sort(
-        SCTAB nTab, const ScSortParam& rSortParam, bool bRecord, bool bPaint, bool bApi );
+    SC_DLLPUBLIC bool SortTab(SCTAB nTab, const ScSortParam& rSortParam, bool bRecord, bool bPaint, bool bApi);
 
     SC_DLLPUBLIC bool           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, bool bRecord, bool bApi );

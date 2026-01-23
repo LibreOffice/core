@@ -215,7 +215,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     SCTAB nTab = GetViewData().CurrentTabForData();
     ScDBDocFunc aDBDocFunc( *pDocSh );
-    bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
+    bool bSuccess = aDBDocFunc.SortTab(nTab, rSortParam, bRecord, bPaint, false);
     if ( bSuccess && !rSortParam.bInplace )
     {
         //  mark target

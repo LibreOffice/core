@@ -5353,7 +5353,7 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
     pDocSh->GetDBData( aRange, SC_DB_MAKE, ScGetDBSelection::ForceMark );       // if needed create area
 
     ScDBDocFunc aFunc(*pDocSh); // area must be created
-    (void)aFunc.Sort( nTab, aParam, true, true, true );
+    (void)aFunc.SortTab(nTab, aParam, true, true, true);
 }
 
 // XFilterable

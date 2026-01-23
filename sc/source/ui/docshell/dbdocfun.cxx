@@ -542,7 +542,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
             if (bSort)
             {
                 pDBData->GetSortParam( aSortParam );            // range may have changed
-                (void)Sort( nTab, aSortParam, false, false, bApi );
+                (void)SortTab( nTab, aSortParam, false, false, bApi );
             }
             if (bQuery)
             {
@@ -608,8 +608,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
     return bDone;
 }
 
-bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
-                            bool bRecord, bool bPaint, bool bApi )
+bool ScDBDocFunc::SortTab(SCTAB nTab, const ScSortParam& rSortParam, bool bRecord, bool bPaint, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -1320,7 +1319,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             ScSortParam aOldSort;
             pDBData->GetSortParam( aOldSort );
             ScSortParam aSortParam( aNewParam, aOldSort );
-            Sort( nTab, aSortParam, false, false, bApi );
+            SortTab(nTab, aSortParam, false, false, bApi);
         }
 
         bSuccess = rDoc.DoSubTotals( nTab, aNewParam );
