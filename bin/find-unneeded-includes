@@ -105,9 +105,9 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
     # Skip forward declaration of versioned namespaces
     # see https://gerrit.libreoffice.org/c/core/+/72972
     # for an example of breakage caused by this
-    if include == "unicode/regex.h":
+    if include.startswith("unicode/"):
         for item in toAdd:
-            match = re.search(r'namespace icu.* class RegexMatcher', item)
+            match = re.search(r'namespace icu_.*', item)
             if match:
                 return True
 
