@@ -233,12 +233,11 @@ class SimpleFillPropertiesContext final : private FillProperties, public FillPro
 public:
     explicit            SimpleFillPropertiesContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
-                            ::model::ComplexColor& rColor, Color *pOOXColor);
+                            ::model::ComplexColor& rColor);
     virtual             ~SimpleFillPropertiesContext() override;
 
 private:
     ::model::ComplexColor& mrColor;
-    Color* mpOOXColor;
 };
 
 } // namespace oox::drawingml
