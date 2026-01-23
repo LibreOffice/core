@@ -839,6 +839,7 @@ const svl::SharedString & ScInterpreter::PopString()
                 break;
             case svString:
             case svStringName:
+            case svDPFieldName:
                 return p->GetString();
             case svEmptyCell:
             case svMissing:
@@ -1490,6 +1491,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svDouble:
                 case svString:
                 case svStringName:
+                case svDPFieldName:
                 case svSingleRef:
                 case svExternalSingleRef:
                 case svMissing:
@@ -2358,6 +2360,7 @@ svl::SharedString ScInterpreter::GetString()
         }
         case svString:
         case svStringName:
+        case svDPFieldName:
             return PopString();
         case svSingleRef:
         {

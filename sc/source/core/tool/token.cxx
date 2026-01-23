@@ -269,6 +269,15 @@ void ScRawToken::SetStringName( rtl_uString* pData, rtl_uString* pDataIgnoreCase
     sharedstring.mpDataIgnoreCase = pDataIgnoreCase;
 }
 
+void ScRawToken::SetDPFieldName( rtl_uString* pData, rtl_uString* pDataIgnoreCase )
+{
+    eOp = ocDPFieldName;
+    eType = svString;
+
+    sharedstring.mpData = pData;
+    sharedstring.mpDataIgnoreCase = pDataIgnoreCase;
+}
+
 void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
 {
     eOp       = ocPush;
@@ -5073,7 +5082,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         case svString:
         {
             OUString aStr = rToken.GetString().getString();
-            if (eOp == ocBad || eOp == ocStringXML || eOp == ocStringName)
+            if (eOp == ocBad || eOp == ocStringXML || eOp == ocStringName || eOp == ocDPFieldName)
             {
                 rBuf.append(aStr);
                 return;

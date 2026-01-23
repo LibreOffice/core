@@ -44,6 +44,7 @@
 
 #include <vector>
 #include <memory>
+#include <optional>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
@@ -68,6 +69,7 @@ struct ScDPLabelData
     OUString   maName;         ///< Original name of the dimension.
     OUString   maLayoutName;   ///< Layout name (display name)
     OUString   maSubtotalName;
+    std::optional<OUString> maCalculation; ///< Calculation field data
     SCCOL      mnCol;          ///< 0-based field index (not the source column index)
     tools::Long       mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
     PivotFunc  mnFuncMask;     ///< Page/Column/Row subtotal function.
@@ -78,6 +80,7 @@ struct ScDPLabelData
     bool       mbIsValue:1;    ///< true = Sum or count in data field.
     bool       mbDataLayout:1;
     bool       mbRepeatItemLabels:1;
+    bool       mbCalculatedField:1;
 
     struct Member
     {

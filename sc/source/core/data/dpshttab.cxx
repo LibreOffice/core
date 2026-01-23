@@ -30,6 +30,7 @@
 #include <scresid.hxx>
 #include <rangenam.hxx>
 #include <queryentry.hxx>
+#include <tokenarray.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/XmlWriter.hxx>
@@ -77,7 +78,12 @@ void ScSheetDPData::DisposeData()
 sal_Int32 ScSheetDPData::GetColumnCount()
 {
     CreateCacheTable();
-    return aCacheTable.getColSize();
+    return aCacheTable.getColSize() + aCacheTable.getCalculatedColumnCount();
+}
+
+sal_Int32 ScSheetDPData::GetCalculatedColumnCount()
+{
+    return aCacheTable.getCalculatedColumnCount();
 }
 
 OUString ScSheetDPData::getDimensionName(sal_Int32 nColumn)
@@ -89,7 +95,7 @@ OUString ScSheetDPData::getDimensionName(sal_Int32 nColumn)
         //return "Data";
         return ScResId(STR_PIVOT_DATA);
     }
-    else if (nColumn >= aCacheTable.getColSize())
+    else if (nColumn >= aCacheTable.getColSize() + aCacheTable.getCalculatedColumnCount())
     {
         OSL_FAIL("getDimensionName: invalid dimension");
         return OUString();
@@ -103,20 +109,37 @@ OUString ScSheetDPData::getDimensionName(sal_Int32 nColumn)
 bool ScSheetDPData::IsDateDimension(sal_Int32 nDim)
 {
     CreateCacheTable();
-    tools::Long nColCount = aCacheTable.getColSize();
     if (getIsDataLayoutDimension(nDim))
     {
         return false;
     }
-    else if (nDim >= nColCount)
+    else if (nDim >= aCacheTable.getColSize() + aCacheTable.getCalculatedColumnCount())
     {
         OSL_FAIL("IsDateDimension: invalid dimension");
         return false;
     }
     else
     {
-        return GetCacheTable().getCache().IsDateDimension( nDim);
+        return GetCacheTable().getCache().IsDateDimension(nDim);
     }
+}
+
+bool ScSheetDPData::IsCalculatedDimension(sal_Int32 nDim)
+{
+    CreateCacheTable();
+    return GetCacheTable().isCalculatedField(nDim);
+}
+
+OUString ScSheetDPData::GetCalculation(sal_Int32 nDim)
+{
+    CreateCacheTable();
+    return GetCacheTable().getCalculation(nDim);
+}
+
+const ScTokenArray* ScSheetDPData::GetCalculationToken(sal_Int32 nDim)
+{
+    CreateCacheTable();
+    return GetCacheTable().getCalculationToken(nDim);
 }
 
 sal_uInt32 ScSheetDPData::GetNumberFormat(sal_Int32 nDim)
@@ -126,7 +149,7 @@ sal_uInt32 ScSheetDPData::GetNumberFormat(sal_Int32 nDim)
     {
         return 0;
     }
-    else if (nDim >= GetCacheTable().getColSize())
+    else if (nDim >= GetCacheTable().getColSize() + aCacheTable.getCalculatedColumnCount())
     {
         OSL_FAIL("GetNumberFormat: invalid dimension");
         return 0;
@@ -150,7 +173,7 @@ sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
 bool ScSheetDPData::getIsDataLayoutDimension(sal_Int32 nColumn)
 {
     CreateCacheTable();
-    return (nColumn ==static_cast<tools::Long>( aCacheTable.getColSize()));
+    return (nColumn == static_cast<tools::Long>( aCacheTable.getColSize() + aCacheTable.getCalculatedColumnCount()));
 }
 
 void ScSheetDPData::SetEmptyFlags( bool bIgnoreEmptyRowsP, bool bRepeatIfEmptyP )
@@ -167,11 +190,11 @@ bool ScSheetDPData::IsRepeatIfEmpty()
 void ScSheetDPData::CreateCacheTable()
 {
     // Scan and store the data from the source range.
-    if (!aCacheTable.empty())
-        // already cached.
-        return;
+    if (aCacheTable.empty()) // already cached.
+        aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
 
-    aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
+    if (aCacheTable.emptycalcfields()) // already cached.
+        aCacheTable.fillCalcFieldTable();
 }
 
 void ScSheetDPData::FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rCatDims)
@@ -285,7 +308,7 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
+const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData) const
 {
     if (!mpDoc)
         return nullptr;
@@ -303,11 +326,11 @@ const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDi
     {
         // Name-based data source.
         ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
-        return rCaches.getCache(GetRangeName(), GetSourceRange(), pDimData);
+        return rCaches.getCache(GetRangeName(), GetSourceRange(), pDimData, pCalculatedDimData);
     }
 
     ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
-    return rCaches.getCache(GetSourceRange(), pDimData);
+    return rCaches.getCache(GetSourceRange(), pDimData, pCalculatedDimData);
 }
 
 TranslateId ScSheetSourceDesc::CheckSourceRange() const

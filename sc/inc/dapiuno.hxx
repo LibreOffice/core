@@ -55,6 +55,7 @@ namespace com::sun::star::sheet { struct DataPilotFieldSortInfo; }
 
 class ScDocShell;
 class ScDPSaveDimension;
+class ScTokenArray;
 struct ScDPNumGroupInfo;
 
 class ScDataPilotTableObj;
@@ -369,11 +370,17 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj> getScDataPilotFieldObjByIndex( sal_Int32 nIndex );
+    SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj>
+    getScDataPilotFieldObjByIndex(sal_Int32 nIndex, bool bCalculated = false,
+                                  const OUString& aFieldName = u""_ustr,
+                                  const std::shared_ptr<ScTokenArray>& pArray = nullptr);
     SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj> getScDataPilotFieldObjByName( const OUString& aName );
 
 private:
-    rtl::Reference<ScDataPilotFieldObj> GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
+    rtl::Reference<ScDataPilotFieldObj> GetObjectByIndex_Impl(sal_Int32 nIndex,
+                                                              bool bCalculated = false,
+                                                              const OUString& rFieldName = u""_ustr,
+                                                              const std::shared_ptr<ScTokenArray>& pArray = nullptr) const;
     rtl::Reference<ScDataPilotFieldObj> GetObjectByName_Impl( const OUString& rName ) const;
 
 private:

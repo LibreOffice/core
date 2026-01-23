@@ -103,14 +103,10 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
             rLabelData.mnFuncMask = mpFunctionDlg->GetFuncMask();
 
             rFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
-
-            ScDPLabelData& rDFData = mpParent->GetLabelData(rFunctionData.mnCol);
-
             AdjustDuplicateCount(pCurrentItemValue);
-
             OUString sDataItemName = lclCreateDataItemName(
                                         rFunctionData.mnFuncMask,
-                                        rDFData.maName,
+                                        rLabelData.maName,
                                         rFunctionData.mnDupCount);
 
             mxControl->set_text(nEntry, sDataItemName);

@@ -66,6 +66,7 @@ class ScDPLevels;
 class ScDPLevel;
 class ScDPMembers;
 class ScDPMember;
+class ScTokenArray;
 enum class ScGeneralFunction;
 
 //  implementation of DataPilotSource using ScDPTableData
@@ -108,6 +109,8 @@ private:
 
     std::optional<OUString> mpGrandTotalName;
 
+    void AddDataDimsToResultData(css::sheet::DataPilotFieldOrientation nDataOrient,
+                                 ScDPTableData::CalcInfo& rInfo, bool& bExtended);
     void                    CreateRes_Impl();
     void                    FillMemberResults();
     void                    FillLevelList( css::sheet::DataPilotFieldOrientation nOrientation, std::vector<ScDPLevel*> &rList );
@@ -152,6 +155,7 @@ public:
     sal_Int32               GetDataDimensionCount() const;
     ScDPDimension*          GetDataDimension(sal_Int32 nIndex);
     OUString                GetDataDimName(sal_Int32 nIndex);
+    const ScTokenArray*     GetDataDimCalculationToken(sal_Int32 nIndex);
     const ScDPCache* GetCache();
     const ScDPItemData*         GetItemDataById( sal_Int32 nDim, sal_Int32 nId );
     bool                        IsDataLayoutDimension(sal_Int32 nDim);
@@ -235,6 +239,8 @@ public:
 
     void                    CountChanged();
 
+    void                    InsertEmptyDimension( sal_Int32 nPos );
+
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
@@ -282,6 +288,7 @@ public:
                             ScDPDimension(const ScDPDimension&) = delete;
     ScDPDimension&          operator=(const ScDPDimension&) = delete;
 
+    void                    SetDimension(sal_Int32 nPos) { nDim = nPos; }
     sal_Int32               GetDimension() const    { return nDim; }        // dimension index in source
     sal_Int32               GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
 
@@ -290,6 +297,8 @@ public:
 
     const std::optional<OUString> & GetLayoutName() const;
     const std::optional<OUString> & GetSubtotalName() const;
+
+    const std::optional<OUString>& getCalculation() const;
 
                             // XNamed
     virtual OUString SAL_CALL getName() override;
@@ -325,6 +334,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+    const ScTokenArray* getCalculationToken() const;
     css::sheet::DataPilotFieldOrientation getOrientation() const;
     bool getIsDataLayoutDimension() const;
     ScGeneralFunction getFunction() const { return nFunction;}

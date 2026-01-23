@@ -36,6 +36,20 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument& rDoc, const Sc
         aComp.CompileTokenArray();
 }
 
+ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument& rDoc, const ScAddress& rAddr,
+        std::unique_ptr<ScTokenArray> pArray, bool bMatrixFormula, formula::FormulaGrammar::Grammar eGram )
+    : mnFormatType(SvNumFormatType::ALL)
+    , mbCalculated(false)
+    , mpCode(std::move(pArray))
+    , maAddr(rAddr)
+    , mrDoc(rDoc)
+    , maGram(eGram)
+    , mbMatrixResult(false)
+    , mbLimitString(false)
+    , mbMatrixFormula(bMatrixFormula)
+{
+}
+
 ScSimpleFormulaCalculator::~ScSimpleFormulaCalculator()
 {
 }

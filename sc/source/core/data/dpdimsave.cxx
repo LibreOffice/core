@@ -23,6 +23,7 @@
 #include <dpobject.hxx>
 #include <dputil.hxx>
 #include <document.hxx>
+#include <tokenarray.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
@@ -787,6 +788,50 @@ OUString ScDPDimensionSaveData::CreateDateGroupDimName(
     }
     OSL_ENSURE(!aPartName.isEmpty(), "ScDPDimensionSaveData::CreateDateGroupDimName - invalid date part");
     return CreateGroupDimName( aPartName, rObject, bAllowSource, pDeletedNames );
+}
+
+ScDPDimCalcSaveData::ScDPDimCalcSaveData()
+{
+}
+
+bool ScDPDimCalcSaveData::operator==(const ScDPDimCalcSaveData&) const
+{
+    return false;
+}
+
+void ScDPDimCalcSaveData::WriteToCache(ScDPCache& rCache) const
+{
+    // Take a local copy: rCache.SetCalculatedField() propagates back to all
+    // ref objects (including potentially *this), which could modify
+    // maCalculatedFields mid-iteration and invalidate our iterator.
+    std::vector<std::shared_ptr<ScDPCache::CalculatedField>> aFields = maCalculatedFields;
+
+    // Recompute calculated field indices based on the current cache state.
+    // mnIndex must place calc fields right after source columns in the
+    // cache-level dimension space: [source 0..N-1] [calc N..N+C-1].
+    // Groups and DataLayout live in higher layers and are not affected.
+    // This handles the case where the source range was expanded or shrunk
+    // (e.g. 3 columns → 4 columns) and the stored mnIndex is now stale.
+    sal_Int32 nSourceColCount = rCache.GetFieldCount();
+    sal_Int32 nOffset = 0;
+    for (const std::shared_ptr<ScDPCache::CalculatedField>& rEntry : aFields)
+    {
+        rCache.SetCalculatedField(rEntry->maFieldName, rEntry->mpArrayRef,
+                                  nSourceColCount + nOffset);
+        ++nOffset;
+    }
+}
+
+void ScDPDimCalcSaveData::SetCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField)
+{
+    auto aIt = std::find_if(maCalculatedFields.begin(), maCalculatedFields.end(),
+                       [&pField](const std::shared_ptr<ScDPCache::CalculatedField>& rField)
+                       { return rField->maFieldName.equalsIgnoreAsciiCase(pField->maFieldName); });
+
+    if (aIt == maCalculatedFields.end())
+        maCalculatedFields.emplace_back(pField);
+    else
+        *aIt = pField;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

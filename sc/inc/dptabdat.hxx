@@ -48,6 +48,7 @@ class ScDPDimension;
 class ScDPLevel;
 class ScDPInitState;
 class ScDocument;
+class ScTokenArray;
 namespace tools { class XmlWriter; }
 
 /**
@@ -62,6 +63,7 @@ class SAL_DLLPUBLIC_RTTI ScDPTableData
     tools::Long    nLastLevel;
     tools::Long    nLastRet;
     const ScDocument* mpDoc;
+
 public:
 
     /** This structure stores dimension information used when calculating
@@ -91,6 +93,7 @@ public:
     virtual     ~ScDPTableData();
 
     OUString GetFormattedString(sal_Int32 nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
+    double GetCalculatedValueByToken(std::unique_ptr<ScTokenArray> pNewArray) const;
 
     tools::Long        GetDatePart( tools::Long nDateVal, tools::Long nHierarchy, tools::Long nLevel );
 
@@ -98,10 +101,14 @@ public:
                 //! or separate Str and ValueCollection
 
     virtual sal_Int32               GetColumnCount() = 0;
+    virtual sal_Int32               GetCalculatedColumnCount() = 0;
     virtual const std::vector< SCROW >& GetColumnEntries( sal_Int32 nColumn ) ;
     virtual OUString                getDimensionName(sal_Int32 nColumn) = 0;
     virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) = 0;
     virtual bool                    IsDateDimension(sal_Int32 nDim) = 0;
+    virtual bool                    IsCalculatedDimension(sal_Int32 nDim) = 0;
+    virtual const ScTokenArray*     GetCalculationToken(sal_Int32 nDim) = 0;
+    virtual OUString                GetCalculation(sal_Int32 nDim) = 0;
     virtual sal_uInt32              GetNumberFormat(sal_Int32 nDim);
     sal_uInt32                      GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;

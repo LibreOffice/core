@@ -23,6 +23,7 @@
 #include <dpfilteredcache.hxx>
 #include <document.hxx>
 #include <dpobject.hxx>
+#include <tokenarray.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 
@@ -46,7 +47,7 @@ sal_Int32 ScImportSourceDesc::GetCommandType() const
     return nSdbType;
 }
 
-const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
+const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData) const
 {
     if (!mpDoc)
         return nullptr;
@@ -56,7 +57,7 @@ const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pD
         return nullptr;
 
     ScDPCollection::DBCaches& rCaches = mpDoc->GetDPCollection()->GetDBCaches();
-    return rCaches.getCache(nSdbType, aDBName, aObject, pDimData);
+    return rCaches.getCache(nSdbType, aDBName, aObject, pDimData, pCalculatedDimData);
 }
 
 ScDatabaseDPData::ScDatabaseDPData(
@@ -82,6 +83,11 @@ sal_Int32 ScDatabaseDPData::GetColumnCount()
     return GetCacheTable().getColSize();
 }
 
+sal_Int32 ScDatabaseDPData::GetCalculatedColumnCount()
+{
+    return GetCacheTable().getCalculatedColumnCount();
+}
+
 OUString ScDatabaseDPData::getDimensionName(sal_Int32 nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
@@ -104,6 +110,21 @@ bool ScDatabaseDPData::IsDateDimension(sal_Int32 /* nDim */)
 {
     //TODO: later...
     return false;
+}
+
+bool ScDatabaseDPData::IsCalculatedDimension(sal_Int32 nDim)
+{
+    return GetCacheTable().isCalculatedField(nDim);
+}
+
+OUString ScDatabaseDPData::GetCalculation(sal_Int32 nDim)
+{
+    return GetCacheTable().getCalculation(nDim);
+}
+
+const ScTokenArray* ScDatabaseDPData::GetCalculationToken(sal_Int32 nDim)
+{
+    return GetCacheTable().getCalculationToken(nDim);
 }
 
 void ScDatabaseDPData::SetEmptyFlags( bool /* bIgnoreEmptyRows */, bool /* bRepeatIfEmpty */ )

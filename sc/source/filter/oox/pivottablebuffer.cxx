@@ -53,6 +53,9 @@
 #include <sax/fastattribs.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
+#include <formula/errorcodes.hxx>
 
 #include <dapiuno.hxx>
 #include <dpobject.hxx>
@@ -383,21 +386,74 @@ void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
     maModel.mnSortRefItem = rStrm.readInt32();
 }
 
+std::pair<OUString, bool> PivotTableField::resolveCalculatedField( sal_Int32 nDatabaseIdx )
+{
+    OUString aFieldName;
+    if (nDatabaseIdx < 0)
+    {
+        if (const PivotCacheField* pCacheField = mrPivotTable.getCacheField(mnFieldIndex))
+        {
+            aFieldName = pCacheField->getName();
+            const OUString& rCalc = pCacheField->getFormula();
+            if (!rCalc.isEmpty())
+                maDPFieldFormula = rCalc;
+        }
+    }
+
+    const bool bCalculatedField = (nDatabaseIdx == -1 && !aFieldName.isEmpty() && maDPFieldFormula);
+    return { aFieldName, bCalculatedField };
+}
+
+std::shared_ptr<ScTokenArray> PivotTableField::compileCalculatedFieldFormula()
+{
+    if (!maDPFieldFormula)
+        return nullptr;
+
+    ScDocument& rDoc = getDocImport().getDoc();
+    ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+    ScCompiler aComp(rDoc, aAddr, formula::FormulaGrammar::GRAM_OOXML, true, false);
+
+    // Use cache field names directly (available regardless of field processing order)
+    sal_Int32 nFieldCount = static_cast<sal_Int32>(mrPivotTable.getFields().size());
+    for (sal_Int32 i = 0; i < nFieldCount; ++i)
+    {
+        if (const PivotCacheField* pField = mrPivotTable.getCacheField(i))
+            aComp.SetAvailablePivotFields(pField->getName());
+    }
+
+    std::shared_ptr<ScTokenArray> pArrayRef(aComp.CompileString(maDPFieldFormula.value()));
+    if (pArrayRef && pArrayRef->GetCodeError() == FormulaError::NONE && pArrayRef->GetLen())
+    {
+        aComp.CompileTokenArray(); // Generate RPN tokens.
+        return pArrayRef;
+    }
+
+    return nullptr;
+}
+
 void PivotTableField::finalizeImport(const rtl::Reference<ScDataPilotDescriptorBase>& rxDPDesc)
 {
-    /*  Process all fields based on source data, other fields (e.g. group
+    /*  Process all fields based on source data or calculated fields, other fields (e.g. group
         fields) are processed from here. PivotCache::getCacheDatabaseIndex()
         returns -1 for all fields not based on source data. */
-    rtl::Reference< ScDataPilotFieldObj > xDPField;
     sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );
-    if( !((nDatabaseIdx >= 0) && rxDPDesc.is()) )
+    auto [aFieldName, bCalculatedField] = resolveCalculatedField( nDatabaseIdx );
+
+    if (!((nDatabaseIdx >= 0 || bCalculatedField) && rxDPDesc.is()))
         return;
 
+    // Compile calculated field formula to register name and formula in a single call
+    std::shared_ptr<ScTokenArray> pCalcFormula;
+    if (bCalculatedField)
+        pCalcFormula = compileCalculatedFieldFormula();
+
+    rtl::Reference<ScDataPilotFieldObj> xDPField;
     try
     {
         // try to get the source field and its name from passed DataPilot descriptor
         rtl::Reference< ScDataPilotFieldsObj > xDPFieldsIA( rxDPDesc->getScDataPilotFields() );
-        xDPField = xDPFieldsIA->getScDataPilotFieldObjByIndex( nDatabaseIdx );
+        xDPField = xDPFieldsIA->getScDataPilotFieldObjByIndex(!bCalculatedField ? nDatabaseIdx : mnFieldIndex, bCalculatedField,
+                                                              aFieldName, pCalcFormula);
     }
     catch( Exception& )
     {
@@ -498,11 +554,20 @@ void PivotTableField::finalizeImportBasedOnCache(
         fields) are processed based on cache fields.*/
     rtl::Reference< ScDataPilotFieldObj > xDPField;
     sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );
-    if( (nDatabaseIdx >= 0) && rxDPDesc.is() )
+    auto [aFieldName, bCalculatedField] = resolveCalculatedField( nDatabaseIdx );
+
+    // Compile calculated field formula to register name and formula in a single call
+    std::shared_ptr<ScTokenArray> pCalcFormula;
+    if (bCalculatedField)
+        pCalcFormula = compileCalculatedFieldFormula();
+
+    if ((nDatabaseIdx >= 0 || bCalculatedField) && rxDPDesc.is())
         try
         {
             // Try to get the source field and its name from passed DataPilot descriptor
-            xDPField = rxDPDesc->getScDataPilotFields()->getScDataPilotFieldObjByIndex( nDatabaseIdx );
+            xDPField = rxDPDesc->getScDataPilotFields()->getScDataPilotFieldObjByIndex(
+                !bCalculatedField ? nDatabaseIdx : mnFieldIndex, bCalculatedField, aFieldName,
+                pCalcFormula);
             maDPFieldName = xDPField->getName();
             SAL_WARN_IF( maDPFieldName.isEmpty(), "sc.filter", "PivotTableField::finalizeImportBasedOnCache - no field name in source data found" );
         }

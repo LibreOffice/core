@@ -27,6 +27,8 @@
 #include <scresid.hxx>
 #include <dpitemdata.hxx>
 #include <generalfunction.hxx>
+#include <tokenarray.hxx>
+#include <formula/errorcodes.hxx>
 
 #include <document.hxx>
 #include <dpresfilter.hxx>
@@ -35,6 +37,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
+#include <rtl/character.hxx>
 #include <sal/log.hxx>
 
 #include <math.h>
@@ -623,6 +626,21 @@ void ScDPAggData::SetResult( double fNew )
     fVal = fNew;        // don't reset error flag
 }
 
+void ScDPAggData::SetCalculatedResult( double fNew )
+{
+    if (IsCalculated())
+        return;
+
+    if (!std::isnan(fNew))
+    {
+        nCount = SC_DPAGG_RESULT_VALID;
+        fVal = fNew;
+        fAux = 0.0;
+    }
+    else
+        nCount = SC_DPAGG_RESULT_ERROR;
+}
+
 void ScDPAggData::SetError()
 {
     assert( IsCalculated() && "ScDPAggData not calculated" );
@@ -769,7 +787,7 @@ ScDPResultData::~ScDPResultData()
 
 void ScDPResultData::SetMeasureData(
     std::vector<ScSubTotalFunc>& rFunctions, std::vector<sheet::DataPilotFieldReference>& rRefs,
-    std::vector<sheet::DataPilotFieldOrientation>& rRefOrient, std::vector<OUString>& rNames )
+    std::vector<sheet::DataPilotFieldOrientation>& rRefOrient, std::vector<OUString>& rNames, std::vector<sal_Int32>& rIndexes )
 {
     // We need to have at least one measure data at all times.
 
@@ -788,6 +806,10 @@ void ScDPResultData::SetMeasureData(
     maMeasureNames.swap(rNames);
     if (maMeasureNames.empty())
         maMeasureNames.push_back(ScResId(STR_EMPTYDATA));
+
+    maMeasureIndexes.swap(rIndexes);
+    if (maMeasureIndexes.empty())
+        maMeasureIndexes.emplace_back(); // default ctor is ok.
 }
 
 void ScDPResultData::SetDataLayoutOrientation( sheet::DataPilotFieldOrientation nOrient )
@@ -878,6 +900,18 @@ OUString ScDPResultData::GetMeasureDimensionName(tools::Long nMeasure) const
     }
 
     return mrSource.GetDataDimName(nMeasure);
+}
+
+const ScTokenArray* ScDPResultData::GetMeasureDimensionCalculationToken(tools::Long nMeasure) const
+{
+    if (nMeasure < 0 || nMeasure >= static_cast<tools::Long>(maMeasureIndexes.size()))
+    {
+        OSL_FAIL("GetMeasureDimensionCalculation: negative");
+        return nullptr;
+    }
+
+    sal_Int32 nDimIndex = maMeasureIndexes[nMeasure];
+    return mrSource.GetDataDimCalculationToken(nDimIndex);
 }
 
 bool ScDPResultData::IsBaseForGroup( tools::Long nDim ) const
@@ -2220,8 +2254,21 @@ void ScDPDataMember::UpdateDataRow(
                 sheet::DataPilotFieldReference aReferenceValue = pResultData->GetMeasureRefVal( nMemberMeasure );
                 sal_Int32 eRefType = aReferenceValue.ReferenceType;
 
-                // calculate the result first - for all members, regardless of reference value
-                pAggData->Calculate( eFunc, aLocalSubState );
+                const ScTokenArray* pArray = pResultData->GetMeasureDimensionCalculationToken( nMemberMeasure );
+                if (pArray)
+                {
+                    // Calculate Field
+                    std::unordered_set<tools::Long> aRecStack;
+                    std::unique_ptr<ScTokenArray> pNewArray = ReplaceTokenMeasuresWithValues( pArray, aLocalSubState, aRecStack );
+                    double nRes = pResultData->GetSource().GetData()->GetCalculatedValueByToken( std::move(pNewArray) );
+
+                    pAggData->SetCalculatedResult(nRes);
+                }
+                else
+                {
+                    // calculate the result first - for all members, regardless of reference value
+                    pAggData->Calculate(eFunc, aLocalSubState);
+                }
 
                 if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
                      eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
@@ -2650,6 +2697,91 @@ void ScDPDataMember::UpdateRunningTotals(
             pDataChild->UpdateRunningTotals( pRefChild, nMeasure,
                                             bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent );
     }
+}
+
+tools::Long ScDPDataMember::FindMeasureIndex(const std::vector<OUString>& rNames,
+                                             const OUString& rName)
+{
+    auto it = std::find_if(rNames.begin(), rNames.end(), [&rName](const OUString& rItem)
+                           { return rItem.equalsIgnoreAsciiCase(rName); });
+
+    if (it == rNames.end())
+        return -1;
+
+    return static_cast<tools::Long>(std::distance(rNames.begin(), it));
+}
+
+std::unique_ptr<ScTokenArray> ScDPDataMember::ReplaceTokenMeasuresWithValues(const ScTokenArray* pArray,
+    const ScDPSubTotalState& rSubState, std::unordered_set<tools::Long>& rRecStack)
+{
+    std::unique_ptr<ScTokenArray> pNewArray = pArray->Clone();
+    formula::FormulaTokenArrayPlainIterator aIterResult(*pNewArray);
+    for (formula::FormulaToken* t = aIterResult.GetNextDPFieldNameRPN(); t; t = aIterResult.GetNextDPFieldNameRPN())
+    {
+        OUString aName = t->GetString().getString();
+        tools::Long nMemberMeasure = FindMeasureIndex(pResultData->GetMeasureNames(), aName);
+        if (nMemberMeasure >= 0)
+        {
+            // Cycle detection
+            if (rRecStack.count(nMemberMeasure))
+            {
+                SAL_WARN("sc", "Circular calculated field dependency detected");
+                formula::FormulaToken* pErr
+                    = new formula::FormulaErrorToken(FormulaError::CircularReference);
+
+                pNewArray->ReplaceRPNToken(aIterResult.GetIndex() - 1, pErr);
+                continue;
+            }
+
+            // add to recursion stack before processing
+            rRecStack.insert(nMemberMeasure);
+
+            ScDPAggData* pAggData = GetAggData(nMemberMeasure, rSubState);
+            if (pAggData)
+            {
+                if (!pAggData->IsCalculated())
+                {
+                    ScSubTotalFunc eFunc = pResultData->GetMeasureFunction(nMemberMeasure);
+                    sheet::DataPilotFieldReference aReferenceValue
+                        = pResultData->GetMeasureRefVal(nMemberMeasure);
+                    sal_Int32 eRefType = aReferenceValue.ReferenceType;
+
+                    const ScTokenArray* pSubArray
+                        = pResultData->GetMeasureDimensionCalculationToken(nMemberMeasure);
+
+                    if (pSubArray)
+                    {
+                        // Calculate Field
+                        std::unique_ptr<ScTokenArray> pNewSubArray = ReplaceTokenMeasuresWithValues(pSubArray, rSubState, rRecStack);
+                        double nRes = pResultData->GetSource().GetData()->GetCalculatedValueByToken(std::move(pNewSubArray));
+
+                        pAggData->SetCalculatedResult(nRes);
+                    }
+                    else
+                    {
+                        // calculate the result first - for all members, regardless of reference value
+                        pAggData->Calculate(eFunc, rSubState);
+                    }
+
+                    if (eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE
+                        || eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE
+                        || eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE)
+                    {
+                        pAggData->SetAuxiliary(pAggData->GetResult());
+                    }
+                }
+                // replace token with value if calculation was successful
+                if (pAggData->IsCalculated())
+                {
+                    formula::FormulaToken* pValToken = new formula::FormulaDoubleToken(pAggData->GetResult());
+                    pNewArray->ReplaceRPNToken(aIterResult.GetIndex() - 1, pValToken);
+                }
+            }
+            // remove from recursion stack after processing
+            rRecStack.erase(nMemberMeasure);
+        }
+    }
+    return pNewArray;
 }
 
 #if DUMP_PIVOT_TABLE

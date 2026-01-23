@@ -292,8 +292,9 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
     size_t nCount = rCache.GetFieldCount();
     const size_t nGroupFieldCount = rCache.GetGroupFieldCount();
+    const size_t nCalculatedFieldCount = rCache.GetCalculatedFieldCount();
     pDefStrm->startElement(XML_cacheFields,
-        XML_count, OString::number(static_cast<tools::Long>(nCount + nGroupFieldCount)));
+        XML_count, OString::number(static_cast<tools::Long>(nCount + nGroupFieldCount + nCalculatedFieldCount)));
 
     SvNumberFormatter& rFormatter = GetFormatter();
 
@@ -563,6 +564,27 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                                OString::number(0), XML_databaseField, ToPsz10(false));
         WriteFieldGroup(i, nBase);
         pDefStrm->endElement(XML_cacheField);
+    }
+
+    for (size_t i = nCount + nGroupFieldCount; pDPObject && i < nCount + nGroupFieldCount + nCalculatedFieldCount; ++i)
+    {
+        const OUString aName = pDPObject->GetDimName(i, o3tl::temporary(bool()));
+        if (aName.isEmpty())
+            continue;
+
+        const ScDPCache::CalculatedField* pCalcField = rCache.GetCalculatedFieldByName(aName);
+        if (pCalcField && pCalcField->mpArrayRef)
+        {
+            ScAddress aPos(ScAddress::INITIALIZE_INVALID);
+            OUString aFormula = XclXmlUtils::ToOUString(GetCompileFormulaContext(), aPos, pCalcField->mpArrayRef.get());
+
+            pDefStrm->startElement(XML_cacheField, XML_name, pCalcField->maFieldName.toUtf8(), XML_numFmtId,
+                            OString::number(0), XML_formula, aFormula.toUtf8(),
+                            XML_databaseField, ToPsz10(false));
+
+            WriteFieldGroup(i, i);
+            pDefStrm->endElement(XML_cacheField);
+        }
     }
 
     pDefStrm->endElement(XML_cacheFields);
@@ -978,7 +1000,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     const ScDPSaveData& rSaveData = *rDPObj.GetSaveData();
 
-    size_t nFieldCount = rCache.GetFieldCount() + rCache.GetGroupFieldCount();
+    size_t nFieldCount = rCache.GetFieldCount() + rCache.GetGroupFieldCount() + rCache.GetCalculatedFieldCount();
     std::vector<const ScDPSaveDimension*> aCachedDims;
     NameToIdMapType aNameToIdMap;
 
@@ -1173,25 +1195,59 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         if (eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
+            const ScDPCache::CalculatedField* pCalcField = rCache.GetCalculatedFieldByName(pDim->GetName());
             if(bDimInTabularMode)
             {
-                pPivotStrm->singleElement(XML_pivotField,
-                    XML_dataField, ToPsz10(true),
-                    XML_compact, ToPsz10(false),
-                    XML_outline, ToPsz10(false),
-                    XML_showAll, ToPsz10(false));
+                if (!pCalcField)
+                {
+                    pPivotStrm->singleElement(XML_pivotField, XML_dataField, ToPsz10(true),
+                                              XML_compact, ToPsz10(false), XML_outline,
+                                              ToPsz10(false), XML_showAll, ToPsz10(false));
+                }
+                else
+                {
+                    pPivotStrm->singleElement(XML_pivotField, XML_dataField, ToPsz10(true),
+                                              XML_dragToRow, ToPsz10(false), XML_dragToCol,
+                                              ToPsz10(false), XML_dragToPage, ToPsz10(false),
+                                              XML_compact, ToPsz10(false), XML_outline,
+                                              ToPsz10(false), XML_showAll, ToPsz10(false),
+                                              XML_defaultSubtotal, ToPsz10(false));
+                }
             }
             else
             {
                 if (bDimInCompactMode)
-                    pPivotStrm->singleElement(XML_pivotField,
-                        XML_dataField, ToPsz10(true),
-                        XML_showAll, ToPsz10(false));
+                {
+                    if (!pCalcField)
+                    {
+                        pPivotStrm->singleElement(XML_pivotField, XML_dataField, ToPsz10(true),
+                                                  XML_showAll, ToPsz10(false));
+                    }
+                    else
+                    {
+                        pPivotStrm->singleElement(XML_pivotField, XML_dataField, ToPsz10(true),
+                                                  XML_dragToRow, ToPsz10(false), XML_dragToCol,
+                                                  ToPsz10(false), XML_dragToPage, ToPsz10(false),
+                                                  XML_showAll, ToPsz10(false), XML_defaultSubtotal,
+                                                  ToPsz10(false));
+                    }
+                }
                 else
-                    pPivotStrm->singleElement(XML_pivotField,
-                        XML_dataField, ToPsz10(true),
-                        XML_compact, ToPsz10(false),
-                        XML_showAll, ToPsz10(false));
+                {
+                    if (!pCalcField)
+                    {
+                        pPivotStrm->singleElement(XML_pivotField, XML_dataField, ToPsz10(true),
+                                                  XML_compact, ToPsz10(false), XML_showAll, ToPsz10(false));
+                    }
+                    else
+                    {
+                        pPivotStrm->singleElement(XML_pivotField, XML_dataField, ToPsz10(true),
+                                                  XML_dragToRow, ToPsz10(false), XML_dragToCol,
+                                                  ToPsz10(false), XML_dragToPage, ToPsz10(false),
+                                                  XML_compact, ToPsz10(false), XML_showAll, ToPsz10(false),
+                                                  XML_defaultSubtotal, ToPsz10(false));
+                    }
+                }
             }
             continue;
         }

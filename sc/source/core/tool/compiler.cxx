@@ -71,6 +71,7 @@
 #include <tokenuno.hxx>
 #include <formulaparserpool.hxx>
 #include <tokenarray.hxx>
+#include <dpobject.hxx>
 #include <scmatrix.hxx>
 #include <tokenstringcontext.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -478,6 +479,11 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
         if (eMyGrammar != GetGrammar())
             SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
     }
+}
+
+void ScCompiler::SetAvailablePivotFields( const OUString& rPivotFieldName )
+{
+    maPivotFieldNames.push_back(rPivotFieldName);
 }
 
 // Unclear how this was intended to be refreshed when the
@@ -3226,6 +3232,12 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 
 bool ScCompiler::ParseOpCode2( std::u16string_view rName )
 {
+    // If we have Pivot Table field names, means we are parsing a pivot table
+    // calculation field, which are not support any OpCode2 tokens, only there
+    // own field names.
+    if (!maPivotFieldNames.empty())
+        return false;
+
     if (rName == u"TTT")
     {
         maRawToken.SetOpCode(ocTTT);
@@ -3674,6 +3686,11 @@ bool ScCompiler::ParseMacro( const OUString& rName )
     return false;
 #else
 
+    // If we have Pivot Table field names, means we are parsing a pivot table
+    // calculation field, which are not support any macro based tokens, only there
+    // own field names.
+    if (!maPivotFieldNames.empty())
+        return false;
     // Calling SfxObjectShell::GetBasic() may result in all sort of things
     // including obtaining the model and deep down in
     // SfxBaseModel::getDocumentStorage() acquiring the SolarMutex, which when
@@ -3764,6 +3781,11 @@ bool ScCompiler::HasPossibleNamedRangeConflict( SCTAB nTab ) const
 bool ScCompiler::ParseNamedRange( const OUString& rUpperName, bool onlyCheck )
 {
     // ParseNamedRange is called only from NextNewToken, with an upper-case string
+    // If we have Pivot Table field names, means we are parsing a pivot table
+    // calculation field, which are not support any name based tokens, only there
+    // own field names.
+    if (!maPivotFieldNames.empty())
+        return false;
 
     SCTAB nSheet = -1;
     const ScRangeData* pData = GetRangeData( nSheet, rUpperName);
@@ -3827,6 +3849,12 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
 
     rbInvalidExternalNameRange = false;
 
+    // If we have Pivot Table field names, means we are parsing a pivot table
+    // calculation field, which are not support any name based tokens, only there
+    // own field names.
+    if (!maPivotFieldNames.empty())
+        return false;
+
     if (!pConv)
         return false;
 
@@ -3857,6 +3885,12 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
 
 bool ScCompiler::ParseDBRange( const OUString& rName )
 {
+    // If we have Pivot Table field names, means we are parsing a pivot table
+    // calculation field, which are not support any name based tokens, only there
+    // own field names.
+    if (!maPivotFieldNames.empty())
+        return false;
+
     ScDBCollection::NamedDBs& rDBs = rDoc.GetDBCollection()->getNamedDBs();
     const ScDBData* p = rDBs.findByUpperName(rName);
     if (!p)
@@ -3867,8 +3901,50 @@ bool ScCompiler::ParseDBRange( const OUString& rName )
     return true;
 }
 
+bool ScCompiler::ParseDPFieldName( const OUString& rName )
+{
+    if (maPivotFieldNames.empty())
+        return false;
+
+    OUString sField;
+    if (cSymbol[0] == '\'')
+    {
+        const sal_Unicode* p = cSymbol + 1;
+        while (*p)
+            p++;
+        sal_Int32 nLen = sal::static_int_cast<sal_Int32>(p - cSymbol - 1);
+        if (!nLen || cSymbol[nLen] != '\'')
+            return false;
+
+        sField = OUString(cSymbol + 1, nLen - 1);
+    }
+    else
+    {
+        sField = rName;
+    }
+
+    auto it = std::find_if(maPivotFieldNames.begin(), maPivotFieldNames.end(),
+                           [&sField](const OUString& rFieldName)
+                           { return rFieldName.equalsIgnoreAsciiCase(sField); });
+
+    if (it != maPivotFieldNames.end())
+    {
+        svl::SharedString aSS = rDoc.GetSharedStringPool().intern(*it);
+        maRawToken.SetDPFieldName(aSS.getData(), aSS.getDataIgnoreCase());
+        return true;
+    }
+
+    return false;
+}
+
 bool ScCompiler::ParseColRowName( const OUString& rName )
 {
+    // If we have Pivot Table field names, means we are parsing a pivot table
+    // calculation field, which are not support any name based tokens, only there
+    // own field names.
+    if (!maPivotFieldNames.empty())
+        return false;
+
     bool bInList = false;
     bool bFound = false;
     ScSingleRefData aRef;
@@ -4814,6 +4890,12 @@ Label_Rewind:
         if (ParseLambdaFuncName( aOrg ))
             return true;
 
+        // Parse Pivot Table DataPilot field names.
+        // This is only true if the compiler is created with the actual
+        // Pivot Table Fields name
+        if (ParseDPFieldName(aUpper))
+            return true;
+
     } while (mbRewind);
 
     // Last chance: it could be a broken invalidated reference that contains
@@ -5256,6 +5338,14 @@ bool ScCompiler::HandleStringName()
 {
     ScTokenArray* pNew = new ScTokenArray(rDoc);
     pNew->AddStringName(mpToken->GetString());
+    PushTokenArray(pNew, true);
+    return GetToken();
+}
+
+bool ScCompiler::HandleDPFieldName()
+{
+    ScTokenArray* pNew = new ScTokenArray(rDoc);
+    pNew->AddDPFieldName(mpToken->GetString());
     PushTokenArray(pNew, true);
     return GetToken();
 }
@@ -6003,6 +6093,16 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
         rBuffer.append(aBuffer);
     else
         rBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
+}
+
+void ScCompiler::CreateStringFromDPFieldName( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
+{
+    OUString aFieldName = _pTokenP->GetString().getString();
+
+    if (aFieldName.indexOf(' ') != -1)
+        rBuffer.append("'" + aFieldName + "'");
+    else
+        rBuffer.append(aFieldName);
 }
 
 void ScCompiler::LocalizeString( OUString& rName ) const

@@ -1600,6 +1600,11 @@ bool FormulaCompiler::GetToken()
                     return true;
                 else
                     return false;
+            case ocDPFieldName:
+                if ( HandleDPFieldName())
+                    return true;
+                else
+                    return false;
             case ocName:
                 if( HandleRange())
                 {
@@ -2670,6 +2675,8 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             case svString:
                 if( eOp == ocBad || eOp == ocStringXML || eOp == ocStringName )
                     rBuffer.append( t->GetString().getString());
+                else if (eOp == ocDPFieldName)
+                    CreateStringFromDPFieldName( rBuffer, t );
                 else
                     AppendString( rBuffer, t->GetString().getString() );
                 break;
@@ -3004,6 +3011,11 @@ bool FormulaCompiler::HandleStringName()
     return true;
 }
 
+bool FormulaCompiler::HandleDPFieldName()
+{
+    return true;
+}
+
 bool FormulaCompiler::HandleRange()
 {
     return true;
@@ -3033,6 +3045,10 @@ void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, co
 }
 
 void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
+{
+}
+
+void FormulaCompiler::CreateStringFromDPFieldName( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*_pTokenP*/ ) const
 {
 }
 

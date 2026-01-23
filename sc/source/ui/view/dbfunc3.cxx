@@ -788,17 +788,25 @@ bool ScDBFunc::MakePivotTable(
 
     ScDPObject aObj( rSource );
     aObj.SetOutRange( aDestRange );
-    if ( pDPObj && !rData.GetExistingDimensionData() )
+    if ( pDPObj && (!rData.GetExistingDimensionData() || !rData.GetExistingDimCalcData()) )
     {
-        // copy dimension data from old object - lost in the dialog
-        //! change the dialog to keep the dimension data
-
         ScDPSaveData aNewData( rData );
         const ScDPSaveData* pOldData = pDPObj->GetSaveData();
         if ( pOldData )
         {
-            const ScDPDimensionSaveData* pDimSave = pOldData->GetExistingDimensionData();
-            aNewData.SetDimensionData( pDimSave );
+            // copy dimension data from old object - lost in the dialog
+            //! change the dialog to keep the dimension data
+            if (!rData.GetExistingDimensionData())
+            {
+                const ScDPDimensionSaveData* pDimSave = pOldData->GetExistingDimensionData();
+                aNewData.SetDimensionData(pDimSave);
+            }
+            // copy calculation dimension data from old object - stored in a different dialog
+            if (!rData.GetExistingDimCalcData())
+            {
+                const ScDPDimCalcSaveData* pDimCalcData = pOldData->GetExistingDimCalcData();
+                aNewData.SetDimCalcData(pDimCalcData);
+            }
         }
         aObj.SetSaveData( aNewData );
     }

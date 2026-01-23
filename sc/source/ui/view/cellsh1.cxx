@@ -3466,10 +3466,14 @@ bool isDPSourceValid(const ScDPObject& rDPObj)
 
         const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
         const ScDPDimensionSaveData* pDimData = nullptr;
+        const ScDPDimCalcSaveData* pCalculatedDimData = nullptr;
         if (pSaveData)
+        {
             pDimData = pSaveData->GetExistingDimensionData();
+            pCalculatedDimData = pSaveData->GetExistingDimCalcData();
+        }
 
-        const ScDPCache* pCache = pDesc->CreateCache(pDimData);
+        const ScDPCache* pCache = pDesc->CreateCache(pDimData, pCalculatedDimData);
         if (!pCache)
             // cache creation failed, probably due to invalid connection.
             return false;

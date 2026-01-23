@@ -67,6 +67,7 @@ enum OpCode : sal_uInt16
         ocMacro             = SC_OPCODE_MACRO,
         ocColRowName        = SC_OPCODE_COL_ROW_NAME,
         ocColRowNameAuto    = SC_OPCODE_COL_ROW_NAME_AUTO,
+        ocDPFieldName       = SC_OPCODE_DP_FIELD,
     // Percent operator _follows_ value
         ocPercentSign       = SC_OPCODE_PERCENT_SIGN,
     // Error constants
@@ -581,6 +582,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocMacro: return "Macro";
     case ocColRowName: return "ColRowName";
     case ocColRowNameAuto: return "ColRowNameAuto";
+    case ocDPFieldName: return "DPFieldName";
     case ocPercentSign: return "PercentSign";
     case ocErrNull: return "ErrNull";
     case ocErrDivZero: return "ErrDivZero";

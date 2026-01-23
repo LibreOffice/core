@@ -42,6 +42,7 @@
 #include <dpresfilter.hxx>
 #include <calcmacros.hxx>
 #include <generalfunction.hxx>
+#include <tokenarray.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -151,6 +152,14 @@ OUString ScDPSource::GetDataDimName(sal_Int32 nIndex)
     if (pDim)
         aRet = pDim->getName();
     return aRet;
+}
+
+const ScTokenArray* ScDPSource::GetDataDimCalculationToken(sal_Int32 nIndex)
+{
+    ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nIndex);
+    if (pDim)
+        return pDim->getCalculationToken();
+    return nullptr;
 }
 
 sal_Int32 ScDPSource::GetPosition(sal_Int32 nColumn)
@@ -718,41 +727,89 @@ void ScDPSource::FilterCacheByPageDimensions()
     }
 }
 
-void ScDPSource::CreateRes_Impl()
+void ScDPSource::AddDataDimsToResultData(sheet::DataPilotFieldOrientation nDataOrient,
+                                         ScDPTableData::CalcInfo& rInfo, bool& bExtended)
 {
-    if (mpResultData)
-        return;
-
-    sheet::DataPilotFieldOrientation nDataOrient = GetDataLayoutOrientation();
-    if (maDataDims.size() > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
-                                nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
+    std::vector<sal_Int32> vNewDims;
+    ScDPDimensions* pDimsObj = GetDimensionsObject();
+    if (!bExtended)
     {
-        //  if more than one data dimension, data layout orientation must be set
-        SetOrientation(mpData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW);
-        nDataOrient = sheet::DataPilotFieldOrientation_ROW;
+        // Track everything already known (original + new)
+        std::unordered_set<sal_Int32> aVisited(maDataDims.begin(), maDataDims.end());
+        std::vector<sal_Int32> aStack;
+        aStack.reserve(maDataDims.size());
+
+        // Push originals in reverse to preserve order
+        for (auto it = maDataDims.rbegin(); it != maDataDims.rend(); ++it)
+            aStack.push_back(*it);
+
+        vNewDims = maDataDims;
+        const ScDPCache& rCache = GetData()->GetCacheTable().getCache();
+        while (!aStack.empty())
+        {
+            sal_Int32 nDimIndex = aStack.back();
+            aStack.pop_back();
+
+            ScDPDimension* pDim = pDimsObj->getByIndex(nDimIndex);
+            if (!pDim)
+                continue;
+
+            const ScTokenArray* pCalculation = pDim->getCalculationToken();
+            if (!pCalculation)
+                continue;
+
+            formula::FormulaTokenArrayPlainIterator aIter(*pCalculation);
+
+            for (formula::FormulaToken* t = aIter.GetNextDPFieldNameRPN(); t;
+                 t = aIter.GetNextDPFieldNameRPN())
+            {
+                OUString aName = t->GetString().getString();
+
+                SCCOL nDepIndex = rCache.GetDimensionIndex(aName);
+
+                if (nDepIndex >= 0 && aVisited.insert(nDepIndex).second) // only new ones
+                {
+                    vNewDims.push_back(nDepIndex);
+                    aStack.push_back(nDepIndex);
+                }
+            }
+        }
+
+        if (maDataDims.size() < vNewDims.size())
+            bExtended = true;
+    }
+    else
+    {
+        vNewDims = maDataDims;
     }
 
     // TODO: Aggregate pDataNames, pDataRefValues, nDataRefOrient, and
     // eDataFunctions into a structure and use vector instead of static
     // or pointer arrays.
     std::vector<OUString> aDataNames;
+    std::vector<sal_Int32> aDataIndexes;
     std::vector<sheet::DataPilotFieldReference> aDataRefValues;
     std::vector<ScSubTotalFunc> aDataFunctions;
     std::vector<sheet::DataPilotFieldOrientation> aDataRefOrient;
-
-    ScDPTableData::CalcInfo aInfo;
-
     //  LateInit (initialize only those rows/children that are used) can be used unless
     //  any data dimension needs reference values from column/row dimensions
     bool bLateInit = true;
-
     // Go through all data dimensions (i.e. fields) and build their meta data
     // so that they can be passed on to ScDPResultData instance later.
     // TODO: aggregate all of data dimension info into a structure.
-    for (const tools::Long nDimIndex : maDataDims)
+    aDataNames.reserve(vNewDims.size());
+    aDataIndexes.reserve(vNewDims.size());
+    aDataRefValues.reserve(vNewDims.size());
+    aDataFunctions.reserve(vNewDims.size());
+    aDataRefOrient.reserve(vNewDims.size());
+
+    for (const tools::Long nDimIndex : vNewDims)
     {
         // Get function for each data field.
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
+        ScDPDimension* pDim = pDimsObj->getByIndex(nDimIndex);
+        if (!pDim)
+            continue;
+
         ScGeneralFunction eUser = pDim->getFunction();
         if (eUser == ScGeneralFunction::AUTO)
         {
@@ -765,16 +822,19 @@ void ScDPSource::CreateRes_Impl()
 
         // Get reference field/item information.
         aDataRefValues.push_back(pDim->GetReferenceValue());
-        sheet::DataPilotFieldOrientation nDataRefOrient = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
+        sheet::DataPilotFieldOrientation nDataRefOrient
+            = sheet::DataPilotFieldOrientation_HIDDEN; // default if not used
         sal_Int32 eRefType = aDataRefValues.back().ReferenceType;
-        if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
-             eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
-             eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
-             eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
+
+        if (eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE
+            || eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE
+            || eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE
+            || eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL)
         {
-            sal_Int32 nColumn = comphelper::findValue(
-                GetDimensionsObject()->getElementNames(), aDataRefValues.back().ReferenceField);
-            if ( nColumn >= 0 )
+            sal_Int32 nColumn = comphelper::findValue(pDimsObj->getElementNames(),
+                                                      aDataRefValues.back().ReferenceField);
+
+            if (nColumn >= 0)
             {
                 nDataRefOrient = GetOrientation(nColumn);
                 //  need fully initialized results to find reference values
@@ -791,6 +851,7 @@ void ScDPSource::CreateRes_Impl()
         //TODO: modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
         aDataNames.back() = ScDPUtil::getSourceDimensionName(aDataNames.back());
+        aDataIndexes.push_back(nDimIndex);
 
         //TODO: if the name is overridden by user, a flag must be set
         //TODO: so the user defined name replaces the function string and field name.
@@ -799,15 +860,38 @@ void ScDPSource::CreateRes_Impl()
 
         tools::Long nSource = pDim->GetSourceDim();
         if (nSource >= 0)
-            aInfo.aDataSrcCols.push_back(nSource);
+            rInfo.aDataSrcCols.push_back(nSource);
         else
-            aInfo.aDataSrcCols.push_back(nDimIndex);
+            rInfo.aDataSrcCols.push_back(nDimIndex);
     }
 
-    mpResultData.reset( new ScDPResultData(*this) );
-    mpResultData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames);
+    if (!mpResultData)
+        mpResultData.reset(new ScDPResultData(*this));
+
+    mpResultData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames,
+                                 aDataIndexes);
     mpResultData->SetDataLayoutOrientation(nDataOrient);
-    mpResultData->SetLateInit( bLateInit );
+    mpResultData->SetLateInit(bLateInit);
+}
+
+void ScDPSource::CreateRes_Impl()
+{
+    if (mpResultData)
+        return;
+
+    sheet::DataPilotFieldOrientation nDataOrient = GetDataLayoutOrientation();
+    if (maDataDims.size() > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
+                                nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
+    {
+        //  if more than one data dimension, data layout orientation must be set
+        SetOrientation(mpData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW);
+        nDataOrient = sheet::DataPilotFieldOrientation_ROW;
+    }
+
+    // Add Data Dims to Result Data
+    ScDPTableData::CalcInfo aInfo;
+    bool bExtended = false;
+    AddDataDimsToResultData(nDataOrient, aInfo, bExtended);
 
     bool bHasAutoShow = false;
 
@@ -927,6 +1011,15 @@ void ScDPSource::CreateRes_Impl()
     ScDPRunningTotalState aRunning(mpColumnResultRoot.get(), mpRowResultRoot.get());
     ScDPRowTotals aTotals;
     mpRowResultRoot->UpdateRunningTotals(mpColumnResultRoot.get(), mpResultData->GetRowStartMeasure(), aRunning, aTotals);
+
+    if (bExtended)
+    {
+        // Calculated fields were evaluated using extended measure data that
+        // included dependency dimensions. Now reset back to the original
+        // data dimensions so only user-visible measures appear in the output.
+        aInfo.aDataSrcCols.clear();
+        AddDataDimsToResultData(nDataOrient, aInfo, bExtended);
+    }
 
 #if DUMP_PIVOT_TABLE
     DumpResults();
@@ -1303,6 +1396,11 @@ void SAL_CALL ScDPDimension::setName( const OUString& rNewName )
     aName = rNewName;
 }
 
+const ScTokenArray* ScDPDimension::getCalculationToken() const
+{
+    return pSource->GetData()->GetCalculationToken( nDim );
+}
+
 sheet::DataPilotFieldOrientation ScDPDimension::getOrientation() const
 {
     return pSource->GetOrientation( nDim );
@@ -1395,6 +1493,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         { SC_UNO_DP_LAYOUTNAME, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNO_DP_FIELD_SUBTOTALNAME, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNO_DP_HAS_HIDDEN_MEMBER, 0, cppu::UnoType<bool>::get(), 0, 0 },
+        { SC_UNO_DP_CALCULATEDFIELD, 0, cppu::UnoType<bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_CALCULATION, 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPDimensionMap_Impl );
@@ -1572,6 +1672,14 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     else if (aPropertyName == SC_UNO_DP_FLAGS)
     {
         aRet <<= sal_Int32(0); // tabular data: all orientations are possible
+    }
+    else if (aPropertyName == SC_UNO_DP_CALCULATEDFIELD)
+    {
+        aRet <<= pSource->GetData()->IsCalculatedDimension((nSourceDim >= 0) ? nSourceDim : nDim);
+    }
+    else if (aPropertyName == SC_UNO_DP_CALCULATION)
+    {
+        aRet <<= pSource->GetData()->GetCalculation((nSourceDim >= 0) ? nSourceDim : nDim);
     }
     else
     {

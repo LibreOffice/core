@@ -38,6 +38,9 @@ public:
     ScSimpleFormulaCalculator(ScDocument& rDoc, const ScAddress& rAddr,
             const OUString& rFormula, bool bMatrixFormula,
             formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT);
+    ScSimpleFormulaCalculator(ScDocument& rDoc, const ScAddress& rAddr,
+            std::unique_ptr<ScTokenArray> pArray, bool bMatrixFormula,
+            formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT);
     ~ScSimpleFormulaCalculator();
 
     void Calculate();

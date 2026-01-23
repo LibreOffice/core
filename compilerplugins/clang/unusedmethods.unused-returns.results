@@ -98,8 +98,10 @@ include/editeng/outliner.hxx:880
     _Bool Outliner::UpdateFields()
 include/editeng/svxacorr.hxx:294
     _Bool SvxAutoCorrectLanguageLists::MakeCombinedChanges(std::vector<SvxAutocorrWord> &,std::vector<SvxAutocorrWord> &)
-include/formula/tokenarray.hxx:484
+include/formula/tokenarray.hxx:482
     formula::FormulaToken * formula::FormulaTokenArray::AddStringName(const svl::SharedString &)
+include/formula/tokenarray.hxx:483
+    formula::FormulaToken * formula::FormulaTokenArray::AddDPFieldName(const svl::SharedString &)
 include/o3tl/sorted_vector.hxx:47
     sorted_vector<Value, Compare, Find> o3tl::<deduction guide for sorted_vector>(sorted_vector<Value, Compare, Find>)
 include/o3tl/sorted_vector.hxx:60

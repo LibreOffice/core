@@ -347,6 +347,7 @@ protected:
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 );
     virtual bool HandleExternalReference(const FormulaToken& _aToken);
     virtual bool HandleStringName();
+    virtual bool HandleDPFieldName();
     virtual bool HandleRange();
     virtual bool HandleColRowName();
     virtual bool HandleDbData();
@@ -356,6 +357,7 @@ protected:
     virtual void CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual void CreateStringFromDPFieldName( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
     virtual bool GetExcelName( OUString& rName ) const;     // modify rName - input: exact name

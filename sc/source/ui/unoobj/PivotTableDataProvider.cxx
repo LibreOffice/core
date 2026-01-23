@@ -378,6 +378,11 @@ void PivotTableDataProvider::collectPivotTableData()
                 sal_Int32 nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
                 sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_HAS_HIDDEN_MEMBER);
+                // TODO: wire up calculated field info to chart data provider
+                /*bool bCalculatedField = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_CALCULATEDFIELD);
+                std::optional<OUString> aCalculation;
+                if (bCalculatedField)
+                    aCalculation = ScUnoHelpFunctions::GetStringProperty(xDimProp, SC_UNO_DP_CALCULATION, u""_ustr);*/
 
                 switch (eDimOrient)
                 {

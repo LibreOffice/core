@@ -758,6 +758,8 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& rOther)
     , mbDimensionMembersBuilt(rOther.mbDimensionMembersBuilt)
     , mpGrandTotalName(rOther.mpGrandTotalName)
 {
+    if (rOther.mpDimCalcData)
+        mpDimCalcData.reset(new ScDPDimCalcSaveData(*rOther.mpDimCalcData));
     if (rOther.mpDimensionData)
         mpDimensionData.reset(new ScDPDimensionSaveData(*rOther.mpDimensionData));
     if (rOther.mpFormats)
@@ -1275,6 +1277,21 @@ void ScDPSaveData::SetDimensionData(const ScDPDimensionSaveData* pNew)
         mpDimensionData.reset();
 }
 
+ScDPDimCalcSaveData* ScDPSaveData::GetDimCalcData()
+{
+    if (!mpDimCalcData)
+        mpDimCalcData.reset(new ScDPDimCalcSaveData);
+    return mpDimCalcData.get();
+}
+
+void ScDPSaveData::SetDimCalcData(const ScDPDimCalcSaveData* pNew)
+{
+    if (pNew)
+        mpDimCalcData.reset(new ScDPDimCalcSaveData(*pNew));
+    else
+        mpDimCalcData.reset();
+}
+
 void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
 {
     if (mbDimensionMembersBuilt)
@@ -1327,7 +1344,7 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
 
     // First, build a dimension name-to-index map.
     NameIndexMap aMap;
-    tools::Long nColCount = pData->GetColumnCount();
+    tools::Long nColCount = pData->GetColumnCount() - pData->GetCalculatedColumnCount();
     for (tools::Long i = 0; i < nColCount; ++i)
         aMap.emplace(pData->getDimensionName(i), i);
 

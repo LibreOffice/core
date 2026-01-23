@@ -623,6 +623,11 @@ bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
     return mxListBoxField->IsDataElement(nColumn);
 }
 
+bool ScPivotLayoutDialog::IsCalculatedElement(SCCOL nColumn)
+{
+    return maPivotParameters.maLabelArray[nColumn]->mbCalculatedField;
+}
+
 ScDPLabelData& ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
 {
     return *maPivotParameters.maLabelArray[nColumn];

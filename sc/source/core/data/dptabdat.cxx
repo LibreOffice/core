@@ -21,6 +21,7 @@
 #include <dpcache.hxx>
 #include <dpfilteredcache.hxx>
 #include <dptabres.hxx>
+#include <tokenarray.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
@@ -51,6 +52,12 @@ OUString ScDPTableData::GetFormattedString(sal_Int32 nDim, const ScDPItemData& r
 {
     const ScDPCache& rCache = GetCacheTable().getCache();
     return rCache.GetFormattedString(nDim, rItem, bLocaleIndependent);
+}
+
+double ScDPTableData::GetCalculatedValueByToken(std::unique_ptr<ScTokenArray> pNewArray) const
+{
+    const ScDPCache& rCache = GetCacheTable().getCache();
+    return rCache.GetCalculatedValueByToken(std::move(pNewArray));
 }
 
 tools::Long ScDPTableData::GetDatePart( tools::Long nDateVal, tools::Long nHierarchy, tools::Long nLevel )

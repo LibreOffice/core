@@ -254,6 +254,8 @@ public:
     const OUString& getFinalGroupName() const { return maFieldGroupModel.msFinalGroupName; }
     /** Set the finalized group name of this field.  */
     void            setFinalGroupName(const OUString& rFinalGroupName) { maFieldGroupModel.msFinalGroupName = rFinalGroupName; }
+    /** Returns the formula of the cache calculated field. */
+    const OUString& getFormula() const { return maFieldModel.maFormula; }
 
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;

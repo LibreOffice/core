@@ -99,6 +99,10 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(weld::TreeView& rSource, 
     if (meType == PAGE_LIST && mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
 
+    // Don't allow to add "Calculated Fields" element to page fields
+    if (mpParent->IsCalculatedElement(pItemValue->maFunctionData.mnCol))
+        return;
+
     mpParent->ItemInserted(pOriginalItemValue, meType);
 
     InsertEntryForItem(pOriginalItemValue, nTarget);

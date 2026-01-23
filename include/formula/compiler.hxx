@@ -62,17 +62,18 @@
 #define SC_OPCODE_SKIP               37     /* used to skip raw tokens during string compilation */
 #define SC_OPCODE_STRINGNAME         38     /* special OpCode for lambda function names */
 #define SC_OPCODE_LET                39
+#define SC_OPCODE_DP_FIELD           40
 
 /*** error constants #... ***/
-#define SC_OPCODE_START_ERRORS       40
-#define SC_OPCODE_ERROR_NULL         40
-#define SC_OPCODE_ERROR_DIVZERO      41
-#define SC_OPCODE_ERROR_VALUE        42
-#define SC_OPCODE_ERROR_REF          43
-#define SC_OPCODE_ERROR_NAME         44
-#define SC_OPCODE_ERROR_NUM          45
-#define SC_OPCODE_ERROR_NA           46
-#define SC_OPCODE_STOP_ERRORS        47
+#define SC_OPCODE_START_ERRORS       41
+#define SC_OPCODE_ERROR_NULL         41
+#define SC_OPCODE_ERROR_DIVZERO      42
+#define SC_OPCODE_ERROR_VALUE        43
+#define SC_OPCODE_ERROR_REF          44
+#define SC_OPCODE_ERROR_NAME         45
+#define SC_OPCODE_ERROR_NUM          46
+#define SC_OPCODE_ERROR_NA           47
+#define SC_OPCODE_STOP_ERRORS        48
 
 /*** Binary operators ***/
 #define SC_OPCODE_START_BIN_OP       50

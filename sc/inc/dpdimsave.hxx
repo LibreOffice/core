@@ -27,6 +27,7 @@
 
 #include "dpitemdata.hxx"
 #include "dpnumgroupinfo.hxx"
+#include "dpcache.hxx"
 #include "scdllapi.h"
 #include "dptypes.hxx"
 
@@ -35,6 +36,7 @@ class ScDPGroupDimension;
 class ScDPObject;
 class ScDPCache;
 class SvNumberFormatter;
+class ScTokenArray;
 
 class ScDPSaveGroupDimension;
 
@@ -213,6 +215,34 @@ private:
 
     ScDPSaveGroupDimVec maGroupDims;
     ScDPSaveNumGroupDimMap maNumGroupDims;
+};
+
+/**
+ * Stores calculated field data shared between ScDPCache and ScDPSaveData.
+ * Uses shared_ptr<ScDPCache::CalculatedField> so that all references to the
+ * same cache automatically see the same calculated field objects.
+ */
+class ScDPDimCalcSaveData
+{
+public:
+    ScDPDimCalcSaveData();
+    ScDPDimCalcSaveData(const ScDPDimCalcSaveData&) = default;
+
+    bool operator==(const ScDPDimCalcSaveData& r) const;
+
+    void WriteToCache(ScDPCache& rCache) const;
+
+    SC_DLLPUBLIC void SetCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField);
+
+    const std::vector<std::shared_ptr<ScDPCache::CalculatedField>>& GetCalculatedFields() const
+    {
+        return maCalculatedFields;
+    }
+
+private:
+    ScDPDimCalcSaveData& operator=( const ScDPDimCalcSaveData& ) = delete;
+
+    std::vector<std::shared_ptr<ScDPCache::CalculatedField>> maCalculatedFields;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

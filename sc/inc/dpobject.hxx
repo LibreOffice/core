@@ -60,11 +60,13 @@ namespace tools
     class Rectangle;
     class XmlWriter;
 }
+class ScTokenArray;
 class ScDPSaveData;
 class ScDPOutput;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
 class ScDPTableData;
+class ScDPDimCalcSaveData;
 class ScDPDimensionSaveData;
 class ScRangeList;
 class ScDocument;
@@ -186,6 +188,9 @@ public:
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
     void                WriteSourceDataTo( ScDPObject& rDest ) const;
+
+    SC_DLLPUBLIC void   InsertCalculatedFieldToCache(sal_Int32 nIndex, const OUString& rFieldName,
+                                                     const std::shared_ptr<ScTokenArray>& pArray);
 
     const ScSheetSourceDesc* GetSheetDesc() const { return mpSheetDescription.get(); }
     const ScImportSourceDesc* GetImportSourceDesc() const { return mpImportDescription.get(); }
@@ -336,7 +341,7 @@ public:
     public:
         SheetCaches(ScDocument& rDoc);
         bool hasCache(const ScRange& rRange) const;
-        const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
+        const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData);
         SC_DLLPUBLIC size_t size() const;
 
         void updateReference(
@@ -363,11 +368,11 @@ public:
     public:
         NameCaches(ScDocument& rDoc);
         bool hasCache(const OUString& rName) const;
-        const ScDPCache* getCache(
-            const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
+        const ScDPCache* getCache(const OUString& rName, const ScRange& rRange,
+                                  const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData);
+        ScDPCache* getExistingCache(const OUString& rName);
         size_t size() const;
     private:
-        ScDPCache* getExistingCache(const OUString& rName);
 
         void updateCache(
             const OUString& rName, const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs);
@@ -404,12 +409,11 @@ public:
         DBCaches(ScDocument& rDoc);
         bool hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const;
         const ScDPCache* getCache(
-            sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-            const ScDPDimensionSaveData* pDimData);
+            sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand, const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData);
+        ScDPCache* getExistingCache(sal_Int32 nSdbType, const OUString& rDBName,
+                                    const OUString& rCommand);
 
     private:
-        ScDPCache* getExistingCache(
-            sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
         static css::uno::Reference<css::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);

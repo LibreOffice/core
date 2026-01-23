@@ -281,6 +281,8 @@ inline constexpr OUString SC_UNONAME_ISGROUP          = u"IsGroupField"_ustr;
 inline constexpr OUString SC_UNONAME_GROUPINFO        = u"GroupInfo"_ustr;
 inline constexpr OUString SC_UNONAME_SHOWEMPTY        = u"ShowEmpty"_ustr;
 inline constexpr OUString SC_UNONAME_REPEATITEMLABELS = u"RepeatItemLabels"_ustr;
+inline constexpr OUString SC_UNONAME_CALCULATEDFIELD  = u"CalculatedField"_ustr;
+inline constexpr OUString SC_UNONAME_CALCULATION      = u"Calculation"_ustr;
 
 //  data pilot item
 inline constexpr OUString SC_UNONAME_SHOWDETAIL       = u"ShowDetail"_ustr;
@@ -642,6 +644,8 @@ inline constexpr OUString SC_UNO_DP_LAYOUTNAME           = u"LayoutName"_ustr;
 inline constexpr OUString SC_UNO_DP_FIELD_SUBTOTALNAME   = u"FieldSubtotalName"_ustr;
 inline constexpr OUString SC_UNO_DP_GRANDTOTAL_NAME      = u"GrandTotalName"_ustr;
 inline constexpr OUString SC_UNO_DP_HAS_HIDDEN_MEMBER    = u"HasHiddenMember"_ustr;
+#define SC_UNO_DP_CALCULATEDFIELD      SC_UNONAME_CALCULATEDFIELD
+#define SC_UNO_DP_CALCULATION          SC_UNONAME_CALCULATION
 inline constexpr OUString SC_UNO_DP_FLAGS                = u"Flags"_ustr;
 
 inline constexpr OUString SC_UNO_DP_REFVALUE             = u"ReferenceValue"_ustr;

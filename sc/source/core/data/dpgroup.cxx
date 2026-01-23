@@ -23,6 +23,7 @@
 #include <document.hxx>
 #include <dpfilteredcache.hxx>
 #include <dputil.hxx>
+#include <tokenarray.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
@@ -505,6 +506,11 @@ sal_Int32 ScDPGroupTableData::GetColumnCount()
     return nSourceCount + aGroups.size();
 }
 
+sal_Int32 ScDPGroupTableData::GetCalculatedColumnCount()
+{
+    return pSourceData->GetCalculatedColumnCount();
+}
+
 bool ScDPGroupTableData::IsNumGroupDimension( tools::Long nDimension ) const
 {
     return ( nDimension < nSourceCount && pNumGroups[nDimension].GetInfo().mbEnable );
@@ -578,6 +584,24 @@ bool ScDPGroupTableData::IsDateDimension(sal_Int32 nDim)
     }
 
     return pSourceData->IsDateDimension( nDim );
+}
+
+bool ScDPGroupTableData::IsCalculatedDimension(sal_Int32 nDim)
+{
+    //TODO
+    return pSourceData->IsCalculatedDimension(nDim);
+}
+
+OUString ScDPGroupTableData::GetCalculation(sal_Int32 nDim)
+{
+    //TODO
+    return pSourceData->GetCalculation(nDim);
+}
+
+const ScTokenArray* ScDPGroupTableData::GetCalculationToken(sal_Int32 nDim)
+{
+    //TODO
+    return pSourceData->GetCalculationToken(nDim);
 }
 
 sal_uInt32 ScDPGroupTableData::GetNumberFormat(sal_Int32 nDim)

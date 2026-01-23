@@ -156,6 +156,7 @@ public:
     void SetOpCode( OpCode eCode );
     void SetString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
     void SetStringName( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
+    void SetDPFieldName( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
@@ -303,6 +304,7 @@ private:
     std::vector<sal_uInt16> maExternalFiles;
 
     std::vector<OUString> maTabNames;                /// sheet names mangled for the current grammar for output
+    std::vector<OUString> maPivotFieldNames;         /// Available Pivot Table Field names for calculation of pivot table formulas
     std::vector<OUString> &GetSetupTabNames() const; /// get or setup tab names for the current grammar
 
     struct TableRefEntry
@@ -363,6 +365,7 @@ private:
     bool ParseLambdaFuncName( const OUString& );
     bool ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );
     bool ParseDBRange( const OUString& );
+    bool ParseDPFieldName( const OUString& );
     bool ParseColRowName( const OUString& );
     bool ParseBoolean( const OUString& );
     void AutoCorrectParsedSymbol();
@@ -465,6 +468,7 @@ public:
     void            SetFormulaLanguage( const OpCodeMapPtr & xMap );
 
     SC_DLLPUBLIC void SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
+    SC_DLLPUBLIC void SetAvailablePivotFields( const OUString& rPivotFieldName );
 
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
@@ -541,6 +545,7 @@ private:
 
     virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) override;
     virtual bool HandleStringName() override;
+    virtual bool HandleDPFieldName() override;
     virtual bool HandleRange() override;
     virtual bool HandleColRowName() override;
     virtual bool HandleDbData() override;
@@ -552,6 +557,7 @@ private:
     virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
+    virtual void CreateStringFromDPFieldName( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void LocalizeString( OUString& rName ) const override;   // modify rName - input: exact name
     virtual bool GetExcelName( OUString& rName ) const override;    // modify rName - input: exact name
 

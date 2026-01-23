@@ -42,6 +42,7 @@ namespace com::sun::star::sheet {
     struct DataPilotFieldLayoutInfo;
 }
 
+class ScDPDimCalcSaveData;
 class ScDPDimensionSaveData;
 class ScDPTableData;
 enum class ScGeneralFunction;
@@ -247,6 +248,7 @@ private:
     DimsType m_DimList;
     DupNameCountType maDupNameCounts; /// keep track of number of duplicates in each name.
     std::unique_ptr<ScDPDimensionSaveData> mpDimensionData; // settings that create new dimensions
+    std::unique_ptr<ScDPDimCalcSaveData> mpDimCalcData; // settings that create new dimensions
     sal_uInt16 mnColumnGrandMode;
     sal_uInt16 mnRowGrandMode;
     sal_uInt16 mnIgnoreEmptyMode;
@@ -355,11 +357,14 @@ public:
     bool IsEmpty() const;
 
     const ScDPDimensionSaveData* GetExistingDimensionData() const { return mpDimensionData.get(); }
+    const ScDPDimCalcSaveData* GetExistingDimCalcData() const { return mpDimCalcData.get(); }
 
     void RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames = nullptr );
 
     SC_DLLPUBLIC ScDPDimensionSaveData* GetDimensionData(); // create if not there
     SC_DLLPUBLIC void SetDimensionData( const ScDPDimensionSaveData* pNew ); // copied
+    SC_DLLPUBLIC ScDPDimCalcSaveData* GetDimCalcData(); // create if not there
+    SC_DLLPUBLIC void SetDimCalcData( const ScDPDimCalcSaveData* pNew ); // copied
     void BuildAllDimensionMembers(ScDPTableData* pData);
     void SyncAllDimensionMembers(ScDPTableData* pData);
 

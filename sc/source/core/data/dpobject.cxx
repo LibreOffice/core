@@ -39,6 +39,7 @@
 #include <globstr.hrc>
 #include <queryentry.hxx>
 #include <dputil.hxx>
+#include <tokenarray.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -561,6 +562,74 @@ void ScDPObject::CreateOutput()
     mbAllowMove = false; // use only once
 }
 
+void ScDPObject::InsertCalculatedFieldToCache(sal_Int32 nIndex, const OUString& rFieldName,
+                                              const std::shared_ptr<ScTokenArray>& pArray)
+{
+    ScDPCollection* pDPColl = mpDocument->GetDPCollection();
+    if (!pDPColl)
+        return;
+
+    if (IsSheetData())
+    {
+        // data source is internal sheet.
+        const ScSheetSourceDesc* pDesc = GetSheetDesc();
+        if (!pDesc)
+            return;
+
+        TranslateId pErrId = pDesc->CheckSourceRange();
+        if (pErrId)
+            return;
+
+        if (pDesc->HasRangeName())
+        {
+            // cache by named range
+            ScDPCollection::NameCaches& rCaches = pDPColl->GetNameCaches();
+            if (rCaches.hasCache(pDesc->GetRangeName()))
+            {
+                ScDPCache* pCache = rCaches.getExistingCache(pDesc->GetRangeName());
+                if (pCache)
+                {
+                    pCache->SetCalculatedField(rFieldName, pArray, nIndex);
+                    InvalidateData();
+                }
+            }
+        }
+        else
+        {
+            // cache by cell range
+            ScDPCollection::SheetCaches& rCaches = pDPColl->GetSheetCaches();
+            if (rCaches.hasCache(pDesc->GetSourceRange()))
+            {
+                ScDPCache* pCache = rCaches.getExistingCache(pDesc->GetSourceRange());
+                if (pCache)
+                {
+                    pCache->SetCalculatedField(rFieldName, pArray, nIndex);
+                    InvalidateData();
+                }
+            }
+        }
+    }
+    else if (IsImportData())
+    {
+        // data source is external database.
+        const ScImportSourceDesc* pDesc = GetImportSourceDesc();
+        if (!pDesc)
+            return;
+
+        ScDPCollection::DBCaches& rCaches = pDPColl->GetDBCaches();
+        if (rCaches.hasCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject))
+        {
+            ScDPCache* pCache = rCaches.getExistingCache(pDesc->GetCommandType(),
+                                                         pDesc->aDBName, pDesc->aObject);
+            if (pCache)
+            {
+                pCache->SetCalculatedField(rFieldName, pArray, nIndex);
+                InvalidateData();
+            }
+        }
+    }
+}
+
 namespace {
 
 class DisableGetPivotData
@@ -688,11 +757,12 @@ ScDPTableData* ScDPObject::GetTableData()
     {
         std::shared_ptr<ScDPTableData> pData;
         const ScDPDimensionSaveData* pDimData = mpSaveData ? mpSaveData->GetExistingDimensionData() : nullptr;
+        const ScDPDimCalcSaveData* pCalculatedDimData = mpSaveData ? mpSaveData->GetExistingDimCalcData() : nullptr;
 
         if (mpImportDescription)
         {
             // database data
-            const ScDPCache* pCache = mpImportDescription->CreateCache(pDimData);
+            const ScDPCache* pCache = mpImportDescription->CreateCache(pDimData, pCalculatedDimData);
             if (pCache)
             {
                 pCache->AddReference(this);
@@ -713,7 +783,7 @@ ScDPTableData* ScDPObject::GetTableData()
                 // GETPIVOTDATA called onto itself from within the source
                 // range.
                 DisableGetPivotData aSwitch(*this, mbEnableGetPivotData);
-                const ScDPCache* pCache = mpSheetDescription->CreateCache(pDimData);
+                const ScDPCache* pCache = mpSheetDescription->CreateCache(pDimData, pCalculatedDimData);
                 if (pCache)
                 {
                     pCache->AddReference(this);
@@ -764,7 +834,9 @@ void ScDPObject::CreateObjects()
         }
 
         if (mpSaveData)
+        {
             mpSaveData->WriteToSource(mxSource);
+        }
     }
     else if (mbSettingsChanged)
     {
@@ -784,8 +856,11 @@ void ScDPObject::CreateObjects()
         }
 
         if (mpSaveData)
+        {
             mpSaveData->WriteToSource(mxSource);
+        }
     }
+
     mbSettingsChanged = false;
 }
 
@@ -2445,6 +2520,15 @@ void ScDPObject::FillLabelDataForDimension(
     rLabelData.mnOriginalDim = static_cast<tools::Long>(nOrigPos);
     rLabelData.maLayoutName = aLayoutName;
     rLabelData.maSubtotalName = aSubtotalName;
+    rLabelData.mbCalculatedField
+        = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_CALCULATEDFIELD);
+
+    if (rLabelData.mbCalculatedField)
+    {
+        rLabelData.maCalculation
+            = ScUnoHelpFunctions::GetStringProperty(xDimProp, SC_UNO_DP_CALCULATION, OUString());
+    }
+
     if (nOrigPos >= 0)
         // This is a duplicated dimension. Use the original dimension index.
         nDim = nOrigPos;
@@ -2999,7 +3083,7 @@ bool ScDPCollection::SheetCaches::hasCache(const ScRange& rRange) const
     return itCache != m_Caches.end();
 }
 
-const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData)
+const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it != maRanges.end())
@@ -3027,6 +3111,8 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     pCache->InitFromDoc(mrDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
+    if (pCalculatedDimData)
+        pCalculatedDimData->WriteToCache(*pCache);
 
     // Get the smallest available range index.
     it = std::find_if(maRanges.begin(), maRanges.end(), FindInvalidRange());
@@ -3180,8 +3266,8 @@ bool ScDPCollection::NameCaches::hasCache(const OUString& rName) const
     return m_Caches.count(rName) != 0;
 }
 
-const ScDPCache* ScDPCollection::NameCaches::getCache(
-    const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData)
+const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, const ScRange& rRange,
+                                     const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData)
 {
     CachesType::const_iterator const itr = m_Caches.find(rName);
     if (itr != m_Caches.end())
@@ -3192,6 +3278,8 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(
     pCache->InitFromDoc(mrDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
+    if (pCalculatedDimData)
+        pCalculatedDimData->WriteToCache(*pCache);
 
     const ScDPCache *const p = pCache.get();
     m_Caches.insert(std::make_pair(rName, std::move(pCache)));
@@ -3261,7 +3349,7 @@ bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBN
 
 const ScDPCache* ScDPCollection::DBCaches::getCache(
     sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-    const ScDPDimensionSaveData* pDimData)
+    const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData)
 {
     DBType aType(nSdbType, rDBName, rCommand);
     CachesType::const_iterator const itr = m_Caches.find(aType);
@@ -3288,6 +3376,8 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
 
     if (pDimData)
         pDimData->WriteToCache(*pCache);
+    if (pCalculatedDimData)
+        pCalculatedDimData->WriteToCache(*pCache);
 
     ::comphelper::disposeComponent(xRowSet);
     const ScDPCache* p = pCache.get();
@@ -3551,7 +3641,7 @@ bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_
                 // Not cached yet.  Cache the source dimensions.  Groups will
                 // be added below.
                 pCache = const_cast<ScDPCache*>(
-                    rCaches.getCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), nullptr));
+                    rCaches.getCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), nullptr, nullptr));
             }
             GetAllTables(pDesc->GetRangeName(), rRefs);
         }
@@ -3566,7 +3656,7 @@ bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_
                 // Not cached yet.  Cache the source dimensions.  Groups will
                 // be added below.
                 pCache = const_cast<ScDPCache*>(
-                    rCaches.getCache(pDesc->GetSourceRange(), nullptr));
+                    rCaches.getCache(pDesc->GetSourceRange(), nullptr, nullptr));
             }
             GetAllTables(pDesc->GetSourceRange(), rRefs);
         }
@@ -3587,7 +3677,7 @@ bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_
             // Not cached yet.  Cache the source dimensions.  Groups will
             // be added below.
             pCache = const_cast<ScDPCache*>(
-                rCaches.getCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, nullptr));
+                rCaches.getCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, nullptr, nullptr));
         }
         GetAllTables(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
     }

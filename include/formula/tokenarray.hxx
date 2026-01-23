@@ -480,6 +480,7 @@ public:
 
     FormulaToken* AddString( const svl::SharedString& rStr );
     FormulaToken* AddStringName( const svl::SharedString& rStr );
+    FormulaToken* AddDPFieldName( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
     void          AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
@@ -488,6 +489,7 @@ public:
     FormulaToken* AddBad( const OUString& rStr );          /// ocBad with OUString
     FormulaToken* AddStringXML( const OUString& rStr );    /// ocStringXML with OUString, temporary during import
     FormulaToken* AddStringName( const OUString& rStr );   /// ocStringName with OUString - Lambda functions
+    FormulaToken* AddDPFieldName( const OUString& rStr );   /// ocDPFieldName with OUString - Pivot Table DataPilot field names
     FormulaToken* AddError( FormulaError nErr );
 
     virtual FormulaToken* MergeArray( );
@@ -644,7 +646,8 @@ public:
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
-    FormulaToken* GetNextStringName();
+    FormulaToken* GetNextStringNameRPN();
+    FormulaToken* GetNextDPFieldNameRPN();
     FormulaToken* GetNextReference();
     FormulaToken* GetNextReferenceRPN();
     FormulaToken* GetNextReferenceOrName();

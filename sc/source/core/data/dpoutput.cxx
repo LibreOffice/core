@@ -526,6 +526,13 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                         SC_UNO_DP_POSITION );
                 bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
                     xDimProp, SC_UNO_DP_ISDATALAYOUT);
+                // TODO: wire up calculated field info to output
+                bool bIsCalculatedField = ScUnoHelpFunctions::GetBoolProperty(
+                    xDimProp, SC_UNO_DP_CALCULATEDFIELD);
+                std::optional<OUString> aCalculation;
+                if (bIsCalculatedField)
+                    aCalculation = ScUnoHelpFunctions::GetStringProperty(
+                        xDimProp, SC_UNO_DP_CALCULATION, u""_ustr);
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
                     xDimProp, SC_UNO_DP_HAS_HIDDEN_MEMBER);
                 sal_Int32 nNumFmt = ScUnoHelpFunctions::GetLongProperty(

@@ -44,6 +44,7 @@ class ScDPLevel;
 class ScDPMember;
 class ScDPResultMember;
 class ScDPResultVisibilityData;
+class ScTokenArray;
 
 struct ScDPValue;
 struct ScDPResultFilterContext;
@@ -172,6 +173,7 @@ public:
     bool HasData() const;
 
     void    SetResult( double fNew );
+    void    SetCalculatedResult( double fNew );
     void SetEmpty( bool bSet );
     void    SetError();
 
@@ -277,6 +279,7 @@ class ScDPResultData
     std::vector<css::sheet::DataPilotFieldReference> maMeasureRefs;
     std::vector<css::sheet::DataPilotFieldOrientation> maMeasureRefOrients;
     std::vector<OUString> maMeasureNames;
+    std::vector<sal_Int32> maMeasureIndexes;
 
     bool                    bLateInit:1;
     bool                    bDataAtCol:1;
@@ -292,7 +295,7 @@ public:
         std::vector<ScSubTotalFunc>& rFunctions,
         std::vector<css::sheet::DataPilotFieldReference>& rRefs,
         std::vector<css::sheet::DataPilotFieldOrientation>& rRefOrient,
-        std::vector<OUString>& rNames );
+        std::vector<OUString>& rNames, std::vector<sal_Int32>& rIndexes );
 
     void                SetDataLayoutOrientation( css::sheet::DataPilotFieldOrientation nOrient );
     void                SetLateInit( bool bSet );
@@ -301,6 +304,7 @@ public:
     ScSubTotalFunc      GetMeasureFunction(tools::Long nMeasure) const;
     OUString            GetMeasureString(tools::Long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     OUString            GetMeasureDimensionName(tools::Long nMeasure) const;
+    const ScTokenArray* GetMeasureDimensionCalculationToken(tools::Long nMeasure) const;
     const css::sheet::DataPilotFieldReference& GetMeasureRefVal(tools::Long nMeasure) const;
     css::sheet::DataPilotFieldOrientation      GetMeasureRefOrient(tools::Long nMeasure) const;
 
@@ -322,6 +326,7 @@ public:
     ResultMembers&      GetDimResultMembers(tools::Long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const;
 
     const ScDPSource& GetSource() const { return mrSource;}
+    const std::vector<OUString>& GetMeasureNames() const { return maMeasureNames; }
 };
 
 class ScDPResultMember
@@ -470,6 +475,11 @@ public:
     void                DoAutoShow( ScDPResultMember* pRefMember );
 
     void                ResetResults();
+
+    // function resolver
+    static tools::Long FindMeasureIndex(const std::vector<OUString>& rNames, const OUString& rName);
+    std::unique_ptr<ScTokenArray> ReplaceTokenMeasuresWithValues(const ScTokenArray* pArray,
+        const ScDPSubTotalState& rSubState, std::unordered_set<tools::Long>& rRecStack);
 
 #if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;

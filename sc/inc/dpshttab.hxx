@@ -28,7 +28,9 @@
 #include <unordered_set>
 #include <vector>
 
+class ScDPDimCalcSaveData;
 class ScDPDimensionSaveData;
+class ScTokenArray;
 
 /**
  * This class contains authoritative information on the internal reference
@@ -63,7 +65,7 @@ public:
     const ScQueryParam& GetQueryParam() const { return maQueryParam;}
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    SC_DLLPUBLIC const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;
+    SC_DLLPUBLIC const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData) const;
 
     /**
      * Check the sanity of the data source range.
@@ -97,9 +99,13 @@ public:
     SC_DLLPUBLIC virtual ~ScSheetDPData() override;
 
     virtual sal_Int32               GetColumnCount() override;
+    virtual sal_Int32               GetCalculatedColumnCount() override;
     virtual OUString                getDimensionName(sal_Int32 nColumn) override;
     virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) override;
     virtual bool                    IsDateDimension(sal_Int32 nDim) override;
+    virtual bool                    IsCalculatedDimension(sal_Int32 nDim) override;
+    virtual OUString                GetCalculation(sal_Int32 nDim) override;
+    virtual const ScTokenArray*     GetCalculationToken(sal_Int32 nDim) override;
     virtual sal_uInt32              GetNumberFormat(sal_Int32 nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;

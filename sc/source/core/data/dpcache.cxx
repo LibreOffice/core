@@ -26,11 +26,15 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <docoptio.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
 #include <dpitemdata.hxx>
 #include <dputil.hxx>
 #include <dpnumgroupinfo.hxx>
 #include <columniterator.hxx>
 #include <cellvalue.hxx>
+#include <compiler.hxx>
+#include <simpleformulacalc.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 #include <comphelper/parallelsort.hxx>
@@ -66,6 +70,23 @@ ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGrou
     maInfo(rInfo), mnGroupType(nGroupType) {}
 
 ScDPCache::Field::Field() : mnNumFormat(0) {}
+
+ScDPCache::CalculatedField::CalculatedField(ScDocument& rDoc, const OUString& rFieldName,
+                                            const std::shared_ptr<ScTokenArray>& pArray, sal_Int32 nIndex)
+    : maFieldName(rFieldName)
+    , mpArrayRef(pArray)
+    , mnIndex(nIndex)
+{
+    if (mpArrayRef)
+    {
+        ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+        ScCompiler aComp(rDoc, aAddr, *mpArrayRef, rDoc.GetGrammar());
+        OUStringBuffer aBuf;
+        aComp.CreateStringFromTokenArray(aBuf);
+        aBuf.insert(0, "=");
+        maCalculation = aBuf.makeStringAndClear();
+    }
+}
 
 ScDPCache::ScDPCache(ScDocument& rDoc) :
     mrDoc( rDoc ),
@@ -916,7 +937,7 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(tools::Long nDim) const
 
 const OUString & ScDPCache::GetDimensionName(std::vector<OUString>::size_type nDim) const
 {
-    OSL_ENSURE(nDim < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
+    OSL_ENSURE(nDim < maLabelNames.size() + maCalculatedFields.size() - 1 , "ScDPTableDataCache::GetDimensionName");
     OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
 
     if ( nDim+1 < maLabelNames.size() )
@@ -924,7 +945,15 @@ const OUString & ScDPCache::GetDimensionName(std::vector<OUString>::size_type nD
         return maLabelNames[nDim+1];
     }
     else
+    {
+        for (size_t i = 0; i < maCalculatedFields.size(); ++i)
+        {
+            if (maCalculatedFields[i]->mnIndex >= 0
+                && static_cast<size_t>(maCalculatedFields[i]->mnIndex) == nDim)
+                return maCalculatedFields[i]->maFieldName;
+        }
         return EMPTY_OUSTRING;
+    }
 }
 
 void ScDPCache::PostInit()
@@ -1029,6 +1058,11 @@ size_t ScDPCache::GetGroupFieldCount() const
     return maGroupFields.size();
 }
 
+size_t ScDPCache::GetCalculatedFieldCount() const
+{
+    return maCalculatedFields.size();
+}
+
 SCROW ScDPCache::GetRowCount() const
 {
     return mnRowCount;
@@ -1093,6 +1127,11 @@ SCCOL ScDPCache::GetDimensionIndex(std::u16string_view sName) const
     {
         if (maLabelNames[i] == sName)
             return static_cast<SCCOL>(i-1);
+    }
+    for (size_t i = 0; i < maCalculatedFields.size(); ++i)
+    {
+        if (maCalculatedFields[i]->maFieldName == sName)
+            return static_cast<SCCOL>(maCalculatedFields[i]->mnIndex);
     }
     return -1;
 }
@@ -1260,9 +1299,74 @@ OUString ScDPCache::GetFormattedString(tools::Long nDim, const ScDPItemData& rIt
     return rItem.GetString();
 }
 
+double ScDPCache::GetCalculatedValueByToken(std::unique_ptr<ScTokenArray> pNewArray) const
+{
+    if (!pNewArray)
+        return std::numeric_limits<double>::quiet_NaN();
+
+    ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+    std::optional<ScSimpleFormulaCalculator> pFCell(std::in_place, mrDoc, aAddr, std::move(pNewArray), false);
+    if (!pFCell)
+        return std::numeric_limits<double>::quiet_NaN();
+
+    FormulaError nErrCode = pFCell->GetErrCode();
+    if (nErrCode != FormulaError::NONE)
+        return std::numeric_limits<double>::quiet_NaN();
+
+    if (!pFCell->IsValue() || pFCell->IsMatrix())
+        return std::numeric_limits<double>::quiet_NaN();
+
+    return pFCell->GetValue();
+}
+
 ScInterpreterContext& ScDPCache::GetInterpreterContext() const
 {
     return mrDoc.GetNonThreadedContext();
+}
+
+std::shared_ptr<ScDPCache::CalculatedField> ScDPCache::SetCalculatedField(
+    const OUString& rFieldName,
+    const std::shared_ptr<ScTokenArray>& pArray,
+    sal_Int32 nIndex)
+{
+    // Find existing field
+    auto it = std::find_if(maCalculatedFields.begin(), maCalculatedFields.end(),
+                           [&rFieldName](const std::shared_ptr<CalculatedField>& rField)
+                           { return rField->maFieldName.equalsIgnoreAsciiCase(rFieldName); });
+
+    auto newField
+        = std::make_shared<CalculatedField>(mrDoc, rFieldName, pArray, nIndex);
+
+    // Propagate the same shared_ptr to all referenced ScDPObjects
+    for (ScDPObject* pRefObj : maRefObjects)
+    {
+        if (ScDPSaveData* pSaveData = pRefObj->GetSaveData())
+        {
+            if (ScDPDimCalcSaveData* pCalcSave = pSaveData->GetDimCalcData())
+            {
+                pCalcSave->SetCalculatedField(newField);
+            }
+        }
+    }
+
+    if (it == maCalculatedFields.end())
+        maCalculatedFields.emplace_back(newField);
+    else
+        *it = newField;
+
+    return newField;
+}
+
+const ScDPCache::CalculatedField* ScDPCache::GetCalculatedFieldByName(const OUString& rFieldName) const
+{
+    auto aIt = std::find_if(maCalculatedFields.begin(), maCalculatedFields.end(),
+                            [&rFieldName](const std::shared_ptr<CalculatedField>& rField)
+                            { return rField->maFieldName.equalsIgnoreAsciiCase(rFieldName); });
+
+    if (aIt == maCalculatedFields.end())
+        return nullptr;
+
+    return aIt->get();
 }
 
 tools::Long ScDPCache::AppendGroupField()
@@ -1356,6 +1460,12 @@ struct ClearGroupItems
     }
 };
 
+}
+
+void ScDPCache::ClearCalculatedFields()
+{
+    // TODO: delete specific ones instead of clearing all.
+    maCalculatedFields.clear();
 }
 
 void ScDPCache::ClearGroupFields()

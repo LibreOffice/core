@@ -1528,10 +1528,18 @@ static bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldNa
 
 // XDataPilotFields
 
-rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
+rtl::Reference<ScDataPilotFieldObj>
+ScDataPilotFieldsObj::GetObjectByIndex_Impl(sal_Int32 nIndex, bool bCalculated,
+                                            const OUString& rFieldName,
+                                            const std::shared_ptr<ScTokenArray>& pArray) const
 {
     if (ScDPObject* pObj = GetDPObject())
     {
+        // Register the calculated field dimension in the cache
+        // so that lcl_GetFieldDataByIndex can find it.
+        if (bCalculated)
+            pObj->InsertCalculatedFieldToCache(nIndex, rFieldName, pArray);
+
         ScFieldIdentifier aFieldId;
         if (lcl_GetFieldDataByIndex( pObj->GetSource(), maOrient, nIndex, aFieldId ))
             return new ScDataPilotFieldObj( *mxParent, aFieldId, maOrient );
@@ -1576,10 +1584,12 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
     return Any( Reference< XPropertySet >(xField) );
 }
 
-rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::getScDataPilotFieldObjByIndex( sal_Int32 nIndex )
+rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::getScDataPilotFieldObjByIndex(
+    sal_Int32 nIndex, bool bCalculated, const OUString& rFieldName,
+    const std::shared_ptr<ScTokenArray>& pArray)
 {
     SolarMutexGuard aGuard;
-    rtl::Reference< ScDataPilotFieldObj > xField( GetObjectByIndex_Impl( nIndex ) );
+    rtl::Reference< ScDataPilotFieldObj > xField( GetObjectByIndex_Impl( nIndex, bCalculated, rFieldName, pArray ) );
     if (!xField.is())
         throw IndexOutOfBoundsException();
     return xField;

@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include "dpitemdata.hxx"
+#include "dpcache.hxx"
 #include "calcmacros.hxx"
 #include "types.hxx"
 
@@ -39,6 +40,7 @@ template <typename> class Sequence;
 }
 
 class ScDPCache;
+class ScTokenArray;
 struct ScDPValue;
 struct ScQueryParam;
 
@@ -105,11 +107,19 @@ public:
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
+    sal_Int32 getCalculatedColumnCount() const;
+    void addCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField);
+    bool isCalculatedField(sal_Int32 nDim) const;
+    OUString getCalculatedFieldName(sal_Int32 nDim) const;
+    OUString getCalculation(sal_Int32 nDim) const;
+    const ScTokenArray* getCalculationToken(sal_Int32 nDim) const;
+
     const ScDPCache& getCache() const { return mrCache; }
 
     void fillTable(const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty);
 
     void fillTable();
+    void fillCalcFieldTable();
 
     /** Check whether a specified row is active or not.  When a row is active,
         it is used in calculation of the results data.  A row becomes inactive
@@ -142,6 +152,7 @@ public:
 
     void clear();
     bool empty() const;
+    bool emptycalcfields() const;
 
 #if DUMP_PIVOT_TABLE
     static void dumpRowFlag(const RowFlagType& rFlag);
@@ -163,6 +174,8 @@ private:
 private:
     /** unique field entries for each field (column). */
     ::std::vector<::std::vector<SCROW>> maFieldEntries;
+    /** unique field entries for calculated fields (column). */
+    ::std::vector<std::shared_ptr<ScDPCache::CalculatedField>> maCalcFields;
 
     /** Rows visible by standard filter query. */
     RowFlagType maShowByFilter;

@@ -435,6 +435,8 @@ bool FormulaTokenArray::AddFormulaToken(
                     AddStringXML( aStrVal );
                 else if ( eOpCode == ocStringName )
                     AddStringName( aStrVal );
+                else if ( eOpCode == ocDPFieldName )
+                    AddDPFieldName( aStrVal );
                 else if ( eOpCode == ocExternal || eOpCode == ocMacro )
                     Add( new formula::FormulaExternalToken( eOpCode, aStrVal ) );
                 else if ( eOpCode == ocWhitespace )
@@ -908,7 +910,12 @@ FormulaToken* FormulaTokenArray::AddString( const svl::SharedString& rStr )
 
 FormulaToken* FormulaTokenArray::AddStringName( const svl::SharedString& rStr )
 {
-    return Add( new FormulaStringNameToken( rStr ) );
+    return Add( new FormulaStringNameToken( svStringName, rStr ) );
+}
+
+FormulaToken* FormulaTokenArray::AddDPFieldName( const svl::SharedString& rStr )
+{
+    return Add( new FormulaStringNameToken( svDPFieldName, rStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddDouble( double fVal )
@@ -945,6 +952,11 @@ FormulaToken* FormulaTokenArray::AddError( FormulaError nErr )
 FormulaToken* FormulaTokenArray::AddStringName( const OUString& rStr )
 {
     return Add( new FormulaStringOpToken( ocStringName, svl::SharedString( rStr ) ) );   // string not interned
+}
+
+FormulaToken* FormulaTokenArray::AddDPFieldName( const OUString& rStr )
+{
+    return Add( new FormulaStringOpToken( ocDPFieldName, svl::SharedString( rStr ) ) );   // string not interned
 }
 
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
@@ -1749,7 +1761,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
     return nullptr;
 }
 
-FormulaToken* FormulaTokenArrayPlainIterator::GetNextStringName()
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextStringNameRPN()
 {
     if (mpFTA->GetCode())
     {
@@ -1757,6 +1769,20 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextStringName()
         {
             FormulaToken* t = mpFTA->GetCode()[ mnIndex++ ];
             if (t->GetType() == svStringName)
+                return t;
+        }
+    }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextDPFieldNameRPN()
+{
+    if (mpFTA->GetCode())
+    {
+        while (mnIndex < mpFTA->GetCodeLen())
+        {
+            FormulaToken* t = mpFTA->GetCode()[mnIndex++];
+            if (t->GetType() == svDPFieldName)
                 return t;
         }
     }
@@ -2082,8 +2108,8 @@ bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
     return FormulaByteToken::operator==( r ) && maString == r.GetString();
 }
 
-FormulaStringNameToken::FormulaStringNameToken( svl::SharedString r ) :
-    FormulaToken( svStringName ), maString(std::move( r ))
+FormulaStringNameToken::FormulaStringNameToken( StackVar eTypeP, svl::SharedString r ) :
+    FormulaToken( eTypeP ), maString(std::move( r ))
 {
 }
 

@@ -20,6 +20,7 @@
 #include <dpcache.hxx>
 #include <dpfilteredcache.hxx>
 #include <address.hxx>
+#include <tokenarray.hxx>
 #include <queryparam.hxx>
 #include <dpitemdata.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -72,6 +73,7 @@ ScDPFilteredCache::Criterion::Criterion() :
 {
 }
 
+
 ScDPFilteredCache::ScDPFilteredCache(const ScDPCache& rCache) :
     maShowByFilter(0, MAXROW+1, false), maShowByPage(0, MAXROW+1, true), mrCache(rCache)
 {
@@ -89,6 +91,53 @@ sal_Int32 ScDPFilteredCache::getRowSize() const
 sal_Int32 ScDPFilteredCache::getColSize() const
 {
     return mrCache.GetColumnCount();
+}
+
+sal_Int32 ScDPFilteredCache::getCalculatedColumnCount() const
+{
+    return mrCache.GetCalculatedFieldCount();
+}
+
+void ScDPFilteredCache::addCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField)
+{
+    maCalcFields.emplace_back(pField);
+}
+
+bool ScDPFilteredCache::isCalculatedField(sal_Int32 nDim) const
+{
+    return std::any_of(maCalcFields.begin(), maCalcFields.end(),
+                       [nDim](const auto& pCalcF)
+                       { return nDim == pCalcF->mnIndex; });
+}
+
+OUString ScDPFilteredCache::getCalculatedFieldName(sal_Int32 nDim) const
+{
+    for (const auto& pCalcField : maCalcFields)
+    {
+        if (pCalcField->mnIndex == nDim)
+            return pCalcField->maFieldName;
+    }
+    return OUString(); // Empty string
+}
+
+OUString ScDPFilteredCache::getCalculation(sal_Int32 nDim) const
+{
+    for (const auto& pCalcField : maCalcFields)
+    {
+        if (pCalcField->mnIndex == nDim)
+            return pCalcField->maCalculation;
+    }
+    return OUString(); // Empty string
+}
+
+const ScTokenArray* ScDPFilteredCache::getCalculationToken(sal_Int32 nDim) const
+{
+    for (const auto& pCalcField : maCalcFields)
+    {
+        if (pCalcField->mnIndex == nDim)
+            return pCalcField->mpArrayRef.get();
+    }
+    return nullptr;
 }
 
 void ScDPFilteredCache::fillTable(
@@ -209,6 +258,14 @@ void ScDPFilteredCache::fillTable()
             if (aAdded[nRow] != -1)
                 maFieldEntries.back().push_back(aAdded[nRow]);
         }
+    }
+}
+
+void ScDPFilteredCache::fillCalcFieldTable()
+{
+    for (const auto& pField : getCache().GetCalculatedFields())
+    {
+        maCalcFields.emplace_back(pField);
     }
 }
 
@@ -357,11 +414,17 @@ void ScDPFilteredCache::clear()
     maFieldEntries.clear();
     maShowByFilter.clear();
     maShowByPage.clear();
+    maCalcFields.clear();
 }
 
 bool ScDPFilteredCache::empty() const
 {
     return maFieldEntries.empty();
+}
+
+bool ScDPFilteredCache::emptycalcfields() const
+{
+    return maCalcFields.empty();
 }
 
 bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const std::vector<Criterion>& rCriteria,

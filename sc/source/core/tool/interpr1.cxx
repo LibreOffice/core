@@ -9925,7 +9925,7 @@ void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, for
 {
     formula::FormulaTokenArrayPlainIterator aIterResult(rTokens);
     aIterResult.Jump(nStartPos + 1);
-    for (FormulaToken* t = aIterResult.GetNextStringName(); t; t = aIterResult.GetNextStringName())
+    for (FormulaToken* t = aIterResult.GetNextStringNameRPN(); t; t = aIterResult.GetNextStringNameRPN())
     {
         if (aIterResult.GetIndex() > nEndPos)
             break;

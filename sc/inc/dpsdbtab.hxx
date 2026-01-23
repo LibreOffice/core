@@ -29,6 +29,8 @@
 class ScDocument;
 class ScDPCache;
 class ScDPDimensionSaveData;
+class ScDPDimCalcSaveData;
+class ScTokenArray;
 
 struct ScImportSourceDesc
 {
@@ -48,7 +50,7 @@ struct ScImportSourceDesc
                 mpDoc == rOther.mpDoc; }
 
     sal_Int32 GetCommandType() const;
-    const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;
+    const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData) const;
 };
 
 /**
@@ -63,9 +65,13 @@ public:
     virtual ~ScDatabaseDPData() override;
 
     virtual sal_Int32               GetColumnCount() override;
+    virtual sal_Int32               GetCalculatedColumnCount() override;
     virtual OUString                getDimensionName(sal_Int32 nColumn) override;
     virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) override;
     virtual bool                    IsDateDimension(sal_Int32 nDim) override;
+    virtual bool                    IsCalculatedDimension(sal_Int32 nDim) override;
+    virtual OUString                GetCalculation(sal_Int32 nDim) override;
+    virtual const ScTokenArray*     GetCalculationToken(sal_Int32 nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 

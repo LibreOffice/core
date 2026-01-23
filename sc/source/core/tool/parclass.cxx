@@ -80,6 +80,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocStop,            {{ Bounds                                               }, 0, Bounds }},
     { ocStringXML,       {{ Bounds                                               }, 0, Bounds }},
     { ocStringName,      {{ Bounds                                               }, 0, Bounds }},
+    { ocDPFieldName,     {{ Bounds                                               }, 0, Bounds }},
     { ocTableRef,        {{ Bounds                                               }, 0, Value }},    // or Reference?
     { ocTableRefClose,   {{ Bounds                                               }, 0, Bounds }},
     { ocTableRefItemAll,     {{ Bounds                                           }, 0, Bounds }},
