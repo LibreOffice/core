@@ -10,6 +10,8 @@
  */
 
 #include "AIAssistantPanel.hxx"
+#include <sal/log.hxx>
+#include <cstdio>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -27,6 +29,8 @@
 #include <tools/fontenum.hxx>
 #include <numrule.hxx>
 #include <fmtcol.hxx>
+#include <i18nutil/searchopt.hxx>
+#include <cshtyp.hxx>
 
 namespace sw::sidebar {
 
@@ -67,14 +71,6 @@ AIAssistantPanel::AIAssistantPanel(
     m_xExpandButton = m_xBuilder->weld_button(u"expand_button"_ustr);
     m_xCondenseButton = m_xBuilder->weld_button(u"condense_button"_ustr);
 
-    // Formatting buttons
-    m_xBoldButton = m_xBuilder->weld_button(u"bold_button"_ustr);
-    m_xItalicButton = m_xBuilder->weld_button(u"italic_button"_ustr);
-    m_xUnderlineButton = m_xBuilder->weld_button(u"underline_button"_ustr);
-    m_xHeadingButton = m_xBuilder->weld_button(u"heading_button"_ustr);
-    m_xBulletButton = m_xBuilder->weld_button(u"bullet_button"_ustr);
-    m_xNumberButton = m_xBuilder->weld_button(u"number_button"_ustr);
-
     // Chat area
     m_xChatHistory = m_xBuilder->weld_text_view(u"chat_history"_ustr);
 
@@ -105,20 +101,6 @@ AIAssistantPanel::AIAssistantPanel(
         m_xExpandButton->connect_clicked(LINK(this, AIAssistantPanel, ExpandClickHdl));
     if (m_xCondenseButton)
         m_xCondenseButton->connect_clicked(LINK(this, AIAssistantPanel, CondenseClickHdl));
-
-    // Connect formatting handlers
-    if (m_xBoldButton)
-        m_xBoldButton->connect_clicked(LINK(this, AIAssistantPanel, BoldClickHdl));
-    if (m_xItalicButton)
-        m_xItalicButton->connect_clicked(LINK(this, AIAssistantPanel, ItalicClickHdl));
-    if (m_xUnderlineButton)
-        m_xUnderlineButton->connect_clicked(LINK(this, AIAssistantPanel, UnderlineClickHdl));
-    if (m_xHeadingButton)
-        m_xHeadingButton->connect_clicked(LINK(this, AIAssistantPanel, HeadingClickHdl));
-    if (m_xBulletButton)
-        m_xBulletButton->connect_clicked(LINK(this, AIAssistantPanel, BulletClickHdl));
-    if (m_xNumberButton)
-        m_xNumberButton->connect_clicked(LINK(this, AIAssistantPanel, NumberClickHdl));
 
     // Connect chat handlers
     if (m_xSendButton)
@@ -213,22 +195,44 @@ OUString AIAssistantPanel::GetSelectedText()
 
 OUString AIAssistantPanel::GetDocumentText()
 {
-    if (!m_pWrtShell)
+    // Debug: write to file
+    FILE* dbg = fopen("C:\\temp\\ai_debug.log", "a");
+    if (dbg) { fprintf(dbg, "GetDocumentText() called\n"); fflush(dbg); }
+
+    // Always get fresh view/shell - don't use cached pointer
+    SwView* pView = GetActiveView();
+    if (dbg) { fprintf(dbg, "GetActiveView() returned: %s\n", pView ? "valid" : "nullptr"); fflush(dbg); }
+
+    if (!pView)
     {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
+        if (dbg) { fprintf(dbg, "No active view - returning empty\n"); fclose(dbg); }
+        return u""_ustr;
     }
 
-    if (!m_pWrtShell)
-        return u""_ustr;
+    SwWrtShell& rSh = pView->GetWrtShell();
+    if (dbg) { fprintf(dbg, "Got fresh SwWrtShell reference\n"); fflush(dbg); }
 
-    // Get full document text using ExtendedSelectAll
-    m_pWrtShell->Push();
-    m_pWrtShell->ExtendedSelectAll();
+    // Lock view and save cursor position (pattern from view2.cxx)
+    rSh.LockView(true);
+    rSh.Push();
+
+    // Select all using the pattern from LibreOffice source
+    rSh.SelAll();
+    if (dbg) { fprintf(dbg, "After SelAll()\n"); fflush(dbg); }
+
+    rSh.ExtendedSelectAll();
+    if (dbg) { fprintf(dbg, "After ExtendedSelectAll()\n"); fflush(dbg); }
+
     OUString sDocText;
-    m_pWrtShell->GetSelectedText(sDocText, ParaBreakType::ToBlank);
-    m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+    rSh.GetSelectedText(sDocText, ParaBreakType::ToBlank);
+
+    if (dbg) { fprintf(dbg, "GetSelectedText returned: %d chars\n", (int)sDocText.getLength()); fflush(dbg); }
+
+    // Restore cursor position and unlock view
+    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    rSh.LockView(false);
+
+    if (dbg) { fprintf(dbg, "Final result: %d chars\n", (int)sDocText.getLength()); fclose(dbg); }
 
     // Limit to 10000 chars
     if (sDocText.getLength() > 10000)
@@ -278,6 +282,176 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
         AppendToChat(u"System"_ustr, u"No response from AI"_ustr);
         UpdateStatus(u"Error occurred"_ustr);
     }
+
+    // Execute any automatic edits from the AI
+    if (!response.autoEdits.empty())
+    {
+        ExecuteAutoEdits(response.autoEdits);
+    }
+}
+
+void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCommand>& edits)
+{
+    // Get fresh shell reference
+    SwView* pView = GetActiveView();
+    if (!pView)
+    {
+        AppendToChat(u"System"_ustr, u"Cannot edit: No active document"_ustr);
+        return;
+    }
+
+    SwWrtShell& rSh = pView->GetWrtShell();
+    int editCount = 0;
+
+    rSh.StartAllAction();
+
+    for (const auto& cmd : edits)
+    {
+        FILE* dbg = fopen("C:\\temp\\auto_edit_debug.log", "a");
+        if (dbg) {
+            OString action = cmd.action.toUtf8();
+            OString findText = cmd.findText.toUtf8();
+            OString newText = cmd.newText.toUtf8();
+            OString position = cmd.position.toUtf8();
+            fprintf(dbg, "AutoEdit: action=%s find='%s' new='%s' pos=%s\n",
+                    action.getStr(), findText.getStr(), newText.getStr(), position.getStr());
+            fclose(dbg);
+        }
+
+        if (cmd.action == u"clear_and_write"_ustr)
+        {
+            // Clear entire document and write new content
+            rSh.LockView(true);
+            rSh.Push();
+            rSh.SelAll();
+            rSh.ExtendedSelectAll();
+            rSh.DelRight();
+            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+            rSh.LockView(false);
+
+            // Insert new text
+            InsertFormattedText(cmd.newText);
+            editCount++;
+        }
+        else if (cmd.action == u"insert"_ustr)
+        {
+            if (cmd.position == u"start"_ustr)
+            {
+                rSh.StartOfSection();
+            }
+            else if (cmd.position == u"end"_ustr)
+            {
+                rSh.EndOfSection();
+            }
+            // Default "cursor" - just insert at current position
+
+            InsertFormattedText(cmd.newText);
+            editCount++;
+        }
+        else if (cmd.action == u"replace"_ustr)
+        {
+            if (!cmd.findText.isEmpty())
+            {
+                // Use find & replace via SearchPattern
+                i18nutil::SearchOptions2 aSearchOpt;
+                aSearchOpt.searchString = cmd.findText;
+                aSearchOpt.replaceString = cmd.newText;
+                aSearchOpt.Locale = css::lang::Locale();
+                aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+                // SearchPattern returns count of replacements made
+                sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
+                    false,  // bSearchInNotes
+                    SwDocPositions::Start,
+                    SwDocPositions::End,
+                    FindRanges::InBody,
+                    true);  // bReplace
+
+                if (nFound > 0 && nFound != SAL_MAX_INT32)
+                    editCount++;
+            }
+            else if (rSh.HasSelection())
+            {
+                // Replace current selection
+                rSh.DelRight();
+                InsertFormattedText(cmd.newText);
+                editCount++;
+            }
+        }
+        else if (cmd.action == u"delete"_ustr)
+        {
+            if (!cmd.findText.isEmpty())
+            {
+                // Find and delete text (replace with empty string)
+                i18nutil::SearchOptions2 aSearchOpt;
+                aSearchOpt.searchString = cmd.findText;
+                aSearchOpt.replaceString = u""_ustr;
+                aSearchOpt.Locale = css::lang::Locale();
+                aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+                sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
+                    false,
+                    SwDocPositions::Start,
+                    SwDocPositions::End,
+                    FindRanges::InBody,
+                    true);
+
+                if (nFound > 0 && nFound != SAL_MAX_INT32)
+                    editCount++;
+            }
+        }
+        else if (cmd.action == u"format"_ustr)
+        {
+            // Find text and apply formatting
+            if (!cmd.findText.isEmpty())
+            {
+                // First search to select the text
+                i18nutil::SearchOptions2 aSearchOpt;
+                aSearchOpt.searchString = cmd.findText;
+                aSearchOpt.Locale = css::lang::Locale();
+                aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+                sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
+                    false,
+                    SwDocPositions::Start,
+                    SwDocPositions::End,
+                    FindRanges::InBody,
+                    false);  // Don't replace, just find
+
+                if (nFound > 0 && nFound != SAL_MAX_INT32)
+                {
+                    // Text found and selected, apply formatting
+                    if (cmd.bold)
+                    {
+                        rSh.SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+                    }
+                    if (cmd.italic)
+                    {
+                        rSh.SetAttrItem(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));
+                    }
+                    if (cmd.underline)
+                    {
+                        rSh.SetAttrItem(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
+                    }
+                    if (cmd.headingLevel > 0 && cmd.headingLevel <= 6)
+                    {
+                        sal_uInt16 nPoolId = RES_POOLCOLL_HEADLINE1 + (cmd.headingLevel - 1);
+                        rSh.SetTextFormatColl(rSh.GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(nPoolId));
+                    }
+                    editCount++;
+                }
+            }
+        }
+    }
+
+    rSh.EndAllAction();
+
+    if (editCount > 0)
+    {
+        OUString msg = OUString::number(editCount) + u" edit(s) applied to document"_ustr;
+        AppendToChat(u"System"_ustr, msg);
+        UpdateStatus(msg);
+    }
 }
 
 void AIAssistantPanel::SendMessage(const OUString& message)
@@ -316,8 +490,17 @@ void AIAssistantPanel::SendMessage(const OUString& message)
         m_xSendButton->set_sensitive(false);
 
     // Get document content and selection for the AI
+    FILE* dbg = fopen("C:/temp/sendmsg_debug.log", "a");
+    if (dbg) { fprintf(dbg, "SendMessage: About to call GetDocumentText()\n"); fflush(dbg); }
+
     OUString sDocumentContent = GetDocumentText();
     OUString sSelection = GetSelectedText();
+
+    if (dbg) {
+        fprintf(dbg, "SendMessage: GetDocumentText returned %d chars\n", (int)sDocumentContent.getLength());
+        fprintf(dbg, "SendMessage: GetSelectedText returned %d chars\n", (int)sSelection.getLength());
+        fclose(dbg);
+    }
 
     // Make HTTP call to backend with document content and selection
     officelabs::AgentResponse response = m_pAgentConnection->sendMessage(message, sDocumentContent, sSelection);
@@ -430,140 +613,6 @@ IMPL_LINK_NOARG(AIAssistantPanel, ExpandClickHdl, weld::Button&, void)
 IMPL_LINK_NOARG(AIAssistantPanel, CondenseClickHdl, weld::Button&, void)
 {
     SendQuickAction(u"condense"_ustr);
-}
-
-// ==================== FORMATTING HANDLERS ====================
-
-void AIAssistantPanel::ApplyBold()
-{
-    if (!m_pWrtShell)
-    {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
-    }
-
-    if (m_pWrtShell)
-    {
-        SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
-        aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
-        m_pWrtShell->SetAttrSet(aSet);
-    }
-}
-
-void AIAssistantPanel::ApplyItalic()
-{
-    if (!m_pWrtShell)
-    {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
-    }
-
-    if (m_pWrtShell)
-    {
-        SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_POSTURE, RES_CHRATR_POSTURE>);
-        aSet.Put(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));
-        m_pWrtShell->SetAttrSet(aSet);
-    }
-}
-
-void AIAssistantPanel::ApplyUnderline()
-{
-    if (!m_pWrtShell)
-    {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
-    }
-
-    if (m_pWrtShell)
-    {
-        SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_UNDERLINE, RES_CHRATR_UNDERLINE>);
-        aSet.Put(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
-        m_pWrtShell->SetAttrSet(aSet);
-    }
-}
-
-void AIAssistantPanel::ApplyHeading()
-{
-    if (!m_pWrtShell)
-    {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
-    }
-
-    if (m_pWrtShell)
-    {
-        SwTextFormatColl* pColl = m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE1);
-        if (pColl)
-            m_pWrtShell->SetTextFormatColl(pColl);
-    }
-}
-
-void AIAssistantPanel::ApplyBulletList()
-{
-    if (!m_pWrtShell)
-    {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
-    }
-
-    if (m_pWrtShell)
-    {
-        m_pWrtShell->StartAllAction();
-        m_pWrtShell->NumOrBulletOn(false);  // false = bullets
-        m_pWrtShell->EndAllAction();
-    }
-}
-
-void AIAssistantPanel::ApplyNumberList()
-{
-    if (!m_pWrtShell)
-    {
-        SwView* pView = GetActiveView();
-        if (pView)
-            m_pWrtShell = &pView->GetWrtShell();
-    }
-
-    if (m_pWrtShell)
-    {
-        m_pWrtShell->StartAllAction();
-        m_pWrtShell->NumOrBulletOn(true);  // true = numbered
-        m_pWrtShell->EndAllAction();
-    }
-}
-
-IMPL_LINK_NOARG(AIAssistantPanel, BoldClickHdl, weld::Button&, void)
-{
-    ApplyBold();
-}
-
-IMPL_LINK_NOARG(AIAssistantPanel, ItalicClickHdl, weld::Button&, void)
-{
-    ApplyItalic();
-}
-
-IMPL_LINK_NOARG(AIAssistantPanel, UnderlineClickHdl, weld::Button&, void)
-{
-    ApplyUnderline();
-}
-
-IMPL_LINK_NOARG(AIAssistantPanel, HeadingClickHdl, weld::Button&, void)
-{
-    ApplyHeading();
-}
-
-IMPL_LINK_NOARG(AIAssistantPanel, BulletClickHdl, weld::Button&, void)
-{
-    ApplyBulletList();
-}
-
-IMPL_LINK_NOARG(AIAssistantPanel, NumberClickHdl, weld::Button&, void)
-{
-    ApplyNumberList();
 }
 
 // ==================== CHAT HANDLERS ====================

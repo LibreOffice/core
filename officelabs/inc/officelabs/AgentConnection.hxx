@@ -4,9 +4,22 @@
 #include <officelabs/officelabsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <string>
+#include <vector>
 #include <optional>
 
 namespace officelabs {
+
+// Command for automatic document editing
+struct OFFICELABS_DLLPUBLIC AutoEditCommand {
+    OUString action;     // "insert", "replace", "delete", "format", "clear_and_write"
+    OUString findText;   // Text to find for replace/delete/format
+    OUString newText;    // Text to insert or replace with
+    OUString position;   // "cursor", "end", "start", "after_find", "before_find"
+    bool bold = false;
+    bool italic = false;
+    bool underline = false;
+    int headingLevel = 0;  // 0 = normal, 1-6 = heading levels
+};
 
 struct OFFICELABS_DLLPUBLIC AgentResponse {
     OUString message;
@@ -16,6 +29,7 @@ struct OFFICELABS_DLLPUBLIC AgentResponse {
     OUString patchOldValue;
     OUString patchNewValue;
     OUString patchDiff;
+    std::vector<AutoEditCommand> autoEdits;  // Commands to execute automatically
 };
 
 class OFFICELABS_DLLPUBLIC AgentConnection {

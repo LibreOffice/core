@@ -118,93 +118,6 @@
       </packing>
     </child>
 
-    <!-- Formatting Row: B, I, U, H1, List, 1.2 -->
-    <child>
-      <object class="GtkBox" id="formatting_row">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">horizontal</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkButton" id="bold_button">
-            <property name="label" translatable="yes">B</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Apply bold formatting</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="italic_button">
-            <property name="label" translatable="yes">I</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Apply italic formatting</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="underline_button">
-            <property name="label" translatable="yes">U</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Apply underline formatting</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="heading_button">
-            <property name="label" translatable="yes">H1</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Apply heading style</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="bullet_button">
-            <property name="label" translatable="yes">List</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Apply bullet list</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="number_button">
-            <property name="label" translatable="yes">1.2</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Apply numbered list</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
-    </child>
-
     <!-- Chat History -->
     <child>
       <object class="GtkScrolledWindow">
@@ -224,7 +137,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="position">3</property>
       </packing>
     </child>
 
@@ -278,7 +191,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="position">4</property>
       </packing>
     </child>
 
@@ -318,7 +231,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="position">5</property>
       </packing>
     </child>
   </object>

@@ -1,11 +1,11 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * OfficeLabs AI Assistant Panel - Full Featured
+ * OfficeLabs AI Assistant Panel - Fully Agentic
  *
- * Complete AI assistant with:
+ * AI assistant with agentic document control:
  * - Quick AI actions (clean, review, summarize, adapt, improve, translate, expand, condense)
  * - @ reference system for document elements
- * - Direct formatting buttons
+ * - Automatic document editing via AI tools
  * - Document insert/replace operations
  */
 
@@ -41,14 +41,6 @@ private:
     std::unique_ptr<weld::Button> m_xExpandButton;
     std::unique_ptr<weld::Button> m_xCondenseButton;
 
-    // Formatting buttons
-    std::unique_ptr<weld::Button> m_xBoldButton;
-    std::unique_ptr<weld::Button> m_xItalicButton;
-    std::unique_ptr<weld::Button> m_xUnderlineButton;
-    std::unique_ptr<weld::Button> m_xHeadingButton;
-    std::unique_ptr<weld::Button> m_xBulletButton;
-    std::unique_ptr<weld::Button> m_xNumberButton;
-
     // Chat area
     std::unique_ptr<weld::TextView> m_xChatHistory;
 
@@ -83,14 +75,6 @@ private:
     DECL_LINK(ExpandClickHdl, weld::Button&, void);
     DECL_LINK(CondenseClickHdl, weld::Button&, void);
 
-    // Formatting handlers
-    DECL_LINK(BoldClickHdl, weld::Button&, void);
-    DECL_LINK(ItalicClickHdl, weld::Button&, void);
-    DECL_LINK(UnderlineClickHdl, weld::Button&, void);
-    DECL_LINK(HeadingClickHdl, weld::Button&, void);
-    DECL_LINK(BulletClickHdl, weld::Button&, void);
-    DECL_LINK(NumberClickHdl, weld::Button&, void);
-
     // Chat handlers
     DECL_LINK(SendClickHdl, weld::Button&, void);
     DECL_LINK(InputActivateHdl, weld::Entry&, bool);
@@ -111,16 +95,9 @@ private:
     OUString GetDocumentText();
     OUString GetDocumentContext();
     void ProcessResponse(const officelabs::AgentResponse& response);
+    void ExecuteAutoEdits(const std::vector<officelabs::AutoEditCommand>& edits);
     void InsertFormattedText(const OUString& text);
     void InsertAtRefText(const OUString& ref);
-
-    // Formatting helpers
-    void ApplyBold();
-    void ApplyItalic();
-    void ApplyUnderline();
-    void ApplyHeading();
-    void ApplyBulletList();
-    void ApplyNumberList();
 
 public:
     static std::unique_ptr<PanelLayout> Create(

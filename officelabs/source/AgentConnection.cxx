@@ -46,54 +46,96 @@ void AgentConnection::setBackendUrl(const OUString& url) {
     checkConnection();
 }
 
+// Helper to extract a JSON string value after a key
+static std::string extractJsonString(const std::string& json, const std::string& key, size_t startPos = 0) {
+    std::string searchKey = "\"" + key + "\":";
+    size_t keyPos = json.find(searchKey, startPos);
+    if (keyPos == std::string::npos) return "";
+
+    size_t valueStart = json.find("\"", keyPos + searchKey.length());
+    if (valueStart == std::string::npos) return "";
+
+    // Handle escaped quotes in the value
+    size_t valueEnd = valueStart + 1;
+    while (valueEnd < json.length()) {
+        if (json[valueEnd] == '"' && json[valueEnd - 1] != '\\') {
+            break;
+        }
+        valueEnd++;
+    }
+
+    return json.substr(valueStart + 1, valueEnd - valueStart - 1);
+}
+
+// Helper to unescape JSON string
+static std::string unescapeJson(const std::string& str) {
+    std::string result;
+    for (size_t i = 0; i < str.length(); ++i) {
+        if (str[i] == '\\' && i + 1 < str.length()) {
+            char next = str[i + 1];
+            if (next == 'n') { result += '\n'; i++; }
+            else if (next == 'r') { result += '\r'; i++; }
+            else if (next == 't') { result += '\t'; i++; }
+            else if (next == '"') { result += '"'; i++; }
+            else if (next == '\\') { result += '\\'; i++; }
+            else { result += str[i]; }
+        } else {
+            result += str[i];
+        }
+    }
+    return result;
+}
+
 AgentResponse AgentConnection::parseResponse(const std::string& json) {
     AgentResponse response;
-    
-    // Simple JSON parsing (for production, use a proper JSON library)
-    // For now, just extract the message
-    size_t msgStart = json.find("\"message\":");
-    if (msgStart != std::string::npos) {
-        msgStart = json.find("\"", msgStart + 10);
-        if (msgStart != std::string::npos) {
-            size_t msgEnd = json.find("\"", msgStart + 1);
-            if (msgEnd != std::string::npos) {
-                std::string msg = json.substr(msgStart + 1, msgEnd - msgStart - 1);
-                response.message = OUString::fromUtf8(msg.c_str());
-            }
-        }
-    }
-    
+
+    // Extract message
+    std::string msg = extractJsonString(json, "message");
+    response.message = OUString::fromUtf8(unescapeJson(msg).c_str());
+
     // Check for patch
-    response.hasPatch = (json.find("\"patch\":") != std::string::npos);
-    
+    response.hasPatch = (json.find("\"patch\":") != std::string::npos &&
+                         json.find("\"patch\":null") == std::string::npos);
+
     if (response.hasPatch) {
-        // Extract patch details (simplified)
-        size_t typeStart = json.find("\"type\":");
-        if (typeStart != std::string::npos) {
-            typeStart = json.find("\"", typeStart + 7);
-            if (typeStart != std::string::npos) {
-                size_t typeEnd = json.find("\"", typeStart + 1);
-                if (typeEnd != std::string::npos) {
-                    std::string type = json.substr(typeStart + 1, typeEnd - typeStart - 1);
-                    response.patchType = OUString::fromUtf8(type.c_str());
+        response.patchType = OUString::fromUtf8(extractJsonString(json, "type").c_str());
+        response.patchTarget = OUString::fromUtf8(extractJsonString(json, "target").c_str());
+        response.patchNewValue = OUString::fromUtf8(unescapeJson(extractJsonString(json, "new_value")).c_str());
+        response.patchOldValue = OUString::fromUtf8(unescapeJson(extractJsonString(json, "old_value")).c_str());
+        response.patchDiff = OUString::fromUtf8(unescapeJson(extractJsonString(json, "diff")).c_str());
+    }
+
+    // Parse auto_edits array
+    size_t autoEditsStart = json.find("\"auto_edits\":");
+    if (autoEditsStart != std::string::npos) {
+        size_t arrayStart = json.find("[", autoEditsStart);
+        size_t arrayEnd = json.find("]", arrayStart);
+        if (arrayStart != std::string::npos && arrayEnd != std::string::npos) {
+            std::string arrayContent = json.substr(arrayStart, arrayEnd - arrayStart + 1);
+
+            // Parse each object in the array
+            size_t objStart = 0;
+            while ((objStart = arrayContent.find("{", objStart)) != std::string::npos) {
+                size_t objEnd = arrayContent.find("}", objStart);
+                if (objEnd == std::string::npos) break;
+
+                std::string objStr = arrayContent.substr(objStart, objEnd - objStart + 1);
+
+                AutoEditCommand cmd;
+                cmd.action = OUString::fromUtf8(extractJsonString(objStr, "action").c_str());
+                cmd.findText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "find_text")).c_str());
+                cmd.newText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "new_text")).c_str());
+                cmd.position = OUString::fromUtf8(extractJsonString(objStr, "position").c_str());
+
+                if (!cmd.action.isEmpty()) {
+                    response.autoEdits.push_back(cmd);
                 }
-            }
-        }
-        
-        // Extract diff
-        size_t diffStart = json.find("\"diff\":");
-        if (diffStart != std::string::npos) {
-            diffStart = json.find("\"", diffStart + 7);
-            if (diffStart != std::string::npos) {
-                size_t diffEnd = json.find("\"", diffStart + 1);
-                if (diffEnd != std::string::npos) {
-                    std::string diff = json.substr(diffStart + 1, diffEnd - diffStart - 1);
-                    response.patchDiff = OUString::fromUtf8(diff.c_str());
-                }
+
+                objStart = objEnd + 1;
             }
         }
     }
-    
+
     return response;
 }
 
