@@ -29,6 +29,8 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <txatbase.hxx>
+#include <wrtsh.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -531,6 +533,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldCharHeightHeaderToC)
     const SvxFontHeightItem& rFontHeightItem
         = rAutoFormat.GetStyleHandle()->Get(RES_CHRATR_FONTSIZE);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(480), rFontHeightItem.GetHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAnnotationMarkRedline)
+{
+    // Given a document with a commented text range, inside a redline:
+    // When importing that document:
+    createSwDoc("redline-range-comment.docx");
+
+    // Then make sure the comment anchor is inside a redline:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 7, /*bBasicCall=*/false);
+    SwPaM* pCursor = pWrtShell->GetCursor();
+    SwField* pField = SwCursorShell::GetFieldAtCursor(pCursor, true);
+    CPPUNIT_ASSERT_EQUAL(SwFieldIds::Postit, pField->Which());
+    const IDocumentRedlineAccess& rIDRA = pDocShell->GetDoc()->getIDocumentRedlineAccess();
+    const SwRangeRedline* pRedline = rIDRA.GetRedline(*pCursor->Start(), nullptr);
+    // Without the accompanying fix in place, this test would have failed, the anchor point was not
+    // inside a redline.
+    CPPUNIT_ASSERT(pRedline);
 }
 }
 
