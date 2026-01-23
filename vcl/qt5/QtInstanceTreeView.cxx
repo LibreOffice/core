@@ -745,7 +745,23 @@ void QtInstanceTreeView::set_selection_mode(SelectionMode eMode)
 
 int QtInstanceTreeView::count_selected_rows() const { return get_selected_rows().size(); }
 
-void QtInstanceTreeView::do_remove_selection() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::do_remove_selection()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        // remove from last to first selected row to ensure indexes remain valid
+        QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedRows();
+        std::sort(aSelectedIndexes.begin(), aSelectedIndexes.end(),
+                  [this](const QModelIndex& rFirst, const QModelIndex& rSecond) {
+                      return iter_compare(QtInstanceTreeIter(rFirst), QtInstanceTreeIter(rSecond))
+                             == -1;
+                  });
+
+        for (auto aIt = aSelectedIndexes.rbegin(); aIt != aSelectedIndexes.rend(); aIt++)
+            m_pModel->removeRow(aIt->row(), aIt->parent());
+    });
+}
 
 bool QtInstanceTreeView::changed_by_hover() const
 {
