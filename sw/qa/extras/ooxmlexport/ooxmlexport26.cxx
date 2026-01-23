@@ -42,6 +42,21 @@ CPPUNIT_TEST_FIXTURE(Test, testwDateValueFormat)
     // - Actual  : 44
     // - validation error in OOXML export: Errors: 44
     saveAndReload(TestFilter::DOCX);
+
+    // tdf#170457: round-tripped document was indicated as corrupt by MS Word
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
+
+    int nComments = countXPathNodes(pXmlComments, "//w:comment");
+
+    int nCommentReferences = countXPathNodes(pXmlDoc, "//w:commentReference");
+    // Each comment is referenced - the counts must match
+    CPPUNIT_ASSERT_EQUAL(nComments, nCommentReferences);
+    CPPUNIT_ASSERT_EQUAL(int(22), nCommentReferences);
+
+    int nCommentStarts = countXPathNodes(pXmlDoc, "//w:commentRangeStart");
+    int nCommentEnds = countXPathNodes(pXmlDoc, "//w:commentRangeEnd");
+    CPPUNIT_ASSERT_EQUAL(nCommentStarts, nCommentEnds);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
