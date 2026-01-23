@@ -814,10 +814,19 @@ std::unique_ptr<weld::TreeIter> QtInstanceTreeView::get_dest_row_at_pos(const Po
 
 void QtInstanceTreeView::unset_drag_dest_row() { assert(false && "Not implemented yet"); }
 
-tools::Rectangle QtInstanceTreeView::get_row_area(const weld::TreeIter&) const
+tools::Rectangle QtInstanceTreeView::get_row_area(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return tools::Rectangle();
+    SolarMutexGuard g;
+
+    tools::Rectangle aRowArea;
+    GetQtInstance().RunInMainThread([&] {
+        const QRect aFirstColRect = m_pTreeView->visualRect(modelIndex(rIter));
+        const QRect aLastColRect
+            = m_pTreeView->visualRect(modelIndex(rIter, m_pModel->columnCount() - 1));
+        aRowArea = toRectangle(aFirstColRect.united(aLastColRect));
+    });
+
+    return aRowArea;
 }
 
 weld::TreeView* QtInstanceTreeView::get_drag_source() const
