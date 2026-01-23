@@ -13920,6 +13920,21 @@ public:
         return true;
     }
 
+    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+
+        gint depth;
+        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+        int nRet = indices[depth-1];
+
+        gtk_tree_path_free(path);
+
+        return nRet;
+    }
+
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override
     {
         GtkTreeIter iter;
@@ -15446,21 +15461,6 @@ public:
         set_image(rGtkIter.iter, col, getPixbuf(rImage));
     }
 
-    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
-    {
-        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-
-        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
-
-        gint depth;
-        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
-        int nRet = indices[depth-1];
-
-        gtk_tree_path_free(path);
-
-        return nRet;
-    }
-
     virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override
     {
         const GtkInstanceTreeIter& rGtkIterA = static_cast<const GtkInstanceTreeIter&>(a);
@@ -16863,21 +16863,6 @@ public:
         gtk_icon_view_set_cursor(m_pIconView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
-    }
-
-    virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
-    {
-        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-
-        GtkTreePath* path = gtk_tree_model_get_path(GTK_TREE_MODEL(m_pTreeStore), const_cast<GtkTreeIter*>(&rGtkIter.iter));
-
-        gint depth;
-        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
-        int nRet = indices[depth-1];
-
-        gtk_tree_path_free(path);
-
-        return nRet;
     }
 
     virtual void do_scroll_to_item(const weld::TreeIter& rIter) override
