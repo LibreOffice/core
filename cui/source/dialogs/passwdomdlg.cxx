@@ -157,6 +157,10 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     , m_xReenterPasswdToModifyFT(m_xBuilder->weld_label(u"label8"_ustr))
     , m_xReenterPasswdToModifyED(m_xBuilder->weld_entry(u"confirmropassEntry"_ustr))
     , m_xReenterPasswdToModifyInd(m_xBuilder->weld_label(u"confirmropassIndicator"_ustr))
+    , m_xBtn1(m_xBuilder->weld_toggle_button(u"togglebt1"_ustr))
+    , m_xBtn2(m_xBuilder->weld_toggle_button(u"togglebt2"_ustr))
+    , m_xBtn3(m_xBuilder->weld_toggle_button(u"togglebt3"_ustr))
+    , m_xBtn4(m_xBuilder->weld_toggle_button(u"togglebt4"_ustr))
     , m_aOneMismatch( CuiResId( RID_CUISTR_ONE_PASSWORD_MISMATCH ) )
     , m_aTwoMismatch( CuiResId( RID_CUISTR_TWO_PASSWORDS_MISMATCH ) )
     , m_aInvalidStateForOkButton( CuiResId( RID_CUISTR_INVALID_STATE_FOR_OK_BUTTON ) )
@@ -170,21 +174,11 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     m_xPasswdToOpenED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
     m_xPasswdToModifyED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
 
-    m_xPass[0] = m_xBuilder->weld_toggle_button(u"togglebt1"_ustr);
-    m_xPass[1] = m_xBuilder->weld_toggle_button(u"togglebt2"_ustr);
-    m_xPass[2] = m_xBuilder->weld_toggle_button(u"togglebt3"_ustr);
-    m_xPass[3] = m_xBuilder->weld_toggle_button(u"togglebt4"_ustr);
-
     Link<weld::Toggleable&, void> aToggleLink = LINK(this, PasswordToOpenModifyDialog, ShowHdl);
-
-    for (auto& aPass : m_xPass)
-    {
-        if (aPass->get_active())
-            aPass->set_from_icon_name(RID_SVXBMP_SHOWPASS);
-        else
-            aPass->set_from_icon_name(RID_SVXBMP_HIDEPASS);
-        aPass->connect_toggled(aToggleLink);
-    }
+    m_xBtn1->connect_toggled(aToggleLink);
+    m_xBtn2->connect_toggled(aToggleLink);
+    m_xBtn3->connect_toggled(aToggleLink);
+    m_xBtn4->connect_toggled(aToggleLink);
 
     if(m_oPasswordPolicy || nMaxPasswdLen)
     {
@@ -291,62 +285,62 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, ReadonlyOnOffHdl, weld::Toggleable&,
 IMPL_LINK(PasswordToOpenModifyDialog, ShowHdl, weld::Toggleable&, rToggleable, void)
 {
     bool bChecked = rToggleable.get_active();
-    if (&rToggleable == m_xPass[0].get())
+    if (&rToggleable == m_xBtn1.get())
     {
         if (bChecked)
         {
-            m_xPass[0]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn1->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xPasswdToOpenED->set_visibility(true);
             m_xPasswdToOpenED->grab_focus();
         }
         else
         {
-            m_xPass[0]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn1->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xPasswdToOpenED->set_visibility(false);
             m_xPasswdToOpenED->grab_focus();
         }
     }
-    else if (&rToggleable == m_xPass[1].get())
+    else if (&rToggleable == m_xBtn2.get())
     {
         if (bChecked)
         {
-            m_xPass[1]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn2->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xReenterPasswdToOpenED->set_visibility(true);
             m_xReenterPasswdToOpenED->grab_focus();
         }
         else
         {
-            m_xPass[1]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn2->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xReenterPasswdToOpenED->set_visibility(false);
             m_xReenterPasswdToOpenED->grab_focus();
         }
     }
-    else if (&rToggleable == m_xPass[2].get())
+    else if (&rToggleable == m_xBtn3.get())
     {
         if (bChecked)
         {
-            m_xPass[2]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn3->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xPasswdToModifyED->set_visibility(true);
             m_xPasswdToModifyED->grab_focus();
         }
         else
         {
-            m_xPass[2]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn3->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xPasswdToModifyED->set_visibility(false);
             m_xPasswdToModifyED->grab_focus();
         }
     }
-    else if (&rToggleable == m_xPass[3].get())
+    else if (&rToggleable == m_xBtn4.get())
     {
         if (bChecked)
         {
-            m_xPass[3]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn4->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xReenterPasswdToModifyED->set_visibility(true);
             m_xReenterPasswdToModifyED->grab_focus();
         }
         else
         {
-            m_xPass[3]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn4->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xReenterPasswdToModifyED->set_visibility(false);
             m_xReenterPasswdToModifyED->grab_focus();
         }
