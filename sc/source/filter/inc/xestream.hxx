@@ -313,9 +313,7 @@ public:
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const OUString& sRelationshipType,
-                                        OUString* pRelationshipId = nullptr,
-                                        // if bNoHeader is true, don't create a header (<?xml... ) line
-                                        bool bNoHeader = false);
+                                        OUString* pRelationshipId = nullptr);
 
     // ignore
     virtual bool exportDocument() override;
