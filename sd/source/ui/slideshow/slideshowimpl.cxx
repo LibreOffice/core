@@ -980,7 +980,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev(), nullptr );
+            mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev() );
             mpView->SetAnimationPause( true );
         }
 
@@ -1169,7 +1169,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
 
             if( mpView )
             {
-                mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev(), nullptr );
+                mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev() );
                 mpView->SetAnimationPause( true );
             }
 

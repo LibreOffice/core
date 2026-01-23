@@ -311,7 +311,7 @@ public:
     SdrPageView* GetSdrPageView() const { return mpPageView.get(); }
 
     // A SdrView can be output to multiple devices at the same time
-    virtual void AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow);
+    virtual void AddDeviceToPaintView(OutputDevice& rNewDev);
     virtual void DeleteDeviceFromPaintView(OutputDevice& rOldDev);
 
     void SetLayerVisible(const OUString& rName, bool bShow);

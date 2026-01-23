@@ -175,7 +175,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     SetDefaultStyleSheet(GetModel().GetDefaultStyleSheet(), true);
 
     if (pOut)
-        AddDeviceToPaintView(*pOut, nullptr);
+        AddDeviceToPaintView(*pOut);
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();
@@ -405,9 +405,9 @@ void SdrPaintView::HideSdrPage()
     }
 }
 
-void SdrPaintView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window *pWindow)
+void SdrPaintView::AddDeviceToPaintView(OutputDevice& rNewDev)
 {
-    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, rNewDev, pWindow);
+    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, rNewDev);
     maPaintWindows.emplace_back(pNewPaintWindow);
 
     if(mpPageView)

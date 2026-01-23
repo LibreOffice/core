@@ -2570,9 +2570,9 @@ void SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
     SdrGlueEditView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
 }
 
-void SdrObjEditView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow)
+void SdrObjEditView::AddDeviceToPaintView(OutputDevice& rNewDev)
 {
-    SdrGlueEditView::AddDeviceToPaintView(rNewDev, pWindow);
+    SdrGlueEditView::AddDeviceToPaintView(rNewDev);
 
     if (mxWeakTextEditObj.get() && !mbTextEditOnlyOneView
         && rNewDev.GetOutDevType() == OUTDEV_WINDOW)

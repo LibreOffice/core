@@ -1562,7 +1562,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                 if(!HasDrawView())
                     MakeDrawView();
                 SdrView* pDrawView = GetDrawView();
-                pDrawView->AddDeviceToPaintView(*pVout, nullptr);
+                pDrawView->AddDeviceToPaintView(*pVout);
 
                 // clear mpWin during DLPrePaint2 to get paint preparation for mpOut, but set it again
                 // immediately afterwards. There are many decisions in SW which imply that Printing
