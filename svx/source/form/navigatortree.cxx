@@ -149,6 +149,7 @@ namespace svxform
         m_xTreeView->set_size_request(200, 200);
 
         m_xTreeView->set_selection_mode(SelectionMode::Multiple);
+        m_xTreeView->set_column_editables({ true });
 
         m_pNavModel.reset(new NavigatorTreeModel());
         Clear();
