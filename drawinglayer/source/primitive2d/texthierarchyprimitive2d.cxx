@@ -147,8 +147,15 @@ namespace drawinglayer::primitive2d
             const geometry::ViewInformation2D& rViewInformation) const
         {
             // check if TextEdit is active. If not, process. If yes, suppress the content
+            // lok case: if TextEdit is active in view, suppress text in all views.
+            // use `isTiledPainting()` instead of a more generic `isActive()` so that it
+            // does not suppress text for SVG exports
+            bool bSuppress = rViewInformation.getTextEditActive()
+                        || (comphelper::LibreOfficeKit::isTiledPainting());
             // lok case: always decompose it when we're rendering a slide show
-            if (!rViewInformation.getTextEditActive() || comphelper::LibreOfficeKit::isSlideshowRendering())
+            if (comphelper::LibreOfficeKit::isSlideshowRendering())
+                bSuppress = false;
+            if (!bSuppress)
                 GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
