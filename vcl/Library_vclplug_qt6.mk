@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,vclplug_qt6,\
     boost_headers \
     cairo \
     epoxy \
+    frozen \
     graphite \
     harfbuzz \
     icu_headers \
