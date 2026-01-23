@@ -1832,34 +1832,20 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                         2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
-                    if(GetOutput() == EXC_OUTPUT_BINARY)
-                        mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
-                    else
-                        msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
-                            xScTokArr.get());
+                    mxTokArr1 = rFmlaComp.CreateFormula(EXC_FMLATYPE_LISTVAL, *xScTokArr);
                 }
             }
             else
             {
                 // no list validation -> convert the formula
-                if(GetOutput() == EXC_OUTPUT_BINARY)
-                    mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
-                else
-                    msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
-                            xScTokArr.get());
+                mxTokArr1 = rFmlaComp.CreateFormula(EXC_FMLATYPE_DATAVAL, *xScTokArr);
             }
         }
 
         // second formula
         xScTokArr = pValData->CreateFlatCopiedTokenArray( 1 );
         if (xScTokArr)
-        {
-            if(GetOutput() == EXC_OUTPUT_BINARY)
-                mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
-            else
-                msFormula2 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
-                        xScTokArr.get());
-        }
+            mxTokArr2 = rFmlaComp.CreateFormula(EXC_FMLATYPE_DATAVAL, *xScTokArr);
     }
     else
     {
@@ -1932,18 +1918,41 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
         rWorksheet->endElement(FSNS(XML_mc, XML_Fallback));
         rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
     }
-    if (msList.isEmpty() && !msFormula1.isEmpty())
+
+    if (const ScValidationData* pValData = GetDoc().GetValidationEntry(mnScHandle))
     {
-        rWorksheet->startElement(XML_formula1);
-        rWorksheet->writeEscaped( msFormula1 );
-        rWorksheet->endElement( XML_formula1 );
+        if (msList.isEmpty())
+        {
+            if (msFormula1.isEmpty())
+            {
+                if (const std::unique_ptr<ScTokenArray> xScTokArr
+                    = pValData->CreateFlatCopiedTokenArray(0))
+                {
+                    msFormula1 = XclXmlUtils::ToOUString(GetCompileFormulaContext(),
+                                                         pValData->GetSrcPos(), xScTokArr.get());
+                }
+            }
+
+            if (!msFormula1.isEmpty())
+            {
+                rWorksheet->startElement(XML_formula1);
+                rWorksheet->writeEscaped(msFormula1);
+                rWorksheet->endElement(XML_formula1);
+            }
+        }
+        if (const std::unique_ptr<ScTokenArray> xScTokArr = pValData->CreateFlatCopiedTokenArray(1))
+        {
+            msFormula2 = XclXmlUtils::ToOUString(GetCompileFormulaContext(), pValData->GetSrcPos(),
+                                                 xScTokArr.get());
+            if (!msFormula2.isEmpty())
+            {
+                rWorksheet->startElement(XML_formula2);
+                rWorksheet->writeEscaped(msFormula2);
+                rWorksheet->endElement(XML_formula2);
+            }
+        }
     }
-    if( !msFormula2.isEmpty() )
-    {
-        rWorksheet->startElement(XML_formula2);
-        rWorksheet->writeEscaped( msFormula2 );
-        rWorksheet->endElement( XML_formula2 );
-    }
+
     rWorksheet->endElement( XML_dataValidation );
 }
 
