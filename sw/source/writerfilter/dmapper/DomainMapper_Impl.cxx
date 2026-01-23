@@ -4793,7 +4793,6 @@ void DomainMapper_Impl::PopAnnotation()
         {
             uno::Sequence< beans::PropertyValue > aEmptyProperties;
             appendTextContent( m_xAnnotationField, aEmptyProperties );
-            CheckRedline( m_xAnnotationField->getAnchor( ) );
         }
         else
         {
@@ -4855,6 +4854,7 @@ void DomainMapper_Impl::PopAnnotation()
                 xCursor->setString(OUString());
             }
         }
+        CheckRedline(m_xAnnotationField->getAnchor());
         m_aAnnotationPositions.erase( m_nAnnotationId );
     }
     catch (uno::Exception const&)
