@@ -148,62 +148,62 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
 IMPL_LINK(SfxPasswordDialog, ShowHdl, weld::Toggleable&, rToggleable, void)
 {
     bool bChecked = rToggleable.get_active();
-    if (&rToggleable == m_xPass[0].get())
+    if (&rToggleable == m_xBtn1.get())
     {
         if (bChecked)
         {
-            m_xPass[0]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn1->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xPassword1ED->set_visibility(true);
             m_xPassword1ED->grab_focus();
         }
         else
         {
-            m_xPass[0]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn1->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xPassword1ED->set_visibility(false);
             m_xPassword1ED->grab_focus();
         }
     }
-    else if (&rToggleable == m_xPass[1].get())
+    else if (&rToggleable == m_xBtn2.get())
     {
         if (bChecked)
         {
-            m_xPass[1]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn2->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xConfirm1ED->set_visibility(true);
             m_xConfirm1ED->grab_focus();
         }
         else
         {
-            m_xPass[1]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn2->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xConfirm1ED->set_visibility(false);
             m_xConfirm1ED->grab_focus();
         }
     }
-    else if (&rToggleable == m_xPass[2].get())
+    else if (&rToggleable == m_xBtn3.get())
     {
         if (bChecked)
         {
-            m_xPass[2]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn3->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xPassword2ED->set_visibility(true);
             m_xPassword2ED->grab_focus();
         }
         else
         {
-            m_xPass[2]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn3->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xPassword2ED->set_visibility(false);
             m_xPassword2ED->grab_focus();
         }
     }
-    else if (&rToggleable == m_xPass[3].get())
+    else if (&rToggleable == m_xBtn4.get())
     {
         if (bChecked)
         {
-            m_xPass[3]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xBtn4->set_from_icon_name(RID_SVXBMP_SHOWPASS);
             m_xConfirm2ED->set_visibility(true);
             m_xConfirm2ED->grab_focus();
         }
         else
         {
-            m_xPass[3]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xBtn4->set_from_icon_name(RID_SVXBMP_HIDEPASS);
             m_xConfirm2ED->set_visibility(false);
             m_xConfirm2ED->grab_focus();
         }
@@ -236,6 +236,10 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     , m_xMinLengthFT(m_xBuilder->weld_label(u"minlenft"_ustr))
     , m_xOnlyAsciiFT(m_xBuilder->weld_label(u"onlyascii"_ustr))
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtn1(m_xBuilder->weld_toggle_button(u"togglebt1"_ustr))
+    , m_xBtn2(m_xBuilder->weld_toggle_button(u"togglebt2"_ustr))
+    , m_xBtn3(m_xBuilder->weld_toggle_button(u"togglebt3"_ustr))
+    , m_xBtn4(m_xBuilder->weld_toggle_button(u"togglebt4"_ustr))
     , maMinLenPwdStr(SfxResId(STR_PASSWD_MIN_LEN))
     , maMinLenPwdStr1(SfxResId(STR_PASSWD_MIN_LEN1))
     , maEmptyPwdStr(SfxResId(STR_PASSWD_EMPTY))
@@ -254,21 +258,11 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     m_xConfirm2ED->connect_insert_text(aLink2);
     m_xOKBtn->connect_clicked(LINK(this, SfxPasswordDialog, OKHdl));
 
-    m_xPass[0] = m_xBuilder->weld_toggle_button(u"togglebt1"_ustr);
-    m_xPass[1] = m_xBuilder->weld_toggle_button(u"togglebt2"_ustr);
-    m_xPass[2] = m_xBuilder->weld_toggle_button(u"togglebt3"_ustr);
-    m_xPass[3] = m_xBuilder->weld_toggle_button(u"togglebt4"_ustr);
-
     Link<weld::Toggleable&, void> aToggleLink = LINK(this, SfxPasswordDialog, ShowHdl);
-
-    for (auto& aPass : m_xPass)
-    {
-        if (aPass->get_active())
-            aPass->set_from_icon_name(RID_SVXBMP_SHOWPASS);
-        else
-            aPass->set_from_icon_name(RID_SVXBMP_HIDEPASS);
-        aPass->connect_toggled(aToggleLink);
-    }
+    m_xBtn1->connect_toggled(aToggleLink);
+    m_xBtn2->connect_toggled(aToggleLink);
+    m_xBtn3->connect_toggled(aToggleLink);
+    m_xBtn4->connect_toggled(aToggleLink);
 
     if(moPasswordPolicy)
     {
