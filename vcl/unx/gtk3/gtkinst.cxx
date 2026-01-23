@@ -13909,6 +13909,17 @@ public:
         return true;
     }
 
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeIter aTmpIter = rGtkIter.iter;
+        if (!gtk_tree_model_iter_next(m_pTreeModel, &aTmpIter))
+            return false;
+
+        rGtkIter.iter = aTmpIter;
+        return true;
+    }
+
     virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override
     {
         GtkTreeIter iter;
@@ -15594,17 +15605,6 @@ public:
         enable_notify_events();
     }
 
-    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
-    {
-        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeIter aTmpIter = rGtkIter.iter;
-        if (!gtk_tree_model_iter_next(m_pTreeModel, &aTmpIter))
-            return false;
-
-        rGtkIter.iter = aTmpIter;
-        return true;
-    }
-
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
@@ -16863,18 +16863,6 @@ public:
         gtk_icon_view_set_cursor(m_pIconView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
-    }
-
-    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
-    {
-        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreeIter aTmpIter = rGtkIter.iter;
-        if (!gtk_tree_model_iter_next(pModel, &aTmpIter))
-            return false;
-
-        rGtkIter.iter = aTmpIter;
-        return true;
     }
 
     virtual int get_iter_index_in_parent(const weld::TreeIter& rIter) const override
