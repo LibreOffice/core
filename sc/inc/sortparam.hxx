@@ -64,6 +64,15 @@ struct ScSortKeyState
     bool bAscending = true;
     ScColorSortMode aColorSortMode = ScColorSortMode::None;
     Color aColorSortColor;
+
+    bool operator==(const ScSortKeyState& rOther) const
+    {
+        return nField == rOther.nField
+            && bDoSort == rOther.bDoSort
+            && bAscending == rOther.bAscending
+            && aColorSortMode == rOther.aColorSortMode
+            && aColorSortColor == rOther.aColorSortColor;
+    }
 };
 
 /** Struct to hold non-data extended area, used with
