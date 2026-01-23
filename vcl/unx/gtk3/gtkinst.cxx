@@ -13897,6 +13897,15 @@ public:
         return std::unique_ptr<weld::TreeIter>(
             new GtkInstanceTreeIter(static_cast<const GtkInstanceTreeIter*>(pOrig)));
     }
+
+    virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override
+    {
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, nPos))
+            return std::make_unique<GtkInstanceTreeIter>(iter);
+
+        return {};
+    }
 };
 
 class GtkInstanceTreeView : public GtkInstanceItemView, public virtual weld::TreeView
@@ -15533,15 +15542,6 @@ public:
         rGtkDest.iter = rGtkSource.iter;
     }
 
-    virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, nPos))
-            return std::make_unique<GtkInstanceTreeIter>(iter);
-
-        return {};
-    }
-
     virtual std::unique_ptr<weld::TreeIter> get_selected() const override
     {
         GtkTreeIter iter;
@@ -16646,16 +16646,6 @@ public:
         , m_pSelectionChangeEvent(nullptr)
     {
         m_nIdCol = std::max(m_nTextCol, m_nImageCol) + 1;
-    }
-
-    virtual std::unique_ptr<weld::TreeIter> get_iterator(int nPos) const override
-    {
-        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, nPos))
-            return std::make_unique<GtkInstanceTreeIter>(iter);
-
-        return {};
     }
 
     virtual int get_item_width() const override
