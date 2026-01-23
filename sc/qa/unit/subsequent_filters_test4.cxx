@@ -1483,7 +1483,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSharedFormulasODS)
     // Do the sorting.  This should not crash.
     ScDocShell* pDocSh = getScDocShell();
     ScDBDocFunc aFunc(*pDocSh);
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // After the sort, E2:E16 should be shared.
@@ -1533,7 +1533,7 @@ void testSortWithSheetExternalReferencesODS_Impl(ScDocShell& rDocSh, SCROW nRow1
 
     // Do the sorting.
     ScDBDocFunc aFunc(rDocSh);
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
     rDoc.CalcAll();
 
@@ -1653,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithFormattingXLS)
     ScDocShell* pDocSh = getScDocShell();
     ScDBDocFunc aFunc(*pDocSh);
     // Without the fix, sort would crash.
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 }
 

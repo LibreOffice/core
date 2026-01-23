@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortHorizontal)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     {
@@ -244,7 +244,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortHorizontalWholeColumn)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result.
@@ -308,7 +308,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortSingleRow)
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
 
     // Do the sorting.  This should not crash.
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Another test case - single row horizontal sort with header column.
@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortSingleRow)
     aSortData.nCol1 = 0;
     aSortData.nCol2 = 6;
     aSortData.bByRow = false;
-    bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the result.
@@ -671,7 +671,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, false, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, false, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result.
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     double aSorted[] = { 0.0, 1.0, 4.0, 14.0, 29.0, 36.0, 78.0, 98.0, 99.0 };
@@ -819,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate)
     // Turn off reference update on sort.
     SortTypeSetter::changeTo(false);
 
-    bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result again.
@@ -893,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate2)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sort result in column A.
@@ -979,7 +979,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate3)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sorted values.
@@ -1112,7 +1112,7 @@ void TestSort::testSortRefUpdate4_Impl()
         m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
                     aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2)));
 
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         // Check the sorted values.
@@ -1184,7 +1184,7 @@ void TestSort::testSortRefUpdate4_Impl()
         m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
                     aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2)));
 
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         // Check the sorted values.
@@ -1286,7 +1286,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
     aSortData.maKeyState[0].nField = 0;             // Date
     aSortData.maKeyState[0].bAscending = true;      // ascending
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Check the sorted values.
@@ -1382,7 +1382,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate6)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     {
@@ -1519,7 +1519,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortBroadcaster)
         aSortData.maKeyState[0].nField = 0;
         aSortData.maKeyState[0].bAscending = false;
         aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         {
@@ -1617,7 +1617,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortBroadcaster)
         aSortData.maKeyState[0].nField = 0;
         aSortData.maKeyState[0].bAscending = false;
         aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         {
@@ -1721,7 +1721,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortBroadcastBroadcaster)
         aSortData.maKeyState[0].nField = 0;
         aSortData.maKeyState[0].bAscending = false;
         aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
 
         {
@@ -1792,7 +1792,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortOutOfPlaceResult)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Source data still intact.
@@ -1869,7 +1869,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortPartialFormulaGroup)
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
     aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     m_pDoc->CalcAll(); // just in case...
@@ -2262,7 +2262,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testLanguageDependentNaturalSort)
 
     // Actually sort
     ScDBDocFunc aFunc(*m_xDocShell);
-    bool bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortParam, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Verify sort result. Without fix the comma was treated as ordinary character and thus the order
@@ -2329,7 +2329,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortEmbeddedNumberTypes)
 
     // Actually sort
     ScDBDocFunc aFunc(*m_xDocShell);
-    bool bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortParam, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Verify sort result: Item | K1.2 | K1.104 | K2.5 | K2.40 | K2.501 | K10
@@ -2344,7 +2344,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortEmbeddedNumberTypes)
     // Make sure that type ScSortNumberBehavior::DOUBLE works as well
     // It sorts according the values of the decimal numbers.
     aSortParam.eSortNumberBehavior = ScSortNumberBehavior::DOUBLE;
-    bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    bSorted = aFunc.SortTab(0, aSortParam, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     const std::array<OUString, 7> aExpectedDbl
@@ -2358,7 +2358,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortEmbeddedNumberTypes)
     // And same for type ScSortNumberBehavior::ALPHA_NUMERIC
     // It treats digits and decimal separator of the numbers as normal characters.
     aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
-    bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    bSorted = aFunc.SortTab(0, aSortParam, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     const std::array<OUString, 7> aExpectedAlpha
@@ -2418,7 +2418,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffle)
     aSortData.meSortOrderType = SortOrderType::Random;
 
     ScDBDocFunc aFunc(*m_xDocShell);
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // First check the header, which should be untouched
@@ -2522,7 +2522,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffleAndThenSort)
         aSortData.aDataAreaExtras.mbCellFormats = true;
         aSortData.meSortOrderType = SortOrderType::Random;
 
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
     }
 
@@ -2541,7 +2541,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffleAndThenSort)
         aSortData.maKeyState[0].bAscending = true;
         aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
 
-        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        bool bSorted = aFunc.SortTab(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
     }
 

@@ -237,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     // parameters.
     ScDocShell* pDocSh = getScDocShell();
     ScDBDocFunc aFunc(*pDocSh);
-    bool bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    bool bSorted = aFunc.SortTab(0, aSortParam, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Verify items are naturally sorted
@@ -261,7 +261,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
     pDocSh = getScDocShell();
     ScDBDocFunc aFunc2(*pDocSh);
-    bSorted = aFunc2.Sort(0, aSortParam, true, true, true);
+    bSorted = aFunc2.SortTab(0, aSortParam, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
     // Verify items are alpha-numerically sorted
