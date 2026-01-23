@@ -183,7 +183,7 @@ private:
     void                ProcToken( HtmlImportInfo* );
     void                CloseEntry( const HtmlImportInfo* );
     void                NextRow(  const HtmlImportInfo*  );
-    void                SkipLocked( ScEEParseEntry*, bool bJoin = true );
+    void                SkipLocked( ScEEParseEntry*, bool bJoin );
     static bool         SeekOffset( const ScHTMLColOffset*, sal_uInt16 nOffset,
                                     SCCOL* pCol, sal_uInt16 nOffsetTol );
     static void         MakeCol( ScHTMLColOffset*, sal_uInt16& nOffset,
