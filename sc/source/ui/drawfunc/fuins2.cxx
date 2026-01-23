@@ -513,8 +513,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
         aSize = Size( aSz.Width, aSz.Height );
 
-        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-
         bool bSizeCh = false;
         if (aSize.IsEmpty())
         {
@@ -524,6 +522,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         }
         if (bSizeCh)
         {
+            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
             aSize = OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
