@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <QtCore/QPointer>
 #include <QtWidgets/QStyledItemDelegate>
 #include <QtWidgets/QWidget>
 
@@ -21,6 +22,8 @@ class QtTreeViewItemDelegate : public QStyledItemDelegate
     std::function<bool(const QModelIndex& rIndex, const QString& rNewText)>
         m_aFinishEditingFunction;
 
+    mutable QPointer<QWidget> m_pEditor;
+
 public:
     QtTreeViewItemDelegate(QObject* pParent,
                            std::function<bool(const QModelIndex& rIndex)> aStartEditingFunction,
@@ -31,6 +34,8 @@ public:
                                   const QModelIndex& rIndex) const override;
     virtual void setModelData(QWidget* pEditor, QAbstractItemModel* pModel,
                               const QModelIndex& rIndex) const override;
+
+    void endEditing();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

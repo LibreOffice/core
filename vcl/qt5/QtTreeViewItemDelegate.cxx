@@ -27,7 +27,8 @@ QWidget* QtTreeViewItemDelegate::createEditor(QWidget* pParent, const QStyleOpti
     if (!m_aStartEditingFunction(rIndex))
         return nullptr;
 
-    return QStyledItemDelegate::createEditor(pParent, rOption, rIndex);
+    m_pEditor = QStyledItemDelegate::createEditor(pParent, rOption, rIndex);
+    return m_pEditor;
 }
 
 void QtTreeViewItemDelegate::setModelData(QWidget* pEditor, QAbstractItemModel* pModel,
@@ -42,5 +43,7 @@ void QtTreeViewItemDelegate::setModelData(QWidget* pEditor, QAbstractItemModel* 
 
     QStyledItemDelegate::setModelData(pEditor, pModel, rIndex);
 }
+
+void QtTreeViewItemDelegate::endEditing() { closeEditor(m_pEditor); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

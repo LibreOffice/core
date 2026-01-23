@@ -573,7 +573,17 @@ void QtInstanceTreeView::start_editing(const weld::TreeIter& rEntry)
     });
 }
 
-void QtInstanceTreeView::end_editing() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::end_editing()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QtTreeViewItemDelegate* pDelegate
+            = qobject_cast<QtTreeViewItemDelegate*>(m_pTreeView->itemDelegate());
+        assert(pDelegate);
+        pDelegate->endEditing();
+    });
+}
 
 void QtInstanceTreeView::enable_drag_source(rtl::Reference<TransferDataContainer>&, sal_uInt8)
 {
