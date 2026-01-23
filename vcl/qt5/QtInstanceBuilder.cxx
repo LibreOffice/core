@@ -270,6 +270,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/additionsfragment.ui"_ustr,
         u"cui/ui/appearance.ui"_ustr,
         u"cui/ui/cellalignment.ui"_ustr,
+        u"svx/ui/formnavimenu.ui"_ustr,
         u"cui/ui/graphictestentry.ui"_ustr,
         u"cui/ui/lineendstabpage.ui"_ustr,
         u"cui/ui/linetabpage.ui"_ustr,
