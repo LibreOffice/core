@@ -13943,6 +13943,11 @@ public:
 
         return {};
     }
+
+    virtual int n_children() const override
+    {
+        return gtk_tree_model_iter_n_children(m_pTreeModel, nullptr);
+    }
 };
 
 class GtkInstanceTreeView : public GtkInstanceItemView, public virtual weld::TreeView
@@ -15189,11 +15194,6 @@ public:
         disable_notify_events();
         gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
         enable_notify_events();
-    }
-
-    virtual int n_children() const override
-    {
-        return gtk_tree_model_iter_n_children(m_pTreeModel, nullptr);
     }
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override
@@ -16907,11 +16907,6 @@ public:
         disable_notify_events();
         gtk_icon_view_unselect_all(m_pIconView);
         enable_notify_events();
-    }
-
-    virtual int n_children() const override
-    {
-        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), nullptr);
     }
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override
