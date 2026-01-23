@@ -148,12 +148,14 @@ enum class SwFieldTypesEnum : sal_uInt16 {
     LAST = ParagraphSignature,
     Unknown = USHRT_MAX // used by SwFieldMgr::GetCurTypeId
 };
+
+// tdf#170392 - this should be aligned with FMT_FF_ARY in sw/source/uibase/fldui/fldmgr.cxx
 enum class SwFileNameFormat {
     // most of the constants are a regular enum
-    Name,
-    PathName,
     Path,
+    PathName,
     NameNoExt,
+    Name,
     UIName,
     UIRange,
     End, // marker value, used for asserts
