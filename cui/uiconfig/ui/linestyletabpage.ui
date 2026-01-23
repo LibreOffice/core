@@ -448,6 +448,11 @@
                   <object class="GtkDrawingArea" id="CTL_PREVIEW">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CTL_PREVIEW-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="linestyletabpage|CTL_PREVIEW-atkobject">Example</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
