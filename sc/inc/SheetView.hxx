@@ -13,19 +13,27 @@
 #include "types.hxx"
 #include <rtl/ustring.hxx>
 #include "SheetViewTypes.hxx"
+#include "sortparam.hxx"
 #include <optional>
 
 class ScTable;
 
 namespace sc
 {
+/** Contains the information of an performed sort action */
+struct SC_DLLPUBLIC SortOrderInfo
+{
+    SCROW mnFirstRow = -1;
+    SCROW mnLastRow = -1;
+    std::vector<SCCOLROW> maOrder; // Remember the sort order
+    std::vector<ScSortKeyState> maKeyStates; // Each column sort information
+};
+
 /** Stores the sort order and can reverse the sorting of rows (unsorting). */
 struct SC_DLLPUBLIC SortOrderReverser
 {
 public:
-    SCROW mnFirstRow;
-    SCROW mnLastRow;
-    std::vector<SCCOLROW> maOrder;
+    SortOrderInfo maSortInfo;
 
     /** Reverse the sort for the input row and output the unsorted row.
      *
@@ -40,7 +48,7 @@ public:
      * Adds the indices if none are present, or combines the indices if the order indices
      * were already added previously.
      **/
-    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
+    void addOrderIndices(SortOrderInfo const& rSortInfo);
 };
 
 /** Stores information of a sheet view.
@@ -83,7 +91,7 @@ public:
      * Adds the indices if none are present, or combines the indices if the order indices
      * were already added previously.
      **/
-    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
+    void addOrderIndices(SortOrderInfo const& rSortInfo);
 };
 }
 

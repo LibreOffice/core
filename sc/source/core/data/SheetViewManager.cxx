@@ -130,12 +130,11 @@ OUString SheetViewManager::generateName()
 
 OUString SheetViewManager::defaultViewName() { return ScResId(STR_SHEET_VIEW_DEFAULT_VIEW_NAME); }
 
-void SheetViewManager::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW nFirstRow,
-                                       SCROW nLastRow)
+void SheetViewManager::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
     if (!moSortOrder)
         moSortOrder.emplace();
-    moSortOrder->addOrderIndices(rOrder, nFirstRow, nLastRow);
+    moSortOrder->addOrderIndices(rSortInfo);
 }
 }
 
