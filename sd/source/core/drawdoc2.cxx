@@ -1694,8 +1694,8 @@ void SdDrawDocument::populatePagePreviewsGrid()
     sal_uInt8 nFactor = 3;
 
     // TODO: this should also vary based on the available space
-    sal_uInt16 nGapWidth = 500;
-    sal_uInt16 nGapHeight = 500;
+    constexpr ::tools::Long nGapWidth = 500;
+    constexpr ::tools::Long nGapHeight = 500;
 
     ::tools::Long nPreviewWidth;
     ::tools::Long nPreviewHeight;
