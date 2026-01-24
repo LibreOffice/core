@@ -286,7 +286,7 @@ class VistaFilePickerImpl : public  IVistaFilePickerInternalNotify
         /** help us to handle dialog events and provide them to interested office
          *  listener.
          */
-        TFileDialogEvents m_iEventHandler;
+        sal::systools::COMReference<IFileDialogEvents> m_iEventHandler;
 
 
         /// @todo document me
