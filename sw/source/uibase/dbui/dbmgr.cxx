@@ -3089,8 +3089,8 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
                 {
                     TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
                 }
-                pDlg->disposeOnce();
             }
+            pDlg->disposeOnce();
         }
     );
 
