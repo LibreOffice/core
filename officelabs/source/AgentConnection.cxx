@@ -86,6 +86,48 @@ static std::string unescapeJson(const std::string& str) {
     return result;
 }
 
+// Helper to extract a JSON boolean value after a key
+static bool extractJsonBool(const std::string& json, const std::string& key) {
+    std::string searchKey = "\"" + key + "\":";
+    size_t keyPos = json.find(searchKey);
+    if (keyPos == std::string::npos) return false;
+
+    size_t valueStart = keyPos + searchKey.length();
+    // Skip whitespace
+    while (valueStart < json.length() && (json[valueStart] == ' ' || json[valueStart] == '\t'))
+        valueStart++;
+
+    if (valueStart >= json.length()) return false;
+
+    // Check for true/false
+    if (json.substr(valueStart, 4) == "true") return true;
+    return false;
+}
+
+// Helper to extract a JSON integer value after a key
+static int extractJsonInt(const std::string& json, const std::string& key) {
+    std::string searchKey = "\"" + key + "\":";
+    size_t keyPos = json.find(searchKey);
+    if (keyPos == std::string::npos) return 0;
+
+    size_t valueStart = keyPos + searchKey.length();
+    // Skip whitespace
+    while (valueStart < json.length() && (json[valueStart] == ' ' || json[valueStart] == '\t'))
+        valueStart++;
+
+    if (valueStart >= json.length()) return 0;
+
+    // Parse integer
+    std::string numStr;
+    while (valueStart < json.length() && (isdigit(json[valueStart]) || json[valueStart] == '-')) {
+        numStr += json[valueStart];
+        valueStart++;
+    }
+
+    if (numStr.empty()) return 0;
+    return std::stoi(numStr);
+}
+
 AgentResponse AgentConnection::parseResponse(const std::string& json) {
     AgentResponse response;
 
@@ -106,34 +148,68 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
     }
 
     // Parse auto_edits array
+    FILE* dbg = fopen("C:\\temp\\parse_response_debug.log", "a");
+    if (dbg) {
+        fprintf(dbg, "parseResponse: looking for auto_edits\n");
+        fprintf(dbg, "  json length: %d\n", (int)json.length());
+    }
+
     size_t autoEditsStart = json.find("\"auto_edits\":");
+    if (dbg) fprintf(dbg, "  autoEditsStart: %d\n", (int)autoEditsStart);
+
     if (autoEditsStart != std::string::npos) {
         size_t arrayStart = json.find("[", autoEditsStart);
         size_t arrayEnd = json.find("]", arrayStart);
+        if (dbg) fprintf(dbg, "  arrayStart: %d, arrayEnd: %d\n", (int)arrayStart, (int)arrayEnd);
+
         if (arrayStart != std::string::npos && arrayEnd != std::string::npos) {
             std::string arrayContent = json.substr(arrayStart, arrayEnd - arrayStart + 1);
+            if (dbg) fprintf(dbg, "  arrayContent length: %d\n", (int)arrayContent.length());
 
             // Parse each object in the array
             size_t objStart = 0;
+            int objCount = 0;
             while ((objStart = arrayContent.find("{", objStart)) != std::string::npos) {
                 size_t objEnd = arrayContent.find("}", objStart);
                 if (objEnd == std::string::npos) break;
 
                 std::string objStr = arrayContent.substr(objStart, objEnd - objStart + 1);
+                if (dbg) fprintf(dbg, "  object %d: %s\n", objCount, objStr.c_str());
 
                 AutoEditCommand cmd;
                 cmd.action = OUString::fromUtf8(extractJsonString(objStr, "action").c_str());
                 cmd.findText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "find_text")).c_str());
                 cmd.newText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "new_text")).c_str());
                 cmd.position = OUString::fromUtf8(extractJsonString(objStr, "position").c_str());
+                // Extract formatting flags
+                cmd.bold = extractJsonBool(objStr, "bold");
+                cmd.italic = extractJsonBool(objStr, "italic");
+                cmd.underline = extractJsonBool(objStr, "underline");
+                cmd.headingLevel = extractJsonInt(objStr, "heading_level");
+                cmd.fontColor = OUString::fromUtf8(extractJsonString(objStr, "font_color").c_str());
+
+                if (dbg) {
+                    OString actionStr = cmd.action.toUtf8();
+                    OString colorStr = cmd.fontColor.toUtf8();
+                    fprintf(dbg, "    action='%s' bold=%d color='%s'\n", actionStr.getStr(), cmd.bold ? 1 : 0, colorStr.getStr());
+                }
 
                 if (!cmd.action.isEmpty()) {
                     response.autoEdits.push_back(cmd);
                 }
 
                 objStart = objEnd + 1;
+                objCount++;
             }
+            if (dbg) fprintf(dbg, "  Total objects parsed: %d\n", objCount);
         }
+    } else {
+        if (dbg) fprintf(dbg, "  auto_edits NOT FOUND in JSON\n");
+    }
+
+    if (dbg) {
+        fprintf(dbg, "  Final autoEdits count: %d\n", (int)response.autoEdits.size());
+        fclose(dbg);
     }
 
     return response;

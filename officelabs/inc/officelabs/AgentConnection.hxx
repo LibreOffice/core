@@ -19,6 +19,7 @@ struct OFFICELABS_DLLPUBLIC AutoEditCommand {
     bool italic = false;
     bool underline = false;
     int headingLevel = 0;  // 0 = normal, 1-6 = heading levels
+    OUString fontColor;  // Hex color like "#FF0000" for red, empty = no change
 };
 
 struct OFFICELABS_DLLPUBLIC AgentResponse {

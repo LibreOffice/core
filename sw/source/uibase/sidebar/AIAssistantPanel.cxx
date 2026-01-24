@@ -25,7 +25,9 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/itemset.hxx>
+#include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <numrule.hxx>
 #include <fmtcol.hxx>
@@ -266,6 +268,16 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
 {
     m_bProcessing = false;
 
+    // Debug: log response details
+    FILE* dbg = fopen("C:\\temp\\process_response_debug.log", "a");
+    if (dbg) {
+        fprintf(dbg, "ProcessResponse called\n");
+        fprintf(dbg, "  message length: %d\n", (int)response.message.getLength());
+        fprintf(dbg, "  autoEdits count: %d\n", (int)response.autoEdits.size());
+        fprintf(dbg, "  hasPatch: %s\n", response.hasPatch ? "true" : "false");
+        fclose(dbg);
+    }
+
     // Re-enable buttons
     if (m_xSendButton)
         m_xSendButton->set_sensitive(true);
@@ -287,6 +299,14 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
     if (!response.autoEdits.empty())
     {
         ExecuteAutoEdits(response.autoEdits);
+    }
+    else
+    {
+        FILE* dbg2 = fopen("C:\\temp\\process_response_debug.log", "a");
+        if (dbg2) {
+            fprintf(dbg2, "  autoEdits is EMPTY - not calling ExecuteAutoEdits\n");
+            fclose(dbg2);
+        }
     }
 }
 
@@ -437,6 +457,23 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                     {
                         sal_uInt16 nPoolId = RES_POOLCOLL_HEADLINE1 + (cmd.headingLevel - 1);
                         rSh.SetTextFormatColl(rSh.GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(nPoolId));
+                    }
+                    if (!cmd.fontColor.isEmpty())
+                    {
+                        // Parse hex color like "#FF0000" or "FF0000"
+                        OUString colorStr = cmd.fontColor;
+                        if (colorStr.startsWith("#"))
+                            colorStr = colorStr.copy(1);
+                        if (colorStr.getLength() == 6)
+                        {
+                            sal_uInt32 nColor = colorStr.toUInt32(16);
+                            Color aColor(
+                                static_cast<sal_uInt8>((nColor >> 16) & 0xFF),  // R
+                                static_cast<sal_uInt8>((nColor >> 8) & 0xFF),   // G
+                                static_cast<sal_uInt8>(nColor & 0xFF)           // B
+                            );
+                            rSh.SetAttrItem(SvxColorItem(aColor, RES_CHRATR_COLOR));
+                        }
                     }
                     editCount++;
                 }
