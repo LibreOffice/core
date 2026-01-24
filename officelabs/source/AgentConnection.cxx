@@ -181,17 +181,63 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
                 cmd.findText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "find_text")).c_str());
                 cmd.newText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "new_text")).c_str());
                 cmd.position = OUString::fromUtf8(extractJsonString(objStr, "position").c_str());
+                cmd.asParagraph = extractJsonBool(objStr, "as_paragraph");
                 // Extract formatting flags
                 cmd.bold = extractJsonBool(objStr, "bold");
                 cmd.italic = extractJsonBool(objStr, "italic");
                 cmd.underline = extractJsonBool(objStr, "underline");
                 cmd.headingLevel = extractJsonInt(objStr, "heading_level");
                 cmd.fontColor = OUString::fromUtf8(extractJsonString(objStr, "font_color").c_str());
+                cmd.fontSize = static_cast<double>(extractJsonInt(objStr, "font_size"));
+                // Paragraph formatting
+                cmd.alignment = OUString::fromUtf8(extractJsonString(objStr, "alignment").c_str());
+                cmd.lineSpacing = static_cast<double>(extractJsonInt(objStr, "line_spacing"));
+                if (cmd.lineSpacing == 0) {
+                    // Try parsing as float string
+                    std::string lsStr = extractJsonString(objStr, "line_spacing");
+                    if (!lsStr.empty()) cmd.lineSpacing = std::stod(lsStr);
+                }
+                cmd.spaceBefore = static_cast<double>(extractJsonInt(objStr, "space_before"));
+                cmd.spaceAfter = static_cast<double>(extractJsonInt(objStr, "space_after"));
+                // List creation
+                cmd.listType = OUString::fromUtf8(extractJsonString(objStr, "list_type").c_str());
+                // Parse list_items array
+                size_t listStart = objStr.find("\"list_items\":");
+                if (listStart != std::string::npos) {
+                    size_t arrStart = objStr.find("[", listStart);
+                    size_t arrEnd = objStr.find("]", arrStart);
+                    if (arrStart != std::string::npos && arrEnd != std::string::npos) {
+                        std::string itemsStr = objStr.substr(arrStart + 1, arrEnd - arrStart - 1);
+                        // Simple string array parsing
+                        size_t pos = 0;
+                        while ((pos = itemsStr.find("\"", pos)) != std::string::npos) {
+                            size_t end = itemsStr.find("\"", pos + 1);
+                            if (end != std::string::npos) {
+                                std::string item = itemsStr.substr(pos + 1, end - pos - 1);
+                                cmd.listItems.push_back(OUString::fromUtf8(unescapeJson(item).c_str()));
+                                pos = end + 1;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Table creation
+                cmd.tableRows = extractJsonInt(objStr, "table_rows");
+                cmd.tableColumns = extractJsonInt(objStr, "table_columns");
+                cmd.headerRow = extractJsonBool(objStr, "header_row");
+                // TODO: Parse table_data 2D array if needed
+                // Search & Replace
+                cmd.caseSensitive = extractJsonBool(objStr, "case_sensitive");
+                cmd.wholeWords = extractJsonBool(objStr, "whole_words");
 
                 if (dbg) {
                     OString actionStr = cmd.action.toUtf8();
                     OString colorStr = cmd.fontColor.toUtf8();
-                    fprintf(dbg, "    action='%s' bold=%d color='%s'\n", actionStr.getStr(), cmd.bold ? 1 : 0, colorStr.getStr());
+                    OString alignStr = cmd.alignment.toUtf8();
+                    fprintf(dbg, "    action='%s' bold=%d color='%s' asParagraph=%d fontSize=%.1f align='%s' lineSpacing=%.1f listItems=%d rows=%d cols=%d\n",
+                            actionStr.getStr(), cmd.bold ? 1 : 0, colorStr.getStr(), cmd.asParagraph ? 1 : 0, cmd.fontSize, alignStr.getStr(), cmd.lineSpacing, (int)cmd.listItems.size(), cmd.tableRows, cmd.tableColumns);
                 }
 
                 if (!cmd.action.isEmpty()) {

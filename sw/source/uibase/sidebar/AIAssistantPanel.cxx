@@ -26,6 +26,9 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <svl/itemset.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
@@ -33,6 +36,8 @@
 #include <fmtcol.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <cshtyp.hxx>
+#include <tblsel.hxx>
+#include <itabenum.hxx>
 
 namespace sw::sidebar {
 
@@ -365,7 +370,14 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
             }
             // Default "cursor" - just insert at current position
 
-            InsertFormattedText(cmd.newText);
+            // Insert the text
+            rSh.Insert(cmd.newText);
+
+            // If as_paragraph is true, add a paragraph break after the inserted text
+            if (cmd.asParagraph)
+            {
+                rSh.SplitNode();
+            }
             editCount++;
         }
         else if (cmd.action == u"replace"_ustr)
@@ -475,8 +487,167 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                             rSh.SetAttrItem(SvxColorItem(aColor, RES_CHRATR_COLOR));
                         }
                     }
+                    if (cmd.fontSize > 0)
+                    {
+                        // Font size is in points, convert to twips (1 point = 20 twips)
+                        sal_uInt32 nTwips = static_cast<sal_uInt32>(cmd.fontSize * 20);
+                        SvxFontHeightItem aFontHeight(nTwips, 100, RES_CHRATR_FONTSIZE);
+                        rSh.SetAttrItem(aFontHeight);
+                    }
                     editCount++;
                 }
+            }
+        }
+        else if (cmd.action == u"paragraph_format"_ustr)
+        {
+            // Find text and apply paragraph formatting
+            if (!cmd.findText.isEmpty())
+            {
+                // First search to select the text
+                i18nutil::SearchOptions2 aSearchOpt;
+                aSearchOpt.searchString = cmd.findText;
+                aSearchOpt.Locale = css::lang::Locale();
+                aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+                sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
+                    false,
+                    SwDocPositions::Start,
+                    SwDocPositions::End,
+                    FindRanges::InBody,
+                    false);  // Don't replace, just find
+
+                if (nFound > 0 && nFound != SAL_MAX_INT32)
+                {
+                    // Apply paragraph alignment
+                    if (!cmd.alignment.isEmpty())
+                    {
+                        SvxAdjust eAdjust = SvxAdjust::Left;
+                        if (cmd.alignment == u"center"_ustr)
+                            eAdjust = SvxAdjust::Center;
+                        else if (cmd.alignment == u"right"_ustr)
+                            eAdjust = SvxAdjust::Right;
+                        else if (cmd.alignment == u"justify"_ustr)
+                            eAdjust = SvxAdjust::Block;
+                        rSh.SetParaAttr(SvxAdjustItem(eAdjust, RES_PARATR_ADJUST));
+                    }
+                    // Apply line spacing
+                    if (cmd.lineSpacing > 0)
+                    {
+                        SvxLineSpacingItem aSpacing(0, RES_PARATR_LINESPACING);
+                        if (cmd.lineSpacing == 1.0)
+                            aSpacing.SetLineSpaceRule(SvxLineSpaceRule::Auto);
+                        else if (cmd.lineSpacing == 1.5)
+                        {
+                            aSpacing.SetPropLineSpace(150);
+                        }
+                        else if (cmd.lineSpacing == 2.0)
+                        {
+                            aSpacing.SetPropLineSpace(200);
+                        }
+                        else
+                        {
+                            aSpacing.SetPropLineSpace(static_cast<sal_uInt16>(cmd.lineSpacing * 100));
+                        }
+                        rSh.SetParaAttr(aSpacing);
+                    }
+                    editCount++;
+                }
+            }
+        }
+        else if (cmd.action == u"create_list"_ustr)
+        {
+            // Move to position if specified
+            if (cmd.position == u"start"_ustr)
+            {
+                rSh.StartOfSection();
+            }
+            else if (cmd.position == u"end"_ustr)
+            {
+                rSh.EndOfSection();
+            }
+
+            // Create list items
+            for (size_t i = 0; i < cmd.listItems.size(); ++i)
+            {
+                // Insert the text
+                rSh.Insert(cmd.listItems[i]);
+
+                // Apply bullet/numbering
+                if (cmd.listType == u"numbered"_ustr)
+                {
+                    rSh.NumOrNoNum(true);  // Apply numbering
+                }
+                else
+                {
+                    // Default to bullet list
+                    rSh.NumOrNoNum(true);  // Apply bullet
+                }
+
+                // Add paragraph break for next item (unless it's the last one)
+                if (i < cmd.listItems.size() - 1)
+                {
+                    rSh.SplitNode();
+                }
+            }
+            editCount++;
+        }
+        else if (cmd.action == u"create_table"_ustr)
+        {
+            // Move to position if specified
+            if (cmd.position == u"start"_ustr)
+            {
+                rSh.StartOfSection();
+            }
+            else if (cmd.position == u"end"_ustr)
+            {
+                rSh.EndOfSection();
+            }
+
+            // Create a table
+            if (cmd.tableRows > 0 && cmd.tableColumns > 0)
+            {
+                // InsertTable creates a table with specified rows and columns
+                rSh.InsertTable(SwInsertTableOptions(SwInsertTableFlags::DefaultBorder, 0),
+                    cmd.tableRows, cmd.tableColumns);
+                editCount++;
+            }
+        }
+        else if (cmd.action == u"replace_all"_ustr)
+        {
+            // Find and replace all occurrences
+            if (!cmd.findText.isEmpty())
+            {
+                i18nutil::SearchOptions2 aSearchOpt;
+                aSearchOpt.searchString = cmd.findText;
+                aSearchOpt.replaceString = cmd.newText;
+                aSearchOpt.Locale = css::lang::Locale();
+                aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+                // Set case sensitivity and whole words
+                if (!cmd.caseSensitive)
+                    aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
+                if (cmd.wholeWords)
+                    aSearchOpt.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
+
+                // Replace all occurrences
+                sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
+                    false,  // bSearchInNotes
+                    SwDocPositions::Start,
+                    SwDocPositions::End,
+                    FindRanges::InBody,
+                    true);  // bReplace
+
+                // Keep replacing until no more found
+                while (nFound > 0 && nFound != SAL_MAX_INT32)
+                {
+                    nFound = rSh.SearchPattern(aSearchOpt,
+                        false,
+                        SwDocPositions::Curr,
+                        SwDocPositions::End,
+                        FindRanges::InBody,
+                        true);
+                }
+                editCount++;
             }
         }
     }
