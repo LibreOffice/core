@@ -256,7 +256,7 @@ void WpADOCommand::Create()
                                             nullptr,
                                             ADOS::IID_ADOCOMMAND_21,
                                             ADOS::GetKeyStr(),
-                                            reinterpret_cast<void**>(&pCommand));
+                                            IID_PPV_ARGS_Helper(&pCommand));
 
         if( !FAILED( hr ) )
             pInterface = std::move(pCommand);
@@ -642,7 +642,7 @@ bool WpADOProperty::PutAttributes(sal_Int32 _nDefSize)
                                             nullptr,
                                             ADOS::IID_ADORECORDSET_21,
                                             ADOS::GetKeyStr(),
-                                            reinterpret_cast<void**>(&pRec));
+                                            IID_PPV_ARGS_Helper(&pRec));
 
         if( !FAILED( hr ) )
             pInterface = std::move(pRec);
