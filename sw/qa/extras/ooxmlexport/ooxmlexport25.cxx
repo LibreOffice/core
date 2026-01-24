@@ -154,7 +154,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165359_SdtWithInline)
 {
     createSwDoc("tdf165359_SdtWithInline.docx");
 
-    saveAndReload(TestFilter::DOCX);
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if a picture is inside of a plainText content control
+    assertXPath(pXmlDoc, "//w:sdtPr/w:text", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf165359_SdtWithDrawing)
+{
+    createSwDoc("tdf165359_SdtWithDrawing.docx");
+
+    save(TestFilter::DOCX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // MS Word reports document as corrupt if a picture is inside of a plainText content control

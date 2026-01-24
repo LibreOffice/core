@@ -3064,13 +3064,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if ( m_pImpl->IsDiscardHeaderFooter() )
             break;
 
-        if (m_pImpl->m_StreamStateStack.top().bSdt
-            && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
-        {
-            // plainText controls cannot contain pictures or shapes
-            m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
-        }
-
         //tdf112342: Break before images as well, if there are page break
         if (m_pImpl->isBreakDeferred(BreakType::PAGE_BREAK)
             && nSprmId == NS_ooxml::LN_inline_inline && !m_pImpl->IsInShape())
