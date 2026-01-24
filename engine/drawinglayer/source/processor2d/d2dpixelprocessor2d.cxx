@@ -67,7 +67,6 @@ class ID2D1GlobalFactoryProvider
 
 public:
     ID2D1GlobalFactoryProvider()
-        : mpD2DFactory(nullptr)
     {
         const HRESULT hr(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
                                            __uuidof(ID2D1Factory), nullptr,
@@ -87,10 +86,7 @@ class ID2D1GlobalRenderTargetProvider
     sal::systools::COMReference<ID2D1DCRenderTarget> mpID2D1DCRenderTarget;
 
 public:
-    ID2D1GlobalRenderTargetProvider()
-        : mpID2D1DCRenderTarget()
-    {
-    }
+    ID2D1GlobalRenderTargetProvider() = default;
 
     sal::systools::COMReference<ID2D1DCRenderTarget>& getID2D1DCRenderTarget()
     {
@@ -511,7 +507,6 @@ public:
                               sal_uInt32 nWidth, sal_uInt32 nHeight,
                               const sal::systools::COMReference<ID2D1RenderTarget>& rParent)
         : drawinglayer::processor2d::D2DPixelProcessor2D(rViewInformation)
-        , mpBitmapRenderTarget()
     {
         if (0 == nWidth || 0 == nHeight)
         {
@@ -534,10 +529,7 @@ public:
             }
             else
             {
-                sal::systools::COMReference<ID2D1RenderTarget> pRT;
-                mpBitmapRenderTarget->QueryInterface(__uuidof(ID2D1RenderTarget),
-                                                     reinterpret_cast<void**>(&pRT));
-                setRenderTarget(pRT);
+                setRenderTarget(mpBitmapRenderTarget.QueryInterface<ID2D1RenderTarget>());
             }
         }
 
@@ -653,7 +645,6 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
                                          HDC aHdc)
     : BaseProcessor2D(rViewInformation)
     , maBColorModifierStack()
-    , mpRT()
     , mnRecursionCounter(0)
     , mnErrorCounter(0)
 {
@@ -718,9 +709,7 @@ D2DPixelProcessor2D::D2DPixelProcessor2D(const geometry::ViewInformation2D& rVie
 
     if (pDCRT)
     {
-        sal::systools::COMReference<ID2D1RenderTarget> pRT;
-        pDCRT->QueryInterface(__uuidof(ID2D1RenderTarget), reinterpret_cast<void**>(&pRT));
-        setRenderTarget(pRT);
+        setRenderTarget(pDCRT.QueryInterface<ID2D1RenderTarget>());
     }
     else
     {
@@ -930,20 +919,15 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
     // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
     // Only then can we use ID2D1Effect/CLSID_D2D1LuminanceToAlpha and it makes
     // sense to try to do it this way in this implementation
-    sal::systools::COMReference<ID2D1DeviceContext> pID2D1DeviceContext;
-    getRenderTarget()->QueryInterface(__uuidof(ID2D1DeviceContext),
-                                      reinterpret_cast<void**>(&pID2D1DeviceContext));
     sal::systools::COMReference<ID2D1Bitmap> pRetval;
 
-    if (!pID2D1DeviceContext)
+    if (!getRenderTarget().QueryInterface<ID2D1DeviceContext>())
     {
         // no, done - tell caller to use fallback by returning empty - we have
         // not the preconditions for this
         return pRetval;
     }
 
-    // Release early
-    pID2D1DeviceContext.clear();
     basegfx::B2DRange aDiscreteVisibleRange;
 
     if (!createBitmapSubContent(pRetval, aDiscreteVisibleRange, rTransCandidate.getTransparence(),
@@ -973,10 +957,7 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_Di
     if (SUCCEEDED(hr) && pContent)
     {
         // try to access ID2D1DeviceContext of that target, we need that *now*
-        pContent->QueryInterface(__uuidof(ID2D1DeviceContext),
-                                 reinterpret_cast<void**>(&pID2D1DeviceContext));
-
-        if (pID2D1DeviceContext)
+        if (auto pID2D1DeviceContext = pContent.QueryInterface<ID2D1DeviceContext>())
         {
             // create the effect
             sal::systools::COMReference<ID2D1Effect> pLuminanceToAlpha;
@@ -1851,11 +1832,8 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
             // NOTE: This uses D2D1_BITMAP_INTERPOLATION_MODE, but there seem to be
             //       advanced modes when using D2D1_INTERPOLATION_MODE, but that needs
             //       D2D1_BITMAP_BRUSH_PROPERTIES1 and ID2D1BitmapBrush1
-            sal::systools::COMReference<ID2D1BitmapBrush1> pBrush1;
-            pBitmapBrush->QueryInterface(__uuidof(ID2D1BitmapBrush1),
-                                         reinterpret_cast<void**>(&pBrush1));
 
-            if (pBrush1)
+            if (auto pBrush1 = pBitmapBrush.QueryInterface<ID2D1BitmapBrush1>())
             {
                 pBrush1->SetInterpolationMode1(D2D1_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR);
             }
@@ -1951,9 +1929,7 @@ void D2DPixelProcessor2D::processInvertPrimitive2D(
     // Try if we can use ID2D1DeviceContext/d2d1_1 by querying for interface.
     // Only with ID2D1DeviceContext we can use ::DrawImage which supports
     // D2D1_COMPOSITE_MODE_XOR
-    sal::systools::COMReference<ID2D1DeviceContext> pID2D1DeviceContext;
-    getRenderTarget()->QueryInterface(__uuidof(ID2D1DeviceContext),
-                                      reinterpret_cast<void**>(&pID2D1DeviceContext));
+    auto pID2D1DeviceContext(getRenderTarget().QueryInterface<ID2D1DeviceContext>());
 
     if (!pID2D1DeviceContext)
     {
