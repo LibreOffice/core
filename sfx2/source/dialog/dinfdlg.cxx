@@ -1475,18 +1475,18 @@ namespace
 {
     void fillNameBox(weld::ComboBox& rNameBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_CB_PROPERTY_STRINGARRAY); ++i)
-            rNameBox.append_text(SfxResId(SFX_CB_PROPERTY_STRINGARRAY[i]));
+        for (const auto& rResId : SFX_CB_PROPERTY_STRINGARRAY)
+            rNameBox.append_text(SfxResId(rResId));
         Size aSize(rNameBox.get_preferred_size());
         rNameBox.set_size_request(aSize.Width(), aSize.Height());
     }
 
     void fillTypeBox(weld::ComboBox& rTypeBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+        for (const auto& rCustomProperty : SFX_LB_PROPERTY_STRINGARRAY)
         {
-            OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
-            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+            OUString sId(OUString::number(rCustomProperty.second));
+            rTypeBox.append(sId, SfxResId(rCustomProperty.first));
         }
         rTypeBox.set_active(0);
         Size aSize(rTypeBox.get_preferred_size());
