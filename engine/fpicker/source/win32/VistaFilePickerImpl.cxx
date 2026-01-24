@@ -109,21 +109,21 @@ public:
 
     virtual ~TDialogImplBase() = default;
 
-    TFileDialog getComPtr() { return m_iDialog; }
+    const TFileDialog& getComPtr() { return m_iDialog; }
     virtual sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute)
     {
-        sal::systools::COMReference<IShellItem> iItem;
+        sal::systools::COMReference<IShellItemArray> iItems;
         if (m_iDialog.is())
         {
+            sal::systools::COMReference<IShellItem> iItem;
             if (bInExecute)
                 m_iDialog->GetCurrentSelection(&iItem);
             else
                 m_iDialog->GetResult(&iItem);
+            if (iItem.is())
+                SHCreateShellItemArrayFromShellItem(iItem, IID_PPV_ARGS(&iItems));
         }
-        void* iItems = nullptr;
-        if (iItem.is())
-            SHCreateShellItemArrayFromShellItem(iItem.get(), IID_IShellItemArray, &iItems);
-        return static_cast<IShellItemArray*>(iItems);
+        return iItems;
     }
 
 private:
@@ -146,18 +146,14 @@ class TOpenDialogImpl : public TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog
 public:
     sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute) override
     {
-        sal::systools::COMReference<IShellItemArray> iItems;
-        auto iDialog(getComPtr().QueryInterface<IFileOpenDialog>());
-        bool bGetResult = false;
-        if (!iDialog.is())
-            bGetResult = true;
-        else if (FAILED(bInExecute ? iDialog->GetSelectedItems(&iItems) : iDialog->GetResults(&iItems)))
-            bGetResult = true;
-
-        if (bGetResult)
-            iItems = TDialogImplBase::getResult(bInExecute);
-
-        return iItems;
+        if (auto iDialog = getComPtr().QueryInterface<IFileOpenDialog>())
+        {
+            sal::systools::COMReference<IShellItemArray> iItems;
+            if (SUCCEEDED(bInExecute ? iDialog->GetSelectedItems(&iItems)
+                                     : iDialog->GetResults(&iItems)))
+                return iItems;
+        }
+        return TDialogImplBase::getResult(bInExecute);
     }
 };
 
@@ -980,18 +976,16 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(Request& rRequest)
 
 TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 {
-    TFileDialog iDialog;
+    if (m_pDialog)
+        return m_pDialog->getComPtr();
 
-    if (m_pDialog != nullptr)
-        iDialog = m_pDialog->getComPtr();
-
-    return iDialog;
+    return {};
 }
 
 
 TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 {
-    if (m_pDialog != nullptr)
+    if (m_pDialog)
         return m_pDialog->getComPtr().QueryInterface<IFileDialogCustomize>();
 
     return {};
