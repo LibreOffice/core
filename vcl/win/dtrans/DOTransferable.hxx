@@ -56,7 +56,7 @@ public:
 
     explicit CDOTransferable(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        IDataObjectPtr rDataObject );
+        sal::systools::COMReference<IDataObject> rDataObject );
 
 private:
     // some helper functions
@@ -78,7 +78,7 @@ private:
 
 private:
     css::uno::WeakReference<css::datatransfer::clipboard::XClipboard> m_xClipboard;
-    IDataObjectPtr                                                                          m_rDataObject;
+    sal::systools::COMReference<IDataObject>                          m_rDataObject;
     css::uno::Sequence< css::datatransfer::DataFlavor >               m_FlavorList;
     const css::uno::Reference< css::uno::XComponentContext >          m_xContext;
     CDataFormatTranslator                                             m_DataFormatTranslator;

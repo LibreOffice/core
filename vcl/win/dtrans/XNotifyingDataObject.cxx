@@ -28,7 +28,7 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Reference;
 
 CXNotifyingDataObject::CXNotifyingDataObject(
-    const IDataObjectPtr& aIDataObject,
+    const sal::systools::COMReference<IDataObject>& aIDataObject,
     const Reference< XTransferable >& aXTransferable,
     const Reference< XClipboardOwner >& aXClipOwner,
     CWinClipboard* const theWinClipoard) :

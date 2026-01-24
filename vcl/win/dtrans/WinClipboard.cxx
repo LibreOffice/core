@@ -163,7 +163,7 @@ css::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents
     return rClipContent;
 }
 
-IDataObjectPtr CWinClipboard::getIDataObject()
+sal::systools::COMReference<IDataObject> CWinClipboard::getIDataObject()
 {
     {
         std::unique_lock aGuard(m_aMutex);
@@ -173,7 +173,7 @@ IDataObjectPtr CWinClipboard::getIDataObject()
                                           static_cast<XClipboardEx*>(this));
     }
     // get the current dataobject from clipboard
-    IDataObjectPtr pIDataObject;
+    sal::systools::COMReference<IDataObject> pIDataObject;
     HRESULT hr = m_MtaOleClipboard.getClipboard(&pIDataObject);
 
     if (SUCCEEDED(hr))
@@ -196,7 +196,7 @@ void SAL_CALL CWinClipboard::setContents(
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
-    IDataObjectPtr pIDataObj;
+    sal::systools::COMReference<IDataObject> pIDataObj;
 
     // The object must be destroyed only outside of the mutex lock, and in a different thread,
     // because it may call CWinClipboard::onReleaseDataObject, or try to lock solar mutex, in
@@ -213,7 +213,7 @@ void SAL_CALL CWinClipboard::setContents(
             CDTransObjFactory::createDataObjFromTransferable(m_xContext, xTransferable),
             xTransferable, xClipboardOwner, this);
 
-        pIDataObj = IDataObjectPtr(m_pNewOwnClipContent);
+        pIDataObj = sal::systools::COMReference<IDataObject>(m_pNewOwnClipContent);
     }
     else
     {

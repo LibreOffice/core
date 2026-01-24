@@ -254,7 +254,4 @@ namespace sal::systools
 
 } // sal::systools
 
-/* Typedefs for some popular COM interfaces */
-typedef sal::systools::COMReference<IDataObject> IDataObjectPtr;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

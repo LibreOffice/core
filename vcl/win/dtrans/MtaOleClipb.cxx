@@ -151,7 +151,7 @@ HRESULT onGetClipboard(LPSTREAM* ppStream)
 {
     OSL_ASSERT(nullptr != ppStream);
 
-    IDataObjectPtr pIDataObject;
+    sal::systools::COMReference<IDataObject> pIDataObject;
 
     // forward the request to the OleClipboard
     HRESULT hr
