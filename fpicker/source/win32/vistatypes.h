@@ -31,8 +31,6 @@ namespace vista{
 
 
 typedef sal::systools::COMReference<IFileDialog> TFileDialog;
-typedef sal::systools::COMReference<IFileOpenDialog> TFileOpenDialog;
-typedef sal::systools::COMReference<IFileSaveDialog> TFileSaveDialog;
 typedef sal::systools::COMReference<IFileDialogCustomize> TFileDialogCustomize;
 
 } // namespace vista
