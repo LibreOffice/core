@@ -748,7 +748,7 @@ namespace dxcanvas
         sal::systools::COMReference<IDirect3DSurface9> DXRenderModule::createSystemMemorySurface(const ::basegfx::B2ISize& rSize)
         {
             if(isDisposed())
-                return sal::systools::COMReference<IDirect3DSurface9>(nullptr);
+                return {};
 
             // please note that D3DFMT_X8R8G8B8 is the only format we're
             // able to choose here, since GetDC() doesn't support any

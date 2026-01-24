@@ -70,7 +70,7 @@ public:
     {
         const HRESULT hr(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
                                            __uuidof(ID2D1Factory), nullptr,
-                                           reinterpret_cast<void**>(&mpD2DFactory)));
+                                           IID_PPV_ARGS_Helper(&mpD2DFactory)));
 
         if (!SUCCEEDED(hr))
             mpD2DFactory.clear();

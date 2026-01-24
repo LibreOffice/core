@@ -67,7 +67,7 @@ OConnection::OConnection(ODriver*   _pDriver)
                                             nullptr,
                                             ADOS::IID_ADOCONNECTION_21,
                                             ADOS::GetKeyStr(),
-                                            reinterpret_cast<void**>(&m_aAdoConnection));
+                                            IID_PPV_ARGS_Helper(&m_aAdoConnection));
 
         if( !FAILED( hr ) )
         {
