@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
 #include "browserpage.hxx"
 
@@ -30,12 +31,14 @@ OBrowserPage::OBrowserPage(weld::Container* pParent, weld::Container* pInitialCo
 {
 }
 
-OBrowserPage::~OBrowserPage()
+void OBrowserPage::ImplDestroy()
 {
     if (m_pParent)
         detach();
     assert(!m_pParent);
 }
+
+OBrowserPage::~OBrowserPage() { suppress_fun_call_w_exception(ImplDestroy()); }
 } // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
