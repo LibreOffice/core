@@ -882,7 +882,7 @@ bool lcl_isAsyncFilePicker( const uno::Reference< XExecutableDialog >& _rxFP )
     return false;
 }
 
-enum open_or_save_t {OPEN, SAVE, UNDEFINED};
+enum class open_or_save_t {OPEN, SAVE, UNDEFINED};
 
 }
 
@@ -899,18 +899,18 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
         case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
         case FILEOPEN_LINK_PREVIEW:
         case FILEOPEN_PREVIEW:
-            return OPEN;
+            return open_or_save_t::OPEN;
         case FILESAVE_SIMPLE:
         case FILESAVE_AUTOEXTENSION_PASSWORD:
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
         case FILESAVE_AUTOEXTENSION_SELECTION:
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
         case FILESAVE_AUTOEXTENSION:
-            return SAVE;
+            return open_or_save_t::SAVE;
         default:
             assert(false); // invalid dialog type
     }
-    return UNDEFINED;
+    return open_or_save_t::UNDEFINED;
 }
 
 // FileDialogHelper_Impl
@@ -984,7 +984,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     // default settings
     m_nDontFlags = SFX_FILTER_NOTINSTALLED | SfxFilterFlags::INTERNAL | SfxFilterFlags::NOTINFILEDLG;
-    if (OPEN == lcl_OpenOrSave(m_nDialogType))
+    if (open_or_save_t::OPEN == lcl_OpenOrSave(m_nDialogType))
         m_nMustFlags = SfxFilterFlags::IMPORT;
     else
         m_nMustFlags = SfxFilterFlags::EXPORT;
@@ -1876,7 +1876,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
 
     // append the filters
     OUString sFirstFilter;
-    if (OPEN == lcl_OpenOrSave(m_nDialogType))
+    if (open_or_save_t::OPEN == lcl_OpenOrSave(m_nDialogType))
         ::sfx2::appendFiltersForOpen( aIter, mxFileDlg, sFirstFilter, *this );
     else if ( mbExport )
         ::sfx2::appendExportFilters( aIter, mxFileDlg, sFirstFilter, *this );
@@ -2474,7 +2474,7 @@ FileDialogHelper::FileDialogHelper(
     aWildcard += aExtName;
 
     OUString const aUIString = ::sfx2::addExtension(
-        aFilterUIName, aWildcard, (OPEN == lcl_OpenOrSave(mpImpl->m_nDialogType)), *mpImpl);
+        aFilterUIName, aWildcard, (open_or_save_t::OPEN == lcl_OpenOrSave(mpImpl->m_nDialogType)), *mpImpl);
     AddFilter( aUIString, aWildcard );
 }
 
