@@ -711,7 +711,7 @@ static bool CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObje
         if (!rParameter.isEmpty())
             psl->SetArguments( o3tl::toW(rParameter.getStr()) );
 
-        sal::systools::COMReference<IPersistFile> ppf(psl, sal::systools::COM_QUERY_THROW);
+        auto ppf(psl.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW()));
         return SUCCEEDED(ppf->Save(o3tl::toW(rAbsShortcut.getStr()), TRUE));
     }
     catch (const sal::systools::ComError&)

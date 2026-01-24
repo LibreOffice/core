@@ -1412,8 +1412,7 @@ void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & 
     xChanges->commit();
 
     // Set Windows Security Zone for temp file
-    sal::systools::COMReference<IZoneIdentifier> pZoneId;
-    pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
+    sal::systools::COMReference<IZoneIdentifier> pZoneId(CLSID_PersistentZoneIdentifier);
 
     // ignore setting of Zone 0, since at least for Windows Server
     // setups, that always leads to E_ACCESSDENIED - presumably since
@@ -1424,7 +1423,7 @@ void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & 
     if( zoneId != 0 )
     {
         CPPUNIT_ASSERT(SUCCEEDED(pZoneId->SetId(zoneId)));
-        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY_THROW);
+        auto pPersist(pZoneId.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW()));
         OUString sTempFileWinPath;
         osl::FileBase::getSystemPathFromFileURL(sFileName, sTempFileWinPath);
         CPPUNIT_ASSERT(

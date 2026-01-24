@@ -54,7 +54,7 @@ namespace sal::systools
     };
 
     /* Convert failed HRESULT to thrown ComError */
-    inline void ThrowIfFailed(HRESULT hr, std::string_view msg,
+    inline void ThrowIfFailed(HRESULT hr, std::string_view msg = {},
                               std::source_location loc = std::source_location::current())
     {
         if (FAILED(hr))
@@ -99,8 +99,8 @@ namespace sal::systools
         bool mbUninit;
     };
 
-    struct COM_QUERY_TAG {} constexpr COM_QUERY;
-    struct COM_QUERY_THROW_TAG : public COM_QUERY_TAG {} constexpr COM_QUERY_THROW;
+    enum class COM_QUERY;
+    enum class COM_QUERY_THROW;
 
     /* A simple COM smart pointer template */
     template <typename T>
@@ -122,13 +122,6 @@ namespace sal::systools
 
         COMReference(COMReference<T>&& other) :
             COMReference(std::exchange(other.com_ptr_, nullptr), false)
-        {
-        }
-
-        // Query from IUnknown*, using COM_QUERY or COM_QUERY_THROW tags
-        template <typename T2, typename TAG>
-        COMReference(const COMReference<T2>& p, TAG t)
-            : COMReference(p.template QueryInterface<T>(t))
         {
         }
 
@@ -162,25 +155,19 @@ namespace sal::systools
 
         ~COMReference() { release(com_ptr_); }
 
-        template <typename T2, typename TAG>
-            requires std::is_base_of_v<COM_QUERY_TAG, TAG>
-        COMReference<T2> QueryInterface(TAG) const
+        template <typename T2, typename TAG = COM_QUERY>
+            requires (std::is_same_v<TAG, COM_QUERY> || std::is_same_v<TAG, COM_QUERY_THROW>)
+        COMReference<T2> QueryInterface(TAG = TAG()) const
         {
             T2* ip = nullptr;
             HRESULT hr = E_POINTER;
             if (com_ptr_)
                 hr = com_ptr_->QueryInterface(IID_PPV_ARGS(&ip));
 
-            if constexpr (std::is_same_v<TAG, COM_QUERY_THROW_TAG>)
+            if constexpr (std::is_same_v<TAG, COM_QUERY_THROW>)
                 ThrowIfFailed(hr, "QueryInterface failed");
 
             return { ip, false };
-        }
-
-        template <typename T2, typename TAG>
-        COMReference<T>& set(const COMReference<T2>& p, TAG t)
-        {
-            return operator=(p.template QueryInterface<T>(t));
         }
 
         HRESULT CoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,

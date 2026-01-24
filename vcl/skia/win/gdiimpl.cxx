@@ -55,8 +55,8 @@ getDWritePrivateFontCollection(IDWriteFontFace* fontFace)
     sal::systools::COMReference<IDWriteFontFile> fontFile;
     sal::systools::ThrowIfFailed(fontFace->GetFiles(&numberOfFiles, &fontFile), SAL_WHERE);
 
-    static sal::systools::COMReference<IDWriteFactory3> dwriteFactory3(
-        WinSalGraphics::getDWriteFactory(), sal::systools::COM_QUERY_THROW);
+    static auto dwriteFactory3(WinSalGraphics::getDWriteFactory().QueryInterface<IDWriteFactory3>(
+        sal::systools::COM_QUERY_THROW()));
 
     static sal::systools::COMReference<IDWriteFontSetBuilder> dwriteFontSetBuilder = [] {
         sal::systools::COMReference<IDWriteFontSetBuilder> builder;
