@@ -35,6 +35,7 @@
 #include <numrule.hxx>
 #include <fmtcol.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <cshtyp.hxx>
 #include <tblsel.hxx>
 #include <itabenum.hxx>
@@ -528,7 +529,7 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                             eAdjust = SvxAdjust::Right;
                         else if (cmd.alignment == u"justify"_ustr)
                             eAdjust = SvxAdjust::Block;
-                        rSh.SetParaAttr(SvxAdjustItem(eAdjust, RES_PARATR_ADJUST));
+                        rSh.SetAttrItem(SvxAdjustItem(eAdjust, RES_PARATR_ADJUST));
                     }
                     // Apply line spacing
                     if (cmd.lineSpacing > 0)
@@ -548,7 +549,7 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                         {
                             aSpacing.SetPropLineSpace(static_cast<sal_uInt16>(cmd.lineSpacing * 100));
                         }
-                        rSh.SetParaAttr(aSpacing);
+                        rSh.SetAttrItem(aSpacing);
                     }
                     editCount++;
                 }
@@ -625,7 +626,7 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
 
                 // Set case sensitivity and whole words
                 if (!cmd.caseSensitive)
-                    aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
+                    aSearchOpt.transliterateFlags = TransliterationFlags::IGNORE_CASE;
                 if (cmd.wholeWords)
                     aSearchOpt.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
 
