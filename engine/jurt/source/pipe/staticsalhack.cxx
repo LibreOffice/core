@@ -50,7 +50,6 @@
 #include <sal/osl/unx/pipe.cxx>
 #include <sal/osl/unx/process.cxx>
 #include <sal/osl/unx/process_impl.cxx>
-#include <sal/osl/unx/profile.cxx>
 #include <sal/osl/unx/readwrite_helper.cxx>
 #include <sal/osl/unx/security.cxx>
 #include <sal/osl/unx/socket.cxx>
