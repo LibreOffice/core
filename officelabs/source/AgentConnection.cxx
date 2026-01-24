@@ -131,6 +131,13 @@ static int extractJsonInt(const std::string& json, const std::string& key) {
 AgentResponse AgentConnection::parseResponse(const std::string& json) {
     AgentResponse response;
 
+    // Debug: dump raw JSON to file
+    FILE* rawDbg = fopen("C:\\temp\\raw_json_debug.log", "w");
+    if (rawDbg) {
+        fprintf(rawDbg, "Raw JSON (%d bytes):\n%s\n", (int)json.length(), json.c_str());
+        fclose(rawDbg);
+    }
+
     // Extract message
     std::string msg = extractJsonString(json, "message");
     response.message = OUString::fromUtf8(unescapeJson(msg).c_str());
@@ -152,51 +159,104 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
     if (dbg) {
         fprintf(dbg, "parseResponse: looking for auto_edits\n");
         fprintf(dbg, "  json length: %d\n", (int)json.length());
+        fflush(dbg);
     }
 
     size_t autoEditsStart = json.find("\"auto_edits\":");
-    if (dbg) fprintf(dbg, "  autoEditsStart: %d\n", (int)autoEditsStart);
+    if (dbg) { fprintf(dbg, "  autoEditsStart: %d\n", (int)autoEditsStart); fflush(dbg); }
 
     if (autoEditsStart != std::string::npos) {
         size_t arrayStart = json.find("[", autoEditsStart);
-        size_t arrayEnd = json.find("]", arrayStart);
-        if (dbg) fprintf(dbg, "  arrayStart: %d, arrayEnd: %d\n", (int)arrayStart, (int)arrayEnd);
+        // Find matching closing bracket (handle nested arrays)
+        size_t arrayEnd = arrayStart;
+        int bracketDepth = 1;
+        for (size_t i = arrayStart + 1; i < json.length() && bracketDepth > 0; ++i) {
+            if (json[i] == '[') bracketDepth++;
+            else if (json[i] == ']') bracketDepth--;
+            if (bracketDepth == 0) arrayEnd = i;
+        }
+        if (dbg) { fprintf(dbg, "  arrayStart: %d, arrayEnd: %d\n", (int)arrayStart, (int)arrayEnd); fflush(dbg); }
 
-        if (arrayStart != std::string::npos && arrayEnd != std::string::npos) {
+        if (arrayStart != std::string::npos && arrayEnd != std::string::npos && arrayEnd > arrayStart) {
             std::string arrayContent = json.substr(arrayStart, arrayEnd - arrayStart + 1);
-            if (dbg) fprintf(dbg, "  arrayContent length: %d\n", (int)arrayContent.length());
+            if (dbg) { fprintf(dbg, "  arrayContent length: %d\n", (int)arrayContent.length()); fflush(dbg); }
 
             // Parse each object in the array
             size_t objStart = 0;
             int objCount = 0;
             while ((objStart = arrayContent.find("{", objStart)) != std::string::npos) {
-                size_t objEnd = arrayContent.find("}", objStart);
-                if (objEnd == std::string::npos) break;
+                // Find matching closing brace (handle nested structures)
+                size_t objEnd = objStart;
+                int braceDepth = 1;
+                for (size_t i = objStart + 1; i < arrayContent.length() && braceDepth > 0; ++i) {
+                    if (arrayContent[i] == '{') braceDepth++;
+                    else if (arrayContent[i] == '}') braceDepth--;
+                    if (braceDepth == 0) objEnd = i;
+                }
+                if (objEnd == objStart) break;
 
                 std::string objStr = arrayContent.substr(objStart, objEnd - objStart + 1);
-                if (dbg) fprintf(dbg, "  object %d: %s\n", objCount, objStr.c_str());
+                if (dbg) { fprintf(dbg, "  object %d (len %d): parsing...\n", objCount, (int)objStr.length()); fflush(dbg); }
 
                 AutoEditCommand cmd;
+                if (dbg) { fprintf(dbg, "    extracting action...\n"); fflush(dbg); }
                 cmd.action = OUString::fromUtf8(extractJsonString(objStr, "action").c_str());
+                if (dbg) { fprintf(dbg, "    extracting find_text...\n"); fflush(dbg); }
                 cmd.findText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "find_text")).c_str());
+                if (dbg) { fprintf(dbg, "    extracting new_text...\n"); fflush(dbg); }
                 cmd.newText = OUString::fromUtf8(unescapeJson(extractJsonString(objStr, "new_text")).c_str());
+                if (dbg) { fprintf(dbg, "    extracting position...\n"); fflush(dbg); }
                 cmd.position = OUString::fromUtf8(extractJsonString(objStr, "position").c_str());
+                if (dbg) { fprintf(dbg, "    extracting as_paragraph...\n"); fflush(dbg); }
                 cmd.asParagraph = extractJsonBool(objStr, "as_paragraph");
-                // Extract formatting flags
+                if (dbg) { fprintf(dbg, "    extracting bold...\n"); fflush(dbg); }
                 cmd.bold = extractJsonBool(objStr, "bold");
+                if (dbg) { fprintf(dbg, "    extracting italic...\n"); fflush(dbg); }
                 cmd.italic = extractJsonBool(objStr, "italic");
+                if (dbg) { fprintf(dbg, "    extracting underline...\n"); fflush(dbg); }
                 cmd.underline = extractJsonBool(objStr, "underline");
+                if (dbg) { fprintf(dbg, "    extracting heading_level...\n"); fflush(dbg); }
                 cmd.headingLevel = extractJsonInt(objStr, "heading_level");
+                if (dbg) { fprintf(dbg, "    extracting font_color...\n"); fflush(dbg); }
                 cmd.fontColor = OUString::fromUtf8(extractJsonString(objStr, "font_color").c_str());
-                cmd.fontSize = static_cast<double>(extractJsonInt(objStr, "font_size"));
-                // Paragraph formatting
-                cmd.alignment = OUString::fromUtf8(extractJsonString(objStr, "alignment").c_str());
-                cmd.lineSpacing = static_cast<double>(extractJsonInt(objStr, "line_spacing"));
-                if (cmd.lineSpacing == 0) {
-                    // Try parsing as float string
-                    std::string lsStr = extractJsonString(objStr, "line_spacing");
-                    if (!lsStr.empty()) cmd.lineSpacing = std::stod(lsStr);
+                if (dbg) { fprintf(dbg, "    extracting font_size...\n"); fflush(dbg); }
+                // Parse font_size as double from JSON number
+                cmd.fontSize = 0;
+                {
+                    std::string searchKey = "\"font_size\":";
+                    size_t keyPos = objStr.find(searchKey);
+                    if (keyPos != std::string::npos) {
+                        size_t valStart = keyPos + searchKey.length();
+                        std::string numStr;
+                        while (valStart < objStr.length() && (isdigit(objStr[valStart]) || objStr[valStart] == '.' || objStr[valStart] == '-')) {
+                            numStr += objStr[valStart++];
+                        }
+                        if (!numStr.empty()) {
+                            try { cmd.fontSize = std::stod(numStr); } catch (...) {}
+                        }
+                    }
                 }
+                // Paragraph formatting
+                if (dbg) { fprintf(dbg, "    extracting alignment...\n"); fflush(dbg); }
+                cmd.alignment = OUString::fromUtf8(extractJsonString(objStr, "alignment").c_str());
+                if (dbg) { fprintf(dbg, "    extracting line_spacing...\n"); fflush(dbg); }
+                // Parse line_spacing as double from JSON number (not string)
+                cmd.lineSpacing = 0;
+                {
+                    std::string searchKey = "\"line_spacing\":";
+                    size_t keyPos = objStr.find(searchKey);
+                    if (keyPos != std::string::npos) {
+                        size_t valStart = keyPos + searchKey.length();
+                        std::string numStr;
+                        while (valStart < objStr.length() && (isdigit(objStr[valStart]) || objStr[valStart] == '.' || objStr[valStart] == '-')) {
+                            numStr += objStr[valStart++];
+                        }
+                        if (!numStr.empty()) {
+                            try { cmd.lineSpacing = std::stod(numStr); } catch (...) {}
+                        }
+                    }
+                }
+                if (dbg) { fprintf(dbg, "    line_spacing = %f\n", cmd.lineSpacing); fflush(dbg); }
                 cmd.spaceBefore = static_cast<double>(extractJsonInt(objStr, "space_before"));
                 cmd.spaceAfter = static_cast<double>(extractJsonInt(objStr, "space_after"));
                 // List creation
