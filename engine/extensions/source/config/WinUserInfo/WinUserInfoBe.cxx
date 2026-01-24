@@ -95,16 +95,15 @@ public:
                                                                  CLSCTX_INPROC_SERVER);
 
             sal::systools::BStr sUserDN;
-            sal::systools::ThrowIfFailed(pADsys->get_UserName(&sUserDN), "get_UserName failed");
+            sal::systools::ThrowIfFailed(pADsys->get_UserName(&sUserDN));
             // If this user is an AD user, then without an active connection to the domain, all the
             // above will succeed, and m_sUserDN will be correctly initialized, but the following
             // call to ADsGetObject will fail, and we will attempt reading cached values.
             m_sUserDN = sUserDN;
             OUString sLdapUserDN = "LDAP://" + m_sUserDN;
             sal::systools::COMReference<IADsUser> pUser;
-            sal::systools::ThrowIfFailed(ADsGetObject(o3tl::toW(sLdapUserDN.getStr()), IID_IADsUser,
-                                                      reinterpret_cast<void**>(&pUser)),
-                                         "ADsGetObject failed");
+            sal::systools::ThrowIfFailed(
+                ADsGetObject(o3tl::toW(sLdapUserDN.getStr()), IID_PPV_ARGS(&pUser)));
             // Fetch all the required information right now, when we know to have access to AD
             // (later the connection may already be lost)
             m_aMap[_givenname] = Str(pUser, &IADsUser::get_FirstName);

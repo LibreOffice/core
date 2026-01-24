@@ -311,25 +311,20 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
 
     try
     {
-        sal::systools::COMReference<IShellLinkW> pIShellLink;
-        pIShellLink.CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
+        sal::systools::COMReference<IShellLinkW> pIShellLink(CLSID_ShellLink, nullptr,
+                                                             CLSCTX_INPROC_SERVER);
 
-        sal::systools::COMReference<IPersistFile> pIPersistFile(pIShellLink,
-                                                                sal::systools::COM_QUERY_THROW);
+        auto pIPersistFile(
+            pIShellLink.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW()));
 
-        HRESULT hr = pIPersistFile->Load(aLnkFile.c_str(), STGM_READ);
-        if (FAILED(hr))
-            return target;
-
-        hr = pIShellLink->Resolve(nullptr, SLR_UPDATE | SLR_NO_UI);
-        if (FAILED(hr))
-            return target;
+        sal::systools::ThrowIfFailed(pIPersistFile->Load(aLnkFile.c_str(), STGM_READ), SAL_WHERE);
+        sal::systools::ThrowIfFailed(pIShellLink->Resolve(nullptr, SLR_UPDATE | SLR_NO_UI),
+                                     SAL_WHERE);
 
         wchar_t pathW[EXTENDED_MAX_PATH];
         WIN32_FIND_DATAW wfd;
-        hr = pIShellLink->GetPath(pathW, std::size(pathW), &wfd, SLGP_RAWPATH);
-        if (FAILED(hr))
-            return target;
+        sal::systools::ThrowIfFailed(
+            pIShellLink->GetPath(pathW, std::size(pathW), &wfd, SLGP_RAWPATH), SAL_WHERE);
 
         target = pathW;
     }

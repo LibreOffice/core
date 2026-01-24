@@ -128,7 +128,7 @@ public:
     auto getStorage() const { return getInterface<IStorage>(m_nStorage); }
     auto getObj() const { return m_nOleObject ? getInterface<IUnknown>(m_nOleObject) : m_pObj; }
     template <typename T>
-    auto get() const { return getObj().QueryInterface<T>(sal::systools::COM_QUERY); }
+    auto get() const { return getObj().QueryInterface<T>(); }
 
     void registerStorage(IStorage* pStorage) { registerInterface(pStorage, m_nStorage); }
     void registerObj() { registerInterface(m_pObj.get(), m_nOleObject); }
@@ -617,16 +617,16 @@ void OleComponent::InitializeObject_Impl()
     // the linked object will be detected here
     OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
     if ( m_pUnoOleObject )
-        m_pUnoOleObject->SetObjectIsLink_Impl( m_pNativeImpl->m_pObj.QueryInterface<IOleLink>(sal::systools::COM_QUERY).is() );
+        m_pUnoOleObject->SetObjectIsLink_Impl( m_pNativeImpl->m_pObj.QueryInterface<IOleLink>().is() );
 
-    auto pViewObject2(m_pNativeImpl->m_pObj.QueryInterface<IViewObject2>(sal::systools::COM_QUERY));
+    auto pViewObject2(m_pNativeImpl->m_pObj.QueryInterface<IViewObject2>());
     if (!pViewObject2)
         throw uno::RuntimeException(
              u"Failed to query IViewObject2 interface from native implementation object."_ustr
         ); // TODO
 
     // remove all the caches
-    if ( sal::systools::COMReference< IOleCache > pIOleCache{ m_pNativeImpl->m_pObj, sal::systools::COM_QUERY } )
+    if (auto pIOleCache = m_pNativeImpl->m_pObj.QueryInterface<IOleCache>())
     {
         IEnumSTATDATA* pEnumSD = nullptr;
         HRESULT hr2 = pIOleCache->EnumCache( &pEnumSD );
@@ -646,7 +646,7 @@ void OleComponent::InitializeObject_Impl()
         hr2 = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
     }
 
-    auto pOleObject(m_pNativeImpl->m_pObj.QueryInterface<IOleObject>(sal::systools::COM_QUERY));
+    auto pOleObject(m_pNativeImpl->m_pObj.QueryInterface<IOleObject>());
     if (!pOleObject)
         throw uno::RuntimeException(
              u"Failed to query IOleObject interface from native implementation object."_ustr
@@ -886,7 +886,7 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
 
     SolarMutexReleaser releaser;
 
-    auto pDataObject(pOleLinkComponentObj.QueryInterface<IDataObject>(sal::systools::COM_QUERY));
+    auto pDataObject(pOleLinkComponentObj.QueryInterface<IDataObject>());
     if ( pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
     {
         if (!pStorage)
@@ -905,7 +905,7 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
 
     if ( !m_pNativeImpl->m_pObj )
     {
-        auto pOleLink(pOleLinkComponentObj.QueryInterface<IOleLink>(sal::systools::COM_QUERY));
+        auto pOleLink(pOleLinkComponentObj.QueryInterface<IOleLink>());
         if ( !pOleLink )
             throw io::IOException(); // TODO: the object doesn't support IOleLink
 
@@ -981,8 +981,7 @@ void OleComponent::RunObject()
             OUString error = comphelper::WindowsErrorStringFromHRESULT(hr);
             if ( hr == REGDB_E_CLASSNOTREG )
             {
-                if (auto pOleObj
-                    = m_pNativeImpl->m_pObj.QueryInterface<IOleObject>(sal::systools::COM_QUERY))
+                if (auto pOleObj = m_pNativeImpl->m_pObj.QueryInterface<IOleObject>())
                 {
                     LPOLESTR lpUserType = nullptr;
                     if (SUCCEEDED(pOleObj->GetUserType(USERCLASSTYPE_FULL, &lpUserType)))

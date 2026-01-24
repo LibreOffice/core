@@ -147,7 +147,7 @@ public:
     sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute) override
     {
         sal::systools::COMReference<IShellItemArray> iItems;
-        TFileOpenDialog iDialog(getComPtr(), sal::systools::COM_QUERY_THROW);
+        auto iDialog(getComPtr().QueryInterface<IFileOpenDialog>());
         bool bGetResult = false;
         if (!iDialog.is())
             bGetResult = true;
@@ -992,7 +992,7 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 {
     if (m_pDialog != nullptr)
-        return { m_pDialog->getComPtr(), sal::systools::COM_QUERY_THROW };
+        return m_pDialog->getComPtr().QueryInterface<IFileDialogCustomize>();
 
     return {};
 }

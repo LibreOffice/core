@@ -101,11 +101,11 @@ bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
             continue;
 
         PROPVARIANT propvar;
-        COMReference<IPropertyStore> pps(pShellLinkItem, COM_QUERY_THROW);
+        auto pps(pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
         ThrowIfFailed(pps->GetValue(PKEY_Title, &propvar), "GetValue failed.");
         OUString title(o3tl::toU(PropVariantToStringWithDefault(propvar, L"")));
 
-        COMReference<IPropertyStore> ppsCompare(pShellLinkItemCompare, COM_QUERY_THROW);
+        auto ppsCompare(pShellLinkItemCompare.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
         ThrowIfFailed(ppsCompare->GetValue(PKEY_Title, &propvar), "GetValue failed.");
         OUString titleCompare(o3tl::toU(PropVariantToStringWithDefault(propvar, L"")));
         PropVariantClear(&propvar);
@@ -188,7 +188,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                                                          CLSCTX_INPROC_SERVER);
 
                 {
-                    COMReference<IPropertyStore> pps(pShellLinkItem, COM_QUERY_THROW);
+                    auto pps(pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
 
                     PROPVARIANT propvar;
                     ThrowIfFailed(
@@ -233,7 +233,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
             }
         }
 
-        COMReference<IObjectArray> pObjectArray(aCollection, COM_QUERY_THROW);
+        auto pObjectArray(aCollection.QueryInterface<IObjectArray>(COM_QUERY_THROW()));
         UINT nItems;
         ThrowIfFailed(pObjectArray->GetCount(&nItems), "GetCount failed.");
         if (nItems == 0)
@@ -286,7 +286,7 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
                                                          CLSCTX_INPROC_SERVER);
 
                 {
-                    COMReference<IPropertyStore> pps(pShellLinkItem, COM_QUERY_THROW);
+                    auto pps(pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
 
                     PROPVARIANT propvar;
                     ThrowIfFailed(
@@ -323,7 +323,7 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
             }
         }
 
-        COMReference<IObjectArray> pObjectArray(aCollection, COM_QUERY_THROW);
+        auto pObjectArray(aCollection.QueryInterface<IObjectArray>(COM_QUERY_THROW()));
         UINT nItems;
         ThrowIfFailed(pObjectArray->GetCount(&nItems), "GetCount failed.");
         if (nItems == 0)
@@ -467,7 +467,8 @@ Sequence<JumpListItem> SAL_CALL JumpListImpl::getRemovedItems(const OUString& sA
             {
                 if (SUCCEEDED(removed->GetAt(i, IID_PPV_ARGS(&pShellLinkItem))))
                 {
-                    COMReference<IPropertyStore> propertyStore(pShellLinkItem, COM_QUERY_THROW);
+                    auto propertyStore(
+                        pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
                     PROPVARIANT propvar;
                     ThrowIfFailed(propertyStore->GetValue(PKEY_Title, &propvar),
                                   "GetValue failed.");

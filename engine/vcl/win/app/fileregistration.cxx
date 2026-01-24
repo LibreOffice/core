@@ -140,8 +140,8 @@ void CheckFileExtRegistration(weld::Window* pDialogParent)
     sal::systools::COMReference<IApplicationAssociationRegistration> pAAR;
     try
     {
-        pAAR.CoCreateInstance(CLSID_ApplicationAssociationRegistration, nullptr,
-                              CLSCTX_INPROC_SERVER);
+        sal::systools::ThrowIfFailed(pAAR.CoCreateInstance(CLSID_ApplicationAssociationRegistration,
+                                                           nullptr, CLSCTX_INPROC_SERVER));
     }
     catch (...)
     {

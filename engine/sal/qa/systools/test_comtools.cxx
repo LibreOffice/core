@@ -188,7 +188,7 @@ namespace test_comtools
             sal::systools::COMReference<IUnknown> r2;
             CPPUNIT_ASSERT_NO_THROW_MESSAGE(
                 "Exception should not have been thrown",
-                r2 = r1.QueryInterface<IUnknown>(sal::systools::COM_QUERY_THROW));
+                r2 = r1.QueryInterface<IUnknown>(sal::systools::COM_QUERY_THROW()));
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 2 is expected", ULONG(2),
                                          reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
         }
@@ -197,7 +197,7 @@ namespace test_comtools
         {
             sal::systools::COMReference<IUnknown> r1 = comObjectSource();
             CPPUNIT_ASSERT_THROW_MESSAGE("Exception should have been thrown",
-                auto r2 = r1.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW),
+                auto r2 = r1.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW()),
                 sal::systools::ComError);
         }
 
