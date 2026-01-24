@@ -75,7 +75,7 @@ public:
     Reference<XDragSourceContext>   m_currentContext;
 
     // the wrapper for the Transferable ( startDrag)
-    IDataObjectPtr m_spDataObject;
+    sal::systools::COMReference<IDataObject> m_spDataObject;
 
     sal_Int8 m_sourceActions;
 

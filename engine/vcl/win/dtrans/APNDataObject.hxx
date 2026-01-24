@@ -36,7 +36,7 @@
 class CAPNDataObject : public IDataObject
 {
 public:
-    explicit CAPNDataObject(IDataObjectPtr rIDataObject);
+    explicit CAPNDataObject(sal::systools::COMReference<IDataObject> rIDataObject);
     virtual ~CAPNDataObject();
 
     //IUnknown interface methods
@@ -61,7 +61,7 @@ private:
     HRESULT MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj );
 
 private:
-    IDataObjectPtr  m_rIDataObjectOrg;
+    sal::systools::COMReference<IDataObject> m_rIDataObjectOrg;
     HGLOBAL         m_hGlobal;
     LONG            m_nRefCnt;
 

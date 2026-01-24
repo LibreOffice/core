@@ -27,7 +27,7 @@
 
 // ctor
 
-CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
+CAPNDataObject::CAPNDataObject( sal::systools::COMReference<IDataObject> rIDataObject ) :
     m_rIDataObjectOrg( rIDataObject ),
     m_hGlobal( nullptr ),
     m_nRefCnt( 0 )
@@ -147,7 +147,7 @@ STDMETHODIMP CAPNDataObject::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmediu
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -164,7 +164,7 @@ STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** 
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -181,7 +181,7 @@ STDMETHODIMP CAPNDataObject::QueryGetData( FORMATETC * pFormatetc )
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
 
         if (SUCCEEDED(hr))
@@ -198,7 +198,7 @@ STDMETHODIMP CAPNDataObject::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pm
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -215,7 +215,7 @@ STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(FORMATETC * pFormatectIn, FOR
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -232,7 +232,7 @@ STDMETHODIMP CAPNDataObject::SetData( FORMATETC * pFormatetc, STGMEDIUM * pmediu
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -249,7 +249,7 @@ STDMETHODIMP CAPNDataObject::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdvis
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -266,7 +266,7 @@ STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))
@@ -283,7 +283,7 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 
     if (RPC_E_WRONG_THREAD == hr)
     {
-        IDataObjectPtr pIDOTmp;
+        sal::systools::COMReference<IDataObject> pIDOTmp;
         hr = MarshalIDataObjectIntoCurrentApartment(&pIDOTmp);
 
         if (SUCCEEDED(hr))

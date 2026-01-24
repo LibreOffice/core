@@ -107,7 +107,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    IDataObjectPtr getIDataObject();
+    sal::systools::COMReference<IDataObject> getIDataObject();
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 };
