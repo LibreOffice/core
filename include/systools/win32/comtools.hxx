@@ -169,7 +169,7 @@ namespace sal::systools
             T2* ip = nullptr;
             HRESULT hr = E_POINTER;
             if (com_ptr_)
-                hr = com_ptr_->QueryInterface(&ip);
+                hr = com_ptr_->QueryInterface(IID_PPV_ARGS(&ip));
 
             if constexpr (std::is_same_v<TAG, COM_QUERY_THROW_TAG>)
                 ThrowIfFailed(hr, "QueryInterface failed");
