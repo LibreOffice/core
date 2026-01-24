@@ -160,7 +160,6 @@ public:
 }
 
 using TSaveDialogImpl = TDialogImpl<TFileSaveDialog, CLSID_FileSaveDialog>;
-using TFolderPickerDialogImpl = TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>;
 
 
 static OUString lcl_getURLFromShellItem (IShellItem* pItem)
@@ -507,7 +506,7 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(Request& rRequest)
 
 void VistaFilePickerImpl::impl_sta_CreateFolderPicker(Request& rRequest)
 {
-    impl_sta_CreateDialog<TFolderPickerDialogImpl>();
+    impl_sta_CreateDialog<TOpenDialogImpl>();
     impl_sta_InitDialog(rRequest, FOS_PICKFOLDERS);
 }
 
