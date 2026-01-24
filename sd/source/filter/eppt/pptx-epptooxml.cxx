@@ -1985,9 +1985,9 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         }
 
         // Close the list tag if it was the last one
-        if (nPageNum == mnMasterPages - 1)
+        if (nPageNum + 1 == mnMasterPages)
             mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
-        if (mnCanvasMasterIndex == mnMasterPages - 1 && nPageNum == mnMasterPages - 2)
+        if (mnCanvasMasterIndex == mnMasterPages - 1 && nPageNum + 2 == mnMasterPages)
             mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
         return;
@@ -2010,10 +2010,10 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // if canvas master page is the last one, close the list tag before that
     if (mnCanvasMasterIndex == mnMasterPages - 1)
     {
-        if (nPageNum == mnMasterPages - 2)
+        if (nPageNum + 2 == mnMasterPages)
             mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
     }
-    if (nPageNum == mnMasterPages - 1)
+    if (nPageNum + 1 == mnMasterPages)
         mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
     FSHelperPtr pFS =
