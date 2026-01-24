@@ -2444,7 +2444,7 @@ void Test::testTdf157037PasteTextAutoDirection()
     aEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), /*paste special*/ true);
 
     // Check that the paste worked
-    CPPUNIT_ASSERT_EQUAL(29, rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(29), rDoc.GetTextLen());
     CPPUNIT_ASSERT_EQUAL(u"Example"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
     CPPUNIT_ASSERT_EQUAL(u"مثال"_ustr, rDoc.GetParaAsString(sal_Int32(1)));
     CPPUNIT_ASSERT_EQUAL(u"Example"_ustr, rDoc.GetParaAsString(sal_Int32(2)));
