@@ -150,6 +150,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1887), nFlyTop);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165359_SdtWithInline)
+{
+    createSwDoc("tdf165359_SdtWithInline.docx");
+
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if a picture is inside of a plainText content control
+    assertXPath(pXmlDoc, "//w:sdtPr/w:text", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170438_dropdown)
 {
     createSwDoc("tdf170438_dropdown.odt");
