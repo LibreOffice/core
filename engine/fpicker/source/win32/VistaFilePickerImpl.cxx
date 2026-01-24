@@ -132,16 +132,16 @@ private:
 
 namespace {
 
-template <class ComPtrDialog, REFCLSID CLSID> class TDialogImpl : public TDialogImplBase
+template <class IDlg, REFCLSID CLSID> class TDialogImpl : public TDialogImplBase
 {
 public:
     TDialogImpl()
-        : TDialogImplBase(ComPtrDialog(CLSID).get())
+        : TDialogImplBase(sal::systools::COMReference<IDlg>(CLSID).get())
     {
     }
 };
 
-class TOpenDialogImpl : public TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>
+class TOpenDialogImpl : public TDialogImpl<IFileOpenDialog, CLSID_FileOpenDialog>
 {
 public:
     sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute) override
@@ -158,8 +158,6 @@ public:
 };
 
 }
-
-using TSaveDialogImpl = TDialogImpl<TFileSaveDialog, CLSID_FileSaveDialog>;
 
 
 static OUString lcl_getURLFromShellItem (IShellItem* pItem)
@@ -499,7 +497,7 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(Request& rRequest)
 
 void VistaFilePickerImpl::impl_sta_CreateSaveDialog(Request& rRequest)
 {
-    impl_sta_CreateDialog<TSaveDialogImpl>();
+    impl_sta_CreateDialog<TDialogImpl<IFileSaveDialog, CLSID_FileSaveDialog>>();
     impl_sta_InitDialog(rRequest, FOS_FILEMUSTEXIST | FOS_OVERWRITEPROMPT);
 }
 
