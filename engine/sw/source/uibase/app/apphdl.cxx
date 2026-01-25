@@ -403,6 +403,16 @@ bool lcl_hasAllComponentsAvailable()
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
 {
+    if (m_pView)
+    {
+        OSL_FAIL("SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!");
+        return;
+    }
+
+    auto pView = ::GetActiveView();
+    if (!pView)
+        return;
+
     if(!lcl_hasAllComponentsAvailable())
     {
         if (officecfg::Office::Common::PackageKit::EnableBaseInstallation::get())
@@ -411,53 +421,36 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             {
                 using namespace org::freedesktop::PackageKit;
                 using namespace svtools;
-                css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+                auto xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
                 const css::uno::Sequence< OUString > vPackages{ u"libreoffice-base"_ustr };
                 xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
                 SolarMutexGuard aGuard;
-                (void)executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
+                (void)executeRestartDialog(comphelper::getProcessComponentContext(),
+                                           pView->GetFrameWeld(), RESTART_REASON_MAILMERGE_INSTALL);
+                return;
             }
             catch (const css::uno::Exception &)
             {
                 TOOLS_INFO_EXCEPTION(
                     "sw.core",
                     "trying to install LibreOffice Base, caught");
-                auto xRestartManager
-                    = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
-                if (!xRestartManager->isRestartRequested(false))
-                {
-                    // Base is absent, and could not initiate its install - ask user to do that manually
-                    // Only show the dialog if restart is not initiated yet
-                    std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(
-                        nullptr, VclMessageType::Info, VclButtonsType::Ok,
-                        SwResId(STR_NO_BASE_FOR_MERGE)));
-                    xWarnBox->run();
-                }
             }
-        } else {
-            auto xRestartManager
-                = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
-            if (!xRestartManager->isRestartRequested(false))
-            {
-                // Base is absent, and could not initiate its install - ask user to do that manually
-                // Only show the dialog if restart is not initiated yet
-                std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(
-                    nullptr, VclMessageType::Info, VclButtonsType::Ok,
-                    SwResId(STR_NO_BASE_FOR_MERGE)));
-                xWarnBox->run();
-            }
+        }
+        auto xRestartManager
+            = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
+        if (!xRestartManager->isRestartRequested(false))
+        {
+            // Base is absent, and could not initiate its install - ask user to do that manually
+            // Only show the dialog if restart is not initiated yet
+            std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(
+                pView->GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+                SwResId(STR_NO_BASE_FOR_MERGE)));
+            xWarnBox->run();
         }
         return;
     }
-    if ( m_pView )
-    {
-        OSL_FAIL("SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
-        return;
-    }
 
-    m_pView = ::GetActiveView();
-    if (!m_pView)
-        return;
+    m_pView = pView;
 
     // keep self alive until done.
     acquire();
