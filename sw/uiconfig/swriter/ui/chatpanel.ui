@@ -141,7 +141,47 @@
       </packing>
     </child>
 
-    <!-- Input Row with @ button -->
+    <!-- Action Buttons Row: Insert, Replace, Reset -->
+    <child>
+      <object class="GtkBox" id="action_row">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">4</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="insert_button">
+            <property name="label" translatable="yes">Insert</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Insert AI response at cursor</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="replace_button">
+            <property name="label" translatable="yes">Replace</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Replace selection with AI response</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="reset_button">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Clear chat and start fresh</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+
+    <!-- Input Row with @ button (at bottom) -->
     <child>
       <object class="GtkBox" id="input_row">
         <property name="visible">True</property>
@@ -186,46 +226,6 @@
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
-      </packing>
-    </child>
-
-    <!-- Action Buttons Row: Insert, Replace, Reset -->
-    <child>
-      <object class="GtkBox" id="action_row">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">horizontal</property>
-        <property name="spacing">4</property>
-        <property name="homogeneous">True</property>
-        <child>
-          <object class="GtkButton" id="insert_button">
-            <property name="label" translatable="yes">Insert</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Insert AI response at cursor</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="replace_button">
-            <property name="label" translatable="yes">Replace</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Replace selection with AI response</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="reset_button">
-            <property name="label" translatable="yes">Reset</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Clear chat and start fresh</property>
-          </object>
         </child>
       </object>
       <packing>

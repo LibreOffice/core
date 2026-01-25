@@ -12,6 +12,7 @@
 #include "AIAssistantPanel.hxx"
 #include <sal/log.hxx>
 #include <cstdio>
+#include <algorithm>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -29,7 +30,15 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svl/itemset.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <numrule.hxx>
@@ -318,18 +327,26 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
 
 void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCommand>& edits)
 {
+    FILE* execDbg = fopen("C:\\temp\\execute_debug.log", "a");
+    if (execDbg) { fprintf(execDbg, "ExecuteAutoEdits: starting with %d edits\n", (int)edits.size()); fflush(execDbg); }
+
     // Get fresh shell reference
     SwView* pView = GetActiveView();
     if (!pView)
     {
+        if (execDbg) { fprintf(execDbg, "  ERROR: No active view!\n"); fclose(execDbg); }
         AppendToChat(u"System"_ustr, u"Cannot edit: No active document"_ustr);
         return;
     }
 
+    if (execDbg) { fprintf(execDbg, "  Got active view\n"); fflush(execDbg); }
+
     SwWrtShell& rSh = pView->GetWrtShell();
     int editCount = 0;
 
+    if (execDbg) { fprintf(execDbg, "  Got SwWrtShell, calling StartAllAction\n"); fflush(execDbg); }
     rSh.StartAllAction();
+    if (execDbg) { fprintf(execDbg, "  StartAllAction done\n"); fflush(execDbg); }
 
     for (const auto& cmd : edits)
     {
@@ -361,24 +378,133 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
         }
         else if (cmd.action == u"insert"_ustr)
         {
+            if (execDbg) { fprintf(execDbg, "  INSERT action starting\n"); fflush(execDbg); }
+
             if (cmd.position == u"start"_ustr)
             {
+                if (execDbg) { fprintf(execDbg, "    Moving to start\n"); fflush(execDbg); }
                 rSh.StartOfSection();
             }
             else if (cmd.position == u"end"_ustr)
             {
+                if (execDbg) { fprintf(execDbg, "    Moving to end\n"); fflush(execDbg); }
                 rSh.EndOfSection();
             }
             // Default "cursor" - just insert at current position
 
+            // Apply heading style BEFORE inserting text (paragraph style)
+            if (cmd.headingLevel > 0 && cmd.headingLevel <= 6)
+            {
+                if (execDbg) { fprintf(execDbg, "    Applying heading level %d\n", cmd.headingLevel); fflush(execDbg); }
+                sal_uInt16 nPoolId = RES_POOLCOLL_HEADLINE1 + (cmd.headingLevel - 1);
+                SwDoc* pDoc = rSh.GetDoc();
+                if (pDoc)
+                {
+                    SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(nPoolId);
+                    if (pColl)
+                        rSh.SetTextFormatColl(pColl);
+                }
+            }
+
+            // Remember start position for formatting
+            if (execDbg) { fprintf(execDbg, "    Getting cursor position\n"); fflush(execDbg); }
+            sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->GetContentIndex();
+
             // Insert the text
+            if (execDbg) { OString txt = cmd.newText.toUtf8(); fprintf(execDbg, "    Inserting text: '%s'\n", txt.getStr()); fflush(execDbg); }
             rSh.Insert(cmd.newText);
+            if (execDbg) { fprintf(execDbg, "    Insert done\n"); fflush(execDbg); }
+
+            // Select the inserted text to apply character formatting
+            sal_Int32 nEndPos = rSh.GetCursor()->GetPoint()->GetContentIndex();
+            if (nEndPos > nStartPos && (cmd.bold || cmd.italic || cmd.underline || !cmd.fontColor.isEmpty() || cmd.fontSize > 0))
+            {
+                // Select the text we just inserted
+                rSh.Left(SwCursorSkipMode::Chars, true, nEndPos - nStartPos, false);
+
+                // Apply character formatting
+                if (cmd.bold)
+                {
+                    rSh.SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+                }
+                if (cmd.italic)
+                {
+                    rSh.SetAttrItem(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));
+                }
+                if (cmd.underline)
+                {
+                    rSh.SetAttrItem(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
+                }
+                if (!cmd.fontColor.isEmpty())
+                {
+                    OUString colorStr = cmd.fontColor;
+                    if (colorStr.startsWith("#"))
+                        colorStr = colorStr.copy(1);
+                    if (colorStr.getLength() == 6)
+                    {
+                        sal_uInt32 nColor = colorStr.toUInt32(16);
+                        Color aColor(
+                            static_cast<sal_uInt8>((nColor >> 16) & 0xFF),
+                            static_cast<sal_uInt8>((nColor >> 8) & 0xFF),
+                            static_cast<sal_uInt8>(nColor & 0xFF)
+                        );
+                        rSh.SetAttrItem(SvxColorItem(aColor, RES_CHRATR_COLOR));
+                    }
+                }
+                if (cmd.fontSize > 0)
+                {
+                    sal_uInt32 nTwips = static_cast<sal_uInt32>(cmd.fontSize * 20);
+                    SvxFontHeightItem aFontHeight(nTwips, 100, RES_CHRATR_FONTSIZE);
+                    rSh.SetAttrItem(aFontHeight);
+                }
+                // New formatting features - disabled for debugging in insert action
+                /*
+                if (cmd.strikethrough)
+                {
+                    rSh.SetAttrItem(SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT));
+                }
+                if (cmd.superscript)
+                {
+                    rSh.SetAttrItem(SvxEscapementItem(SvxEscapement::Superscript, RES_CHRATR_ESCAPEMENT));
+                }
+                if (cmd.subscript)
+                {
+                    rSh.SetAttrItem(SvxEscapementItem(SvxEscapement::Subscript, RES_CHRATR_ESCAPEMENT));
+                }
+                if (!cmd.highlightColor.isEmpty())
+                {
+                    OUString colorStr = cmd.highlightColor;
+                    if (colorStr.startsWith("#"))
+                        colorStr = colorStr.copy(1);
+                    if (colorStr.getLength() == 6)
+                    {
+                        sal_uInt32 nColor = colorStr.toUInt32(16);
+                        Color aColor(
+                            static_cast<sal_uInt8>((nColor >> 16) & 0xFF),
+                            static_cast<sal_uInt8>((nColor >> 8) & 0xFF),
+                            static_cast<sal_uInt8>(nColor & 0xFF)
+                        );
+                        rSh.SetAttrItem(SvxBrushItem(aColor, RES_CHRATR_BACKGROUND));
+                    }
+                }
+                if (!cmd.fontName.isEmpty())
+                {
+                    SvxFontItem aFont(FAMILY_DONTKNOW, cmd.fontName, OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
+                    rSh.SetAttrItem(aFont);
+                }
+                */
+
+                // Deselect (move cursor to end of inserted text)
+                rSh.Right(SwCursorSkipMode::Chars, false, 0, false);
+            }
 
             // If as_paragraph is true, add a paragraph break after the inserted text
             if (cmd.asParagraph)
             {
+                if (execDbg) { fprintf(execDbg, "    SplitNode for paragraph\n"); fflush(execDbg); }
                 rSh.SplitNode();
             }
+            if (execDbg) { fprintf(execDbg, "  INSERT action complete\n"); fflush(execDbg); }
             editCount++;
         }
         else if (cmd.action == u"replace"_ustr)
@@ -453,26 +579,40 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
 
                 if (nFound > 0 && nFound != SAL_MAX_INT32)
                 {
+                    FILE* fmtDbg = fopen("C:\\temp\\format_debug.log", "a");
+                    if (fmtDbg) { fprintf(fmtDbg, "Text found, applying formatting\n"); fflush(fmtDbg); }
+
                     // Text found and selected, apply formatting
                     if (cmd.bold)
                     {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying bold\n"); fflush(fmtDbg); }
                         rSh.SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
                     }
                     if (cmd.italic)
                     {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying italic\n"); fflush(fmtDbg); }
                         rSh.SetAttrItem(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));
                     }
                     if (cmd.underline)
                     {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying underline\n"); fflush(fmtDbg); }
                         rSh.SetAttrItem(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
                     }
                     if (cmd.headingLevel > 0 && cmd.headingLevel <= 6)
                     {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying heading %d\n", cmd.headingLevel); fflush(fmtDbg); }
                         sal_uInt16 nPoolId = RES_POOLCOLL_HEADLINE1 + (cmd.headingLevel - 1);
-                        rSh.SetTextFormatColl(rSh.GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(nPoolId));
+                        SwDoc* pDoc = rSh.GetDoc();
+                        if (pDoc)
+                        {
+                            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(nPoolId);
+                            if (pColl)
+                                rSh.SetTextFormatColl(pColl);
+                        }
                     }
                     if (!cmd.fontColor.isEmpty())
                     {
+                        if (fmtDbg) { OString cs = cmd.fontColor.toUtf8(); fprintf(fmtDbg, "  Applying color %s\n", cs.getStr()); fflush(fmtDbg); }
                         // Parse hex color like "#FF0000" or "FF0000"
                         OUString colorStr = cmd.fontColor;
                         if (colorStr.startsWith("#"))
@@ -490,11 +630,54 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                     }
                     if (cmd.fontSize > 0)
                     {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying fontSize %.1f\n", cmd.fontSize); fflush(fmtDbg); }
                         // Font size is in points, convert to twips (1 point = 20 twips)
                         sal_uInt32 nTwips = static_cast<sal_uInt32>(cmd.fontSize * 20);
                         SvxFontHeightItem aFontHeight(nTwips, 100, RES_CHRATR_FONTSIZE);
                         rSh.SetAttrItem(aFontHeight);
                     }
+                    // New formatting features - disabled for debugging
+                    /*
+                    if (cmd.strikethrough)
+                    {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying strikethrough\n"); fflush(fmtDbg); }
+                        rSh.SetAttrItem(SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT));
+                    }
+                    if (cmd.superscript)
+                    {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying superscript\n"); fflush(fmtDbg); }
+                        rSh.SetAttrItem(SvxEscapementItem(SvxEscapement::Superscript, RES_CHRATR_ESCAPEMENT));
+                    }
+                    if (cmd.subscript)
+                    {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying subscript\n"); fflush(fmtDbg); }
+                        rSh.SetAttrItem(SvxEscapementItem(SvxEscapement::Subscript, RES_CHRATR_ESCAPEMENT));
+                    }
+                    if (!cmd.highlightColor.isEmpty())
+                    {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying highlight\n"); fflush(fmtDbg); }
+                        OUString colorStr = cmd.highlightColor;
+                        if (colorStr.startsWith("#"))
+                            colorStr = colorStr.copy(1);
+                        if (colorStr.getLength() == 6)
+                        {
+                            sal_uInt32 nColor = colorStr.toUInt32(16);
+                            Color aColor(
+                                static_cast<sal_uInt8>((nColor >> 16) & 0xFF),
+                                static_cast<sal_uInt8>((nColor >> 8) & 0xFF),
+                                static_cast<sal_uInt8>(nColor & 0xFF)
+                            );
+                            rSh.SetAttrItem(SvxBrushItem(aColor, RES_CHRATR_BACKGROUND));
+                        }
+                    }
+                    if (!cmd.fontName.isEmpty())
+                    {
+                        if (fmtDbg) { fprintf(fmtDbg, "  Applying fontName\n"); fflush(fmtDbg); }
+                        SvxFontItem aFont(FAMILY_DONTKNOW, cmd.fontName, OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
+                        rSh.SetAttrItem(aFont);
+                    }
+                    */
+                    if (fmtDbg) { fprintf(fmtDbg, "  Format complete\n"); fclose(fmtDbg); }
                     editCount++;
                 }
             }
@@ -551,65 +734,173 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                         }
                         rSh.SetAttrItem(aSpacing);
                     }
+                    // Apply space before/after paragraph (in twips: 1 pt = 20 twips)
+                    if (cmd.spaceBefore > 0 || cmd.spaceAfter > 0)
+                    {
+                        SvxULSpaceItem aULSpace(RES_UL_SPACE);
+                        if (cmd.spaceBefore > 0)
+                            aULSpace.SetUpper(static_cast<sal_uInt16>(cmd.spaceBefore * 20));
+                        if (cmd.spaceAfter > 0)
+                            aULSpace.SetLower(static_cast<sal_uInt16>(cmd.spaceAfter * 20));
+                        rSh.SetAttrItem(aULSpace);
+                    }
+                    // Apply indent settings (in twips: 1 cm = 567 twips)
+                    if (cmd.indentLeft > 0 || cmd.indentRight > 0 || cmd.indentFirstLine > 0)
+                    {
+                        SvxLRSpaceItem aLRSpace(RES_LR_SPACE);
+                        if (cmd.indentLeft > 0)
+                            aLRSpace.SetLeft(SvxIndentValue::twips(cmd.indentLeft * 567));
+                        if (cmd.indentRight > 0)
+                            aLRSpace.SetRight(SvxIndentValue::twips(cmd.indentRight * 567));
+                        if (cmd.indentFirstLine > 0)
+                            aLRSpace.SetTextFirstLineOffset(SvxIndentValue::twips(cmd.indentFirstLine * 567));
+                        rSh.SetAttrItem(aLRSpace);
+                    }
                     editCount++;
                 }
             }
         }
         else if (cmd.action == u"create_list"_ustr)
         {
+            FILE* listDbg = fopen("C:\\temp\\list_debug.log", "a");
+            if (listDbg) { fprintf(listDbg, "create_list: starting, position=%s\n", cmd.position.toUtf8().getStr()); fflush(listDbg); }
+
             // Move to position if specified
             if (cmd.position == u"start"_ustr)
             {
+                if (listDbg) { fprintf(listDbg, "  Moving to start\n"); fflush(listDbg); }
                 rSh.StartOfSection();
             }
             else if (cmd.position == u"end"_ustr)
             {
+                if (listDbg) { fprintf(listDbg, "  Moving to end\n"); fflush(listDbg); }
                 rSh.EndOfSection();
+                // Add paragraph break before list if there's existing content
+                if (listDbg) { fprintf(listDbg, "  SplitNode\n"); fflush(listDbg); }
+                rSh.SplitNode();
+                // Only turn off bullet/numbering if we're actually in a list
+                if (rSh.GetNumRuleAtCurrCursorPos())
+                {
+                    if (listDbg) { fprintf(listDbg, "  NumOrBulletOff (in list context)\n"); fflush(listDbg); }
+                    rSh.NumOrBulletOff();
+                }
             }
 
             // Create list items
-            for (size_t i = 0; i < cmd.listItems.size(); ++i)
+            if (!cmd.listItems.empty())
             {
-                // Insert the text
-                rSh.Insert(cmd.listItems[i]);
+                if (listDbg) { fprintf(listDbg, "  Inserting %d items\n", (int)cmd.listItems.size()); fflush(listDbg); }
 
-                // Apply bullet/numbering
+                // Insert first item text
+                if (listDbg) { fprintf(listDbg, "  Insert first item\n"); fflush(listDbg); }
+                rSh.Insert(cmd.listItems[0]);
+
+                // Apply bullet or numbering to make this a list
                 if (cmd.listType == u"numbered"_ustr)
                 {
-                    rSh.NumOrNoNum(true);  // Apply numbering
+                    if (listDbg) { fprintf(listDbg, "  NumOn() for numbered list\n"); fflush(listDbg); }
+                    rSh.NumOn();  // Apply numbering format
                 }
                 else
                 {
                     // Default to bullet list
-                    rSh.NumOrNoNum(true);  // Apply bullet
+                    if (listDbg) { fprintf(listDbg, "  BulletOn() for bullet list\n"); fflush(listDbg); }
+                    rSh.BulletOn();  // Apply bullet format
                 }
 
-                // Add paragraph break for next item (unless it's the last one)
-                if (i < cmd.listItems.size() - 1)
+                // Insert remaining items
+                for (size_t i = 1; i < cmd.listItems.size(); ++i)
                 {
-                    rSh.SplitNode();
+                    if (listDbg) { fprintf(listDbg, "  SplitNode + insert item %d\n", (int)i); fflush(listDbg); }
+                    rSh.SplitNode();  // New paragraph continues the list
+                    rSh.Insert(cmd.listItems[i]);
                 }
+                if (listDbg) { fprintf(listDbg, "  List complete\n"); fclose(listDbg); }
+            }
+            else
+            {
+                if (listDbg) { fprintf(listDbg, "  No list items!\n"); fclose(listDbg); }
             }
             editCount++;
         }
         else if (cmd.action == u"create_table"_ustr)
         {
+            FILE* tblDbg2 = fopen("C:\\temp\\table_debug.log", "a");
+            if (tblDbg2) { fprintf(tblDbg2, "create_table: starting, position=%s\n", cmd.position.toUtf8().getStr()); fflush(tblDbg2); }
+
             // Move to position if specified
             if (cmd.position == u"start"_ustr)
             {
+                if (tblDbg2) { fprintf(tblDbg2, "  Moving to start\n"); fflush(tblDbg2); }
                 rSh.StartOfSection();
             }
             else if (cmd.position == u"end"_ustr)
             {
+                if (tblDbg2) { fprintf(tblDbg2, "  Moving to end\n"); fflush(tblDbg2); }
                 rSh.EndOfSection();
+                // Add paragraph break before table if there's existing content
+                if (tblDbg2) { fprintf(tblDbg2, "  SplitNode\n"); fflush(tblDbg2); }
+                rSh.SplitNode();
+                // Only turn off bullet/numbering if we're actually in a list
+                if (rSh.GetNumRuleAtCurrCursorPos())
+                {
+                    if (tblDbg2) { fprintf(tblDbg2, "  NumOrBulletOff (in list context)\n"); fflush(tblDbg2); }
+                    rSh.NumOrBulletOff();
+                }
             }
+            if (tblDbg2) { fclose(tblDbg2); tblDbg2 = nullptr; }
 
-            // Create a table
-            if (cmd.tableRows > 0 && cmd.tableColumns > 0)
+            // Create a table - validate dimensions
+            if (cmd.tableRows > 0 && cmd.tableRows <= 100 && cmd.tableColumns > 0 && cmd.tableColumns <= 50)
             {
+                FILE* tblDbg = fopen("C:\\temp\\table_debug.log", "a");
+                if (tblDbg) { fprintf(tblDbg, "Creating table %dx%d\n", cmd.tableRows, cmd.tableColumns); fflush(tblDbg); }
+
                 // InsertTable creates a table with specified rows and columns
                 rSh.InsertTable(SwInsertTableOptions(SwInsertTableFlags::DefaultBorder, 0),
                     cmd.tableRows, cmd.tableColumns);
+
+                if (tblDbg) { fprintf(tblDbg, "InsertTable done, IsCursorInTable=%d\n", rSh.IsCursorInTable() ? 1 : 0); fflush(tblDbg); }
+
+                // Navigate to start of table (first cell) - InsertTable may leave cursor after table
+                bool bMoved = rSh.MoveTable(GotoPrevTable, fnTableStart);
+
+                if (tblDbg) { fprintf(tblDbg, "MoveTable returned %d, IsCursorInTable=%d\n", bMoved ? 1 : 0, rSh.IsCursorInTable() ? 1 : 0); fflush(tblDbg); }
+
+                // Insert table data if provided
+                if (!cmd.tableData.empty())
+                {
+                    if (tblDbg) { fprintf(tblDbg, "Inserting %d rows of data\n", (int)cmd.tableData.size()); fflush(tblDbg); }
+
+                    // Fill in the data row by row, cell by cell
+                    for (size_t row = 0; row < cmd.tableData.size() && row < static_cast<size_t>(cmd.tableRows); ++row)
+                    {
+                        const auto& rowData = cmd.tableData[row];
+                        for (size_t col = 0; col < rowData.size() && col < static_cast<size_t>(cmd.tableColumns); ++col)
+                        {
+                            // Insert the cell content
+                            rSh.Insert(rowData[col]);
+
+                            // Move to next cell (unless this is the last cell)
+                            if (col < static_cast<size_t>(cmd.tableColumns) - 1 ||
+                                row < cmd.tableData.size() - 1)
+                            {
+                                rSh.GoNextCell(false);  // false = don't create new row if at end
+                            }
+                        }
+                        // If row has fewer columns than table, skip remaining cells in this row
+                        for (size_t col = rowData.size(); col < static_cast<size_t>(cmd.tableColumns); ++col)
+                        {
+                            if (col < static_cast<size_t>(cmd.tableColumns) - 1 ||
+                                row < cmd.tableData.size() - 1)
+                            {
+                                rSh.GoNextCell(false);
+                            }
+                        }
+                    }
+                    if (tblDbg) { fprintf(tblDbg, "Data insertion complete\n"); fclose(tblDbg); tblDbg = nullptr; }
+                }
+                if (tblDbg) fclose(tblDbg);
                 editCount++;
             }
         }
@@ -618,6 +909,9 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
             // Find and replace all occurrences
             if (!cmd.findText.isEmpty())
             {
+                FILE* replDbg = fopen("C:\\temp\\replace_debug.log", "a");
+                if (replDbg) { fprintf(replDbg, "replace_all: find='%s' replace='%s'\n", cmd.findText.toUtf8().getStr(), cmd.newText.toUtf8().getStr()); fflush(replDbg); }
+
                 i18nutil::SearchOptions2 aSearchOpt;
                 aSearchOpt.searchString = cmd.findText;
                 aSearchOpt.replaceString = cmd.newText;
@@ -630,7 +924,7 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                 if (cmd.wholeWords)
                     aSearchOpt.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
 
-                // Replace all occurrences
+                // Replace all occurrences - use ReplaceAll pattern
                 sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
                     false,  // bSearchInNotes
                     SwDocPositions::Start,
@@ -638,8 +932,12 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                     FindRanges::InBody,
                     true);  // bReplace
 
-                // Keep replacing until no more found
-                while (nFound > 0 && nFound != SAL_MAX_INT32)
+                if (replDbg) { fprintf(replDbg, "  First SearchPattern returned: %d\n", (int)nFound); fflush(replDbg); }
+
+                // Keep replacing until no more found - with safety limit
+                int safetyCount = 0;
+                const int MAX_REPLACEMENTS = 1000;
+                while (nFound > 0 && nFound != SAL_MAX_INT32 && safetyCount < MAX_REPLACEMENTS)
                 {
                     nFound = rSh.SearchPattern(aSearchOpt,
                         false,
@@ -647,20 +945,125 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
                         SwDocPositions::End,
                         FindRanges::InBody,
                         true);
+                    safetyCount++;
+                    if (replDbg && safetyCount % 10 == 0) { fprintf(replDbg, "  Replace iteration %d, nFound=%d\n", safetyCount, (int)nFound); fflush(replDbg); }
                 }
+                if (replDbg) { fprintf(replDbg, "  Replace complete, iterations=%d\n", safetyCount); fclose(replDbg); }
                 editCount++;
             }
         }
+        else if (cmd.action == u"insert_page_break"_ustr)
+        {
+            // Move to position if specified
+            if (cmd.position == u"start"_ustr)
+            {
+                rSh.StartOfSection();
+            }
+            else if (cmd.position == u"end"_ustr)
+            {
+                rSh.EndOfSection();
+            }
+            // Insert page break
+            rSh.InsertPageBreak();
+            editCount++;
+        }
+        else if (cmd.action == u"apply_style"_ustr)
+        {
+            // Find text and apply named style
+            if (!cmd.findText.isEmpty() && !cmd.styleName.isEmpty())
+            {
+                // First search to select the text
+                i18nutil::SearchOptions2 aSearchOpt;
+                aSearchOpt.searchString = cmd.findText;
+                aSearchOpt.Locale = css::lang::Locale();
+                aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+                sal_Int32 nFound = rSh.SearchPattern(aSearchOpt,
+                    false,
+                    SwDocPositions::Start,
+                    SwDocPositions::End,
+                    FindRanges::InBody,
+                    false);  // Don't replace, just find
+
+                if (nFound > 0 && nFound != SAL_MAX_INT32)
+                {
+                    // Map style name to pool ID
+                    sal_uInt16 nPoolId = RES_POOLCOLL_STANDARD;
+                    if (cmd.styleName == u"Heading 1"_ustr || cmd.styleName == u"Title"_ustr)
+                        nPoolId = RES_POOLCOLL_HEADLINE1;
+                    else if (cmd.styleName == u"Heading 2"_ustr || cmd.styleName == u"Subtitle"_ustr)
+                        nPoolId = RES_POOLCOLL_HEADLINE2;
+                    else if (cmd.styleName == u"Heading 3"_ustr)
+                        nPoolId = RES_POOLCOLL_HEADLINE3;
+                    else if (cmd.styleName == u"Heading 4"_ustr)
+                        nPoolId = RES_POOLCOLL_HEADLINE4;
+                    else if (cmd.styleName == u"Heading 5"_ustr)
+                        nPoolId = RES_POOLCOLL_HEADLINE5;
+                    else if (cmd.styleName == u"Heading 6"_ustr)
+                        nPoolId = RES_POOLCOLL_HEADLINE6;
+                    else if (cmd.styleName == u"Text Body"_ustr)
+                        nPoolId = RES_POOLCOLL_TEXT;
+                    else if (cmd.styleName == u"Quotations"_ustr)
+                        nPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
+                    else if (cmd.styleName == u"Preformatted Text"_ustr)
+                        nPoolId = RES_POOLCOLL_HTML_PRE;
+
+                    SwDoc* pDoc = rSh.GetDoc();
+                    if (pDoc)
+                    {
+                        SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(nPoolId);
+                        if (pColl)
+                            rSh.SetTextFormatColl(pColl);
+                    }
+                    editCount++;
+                }
+            }
+        }
+        else if (cmd.action == u"undo"_ustr)
+        {
+            // Undo operations - limit to reasonable range
+            int steps = std::min(std::max(cmd.undoSteps, 1), 100);
+            for (int i = 0; i < steps; ++i)
+            {
+                if (SfxViewShell* pViewShell = SfxViewShell::Current())
+                {
+                    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+                    if (pDispatcher)
+                        pDispatcher->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+                }
+            }
+            editCount++;
+        }
+        else if (cmd.action == u"redo"_ustr)
+        {
+            // Redo operations - limit to reasonable range
+            int steps = std::min(std::max(cmd.undoSteps, 1), 100);
+            for (int i = 0; i < steps; ++i)
+            {
+                if (SfxViewShell* pViewShell = SfxViewShell::Current())
+                {
+                    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+                    if (pDispatcher)
+                        pDispatcher->Execute(SID_REDO, SfxCallMode::SYNCHRON);
+                }
+            }
+            editCount++;
+        }
     }
 
+    if (execDbg) { fprintf(execDbg, "All actions processed, calling EndAllAction\n"); fflush(execDbg); }
     rSh.EndAllAction();
+    if (execDbg) { fprintf(execDbg, "EndAllAction done, editCount=%d\n", editCount); fflush(execDbg); }
 
     if (editCount > 0)
     {
         OUString msg = OUString::number(editCount) + u" edit(s) applied to document"_ustr;
+        if (execDbg) { fprintf(execDbg, "Calling AppendToChat\n"); fflush(execDbg); }
         AppendToChat(u"System"_ustr, msg);
+        if (execDbg) { fprintf(execDbg, "Calling UpdateStatus\n"); fflush(execDbg); }
         UpdateStatus(msg);
     }
+    if (execDbg) { fprintf(execDbg, "ExecuteAutoEdits complete\n"); fclose(execDbg); }
 }
 
 void AIAssistantPanel::SendMessage(const OUString& message)
@@ -885,36 +1288,54 @@ void AIAssistantPanel::InsertFormattedText(const OUString& text)
             m_pWrtShell->SplitNode();
         bFirstParagraph = false;
 
+        // Get document and style pool - with null checks
+        SwDoc* pDoc = m_pWrtShell->GetDoc();
+        if (!pDoc)
+        {
+            m_pWrtShell->Insert(sLine);
+            continue;
+        }
+
         // Check for heading (## or #)
         if (sLine.startsWith(u"## "))
         {
             OUString sHeadingText = sLine.copy(3);
-            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE2));
+            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE2);
+            if (pColl)
+                m_pWrtShell->SetTextFormatColl(pColl);
             m_pWrtShell->Insert(sHeadingText);
         }
         else if (sLine.startsWith(u"# "))
         {
             OUString sHeadingText = sLine.copy(2);
-            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE1));
+            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HEADLINE1);
+            if (pColl)
+                m_pWrtShell->SetTextFormatColl(pColl);
             m_pWrtShell->Insert(sHeadingText);
         }
         else if (sLine.startsWith(u"- ") || sLine.startsWith(u"* "))
         {
             OUString sBulletText = sLine.copy(2);
-            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            if (pColl)
+                m_pWrtShell->SetTextFormatColl(pColl);
             m_pWrtShell->Insert(u"\u2022 "_ustr + sBulletText);
         }
         else if (sLine.startsWith(u"**") && sLine.endsWith(u"**") && sLine.getLength() > 4)
         {
             OUString sBoldText = sLine.copy(2, sLine.getLength() - 4);
-            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            if (pColl)
+                m_pWrtShell->SetTextFormatColl(pColl);
             SfxItemSet aSet(m_pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
             aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
             m_pWrtShell->Insert(sBoldText);
         }
         else
         {
-            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            if (pColl)
+                m_pWrtShell->SetTextFormatColl(pColl);
             OUString sCleanLine = sLine.replaceAll(u"\\n", u" ");
             m_pWrtShell->Insert(sCleanLine);
         }

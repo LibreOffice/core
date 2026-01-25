@@ -215,10 +215,15 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
                 cmd.italic = extractJsonBool(objStr, "italic");
                 if (dbg) { fprintf(dbg, "    extracting underline...\n"); fflush(dbg); }
                 cmd.underline = extractJsonBool(objStr, "underline");
+                cmd.strikethrough = extractJsonBool(objStr, "strikethrough");
+                cmd.superscript = extractJsonBool(objStr, "superscript");
+                cmd.subscript = extractJsonBool(objStr, "subscript");
                 if (dbg) { fprintf(dbg, "    extracting heading_level...\n"); fflush(dbg); }
                 cmd.headingLevel = extractJsonInt(objStr, "heading_level");
                 if (dbg) { fprintf(dbg, "    extracting font_color...\n"); fflush(dbg); }
                 cmd.fontColor = OUString::fromUtf8(extractJsonString(objStr, "font_color").c_str());
+                cmd.highlightColor = OUString::fromUtf8(extractJsonString(objStr, "highlight_color").c_str());
+                cmd.fontName = OUString::fromUtf8(extractJsonString(objStr, "font_name").c_str());
                 if (dbg) { fprintf(dbg, "    extracting font_size...\n"); fflush(dbg); }
                 // Parse font_size as double from JSON number
                 cmd.fontSize = 0;
@@ -259,6 +264,54 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
                 if (dbg) { fprintf(dbg, "    line_spacing = %f\n", cmd.lineSpacing); fflush(dbg); }
                 cmd.spaceBefore = static_cast<double>(extractJsonInt(objStr, "space_before"));
                 cmd.spaceAfter = static_cast<double>(extractJsonInt(objStr, "space_after"));
+                // Parse indents as double from JSON number
+                {
+                    std::string searchKey = "\"indent_left\":";
+                    size_t keyPos = objStr.find(searchKey);
+                    if (keyPos != std::string::npos) {
+                        size_t valStart = keyPos + searchKey.length();
+                        std::string numStr;
+                        while (valStart < objStr.length() && (isdigit(objStr[valStart]) || objStr[valStart] == '.' || objStr[valStart] == '-')) {
+                            numStr += objStr[valStart++];
+                        }
+                        if (!numStr.empty()) {
+                            try { cmd.indentLeft = std::stod(numStr); } catch (...) {}
+                        }
+                    }
+                }
+                {
+                    std::string searchKey = "\"indent_right\":";
+                    size_t keyPos = objStr.find(searchKey);
+                    if (keyPos != std::string::npos) {
+                        size_t valStart = keyPos + searchKey.length();
+                        std::string numStr;
+                        while (valStart < objStr.length() && (isdigit(objStr[valStart]) || objStr[valStart] == '.' || objStr[valStart] == '-')) {
+                            numStr += objStr[valStart++];
+                        }
+                        if (!numStr.empty()) {
+                            try { cmd.indentRight = std::stod(numStr); } catch (...) {}
+                        }
+                    }
+                }
+                {
+                    std::string searchKey = "\"indent_first_line\":";
+                    size_t keyPos = objStr.find(searchKey);
+                    if (keyPos != std::string::npos) {
+                        size_t valStart = keyPos + searchKey.length();
+                        std::string numStr;
+                        while (valStart < objStr.length() && (isdigit(objStr[valStart]) || objStr[valStart] == '.' || objStr[valStart] == '-')) {
+                            numStr += objStr[valStart++];
+                        }
+                        if (!numStr.empty()) {
+                            try { cmd.indentFirstLine = std::stod(numStr); } catch (...) {}
+                        }
+                    }
+                }
+                // Style application
+                cmd.styleName = OUString::fromUtf8(extractJsonString(objStr, "style_name").c_str());
+                // Undo/Redo steps
+                cmd.undoSteps = extractJsonInt(objStr, "undo_steps");
+                if (cmd.undoSteps <= 0) cmd.undoSteps = 1;  // Default to 1
                 // List creation
                 cmd.listType = OUString::fromUtf8(extractJsonString(objStr, "list_type").c_str());
                 // Parse list_items array
@@ -287,7 +340,66 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
                 cmd.tableRows = extractJsonInt(objStr, "table_rows");
                 cmd.tableColumns = extractJsonInt(objStr, "table_columns");
                 cmd.headerRow = extractJsonBool(objStr, "header_row");
-                // TODO: Parse table_data 2D array if needed
+                // Parse table_data 2D array: [["col1", "col2"], ["cell1", "cell2"]]
+                {
+                    size_t tableDataStart = objStr.find("\"table_data\":");
+                    if (tableDataStart != std::string::npos) {
+                        size_t outerArrStart = objStr.find("[", tableDataStart);
+                        if (outerArrStart != std::string::npos) {
+                            // Find matching closing bracket for outer array
+                            size_t outerArrEnd = outerArrStart;
+                            int tableBracketDepth = 1;
+                            for (size_t i = outerArrStart + 1; i < objStr.length() && tableBracketDepth > 0; ++i) {
+                                if (objStr[i] == '[') tableBracketDepth++;
+                                else if (objStr[i] == ']') tableBracketDepth--;
+                                if (tableBracketDepth == 0) outerArrEnd = i;
+                            }
+                            if (outerArrEnd > outerArrStart) {
+                                // Parse each row (inner array)
+                                size_t pos = outerArrStart + 1;
+                                while (pos < outerArrEnd) {
+                                    // Find start of row array
+                                    size_t rowStart = objStr.find("[", pos);
+                                    if (rowStart == std::string::npos || rowStart >= outerArrEnd) break;
+                                    // Find end of row array
+                                    size_t rowEnd = rowStart;
+                                    int rowDepth = 1;
+                                    for (size_t i = rowStart + 1; i < outerArrEnd && rowDepth > 0; ++i) {
+                                        if (objStr[i] == '[') rowDepth++;
+                                        else if (objStr[i] == ']') rowDepth--;
+                                        if (rowDepth == 0) rowEnd = i;
+                                    }
+                                    if (rowEnd > rowStart) {
+                                        // Parse strings in this row
+                                        std::vector<OUString> rowData;
+                                        std::string rowStr = objStr.substr(rowStart + 1, rowEnd - rowStart - 1);
+                                        size_t strPos = 0;
+                                        while ((strPos = rowStr.find("\"", strPos)) != std::string::npos) {
+                                            size_t strEnd = rowStr.find("\"", strPos + 1);
+                                            // Handle escaped quotes
+                                            while (strEnd != std::string::npos && strEnd > 0 && rowStr[strEnd - 1] == '\\') {
+                                                strEnd = rowStr.find("\"", strEnd + 1);
+                                            }
+                                            if (strEnd != std::string::npos) {
+                                                std::string cellVal = rowStr.substr(strPos + 1, strEnd - strPos - 1);
+                                                rowData.push_back(OUString::fromUtf8(unescapeJson(cellVal).c_str()));
+                                                strPos = strEnd + 1;
+                                            } else {
+                                                break;
+                                            }
+                                        }
+                                        if (!rowData.empty()) {
+                                            cmd.tableData.push_back(rowData);
+                                        }
+                                        pos = rowEnd + 1;
+                                    } else {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 // Search & Replace
                 cmd.caseSensitive = extractJsonBool(objStr, "case_sensitive");
                 cmd.wholeWords = extractJsonBool(objStr, "whole_words");
@@ -296,8 +408,8 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
                     OString actionStr = cmd.action.toUtf8();
                     OString colorStr = cmd.fontColor.toUtf8();
                     OString alignStr = cmd.alignment.toUtf8();
-                    fprintf(dbg, "    action='%s' bold=%d color='%s' asParagraph=%d fontSize=%.1f align='%s' lineSpacing=%.1f listItems=%d rows=%d cols=%d\n",
-                            actionStr.getStr(), cmd.bold ? 1 : 0, colorStr.getStr(), cmd.asParagraph ? 1 : 0, cmd.fontSize, alignStr.getStr(), cmd.lineSpacing, (int)cmd.listItems.size(), cmd.tableRows, cmd.tableColumns);
+                    fprintf(dbg, "    action='%s' bold=%d color='%s' asParagraph=%d fontSize=%.1f align='%s' lineSpacing=%.1f listItems=%d rows=%d cols=%d tableData=%d\n",
+                            actionStr.getStr(), cmd.bold ? 1 : 0, colorStr.getStr(), cmd.asParagraph ? 1 : 0, cmd.fontSize, alignStr.getStr(), cmd.lineSpacing, (int)cmd.listItems.size(), cmd.tableRows, cmd.tableColumns, (int)cmd.tableData.size());
                 }
 
                 if (!cmd.action.isEmpty()) {
@@ -394,7 +506,8 @@ AgentResponse AgentConnection::sendMessage(const OUString& message, const OUStri
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseStr);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);  // 10 seconds to connect
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 120L);  // 120 seconds for full request (LLM can be slow)
     
     CURLcode res = curl_easy_perform(curl);
     
