@@ -1448,23 +1448,21 @@ int Desktop::Main()
                               || std::getenv("LIBO_UPDATER_TEST_RUNNING");
         if (bUpdateRunning)
         {
-            OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
             OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
-
-            OUString aBuildID = Updater::getBuildID();
-            if (aOldBuildID == aBuildID)
+            if (aOldBuildID == Updater::getBuildID())
             {
                 Updater::log("Old and new Build ID are the same. No Updating took place.");
             }
             else
             {
+                OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
                 if (!aSeeAlso.isEmpty())
                 {
                     SAL_INFO("desktop.updater", "See also: " << aSeeAlso);
-                            Reference< css::system::XSystemShellExecute > xSystemShell(
-                    SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                    Reference<css::system::XSystemShellExecute> xSystemShell(
+                        SystemShellExecute::create(::comphelper::getProcessComponentContext()));
 
-                    xSystemShell->execute( aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY );
+                    xSystemShell->execute(aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY);
                 }
             }
 
