@@ -2930,9 +2930,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         SwFlyFrame* pFly = FindFlyFrame();
         if (!pIndPrev && pFly && pFly->IsFlySplitAllowed())
         {
-            auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
-            SwFrame* pAnchor = pFlyAtContent->FindAnchorCharFrame();
-            if (pAnchor)
+            if (SwFrame* pAnchor = pFly->FindAnchorCharFrame())
             {
                 // If the anchor of the split has a previous frame, we're allowed to move forward.
                 pIndPrev = pAnchor->GetIndPrev();
