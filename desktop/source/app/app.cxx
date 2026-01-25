@@ -1485,8 +1485,7 @@ int Desktop::Main()
 
         if (aUpdateFile.is() || std::getenv("LIBO_UPDATER_TEST_UPDATE"))
         {
-            OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
-            rtl::Bootstrap::expandMacros(aBuildID);
+            OUString aBuildID(Updater::getBuildID());
             std::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
             officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
