@@ -2232,7 +2232,6 @@ rtl::Reference<SvxShapeText>
             // Lock during property update to prevent unnecessary layout work.
             xShape->addActionLock();
 
-            uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
             if(bStackCharacters)
             {
                 //if the characters should be stacked we use only the first character properties for code simplicity
