@@ -6080,7 +6080,9 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     }
 
     // Probe the main range token, and try if we can shrink the range without altering results.
-    const formula::FormulaToken* pMainRangeToken = pStack[ sp-nParamCount ];
+    const bool bIsCountIfs = (nParamCount % 2) == 0;
+    const formula::FormulaToken* pMainRangeToken
+        = bIsCountIfs ? pStack[sp - 1] : pStack[sp - nParamCount];
     if (pMainRangeToken->GetType() == svDoubleRef && bHasDoubleRefCriteriaRanges)
     {
         const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
@@ -6305,8 +6307,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
 
             // Undo bRangeReduce if asked to match empty cells for COUNTIFS (which should be rare).
             assert(rEntry.GetQueryItems().size() == 1);
-            const bool isCountIfs = (nParamCount % 2) == 0;
-            if(isCountIfs && (rEntry.IsQueryByEmpty() || rItem.mbMatchEmpty) && bRangeReduce)
+            if(bIsCountIfs && (rEntry.IsQueryByEmpty() || rItem.mbMatchEmpty) && bRangeReduce)
             {
                 bRangeReduce = false;
                 // All criteria ranges are svDoubleRef's, so only vConditions needs adjusting.
