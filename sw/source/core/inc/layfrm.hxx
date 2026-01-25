@@ -22,6 +22,8 @@
 #include "frame.hxx"
 #include <swdllapi.h>
 
+#include <utility>
+
 class SwAnchoredObject;
 class SwContentFrame;
 class SwFormatCol;
@@ -189,17 +191,17 @@ public:
  */
 inline SwContentFrame* SwLayoutFrame::ContainsContent()
 {
-    return const_cast<SwContentFrame*>(static_cast<const SwLayoutFrame*>(this)->ContainsContent());
+    return const_cast<SwContentFrame*>(std::as_const(*this).ContainsContent());
 }
 
 inline SwCellFrame* SwLayoutFrame::FirstCell()
 {
-    return const_cast<SwCellFrame*>(static_cast<const SwLayoutFrame*>(this)->FirstCell());
+    return const_cast<SwCellFrame*>(std::as_const(*this).FirstCell());
 }
 
 inline SwFrame* SwLayoutFrame::ContainsAny( const bool _bInvestigateFootnoteForSections )
 {
-    return const_cast<SwFrame*>(static_cast<const SwLayoutFrame*>(this)->ContainsAny( _bInvestigateFootnoteForSections ));
+    return const_cast<SwFrame*>(std::as_const(*this).ContainsAny(_bInvestigateFootnoteForSections));
 }
 
 /**
@@ -217,7 +219,7 @@ inline bool SwFrame::IsPageBodyFrame() const
 
 inline SwFrame* SwLayoutFrame::GetLastLower()
 {
-    return const_cast<SwFrame*>(static_cast<const SwLayoutFrame*>(this)->GetLastLower());
+    return const_cast<SwFrame*>(std::as_const(*this).GetLastLower());
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_LAYFRM_HXX
