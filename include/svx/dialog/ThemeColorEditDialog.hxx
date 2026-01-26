@@ -19,8 +19,7 @@ class ColorListBox;
 
 namespace svx
 {
-class UNLESS_MERGELIBS(SVX_DLLPUBLIC) ThemeColorEditDialog final
-    : public weld::GenericDialogController
+class SVX_DLLPUBLIC ThemeColorEditDialog final : public weld::GenericDialogController
 {
 private:
     model::ColorSet maColorSet;

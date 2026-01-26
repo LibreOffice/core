@@ -12680,6 +12680,23 @@ SfxVoidItem ThemeDialog SID_THEME_DIALOG
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem AddTheme SID_ADD_THEME
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxBoolItem AccessibilityCheckOnline SID_ACCESSIBILITY_CHECK_ONLINE
 (SfxBoolItem Enable FN_PARAM_1)
 [
