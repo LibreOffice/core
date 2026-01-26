@@ -2342,6 +2342,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf170381_split_float_table_in_float_t
         assertCellLines(2, r + 1, page2cells[r]);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf170477)
+{
+    // This document must not hang on layout:
+    createSwDoc("tdf170477.docx");
+    calcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
