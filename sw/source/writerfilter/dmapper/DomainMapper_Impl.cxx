@@ -9667,6 +9667,13 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         }
     }
 
+    if (m_pSdtHelper->getControlType() == SdtControlType::plainText
+        && (m_StreamStateStack.top().bSdt || GetSdtStarts().size()))
+    {
+        // plainText controls cannot contain pictures or shapes
+        m_pSdtHelper->setControlType(SdtControlType::richText);
+    }
+
 
     // Update the shape properties if it is embedded object.
     if (m_StreamStateStack.top().xEmbedded.is())
