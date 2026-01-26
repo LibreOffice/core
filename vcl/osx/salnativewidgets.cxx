@@ -440,7 +440,7 @@ static void drawBox(CGContextRef context, const NSRect& rc, NSColor* pColor)
 static void drawEditableBackground(CGContextRef context, const NSRect& rc)
 {
     CGContextSaveGState(context);
-    if (ThemeColors::VclPluginCanUseThemeColors())
+    if (ThemeColors::IsThemeLoaded())
         CGContextSetFillColorWithColor(context, colorFromRGB(ThemeColors::GetThemeColors().GetBaseColor()).CGColor);
     else
         CGContextSetFillColorWithColor(context, [NSColor controlBackgroundColor].CGColor);
@@ -460,14 +460,14 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                                 AquaSalFrame* mpFrame)
 {
     bool bOK = false;
-    bool bCanUseThemeColors(ThemeColors::VclPluginCanUseThemeColors());
+    bool bThemeLoaded(ThemeColors::IsThemeLoaded());
     AquaSalInstance* pInst = GetSalData()->mpInstance;
     HIRect rc = ImplGetHIRectFromRectangle(rControlRegion);
     switch (nType)
     {
         case ControlType::Toolbar:
             {
-                if (bCanUseThemeColors)
+                if (bThemeLoaded)
                     drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetWindowColor()));
                 else
                     drawBox(context, rc, NSColor.windowBackgroundColor);
@@ -476,7 +476,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
             break;
         case ControlType::WindowBackground:
             {
-                if (bCanUseThemeColors)
+                if (bThemeLoaded)
                     drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetWindowColor()));
                 else
                     drawBox(context, rc, NSColor.windowBackgroundColor);
@@ -487,7 +487,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
             {
                 rc.size.width += 2;
                 rc.size.height += 2;
-                if (bCanUseThemeColors)
+                if (bThemeLoaded)
                     drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetBaseColor()));
                 else
                     drawBox(context, rc, NSColor.controlBackgroundColor);
@@ -755,7 +755,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                                                     ? static_cast<const ScrollbarValue *>(&aValue) : nullptr;
                 if (nPart == ControlPart::DrawBackgroundVert || nPart == ControlPart::DrawBackgroundHorz)
                 {
-                    if (bCanUseThemeColors)
+                    if (bThemeLoaded)
                         drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetBaseColor()));
                     else
                         drawBox(context, rc, NSColor.controlBackgroundColor);

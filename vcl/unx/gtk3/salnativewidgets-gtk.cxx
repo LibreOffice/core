@@ -28,6 +28,7 @@
 #include "custom-theme.hxx"
 #include <vcl/themecolors.hxx>
 #include "gtkcairo.hxx"
+#include <optional>
 
 GtkCssProvider*  GtkSalGraphics::mpCustomThemeProvider = nullptr;
 GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;
@@ -2677,7 +2678,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMinThumbSize(min_slider_length);
 
     // preferred icon style
-    if (!ThemeColors::VclPluginCanUseThemeColors())
+    if (!ThemeColors::IsThemeLoaded())
     {
         gchar* pIconThemeName = nullptr;
         gboolean bDarkIconTheme = false;
@@ -2704,7 +2705,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // High contrast
     aStyleSet.SetHighContrastMode(g_strcmp0(pThemeName, "HighContrast") == 0);
     g_free(pThemeName);
-    aStyleSet.SetSystemColorsLoaded(true);
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );

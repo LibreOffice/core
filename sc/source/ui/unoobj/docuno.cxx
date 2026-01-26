@@ -513,12 +513,8 @@ static OString getTabViewRenderState(ScTabViewShell& rTabViewShell)
 
     if (rTabViewShell.IsAutoSpell())
         aState.append('S');
-    if (!ThemeColors::UseOnlyWhiteDocBackground())
-    {
-        if (rViewRenderingOptions.GetDocColor()
-            == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
-            aState.append('D');
-    }
+    if (rViewRenderingOptions.GetDocColor() == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
+        aState.append('D');
 
     aState.append(';');
 

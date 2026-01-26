@@ -11,78 +11,22 @@
 #include <vcl/dllapi.h>
 #include <svtools/colorcfg.hxx>
 
-/* ThemeState represents registry values for "LibreOfficeTheme" enumeration
- * in officecfg/registry/schema/org/openoffice/Office/Common.xcs, which means
- * that the associations here have a meaning. Please don't change it. */
-enum class ThemeState
-{
-    DISABLED = 0,
-    ENABLED = 1,
-    RESET = 2,
-};
-
-/*
-  AUTO          app colors follow os, light doc colors (default)
-  LIGHT         app colors follow os, light doc colors
-  DARK          app colors follow os, dark  doc colors
-  COUNT         app color modes count
-*/
-enum class AppearanceMode
-{
-    AUTO = 0,
-    LIGHT = 1,
-    DARK = 2,
-    COUNT,
-};
-
 class VCL_DLLPUBLIC ThemeColors
 {
     ThemeColors() {}
-    static bool m_bIsThemeCached;
+    static bool m_bIsThemeLoaded;
     static ThemeColors m_aThemeColors;
 
 public:
     static ThemeColors& GetThemeColors() { return m_aThemeColors; }
     static void SetThemeColors(const ThemeColors& rThemeColors) { m_aThemeColors = rThemeColors; }
 
-    static bool IsThemeCached() { return m_bIsThemeCached; }
-    static void SetThemeCached(bool bCached) { m_bIsThemeCached = bCached; }
+    static bool IsThemeLoaded() { return m_bIsThemeLoaded; }
+    static void SetThemeLoaded(bool bLoaded) { m_bIsThemeLoaded = bLoaded; }
     static bool IsAutomaticTheme(std::u16string_view rThemeName)
     {
         return rThemeName == svtools::AUTOMATIC_COLOR_SCHEME;
     }
-
-    static bool IsLightTheme(std::u16string_view rThemeName)
-    {
-        return rThemeName == svtools::LIGHT_COLOR_SCHEME;
-    }
-
-    static bool IsDarkTheme(std::u16string_view rThemeName)
-    {
-        return rThemeName == svtools::DARK_COLOR_SCHEME;
-    }
-
-    static bool IsCustomTheme(std::u16string_view rThemeName)
-    {
-        return !IsAutomaticTheme(rThemeName) && !IsLightTheme(rThemeName)
-               && !IsDarkTheme(rThemeName);
-    }
-
-    static ThemeState GetThemeState();
-    static void SetThemeState(ThemeState eState);
-
-    static bool IsThemeDisabled() { return GetThemeState() == ThemeState::DISABLED; };
-    static bool IsThemeEnabled() { return GetThemeState() == ThemeState::ENABLED; };
-    static bool IsThemeReset() { return GetThemeState() == ThemeState::RESET; }
-    static void ResetTheme() { SetThemeState(ThemeState::RESET); }
-
-    static bool UseOnlyWhiteDocBackground();
-    static void SetUseOnlyWhiteDocBackground(bool bFlag);
-
-    // !IsThemeCached means that the ThemeColors object doesn't have the colors from the registry yet.
-    // IsThemeReset means that the user pressed the Reset All  button and the UI colors in the registry
-    //      are not valid anymore => read from the system again
-    static bool VclPluginCanUseThemeColors() { return IsThemeCached() && !IsThemeReset(); };
 
     void SetWindowColor(const Color& rColor) { m_aWindowColor = rColor; }
     void SetWindowTextColor(const Color& rColor) { m_aWindowTextColor = rColor; }

@@ -21,4 +21,5 @@ void ApplyCustomTheme(GdkScreen* pScreen, GtkCssProvider** pCustomThemeProvider)
 #endif
 
 OString CreateStyleString();
+void LoadColorsFromTheme(StyleSettings& rStyleSet);
 }

@@ -5177,29 +5177,11 @@
       <info>
         <desc>Specifies appearance settings for the application.</desc>
       </info>
-      <prop oor:name="LibreOfficeTheme" oor:type="xs:short" oor:nillable="false">
+      <prop oor:name="LibreOfficeTheme" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Specifies LibreOfficeTheme state.</desc>
-          <label>LibreOffice Theme</label>
+          <desc>Enable UI Themeing in LibreOffice.</desc>
         </info>
-        <constraints>
-          <enumeration oor:value="0">
-            <info>
-              <desc>Disabled</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="1">
-            <info>
-              <desc>Enabled</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="2">
-            <info>
-              <desc>Reset</desc>
-            </info>
-          </enumeration>
-        </constraints>
-        <value>1</value>
+        <value>false</value>
       </prop>
       <prop oor:name="ApplicationAppearance" oor:type="xs:short" oor:nillable="false">
         <info>
@@ -5224,14 +5206,6 @@
           </enumeration>
         </constraints>
         <value>0</value>
-      </prop>
-      <prop oor:name="UseOnlyWhiteDocBackground" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Use only white colors for document background and don't let
-          the theme change it.</desc>
-          <label>Use white document background</label>
-        </info>
-        <value>true</value>
       </prop>
     </group>
     <group oor:name="Misc">

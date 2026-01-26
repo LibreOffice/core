@@ -18,7 +18,7 @@
 void QtCustomStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* option,
                                   QPainter* painter, const QWidget* widget) const
 {
-    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
+    if (!ThemeColors::IsThemeLoaded() || IsSystemThemeChanged())
     {
         QProxyStyle::drawPrimitive(element, option, painter, widget);
         return;
@@ -45,7 +45,7 @@ void QtCustomStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* 
 
 QPalette QtCustomStyle::customPalette()
 {
-    if (!ThemeColors::IsThemeCached())
+    if (!ThemeColors::IsThemeLoaded())
         return QApplication::palette();
 
     const ThemeColors& aThemeColors = ThemeColors::GetThemeColors();
@@ -75,7 +75,7 @@ QPalette QtCustomStyle::customPalette()
 
 QPalette QtCustomStyle::GetMenuBarPalette()
 {
-    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
+    if (!ThemeColors::IsThemeLoaded() || IsSystemThemeChanged())
         return QApplication::palette();
 
     QPalette aPal;
@@ -92,7 +92,7 @@ QPalette QtCustomStyle::GetMenuBarPalette()
 
 QPalette QtCustomStyle::GetMenuPalette()
 {
-    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
+    if (!ThemeColors::IsThemeLoaded() || IsSystemThemeChanged())
         return QApplication::palette();
 
     QPalette aPal;
@@ -129,7 +129,8 @@ bool QtCustomStyle::IsSystemThemeChanged()
 
 void QtCustomStyle::LoadCustomStyle(bool bDarkMode)
 {
-    if (!ThemeColors::VclPluginCanUseThemeColors())
+    if (!ThemeColors::IsThemeLoaded()
+        || ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
         return;
 
     // don't set custom palette in case the system theme has been changed.

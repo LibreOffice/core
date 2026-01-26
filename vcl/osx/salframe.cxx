@@ -1415,16 +1415,16 @@ void AquaSalFrame::UpdateDarkMode()
 
     switch (MiscSettings::GetDarkMode())
     {
-        case AppearanceMode::AUTO:
+        case 0: // auto
         default:
             if (pCurrentAppearance)
                 [NSApp setAppearance: nil];
             break;
-        case AppearanceMode::LIGHT:
+        case 1: // light
             if (!pCurrentAppearance || ![NSAppearanceNameAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
             break;
-        case AppearanceMode::DARK:
+        case 2: // dark
             if (!pCurrentAppearance || ![NSAppearanceNameDarkAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
             break;
@@ -1566,7 +1566,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
     bool bUseDarkMode(GetUseDarkMode());
-    if (!ThemeColors::VclPluginCanUseThemeColors())
+    if (!ThemeColors::IsThemeLoaded())
     {
         OUString sThemeName(!bUseDarkMode ? u"sukapura_svg" : u"sukapura_dark_svg");
         aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
@@ -1740,9 +1740,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetHideDisabledMenuItems( true );
     aStyleSettings.SetPreferredContextMenuShortcuts( false );
 
-    if (ThemeColors::VclPluginCanUseThemeColors())
+    if (ThemeColors::IsThemeLoaded())
         lcl_LoadColorsFromTheme(aStyleSettings);
-    aStyleSettings.SetSystemColorsLoaded(true);
 
     rSettings.SetStyleSettings( aStyleSettings );
 

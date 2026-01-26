@@ -410,7 +410,7 @@ bool UseDarkMode()
     bool bRet(false);
     switch (MiscSettings::GetDarkMode())
     {
-        case AppearanceMode::AUTO:
+        case 0: // auto
         default:
         {
             HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -424,10 +424,10 @@ bool UseDarkMode()
             FreeLibrary(hUxthemeLib);
             break;
         }
-        case AppearanceMode::LIGHT:
+        case 1: // light
             bRet = false;
             break;
-        case AppearanceMode::DARK:
+        case 2: // dark
             bRet = true;
             break;
     }
@@ -550,28 +550,25 @@ static bool drawThemedControl(HDC hDC, ControlType nType, int iPart, int iState,
         if (iPart == BP_PUSHBUTTON)
         {
             Color aButtonColor = ThemeColors::GetThemeColors().GetButtonColor();
-            Color aButtonRectColor = ThemeColors::GetThemeColors().GetDisabledColor();
+            const Color& rButtonRectColor = ThemeColors::GetThemeColors().GetDisabledColor();
 
             if (iState == PBS_PRESSED)
-                aButtonColor.Merge(aButtonRectColor, 230);
+                aButtonColor.Merge(rButtonRectColor, 230);
             else if (iState == PBS_DISABLED)
-                if (UseDarkMode())
-                    aButtonRectColor.DecreaseLuminance(150);
-                else
-                    aButtonRectColor.IncreaseLuminance(150);
+                aButtonColor = ThemeColors::GetThemeColors().GetDisabledColor();
             else if (iState == PBS_HOT)
-                aButtonColor.Merge(aButtonRectColor, 170);
+                aButtonColor.Merge(rButtonRectColor, 170);
             else if (iState == PBS_DEFAULTED)
-                aButtonColor.Merge(aButtonRectColor, 150);
+                aButtonColor.Merge(rButtonRectColor, 150);
 
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aButtonColor.GetRed(),
                                                      aButtonColor.GetGreen(),
                                                      aButtonColor.GetBlue())));
             FillRect(hDC, &rc, hbrush.get());
 
-            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(aButtonRectColor.GetRed(),
-                                                       aButtonRectColor.GetGreen(),
-                                                       aButtonRectColor.GetBlue())));
+            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(rButtonRectColor.GetRed(),
+                                                       rButtonRectColor.GetGreen(),
+                                                       rButtonRectColor.GetBlue())));
             FrameRect(hDC, &rc, hbrush.get());
             return true;
         }
@@ -673,7 +670,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == ControlPart::Entire )
             nType = ControlType::Editbox;
 
-    bool bCanUseThemeColors = ThemeColors::VclPluginCanUseThemeColors();
+    bool bThemeLoaded = ThemeColors::IsThemeLoaded();
     int iPart(0), iState(0);
     if( nType == ControlType::Scrollbar )
     {
@@ -690,7 +687,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = ABS_UPNORMAL;
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -708,7 +705,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = ABS_DOWNNORMAL;
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -726,7 +723,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = ABS_LEFTNORMAL;
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -744,7 +741,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = ABS_RIGHTNORMAL;
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -767,7 +764,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_TRUE, &sz);
             GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_DRAW, &sz);
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -801,7 +798,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = SCRBS_NORMAL;
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
@@ -932,7 +929,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else
             iState = PBS_NORMAL;
 
-        if (bCanUseThemeColors)
+        if (bThemeLoaded)
             return drawThemedControl(hDC, nType, iPart, iState, rc);
 
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -998,7 +995,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else
             iState = EPSN_NORMAL;
 
-        if (bCanUseThemeColors)
+        if (bThemeLoaded)
             return drawThemedControl(hDC, nType, iPart, iState, rc);
 
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -1032,7 +1029,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     {
         // tabpane in tabcontrols gets drawn in "darkmode" as if it was a
         // a "light" theme, so bodge this by drawing a frame directly
-        if (bCanUseThemeColors || bUseDarkMode)
+        if (bThemeLoaded || bUseDarkMode)
         {
             Color aColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -1048,7 +1045,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::TabBody )
     {
         // tabbody in main window gets drawn in white in "darkmode", so bodge this here
-        if (bCanUseThemeColors || bUseDarkMode)
+        if (bThemeLoaded || bUseDarkMode)
         {
             Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -1108,7 +1105,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
         // tabitem in tabcontrols gets drawn in "darkmode" as if it was a
         // a "light" theme, so bodge this by drawing with a button instead
-        if (bCanUseThemeColors || bUseDarkMode)
+        if (bThemeLoaded || bUseDarkMode)
         {
             Color aColor;
             if (iState == TILES_SELECTED)
@@ -1158,7 +1155,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = bChecked ? TS_CHECKED : TS_NORMAL;
 
-            if (bCanUseThemeColors)
+            if (bThemeLoaded)
                 return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             if (bUseDarkMode && (bChecked || (nState & (ControlState::PRESSED) || (nState & ControlState::ROLLOVER))))
@@ -1203,7 +1200,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
 
             // toolbar in main window gets drawn in white in "darkmode", so bodge this here
-            if (bCanUseThemeColors || bUseDarkMode)
+            if (bThemeLoaded || bUseDarkMode)
             {
                 Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
                 ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -1235,10 +1232,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
 
                 // menubar in main window gets drawn in white in "darkmode", so bodge this here
-                if (bCanUseThemeColors || bUseDarkMode)
+                if (bThemeLoaded || bUseDarkMode)
                 {
                     Color aColor
-                        = bCanUseThemeColors
+                        = bThemeLoaded
                               ? ThemeColors::GetThemeColors().GetMenuBarColor()
                               : Application::GetSettings().GetStyleSettings().GetWindowColor();
                     ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -1269,12 +1266,12 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 else
                     iState = MBI_NORMAL;
 
-                if (bCanUseThemeColors
+                if (bThemeLoaded
                     || (GetSalData()->mbThemeMenuSupport
                         && Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                         && (nState & (ControlState::SELECTED | nState & ControlState::ROLLOVER))))
                 {
-                    Color aColor = bCanUseThemeColors
+                    Color aColor = bThemeLoaded
                               ? ThemeColors::GetThemeColors().GetMenuBarHighlightColor()
                               : Application::GetSettings().GetStyleSettings().GetHighlightColor();
 
@@ -1420,7 +1417,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     aGutterRC.right = aGutterRC.left+3;
                 }
 
-                if (bCanUseThemeColors)
+                if (bThemeLoaded)
                     return drawThemedControl(hDC, nType, MENU_POPUPBACKGROUND, iState, rc);
 
                 return
@@ -1435,7 +1432,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 else
                     iState = (nState & ControlState::SELECTED) ? MPI_DISABLEDHOT : MPI_DISABLED;
 
-                if (bCanUseThemeColors)
+                if (bThemeLoaded)
                     return drawThemedControl(hDC, nType, MENU_POPUPITEM, iState, rc);
 
                 return ImplDrawTheme( hTheme, hDC, MENU_POPUPITEM, iState, rc, aCaption );
@@ -1908,17 +1905,17 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     Color aMenuBarTextColor = aStyleSettings.GetMenuTextColor();
     // in aero menuitem highlight text is drawn in the same color as normal
     // high contrast highlight color is not related to persona and not apply blur or transparency
-    bool bCanUseThemeColors = ThemeColors::VclPluginCanUseThemeColors();
-    if( bCanUseThemeColors || !aStyleSettings.GetHighContrastMode() )
+    bool bThemeLoaded = ThemeColors::IsThemeLoaded();
+    if( bThemeLoaded || !aStyleSettings.GetHighContrastMode() )
     {
         const ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
-        aStyleSettings.SetMenuHighlightTextColor(bCanUseThemeColors
+        aStyleSettings.SetMenuHighlightTextColor(bThemeLoaded
                                                      ? rThemeColors.GetMenuHighlightTextColor()
                                                      : aStyleSettings.GetMenuTextColor());
         aStyleSettings.SetMenuBarRolloverTextColor(
-            bCanUseThemeColors ? rThemeColors.GetMenuBarHighlightTextColor() : aMenuBarTextColor);
+            bThemeLoaded ? rThemeColors.GetMenuBarHighlightTextColor() : aMenuBarTextColor);
         aStyleSettings.SetMenuBarHighlightTextColor(
-            bCanUseThemeColors ? rThemeColors.GetMenuBarHighlightTextColor() : aMenuBarTextColor);
+            bThemeLoaded ? rThemeColors.GetMenuBarHighlightTextColor() : aMenuBarTextColor);
     }
 
     pSVData->maNWFData.mnMenuFormatBorderX = 2;

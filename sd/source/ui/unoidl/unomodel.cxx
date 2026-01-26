@@ -3974,12 +3974,8 @@ OString SdXImpressDocument::getViewRenderState(SfxViewShell* pViewShell)
         const SdViewOptions& pVOpt = pView->GetViewOptions();
         if (mpDoc && mpDoc->GetOnlineSpell())
             aState.append('S');
-        if (!ThemeColors::UseOnlyWhiteDocBackground())
-        {
-            if (pVOpt.mnDocBackgroundColor
-                == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR))
-                aState.append('D');
-        }
+        if (pVOpt.mnDocBackgroundColor == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
+            aState.append('D');
         aState.append(';');
 
         OString aThemeName = OUStringToOString(pVOpt.msColorSchemeName, RTL_TEXTENCODING_UTF8);

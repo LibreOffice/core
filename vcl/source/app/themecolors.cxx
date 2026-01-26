@@ -7,33 +7,8 @@
  */
 
 #include <vcl/themecolors.hxx>
-#include <officecfg/Office/Common.hxx>
 
 ThemeColors ThemeColors::m_aThemeColors;
-bool ThemeColors::m_bIsThemeCached = false;
-
-void ThemeColors::SetThemeState(ThemeState eState)
-{
-    auto pChange(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::LibreOfficeTheme::set(static_cast<int>(eState), pChange);
-    pChange->commit();
-}
-
-ThemeState ThemeColors::GetThemeState()
-{
-    return static_cast<ThemeState>(officecfg::Office::Common::Appearance::LibreOfficeTheme::get());
-}
-
-bool ThemeColors::UseOnlyWhiteDocBackground()
-{
-    return officecfg::Office::Common::Appearance::UseOnlyWhiteDocBackground::get();
-}
-
-void ThemeColors::SetUseOnlyWhiteDocBackground(bool bFlag)
-{
-    auto pChange(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::UseOnlyWhiteDocBackground::set(bFlag, pChange);
-    pChange->commit();
-}
+bool ThemeColors::m_bIsThemeLoaded = false;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

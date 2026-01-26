@@ -271,13 +271,13 @@ static void UpdateDarkMode(HWND hWnd)
     {
         switch (MiscSettings::GetDarkMode())
         {
-            case AppearanceMode::AUTO:
+            case 0:
                 SetPreferredAppMode(AllowDark);
                 break;
-            case AppearanceMode::LIGHT:
+            case 1:
                 SetPreferredAppMode(ForceLight);
                 break;
-            case AppearanceMode::DARK:
+            case 2:
                 SetPreferredAppMode(ForceDark);
                 break;
         }
@@ -2774,7 +2774,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     const bool bUseDarkMode(UseDarkMode());
-    if (!ThemeColors::VclPluginCanUseThemeColors())
+    if (!ThemeColors::IsThemeLoaded())
     {
         OUString sThemeName(!bUseDarkMode ? u"colibre" : u"colibre_dark");
         aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
@@ -3016,9 +3016,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // otherwise, menu shows up as white in dark mode
     aStyleSettings.SetMenuColor(aStyleSettings.GetWindowColor());
-    if (ThemeColors::VclPluginCanUseThemeColors())
+    if (ThemeColors::IsThemeLoaded())
         lcl_LoadColorsFromTheme(aStyleSettings);
-    aStyleSettings.SetSystemColorsLoaded(true);
 
     rSettings.SetMouseSettings( aMouseSettings );
     rSettings.SetStyleSettings( aStyleSettings );

@@ -484,10 +484,12 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
 
 void QtMenu::DoFullMenuUpdate(Menu* pMenuBar)
 {
-    if (mpQMenuBar && ThemeColors::VclPluginCanUseThemeColors())
+    if (mpQMenuBar && ThemeColors::IsThemeLoaded()
+        && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
         mpQMenuBar->setPalette(QtCustomStyle::GetMenuBarPalette());
 
-    if (mpQMenu && ThemeColors::VclPluginCanUseThemeColors())
+    if (mpQMenu && ThemeColors::IsThemeLoaded()
+        && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
         mpQMenu->setPalette(QtCustomStyle::GetMenuPalette());
 
     // clear action groups since menu is rebuilt

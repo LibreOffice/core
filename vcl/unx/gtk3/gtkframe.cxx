@@ -1370,7 +1370,7 @@ void GtkSalFrame::SetColorScheme(GVariant* variant)
     switch (MiscSettings::GetAppColorMode())
     {
         default:
-        case AppearanceMode::AUTO:
+        case 0: // Auto
         {
             if (variant)
             {
@@ -1382,10 +1382,10 @@ void GtkSalFrame::SetColorScheme(GVariant* variant)
                 color_scheme = DEFAULT;
             break;
         }
-        case AppearanceMode::LIGHT:
+        case 1: // Light
             color_scheme = PREFER_LIGHT;
             break;
-        case AppearanceMode::DARK:
+        case 2: // Dark
             color_scheme = PREFER_DARK;
             break;
     }

@@ -3629,12 +3629,9 @@ OString SwXTextDocument::getViewRenderState(SfxViewShell* pViewShell)
                 aState.append('P');
             if (pVOpt->IsOnlineSpell())
                 aState.append('S');
-            if (!ThemeColors::UseOnlyWhiteDocBackground())
-            {
-                if (pVOpt->GetDocColor()
-                    == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
-                    aState.append('D');
-            }
+            if (pVOpt->GetDocColor() == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
+                aState.append('D');
+
             if (pView->IsSpotlightParaStyles() || pView->IsSpotlightCharStyles())
             {
                 aState.append('H');

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/themecolors.hxx>
 #include <config_folders.h>
 
 #include <officecfg/Office/Common.hxx>
@@ -232,7 +233,6 @@ struct ImplStyleData
     bool mbSkipDisabledInMenus : 1;
     bool mbHideDisabledMenuItems : 1;
     bool mbPreferredContextMenuShortcuts : 1;
-    bool mbSystemColorsLoaded : 1;
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
     bool mbPrimaryButtonWarpsSlider : 1;
@@ -589,7 +589,6 @@ void ImplStyleData::SetStandardStyles()
     mbSkipDisabledInMenus           = false;
     mbHideDisabledMenuItems         = false;
     mbPreferredContextMenuShortcuts = true;
-    mbSystemColorsLoaded            = false;
     mbPrimaryButtonWarpsSlider      = false;
 }
 
@@ -602,18 +601,6 @@ void
 StyleSettings::SetFaceColor( const Color& rColor )
 {
     mxData->maColors.maFaceColor = rColor;
-}
-
-void
-StyleSettings::SetSystemColorsLoaded( bool bLoaded )
-{
-    mxData->mbSystemColorsLoaded = bLoaded;
-}
-
-bool
-StyleSettings::GetSystemColorsLoaded() const
-{
-    return mxData->mbSystemColorsLoaded;
 }
 
 const Color&
@@ -2246,7 +2233,6 @@ bool ImplStyleData::operator==(const ImplStyleData& rSet) const
            (mbSkipDisabledInMenus             == rSet.mbSkipDisabledInMenus)              &&
            (mbHideDisabledMenuItems           == rSet.mbHideDisabledMenuItems)            &&
            (mbPreferredContextMenuShortcuts   == rSet.mbPreferredContextMenuShortcuts)    &&
-           (mbSystemColorsLoaded              == rSet.mbSystemColorsLoaded)               &&
            (meContextMenuShortcuts            == rSet.meContextMenuShortcuts)             &&
            (mbPrimaryButtonWarpsSlider        == rSet.mbPrimaryButtonWarpsSlider)         &&
            (mnEdgeBlending                    == rSet.mnEdgeBlending)                     &&
@@ -2326,16 +2312,16 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
     return mxData->mbEnableLocalizedDecimalSep;
 }
 
-AppearanceMode MiscSettings::GetDarkMode()
+int MiscSettings::GetDarkMode()
 {
     // MiscSettings::GetAppColorMode() replaces MiscSettings::GetDarkMode()
     return MiscSettings::GetAppColorMode();
 }
 
-void MiscSettings::SetDarkMode(AppearanceMode eMode)
+void MiscSettings::SetDarkMode(int nMode)
 {
     // MiscSettings::SetAppColorMode() replaces MiscSettings::SetDarkMode()
-    MiscSettings::SetAppColorMode(eMode);
+    MiscSettings::SetAppColorMode(nMode);
 }
 
 bool MiscSettings::GetUseDarkMode()
@@ -2346,26 +2332,14 @@ bool MiscSettings::GetUseDarkMode()
     return pDefWindow->ImplGetFrame()->GetUseDarkMode();
 }
 
-AppearanceMode MiscSettings::GetAppColorMode()
+int MiscSettings::GetAppColorMode()
 {
     if (comphelper::IsFuzzing())
-        return AppearanceMode::AUTO;
-
-    int nMode = officecfg::Office::Common::Appearance::ApplicationAppearance::get();
-
-    // check for invalid appearance mode, and if found, set it back to AUTO
-    if (nMode < static_cast<int>(AppearanceMode::AUTO)
-        || static_cast<int>(AppearanceMode::COUNT) <= nMode)
-    {
-        SAL_WARN("vcl.app", "invalid appearance mode! setting back to AppearanceMode::AUTO");
-        MiscSettings::SetAppColorMode(AppearanceMode::AUTO);
-        return AppearanceMode::AUTO;
-    }
-
-    return static_cast<AppearanceMode>(nMode);
+        return 0;
+    return officecfg::Office::Common::Appearance::ApplicationAppearance::get();
 }
 
-void MiscSettings::SetAppColorMode(AppearanceMode eMode)
+void MiscSettings::SetAppColorMode(int nMode)
 {
     // Partial: tdf#156855 update native and LibreOffice dark mode states
     // Updating the dark mode state of everything all at once does not
@@ -2378,8 +2352,7 @@ void MiscSettings::SetAppColorMode(AppearanceMode eMode)
 
     // 1. Save the new mode.
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::ApplicationAppearance::set(static_cast<int>(eMode),
-                                                                      batch);
+    officecfg::Office::Common::Appearance::ApplicationAppearance::set(nMode, batch);
     batch->commit();
 
     // 2. Force the native windows to update their dark mode state so
@@ -2396,8 +2369,8 @@ void MiscSettings::SetAppColorMode(AppearanceMode eMode)
     //    is disabled during this step to stop SalFrame::UpdateSettings()
     //    from adding the current theme's colors which are still set to
     //    the previous light/dark mode's colors.
-    if (ThemeColors::IsThemeCached())
-        ThemeColors::SetThemeCached(false);
+    if (ThemeColors::IsThemeLoaded())
+        ThemeColors::SetThemeLoaded(false);
     AllSettings aSettings = Application::GetSettings();
     Application::MergeSystemSettings(aSettings);
     Application *pApp = GetpApp();

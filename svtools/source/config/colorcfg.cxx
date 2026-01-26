@@ -171,8 +171,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
     m_sLoadedScheme = sScheme;
 
-    // use automatic theme as the fallback, in case the theme extension was removed
-    if (ThemeColors::IsCustomTheme(sScheme))
+    // in cases like theme not found or extension removal, use AUTOMATIC_COLOR_SCHEME as fallback.
+    if (!ThemeColors::IsAutomaticTheme(sScheme))
     {
         uno::Sequence<OUString> aSchemes = GetSchemeNames();
         bool bFound = false;
@@ -214,8 +214,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         ++nIndex;
 
         bool bIsDarkMode
-            = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
-              || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO && MiscSettings::GetUseDarkMode());
+            = MiscSettings::GetAppColorMode() == 2
+              || (MiscSettings::GetAppColorMode() == 0 && MiscSettings::GetUseDarkMode());
 
         // based on the appearance (light/dark) cache the value of the appropriate color in nColor.
         // this way we don't have to add hunderds of function calls in the codebase and it will be fast.
@@ -431,9 +431,7 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
     }
 }
 
-// caches registry colors into the static ThemeColors::m_aThemeColors object. if the color
-// value is set to COL_AUTO, the ColorConfig::GetColorValue function calls ColorConfig::GetDefaultColor()
-// which returns some hard coded colors for the document, and StyleSettings colors for the UI (lcl_GetDefaultUIColor).
+// Loads the ThemeColors (ExpertConfig Colors) into static ThemeColors::maThemeColors
 void ColorConfig::LoadThemeColorsFromRegistry()
 {
     ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
@@ -456,8 +454,7 @@ void ColorConfig::LoadThemeColorsFromRegistry()
     rThemeColors.SetMenuBarColor(GetColorValue(svtools::MENUBARCOLOR).nColor);
     rThemeColors.SetMenuBarTextColor(GetColorValue(svtools::MENUBARTEXTCOLOR).nColor);
     rThemeColors.SetMenuBarHighlightColor(GetColorValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
-    rThemeColors.SetMenuBarHighlightTextColor(
-        GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightTextColor(GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
     rThemeColors.SetMenuColor(GetColorValue(svtools::MENUCOLOR).nColor);
     rThemeColors.SetMenuTextColor(GetColorValue(svtools::MENUTEXTCOLOR).nColor);
     rThemeColors.SetMenuHighlightColor(GetColorValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
@@ -470,44 +467,29 @@ void ColorConfig::LoadThemeColorsFromRegistry()
 
     // as more controls support it, we might want to have ColorConfigValue entries in ThemeColors
     // instead of just colors. for now that seems overkill for just one control.
-    rThemeColors.SetAppBackBitmapFileName(
-        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
-    rThemeColors.SetAppBackUseBitmap(
-        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
-    rThemeColors.SetAppBackBitmapStretched(
-        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
+    rThemeColors.SetAppBackBitmapFileName(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
+    rThemeColors.SetAppBackUseBitmap(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
+    rThemeColors.SetAppBackBitmapStretched(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
 
-    ThemeColors::SetThemeCached(true);
+    ThemeColors::SetThemeLoaded(true);
 }
 
 void ColorConfig::SetupTheme()
 {
-    if (ThemeColors::IsThemeDisabled())
+    if (!officecfg::Office::Common::Appearance::LibreOfficeTheme::get()
+        || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
     {
-        ThemeColors::SetThemeCached(false);
+        ThemeColors::SetThemeLoaded(false);
         return;
     }
 
-    // When the theme is set to RESET, the IsThemeReset conditional doesn't let the theme to be loaded
-    // as explained above, and returns if the StyleSettings doesn't have system colors loaded. IsThemeReset
-    // is also used in VclPluginCanUseThemeColors where it prevents the VCL_PLUGINs from using theme colors.
-    if (ThemeColors::IsThemeReset())
+    if (!ThemeColors::IsThemeLoaded())
     {
-        if (!Application::GetSettings().GetStyleSettings().GetSystemColorsLoaded())
-            return;
-        ThemeColors::SetThemeState(ThemeState::ENABLED);
-    }
-
-    // When the application is started for the first time, themes is set to ENABLED.
-    // that would skip the first two checks for IsThemeDisabled and IsThemeReset in the
-    // ColorConfig::SetupTheme function and call LoadThemeColorsFromRegistry();
-    if (!ThemeColors::IsThemeCached())
-    {
-        // registry to ColorConfig::m_pImpl
+        // extension to registry
         m_pImpl->Load(GetCurrentSchemeName());
         m_pImpl->CommitCurrentSchemeName();
 
-        // ColorConfig::m_pImpl to static ThemeColors::m_aThemeColors
+        // registry to theme
         LoadThemeColorsFromRegistry();
     }
 }
@@ -719,25 +701,16 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
             else
             {
                 switch (MiscSettings::GetAppColorMode()) {
-                    case AppearanceMode::LIGHT:
-                        nAppMod = clLight;
-                        break;
-                    case AppearanceMode::DARK:
-                        nAppMod = clDark;
-                        break;
-                    case AppearanceMode::AUTO:
                     default:
                         if (MiscSettings::GetUseDarkMode())
                             nAppMod = clDark;
                         else
                             nAppMod = clLight;
                         break;
+                    case 1: nAppMod = clLight; break;
+                    case 2: nAppMod = clDark; break;
                 }
             }
-
-            if (ThemeColors::UseOnlyWhiteDocBackground())
-                nAppMod = clLight;
-
             aRet = cAutoColors[eEntry][nAppMod];
     }
     // fdo#71511: if in a11y HC mode, do pull background color from theme
@@ -797,7 +770,7 @@ IMPL_LINK( ColorConfig, DataChangedHdl, VclSimpleEvent&, rEvent, void )
         if (pData->GetType() == DataChangedEventType::SETTINGS &&
             pData->GetFlags() & AllSettingsFlags::STYLE)
         {
-            ThemeColors::SetThemeCached(false);
+            ThemeColors::SetThemeLoaded(false);
             SetupTheme();
         }
     }

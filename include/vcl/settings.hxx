@@ -23,7 +23,6 @@
 #include <config_options.h>
 
 #include <vcl/dllapi.h>
-#include <vcl/themecolors.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -231,9 +230,6 @@ public:
 
     SAL_DLLPRIVATE void             Set3DColors( const Color& rColor );
 
-    void                            SetSystemColorsLoaded( bool bLoaded );
-    bool                            GetSystemColorsLoaded() const;
-
     void                            SetFaceColor( const Color& rColor );
     const Color&                    GetFaceColor() const;
 
@@ -258,7 +254,7 @@ public:
     const Color&                    GetDarkShadowColor() const;
 
     void                            SetDefaultButtonTextColor( const Color& rColor );
-    const Color&                    GetDefaultButtonTextColor() const;
+    SAL_DLLPRIVATE const Color&     GetDefaultButtonTextColor() const;
 
     void                            SetButtonTextColor( const Color& rColor );
     const Color&                    GetButtonTextColor() const;
@@ -390,7 +386,7 @@ public:
     const Color&                    GetMenuBarColor() const;
 
     void                            SetMenuBarRolloverColor( const Color& rColor );
-    const Color&                    GetMenuBarRolloverColor() const;
+    SAL_DLLPRIVATE const Color&     GetMenuBarRolloverColor() const;
 
     void                            SetMenuBorderColor( const Color& rColor );
     const Color&                    GetMenuBorderColor() const;
@@ -402,7 +398,7 @@ public:
     const Color&                    GetMenuBarTextColor() const;
 
     void                            SetMenuBarRolloverTextColor( const Color& rColor );
-    const Color&                    GetMenuBarRolloverTextColor() const;
+    SAL_DLLPRIVATE const Color&     GetMenuBarRolloverTextColor() const;
 
     void                            SetMenuBarHighlightTextColor( const Color& rColor );
     const Color&                    GetMenuBarHighlightTextColor() const;
@@ -673,13 +669,13 @@ public:
     bool                            GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( bool bEnable );
     bool                            GetEnableLocalizedDecimalSep() const;
-
-    static void                     SetDarkMode(AppearanceMode nMode);
-    static AppearanceMode           GetDarkMode();
+    // 0 auto, 1 light, 2, dark
+    static void                     SetDarkMode(int nMode);
+    static int                      GetDarkMode();
     // return if dark mode is active, resolving 'auto' to dark (true) or light (false)
     static bool                     GetUseDarkMode();
-    static void                     SetAppColorMode(AppearanceMode nMode);
-    static AppearanceMode           GetAppColorMode();
+    static void                     SetAppColorMode(int nMode);
+    static int                      GetAppColorMode();
     // return true if system preferences are set to use reduced animation
     static bool                     GetUseReducedAnimation();
     static bool                     IsAnimatedGraphicAllowed();

@@ -45,7 +45,6 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/themecolors.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1396,8 +1395,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
 {
     Color aDarkColor(0x1c, 0x1c, 0x1c);
-    if (ThemeColors::UseOnlyWhiteDocBackground())
-        aDarkColor = COL_WHITE;
     addDarkLightThemes(aDarkColor, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getCurrentView();
