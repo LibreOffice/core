@@ -314,10 +314,13 @@ endif
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodec \
+    UnpackedTarball/skia/src/codec/SkCodecColorProfile \
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorPalette \
     UnpackedTarball/skia/src/codec/SkExif \
     UnpackedTarball/skia/src/codec/SkGainmapInfo \
+    UnpackedTarball/skia/src/codec/SkHdrAgtm \
+    UnpackedTarball/skia/src/codec/SkHdrAgtmParse \
     UnpackedTarball/skia/src/codec/SkHdrMetadata \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
@@ -491,10 +494,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPathPriv \
     UnpackedTarball/skia/src/core/SkPathRaw \
     UnpackedTarball/skia/src/core/SkPathRawShapes \
-    UnpackedTarball/skia/src/core/SkPathRef \
     UnpackedTarball/skia/src/core/SkPathUtils \
-    UnpackedTarball/skia/src/core/SkPath_editing \
-    UnpackedTarball/skia/src/core/SkPath_pathref \
+    UnpackedTarball/skia/src/core/SkPath_pathdata \
     UnpackedTarball/skia/src/core/SkPath_serial \
     UnpackedTarball/skia/src/core/SkPixelRef \
     UnpackedTarball/skia/src/core/SkPixmap \

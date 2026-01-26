@@ -1,0 +1,113 @@
+diff -ur skia.org/include/core/SkColorSpace.h skia/include/core/SkColorSpace.h
+--- skia.org/include/core/SkColorSpace.h	2026-01-27 09:40:11.413189600 +0200
++++ skia/include/core/SkColorSpace.h	2026-01-27 09:45:24.942227100 +0200
+@@ -37,6 +37,11 @@
+      *  representation of SkColorSpace.
+      */
+     bool toXYZD50(skcms_Matrix3x3* toXYZD50) const;
++
++    bool operator==(const SkColorSpacePrimaries& other) const {
++        return fRX == other.fRX && fRY == other.fRY && fGX == other.fGX && fGY == other.fGY &&
++               fBX == other.fBX && fBY == other.fBY && fWX == other.fWX && fWY == other.fWY;
++    }
+ };
+ 
+ namespace SkNamedPrimaries {
+diff -ur skia.org/include/private/SkHdrMetadata.h skia/include/private/SkHdrMetadata.h
+--- skia.org/include/private/SkHdrMetadata.h	2026-01-27 09:40:11.335068400 +0200
++++ skia/include/private/SkHdrMetadata.h	2026-01-27 09:53:46.338379800 +0200
+@@ -141,12 +141,20 @@
+             float fX = 0.f;
+             float fY = 0.f;
+             float fM = 0.f;
++
++            bool operator==(const ControlPoint& other) const {
++                return fX == other.fX && fY == other.fY && fM == other.fM;
++            }
+         };
+ 
+         // The size of this vector is the value of the GainCurveNumControlPoints metadata item.
+         static constexpr size_t kMinNumControlPoints = 1u;
+         static constexpr size_t kMaxNumControlPoints = 32u;
+         std::vector<ControlPoint> fControlPoints;
++
++        bool operator==(const GainCurve& other) const {
++            return fControlPoints == other.fControlPoints;
++        }
+     };
+ 
+     // A ComponentMix metadata group.
+@@ -158,6 +166,11 @@
+         float fMax = 0.f;
+         float fMin = 0.f;
+         float fComponent = 0.f;
++
++        bool operator==(const ComponentMixingFunction& other) const {
++            return fRed == other.fRed && fGreen == other.fGreen && fBlue == other.fBlue &&
++                   fMax == other.fMax && fMin == other.fMin && fComponent == other.fComponent;
++        }
+     };
+ 
+     // A ColorGainFunction metadata group.
+@@ -167,6 +180,10 @@
+ 
+         // The GainCurve metadata group.
+         GainCurve fGainCurve;
++
++        bool operator==(const ColorGainFunction& other) const {
++            return fComponentMixing == other.fComponentMixing && fGainCurve == other.fGainCurve;
++        }
+     };
+ 
+     // Structure holding the metadata items and groups for an alternate image.
+@@ -176,6 +193,10 @@
+ 
+         // The ColorGainFunction metadata group.
+         ColorGainFunction fColorGainFunction;
++
++        bool operator==(const AlternateImage& other) const {
++            return fHdrHeadroom == other.fHdrHeadroom && fColorGainFunction == other.fColorGainFunction;
++        }
+     };
+ 
+     // HeadroomAdaptiveToneMap metadata group.
+@@ -192,6 +213,12 @@
+         // The size of this vector is the NumAlternateImages metadata item.
+         static constexpr size_t kMaxNumAlternateImages = 4u;
+         std::vector<AlternateImage> fAlternateImages;
++
++        bool operator==(const HeadroomAdaptiveToneMap& other) const {
++            return fBaselineHdrHeadroom == other.fBaselineHdrHeadroom &&
++                   fGainApplicationSpacePrimaries == other.fGainApplicationSpacePrimaries &&
++                   fAlternateImages == other.fAlternateImages;
++        }
+     };
+ 
+     // The default value for the HdrReferenceWhite metadata item.
+@@ -218,7 +245,10 @@
+      */
+     SkString toString() const;
+ 
+-    bool operator==(const AdaptiveGlobalToneMap& other) const;
++    bool operator==(const AdaptiveGlobalToneMap& other) const {
++        return fHdrReferenceWhite == other.fHdrReferenceWhite &&
++               fHeadroomAdaptiveToneMap == other.fHeadroomAdaptiveToneMap;
++    }
+     bool operator!=(const AdaptiveGlobalToneMap& other) const {
+         return !(*this == other);
+     }
+diff -ur skia.org/src/codec/SkHdrAgtmParse.cpp skia/src/codec/SkHdrAgtmParse.cpp
+--- skia.org/src/codec/SkHdrAgtmParse.cpp	2026-01-27 09:40:06.084287800 +0200
++++ skia/src/codec/SkHdrAgtmParse.cpp	2026-01-27 09:56:03.168285100 +0200
+@@ -12,11 +12,6 @@
+ 
+ namespace {
+ 
+-// TODO(https://issuetracker.google.com/issues/40044808): Include operator== in SkColorSpace.h.
+-bool operator==(const SkColorSpacePrimaries& a, const SkColorSpacePrimaries& b) {
+-    return memcmp(&a, &b, sizeof(a)) == 0;
+-}
+-
+ // Return x clamped to [a, b].
+ template<typename T, typename U, typename V>
+ T clamp(T x, U a, V b) {

@@ -35,7 +35,7 @@
 #include <SkBitmap.h>
 #include <SkCanvas.h>
 #include <SkGradientShader.h>
-#include <SkPath.h>
+#include <SkPathBuilder.h>
 #include <SkRegion.h>
 #include <SkPathEffect.h>
 #include <SkDashPathEffect.h>
@@ -62,9 +62,10 @@ namespace
 // bottom-most line of pixels of the bounding rectangle (see
 // https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html).
 // So be careful with rectangle->polygon conversions (generally avoid them).
-void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uInt32 nFirstIndex,
-                      sal_uInt32 nLastIndex, const sal_uInt32 nPointCount, const bool bClosePath,
-                      const bool bHasCurves, bool* hasOnlyOrthogonal = nullptr)
+void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPathBuilder& rPathBuilder,
+                      sal_uInt32 nFirstIndex, sal_uInt32 nLastIndex, const sal_uInt32 nPointCount,
+                      const bool bClosePath, const bool bHasCurves,
+                      bool* hasOnlyOrthogonal = nullptr)
 {
     assert(nFirstIndex < nPointCount || (nFirstIndex == 0 && nPointCount == 0));
     assert(nLastIndex <= nPointCount);
@@ -87,12 +88,12 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uI
 
         if (bFirst)
         {
-            rPath.moveTo(aCurrentPoint.getX(), aCurrentPoint.getY());
+            rPathBuilder.moveTo(aCurrentPoint.getX(), aCurrentPoint.getY());
             bFirst = false;
         }
         else if (!bHasCurves)
         {
-            rPath.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY());
+            rPathBuilder.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY());
             // If asked for, check whether the polygon has a line that is not
             // strictly horizontal or vertical.
             if (hasOnlyOrthogonal != nullptr && aCurrentPoint.getX() != aPreviousPoint.getX()
@@ -107,7 +108,7 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uI
             if (aPreviousControlPoint.equal(aPreviousPoint)
                 && aCurrentControlPoint.equal(aCurrentPoint))
             {
-                rPath.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY()); // a straight line
+                rPathBuilder.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY()); // a straight line
                 if (hasOnlyOrthogonal != nullptr && aCurrentPoint.getX() != aPreviousPoint.getX()
                     && aCurrentPoint.getY() != aPreviousPoint.getY())
                     *hasOnlyOrthogonal = false;
@@ -124,9 +125,9 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uI
                     aCurrentControlPoint
                         = aCurrentPoint + ((aCurrentControlPoint - aPreviousPoint) * 0.0005);
                 }
-                rPath.cubicTo(aPreviousControlPoint.getX(), aPreviousControlPoint.getY(),
-                              aCurrentControlPoint.getX(), aCurrentControlPoint.getY(),
-                              aCurrentPoint.getX(), aCurrentPoint.getY());
+                rPathBuilder.cubicTo(aPreviousControlPoint.getX(), aPreviousControlPoint.getY(),
+                                     aCurrentControlPoint.getX(), aCurrentControlPoint.getY(),
+                                     aCurrentPoint.getX(), aCurrentPoint.getY());
                 if (hasOnlyOrthogonal != nullptr)
                     *hasOnlyOrthogonal = false;
             }
@@ -136,18 +137,18 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uI
     }
     if (bClosePath && nFirstIndex == 0 && nLastIndex == nPointCount)
     {
-        rPath.close();
+        rPathBuilder.close();
     }
 }
 
-void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath,
+void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPathBuilder& rPathBuilder,
                       bool* hasOnlyOrthogonal = nullptr)
 {
-    addPolygonToPath(rPolygon, rPath, 0, rPolygon.count(), rPolygon.count(), rPolygon.isClosed(),
-                     rPolygon.areControlPointsUsed(), hasOnlyOrthogonal);
+    addPolygonToPath(rPolygon, rPathBuilder, 0, rPolygon.count(), rPolygon.count(),
+                     rPolygon.isClosed(), rPolygon.areControlPointsUsed(), hasOnlyOrthogonal);
 }
 
-void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath,
+void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPathBuilder& rPathBuilder,
                           bool* hasOnlyOrthogonal = nullptr)
 {
     const sal_uInt32 nPolygonCount(rPolyPolygon.count());
@@ -158,11 +159,11 @@ void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& r
     sal_uInt32 nPointCount = 0;
     for (const auto& rPolygon : rPolyPolygon)
         nPointCount += rPolygon.count() * 3; // because cubicTo is 3 elements
-    rPath.incReserve(nPointCount);
+    rPathBuilder.incReserve(nPointCount);
 
     for (const auto& rPolygon : rPolyPolygon)
     {
-        addPolygonToPath(rPolygon, rPath, hasOnlyOrthogonal);
+        addPolygonToPath(rPolygon, rPathBuilder, hasOnlyOrthogonal);
     }
 }
 
@@ -644,18 +645,18 @@ void SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region)
 {
     SkiaZone zone;
-    SkPath path;
+    SkPathBuilder pathBuilder;
     // Always use region rectangles, regardless of what the region uses internally.
     // That's what other VCL backends do, and trying to use addPolyPolygonToPath()
     // in case a polygon is used leads to off-by-one errors such as tdf#133208.
     RectangleVector rectangles;
     region.GetRegionRectangles(rectangles);
-    path.incReserve(rectangles.size() + 1);
+    pathBuilder.incReserve(rectangles.size() + 1);
     for (const tools::Rectangle& rectangle : rectangles)
-        path.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(), rectangle.GetWidth(),
-                                      rectangle.GetHeight()));
-    path.setFillType(SkPathFillType::kEvenOdd);
-    canvas->clipPath(path);
+        pathBuilder.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(),
+                                             rectangle.GetWidth(), rectangle.GetHeight()));
+    pathBuilder.setFillType(SkPathFillType::kEvenOdd);
+    canvas->clipPath(pathBuilder.detach());
 }
 
 void SkiaSalGraphicsImpl::ResetClipRegion()
@@ -927,11 +928,11 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
 {
     preDraw();
 
-    SkPath polygonPath;
+    SkPathBuilder polygonPathBuilder;
     bool hasOnlyOrthogonal = true;
-    addPolyPolygonToPath(aPolyPolygon, polygonPath, &hasOnlyOrthogonal);
-    polygonPath.setFillType(SkPathFillType::kEvenOdd);
-    addUpdateRegion(polygonPath.getBounds());
+    addPolyPolygonToPath(aPolyPolygon, polygonPathBuilder, &hasOnlyOrthogonal);
+    polygonPathBuilder.setFillType(SkPathFillType::kEvenOdd);
+    addUpdateRegion(polygonPathBuilder.computeBounds());
 
     // For lines we use toSkX()/toSkY() in order to pass centers of pixels to Skia,
     // as that leads to better results with floating-point coordinates
@@ -962,7 +963,7 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
 #endif
         {
             const SkScalar posFix = useAA ? toSkXYFix : 0;
-            polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
+            polygonPathBuilder.offset(toSkX(0) + posFix, toSkY(0) + posFix);
         }
     }
     if (moFillColor)
@@ -971,15 +972,15 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
         aPaint.setAntiAlias(useAA);
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
-        if (!moLineColor && polygonPath.getBounds().isEmpty())
+        if (!moLineColor && polygonPathBuilder.computeBounds().isEmpty())
             aPaint.setStyle(SkPaint::kStroke_Style);
-        getDrawCanvas()->drawPath(polygonPath, aPaint);
+        getDrawCanvas()->drawPath(polygonPathBuilder.detach(), aPaint);
     }
     if (moLineColor && moLineColor != moFillColor) // otherwise handled by fill
     {
         SkPaint aPaint = makeLinePaint(fTransparency);
         aPaint.setAntiAlias(useAA);
-        getDrawCanvas()->drawPath(polygonPath, aPaint);
+        getDrawCanvas()->drawPath(polygonPathBuilder.detach(), aPaint);
     }
     postDraw();
 }
@@ -1194,12 +1195,12 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     // are not wider than a pixel.
     if (eLineJoin != basegfx::B2DLineJoin::NONE || fLineWidth <= 1.0)
     {
-        SkPath aPath;
-        aPath.incReserve(aPolyLine.count() * 3); // because cubicTo is 3 elements
-        addPolygonToPath(aPolyLine, aPath);
-        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
-        addUpdateRegion(aPath.getBounds());
-        getDrawCanvas()->drawPath(aPath, aPaint);
+        SkPathBuilder aPathBuilder;
+        aPathBuilder.incReserve(aPolyLine.count() * 3); // because cubicTo is 3 elements
+        addPolygonToPath(aPolyLine, aPathBuilder);
+        aPathBuilder.offset(toSkX(0) + posFix, toSkY(0) + posFix);
+        addUpdateRegion(aPathBuilder.computeBounds());
+        getDrawCanvas()->drawPath(aPathBuilder.detach(), aPaint);
     }
     else
     {
@@ -1208,12 +1209,12 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
         bool bHasCurves = aPolyLine.areControlPointsUsed();
         for (sal_uInt32 j = 0; j < nPoints; ++j)
         {
-            SkPath aPath;
-            aPath.incReserve(2 * 3); // because cubicTo is 3 elements
-            addPolygonToPath(aPolyLine, aPath, j, j + 1, nPoints, bClosed, bHasCurves);
-            aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
-            addUpdateRegion(aPath.getBounds());
-            getDrawCanvas()->drawPath(aPath, aPaint);
+            SkPathBuilder aPathBuilder;
+            aPathBuilder.incReserve(2 * 3); // because cubicTo is 3 elements
+            addPolygonToPath(aPolyLine, aPathBuilder, j, j + 1, nPoints, bClosed, bHasCurves);
+            aPathBuilder.offset(toSkX(0) + posFix, toSkY(0) + posFix);
+            addUpdateRegion(aPathBuilder.computeBounds());
+            getDrawCanvas()->drawPath(aPathBuilder.detach(), aPaint);
         }
     }
 
@@ -1433,11 +1434,11 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     preDraw();
     SAL_INFO("vcl.skia.trace", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
     assert(mXorMode == XorMode::None);
-    SkPath aPath;
-    aPath.incReserve(rPoly.count());
-    addPolygonToPath(rPoly, aPath);
-    aPath.setFillType(SkPathFillType::kEvenOdd);
-    addUpdateRegion(aPath.getBounds());
+    SkPathBuilder aPathBuilder;
+    aPathBuilder.incReserve(rPoly.count());
+    addPolygonToPath(rPoly, aPathBuilder);
+    aPathBuilder.setFillType(SkPathFillType::kEvenOdd);
+    addUpdateRegion(aPathBuilder.computeBounds());
     {
         SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
         SkPaint aPaint;
@@ -1451,7 +1452,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             // TrackFrame is not supposed to paint outside of the polygon (usually rectangle),
             // but wider stroke width usually results in that, so ensure the requirement
             // by clipping.
-            getDrawCanvas()->clipRect(aPath.getBounds(), SkClipOp::kIntersect, false);
+            getDrawCanvas()->clipRect(aPathBuilder.computeBounds(), SkClipOp::kIntersect, false);
             aPaint.setStrokeWidth(2);
             static constexpr float intervals[] = { 4.0f, 4.0f };
             aPaint.setStyle(SkPaint::kStroke_Style);
@@ -1504,7 +1505,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             }
 #endif
         }
-        getDrawCanvas()->drawPath(aPath, aPaint);
+        getDrawCanvas()->drawPath(aPathBuilder.detach(), aPaint);
     }
     postDraw();
 }
@@ -1953,19 +1954,19 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     tools::Rectangle boundRect(rPolyPolygon.GetBoundRect());
     if (boundRect.IsEmpty())
         return true;
-    SkPath path;
+    SkPathBuilder pathBuilder;
     if (rPolyPolygon.IsRect())
     {
         // Rect->Polygon conversion loses the right and bottom edge, fix that.
-        path.addRect(SkRect::MakeXYWH(boundRect.getX(), boundRect.getY(), boundRect.GetWidth(),
-                                      boundRect.GetHeight()));
+        pathBuilder.addRect(SkRect::MakeXYWH(boundRect.getX(), boundRect.getY(),
+                                             boundRect.GetWidth(), boundRect.GetHeight()));
         boundRect.AdjustRight(1);
         boundRect.AdjustBottom(1);
     }
     else
-        addPolyPolygonToPath(rPolyPolygon.getB2DPolyPolygon(), path);
-    path.setFillType(SkPathFillType::kEvenOdd);
-    addUpdateRegion(path.getBounds());
+        addPolyPolygonToPath(rPolyPolygon.getB2DPolyPolygon(), pathBuilder);
+    pathBuilder.setFillType(SkPathFillType::kEvenOdd);
+    addUpdateRegion(pathBuilder.computeBounds());
 
     Gradient aGradient(rGradient);
     tools::Rectangle aBoundRect;
@@ -1973,9 +1974,10 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     aGradient.SetAngle(aGradient.GetAngle() + 2700_deg10);
     aGradient.GetBoundRect(boundRect, aBoundRect, aCenter);
 
-    SkColor startColor
+    SkColor4f startColor
         = toSkColorWithIntensity(rGradient.GetStartColor(), rGradient.GetStartIntensity());
-    SkColor endColor = toSkColorWithIntensity(rGradient.GetEndColor(), rGradient.GetEndIntensity());
+    SkColor4f endColor
+        = toSkColorWithIntensity(rGradient.GetEndColor(), rGradient.GetEndIntensity());
 
     sk_sp<SkShader> shader;
     if (rGradient.GetStyle() == css::awt::GradientStyle_LINEAR)
@@ -1984,9 +1986,9 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
         aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
         SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
-        SkColor colors[2] = { startColor, endColor };
+        SkColor4f colors[2] = { startColor, endColor };
         SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
-        shader = SkGradientShader::MakeLinear(points, colors, pos, 2, SkTileMode::kClamp);
+        shader = SkShaders::LinearGradient(points, { { colors, pos, SkTileMode::kClamp }, {} });
     }
     else if (rGradient.GetStyle() == css::awt::GradientStyle_AXIAL)
     {
@@ -1994,11 +1996,11 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
         aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
         SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
-        SkColor colors[3] = { endColor, startColor, endColor };
+        SkColor4f colors[3] = { endColor, startColor, endColor };
         SkScalar border = SkDoubleToScalar(aGradient.GetBorder() / 100.0);
         SkScalar pos[3] = { std::min<SkScalar>(border * 0.5f, 0.5f), 0.5f,
                             std::max<SkScalar>(1 - border * 0.5f, 0.5f) };
-        shader = SkGradientShader::MakeLinear(points, colors, pos, 3, SkTileMode::kClamp);
+        shader = SkShaders::LinearGradient(points, { { colors, pos, SkTileMode::kClamp }, {} });
     }
     else
     {
@@ -2006,15 +2008,16 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
         // Skia is the opposite way).
         SkPoint center = SkPoint::Make(toSkX(aCenter.X()) - 1, toSkY(aCenter.Y()) - 1);
         SkScalar radius = std::max(aBoundRect.GetWidth() / 2.0, aBoundRect.GetHeight() / 2.0);
-        SkColor colors[2] = { endColor, startColor };
+        SkColor4f colors[2] = { endColor, startColor };
         SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
-        shader = SkGradientShader::MakeRadial(center, radius, colors, pos, 2, SkTileMode::kClamp);
+        shader = SkShaders::RadialGradient(center, radius,
+                                           { { colors, pos, SkTileMode::kClamp }, {} });
     }
 
     SkPaint paint = makeGradientPaint();
     paint.setAntiAlias(mParent.getAntiAlias());
     paint.setShader(shader);
-    getDrawCanvas()->drawPath(path, paint);
+    getDrawCanvas()->drawPath(pathBuilder.detach(), paint);
     postDraw();
     return true;
 }
@@ -2027,27 +2030,27 @@ bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyP
              "impldrawgradient(" << this << "): " << rPolyPolygon << ":" << rGradient.maPoint1
                                  << "->" << rGradient.maPoint2 << ":" << rGradient.maStops.size());
 
-    SkPath path;
-    addPolyPolygonToPath(rPolyPolygon, path);
-    path.setFillType(SkPathFillType::kEvenOdd);
-    addUpdateRegion(path.getBounds());
+    SkPathBuilder pathBuilder;
+    addPolyPolygonToPath(rPolyPolygon, pathBuilder);
+    pathBuilder.setFillType(SkPathFillType::kEvenOdd);
+    addUpdateRegion(pathBuilder.computeBounds());
 
     SkPoint points[2]
         = { SkPoint::Make(toSkX(rGradient.maPoint1.getX()), toSkY(rGradient.maPoint1.getY())),
             SkPoint::Make(toSkX(rGradient.maPoint2.getX()), toSkY(rGradient.maPoint2.getY())) };
-    std::vector<SkColor> colors;
+    std::vector<SkColor4f> colors;
     std::vector<SkScalar> pos;
     for (const SalGradientStop& stop : rGradient.maStops)
     {
-        colors.emplace_back(toSkColor(stop.maColor));
+        colors.emplace_back(SkColor4f::FromColor(toSkColor(stop.maColor)));
         pos.emplace_back(stop.mfOffset);
     }
-    sk_sp<SkShader> shader = SkGradientShader::MakeLinear(points, colors.data(), pos.data(),
-                                                          colors.size(), SkTileMode::kDecal);
+    sk_sp<SkShader> shader
+        = SkShaders::LinearGradient(points, { { colors, pos, SkTileMode::kDecal }, {} });
     SkPaint paint = makeGradientPaint();
     paint.setAntiAlias(mParent.getAntiAlias());
     paint.setShader(shader);
-    getDrawCanvas()->drawPath(path, paint);
+    getDrawCanvas()->drawPath(pathBuilder.detach(), paint);
     postDraw();
     return true;
 }
