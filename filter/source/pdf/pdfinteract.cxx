@@ -60,14 +60,13 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
         for( sal_Int32 i = 0; i < nCodes; i++ )
             aCodes.insert( static_cast<vcl::PDFWriter::ErrorCode>(aExc.ErrorCodes.getConstArray()[i]) );
 
-        ImplErrorDialog aDlg(Application::GetFrameWeld(m_xParent), aCodes);
-        aDlg.run();
+        auto xDialog = std::make_shared<ImplErrorDialog>(Application::GetFrameWeld(m_xParent), aCodes);
+        weld::DialogController::runAsync(xDialog, [](sal_uInt32 /*nResult*/) {});
+
         bHandled = true;
     }
     return bHandled;
 }
-
-
 
 OUString SAL_CALL PDFInteractionHandler::getImplementationName()
 {
