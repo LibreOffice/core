@@ -1320,9 +1320,9 @@ void SwEditWin::ChangeDrawing(Move::Direction eDir, Move::Size eDirSize)
                 // Check if object is anchored as character and move direction
                 bool bDummy1, bDummy2;
                 const bool bVertAnchor = rSh.IsFrameVertical( true, bDummy1, bDummy2 );
-                bool bHoriMove = !bVertAnchor == (eDir == Move::Direction::Left || eDir == Move::Direction::Right);
-                bool bMoveAllowed =
-                    !bHoriMove || (rSh.GetAnchorId() != RndStdIds::FLY_AS_CHAR);
+                const bool bIsHorizontalDirection = eDir == Move::Direction::Left || eDir == Move::Direction::Right;
+                const bool bHoriMove = bVertAnchor != bIsHorizontalDirection;
+                const bool bMoveAllowed = !bHoriMove || (rSh.GetAnchorId() != RndStdIds::FLY_AS_CHAR);
                 if ( bMoveAllowed )
                 {
                     pSdrView->MoveAllMarked(Size(nX, nY));
