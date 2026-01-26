@@ -3043,6 +3043,11 @@ interface DrawView
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;
     ]
+    SID_ADD_THEME
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
     SID_ALIGN_PAGE
     [
         ExecMethod = FuTemporary ;

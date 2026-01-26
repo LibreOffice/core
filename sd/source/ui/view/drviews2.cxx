@@ -197,6 +197,8 @@
 
 #include <theme/ThemeColorChanger.hxx>
 #include <svx/dialog/ThemeDialog.hxx>
+#include <svx/dialog/ThemeColorEditDialog.hxx>
+#include <svx/ColorSets.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <ViewShellBase.hxx>
@@ -4271,6 +4273,31 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
                     aChanger.apply(pColorSet);
+                }
+            });
+
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_ADD_THEME:
+        {
+            // Create empty color set as starting point for new theme
+            auto pCurrentColorSet = std::make_shared<model::ColorSet>(OUString());
+
+            // Open ThemeColorEditDialog to create/edit the new color set
+            auto pSubDialog = std::make_shared<svx::ThemeColorEditDialog>(GetFrameWeld(), *pCurrentColorSet);
+
+            weld::DialogController::runAsync(pSubDialog, [pSubDialog](sal_uInt32 nResult) {
+                if (nResult != RET_OK)
+                    return;
+
+                auto aColorSet = pSubDialog->getColorSet();
+                if (!aColorSet.getName().isEmpty())
+                {
+                    // Add the new color set to the global collection
+                    svx::ColorSets::get().insert(aColorSet);
                 }
             });
 
