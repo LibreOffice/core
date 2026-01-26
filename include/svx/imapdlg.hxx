@@ -88,9 +88,9 @@ class SVX_DLLPUBLIC SvxIMapDlg final : public SfxModelessDialogController
     friend class IMapOwnData;
     friend class IMapWindow;
 
-    std::unique_ptr<IMapOwnData> pOwnData;
-    void*               pCheckObj;
-    SvxIMapDlgItem      aIMapItem;
+    std::unique_ptr<IMapOwnData> m_pOwnData;
+    void*               m_pCheckObj;
+    SvxIMapDlgItem      m_aIMapItem;
 
     std::unique_ptr<IMapWindow> m_xIMapWnd;
     std::unique_ptr<weld::Toolbar> m_xTbxIMapDlg1;
@@ -130,7 +130,7 @@ public:
 
     void                SetExecState( bool bEnable );
 
-    const void*         GetEditingObject() const { return pCheckObj; }
+    const void*         GetEditingObject() const { return m_pCheckObj; }
 
     const ImageMap&     GetImageMap() const;
 

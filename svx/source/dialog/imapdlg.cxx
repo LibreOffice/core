@@ -101,8 +101,8 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
 
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Window* _pParent)
     : SfxModelessDialogController(_pBindings, pCW, _pParent, u"svx/ui/imapdialog.ui"_ustr, u"ImapDialog"_ustr)
-    , pCheckObj(nullptr)
-    , aIMapItem(*this, *_pBindings)
+    , m_pCheckObj(nullptr)
+    , m_aIMapItem(*this, *_pBindings)
     , m_xIMapWnd(new IMapWindow(_pBindings->GetActiveFrame(), m_xDialog.get()))
     , m_xTbxIMapDlg1(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
     , m_xFtURL(m_xBuilder->weld_label(u"urlft"_ustr))
@@ -135,7 +135,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Windo
 
     m_xIMapWnd->Show();
 
-    pOwnData.reset(new IMapOwnData);
+    m_pOwnData.reset(new IMapOwnData);
 
     m_xIMapWnd->SetInfoLink( LINK( this, SvxIMapDlg, InfoHdl ) );
     m_xIMapWnd->SetMousePosLink( LINK( this, SvxIMapDlg, MousePosHdl ) );
@@ -163,9 +163,9 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Windo
     m_xEdtText->set_sensitive(false);
     m_xFtTarget->set_sensitive(false);
     m_xCbbTarget->set_sensitive(false);
-    pOwnData->bExecState = false;
+    m_pOwnData->bExecState = false;
 
-    pOwnData->aIdle.SetInvokeHandler( LINK( this, SvxIMapDlg, UpdateHdl ) );
+    m_pOwnData->aIdle.SetInvokeHandler( LINK( this, SvxIMapDlg, UpdateHdl ) );
 
     m_xTbxIMapDlg1->set_item_sensitive(u"TBI_ACTIVE"_ustr, false);
     m_xTbxIMapDlg1->set_item_sensitive(u"TBI_MACRO"_ustr, false );
@@ -220,7 +220,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, CancelHdl, weld::Button&, void)
 
 void SvxIMapDlg::SetExecState( bool bEnable )
 {
-    pOwnData->bExecState = bEnable;
+    m_pOwnData->bExecState = bEnable;
 }
 
 const ImageMap& SvxIMapDlg::GetImageMap() const
@@ -241,14 +241,14 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
                          const TargetList* pTargetList, void* pEditingObj )
 {
-    pOwnData->aUpdateGraphic = rGraphic;
+    m_pOwnData->aUpdateGraphic = rGraphic;
 
     if ( pImageMap )
-        pOwnData->aUpdateImageMap = *pImageMap;
+        m_pOwnData->aUpdateImageMap = *pImageMap;
     else
-        pOwnData->aUpdateImageMap.ClearImageMap();
+        m_pOwnData->aUpdateImageMap.ClearImageMap();
 
-    pOwnData->pUpdateEditingObject = pEditingObj;
+    m_pOwnData->pUpdateEditingObject = pEditingObj;
 
     // Delete UpdateTargetList, because this method can still be called several
     // times before the update timer is turned on
@@ -257,11 +257,11 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
     // deleted immediately after this call the copied list will be deleted
     // again in the handler
     if( pTargetList )
-        pOwnData->aUpdateTargetList = *pTargetList;
+        m_pOwnData->aUpdateTargetList = *pTargetList;
     else
-        pOwnData->aUpdateTargetList.clear();
+        m_pOwnData->aUpdateTargetList.clear();
 
-    pOwnData->aIdle.Start();
+    m_pOwnData->aIdle.Start();
 }
 
 
@@ -632,9 +632,9 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl, weld::Widget&, void)
 
 IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Timer *, void)
 {
-    pOwnData->aIdle.Stop();
+    m_pOwnData->aIdle.Stop();
 
-    if ( pOwnData->pUpdateEditingObject != pCheckObj )
+    if ( m_pOwnData->pUpdateEditingObject != m_pCheckObj )
     {
         if (m_xIMapWnd->IsChanged())
         {
@@ -646,10 +646,10 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Timer *, void)
             }
         }
 
-        m_xIMapWnd->SetGraphic( pOwnData->aUpdateGraphic );
-        m_xIMapWnd->SetImageMap( pOwnData->aUpdateImageMap );
-        SetTargetList( pOwnData->aUpdateTargetList );
-        pCheckObj = pOwnData->pUpdateEditingObject;
+        m_xIMapWnd->SetGraphic( m_pOwnData->aUpdateGraphic );
+        m_xIMapWnd->SetImageMap( m_pOwnData->aUpdateImageMap );
+        SetTargetList( m_pOwnData->aUpdateTargetList );
+        m_pCheckObj = m_pOwnData->pUpdateEditingObject;
 
         // After changes => default selection
         m_xTbxIMapDlg1->set_item_active(u"TBI_SELECT"_ustr, true);
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Timer *, void)
     }
 
     // Delete the copied list again in the Update method
-    pOwnData->aUpdateTargetList.clear();
+    m_pOwnData->aUpdateTargetList.clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );
     m_xIMapWnd->QueueIdleUpdate();
@@ -671,7 +671,7 @@ IMPL_LINK( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
     const bool          bPolyEdit = ( pObj != nullptr ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
     const bool          bDrawEnabled = !( bPolyEdit && m_xTbxIMapDlg1->get_item_active(u"TBI_POLYEDIT"_ustr) );
 
-    m_xTbxIMapDlg1->set_item_sensitive(u"TBI_APPLY"_ustr, pOwnData->bExecState && pWnd->IsChanged() );
+    m_xTbxIMapDlg1->set_item_sensitive(u"TBI_APPLY"_ustr, m_pOwnData->bExecState && pWnd->IsChanged() );
 
     m_xTbxIMapDlg1->set_item_sensitive(u"TBI_SELECT"_ustr, bDrawEnabled);
     m_xTbxIMapDlg1->set_item_sensitive(u"TBI_RECT"_ustr, bDrawEnabled);
