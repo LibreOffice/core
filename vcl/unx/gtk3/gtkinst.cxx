@@ -13659,9 +13659,8 @@ namespace
     {
         GtkInstanceTreeIter(GtkTreeModel* pTreeModel, const GtkTreeIter* pOrig)
             : m_pTreeModel(pTreeModel)
+            , iter(pOrig ? *pOrig : GtkTreeIter{})
         {
-            if (pOrig)
-                iter = *pOrig;
         }
 
         GtkInstanceTreeIter(GtkTreeModel* pTreeModel, const GtkTreeIter& rOrig)
