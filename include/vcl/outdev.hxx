@@ -437,12 +437,11 @@ public:
 
     virtual void                CopyArea(
                                     const Point& rDestPt,
-                                    const Point& rSrcPt,  const Size& rSrcSize,
-                                    bool bWindowInvalidate = false );
+                                    const Point& rSrcPt,  const Size& rSrcSize );
 
 protected:
 
-    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
+    virtual void                CopyDeviceArea( SalTwoRect& aPosAry );
 
     virtual tools::Rectangle    GetBackgroundComponentBounds() const;
 

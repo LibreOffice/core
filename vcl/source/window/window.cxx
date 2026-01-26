@@ -1240,30 +1240,12 @@ ImplWinData* Window::ImplGetWinData() const
 }
 
 
-void WindowOutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
+void WindowOutputDevice::CopyDeviceArea( SalTwoRect& aPosAry )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
 
-    if (bWindowInvalidate)
-    {
-        const tools::Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
-                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
-
-        mxOwnerWindow->ImplMoveAllInvalidateRegions(aSrcRect,
-                aPosAry.mnDestX-aPosAry.mnSrcX,
-                aPosAry.mnDestY-aPosAry.mnSrcY,
-                false);
-
-        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
-                aPosAry.mnSrcX, aPosAry.mnSrcY,
-                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                *this);
-
-        return;
-    }
-
-    OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
+    OutputDevice::CopyDeviceArea(aPosAry);
 }
 
 const OutputDevice* WindowOutputDevice::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const

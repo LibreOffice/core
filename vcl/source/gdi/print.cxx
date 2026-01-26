@@ -284,8 +284,7 @@ void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
 }
 
 void Printer::CopyArea( const Point& /*rDestPt*/,
-                        const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
-                        bool /*bWindowInvalidate*/ )
+                        const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
     SAL_WARN( "vcl.gdi", "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 }

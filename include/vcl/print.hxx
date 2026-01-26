@@ -297,7 +297,7 @@ public:
                                     const OutputDevice& rOutDev ) override;
 
     virtual void                CopyArea( const Point& rDestPt, const Point& rSrcPt,
-                                    const Size& rSrcSize, bool bWindowInvalidate = false ) override;
+                                    const Size& rSrcSize ) override;
 
     virtual tools::Rectangle    GetBackgroundComponentBounds() const override;
 
