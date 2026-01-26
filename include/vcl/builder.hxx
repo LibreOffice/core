@@ -20,6 +20,7 @@
 #include <vcl/toolboxid.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 
 #include <memory>
 #include <map>
@@ -41,7 +42,6 @@ class Slider;
 class VclExpander;
 class VclMultiLineEdit;
 namespace com::sun::star::frame { class XFrame; }
-struct NotebookBarAddonsItem;
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
 class VCL_DLLPUBLIC VclBuilder final : public WidgetBuilder<vcl::Window, VclPtr<vcl::Window>, PopupMenu, VclPtr<PopupMenu>>
