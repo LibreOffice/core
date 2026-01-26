@@ -733,6 +733,10 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
             // Skip this one, I don't think it can appear in practice
             if (entry == u"sfx/ui/cmisinfopage.ui")
                 continue;
+            // Skip this one, I think it can only happen on loading
+            // an archaic wordperfect file
+            else if (entry == u"writerperfect/ui/wpftencodingdialog.ui")
+                continue;
             // Skip this one, I don't think it can appear in practice
             else if (entry == u"cui/ui/colorpickerdialog.ui")
                 continue;
@@ -762,6 +766,30 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
             // from calc.
             else if (entry == u"cui/ui/eventassigndialog.ui")
                 continue;
+            // Skip this one, it is disabled in filter/source/pdf/impdialog.cxx
+            // for kit mode
+            else if (entry == u"filter/ui/pdfsignpage.ui")
+                continue;
+            // This, for the chart wizard, it is really only available in calc
+            else if (entry == u"vcl/ui/wizard.ui")
+                continue;
+            // The warn dialog appears to be somewhat broken, at least the
+            // existing tests for it are currently disabled and it doesn't
+            // work for me
+            else if (entry == u"uui/ui/macrowarnmedium.ui")
+                continue;
+            // This, for the forumula dialog, are really only available in calc
+            else if (entry == u"formula/ui/formuladialog.ui" ||
+                     entry == u"formula/ui/functionpage.ui" ||
+                     entry == u"formula/ui/parameter.ui" ||
+                     entry == u"formula/ui/structpage.ui")
+            {
+                continue;
+            }
+            // Testing this requires hosting an image, or similar, with
+            // a username+password
+            else if (entry == u"uui/ui/logindialog.ui")
+                continue;
             OUString sEntry(entry);
             if (!entries.contains(sEntry))
                 missing.push_back(sEntry);
@@ -769,6 +797,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
     };
     processCategory(CuiDialogList);
     processCategory(SfxDialogList);
+    processCategory(OtherDialogList);
     return missing;
 }
 
