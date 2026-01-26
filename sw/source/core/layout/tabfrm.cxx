@@ -3274,58 +3274,34 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
         // #i29771# Reset bTryToSplit flag on change of upper
         const SwFrame* pOldUpper = GetUpper();
-        const SwPageFrame* pOldUpperPage = nullptr;
 
         //Let's see if we find some place anywhere...
         if (!bMovedFwd)
         {
-            bool bMoveAlways = false;
+            bool bSkipMoveFwd = false;
             SwFrame* pUpper = GetUpper();
             if (pUpper && pUpper->IsFlyFrame())
             {
                 auto pFlyFrame = static_cast<SwFlyFrame*>(pUpper);
                 if (pFlyFrame->IsFlySplitAllowed())
                 {
-                    // If the anchor of the split has a previous frame, MoveFwd() is allowed to move
-                    // forward.
-                    bMoveAlways = true;
-                    pOldUpperPage = pFlyFrame->FindPageFrame();
+                    // Don't try to move floating table forward. It's done elsewhere moving its fly.
+                    bSkipMoveFwd = true;
                 }
             }
             // don't make the effort to move fwd if its known
             // conditions that are known not to work
             if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
                 bMakePage = false;
-            else if (!MoveFwd(bMakePage, false, bMoveAlways))
+            else if (bSkipMoveFwd || !MoveFwd(bMakePage, false))
                 bMakePage = false;
         }
 
         // #i29771# Reset bSplitError flag on change of upper
         if ( GetUpper() != pOldUpper )
         {
-            bool bResetSplit = true;
-            if (GetUpper() && GetUpper()->IsFlyFrame() && pOldUpperPage
-                && GetUpper()->FindPageFrame() == pOldUpperPage
-                && static_cast<const SwFlyFrame*>(GetUpper())->IsFlySplitAllowed())
-            {
-                // MoveFwd created a split (follow) fly on the same page, that was intended to move
-                // to the next page together with its anchor. Then the content was moved to the new
-                // fly, and the old fly became empty; it called its DelEmpty(). The new fly is now
-                // basically a copy of the old one; move to the next page and prevent oscillation.
-                SwTextFrame* pAnchor = static_cast<SwFlyFrame*>(GetUpper())->FindAnchorCharFrame();
-                if (pAnchor)
-                {
-                    bResetSplit = false;
-                    SwPageFrame* pPage = pAnchor->FindPageFrame();
-                    SwLayouter::InsertMovedFwdFrame(pPage->GetFormat()->GetDoc(), *pAnchor,
-                                                    pPage->GetPhyPageNum() + 1);
-                }
-            }
-            if (bResetSplit)
-            {
-                bTryToSplit = true;
-                nUnSplitted = 5;
-            }
+            bTryToSplit = true;
+            nUnSplitted = 5;
         }
 
         aRectFnSet.Refresh(*this);
