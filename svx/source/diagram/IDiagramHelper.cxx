@@ -429,7 +429,7 @@ void IDiagramHelper::disconnectFromSdrObjGroup()
 void IDiagramHelper::connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget)
 {
     SdrObjGroup* pGroupObject(nullptr);
-    if (pGroupObject && mxGroupShape && rTarget == mxGroupShape)
+    if (mxGroupShape && rTarget == mxGroupShape)
     {
         pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape));
         if (pGroupObject != nullptr &&  pGroupObject->mp_DiagramHelper.get() == this)
