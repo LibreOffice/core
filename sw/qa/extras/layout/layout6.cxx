@@ -2050,6 +2050,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170381_split_float_table_in_float_t
         assertCellLines(2, r + 1, page2cells[r]);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170477)
+{
+    // This document must not hang on layout:
+    createSwDoc("tdf170477.docx");
+    calcLayout();
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
