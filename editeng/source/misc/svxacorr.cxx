@@ -1333,7 +1333,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
 
     if( '\"' == cInsChar )
     {
-        if (primary(eLang) == primary(LANGUAGE_FRENCH) && eLang != LANGUAGE_FRENCH_SWISS)
+        if (primary(eLang) == primary(LANGUAGE_FRENCH))
         {
             if( bSttQuote )
                 sRet += " ";
@@ -1491,7 +1491,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 }
 
                 if ( eType == ACQuotes::NONE && !bSingle &&
-                    ( primary(eLang) == primary(LANGUAGE_FRENCH) && eLang != LANGUAGE_FRENCH_SWISS ) )
+                    ( primary(eLang) == primary(LANGUAGE_FRENCH)) )
                     eType = ACQuotes::NonBreakingSpace;
 
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, eLang, eType );
