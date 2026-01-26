@@ -2927,8 +2927,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // 3. The table is allowed to split or we do not have a pIndPrev:
         SwFrame* pIndPrev = GetIndPrev();
 
-        SwFlyFrame* pFly = FindFlyFrame();
-        if (!pIndPrev && pFly && pFly->IsFlySplitAllowed())
+        if (SwFlyFrame* pFly = FindFlyFrame(); !pIndPrev && pFly && pFly->IsFlySplitAllowed())
         {
             if (SwFrame* pAnchor = pFly->FindAnchorCharFrame())
             {
