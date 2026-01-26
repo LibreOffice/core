@@ -116,6 +116,8 @@ OString OutHex(sal_uInt32 nHex, sal_uInt8 nLen)
     return pStr;
 }
 
+/// Handles correct unicode and legacy export of a single character.
+//
 // Ideally, this function should work on (sal_uInt32) Unicode scalar values
 // instead of (sal_Unicode) UTF-16 code units.  However, at least "Rich Text
 // Format (RTF) Specification Version 1.9.1" available at
@@ -127,11 +129,8 @@ OString OutHex(sal_uInt32 nHex, sal_uInt8 nLen)
 // However the "Mathematics" section has an example that shows the code point
 // U+1D44E being encoded as UTF-16 surrogate pair "\u-10187?\u-9138?", so
 // sal_Unicode actually works fine here.
-OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pSuccess,
-                bool bUnicode)
+static OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool bUnicode)
 {
-    if (pSuccess)
-        *pSuccess = true;
     OStringBuffer aBuf;
     const char* pStr = nullptr;
     // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
@@ -169,12 +168,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
             {
                 OUString sBuf(&c, 1);
                 OString sConverted;
-                if (pSuccess)
-                    *pSuccess &= sBuf.convertToString(&sConverted, eDestEnc,
-                                                      RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                                                          | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
-                else
-                    sBuf.convertToString(&sConverted, eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
+                sBuf.convertToString(&sConverted, eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
                 const sal_Int32 nLen = sConverted.getLength();
 
                 if (pUCMode && bUnicode)
@@ -217,7 +211,7 @@ OString OutString(std::u16string_view rStr, rtl_TextEncoding eDestEnc, bool bUni
     OStringBuffer aBuf;
     int nUCMode = 1;
     for (size_t n = 0; n < rStr.size(); ++n)
-        aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, nullptr, bUnicode));
+        aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, bUnicode));
     if (nUCMode != 1)
     {
         aBuf.append(
