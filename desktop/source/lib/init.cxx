@@ -5647,28 +5647,34 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:UICoverage")
     {
+        bool report(true), linguisticDataAvailable(true);
+        std::optional<bool> applyTracking;
+
         for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
         {
             if (rPropValue.Name == "Report")
-            {
-                bool report(true);
                 rPropValue.Value >>= report;
-                if (report)
-                {
-                    tools::JsonWriter aJson;
-                    aJson.put("commandName", aCommand);
-                    aJson.put("success", true);
-                    Application::UICoverageReport(aJson);
-                    pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
-                }
-            }
+            else if (rPropValue.Name == "LinguisticDataAvailable")
+                rPropValue.Value >>= linguisticDataAvailable;
             else if (rPropValue.Name == "Track")
             {
                 bool track(false);
                 rPropValue.Value >>= track;
-                Application::EnableUICoverage(track);
+                applyTracking = track;
             }
         }
+
+        if (report)
+        {
+            tools::JsonWriter aJson;
+            aJson.put("commandName", aCommand);
+            aJson.put("success", true);
+            Application::UICoverageReport(aJson, linguisticDataAvailable);
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+        }
+
+        if (applyTracking)
+            Application::EnableUICoverage(*applyTracking);
 
         return;
     }

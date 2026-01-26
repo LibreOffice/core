@@ -713,12 +713,23 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
     return missing;
 }
 
-std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries)
+std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
+                                               bool linguisticDataAvailable)
 {
     std::vector<OUString> missing;
     auto processCategory = [&](const auto& category) {
         for (const auto& entry : category)
         {
+            if (!linguisticDataAvailable && (
+                entry == u"cui/ui/thesaurus.ui" ||
+                entry == u"cui/ui/spellingdialog.ui" ||
+                entry == u"cui/ui/spelloptionsdialog.ui"))
+            {
+                // Skip the dialogs that can't be reached in the absense of
+                // linguistic data.
+                continue;
+            }
+
             // Skip this one, I don't think it can appear in practice
             if (entry == u"sfx/ui/cmisinfopage.ui")
                 continue;
@@ -756,8 +767,8 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 missing.push_back(sEntry);
         }
     };
-    processCategory(SfxDialogList);
     processCategory(CuiDialogList);
+    processCategory(SfxDialogList);
     return missing;
 }
 

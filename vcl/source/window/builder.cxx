@@ -192,7 +192,7 @@ void Application::EnableUICoverage(bool bEnable)
         ImplGetSVData()->mpDefInst->getUsedUIList().clear();
 }
 
-void Application::UICoverageReport(tools::JsonWriter& rJson)
+void Application::UICoverageReport(tools::JsonWriter& rJson, bool linguisticDataAvailable)
 {
     auto resultNode = rJson.startNode("result");
 
@@ -222,7 +222,7 @@ void Application::UICoverageReport(tools::JsonWriter& rJson)
             rJson.putSimpleValue(entry);
     }
 
-    std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries);
+    std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries, linguisticDataAvailable);
     rJson.put("CompleteCommonDialogCoverage", missingCommonDialogUIs.empty());
     if (!missingCommonDialogUIs.empty())
     {
