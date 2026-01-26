@@ -27,7 +27,6 @@ gb_BUILD_TOOLS_executables = \
     $(call gb_CondExeLockfile,lockfile) \
 		makedepend \
 		propex \
-		$(if $(filter PYTHON,$(BUILD_TYPE_FOR_HOST)),python) \
 		saxparser \
 		svidl \
 		treex \
