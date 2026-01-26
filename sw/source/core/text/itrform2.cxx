@@ -2455,9 +2455,18 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
             nTmpY = aRectFnSet.YDiff( nTmpY, RegStart() );
-            const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
+            const sal_uInt16 nDiff = sal_uInt16( std::abs(nTmpY) % RegDiff() );
             if( nDiff )
-                nLineHeight += RegDiff() - nDiff;
+            {
+                if( nTmpY >= 0 )
+                {
+                    nLineHeight += RegDiff() - nDiff;
+                }
+                else
+                {
+                    nLineHeight += nDiff;
+                }
+            }
         }
     }
     m_pCurr->SetRealHeight( nLineHeight );

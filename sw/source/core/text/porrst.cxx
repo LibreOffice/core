@@ -560,11 +560,11 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
         {
             return false;
         }
-        rRegStart = aRectFnSet.GetPrtTop(*pFrame);
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )
         {
             const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pFrame);
+            rRegStart = aRectFnSet.GetPrtTop(*pPage);
             SwPageDesc* pDesc = const_cast<SwPageFrame*>(pPage)->FindPageDesc();
             if( pDesc )
             {
