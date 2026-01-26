@@ -143,8 +143,16 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     const basegfx::B2DPoint aBottomRight(rSnapRange.getMaxX() - fDistanceForTextR,
                                          rSnapRange.getMaxY() - fDistanceForTextB);
     basegfx::B2DRange aAnchorRange;
-    aAnchorRange.expand(aTopLeft);
-    aAnchorRange.expand(aBottomRight);
+
+    // tdf#165732 Margins are too large in some cases (left > right or top > bottom)
+    // - in this case do not expand the range
+    bool bInvalidMargins
+        = (aTopLeft.getX() >= aBottomRight.getX() || aTopLeft.getY() >= aBottomRight.getY());
+    if (!bInvalidMargins)
+    {
+        aAnchorRange.expand(aTopLeft);
+        aAnchorRange.expand(aBottomRight);
+    }
 
     // If the shape has no width, then don't attempt to break the text into multiple
     // lines, not a single character would satisfy a zero width requirement.
