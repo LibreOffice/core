@@ -71,7 +71,7 @@ private:
     void ImplRefreshFontData(bool bNewFontLists) override;
     void ImplInitMapModeObjects() override;
 
-    virtual void CopyDeviceArea(SalTwoRect& aPosAry, bool bWindowInvalidate) override;
+    virtual void CopyDeviceArea(SalTwoRect& aPosAry) override;
     virtual const OutputDevice* DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const override;
     virtual void DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRect& rPosAry,
                                          SalGraphics* pSrcGraphics) override;

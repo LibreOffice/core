@@ -493,8 +493,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 }
 
 void OutputDevice::CopyArea( const Point& rDestPt,
-                             const Point& rSrcPt,  const Size& rSrcSize,
-                             bool bWindowInvalidate )
+                             const Point& rSrcPt,  const Size& rSrcSize )
 {
     if ( ImplIsRecordLayout() )
         return;
@@ -526,7 +525,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
         AdjustTwoRect( aPosAry, GetOutputRectPixel() );
 
-        CopyDeviceArea( aPosAry, bWindowInvalidate );
+        CopyDeviceArea( aPosAry );
     }
 
     SetRasterOp( eOldRop );
@@ -534,7 +533,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
 // Direct OutputDevice drawing protected function
 
-void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate*/)
+void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
