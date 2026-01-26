@@ -289,7 +289,7 @@ gb_TEST_ENV_VARS := MAX_CONCURRENCY=4
 #  initial NSS_InitReadWrite will fail. In response to that failure
 #  LibreOffice will create a temp fallback cert database which is removed
 #  on process exit
-gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=dbm:
+gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=sql:
 # Avoid hanging if the cups daemon requests a password:
 gb_TEST_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 ifeq (,$(SAL_USE_VCLPLUGIN))
