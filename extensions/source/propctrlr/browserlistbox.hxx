@@ -78,6 +78,8 @@ class OBrowserListBox final : public IButtonClickListener
     void UpdatePlayGround();
     void ShowEntry(sal_uInt16 nPos);
 
+    void ImplDestroy();
+
 public:
     explicit OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer);
     ~OBrowserListBox();

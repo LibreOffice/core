@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
+#include <o3tl/deleter.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/asyncnotification.hxx>
@@ -307,7 +308,7 @@ OBrowserListBox::OBrowserListBox(weld::Builder& rBuilder, weld::Container* pCont
     m_xScrolledWindow->set_size_request(-1, m_xScrolledWindow->get_text_height() * 20);
 }
 
-OBrowserListBox::~OBrowserListBox()
+void OBrowserListBox::ImplDestroy()
 {
     OSL_ENSURE(
         !IsModified(),
@@ -321,6 +322,8 @@ OBrowserListBox::~OBrowserListBox()
 
     Clear();
 }
+
+OBrowserListBox::~OBrowserListBox() { suppress_fun_call_w_exception(ImplDestroy()); }
 
 bool OBrowserListBox::IsModified() const
 {

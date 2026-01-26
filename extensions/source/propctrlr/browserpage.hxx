@@ -32,8 +32,6 @@ private:
     std::unique_ptr<weld::Container> m_xContainer;
     OBrowserListBox m_aBrowserListBox;
 
-    void ImplDestroy();
-
 public:
     // TODO inherit from BuilderPage
     explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
