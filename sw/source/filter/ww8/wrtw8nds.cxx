@@ -2530,6 +2530,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
             }
 
+            AttrOutput().ResetFlyProcessingFlag();
             const FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys(nCurrentPos);
 
             // Append bookmarks in this range after flys, exclusive of final
