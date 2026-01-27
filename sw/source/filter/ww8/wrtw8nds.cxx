@@ -2530,7 +2530,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
             }
 
-            FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
+            const FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys(nCurrentPos);
             AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
 
             // Append bookmarks in this range after flys, exclusive of final
@@ -2774,7 +2774,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     else
                     {
                         // insert final graphic anchors if any before CR
-                        nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
+                        aAttrIter.OutFlys(nEnd);
                         // insert final bookmarks if any before CR and after flys
                         AppendBookmarks( rNode, nEnd, 1 );
                         AppendAnnotationMarks(aAttrIter, nEnd, 1);
@@ -2828,7 +2828,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     AttrOutput().WritePostitFieldReference();
 
                     // insert final graphic anchors if any before CR
-                    nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
+                    aAttrIter.OutFlys(nEnd);
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
                     AppendAnnotationMarks(aAttrIter, nEnd, 1);
