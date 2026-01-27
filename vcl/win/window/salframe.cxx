@@ -2154,9 +2154,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
 
                 // tdf#147299: To enable vertical input mode, Windows IMEs check the face
                 // name string for a leading '@'.
-                SalExtTextInputPosEvent aPosEvt;
-                pFrame->CallCallback(SalEvent::ExtTextInputPos, &aPosEvt);
-                if (aPosEvt.mbVertical)
+                if (pContext->mpFont->GetFontSelectPattern().mbVertical)
                 {
                     std::array<WCHAR, LF_FACESIZE> aTmpFaceName;
                     std::copy(aLogFont.lfFaceName, aLogFont.lfFaceName + LF_FACESIZE,
