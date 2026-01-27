@@ -2522,27 +2522,13 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     const FormulaToken* t = maArrIterator.First();
     while( t )
     {
-        // Skip writing unknown functions without a name in OOXML ex: #NAME!()
+        // Discard writing unknown functions without a name in OOXML ex: #NAME!()
         if (t->GetOpCode() == ocNoName && t->GetType() == svByte
             && FormulaGrammar::isOOXML(meGrammar))
         {
-            t = maArrIterator.Next();
-            sal_uInt16 nParenthesis = 0;
-            // traverse the array to match parentheses
-            if (t && t->GetOpCode() == ocOpen)
-            {
-                do
-                {
-                    if (t->GetOpCode() == ocOpen)
-                        nParenthesis++;
-                    else if (t->GetOpCode() == ocClose)
-                        nParenthesis--;
-
-                    t = maArrIterator.Next();
-
-                } while (nParenthesis > 0 && t);
-            }
-            continue;
+            rBuffer.setLength(0);
+            rBuffer.append(GetNativeSymbol(ocErrRef));
+            break;
         }
         t = CreateStringFromToken(rBuffer, t, true);
     }
