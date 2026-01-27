@@ -120,7 +120,7 @@ using ::std::vector;
 
 #define AUTOFORMAT_WARN_SIZE 0x10ffffUL
 
-bool ScDocFunc::CheckSheetViewProtection(sc::Operation eOperation)
+bool ScDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
 {
     sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     return aSheetViewTester.check(eOperation);
@@ -605,7 +605,7 @@ bool ScDocFunc::DeleteContents(
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    if (!CheckSheetViewProtection(sc::Operation::DeleteContent))
+    if (!CheckSheetViewProtection(sc::OperationType::DeleteContent))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
@@ -711,7 +711,7 @@ bool ScDocFunc::DeleteCell(
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    if (!CheckSheetViewProtection(sc::Operation::DeleteCell))
+    if (!CheckSheetViewProtection(sc::OperationType::DeleteCell))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
@@ -782,7 +782,7 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    if (!CheckSheetViewProtection(sc::Operation::TransliterateText))
+    if (!CheckSheetViewProtection(sc::OperationType::TransliterateText))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
@@ -840,7 +840,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
 
     bool bUndo(rDoc.IsUndoEnabled());
 
-    if (!CheckSheetViewProtection(sc::Operation::SetNormalString))
+    if (!CheckSheetViewProtection(sc::OperationType::SetNormalString))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row());
@@ -1362,7 +1362,7 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    if (!CheckSheetViewProtection(sc::Operation::SetNoteText))
+    if (!CheckSheetViewProtection(sc::OperationType::SetNoteText))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row());
@@ -1391,7 +1391,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    if (!CheckSheetViewProtection(sc::Operation::ReplaceNoteText))
+    if (!CheckSheetViewProtection(sc::OperationType::ReplaceNoteText))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row());
@@ -1928,34 +1928,34 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nEditTestEndRow = (eCmd==INS_INSROWS_BEFORE || eCmd==INS_INSROWS_AFTER) ? rDoc.MaxRow() : nMergeTestEndRow;
 
     ScEditableTester aTester;
-    sc::Operation eOperation = sc::Operation::Unknown;
+    sc::OperationType eOperation = sc::OperationType::Unknown;
     switch (eCmd)
     {
         case INS_INSCOLS_BEFORE:
-            eOperation = sc::Operation::InsertColumnsBefore;
+            eOperation = sc::OperationType::InsertColumnsBefore;
             aTester = ScEditableTester::CreateAndTestBlockForAction(
                 rDoc, sc::EditAction::InsertColumnsBefore, nMergeTestStartCol, 0, nMergeTestEndCol, rDoc.MaxRow(), aMark);
             break;
         case INS_INSCOLS_AFTER:
-            eOperation = sc::Operation::InsertColumnsBefore;
+            eOperation = sc::OperationType::InsertColumnsBefore;
             aTester = ScEditableTester::CreateAndTestBlockForAction(
                 rDoc, sc::EditAction::InsertColumnsAfter, nMergeTestStartCol, 0, nMergeTestEndCol, rDoc.MaxRow(), aMark);
             break;
         case INS_INSROWS_BEFORE:
-            eOperation = sc::Operation::InsertRowsBefore;
+            eOperation = sc::OperationType::InsertRowsBefore;
             aTester = ScEditableTester::CreateAndTestBlockForAction(
                 rDoc, sc::EditAction::InsertRowsBefore, 0, nMergeTestStartRow, rDoc.MaxCol(), nMergeTestEndRow, aMark);
             break;
         case INS_INSROWS_AFTER:
-            eOperation = sc::Operation::InsertRowsAfter;
+            eOperation = sc::OperationType::InsertRowsAfter;
             aTester = ScEditableTester::CreateAndTestBlockForAction(
                 rDoc, sc::EditAction::InsertRowsAfter, 0, nMergeTestStartRow, rDoc.MaxCol(), nMergeTestEndRow, aMark);
             break;
         default:
             if (eCmd == INS_CELLSDOWN)
-                eOperation = sc::Operation::InsertCellsDown;
+                eOperation = sc::OperationType::InsertCellsDown;
             else if (eCmd == INS_CELLSRIGHT)
-                eOperation = sc::Operation::InsertCellsRight;
+                eOperation = sc::OperationType::InsertCellsRight;
 
             aTester = ScEditableTester::CreateAndTestSelectedBlock(
                 rDoc, nMergeTestStartCol, nMergeTestStartRow, nEditTestEndCol, nEditTestEndRow, aMark);
@@ -2443,24 +2443,24 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         nEditTestEndY = rDoc.MaxRow();
 
     ScEditableTester aTester;
-    sc::Operation eOperation = sc::Operation::Unknown;
+    sc::OperationType eOperation = sc::OperationType::Unknown;
     switch (eCmd)
     {
         case DelCellCmd::Cols:
-            eOperation = sc::Operation::DeleteColumns;
+            eOperation = sc::OperationType::DeleteColumns;
             aTester = ScEditableTester::CreateAndTestBlockForAction(
                 rDoc, sc::EditAction::DeleteColumns, nUndoStartCol, 0, nUndoEndCol, rDoc.MaxRow(), aMark);
             break;
         case DelCellCmd::Rows:
-            eOperation = sc::Operation::DeleteRows;
+            eOperation = sc::OperationType::DeleteRows;
             aTester = ScEditableTester::CreateAndTestBlockForAction(
                 rDoc, sc::EditAction::DeleteRows, 0, nUndoStartRow, rDoc.MaxCol(), nUndoEndRow, aMark);
             break;
         default:
             if (eCmd == DelCellCmd::CellsLeft)
-                eOperation = sc::Operation::DeleteCellsLeft;
+                eOperation = sc::OperationType::DeleteCellsLeft;
             else if (eCmd == DelCellCmd::CellsUp)
-                eOperation = sc::Operation::DeleteCellsUp;
+                eOperation = sc::OperationType::DeleteCellsUp;
 
             aTester = ScEditableTester::CreateAndTestSelectedBlock(
                 rDoc, nUndoStartCol, nUndoStartRow, nEditTestEndX, nEditTestEndY, aMark);
@@ -3023,7 +3023,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         return false;
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::MoveBlock))
+    if (!CheckSheetViewProtection(sc::OperationType::MoveBlock))
         return false;
 
     //  Test for cell protection
@@ -4175,7 +4175,7 @@ void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo (rDoc.IsUndoEnabled());
 
-    if (!CheckSheetViewProtection(sc::Operation::ClearItems))
+    if (!CheckSheetViewProtection(sc::OperationType::ClearItems))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
@@ -4223,7 +4223,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
 
-    if (!CheckSheetViewProtection(sc::Operation::ChangeIndent))
+    if (!CheckSheetViewProtection(sc::OperationType::ChangeIndent))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
@@ -4316,7 +4316,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
     ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
 
-    if (!CheckSheetViewProtection(sc::Operation::AutoFormat))
+    if (!CheckSheetViewProtection(sc::OperationType::AutoFormat))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -4441,7 +4441,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::EnterMatrix))
+    if (!CheckSheetViewProtection(sc::OperationType::EnterMatrix))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -4531,7 +4531,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::TabOperation))
+    if (!CheckSheetViewProtection(sc::OperationType::TabOperation))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -4678,7 +4678,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::FillSimple))
+    if (!CheckSheetViewProtection(sc::OperationType::FillSimple))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -4794,7 +4794,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::FillSeries))
+    if (!CheckSheetViewProtection(sc::OperationType::FillSeries))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -4965,7 +4965,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
             break;
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::FillAuto))
+    if (!CheckSheetViewProtection(sc::OperationType::FillAuto))
         return false;
 
     //      Test for cell protection
@@ -5070,7 +5070,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    if (!CheckSheetViewProtection(sc::Operation::MergeCells))
+    if (!CheckSheetViewProtection(sc::OperationType::MergeCells))
         return false;
 
     for (const auto& rTab : rOption.maTabs)
@@ -5515,7 +5515,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
         SCCOL nEndCol = nStartCol + 1;
         SCROW nEndRow = nStartRow + static_cast<SCROW>(nValidCount) - 1;
 
-        if (!CheckSheetViewProtection(sc::Operation::InsertNameList))
+        if (!CheckSheetViewProtection(sc::OperationType::InsertNameList))
             return false;
 
         ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow);
@@ -5832,7 +5832,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    if (!CheckSheetViewProtection(sc::Operation::ConvertFormulaToValue))
+    if (!CheckSheetViewProtection(sc::OperationType::ConvertFormulaToValue))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, rRange, sc::EditAction::Unknown);
@@ -5877,7 +5877,7 @@ void ScDocFunc::EndListAction()
 bool ScDocFunc::InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
                                  const std::shared_ptr<sc::SparklineGroup>& pSparklineGroup)
 {
-    if (!CheckSheetViewProtection(sc::Operation::SparklineInsert))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineInsert))
         return false;
 
     std::vector<sc::SparklineData> aSparklineDataVector;
@@ -5963,7 +5963,7 @@ bool ScDocFunc::DeleteSparkline(ScAddress const& rAddress)
     if (!rDocument.HasSparkline(rAddress))
         return false;
 
-    if (!CheckSheetViewProtection(sc::Operation::SparklineDelete))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineDelete))
         return false;
 
 
@@ -5985,7 +5985,7 @@ bool ScDocFunc::DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& 
     if (!rDocument.HasTable(nTab))
         return false;
 
-    if (!CheckSheetViewProtection(sc::Operation::SparklineGroupDelete))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineGroupDelete))
         return false;
 
     auto pUndo = std::make_unique<sc::UndoDeleteSparklineGroup>(rDocShell, pSparklineGroup, nTab);
@@ -5998,7 +5998,7 @@ bool ScDocFunc::DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& 
 bool ScDocFunc::ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGroup> const& pExistingSparklineGroup,
                                                sc::SparklineAttributes const& rNewAttributes)
 {
-    if (!CheckSheetViewProtection(sc::Operation::SparklineGroupChange))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineGroupChange))
         return false;
 
 
@@ -6011,7 +6011,7 @@ bool ScDocFunc::ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGrou
 
 bool ScDocFunc::GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup> const& rpGroup)
 {
-    if (!CheckSheetViewProtection(sc::Operation::SparklineGroup))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineGroup))
         return false;
 
     auto pUndo = std::make_unique<sc::UndoGroupSparklines>(rDocShell, rRange, rpGroup);
@@ -6023,7 +6023,7 @@ bool ScDocFunc::GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::Spark
 
 bool ScDocFunc::UngroupSparklines(ScRange const& rRange)
 {
-    if (!CheckSheetViewProtection(sc::Operation::SparklineUngroup))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineUngroup))
         return false;
 
     auto pUndo = std::make_unique<sc::UndoUngroupSparklines>(rDocShell, rRange);
@@ -6035,7 +6035,7 @@ bool ScDocFunc::UngroupSparklines(ScRange const& rRange)
 
 bool ScDocFunc::ChangeSparkline(std::shared_ptr<sc::Sparkline> const& rpSparkline, SCTAB nTab, ScRangeList const& rDataRange)
 {
-    if (!CheckSheetViewProtection(sc::Operation::SparklineChange))
+    if (!CheckSheetViewProtection(sc::OperationType::SparklineChange))
         return false;
 
     auto pUndo = std::make_unique<sc::UndoEditSparkline>(rDocShell, rpSparkline, nTab, rDataRange);

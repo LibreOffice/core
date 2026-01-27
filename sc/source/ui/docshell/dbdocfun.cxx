@@ -63,7 +63,7 @@
 
 using namespace ::com::sun::star;
 
-bool ScDBDocFunc::CheckSheetViewProtection(sc::Operation eOperation)
+bool ScDBDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
 {
     sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     return aSheetViewTester.check(eOperation);
@@ -658,7 +658,7 @@ bool ScDBDocFunc::SortTab(SCTAB nTab, const ScSortParam& rSortParam, bool bRecor
             nStartingColToEdit++;
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::Sort))
+    if (!CheckSheetViewProtection(sc::OperationType::Sort))
         return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
@@ -889,7 +889,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             return false;
         }
 
-        if (!CheckSheetViewProtection(sc::Operation::Query))
+        if (!CheckSheetViewProtection(sc::OperationType::Query))
             return false;
 
         ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nDestTab,
@@ -1213,7 +1213,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         return;
     }
 
-    if (!CheckSheetViewProtection(sc::Operation::SubTotals))
+    if (!CheckSheetViewProtection(sc::OperationType::SubTotals))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, 0, rParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
@@ -1587,7 +1587,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     aRanges.push_back(pOldObj->GetOutRange());
     aRanges.push_back(ScRange(pNewObj->GetOutRange().aStart)); // at least one cell in the output position must be editable.
 
-    if (!CheckSheetViewProtection(sc::Operation::PivotTableUpdate))
+    if (!CheckSheetViewProtection(sc::OperationType::PivotTableUpdate))
        return false;
 
     if (!isEditable(rDocShell, aRanges, bApi))
@@ -1672,7 +1672,7 @@ bool ScDBDocFunc::RemovePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     ScDocShellModificator aModificator(rDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
-    if (!CheckSheetViewProtection(sc::Operation::PivotTableRemove))
+    if (!CheckSheetViewProtection(sc::OperationType::PivotTableRemove))
         return false;
 
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
@@ -1757,7 +1757,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     ScDocShellModificator aModificator(rDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
-    if (!CheckSheetViewProtection(sc::Operation::PivotTableCreate))
+    if (!CheckSheetViewProtection(sc::OperationType::PivotTableCreate))
         return false;
 
     // At least one cell in the output range should be editable. Check in advance.
@@ -1872,7 +1872,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocShellModificator aModificator( rDocShell );
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
-    if (!CheckSheetViewProtection(sc::Operation::PivotTableUpdate))
+    if (!CheckSheetViewProtection(sc::OperationType::PivotTableUpdate))
         return false;
 
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi, sc::EditAction::UpdatePivotTable))

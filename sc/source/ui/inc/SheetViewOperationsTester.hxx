@@ -16,7 +16,7 @@ class ScViewData;
 namespace sc
 {
 /** Operations that can be performed on a sheet. */
-enum class Operation
+enum class OperationType
 {
     Unknown,
     DeleteContent,
@@ -77,7 +77,7 @@ public:
     {
     }
 
-    bool check(Operation eOperation) const;
+    bool check(OperationType eOperationType) const;
 };
 }
 

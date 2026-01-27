@@ -53,7 +53,7 @@ namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace sc
 {
     struct ColRowSpan;
-    enum class Operation;
+    enum class OperationType;
 }
 
 namespace com::sun::star::datatransfer { class XTransferable; }
@@ -417,7 +417,7 @@ private:
     void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 
-    bool CheckSheetViewProtection(sc::Operation eOperation);
+    bool CheckSheetViewProtection(sc::OperationType eOperationType);
 };
 
 extern bool bPasteIsMove;
