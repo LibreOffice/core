@@ -93,6 +93,10 @@ struct SdrModelImpl
     std::shared_ptr<model::Theme> mpTheme;
     std::shared_ptr<svx::IThemeColorChanger> mpThemeColorChanger;
 
+    // A set of SdrObjects that want to BroadcastObjectChange when this is unlocked.
+    std::unordered_set<rtl::Reference<SdrObject>> maDeferredChanges;
+    bool mbIgnoreDeferredChanges = false;
+
     SdrModelImpl()
         : mpUndoManager(nullptr)
         , mpUndoFactory(nullptr)
@@ -1645,11 +1649,35 @@ void SdrModel::setLock( bool bLock )
 
         if( !bLock )
         {
+            // Catch unbalanced calls to SetIgnoreDeferredObjectChanges
+            assert(!mpImpl->mbIgnoreDeferredChanges);
+            for (auto& pObject : std::exchange(mpImpl->maDeferredChanges, {}))
+                pObject->BroadcastObjectChange();
+
             ImpReformatAllEdgeObjects();
         }
     }
 }
 
+void SdrModel::addDeferredObjectChanges(const SdrObject* pObject)
+{
+    assert(mbModelLocked); // Only makes sense when model is locked
+    assert(pObject);
+    if (!mpImpl->mbIgnoreDeferredChanges)
+        mpImpl->maDeferredChanges.insert(const_cast<SdrObject*>(pObject));
+}
+
+void SdrModel::setIgnoreDeferredObjectChanges(bool bIgnore)
+{
+    assert(mbModelLocked); // Only makes sense when model is locked
+    mpImpl->mbIgnoreDeferredChanges = bIgnore;
+}
+
+bool SdrModel::isIgnoringDeferredObjectChanges() const
+{
+    assert(mbModelLocked); // Only makes sense when model is locked
+    return mpImpl->mbIgnoreDeferredChanges;
+}
 
 void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel& rNewModel )
 {
