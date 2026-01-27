@@ -2515,9 +2515,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // Don't redline content-controls--Word doesn't do them.
             SwTextAttr* pAttr = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
                                                     sw::GetTextAttrMode::Default);
+            bool bIsStartOfContentControl = false;
             if (pAttr && pAttr->GetStart() == nCurrentPos)
             {
                 pRedlineData = nullptr;
+                bIsStartOfContentControl = true;
             }
 
             sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nCurrentPos );
@@ -2582,6 +2584,21 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             OUString aSymbolFont;
             sal_Int32 nLen = nNextAttr - nCurrentPos;
+
+            if (!bPostponeWritingText && bIsStartOfContentControl
+                && nStateOfFlyFrame == FLY_PROCESSED
+                && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX)
+            {
+                // FLY_PROCESSED: there is at least 1 fly already written
+
+                // assurance: this will not duplicate what is done for fields below...
+                assert(bTextAtr); // because SwTextContentControl always SetHasDummyChar(true)
+
+                // write flys in a separate run before Sdt content control
+                AttrOutput().EndRun(&rNode, nCurrentPos, /*nLen=*/-1, /*bLastRun=*/false);
+                AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+            }
+
             if ( !bTextAtr && nLen )
             {
                 sal_Unicode ch = aStr[nCurrentPos];

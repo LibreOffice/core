@@ -143,6 +143,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165359_SdtWithDrawing)
     assertXPath(pXmlDoc, "//w:sdtPr/w:text", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170516_drawingBeforePlainText)
+{
+    createSwDoc("tdf170516_drawingBeforePlainText.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 1); // only one sdt
+    assertXPath(pXmlDoc, "//w:tc/w:p/w:sdt", 1); // and it is inside a cell
+
+    assertXPath(pXmlDoc, "//mc:AlternateContent", 1); // only one drawing
+    assertXPath(pXmlDoc, "//w:tc/w:p/w:r/mc:AlternateContent", 1); // and it is not inside the sdt
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
 {
     createSwDoc("tdf170389_manyTabstops.odt");
