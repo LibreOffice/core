@@ -58,7 +58,7 @@ namespace sc
     class SparklineAttributes;
     class SparklineGroup;
     class Sparkline;
-    enum class Operation;
+    enum class OperationType;
 }
 namespace tools
 {
@@ -68,7 +68,7 @@ namespace tools
 class ScDocFunc
 {
     ScDocShell&     rDocShell;
-    static bool CheckSheetViewProtection(sc::Operation eOperation);
+    static bool CheckSheetViewProtection(sc::OperationType eOperation);
 
 protected:
     bool            AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi );

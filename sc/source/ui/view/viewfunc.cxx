@@ -137,7 +137,7 @@ ScViewFunc::~ScViewFunc()
 {
 }
 
-bool ScViewFunc::CheckSheetViewProtection(sc::Operation eOperation)
+bool ScViewFunc::CheckSheetViewProtection(sc::OperationType eOperation)
 {
     sc::SheetViewOperationsTester aSheetViewTester(&GetViewData());
     return aSheetViewTester.check(eOperation);
@@ -790,7 +790,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScDocFunc &rFunc = GetViewData().GetDocFunc();
     std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(*GetViewData().GetDocShell());
 
-    if (!CheckSheetViewProtection(sc::Operation::EnterData))
+    if (!CheckSheetViewProtection(sc::OperationType::EnterData))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nCol, nRow, nCol, nRow, aMark);
@@ -937,7 +937,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    if (!CheckSheetViewProtection(sc::Operation::EnterData))
+    if (!CheckSheetViewProtection(sc::OperationType::EnterData))
         return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);

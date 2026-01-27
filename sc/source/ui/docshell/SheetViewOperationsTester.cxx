@@ -18,122 +18,126 @@ namespace sc
 namespace
 {
 /** Return operation as string. */
-constexpr std::string_view getOperationName(Operation eOperation)
+constexpr std::string_view getOperationName(OperationType eOperation)
 {
     switch (eOperation)
     {
-        case Operation::Unknown:
+        case OperationType::Unknown:
             return "Unknown";
-        case Operation::DeleteContent:
+        case OperationType::DeleteContent:
             return "DeleteContent";
-        case Operation::DeleteCell:
+        case OperationType::DeleteCell:
             return "DeleteCell";
-        case Operation::TransliterateText:
+        case OperationType::TransliterateText:
             return "TransliterateText";
-        case Operation::SetNormalString:
+        case OperationType::SetNormalString:
             return "SetNormalString";
-        case Operation::SetNoteText:
+        case OperationType::SetNoteText:
             return "SetNoteText";
-        case Operation::ReplaceNoteText:
+        case OperationType::ReplaceNoteText:
             return "ReplaceNoteText";
-        case Operation::InsertColumnsBefore:
+        case OperationType::InsertColumnsBefore:
             return "InsertColumnsBefore";
-        case Operation::InsertColumnsAfter:
+        case OperationType::InsertColumnsAfter:
             return "InsertColumnsAfter";
-        case Operation::InsertRowsBefore:
+        case OperationType::InsertRowsBefore:
             return "InsertRowsBefore";
-        case Operation::InsertRowsAfter:
+        case OperationType::InsertRowsAfter:
             return "InsertRowsAfter";
-        case Operation::InsertCellsDown:
+        case OperationType::InsertCellsDown:
             return "InsertCellsDown";
-        case Operation::InsertCellsRight:
+        case OperationType::InsertCellsRight:
             return "InsertCellsRight";
-        case Operation::DeleteColumns:
+        case OperationType::DeleteColumns:
             return "DeleteColumns";
-        case Operation::DeleteRows:
+        case OperationType::DeleteRows:
             return "DeleteRows";
-        case Operation::DeleteCellsLeft:
+        case OperationType::DeleteCellsLeft:
             return "DeleteCellsLeft";
-        case Operation::DeleteCellsUp:
+        case OperationType::DeleteCellsUp:
             return "DeleteCellsUp";
-        case Operation::MoveBlock:
+        case OperationType::MoveBlock:
             return "MoveBlock";
-        case Operation::ClearItems:
+        case OperationType::ClearItems:
             return "ClearItems";
-        case Operation::ChangeIndent:
+        case OperationType::ChangeIndent:
             return "ChangeIndent";
-        case Operation::AutoFormat:
+        case OperationType::AutoFormat:
             return "AutoFormat";
-        case Operation::EnterMatrix:
+        case OperationType::EnterMatrix:
             return "EnterMatrix";
-        case Operation::TabOperation:
+        case OperationType::TabOperation:
             return "TabOperation";
-        case Operation::FillSimple:
+        case OperationType::FillSimple:
             return "FillSimple";
-        case Operation::FillSeries:
+        case OperationType::FillSeries:
             return "FillSeries";
-        case Operation::FillAuto:
+        case OperationType::FillAuto:
             return "FillAuto";
-        case Operation::MergeCells:
+        case OperationType::MergeCells:
             return "MergeCells";
-        case Operation::InsertNameList:
+        case OperationType::InsertNameList:
             return "InsertNameList";
-        case Operation::ConvertFormulaToValue:
+        case OperationType::ConvertFormulaToValue:
             return "ConvertFormulaToValue";
-        case Operation::Sort:
+        case OperationType::Sort:
             return "Sort";
-        case Operation::Query:
+        case OperationType::Query:
             return "Query";
-        case Operation::SubTotals:
+        case OperationType::SubTotals:
             return "SubTotals";
-        case Operation::PivotTableUpdate:
+        case OperationType::PivotTableUpdate:
             return "PivotTableUpdate";
-        case Operation::PivotTableRemove:
+        case OperationType::PivotTableRemove:
             return "PivotTableRemove";
-        case Operation::PivotTableCreate:
+        case OperationType::PivotTableCreate:
             return "PivotTableCreate";
-        case Operation::SparklineInsert:
+        case OperationType::SparklineInsert:
             return "SparklineInsert";
-        case Operation::SparklineDelete:
+        case OperationType::SparklineDelete:
             return "SparklineDelete";
-        case Operation::SparklineChange:
+        case OperationType::SparklineChange:
             return "SparklineChange";
-        case Operation::SparklineGroup:
+        case OperationType::SparklineGroup:
             return "SparklineGroup";
-        case Operation::SparklineUngroup:
+        case OperationType::SparklineUngroup:
             return "SparklineUngroup";
-        case Operation::SparklineGroupDelete:
+        case OperationType::SparklineGroupDelete:
             return "SparklineGroupDelete";
-        case Operation::SparklineGroupChange:
+        case OperationType::SparklineGroupChange:
             return "SparklineGroupChange";
-        case Operation::EnterData:
+        case OperationType::EnterData:
             return "EnterData";
     }
     return "";
 }
 
 /** Supported operations by sheet view. */
-constexpr bool isSupported(Operation eOperation)
+constexpr bool isSupported(OperationType eOperationType)
 {
-    return eOperation == Operation::EnterData || eOperation == Operation::SetNormalString
-           || eOperation == Operation::Sort;
+    return eOperationType == OperationType::EnterData
+           || eOperationType == OperationType::SetNormalString
+           || eOperationType == OperationType::Sort;
 }
 
 /** Operations on default view that unsync all the sheet views. */
-constexpr bool doesUnsycAllSheetView(Operation eOperation)
+constexpr bool doesUnsyncAllSheetView(OperationType eOperationType)
 {
-    bool bOperationAllowed
-        = eOperation == Operation::EnterData || eOperation == Operation::SetNormalString;
+    bool bOperationAllowed = eOperationType == OperationType::EnterData
+                             || eOperationType == OperationType::SetNormalString;
 
     return !bOperationAllowed;
 }
 
 /** Operations that unsync the current sheet view. */
-constexpr bool doesUnsycSheetView(Operation eOperation) { return eOperation == Operation::Sort; }
+constexpr bool doesUnsyncSheetView(OperationType eOperationType)
+{
+    return eOperationType == OperationType::Sort;
+}
 
 } // end anonymous namespace
 
-bool SheetViewOperationsTester::check(Operation eOperation) const
+bool SheetViewOperationsTester::check(OperationType eOperationType) const
 {
     if (!mpViewData)
         return true;
@@ -149,28 +153,28 @@ bool SheetViewOperationsTester::check(Operation eOperation) const
 
     std::shared_ptr<sc::SheetViewManager> pSheetViewManager = rDocument.GetSheetViewManager(nTab);
 
-    if (nSheetViewID == sc::DefaultSheetViewID && doesUnsycAllSheetView(eOperation))
+    if (nSheetViewID == sc::DefaultSheetViewID && doesUnsyncAllSheetView(eOperationType))
     {
         // Only unsync if there are sheet views.
         if (!pSheetViewManager->isEmpty())
         {
             pSheetViewManager->unsyncAllSheetViews();
-            SAL_INFO("sc.ui", "Operation '" << getOperationName(eOperation)
+            SAL_INFO("sc.ui", "Operation '" << getOperationName(eOperationType)
                                             << "' unsynced all sheet views for TAB " << nTab);
         }
     }
     else
     {
-        bool bSupported = isSupported(eOperation);
+        bool bSupported = isSupported(eOperationType);
         SAL_INFO_IF(!bSupported, "sc.ui",
-                    "Operation '" << getOperationName(eOperation)
+                    "Operation '" << getOperationName(eOperationType)
                                   << "' not supported on sheet view '" << nSheetViewID << "'");
 
-        if (bSupported && doesUnsycSheetView(eOperation))
+        if (bSupported && doesUnsyncSheetView(eOperationType))
         {
             std::shared_ptr<sc::SheetView> pSheetView = pSheetViewManager->get(nSheetViewID);
             pSheetView->unsync();
-            SAL_INFO("sc.ui", "Operation '" << getOperationName(eOperation)
+            SAL_INFO("sc.ui", "Operation '" << getOperationName(eOperationType)
                                             << "' unsynced sheet view '" << nSheetViewID << "'");
         }
         return bSupported;
