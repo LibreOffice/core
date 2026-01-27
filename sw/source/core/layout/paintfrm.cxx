@@ -4322,8 +4322,11 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             }
         }
         // paint of margin needed.
+        const SwViewOption* pViewOptions = pShell ? pShell->GetViewOptions() : nullptr;
+        SwRedlineRenderMode eRedlineRenderMode = pViewOptions ? pViewOptions->GetRedlineRenderMode()
+            : SwRedlineRenderMode::Standard;
         const bool bPaintMarginOnly( !bPaintCompleteBack &&
-                                     getFramePrintArea().SSize() != getFrameArea().SSize() );
+                                     (getFramePrintArea().SSize() != getFrameArea().SSize() || eRedlineRenderMode != SwRedlineRenderMode::Standard));
 
         // #i47804# - paint background of parent fly frame
         // for transparent graphics in layer Hell, if parent fly frame isn't
@@ -5520,7 +5523,8 @@ void SwFrame::PaintSwFrameShadowAndBorder(
     if (GetType() & (SwFrameType::NoTxt|SwFrameType::Row|SwFrameType::Body|SwFrameType::Ftn|SwFrameType::Column|SwFrameType::Root))
         return;
 
-    if (IsCellFrame() && !gProp.pSGlobalShell->GetViewOptions()->IsTable())
+    const SwViewOption& rViewOptions = *gProp.pSGlobalShell->GetViewOptions();
+    if (IsCellFrame() && !rViewOptions.IsTable())
         return;
 
     // #i29550#
@@ -5539,7 +5543,8 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         return;
     }
 
-    const bool bLine = rAttrs.IsLine();
+    SwRedlineRenderMode eRedlineRenderMode = rViewOptions.GetRedlineRenderMode();
+    const bool bLine = (rAttrs.IsLine() || (IsFlyFrame() && eRedlineRenderMode != SwRedlineRenderMode::Standard));
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE;
 
     // - flag to control,
@@ -5617,6 +5622,21 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         const SvxBorderLine* pRightBorder(rBox.GetRight());
         const SvxBorderLine* pTopBorder(rBox.GetTop());
         const SvxBorderLine* pBottomBorder(rBox.GetBottom());
+
+        auto pFlyFrame = IsFlyFrame() ? static_cast<const SwFlyFrame*>(this) : nullptr;
+        SvxBoxItem aBoxItem(RES_BOX);
+        if (pFlyFrame)
+        {
+            // This is a fly frame, see if it wants to paint a custom border based on the redline
+            // mode and status.
+            if (pFlyFrame->GetRedlineRenderModeFrame(aBoxItem))
+            {
+                pLeftBorder = aBoxItem.GetLeft();
+                pRightBorder = aBoxItem.GetRight();
+                pTopBorder = aBoxItem.GetTop();
+                pBottomBorder = aBoxItem.GetBottom();
+            }
+        }
 
         // if R2L, exchange Right/Left
         const bool bR2L(IsCellFrame() && IsRightToLeft());
