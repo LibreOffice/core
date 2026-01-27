@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAMHELPER_HXX
-#define INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAMHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <oox/drawingml/theme.hxx>
@@ -102,7 +101,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
