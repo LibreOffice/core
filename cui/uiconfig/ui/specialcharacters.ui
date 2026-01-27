@@ -389,7 +389,9 @@
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="specialcharacters|symboltext1">Recent Characters:</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">viewchar1</property>
+                    <accessibility>
+                      <relation type="label-for" target="viewgrid"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -594,6 +596,9 @@
                         <property name="position">15</property>
                       </packing>
                     </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="symboltext1"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -623,7 +628,9 @@
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="specialcharacters|favbtn|symboltext2">Favorite Characters:</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">favchar1</property>
+                    <accessibility>
+                      <relation type="label-for" target="favgrid"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -813,6 +820,9 @@
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="symboltext2"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
