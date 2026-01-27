@@ -665,6 +665,8 @@ void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdat
     // Disable mass broadcasts from drawing objects' position changes.
     bool bWasLocked = isLocked();
     setLock(true);
+    bool bWasIgnoring = isIgnoringDeferredObjectChanges();
+    setIgnoreDeferredObjectChanges(true);
 
     for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
@@ -706,6 +708,7 @@ void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdat
         }
     }
 
+    setIgnoreDeferredObjectChanges(bWasIgnoring);
     setLock(bWasLocked);
 }
 
