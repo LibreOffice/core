@@ -41,7 +41,7 @@ namespace svx {
 }
 namespace sc
 {
-    enum class Operation;
+    enum class OperationType;
 }
 
 class ScDBDocFunc
@@ -50,7 +50,7 @@ friend class ScDBFunc;
 
 private:
     ScDocShell&     rDocShell;
-    static bool CheckSheetViewProtection(sc::Operation eOperation);
+    static bool CheckSheetViewProtection(sc::OperationType eOperation);
 
 public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
