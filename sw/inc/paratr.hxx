@@ -134,7 +134,7 @@ public:
             { m_pDefinedIn = const_cast<sw::FormatDropDefiner*>(pDefiner); };
 };
 
-class SwRegisterItem final : public SfxBoolItem
+class SW_DLLPUBLIC SwRegisterItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();

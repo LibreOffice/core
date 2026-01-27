@@ -37,7 +37,11 @@ protected:
     void applyPageLineSpacing(const uint16_t nPage, const bool bEnable,
                               const OUString& rReferenceStyle);
 
+    void applyPageLineSpacing(const OUString& rParagraphStyle);
+
     Size getTextFrameSize(const uint16_t nTextFrame, const OUString& rTextContent);
+
+    void setLineHeightForReferenceStyle(const uint16_t nPage, const sal_uInt16 nLineHeight);
 
 private:
     void checkTextAlignedToBaselineGrid(SwTextFrame* pTextFrame, const bool bAligned);
@@ -156,6 +160,38 @@ void SwPageLineSpacingTest::applyPageLineSpacing(const uint16_t nPage, const boo
     calcLayout();
 }
 
+void SwPageLineSpacingTest::applyPageLineSpacing(const OUString& rParagraphStyle)
+{
+    SwDocShell* pDocShell = getSwDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwDoc* pDoc = pDocShell->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Enable page line-spacing for the given paragraph style.
+    {
+        SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(UIName(rParagraphStyle));
+        CPPUNIT_ASSERT(pTextFormat);
+
+        const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
+        SwRegisterItem aRegisterItem = rAttrSet.GetRegister();
+        aRegisterItem.SetValue(true);
+        CPPUNIT_ASSERT_EQUAL(true, aRegisterItem.GetValue());
+
+        std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
+        pNewSet->Put(aRegisterItem);
+        pDoc->ChgFormat(*pTextFormat, *pNewSet);
+        calcLayout();
+    }
+
+    // Verify the paragraph style was updated properly.
+    {
+        SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(UIName(rParagraphStyle));
+        const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
+        CPPUNIT_ASSERT_EQUAL(true, rAttrSet.GetRegister().GetValue());
+    }
+}
+
 Size SwPageLineSpacingTest::getTextFrameSize(const uint16_t nTextFrame,
                                              const OUString& rTextContent)
 {
@@ -203,6 +239,79 @@ Size SwPageLineSpacingTest::getTextFrameSize(const uint16_t nTextFrame,
     };
 
     return { 0, 0 };
+}
+
+void SwPageLineSpacingTest::setLineHeightForReferenceStyle(const uint16_t nPage,
+                                                           const sal_uInt16 nLineHeight)
+{
+    SwDocShell* pDocShell = getSwDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwDoc* pDoc = pDocShell->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SwFrame* pNextFrame = pWrtShell->GetLayout();
+    while (pNextFrame)
+    {
+        if (pNextFrame->IsPageFrame())
+        {
+            uint16_t nCurrentPage = 1;
+            while (pNextFrame)
+            {
+                // Find the correct page.
+                if (nCurrentPage == nPage)
+                {
+                    CPPUNIT_ASSERT(pNextFrame->IsPageFrame());
+                    auto pPageFrame = dynamic_cast<SwPageFrame*>(pNextFrame);
+                    CPPUNIT_ASSERT(pPageFrame);
+                    SwPageDesc* pPageDesc = pPageFrame->GetPageDesc();
+                    CPPUNIT_ASSERT(pPageDesc);
+                    // Modify the reference style of the given page style.
+                    {
+                        const SwTextFormatColl* pRegisterFormat
+                            = pPageDesc->GetRegisterFormatColl();
+                        CPPUNIT_ASSERT(pRegisterFormat);
+                        SwTextFormatColl* pTextFormat
+                            = pDoc->FindTextFormatCollByName(pRegisterFormat->GetName());
+                        CPPUNIT_ASSERT(pTextFormat);
+
+                        const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
+                        SvxLineSpacingItem aLineSpacingItem = rAttrSet.GetLineSpacing();
+                        aLineSpacingItem.SetLineHeight(nLineHeight);
+                        aLineSpacingItem.SetLineSpaceRule(SvxLineSpaceRule::Fix);
+                        CPPUNIT_ASSERT_EQUAL(nLineHeight, aLineSpacingItem.GetLineHeight());
+                        CPPUNIT_ASSERT_EQUAL(SvxLineSpaceRule::Fix,
+                                             aLineSpacingItem.GetLineSpaceRule());
+
+                        std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
+                        pNewSet->Put(aLineSpacingItem);
+                        pDoc->ChgFormat(*pTextFormat, *pNewSet);
+                    }
+
+                    // Verify the reference style was updated properly.
+                    {
+                        const SwTextFormatColl* pRegisterFormat
+                            = pPageDesc->GetRegisterFormatColl();
+                        CPPUNIT_ASSERT(pRegisterFormat);
+                        const SwAttrSet& rAttrSet = pRegisterFormat->GetAttrSet();
+                        const SvxLineSpacingItem& aLineSpacingItem = rAttrSet.GetLineSpacing();
+                        CPPUNIT_ASSERT_EQUAL(nLineHeight, aLineSpacingItem.GetLineHeight());
+                        CPPUNIT_ASSERT_EQUAL(SvxLineSpaceRule::Fix,
+                                             aLineSpacingItem.GetLineSpaceRule());
+                    }
+                    break;
+                }
+                pNextFrame = pNextFrame->GetNext();
+                nCurrentPage += 1;
+            };
+            break;
+        }
+        pNextFrame = pNextFrame->GetLower();
+    };
+    calcLayout();
 }
 
 void SwPageLineSpacingTest::checkTextAlignedToBaselineGrid(SwTextFrame* pTextFrame,
@@ -284,13 +393,6 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testMultiplePages)
     checkTextAlignedToBaselineGrid();
 }
 
-CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testPageLineSpacingDisabledParagraph)
-{
-    createSwDoc("pageLineSpacingDisabledParagraph.fodt");
-
-    checkTextAlignedToBaselineGrid(false);
-}
-
 CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testDoubleLineSpacing)
 {
     createSwDoc("doubleLineSpacing.fodt");
@@ -352,13 +454,6 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testColumnSection)
 CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testPageColumns)
 {
     createSwDoc("pageColumns.fodt");
-
-    checkTextAlignedToBaselineGrid();
-}
-
-CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testTableWithTopAlignment)
-{
-    createSwDoc("tableWithTopAlignment.fodt");
 
     checkTextAlignedToBaselineGrid();
 }
@@ -479,6 +574,43 @@ CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testVerticalPageStyle)
     applyPageLineSpacing(1, false, "");
 
     CPPUNIT_ASSERT_EQUAL(aOriginalSize, getTextFrameSize(1, u"RightToLeft"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testApplyPageLineSpacingOnTable)
+{
+    createSwDoc("tableWithTopAlignment.fodt");
+
+    checkTextAlignedToBaselineGrid();
+
+    applyPageLineSpacing(1, false, "");
+
+    checkTextAlignedToBaselineGrid(false);
+
+    applyPageLineSpacing(1, true, u"Body Text"_ustr);
+
+    checkTextAlignedToBaselineGrid();
+}
+
+CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testActivatePageLineSpacingForParagraphStyle)
+{
+    createSwDoc("pageLineSpacingDisabledParagraph.fodt");
+
+    checkTextAlignedToBaselineGrid(false);
+
+    applyPageLineSpacing(u"Title"_ustr);
+
+    checkTextAlignedToBaselineGrid();
+}
+
+CPPUNIT_TEST_FIXTURE(SwPageLineSpacingTest, testModifyReferenceStyle)
+{
+    createSwDoc("multipleParagraphs.fodt");
+
+    checkTextAlignedToBaselineGrid();
+
+    setLineHeightForReferenceStyle(1, 400);
+
+    checkTextAlignedToBaselineGrid();
 }
 
 } // end of anonymous namespace
