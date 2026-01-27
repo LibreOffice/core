@@ -3137,7 +3137,10 @@ IMPL_LINK(SwContentTree, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
     if (dynamic_cast<SwTOXMarkContent*>(static_cast<SwTypeNumber*>(pCnt)))
         m_bEditing = false;
     else
+    {
+        assert(pCnt);
         m_bEditing = pCnt->GetParent()->IsRenamable();
+    }
     if (m_bEditing)
         OverlayObject();
     return m_bEditing;
