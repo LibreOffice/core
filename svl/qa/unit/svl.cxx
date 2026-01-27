@@ -1437,6 +1437,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "-1/2";
         checkPreviewString(aFormatter, sCode, -0.5, eLang, sExpected);
     }
+    {  // tdf#167892: hang formatting as fraction
+        sCode =     "#/?";
+        sExpected = "0/1";
+        checkPreviewString(aFormatter, sCode, 0.0000000000000000001, eLang, sExpected);
+    }
     {  // tdf#52510
         sCode =     "_($* #,##0.00_);_($* (#,##0.00);";
         sExpected = "";
