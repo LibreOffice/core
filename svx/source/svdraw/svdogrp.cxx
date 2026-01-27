@@ -32,14 +32,14 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 bool SdrObjGroup::isDiagram() const
 {
     return bool(mp_DiagramHelper);
 }
 
-const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObjGroup::getDiagramHelper() const
+const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObjGroup::getDiagramHelper() const
 {
     return mp_DiagramHelper;
 }
@@ -97,7 +97,7 @@ void SdrObjGroup::AddToHdlList(SdrHdlList& rHdlList) const
     if(!isDiagram())
         return;
 
-    svx::diagram::IDiagramHelper::AddAdditionalVisualization(*this, rHdlList);
+    svx::diagram::DiagramHelper_svx::AddAdditionalVisualization(*this, rHdlList);
 }
 
 SdrObjGroup::~SdrObjGroup()

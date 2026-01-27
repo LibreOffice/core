@@ -241,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 {
     // Adapted this test to work with a *real* SmartArt/Diagram (SA). The former
     // test created a 'fake' one and checked if on TextEdit The GrabBag gets deleted.
-    // The updated SA text edit *tries* to keep the SA Data (in IDiagramHelper
+    // The updated SA text edit *tries* to keep the SA Data (in DiagramHelper_svx
     // attached to SdrObjGroup). It clears the GrabBag, but only if a 'real' SA
     // exists.
     // Thus I added a bugdoc for that task which contains a 'real' SA to test

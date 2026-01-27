@@ -22,7 +22,7 @@
 #include <svx/svdogrp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1067,8 +1067,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInteropGrabBag)
     CPPUNIT_ASSERT(nullptr != pObj);
     CPPUNIT_ASSERT(pObj->isDiagram());
 
-    const std::shared_ptr<svx::diagram::IDiagramHelper>& rIDiagramHelper(pObj->getDiagramHelper());
-    // const AdvancedDiagramHelper* pHelper(dynamic_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get()));
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(
+        pObj->getDiagramHelper());
     CPPUNIT_ASSERT(rIDiagramHelper);
 
     CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData).hasValue());

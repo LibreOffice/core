@@ -59,7 +59,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <textboxhelper.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svl/grabbagitem.hxx>
 #include <IDocumentSettingAccess.hxx>
 
@@ -475,7 +475,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         if (SID_REGENERATE_DIAGRAM == nSlotId)
                         {
                             pSdrView->UnmarkAll();
-                            pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
+                            pObj->getDiagramHelper()->reLayout();
                             pSdrView->MarkObj(pObj, pSdrView->GetSdrPageView());
                         }
                         else if(SID_EDIT_DIAGRAM == nSlotId)

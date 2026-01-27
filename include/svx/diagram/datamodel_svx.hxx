@@ -36,8 +36,6 @@
 #include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 
-class Outliner;
-
 namespace svx::diagram {
 
 enum TypeConstant {
@@ -77,46 +75,11 @@ struct SVXCORE_DLLPUBLIC Connection
 
 typedef std::vector< Connection > Connections;
 
-/** Text and properties for a point
- * For proof of concept to make TextData available in svx level this
- * is in a first run pretty simple, but may need to be extended accordingly
- * up to similar data as in oox::drawingml::TextBody.
- */
-struct SVXCORE_DLLPUBLIC TextBody
-{
-    // text from 1st paragraph (1st run)
-    OUString msText;
-
-    // attributes from TextBody::getTextProperties()
-    std::vector< std::pair< OUString, css::uno::Any >> maTextProps;
-};
-
-typedef std::shared_ptr< TextBody > TextBodyPtr;
-
-/** Styles for a Point (FillStyle/LineStyle/...)
- */
-struct SVXCORE_DLLPUBLIC PointStyle
-{
-    // attributes (LineStyle/FillStyle/...)
-    std::vector< std::pair< OUString, css::uno::Any >> maProperties;
-};
-
-typedef std::shared_ptr< PointStyle > PointStylePtr;
-
 /** A point
  */
 struct SVXCORE_DLLPUBLIC Point
 {
     Point();
-
-    // The minimal text data from the imported Diagram
-    // in source format
-    TextBodyPtr msTextBody;
-
-    // The property sequence of pairs<OUString, css::uno::Any>,
-    // interpreted & assigned by the ::addShape(s) creators in the
-    // import filter that created a XShape associated/based on this entry
-    PointStylePtr msPointStylePtr;
 
     OUString msCnxId;
     OUString msModelId;
@@ -159,9 +122,10 @@ struct SVXCORE_DLLPUBLIC Point
     bool          mbCustomText;
     bool          mbIsPlaceholder;
 
-    void writeDiagramData(sax_fastparser::FSHelperPtr& rTarget);
+    void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
 };
 
+void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList);
 typedef std::vector< Point >        Points;
 
 /** Snippet of Diagram ModelData for Diagram-defining data undo/redo
@@ -215,13 +179,14 @@ public:
     // read accesses
     Connections& getConnections() { return maConnections; }
     Points& getPoints() { return maPoints; }
+    const Points& getPoints() const { return maPoints; }
     StringMap& getPresOfNameMap() { return maPresOfNameMap; }
     PointNameMap& getPointNameMap() { return maPointNameMap; }
     PointsNameMap& getPointsPresNameMap() { return maPointsPresNameMap; }
     ::std::vector<OUString>& getExtDrawings() { return maExtDrawings; }
     const Point* getRootPoint() const;
-    OUString getString() const;
-    std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const;
+    OUString getDiagramString(const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
+    std::vector<std::pair<OUString, OUString>> getDiagramChildren(const OUString& rParentId, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
 
     const css::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
     void setThemeDocument( const css::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
@@ -230,17 +195,20 @@ public:
     void setBackgroundShapeModelID( const OUString& rModelID ) { msBackgroundShapeModelID = rModelID; }
 
     // model modifiers
-    std::pair<OUString, DomMapFlags> addDiagramNode(const OUString& rText);
+    std::pair<OUString, DomMapFlags> addDiagramNode();
     DomMapFlags removeDiagramNode(const OUString& rNodeId);
-    DomMapFlags TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl);
 
     // Undo/Redo helpers to extract/restore Diagram-defining data
     DiagramDataStatePtr extractDiagramDataState() const;
     void applyDiagramDataState(const DiagramDataStatePtr& rState);
 
+    css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
+    OUString getTextForPoint(const Point& rPoint, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
+    static css::uno::Reference<css::drawing::XShape> getXShapeByModelID(const css::uno::Reference<css::drawing::XShape>& rxShape, std::u16string_view rModelID);
+
 protected:
     // helpers
-    void getChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const;
+    void getDiagramChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
     void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
 
     // evtl. existing alternative imported visualization identifier
@@ -253,12 +221,6 @@ protected:
 
     // - data point entries
     Points maPoints;
-
-    // - style for the BackgroundShape (if used)
-    //   this is the property sequence of pairs<OUString, css::uno::Any>,
-    //   as interpreted & assigned by the ::addShape(s) creators in the
-    //   import filter
-    PointStylePtr maBackgroundShapeStyle;
 
     // - Theme definition as css::xml::dom::XDocument
     //    Note: I decided to use dom::XDocument which is already in use, instead of a

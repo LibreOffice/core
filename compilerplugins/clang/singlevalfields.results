@@ -343,14 +343,14 @@ include/svx/deflt3d.hxx:54
 include/svx/deflt3d.hxx:55
     E3dDefaultAttributes m_bDefaultExtrudeSmoothFrontBack
     0
-include/svx/diagram/IDiagramHelper.hxx:72
-    svx::diagram::IDiagramHelper mbUseDiagramThemeData
+include/svx/diagram/DiagramHelper_svx.hxx:72
+    svx::diagram::DiagramHelper_svx mbUseDiagramThemeData
     0
-include/svx/diagram/IDiagramHelper.hxx:77
-    svx::diagram::IDiagramHelper mbUseDiagramModelData
+include/svx/diagram/DiagramHelper_svx.hxx:77
+    svx::diagram::DiagramHelper_svx mbUseDiagramModelData
     1
-include/svx/diagram/IDiagramHelper.hxx:81
-    svx::diagram::IDiagramHelper mbForceThemePtrRecreation
+include/svx/diagram/DiagramHelper_svx.hxx:81
+    svx::diagram::DiagramHelper_svx mbForceThemePtrRecreation
     0
 include/svx/fontwork.hxx:77
     SvxFontWorkDialog aInputIdle

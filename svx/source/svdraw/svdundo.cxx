@@ -45,7 +45,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svx/diagram/datamodel_svx.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <tools/debug.hxx>
 
 
@@ -653,7 +653,7 @@ void SdrUndoDiagramModelData::implUndoRedo(bool bUndo)
 
     mxObj->getDiagramHelper()->applyDiagramDataState(
         bUndo ? m_aStartState : m_aEndState);
-    mxObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(mxObj.get()));
+    mxObj->getDiagramHelper()->reLayout();
 }
 
 void SdrUndoDiagramModelData::Undo()

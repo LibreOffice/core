@@ -79,7 +79,7 @@ namespace sdr::properties { class BaseProperties; }
 namespace sdr::contact { class ViewContact; }
 namespace sdr::annotation { class ObjectAnnotationData; }
 namespace com::sun::star::drawing { class XShape; }
-namespace svx::diagram { class IDiagramHelper; }
+namespace svx::diagram { class DiagramHelper_svx; }
 
 
 enum class SdrInventor : sal_uInt32 {
@@ -227,8 +227,8 @@ class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public cppu::OWeakObject
 public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const;
-    virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const;
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelperFromDiagramOrMember() const;
+    virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const;
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelperFromDiagramOrMember() const;
     void setDiagramDataModelID(const OUString& rID) { msDiagramDataModelID = rID; }
     const OUString& getDiagramDataModelID() const { return msDiagramDataModelID; }
 

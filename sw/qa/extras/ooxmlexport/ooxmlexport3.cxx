@@ -24,7 +24,7 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -451,7 +451,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(nullptr != pObj);
     CPPUNIT_ASSERT(pObj->isDiagram());
 
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
     CPPUNIT_ASSERT(rIDiagramHelper);
 
     uno::Any aPropVal;

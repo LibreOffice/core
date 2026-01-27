@@ -207,13 +207,13 @@ bool SdrObject::isDiagram() const
     return false;
 }
 
-const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelper() const
+const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
 {
-    static std::shared_ptr< svx::diagram::IDiagramHelper > aEmpty;
+    static std::shared_ptr< svx::diagram::DiagramHelper_svx > aEmpty;
     return aEmpty;
 }
 
-const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelperFromDiagramOrMember() const
+const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelperFromDiagramOrMember() const
 {
     SdrObject* pCurrent(const_cast<SdrObject*>(this));
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmrkv.hxx>
@@ -405,18 +405,17 @@ DiagramFrameHdl::DiagramFrameHdl(const basegfx::B2DHomMatrix& rTransformation)
 {
 }
 
-IDiagramHelper::IDiagramHelper(bool bSelfCreated)
+DiagramHelper_svx::DiagramHelper_svx()
 : mbUseDiagramThemeData(false)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
-, mbSelfCreated(bSelfCreated)
 , mxGroupShape()
 {
 }
 
-IDiagramHelper::~IDiagramHelper() {}
+DiagramHelper_svx::~DiagramHelper_svx() {}
 
-void IDiagramHelper::disconnectFromSdrObjGroup()
+void DiagramHelper_svx::disconnectFromSdrObjGroup()
 {
     SdrObjGroup* pGroupObject(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape)));
     if (nullptr != pGroupObject)
@@ -426,7 +425,7 @@ void IDiagramHelper::disconnectFromSdrObjGroup()
     }
 }
 
-void IDiagramHelper::connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget)
+void DiagramHelper_svx::connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget)
 {
     SdrObjGroup* pGroupObject(nullptr);
     if (mxGroupShape && rTarget == mxGroupShape)
@@ -449,7 +448,7 @@ void IDiagramHelper::connectToSdrObjGroup(com::sun::star::uno::Reference< com::s
         pGroupObject->mp_DiagramHelper.reset(this);;
 }
 
-void IDiagramHelper::AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList)
+void DiagramHelper_svx::AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList)
 {
     // create an extra frame visualization here
     basegfx::B2DHomMatrix aTransformation;

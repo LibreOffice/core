@@ -123,7 +123,7 @@ struct DiagramColor
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
-typedef std::map<svx::diagram::DomMapFlag,com::sun::star::uno::Any> DiagramPRDomMap;
+typedef std::map<svx::diagram::DomMapFlag,css::uno::Any> DiagramPRDomMap;
 
 class Diagram
 {
@@ -147,13 +147,13 @@ public:
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
     void syncDiagramFontHeights();
 
-    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const com::sun::star::uno::Any& rValue);
-    com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
+    css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
     void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
 
     // check if mandatory DiagramDomS exist (or can be created)
     bool checkMinimalDataDoms() const;
-    void tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const com::sun::star::uno::Reference<css::drawing::XShape>& rXRootShape);
+    void tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const css::uno::Reference<css::drawing::XShape>& rXRootShape);
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.

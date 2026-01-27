@@ -65,7 +65,7 @@ struct FillProperties;
 struct GraphicProperties;
 struct LineProperties;
 struct Shape3DProperties;
-class AdvancedDiagramHelper;
+class DiagramHelper_oox;
 class CustomShapeProperties;
 typedef std::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
@@ -233,7 +233,7 @@ public:
     SAL_DLLPRIVATE void setTextBox(bool bTextBox);
 
     // access to DiagramHelper
-    AdvancedDiagramHelper* getDiagramHelper() const { return mpDiagramHelper; }
+    DiagramHelper_oox* getDiagramHelper() const { return mpDiagramHelper; }
     SAL_DLLPRIVATE css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
@@ -271,8 +271,7 @@ public:
     // existing one to the data holder object later
     SAL_DLLPRIVATE void prepareDiagramHelper(
         const std::shared_ptr< Diagram >& rDiagramPtr,
-        const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-        bool bSelfCreated);
+        const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
     SAL_DLLPRIVATE void propagateDiagramHelper();
 
     // for Writer it is necessary to migrate an existing helper to a new Shape
@@ -449,7 +448,7 @@ private:
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that
-    AdvancedDiagramHelper* mpDiagramHelper;
+    DiagramHelper_oox* mpDiagramHelper;
 
     // association-ID to identify the Diagram ModelData
     OUString msDiagramDataModelID;

@@ -159,7 +159,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/diagram/datamodel_oox \
     oox/source/drawingml/diagram/datamodelcontext \
     oox/source/drawingml/diagram/diagram \
-    oox/source/drawingml/diagram/diagramhelper \
+    oox/source/drawingml/diagram/diagramhelper_oox \
     oox/source/drawingml/diagram/diagramdefinitioncontext \
     oox/source/drawingml/diagram/diagramfragmenthandler \
     oox/source/drawingml/diagram/diagramlayoutatoms \
