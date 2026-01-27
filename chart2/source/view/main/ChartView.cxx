@@ -1458,6 +1458,11 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
         return;
 
     m_bInViewUpdate = true;
+
+    // Rendering the chart must not set its (or its parent) modified status.
+    // Note that unlockControllers() may send notifications that set modified state.
+    ChartModelDisableSetModified dontSetModified(mrChartModel);
+
     //bool bOldRefreshAddIn = m_bRefreshAddIn;
     //m_bRefreshAddIn = false;
     try
@@ -1469,9 +1474,6 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
             SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->lockControllers();
         }
-
-        // Rendering the chart must not set its (or its parent) modified status
-        ChartModelDisableSetModified dontSetModified(mrChartModel);
 
         //create chart view
         {

@@ -1010,7 +1010,7 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::BroadcastObjectChange() const
 {
-    if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     bool bPlusDataBroadcast(m_pPlusData && m_pPlusData->pBroadcast);
@@ -1018,6 +1018,13 @@ void SdrObject::BroadcastObjectChange() const
 
     if(!(bPlusDataBroadcast || bObjectChange))
         return;
+
+    // Only check if we want to defer, after we decided that we really need to broadcast something
+    if (getSdrModelFromSdrObject().isLocked())
+    {
+        getSdrModelFromSdrObject().addDeferredObjectChanges(this);
+        return;
+    }
 
     SdrHint aHint(SdrHintKind::ObjectChange, *this);
 
