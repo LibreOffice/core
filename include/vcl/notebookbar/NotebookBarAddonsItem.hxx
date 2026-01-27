@@ -20,13 +20,9 @@
 #pragma once
 
 #include <vcl/image.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <vector>
-
-namespace com::sun::star::beans
-{
-struct PropertyValue;
-}
 
 struct NotebookBarAddonsItem
 {
