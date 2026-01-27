@@ -57,22 +57,22 @@ diff --git a/crypto/cmp/cmp_msg.c b/crypto/cmp/cmp_msg.c
 index a3b6258f52..223ac28663 100644
 --- a/crypto/cmp/cmp_msg.c
 +++ b/crypto/cmp/cmp_msg.c
-@@ -65,7 +65,7 @@ OSSL_CMP_PKIHEADER *OSSL_CMP_MSG_get0_header(const OSSL_CMP_MSG *msg)
+@@ -73,7 +73,7 @@
  
  const char *ossl_cmp_bodytype_to_string(int type)
  {
 -    static const char *type_names[] = {
 +    static const char *const type_names[] = {
-         "IR", "IP", "CR", "CP", "P10CR",
-         "POPDECC", "POPDECR", "KUR", "KUP",
-         "KRR", "KRP", "RR", "RP", "CCR", "CCP",
+         "IR",
+         "IP",
+         "CR",
 diff --git a/crypto/dsa/dsa_ossl.c b/crypto/dsa/dsa_ossl.c
 index 59b26d7369..a7c6930162 100644
 --- a/crypto/dsa/dsa_ossl.c
 +++ b/crypto/dsa/dsa_ossl.c
-@@ -39,7 +39,7 @@ static int dsa_finish(DSA *dsa);
+@@ -39,7 +39,7 @@
  static BIGNUM *dsa_mod_inverse_fermat(const BIGNUM *k, const BIGNUM *q,
-                                       BN_CTX *ctx);
+     BN_CTX *ctx);
  
 -static DSA_METHOD openssl_dsa_meth = {
 +static const DSA_METHOD openssl_dsa_meth = {
@@ -83,41 +83,41 @@ diff --git a/crypto/err/err.c b/crypto/err/err.c
 index 63a1bf192a..a127988a0d 100644
 --- a/crypto/err/err.c
 +++ b/crypto/err/err.c
-@@ -86,7 +86,7 @@ static const ERR_STRING_DATA ERR_str_libraries[] = {
+@@ -85,7 +85,7 @@
   * Should make sure that all ERR_R_ reasons defined in include/openssl/err.h.in
   * are listed.  For maintainability, please keep all reasons in the same order.
   */
 -static ERR_STRING_DATA ERR_str_reasons[] = {
 +static const ERR_STRING_DATA ERR_str_reasons[] = {
-     {ERR_R_SYS_LIB, "system lib"},
-     {ERR_R_BN_LIB, "BN lib"},
-     {ERR_R_RSA_LIB, "RSA lib"},
+     { ERR_R_SYS_LIB, "system lib" },
+     { ERR_R_BN_LIB, "BN lib" },
+     { ERR_R_RSA_LIB, "RSA lib" },
 diff --git a/crypto/evp/e_chacha20_poly1305.c b/crypto/evp/e_chacha20_poly1305.c
 index a06e9a6682..03bf63b502 100644
 --- a/crypto/evp/e_chacha20_poly1305.c
 +++ b/crypto/evp/e_chacha20_poly1305.c
-@@ -609,7 +609,7 @@ static int chacha20_poly1305_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg,
+@@ -605,7 +605,7 @@
      }
  }
  
 -static EVP_CIPHER chacha20_poly1305 = {
 +static const EVP_CIPHER chacha20_poly1305 = {
      NID_chacha20_poly1305,
-     1,                  /* block_size */
-     CHACHA_KEY_SIZE,    /* key_len */
+     1, /* block_size */
+     CHACHA_KEY_SIZE, /* key_len */
 diff --git a/crypto/evp/e_rc4_hmac_md5.c b/crypto/evp/e_rc4_hmac_md5.c
 index 4ea382815c..ec7dd02ce5 100644
 --- a/crypto/evp/e_rc4_hmac_md5.c
 +++ b/crypto/evp/e_rc4_hmac_md5.c
-@@ -246,7 +246,7 @@ static int rc4_hmac_md5_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg,
+@@ -240,7 +240,7 @@
      }
  }
  
 -static EVP_CIPHER r4_hmac_md5_cipher = {
 +static const EVP_CIPHER r4_hmac_md5_cipher = {
- # ifdef NID_rc4_hmac_md5
+ #ifdef NID_rc4_hmac_md5
      NID_rc4_hmac_md5,
- # else
+ #else
 diff --git a/crypto/rsa/rsa_ossl.c b/crypto/rsa/rsa_ossl.c
 index 1e56c6d38c..4f2af3167c 100644
 --- a/crypto/rsa/rsa_ossl.c
@@ -125,12 +125,12 @@ index 1e56c6d38c..4f2af3167c 100644
 @@ -36,7 +36,7 @@
  #ifdef S390X_MOD_EXP
  static int rsa_ossl_s390x_mod_exp(BIGNUM *r0, const BIGNUM *i, RSA *rsa,
-                                 BN_CTX *ctx);
+     BN_CTX *ctx);
 -static RSA_METHOD rsa_pkcs1_ossl_meth = {
 +static const RSA_METHOD rsa_pkcs1_ossl_meth = {
      "OpenSSL PKCS#1 RSA",
      rsa_ossl_public_encrypt,
-     rsa_ossl_public_decrypt,     /* signature verification */
+     rsa_ossl_public_decrypt, /* signature verification */
 diff --git a/crypto/ts/ts_rsp_print.c b/crypto/ts/ts_rsp_print.c
 index ca2d8a6dc1..c002239905 100644
 --- a/crypto/ts/ts_rsp_print.c
@@ -174,9 +174,9 @@ diff --git a/providers/implementations/keymgmt/ec_kmgmt.c b/providers/implementa
 index 5b7cca59c5..2633c0f794 100644
 --- a/providers/implementations/keymgmt/ec_kmgmt.c
 +++ b/providers/implementations/keymgmt/ec_kmgmt.c
-@@ -1224,7 +1224,7 @@ err:
+@@ -1188,7 +1188,7 @@
  static const OSSL_PARAM *ec_gen_settable_params(ossl_unused void *genctx,
-                                                 ossl_unused void *provctx)
+     ossl_unused void *provctx)
  {
 -    static OSSL_PARAM settable[] = {
 +    static const OSSL_PARAM settable[] = {
@@ -200,18 +200,18 @@ diff --git a/providers/implementations/keymgmt/rsa_kmgmt.c b/providers/implement
 index 68691280cd..811688398c 100644
 --- a/providers/implementations/keymgmt/rsa_kmgmt.c
 +++ b/providers/implementations/keymgmt/rsa_kmgmt.c
-@@ -558,7 +558,7 @@ static int rsa_gen_set_params(void *genctx, const OSSL_PARAM params[])
+@@ -548,7 +548,7 @@
  static const OSSL_PARAM *rsa_gen_settable_params(ossl_unused void *genctx,
-                                                  ossl_unused void *provctx)
+     ossl_unused void *provctx)
  {
 -    static OSSL_PARAM settable[] = {
 +    static const OSSL_PARAM settable[] = {
          rsa_gen_basic,
          OSSL_PARAM_END
      };
-@@ -569,7 +569,7 @@ static const OSSL_PARAM *rsa_gen_settable_params(ossl_unused void *genctx,
+@@ -559,7 +559,7 @@
  static const OSSL_PARAM *rsapss_gen_settable_params(ossl_unused void *genctx,
-                                                     ossl_unused void *provctx)
+     ossl_unused void *provctx)
  {
 -    static OSSL_PARAM settable[] = {
 +    static const OSSL_PARAM settable[] = {
