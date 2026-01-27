@@ -313,6 +313,8 @@ public:
 
     bool IsSplitButNotYetMovedFollow() const;
 
+    bool GetRedlineRenderModeFrame(SvxBoxItem& rBoxItem) const;
+
 private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;
