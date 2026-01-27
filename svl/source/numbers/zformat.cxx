@@ -2884,14 +2884,14 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
         {
             double fTemp = 1.0 / fRemainder;             // 64bits precision required when fRemainder is very weak
             nPartialDenom = static_cast<sal_Int64>(floor(fTemp));   // due to floating point notation with double precision
-#ifdef _WIN32
             // The fTemp value may be out of range for sal_Int64 (e.g. 1e+19), and the result of
-            // casting that is undefined. In practice, gcc/llvm gives us a large positive number, but MSVC may create
-            // a large negative number, which will make this algorithm oscillate, so apply a correction that makes
-            // MSVC end up with the same thing. There is probably a better algorithm to be used here.
+            // casting that is undefined. In practice, gcc/llvm gives us a large positive number,
+            // but depending on the compiler, we have either a large positive number (which works fine)
+            // or a a large negative number, which will make this algorithm oscillate.
+            // So apply a correction that makes all the compilers work reasonbly.
+            // There is probably a better algorithm to be used here for this whole function.
             if (nPartialDenom < 0)
                 nPartialDenom = -(nPartialDenom+1);
-#endif
             fRemainder = fTemp - static_cast<double>(nPartialDenom);
             nDivNext = nPartialDenom * nDiv + nDivPrev;
             if (nDivNext <= nBasis) // continue loop
