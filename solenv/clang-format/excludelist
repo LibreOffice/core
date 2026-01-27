@@ -6843,7 +6843,6 @@ oox/source/drawingml/diagram/layoutnodecontext.cxx
 oox/source/drawingml/diagram/layoutnodecontext.hxx
 oox/source/drawingml/drawingmltypes.cxx
 oox/source/drawingml/effectproperties.cxx
-oox/source/drawingml/effectproperties.hxx
 oox/source/drawingml/effectpropertiescontext.cxx
 oox/source/drawingml/fillproperties.cxx
 oox/source/drawingml/graphicshapecontext.cxx
