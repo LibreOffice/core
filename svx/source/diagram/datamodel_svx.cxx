@@ -22,39 +22,43 @@
 #include <fstream>
 
 #include <svx/diagram/datamodel_svx.hxx>
-#include <svx/svdoutl.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svditer.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sal/log.hxx>
 #include <utility>
 #include <sax/fastattribs.hxx>
+#include <com/sun/star/text/XText.hpp>
 
 using namespace ::oox;
+using namespace ::com::sun::star;
 
 namespace svx::diagram {
 
-namespace {
 void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList)
 {
     if (TypeConstant::XML_none != aTypeConstant)
     {
         switch (aTypeConstant)
         {
-            case TypeConstant::XML_type: rAttributeList->add(XML_type, "Type"); break;
-            case TypeConstant::XML_asst: rAttributeList->add(XML_type, "asst"); break;
-            case TypeConstant::XML_doc: rAttributeList->add(XML_type, "doc"); break;
+            // *CAUTION!* here '::XML_type' is *not* the same as 'XML_type' which would
+            // namespace expand to oox::XML_type as in enum TypeConstant definitions (!)
+            case TypeConstant::XML_type: rAttributeList->add(::XML_type, "Type"); break;
+            case TypeConstant::XML_asst: rAttributeList->add(::XML_type, "asst"); break;
+            case TypeConstant::XML_doc: rAttributeList->add(::XML_type, "doc"); break;
             case TypeConstant::XML_node: /* XML_node is default, no need to write */ break;
-            case TypeConstant::XML_norm: rAttributeList->add(XML_type, "norm"); break;
-            case TypeConstant::XML_parOf: rAttributeList->add(XML_type, "parOf"); break;
-            case TypeConstant::XML_parTrans: rAttributeList->add(XML_type, "parTrans"); break;
-            case TypeConstant::XML_pres: rAttributeList->add(XML_type, "pres"); break;
-            case TypeConstant::XML_presOf: rAttributeList->add(XML_type, "presOf"); break;
-            case TypeConstant::XML_presParOf: rAttributeList->add(XML_type, "presParOf"); break;
-            case TypeConstant::XML_rel: rAttributeList->add(XML_type, "rel"); break;
-            case TypeConstant::XML_sibTrans: rAttributeList->add(XML_type, "sibTrans"); break;
+            case TypeConstant::XML_norm: rAttributeList->add(::XML_type, "norm"); break;
+            case TypeConstant::XML_parOf: rAttributeList->add(::XML_type, "parOf"); break;
+            case TypeConstant::XML_parTrans: rAttributeList->add(::XML_type, "parTrans"); break;
+            case TypeConstant::XML_pres: rAttributeList->add(::XML_type, "pres"); break;
+            case TypeConstant::XML_presOf: rAttributeList->add(::XML_type, "presOf"); break;
+            case TypeConstant::XML_presParOf: rAttributeList->add(::XML_type, "presParOf"); break;
+            case TypeConstant::XML_rel: rAttributeList->add(::XML_type, "rel"); break;
+            case TypeConstant::XML_sibTrans: rAttributeList->add(::XML_type, "sibTrans"); break;
             default: break; // XML_none
         }
     }
-}}
+}
 
 Connection::Connection()
 : mnXMLType( XML_none )
@@ -84,9 +88,7 @@ void Connection::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
 }
 
 Point::Point()
-: msTextBody(std::make_shared< TextBody >())
-, msPointStylePtr(std::make_shared< PointStyle >())
-, mnXMLType(XML_none)
+: mnXMLType(XML_none)
 , mnMaxChildren(-1)
 , mnPreferredChildren(-1)
 , mnDirection(XML_norm)
@@ -113,22 +115,9 @@ Point::Point()
 {
 }
 
-void Point::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
+void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
 {
-    if (!rTarget)
-        return;
-
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(sax_fastparser::FastSerializerHelper::createAttrList());
-    pAttributeList->add(XML_modelId, msModelId);
-
-    addTypeConstantToFastAttributeList(mnXMLType, pAttributeList);
-
-    if (!msCnxId.isEmpty())
-        pAttributeList->add(XML_cxnId, msCnxId);
-
-    rTarget->startElementNS(XML_dgm, XML_pt, pAttributeList);
-
-    pAttributeList->clear();
 
     if (!msColorTransformCategoryId.isEmpty()) pAttributeList->add(XML_csCatId, msColorTransformCategoryId);
     if (!msColorTransformTypeId.isEmpty()) pAttributeList->add(XML_csTypeId, msColorTransformTypeId);
@@ -203,50 +192,6 @@ void Point::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
         rTarget->singleElementNS(XML_dgm, XML_prSet, pAttributeList);
 
     rTarget->singleElementNS(XML_dgm, XML_spPr);
-
-    bool bWriteText(TypeConstant::XML_parTrans == mnXMLType || TypeConstant::XML_sibTrans == mnXMLType);
-
-    if (!bWriteText && "textNode" == msPresentationLayoutName)
-        bWriteText = true;
-
-    const bool bTextEmpty(msTextBody->msText.isEmpty());
-    if (!bWriteText && !bTextEmpty)
-        bWriteText = true;
-
-    if(bWriteText)
-    {
-        // for writing text we would need to use the XShape containing it, and DrawingML::WriteText.
-        // we *could* find the XShape that is referencing this svx::diagram::Point, the text should
-        // be set there.
-        // For now, just make a rough export to get this started. This will have to be enhanced in
-        // the future, either by using XShape or by implementing exporting the raw MSO XML data we
-        // have here at the model from import - which implies that this data is what gets changed when
-        // text or textAttributes get changed, plus a re-creation of the XShapes in the GroupObject
-        rTarget->startElementNS(XML_dgm, XML_t);
-        rTarget->singleElementNS(XML_a, XML_bodyPr);
-        rTarget->singleElementNS(XML_a, XML_lstStyle);
-        rTarget->startElementNS(XML_a, XML_p);
-
-        if (bTextEmpty)
-        {
-            rTarget->singleElementNS(XML_a, XML_endParaRPr, XML_lang, "en-US");
-        }
-        else
-        {
-            rTarget->startElementNS(XML_a, XML_r);
-            rTarget->singleElementNS(XML_a, XML_rPr, XML_lang, "de-DE", XML_dirty, "0", XML_smtClean, "0");
-            rTarget->startElementNS(XML_a, XML_t);
-            rTarget->write(msTextBody->msText);
-            rTarget->endElementNS(XML_a, XML_t);
-            rTarget->endElementNS(XML_a, XML_r);
-            rTarget->singleElementNS(XML_a, XML_endParaRPr, XML_lang, "en-US", XML_dirty, "0");
-        }
-
-        rTarget->endElementNS(XML_a, XML_p);
-        rTarget->endElementNS(XML_dgm, XML_t);
-    }
-
-    rTarget->endElementNS(XML_dgm, XML_pt);
 }
 
 DiagramData_svx::DiagramData_svx()
@@ -267,11 +212,11 @@ const Point* DiagramData_svx::getRootPoint() const
     return nullptr;
 }
 
-OUString DiagramData_svx::getString() const
+OUString DiagramData_svx::getDiagramString(const css::uno::Reference<css::drawing::XShape>& rRootShape) const
 {
     OUStringBuffer aBuf;
     const Point* pPoint = getRootPoint();
-    getChildrenString(aBuf, pPoint, 0);
+    getDiagramChildrenString(aBuf, pPoint, 0, rRootShape);
     return aBuf.makeStringAndClear();
 }
 
@@ -359,10 +304,11 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
     }
 }
 
-void DiagramData_svx::getChildrenString(
+void DiagramData_svx::getDiagramChildrenString(
     OUStringBuffer& rBuf,
     const svx::diagram::Point* pPoint,
-    sal_Int32 nLevel) const
+    sal_Int32 nLevel,
+    const css::uno::Reference<css::drawing::XShape>& rRootShape) const
 {
     if (!pPoint)
         return;
@@ -373,7 +319,8 @@ void DiagramData_svx::getChildrenString(
             rBuf.append('\t');
         rBuf.append('+');
         rBuf.append(' ');
-        rBuf.append(pPoint->msTextBody->msText);
+        const OUString aText(getTextForPoint(*pPoint, rRootShape));
+        rBuf.append(aText);
         rBuf.append('\n');
     }
 
@@ -389,10 +336,63 @@ void DiagramData_svx::getChildrenString(
         }
 
     for (auto pChild : aChildren)
-        getChildrenString(rBuf, pChild, nLevel + 1);
+        getDiagramChildrenString(rBuf, pChild, nLevel + 1, rRootShape);
 }
 
-std::vector<std::pair<OUString, OUString>> DiagramData_svx::getChildren(const OUString& rParentId) const
+uno::Reference<drawing::XShape> DiagramData_svx::getXShapeByModelID(const uno::Reference<drawing::XShape>& rxShape, std::u16string_view rModelID)
+{
+    if (!rxShape)
+        return rxShape;
+
+    uno::Reference<drawing::XShape> xRetval;
+    if (rModelID.empty())
+        return xRetval;
+
+    SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(rxShape));
+    if (nullptr == pCandidate)
+        return xRetval;
+
+    SdrObjListIter aIterator(*pCandidate, SdrIterMode::DeepNoGroups);
+    while (aIterator.IsMore())
+    {
+        pCandidate = aIterator.Next();
+        if (nullptr != pCandidate && rModelID == pCandidate->getDiagramDataModelID())
+            return pCandidate->getUnoShape();
+    }
+
+    return xRetval;
+}
+
+uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const Point& rPoint, const uno::Reference<drawing::XShape>& rRootShape) const
+{
+    if (!rPoint.msPlaceholderText.isEmpty())
+    {
+        for (auto& rCandidate : getPoints())
+        {
+            if (!rCandidate.msPresentationAssociationId.isEmpty() && rCandidate.msPresentationAssociationId == rPoint.msModelId)
+            {
+                uno::Reference<drawing::XShape> xMasterText = getXShapeByModelID(rRootShape, rCandidate.msModelId);
+                if (xMasterText)
+                    return xMasterText;
+            }
+        }
+    }
+
+    return uno::Reference<drawing::XShape>();
+}
+
+OUString DiagramData_svx::getTextForPoint(const Point& rPoint, const uno::Reference<drawing::XShape>& rRootShape) const
+{
+    uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, rRootShape));
+    uno::Reference<text::XText> xText(xMasterText, uno::UNO_QUERY);
+
+    if (xText)
+        return xText->getString();
+
+    return OUString();
+}
+
+std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(const OUString& rParentId, const uno::Reference<drawing::XShape>& rRootShape) const
 {
     const OUString sModelId = rParentId.isEmpty() ? getRootPoint()->msModelId : rParentId;
     std::vector<std::pair<OUString, OUString>> aChildren;
@@ -404,9 +404,10 @@ std::vector<std::pair<OUString, OUString>> DiagramData_svx::getChildren(const OU
             const auto pChild = maPointNameMap.find(rCxn.msDestId);
             if (pChild != maPointNameMap.end())
             {
+                const OUString aText(getTextForPoint(*pChild->second, rRootShape));
                 aChildren[rCxn.mnSourceOrder] = std::make_pair(
                     pChild->second->msModelId,
-                    pChild->second->msTextBody->msText);
+                    aText);
             }
         }
 
@@ -416,7 +417,7 @@ std::vector<std::pair<OUString, OUString>> DiagramData_svx::getChildren(const OU
     return aChildren;
 }
 
-std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode(const OUString& rText)
+std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode()
 {
     DomMapFlags aRetval;
     const svx::diagram::Point& rDataRoot = *getRootPoint();
@@ -433,7 +434,7 @@ std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode(const OUString&
     svx::diagram::Point aDataPoint;
     aDataPoint.mnXMLType = TypeConstant::XML_node;
     aDataPoint.msModelId = sNewNodeId;
-    aDataPoint.msTextBody->msText = rText;
+    aDataPoint.msPlaceholderText = "[Text]";
 
     OUString sDataSibling;
     for (const auto& aCxn : maConnections)
@@ -539,7 +540,6 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
     maPointsPresNameMap.clear();
     maConnectionNameMap.clear();
     maPresOfNameMap.clear();
-    msBackgroundShapeModelID.clear();
 
 #ifdef DEBUG_OOX_DIAGRAM
     std::ofstream output("tree.dot");
@@ -578,27 +578,6 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 
         output << "];" << std::endl;
 #endif
-
-        // does currpoint have any text set?
-        if(!point.msTextBody->msText.isEmpty())
-        {
-#ifdef DEBUG_OOX_DIAGRAM
-            static sal_Int32 nCount=0;
-            output << "\t"
-                   << "textNode" << nCount
-                   << " ["
-                   << "label=\""
-                   << OUStringToOString(
-                       point.msTextBody->msText,
-                       RTL_TEXTENCODING_UTF8).getStr()
-                   << "\"" << "];" << std::endl;
-            output << "\t"
-                   << normalizeDotName(point.msModelId).getStr()
-                   << " -> "
-                   << "textNode" << nCount++
-                   << ";" << std::endl;
-#endif
-        }
 
         const bool bInserted1 = getPointNameMap().insert(
             std::make_pair(point.msModelId,&point)).second;
@@ -690,60 +669,6 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 #ifdef DEBUG_OOX_DIAGRAM
     output << "}" << std::endl;
 #endif
-}
-
-DomMapFlags DiagramData_svx::TextInformationChange(const OUString& rDiagramDataModelID, Outliner& rOutl)
-{
-    DomMapFlags aRetval;
-
-    // try to get the Point for the associated ID
-    const auto pDataNode = maPointNameMap.find(rDiagramDataModelID);
-    if (pDataNode == maPointNameMap.end())
-        return aRetval;
-
-    // use PresentationAssociationId to get to the text containing Point
-    const OUString& rPresentationAssociationId(pDataNode->second->msPresentationAssociationId);
-    if (rPresentationAssociationId.isEmpty())
-        return aRetval;
-
-    // try to get the text-associated Point
-    const auto pTextNode = maPointNameMap.find(rPresentationAssociationId);
-    if (pTextNode == maPointNameMap.end())
-        return aRetval;
-
-    // check if it has a text node - it should
-    if (!pTextNode->second->msTextBody)
-        return aRetval;
-
-    // access TextBody
-    TextBodyPtr pTextBody(pTextNode->second->msTextBody);
-
-    // now for outliner/source: Do we have data at all?
-    if(0 == rOutl.GetParagraphCount())
-        return aRetval;
-
-    // if yes, use 1st paragraph (for now)
-    const Paragraph* pPara(rOutl.GetParagraph(0));
-    if (nullptr == pPara)
-        return aRetval;
-
-    // extract 1st para as text
-    const OUString aCurrentText(rOutl.GetText(pPara));
-
-    // check if text differs at all
-    if (aCurrentText == pTextBody->msText)
-        return aRetval;
-
-    // do change and return true (change was done)
-    // NOTE: for now only rough text change, attributes are missing and will need to be added
-    pTextBody->msText = aCurrentText;
-
-    // prepare retval, OOXData is changed
-    aRetval.push_back(DomMapFlag::OOXData);
-    // aRetval.push_back(DomMapFlag::OOXDrawing);
-    // aRetval.push_back(DomMapFlag::OOXDataRels);
-
-    return aRetval;
 }
 
 }

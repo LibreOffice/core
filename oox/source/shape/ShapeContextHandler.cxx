@@ -460,7 +460,9 @@ ShapeContextHandler::getShape()
         else if (mxDiagramShapeContext.is())
         {
             basegfx::B2DHomMatrix aMatrix;
-            if (mpShape->getExtDrawings().empty())
+            static bool bIgnoreExtDrawings(nullptr != std::getenv("DIAGRAM_IGNORE_EXTDRAWINGS"));
+
+            if (bIgnoreExtDrawings || mpShape->getExtDrawings().empty())
             {
                 mpShape->addShape( *mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, mpShape->getFillProperties() );
                 xResult = mpShape->getXShape();
@@ -478,11 +480,11 @@ ShapeContextHandler::getShape()
                     if (mpShape->getFontRefColorForNodes().isUsed())
                         applyFontRefColor(pShapePtr, mpShape->getFontRefColorForNodes());
 
-                    // migrate IDiagramHelper to new oox::Shape (from mpShape which was loaded
+                    // migrate DiagramHelper_svx to new oox::Shape (from mpShape which was loaded
                     // to pShapePtr where the geometry is now constructed)
                     mpShape->migrateDiagramHelperToNewShape(pShapePtr);
 
-                    // use now migrated AdvancedDiagramHelper
+                    // use now migrated DiagramHelper_oox
                     pShapePtr->keepDiagramDrawing(*mxShapeFilterBase, aFragmentPath);
 
                     if (!mpShape->getChildren().empty())

@@ -382,10 +382,10 @@ include/svl/ondemand.hxx:54
     OnDemandLocaleDataWrapper aSysLocale SvtSysLocale
 include/svx/annotation/Annotation.hxx:108
     sdr::annotation::Annotation maUniqueID UniqueID
-include/svx/diagram/IDiagramHelper.hxx:71
-    svx::diagram::IDiagramHelper mbUseDiagramThemeData _Bool
-include/svx/diagram/IDiagramHelper.hxx:80
-    svx::diagram::IDiagramHelper mbForceThemePtrRecreation _Bool
+include/svx/diagram/DiagramHelper_svx.hxx:71
+    svx::diagram::DiagramHelper_svx mbUseDiagramThemeData _Bool
+include/svx/diagram/DiagramHelper_svx.hxx:80
+    svx::diagram::DiagramHelper_svx mbForceThemePtrRecreation _Bool
 include/svx/EnhancedCustomShape2d.hxx:108
     EnhancedCustomShape2d::EquationResult bReady _Bool
 include/svx/graphctl.hxx:52

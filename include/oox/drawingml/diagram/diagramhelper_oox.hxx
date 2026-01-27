@@ -24,7 +24,7 @@
 #include <oox/drawingml/theme.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 namespace oox::drawingml {
 
@@ -43,50 +43,58 @@ class Diagram;
 // - deliver representative data from the Diagram-Model
 // - modify it eventually
 // - im/export Diagram model to other representations
-class AdvancedDiagramHelper final : public svx::diagram::IDiagramHelper
+class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
 {
     const std::shared_ptr< Diagram >            mpDiagramPtr;
     std::shared_ptr<::oox::drawingml::Theme>    mpThemePtr;
 
     css::awt::Size maImportSize;
 
+    // data values set by addDiagramNode to be used by next reLayout call
+    // when a new ode gets added
+    OUString msNewNodeId;
+    OUString msNewNodeText;
+
     bool hasDiagramData() const;
 
+    static void moveDiagramModelDataFromOldToNewXShape(
+        const css::uno::Reference<css::drawing::XShape>& xOldShape,
+        const css::uno::Reference<css::drawing::XShape>& xNewShape);
+
 public:
-    AdvancedDiagramHelper(
+    DiagramHelper_oox(
         std::shared_ptr< Diagram > xDiagramPtr,
         std::shared_ptr<::oox::drawingml::Theme> xTheme,
-        css::awt::Size aImportSize,
-        bool bSelfCreated);
-    virtual ~AdvancedDiagramHelper();
+        css::awt::Size aImportSize);
+    virtual ~DiagramHelper_oox();
 
     // re-create XShapes
-    virtual void reLayout(SdrObjGroup& rTarget) override;
+    virtual void reLayout() override;
 
     // get text representation of data tree
-    virtual OUString getString() const override;
+    virtual OUString getDiagramString() const override;
 
     // get children of provided data node
     // use empty string for top-level nodes
     // returns vector of (id, text)
-    virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
+    virtual std::vector<std::pair<OUString, OUString>> getDiagramChildren(const OUString& rParentId) const override;
 
     // add/remove new top-level node to data model, returns its id
     virtual OUString addDiagramNode(const OUString& rText) override;
     virtual bool removeDiagramNode(const OUString& rNodeId) override;
-    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) override;
+    virtual void TextInformationChange() override;
 
     // Undo/Redo helpers to extract/restore Diagram-defining data
     virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
     virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
-    void doAnchor(com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rTarget, ::oox::drawingml::Shape& rRootShape);
+    void doAnchor(css::uno::Reference<css::drawing::XShape>& rTarget);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 
     // access to get/set PropertyValues
-    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const com::sun::star::uno::Any& rValue);
-    virtual com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
+    virtual css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
 
     // check if mandatory DiagramDomS exist (or can be created)
     bool checkMinimalDataDoms() const;

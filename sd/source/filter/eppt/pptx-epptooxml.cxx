@@ -88,7 +88,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/ColorSets.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>

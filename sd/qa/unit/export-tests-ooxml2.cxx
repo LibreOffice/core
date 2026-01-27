@@ -15,7 +15,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -1603,7 +1603,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
 
     // clear SmartArt data to check how group shapes with double-rotated children are exported, not smartart
     // NOTE: Now we have a slot (comphelper::dispatchCommand(u".uno:DiagramToGroup"_ustr, {})) and method
-    //       at IDiagramHelper to do that, adapted removal of Diagram/SmartArt functionality
+    //       at DiagramHelper_svx to do that, adapted removal of Diagram/SmartArt functionality
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     SdrObjGroup* pSdrObjGroup

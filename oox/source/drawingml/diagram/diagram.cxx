@@ -200,7 +200,7 @@ bool Diagram::checkMinimalDataDoms() const
     return true;
 }
 
-void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const css::uno::Reference<css::drawing::XShape>& rXRootShape)
+void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const uno::Reference<drawing::XShape>& rXRootShape)
 {
     // internal testing: allow to force to always recreate
     static bool bForceAlwaysReCreate(false);
@@ -252,7 +252,7 @@ void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const cs
 }
 
 using ShapePairs
-    = std::map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
+    = std::map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
 
 void Diagram::syncDiagramFontHeights()
 {
@@ -443,7 +443,7 @@ void loadDiagram( ShapePtr const & pShape,
         }
 
         // Layout: always import to allow editing in the future. It's needed for
-        // AdvancedDiagramHelper::reLayout to re-create the oox::Shape(s) for the
+        // DiagramHelper_oox::reLayout to re-create the oox::Shape(s) for the
         // model. Without importing these the diagram model will be not complete.
         // NOTE: This also adds the DomMaps to rMainDomMap, so the lines
         //     DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
@@ -513,7 +513,8 @@ void loadDiagram( ShapePtr const & pShape,
         // already *filtered* version, see usage of DiagramShapeCounter
         // above. Moving to local bool, there might more conditions show
         // up
-        const bool bCreate(pShape->getExtDrawings().empty());
+        static bool bIgnoreExtDrawings(nullptr != std::getenv("DIAGRAM_IGNORE_EXTDRAWINGS"));
+        const bool bCreate(bIgnoreExtDrawings || pShape->getExtDrawings().empty());
         pDiagram->createShapeHierarchyFromModel(pShape, bCreate);
 
         // Get the oox::Theme definition and - if available - move/secure the
@@ -523,7 +524,7 @@ void loadDiagram( ShapePtr const & pShape,
             pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
 
         // Prepare support for the advanced DiagramHelper using Diagram & Theme data
-        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr(), bCreate);
+        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
     }
     catch (...)
     {

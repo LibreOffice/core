@@ -57,7 +57,7 @@
 #include <svx/svdundo.hxx>
 
 #include <svx/sdrhittesthelper.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

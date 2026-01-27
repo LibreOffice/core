@@ -50,7 +50,7 @@
 #include <svx/float3d.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -501,7 +501,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     if (SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
-                        pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
+                        pObj->getDiagramHelper()->reLayout();
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                     else if (SID_EDIT_DIAGRAM == nSlot)

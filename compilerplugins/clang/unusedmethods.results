@@ -916,10 +916,10 @@ include/svx/ClassificationField.hxx:53
     _Bool svx::ClassificationResult::operator==(const svx::ClassificationResult &) const
 include/svx/ctredlin.hxx:64
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const enum RedlineType &)
-include/svx/diagram/IDiagramHelper.hxx:47
+include/svx/diagram/DiagramHelper_svx.hxx:47
     void svx::diagram::DiagramFrameHdl::clicked(const struct svx::diagram::Point &)
-include/svx/diagram/IDiagramHelper.hxx:97
-    rtl::OUString svx::diagram::IDiagramHelper::getString() const
+include/svx/diagram/DiagramHelper_svx.hxx:97
+    rtl::OUString svx::diagram::DiagramHelper_svx::getString() const
 include/svx/dlgctrl.hxx:263
     void SvxLineEndLB::set_active_text(const rtl::OUString &)
 include/svx/framelink.hxx:169

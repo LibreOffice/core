@@ -15373,11 +15373,11 @@ svx::ThemeDialog::runThemeColorEditDialog()
 svx::classification::containsProperty(com::sun::star::uno::Sequence<com::sun::star::beans::Property> const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 svx::classification::convertClassificationResultToString(std::__debug::vector<svx::ClassificationResult, std::allocator<svx::ClassificationResult> > const&)
 svx::diagram::DiagramData_svx::addConnection(svx::diagram::TypeConstant, rtl::OUString const&, rtl::OUString const&)
-svx::diagram::DiagramData_svx::getChildrenString(rtl::OUStringBuffer&, svx::diagram::Point const*, int) const
+svx::diagram::DiagramData_svx::getDiagramChildrenString(rtl::OUStringBuffer&, svx::diagram::Point const*, int) const
 svx::diagram::DiagramDataState::DiagramDataState(std::__debug::vector<svx::diagram::Connection, std::allocator<svx::diagram::Connection> >, std::__debug::vector<svx::diagram::Point, std::allocator<svx::diagram::Point> >)
 svx::diagram::DiagramFrameHdl::CreateB2dIAObject()
 svx::diagram::DiagramFrameHdl::DiagramFrameHdl(basegfx::B2DHomMatrix const&)
-svx::diagram::IDiagramHelper::AddAdditionalVisualization(SdrObjGroup const&, SdrHdlList&)
+svx::diagram::DiagramHelper_svx::AddAdditionalVisualization(SdrObjGroup const&, SdrHdlList&)
 svx::frame::Style::Set(double, double, double)
 svx::frame::Style::hashCode() const
 svx::sidebar::AreaPropertyPanelBase::FillStyleChanged(bool)

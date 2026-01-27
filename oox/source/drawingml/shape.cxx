@@ -55,7 +55,7 @@
 #include <oox/mathml/importutils.hxx>
 #include <oox/token/properties.hxx>
 #include "diagram/datamodel_oox.hxx"
-#include <oox/drawingml/diagram/diagramhelper.hxx>
+#include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -255,17 +255,15 @@ Shape::~Shape()
 
 void Shape::prepareDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
-    const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-    bool bSelfCreated)
+    const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
 {
     // Prepare Diagram data collecting for this Shape
     if( nullptr == mpDiagramHelper && FRAMETYPE_DIAGRAM == meFrameType )
     {
-        mpDiagramHelper = new AdvancedDiagramHelper(
+        mpDiagramHelper = new DiagramHelper_oox(
             rDiagramPtr,
             rTheme,
-            getSize(),
-            bSelfCreated);
+            getSize());
     }
 }
 
@@ -276,7 +274,7 @@ void Shape::propagateDiagramHelper()
     {
         if (mxShape)
         {
-            mpDiagramHelper->doAnchor(mxShape, *this);
+            mpDiagramHelper->doAnchor(mxShape);
             mpDiagramHelper = nullptr;
         }
     }
@@ -1430,19 +1428,15 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if (!getDiagramDataModelID().isEmpty())
         {
-            SdrObject* pShape(SdrObject::getSdrObjectFromXShape(mxShape));
+            SdrObject* pSdrObject(SdrObject::getSdrObjectFromXShape(mxShape));
 
-            if (nullptr != pShape)
+            if (nullptr != pSdrObject)
             {
-                // check if we have a DiagramHelper
-                std::shared_ptr< svx::diagram::IDiagramHelper > pIDiagramHelper(
-                    pShape->getDiagramHelperFromDiagramOrMember());
-
-                if (pIDiagramHelper)
-                {
-                    // only needed when DiagramHelper exists
-                    pShape->setDiagramDataModelID(getDiagramDataModelID());
-                }
+                // I checked if pSdrObject has a DiagramHelper here once, but this is
+                // highly dependent on when propagateDiagramHelper() will be called
+                // and not needed since when a DiagramDataModelID is set locally
+                // is sufficient to know that we are in a Diagram context.
+                pSdrObject->setDiagramDataModelID(getDiagramDataModelID());
             }
         }
 
@@ -2414,7 +2408,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
 void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFragmentPath)
 {
-    AdvancedDiagramHelper* pAdvancedDiagramHelper(getDiagramHelper());
+    DiagramHelper_oox* pAdvancedDiagramHelper(getDiagramHelper());
     if (nullptr == pAdvancedDiagramHelper)
         return;
 

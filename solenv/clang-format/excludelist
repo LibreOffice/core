@@ -1,4 +1,4 @@
-UnoControls/inc/basecontainercontrol.hxx
+hUnoControls/inc/basecontainercontrol.hxx
 UnoControls/inc/basecontrol.hxx
 UnoControls/inc/multiplexer.hxx
 UnoControls/source/base/basecontainercontrol.cxx
@@ -5143,7 +5143,7 @@ include/oox/drawingml/clrscheme.hxx
 include/oox/drawingml/color.hxx
 include/oox/drawingml/connectorshapecontext.hxx
 include/oox/drawingml/diagram/diagram.hxx
-include/oox/drawingml/diagram/diagramhelper.hxx
+include/oox/drawingml/diagram/diagramhelper_oox.hxx
 include/oox/drawingml/drawingmltypes.hxx
 include/oox/drawingml/graphicshapecontext.hxx
 include/oox/drawingml/shape.hxx
@@ -5667,7 +5667,7 @@ include/svx/sdmetitm.hxx
 include/svx/sdooitm.hxx
 include/svx/sdprcitm.hxx
 include/svx/diagram/datamodel_svx.hxx
-include/svx/diagram/IDiagramHelper.hxx
+include/svx/diagram/DiagramHelper_svx.hxx
 include/svx/sdr/animation/animationstate.hxx
 include/svx/sdr/animation/objectanimator.hxx
 include/svx/sdr/animation/scheduler.hxx
@@ -11111,7 +11111,7 @@ svx/source/customshapes/EnhancedCustomShapeHandle.cxx
 svx/source/customshapes/EnhancedCustomShapeHandle.hxx
 svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx
 svx/source/diagram/datamodel_svx.cxx
-svx/source/diagram/IDiagramHelper.cxx
+svx/source/diagram/DiagramHelper_svx.cxx
 svx/source/dialog/ClassificationDialog.cxx
 svx/source/dialog/ClassificationEditView.cxx
 svx/source/dialog/ClassificationEditView.hxx

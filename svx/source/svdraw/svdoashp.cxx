@@ -76,7 +76,7 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -2614,12 +2614,12 @@ void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
     if (!getDiagramDataModelID().isEmpty())
     {
-        std::shared_ptr< svx::diagram::IDiagramHelper > pIDiagramHelper(getDiagramHelperFromDiagramOrMember());
+        std::shared_ptr< svx::diagram::DiagramHelper_svx > pIDiagramHelper(getDiagramHelperFromDiagramOrMember());
 
         if (pIDiagramHelper)
         {
             // try to do the needed changes at the associated DiagramData model
-            pIDiagramHelper->TextInformationChange(getDiagramDataModelID(), rOutl);
+            pIDiagramHelper->TextInformationChange();
         }
     }
 

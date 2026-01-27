@@ -33,7 +33,7 @@
 #include <svx/svdogrp.hxx>
 #include <sfx2/docfile.hxx>
 #include <osl/diagnose.h>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -291,7 +291,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         if(SID_REGENERATE_DIAGRAM == nSlotId)
                         {
                             pView->UnmarkAll();
-                            pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
+                            pObj->getDiagramHelper()->reLayout();
                             pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
                         else if (SID_EDIT_DIAGRAM == nSlotId)

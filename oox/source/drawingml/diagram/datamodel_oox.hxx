@@ -50,16 +50,7 @@ public:
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
-    // get/set data between Diagram DataModel and oox::drawingml::Shape
-    void secureDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape);
-    void restoreDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape);
-    static void restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape);
-
-    void writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const css::uno::Reference<css::drawing::XShape>& rXShape);
-
-protected:
-    void secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape);
-    void restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape);
+    void writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const css::uno::Reference<css::drawing::XShape>& rRootShape);
 
 private:
     // The model definition, the parts *only* available in oox. Also look for already

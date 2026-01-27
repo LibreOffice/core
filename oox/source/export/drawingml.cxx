@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <oox/drawingml/diagram/diagramhelper.hxx>
+#include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
@@ -144,7 +144,7 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -6782,12 +6782,12 @@ bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::
     if (nullptr == pObj)
         return false;
 
-    const std::shared_ptr<svx::diagram::IDiagramHelper>& rIDiagramHelper(pObj->getDiagramHelper());
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pObj->getDiagramHelper());
 
     if (!rIDiagramHelper)
         return false;
 
-    AdvancedDiagramHelper* pAdvancedDiagramHelper = static_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get());
+    DiagramHelper_oox* pAdvancedDiagramHelper = static_cast<DiagramHelper_oox*>(rIDiagramHelper.get());
 
     if (nullptr == pAdvancedDiagramHelper)
         return false;
@@ -6807,10 +6807,10 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     assert(pObj && "no SdrObject");
     assert(pObj->isDiagram() && "is no Diagram");
 
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
     assert(rIDiagramHelper && "has no DiagramHelper");
 
-    const AdvancedDiagramHelper* pAdvancedDiagramHelper = static_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get());
+    const DiagramHelper_oox* pAdvancedDiagramHelper = static_cast<DiagramHelper_oox*>(rIDiagramHelper.get());
     assert(pAdvancedDiagramHelper && "has no DiagramHelper");
 
     if (!pAdvancedDiagramHelper->checkMinimalDataDoms())

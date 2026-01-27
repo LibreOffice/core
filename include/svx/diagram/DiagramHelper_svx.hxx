@@ -52,7 +52,7 @@ class DiagramDataState;
 
 // Helper class to allow administer advanced Diagram related
 // data and functionality
-class SVXCORE_DLLPUBLIC IDiagramHelper
+class SVXCORE_DLLPUBLIC DiagramHelper_svx
 {
 private:
     // These values define behaviour to where take data from at re-creation time.
@@ -80,34 +80,30 @@ private:
     // a newly created oox::drawingml::Theme object
     bool mbForceThemePtrRecreation; // false
 
-    // if true, content was self-created using addTo/addShape
-    // and the layouting stuff
-    bool mbSelfCreated;
-
 protected:
     // remember associated SdrObjGroup
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxGroupShape;
 
 public:
-    IDiagramHelper(bool bSelfCreated);
-    virtual ~IDiagramHelper();
+    DiagramHelper_svx();
+    virtual ~DiagramHelper_svx();
 
     // re-create XShapes
-    virtual void reLayout(SdrObjGroup& rTarget) = 0;
+    virtual void reLayout() = 0;
 
     // get text representation of data tree
-    virtual OUString getString() const = 0;
+    virtual OUString getDiagramString() const = 0;
 
     // get children of provided data node
     // use empty string for top-level nodes
     // returns vector of (id, text)
     virtual std::vector<std::pair<OUString, OUString>>
-    getChildren(const OUString& rParentId) const = 0;
+    getDiagramChildren(const OUString& rParentId) const = 0;
 
     // add/remove new top-level node to data model, returns its id
     virtual OUString addDiagramNode(const OUString& rText) = 0;
     virtual bool removeDiagramNode(const OUString& rNodeId) = 0;
-    virtual void TextInformationChange(const OUString& rDiagramDataModelID, SdrOutliner& rOutl) = 0;
+    virtual void TextInformationChange() = 0;
 
     // Undo/Redo helpers for extracting/restoring Diagram-defining data
     virtual std::shared_ptr<svx::diagram::DiagramDataState> extractDiagramDataState() const = 0;
@@ -116,10 +112,6 @@ public:
     bool UseDiagramThemeData() const { return mbUseDiagramThemeData; }
     bool UseDiagramModelData() const { return mbUseDiagramModelData; }
     bool ForceThemePtrRecreation() const { return mbForceThemePtrRecreation; };
-
-    // get/set SelfCreated flag
-    bool isSelfCreated() const { return mbSelfCreated; }
-    void setSelfCreated() { mbSelfCreated = true; }
 
     // connect/disconnect to/from Group
     void connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget);

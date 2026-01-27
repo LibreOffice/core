@@ -31,13 +31,14 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <editeng/unoprnms.hxx>
-#include <svx/svdobj.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/export/drawingml.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <unordered_set>
 
 using namespace ::com::sun::star;
+using namespace ::svx::diagram;
 
 namespace oox::drawingml {
 
@@ -53,44 +54,12 @@ Shape* DiagramData_oox::getOrCreateAssociatedShape(const svx::diagram::Point& rP
     if(!rShapePtr && bCreateOnDemand)
     {
         const_cast<ShapePtr&>(rShapePtr) = std::make_shared<Shape>();
-
-        // If we did create a new oox::drawingml::Shape, directly apply
-        // available data from the Diagram ModelData to it as preparation
-        restoreDataFromModelToShapeAfterReCreation(rPoint, *rShapePtr);
     }
 
     return rShapePtr.get();
 }
 
-void DiagramData_oox::restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape)
-{
-    // If we did create a new oox::drawingml::Shape, directly apply
-    // available data from the Diagram ModelData to it as preparation
-
-    // This is e.g. the Text, but may get more (styles?)
-    if(!rPoint.msTextBody->msText.isEmpty())
-    {
-        TextBodyPtr aNewTextBody(std::make_shared<TextBody>());
-        rNewShape.setTextBody(aNewTextBody);
-        TextRunPtr pTextRun = std::make_shared<TextRun>();
-        pTextRun->getText() = rPoint.msTextBody->msText;
-        aNewTextBody->addParagraph().addRun(pTextRun);
-
-        if(!rPoint.msTextBody->maTextProps.empty())
-        {
-            oox::PropertyMap& rTargetMap(aNewTextBody->getTextProperties().maPropertyMap);
-
-            for (auto const& prop : rPoint.msTextBody->maTextProps)
-            {
-                const sal_Int32 nPropId(oox::PropertyMap::getPropertyId(prop.first));
-                if(nPropId > 0)
-                    rTargetMap.setAnyProperty(nPropId, prop.second);
-            }
-        }
-    }
-}
-
-void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const css::uno::Reference<css::drawing::XShape>& rXShape)
+void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const uno::Reference<drawing::XShape>& rRootShape)
 {
     if (!rTarget)
         return;
@@ -105,7 +74,50 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
     // write PointList
     rTarget->startElementNS(XML_dgm, XML_ptLst);
     for (auto& rPoint : getPoints())
-        rPoint.writeDiagramData(rTarget);
+    {
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(sax_fastparser::FastSerializerHelper::createAttrList());
+
+        pAttributeList->add(XML_modelId, rPoint.msModelId);
+        addTypeConstantToFastAttributeList(rPoint.mnXMLType, pAttributeList);
+        if (!rPoint.msCnxId.isEmpty())
+            pAttributeList->add(XML_cxnId, rPoint.msCnxId);
+        rTarget->startElementNS(XML_dgm, XML_pt, pAttributeList);
+
+        rPoint.writeDiagramData_data(rTarget);
+
+        uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, rRootShape));
+
+        if (xMasterText)
+        {
+            rTarget->startElementNS(XML_dgm, XML_t);
+            DrawingML aTempML(rTarget, &rFB);
+            aTempML.WriteText(xMasterText, false, true, XML_a);
+            rTarget->endElementNS(XML_dgm, XML_t);
+
+            // uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
+            // aTempML.WriteFill( xProps, xBgShape->getSize());
+        }
+        else
+        {
+            const bool bWriteEmptyText(
+                TypeConstant::XML_parTrans == rPoint.mnXMLType ||
+                TypeConstant::XML_sibTrans == rPoint.mnXMLType ||
+                "textNode" == rPoint.msPresentationLayoutName);
+
+            if (bWriteEmptyText)
+            {
+                rTarget->startElementNS(XML_dgm, XML_t);
+                rTarget->singleElementNS(XML_a, XML_bodyPr);
+                rTarget->singleElementNS(XML_a, XML_lstStyle);
+                rTarget->startElementNS(XML_a, XML_p);
+                rTarget->singleElementNS(XML_a, XML_endParaRPr, XML_lang, "en-US");
+                rTarget->endElementNS(XML_a, XML_p);
+                rTarget->endElementNS(XML_dgm, XML_t);
+            }
+        }
+
+        rTarget->endElementNS(XML_dgm, XML_pt);
+    }
     rTarget->endElementNS(XML_dgm, XML_ptLst);
 
     // write ConnectorList
@@ -127,21 +139,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
     // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
     // and more for later offering changing the Background of a Diagram.
     // Note that an incarnation of BG as XShape is also needed to 'carry' the correct Size for that Diagram.
-    uno::Reference<drawing::XShape> xBgShape;
-    uno::Reference<drawing::XShapes> xGroup(rXShape, uno::UNO_QUERY);
-    if (xGroup.is() && 0 != xGroup->getCount())
-    {
-        // access the BGShape, it *should* always exist and be the 1st shape (to *be* in the BG)
-        uno::Reference<drawing::XShape> xCandidate(xGroup->getByIndex(0), uno::UNO_QUERY);
-        if (xCandidate.is())
-        {
-            // check comparing the DiagramDataModelID created at BackgroundSHape creation for the oox::Shape
-            // that got transferred to the XShape when it was created
-            SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(xCandidate));
-            if (nullptr != pCandidate && pCandidate->getDiagramDataModelID() == getBackgroundShapeModelID())
-                xBgShape = xCandidate;
-        }
-    }
+    uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(rRootShape, getBackgroundShapeModelID()));
 
     if (xBgShape.is())
     {
@@ -175,319 +173,6 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
 
     rTarget->endElementNS(XML_dgm, XML_dataModel);
     rTarget->endDocument();
-}
-
-static void addProperty(const OUString& rName,
-    const css::uno::Reference< css::beans::XPropertySetInfo >& xInfo,
-    std::vector< std::pair< OUString, css::uno::Any >>& rTarget,
-    const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
-{
-    if(xInfo->hasPropertyByName(rName))
-            rTarget.push_back(std::pair(OUString(rName), xPropSet->getPropertyValue(rName)));
-}
-
-void DiagramData_oox::secureStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape)
-{
-    const std::vector< ShapePtr >& rChildren(rShape.getChildren());
-
-    if(!rChildren.empty())
-    {
-        // group shape
-        for (auto& child : rChildren)
-        {
-            secureStyleDataFromShapeToModel(*child);
-        }
-
-        // if group shape we are done. Do not secure properties for group shapes
-        return;
-    }
-
-    // we need a XShape
-    const css::uno::Reference< css::drawing::XShape > &rXShape(rShape.getXShape());
-    if(!rXShape)
-        return;
-
-    // we need a ModelID for association
-    if(rShape.getDiagramDataModelID().isEmpty())
-        return;
-
-    // define target to save to
-    svx::diagram::PointStyle* pTarget(nullptr);
-    const bool bIsBackgroundShape(rShape.getDiagramDataModelID() == getBackgroundShapeModelID());
-
-    if(bIsBackgroundShape)
-    {
-        // if BackgroundShape, create properties & set as target
-        if(!maBackgroundShapeStyle)
-            maBackgroundShapeStyle = std::make_shared< svx::diagram::PointStyle >();
-        pTarget = maBackgroundShapeStyle.get();
-    }
-    else
-    {
-        // if Shape, seek association
-        for (auto & point : maPoints)
-        {
-            if(point.msModelId == rShape.getDiagramDataModelID())
-            {
-                // found - create properties & set as target
-                pTarget = point.msPointStylePtr.get();
-
-                // we are done, there is no 2nd shape with the same ModelID by definition
-                break;
-            }
-        }
-    }
-
-    // no target -> nothing to do
-    if(nullptr == pTarget)
-        return;
-
-#ifdef DBG_UTIL
-    // to easier decide which additional properties may/should be preserved,
-    // create a full list of set properties to browse/decide (in debugger)
-    const css::uno::Reference< css::beans::XPropertyState > xAllPropStates(rXShape, css::uno::UNO_QUERY);
-    const css::uno::Reference< css::beans::XPropertySet > xAllPropSet( rXShape, css::uno::UNO_QUERY );
-    const css::uno::Sequence< css::beans::Property > allSequence(xAllPropSet->getPropertySetInfo()->getProperties());
-    std::vector< std::pair< OUString, css::uno::Any >> allSetProps;
-    for (auto& rProp : allSequence)
-    {
-        try
-        {
-            if (xAllPropStates->getPropertyState(rProp.Name) == css::beans::PropertyState::PropertyState_DIRECT_VALUE)
-            {
-                css::uno::Any aValue(xAllPropSet->getPropertyValue(rProp.Name));
-                if(aValue.hasValue())
-                    allSetProps.push_back(std::pair(rProp.Name, aValue));
-            }
-        }
-        catch (...)
-        {
-        }
-    }
-#endif
-
-    const css::uno::Reference< css::beans::XPropertySet > xPropSet( rXShape, css::uno::UNO_QUERY );
-    if(!xPropSet)
-        return;
-
-    const css::uno::Reference< css::lang::XServiceInfo > xServiceInfo( rXShape, css::uno::UNO_QUERY );
-    if(!xServiceInfo)
-        return;
-
-    const css::uno::Reference< css::beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
-    if (!xInfo.is())
-        return;
-
-    // Note: The Text may also be secured here, so it may also be possible to
-    // secure/store it at PointStyle instead of at TextBody, same maybe evaluated
-    // for the text attributes - where when securing here the attributes would be
-    // in our UNO API format already.
-    // if(xServiceInfo->supportsService("com.sun.star.drawing.Text"))
-    // {
-    //     css::uno::Reference< css::text::XText > xText(rXShape, css::uno::UNO_QUERY);
-    //     const OUString aText(xText->getString());
-    //
-    //     if(!aText.isEmpty())
-    //     {
-    //     }
-    // }
-
-    // Add all kinds of properties that are needed to re-create the XShape.
-    // For now this is a minimal example-selection, it will need to be extended
-    // over time for all kind of cases/properties
-
-    // text properties
-    if(!bIsBackgroundShape
-        && xServiceInfo->supportsService(u"com.sun.star.drawing.TextProperties"_ustr))
-    {
-        addProperty(UNO_NAME_CHAR_COLOR, xInfo, pTarget->maProperties, xPropSet);
-        addProperty(UNO_NAME_CHAR_HEIGHT, xInfo, pTarget->maProperties, xPropSet);
-        addProperty(UNO_NAME_CHAR_SHADOWED, xInfo, pTarget->maProperties, xPropSet);
-        addProperty(UNO_NAME_CHAR_WEIGHT, xInfo, pTarget->maProperties, xPropSet);
-    }
-
-    // fill properties
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.FillProperties"_ustr))
-    {
-        css::drawing::FillStyle eFillStyle(css::drawing::FillStyle_NONE);
-        if (xInfo->hasPropertyByName(UNO_NAME_FILLSTYLE))
-            xPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= eFillStyle;
-
-        if(css::drawing::FillStyle_NONE != eFillStyle)
-        {
-            addProperty(UNO_NAME_FILLSTYLE, xInfo, pTarget->maProperties, xPropSet);
-
-            switch(eFillStyle)
-            {
-                case css::drawing::FillStyle_SOLID:
-                {
-                    addProperty(UNO_NAME_FILLCOLOR, xInfo, pTarget->maProperties, xPropSet);
-                    break;
-                }
-                default:
-                case css::drawing::FillStyle_NONE:
-                case css::drawing::FillStyle_GRADIENT:
-                case css::drawing::FillStyle_HATCH:
-                case css::drawing::FillStyle_BITMAP:
-                    break;
-            }
-        }
-    }
-
-    // line properties
-    if(!bIsBackgroundShape
-        && xServiceInfo->supportsService(u"com.sun.star.drawing.LineProperties"_ustr))
-    {
-        css::drawing::LineStyle eLineStyle(css::drawing::LineStyle_NONE);
-        if (xInfo->hasPropertyByName(UNO_NAME_LINESTYLE))
-            xPropSet->getPropertyValue(UNO_NAME_LINESTYLE) >>= eLineStyle;
-
-        if(css::drawing::LineStyle_NONE != eLineStyle)
-        {
-            addProperty(UNO_NAME_LINESTYLE, xInfo, pTarget->maProperties, xPropSet);
-            addProperty(UNO_NAME_LINECOLOR, xInfo, pTarget->maProperties, xPropSet);
-            addProperty(UNO_NAME_LINEWIDTH, xInfo, pTarget->maProperties, xPropSet);
-
-            switch(eLineStyle)
-            {
-                case css::drawing::LineStyle_SOLID:
-                    break;
-                default:
-                case css::drawing::LineStyle_NONE:
-                case css::drawing::LineStyle_DASH:
-                    break;
-            }
-        }
-    }
-}
-
-void DiagramData_oox::secureDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape)
-{
-    const std::vector< ShapePtr >& rChildren(rRootShape.getChildren());
-
-    for (auto& child : rChildren)
-    {
-        secureStyleDataFromShapeToModel(*child);
-    }
-
-    // After Diagram import, parts of the Diagram ModelData is at the
-    // oox::drawingml::Shape. Since these objects are temporary helpers,
-    // secure that data at the Diagram ModelData by copying.
-
-    // This is currently mainly the Text, but may get more (styles?)
-    for (auto & point : maPoints)
-    {
-        Shape* pShapeCandidate(getOrCreateAssociatedShape(point));
-
-        if(nullptr != pShapeCandidate)
-        {
-            if(pShapeCandidate->getTextBody() && !pShapeCandidate->getTextBody()->isEmpty())
-            {
-                point.msTextBody->msText = pShapeCandidate->getTextBody()->toString();
-
-                const uno::Sequence< beans::PropertyValue > aTextProps(
-                    pShapeCandidate->getTextBody()->getTextProperties().maPropertyMap.makePropertyValueSequence());
-
-                for (auto const& prop : aTextProps)
-                    point.msTextBody->maTextProps.push_back(std::pair(prop.Name, prop.Value));
-            }
-
-            // At this place a mechanism to find missing data should be added:
-            // Create a Shape from so-far secured data & compare it with the
-            // imported one. Report differences to allow extending the mechanism
-            // more easily.
-#ifdef DBG_UTIL
-            // The original is pShapeCandidate, re-create potential new oox::drawingml::Shape
-            // as aNew to be able to compare these
-            ShapePtr aNew(std::make_shared<Shape>());
-            restoreDataFromModelToShapeAfterReCreation(point, *aNew);
-
-            // Unfortunately oox::drawingml::Shape has no operator==. I tried to add
-            // one, but that is too expensive. I stopped at oox::drawingml::Color.
-            // To compare it is necessary to use the debugger, or for single aspects
-            // of the oox data it might be possible to call local dump() methods at
-            // both instances to compare them/their output
-
-            // bool bSame(aNew.get() == pShapeCandidate);
-#endif
-        }
-    }
-}
-
-void DiagramData_oox::restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rShape)
-{
-    const std::vector< ShapePtr >& rChildren(rShape.getChildren());
-
-    if(!rChildren.empty())
-    {
-        // group shape
-        for (auto& child : rChildren)
-        {
-            restoreStyleDataFromShapeToModel(*child);
-        }
-
-        // if group shape we are done. Do not restore properties for group shapes
-        return;
-    }
-
-    // we need a XShape
-    const css::uno::Reference< css::drawing::XShape > &rXShape(rShape.getXShape());
-    if(!rXShape)
-        return;
-
-    // we need a ModelID for association
-    if(rShape.getDiagramDataModelID().isEmpty())
-        return;
-
-    // define source to save to
-    svx::diagram::PointStyle* pSource(nullptr);
-
-    if(rShape.getDiagramDataModelID() == getBackgroundShapeModelID())
-    {
-        // if BackgroundShape, set BackgroundShapeStyle as source
-        if(maBackgroundShapeStyle)
-            pSource = maBackgroundShapeStyle.get();
-    }
-    else
-    {
-        // if Shape, seek association
-        for (auto & point : maPoints)
-        {
-            if(point.msModelId == rShape.getDiagramDataModelID())
-            {
-                // found - create properties & set as source
-                pSource = point.msPointStylePtr.get();
-
-                // we are done, there is no 2nd shape with the same ModelID by definition
-                break;
-            }
-        }
-    }
-
-    // no source -> nothing to do
-    if(nullptr == pSource)
-        return;
-
-    // get target PropertySet of new XShape
-    css::uno::Reference<css::beans::XPropertySet> xPropSet(rXShape, css::uno::UNO_QUERY);
-    if(!xPropSet)
-        return;
-
-    // apply properties
-    for (auto const& prop : pSource->maProperties)
-    {
-        xPropSet->setPropertyValue(prop.first, prop.second);
-    }
-}
-
-void DiagramData_oox::restoreDataFromShapeToModelAfterDiagramImport(::oox::drawingml::Shape& rRootShape)
-{
-    const std::vector< ShapePtr >& rChildren(rRootShape.getChildren());
-
-    for (auto& child : rChildren)
-    {
-        restoreStyleDataFromShapeToModel(*child);
-    }
 }
 
 DiagramData_oox::DiagramData_oox()
