@@ -150,17 +150,41 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
     CPPUNIT_ASSERT_EQUAL(120, GetColorHue(aColor3));
 }
 
-bool IsGrayScale(const Bitmap& rBitmap)
+struct ImageInfo
 {
-    BitmapScopedReadAccess pReadAccess(rBitmap);
-    Size aSize = rBitmap.GetSizePixel();
+    Bitmap m_aBitmap;
+    tools::Rectangle m_aRectangle;
+};
+
+bool IsGrayScale(const ImageInfo& rInfo)
+{
+    Bitmap aBitmap = rInfo.m_aBitmap;
+    BitmapScopedReadAccess pReadAccess(aBitmap);
+    Size aSize = rInfo.m_aBitmap.GetSizePixel();
     Color aColor = pReadAccess->GetColor(aSize.getHeight() / 2, aSize.getWidth() / 2);
     return aColor.GetRed() == aColor.GetGreen() && aColor.GetRed() == aColor.GetBlue();
 }
 
-std::vector<Bitmap> GetMetaFileImages(const GDIMetaFile& rMetaFile)
+bool RectangleContainsPolygons(const tools::Rectangle& rRectangle,
+                               const std::vector<tools::Polygon>& rPolygons)
 {
-    std::vector<Bitmap> aImages;
+    static constexpr SwTwips nPixel = 15;
+    tools::Rectangle aRectangle(rRectangle.Left() - nPixel, rRectangle.Top() - nPixel,
+                                rRectangle.Right() + nPixel, rRectangle.Bottom() + nPixel);
+    for (const auto& rPolygon : rPolygons)
+    {
+        if (!aRectangle.Contains(rPolygon.GetBoundRect()))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+std::vector<ImageInfo> GetMetaFileImages(const GDIMetaFile& rMetaFile)
+{
+    std::vector<ImageInfo> aImages;
     for (size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
     {
         MetaAction* pAction = rMetaFile.GetAction(nAction);
@@ -170,9 +194,29 @@ std::vector<Bitmap> GetMetaFileImages(const GDIMetaFile& rMetaFile)
         }
 
         auto pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-        aImages.push_back(pAct->GetBitmap());
+        ImageInfo aInfo;
+        aInfo.m_aBitmap = pAct->GetBitmap();
+        aInfo.m_aRectangle = { pAct->GetPoint(), pAct->GetSize() };
+        aImages.push_back(aInfo);
     }
     return aImages;
+}
+
+std::vector<tools::Polygon> GetMetaFilePolylines(const GDIMetaFile& rMetaFile)
+{
+    std::vector<tools::Polygon> aPolygons;
+    for (size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
+    {
+        MetaAction* pAction = rMetaFile.GetAction(nAction);
+        if (pAction->GetType() != MetaActionType::POLYLINE)
+        {
+            continue;
+        }
+
+        auto pAct = static_cast<MetaPolyLineAction*>(pAction);
+        aPolygons.push_back(pAct->GetPolygon());
+    }
+    return aPolygons;
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
@@ -185,11 +229,14 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
 
     // Then make sure none of the images are grayscale:
-    std::vector<Bitmap> aImages = GetMetaFileImages(*xMetaFile);
+    std::vector<ImageInfo> aImages = GetMetaFileImages(*xMetaFile);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[2]));
+    std::vector<tools::Polygon> aPolygons = GetMetaFilePolylines(*xMetaFile);
+    // No frames around images.
+    CPPUNIT_ASSERT(aPolygons.empty());
 
     // Omit insert: default, default, grayscale.
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -206,6 +253,10 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
     // Without the accompanying fix in place, this test would have failed, the image's center pixel
     // wasn't gray.
     CPPUNIT_ASSERT(IsGrayScale(aImages[2]));
+    aPolygons = GetMetaFilePolylines(*xMetaFile);
+    // Frame around the deleted image. This failed, there was no frame around the deleted image.
+    CPPUNIT_ASSERT(!aPolygons.empty());
+    CPPUNIT_ASSERT(RectangleContainsPolygons(aImages[1].m_aRectangle, aPolygons));
 
     // Omit deletes: default, grayscale, default.
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
@@ -218,6 +269,10 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredImageRedlineRenderModeOmitInsertDelete)
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(IsGrayScale(aImages[1]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[2]));
+    aPolygons = GetMetaFilePolylines(*xMetaFile);
+    // Frame around the inserted image.
+    CPPUNIT_ASSERT(!aPolygons.empty());
+    CPPUNIT_ASSERT(RectangleContainsPolygons(aImages[2].m_aRectangle, aPolygons));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
@@ -230,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
 
     // Then make sure none of the images are grayscale:
-    std::vector<Bitmap> aImages = GetMetaFileImages(*xMetaFile);
+    std::vector<ImageInfo> aImages = GetMetaFileImages(*xMetaFile);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aImages.size());
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));

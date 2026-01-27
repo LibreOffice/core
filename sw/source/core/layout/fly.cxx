@@ -2330,6 +2330,48 @@ bool SwFlyFrame::IsSplitButNotYetMovedFollow() const
     return false;
 }
 
+bool SwFlyFrame::GetRedlineRenderModeFrame(SvxBoxItem& rBoxItem) const
+{
+    // If we're in non-standard redline mode, then color deletes and inserts depending on the
+    // redline render mode. Similar to what SwFntObj::DrawText() does for redlined text.
+    const SwViewShell* pViewShell = getRootFrame()->GetCurrShell();
+    if (!pViewShell)
+    {
+        return false;
+    }
+
+    const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
+    if (!pViewOptions)
+    {
+        return false;
+    }
+
+    SwRedlineRenderMode eRedlineRenderMode = pViewOptions->GetRedlineRenderMode();
+    std::optional<Color> oColor;
+    if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && IsDeleted())
+    {
+        oColor.emplace(COL_RED);
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && IsInserted())
+    {
+        oColor.emplace(COL_GREEN);
+    }
+    if (!oColor)
+    {
+        return false;
+    }
+
+    editeng::SvxBorderLine aBorderLine;
+    aBorderLine.SetWidth(1);
+    aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
+    aBorderLine.SetColor(*oColor);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
+    return true;
+}
+
 SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
 {
     if (!Lower())
