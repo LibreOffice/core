@@ -394,6 +394,7 @@ private:
     /** Convert Locale to BCP 47 string without resolving system and creating
         temporary LanguageTag instances. */
     static OUString     convertToBcp47( const css::lang::Locale& rLocale );
+    static void         convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale );
 
 };
 
@@ -2871,6 +2872,49 @@ OUString LanguageTagImpl::convertToBcp47( const css::lang::Locale& rLocale )
     return aBcp47;
 }
 
+/**
+  We know the strings here are always ascii, so we can avoid some allocation work.
+*/
+static void appendAscii(OStringBuffer& rBuf, const OUString& s)
+{
+    rBuf.setLength(rBuf.getLength() + s.getLength());
+    const sal_Unicode* pSrc = s.getStr();
+    char* pDest = rBuf.getMutableStr();
+    for (int i=0; i<s.getLength(); i++)
+    {
+        assert(*pSrc < 127);
+        *pDest = static_cast<char>(*pSrc);
+        ++pSrc;
+        ++pDest;
+    }
+}
+
+// static
+void LanguageTagImpl::convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale )
+{
+    if (rLocale.Language.isEmpty())
+    {
+        // aBcp47 stays empty
+    }
+    else if (rLocale.Language == I18NLANGTAG_QLT)
+    {
+        appendAscii(rBuf, rLocale.Variant);
+    }
+    else
+    {
+        /* XXX NOTE: most legacy code never evaluated the Variant field, so for
+         * now just concatenate language and country. In case we stumbled over
+         * variant aware code we'd have to take care of that. */
+        if (rLocale.Country.isEmpty())
+            appendAscii(rBuf, rLocale.Language);
+        else
+        {
+            appendAscii(rBuf, rLocale.Language);
+            rBuf.append("-");
+            appendAscii(rBuf, rLocale.Country);
+        }
+    }
+}
 
 // static
 OUString LanguageTag::convertToBcp47( const css::lang::Locale& rLocale, bool bResolveSystem )
@@ -2889,6 +2933,22 @@ OUString LanguageTag::convertToBcp47( const css::lang::Locale& rLocale, bool bRe
     return aBcp47;
 }
 
+// static
+void LanguageTag::convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale, bool bResolveSystem )
+{
+    if (rLocale.Language.isEmpty())
+    {
+        if (bResolveSystem)
+            LanguageTag::convertToBcp47( rBuf, LANGUAGE_SYSTEM );
+        // else aBcp47 stays empty
+    }
+    else
+    {
+        LanguageTagImpl::convertToBcp47( rBuf, rLocale);
+    }
+}
+
+
 
 // static
 OUString LanguageTag::convertToBcp47( LanguageType nLangID )
@@ -2902,6 +2962,17 @@ OUString LanguageTag::convertToBcp47( LanguageType nLangID )
     return LanguageTagImpl::convertToBcp47( aLocale);
 }
 
+// static
+void LanguageTag::convertToBcp47( OStringBuffer& rBuf, LanguageType nLangID )
+{
+    lang::Locale aLocale( LanguageTag::convertToLocale( nLangID ));
+    // If system for some reason (should not happen... haha) could not be
+    // resolved DO NOT CALL LanguageTag::convertToBcp47(Locale) because that
+    // would recurse into this method here!
+    if (aLocale.Language.isEmpty())
+        return;      // bad luck, bail out
+    LanguageTagImpl::convertToBcp47(rBuf, aLocale);
+}
 
 // static
 css::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp47, bool bResolveSystem )

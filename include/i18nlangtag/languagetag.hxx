@@ -13,6 +13,7 @@
 #include <sal/config.h>
 #include <rtl/locale.h>
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
@@ -446,6 +447,7 @@ public:
        locale to the real locale used.
      */
     static OUString convertToBcp47( LanguageType nLangID );
+    static void convertToBcp47( OStringBuffer& rBuf, LanguageType nLangID );
 
     /** Convert Locale to BCP 47 string.
 
@@ -455,6 +457,7 @@ public:
                If FALSE, return an empty OUString for such a tag.
      */
     static OUString convertToBcp47( const css::lang::Locale& rLocale, bool bResolveSystem = true );
+    static void convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale, bool bResolveSystem = true );
 
     /** Convert BCP 47 string to Locale, convenience method.
 

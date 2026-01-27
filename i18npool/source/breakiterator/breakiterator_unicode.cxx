@@ -118,9 +118,10 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
     // expensive numeric conversion in append() for faster construction of the
     // always used global key.
     assert( 0 <= breakType && breakType <= 9 && 0 <= rBreakType && rBreakType <= 9 && 0 <= nWordType && nWordType <= 9);
-    const OString aLangtagStr( LanguageTag::convertToBcp47( rLocale).toUtf8());
     OStringBuffer aKeyBuf(64);
-    aKeyBuf.append( aLangtagStr + ";" );
+    LanguageTag::convertToBcp47(aKeyBuf, rLocale);
+    const sal_Int32 nLangStrLen = aKeyBuf.getLength();
+    aKeyBuf.append( ";" );
     if (rule)
         aKeyBuf.append(rule);
     aKeyBuf.append(";" + OStringChar(static_cast<char>('0'+breakType)) + ";"
@@ -128,6 +129,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
         + OStringChar( static_cast<char>('0'+nWordType)));
     // langtag;rule;breakType;rBreakType;nWordType
     const OString aBIMapGlobalKey( aKeyBuf.makeStringAndClear());
+    std::string_view aKeyBufView = std::string_view(aBIMapGlobalKey).substr(0, nLangStrLen);
 
     if (icuBI->maBIMapKey != aBIMapGlobalKey || !icuBI->mpValue || !icuBI->mpValue->mpBreakIterator)
     {
@@ -154,7 +156,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 if (breakRules.getLength() > breakType && !breakRules[breakType].isEmpty())
                 {
                     // langtag;rule;breakType
-                    const OString aBIMapRuleTypeKey( aLangtagStr + ";" + rule + ";" + OString::number(breakType));
+                    const OString aBIMapRuleTypeKey( OString::Concat(aKeyBufView) + ";" + rule + ";" + OString::number(breakType));
                     aMapIt = theBIMap.find( aBIMapRuleTypeKey);
                     bInMap = (aMapIt != theBIMap.end());
                     if (bInMap)
@@ -243,7 +245,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
             do
             {
                 // langtag;;;rBreakType (empty rule; empty breakType)
-                const OString aBIMapLocaleTypeKey( aLangtagStr + ";;;" + OString::number(rBreakType));
+                const OString aBIMapLocaleTypeKey( OString::Concat(aKeyBufView) + ";;;" + OString::number(rBreakType));
                 aMapIt = theBIMap.find( aBIMapLocaleTypeKey);
                 bInMap = (aMapIt != theBIMap.end());
                 if (bInMap)
