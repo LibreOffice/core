@@ -59,6 +59,7 @@ namespace sc
     class SparklineGroup;
     class Sparkline;
     enum class OperationType;
+    class DeleteContentOperation;
 }
 namespace tools
 {
@@ -67,6 +68,8 @@ namespace tools
 
 class ScDocFunc
 {
+    friend class sc::DeleteContentOperation;
+
     ScDocShell&     rDocShell;
     static bool CheckSheetViewProtection(sc::OperationType eOperation);
 
@@ -257,6 +260,8 @@ public:
     SC_DLLPUBLIC bool GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup> const& rpGroup);
     SC_DLLPUBLIC bool UngroupSparklines(ScRange const& rRange);
     SC_DLLPUBLIC bool ChangeSparkline(std::shared_ptr<sc::Sparkline> const& rpSparkline, SCTAB nTab, ScRangeList const& rDataRange);
+
+    static void PaintAbove(ScDocShell& rDocShell, const ScRange& rRange);
 
 private:
     void ProtectDocument(const ScDocProtection& rProtect);

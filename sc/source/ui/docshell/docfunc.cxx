@@ -110,6 +110,7 @@
 #include <config_features.h>
 
 #include <memory>
+#include <operation/DeleteContentOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -145,7 +146,7 @@ void ScDocFunc::NotifyDrawUndo( std::unique_ptr<SdrUndoAction> pUndoAction)
 
 //  paint row above the range (because of lines after AdjustRowHeight)
 
-static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
+void ScDocFunc::PaintAbove(ScDocShell& rDocShell, const ScRange& rRange)
 {
     SCROW nRow = rRange.aStart.Row();
     if ( nRow > 0 )
@@ -589,98 +590,10 @@ void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, vector<S
     lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, false);
 }
 
-bool ScDocFunc::DeleteContents(
-    const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
+bool ScDocFunc::DeleteContents(const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi)
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-    {
-        OSL_FAIL("ScDocFunc::DeleteContents without markings");
-        return false;
-    }
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    if (bRecord && !rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::DeleteContent))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
-    if (!aTester.IsEditable())
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
-    }
-
-    ScMarkData aMultiMark = rMark;
-    aMultiMark.SetMarking(false);       // for MarkToMulti
-
-    ScDocumentUniquePtr pUndoDoc;
-    bool bMulti = aMultiMark.IsMultiMarked();
-    aMultiMark.MarkToMulti();
-    const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
-    ScRange aExtendedRange(aMarkRange);
-    if ( rDoc.ExtendMerge( aExtendedRange, true ) )
-        bMulti = false;
-
-    // no objects on protected tabs
-    bool bObjects = (nFlags & InsertDeleteFlags::OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, rMark);
-
-    sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
-    if ( nFlags & InsertDeleteFlags::ATTRIB )
-        rDocShell.UpdatePaintExt( nExtFlags, aMarkRange );
-
-    //  order of operations:
-    //  1) BeginDrawUndo
-    //  2) Delete objects (DrawUndo will be filled)
-    //  3) Copy content for undo and set up undo actions
-    //  4) Delete content
-
-    bool bDrawUndo = bObjects || (nFlags & InsertDeleteFlags::NOTE);
-    if (bRecord && bDrawUndo)
-        rDoc.BeginDrawUndo();
-
-    if (bObjects)
-    {
-        if (bMulti)
-            rDoc.DeleteObjectsInSelection( aMultiMark );
-        else
-            rDoc.DeleteObjectsInArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
-                                       aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
-                                       aMultiMark );
-    }
-
-    // To keep track of all non-empty cells within the deleted area.
-    std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
-
-    if ( bRecord )
-    {
-        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, aMultiMark, aMarkRange, nFlags, bMulti);
-        pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, aMultiMark, aMarkRange);
-    }
-
-    rDoc.DeleteSelection( nFlags, aMultiMark );
-
-    // add undo action after drawing undo is complete (objects and note captions)
-    if( bRecord )
-    {
-        sc::DocFuncUtil::addDeleteContentsUndo(
-            rDocShell.GetUndoManager(), &rDocShell, aMultiMark, aExtendedRange,
-            std::move(pUndoDoc), nFlags, pDataSpans, bMulti, bDrawUndo);
-    }
-
-    if (!AdjustRowHeight( aExtendedRange, true, bApi ))
-        rDocShell.PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
-    else if (nExtFlags & SC_PF_LINES)
-        lcl_PaintAbove( rDocShell, aExtendedRange );    // for lines above the range
-
-    aModificator.SetDocumentModified();
-
-    return true;
+    sc::DeleteContentOperation aOperation(*this, rDocShell, rMark, nFlags, bRecord, bApi);
+    return aOperation.run();
 }
 
 tools::Long ScDocShell::GetTwipWidthHint(const ScAddress& rPos)
@@ -1537,7 +1450,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
         if (!AdjustRowHeight( aMultiRange, true, bApi ))
             rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
         else if (nExtFlags & SC_PF_LINES)
-            lcl_PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
+            PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
 
         aModificator.SetDocumentModified();
     }
@@ -2897,7 +2810,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         {
             //  paint only what is not done by AdjustRowHeight
             if (nExtFlags & SC_PF_LINES)
-                lcl_PaintAbove( rDocShell, ScRange( nPaintStartCol, nPaintStartRow, rTab, nPaintEndCol, nPaintEndRow, rTab+nScenarioCount) );
+                PaintAbove( rDocShell, ScRange( nPaintStartCol, nPaintStartRow, rTab, nPaintEndCol, nPaintEndRow, rTab+nScenarioCount) );
             if (nPaintFlags & PaintPartFlags::Top)
                 rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, rTab, nPaintEndCol, nPaintEndRow, rTab+nScenarioCount, PaintPartFlags::Top );
         }
