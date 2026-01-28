@@ -280,7 +280,7 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::render2() const
                 nTan = -nTan;
             }
 
-            xRenderedShape->Shear(mpCustomShape->GetSnapRect().Center(), nShearAngle, nTan, false);
+            xRenderedShape->NbcShear(mpCustomShape->GetSnapRect().Center(), nShearAngle, nTan, false);
         }
         if(nRotateAngle )
             xRenderedShape->NbcRotate(mpCustomShape->GetSnapRect().Center(), nRotateAngle);
