@@ -32,6 +32,7 @@
 #include <rtl/ref.hxx>
 #include <linguistic/lngdllapi.h>
 
+#include <map>
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -154,7 +155,8 @@ css::uno::Reference<
         SearchDicList(
             const css::uno::Reference< css::linguistic2::XSearchableDictionaryList >& rDicList,
             const OUString& rWord, LanguageType nLanguage,
-            bool bSearchPosDics, bool bSearchSpellEntry );
+            bool bSearchPosDics, bool bSearchSpellEntry,
+            std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap );
 
 LNG_DLLPUBLIC DictionaryError AddEntryToDic(
     css::uno::Reference< css::linguistic2::XDictionary > const &rxDic,
