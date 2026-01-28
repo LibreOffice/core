@@ -620,6 +620,11 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="label8-atkobject">
+                <property name="AtkObject::accessible-role">static</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

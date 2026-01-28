@@ -165,7 +165,7 @@
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <child>
-              <object class="GtkLabel" id="distanceft">
+              <object class="GtkLabel" id="hatchdistanceft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="hatchpage|distanceft">_Spacing:</property>
@@ -448,6 +448,11 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="label1-atkobject">
+                <property name="AtkObject::accessible-role">static</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
