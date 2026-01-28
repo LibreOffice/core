@@ -2983,6 +2983,10 @@ void SdrObjCustomShape::AdjustToMaxRect(const tools::Rectangle& rMaxRect, bool b
 
 void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
+    tools::Rectangle aBoundRect0;
+    if (m_pUserCall != nullptr)
+        aBoundRect0 = GetLastBoundRect();
+
     // The shape might have already flipping in its enhanced geometry. LibreOffice applies
     // such after all transformations. We remove it, but remember it to apply them later.
     bool bIsMirroredX = IsMirroredX();
@@ -2992,11 +2996,11 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         Point aCurrentCenter = GetSnapRect().Center();
         if (bIsMirroredX) // mirror on the y-axis
         {
-            Mirror(aCurrentCenter, Point(aCurrentCenter.X(), aCurrentCenter.Y() + 1000));
+            NbcMirror(aCurrentCenter, Point(aCurrentCenter.X(), aCurrentCenter.Y() + 1000));
         }
         if (bIsMirroredY) // mirror on the x-axis
         {
-            Mirror(aCurrentCenter, Point(aCurrentCenter.X() + 1000, aCurrentCenter.Y()));
+            NbcMirror(aCurrentCenter, Point(aCurrentCenter.X() + 1000, aCurrentCenter.Y()));
         }
     }
 
@@ -3029,13 +3033,13 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
     tools::Rectangle aBaseRect(Point(), aSize);
-    SetLogicRect(aBaseRect);
+    NbcSetLogicRect(aBaseRect);
 
     // Apply flipping from Matrix, which is a transformation relative to origin
     if (aScale.getX() < 0.0)
-        Mirror(Point(0, 0), Point(0, 1000)); // mirror on the y-axis
+        NbcMirror(Point(0, 0), Point(0, 1000)); // mirror on the y-axis
     if (aScale.getY() < 0.0)
-        Mirror(Point(0, 0), Point(1000, 0)); // mirror on the x-axis
+        NbcMirror(Point(0, 0), Point(1000, 0)); // mirror on the x-axis
 
     // shear?
     if(!basegfx::fTools::equalZero(fShearX))
@@ -3046,7 +3050,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // back the mirroring of the shear angle
         aGeoStat.m_nShearAngle = Degree100(basegfx::fround(basegfx::rad2deg<100>(atan(fShearX))));
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.m_nShearAngle, aGeoStat.mfTanShearAngle, false);
+        NbcShear(Point(), aGeoStat.m_nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
 
     // rotation?
@@ -3059,14 +3063,15 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // mirrored -> mirror value here
         aGeoStat.m_nRotationAngle = NormAngle36000(Degree100(basegfx::fround(-basegfx::rad2deg<100>(fRotate))));
         aGeoStat.RecalcSinCos();
-        Rotate(Point(), aGeoStat.m_nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
+        NbcRotate(Point(), aGeoStat.m_nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }
 
     // translate?
-    if(!aTranslate.equalZero())
+    if (Size move(basegfx::fround<tools::Long>(aTranslate.getX()),
+                  basegfx::fround<tools::Long>(aTranslate.getY()));
+        move.Width() || move.Height())
     {
-        Move(Size(basegfx::fround<tools::Long>(aTranslate.getX()),
-                  basegfx::fround<tools::Long>(aTranslate.getY())));
+        NbcMove(move);
     }
 
     // Apply flipping from enhanced geometry at center of the shape.
@@ -3087,11 +3092,14 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     double fCenterX = aCenter.getX();
     double fCenterY = aCenter.getY();
     if (bIsMirroredX) // vertical axis
-        Mirror(Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY)),
+        NbcMirror(Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY)),
             Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY + 1000.0)));
     if (bIsMirroredY) // horizontal axis
-        Mirror(Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY)),
+        NbcMirror(Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY)),
             Point(basegfx::fround<tools::Long>(fCenterX + 1000.0), basegfx::fround<tools::Long>(fCenterY)));
+
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
 // taking fObjectRotation instead of aGeo.nAngle
