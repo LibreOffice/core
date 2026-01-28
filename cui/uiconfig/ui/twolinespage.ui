@@ -85,6 +85,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="twolinespage|label29">Initial character</property>
+                <property name="mnemonic-widget">startbracket</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label29-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -96,6 +102,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="twolinespage|label30">Final character</property>
+                <property name="mnemonic-widget">endbracket</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label30-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
