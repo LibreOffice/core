@@ -25,7 +25,7 @@
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textfont.hxx>
-#include <oox/drawingml/effectproperties.hxx>
+#include <drawingml/effectproperties.hxx>
 
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/lineproperties.hxx>

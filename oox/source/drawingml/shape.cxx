@@ -29,7 +29,7 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <drawingml/shape3dproperties.hxx>
 #include <drawingml/scene3dhelper.hxx>
-#include <oox/drawingml/effectproperties.hxx>
+#include <drawingml/effectproperties.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
