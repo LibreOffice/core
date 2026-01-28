@@ -37,6 +37,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|label19">Numbering</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">endnotenumberinglb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -49,6 +50,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|label22">Before</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">prefix</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -61,6 +63,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|offset">Start at</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">offsetnf</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -73,6 +76,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|label25">After</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">suffix</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -131,11 +135,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="numberinglb">
+              <object class="GtkComboBoxText" id="endnotenumberinglb">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="numberinglb-atkobject">
+                  <object class="AtkObject" id="endnotenumberinglb-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|numberinglb">Enter the number for the first endnote in the document.</property>
                   </object>
                 </child>
@@ -184,6 +188,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|label20">Paragraph</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">parastylelb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -196,6 +201,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|pagestyleft">Page</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">pagestylelb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -240,6 +246,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|label27">Text area</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">charanchorstylelb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -252,6 +259,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="endnotepage|label28">Endnote area</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">charstylelb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

@@ -73,7 +73,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
     , m_pSh(nullptr)
     , m_bPosDoc(false)
     , m_bEndNote(bEN)
-    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box(u"numberinglb"_ustr)))
+    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box(bEN ? u"endnotenumberinglb"_ustr : u"footnotenumberinglb"_ustr)))
     , m_xOffsetLbl(m_xBuilder->weld_label(u"offset"_ustr))
     , m_xOffsetField(m_xBuilder->weld_spin_button(u"offsetnf"_ustr))
     , m_xNumCountBox(m_xBuilder->weld_combo_box(u"countinglb"_ustr))
