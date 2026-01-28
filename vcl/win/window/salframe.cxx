@@ -2555,6 +2555,7 @@ static void lcl_LoadColorsFromTheme(StyleSettings& rStyleSet)
     rStyleSet.SetMenuBarTextColor(rThemeColors.GetMenuBarTextColor());
     rStyleSet.SetMenuTextColor(rThemeColors.GetMenuTextColor());
 
+    rStyleSet.SetButtonTextColor(rThemeColors.GetButtonTextColor());
     rStyleSet.SetDefaultActionButtonTextColor(rThemeColors.GetButtonTextColor());
     rStyleSet.SetActionButtonTextColor(rThemeColors.GetButtonTextColor());
     rStyleSet.SetShadowColor(rThemeColors.GetShadeColor());

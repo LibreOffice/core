@@ -413,11 +413,6 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 
         if (bOffScreen)
         {
-            if (ThemeColors::IsThemeEnabled())
-            {
-                const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-                mpImplData->mpVirDev->SetTextColor(rStyleSettings.GetWindowTextColor());
-            }
             mpImplData->mpVirDev->DrawText(
                         aTextPos,
                         pItem->maText,
