@@ -168,6 +168,10 @@ protected:
     DiagramData_svx();
 
 public:
+    // access associated SdrObjGroup/XShape/RootShape
+    css::uno::Reference< css::drawing::XShape >& accessRootShape() { return mxRootShape; }
+    const css::uno::Reference< css::drawing::XShape >& accessRootShape() const { return mxRootShape; }
+
     virtual ~DiagramData_svx();
 
     // creates temporary processing data from model data
@@ -185,8 +189,8 @@ public:
     PointsNameMap& getPointsPresNameMap() { return maPointsPresNameMap; }
     ::std::vector<OUString>& getExtDrawings() { return maExtDrawings; }
     const Point* getRootPoint() const;
-    OUString getDiagramString(const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
-    std::vector<std::pair<OUString, OUString>> getDiagramChildren(const OUString& rParentId, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
+    OUString getDiagramString() const;
+    std::vector<std::pair<OUString, OUString>> getDiagramChildren(const OUString& rParentId) const;
 
     const css::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
     void setThemeDocument( const css::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
@@ -202,14 +206,17 @@ public:
     DiagramDataStatePtr extractDiagramDataState() const;
     void applyDiagramDataState(const DiagramDataStatePtr& rState);
 
-    css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
-    OUString getTextForPoint(const Point& rPoint, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
-    static css::uno::Reference<css::drawing::XShape> getXShapeByModelID(const css::uno::Reference<css::drawing::XShape>& rxShape, std::u16string_view rModelID);
+    css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint) const;
+    OUString getTextForPoint(const Point& rPoint) const;
+    css::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
 
 protected:
     // helpers
-    void getDiagramChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel, const css::uno::Reference<css::drawing::XShape>& rRootShape) const;
+    void getDiagramChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const;
     void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
+
+    // remember associated SdrObjGroup/XShape/RootShape
+    css::uno::Reference< css::drawing::XShape > mxRootShape;
 
     // evtl. existing alternative imported visualization identifier
     ::std::vector<OUString>  maExtDrawings;

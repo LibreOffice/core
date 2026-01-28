@@ -74,10 +74,16 @@ void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
     // maybe copy more stuff...
 }
 
+uno::Reference<drawing::XShape>& DiagramHelper_oox::accessRootShape()
+{
+    assert(hasDiagramData() && "Access to XRootShape without DiagramData (!)");
+    return mpDiagramPtr->getData()->accessRootShape();
+}
+
 void DiagramHelper_oox::reLayout()
 {
     SdrObjGroup* pTarget(
-        dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape)));
+        dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(accessRootShape())));
     if (nullptr == pTarget)
         return;
 
@@ -167,7 +173,7 @@ void DiagramHelper_oox::reLayout()
     xFilter->setDiagramFontHeights(&mpDiagramPtr->getDiagramFontHeights());
 
     // Prepare the target for the to-be-created XShapes
-    uno::Reference<drawing::XShapes> xShapes(mxGroupShape, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapes(accessRootShape(), uno::UNO_QUERY_THROW);
 
     for (auto const& child : pShapePtr->getChildren())
     {
@@ -274,7 +280,7 @@ OUString DiagramHelper_oox::getDiagramString() const
 {
     if (hasDiagramData())
     {
-        return mpDiagramPtr->getData()->getDiagramString(mxGroupShape);
+        return mpDiagramPtr->getData()->getDiagramString();
     }
 
     return OUString();
@@ -285,7 +291,7 @@ DiagramHelper_oox::getDiagramChildren(const OUString& rParentId) const
 {
     if (hasDiagramData())
     {
-        return mpDiagramPtr->getData()->getDiagramChildren(rParentId, mxGroupShape);
+        return mpDiagramPtr->getData()->getDiagramChildren(rParentId);
     }
 
     return std::vector<std::pair<OUString, OUString>>();
@@ -362,13 +368,15 @@ void DiagramHelper_oox::TextInformationChange()
 
     DomMapFlags aFlags;
     aFlags.push_back(DomMapFlag::OOXData);
-    // aFlags.push_back(DomMapFlag::OOXDrawing);
-    // aFlags.push_back(DomMapFlag::OOXDataRels);
+    aFlags.push_back(DomMapFlag::OOXDrawing);
+    aFlags.push_back(DomMapFlag::OOXDataImageRels);
+    aFlags.push_back(DomMapFlag::OOXDataHlinkRels);
+    aFlags.push_back(DomMapFlag::OOXDrawingRels);
     mpDiagramPtr->resetOOXDomValues(std::move(aFlags));
 
     // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
     // entries anymore, but others like "mso-rotation-angle" and others
-    uno::Reference<beans::XPropertySet> xPropSet(mxGroupShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(accessRootShape(), uno::UNO_QUERY);
     if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         xPropSet->setPropertyValue(u"InteropGrabBag"_ustr,
                                    uno::Any(uno::Sequence<beans::PropertyValue>()));
@@ -466,7 +474,7 @@ void DiagramHelper_oox::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB
     if (!mpDiagramPtr)
         return;
 
-    mpDiagramPtr->tryToCreateMissingDataDoms(rFB, mxGroupShape);
+    mpDiagramPtr->tryToCreateMissingDataDoms(rFB);
 }
 }
 

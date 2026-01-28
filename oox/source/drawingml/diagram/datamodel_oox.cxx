@@ -59,14 +59,14 @@ Shape* DiagramData_oox::getOrCreateAssociatedShape(const svx::diagram::Point& rP
     return rShapePtr.get();
 }
 
-void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const uno::Reference<drawing::XShape>& rRootShape)
+void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget)
 {
     if (!rTarget)
         return;
 
     // write header infos
     const OUString aNsDmlDiagram(rFB.getNamespaceURL(OOX_NS(dmlDiagram)));
-    const OUString aNsDml(rFB.getNamespaceURL(NMSP_dmlDiagram));
+    const OUString aNsDml(rFB.getNamespaceURL(OOX_NS(dml)));
     rTarget->startElementNS(XML_dgm, XML_dataModel,
         FSNS(XML_xmlns, XML_dgm), aNsDmlDiagram,
         FSNS(XML_xmlns, XML_a), aNsDml);
@@ -85,7 +85,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
 
         rPoint.writeDiagramData_data(rTarget);
 
-        uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, rRootShape));
+        uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint));
 
         if (xMasterText)
         {
@@ -139,7 +139,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
     // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
     // and more for later offering changing the Background of a Diagram.
     // Note that an incarnation of BG as XShape is also needed to 'carry' the correct Size for that Diagram.
-    uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(rRootShape, getBackgroundShapeModelID()));
+    uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(getBackgroundShapeModelID()));
 
     if (xBgShape.is())
     {

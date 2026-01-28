@@ -200,7 +200,7 @@ bool Diagram::checkMinimalDataDoms() const
     return true;
 }
 
-void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const uno::Reference<drawing::XShape>& rXRootShape)
+void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB)
 {
     // internal testing: allow to force to always recreate
     static bool bForceAlwaysReCreate(false);
@@ -225,7 +225,7 @@ void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB, const un
         if (xOutput)
         {
             sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutput, true);
-            getData()->writeDiagramData(rFB, aFS, rXRootShape);
+            getData()->writeDiagramData(rFB, aFS);
             xOutput->flush();
 
             // this call is *important*, without it xDocBuilder->parse below fails and some strange
@@ -410,10 +410,17 @@ void loadDiagram( ShapePtr const & pShape,
                            pDiagram,
                            xRefDataModel);
 
-            uno::Sequence< uno::Sequence< uno::Any > > aDataRelsMap(
-                pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter, xRefDataModel->getFragmentPath(), u"image" ));
+            uno::Sequence<uno::Sequence<uno::Any>> aDataImageRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                    rFilter, xRefDataModel->getFragmentPath(), u"image"));
+            uno::Sequence<uno::Sequence<uno::Any>> aDataHlinkRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                    rFilter, xRefDataModel->getFragmentPath(), u"hlink"));
 
-            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataRels, uno::Any(aDataRelsMap));
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels,
+                                     uno::Any(aDataImageRelsMap));
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels,
+                                     uno::Any(aDataHlinkRelsMap));
 
             // Pass the info to pShape
             for (auto const& extDrawing : pData->getExtDrawings())

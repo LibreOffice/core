@@ -81,8 +81,8 @@ private:
     bool mbForceThemePtrRecreation; // false
 
 protected:
-    // remember associated SdrObjGroup
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxGroupShape;
+    // access associated SdrObjGroup/XShape/RootShape
+    virtual css::uno::Reference< css::drawing::XShape >& accessRootShape() = 0;
 
 public:
     DiagramHelper_svx();
@@ -114,13 +114,13 @@ public:
     bool ForceThemePtrRecreation() const { return mbForceThemePtrRecreation; };
 
     // connect/disconnect to/from Group
-    void connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget);
+    void connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget);
     void disconnectFromSdrObjGroup();
 
     static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);
 
     // access to PropertyValues
-    virtual com::sun::star::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const = 0;
+    virtual css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const = 0;
 };
 
 }} // end of namespace

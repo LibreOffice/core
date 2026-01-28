@@ -409,7 +409,6 @@ DiagramHelper_svx::DiagramHelper_svx()
 : mbUseDiagramThemeData(false)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
-, mxGroupShape()
 {
 }
 
@@ -417,20 +416,22 @@ DiagramHelper_svx::~DiagramHelper_svx() {}
 
 void DiagramHelper_svx::disconnectFromSdrObjGroup()
 {
-    SdrObjGroup* pGroupObject(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape)));
+    uno::Reference< drawing::XShape >& rxRootShape(accessRootShape());
+    SdrObjGroup* pGroupObject(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape)));
     if (nullptr != pGroupObject)
     {
-        mxGroupShape.clear();
+        rxRootShape.clear();
         pGroupObject->mp_DiagramHelper.reset();
     }
 }
 
-void DiagramHelper_svx::connectToSdrObjGroup(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rTarget)
+void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget)
 {
     SdrObjGroup* pGroupObject(nullptr);
-    if (mxGroupShape && rTarget == mxGroupShape)
+    uno::Reference< drawing::XShape >& rxRootShape(accessRootShape());
+    if (rxRootShape && rTarget == rxRootShape)
     {
-        pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape));
+        pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
         if (pGroupObject != nullptr &&  pGroupObject->mp_DiagramHelper.get() == this)
         {
             // connection already established
@@ -442,8 +443,8 @@ void DiagramHelper_svx::connectToSdrObjGroup(com::sun::star::uno::Reference< com
     disconnectFromSdrObjGroup();
 
     // connect to target
-    mxGroupShape = rTarget;
-    pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxGroupShape));
+    rxRootShape = rTarget;
+    pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
     if (nullptr != pGroupObject)
         pGroupObject->mp_DiagramHelper.reset(this);;
 }

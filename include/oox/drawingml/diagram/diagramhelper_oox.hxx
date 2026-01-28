@@ -61,6 +61,10 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
         const css::uno::Reference<css::drawing::XShape>& xOldShape,
         const css::uno::Reference<css::drawing::XShape>& xNewShape);
 
+protected:
+    // access associated SdrObjGroup/XShape/RootShape
+    virtual css::uno::Reference< css::drawing::XShape >& accessRootShape() override;
+
 public:
     DiagramHelper_oox(
         std::shared_ptr< Diagram > xDiagramPtr,

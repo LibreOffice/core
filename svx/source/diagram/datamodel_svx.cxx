@@ -212,11 +212,11 @@ const Point* DiagramData_svx::getRootPoint() const
     return nullptr;
 }
 
-OUString DiagramData_svx::getDiagramString(const css::uno::Reference<css::drawing::XShape>& rRootShape) const
+OUString DiagramData_svx::getDiagramString() const
 {
     OUStringBuffer aBuf;
     const Point* pPoint = getRootPoint();
-    getDiagramChildrenString(aBuf, pPoint, 0, rRootShape);
+    getDiagramChildrenString(aBuf, pPoint, 0);
     return aBuf.makeStringAndClear();
 }
 
@@ -270,9 +270,10 @@ DomMapFlags DiagramData_svx::removeDiagramNode(const OUString& rNodeId)
 
     // prepare retval, OOXData and OOXLayout is changed
     aRetval.push_back(DomMapFlag::OOXData);
-    // aRetval.push_back(DomMapFlag::OOXDrawing);
-    // aRetval.push_back(DomMapFlag::OOXDataRels);
-    // aRetval.push_back(DomMapFlag::OOXLayout);
+    aRetval.push_back(DomMapFlag::OOXDrawing);
+    aRetval.push_back(DomMapFlag::OOXDataImageRels);
+    aRetval.push_back(DomMapFlag::OOXDataHlinkRels);
+    aRetval.push_back(DomMapFlag::OOXDrawingRels);
 
     return aRetval;
 }
@@ -307,8 +308,7 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
 void DiagramData_svx::getDiagramChildrenString(
     OUStringBuffer& rBuf,
     const svx::diagram::Point* pPoint,
-    sal_Int32 nLevel,
-    const css::uno::Reference<css::drawing::XShape>& rRootShape) const
+    sal_Int32 nLevel) const
 {
     if (!pPoint)
         return;
@@ -319,7 +319,7 @@ void DiagramData_svx::getDiagramChildrenString(
             rBuf.append('\t');
         rBuf.append('+');
         rBuf.append(' ');
-        const OUString aText(getTextForPoint(*pPoint, rRootShape));
+        const OUString aText(getTextForPoint(*pPoint));
         rBuf.append(aText);
         rBuf.append('\n');
     }
@@ -336,19 +336,16 @@ void DiagramData_svx::getDiagramChildrenString(
         }
 
     for (auto pChild : aChildren)
-        getDiagramChildrenString(rBuf, pChild, nLevel + 1, rRootShape);
+        getDiagramChildrenString(rBuf, pChild, nLevel + 1);
 }
 
-uno::Reference<drawing::XShape> DiagramData_svx::getXShapeByModelID(const uno::Reference<drawing::XShape>& rxShape, std::u16string_view rModelID)
+uno::Reference<drawing::XShape> DiagramData_svx::getXShapeByModelID(std::u16string_view rModelID) const
 {
-    if (!rxShape)
-        return rxShape;
-
     uno::Reference<drawing::XShape> xRetval;
     if (rModelID.empty())
         return xRetval;
 
-    SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(rxShape));
+    SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(accessRootShape()));
     if (nullptr == pCandidate)
         return xRetval;
 
@@ -363,27 +360,26 @@ uno::Reference<drawing::XShape> DiagramData_svx::getXShapeByModelID(const uno::R
     return xRetval;
 }
 
-uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const Point& rPoint, const uno::Reference<drawing::XShape>& rRootShape) const
+uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const Point& rPoint) const
 {
-    if (!rPoint.msPlaceholderText.isEmpty())
+    for (auto& rCandidate : getPoints())
     {
-        for (auto& rCandidate : getPoints())
+        if (!rCandidate.msPresentationAssociationId.isEmpty()
+            && "textNode" == rCandidate.msPresentationLayoutName
+            && rCandidate.msPresentationAssociationId == rPoint.msModelId)
         {
-            if (!rCandidate.msPresentationAssociationId.isEmpty() && rCandidate.msPresentationAssociationId == rPoint.msModelId)
-            {
-                uno::Reference<drawing::XShape> xMasterText = getXShapeByModelID(rRootShape, rCandidate.msModelId);
-                if (xMasterText)
-                    return xMasterText;
-            }
+            const uno::Reference<drawing::XShape> xMasterText = getXShapeByModelID(rCandidate.msModelId);
+            if (xMasterText)
+                return xMasterText;
         }
     }
 
     return uno::Reference<drawing::XShape>();
 }
 
-OUString DiagramData_svx::getTextForPoint(const Point& rPoint, const uno::Reference<drawing::XShape>& rRootShape) const
+OUString DiagramData_svx::getTextForPoint(const Point& rPoint) const
 {
-    uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, rRootShape));
+    uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint));
     uno::Reference<text::XText> xText(xMasterText, uno::UNO_QUERY);
 
     if (xText)
@@ -392,7 +388,7 @@ OUString DiagramData_svx::getTextForPoint(const Point& rPoint, const uno::Refere
     return OUString();
 }
 
-std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(const OUString& rParentId, const uno::Reference<drawing::XShape>& rRootShape) const
+std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(const OUString& rParentId) const
 {
     const OUString sModelId = rParentId.isEmpty() ? getRootPoint()->msModelId : rParentId;
     std::vector<std::pair<OUString, OUString>> aChildren;
@@ -404,7 +400,7 @@ std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(c
             const auto pChild = maPointNameMap.find(rCxn.msDestId);
             if (pChild != maPointNameMap.end())
             {
-                const OUString aText(getTextForPoint(*pChild->second, rRootShape));
+                const OUString aText(getTextForPoint(*pChild->second));
                 aChildren[rCxn.mnSourceOrder] = std::make_pair(
                     pChild->second->msModelId,
                     aText);
@@ -471,9 +467,10 @@ std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode()
 
     // prepare retval, OOXData and OOXLayout is changed
     aRetval.push_back(DomMapFlag::OOXData);
-    // aRetval.push_back(DomMapFlag::OOXDrawing);
-    // aRetval.push_back(DomMapFlag::OOXDataRels);
-    // aRetval.push_back(DomMapFlag::OOXLayout);
+    aRetval.push_back(DomMapFlag::OOXDrawing);
+    aRetval.push_back(DomMapFlag::OOXDataImageRels);
+    aRetval.push_back(DomMapFlag::OOXDataHlinkRels);
+    aRetval.push_back(DomMapFlag::OOXDrawingRels);
 
     return std::make_pair(sNewNodeId, aRetval);
 }
@@ -578,6 +575,28 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 
         output << "];" << std::endl;
 #endif
+
+        // does currpoint have any text set?
+        const OUString aTextAtPoint(getTextForPoint(point));
+        if(!aTextAtPoint.isEmpty())
+        {
+#ifdef DEBUG_OOX_DIAGRAM
+            static sal_Int32 nCount=0;
+            output << "\t"
+                   << "textNode" << nCount
+                   << " ["
+                   << "label=\""
+                   << OUStringToOString(
+                       aTextAtPoint,
+                       RTL_TEXTENCODING_UTF8).getStr()
+                   << "\"" << "];" << std::endl;
+            output << "\t"
+                   << normalizeDotName(point.msModelId).getStr()
+                   << " -> "
+                   << "textNode" << nCount++
+                   << ";" << std::endl;
+#endif
+        }
 
         const bool bInserted1 = getPointNameMap().insert(
             std::make_pair(point.msModelId,&point)).second;

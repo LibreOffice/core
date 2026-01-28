@@ -50,7 +50,7 @@ public:
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
-    void writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget, const css::uno::Reference<css::drawing::XShape>& rRootShape);
+    void writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget);
 
 private:
     // The model definition, the parts *only* available in oox. Also look for already

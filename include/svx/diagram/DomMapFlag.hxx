@@ -28,12 +28,13 @@ namespace svx::diagram
 enum class SVXCORE_DLLPUBLIC DomMapFlag : sal_uInt16
 {
     OOXData = 0,
-    OOXDataRels = 1,
-    OOXLayout = 2,
-    OOXStyle = 3,
-    OOXColor = 4,
-    OOXDrawing = 5,
-    OOXDrawingRels = 6
+    OOXDataImageRels = 1,
+    OOXDataHlinkRels = 2,
+    OOXLayout = 3,
+    OOXStyle = 4,
+    OOXColor = 5,
+    OOXDrawing = 6,
+    OOXDrawingRels = 7
 };
 
 typedef std::vector<DomMapFlag> DomMapFlags;
