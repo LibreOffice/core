@@ -397,6 +397,91 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf166789)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7000, length.toInt32(), 70); // allow 1% for rounding errors
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168054_export_two_pages_to_svg_using_convert_to)
+{
+    loadFromFile(u"tdf168054.odg");
+
+    // Emulate --convert-to svg:"draw_svg_Export"
+    saveWithParams({
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"draw_svg_Export"_ustr),
+        comphelper::makePropertyValue(u"ConversionRequestOrigin"_ustr, u"CommandLine"_ustr),
+    });
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Both shapes are exported into one page
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:rect",
+                "fill", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:rect",
+                "stroke", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[1]",
+                "fill", u"rgb(255,0,0)");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[1]",
+                "stroke", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[2]",
+                "fill", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[2]",
+                "stroke", u"rgb(255,64,0)");
+
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[2]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:rect",
+                "fill", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[2]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:rect",
+                "stroke", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[2]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[1]",
+                "fill", u"rgb(0,0,0)");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[2]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[1]",
+                "stroke", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[2]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[2]",
+                "fill", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[2]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[2]",
+                "stroke", u"rgb(0,0,0)");
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168054_export_two_pages_to_svg)
+{
+    loadFromFile(u"tdf168054.odg");
+
+    save(TestFilter::SVG_DRAW);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Only first page is exported
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:rect",
+                "fill", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:rect",
+                "stroke", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[1]",
+                "fill", u"rgb(255,0,0)");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[1]",
+                "stroke", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[2]",
+                "fill", u"none");
+    assertXPath(pXmlDoc,
+                "//svg:g[@class='SlideGroup']/svg:g[1]/svg:g/svg:g/svg:g/svg:g/svg:g/svg:path[2]",
+                "stroke", u"rgb(255,64,0)");
+
+    assertXPath(pXmlDoc, "//svg:g[@class='SlideGroup']/svg:g[2]", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testDashedLine)
 {
     // A dashed line
