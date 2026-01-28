@@ -1068,7 +1068,8 @@ bool ScDPCache::IsDateDimension( tools::Long nDim ) const
 
     ScInterpreterContext& rContext = mrDoc.GetNonThreadedContext();
     SvNumFormatType eType = rContext.NFGetType(maFields[nDim]->mnNumFormat);
-    return (eType == SvNumFormatType::DATE) || (eType == SvNumFormatType::DATETIME);
+    return (eType == SvNumFormatType::DATE) || (eType == SvNumFormatType::DATETIME)
+           || (eType == SvNumFormatType::TIME);
 }
 
 tools::Long ScDPCache::GetDimMemberCount(tools::Long nDim) const
