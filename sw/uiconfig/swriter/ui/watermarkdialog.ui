@@ -100,6 +100,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="watermarkdialog|TextLabel">Text</property>
+                    <property name="mnemonic_widget">TextInput</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -130,6 +131,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="watermarkdialog|FontLabel">Font</property>
+                    <property name="mnemonic_widget">FontBox</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -142,6 +144,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="watermarkdialog|AngleLabel">Angle</property>
+                    <property name="mnemonic_widget">Angle</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -154,6 +157,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="watermarkdialog|TransparencyLabel">Transparency</property>
+                    <property name="mnemonic_widget">Transparency</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -168,6 +172,11 @@
                     <property name="label" translatable="yes" context="watermarkdialog|ColorLabel">Color</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">Color</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ColorLabel-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

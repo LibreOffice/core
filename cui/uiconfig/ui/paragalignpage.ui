@@ -364,7 +364,7 @@
                 <property name="margin-top">6</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label2">
+                  <object class="GtkLabel" id="paragalignlabel2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="paragalignpage|label2">_Text direction:</property>
@@ -417,7 +417,7 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="labelFT_VERTALIGN"/>
-      <widget name="label2"/>
+      <widget name="paragalignlabel2"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">

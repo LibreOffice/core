@@ -168,7 +168,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="position">
+                          <object class="GtkLabel" id="lmposition">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="linenumbering|position">Position:</property>
@@ -311,6 +311,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="linenumbering|intervallines">lines</property>
+                                <property name="mnemonic_widget">intervalspin</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -435,6 +436,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="linenumbering|lines">lines</property>
+                                <property name="mnemonic_widget">linesspin</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -608,7 +610,7 @@
     <widgets>
       <widget name="characterstyle"/>
       <widget name="format"/>
-      <widget name="position"/>
+      <widget name="lmposition"/>
       <widget name="spacing"/>
       <widget name="interval"/>
       <widget name="text"/>
