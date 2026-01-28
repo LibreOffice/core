@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     i18nlangtag \
     sal \
     sc \

@@ -15,15 +15,18 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <condformathelper.hxx>
 #include <conditio.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <dpobject.hxx>
+#include <editeng/borderline.hxx>
 #include <formulaopt.hxx>
 #include <inputopt.hxx>
 #include <postit.hxx>
@@ -343,6 +346,71 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     // - Expected: 50
     // - Actual  : Err:507
     CPPUNIT_ASSERT_EQUAL(u"50"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf168438_check_LineStyle_uno_command)
+{
+    auto checkBorder = [](const editeng::SvxBorderLine* pLine) {
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pLine->GetColor());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLine->GetInWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pLine->GetOutWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLine->GetDistance());
+        CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1), pLine->GetWidth());
+    };
+
+    auto checkBorder2 = [](const editeng::SvxBorderLine* pLine) {
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pLine->GetColor());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLine->GetInWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pLine->GetOutWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pLine->GetDistance());
+        CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE, pLine->GetBorderLineStyle());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1), pLine->GetWidth());
+    };
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    table::BorderLine2 aLine(sal_Int32(COL_LIGHTRED), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
+
+    // see SvxBoxItem::QueryValue for details
+    uno::Sequence<uno::Any> aOuterSeq{ uno::Any(aLine), // left
+                                       uno::Any(aLine), // right
+                                       uno::Any(aLine), // bottom
+                                       uno::Any(aLine), // top
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)) };
+
+    uno::Sequence<uno::Any> aInnerSeq{};
+
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, aOuterSeq),
+                         comphelper::makePropertyValue(u"InnerBorder"_ustr, aInnerSeq) };
+    dispatchCommand(mxComponent, u".uno:SetBorderStyle"_ustr, aArgs);
+
+    const ScPatternAttr* pPat = pDoc->GetPattern(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pPat);
+    SvxBoxItem aBorderItem(pPat->GetItem(ATTR_BORDER));
+    checkBorder(aBorderItem.GetLeft());
+    checkBorder(aBorderItem.GetRight());
+    checkBorder(aBorderItem.GetBottom());
+    checkBorder(aBorderItem.GetTop());
+
+    table::BorderLine2 aLine2(sal_Int32(COL_LIGHTRED), 0, 1, 0, table::BorderLineStyle::DOUBLE, 1);
+    uno::Sequence aArgs2{ comphelper::makePropertyValue(u"LineStyle"_ustr, uno::Any(aLine2)) };
+
+    dispatchCommand(mxComponent, u".uno:LineStyle"_ustr, aArgs2);
+
+    pPat = pDoc->GetPattern(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pPat);
+    SvxBoxItem aBorderItem2(pPat->GetItem(ATTR_BORDER));
+    checkBorder2(aBorderItem2.GetLeft());
+    checkBorder2(aBorderItem2.GetRight());
+    checkBorder2(aBorderItem2.GetBottom());
+    checkBorder2(aBorderItem2.GetTop());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
