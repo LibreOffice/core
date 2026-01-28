@@ -271,10 +271,10 @@ void ScDocShell::SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageTyp
             lcl_setLOKLocale(*pViewShell, eLatin);
         }
     }
-    else
-    {
-        GetDocument().SetLanguage(eLatin, eCjk, eCtl);
-    }
+
+    // Update the document language even in lok mode as
+    // the spell-check is still based on document language.
+    GetDocument().SetLanguage(eLatin, eCjk, eCtl);
 }
 
 void ScDocShell::Execute( SfxRequest& rReq )
@@ -1381,17 +1381,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bParagraph = false;
 
                 ScDocument& rDoc = GetDocument();
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    if (ScTabViewShell* pViewShell = GetBestViewShell())
-                    {
-                        eLatin = pViewShell->GetLOKLocale().getLanguageType();
-                    }
-                }
-                else
-                {
-                    rDoc.GetLanguage( eLatin, eCjk, eCtl );
-                }
+                rDoc.GetLanguage( eLatin, eCjk, eCtl );
 
                 sal_Int32 nPos = 0;
                 if ( aLangText == "*" )
@@ -2572,15 +2562,13 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
                     if (comphelper::LibreOfficeKit::isActive())
                     {
-                        if (ScTabViewShell* pViewShell = GetBestViewShell())
-                        {
-                            eLatin = pViewShell->GetLOKLocale().getLanguageType();
-                            sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
-                            if (eLatin == LANGUAGE_NONE)
-                                sLanguage += ";-";
-                            else
-                                sLanguage += ";" + LanguageTag(eLatin).getBcp47(false);
-                        }
+                        GetDocument().GetLanguage( eLatin, eCjk, eCtl );
+                        sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
+
+                        if (eLatin == LANGUAGE_NONE)
+                            sLanguage += ";-";
+                        else
+                            sLanguage += ";" + LanguageTag(eLatin).getBcp47(false);
                     }
                     else if (ScTabViewShell* pViewShell = GetBestViewShell())
                     {
