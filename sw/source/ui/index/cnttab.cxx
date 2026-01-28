@@ -1948,7 +1948,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     , m_xTabPosMF(m_xBuilder->weld_metric_spin_button(u"tabstoppos"_ustr, FieldUnit::CM))
     , m_xAutoRightCB(m_xBuilder->weld_check_button(u"alignright"_ustr))
     , m_xFormatFrame(m_xBuilder->weld_widget(u"formatframe"_ustr))
-    , m_xMainEntryStyleFT(m_xBuilder->weld_label(u"mainstyleft"_ustr))
+    , m_xMainEntryStyleFT(m_xBuilder->weld_label(u"tocentriesmainstyleft"_ustr))
     , m_xMainEntryStyleLB(m_xBuilder->weld_combo_box(u"mainstyle"_ustr))
     , m_xAlphaDelimCB(m_xBuilder->weld_check_button(u"alphadelim"_ustr))
     , m_xCommaSeparatedCB(m_xBuilder->weld_check_button(u"commasep"_ustr))
