@@ -19,6 +19,7 @@
 
 #include <string_view>
 
+#include <o3tl/float_int_conversion.hxx>
 #include <o3tl/sprintf.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/numeric.hxx>
@@ -2883,15 +2884,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
         while ( fRemainder > 0.0 )
         {
             double fTemp = 1.0 / fRemainder;             // 64bits precision required when fRemainder is very weak
-            nPartialDenom = static_cast<sal_Int64>(floor(fTemp));   // due to floating point notation with double precision
-            // The fTemp value may be out of range for sal_Int64 (e.g. 1e+19), and the result of
-            // casting that is undefined. In practice, gcc/llvm gives us a large positive number,
-            // but depending on the compiler, we have either a large positive number (which works fine)
-            // or a a large negative number, which will make this algorithm oscillate.
-            // So apply a correction that makes all the compilers work reasonbly.
-            // There is probably a better algorithm to be used here for this whole function.
-            if (nPartialDenom < 0)
-                nPartialDenom = -(nPartialDenom+1);
+            nPartialDenom = o3tl::saturating_cast<sal_Int64>(floor(fTemp));   // due to floating point notation with double precision
             fRemainder = fTemp - static_cast<double>(nPartialDenom);
             nDivNext = nPartialDenom * nDiv + nDivPrev;
             if (nDivNext <= nBasis) // continue loop
