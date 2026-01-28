@@ -88,8 +88,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                         SetZoom( static_cast<::tools::Long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
-                        sal_uInt16 nZoom = aZoom.GetValue();
-                        RememberPageZoom(nZoom);
                     }
                     break;
 

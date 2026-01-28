@@ -1655,7 +1655,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         sal_uInt16 nZoom = pArgs->Get( SID_ATTR_ZOOM ).GetValue();
                         SetZoom( static_cast<::tools::Long>( nZoom ) );
-                        RememberPageZoom(nZoom);
                     }
                         break;
 

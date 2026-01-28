@@ -1124,6 +1124,8 @@ void OutlineViewShell::SetZoom(::tools::Long nZoom)
 
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+
+    RememberPageZoom(nZoom);
 }
 
 /**
