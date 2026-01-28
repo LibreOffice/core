@@ -107,32 +107,42 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkFrame" id="frame1">
+              <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="insertcaption|label1">Caption</property>
+                    <property name="mnemonic-widget">caption_edit</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkEntry" id="caption_edit">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
-                    <property name="margin-start">12</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="margin-top">6</property>
                   </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="insertcaption|label1">Caption</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -343,12 +353,29 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="frame3">
+              <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="insertcaption|label3">Preview</property>
+                    <property name="mnemonic-widget">preview</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
@@ -356,8 +383,6 @@
                     <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
-                    <property name="margin-start">12</property>
-                    <property name="margin-top">6</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
@@ -366,26 +391,16 @@
                           <object class="GtkDrawingArea" id="preview">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="preview-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="insertcaption|label3">Preview</property>
-                              </object>
-                            </child>
                           </object>
                         </child>
                       </object>
                     </child>
                   </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="insertcaption|label3">Preview</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
