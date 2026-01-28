@@ -135,7 +135,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="1">
+                  <object class="GtkLabel" id="column1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -152,7 +152,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="2">
+                  <object class="GtkLabel" id="column2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -169,7 +169,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="3">
+                  <object class="GtkLabel" id="column3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -214,6 +214,7 @@
                     <property name="digits">2</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
+                      <relation type="labelled-by" target="column3"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width3mf-atkobject">
@@ -238,6 +239,7 @@
                     <property name="digits">2</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
+                      <relation type="labelled-by" target="column2"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width2mf-atkobject">
@@ -262,6 +264,7 @@
                     <property name="digits">2</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
+                      <relation type="labelled-by" target="column1"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width1mf-atkobject">
@@ -683,7 +686,7 @@
                     <property name="valign">center</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="label3">
+                      <object class="GtkLabel" id="columnlabel3">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="columnpage|label3">Columns:</property>
@@ -962,7 +965,7 @@
       <widget name="lineheightft"/>
       <widget name="lineposft"/>
       <widget name="linecolorft"/>
-      <widget name="label3"/>
+      <widget name="columnlabel3"/>
       <widget name="applytoft"/>
       <widget name="textdirectionft"/>
     </widgets>
