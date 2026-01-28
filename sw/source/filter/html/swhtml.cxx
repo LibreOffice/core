@@ -26,7 +26,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>

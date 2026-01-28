@@ -34,8 +34,8 @@
 #include <unicode/ubidi.h>
 #include <tools/tenccvt.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 
+#include <i18npool/breakiterator.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>

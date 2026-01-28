@@ -44,7 +44,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <hintids.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

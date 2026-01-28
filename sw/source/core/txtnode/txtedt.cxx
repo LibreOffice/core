@@ -69,10 +69,10 @@
 #include <istyleaccess.hxx>
 #include <unicode/uchar.h>
 #include <DocumentSettingManager.hxx>
+#include <i18npool/breakiterator.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <vector>
 
@@ -696,7 +696,7 @@ OUString SwTextFrame::GetCurWord(SwPosition const& rPos) const
         return OUString();
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
-    const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
+    const rtl::Reference< i18npool::BreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
     sal_Int16 nWordType = WordType::DICTIONARY_WORD;
     lang::Locale aLocale( g_pBreakIt->GetLocale(pTextNode->GetLang(rPos.GetContentIndex())) );
     Boundary aBndry =
@@ -805,7 +805,7 @@ forceEachCJCodePointToWord(const OUString& rText, sal_Int32 nBegin, sal_Int32 nL
 {
     if (nLen > 1)
     {
-        const uno::Reference<XBreakIterator>& rxBreak = g_pBreakIt->GetBreakIter();
+        const rtl::Reference<i18npool::BreakIterator>& rxBreak = g_pBreakIt->GetBreakIter();
 
         sal_uInt16 nCurrScript = rxBreak->getScriptType(rText, nBegin);
 
@@ -936,7 +936,7 @@ bool SwScanner::NextWord()
 
             // restrict boundaries to script boundaries and nEndPos
             const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, m_nBegin );
-            OUString aTmpWord = m_aText.copy( m_nBegin, aBound.endPos - m_nBegin );
+            std::u16string_view aTmpWord = m_aText.subView( m_nBegin, aBound.endPos - m_nBegin );
             const sal_Int32 nScriptEnd = m_nBegin +
                 g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = std::min( aBound.endPos, nScriptEnd );
@@ -946,7 +946,7 @@ bool SwScanner::NextWord()
             if ( aBound.startPos < m_nBegin )
             {
                 // search from nBegin backwards until the next script change
-                aTmpWord = m_aText.copy( aBound.startPos,
+                aTmpWord = m_aText.subView( aBound.startPos,
                                        m_nBegin - aBound.startPos + 1 );
                 nScriptBegin = aBound.startPos +
                     g_pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, m_nBegin - aBound.startPos,
@@ -959,7 +959,7 @@ bool SwScanner::NextWord()
         else
         {
             const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, aBound.startPos );
-            OUString aTmpWord = m_aText.copy( aBound.startPos,
+            std::u16string_view aTmpWord = m_aText.subView( aBound.startPos,
                                              aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
                 g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );

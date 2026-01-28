@@ -20,7 +20,7 @@
 #include <txatritr.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 #include <breakit.hxx>

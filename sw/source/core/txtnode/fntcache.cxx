@@ -32,7 +32,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <breakit.hxx>
 #include <paintfrm.hxx>
 #include <viewsh.hxx>

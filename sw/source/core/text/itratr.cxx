@@ -56,7 +56,7 @@
 #include "itrtxt.hxx"
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <editeng/lrspitem.hxx>
 #include <calbck.hxx>
 #include <frameformats.hxx>

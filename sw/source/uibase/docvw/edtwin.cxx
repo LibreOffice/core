@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
@@ -34,7 +33,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
-
+#include <i18npool/breakiterator.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>
@@ -813,7 +812,7 @@ bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const Sw
         return false;
 
     SwBreakIt *pBreakIter = SwBreakIt::Get();
-    uno::Reference < i18n::XBreakIterator > xBI = pBreakIter->GetBreakIter();
+    rtl::Reference < i18npool::BreakIterator > xBI = pBreakIter->GetBreakIter();
     assert(xBI.is());
     tools::Long nCTLScriptPos = -1;
 

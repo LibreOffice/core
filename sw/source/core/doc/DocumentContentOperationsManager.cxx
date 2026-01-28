@@ -93,9 +93,9 @@
 #include <editeng/autodiritem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <i18npool/breakiterator.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <tuple>

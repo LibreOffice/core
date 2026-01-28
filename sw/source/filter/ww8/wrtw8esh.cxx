@@ -70,7 +70,7 @@
 #include <poolfmt.hxx>
 #include "ww8par.hxx"
 #include <breakit.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "attributeoutputbase.hxx"
 #include "writerhelper.hxx"

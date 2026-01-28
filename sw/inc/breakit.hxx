@@ -24,16 +24,17 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ref.hxx>
+#include <i18npool/breakiterator.hxx>
 #include "swdllapi.h"
 
 enum class SvtScriptType : sal_uInt8;
-namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 class SW_DLLPUBLIC SwBreakIt
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference<css::i18n::XBreakIterator> m_xBreak;
+    rtl::Reference<i18npool::BreakIterator> m_xBreak;
 
     std::unique_ptr<LanguageTag> m_xLanguageTag;   ///< language tag of the current locale
     std::optional<css::i18n::ForbiddenCharacters> m_oForbidden;
@@ -59,7 +60,7 @@ public:
 public:
     static SwBreakIt * Get();
 
-    css::uno::Reference< css::i18n::XBreakIterator > const & GetBreakIter() const
+    rtl::Reference< i18npool::BreakIterator > const & GetBreakIter() const
     {
         return m_xBreak;
     }
