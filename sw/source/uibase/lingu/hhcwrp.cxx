@@ -27,7 +27,7 @@
 #include <editeng/fontitem.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <osl/diagnose.h>
 #include <hhcwrp.hxx>
 #include "sdrhhcwrap.hxx"

@@ -18,9 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <i18npool/breakiterator.hxx>
 
 #include <utility>
 #include <vector>
@@ -29,13 +27,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 
-
-
-class BreakIteratorImpl : public cppu::WeakImplHelper
-<
-    css::i18n::XBreakIterator,
-    css::lang::XServiceInfo
->
+class BreakIteratorImpl : public BreakIterator
 {
 public:
     BreakIteratorImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
@@ -96,6 +88,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    virtual sal_Int32 endOfScript( std::u16string_view Text, sal_Int32 nStartPos, sal_Int16 ScriptType ) override;
+    virtual sal_Int32 beginOfScript( std::u16string_view Text, sal_Int32 nStartPos, sal_Int16 ScriptType ) override;
 
     static sal_Int16 getScriptClass(sal_uInt32 currentChar);
 protected:

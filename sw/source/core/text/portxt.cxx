@@ -18,10 +18,10 @@
  */
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/unolingu.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18npool/breakiterator.hxx>
 #include <breakit.hxx>
 #include <hintids.hxx>
 #include <EnhancedPDFExportHelper.hxx>

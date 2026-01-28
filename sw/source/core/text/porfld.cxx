@@ -20,9 +20,9 @@
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <utility>
 
+#include <i18npool/breakiterator.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/brushitem.hxx>
 #include <o3tl/deleter.hxx>

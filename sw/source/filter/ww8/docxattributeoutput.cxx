@@ -147,9 +147,10 @@
 #include <osl/file.hxx>
 #include <utility>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#include <i18npool/breakiterator.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>

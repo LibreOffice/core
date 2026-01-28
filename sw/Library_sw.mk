@@ -67,6 +67,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
     editeng \
     fwk \
     i18nlangtag \
+    i18npool \
     i18nutil \
     lng \
     msfilter \

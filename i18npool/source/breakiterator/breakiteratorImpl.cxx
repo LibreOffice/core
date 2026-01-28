@@ -38,6 +38,9 @@ using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
+BreakIterator::BreakIterator() {}
+BreakIterator::~BreakIterator() {}
+
 BreakIteratorImpl::BreakIteratorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
 }
@@ -274,13 +277,13 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_I
 /** Increments/decrements position first, then obtains character.
     @return current position, may be -1 or text length if string was consumed.
  */
-static sal_Int32 iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, sal_Int32 inc, sal_uInt32& ch) {
-        sal_Int32 nLen = Text.getLength();
+static sal_Int32 iterateCodePoints(std::u16string_view Text, sal_Int32 &nStartPos, sal_Int32 inc, sal_uInt32& ch) {
+        sal_Int32 nLen = Text.size();
         if (nStartPos + inc < 0 || nStartPos + inc >= nLen) {
             ch = 0;
             nStartPos = nStartPos + inc < 0 ? -1 : nLen;
         } else {
-            ch = Text.iterateCodePoints(&nStartPos, inc);
+            ch = o3tl::iterateCodePoints(Text, &nStartPos, inc);
             // Fix for #i80436#.
             // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
             // suspicious as if it cures a symptom... anyway, had to add
@@ -292,7 +295,7 @@ static sal_Int32 iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, s
             // With surrogates, nStartPos may actually point behind string
             // now, even if inc is only +1
             if (inc > 0)
-                ch = (nStartPos < nLen ? Text.iterateCodePoints(&nStartPos, 0) : 0);
+                ch = (nStartPos < nLen ? o3tl::iterateCodePoints(Text, &nStartPos, 0) : 0);
         }
         return nStartPos;
 }
@@ -301,10 +304,16 @@ static sal_Int32 iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, s
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType )
 {
-    if (nStartPos < 0 || nStartPos >= Text.getLength())
+    return beginOfScript(std::u16string_view(Text), nStartPos, ScriptType);
+}
+
+sal_Int32 BreakIteratorImpl::beginOfScript( std::u16string_view Text,
+        sal_Int32 nStartPos, sal_Int16 ScriptType )
+{
+    if (nStartPos < 0 || nStartPos >= static_cast<sal_Int32>(Text.size()))
         return -1;
 
-    if(ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
+    if(ScriptType != getScriptClass(o3tl::iterateCodePoints(Text, &nStartPos, 0)))
         return -1;
 
     if (nStartPos == 0) return 0;
@@ -319,13 +328,19 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType )
 {
-    if (nStartPos < 0 || nStartPos >= Text.getLength())
+    return endOfScript(std::u16string_view(Text), nStartPos, ScriptType);
+}
+
+sal_Int32 BreakIteratorImpl::endOfScript( std::u16string_view Text,
+        sal_Int32 nStartPos, sal_Int16 ScriptType )
+{
+    if (nStartPos < 0 || nStartPos >= static_cast<sal_Int32>(Text.size()))
         return -1;
 
-    if(ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
+    if(ScriptType != getScriptClass(o3tl::iterateCodePoints(Text, &nStartPos, 0)))
         return -1;
 
-    sal_Int32 strLen = Text.getLength();
+    sal_Int32 strLen = Text.size();
     sal_uInt32 ch=0;
     while(iterateCodePoints(Text, nStartPos, 1, ch) < strLen ) {
         sal_Int16 currentCharScriptType = getScriptClass(ch);

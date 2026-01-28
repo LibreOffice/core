@@ -87,11 +87,11 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>

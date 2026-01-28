@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     editeng \
     fwk \
     i18nlangtag \
+    i18npool \
     i18nutil \
     lng \
     msfilter \
