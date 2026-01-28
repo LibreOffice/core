@@ -266,6 +266,7 @@ void DrawViewShell::SetZoom( ::tools::Long nZoom )
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     mpViewOverlayManager->onZoomChanged();
     collectUIInformation(OUString::number(nZoom));
+    RememberPageZoom(nZoom);
 }
 
 /**
@@ -1149,11 +1150,14 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             }
             else
             {
-                const sal_uInt16 nZoom = GetPageZoom();
-                if (nZoom)
+                if (bChangeZoom && bAllowChangeFocus)
                 {
-                    const SvxZoomItem aZoomItem(SvxZoomType::PERCENT, nZoom, SID_ATTR_ZOOM);
-                    GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::SLOT, {&aZoomItem});
+                    const sal_uInt16 nZoom = GetPageZoom();
+                    if (nZoom)
+                    {
+                        const SvxZoomItem aZoomItem(SvxZoomType::PERCENT, nZoom, SID_ATTR_ZOOM);
+                        GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::SLOT, {&aZoomItem});
+                    }
                 }
             }
 

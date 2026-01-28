@@ -405,6 +405,7 @@ void ViewShell::SetZoom(::tools::Long nZoom)
     }
 
     UpdateScrollBars();
+    RememberPageZoom(nZoom);
 }
 
 ::tools::Long ViewShell::GetZoom() const
