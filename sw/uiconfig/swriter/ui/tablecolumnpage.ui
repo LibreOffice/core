@@ -120,7 +120,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="tablecolumnpage|spaceft">Remaining space:</property>
                 <property name="use-underline">True</property>
-                <property name="mnemonic-widget">space</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="spaceft-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -300,7 +304,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="6">
+                  <object class="GtkLabel" id="column6">
                     <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -314,7 +318,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="1">
+                  <object class="GtkLabel" id="column1">
                     <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -328,7 +332,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="2">
+                  <object class="GtkLabel" id="column2">
                     <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -343,7 +347,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="3">
+                  <object class="GtkLabel" id="column3">
                     <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -358,7 +362,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="5">
+                  <object class="GtkLabel" id="column5">
                     <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -373,7 +377,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="4">
+                  <object class="GtkLabel" id="column4">
                     <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
