@@ -8315,8 +8315,8 @@ void SwContentTree::BringTextTOXMarksToAttention(std::vector<const SwTextAttr*>&
                 lcl_CalcOverlayRanges(pFrame, pFrame, aStartPos, aEndPos, aRanges);
             }
         }
-        OverlayObject(std::move(aRanges));
     }
+    OverlayObject(std::move(aRanges));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
