@@ -92,7 +92,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="name_label">
+                      <object class="GtkLabel" id="frm_add_name_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="frmaddpage|name_label">_Name:</property>
@@ -230,7 +230,7 @@
             <property name="margin-top">6</property>
             <property name="column-spacing">12</property>
             <child>
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="frm_add_label2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="frmaddpage|label2">_Vertical alignment:</property>
@@ -498,7 +498,7 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore-hidden">True</property>
     <widgets>
-      <widget name="name_label"/>
+      <widget name="frm_add_name_label"/>
       <widget name="altname_label"/>
       <widget name="description_label"/>
       <widget name="textflow_label"/>

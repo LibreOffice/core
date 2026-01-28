@@ -2945,7 +2945,7 @@ SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* p
     , m_bFormat(false)
     , m_bNew(false)
     , m_xNameFrame(m_xBuilder->weld_widget(u"nameframe"_ustr))
-    , m_xNameFT(m_xBuilder->weld_label(u"name_label"_ustr))
+    , m_xNameFT(m_xBuilder->weld_label(u"frm_add_name_label"_ustr))
     , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
     , m_xAltNameFT(m_xBuilder->weld_label(u"altname_label"_ustr))
     , m_xAltNameED(m_xBuilder->weld_entry(u"altname"_ustr))
