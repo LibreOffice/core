@@ -134,7 +134,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     , m_xDistFT(m_xBuilder->weld_label(u"labelSpacing"_ustr))
     , m_xDistEdit(m_xBuilder->weld_metric_spin_button(u"spinSpacing"_ustr, FieldUnit::CM))
     , m_xDynSpacingCB(m_xBuilder->weld_check_button(u"checkDynSpacing"_ustr))
-    , m_xHeightFT(m_xBuilder->weld_label(u"labelHeight"_ustr))
+    , m_xHeightFT(m_xBuilder->weld_label(u"hfflabelHeight"_ustr))
     , m_xHeightEdit(m_xBuilder->weld_metric_spin_button(u"spinHeight"_ustr, FieldUnit::CM))
     , m_xHeightDynBtn(m_xBuilder->weld_check_button(u"checkAutofit"_ustr))
     , m_xBackgroundBtn(m_xBuilder->weld_button(u"buttonMore"_ustr))

@@ -59,6 +59,11 @@
         <property name="no-show-all">True</property>
         <property name="label" translatable="yes" context="pickgraphicpage|errorft">The Gallery theme 'Bullets' is empty (no images).</property>
         <property name="wrap">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="errorft-atkobject">
+              <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>

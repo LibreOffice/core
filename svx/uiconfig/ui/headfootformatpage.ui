@@ -245,7 +245,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="labelHeight">
+                  <object class="GtkLabel" id="hfflabelHeight">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>

@@ -797,6 +797,11 @@
         <property name="label" translatable="yes" context="pageformatpage|labelMsg">The margin settings are out of print range.
 
 Do you still want to apply these settings?</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="labelMsg-atkobject">
+            <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>

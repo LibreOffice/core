@@ -285,7 +285,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="indent">
+                  <object class="GtkLabel" id="numposindent">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="numberingpositionpage|indent">Indent:</property>

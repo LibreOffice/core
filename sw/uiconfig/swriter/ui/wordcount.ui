@@ -75,6 +75,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="wordcount|label1">Words</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label1-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -87,6 +92,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label2-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -99,6 +109,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label3-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -114,6 +129,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="selectwords-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -129,6 +149,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="selectchars-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -144,6 +169,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="selectcharsnospaces-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -159,6 +189,11 @@
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label9-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -174,6 +209,11 @@
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label10-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -189,6 +229,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="docwords-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -204,6 +249,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="docchars-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -219,6 +269,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="doccharsnospaces-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -231,6 +286,11 @@
                 <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean words</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cjkcharsft-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -246,6 +306,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="selectcjkchars-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -261,6 +326,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="doccjkchars-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -273,6 +343,11 @@
                 <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="standardizedpages-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -288,6 +363,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="selectstandardizedpages-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -303,6 +383,11 @@
                 <property name="label">            0</property>
                 <property name="justify">right</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="docstandardizedpages-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -315,6 +400,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="wordcount|lbComments">Comments</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbComments-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -329,6 +419,11 @@
                 <property name="hexpand">True</property>
                 <property name="label">            0</property>
                 <property name="xalign">1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="docComments-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>

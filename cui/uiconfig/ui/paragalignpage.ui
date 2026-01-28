@@ -171,6 +171,11 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="paragalignpage|labelST_RIGHTALIGN_ASIAN">Righ_t/Bottom</property>
                         <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="labelST_RIGHTALIGN_ASIAN-atkobject">
+                            <property name="AtkObject::accessible-role">static</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -183,6 +188,11 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="paragalignpage|labelST_LEFTALIGN_ASIAN">_Left/Top</property>
                         <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="labelST_LEFTALIGN_ASIAN-atkobject">
+                            <property name="AtkObject::accessible-role">static</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -194,6 +204,11 @@
                       <object class="GtkLabel" id="labelST_VERTALIGN_SDR">
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="paragalignpage|labelST_VERTALIGN_SDR">Vertical</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="labelST_VERTALIGN_SDR-atkobject">
+                            <property name="AtkObject::accessible-role">static</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

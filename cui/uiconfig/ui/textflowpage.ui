@@ -845,6 +845,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="textflowpage|labelOrphan">lines</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="labelOrphan-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -857,6 +862,11 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="textflowpage|labelWidow">lines</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="labelWidow-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
