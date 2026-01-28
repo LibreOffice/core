@@ -3411,7 +3411,13 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     // so LOK renders it as <span> instead of <label> for correct accessibility.
     OUString sAccRole;
     sal_uInt16 nAccessibleRole = GetAccessibleRole();
-    if (nAccessibleRole == css::accessibility::AccessibleRole::STATIC && GetType() == WindowType::FIXEDTEXT)
+    const std::initializer_list<sal_uInt16> staticRoles = {
+        css::accessibility::AccessibleRole::STATIC,
+        css::accessibility::AccessibleRole::NOTIFICATION
+    };
+
+    if (std::find(staticRoles.begin(), staticRoles.end(), nAccessibleRole) != staticRoles.end()
+        && GetType() == WindowType::FIXEDTEXT)
         rJsonWriter.put("renderAsStatic", true);
     else if (nAccessibleRole == css::accessibility::AccessibleRole::PAGE_TAB_LIST)
         sAccRole = "tablist";
