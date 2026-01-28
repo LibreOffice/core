@@ -1309,7 +1309,7 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xFontTransparencyFT(m_xBuilder->weld_label(u"fonttransparencyft"_ustr))
     , m_xFontTransparencyMtr(
           m_xBuilder->weld_metric_spin_button(u"fonttransparencymtr"_ustr, FieldUnit::PERCENT))
-    , m_xEffectsFT(m_xBuilder->weld_label(u"effectsft"_ustr))
+    , m_xEffectsFT(m_xBuilder->weld_label(u"caseft"_ustr))
     , m_xEffectsLB(m_xBuilder->weld_combo_box(u"effectslb"_ustr))
     , m_xReliefFT(m_xBuilder->weld_label(u"reliefft"_ustr))
     , m_xReliefLB(m_xBuilder->weld_combo_box(u"relieflb"_ustr))
