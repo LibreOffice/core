@@ -118,18 +118,18 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
     // expensive numeric conversion in append() for faster construction of the
     // always used global key.
     assert( 0 <= breakType && breakType <= 9 && 0 <= rBreakType && rBreakType <= 9 && 0 <= nWordType && nWordType <= 9);
-    OStringBuffer aKeyBuf(64);
+    StackString64 aKeyBuf;
     LanguageTag::convertToBcp47(aKeyBuf, rLocale);
     const sal_Int32 nLangStrLen = aKeyBuf.getLength();
     aKeyBuf.append( ";" );
     if (rule)
         aKeyBuf.append(rule);
-    aKeyBuf.append(";" + OStringChar(static_cast<char>('0'+breakType)) + ";"
-        + OStringChar(static_cast<char>('0'+rBreakType)) + ";"
-        + OStringChar( static_cast<char>('0'+nWordType)));
+    aKeyBuf.append(";").append(static_cast<char>('0'+breakType)).append(";")
+        .append(static_cast<char>('0'+rBreakType)).append(";")
+        .append(static_cast<char>('0'+nWordType));
     // langtag;rule;breakType;rBreakType;nWordType
-    const OString aBIMapGlobalKey( aKeyBuf.makeStringAndClear());
-    std::string_view aKeyBufView = std::string_view(aBIMapGlobalKey).substr(0, nLangStrLen);
+    const std::string_view aBIMapGlobalKey( aKeyBuf.toView() );
+    std::string_view aKeyBufView = aBIMapGlobalKey.substr(0, nLangStrLen);
 
     if (icuBI->maBIMapKey != aBIMapGlobalKey || !icuBI->mpValue || !icuBI->mpValue->mpBreakIterator)
     {
@@ -161,9 +161,10 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     bInMap = (aMapIt != theBIMap.end());
                     if (bInMap)
                     {
+                        OString aBIMapGlobalKeyStr(aBIMapGlobalKey);
                         icuBI->mpValue = aMapIt->second;
-                        icuBI->maBIMapKey = aBIMapGlobalKey;
-                        theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                        icuBI->maBIMapKey = aBIMapGlobalKeyStr;
+                        theBIMap.insert( std::make_pair( aBIMapGlobalKeyStr, icuBI->mpValue));
                         break;  // do
                     }
 
@@ -190,9 +191,10 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     bInMap = (aMapIt != theBIMap.end());
                     if (bInMap)
                     {
+                        OString aBIMapGlobalKeyStr(aBIMapGlobalKey);
                         icuBI->mpValue = aMapIt->second;
-                        icuBI->maBIMapKey = aBIMapGlobalKey;
-                        theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                        icuBI->maBIMapKey = aBIMapGlobalKeyStr;
+                        theBIMap.insert( std::make_pair( aBIMapGlobalKeyStr, icuBI->mpValue));
                         break;  // do
                     }
 
@@ -217,9 +219,10 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                         bInMap = (aMapIt != theBIMap.end());
                         if (bInMap)
                         {
+                            OString aBIMapGlobalKeyStr(aBIMapGlobalKey);
                             icuBI->mpValue = aMapIt->second;
-                            icuBI->maBIMapKey = aBIMapGlobalKey;
-                            theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                            icuBI->maBIMapKey = aBIMapGlobalKeyStr;
+                            theBIMap.insert( std::make_pair( aBIMapGlobalKeyStr, icuBI->mpValue));
                             break;  // do
                         }
 
@@ -250,9 +253,10 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 bInMap = (aMapIt != theBIMap.end());
                 if (bInMap)
                 {
+                    OString aBIMapGlobalKeyStr(aBIMapGlobalKey);
                     icuBI->mpValue = aMapIt->second;
-                    icuBI->maBIMapKey = aBIMapGlobalKey;
-                    theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+                    icuBI->maBIMapKey = aBIMapGlobalKeyStr;
+                    theBIMap.insert( std::make_pair( aBIMapGlobalKeyStr, icuBI->mpValue));
                     break;  // do
                 }
 
@@ -284,9 +288,10 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
         if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator) {
             throw uno::RuntimeException(u"ICU BreakIterator is not properly initialized"_ustr);
         }
-        icuBI->maBIMapKey = aBIMapGlobalKey;
+        OString aBIMapGlobalKeyStr(aBIMapGlobalKey);
+        icuBI->maBIMapKey = aBIMapGlobalKeyStr;
         if (!bInMap)
-            theBIMap.insert( std::make_pair( aBIMapGlobalKey, icuBI->mpValue));
+            theBIMap.insert( std::make_pair( aBIMapGlobalKeyStr, icuBI->mpValue));
         bNewBreak=true;
     }
 

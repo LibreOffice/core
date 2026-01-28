@@ -13,7 +13,6 @@
 #include <sal/config.h>
 #include <rtl/locale.h>
 #include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
@@ -39,6 +38,34 @@ inline constexpr OUString I18NLANGTAG_QLT = u"qlt"_ustr;
 
 class LanguageTagImpl;
 
+
+/**
+ Small 64-byte length "string" that emulates part of OString's API, and is meant to be
+ stack-allocated for speed.
+*/
+class StackString64
+{
+public:
+    sal_Int32 getLength() const { return mnLength; }
+    void setLength(sal_Int32 n) { mnLength = n; }
+    char* getMutableStr() { return maData; }
+    StackString64& append(const char *s)
+    {
+        int slen = strlen(s);
+        for (int i=0; i < slen; i++)
+            maData[mnLength++] = *(s++);
+        return *this;
+    }
+    StackString64& append(char ch)
+    {
+        maData[mnLength++] = ch;
+        return *this;
+    }
+    std::string_view toView() const { return std::string_view(maData, mnLength); }
+private:
+    char maData[64];
+    sal_Int32 mnLength = 0;
+};
 
 /** Wrapper for liblangtag BCP 47 language tags, MS-LangIDs, locales and
     conversions in between.
@@ -447,7 +474,7 @@ public:
        locale to the real locale used.
      */
     static OUString convertToBcp47( LanguageType nLangID );
-    static void convertToBcp47( OStringBuffer& rBuf, LanguageType nLangID );
+    static void convertToBcp47( StackString64& rBuf, LanguageType nLangID );
 
     /** Convert Locale to BCP 47 string.
 
@@ -457,7 +484,7 @@ public:
                If FALSE, return an empty OUString for such a tag.
      */
     static OUString convertToBcp47( const css::lang::Locale& rLocale, bool bResolveSystem = true );
-    static void convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale, bool bResolveSystem = true );
+    static void convertToBcp47( StackString64& rBuf, const css::lang::Locale& rLocale, bool bResolveSystem = true );
 
     /** Convert BCP 47 string to Locale, convenience method.
 

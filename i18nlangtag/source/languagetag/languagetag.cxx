@@ -394,7 +394,7 @@ private:
     /** Convert Locale to BCP 47 string without resolving system and creating
         temporary LanguageTag instances. */
     static OUString     convertToBcp47( const css::lang::Locale& rLocale );
-    static void         convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale );
+    static void         convertToBcp47( StackString64& rBuf, const css::lang::Locale& rLocale );
 
 };
 
@@ -2875,11 +2875,11 @@ OUString LanguageTagImpl::convertToBcp47( const css::lang::Locale& rLocale )
 /**
   We know the strings here are always ascii, so we can avoid some allocation work.
 */
-static void appendAscii(OStringBuffer& rBuf, const OUString& s)
+static void appendAscii(StackString64& rBuf, const OUString& s)
 {
     rBuf.setLength(rBuf.getLength() + s.getLength());
     const sal_Unicode* pSrc = s.getStr();
-    char* pDest = &rBuf[0];
+    char* pDest = rBuf.getMutableStr();
     for (int i=0; i<s.getLength(); i++)
     {
         assert(*pSrc < 127);
@@ -2890,7 +2890,7 @@ static void appendAscii(OStringBuffer& rBuf, const OUString& s)
 }
 
 // static
-void LanguageTagImpl::convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale )
+void LanguageTagImpl::convertToBcp47( StackString64& rBuf, const css::lang::Locale& rLocale )
 {
     if (rLocale.Language.isEmpty())
     {
@@ -2934,7 +2934,7 @@ OUString LanguageTag::convertToBcp47( const css::lang::Locale& rLocale, bool bRe
 }
 
 // static
-void LanguageTag::convertToBcp47( OStringBuffer& rBuf, const css::lang::Locale& rLocale, bool bResolveSystem )
+void LanguageTag::convertToBcp47( StackString64& rBuf, const css::lang::Locale& rLocale, bool bResolveSystem )
 {
     if (rLocale.Language.isEmpty())
     {
@@ -2963,7 +2963,7 @@ OUString LanguageTag::convertToBcp47( LanguageType nLangID )
 }
 
 // static
-void LanguageTag::convertToBcp47( OStringBuffer& rBuf, LanguageType nLangID )
+void LanguageTag::convertToBcp47( StackString64& rBuf, LanguageType nLangID )
 {
     lang::Locale aLocale( LanguageTag::convertToLocale( nLangID ));
     // If system for some reason (should not happen... haha) could not be
