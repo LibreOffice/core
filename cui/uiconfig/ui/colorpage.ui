@@ -150,13 +150,18 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
                 <child>
-                  <object class="GtkLabel" id="label20">
+                  <object class="GtkLabel" id="colorlabel20">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label20">Recent Colors</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">iconview_recent_colors_win</property>
+                    <property name="mnemonic-widget">iconview_recent_colors</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorlabel20-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -165,27 +170,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow" id="iconview_recent_colors_win">
+                  <object class="GtkIconView" id="iconview_recent_colors">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="vscrollbar-policy">never</property>
-                    <property name="shadow-type">in</property>
-                    <property name="height-request">10</property>
-                    <child>
-                      <object class="GtkIconView" id="iconview_recent_colors">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="model">recent_colors_liststore</property>
-                        <property name="pixbuf-column">0</property>
-                        <property name="selection-mode">single</property>
-                        <property name="item-orientation">horizontal</property>
-                        <property name="columns">12</property>
-                        <property name="row-spacing">1</property>
-                        <property name="column-spacing">1</property>
-                        <property name="item-padding">3</property>
-                      </object>
-                    </child>
+                    <property name="model">recent_colors_liststore</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="selection-mode">single</property>
+                    <property name="item-orientation">horizontal</property>
+                    <property name="columns">12</property>
+                    <property name="row-spacing">1</property>
+                    <property name="column-spacing">1</property>
+                    <property name="item-padding">3</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -272,7 +267,7 @@
                     <property name="margin-bottom">3</property>
                     <property name="label" translatable="yes" context="colorpage|label22">Custom Palette</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">iconview_colors_win</property>
+                    <property name="mnemonic-widget">iconview_colors</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -294,7 +289,7 @@
                 <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="iconview_colors_win">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="hscrollbar-policy">never</property>
@@ -421,7 +416,7 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label7">
+                  <object class="GtkLabel" id="colorlabel7">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label7">B</property>
@@ -434,7 +429,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label8">
+                  <object class="GtkLabel" id="colorlabel8">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label8">G</property>
@@ -447,7 +442,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label9">
+                  <object class="GtkLabel" id="colorlabel9">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label9">R</property>
@@ -541,7 +536,7 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label10">
+                  <object class="GtkLabel" id="colorlabel10">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label10">_C</property>
@@ -554,7 +549,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label16">
+                  <object class="GtkLabel" id="colorlabel16">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label16">_K</property>
@@ -567,7 +562,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label17">
+                  <object class="GtkLabel" id="colorlabel17">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label17">_Y</property>
@@ -632,7 +627,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label15">
+                  <object class="GtkLabel" id="colorlabel15">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label15">_M</property>
@@ -772,7 +767,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label4">
+                  <object class="GtkLabel" id="colorlabel4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label4">_B</property>
@@ -785,7 +780,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label3">
+                  <object class="GtkLabel" id="colorlabel3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label3">_G</property>
@@ -798,7 +793,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label2">
+                  <object class="GtkLabel" id="colorlabel2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label2">_R</property>
@@ -869,7 +864,7 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label11">
+                  <object class="GtkLabel" id="colorlabel11">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label11">_C</property>
@@ -882,7 +877,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label12">
+                  <object class="GtkLabel" id="colorlabel12">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label12">_M</property>
@@ -895,7 +890,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label13">
+                  <object class="GtkLabel" id="colorlabel13">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label13">_K</property>
@@ -934,7 +929,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label14">
+                  <object class="GtkLabel" id="colorlabel14">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label14">_Y</property>
