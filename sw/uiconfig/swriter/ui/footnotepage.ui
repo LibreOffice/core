@@ -36,12 +36,12 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkLabel" id="label6">
+              <object class="GtkLabel" id="footnotelabel6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label6">Numbering:</property>
                 <property name="use-underline">True</property>
-                <property name="mnemonic-widget">numberinglb</property>
+                <property name="mnemonic-widget">footnotenumberinglb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -50,11 +50,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="numberinglb">
+              <object class="GtkComboBoxText" id="footnotenumberinglb">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="numberinglb-atkobject">
+                  <object class="AtkObject" id="footnotenumberinglb-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|numberinglb">Select the numbering scheme that you want to use.</property>
                   </object>
                 </child>
