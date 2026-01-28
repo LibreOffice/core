@@ -49,7 +49,7 @@
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkLabel" id="label1">
+                  <object class="GtkLabel" id="indentlabel1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="indentpage|label1">_Before section</property>
@@ -63,7 +63,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label3">
+                  <object class="GtkLabel" id="indentlabel3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="indentpage|label3">_After section</property>
