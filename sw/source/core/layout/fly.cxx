@@ -2350,7 +2350,12 @@ bool SwFlyFrame::GetRedlineRenderModeFrame(SvxBoxItem& rBoxItem) const
     }
 
     editeng::SvxBorderLine aBorderLine;
-    aBorderLine.SetWidth(1);
+
+    // Set a logic value which is roughly 1 pixel wide, so the border is visible.
+    vcl::RenderContext* pOut = pViewShell->GetOut();
+    tools::Long nWidth = pOut ? pOut->PixelToLogic(Size(1, 1)).Width() : 0;
+    aBorderLine.SetWidth(nWidth);
+
     aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
     aBorderLine.SetColor(*oColor);
     rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);

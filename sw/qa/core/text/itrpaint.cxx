@@ -290,6 +290,9 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[1]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[2]));
+    std::vector<tools::Polygon> aPolygons = GetMetaFilePolylines(*xMetaFile);
+    // No frames around images.
+    CPPUNIT_ASSERT(aPolygons.empty());
 
     // Omit insert: default, default, grayscale.
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -306,6 +309,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
     // Without the accompanying fix in place, this test would have failed, the image's center pixel
     // wasn't gray.
     CPPUNIT_ASSERT(IsGrayScale(aImages[2]));
+    aPolygons = GetMetaFilePolylines(*xMetaFile);
+    // Frame around the deleted image: no polygons -> no frame.
+    CPPUNIT_ASSERT(!aPolygons.empty());
+    CPPUNIT_ASSERT(RectangleContainsPolygons(aImages[1].m_aRectangle, aPolygons));
 
     // Omit deletes: default, grayscale, default.
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
@@ -318,6 +325,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
     CPPUNIT_ASSERT(!IsGrayScale(aImages[0]));
     CPPUNIT_ASSERT(IsGrayScale(aImages[1]));
     CPPUNIT_ASSERT(!IsGrayScale(aImages[2]));
+    aPolygons = GetMetaFilePolylines(*xMetaFile);
+    // Frame around the inserted image.
+    CPPUNIT_ASSERT(!aPolygons.empty());
+    CPPUNIT_ASSERT(RectangleContainsPolygons(aImages[2].m_aRectangle, aPolygons));
 }
 }
 
