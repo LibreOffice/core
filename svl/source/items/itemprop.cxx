@@ -167,23 +167,18 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry& rEntry
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
-    std::unique_ptr<SfxPoolItem> pNewItem;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID))
         pItem = &rSet.GetPool()->GetUserOrPoolDefaultItem(rEntry.nWID);
-    if (pItem)
-    {
-        pNewItem.reset(pItem->Clone());
-    }
-    if(pNewItem)
-    {
-        if( !pNewItem->PutValue( aVal, rEntry.nMemberId ) )
-        {
-            throw IllegalArgumentException();
-        }
-        // apply new item
-        rSet.Put( std::move(pNewItem) );
-    }
+    if (!pItem)
+        return;
+    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+    if(!pNewItem)
+        return;
+    if( !pNewItem->PutValue( aVal, rEntry.nMemberId ) )
+        throw IllegalArgumentException();
+    // apply new item
+    rSet.Put( std::move(pNewItem) );
 }
 
 void SfxItemPropertySet::setPropertyValue( const OUString &rName,
