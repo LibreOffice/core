@@ -414,79 +414,101 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="prefixft">
+                      <object class="GtkFrame" id="separator_frame">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="margin-start">20</property>
-                        <property name="label" translatable="yes" context="numberingoptionspage|prefixft">Before:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">prefix</property>
-                        <property name="xalign">1</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">10</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="separator">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">20</property>
-                        <property name="label" translatable="yes" context="numberingoptionspage|separator">Separator</property>
-                        <property name="xalign">1</property>
+                        <property name="label-xalign">0</property>
+                        <property name="shadow-type">none</property>
+                        <child>
+                          <!-- n-columns=2 n-rows=2 -->
+                          <object class="GtkGrid">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">6</property>
+                            <property name="row-spacing">6</property>
+                            <property name="column-spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="prefixft">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="margin-start">20</property>
+                                <property name="label" translatable="yes" context="numberingoptionspage|prefixft">Before:</property>
+                                <property name="use-underline">True</property>
+                                <property name="mnemonic-widget">prefix</property>
+                                <property name="xalign">1</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="prefix">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="truncate-multiline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="prefix-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|prefix">Enter a character or the text to display in front of the number in the list.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="suffixft">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes" context="numberingoptionspage|suffixft">After:</property>
+                                <property name="use-underline">True</property>
+                                <property name="mnemonic-widget">suffix</property>
+                                <property name="xalign">1</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="suffix">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="truncate-multiline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="suffix-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|suffix">Enter a character or the text to display behind the number in the list. To create the numbering scheme "1.)", enter ".)" in this box.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="separator">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|separator">Separator</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">9</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="suffix">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="suffix-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|suffix">Enter a character or the text to display behind the number in the list. To create the numbering scheme "1.)", enter ".)" in this box.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">11</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="prefix">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="prefix-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|prefix">Enter a character or the text to display in front of the number in the list.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">10</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="suffixft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="numberingoptionspage|suffixft">After:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">suffix</property>
-                        <property name="xalign">1</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">11</property>
+                        <property name="width">2</property>
+                        <property name="height">3</property>
                       </packing>
                     </child>
                     <child>
