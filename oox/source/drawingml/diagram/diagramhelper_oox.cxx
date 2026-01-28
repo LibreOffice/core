@@ -93,7 +93,7 @@ void DiagramHelper_oox::reLayout()
     pShapePtr->setDiagramType();
     pShapePtr->setSize(maImportSize);
 
-    // remember exsiting DrawingLayerModelData. Do this before createShapeHierarchyFromModel
+    // remember existing DrawingLayerModelData. Do this before createShapeHierarchyFromModel
     // below, that will create a new BackgroundShapeModelID and the BGShape would
     // be missing.
     // Also important is to do this as XShapes, the content of the Group will delete the
