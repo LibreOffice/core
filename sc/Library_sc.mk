@@ -532,6 +532,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
     sc/source/ui/operation/Operation \
+    sc/source/ui/operation/SortOperation \
     sc/source/ui/pagedlg/areasdlg \
     sc/source/ui/pagedlg/tphfedit \
     sc/source/ui/sidebar/AlignmentPropertyPanel \

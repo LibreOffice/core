@@ -47,6 +47,7 @@ namespace sc
 class ScDBDocFunc
 {
 friend class ScDBFunc;
+friend class SortOperation;
 
 private:
     ScDocShell&     rDocShell;
