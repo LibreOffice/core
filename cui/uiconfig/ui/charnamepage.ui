@@ -315,6 +315,11 @@
                 <attributes>
                   <attribute name="scale" value="0.9"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbWestFontinfo-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -594,6 +599,11 @@
                 <attributes>
                   <attribute name="scale" value="0.9"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbCJKFontinfo-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -848,6 +858,11 @@
                 <attributes>
                   <attribute name="scale" value="0.9"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbCTLFontinfo-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
