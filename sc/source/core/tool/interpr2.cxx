@@ -970,7 +970,19 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
         fVal = ::rtl::math::round( GetDouble(), 0, eMode );
     else
     {
-        const sal_Int16 nDec = GetInt16();
+        double fDec = GetDouble();
+        if (fDec > SAL_MAX_INT16)
+            fDec = SAL_MAX_INT16;
+        else if (fDec < SAL_MIN_INT16)
+            fDec = SAL_MIN_INT16;
+        else
+        {
+            if (fDec < 0.0)
+                fDec = rtl::math::approxCeil(fDec);
+            else
+                fDec = rtl::math::approxFloor(fDec);
+        }
+        const sal_Int16 nDec = static_cast<sal_Int16>(fDec);
         const double fX = GetDouble();
         if (nGlobalError == FormulaError::NONE)
         {
