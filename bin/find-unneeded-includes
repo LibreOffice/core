@@ -261,6 +261,13 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                 if realFileName in excludelistRules.keys():
                     if include in excludelistRules[realFileName]:
                         print("WARNING:", include, "excluded header can be removed from exclusion list of file:", realFileName)
+                    # check if a hpp files hdl pair is now considered necessary
+                    # then there is no need for an explicit exclusion
+                    hdlMatch = re.match(".*.hdl", include)
+                    if hdlMatch:
+                        hdl = include.replace(".hdl", ".hpp")
+                        if hdl in excludelistRules[realFileName]:
+                            print("WARNING:", hdl, "excluded header can be removed from exclusion list of file:", realFileName)
 
             if checknamespaces:
                 # match for all possible URE/UNO namespaces, created with:
