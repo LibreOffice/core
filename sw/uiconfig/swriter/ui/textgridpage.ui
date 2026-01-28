@@ -248,6 +248,7 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" context="textgridpage|labelFT_CHARRANGE">(1-45)</property>
+                        <property name="mnemonic-widget">spinNF_CHARSPERLINE</property>
                         <property name="use-underline">True</property>
                       </object>
                       <packing>
@@ -293,6 +294,7 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" context="textgridpage|labelFT_LINERANGE">(1-48)</property>
+                        <property name="mnemonic-widget">spinNF_LINESPERPAGE</property>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>

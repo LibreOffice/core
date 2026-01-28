@@ -150,7 +150,7 @@
                 <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
                 <child>
-                  <object class="GtkLabel" id="colorlabel20">
+                  <object class="GtkLabel" id="recentcolorlb">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="colorpage|label20">Recent Colors</property>
@@ -158,7 +158,7 @@
                     <property name="mnemonic-widget">iconview_recent_colors</property>
                     <property name="xalign">0</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="colorlabel20-atkobject">
+                      <object class="AtkObject" id="recentcolorlb-atkobject">
                           <property name="AtkObject::accessible-role">static</property>
                       </object>
                     </child>
