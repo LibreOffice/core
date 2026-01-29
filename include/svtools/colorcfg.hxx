@@ -296,13 +296,25 @@ public:
     // get the configured value - if bSmart is set the default color setting is provided
     // instead of the automatic color
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, bool bSmart = true) const;
+
+    /*
+     * The above function is used over 300 times in the codebase, some times inside
+     * wrappers, sometimes stand alone. it doesn't make sense to spend time changing
+     * it in all those places as we are moving to 26-2 soon. In some places where
+     * it's called inside wrappers, the wrappers are doing more than just GetColorValue,
+     * things like ColorConfig instance initialization/reset, so changing it across the
+     * codebase might introduce subtle bugs here and there. this seems to be the most
+     * straight forward solution to tdf#169839 on 25-04.
+     */
+    static ColorConfigValue static_GetColorValue(ColorConfigEntry eEntry, bool bSmart = true);
+
     // -1 gets the default color on current mod.
     //  0 gets the default color on light mod.
     //  1 gets the default color on dark mod.
     static Color            GetDefaultColor(ColorConfigEntry eEntry, int nMod = -1);
     static const OUString& GetCurrentSchemeName();
 
-    void                    LoadThemeColorsFromRegistry();
+    static void             LoadThemeColorsFromRegistry();
     void                    SetupTheme();
 
     DECL_LINK(DataChangedHdl, VclSimpleEvent&, void);

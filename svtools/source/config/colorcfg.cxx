@@ -436,33 +436,36 @@ void ColorConfig::LoadThemeColorsFromRegistry()
 {
     ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
 
-    rThemeColors.SetWindowColor(GetColorValue(svtools::WINDOWCOLOR).nColor);
-    rThemeColors.SetWindowTextColor(GetColorValue(svtools::WINDOWTEXTCOLOR).nColor);
-    rThemeColors.SetBaseColor(GetColorValue(svtools::BASECOLOR).nColor);
-    rThemeColors.SetButtonColor(GetColorValue(svtools::BUTTONCOLOR).nColor);
-    rThemeColors.SetButtonTextColor(GetColorValue(svtools::BUTTONTEXTCOLOR).nColor);
-    rThemeColors.SetAccentColor(GetColorValue(svtools::ACCENTCOLOR).nColor);
-    rThemeColors.SetDisabledColor(GetColorValue(svtools::DISABLEDCOLOR).nColor);
-    rThemeColors.SetDisabledTextColor(GetColorValue(svtools::DISABLEDTEXTCOLOR).nColor);
-    rThemeColors.SetShadeColor(GetColorValue(svtools::SHADECOLOR).nColor);
-    rThemeColors.SetSeparatorColor(GetColorValue(svtools::SEPARATORCOLOR).nColor);
-    rThemeColors.SetFaceColor(GetColorValue(svtools::FACECOLOR).nColor);
-    rThemeColors.SetActiveColor(GetColorValue(svtools::ACTIVECOLOR).nColor);
-    rThemeColors.SetActiveTextColor(GetColorValue(svtools::ACTIVETEXTCOLOR).nColor);
-    rThemeColors.SetActiveBorderColor(GetColorValue(svtools::ACTIVEBORDERCOLOR).nColor);
-    rThemeColors.SetFieldColor(GetColorValue(svtools::FIELDCOLOR).nColor);
-    rThemeColors.SetMenuBarColor(GetColorValue(svtools::MENUBARCOLOR).nColor);
-    rThemeColors.SetMenuBarTextColor(GetColorValue(svtools::MENUBARTEXTCOLOR).nColor);
-    rThemeColors.SetMenuBarHighlightColor(GetColorValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
-    rThemeColors.SetMenuBarHighlightTextColor(GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
-    rThemeColors.SetMenuColor(GetColorValue(svtools::MENUCOLOR).nColor);
-    rThemeColors.SetMenuTextColor(GetColorValue(svtools::MENUTEXTCOLOR).nColor);
-    rThemeColors.SetMenuHighlightColor(GetColorValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
-    rThemeColors.SetMenuHighlightTextColor(GetColorValue(svtools::MENUHIGHLIGHTTEXTCOLOR).nColor);
-    rThemeColors.SetMenuBorderColor(GetColorValue(svtools::MENUBORDERCOLOR).nColor);
-    rThemeColors.SetInactiveColor(GetColorValue(svtools::INACTIVECOLOR).nColor);
-    rThemeColors.SetInactiveTextColor(GetColorValue(svtools::INACTIVETEXTCOLOR).nColor);
-    rThemeColors.SetInactiveBorderColor(GetColorValue(svtools::INACTIVEBORDERCOLOR).nColor);
+    rThemeColors.SetWindowColor(static_GetColorValue(svtools::WINDOWCOLOR).nColor);
+    rThemeColors.SetWindowTextColor(static_GetColorValue(svtools::WINDOWTEXTCOLOR).nColor);
+    rThemeColors.SetBaseColor(static_GetColorValue(svtools::BASECOLOR).nColor);
+    rThemeColors.SetButtonColor(static_GetColorValue(svtools::BUTTONCOLOR).nColor);
+    rThemeColors.SetButtonTextColor(static_GetColorValue(svtools::BUTTONTEXTCOLOR).nColor);
+    rThemeColors.SetAccentColor(static_GetColorValue(svtools::ACCENTCOLOR).nColor);
+    rThemeColors.SetDisabledColor(static_GetColorValue(svtools::DISABLEDCOLOR).nColor);
+    rThemeColors.SetDisabledTextColor(static_GetColorValue(svtools::DISABLEDTEXTCOLOR).nColor);
+    rThemeColors.SetShadeColor(static_GetColorValue(svtools::SHADECOLOR).nColor);
+    rThemeColors.SetSeparatorColor(static_GetColorValue(svtools::SEPARATORCOLOR).nColor);
+    rThemeColors.SetFaceColor(static_GetColorValue(svtools::FACECOLOR).nColor);
+    rThemeColors.SetActiveColor(static_GetColorValue(svtools::ACTIVECOLOR).nColor);
+    rThemeColors.SetActiveTextColor(static_GetColorValue(svtools::ACTIVETEXTCOLOR).nColor);
+    rThemeColors.SetActiveBorderColor(static_GetColorValue(svtools::ACTIVEBORDERCOLOR).nColor);
+    rThemeColors.SetFieldColor(static_GetColorValue(svtools::FIELDCOLOR).nColor);
+    rThemeColors.SetMenuBarColor(static_GetColorValue(svtools::MENUBARCOLOR).nColor);
+    rThemeColors.SetMenuBarTextColor(static_GetColorValue(svtools::MENUBARTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightColor(
+        static_GetColorValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightTextColor(
+        static_GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuColor(static_GetColorValue(svtools::MENUCOLOR).nColor);
+    rThemeColors.SetMenuTextColor(static_GetColorValue(svtools::MENUTEXTCOLOR).nColor);
+    rThemeColors.SetMenuHighlightColor(static_GetColorValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
+    rThemeColors.SetMenuHighlightTextColor(
+        static_GetColorValue(svtools::MENUHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBorderColor(static_GetColorValue(svtools::MENUBORDERCOLOR).nColor);
+    rThemeColors.SetInactiveColor(static_GetColorValue(svtools::INACTIVECOLOR).nColor);
+    rThemeColors.SetInactiveTextColor(static_GetColorValue(svtools::INACTIVETEXTCOLOR).nColor);
+    rThemeColors.SetInactiveBorderColor(static_GetColorValue(svtools::INACTIVEBORDERCOLOR).nColor);
     rThemeColors.SetThemeName(GetCurrentSchemeName());
 
     // as more controls support it, we might want to have ColorConfigValue entries in ThemeColors
@@ -732,6 +735,19 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
 }
 
 ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart) const
+{
+    ColorConfigValue aRet;
+
+    if (m_pImpl)
+        aRet = m_pImpl->GetColorConfigValue(eEntry);
+
+    if (bSmart && aRet.nColor == COL_AUTO)
+        aRet.nColor = ColorConfig::GetDefaultColor(eEntry);
+
+    return aRet;
+}
+
+ColorConfigValue ColorConfig::static_GetColorValue(ColorConfigEntry eEntry, bool bSmart)
 {
     ColorConfigValue aRet;
 
