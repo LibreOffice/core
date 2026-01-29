@@ -290,6 +290,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRangeCommentInDeleteDocxExport)
+{
+    // Given a document with a comment that is inside a delete redline:
+    createSwDoc("redline-range-comment.docx");
+
+    // When exporting that to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then make sure that the comment reference is inside the delete redline:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the comment anchor was outside the redline.
+    CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:commentReference"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
 {
     // Given a document with two floating tables after each other:
