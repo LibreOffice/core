@@ -34,7 +34,7 @@
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ok-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|ok">Saves all changes and closes dialog.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="definetablerangedialog|extended_tip|ok">Saves all changes and closes dialog.</property>
                   </object>
                 </child>
               </object>
@@ -53,7 +53,7 @@
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cancel-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|cancel">Closes dialog and discards all changes.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="definetablerangedialog|extended_tip|cancel">Closes dialog and discards all changes.</property>
                   </object>
                 </child>
               </object>
@@ -103,7 +103,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assign-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|assign">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definetablerangedialog|extended_tip|assign">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
                           </object>
                         </child>
                       </object>
@@ -120,7 +120,7 @@
                         <property name="receives-default">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assgnrb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|assignrb">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definetablerangedialog|extended_tip|assignrb">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
                           </object>
                         </child>
                       </object>
@@ -168,7 +168,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bheaders-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|ContainsColumnLabels">Selected cell ranges contain labels.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="definetablerangedialog|extended_tip|ContainsColumnLabels">Selected cell ranges contain labels.</property>
                       </object>
                     </child>
                   </object>
@@ -200,7 +200,7 @@
     </action-widgets>
     <child internal-child="accessible">
       <object class="AtkObject" id="tablerangedialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|DefineDatabaseRangeDialog">Defines a database range based on the selected cells in your sheet.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="definetablerangedialog|extended_tip|DefineTableRangeDialog">Defines a database range based on the selected cells in your sheet.</property>
       </object>
     </child>
   </object>
