@@ -167,7 +167,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|label4">Number:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">numfmtlb</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -252,7 +252,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|startatft">Start at:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">startat</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -285,7 +285,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|bitmapft">Graphics:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">bitmap</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -299,7 +299,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|orientft">Alignment:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">orientlb</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -436,7 +436,7 @@
                                 <property name="label" translatable="yes" context="numberingoptionspage|prefixft">Before:</property>
                                 <property name="use-underline">True</property>
                                 <property name="mnemonic-widget">prefix</property>
-                                <property name="xalign">1</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -467,7 +467,7 @@
                                 <property name="label" translatable="yes" context="numberingoptionspage|suffixft">After:</property>
                                 <property name="use-underline">True</property>
                                 <property name="mnemonic-widget">suffix</property>
-                                <property name="xalign">1</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -498,9 +498,6 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="numberingoptionspage|separator">Separator</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
                           </object>
                         </child>
                       </object>
@@ -519,7 +516,7 @@
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">sublevels</property>
                         <property name="ellipsize">end</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -533,7 +530,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|bulletft">Character:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">bullet</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -547,7 +544,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|relsizeft">_Relative size:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">relsize</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -561,7 +558,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|colorft">Color:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">color</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -575,7 +572,7 @@
                         <property name="label" translatable="yes" context="numberingoptionspage|charstyleft">Character style:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">charstyle</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -595,7 +592,7 @@
                             <property name="label" translatable="yes" context="numberingoptionspage|widthft">Width:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">widthmf</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -611,7 +608,7 @@
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">heightmf</property>
                             <property name="ellipsize">end</property>
-                            <property name="xalign">1</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -750,9 +747,6 @@
                         <property name="left-attach">1</property>
                         <property name="top-attach">13</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
