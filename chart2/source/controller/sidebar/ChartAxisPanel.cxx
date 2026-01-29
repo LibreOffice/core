@@ -157,7 +157,6 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
         return OUString();
 
     uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
     OUString aCID;
     aAny >>= aCID;
 #if defined DBG_UTIL && !defined NDEBUG
