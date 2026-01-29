@@ -1984,9 +1984,109 @@ void ScTabViewShell::ExtendSingleSelection(css::table::CellRangeAddress& rRangeD
     rRangeData.EndColumn = aEndCol;
 }
 
-/* bool bRemove == false ==> highlight duplicate rows */
-void ScTabViewShell::HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
-                                const css::table::CellRangeAddress& aRange, bool bRemove,
+void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
+                                const css::table::CellRangeAddress& aRange,
+                                bool bIncludesHeaders, bool bDuplicateRows,
+                                const std::vector<int>& rSelectedEntries)
+{
+    if (rSelectedEntries.size() == 0)
+    {
+        Unmark();
+        return;
+    }
+
+    uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+    rtl::Reference<ScCellRangeObj> xSheetRange(
+            ActiveSheet->getScCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow));
+
+    uno::Sequence<uno::Sequence<uno::Any>> aDataArray = xSheetRange->getDataArray();
+
+    uno::Reference< document::XUndoManagerSupplier > xUndoManager( xModel, uno::UNO_QUERY );
+    uno::Reference<document::XActionLockable> xLockable(xModel, uno::UNO_QUERY);
+
+    uno::Reference<sheet::XCalculatable> xCalculatable(xModel, uno::UNO_QUERY);
+    ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
+
+    comphelper::ScopeGuard aUndoContextGuard(
+        [&xUndoManager, &xLockable, &xModel, &rDoc] {
+        xUndoManager->getUndoManager()->leaveUndoContext();
+        xLockable->removeActionLock();
+        if (xModel->hasControllersLocked())
+            xModel->unlockControllers();
+        rDoc.UnlockAdjustHeight();
+    });
+
+    rDoc.LockAdjustHeight();
+    xModel->lockControllers();
+    xLockable->addActionLock();
+    xUndoManager->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
+
+    bool nModifier = false;         // modifier key pressed?
+    bool bNoDuplicatesForSelection = true;
+
+    if (bDuplicateRows)
+    {
+        std::vector<uno::Sequence<uno::Any>> aUnionArray;
+        sal_uInt32 nRow = bIncludesHeaders ? 1 : 0;
+        sal_uInt32 lRows = aDataArray.getLength();
+
+        while (nRow < lRows)
+        {
+            if (lcl_CheckInArray(aUnionArray, aDataArray[nRow], rSelectedEntries, true))
+            {
+                for (int nCol = aRange.StartColumn; nCol <= aRange.EndColumn; ++nCol)
+                {
+                    bNoDuplicatesForSelection = false;
+                    DoneBlockMode( nModifier );
+                    nModifier = true;
+                    InitBlockMode( nCol, aRange.StartRow + nRow, aRange.Sheet, false, false);
+                }
+            }
+            else
+            {
+                aUnionArray.push_back(aDataArray[nRow]);
+            }
+            ++nRow;
+        }
+    }
+    else
+    {
+        std::vector<uno::Sequence<uno::Any>> aUnionArray;
+        sal_uInt32 nColumn = bIncludesHeaders ? 1 : 0;
+        sal_uInt32 lColumns = aDataArray[0].getLength();
+
+        while (nColumn < lColumns)
+        {
+            uno::Sequence<uno::Any> aSeq;
+            aSeq.realloc(rSelectedEntries.size());
+            for (size_t i = 0; i < rSelectedEntries.size(); ++i)
+                aSeq.getArray()[i] = aDataArray[rSelectedEntries[i]][nColumn];
+
+            if (lcl_CheckInArray(aUnionArray, aSeq, rSelectedEntries, false))
+            {
+                for (int nRow = aRange.StartRow; nRow <= aRange.EndRow; ++nRow)
+                {
+                    bNoDuplicatesForSelection = false;
+                    DoneBlockMode( nModifier );
+                    nModifier = true;
+                    InitBlockMode( aRange.StartColumn + nColumn, nRow, aRange.Sheet, false, false);
+                }
+            }
+            else
+            {
+                aUnionArray.push_back(aSeq);
+            }
+            ++nColumn;
+        }
+
+    }
+
+    if (bNoDuplicatesForSelection)
+        Unmark();
+}
+
+void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
+                                const css::table::CellRangeAddress& aRange,
                                 bool bIncludesHeaders, bool bDuplicateRows,
                                 const std::vector<int>& rSelectedEntries)
 {
@@ -2010,10 +2110,9 @@ void ScTabViewShell::HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
 
     comphelper::ScopeGuard aUndoContextGuard(
-        [&xUndoManager, &xLockable, &xModel, &xCalculatable, &bAutoCalc, &bRemove, &rDoc] {
+        [&xUndoManager, &xLockable, &xModel, &xCalculatable, &bAutoCalc, &rDoc] {
         xUndoManager->getUndoManager()->leaveUndoContext();
-        if (bRemove)
-            xCalculatable->enableAutomaticCalculation(bAutoCalc);
+        xCalculatable->enableAutomaticCalculation(bAutoCalc);
         xLockable->removeActionLock();
         if (xModel->hasControllersLocked())
             xModel->unlockControllers();
@@ -2023,12 +2122,8 @@ void ScTabViewShell::HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj
     rDoc.LockAdjustHeight();
     xModel->lockControllers();
     xLockable->addActionLock();
-    if (bRemove)
-        xCalculatable->enableAutomaticCalculation(true);
+    xCalculatable->enableAutomaticCalculation(true);
     xUndoManager->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
-
-    bool nModifier = false;         // modifier key pressed?
-    bool bNoDuplicatesForSelection = true;
 
     if (bDuplicateRows)
     {
@@ -2041,23 +2136,10 @@ void ScTabViewShell::HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj
         {
             if (lcl_CheckInArray(aUnionArray, aDataArray[nRow], rSelectedEntries, true))
             {
-                if (bRemove)
-                {
-                    lcl_RemoveCells(ActiveSheet, aRange.Sheet, aRange.StartColumn,
-                                    aRange.StartRow + nRow - nDeleteCount, aRange.EndColumn,
-                                    aRange.StartRow + nRow - nDeleteCount, true);
-                    ++nDeleteCount;
-                }
-                else
-                {
-                    for (int nCol = aRange.StartColumn; nCol <= aRange.EndColumn; ++nCol)
-                    {
-                        bNoDuplicatesForSelection = false;
-                        DoneBlockMode( nModifier );
-                        nModifier = true;
-                        InitBlockMode( nCol, aRange.StartRow + nRow, aRange.Sheet, false, false);
-                    }
-                }
+                lcl_RemoveCells(ActiveSheet, aRange.Sheet, aRange.StartColumn,
+                                aRange.StartRow + nRow - nDeleteCount, aRange.EndColumn,
+                                aRange.StartRow + nRow - nDeleteCount, true);
+                ++nDeleteCount;
             }
             else
             {
@@ -2082,23 +2164,10 @@ void ScTabViewShell::HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj
 
             if (lcl_CheckInArray(aUnionArray, aSeq, rSelectedEntries, false))
             {
-                if (bRemove)
-                {
-                    lcl_RemoveCells(ActiveSheet, aRange.Sheet,
-                                    aRange.StartColumn + nColumn - nDeleteCount, aRange.StartRow,
-                                    aRange.StartColumn + nColumn - nDeleteCount, aRange.EndRow, false);
-                    ++nDeleteCount;
-                }
-                else
-                {
-                    for (int nRow = aRange.StartRow; nRow <= aRange.EndRow; ++nRow)
-                    {
-                        bNoDuplicatesForSelection = false;
-                        DoneBlockMode( nModifier );
-                        nModifier = true;
-                        InitBlockMode( aRange.StartColumn + nColumn, nRow, aRange.Sheet, false, false);
-                    }
-                }
+                lcl_RemoveCells(ActiveSheet, aRange.Sheet,
+                                aRange.StartColumn + nColumn - nDeleteCount, aRange.StartRow,
+                                aRange.StartColumn + nColumn - nDeleteCount, aRange.EndRow, false);
+                ++nDeleteCount;
             }
             else
             {
@@ -2108,9 +2177,6 @@ void ScTabViewShell::HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj
         }
 
     }
-
-    if (bNoDuplicatesForSelection && !bRemove)
-        Unmark();
 }
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,

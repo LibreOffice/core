@@ -273,8 +273,12 @@ public:
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 
-    void HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
-                                const css::table::CellRangeAddress& aRange, bool bRemove,
+    void HandleDuplicateRecordsHighlight(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
+                                const css::table::CellRangeAddress& aRange,
+                                bool bIncludesHeaders, bool bDuplicateRows,
+                                const std::vector<int>& rSelectedEntries);
+    void HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
+                                const css::table::CellRangeAddress& aRange,
                                 bool bIncludesHeaders, bool bDuplicateRows,
                                 const std::vector<int>& rSelectedEntries);
     rtl::Reference<ScTableSheetObj> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
