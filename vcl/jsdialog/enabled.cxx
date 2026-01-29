@@ -690,10 +690,30 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
     {
         OUString sEntry(entry);
 
-        if (sEntry.startsWith("modules/"))
+        // consider schart and smath as 'common', but other modules specific to a toplevel application
+        if (sEntry.startsWith("modules/") && !sEntry.startsWith("modules/schart/") && !sEntry.startsWith("modules/smath/"))
+            continue;
+        //TODO:  This one should be selectable, but that seems to be broken
+        else if (entry == u"modules/schart/ui/sidebarerrorbar.ui")
+            continue;
+        // Skip this one, it can't appear in practice
+        else if (entry == u"modules/smath/ui/sidebarproperties_math.ui")
+            continue;
+        // Skip this one, theme related, disabled at the moment
+        else if (entry == u"modules/schart/ui/sidebarcolors.ui")
+            continue;
+        // Skip this one, theme related, disabled at the moment
+        else if (entry == u"modules/schart/ui/sidebargradients.ui")
+            continue;
+        // Skip this one, theme related, disabled at the moment
+        else if (entry == u"modules/schart/ui/sidebartheme.ui")
+            continue;
+        // Skip this one, in practice it appears in draw/impress
+        // TODO: it should probably be made to appear in writer too
+        else if (entry == u"svx/ui/mediaplayback.ui")
             continue;
         // Skip this one, I don't think it can appear in practice
-        if (entry == u"svx/ui/sidebargallery.ui")
+        else if (entry == u"svx/ui/sidebargallery.ui")
             continue;
         // Skip this one, its context means it cannot appear in writer
         else if (entry == u"svx/ui/sidebarshadow.ui")
