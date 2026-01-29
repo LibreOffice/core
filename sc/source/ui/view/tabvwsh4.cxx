@@ -1927,14 +1927,14 @@ uno::Reference<css::sheet::XSpreadsheet> ScTabViewShell::GetRangeWithSheet(css::
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
 
     // spreadsheet's extension of com.sun.star.frame.Controller service
-    uno::Reference<sheet::XSpreadsheetView> SpreadsheetDocument(xController, uno::UNO_QUERY);
-    uno::Reference<sheet::XSpreadsheet> ActiveSheet = SpreadsheetDocument->getActiveSheet();
+    ScTabViewObj* pSpreadsheetDocument = dynamic_cast<ScTabViewObj*>(xController.get());
+    assert(pSpreadsheetDocument);
+    uno::Reference<sheet::XSpreadsheet> ActiveSheet = pSpreadsheetDocument->getActiveSheet();
 
     if (!bHasUnoArguments)
     {
         // get the selection supplier, extract selection in XSheetCellRange
-        uno::Reference<view::XSelectionSupplier> xSelectionSupplier(SpreadsheetDocument, uno::UNO_QUERY);
-        uno::Any Selection = xSelectionSupplier->getSelection();
+        uno::Any Selection = pSpreadsheetDocument->getSelection();
         uno::Reference<sheet::XSheetCellRange> SelectedCellRange;
         Selection >>= SelectedCellRange;
 
