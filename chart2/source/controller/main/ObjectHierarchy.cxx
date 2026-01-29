@@ -599,9 +599,17 @@ bool ObjectKeyNavigation::handleKeyEvent(
             else
                 bResult = down();
             break;
+        // allow 'Enter' to go down a level
+        case awt::Key::RETURN:
+            bResult = down();
+            break;
         case awt::Key::ESCAPE:
-            setCurrentSelection( ObjectIdentifier() );
-            bResult = true;
+            bResult = up(); // allow 'Esc' to go up a level if inside a sublevel
+            if (!bResult)
+            {
+                setCurrentSelection( ObjectIdentifier() );
+                bResult = true;
+            }
             break;
         default:
             bResult = false;
