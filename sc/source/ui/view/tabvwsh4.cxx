@@ -1877,22 +1877,6 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
         m_xColorSchemeChangesNotifier->addChangesListener(this);
 }
 
-static void lcl_RemoveCells(const uno::Reference<sheet::XSpreadsheet>& rSheet, sal_uInt16 nSheet,
-                     sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn,
-                     sal_uInt32 nEndRow, bool bRows)
-{
-    table::CellRangeAddress aCellRange(nSheet, nStartColumn, nStartRow, nEndColumn, nEndRow);
-    uno::Reference<sheet::XCellRangeMovement> xCRM(rSheet, uno::UNO_QUERY);
-
-    if (xCRM.is())
-    {
-        if (bRows)
-            xCRM->removeRange(aCellRange, sheet::CellDeleteMode_UP);
-        else
-            xCRM->removeRange(aCellRange, sheet::CellDeleteMode_LEFT);
-    }
-}
-
 /*  For rows (bool bRows), I am passing reference to already existing sequence, and comparing the required
  *  columns, whereas for columns, I am creating a sequence for each, with only the checked entries
  *  in the dialog.
@@ -2136,9 +2120,10 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
         {
             if (lcl_CheckInArray(aUnionArray, aDataArray[nRow], rSelectedEntries, true))
             {
-                lcl_RemoveCells(ActiveSheet, aRange.Sheet, aRange.StartColumn,
-                                aRange.StartRow + nRow - nDeleteCount, aRange.EndColumn,
-                                aRange.StartRow + nRow - nDeleteCount, true);
+                table::CellRangeAddress aCellRange(aRange.Sheet, aRange.StartColumn,
+                                            aRange.StartRow + nRow - nDeleteCount,
+                                            aRange.EndColumn, aRange.StartRow + nRow - nDeleteCount);
+                ActiveSheet->removeRange(aCellRange, sheet::CellDeleteMode_UP);
                 ++nDeleteCount;
             }
             else
@@ -2164,9 +2149,10 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
 
             if (lcl_CheckInArray(aUnionArray, aSeq, rSelectedEntries, false))
             {
-                lcl_RemoveCells(ActiveSheet, aRange.Sheet,
-                                aRange.StartColumn + nColumn - nDeleteCount, aRange.StartRow,
-                                aRange.StartColumn + nColumn - nDeleteCount, aRange.EndRow, false);
+                table::CellRangeAddress aCellRange(aRange.Sheet,
+                            aRange.StartColumn + nColumn - nDeleteCount, aRange.StartRow,
+                            aRange.StartColumn + nColumn - nDeleteCount, aRange.EndRow);
+                ActiveSheet->removeRange(aCellRange, sheet::CellDeleteMode_LEFT);
                 ++nDeleteCount;
             }
             else
