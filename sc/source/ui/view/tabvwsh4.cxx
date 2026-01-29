@@ -2137,19 +2137,27 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
     if (bDuplicateRows)
     {
         std::vector<uno::Sequence<uno::Any>> aUnionArray;
-        sal_uInt32 nRow = bIncludesHeaders ? 1 : 0;
-        sal_uInt32 lRows = aDataArray.getLength();
+        SCROW nRow = bIncludesHeaders ? 1 : 0;
+        SCROW lRows = aDataArray.getLength();
         sal_uInt32 nDeleteCount = 0;
+        SCROW nPrevRowDeleted = -1;
+        std::vector<table::CellRangeAddress> aDelRanges;
 
         while (nRow < lRows)
         {
             if (lcl_CheckInArrayRows(aUnionArray, aDataArray[nRow], rSelectedEntries))
             {
-                table::CellRangeAddress aCellRange(aRange.Sheet, aRange.StartColumn,
-                                            aRange.StartRow + nRow - nDeleteCount,
-                                            aRange.EndColumn, aRange.StartRow + nRow - nDeleteCount);
-                ActiveSheet->removeRange(aCellRange, sheet::CellDeleteMode_UP);
+                if (nPrevRowDeleted + 1 == nRow)
+                    aDelRanges.back().EndRow++;
+                else
+                {
+                    table::CellRangeAddress aCellRange(aRange.Sheet, aRange.StartColumn,
+                                                aRange.StartRow + nRow - nDeleteCount,
+                                                aRange.EndColumn, aRange.StartRow + nRow - nDeleteCount);
+                    aDelRanges.push_back(aCellRange);
+                }
                 ++nDeleteCount;
+                nPrevRowDeleted = nRow;
             }
             else
             {
@@ -2157,6 +2165,8 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
             }
             ++nRow;
         }
+        for (const table::CellRangeAddress & rRange : aDelRanges)
+            ActiveSheet->removeRange(rRange, sheet::CellDeleteMode_UP);
     }
     else
     {
