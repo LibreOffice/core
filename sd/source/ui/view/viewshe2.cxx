@@ -644,7 +644,8 @@ sal_uInt16 ViewShell::GetPageZoom() const
 
 void ViewShell::RememberPageZoom(const sal_uInt16 nZoom)
 {
-    if (getCurrentPage()->IsCanvasPage())
+    SdPage* pPage = getCurrentPage();
+    if (pPage && pPage->IsCanvasPage())
         mnCanvasPageZoom = nZoom;
     else
         mnNonCanvasPageZoom = nZoom;
