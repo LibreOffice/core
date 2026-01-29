@@ -781,9 +781,11 @@ void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
     for(size_t nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; ++nIdx)
     {
         SdrObject* pSdrObject(rObjList.GetObjectForNavigationPosition(nIdx));
-        const SdrObjList* pChildren(pSdrObject->getChildrenOfSdrObject());
-        const bool bIsGroup(nullptr != pChildren);
-        if(!bIsGroup)
+        if (const SdrObjList* pChildren = pSdrObject->getChildrenOfSdrObject())
+        {
+            ImplReformatAllEdgeObjects(*pChildren);
+        }
+        else
         {
             // Check IsVirtualObj because sometimes we get SwDrawVirtObj here
             if (pSdrObject->GetObjIdentifier() == SdrObjKind::Edge
@@ -792,10 +794,6 @@ void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
                 SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pSdrObject);
                 pSdrEdgeObj->Reformat();
             }
-        }
-        else
-        {
-            ImplReformatAllEdgeObjects(*pChildren);
         }
     }
 }
