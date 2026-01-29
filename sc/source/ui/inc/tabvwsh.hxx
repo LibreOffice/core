@@ -273,11 +273,11 @@ public:
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 
-    void HandleDuplicateRecords(const css::uno::Reference<css::sheet::XSpreadsheet>& ActiveSheet,
+    void HandleDuplicateRecords(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
                                 const css::table::CellRangeAddress& aRange, bool bRemove,
                                 bool bIncludesHeaders, bool bDuplicateRows,
                                 const std::vector<int>& rSelectedEntries);
-    css::uno::Reference<css::sheet::XSpreadsheet> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
+    rtl::Reference<ScTableSheetObj> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
     void            ExtendSingleSelection(css::table::CellRangeAddress& rRangeData);
 
     const ScInputHandler* GetInputHandler() const { return mpInputHandler.get(); }

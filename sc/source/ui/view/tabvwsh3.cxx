@@ -47,6 +47,7 @@
 #include <protectiondlg.hxx>
 #include <duplicaterecordsdlg.hxx>
 #include <markdata.hxx>
+#include <cellsuno.hxx>
 
 #include <svl/ilstitem.hxx>
 #include <vector>
@@ -842,7 +843,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 using namespace com::sun::star;
                 table::CellRangeAddress aCellRange;
-                uno::Reference<sheet::XSpreadsheet> xActiveSheet;
+                rtl::Reference<ScTableSheetObj> xActiveSheet;
                 DuplicatesResponse aResponse;
                 bool bHasData = true;
 
