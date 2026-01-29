@@ -930,7 +930,7 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame const * pFrame )
     if ( pSfxApp->IsDowning() || IsLoading() || !pFrame || pFrame->GetFrame().IsClosing_Impl() )
         return;
 
-    const SfxBoolItem* pHiddenItem = pMedium->GetItemSet().GetItem(SID_HIDDEN, false);
+    const SfxBoolItem* pHiddenItem = pMedium ? pMedium->GetItemSet().GetItem(SID_HIDDEN, false) : nullptr;
     if ( !pHiddenItem || !pHiddenItem->GetValue() )
     {
         SfxEventHintId nId = pImpl->nEventId;
