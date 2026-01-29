@@ -1877,13 +1877,12 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
         m_xColorSchemeChangesNotifier->addChangesListener(this);
 }
 
-/*  For rows (bool bRows), I am passing reference to already existing sequence, and comparing the required
- *  columns, whereas for columns, I am creating a sequence for each, with only the checked entries
- *  in the dialog.
+/*  For rows I am passing reference to already existing sequence, and comparing the required
+ *  columns.
  */
-static bool lcl_CheckInArray(std::vector<uno::Sequence<uno::Any>>& nUniqueRecords,
+static bool lcl_CheckInArrayRows(std::vector<uno::Sequence<uno::Any>>& nUniqueRecords,
                              const uno::Sequence<uno::Any>& nCurrentRecord,
-                             const std::vector<int>& rSelectedEntries, bool bRows)
+                             const std::vector<int>& rSelectedEntries)
 {
     for (size_t m = 0; m < nUniqueRecords.size(); ++m)
     {
@@ -1891,8 +1890,34 @@ static bool lcl_CheckInArray(std::vector<uno::Sequence<uno::Any>>& nUniqueRecord
         for (size_t n = 0; n < rSelectedEntries.size(); ++n)
         {
             // when the first different element is found
-            int nColumn = (bRows ? rSelectedEntries[n] : n);
-            if (nUniqueRecords[m][nColumn] != (bRows ? nCurrentRecord[rSelectedEntries[n]] : nCurrentRecord[n]))
+            int nColumn = rSelectedEntries[n];
+            if (nUniqueRecords[m][nColumn] != nCurrentRecord[rSelectedEntries[n]])
+            {
+                bIsDuplicate = false;
+                break;
+            }
+        }
+
+        if (bIsDuplicate)
+            return true;
+    }
+    return false;
+}
+/*  For columns, I am creating a sequence for each, with only the checked entries
+ *  in the dialog.
+ */
+static bool lcl_CheckInArrayCols(std::vector<uno::Sequence<uno::Any>>& nUniqueRecords,
+                             const uno::Sequence<uno::Any>& nCurrentRecord,
+                             const std::vector<int>& rSelectedEntries)
+{
+    for (size_t m = 0; m < nUniqueRecords.size(); ++m)
+    {
+        bool bIsDuplicate = true;
+        for (size_t n = 0; n < rSelectedEntries.size(); ++n)
+        {
+            // when the first different element is found
+            int nColumn = n;
+            if (nUniqueRecords[m][nColumn] != nCurrentRecord[n])
             {
                 bIsDuplicate = false;
                 break;
@@ -2016,7 +2041,7 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
 
         while (nRow < lRows)
         {
-            if (lcl_CheckInArray(aUnionArray, aDataArray[nRow], rSelectedEntries, true))
+            if (lcl_CheckInArrayRows(aUnionArray, aDataArray[nRow], rSelectedEntries))
             {
                 for (int nCol = aRange.StartColumn; nCol <= aRange.EndColumn; ++nCol)
                 {
@@ -2046,7 +2071,7 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
             for (size_t i = 0; i < rSelectedEntries.size(); ++i)
                 aSeq.getArray()[i] = aDataArray[rSelectedEntries[i]][nColumn];
 
-            if (lcl_CheckInArray(aUnionArray, aSeq, rSelectedEntries, false))
+            if (lcl_CheckInArrayCols(aUnionArray, aSeq, rSelectedEntries))
             {
                 for (int nRow = aRange.StartRow; nRow <= aRange.EndRow; ++nRow)
                 {
@@ -2118,7 +2143,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
 
         while (nRow < lRows)
         {
-            if (lcl_CheckInArray(aUnionArray, aDataArray[nRow], rSelectedEntries, true))
+            if (lcl_CheckInArrayRows(aUnionArray, aDataArray[nRow], rSelectedEntries))
             {
                 table::CellRangeAddress aCellRange(aRange.Sheet, aRange.StartColumn,
                                             aRange.StartRow + nRow - nDeleteCount,
@@ -2147,7 +2172,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
             for (size_t i = 0; i < rSelectedEntries.size(); ++i)
                 aSeq.getArray()[i] = aDataArray[rSelectedEntries[i]][nColumn];
 
-            if (lcl_CheckInArray(aUnionArray, aSeq, rSelectedEntries, false))
+            if (lcl_CheckInArrayCols(aUnionArray, aSeq, rSelectedEntries))
             {
                 table::CellRangeAddress aCellRange(aRange.Sheet,
                             aRange.StartColumn + nColumn - nDeleteCount, aRange.StartRow,
