@@ -173,8 +173,6 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
         m_xZoomValue->hide();
     }
 
-    if(!SvtCJKOptions::IsVerticalTextEnabled() )
-        m_xVRulerRightCBox->hide();
     m_xVRulerCBox->connect_toggled(LINK(this, SwContentOptPage, VertRulerHdl ));
 
     for (const auto& [pId, eFUnit] : STR_ARR_METRIC)
