@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -32,7 +33,8 @@
 #include <svl/numformat.hxx>
 #include <svl/inethist.hxx>
 #include <sfx2/objsh.hxx>
-#include <comphelper/lok.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -890,6 +892,21 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     }
 
     return aRet;
+}
+
+void ScHeaderFieldData::SetDocNames(const INetURLObject& rURLObj)
+{
+    aLongDocName = rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+    if (!aLongDocName.isEmpty())
+    {
+        aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+        // The path is useless in jailed kit mode, so present a view that the
+        // document is in a Documents toplevel directory for LibreOfficeKit::isActive()
+        if (comphelper::LibreOfficeKit::isActive())
+            aLongDocName = "/" + SfxResId(STR_GID_DOCUMENT) + "/" + aShortDocName;
+    }
+    else
+        aShortDocName = aLongDocName = aTitle;
 }
 
 //                          field data

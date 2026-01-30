@@ -876,12 +876,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     else
         rData.aTitle = pDocShell->GetTitle();
 
-    const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
-    rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
-    if ( !rData.aLongDocName.isEmpty() )
-        rData.aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
-    else
-        rData.aShortDocName = rData.aLongDocName = rData.aTitle;
+    rData.SetDocNames(pDocShell->GetMedium()->GetURLObject());
     rData.nPageNo       = pPreview->GetPageNo() + 1;
 
     bool bAllTested = pPreview->AllTested();

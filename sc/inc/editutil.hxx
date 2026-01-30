@@ -29,6 +29,7 @@
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 
+class INetURLObject;
 class ScDocument;
 class ScPatternAttr;
 class ScEditEngineDefaulter;
@@ -213,6 +214,10 @@ struct ScHeaderFieldData
     SvxNumType  eNumType;
 
     ScHeaderFieldData();
+
+    // Set aLongDocName and aShortDocName from rURLObj,
+    // falling back back to aTitle,
+    void SetDocNames(const INetURLObject& rURLObj);
 };
 
 // for headers/footers with fields

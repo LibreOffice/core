@@ -1103,12 +1103,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     else
         aFieldData.aTitle = pDocShell->GetTitle();
 
-    const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
-    aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
-    if ( !aFieldData.aLongDocName.isEmpty() )
-        aFieldData.aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
-    else
-        aFieldData.aShortDocName = aFieldData.aLongDocName = aFieldData.aTitle;
+    aFieldData.SetDocNames(pDocShell->GetMedium()->GetURLObject());
 
     //  Printer settings (Orientation, Paper) at DoPrint
 }

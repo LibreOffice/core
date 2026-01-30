@@ -25,10 +25,14 @@
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 
+#include <comphelper/lok.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
 #include <editeng/measfld.hxx>
 #include <editeng/unonames.hxx>
+
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 
 #include <tools/debug.hxx>
 
@@ -754,17 +758,30 @@ OUString SvxExtFileField::GetFormatted() const
     }
     else if( INetProtocol::File == aURLObj.GetProtocol() )
     {
+        // Note: The path is useless in jailed kit mode, so present a view that
+        // the document is in a Documents toplevel directory for LibreOfficeKit::isActive()
         switch( eFormat )
         {
             case SvxFileFormat::PathFull:
-                aString = aURLObj.getFSysPath(FSysStyle::Detect);
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    aString = "/" + SfxResId(STR_GID_DOCUMENT) + "/" +
+                        aURLObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous);
+                }
+                else
+                    aString = aURLObj.getFSysPath(FSysStyle::Detect);
             break;
 
             case SvxFileFormat::PathOnly:
-                aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
-                // #101742# Leave trailing slash at the pathname
-                aURLObj.setFinalSlash();
-                aString = aURLObj.getFSysPath(FSysStyle::Detect);
+                if (comphelper::LibreOfficeKit::isActive())
+                    aString = "/" + SfxResId(STR_GID_DOCUMENT);
+                else
+                {
+                    aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
+                    // #101742# Leave trailing slash at the pathname
+                    aURLObj.setFinalSlash();
+                    aString = aURLObj.getFSysPath(FSysStyle::Detect);
+                }
             break;
 
             case SvxFileFormat::NameOnly:
