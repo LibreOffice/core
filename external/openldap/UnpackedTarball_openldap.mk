@@ -24,7 +24,6 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,openldap,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,openldap,\
 	external/openldap/openldap-2.4.44.patch.1 \
-	external/openldap/0001-const-up-oids.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
