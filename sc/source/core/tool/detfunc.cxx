@@ -95,9 +95,12 @@ private:
     SfxItemSet  aFromTabSet;
     SfxItemSet  aCircleSet;         //TODO: individually ?
     sal_uInt16  nMaxLevel;
+    bool mbModelWasLocked;
+    SdrModel* mpModel;
 
 public:
     explicit ScDetectiveData( SdrModel* pModel );
+    ~ScDetectiveData();
 
     SfxItemSet& GetBoxSet()     { return aBoxSet; }
     SfxItemSet& GetArrowSet()   { return aArrowSet; }
@@ -127,7 +130,8 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aToTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END> ),
     aFromTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END> ),
     aCircleSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END> ),
-    nMaxLevel(0)
+    nMaxLevel(0),
+    mpModel(pModel)
 {
 
     aBoxSet.Put( XLineColorItem( OUString(), ScDetectiveFunc::GetArrowColor() ) );
@@ -178,6 +182,15 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aCircleSet.Put( XLineColorItem( OUString(), ScDetectiveFunc::GetErrorColor() ) );
     aCircleSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     aCircleSet.Put( XLineWidthItem( 55 ) ); // 54 = 1 Pixel
+
+    // lock model during calculation to avoid some broadcasting work
+    mbModelWasLocked = mpModel->isLocked();
+    pModel->setLock(true);
+}
+
+ScDetectiveData::~ScDetectiveData()
+{
+    mpModel->setLock(mbModelWasLocked);
 }
 
 void ScDetectiveFunc::Modified()
