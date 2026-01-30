@@ -5005,8 +5005,14 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
             if (rGluePoint.First.Value >>= nIdx1)
             {
                 bValidIdx1 = rGluePoint.First.Type == EnhancedCustomShapeParameterType::EQUATION;
-                // I would assume that any EQUATION must define a valid index value.
-                assert(!bValidIdx1 || (nIdx1 >= 0 && nIdx1 < aEquations.getLength()));
+                assert(!bValidIdx1 || nIdx1 >= 0); // It is always an index at least
+                // tdf#166335
+                // Sadly, these equation indexes  point to a (changed/enlarged) parsed collection,
+                // but aEquations is the un-parsed collection.
+                // For larger values, there is a good chance that the wrong equation is used.
+                // However, this is so complicated that we ignore that,
+                // and simply make sure we don't export corruption. Inaccuracy is fine...
+                bValidIdx1 = bValidIdx1 && nIdx1 < aEquations.getLength();
             }
             else
                 continue;
@@ -5014,7 +5020,8 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
             if (rGluePoint.Second.Value >>= nIdx2)
             {
                 bValidIdx2 = rGluePoint.Second.Type == EnhancedCustomShapeParameterType::EQUATION;
-                assert(!bValidIdx2 || (nIdx2 >= 0 && nIdx2 < aEquations.getLength()));
+                assert(!bValidIdx2 || nIdx2 >= 0);
+                bValidIdx2 = bValidIdx2 && nIdx2 < aEquations.getLength();
             }
             else
                 continue;
