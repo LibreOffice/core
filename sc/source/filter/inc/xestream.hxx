@@ -251,7 +251,8 @@ public:
     XclXmlUtils(const XclXmlUtils&) = delete;
     XclXmlUtils& operator=(const XclXmlUtils&) = delete;
 
-    static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue);
+    static void GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue,
+                                       bool* pbWriteFormula = nullptr );
     static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 
     static OString ToOString( const Color& rColor );

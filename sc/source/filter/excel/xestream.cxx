@@ -665,7 +665,8 @@ static const char* lcl_GetErrorString( FormulaError nScErrCode )
     }
 }
 
-void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType, OUString& rsValue )
+void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType,
+                                          OUString& rsValue, bool* pbWriteFormula )
 {
     sc::FormulaResultValue aResValue = rCell.GetResult();
 
@@ -674,6 +675,8 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         case sc::FormulaResultValue::Error:
             rsType = "e";
             rsValue = ToOUString(lcl_GetErrorString(aResValue.mnError));
+            if ( pbWriteFormula )
+                *pbWriteFormula = XclTools::IsFormulaWithErrorValid(aResValue.mnError);
         break;
         case sc::FormulaResultValue::Value:
             rsType = rCell.GetFormatType() == SvNumFormatType::LOGICAL
