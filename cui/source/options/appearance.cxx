@@ -580,14 +580,10 @@ void SvxAppearanceTabPage::UpdateOldAppearance()
         return;
 
     ColorConfigValue aValue;
-    bool bIsDarkModeEnabled = IsDarkModeEnabled();
     for (size_t i = 0; i < WINDOWCOLOR; ++i)
     {
-        if (bIsDarkModeEnabled)
-            aValue.nDarkColor = ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i), 1);
-        else
-            aValue.nLightColor = ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i), 0);
-
+        aValue.nDarkColor = COL_AUTO;
+        aValue.nLightColor = COL_AUTO;
         pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
     }
 }
