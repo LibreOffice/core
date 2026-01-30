@@ -1790,8 +1790,13 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                             }
                             else
                                 sListBuf.append(aToken);
+
+                            OUString sEscaped(aToken);
+                            if (aToken.find('"') != std::u16string_view::npos)
+                                sEscaped = sEscaped.replaceAll("\"", "\"\"");
+
                             mxString1->Append( aToken );
-                            sFormulaBuf.append( aToken );
+                            sFormulaBuf.append(sEscaped);
                             if (nStringIx<0)
                                 break;
                             sal_Unicode cUnicodeChar = 0;
