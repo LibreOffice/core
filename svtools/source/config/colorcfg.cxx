@@ -875,6 +875,19 @@ void EditableColorConfig::Commit()
     m_bModified = false;
 }
 
+void EditableColorConfig::TemporarilyLoadAndEnableThemes()
+{
+    if (!ThemeColors::IsThemeLoaded())
+    {
+        // extension to registry
+        m_pImpl->Load(GetCurrentSchemeName());
+        m_pImpl->CommitCurrentSchemeName();
+
+        // // registry to theme
+        ColorConfig::LoadThemeColorsFromRegistry();
+    }
+}
+
 void EditableColorConfig::DisableBroadcast()
 {
     m_pImpl->BlockBroadcasts(true);

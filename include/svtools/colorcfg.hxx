@@ -341,6 +341,7 @@ public:
     void                        ClearModified() {m_bModified = false;}
     bool                        IsModified() const {return m_bModified;}
     void                        Commit();
+    void                        TemporarilyLoadAndEnableThemes();
 
     void                        DisableBroadcast();
     void                        EnableBroadcast();

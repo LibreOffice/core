@@ -145,8 +145,11 @@ void SvxAppearanceTabPage::LoadSchemeList()
 SvxAppearanceTabPage::~SvxAppearanceTabPage()
 {
     if (m_bRestartRequired)
+    {
+        pColorConfig->TemporarilyLoadAndEnableThemes();
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
                                         svtools::RESTART_REASON_THEME_CHANGE);
+    }
 }
 
 std::unique_ptr<SfxTabPage> SvxAppearanceTabPage::Create(weld::Container* pPage,
