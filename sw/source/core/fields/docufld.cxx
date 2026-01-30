@@ -37,6 +37,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
@@ -55,6 +56,8 @@
 #include <swmodule.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <charfmt.hxx>
@@ -436,9 +439,14 @@ OUString SwFileNameFieldType::Expand(SwFileNameFormat nFormat) const
     if( pDShell && pDShell->HasName() )
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
+        // Note: The path is useless in jailed kit mode, so present a view that
+        // the document is in a Documents toplevel directory for LibreOfficeKit::isActive()
         switch( nFormat & ~SwFileNameFormat::Fixed )
         {
             case SwFileNameFormat::Path:
+                if (comphelper::LibreOfficeKit::isActive())
+                    aRet = "/" + SfxResId(STR_GID_DOCUMENT);
+                else
                 {
                     if( INetProtocol::File == rURLObj.GetProtocol() )
                     {
@@ -470,12 +478,17 @@ OUString SwFileNameFieldType::Expand(SwFileNameFormat nFormat) const
                 break;
 
             default:
-                if( INetProtocol::File == rURLObj.GetProtocol() )
-                    aRet = rURLObj.GetFull();
+                if (comphelper::LibreOfficeKit::isActive())
+                    aRet = "/" + SfxResId(STR_GID_DOCUMENT) + "/" + rURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
                 else
-                    aRet = URIHelper::removePassword(
-                                    rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                    INetURLObject::EncodeMechanism::WasEncoded, URL_DECODE );
+                {
+                    if( INetProtocol::File == rURLObj.GetProtocol() )
+                        aRet = rURLObj.GetFull();
+                    else
+                        aRet = URIHelper::removePassword(
+                                        rURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+                                        INetURLObject::EncodeMechanism::WasEncoded, URL_DECODE );
+                }
         }
     }
     return aRet;
