@@ -207,7 +207,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
                 if(nActNumLvl & nMask)
                 {
                     SvxNumberFormat aFmt(aTmpRule.GetLevel(i));
-                    if (nSId == FN_SVX_SET_BULLET)
+                    if (nSId == FN_SVX_SET_BULLET && bToggle)
                     {
                         // If changing to a bullet, then make its format and indent has a good
                         // default, similar to what the master page offers:
