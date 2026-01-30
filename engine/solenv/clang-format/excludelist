@@ -7569,7 +7569,6 @@ sc/inc/fielduno.hxx
 sc/inc/fillinfo.hxx
 sc/inc/filter.hxx
 sc/inc/filterentries.hxx
-sc/inc/filtopt.hxx
 sc/inc/filtuno.hxx
 sc/inc/fmtuno.hxx
 sc/inc/fonthelper.hxx
@@ -7891,7 +7890,6 @@ sc/source/core/tool/docoptio.cxx
 sc/source/core/tool/doubleref.cxx
 sc/source/core/tool/editdataarray.cxx
 sc/source/core/tool/editutil.cxx
-sc/source/core/tool/filtopt.cxx
 sc/source/core/tool/formulagroup.cxx
 sc/source/core/tool/formulalogger.cxx
 sc/source/core/tool/formulaopt.cxx

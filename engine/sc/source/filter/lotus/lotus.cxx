@@ -21,10 +21,10 @@
 #include <lotimpop.hxx>
 
 #include <editeng/justifyitem.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 #include <scerrors.hxx>
-#include <filtopt.hxx>
 #include <ftools.hxx>
 #include <tool.h>
 
@@ -43,7 +43,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     ImportLotus aLotusImport(aContext, *pStream, eSrc);
 
     ErrCode eRet;
-    if (ScFilterOptions().GetWK3Flag())
+    if ( officecfg::Office::Calc::Filter::Import::Lotus123::WK3::get() )
         eRet = aLotusImport.Read();
     else
         eRet = ErrCode(0xFFFFFFFF);  // force WK1 /WKS
