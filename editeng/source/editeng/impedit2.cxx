@@ -4300,7 +4300,18 @@ tools::Long ImpEditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine con
     // But the array might not be init yet, if using text ranger this method is called within CreateLines()...
     tools::Long nPortionTextWidth = rPortion.GetSize().Width();
     if ( ( rPortion.GetKind() == PortionKind::TEXT ) && rPortion.GetLen() && !GetTextRanger() )
-        nPortionTextWidth = rLine.GetCharPosArray()[nTextPortionStart + rPortion.GetLen() - 1 - rLine.GetStart()];
+    {
+        sal_Int32 nCharPosArrayIndex = nTextPortionStart + rPortion.GetLen() - 1 - rLine.GetStart();
+        if (nCharPosArrayIndex >= 0
+            && o3tl::make_unsigned(nCharPosArrayIndex) < rLine.GetCharPosArray().size())
+        {
+            nPortionTextWidth = rLine.GetCharPosArray()[nCharPosArrayIndex];
+        }
+        else
+        {
+            SAL_WARN("editeng", "ImpEditEngine::GetXPos: out of bounds access to rLine.GetCharPosArray()");
+        }
+    }
 
     if ( nTextPortionStart != nIndex )
     {
