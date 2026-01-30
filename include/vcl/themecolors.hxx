@@ -18,6 +18,26 @@ class VCL_DLLPUBLIC ThemeColors
     static ThemeColors m_aThemeColors;
 
 public:
+    /*
+     * In appearance.cxx, we show the restart dialog when the user
+     * changes the appearance modes. And before showing the restart
+     * dialog, we temporarily enable application theming so that the
+     * dialog's widgets are drawn with the old appearance colors and
+     * not a mix of old and new (which make it unreadable).
+     *
+     * But when some module is open, there a lot of DoPaint calls which
+     * create ColorConfig instances and call SetupTheme. There because
+     * it's automatic theme, the theme is disabled. As a result, restart
+     * dialog is drawn partially with the old appearance colors and
+     * partially with the new appearance colors, appearning broken.
+     *
+     * `m_bRestartDialogShown` is a way of preventing SetupTheme from
+     * disabling application theming even if it's Automatic theme. This
+     * is just a quick fix for co-25.04.
+     */
+    static bool m_bRestartDialogShown;
+
+public:
     static ThemeColors& GetThemeColors() { return m_aThemeColors; }
     static void SetThemeColors(const ThemeColors& rThemeColors) { m_aThemeColors = rThemeColors; }
 

@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/themecolors.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <map>
@@ -147,6 +148,7 @@ SvxAppearanceTabPage::~SvxAppearanceTabPage()
     if (m_bRestartRequired)
     {
         pColorConfig->TemporarilyLoadAndEnableThemes();
+        ThemeColors::m_bRestartDialogShown = true;
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
                                         svtools::RESTART_REASON_THEME_CHANGE);
     }

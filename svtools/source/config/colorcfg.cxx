@@ -482,7 +482,8 @@ void ColorConfig::SetupTheme()
     if (!officecfg::Office::Common::Appearance::LibreOfficeTheme::get()
         || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
     {
-        ThemeColors::SetThemeLoaded(false);
+        if (!ThemeColors::m_bRestartDialogShown)
+            ThemeColors::SetThemeLoaded(false);
         return;
     }
 
