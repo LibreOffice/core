@@ -943,7 +943,8 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = nullptr;
     OUString    sValue;
-    XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
+    bool bWriteFormula = true;
+    XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue, &bWriteFormula );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
             XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetStringBuf(), GetXclPos()).getStr(),
@@ -952,7 +953,6 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_cm, XML_vm, XML_ph
     );
 
-    bool bWriteFormula = true;
     bool bTagStarted = false;
     ScAddress aScPos( static_cast< SCCOL >( GetXclPos().mnCol ),
             static_cast< SCROW >( GetXclPos().mnRow ), rStrm.GetRoot().GetCurrScTab() );

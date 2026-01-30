@@ -119,6 +119,8 @@ public:
 
     /** Converts a Calc error code to an Excel error code. */
     static sal_uInt8    GetXclErrorCode( FormulaError nScError );
+    /** Checks if erroneous formula is valid (file can be opened) in Excel */
+    static bool         IsFormulaWithErrorValid( FormulaError nScError );
     /** Converts an Excel error code to a Calc error code. */
     static FormulaError GetScErrorCode( sal_uInt8 nXclError );
 

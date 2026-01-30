@@ -1566,6 +1566,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf137543XLSX)
         u"_xlfn.LET(_xlpm.first,B5:E15,_xlfn.CHOOSEROWS(_xlpm.first, 1, 3, 5, 7, 9, 11))");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170515_invalid_parameters)
+{
+    createScDoc("ods/tdf170515_invalid_parameters.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // No function must be saved into the XLSX, the parameters are invalid (Err:504 in Calc),
+    // and Excel fails to open the result
+    // Function with invalid parameter: =COUNTIF(BASE(1;14);"VV")
+    CPPUNIT_ASSERT_EQUAL(0,
+                         countXPathNodes(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f"));
+    // Function with invalid parameter: =COUNTIF("hello";"VV")
+    CPPUNIT_ASSERT_EQUAL(0,
+                         countXPathNodes(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[1]/x:f"));
+    // Function with invalid parameter: =COUNTIF(1;"VV")
+    CPPUNIT_ASSERT_EQUAL(0,
+                         countXPathNodes(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[1]/x:f"));
+    // Function with invalid parameter: =COUNTIF(TEXT(1;"#");"VV")
+    CPPUNIT_ASSERT_EQUAL(0,
+                         countXPathNodes(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[1]/x:f"));
+    // Just check one of them that it has the right text
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:v", u"#VALUE!");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

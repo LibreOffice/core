@@ -218,6 +218,16 @@ sal_uInt8 XclTools::GetXclErrorCode( FormulaError nScError )
     return EXC_ERR_NA;
 }
 
+bool XclTools::IsFormulaWithErrorValid( FormulaError nScError )
+{
+    switch ( nScError )
+    {
+        // illegal parameter, eg. COUNTIF(1, "x")
+        case FormulaError::IllegalParameter:       return false;
+        default:                                   return true;
+    }
+}
+
 FormulaError XclTools::GetScErrorCode( sal_uInt8 nXclError )
 {
     switch( nXclError )
