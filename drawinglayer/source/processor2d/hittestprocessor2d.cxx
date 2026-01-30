@@ -100,47 +100,47 @@ namespace drawinglayer::processor2d
 
         bool HitTestProcessor2D::checkFillHitWithTolerance(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const basegfx::B2DVector& rDiscreteHitTolerancePerAxis) const
+            const basegfx::B2DVector& rDiscreteHitTolerancePerAxis1) const
         {
-            bool bRetval(false);
+            // cheaper to transform hit tolerance and position than to transform potentially complex polypolygon
+            const basegfx::B2DHomMatrix& rInvMatrix = getViewInformation2D().getInverseObjectToViewTransformation();
+            basegfx::B2DVector aDiscreteHitTolerancePerAxis2
+                = rInvMatrix * rDiscreteHitTolerancePerAxis1;
+            basegfx::B2DPoint aHitPosition
+                = rInvMatrix * getDiscreteHitPosition();
+
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
-            aLocalPolyPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
 
             // get discrete range
             basegfx::B2DRange aPolygonRange(aLocalPolyPolygon.getB2DRange());
 
-            const bool bDiscreteHitToleranceUsed(rDiscreteHitTolerancePerAxis.getX() > 0
-                                                 || rDiscreteHitTolerancePerAxis.getY() > 0);
+            const bool bDiscreteHitToleranceUsed(aDiscreteHitTolerancePerAxis2.getX() > 0
+                                                 || aDiscreteHitTolerancePerAxis2.getY() > 0);
 
             if (bDiscreteHitToleranceUsed)
             {
-                aPolygonRange.grow(rDiscreteHitTolerancePerAxis);
+                aPolygonRange.grow(aDiscreteHitTolerancePerAxis2);
             }
 
             // do rough range test first
-            if(aPolygonRange.isInside(getDiscreteHitPosition()))
-            {
-                // if a HitTolerance is given, check for polygon edge hit in epsilon first
-                if(bDiscreteHitToleranceUsed &&
-                    basegfx::utils::isInEpsilonRange(
-                        aLocalPolyPolygon,
-                        getDiscreteHitPosition(),
-                        std::max(rDiscreteHitTolerancePerAxis.getX(), rDiscreteHitTolerancePerAxis.getY())))
-                {
-                    bRetval = true;
-                }
+            if(!aPolygonRange.isInside(aHitPosition))
+                return false;
 
-                // check for hit in filled polyPolygon
-                if(!bRetval && basegfx::utils::isInside(
+            // if a HitTolerance is given, check for polygon edge hit in epsilon first
+            if(bDiscreteHitToleranceUsed &&
+                basegfx::utils::isInEpsilonRange(
                     aLocalPolyPolygon,
-                    getDiscreteHitPosition(),
-                    true))
-                {
-                    bRetval = true;
-                }
+                    aHitPosition,
+                    std::max(aDiscreteHitTolerancePerAxis2.getX(), aDiscreteHitTolerancePerAxis2.getY())))
+            {
+                return true;
             }
 
-            return bRetval;
+            // check for hit in filled polyPolygon
+            return basegfx::utils::isInside(
+                aLocalPolyPolygon,
+                aHitPosition,
+                true);
         }
 
         void HitTestProcessor2D::checkBitmapHit(basegfx::B2DRange aRange, const Bitmap& rBitmap, const basegfx::B2DHomMatrix& rTransform)
