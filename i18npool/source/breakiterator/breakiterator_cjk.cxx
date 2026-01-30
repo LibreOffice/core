@@ -26,8 +26,8 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace i18npool {
-
+namespace i18npool
+{
 //      ----------------------------------------------------
 //      class BreakIterator_CJK
 //      ----------------------------------------------------;
@@ -37,12 +37,13 @@ BreakIterator_CJK::BreakIterator_CJK()
     cBreakIterator = u"com.sun.star.i18n.BreakIterator_CJK"_ustr;
 }
 
-namespace {
-bool isHangul( sal_Unicode cCh )
+namespace
 {
-    return (cCh >= 0xAC00 && cCh <= 0xD7AF) || (cCh >= 0x1100 && cCh <= 0x11FF) ||
-           (cCh >= 0xA960 && cCh <= 0xA97F) || (cCh >= 0xD7B0 && cCh <= 0xD7FF) ||
-           (cCh >= 0x3130 && cCh <= 0x318F);
+bool isHangul(sal_Unicode cCh)
+{
+    return (cCh >= 0xAC00 && cCh <= 0xD7AF) || (cCh >= 0x1100 && cCh <= 0x11FF)
+           || (cCh >= 0xA960 && cCh <= 0xA97F) || (cCh >= 0xD7B0 && cCh <= 0xD7FF)
+           || (cCh >= 0x3130 && cCh <= 0x318F);
 }
 }
 
@@ -51,11 +52,24 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     sal_Int32 nMinBreakPos, const LineBreakHyphenationOptions& hOptions,
     const LineBreakUserOptions& bOptions)
 {
-    auto fnIsForbiddenBreak = [&](sal_Int32 nBreakPos)
-    {
+    auto fnIsForbiddenBreak = [&](sal_Int32 nBreakPos) {
         return nBreakPos > 0
                && (bOptions.forbiddenBeginCharacters.indexOf(Text[nBreakPos]) != -1
                    || bOptions.forbiddenEndCharacters.indexOf(Text[nBreakPos - 1]) != -1);
+    };
+
+    auto fnIsNonBreak = [](sal_Unicode cChB) {
+        switch (cChB)
+        {
+            case 0x00A0: // No-break Space
+            case 0x2011: // Non-breaking Hyphen
+            case 0x202F: // Narrow No-break Space
+            case 0x2060: // Word Joinner
+            case 0xFEFF: // NWNBSP
+                return true;
+            default:
+                return false;
+        }
     };
 
     while (nStartPos > 0 && nStartPos < Text.getLength())
@@ -105,6 +119,13 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
                 nStartPos = nOldStartPos;
         }
 
+        // Formatting Marks
+        while (nStartPos > 0
+               && (fnIsNonBreak(Text[nStartPos]) || fnIsNonBreak(Text[nStartPos - 1])))
+        {
+            Text.iterateCodePoints(&nStartPos, -1);
+        }
+
         // tdf#130592: Fall back to the ICU breakiterator after applying CJK-specific rules
         auto stBreak = BreakIterator_Unicode::getLineBreak(Text, nStartPos, rLocale, nMinBreakPos,
                                                            hOptions, bOptions);
@@ -112,6 +133,27 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         {
             // Located break is valid under both iterators
             return stBreak;
+        }
+        if (nStartPos > stBreak.breakIndex)
+        {
+            // tdf#169590 Clarify the case where bOptions.applyForbiddenRules is False
+            if (!bOptions.applyForbiddenRules)
+            {
+                stBreak.breakIndex = nStartPos;
+                stBreak.breakType = BreakType::WORDBOUNDARY;
+                return stBreak;
+            }
+
+            // Respect user changes to forbidden character list
+            sal_Int32 nTempPos = stBreak.breakIndex;
+            Text.iterateCodePoints(&nTempPos);
+            if (nTempPos == nStartPos && !fnIsForbiddenBreak(nStartPos)
+                && !fnIsNonBreak(Text[nStartPos]))
+            {
+                stBreak.breakIndex = nStartPos;
+                stBreak.breakType = BreakType::WORDBOUNDARY;
+                return stBreak;
+            }
         }
 
         // CJK break is not valid; restart search from the next candidate
@@ -174,7 +216,6 @@ BreakIterator_ko::BreakIterator_ko()
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE(u"ko"_ustr, u"KR"_ustr));
     cBreakIterator = u"com.sun.star.i18n.BreakIterator_ko"_ustr;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
