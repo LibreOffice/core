@@ -3174,6 +3174,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aLineStart);
     const tools::Long nColumnWidth = GetColumnWidth(maPaperSize);
     sal_Int16 nColumn = 0;
+    sal_Int32 nUrlYHack = 0;
     for (sal_Int32 n = 0, nPortions = GetParaPortions().Count(); n < nPortions; ++n)
     {
         ParaPortion& rPortion = GetParaPortions().getRef(n);
@@ -3217,6 +3218,33 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                     nLineHeight += nVertLineSpacing;
                 MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin,
                                &aInfo.nHeightNeededToNotWrap);
+
+                // Position the actual line some lines down,
+                // if the previous line ended with a multiline hyperlink
+                if (nUrlYHack != 0)
+                {
+                    MoveToNextLine(aLineStart, nUrlYHack, nColumn, aOrigin);
+                    nUrlYHack = 0;
+                }
+
+                // Check if this line has a textportion with a multiline hyperlink
+                // then the next line should be positioned further away
+                for (sal_Int32 nPortion = rLine.GetStartPortion();
+                     nPortion <= rLine.GetEndPortion(); nPortion++)
+                {
+                    const TextPortion& rTextPortion = rPortion.GetTextPortions()[nPortion];
+                    if (rTextPortion.GetKind() == PortionKind::FIELD)
+                    {
+                        ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
+                        if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 2)
+                        {
+                            // Use the same size calculation as in ImpEditEngine::Paint
+                            const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
+                            nUrlYHack = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 2);
+                        }
+                    }
+                }
+
                 const bool bInclILS = eOptions & IterFlag::inclILS;
                 if (bInclILS && (nLine != nLines - 1) && !maStatus.IsOutliner())
                 {
