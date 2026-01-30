@@ -29,6 +29,7 @@
 namespace oox::drawingml {
 
 class Diagram;
+class DrawingML;
 
 // Advanced DiagramHelper
 //
@@ -102,7 +103,7 @@ public:
 
     // check if mandatory DiagramDomS exist (or can be created)
     bool checkMinimalDataDoms() const;
-    void tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB);
+    void tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML);
 };
 
 }

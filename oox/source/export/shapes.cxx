@@ -912,6 +912,14 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 }
             }
 
+            if (isDiagaramExport())
+            {
+                // add evtl. used DiagramDataModelID if DiagramExport
+                SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
+                if (nullptr != pTarget && !pTarget->getDiagramDataModelID().isEmpty())
+                    pAttrListSp->add(XML_modelId, pTarget->getDiagramDataModelID());
+            }
+
             // export <sp> element (with a namespace prefix)
             mpFS->startElementNS(mnXmlNamespace, XML_sp, pAttrListSp);
         }

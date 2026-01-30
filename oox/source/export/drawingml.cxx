@@ -258,6 +258,7 @@ DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBa
     , mpFB(pFB)
     , mbIsBackgroundDark(false)
     , mbPlaceholder(false)
+    , mbDiagaramExport(false)
 {
     uno::Reference<beans::XPropertySet> xSettings(pFB->getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     if (xSettings.is())
@@ -2312,6 +2313,25 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     bool bFlipVWrite = bFlipV && !bSuppressFlipping;
     bFlipH = bFlipH && !bFlippedBeforeRotation;
     bFlipV = bFlipV && !bFlippedBeforeRotation;
+
+    if (isDiagaramExport())
+    {
+        // need to offset from top-left of Diagram's GroupObject
+        SdrObject* pShape(SdrObject::getSdrObjectFromXShape(rXShape));
+
+        if (nullptr != pShape)
+        {
+            std::shared_ptr< svx::diagram::DiagramHelper_svx > pDiagramHelper(pShape->getDiagramHelperFromDiagramOrMember());
+
+            if (pDiagramHelper)
+            {
+                const Reference< XShape >& rRootShape(pDiagramHelper->getRootShape());
+                awt::Point aRootPos = rRootShape->getPosition();
+                aPos.X -= aRootPos.X;
+                aPos.Y -= aRootPos.Y;
+            }
+        }
+    }
 
     if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
     {
@@ -6804,7 +6824,7 @@ bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::
         return false;
 
     // try to re-create (if needed is decided there)
-    pAdvancedDiagramHelper->tryToCreateMissingDataDoms(*GetFB());
+    pAdvancedDiagramHelper->tryToCreateMissingDataDoms(*this);
 
     if (!pAdvancedDiagramHelper->checkMinimalDataDoms())
         return false;

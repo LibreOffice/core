@@ -469,12 +469,12 @@ bool DiagramHelper_oox::checkMinimalDataDoms() const
     return mpDiagramPtr->checkMinimalDataDoms();
 }
 
-void DiagramHelper_oox::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB)
+void DiagramHelper_oox::tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML)
 {
     if (!mpDiagramPtr)
         return;
 
-    mpDiagramPtr->tryToCreateMissingDataDoms(rFB);
+    mpDiagramPtr->tryToCreateMissingDataDoms(rOriginalDrawingML);
 }
 }
 

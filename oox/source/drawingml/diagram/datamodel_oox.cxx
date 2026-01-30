@@ -34,6 +34,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/export/drawingml.hxx>
 #include <sax/fastattribs.hxx>
+#include <oox/export/shapes.hxx>
 
 #include <unordered_set>
 
@@ -59,14 +60,63 @@ Shape* DiagramData_oox::getOrCreateAssociatedShape(const svx::diagram::Point& rP
     return rShapePtr.get();
 }
 
-void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget)
+void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget)
+{
+    if (!rTarget)
+        return;
+
+    uno::Reference<drawing::XShapes> xShapes(accessRootShape(), uno::UNO_QUERY);
+    if (!xShapes.is())
+        return;
+
+    // create an own ShapeExport with the needed target and namespace, mark as DiagramExport
+    ::oox::core::XmlFilterBase* pOriginalFB(rOriginalDrawingML.GetFB());
+    ShapeExport aShapeExport(XML_dsp, rTarget, nullptr, pOriginalFB, rOriginalDrawingML.GetDocumentType(), rOriginalDrawingML.GetTextExport(), true);
+    aShapeExport.setDiagaramExport(true);
+    const sal_Int32 nCount(xShapes->getCount());
+
+    // write header infos
+    const OUString aNsDmlDiagram(pOriginalFB->getNamespaceURL(OOX_NS(dmlDiagram)));
+    const OUString aNsDsp(pOriginalFB->getNamespaceURL(OOX_NS(dsp)));
+    const OUString aNsDml(pOriginalFB->getNamespaceURL(OOX_NS(dml)));
+    rTarget->startElementNS(XML_dsp, XML_drawing,
+        FSNS(XML_xmlns, XML_dgm), aNsDmlDiagram,
+        FSNS(XML_xmlns, XML_dsp), aNsDsp,
+        FSNS(XML_xmlns, XML_a), aNsDml);
+    rTarget->startElementNS(XML_dsp, XML_spTree);
+
+    for ( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        uno::Reference< drawing::XShape > xShape;
+        if ( xShapes->getByIndex( i ) >>= xShape )
+        {
+            if (xShape)
+            {
+                // do *not* write BackgroundShape. MSO has BG infos just as fill properties
+                // as part of the OOXData DomTree
+                SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
+                if (nullptr == pTarget || getBackgroundShapeModelID() == pTarget->getDiagramDataModelID())
+                    continue;
+
+                // write Shape & sub-shapes
+                aShapeExport.WriteShape(xShape);
+            }
+        }
+    }
+
+    rTarget->endElementNS(XML_dsp, XML_spTree);
+    rTarget->endElementNS(XML_dsp, XML_drawing);
+    rTarget->endDocument();
+}
+
+void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rOriginalFB, sax_fastparser::FSHelperPtr& rTarget)
 {
     if (!rTarget)
         return;
 
     // write header infos
-    const OUString aNsDmlDiagram(rFB.getNamespaceURL(OOX_NS(dmlDiagram)));
-    const OUString aNsDml(rFB.getNamespaceURL(OOX_NS(dml)));
+    const OUString aNsDmlDiagram(rOriginalFB.getNamespaceURL(OOX_NS(dmlDiagram)));
+    const OUString aNsDml(rOriginalFB.getNamespaceURL(OOX_NS(dml)));
     rTarget->startElementNS(XML_dgm, XML_dataModel,
         FSNS(XML_xmlns, XML_dgm), aNsDmlDiagram,
         FSNS(XML_xmlns, XML_a), aNsDml);
@@ -90,7 +140,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
         if (xMasterText)
         {
             rTarget->startElementNS(XML_dgm, XML_t);
-            DrawingML aTempML(rTarget, &rFB);
+            DrawingML aTempML(rTarget, &rOriginalFB);
             aTempML.WriteText(xMasterText, false, true, XML_a);
             rTarget->endElementNS(XML_dgm, XML_t);
 
@@ -145,7 +195,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
     {
         // if we have the BGShape as XShape, export using a temp DrawingML which uses
         // the target file combined with the XmlFilterBase representing the ongoing Diagram export
-        DrawingML aTempML(rTarget, &rFB);
+        DrawingML aTempML(rTarget, &rOriginalFB);
         uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
         aTempML.WriteFill( xProps, xBgShape->getSize());
     }
@@ -159,7 +209,7 @@ void DiagramData_oox::writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastpa
     // for this case where the only relevant data is the 'relId' entzry I will allow
     // to construct the XML statement by own string concatenation
     rTarget->startElementNS(XML_dgm, XML_extLst);
-    const OUString rNsDsp(rFB.getNamespaceURL(OOX_NS(dsp)));
+    const OUString rNsDsp(rOriginalFB.getNamespaceURL(OOX_NS(dsp)));
     rTarget->startElementNS(XML_a, XML_ext, XML_uri, rNsDsp);
     OUString aDspLine("<dsp:dataModelExt xmlns:dsp=\"" + rNsDsp + "\" ");
     if (!getExtDrawings().empty())

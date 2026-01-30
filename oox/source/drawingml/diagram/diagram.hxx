@@ -153,7 +153,7 @@ public:
 
     // check if mandatory DiagramDomS exist (or can be created)
     bool checkMinimalDataDoms() const;
-    void tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB);
+    void tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML);
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.

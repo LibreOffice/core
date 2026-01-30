@@ -34,6 +34,8 @@
 
 namespace oox::drawingml {
 
+class DrawingML;
+
 class DiagramData_oox : public svx::diagram::DiagramData_svx
 {
 public:
@@ -50,7 +52,8 @@ public:
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
-    void writeDiagramData(oox::core::XmlFilterBase& rFB, sax_fastparser::FSHelperPtr& rTarget);
+    void writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget);
+    void writeDiagramData(oox::core::XmlFilterBase& rOriginalFB, sax_fastparser::FSHelperPtr& rTarget);
 
 private:
     // The model definition, the parts *only* available in oox. Also look for already

@@ -44,10 +44,11 @@
 #include "diagramfragmenthandler.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/TempFile.hpp>
+#include <oox/export/drawingml.hxx>
 
 #ifdef DBG_UTIL
 #include <osl/file.hxx>
-#include <iostream>
+#include <o3tl/environment.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -200,25 +201,23 @@ bool Diagram::checkMinimalDataDoms() const
     return true;
 }
 
-void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB)
+void Diagram::tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML)
 {
     // internal testing: allow to force to always recreate
-    static bool bForceAlwaysReCreate(false);
+    static bool bForceAlwaysReCreate(nullptr != std::getenv("FORCE_RECREATE_DIAGRAM_DATADOMS"));
 
     // check if activated, return if not to stay compatible for now
     static bool bReCreateDiagramDataDoms(nullptr != std::getenv("ACTIVATE_RECREATE_DIAGRAM_DATADOMS"));
-#ifdef DBG_UTIL
-    std::cout << "DiagramReCreate: always==" << bForceAlwaysReCreate << ",bReCreate==" << bReCreateDiagramDataDoms << std::endl;
-#endif
+    SAL_INFO("oox", "DiagramReCreate: always==" << bForceAlwaysReCreate << ",bReCreate==" << bReCreateDiagramDataDoms);
     if (!bForceAlwaysReCreate && !bReCreateDiagramDataDoms)
         return;
+
+    oox::core::XmlFilterBase& rFB(*rOriginalDrawingML.GetFB());
 
     if (bForceAlwaysReCreate || maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
     {
         // re-create OOXData DomFile from model data
-#ifdef DBG_UTIL
-        std::cout << "DiagramReCreate: creating DomMapFlag::OOXData" << std::endl;
-#endif
+        SAL_INFO("oox", "DiagramReCreate: creating DomMapFlag::OOXData");
         uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(comphelper::getProcessComponentContext());
         uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
 
@@ -243,7 +242,52 @@ void Diagram::tryToCreateMissingDataDoms(oox::core::XmlFilterBase& rFB)
             }
 
 #ifdef DBG_UTIL
-            osl::File::move(xTempFile->getUri(), "file:///home/alg/Downloads/tonne/test.xml");
+            const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+            if(!env.isEmpty())
+            {
+                OUString url;
+                ::osl::FileBase::getFileURLFromSystemPath(env, url);
+                osl::File::move(xTempFile->getUri(), url + "data_T.xml");
+            }
+#endif
+        }
+    }
+
+    if (bForceAlwaysReCreate || maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXDrawing))
+    {
+        // re-create OOXDrawing DomFile from model data
+        SAL_INFO("oox", "DiagramReCreate: creating DomMapFlag::OOXDrawing");
+        uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(comphelper::getProcessComponentContext());
+        uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
+
+        if (xOutput)
+        {
+            sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutput, true);
+            getData()->writeDiagramReplacement(rOriginalDrawingML, aFS);
+            xOutput->flush();
+
+            // this call is *important*, without it xDocBuilder->parse below fails and some strange
+            // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+            xOutput->closeOutput();
+
+            uno::Reference<xml::dom::XDocumentBuilder> xDocBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
+            if (xDocBuilder)
+            {
+                uno::Reference<xml::dom::XDocument> xInstance = xDocBuilder->parse(xTempFile->getInputStream());
+                if (xInstance)
+                {
+                    maDiagramPRDomMap[svx::diagram::DomMapFlag::OOXDrawing] <<= xInstance;
+                }
+            }
+
+#ifdef DBG_UTIL
+            const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+            if(!env.isEmpty())
+            {
+                OUString url;
+                ::osl::FileBase::getFileURLFromSystemPath(env, url);
+                osl::File::move(xTempFile->getUri(), url + "drawing_T.xml");
+            }
 #endif
         }
     }
