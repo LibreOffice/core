@@ -427,8 +427,81 @@ AgentResponse AgentConnection::parseResponse(const std::string& json) {
 
     if (dbg) {
         fprintf(dbg, "  Final autoEdits count: %d\n", (int)response.autoEdits.size());
-        fclose(dbg);
     }
+
+    // Check for clarification flow
+    response.needsClarification = extractJsonBool(json, "needs_clarification");
+
+    if (response.needsClarification) {
+        if (dbg) fprintf(dbg, "  needs_clarification: true, parsing questions\n");
+
+        // Parse clarification_questions array
+        size_t questionsStart = json.find("\"clarification_questions\":");
+        if (questionsStart != std::string::npos) {
+            size_t arrStart = json.find("[", questionsStart);
+            if (arrStart != std::string::npos) {
+                // Find matching closing bracket
+                size_t arrEnd = arrStart;
+                int depth = 1;
+                for (size_t i = arrStart + 1; i < json.length() && depth > 0; ++i) {
+                    if (json[i] == '[') depth++;
+                    else if (json[i] == ']') depth--;
+                    if (depth == 0) arrEnd = i;
+                }
+
+                if (arrEnd > arrStart) {
+                    // Parse each question object
+                    size_t objStart = arrStart;
+                    while ((objStart = json.find("{", objStart + 1)) != std::string::npos && objStart < arrEnd) {
+                        size_t objEnd = objStart;
+                        int objDepth = 1;
+                        for (size_t i = objStart + 1; i < arrEnd && objDepth > 0; ++i) {
+                            if (json[i] == '{') objDepth++;
+                            else if (json[i] == '}') objDepth--;
+                            if (objDepth == 0) objEnd = i;
+                        }
+                        if (objEnd > objStart) {
+                            std::string qStr = json.substr(objStart, objEnd - objStart + 1);
+
+                            ClarificationQuestion q;
+                            q.id = OUString::fromUtf8(extractJsonString(qStr, "id").c_str());
+                            q.question = OUString::fromUtf8(extractJsonString(qStr, "question").c_str());
+                            q.defaultValue = OUString::fromUtf8(extractJsonString(qStr, "default").c_str());
+
+                            // Parse options array
+                            size_t optStart = qStr.find("\"options\":");
+                            if (optStart != std::string::npos && qStr.find("null", optStart) > optStart + 15) {
+                                size_t optArrStart = qStr.find("[", optStart);
+                                size_t optArrEnd = qStr.find("]", optArrStart);
+                                if (optArrStart != std::string::npos && optArrEnd != std::string::npos) {
+                                    std::string optStr = qStr.substr(optArrStart + 1, optArrEnd - optArrStart - 1);
+                                    size_t pos = 0;
+                                    while ((pos = optStr.find("\"", pos)) != std::string::npos) {
+                                        size_t end = optStr.find("\"", pos + 1);
+                                        if (end != std::string::npos) {
+                                            std::string opt = optStr.substr(pos + 1, end - pos - 1);
+                                            q.options.push_back(OUString::fromUtf8(opt.c_str()));
+                                            pos = end + 1;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            response.clarificationQuestions.push_back(q);
+                            objStart = objEnd;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (dbg) fprintf(dbg, "  Parsed %d clarification questions\n", (int)response.clarificationQuestions.size());
+    }
+
+    if (dbg) fclose(dbg);
 
     return response;
 }
@@ -520,6 +593,93 @@ AgentResponse AgentConnection::sendMessage(const OUString& message, const OUStri
         return response;
     }
     
+    return parseResponse(responseStr);
+}
+
+AgentResponse AgentConnection::sendMessageWithClarification(const OUString& message, const OUString& documentContent, const OUString& selection, const std::map<OUString, OUString>& clarificationAnswers) {
+    AgentResponse response;
+
+    if (!m_connected) {
+        checkConnection();
+        if (!m_connected) {
+            response.message = "Error: Backend not available at " + OUString::fromUtf8(m_backendUrl.c_str());
+            response.hasPatch = false;
+            return response;
+        }
+    }
+
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        response.message = "Error: Failed to initialize CURL";
+        response.hasPatch = false;
+        return response;
+    }
+
+    std::string responseStr;
+
+    // Build JSON payload with clarification answers
+    OUStringBuffer jsonBuf;
+    jsonBuf.append("{");
+    jsonBuf.append("\"message\":\"");
+    jsonBuf.append(escapeJsonString(message));
+    jsonBuf.append("\",");
+    jsonBuf.append("\"context\":{");
+    jsonBuf.append("\"document\":\"");
+    jsonBuf.append(escapeJsonString(documentContent));
+    jsonBuf.append("\",");
+    jsonBuf.append("\"selection\":\"");
+    jsonBuf.append(escapeJsonString(selection));
+    jsonBuf.append("\"");
+    jsonBuf.append("},");
+
+    // Add clarification_answers object
+    jsonBuf.append("\"clarification_answers\":{");
+    bool first = true;
+    for (const auto& pair : clarificationAnswers) {
+        if (!first) jsonBuf.append(",");
+        jsonBuf.append("\"");
+        jsonBuf.append(escapeJsonString(pair.first));
+        jsonBuf.append("\":\"");
+        jsonBuf.append(escapeJsonString(pair.second));
+        jsonBuf.append("\"");
+        first = false;
+    }
+    jsonBuf.append("}");
+
+    jsonBuf.append("}");
+
+    std::string payload = jsonBuf.makeStringAndClear().toUtf8().getStr();
+    std::string url = m_backendUrl + "/api/chat";
+
+    // Debug: log the payload
+    FILE* dbg = fopen("C:\\temp\\clarification_request.log", "w");
+    if (dbg) {
+        fprintf(dbg, "Sending clarification request:\n%s\n", payload.c_str());
+        fclose(dbg);
+    }
+
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseStr);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 180L);  // 180 seconds for document generation
+
+    CURLcode res = curl_easy_perform(curl);
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK) {
+        response.message = "Error: " + OUString::fromUtf8(curl_easy_strerror(res));
+        response.hasPatch = false;
+        return response;
+    }
+
     return parseResponse(responseStr);
 }
 

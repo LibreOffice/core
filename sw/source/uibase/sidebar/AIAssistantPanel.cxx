@@ -72,6 +72,10 @@ AIAssistantPanel::AIAssistantPanel(
     , m_pBindings(pBindings)
     , m_pWrtShell(nullptr)
     , m_bProcessing(false)
+    , m_bAwaitingClarification(false)
+    , m_nCurrentQuestionIndex(0)
+    , m_aResponseChecker("AIAssistantPanel AsyncResponseChecker")
+    , m_bAsyncRequestPending(false)
 {
     // Get UI components - Status
     m_xStatusLabel = m_xBuilder->weld_label(u"status_label"_ustr);
@@ -210,10 +214,16 @@ AIAssistantPanel::AIAssistantPanel(
                 m_xInputField->grab_focus();
         }
     }
+
+    // Set up async response checker (Idle handler for non-blocking HTTP)
+    m_aResponseChecker.SetInvokeHandler(LINK(this, AIAssistantPanel, CheckAsyncResponseHdl));
+    m_aResponseChecker.SetPriority(TaskPriority::LOW);
 }
 
 AIAssistantPanel::~AIAssistantPanel()
 {
+    // Stop async response checker if running
+    m_aResponseChecker.Stop();
 }
 
 void AIAssistantPanel::UpdateStatus(const OUString& status)
@@ -238,6 +248,673 @@ void AIAssistantPanel::AppendToChat(const OUString& sender, const OUString& mess
 
     // Scroll to bottom
     m_xChatHistory->select_region(-1, -1);
+}
+
+void AIAssistantPanel::AppendUserMessage(const OUString& message)
+{
+    if (!m_xChatHistory)
+        return;
+
+    OUString currentText = m_xChatHistory->get_text();
+    OUString newText = currentText;
+    if (!currentText.isEmpty())
+        newText += u"\n"_ustr;
+
+    // Modern user message bubble (Cursor/Copilot style)
+    newText += u"┌─────────────────────────────────┐\n"_ustr;
+    newText += u"│ 👤 You                          │\n"_ustr;
+    newText += u"├─────────────────────────────────┤\n"_ustr;
+
+    // Word wrap the message with indentation
+    OUString wrappedMsg = message;
+    // Remove excess whitespace
+    wrappedMsg = wrappedMsg.trim();
+
+    // Add message with padding
+    newText += u"│ "_ustr + wrappedMsg + u"\n"_ustr;
+    newText += u"└─────────────────────────────────┘\n"_ustr;
+
+    m_xChatHistory->set_text(newText);
+    m_sChatLog = newText;
+    m_xChatHistory->select_region(-1, -1);
+}
+
+OUString AIAssistantPanel::CleanAIResponse(const OUString& response)
+{
+    OUString cleaned = response;
+
+    // Remove JSON code blocks
+    sal_Int32 jsonStart = cleaned.indexOf(u"```json");
+    while (jsonStart >= 0)
+    {
+        sal_Int32 jsonEnd = cleaned.indexOf(u"```", jsonStart + 7);
+        if (jsonEnd > jsonStart)
+        {
+            cleaned = cleaned.copy(0, jsonStart) + cleaned.copy(jsonEnd + 3);
+        }
+        else
+        {
+            break;
+        }
+        jsonStart = cleaned.indexOf(u"```json");
+    }
+
+    // Remove any remaining code blocks
+    jsonStart = cleaned.indexOf(u"```");
+    while (jsonStart >= 0)
+    {
+        sal_Int32 jsonEnd = cleaned.indexOf(u"```", jsonStart + 3);
+        if (jsonEnd > jsonStart)
+        {
+            cleaned = cleaned.copy(0, jsonStart) + cleaned.copy(jsonEnd + 3);
+        }
+        else
+        {
+            break;
+        }
+        jsonStart = cleaned.indexOf(u"```");
+    }
+
+    // Remove raw JSON objects/arrays that might be in the response
+    // Look for {"auto_edits": or {"action":
+    sal_Int32 braceStart = cleaned.indexOf(u"{\"auto_edits\"");
+    if (braceStart < 0)
+        braceStart = cleaned.indexOf(u"{\"action\"");
+    if (braceStart >= 0)
+    {
+        // Find matching closing brace
+        int depth = 0;
+        sal_Int32 braceEnd = braceStart;
+        for (sal_Int32 i = braceStart; i < cleaned.getLength(); ++i)
+        {
+            if (cleaned[i] == '{') depth++;
+            else if (cleaned[i] == '}') {
+                depth--;
+                if (depth == 0) {
+                    braceEnd = i;
+                    break;
+                }
+            }
+        }
+        if (braceEnd > braceStart)
+        {
+            cleaned = cleaned.copy(0, braceStart) + cleaned.copy(braceEnd + 1);
+        }
+    }
+
+    // Trim whitespace
+    cleaned = cleaned.trim();
+
+    // If empty after cleaning, return empty (we'll show action summary instead)
+    return cleaned;
+}
+
+OUString AIAssistantPanel::FormatActionSummary(const std::vector<officelabs::AutoEditCommand>& edits)
+{
+    if (edits.empty())
+        return u""_ustr;
+
+    OUStringBuffer summary;
+
+    for (const auto& edit : edits)
+    {
+        OUString icon;
+        OUString actionDesc;
+
+        if (edit.action == u"format"_ustr)
+        {
+            icon = u"🎨"_ustr;  // Format/style icon
+            OUStringBuffer formatTypes;
+            if (edit.bold) formatTypes.append(u"Bold "_ustr);
+            if (edit.italic) formatTypes.append(u"Italic "_ustr);
+            if (edit.underline) formatTypes.append(u"Underline "_ustr);
+            if (edit.headingLevel > 0)
+            {
+                formatTypes.append(u"H"_ustr);
+                formatTypes.append(OUString::number(edit.headingLevel));
+                formatTypes.append(u" "_ustr);
+            }
+            if (!edit.fontColor.isEmpty())
+            {
+                formatTypes.append(u"Color "_ustr);
+            }
+            if (edit.fontSize > 0)
+            {
+                formatTypes.append(OUString::number(static_cast<int>(edit.fontSize)));
+                formatTypes.append(u"pt "_ustr);
+            }
+            actionDesc = formatTypes.makeStringAndClear().trim();
+            if (actionDesc.isEmpty())
+                actionDesc = u"Style applied"_ustr;
+        }
+        else if (edit.action == u"insert"_ustr)
+        {
+            icon = u"➕"_ustr;  // Add/insert icon (green)
+            OUString text = edit.newText;
+            if (text.getLength() > 25)
+                text = text.copy(0, 25) + u"..."_ustr;
+            actionDesc = u"Added: \""_ustr + text + u"\""_ustr;
+        }
+        else if (edit.action == u"replace"_ustr || edit.action == u"replace_all"_ustr)
+        {
+            icon = u"✏️"_ustr;  // Edit icon (yellow)
+            if (!edit.findText.isEmpty())
+            {
+                OUString find = edit.findText;
+                if (find.getLength() > 15)
+                    find = find.copy(0, 15) + u"..."_ustr;
+                actionDesc = u"Changed: \""_ustr + find + u"\""_ustr;
+            }
+            else
+            {
+                actionDesc = u"Text replaced"_ustr;
+            }
+        }
+        else if (edit.action == u"delete"_ustr)
+        {
+            icon = u"🗑️"_ustr;  // Delete icon (red)
+            if (!edit.findText.isEmpty())
+            {
+                OUString find = edit.findText;
+                if (find.getLength() > 20)
+                    find = find.copy(0, 20) + u"..."_ustr;
+                actionDesc = u"Removed: \""_ustr + find + u"\""_ustr;
+            }
+            else
+            {
+                actionDesc = u"Text removed"_ustr;
+            }
+        }
+        else if (edit.action == u"create_list"_ustr)
+        {
+            icon = u"📝"_ustr;  // List icon
+            OUString listDesc = edit.listType;
+            if (listDesc.isEmpty()) listDesc = u"bullet"_ustr;
+            actionDesc = listDesc + u" list with "_ustr + OUString::number(static_cast<int>(edit.listItems.size())) + u" items"_ustr;
+        }
+        else if (edit.action == u"create_table"_ustr)
+        {
+            icon = u"📊"_ustr;  // Table icon
+            actionDesc = OUString::number(edit.tableRows) + u"x"_ustr +
+                         OUString::number(edit.tableColumns) + u" table created"_ustr;
+        }
+        else if (edit.action == u"paragraph_format"_ustr)
+        {
+            icon = u"¶"_ustr;  // Paragraph icon
+            actionDesc = u"Paragraph styled"_ustr;
+        }
+        else if (edit.action == u"clear_and_write"_ustr)
+        {
+            icon = u"📄"_ustr;  // Document icon
+            actionDesc = u"Document content replaced"_ustr;
+        }
+        else
+        {
+            icon = u"⚡"_ustr;  // Generic action
+            actionDesc = edit.action;
+        }
+
+        if (!summary.isEmpty())
+            summary.append(u"\n"_ustr);
+        summary.append(u"  "_ustr + icon + u" "_ustr + actionDesc);
+    }
+
+    return summary.makeStringAndClear();
+}
+
+void AIAssistantPanel::AppendAIMessage(const OUString& message, const std::vector<officelabs::AutoEditCommand>& edits)
+{
+    if (!m_xChatHistory)
+        return;
+
+    OUString currentText = m_xChatHistory->get_text();
+    OUString newText = currentText;
+    if (!currentText.isEmpty())
+        newText += u"\n"_ustr;
+
+    // Modern AI response card (Copilot style)
+    newText += u"╔═══════════════════════════════════╗\n"_ustr;
+    newText += u"║ 🤖 AI Assistant                   ║\n"_ustr;
+    newText += u"╠═══════════════════════════════════╣\n"_ustr;
+
+    // Clean and add message (remove JSON)
+    OUString cleanedMsg = CleanAIResponse(message);
+    if (!cleanedMsg.isEmpty())
+    {
+        // Split message into lines and add box padding
+        sal_Int32 nIndex = 0;
+        while (nIndex >= 0 && nIndex < cleanedMsg.getLength())
+        {
+            sal_Int32 nLineEnd = cleanedMsg.indexOf('\n', nIndex);
+            OUString sLine;
+            if (nLineEnd >= 0)
+            {
+                sLine = cleanedMsg.copy(nIndex, nLineEnd - nIndex);
+                nIndex = nLineEnd + 1;
+            }
+            else
+            {
+                sLine = cleanedMsg.copy(nIndex);
+                nIndex = -1;
+            }
+            newText += u"║ "_ustr + sLine + u"\n"_ustr;
+        }
+    }
+    else if (!edits.empty())
+    {
+        newText += u"║ ✅ Done! Changes applied to document.\n"_ustr;
+    }
+
+    // Add action summary if there are edits
+    if (!edits.empty())
+    {
+        newText += u"╠───────────────────────────────────╣\n"_ustr;
+        newText += u"║ 📋 Actions:\n"_ustr;
+        OUString actionSummary = FormatActionSummary(edits);
+        // Add box padding to action summary
+        sal_Int32 nIdx = 0;
+        while (nIdx >= 0 && nIdx < actionSummary.getLength())
+        {
+            sal_Int32 nEnd = actionSummary.indexOf('\n', nIdx);
+            OUString sLine;
+            if (nEnd >= 0)
+            {
+                sLine = actionSummary.copy(nIdx, nEnd - nIdx);
+                nIdx = nEnd + 1;
+            }
+            else
+            {
+                sLine = actionSummary.copy(nIdx);
+                nIdx = -1;
+            }
+            newText += u"║ "_ustr + sLine + u"\n"_ustr;
+        }
+    }
+
+    newText += u"╚═══════════════════════════════════╝\n"_ustr;
+
+    m_xChatHistory->set_text(newText);
+    m_sChatLog = newText;
+    m_xChatHistory->select_region(-1, -1);
+}
+
+void AIAssistantPanel::AppendSystemMessage(const OUString& message, bool isSuccess)
+{
+    if (!m_xChatHistory)
+        return;
+
+    OUString currentText = m_xChatHistory->get_text();
+    OUString newText = currentText;
+    if (!currentText.isEmpty())
+        newText += u"\n"_ustr;
+
+    // System message with visual indicator
+    if (isSuccess)
+    {
+        newText += u"  ✅ "_ustr + message + u"\n"_ustr;
+    }
+    else
+    {
+        newText += u"  ⚠️ "_ustr + message + u"\n"_ustr;
+    }
+
+    m_xChatHistory->set_text(newText);
+    m_sChatLog = newText;
+    m_xChatHistory->select_region(-1, -1);
+}
+
+void AIAssistantPanel::AppendClarificationHeader()
+{
+    if (!m_xChatHistory)
+        return;
+
+    OUString currentText = m_xChatHistory->get_text();
+    OUString newText = currentText;
+    if (!currentText.isEmpty())
+        newText += u"\n"_ustr;
+
+    // Modern clarification card (thinking mode)
+    newText += u"╔═══════════════════════════════════╗\n"_ustr;
+    newText += u"║ 💭 AI Thinking...                 ║\n"_ustr;
+    newText += u"╠═══════════════════════════════════╣\n"_ustr;
+    newText += u"║ To create the best content, I need║\n"_ustr;
+    newText += u"║ to understand your requirements.  ║\n"_ustr;
+    newText += u"║                                   ║\n"_ustr;
+    newText += u"║ 📋 Please answer these questions: ║\n"_ustr;
+    newText += u"╚═══════════════════════════════════╝\n"_ustr;
+
+    m_xChatHistory->set_text(newText);
+    m_sChatLog = newText;
+    m_xChatHistory->select_region(-1, -1);
+}
+
+void AIAssistantPanel::DisplayClarificationQuestions()
+{
+    if (!m_xChatHistory || m_aPendingQuestions.empty())
+        return;
+
+    OUString currentText = m_xChatHistory->get_text();
+    OUString newText = currentText;
+
+    int questionNum = 1;
+    for (const auto& question : m_aPendingQuestions)
+    {
+        // Question card with number
+        newText += u"\n┌───────────────────────────────────\n"_ustr;
+        newText += u"│ Q"_ustr + OUString::number(questionNum) + u": "_ustr + question.question + u"\n"_ustr;
+        newText += u"├───────────────────────────────────\n"_ustr;
+
+        // Display options if available
+        if (!question.options.empty())
+        {
+            int optionNum = 1;
+            for (const auto& option : question.options)
+            {
+                // Check if this is a default option
+                bool isDefault = (!question.defaultValue.isEmpty() && option == question.defaultValue);
+                OUString marker = isDefault ? u"◉"_ustr : u"○"_ustr;
+                newText += u"│   "_ustr + marker + u" ["_ustr + OUString::number(optionNum) + u"] "_ustr + option;
+                if (isDefault)
+                    newText += u" ⭐"_ustr;
+                newText += u"\n"_ustr;
+                optionNum++;
+            }
+        }
+        else
+        {
+            // Free text input expected
+            newText += u"│   ✍️ (Type your answer)\n"_ustr;
+        }
+        newText += u"└───────────────────────────────────\n"_ustr;
+
+        questionNum++;
+    }
+
+    // Instructions box
+    newText += u"\n💡 How to answer:\n"_ustr;
+    newText += u"   • Type option numbers: 1, 2, 1, Custom text\n"_ustr;
+    newText += u"   • Or: 1:2, 2:Professional, 3:your answer\n"_ustr;
+    newText += u"   • Press Enter when done\n"_ustr;
+
+    m_xChatHistory->set_text(newText);
+    m_sChatLog = newText;
+    m_xChatHistory->select_region(-1, -1);
+
+    // Set placeholder in input field
+    if (m_xInputField)
+    {
+        m_xInputField->set_placeholder_text(u"Type your answers (e.g., 1, 2, 1, my focus)..."_ustr);
+        m_xInputField->grab_focus();
+    }
+}
+
+void AIAssistantPanel::ProcessClarificationAnswers(const OUString& input)
+{
+    if (!m_bAwaitingClarification || m_aPendingQuestions.empty())
+        return;
+
+    // Parse the user input to extract answers
+    // Supported formats:
+    // - "1:answer1, 2:answer2, 3:answer3"
+    // - "answer1, answer2, answer3" (positional)
+    // - "1, Professional, 2" (option numbers or text)
+
+    std::vector<OUString> answers;
+
+    // Split by comma
+    sal_Int32 nIndex = 0;
+    while (nIndex >= 0)
+    {
+        sal_Int32 nCommaPos = input.indexOf(',', nIndex);
+        OUString part;
+        if (nCommaPos >= 0)
+        {
+            part = input.copy(nIndex, nCommaPos - nIndex).trim();
+            nIndex = nCommaPos + 1;
+        }
+        else
+        {
+            part = input.copy(nIndex).trim();
+            nIndex = -1;
+        }
+
+        if (!part.isEmpty())
+        {
+            // Check if it's in "question#:answer" format
+            sal_Int32 colonPos = part.indexOf(':');
+            if (colonPos > 0)
+            {
+                OUString questionNumStr = part.copy(0, colonPos).trim();
+                OUString answerStr = part.copy(colonPos + 1).trim();
+
+                // Get question number (1-based)
+                sal_Int32 questionNum = questionNumStr.toInt32();
+                if (questionNum > 0 && questionNum <= static_cast<sal_Int32>(m_aPendingQuestions.size()))
+                {
+                    const auto& question = m_aPendingQuestions[questionNum - 1];
+
+                    // Check if answer is an option number
+                    sal_Int32 optionNum = answerStr.toInt32();
+                    if (optionNum > 0 && optionNum <= static_cast<sal_Int32>(question.options.size()))
+                    {
+                        m_aClarificationAnswers[question.id] = question.options[optionNum - 1];
+                    }
+                    else
+                    {
+                        // It's a text answer
+                        m_aClarificationAnswers[question.id] = answerStr;
+                    }
+                }
+            }
+            else
+            {
+                // Positional answer - assign to next unanswered question
+                if (answers.size() < m_aPendingQuestions.size())
+                {
+                    answers.push_back(part);
+                }
+            }
+        }
+    }
+
+    // Process positional answers
+    for (size_t i = 0; i < answers.size() && i < m_aPendingQuestions.size(); ++i)
+    {
+        const auto& question = m_aPendingQuestions[i];
+        if (m_aClarificationAnswers.find(question.id) == m_aClarificationAnswers.end())
+        {
+            OUString answer = answers[i];
+
+            // Check if answer is an option number
+            sal_Int32 optionNum = answer.toInt32();
+            if (optionNum > 0 && optionNum <= static_cast<sal_Int32>(question.options.size()))
+            {
+                m_aClarificationAnswers[question.id] = question.options[optionNum - 1];
+            }
+            else
+            {
+                m_aClarificationAnswers[question.id] = answer;
+            }
+        }
+    }
+
+    // Fill in defaults for unanswered questions
+    for (const auto& question : m_aPendingQuestions)
+    {
+        if (m_aClarificationAnswers.find(question.id) == m_aClarificationAnswers.end())
+        {
+            if (!question.defaultValue.isEmpty())
+            {
+                m_aClarificationAnswers[question.id] = question.defaultValue;
+            }
+            else if (!question.options.empty())
+            {
+                m_aClarificationAnswers[question.id] = question.options[0];
+            }
+        }
+    }
+
+    // Show what we understood
+    AppendUserMessage(input);
+
+    OUStringBuffer summary;
+    summary.append(u"◀ AI: Got it! Here's what I understood:\n"_ustr);
+    for (const auto& question : m_aPendingQuestions)
+    {
+        auto it = m_aClarificationAnswers.find(question.id);
+        if (it != m_aClarificationAnswers.end())
+        {
+            summary.append(u"   • "_ustr + question.id + u": "_ustr + it->second + u"\n"_ustr);
+        }
+    }
+    summary.append(u"\n   Now generating your content...\n"_ustr);
+
+    if (m_xChatHistory)
+    {
+        OUString currentText = m_xChatHistory->get_text();
+        m_xChatHistory->set_text(currentText + u"\n"_ustr + summary.makeStringAndClear());
+        m_xChatHistory->select_region(-1, -1);
+    }
+
+    // Clear clarification state
+    m_bAwaitingClarification = false;
+
+    // Re-send the original message with clarification answers
+    SendMessageWithClarification();
+}
+
+void AIAssistantPanel::SendMessageWithClarification()
+{
+    if (m_sPendingMessage.isEmpty())
+        return;
+
+    // Show processing state
+    m_bProcessing = true;
+    UpdateStatus(u"AI is generating content..."_ustr);
+    if (m_xSendButton)
+        m_xSendButton->set_sensitive(false);
+
+    AppendTypingIndicator();
+
+    // Get document content and selection
+    OUString sDocumentContent = GetDocumentText();
+    OUString sSelection = GetSelectedText();
+
+    // Send message with clarification answers
+    officelabs::AgentResponse response = m_pAgentConnection->sendMessageWithClarification(
+        m_sPendingMessage, sDocumentContent, sSelection, m_aClarificationAnswers);
+
+    // Clear pending state
+    m_sPendingMessage.clear();
+    m_aPendingQuestions.clear();
+    m_aClarificationAnswers.clear();
+
+    // Remove typing indicator and process response
+    RemoveTypingIndicator();
+    ProcessResponse(response);
+}
+
+void AIAssistantPanel::AppendTypingIndicator()
+{
+    if (!m_xChatHistory)
+        return;
+
+    OUString currentText = m_xChatHistory->get_text();
+    OUString newText = currentText;
+    if (!currentText.isEmpty())
+        newText += u"\n"_ustr;
+
+    // Modern typing indicator (Copilot style)
+    newText += u"╔═══════════════════════════════════╗\n"_ustr;
+    newText += u"║ 🤖 AI is working...               ║\n"_ustr;
+    newText += u"║     ⏳ Processing your request... ║\n"_ustr;
+    newText += u"╚═══════════════════════════════════╝\n"_ustr;
+
+    m_xChatHistory->set_text(newText);
+    m_xChatHistory->select_region(-1, -1);
+}
+
+void AIAssistantPanel::RemoveTypingIndicator()
+{
+    if (!m_xChatHistory)
+        return;
+
+    OUString text = m_xChatHistory->get_text();
+
+    // Find and remove the typing indicator card (new format)
+    sal_Int32 indicatorPos = text.indexOf(u"🤖 AI is working...");
+    if (indicatorPos >= 0)
+    {
+        // Find the start of the card (look backwards for ╔)
+        sal_Int32 cardStart = indicatorPos;
+        while (cardStart > 0 && text[cardStart] != u'╔')
+            cardStart--;
+
+        // Find the end of the card (look for ╚...╝)
+        sal_Int32 cardEnd = text.indexOf(u"╝", indicatorPos);
+        if (cardEnd >= 0)
+        {
+            // Find newline after the card
+            sal_Int32 lineEnd = text.indexOf(u"\n", cardEnd);
+            if (lineEnd >= 0)
+            {
+                text = text.copy(0, cardStart) + text.copy(lineEnd + 1);
+            }
+            else
+            {
+                text = text.copy(0, cardStart);
+            }
+        }
+    }
+
+    // Also handle old format for backward compatibility
+    sal_Int32 oldIndicatorPos = text.indexOf(u"◀ AI is typing...");
+    if (oldIndicatorPos >= 0)
+    {
+        sal_Int32 dotsEnd = text.indexOf(u"● ○ ○", oldIndicatorPos);
+        if (dotsEnd >= 0)
+        {
+            sal_Int32 lineEnd = text.indexOf(u"\n", dotsEnd);
+            if (lineEnd >= 0)
+            {
+                text = text.copy(0, oldIndicatorPos) + text.copy(lineEnd + 1);
+            }
+            else
+            {
+                text = text.copy(0, oldIndicatorPos);
+            }
+        }
+    }
+
+    // Clean up any extra newlines at the end
+    while (text.endsWith(u"\n\n"))
+    {
+        text = text.copy(0, text.getLength() - 1);
+    }
+
+    m_xChatHistory->set_text(text);
+    m_sChatLog = text;
+}
+
+void AIAssistantPanel::HighlightChangedText(const OUString& text, bool isAddition)
+{
+    // This would highlight text in the document after AI edits
+    // For now, we use character background color to show changes
+    // Green for additions, yellow for modifications
+
+    if (!m_pWrtShell)
+    {
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (!m_pWrtShell || text.isEmpty())
+        return;
+
+    // Search for the text and apply temporary highlight
+    // (This is a placeholder - full implementation would use find & mark)
+    (void)isAddition;  // Suppress unused parameter warning for now
 }
 
 OUString AIAssistantPanel::GetSelectedText()
@@ -333,30 +1010,40 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
 {
     m_bProcessing = false;
 
-    // Debug: log response details
-    FILE* dbg = fopen("C:\\temp\\process_response_debug.log", "a");
-    if (dbg) {
-        fprintf(dbg, "ProcessResponse called\n");
-        fprintf(dbg, "  message length: %d\n", (int)response.message.getLength());
-        fprintf(dbg, "  autoEdits count: %d\n", (int)response.autoEdits.size());
-        fprintf(dbg, "  hasPatch: %s\n", response.hasPatch ? "true" : "false");
-        fclose(dbg);
-    }
-
     // Re-enable buttons
     if (m_xSendButton)
         m_xSendButton->set_sensitive(true);
 
-    // Display response
-    if (!response.message.isEmpty())
+    // Check if AI needs clarification before proceeding
+    if (response.needsClarification && !response.clarificationQuestions.empty())
     {
-        AppendToChat(u"AI"_ustr, response.message);
+        // Store the pending state for clarification flow
+        m_bAwaitingClarification = true;
+        m_aPendingQuestions = response.clarificationQuestions;
+        m_aClarificationAnswers.clear();
+        m_nCurrentQuestionIndex = 0;
+
+        // Display clarification header
+        AppendClarificationHeader();
+
+        // Display all questions with options
+        DisplayClarificationQuestions();
+
+        UpdateStatus(u"Please answer the questions above"_ustr);
+        return;
+    }
+
+    // Display response with clean formatting
+    if (!response.message.isEmpty() || !response.autoEdits.empty())
+    {
+        // Use new formatted AI message display
+        AppendAIMessage(response.message, response.autoEdits);
         m_sLastAIResponse = response.message;
         UpdateStatus(u"Ready"_ustr);
     }
     else
     {
-        AppendToChat(u"System"_ustr, u"No response from AI"_ustr);
+        AppendSystemMessage(u"No response from AI"_ustr, false);
         UpdateStatus(u"Error occurred"_ustr);
     }
 
@@ -364,14 +1051,6 @@ void AIAssistantPanel::ProcessResponse(const officelabs::AgentResponse& response
     if (!response.autoEdits.empty())
     {
         ExecuteAutoEdits(response.autoEdits);
-    }
-    else
-    {
-        FILE* dbg2 = fopen("C:\\temp\\process_response_debug.log", "a");
-        if (dbg2) {
-            fprintf(dbg2, "  autoEdits is EMPTY - not calling ExecuteAutoEdits\n");
-            fclose(dbg2);
-        }
     }
 }
 
@@ -1115,66 +1794,17 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
         // Record edit completion for revert system (Phase 2.5)
         RecordEditEnd();
 
-        OUString msg = OUString::number(editCount) + u" edit(s) applied to document"_ustr;
-        if (execDbg) { fprintf(execDbg, "Calling AppendToChat\n"); fflush(execDbg); }
-        AppendToChat(u"System"_ustr, msg);
-        if (execDbg) { fprintf(execDbg, "Calling UpdateStatus\n"); fflush(execDbg); }
-        UpdateStatus(msg);
+        OUString msg = OUString::number(editCount) + u" edit(s) applied"_ustr;
+        AppendSystemMessage(msg, true);
+        UpdateStatus(u"Ready"_ustr);
     }
     if (execDbg) { fprintf(execDbg, "ExecuteAutoEdits complete\n"); fclose(execDbg); }
 }
 
 void AIAssistantPanel::SendMessage(const OUString& message)
 {
-    if (message.isEmpty())
-        return;
-
-    if (m_bProcessing)
-    {
-        UpdateStatus(u"Please wait for current request..."_ustr);
-        return;
-    }
-
-    // Add user message to chat
-    AppendToChat(u"You"_ustr, message);
-
-    // Clear input immediately
-    if (m_xInputField)
-        m_xInputField->set_text(u""_ustr);
-
-    // Check connection
-    if (!m_pAgentConnection->isConnected())
-    {
-        if (!m_pAgentConnection->checkConnection())
-        {
-            AppendToChat(u"System"_ustr, u"Error: Backend not available at localhost:8765"_ustr);
-            UpdateStatus(u"Backend offline"_ustr);
-            return;
-        }
-    }
-
-    // Update UI for processing state
-    m_bProcessing = true;
-    UpdateStatus(u"Thinking..."_ustr);
-    if (m_xSendButton)
-        m_xSendButton->set_sensitive(false);
-
-    // Get document content and selection for the AI
-    FILE* dbg = fopen("C:/temp/sendmsg_debug.log", "a");
-    if (dbg) { fprintf(dbg, "SendMessage: About to call GetDocumentText()\n"); fflush(dbg); }
-
-    OUString sDocumentContent = GetDocumentText();
-    OUString sSelection = GetSelectedText();
-
-    if (dbg) {
-        fprintf(dbg, "SendMessage: GetDocumentText returned %d chars\n", (int)sDocumentContent.getLength());
-        fprintf(dbg, "SendMessage: GetSelectedText returned %d chars\n", (int)sSelection.getLength());
-        fclose(dbg);
-    }
-
-    // Make HTTP call to backend with document content and selection
-    officelabs::AgentResponse response = m_pAgentConnection->sendMessage(message, sDocumentContent, sSelection);
-    ProcessResponse(response);
+    // Delegate to async version for non-blocking UI
+    SendMessageAsync(message);
 }
 
 void AIAssistantPanel::SendQuickAction(const OUString& action, const OUString& customPrompt)
@@ -1184,7 +1814,7 @@ void AIAssistantPanel::SendQuickAction(const OUString& action, const OUString& c
 
     if (textToProcess.isEmpty())
     {
-        AppendToChat(u"System"_ustr, u"No text to process. Select text or add content to document."_ustr);
+        AppendSystemMessage(u"No text to process. Select text or add content."_ustr, false);
         return;
     }
 
@@ -1531,14 +2161,46 @@ void AIAssistantPanel::RefreshSelectionContext()
             // Store the full selection for later use
             m_sCurrentSelection = sSelection;
 
-            // Truncate for display if too long
-            OUString sDisplayText = sSelection;
-            if (sDisplayText.getLength() > 50)
-                sDisplayText = sDisplayText.copy(0, 50) + u"..."_ustr;
+            // Count words in selection
+            sal_Int32 nWordCount = 0;
+            sal_Int32 nCharCount = sSelection.getLength();
+            bool bInWord = false;
+            for (sal_Int32 i = 0; i < sSelection.getLength(); ++i)
+            {
+                sal_Unicode c = sSelection[i];
+                bool bIsWordChar = (c != ' ' && c != '\t' && c != '\n' && c != '\r');
+                if (bIsWordChar && !bInWord)
+                {
+                    nWordCount++;
+                    bInWord = true;
+                }
+                else if (!bIsWordChar)
+                {
+                    bInWord = false;
+                }
+            }
+
+            // Build display text with word count (like Cursor)
+            OUStringBuffer displayBuf;
+            displayBuf.append(OUString::number(nWordCount));
+            displayBuf.append(u" word");
+            if (nWordCount != 1)
+                displayBuf.append(u"s");
+            displayBuf.append(u" ("_ustr);
+            displayBuf.append(OUString::number(nCharCount));
+            displayBuf.append(u" chars)"_ustr);
+
+            // Add truncated preview
+            OUString sPreview = sSelection;
+            if (sPreview.getLength() > 30)
+                sPreview = sPreview.copy(0, 30) + u"..."_ustr;
+            displayBuf.append(u" \""_ustr);
+            displayBuf.append(sPreview);
+            displayBuf.append(u"\""_ustr);
 
             // Show selection context in the badge UI (Cursor-like)
             if (m_xSelectionContextLabel)
-                m_xSelectionContextLabel->set_label(u"\""_ustr + sDisplayText + u"\""_ustr);
+                m_xSelectionContextLabel->set_label(displayBuf.makeStringAndClear());
             if (m_xSelectionContextBox)
                 m_xSelectionContextBox->set_visible(true);
 
@@ -1684,6 +2346,128 @@ IMPL_LINK_NOARG(AIAssistantPanel, RevertAllClickHdl, weld::Button&, void)
 IMPL_LINK_NOARG(AIAssistantPanel, AcceptAllClickHdl, weld::Button&, void)
 {
     AcceptAllEdits();
+}
+
+// ==================== ASYNC HTTP SUPPORT ====================
+
+void AIAssistantPanel::SendMessageAsync(const OUString& message)
+{
+    if (message.isEmpty())
+        return;
+
+    if (m_bProcessing || m_bAsyncRequestPending)
+    {
+        UpdateStatus(u"Please wait for current request..."_ustr);
+        return;
+    }
+
+    // Check if we're awaiting clarification answers
+    if (m_bAwaitingClarification)
+    {
+        // Process the input as clarification answers
+        ProcessClarificationAnswers(message);
+
+        // Clear input
+        if (m_xInputField)
+        {
+            m_xInputField->set_text(u""_ustr);
+            m_xInputField->set_placeholder_text(u""_ustr);
+        }
+        return;
+    }
+
+    // Store the message in case we need clarification
+    m_sPendingMessage = message;
+
+    // Add user message to chat with new formatting
+    AppendUserMessage(message);
+
+    // Clear input immediately
+    if (m_xInputField)
+        m_xInputField->set_text(u""_ustr);
+
+    // Check connection
+    if (!m_pAgentConnection->isConnected())
+    {
+        if (!m_pAgentConnection->checkConnection())
+        {
+            AppendSystemMessage(u"Backend not available at localhost:8765"_ustr, false);
+            UpdateStatus(u"Backend offline"_ustr);
+            return;
+        }
+    }
+
+    // Update UI for processing state
+    m_bProcessing = true;
+    m_bAsyncRequestPending = true;
+    UpdateStatus(u"AI is thinking..."_ustr);
+    if (m_xSendButton)
+        m_xSendButton->set_sensitive(false);
+
+    // Show typing indicator in chat
+    AppendTypingIndicator();
+
+    // Get document content and selection for the AI - store for async use
+    m_sAsyncDocContent = GetDocumentText();
+    m_sAsyncSelection = GetSelectedText();
+
+    // Launch HTTP call in background thread
+    // Note: We need to capture the connection pointer, not 'this', to avoid thread safety issues
+    auto* pConnection = m_pAgentConnection.get();
+    OUString sMsg = message;
+    OUString sDoc = m_sAsyncDocContent;
+    OUString sSel = m_sAsyncSelection;
+
+    m_aAsyncResponse = std::async(std::launch::async, [pConnection, sMsg, sDoc, sSel]() {
+        return pConnection->sendMessage(sMsg, sDoc, sSel);
+    });
+
+    // Start polling for completion using Idle (runs on main thread)
+    m_aResponseChecker.Start();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, CheckAsyncResponseHdl, Timer*, void)
+{
+    if (!m_bAsyncRequestPending)
+    {
+        m_aResponseChecker.Stop();
+        return;
+    }
+
+    // Check if the async operation has completed
+    if (m_aAsyncResponse.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready)
+    {
+        // Response arrived - stop polling
+        m_aResponseChecker.Stop();
+        m_bAsyncRequestPending = false;
+
+        try
+        {
+            // Get the result and process on main thread
+            officelabs::AgentResponse response = m_aAsyncResponse.get();
+
+            // Remove typing indicator and show response
+            RemoveTypingIndicator();
+            ProcessResponse(response);
+        }
+        catch (const std::exception& e)
+        {
+            // Handle any async errors
+            RemoveTypingIndicator();
+            m_bProcessing = false;
+            if (m_xSendButton)
+                m_xSendButton->set_sensitive(true);
+
+            OUString sError = u"Async error: "_ustr + OUString::createFromAscii(e.what());
+            AppendSystemMessage(sError, false);
+            UpdateStatus(u"Request failed"_ustr);
+        }
+    }
+    else
+    {
+        // Keep checking - restart the idle timer
+        m_aResponseChecker.Start();
+    }
 }
 
 } // end of namespace sw::sidebar

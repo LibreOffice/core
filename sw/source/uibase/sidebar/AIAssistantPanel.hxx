@@ -15,10 +15,13 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/idle.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <officelabs/AgentConnection.hxx>
 #include <chrono>
 #include <vector>
+#include <future>
+#include <optional>
 
 class SfxBindings;
 class SwWrtShell;
@@ -86,8 +89,22 @@ private:
     OUString m_sLastAIResponse;
     OUString m_sChatLog;
 
+    // Clarification flow state
+    bool m_bAwaitingClarification;
+    OUString m_sPendingMessage;  // Original message waiting for clarification
+    std::vector<officelabs::ClarificationQuestion> m_aPendingQuestions;
+    std::map<OUString, OUString> m_aClarificationAnswers;
+    int m_nCurrentQuestionIndex;
+
     // Edit history for revert system (Phase 2.5)
     std::vector<EditHistoryEntry> m_aEditHistory;
+
+    // Async HTTP support - non-blocking AI calls
+    std::future<officelabs::AgentResponse> m_aAsyncResponse;
+    Idle m_aResponseChecker;
+    OUString m_sAsyncDocContent;  // Stored for async request
+    OUString m_sAsyncSelection;   // Stored for async request
+    bool m_bAsyncRequestPending;
 
     // Quick action handlers
     DECL_LINK(CleanClickHdl, weld::Button&, void);
@@ -121,10 +138,22 @@ private:
     // Clear selection context handler
     DECL_LINK(ClearSelectionClickHdl, weld::Button&, void);
 
+    // Async HTTP response handler
+    DECL_LINK(CheckAsyncResponseHdl, Timer*, void);
+
     void SendMessage(const OUString& message);
+    void SendMessageAsync(const OUString& message);  // Non-blocking version
     void SendQuickAction(const OUString& action, const OUString& customPrompt = u""_ustr);
     void UpdateStatus(const OUString& status);
     void AppendToChat(const OUString& sender, const OUString& message);
+    void AppendUserMessage(const OUString& message);
+    void AppendAIMessage(const OUString& message, const std::vector<officelabs::AutoEditCommand>& edits);
+    void AppendSystemMessage(const OUString& message, bool isSuccess = true);
+    OUString CleanAIResponse(const OUString& response);
+    OUString FormatActionSummary(const std::vector<officelabs::AutoEditCommand>& edits);
+    void AppendTypingIndicator();
+    void RemoveTypingIndicator();
+    void HighlightChangedText(const OUString& text, bool isAddition);
     OUString GetSelectedText();
     OUString GetDocumentText();
     OUString GetDocumentContext();
@@ -133,6 +162,12 @@ private:
     void InsertFormattedText(const OUString& text);
     void InsertAtRefText(const OUString& ref);
     void RefreshSelectionContext();
+
+    // Clarification flow methods (Phase 2.5)
+    void AppendClarificationHeader();
+    void DisplayClarificationQuestions();
+    void ProcessClarificationAnswers(const OUString& input);
+    void SendMessageWithClarification();
 
     // Edit history management (Phase 2.5)
     void RecordEditStart(const OUString& description);

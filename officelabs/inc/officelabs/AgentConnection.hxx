@@ -5,6 +5,7 @@
 #include <rtl/ustring.hxx>
 #include <string>
 #include <vector>
+#include <map>
 #include <optional>
 
 namespace officelabs {
@@ -53,6 +54,20 @@ struct OFFICELABS_DLLPUBLIC AutoEditCommand {
     int undoSteps = 1;   // Number of steps to undo/redo
 };
 
+// Clarification question for complex tasks
+struct ClarificationQuestion {
+    OUString id;
+    OUString question;
+    std::vector<OUString> options;  // Empty if free text
+    OUString defaultValue;
+
+    // Inline definitions to avoid DLL export issues
+    ClarificationQuestion() = default;
+    ClarificationQuestion(const ClarificationQuestion&) = default;
+    ClarificationQuestion& operator=(const ClarificationQuestion&) = default;
+    ~ClarificationQuestion() = default;
+};
+
 struct OFFICELABS_DLLPUBLIC AgentResponse {
     OUString message;
     bool hasPatch;
@@ -62,6 +77,9 @@ struct OFFICELABS_DLLPUBLIC AgentResponse {
     OUString patchNewValue;
     OUString patchDiff;
     std::vector<AutoEditCommand> autoEdits;  // Commands to execute automatically
+    // Clarification flow
+    bool needsClarification = false;
+    std::vector<ClarificationQuestion> clarificationQuestions;
 };
 
 class OFFICELABS_DLLPUBLIC AgentConnection {
@@ -80,6 +98,7 @@ public:
     bool isConnected() const { return m_connected; }
     
     AgentResponse sendMessage(const OUString& message, const OUString& documentContent, const OUString& selection = OUString());
+    AgentResponse sendMessageWithClarification(const OUString& message, const OUString& documentContent, const OUString& selection, const std::map<OUString, OUString>& clarificationAnswers);
     void setBackendUrl(const OUString& url);
 };
 
