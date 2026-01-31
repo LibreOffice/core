@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">4</property>
+    <property name="vexpand">True</property>
 
     <!-- Status Label -->
     <child>
@@ -125,12 +126,18 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="height_request">700</property>
+        <property name="shadow_type">in</property>
         <child>
           <object class="GtkTextView" id="chat_history">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="editable">False</property>
             <property name="wrap_mode">word</property>
+            <property name="top_margin">4</property>
+            <property name="left_margin">4</property>
+            <property name="right_margin">4</property>
+            <property name="bottom_margin">4</property>
           </object>
         </child>
       </object>
@@ -181,6 +188,95 @@
       </packing>
     </child>
 
+    <!-- Revert Controls Row (Phase 2.5) -->
+    <child>
+      <object class="GtkBox" id="revert_row">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">4</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="revert_all_button">
+            <property name="label" translatable="yes">Revert All</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="sensitive">False</property>
+            <property name="tooltip_text" translatable="yes">Undo all AI edits in this session</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="accept_all_button">
+            <property name="label" translatable="yes">Accept All</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="sensitive">False</property>
+            <property name="tooltip_text" translatable="yes">Accept all AI edits and clear history</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+
+    <!-- Selection Context Badge (shows selected text) -->
+    <child>
+      <object class="GtkBox" id="selection_context_box">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">4</property>
+        <child>
+          <object class="GtkLabel" id="selection_icon">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label">📝</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="selection_context_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label">No selection</property>
+            <property name="ellipsize">end</property>
+            <property name="max_width_chars">40</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="clear_selection_button">
+            <property name="label" translatable="yes">✕</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">Clear selection context</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
+      </packing>
+    </child>
+
     <!-- Input Row with @ button (at bottom) -->
     <child>
       <object class="GtkBox" id="input_row">
@@ -206,7 +302,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="placeholder_text" translatable="yes">Ask AI... Use @ to reference elements</property>
+            <property name="placeholder_text" translatable="yes">What do you want to do with the selection?</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -231,7 +327,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="position">7</property>
       </packing>
     </child>
   </object>

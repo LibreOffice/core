@@ -91,6 +91,11 @@ AIAssistantPanel::AIAssistantPanel(
     // Chat area
     m_xChatHistory = m_xBuilder->weld_text_view(u"chat_history"_ustr);
 
+    // Selection context UI (Cursor-like)
+    m_xSelectionContextBox = m_xBuilder->weld_box(u"selection_context_box"_ustr);
+    m_xSelectionContextLabel = m_xBuilder->weld_label(u"selection_context_label"_ustr);
+    m_xClearSelectionButton = m_xBuilder->weld_button(u"clear_selection_button"_ustr);
+
     // Input row
     m_xAtRefButton = m_xBuilder->weld_button(u"at_ref_button"_ustr);
     m_xInputField = m_xBuilder->weld_entry(u"input_field"_ustr);
@@ -123,7 +128,10 @@ AIAssistantPanel::AIAssistantPanel(
     if (m_xSendButton)
         m_xSendButton->connect_clicked(LINK(this, AIAssistantPanel, SendClickHdl));
     if (m_xInputField)
+    {
         m_xInputField->connect_activate(LINK(this, AIAssistantPanel, InputActivateHdl));
+        m_xInputField->connect_focus_in(LINK(this, AIAssistantPanel, InputFocusInHdl));
+    }
 
     // Connect action handlers
     if (m_xInsertButton)
@@ -136,6 +144,19 @@ AIAssistantPanel::AIAssistantPanel(
     // Connect @ reference button handler
     if (m_xAtRefButton)
         m_xAtRefButton->connect_clicked(LINK(this, AIAssistantPanel, AtRefClickHdl));
+
+    // Connect clear selection button handler
+    if (m_xClearSelectionButton)
+        m_xClearSelectionButton->connect_clicked(LINK(this, AIAssistantPanel, ClearSelectionClickHdl));
+
+    // Revert buttons (Phase 2.5)
+    m_xRevertAllButton = m_xBuilder->weld_button(u"revert_all_button"_ustr);
+    m_xAcceptAllButton = m_xBuilder->weld_button(u"accept_all_button"_ustr);
+
+    if (m_xRevertAllButton)
+        m_xRevertAllButton->connect_clicked(LINK(this, AIAssistantPanel, RevertAllClickHdl));
+    if (m_xAcceptAllButton)
+        m_xAcceptAllButton->connect_clicked(LINK(this, AIAssistantPanel, AcceptAllClickHdl));
 
     // Configure chat history
     if (m_xChatHistory)
@@ -159,6 +180,35 @@ AIAssistantPanel::AIAssistantPanel(
     else
     {
         UpdateStatus(u"Backend offline - Start server at localhost:8765"_ustr);
+    }
+
+    // Check for selection to enable inline edit mode (Cursor-like feature)
+    if (m_pWrtShell && m_pWrtShell->HasSelection())
+    {
+        OUString sSelection;
+        m_pWrtShell->GetSelectedText(sSelection, ParaBreakType::ToBlank);
+        if (!sSelection.isEmpty())
+        {
+            // Store the full selection
+            m_sCurrentSelection = sSelection;
+
+            // Truncate selection for display if too long
+            OUString sDisplayText = sSelection;
+            if (sDisplayText.getLength() > 50)
+                sDisplayText = sDisplayText.copy(0, 50) + u"..."_ustr;
+
+            // Show selection context in the badge UI
+            if (m_xSelectionContextLabel)
+                m_xSelectionContextLabel->set_label(u"\""_ustr + sDisplayText + u"\""_ustr);
+            if (m_xSelectionContextBox)
+                m_xSelectionContextBox->set_visible(true);
+
+            UpdateStatus(u"Selection ready - Type your instruction"_ustr);
+
+            // Focus the input field for quick typing
+            if (m_xInputField)
+                m_xInputField->grab_focus();
+        }
     }
 }
 
@@ -345,6 +395,11 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
     int editCount = 0;
 
     if (execDbg) { fprintf(execDbg, "  Got SwWrtShell, calling StartAllAction\n"); fflush(execDbg); }
+
+    // Record edit start for revert system (Phase 2.5)
+    OUString sEditDescription = OUString::number(edits.size()) + u" AI edit(s)"_ustr;
+    RecordEditStart(sEditDescription);
+
     rSh.StartAllAction();
     if (execDbg) { fprintf(execDbg, "  StartAllAction done\n"); fflush(execDbg); }
 
@@ -1057,6 +1112,9 @@ void AIAssistantPanel::ExecuteAutoEdits(const std::vector<officelabs::AutoEditCo
 
     if (editCount > 0)
     {
+        // Record edit completion for revert system (Phase 2.5)
+        RecordEditEnd();
+
         OUString msg = OUString::number(editCount) + u" edit(s) applied to document"_ustr;
         if (execDbg) { fprintf(execDbg, "Calling AppendToChat\n"); fflush(execDbg); }
         AppendToChat(u"System"_ustr, msg);
@@ -1433,6 +1491,199 @@ IMPL_LINK_NOARG(AIAssistantPanel, AtRefClickHdl, weld::Button&, void)
     InsertAtRefText(u"@"_ustr);
     // Show quick help in status
     UpdateStatus(u"Type: selection, document, table1, image1, section1"_ustr);
+}
+
+// ==================== SELECTION CONTEXT (PHASE 2.5) ====================
+
+IMPL_LINK_NOARG(AIAssistantPanel, InputFocusInHdl, weld::Widget&, void)
+{
+    // Refresh selection context when input field gets focus
+    RefreshSelectionContext();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, ClearSelectionClickHdl, weld::Button&, void)
+{
+    // Clear the selection context
+    m_sCurrentSelection.clear();
+    if (m_xSelectionContextBox)
+        m_xSelectionContextBox->set_visible(false);
+    UpdateStatus(u"Selection cleared"_ustr);
+}
+
+void AIAssistantPanel::RefreshSelectionContext()
+{
+    // Re-check for selection each time the input field gets focus
+    // This allows the user to select text, then click on the input field
+    if (!m_pWrtShell)
+    {
+        // Try to get the shell again (it might have become available)
+        SwView* pView = GetActiveView();
+        if (pView)
+            m_pWrtShell = &pView->GetWrtShell();
+    }
+
+    if (m_pWrtShell && m_pWrtShell->HasSelection())
+    {
+        OUString sSelection;
+        m_pWrtShell->GetSelectedText(sSelection, ParaBreakType::ToBlank);
+        if (!sSelection.isEmpty())
+        {
+            // Store the full selection for later use
+            m_sCurrentSelection = sSelection;
+
+            // Truncate for display if too long
+            OUString sDisplayText = sSelection;
+            if (sDisplayText.getLength() > 50)
+                sDisplayText = sDisplayText.copy(0, 50) + u"..."_ustr;
+
+            // Show selection context in the badge UI (Cursor-like)
+            if (m_xSelectionContextLabel)
+                m_xSelectionContextLabel->set_label(u"\""_ustr + sDisplayText + u"\""_ustr);
+            if (m_xSelectionContextBox)
+                m_xSelectionContextBox->set_visible(true);
+
+            UpdateStatus(u"Selection ready - Type your instruction"_ustr);
+        }
+    }
+    else
+    {
+        // No selection - hide the context box if there's no stored selection
+        if (m_sCurrentSelection.isEmpty() && m_xSelectionContextBox)
+            m_xSelectionContextBox->set_visible(false);
+    }
+}
+
+// ==================== EDIT HISTORY (PHASE 2.5) ====================
+
+void AIAssistantPanel::RecordEditStart(const OUString& description)
+{
+    // Create a new edit history entry
+    EditHistoryEntry entry;
+    entry.description = description;
+    entry.undoCount = 0;  // Will be set in RecordEditEnd
+    entry.reverted = false;
+    entry.accepted = false;
+    entry.timestamp = std::chrono::system_clock::now();
+
+    m_aEditHistory.push_back(entry);
+    UpdateRevertButtonState();
+}
+
+void AIAssistantPanel::RecordEditEnd()
+{
+    // The edit has been completed - the undo count is 1 for single operations
+    if (!m_aEditHistory.empty())
+    {
+        m_aEditHistory.back().undoCount = 1;
+    }
+    UpdateRevertButtonState();
+}
+
+void AIAssistantPanel::RevertLastEdit()
+{
+    if (m_aEditHistory.empty())
+        return;
+
+    // Get the last non-reverted edit
+    for (auto it = m_aEditHistory.rbegin(); it != m_aEditHistory.rend(); ++it)
+    {
+        if (!it->reverted)
+        {
+            if (m_pWrtShell)
+            {
+                // Undo the edit
+                for (sal_uInt16 i = 0; i < it->undoCount && i < 10; ++i)
+                {
+                    m_pWrtShell->Undo();
+                }
+                it->reverted = true;
+                AppendToChat(u"System"_ustr, u"[Reverted: "_ustr + it->description + u"]"_ustr);
+                UpdateStatus(u"Reverted: "_ustr + it->description);
+            }
+            break;
+        }
+    }
+    UpdateRevertButtonState();
+}
+
+void AIAssistantPanel::RevertAllEdits()
+{
+    if (m_aEditHistory.empty())
+        return;
+
+    // Count total undos needed
+    sal_uInt16 nTotalUndos = 0;
+    for (const auto& entry : m_aEditHistory)
+    {
+        if (!entry.reverted)
+        {
+            nTotalUndos += entry.undoCount;
+        }
+    }
+
+    if (m_pWrtShell && nTotalUndos > 0)
+    {
+        // Undo all edits
+        for (sal_uInt16 i = 0; i < nTotalUndos && i < 50; ++i)
+        {
+            m_pWrtShell->Undo();
+        }
+
+        // Mark all as reverted
+        for (auto& entry : m_aEditHistory)
+        {
+            if (!entry.reverted)
+            {
+                entry.reverted = true;
+            }
+        }
+
+        AppendToChat(u"System"_ustr, u"[All AI edits reverted]"_ustr);
+        UpdateStatus(u"All edits reverted"_ustr);
+    }
+    UpdateRevertButtonState();
+}
+
+void AIAssistantPanel::AcceptAllEdits()
+{
+    // Mark all edits as accepted and clear history
+    for (auto& entry : m_aEditHistory)
+    {
+        entry.accepted = true;
+    }
+    m_aEditHistory.clear();
+
+    AppendToChat(u"System"_ustr, u"[All AI edits accepted]"_ustr);
+    UpdateStatus(u"All edits accepted"_ustr);
+    UpdateRevertButtonState();
+}
+
+void AIAssistantPanel::UpdateRevertButtonState()
+{
+    bool bHasUnrevertedEdits = false;
+    for (const auto& entry : m_aEditHistory)
+    {
+        if (!entry.reverted && !entry.accepted)
+        {
+            bHasUnrevertedEdits = true;
+            break;
+        }
+    }
+
+    if (m_xRevertAllButton)
+        m_xRevertAllButton->set_sensitive(bHasUnrevertedEdits);
+    if (m_xAcceptAllButton)
+        m_xAcceptAllButton->set_sensitive(bHasUnrevertedEdits);
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, RevertAllClickHdl, weld::Button&, void)
+{
+    RevertAllEdits();
+}
+
+IMPL_LINK_NOARG(AIAssistantPanel, AcceptAllClickHdl, weld::Button&, void)
+{
+    AcceptAllEdits();
 }
 
 } // end of namespace sw::sidebar

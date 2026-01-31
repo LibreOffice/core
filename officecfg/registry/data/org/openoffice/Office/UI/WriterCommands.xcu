@@ -4425,6 +4425,11 @@
           <value xml:lang="en-US">Open the Find Deck</value>
         </prop>
       </node>
+      <node oor:name=".uno:SidebarDeck.AIDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open the AI Assistant</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SpotlightMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Spotlight</value>

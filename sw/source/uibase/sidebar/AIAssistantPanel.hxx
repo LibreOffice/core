@@ -17,11 +17,22 @@
 #include <vcl/weld/TextView.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <officelabs/AgentConnection.hxx>
+#include <chrono>
+#include <vector>
 
 class SfxBindings;
 class SwWrtShell;
 
 namespace sw::sidebar {
+
+// Edit history entry for revert system
+struct EditHistoryEntry {
+    OUString description;
+    sal_uInt16 undoCount;  // Number of undo steps for this edit
+    bool reverted = false;
+    bool accepted = false;
+    std::chrono::system_clock::time_point timestamp;
+};
 
 class AIAssistantPanel : public PanelLayout
 {
@@ -44,6 +55,12 @@ private:
     // Chat area
     std::unique_ptr<weld::TextView> m_xChatHistory;
 
+    // Selection context (Cursor-like UI)
+    std::unique_ptr<weld::Box> m_xSelectionContextBox;
+    std::unique_ptr<weld::Label> m_xSelectionContextLabel;
+    std::unique_ptr<weld::Button> m_xClearSelectionButton;
+    OUString m_sCurrentSelection;  // Store current selection text
+
     // Input row
     std::unique_ptr<weld::Button> m_xAtRefButton;
     std::unique_ptr<weld::Entry> m_xInputField;
@@ -53,6 +70,10 @@ private:
     std::unique_ptr<weld::Button> m_xInsertButton;
     std::unique_ptr<weld::Button> m_xReplaceButton;
     std::unique_ptr<weld::Button> m_xResetButton;
+
+    // Revert buttons (Phase 2.5)
+    std::unique_ptr<weld::Button> m_xRevertAllButton;
+    std::unique_ptr<weld::Button> m_xAcceptAllButton;
 
     SfxBindings* m_pBindings;
     SwWrtShell* m_pWrtShell;
@@ -64,6 +85,9 @@ private:
     bool m_bProcessing;
     OUString m_sLastAIResponse;
     OUString m_sChatLog;
+
+    // Edit history for revert system (Phase 2.5)
+    std::vector<EditHistoryEntry> m_aEditHistory;
 
     // Quick action handlers
     DECL_LINK(CleanClickHdl, weld::Button&, void);
@@ -87,6 +111,16 @@ private:
     // @ Reference button handler
     DECL_LINK(AtRefClickHdl, weld::Button&, void);
 
+    // Revert handlers (Phase 2.5)
+    DECL_LINK(RevertAllClickHdl, weld::Button&, void);
+    DECL_LINK(AcceptAllClickHdl, weld::Button&, void);
+
+    // Focus handler for selection refresh
+    DECL_LINK(InputFocusInHdl, weld::Widget&, void);
+
+    // Clear selection context handler
+    DECL_LINK(ClearSelectionClickHdl, weld::Button&, void);
+
     void SendMessage(const OUString& message);
     void SendQuickAction(const OUString& action, const OUString& customPrompt = u""_ustr);
     void UpdateStatus(const OUString& status);
@@ -98,6 +132,15 @@ private:
     void ExecuteAutoEdits(const std::vector<officelabs::AutoEditCommand>& edits);
     void InsertFormattedText(const OUString& text);
     void InsertAtRefText(const OUString& ref);
+    void RefreshSelectionContext();
+
+    // Edit history management (Phase 2.5)
+    void RecordEditStart(const OUString& description);
+    void RecordEditEnd();
+    void RevertLastEdit();
+    void RevertAllEdits();
+    void AcceptAllEdits();
+    void UpdateRevertButtonState();
 
 public:
     static std::unique_ptr<PanelLayout> Create(
