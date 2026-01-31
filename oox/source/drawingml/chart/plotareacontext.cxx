@@ -175,6 +175,13 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                     if (rAttribs.hasAttribute(XML_id)) {
                         sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
                         // TODO: also handle attribute "hidden"
+
+                        // Add the id to the axis id list in the (fictitious)
+                        // type group
+                        std::shared_ptr<TypeGroupModel> aTGM =
+                            mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
+                        aTGM->maAxisIds.push_back(nId);
+
                         return new CxAxisContext(*this, mrModel.maAxes.create(nElement, false), nId);
                     } else {
                         return nullptr;

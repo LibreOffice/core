@@ -282,7 +282,7 @@ private:
         const css::uno::Reference< css::beans::XPropertySet >& xMinorGrid,
         sal_Int32 nAxisType,
         const AxisIdPair& rAxisIdPair);
-    void createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes);
+    void createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes, bool bIsChartex);
     void exportView3D();
     bool isDeep3dChart();
 
