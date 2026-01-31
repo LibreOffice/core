@@ -981,6 +981,7 @@ void SwPostItMgr::LayoutPostIts()
         // - place SwPostIts on their initial position
         // - calculate necessary height for all PostIts together
         bool bUpdate = false;
+        const tools::Long nSidebarWidth = GetSidebarWidth(true);
         for (std::unique_ptr<SwPostItPageItem>& pPage : mPages)
         {
             // only layout if there are notes on this page
@@ -1019,7 +1020,7 @@ void SwPostItMgr::LayoutPostIts()
                             if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
                             {
                                 // x value for notes positioning
-                                mlPageBorder = mpEditWin->LogicToPixel( Point( pPage->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
+                                mlPageBorder = mpEditWin->LogicToPixel(Point(pPage->mPageRect.Left(), 0)).X() - nSidebarWidth;// - GetSidebarBorderWidth(true);
                                 //bending point
                                 mlPageEnd =
                                     mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
@@ -1039,13 +1040,18 @@ void SwPostItMgr::LayoutPostIts()
 
                             tools::Long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
 
+                            // Without taking new width into account, the text height will be wrong.
+                            // GuessTextHeightForWidth is expensive, only use it when necessary.
+                            tools::Long nTextHeight;
+                            if (pPostIt->GetSizePixel().Width() == nSidebarWidth)
+                                nTextHeight = pPostIt->GetPostItTextHeight();
+                            else
+                                nTextHeight = pPostIt->GuessTextHeightForWidth(nSidebarWidth);
+
                             tools::Long postItPixelTextHeight
                                 = (comphelper::LibreOfficeKit::isActive()
-                                       ? mpEditWin
-                                             ->LogicToPixel(
-                                                 Point(0, pPostIt->GetPostItTextHeight()))
-                                             .Y()
-                                       : pPostIt->GetPostItTextHeight());
+                                       ? mpEditWin->LogicToPixel(Point(0, nTextHeight)).Y()
+                                       : nTextHeight);
                             aPostItHeight
                                 = (postItPixelTextHeight < pPostIt->GetMinimumSizeWithoutMeta()
                                        ? pPostIt->GetMinimumSizeWithoutMeta()
@@ -1053,7 +1059,7 @@ void SwPostItMgr::LayoutPostIts()
                                   + pPostIt->GetMetaHeight();
                             pPostIt->SetPosSizePixelRect( mlPageBorder ,
                                                           Y - GetInitialAnchorDistance(),
-                                                          GetSidebarWidth(true),
+                                                          nSidebarWidth,
                                                           aPostItHeight,
                                                           mlPageEnd );
                         }
@@ -2418,7 +2424,7 @@ void SwPostItMgr::CorrectPositions()
 bool SwPostItMgr::ShowNotes() const
 {
     // we only want to see notes if Options - Writer - View - Notes is ticked
-    return mbForceShow || mpWrtShell->GetViewOptions()->IsPostIts();
+    return mbForceShowForPrintOrPdf || mpWrtShell->GetViewOptions()->IsPostIts();
 }
 
 bool SwPostItMgr::HasNotes() const
@@ -2472,8 +2478,18 @@ tools::ULong SwPostItMgr::GetSidebarWidth(bool bPx) const
         double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());
         nZoom = fScaleX * 100;
     }
-    tools::ULong aWidth = static_cast<tools::ULong>(
-        nZoom * officecfg::Office::Writer::Notes::DisplayWidthFactor::get());
+    double fDisplayWidthFactor;
+    if (mbForceShowForPrintOrPdf)
+    {
+        // 1.8 is the fixed factor that empirically matches (at 96 PPI) the 0.75 scale applied to
+        // the page in SwViewShell::PrintOrPDFExport for "print in margins" mode.
+        fDisplayWidthFactor = 1.8 * (Application::GetDefaultDevice()->GetDPIX() / 96.0);
+    }
+    else
+    {
+        fDisplayWidthFactor = officecfg::Office::Writer::Notes::DisplayWidthFactor::get();
+    }
+    tools::ULong aWidth = static_cast<tools::ULong>(nZoom * fDisplayWidthFactor);
 
     if (bPx)
         return aWidth;

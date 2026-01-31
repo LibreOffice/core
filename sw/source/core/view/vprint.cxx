@@ -520,12 +520,18 @@ bool SwViewShell::PrintOrPDFExport(
 
         if (pPostItManager)
         {
-            pPostItManager->SetForceShow(true);
+            pPostItManager->SetForceShowForPrintOrPdf(true);
             pPostItManager->CalcRects();
             pPostItManager->LayoutPostIts();
             pPostItManager->DrawNotesForPage(pOutDev, nPage-1);
             oOrigHeight.emplace(pStPage->getFrameArea().Height());
-            pPostItManager->SetForceShow(false);
+            pPostItManager->SetForceShowForPrintOrPdf(false);
+            if (pPostItManager->ShowNotes())
+            {
+                // In Print/Pdf mode, LayoutPostIts used a fixed sidebar width. Now restore the
+                // layout with the normal (user-defined) sidebar width.
+                pPostItManager->LayoutPostIts();
+            }
         }
     }
 

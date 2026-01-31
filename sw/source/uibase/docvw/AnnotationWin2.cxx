@@ -1196,6 +1196,20 @@ tools::Long SwAnnotationWin::GetPostItTextHeight()
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
+// Provides an estimation for the text height given a specific width of the annotation window.
+// It doesn't calculate it accurately, e.g. it doesn't take scrollbars into account (see
+// SwAnnotationWin::DoResize for more details of accurate calculation). Even though it avoids
+// some calculations, it may still be quite expensive for large text.
+tools::Long SwAnnotationWin::GuessTextHeightForWidth(tools::Long nWidth) const
+{
+    if (!mpOutliner)
+        return 0;
+    comphelper::ScopeGuard resetPaperSize([this, curSize = mpOutliner->GetPaperSize()]()
+                                          { mpOutliner->SetPaperSize(curSize); });
+    mpOutliner->SetPaperSize(PixelToLogic(Size(nWidth, SAL_MAX_INT32)));
+    return LogicToPixel(mpOutliner->CalcTextSize()).Height();
+}
+
 void SwAnnotationWin::SwitchToPostIt(sal_uInt16 aDirection)
 {
     SwAnnotationWin* pPostIt = mrMgr.GetNextPostIt(aDirection, this);

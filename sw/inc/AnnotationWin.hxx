@@ -111,6 +111,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
 
         tools::Long            GetPostItTextHeight();
+        tools::Long GuessTextHeightForWidth(tools::Long nWidth) const;
 
         void            SwitchToPostIt(sal_uInt16 aDirection);
         void            SwitchToFieldPos();
