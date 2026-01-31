@@ -46,7 +46,9 @@ TextContext::~TextContext()
 ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     // this context handler is used for <c:tx> and embedded <c:v> elements
-    if( isCurrentElement( C_TOKEN( tx ) ) || isCurrentElement(CX_TOKEN(tx)) ) switch( nElement )
+    if( isCurrentElement( C_TOKEN( tx ) ) ||
+            isCurrentElement(CX_TOKEN(tx)) ||
+            isCurrentElement(CX_TOKEN(txData)) ) switch( nElement )
     {
         case C_TOKEN( rich ):
         case CX_TOKEN( rich ):
@@ -71,7 +73,7 @@ ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const Attrib
 
 void TextContext::onCharacters( const OUString& rChars )
 {
-    if( isCurrentElement( C_TOKEN( v ) ) )
+    if( isCurrentElement( C_TOKEN( v ) ) ||  isCurrentElement( CX_TOKEN( v ) ))
     {
         // Static text is stored as a single string formula token for Excel document.
         mrModel.mxDataSeq.create().maFormula =  "\"" + rChars + "\"";

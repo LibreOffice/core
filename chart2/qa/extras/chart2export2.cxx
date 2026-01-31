@@ -257,6 +257,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
                 "layoutId", u"funnel");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxes)
+{
+    loadFromFile(u"xlsx/waterfall2.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Should be two axes
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
 {
     loadFromFile(u"xlsx/axis_title_rotation.xlsx");

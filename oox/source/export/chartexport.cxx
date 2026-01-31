@@ -2586,7 +2586,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
         pFS->singleElement(FSNS(XML_c, XML_barDir), XML_val, "col");
         pFS->singleElement(FSNS(XML_c, XML_grouping), XML_val, "clustered");
         pFS->singleElement(FSNS(XML_c, XML_varyColors), XML_val, "0");
-        createAxes(true, false);
+        createAxes(true, false, false);
         pFS->endElement(FSNS(XML_c, XML_barChart));
     }
 
@@ -3138,7 +3138,7 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
         if (splitDataSeries.hasElements())
             exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
-        createAxes(bPrimaryAxes, false);
+        createAxes(bPrimaryAxes, false, false);
         //exportAxesId(bPrimaryAxes);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
@@ -3242,7 +3242,7 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
             }
         }
 
-        createAxes(bPrimaryAxes, false);
+        createAxes(bPrimaryAxes, false, false);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
     }
@@ -3267,7 +3267,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
         if (splitDataSeries.hasElements())
             exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
-        createAxes(bPrimaryAxes, false);
+        createAxes(bPrimaryAxes, false, false);
 
         pFS->endElement(FSNS(XML_c, XML_bubbleChart));
     }
@@ -3284,6 +3284,8 @@ void ChartExport::exportChartex( const Reference< chart2::XChartType >& xChartTy
     {
         if (!splitDataSeries.hasElements())
             continue;
+
+        createAxes(true, false, true);
 
         //exportVaryColors(xChartType);
 
@@ -3422,7 +3424,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
             pFS->singleElement(FSNS(XML_c, XML_marker), XML_val, marker);
         }
 
-        createAxes(bPrimaryAxes, true);
+        createAxes(bPrimaryAxes, true, false);
 
         pFS->endElement( FSNS( XML_c, nTypeId ) );
     }
@@ -3467,7 +3469,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    createAxes(bPrimaryAxes, false);
+    createAxes(bPrimaryAxes, false, false);
 
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
 }
@@ -3497,7 +3499,7 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
     bool bPrimaryAxes = true;
     if (pSeries)
         exportSeries_chart(xChartType, *pSeries, bPrimaryAxes);
-    createAxes(bPrimaryAxes, false);
+    createAxes(bPrimaryAxes, false, false);
     //exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
@@ -3546,7 +3548,7 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
             exportUpDownBars(xChartType);
         }
 
-        createAxes(bPrimaryAxes, false);
+        createAxes(bPrimaryAxes, false, false);
 
         pFS->endElement(FSNS(XML_c, XML_stockChart));
     }
@@ -3621,7 +3623,7 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    createAxes(bPrimaryAxes, false);
+    createAxes(bPrimaryAxes, false, false);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
@@ -5611,7 +5613,7 @@ void ChartExport::exportDataPoints(
 }
 
 // Generalized axis output
-void ChartExport::createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes)
+void ChartExport::createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes, bool bIsChartex)
 {
     sal_Int32 nAxisIdx, nAxisIdy;
     bool bPrimaryAxisExists = false;
@@ -5637,19 +5639,22 @@ void ChartExport::createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes)
         maAxes.emplace_back( eXAxis, nAxisIdx, nAxisIdy );
         maAxes.emplace_back( eYAxis, nAxisIdy, nAxisIdx );
     }
-    // Export IDs
-    FSHelperPtr pFS = GetFS();
-    pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdx));
-    pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdy));
-    if (mbHasZAxis)
-    {
-        sal_Int32 nAxisIdz = 0;
-        if( isDeep3dChart() )
+
+    if (!bIsChartex) {
+        // Export IDs
+        FSHelperPtr pFS = GetFS();
+        pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdx));
+        pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdy));
+        if (mbHasZAxis)
         {
-            nAxisIdz = lcl_generateRandomValue();
-            maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
+            sal_Int32 nAxisIdz = 0;
+            if( isDeep3dChart() )
+            {
+                nAxisIdz = lcl_generateRandomValue();
+                maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
+            }
+            pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdz));
         }
-        pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdz));
     }
 }
 
