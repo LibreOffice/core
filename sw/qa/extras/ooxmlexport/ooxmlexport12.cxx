@@ -983,9 +983,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134618)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     //Without the fix it in place, it would have failed with
-    //- Expected: 1
+    //- Expected: 2
     //- Actual  : 9
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent", 2);
 }

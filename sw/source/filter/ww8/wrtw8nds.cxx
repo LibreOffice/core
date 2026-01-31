@@ -2568,7 +2568,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // DOCX: Put the flies in their own run.
             // This is critical for plainText content controls and fields.
             if (nStateOfFlyFrame == FLY_PROCESSED && !aStr.isEmpty()
-                && aStr != OUStringChar(CH_TXTATR_BREAKWORD)
                 && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX)
             {
                 // FLY_PROCESSED: there is at least 1 fly already written
