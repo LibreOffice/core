@@ -12,6 +12,7 @@ size_t AgentConnection::WriteCallback(void* contents, size_t size, size_t nmemb,
 AgentConnection::AgentConnection()
     : m_backendUrl("http://localhost:8765")
     , m_connected(false)
+    , m_cancelRequested(false)
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
     checkConnection();
@@ -681,6 +682,205 @@ AgentResponse AgentConnection::sendMessageWithClarification(const OUString& mess
     }
 
     return parseResponse(responseStr);
+}
+
+// Structure for streaming callback context
+struct StreamContext {
+    std::string buffer;  // Buffer for incomplete SSE events
+    AgentConnection* connection;
+    StreamCallback callback;
+    AgentResponse response;  // Accumulated response
+};
+
+// Static callback for SSE streaming
+size_t AgentConnection::StreamWriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
+    size_t realsize = size * nmemb;
+    StreamContext* ctx = static_cast<StreamContext*>(userp);
+
+    if (ctx->connection->m_cancelRequested) {
+        return 0;  // Return 0 to abort the transfer
+    }
+
+    // Append to buffer
+    ctx->buffer.append(static_cast<char*>(contents), realsize);
+
+    // Process complete SSE events (lines ending with \n\n)
+    size_t pos = 0;
+    while ((pos = ctx->buffer.find("\n\n")) != std::string::npos) {
+        std::string eventData = ctx->buffer.substr(0, pos);
+        ctx->buffer = ctx->buffer.substr(pos + 2);
+
+        // Skip empty events
+        if (eventData.empty()) continue;
+
+        // Parse SSE event and call callback
+        StreamEvent event = ctx->connection->parseSSEEvent(eventData);
+        if (ctx->callback) {
+            ctx->callback(event);
+        }
+
+        // Accumulate data for final response
+        if (event.type == StreamEventType::DONE) {
+            // Final response parsing handled separately
+        }
+    }
+
+    return realsize;
+}
+
+StreamEvent AgentConnection::parseSSEEvent(const std::string& eventData) {
+    StreamEvent event;
+    event.type = StreamEventType::TEXT;
+
+    // SSE format: "data: {json}\n"
+    std::string data;
+    size_t dataPos = eventData.find("data:");
+    if (dataPos != std::string::npos) {
+        size_t jsonStart = dataPos + 5;
+        // Skip leading whitespace
+        while (jsonStart < eventData.length() && (eventData[jsonStart] == ' ' || eventData[jsonStart] == '\t')) {
+            jsonStart++;
+        }
+        data = eventData.substr(jsonStart);
+        // Remove trailing newline
+        while (!data.empty() && (data.back() == '\n' || data.back() == '\r')) {
+            data.pop_back();
+        }
+    }
+
+    if (data.empty()) {
+        return event;
+    }
+
+    // Parse JSON
+    // Extract "type" field
+    std::string typeStr = extractJsonString(data, "type");
+
+    if (typeStr == "session") {
+        event.type = StreamEventType::SESSION;
+    }
+    else if (typeStr == "iteration") {
+        event.type = StreamEventType::ITERATION;
+        event.iteration = extractJsonInt(data, "iteration");
+    }
+    else if (typeStr == "tool_start") {
+        event.type = StreamEventType::TOOL_START;
+        // Extract from nested tool_call object
+        size_t tcPos = data.find("\"tool_call\":");
+        if (tcPos != std::string::npos) {
+            std::string tcStr = data.substr(tcPos);
+            event.toolName = OUString::fromUtf8(extractJsonString(tcStr, "name").c_str());
+            event.toolId = OUString::fromUtf8(extractJsonString(tcStr, "id").c_str());
+        }
+    }
+    else if (typeStr == "tool_complete") {
+        event.type = StreamEventType::TOOL_COMPLETE;
+        size_t tcPos = data.find("\"tool_call\":");
+        if (tcPos != std::string::npos) {
+            std::string tcStr = data.substr(tcPos);
+            event.toolName = OUString::fromUtf8(extractJsonString(tcStr, "name").c_str());
+            event.toolId = OUString::fromUtf8(extractJsonString(tcStr, "id").c_str());
+            event.toolResult = OUString::fromUtf8(extractJsonString(tcStr, "result").c_str());
+        }
+    }
+    else if (typeStr == "text") {
+        event.type = StreamEventType::TEXT;
+        event.text = OUString::fromUtf8(extractJsonString(data, "text").c_str());
+    }
+    else if (typeStr == "done") {
+        event.type = StreamEventType::DONE;
+    }
+    else if (typeStr == "error") {
+        event.type = StreamEventType::STREAM_ERROR;
+        event.error = OUString::fromUtf8(extractJsonString(data, "error").c_str());
+    }
+
+    return event;
+}
+
+void AgentConnection::cancelStream() {
+    m_cancelRequested = true;
+}
+
+AgentResponse AgentConnection::sendMessageStream(const OUString& message, const OUString& documentContent, const OUString& selection, StreamCallback callback) {
+    AgentResponse response;
+    m_cancelRequested = false;
+
+    if (!m_connected) {
+        checkConnection();
+        if (!m_connected) {
+            response.message = "Error: Backend not available at " + OUString::fromUtf8(m_backendUrl.c_str());
+            response.hasPatch = false;
+            return response;
+        }
+    }
+
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        response.message = "Error: Failed to initialize CURL";
+        response.hasPatch = false;
+        return response;
+    }
+
+    // Build JSON payload
+    OUStringBuffer jsonBuf;
+    jsonBuf.append("{");
+    jsonBuf.append("\"message\":\"");
+    jsonBuf.append(escapeJsonString(message));
+    jsonBuf.append("\",");
+    jsonBuf.append("\"context\":{");
+    jsonBuf.append("\"document\":\"");
+    jsonBuf.append(escapeJsonString(documentContent));
+    jsonBuf.append("\",");
+    jsonBuf.append("\"selection\":\"");
+    jsonBuf.append(escapeJsonString(selection));
+    jsonBuf.append("\"");
+    jsonBuf.append("}");
+    jsonBuf.append("}");
+
+    std::string payload = jsonBuf.makeStringAndClear().toUtf8().getStr();
+    std::string url = m_backendUrl + "/api/chat/stream";  // SSE endpoint
+
+    // Set up streaming context
+    StreamContext ctx;
+    ctx.connection = this;
+    ctx.callback = callback;
+
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+    headers = curl_slist_append(headers, "Accept: text/event-stream");
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, StreamWriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ctx);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 300L);  // 5 minutes for streaming (can be long)
+
+    // Enable TCP keepalive for long connections
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPIDLE, 60L);
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPINTVL, 30L);
+
+    CURLcode res = curl_easy_perform(curl);
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+
+    if (res == CURLE_ABORTED_BY_CALLBACK) {
+        response.message = u"Cancelled"_ustr;
+        response.hasPatch = false;
+        return response;
+    }
+
+    if (res != CURLE_OK) {
+        response.message = "Error: " + OUString::fromUtf8(curl_easy_strerror(res));
+        response.hasPatch = false;
+        return response;
+    }
+
+    return ctx.response;
 }
 
 } // namespace officelabs

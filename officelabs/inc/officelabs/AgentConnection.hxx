@@ -7,8 +7,34 @@
 #include <vector>
 #include <map>
 #include <optional>
+#include <functional>
 
 namespace officelabs {
+
+// Streaming event types (like Claude for Excel real-time updates)
+enum class StreamEventType {
+    SESSION,          // Session started
+    ITERATION,        // New agent iteration
+    TOOL_START,       // Tool call started
+    TOOL_COMPLETE,    // Tool call completed
+    TEXT,             // Text chunk received
+    DONE,             // Processing complete
+    STREAM_ERROR      // Error occurred (named to avoid Windows ERROR macro conflict)
+};
+
+// Event from SSE stream
+struct StreamEvent {
+    StreamEventType type;
+    OUString toolName;      // For TOOL_START/TOOL_COMPLETE
+    OUString toolId;        // Tool call ID
+    OUString toolResult;    // Result for TOOL_COMPLETE
+    OUString text;          // For TEXT events
+    OUString error;         // For ERROR events
+    int iteration = 0;      // For ITERATION events
+};
+
+// Callback for streaming events
+using StreamCallback = std::function<void(const StreamEvent&)>;
 
 // Command for automatic document editing
 struct OFFICELABS_DLLPUBLIC AutoEditCommand {
@@ -86,19 +112,30 @@ class OFFICELABS_DLLPUBLIC AgentConnection {
 private:
     std::string m_backendUrl;
     bool m_connected;
-    
+    bool m_cancelRequested;  // For cancelling streaming requests
+
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
+    static size_t StreamWriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
     AgentResponse parseResponse(const std::string& json);
+    StreamEvent parseSSEEvent(const std::string& eventData);
 
 public:
     AgentConnection();
     ~AgentConnection();
-    
+
     bool checkConnection();
     bool isConnected() const { return m_connected; }
-    
+
+    // Standard synchronous request
     AgentResponse sendMessage(const OUString& message, const OUString& documentContent, const OUString& selection = OUString());
     AgentResponse sendMessageWithClarification(const OUString& message, const OUString& documentContent, const OUString& selection, const std::map<OUString, OUString>& clarificationAnswers);
+
+    // Streaming request with real-time callbacks (Claude for Excel style)
+    AgentResponse sendMessageStream(const OUString& message, const OUString& documentContent, const OUString& selection, StreamCallback callback);
+
+    // Cancel ongoing streaming request
+    void cancelStream();
+
     void setBackendUrl(const OUString& url);
 };
 

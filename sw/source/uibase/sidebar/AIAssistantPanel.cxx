@@ -355,108 +355,122 @@ OUString AIAssistantPanel::FormatActionSummary(const std::vector<officelabs::Aut
         return u""_ustr;
 
     OUStringBuffer summary;
+    int displayCount = 0;
+    const int maxDisplayed = 5;  // Claude for Excel style: show first 5, then collapse
 
     for (const auto& edit : edits)
     {
         OUString icon;
         OUString actionDesc;
+        OUString location;  // Location reference like Claude for Excel
 
-        if (edit.action == u"format"_ustr)
+        // Build location reference from findText (like "Para: Introduction")
+        if (!edit.findText.isEmpty())
         {
-            icon = u"🎨"_ustr;  // Format/style icon
+            OUString locText = edit.findText;
+            if (locText.getLength() > 20)
+                locText = locText.copy(0, 20) + u"..."_ustr;
+            location = u"\"" + locText + u"\""_ustr;
+        }
+        else if (!edit.newText.isEmpty())
+        {
+            OUString locText = edit.newText;
+            if (locText.getLength() > 20)
+                locText = locText.copy(0, 20) + u"..."_ustr;
+            location = u"\"" + locText + u"\""_ustr;
+        }
+
+        if (edit.action == u"format"_ustr || edit.action == u"apply_style"_ustr)
+        {
+            icon = u"🎨"_ustr;
             OUStringBuffer formatTypes;
-            if (edit.bold) formatTypes.append(u"Bold "_ustr);
-            if (edit.italic) formatTypes.append(u"Italic "_ustr);
-            if (edit.underline) formatTypes.append(u"Underline "_ustr);
-            if (edit.headingLevel > 0)
+            if (!edit.styleName.isEmpty())
             {
-                formatTypes.append(u"H"_ustr);
-                formatTypes.append(OUString::number(edit.headingLevel));
-                formatTypes.append(u" "_ustr);
+                formatTypes.append(edit.styleName);
             }
-            if (!edit.fontColor.isEmpty())
+            else
             {
-                formatTypes.append(u"Color "_ustr);
-            }
-            if (edit.fontSize > 0)
-            {
-                formatTypes.append(OUString::number(static_cast<int>(edit.fontSize)));
-                formatTypes.append(u"pt "_ustr);
+                if (edit.bold) formatTypes.append(u"Bold "_ustr);
+                if (edit.italic) formatTypes.append(u"Italic "_ustr);
+                if (edit.underline) formatTypes.append(u"Underline "_ustr);
+                if (edit.headingLevel > 0)
+                {
+                    formatTypes.append(u"Heading "_ustr);
+                    formatTypes.append(OUString::number(edit.headingLevel));
+                }
             }
             actionDesc = formatTypes.makeStringAndClear().trim();
             if (actionDesc.isEmpty())
-                actionDesc = u"Style applied"_ustr;
+                actionDesc = u"Styled"_ustr;
         }
         else if (edit.action == u"insert"_ustr)
         {
-            icon = u"➕"_ustr;  // Add/insert icon (green)
-            OUString text = edit.newText;
-            if (text.getLength() > 25)
-                text = text.copy(0, 25) + u"..."_ustr;
-            actionDesc = u"Added: \""_ustr + text + u"\""_ustr;
+            icon = u"➕"_ustr;
+            actionDesc = u"Inserted"_ustr;
         }
         else if (edit.action == u"replace"_ustr || edit.action == u"replace_all"_ustr)
         {
-            icon = u"✏️"_ustr;  // Edit icon (yellow)
-            if (!edit.findText.isEmpty())
-            {
-                OUString find = edit.findText;
-                if (find.getLength() > 15)
-                    find = find.copy(0, 15) + u"..."_ustr;
-                actionDesc = u"Changed: \""_ustr + find + u"\""_ustr;
-            }
-            else
-            {
-                actionDesc = u"Text replaced"_ustr;
-            }
+            icon = u"✏️"_ustr;
+            actionDesc = u"Replaced"_ustr;
         }
         else if (edit.action == u"delete"_ustr)
         {
-            icon = u"🗑️"_ustr;  // Delete icon (red)
-            if (!edit.findText.isEmpty())
-            {
-                OUString find = edit.findText;
-                if (find.getLength() > 20)
-                    find = find.copy(0, 20) + u"..."_ustr;
-                actionDesc = u"Removed: \""_ustr + find + u"\""_ustr;
-            }
-            else
-            {
-                actionDesc = u"Text removed"_ustr;
-            }
+            icon = u"🗑️"_ustr;
+            actionDesc = u"Removed"_ustr;
         }
         else if (edit.action == u"create_list"_ustr)
         {
-            icon = u"📝"_ustr;  // List icon
-            OUString listDesc = edit.listType;
-            if (listDesc.isEmpty()) listDesc = u"bullet"_ustr;
-            actionDesc = listDesc + u" list with "_ustr + OUString::number(static_cast<int>(edit.listItems.size())) + u" items"_ustr;
+            icon = u"📝"_ustr;
+            actionDesc = edit.listType + u" list"_ustr;
         }
         else if (edit.action == u"create_table"_ustr)
         {
-            icon = u"📊"_ustr;  // Table icon
-            actionDesc = OUString::number(edit.tableRows) + u"x"_ustr +
-                         OUString::number(edit.tableColumns) + u" table created"_ustr;
+            icon = u"📊"_ustr;
+            actionDesc = OUString::number(edit.tableRows) + u"×"_ustr + OUString::number(edit.tableColumns) + u" table"_ustr;
         }
         else if (edit.action == u"paragraph_format"_ustr)
         {
-            icon = u"¶"_ustr;  // Paragraph icon
-            actionDesc = u"Paragraph styled"_ustr;
+            icon = u"¶"_ustr;
+            OUStringBuffer paraFormat;
+            if (!edit.alignment.isEmpty()) paraFormat.append(edit.alignment + u" "_ustr);
+            if (edit.lineSpacing > 0) paraFormat.append(OUString::number(edit.lineSpacing) + u"× spacing"_ustr);
+            actionDesc = paraFormat.makeStringAndClear().trim();
+            if (actionDesc.isEmpty()) actionDesc = u"Formatted"_ustr;
         }
         else if (edit.action == u"clear_and_write"_ustr)
         {
-            icon = u"📄"_ustr;  // Document icon
-            actionDesc = u"Document content replaced"_ustr;
+            icon = u"📄"_ustr;
+            actionDesc = u"Document replaced"_ustr;
+        }
+        else if (edit.action == u"insert_page_break"_ustr)
+        {
+            icon = u"📃"_ustr;
+            actionDesc = u"Page break"_ustr;
         }
         else
         {
-            icon = u"⚡"_ustr;  // Generic action
+            icon = u"⚡"_ustr;
             actionDesc = edit.action;
         }
 
-        if (!summary.isEmpty())
-            summary.append(u"\n"_ustr);
-        summary.append(u"  "_ustr + icon + u" "_ustr + actionDesc);
+        displayCount++;
+        if (displayCount <= maxDisplayed)
+        {
+            if (!summary.isEmpty())
+                summary.append(u"\n"_ustr);
+            // Format like Claude for Excel: icon action → location
+            if (!location.isEmpty())
+                summary.append(u"  "_ustr + icon + u" "_ustr + actionDesc + u" → "_ustr + location);
+            else
+                summary.append(u"  "_ustr + icon + u" "_ustr + actionDesc);
+        }
+    }
+
+    // Add collapse indicator if more items
+    if (displayCount > maxDisplayed)
+    {
+        int remaining = displayCount - maxDisplayed;
+        summary.append(u"\n  ⋯ and "_ustr + OUString::number(remaining) + u" more actions"_ustr);
     }
 
     return summary.makeStringAndClear();
@@ -472,10 +486,20 @@ void AIAssistantPanel::AppendAIMessage(const OUString& message, const std::vecto
     if (!currentText.isEmpty())
         newText += u"\n"_ustr;
 
-    // Modern AI response card (Copilot style)
-    newText += u"╔═══════════════════════════════════╗\n"_ustr;
-    newText += u"║ 🤖 AI Assistant                   ║\n"_ustr;
-    newText += u"╠═══════════════════════════════════╣\n"_ustr;
+    // Claude for Excel style: Compact header with tool call count
+    if (!edits.empty())
+    {
+        // Show tool call count like Claude for Excel: "▶ 12 tool calls completed"
+        newText += u"┌─────────────────────────────────────┐\n"_ustr;
+        newText += u"│ 🤖 AI Copilot • "_ustr + OUString::number(static_cast<int>(edits.size())) + u" actions completed  │\n"_ustr;
+        newText += u"├─────────────────────────────────────┤\n"_ustr;
+    }
+    else
+    {
+        newText += u"┌─────────────────────────────────────┐\n"_ustr;
+        newText += u"│ 🤖 AI Copilot                       │\n"_ustr;
+        newText += u"├─────────────────────────────────────┤\n"_ustr;
+    }
 
     // Clean and add message (remove JSON)
     OUString cleanedMsg = CleanAIResponse(message);
@@ -497,19 +521,19 @@ void AIAssistantPanel::AppendAIMessage(const OUString& message, const std::vecto
                 sLine = cleanedMsg.copy(nIndex);
                 nIndex = -1;
             }
-            newText += u"║ "_ustr + sLine + u"\n"_ustr;
+            newText += u"│ "_ustr + sLine + u"\n"_ustr;
         }
     }
     else if (!edits.empty())
     {
-        newText += u"║ ✅ Done! Changes applied to document.\n"_ustr;
+        newText += u"│ ✅ Done! Document updated.\n"_ustr;
     }
 
-    // Add action summary if there are edits
+    // Add collapsible action summary if there are edits
     if (!edits.empty())
     {
-        newText += u"╠───────────────────────────────────╣\n"_ustr;
-        newText += u"║ 📋 Actions:\n"_ustr;
+        newText += u"├─────────────────────────────────────┤\n"_ustr;
+        newText += u"│ ▼ Actions:\n"_ustr;  // ▼ indicates expanded, ▶ would be collapsed
         OUString actionSummary = FormatActionSummary(edits);
         // Add box padding to action summary
         sal_Int32 nIdx = 0;
@@ -527,11 +551,11 @@ void AIAssistantPanel::AppendAIMessage(const OUString& message, const std::vecto
                 sLine = actionSummary.copy(nIdx);
                 nIdx = -1;
             }
-            newText += u"║ "_ustr + sLine + u"\n"_ustr;
+            newText += u"│"_ustr + sLine + u"\n"_ustr;
         }
     }
 
-    newText += u"╚═══════════════════════════════════╝\n"_ustr;
+    newText += u"└─────────────────────────────────────┘\n"_ustr;
 
     m_xChatHistory->set_text(newText);
     m_sChatLog = newText;
