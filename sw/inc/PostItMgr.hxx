@@ -100,7 +100,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         FieldShadowState                mShadowState;
         std::optional<OutlinerParaObject> mpAnswer;
         OUString                        maAnswerText;
-        bool mbForceShow = false;
+        bool mbForceShowForPrintOrPdf = false;
 
         // data structure to collect the <SwAnnotationWin> instances for certain <SwFrame> instances.
         std::unique_ptr<sw::sidebarwindows::SwFrameSidebarWinContainer> mpFrameSidebarWinContainer;
@@ -254,7 +254,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
 
         sw::sidebarwindows::SidebarPosition GetSidebarPos(const Point& rPointLogic);
 
-        void SetForceShow(bool bForce) { mbForceShow = bForce; }
+        void SetForceShowForPrintOrPdf(bool bForce) { mbForceShowForPrintOrPdf = bForce; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
