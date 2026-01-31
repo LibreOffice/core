@@ -217,7 +217,7 @@ AIAssistantPanel::AIAssistantPanel(
 
     // Set up async response checker (Idle handler for non-blocking HTTP)
     m_aResponseChecker.SetInvokeHandler(LINK(this, AIAssistantPanel, CheckAsyncResponseHdl));
-    m_aResponseChecker.SetPriority(TaskPriority::LOW);
+    m_aResponseChecker.SetPriority(TaskPriority::DEFAULT_IDLE);
 }
 
 AIAssistantPanel::~AIAssistantPanel()
