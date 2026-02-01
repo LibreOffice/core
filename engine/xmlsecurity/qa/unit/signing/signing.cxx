@@ -33,6 +33,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1498,7 +1499,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
 {
     // set ODF version 1.0 / 1.1 as default
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_011);
 
     const TestFilter aFormats[] = { TestFilter::ODT, TestFilter::OTT };

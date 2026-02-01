@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <string_view>
@@ -462,7 +463,7 @@ void Chart2GeometryTest::testTdf135366LabelExport()
 
 void Chart2GeometryTest::testTdf135366_CustomLabelText()
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Error was, that custom text in a data label was only exported in ODF extended,
     // although the used <chart:data-label> element exists since ODF 1.2.

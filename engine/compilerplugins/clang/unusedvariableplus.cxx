@@ -340,7 +340,6 @@ public:
             "std::unique_ptr<class SfxObjectShell::LockAllViewsGuard>",
             "std::unique_ptr<class SwDocShell::LockAllViewsGuard>",
             "std::unique_ptr<class SwSaveFootnoteHeight>",
-            "std::unique_ptr<class SwModelTestBase::Resetter>",
             "StreamExceptionsEnabler",
             "SvAddressParser_Impl",
             "svl::undo::impl::LockGuard",
@@ -370,9 +369,7 @@ public:
             "SwFontSave",
             "SwFootnoteSave",
             "SwFrameDeleteGuard",
-            "SwModelTestBase::Resetter",
             "std::unique_ptr<class ScTokenArray>", // ScCompiler::CompileString has nasty semantics
-            "Resetter",
             "SwFrameSwapper",
             "SwFlyNotify",
             "SwForbidFollowFormat",

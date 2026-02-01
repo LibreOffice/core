@@ -529,7 +529,7 @@ void lcl_assertMetalProperties(std::string_view sInfo,
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -570,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
 
     // save in ODF 1.4 strict and test that new attribute is written.
@@ -593,7 +593,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162686_3D_metal_type_ODF.fods");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -641,7 +641,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162691_handle_position.fodt");
 
     save(TestFilter::ODT);
@@ -667,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePolar)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162691_handle_polar.fodt");
 
     save(TestFilter::ODT);
@@ -719,7 +719,7 @@ void lcl_assertSpecularityProperty(std::string_view sInfo,
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
     // verify property
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -763,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
 
     // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.

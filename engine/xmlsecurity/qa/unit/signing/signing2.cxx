@@ -29,6 +29,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <libxml/xpathInternals.h>
@@ -128,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
     {
         // test the old, standard ODF 1.2/1.3/1.4 encryption
-        Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+        comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
         SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
 
         saveAndReload(TestFilter::ODT, "password");
@@ -313,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
 
     {
         // test the old, standard ODF 1.2/1.3/1.4 encryption
-        Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+        comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
         SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
 
         saveAndReload(TestFilter::ODT, "password");

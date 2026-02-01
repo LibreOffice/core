@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -1533,13 +1534,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
 {
     createSwDoc("hidden-para-follow-frame.fodt");
 
-    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
-
-    Resetter g([this, aOldValue] {
-        uno::Sequence<beans::PropertyValue> argsSH(
-            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
-        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
-    });
+    comphelper::ScopeGuard g(
+        [ this, old = queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") ] {
+            auto args(comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", old } }));
+            dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", args);
+        });
 
     {
         // disable Field Names warning dialog
@@ -1582,13 +1581,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFlys)
 {
     createSwDoc("hidden-para-as-char-fly.fodt");
 
-    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
-
-    Resetter g([this, aOldValue] {
-        uno::Sequence<beans::PropertyValue> argsSH(
-            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
-        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
-    });
+    comphelper::ScopeGuard g(
+        [ this, old = queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") ] {
+            auto args(comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", old } }));
+            dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", args);
+        });
 
     {
         // disable Field Names warning dialog

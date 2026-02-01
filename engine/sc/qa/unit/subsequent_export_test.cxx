@@ -25,6 +25,7 @@
 #include <postit.hxx>
 #include <validat.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <svx/svdpage.hxx>
 #include <tabprotection.hxx>
 #include <editeng/wghtitem.hxx>
@@ -612,7 +613,7 @@ static auto verifySpreadsheet13(char const* const pTestName, const ScDocument& r
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // import
     createScDoc("ods/spreadsheet13e.ods");
@@ -1027,7 +1028,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963_ODF)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Verify, that calcext:contains-footer is only written in extended file format versions.
     // The parameter in DefaultVersion::set need to be adapted, when attribute contains-footer
@@ -1067,7 +1068,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162177_EastersundayODF14)
 {
     // EASTERSUNDAY was added to ODFF in ODF 1.4. LibreOffice has written it as
     // ORG.OPENOFFICE.EASTERSUNDAY for ODF 1.2 and ODF 1.3.
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     createScDoc("fods/tdf162177_Eastersunday.fods");
 
     // File has it as ORG.OPENOFFICE.EASTERSUNDAY in ODF 1.3. Test, that it is read correctly.

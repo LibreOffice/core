@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <rtl/character.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -170,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a frame style with writing-mode bt-lr.
     // In ODF 1.3 extended it is written as loext:writing-mode="bt-lr".
@@ -212,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a frame position with vertical position relative to bottom margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-bottom".
@@ -256,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a frame position with vertical position relative to top margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-top".
@@ -532,7 +533,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a shape with color gradient build from color stop yellow at offset 0.5
     // and color stop red at offset 1.0. For better backward compatibility such gradient has to be
@@ -569,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a shape with transparency gradient build from transparency 100% at
     // offset 0, transparency 100% at offset 0.4 and transparency 10% at offset 1.0. For better

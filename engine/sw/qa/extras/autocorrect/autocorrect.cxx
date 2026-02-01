@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <comphelper/configuration.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <docsh.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <ndtxt.hxx>
@@ -87,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, tdfTdf44293)
 
 CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf151801)
 {
-    Resetter resetter([]() {
+    comphelper::ScopeGuard g([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(0, pBatch);

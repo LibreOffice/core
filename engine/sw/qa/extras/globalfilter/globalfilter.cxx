@@ -23,6 +23,7 @@
 #include <vcl/scheduler.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -974,7 +975,7 @@ auto Test::verifyText13(char const*const pTestName) -> void
 // test ODF 1.3 new text document features
 void Test::testODF13()
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // import
     createSwDoc("text13e.odt");
