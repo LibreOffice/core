@@ -60,6 +60,7 @@ namespace sc
     class Sparkline;
     enum class OperationType;
     class DeleteContentOperation;
+    class DeleteCellOperation;
 }
 namespace tools
 {
@@ -69,6 +70,7 @@ namespace tools
 class ScDocFunc
 {
     friend class sc::DeleteContentOperation;
+    friend class sc::DeleteCellOperation;
 
     ScDocShell&     rDocShell;
     static bool CheckSheetViewProtection(sc::OperationType eOperation);
