@@ -111,6 +111,7 @@
 
 #include <memory>
 #include <operation/DeleteContentOperation.hxx>
+#include <operation/DeleteCellOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -617,72 +618,8 @@ tools::Long ScDocShell::GetTwipWidthHint(const ScAddress& rPos)
 bool ScDocFunc::DeleteCell(
     const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
 {
-    ScDocShellModificator aModificator(rDocShell);
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    if (bRecord && !rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::DeleteCell))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
-    if (!aTester.IsEditable())
-    {
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
-    }
-
-    // no objects on protected tabs
-    bool bObjects = (nFlags & InsertDeleteFlags::OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, rMark);
-
-    sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
-    if (nFlags & InsertDeleteFlags::ATTRIB)
-        rDocShell.UpdatePaintExt(nExtFlags, ScRange(rPos));
-
-    //  order of operations:
-    //  1) BeginDrawUndo
-    //  2) delete objects (DrawUndo is filled)
-    //  3) copy contents for undo
-    //  4) delete contents
-    //  5) add undo-action
-
-    bool bDrawUndo = bObjects || (nFlags & InsertDeleteFlags::NOTE);     // needed for shown notes
-    if (bDrawUndo && bRecord)
-        rDoc.BeginDrawUndo();
-
-    if (bObjects)
-        rDoc.DeleteObjectsInArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
-
-    // To keep track of all non-empty cells within the deleted area.
-    std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
-
-    ScDocumentUniquePtr pUndoDoc;
-    if (bRecord)
-    {
-        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, rMark, ScRange(rPos), nFlags, false);
-        pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, ScRange(rPos));
-    }
-
-    tools::Long nBefore(rDocShell.GetTwipWidthHint(rPos));
-    rDoc.DeleteArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark, nFlags);
-
-    if (bRecord)
-    {
-        sc::DocFuncUtil::addDeleteContentsUndo(
-            rDocShell.GetUndoManager(), &rDocShell, rMark, ScRange(rPos), std::move(pUndoDoc),
-            nFlags, pDataSpans, false, bDrawUndo);
-    }
-
-    if (!AdjustRowHeight(ScRange(rPos), true, bApi))
-        rDocShell.PostPaint(
-            rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
-            PaintPartFlags::Grid, nExtFlags, nBefore);
-
-    aModificator.SetDocumentModified();
-
-    return true;
+    sc::DeleteCellOperation aOperation(*this, rDocShell, rPos, rMark, nFlags, bRecord, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,

@@ -529,6 +529,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/navipi/navcitem \
     sc/source/ui/navipi/navipi \
     sc/source/ui/navipi/scenwnd \
+    sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
     sc/source/ui/operation/Operation \
     sc/source/ui/pagedlg/areasdlg \
