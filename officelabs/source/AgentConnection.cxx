@@ -581,7 +581,7 @@ AgentResponse AgentConnection::sendMessage(const OUString& message, const OUStri
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseStr);
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);  // 10 seconds to connect
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 120L);  // 120 seconds for full request (LLM can be slow)
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 300L);  // 300 seconds for pipeline operations (multi-pass formatting)
     
     CURLcode res = curl_easy_perform(curl);
     
