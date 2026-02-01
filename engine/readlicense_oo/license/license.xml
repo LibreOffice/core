@@ -89,14 +89,14 @@
     </div>
     <div class="ARGON2">
         <h2>Argon2</h2>
-        <!-- Name: Argon2, Source: ARGON2_TARBALL, Package: core, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: argon2, Vendor: argon2_project, Source: ARGON2_TARBALL, URL: https://github.com/P-H-C/phc-winner-argon2, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Argon2. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     </div>
     <div class="BOOST">
         <h2>C++ Boost Library</h2>
-        <!-- Name: boost, Source: BOOST_TARBALL, Package: core, SPDX-License-Identifier: BSL-1.0 -->
+        <!-- Name: boost, Vendor: boost, Source: BOOST_TARBALL, URL: http://www.boost.org/, Declared: BSL-1.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: C++ Boost Library. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Boost Software License - Version 1.0 - August 17th, 2003</p>
@@ -116,7 +116,7 @@
     </div>
     <div class="BZIP2">
         <h2>Bzip2</h2>
-        <!-- Name: Bzip2, Source: BZIP2_TARBALL, Package: core, SPDX-License-Identifier: bzip2-1.0.6 -->
+        <!-- Name: bzip2, Vendor: bzip, Source: BZIP2_TARBALL, URL: http://bzip.org/, Declared: bzip2-1.0.6, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: bzip2, a free and open-source file compression
         program. Use of any of this software is governed by the terms of the license below:</p>
         <p>This program, "bzip2", the associated library "libbzip2", and all documentation, are copyright (C) 1996-2010
@@ -145,7 +145,7 @@
     </div>
     <div class="CAIRO">
         <h2>Cairo</h2>
-        <!-- Name: Cairo, Source: CAIRO_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-only OR MPL-1.1 -->
+        <!-- Name: cairo, Vendor: cairographics, Source: CAIRO_TARBALL, URL: http://cairographics.org/, Declared: LGPL-2.1-only OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Cairo. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Cairo is free software.</p>
@@ -170,7 +170,7 @@
     </div>
     <div class="OPENCL">
         <h2>CLEW</h2>
-        <!-- Name: CLEW, Source: external/clew/source, Package: core, SPDX-License-Identifier: BSL-1.0 -->
+        <!-- Name: CLEW, Vendor:, Source: external/clew/source, URL:, Declared: BSL-1.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: CLEW (OpenCL Extension Wrangler). Use of any of
         this software is governed by the terms of the license below:</p>
         <p>Boost Software License - Version 1.0 - August 17th, 2003</p>
@@ -190,7 +190,7 @@
     </div>
     <div class="CLUCENE">
         <h2>CLucene</h2>
-        <!-- Name: CLucene, Source: CLUCENE_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-only OR Apache-2.0 -->
+        <!-- Name: clucene, Vendor:, Source: CLUCENE_TARBALL, URL: http://clucene.sourceforge.net/, Declared: LGPL-2.1-only OR Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: CLucene. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>CLucene is distributed under the GNU Lesser General Public License (LGPL) or the Apache License, Version
@@ -200,14 +200,14 @@
     </div>
     <div class="COINMP">
         <h2>CoinMP</h2>
-        <!-- Name: CoinMP, Source: COINMP_TARBALL, Package: core, SPDX-License-Identifier: CPL-1.0 -->
+        <!-- Name: coinmp, Vendor:, Source: COINMP_TARBALL, URL: http://www.coin-or.org/download/source/CoinMP/, Declared: CPL-1.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: CoinMP. Use of any of this software is governed by
         the terms of the license below:</p>
         <p><a href="#a__CPL_version_1_0">Jump to Common Public License Version 1.0 (CPL)</a></p>
     </div>
     <div class="DRAGONBOX">
         <h2>Dragonbox</h2>
-        <!-- Name: dragonbox, Source: DRAGONBOX_TARBALL, Package: core, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: dragonbox, Vendor:, Source: DRAGONBOX_TARBALL, URL: https://github.com/jk-jeon/dragonbox, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Dragonbox.</p>
         <p>Dragonbox code is covered by the following license:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
@@ -263,7 +263,7 @@
     </div>
     <div class="EXPAT">
         <h2>expat XML Parser Toolkit</h2>
-        <!-- Name: expat, Source: EXPAT_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: libexpat, Vendor: libexpat_project, Source: EXPAT_TARBALL, URL: https://github.com/libexpat/libexpat, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: expat XML Parser Toolkit. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd and Clark Cooper</p>
@@ -282,7 +282,7 @@
     </div>
     <div class="JAVA_WEBSOCKET">
     <h2>Java WebSocket</h2>
-        <!-- Name: Java WebSocket, Source: JAVA_WEBSOCKET_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: java_websocket, Vendor:, Source: JAVA_WEBSOCKET_TARBALL, URL: https://github.com/TooTallNate/Java-WebSocket, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Java WebSocket. Use of any of this software is governed
         by the terms of the license below:</p>
         <h3>The MIT License</h3>
@@ -301,7 +301,7 @@
     </div>
     <div class="JFREEREPORT">
     <h2>Flute</h2>
-        <!-- Name: Flute, Source: JFREEREPORT_FLUTE_TARBALL, Package: base, SPDX-License-Identifier: W3C -->
+        <!-- Name: flute, Vendor:, Source: JFREEREPORT_FLUTE_TARBALL, URL: http://www.object-refinery.com/jfreereport/, Declared: W3C-19980720, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Flute. Use of any of this software is governed by the
         terms of the license below:</p>
         <h3>W3C IPR SOFTWARE NOTICE</h3>
@@ -344,7 +344,7 @@
     </div>
     <div class="FREETYPE">
         <h2>Freetype Library</h2>
-        <!-- Name: freetype, Source: FREETYPE_TARBALL, Package: core, SPDX-License-Identifier: FTL -->
+        <!-- Name: freetype, Vendor: freetype, Source: FREETYPE_TARBALL, URL: http://freetype.sourceforge.net/freetype2/index.html, Declared: FTL, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Freetype. Use of any of this software is governed by
         the terms of the license below:</p>
         <h3>0. Definitions</h3>
@@ -414,7 +414,7 @@
     </div>
     <div class="FONTCONFIG">
         <h2>fontconfig</h2>
-        <!-- Name: fontconfig, Source: FONTCONFIG_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: fontconfig, Vendor: fontconfig_project, Source: FONTCONFIG_TARBALL, URL: https://www.freedesktop.org/wiki/Software/fontconfig/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: fontconfig. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright © 2002 Keith Packard</p>
@@ -432,14 +432,14 @@
     </div>
     <div class="FROZEN">
         <h2>frozen</h2>
-        <!-- Name: frozen, Source: FROZEN_TARBALL, Package: core, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: frozen, Vendor:, Source: FROZEN_TARBALL, URL: https://github.com/serge-sans-paille/frozen, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: frozen. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     </div>
     <div class="GLM">
         <h2>GLM</h2>
-        <!-- Name: GLM, Source: GLM_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: glm, Vendor:, Source: GLM_TARBALL, URL: http://glm.g-truc.net/0.9.4/index.html, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: OpenGL Mathematics (GLM). Use of any of this
         software is governed by the terms of the license below:</p>
         <h3>The MIT License</h3>
@@ -458,7 +458,7 @@
     </div>
     <div class="GRAPHITE">
         <h2>Graphite2</h2>
-        <!-- Name: Graphite2, Source: GRAPHITE_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 OR GPL-2.0-or-later -->
+        <!-- Name: graphite2, Vendor: sil, Source: GRAPHITE_TARBALL, URL: http://graphite.sil.org/, Declared: LGPL-2.1-or-later OR MPL-2.0 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Graphite2. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright 2010, SIL International All rights reserved.</p>
@@ -480,7 +480,7 @@
     </div>
     <div class="HARFBUZZ">
         <h2>HarfBuzz</h2>
-        <!-- Name: HarfBuzz, Source: HARFBUZZ_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: harfbuzz, Vendor: harfbuzz_project, Source: HARFBUZZ_TARBALL, URL: https://harfbuzz.github.io/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>HarfBuzz is licensed under the so-called "Old MIT" license.  Details follow. For parts of HarfBuzz that are
         licensed under different licenses see individual files names COPYING in subdirectories where applicable.</p>
         <p>Copyright © 2010,2011,2012  Google, Inc.<br />
@@ -508,7 +508,7 @@
     </div>
     <div class="HUNSPELL">
         <h2>Hunspell</h2>
-        <!-- Name: Hunspell, Source: HUNSPELL_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-1.1 OR GPL-2.0-or-later -->
+        <!-- Name: hunspell, Vendor: hunspell_project, Source: HUNSPELL_TARBALL, URL: https://hunspell.github.io/, Declared: LGPL-2.1-or-later OR MPL-1.1 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Hunspell. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>GPL 2.0/LGPL 2.1/MPL 1.1 tri-license</p>
@@ -525,7 +525,7 @@
     </div>
     <div class="HYPH">
         <h2>Hyphen</h2>
-        <!-- Name: Hyphen, Source: HYPHEN_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-1.1 OR GPL-2.0-or-later -->
+        <!-- Name: hyphen, Vendor:, Source: HYPHEN_TARBALL, URL: https://hunspell.github.io/, Declared: LGPL-2.1-or-later OR MPL-1.1 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Hyphen. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>GPL 2.0/LGPL 2.1/MPL 1.1 tri-license</p>
@@ -545,7 +545,7 @@
     </div>
     <div class="ICU">
         <h2>ICU</h2>
-        <!-- Name: ICU, Source: ICU_TARBALL, Package: core, SPDX-License-Identifier: ICU -->
+        <!-- Name: international_components_for_unicode, Vendor: icu-project, Source: ICU_TARBALL, URL: https://icu.unicode.org/, Declared: ICU, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: ICU. Use of any of this software is governed by the
         terms of the license below:</p>
         <h3>ICU License - ICU 1.8.1 and later</h3>
@@ -570,14 +570,14 @@
     </div>
     <div class="ABW" >
         <h2>libabw</h2>
-        <!-- Name: libabw, Source: ABW_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libabw, Vendor:, Source: ABW_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libabw, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libabw. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="CDR">
         <h2>libcdr</h2>
-        <!-- Name: libcdr, Source: CDR_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libcdr, Vendor:, Source: CDR_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libcdr, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libcdr. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>MPL 2.0</p>
@@ -585,7 +585,7 @@
     </div>
     <div class="LIBCMIS">
         <h2>libcmis</h2>
-        <!-- Name: libcmis, Source: LIBCMIS_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-1.1 OR GPL-2.0-or-later -->
+        <!-- Name: libcmis, Vendor:, Source: LIBCMIS_TARBALL, URL: https://github.com/tdf/libcmis, Declared: LGPL-2.1-or-later OR MPL-1.1 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libcmis. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>MPL 1.1 / LGPL v2+ / GPL v2+</p>
@@ -595,7 +595,7 @@
     </div>
     <div class="CURL">
         <h2>libcurl</h2>
-        <!-- Name: libcurl, Source: CURL_TARBALL, Package: core, SPDX-License-Identifier: curl -->
+        <!-- Name: curl, Vendor: curl_project, Source: CURL_TARBALL, URL: https://curl.se/, Declared: curl, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libcurl. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Copyright (c) 1996 - 2009, Daniel Stenberg, &lt;daniel@haxx.se&gt;.</p>
@@ -613,35 +613,35 @@
     </div>
     <div class="EBOOK">
         <h2>libe-book</h2>
-        <!-- Name: libe-book, Source: EBOOK_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libe-book, Vendor:, Source: EBOOK_TARBALL, URL: https://sourceforge.net/projects/libebook/, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libe-book. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="LIBEOT">
         <h2>libeot</h2>
-        <!-- Name: libeot, Source: LIBEOT_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libeot, Vendor:, Source: LIBEOT_TARBALL, URL: https://github.com/umanwizard/libeot, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libeot. Use of any of this software is governed by
         the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="EPUBGEN">
         <h2>libepubgen</h2>
-        <!-- Name: libepubgen, Source: EPUBGEN_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libepubgen, Vendor:, Source: EPUBGEN_TARBALL, URL: https://sourceforge.net/projects/libepubgen/, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libepubgen. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="ETONYEK">
         <h2>libetonyek</h2>
-        <!-- Name: libetonyek, Source: ETONYEK_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libetonyek, Vendor:, Source: ETONYEK_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libetonyek, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libetonyek. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="LIBEXTTEXTCAT_DATA">
         <h2>libexttextcat</h2>
-        <!-- Name: libexttextcat, Source: LIBEXTTEXTCAT_TARBALL, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: libexttextcat, Vendor:, Source: LIBEXTTEXTCAT_TARBALL, URL: https://wiki.documentfoundation.org/Libexttextcat, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libexttextcat. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (c) 2003, WiseGuys Internet B.V.</p>
@@ -664,7 +664,7 @@
         DAMAGE.</p>
     </div>
     <h2>libfixmath</h2>
-    <!-- Name: libfixmath, Source: include/tools/fix16.hxx, Package: core, SPDX-License-Identifier: MIT -->
+    <!-- Name: libfixmath, Vendor:, Source: include/tools/fix16.hxx, URL: https://github.com/PetteriAimonen/libfixmath, Declared: MIT, Concluded: MPL-2.0 -->
     <p>The following software may be included in this product: libfixmath.</p>
     <p>libfixmath code is covered by the MIT license:</p>
     <blockquote>
@@ -688,7 +688,7 @@
     </blockquote>
     <div class ="LIBFFI">
         <h2>libffi</h2>
-        <!-- Name: libffi, Source: LIBFFI_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: libffi, Vendor: libffi_project, Source: LIBFFI_TARBALL, URL: https://sourceware.org/libffi/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libffi</p>
         <p>The libffi project code is covered by the MIT license:</p>
         <p>libffi - Copyright (c) 1996-2019  Anthony Green, Red Hat, Inc and others.</p>
@@ -712,14 +712,14 @@
     </div>
     <div class="FREEHAND">
         <h2>libfreehand</h2>
-        <!-- Name: libfreehand, Source: FREEHAND_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libfreehand, Vendor:, Source: FREEHAND_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libfreehand, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libfreehand. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="LIBJPEG_TURBO">
         <h2>libjpeg-turbo</h2>
-        <!-- Name: libjpeg-turbo, Source: LIBJPEG_TURBO_TARBALL, Package: core, SPDX-License-Identifier: IJG AND BSD-3-Clause AND Zlib -->
+        <!-- Name: libjpeg-turbo, Vendor: libjpeg-turbo, Source: LIBJPEG_TURBO_TARBALL, URL: https://www.libjpeg-turbo.org/, Declared: IJG AND BSD-3-Clause AND Zlib, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libjpeg-turbo. libjpeg-turbo is covered by three
         compatible BSD-style open source licenses:</p>
         <ul>
@@ -915,7 +915,7 @@
     </div>
     <div class="LIBLANGTAG">
         <h2>liblangtag</h2>
-        <!-- Name: liblangtab, Source: LIBLANGTAG_TARBALL, Package: core, SPDX-License-Identifier: LGPL-3.0-or-later OR MPL-2.0 -->
+        <!-- Name: liblangtag, Vendor:, Source: LIBLANGTAG_TARBALL, URL: https://bitbucket.org/tagoh/liblangtag, Declared: LGPL-3.0-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: liblangtag. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
@@ -923,7 +923,7 @@
     </div>
     <div class="LIBTIFF">
         <h2>libtiff</h2>
-        <!-- Name: libtiff, Source: LIBTIFF_TARBALL, Package: core, SPDX-License-Identifier: libtiff -->
+        <!-- Name: libtiff, Vendor: libtiff, Source: LIBTIFF_TARBALL, URL: http://download.osgeo.org/libtiff/, Declared: libtiff, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libtiff. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>Copyright © 1988-1997 Sam Leffler</p>
@@ -942,14 +942,14 @@
     </div>
     <div class="ORCUS">
         <h2>liborcus</h2>
-        <!-- Name: liborcus, Source: ORCUS_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: liborcus, Vendor:, Source: ORCUS_TARBALL, URL: https://gitlab.com/orcus/orcus, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: liborcus. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="MSPUB">
         <h2>libmspub</h2>
-        <!-- Name: libmspub, Source: MSPUB_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libmspub, Vendor:, Source: MSPUB_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libmspub, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libmspub. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>MPL 2.0</p>
@@ -957,7 +957,7 @@
     </div>
     <div class="MWAW">
         <h2>libmwaw</h2>
-        <!-- Name: libmwaw, Source: MWAW_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: libmwaw, Vendor:, Source: MWAW_TARBALL, URL: https://sourceforge.net/projects/libmwaw/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libmwaw. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -966,7 +966,7 @@
     </div>
     <div class="LIBNUMBERTEXT">
         <h2>libnumbertext</h2>
-        <!-- Name: libnumbertext, Source: LIBNUMBERTEXT_TARBALL, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: libnumbertext, Vendor:, Source: LIBNUMBERTEXT_TARBALL, URL: https://github.com/Numbertext/libnumbertext, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libnumbertext. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright 2009–2019 László Németh et al.</p>
@@ -991,7 +991,7 @@
     </div>
     <div class="ODFGEN">
         <h2>libodfgen</h2>
-        <!-- Name: libodfgen, Source: ODFGEN_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: libodfgen, Vendor:, Source: ODFGEN_TARBALL, URL: https://sourceforge.net/p/libwpd/wiki/libodfgen/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libodfgen. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1000,7 +1000,7 @@
     </div>
     <div class="LIBPNG">
         <h2>libpng</h2>
-        <!-- Name: libpng, Source: LIBPNG_TARBALL, Package: core, SPDX-License-Identifier: Libpng -->
+        <!-- Name: libpng, Vendor: libpng, Source: LIBPNG_TARBALL, URL: http://www.libpng.org/, Declared: Libpng, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libpng. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>This copy of the libpng notices is provided for your convenience.  In case of<br />
@@ -1116,7 +1116,7 @@
     </div>
     <div class="LIBWEBP">
         <h2>libwebp</h2>
-        <!-- Name: libwebp, Source: LIBWEBP_TARBALL, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: libwebp, Vendor: webmproject, Source: LIBWEBP_TARBALL, URL: https://developers.google.com/speed/webp/, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libwebp. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Copyright (c) 2010, Google Inc. All rights reserved.</p>
@@ -1148,21 +1148,21 @@
     </div>
     <div class="PAGEMAKER">
         <h2>libpagemaker</h2>
-        <!-- Name: libpagemaker, Source: PAGEMAKER_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libpagemaker, Vendor:, Source: PAGEMAKER_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libpagemaker, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libpagemaker. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="QXP">
         <h2>libqxp</h2>
-        <!-- Name: libqxp, Source: QXP_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libqxp, Vendor:, Source: QXP_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libqxp, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libqxp. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="REVENGE">
         <h2>librevenge</h2>
-        <!-- Name: librevenge, Source: REVENGE_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: librevenge, Vendor:, Source: REVENGE_TARBALL, URL: http://sourceforge.net/p/libwpd/wiki/librevenge/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: librevenge. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1171,7 +1171,7 @@
     </div>
     <div class="STAROFFICE">
         <h2>libstaroffice</h2>
-        <!-- Name: libstaroffice, Source: STAROFFICE_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: libstaroffice, Vendor:, Source: STAROFFICE_TARBALL, URL: https://github.com/fosnola/libstaroffice, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libstaroffice. Use of any of this software
         is governed by the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1180,14 +1180,14 @@
     </div>
     <div class="VISIO">
         <h2>libvisio</h2>
-        <!-- Name: libvisio, Source: VISIO_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libvisio, Vendor:, Source: VISIO_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libvisio, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libvisio. Use of any of this software is governed by
         the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="WPD">
         <h2>libwpd</h2>
-        <!-- Name: libwdp, Source: WPD_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: libwpd, Vendor: libwpd_project, Source: WPD_TARBALL, URL: http://libwpd.sourceforge.net/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libwpd. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1196,7 +1196,7 @@
     </div>
     <div class="WPG">
         <h2>libwpg</h2>
-        <!-- Name: libwdg, Source: WPG_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: libwpg, Vendor:, Source: WPG_TARBALL, URL: http://libwpg.sourceforge.net/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libwpg. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1205,7 +1205,7 @@
     </div>
     <div class="WPS">
         <h2>libwps</h2>
-        <!-- Name: libwds, Source: WPS_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR MPL-2.0 -->
+        <!-- Name: libwps, Vendor:, Source: WPS_TARBALL, URL: https://sourceforge.net/projects/libwps/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libwps. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1214,7 +1214,7 @@
     </div>
     <div class="LIBXML">
         <h2>libxml2</h2>
-        <!-- Name: libxml2, Source: LIBXML_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: libxml2, Vendor: xmlsoft, Source: LIBXML_TARBALL, URL: http://xmlsoft.org/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libxml2. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Except where otherwise noted in the source code (e.g. the files hash.c, list.c and the trio files, which are
@@ -1237,7 +1237,7 @@
     </div>
     <div class="LIBXSLT">
         <h2>libxslt</h2>
-        <!-- Name: libxslt, Source: LIBXSLT_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: libxslt, Vendor: xmlsoft, Source: LIBXSLT_TARBALL, URL: https://gitlab.gnome.org/GNOME/libxslt/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libxslt. Use of any of this software is governed by
         the terms of the license below:</p>
         <h3>License for libxslt except libexslt</h3>
@@ -1274,14 +1274,14 @@
     </div>
     <div class="ZMF">
         <h2>libzmf</h2>
-        <!-- Name: libzmf, Source: ZMF_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: libzmf, Vendor:, Source: ZMF_TARBALL, URL: https://wiki.documentfoundation.org/DLP/Libraries/libzmf, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libzmf. Use of any of this software is governed by
         the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
     <div class="LCMS2">
         <h2>Little CMS (lcms2)</h2>
-        <!-- Name: Little CMS (lcms2), Source: LCMS2_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: little_cms_color_engine, Vendor: littlecms, Source: LCMS2_TARBALL, URL: https://www.littlecms.com/color-engine/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Little CMS (lcms2). Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (c) 1998-2011 Marti Maria Saguer</p>
@@ -1321,7 +1321,7 @@
     </div>
     <div class="MDDS">
         <h2>mdds</h2>
-        <!-- Name: mdds, Source: MDDS_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: mdds, Vendor:, Source: MDDS_TARBALL, URL: https://gitlab.com/mdds/mdds, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: mdds. Use of any of this software is governed by the
         terms of the license below:</p>
         <p>Copyright (c) 2010 Kohei Yoshida</p>
@@ -1339,7 +1339,7 @@
     </div>
     <div class="MDNSRESPONDER">
         <h2>mDNSResponder</h2>
-        <!-- Name: mDNSResponder, Source: MDNSRESPONDER_TARBALL, Package: core, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: mndsresponder, Vendor: apple, Source: MDNSRESPONDER_TARBALL, URL: http://www.opensource.apple.com/tarballs/mDNSResponder/, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: mDNSResponder. The majority of the source code in
         the mDNSResponder project is licensed under the terms of the Apache License, Version 2.0.</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
@@ -1449,7 +1449,7 @@
     </div>
     <div class="MYTHES">
         <h2>MyThes</h2>
-        <!-- Name: MyThes, Source: MYTHES_TARBALL, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: mythes, Vendor:, Source: MYTHES_TARBALL, URL: https://hunspell.github.io/, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: MyThes. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Copyright 2003 Kevin B. Hendricks, Stratford, Ontario, Canada And Contributors. All rights reserved.</p>
@@ -1473,21 +1473,21 @@
     </div>
     <div class="NSS" >
         <h2>Network Security Services (NSS)</h2>
-        <!-- Name: nss, Source: NSS_TARBALL, Package: core, SPDX-License-Identifier: MPL-2.0 -->
-        <p>The following software may be included in this product: Network Security Services (NSS). Use of any of this
+        <!-- Name: nss, Vendor: mozilla, Source: NSS_TARBALL, URL: https://ftp.mozilla.org/pub/security/nss/releases/, Declared: MPL-2.0, Concluded: MPL-2.0 -->
+        <p>The following _externalsoftware may be included in this product: Network Security Services (NSS). Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL 2.0</a></p>
     </div>
     <div class="OPENSSL">
         <h2>OpenSSL</h2>
-        <!-- Name: OpenSSL, Source: OPENSSL_TARBALL, Package: core, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: openssl, Vendor: openssl, Source: OPENSSL_TARBALL, URL: https://www.openssl.org/, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: OpenSSL. Use of any of this software is governed by
         the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     </div>
     <div class="PDFIUM">
         <h2>PDFium</h2>
-        <!-- Name: PDFium, Source: PDFIUM_TARBALL, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: pdfium, Vendor: google, Source: PDFIUM_TARBALL, URL: https://pdfium.googlesource.com/pdfium/, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: PDFium. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Copyright 2014 PDFium Authors. All rights reserved.</p>
@@ -1512,7 +1512,7 @@
     </div>
     <div class="CAIRO">
         <h2>Pixman</h2>
-        <!-- Name: libpixman, Source: PIXMAN_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: pixman, Vendor: pixman, Source: PIXMAN_TARBALL, URL: http://cairographics.org/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Pixman (libpixman). Use of any of this software is
         governed by the terms of the license below:</p>
         <p>The following is the MIT license, agreed upon by most contributors.</p>
@@ -1549,7 +1549,7 @@
     </div>
     <div class="PYTHON">
         <h2>Python</h2>
-        <!-- Name: python, Source: PYTHON_TARBALL, Package: pyuno, SPDX-License-Identifier: PSF-2.0 -->
+        <!-- Name: python, Vendor: python, Source: PYTHON_TARBALL, URL: http://www.python.org, Declared: PSF-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Python. Use of any of this software is governed by
         the terms of the license below:</p>
         <h3>PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2</h3>
@@ -1688,7 +1688,7 @@
         THE SOFTWARE.</p>
     </div>
     <h2>Random123: a Library of Counter-Based Random Number Generators</h2>
-    <!-- Name: Random123, Source: sc/source/core/opencl/formulagroupcl.cxx, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+    <!-- Name: Random123, Vendor:, Source: sc/source/core/opencl/formulagroupcl.cxx, URL: https://github.com/DEShawResearch/random123, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
     <p>The following software may be included in this product: Random123: a Library of Counter-Based Random Number
     Generators. Use of any of this software is governed by the terms of the license below:</p>
     <p>Copyright 2010-2011, D. E. Shaw Research.</p>
@@ -1710,7 +1710,7 @@
     LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
     <h2>Raptor RDF Parser Library</h2>
-    <!-- Name: raptor, Source: RAPTOR_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later -->
+    <!-- Name: raptor_rdf_syntax_library, Vendor: librdf, Source: RAPTOR_TARBALL, URL: https://librdf.org/, Declared: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
     <p>The following software may be included in this product: Raptor RDF Parser Library. Use of any of this software
     is governed by the terms of the license below:</p>
     <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
@@ -1720,7 +1720,7 @@
     <p><a href="#a__GPL_version_2_0">Jump to GPL Version 2.0</a></p>
     <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     <h2>Rasqal RDF Query Library</h2>
-    <!-- Name: rasqal, Source: RASQAL_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later -->
+    <!-- Name: rasqal, Vendor: librdf, Source: RASQAL_TARBALL, URL: https://librdf.org/, Declared: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
     <p>The following software may be included in this product: Rasqal RDF Query Library. Use of any of this software is
     governed by the terms of the license below:</p>
     <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
@@ -1731,7 +1731,7 @@
     <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     <div class="REDLAND">
         <h2>Redland RDF Application Framework</h2>
-        <!-- Name: redland, Source: REDLAND_TARBALL, Package: core, SPDX-License-Identifier: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later -->
+        <!-- Name: redland, Vendor: librdf, Source: REDLAND_TARBALL, URL: https://librdf.org/, Declared: LGPL-2.1-or-later OR Apache-2.0 OR GPL-2.0-or-later, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Redland RDF Application Framework. Use of any of
         this software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2000-2008 <a href="http://www.dajobe.org/">David Beckett</a><br />
@@ -1761,7 +1761,7 @@
     </div>
     <div class="SANE">
         <h2>SANE</h2>
-        <!-- Name: SANE, Source: external/sane/inc/sane/sane.h, Package: core, SPDX-License-Identifier: Unlicense -->
+        <!-- Name: SANE, Vendor: sane-project, Source: external/sane/inc/sane/sane.h, URL: http://www.sane-project.org/, Declared: Unlicense, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: SANE. Use of any of this software is governed by the
         terms of the license below:</p>
         <p>sane - Scanner Access Now Easy. Copyright (C) 1997-1999 David Mosberger-Tang and Andreas Beck</p>
@@ -1775,7 +1775,7 @@
     </div>
     <div class="SKIA">
         <h2>Skia</h2>
-        <!-- Name: Skia, Source: SKIA_TARBALL, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: skia, Vendor: google, Source: SKIA_TARBALL, URL: https://skia.org/, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Skia. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Copyright (c) 2011 Google Inc. All rights reserved.</p>
@@ -1800,7 +1800,7 @@
     </div>
     <hr />
     <h2>SVGPathSeg polyfill</h2>
-    <!-- Name: SVGPathSeg polyfill, Source: filter/source/svg/presentation_engine.js, Package: core, SPDX-License-Identifier: BSD-3-Clause -->
+    <!-- Name: SVGPathSeg_polyfill, Vendor:, Source: filter/source/svg/presentation_engine.js, URL: https://github.com/progers/pathseg, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
     <p>The following software may be included in this product: SVGPathSeg polyfill. Use of any of this software is
     governed by the terms of the license below:</p>
     <p>Copyright 2015 The Chromium Authors. All rights reserved.</p>
@@ -1921,7 +1921,7 @@
     </div>
     <div class="JFREEREPORT">
         <h2>W3C Simple API for CSS (SAC)</h2>
-        <!-- Name: SAC, Source: JFREEREPORT_SAC_TARBALL, Package: base, SPDX-License-Identifier: W3C -->
+        <!-- Name: sac, Vendor:, Source: JFREEREPORT_SAC_TARBALL, URL: http://www.object-refinery.com/jfreereport/, Declared: W3C-19980720, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: W3C Simple API for CSS (SAC). Use of any of this
         software is governed by the terms of the license below:</p>
         <h3>W3C IPR SOFTWARE NOTICE</h3>
@@ -1979,7 +1979,7 @@
     </div>
     <div class="XMLSEC">
         <h2>XML Security Library (xmlsec)</h2>
-        <!-- Name: xmlsec, Source: XMLSEC_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: xmlsec, Vendor: xmlsec_project, Source: XMLSEC_TARBALL, URL: http://www.aleksey.com/xmlsec/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: XML Security Library (xmlsec). Use of any of this
         software is governed by the terms of the license below:</p>
         <h3>xmlsec, xmlsec-openssl, xmlsec-gnutls libraries</h3>
@@ -2085,7 +2085,7 @@
     </div>
     <div class="ZLIB">
         <h2>zlib</h2>
-        <!-- Name: zlib, Source: ZLIB_TARBALL, Package: core, SPDX-License-Identifier: Zlib -->
+        <!-- Name: zlib, Vendor: zlib, Source: ZLIB_TARBALL, URL: http://www.zlib.net/, Declared: Zlib, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: zlib. Use of any of this software is governed by the
         terms of the license below:</p>
         <p>(C) 1995-2002 Jean-loup Gailly and Mark Adler</p>
@@ -2135,7 +2135,7 @@
     </div>
     <div class="ZXCVBN">
         <h2>zxcvbn-c</h2>
-        <!-- Name: zxcvbn-c, Source: ZXCVBN_C_TARBALL, Package: core, SPDX-License-Identifier: MIT -->
+        <!-- Name: zxcvbn-c, Vendor:, Source: ZXCVBN_C_TARBALL, URL: https://github.com/tsyrogit/zxcvbn-c, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: zxcvbn-c. Use of any of this software is governed
         by the terms of the license below:</p>
         <p>MIT License</p>
@@ -2155,7 +2155,7 @@
     </div>
     <div class="ZXING">
         <h2>ZXing-C++</h2>
-        <!-- Name: ZXing-C++, Source: ZXING_TARBALL, Package: core, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: zxing-c\+\+, Vendor:, Source: ZXING_TARBALL, URL: https://github.com/zxing-cpp/zxing-cpp, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: ZXing-C++. Use of any of this software is governed
         by the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
@@ -2173,7 +2173,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Alef</h2>
-        <!-- Name: Alef, Source: FONT_ALEF_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Alef, Vendor:, Source: FONT_ALEF_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>Copyright (c) 2012, HaGilda &amp; Mushon Zer-Aviv (&lt;http://hagilda.com|info@hagilda.com&gt;), with
         Reserved Font Name Alef Regular.</p>
         <p>Copyright (c) 2012, HaGilda &amp; Mushon Zer-Aviv (&lt;http://hagilda.com|info@hagilda.com&gt;), with
@@ -2181,7 +2181,7 @@
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Amiri</h2>
-        <!-- Name: Amiri, Source: FONT_AMIRI_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Amiri, Vendor:, Source: FONT_AMIRI_TARBALL, URL: https://github.com/aliftype/amiri/, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>Copyright (c) 2010-2017, Khaled Hosny (&lt;khaledhosny@eglug.org&gt;)</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
@@ -2202,7 +2202,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Caladea</h2>
-        <!-- Name: Caladea, Source: FONT_CALADEA_TARBALL, Package: fonts, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: Caladea, Vendor:, Source: FONT_CALADEA_TARBALL, URL:, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>Copyright (c) 2012 Huerta Tipográfica</p>
         <p>This Font Software is licensed under the Apache License, Version 2.0 as shown below.</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
@@ -2214,13 +2214,13 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Carlito</h2>
-        <!-- Name: Carlito, Source: FONT_CARLITO_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Carlito, Vendor:, Source: FONT_CARLITO_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>Copyright (c) 2010-2013 by tyPoland Lukasz Dziedzic with Reserved Font Name "Carlito".</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <div class="no_mpl_subset">
             <h2>Culmus</h2>
-            <!-- Name: Culmus, Source: FONT_CULMUS_TARBALL, Package: fonts, SPDX-License-Identifier: GPL-2.0 -->
+            <!-- Name: Culmus, Vendor:, Source: FONT_CULMUS_TARBALL, URL: https://sourceforge.net/projects/culmus/, Declared: GPL-2.0, Concluded: GPL-2.0 -->
             <p>This package is distributed under the terms of GNU General Public License version 2.</p>
             <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
             <p>Shofar font family is Copyright 2011-2012 by Yoram Gnat (yoram.gnat@gmail.com) Latin glyphs and
@@ -2335,7 +2335,7 @@
             rights reserved.</p>
         </div>
         <h2>Deja Vu</h2>
-        <!-- Name: DejaVu, Source: FONT_DEJAVU_TARBALL, Package: fonts, SPDX-License-Identifier: Bitstream-Vera -->
+        <!-- Name: DejaVu, Vendor:, Source: FONT_DEJAVU_TARBALL, URL:, Declared: Bitstream-Vera, Concluded: Bitstream-Vera -->
         <p>The following software may be included in this product: Deja Vu fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Fonts are (c) Bitstream (see below). DejaVu changes are in public domain. Glyphs imported from Arev fonts
@@ -2393,7 +2393,7 @@
         to promote the sale, use or other dealings in this Font Software without prior written authorization from
         Tavmjong Bah. For further information, contact: tavmjong @ free . fr.</p>
         <h2>Gentium</h2>
-        <!-- Name: Gentium, Source: FONT_GENTIUM_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Gentium, Vendor:, Source: FONT_GENTIUM_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Gentium fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (c) 2003-2008 SIL International (<a href="http://www.sil.org/">http://www.sil.org/</a>), with
@@ -2410,7 +2410,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Liberation</h2>
-        <!-- Name: Liberation, Source: FONT_LIBERATION_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Liberation, Vendor:, Source: FONT_LIBERATION_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Liberation fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
@@ -2459,7 +2459,7 @@
         Nations Convention on the International Sale of Goods shall not apply.</p>
         <p>Copyright © 2007 Red Hat, Inc. All rights reserved. LIBERATION is a trademark of Red Hat, Inc.</p>
         <h2>Linux Libertine G and Linux Biolinum G</h2>
-        <!-- Name: LinuxLibertineG, Source: FONT_LINLIBERTINEG_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.0 OR GPL-2.0 -->
+        <!-- Name: LinuxLibertineG, Vendor:, Source: FONT_LINLIBERTINEG_TARBALL, URL: https://www.numbertext.org/linux/, Declared: OFL-1.0 OR GPL-2.0, Concluded: OFL-1.0 -->
         <p>This Font Software is Copyright (c) 2003-2006, Philipp H. Poll (<a href=
         "http://linuxlibertine.sf.net/">http://linuxlibertine.sf.net/</a>).<br />
         All Rights Reserved.<br />
@@ -2529,7 +2529,7 @@
         CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR
         INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.</p>
         <h2>Libre Hebrew</h2>
-        <!-- Name: LibreHebrew, Source: FONT_LIBRE_HEBREW_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: LibreHebrew, Vendor:, Source: FONT_LIBRE_HEBREW_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Libre Hebrew fonts (David Libre, Frank Ruhl Hofsi,
         Miriam Libre, Rubik). Use of any of this software is governed by the terms of the license below:</p>
         <p>Copyright 2015 The Frank Ruhl Hofshi Project Authors.</p>
@@ -2558,7 +2558,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Noto</h2>
-        <!-- Name: Noto, Source: FONT_NOTO_SANS_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Noto, Vendor:, Source: FONT_NOTO_SANS_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Google Noto fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is copied below,
@@ -2575,7 +2575,7 @@
         <p>This Font Software is licensed under the SIL Open Font License, Version 1.1 as shown below.</p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Reem Kufi</h2>
-        <!-- Name: Reem Kufi, Source: FONT_REEM_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Reem_Kufi, Vendor:, Source: FONT_REEM_TARBALL, URL: https://github.com/aliftype/reem-kufi/, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Reem Kufi fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Portions copyright (c) 2015, Khaled Hosny (khaledhosny@eglug.org). Copyright (c) 2010 by Typemade, with
@@ -2584,7 +2584,7 @@
         and is also available with a FAQ at: <a href="http://scripts.sil.org/OFL">http://scripts.sil.org/OFL</a></p>
         <p><a href="#a__SIL_Open_Font_License__version_1_1">Jump to SIL Open Font License, Version 1.1</a></p>
         <h2>Scheherazade</h2>
-        <!-- Name: Scheherazade, Source: FONT_SCHEHERAZADE_TARBALL, Package: fonts, SPDX-License-Identifier: OFL-1.1 -->
+        <!-- Name: Scheherazade, Vendor:, Source: FONT_SCHEHERAZADE_TARBALL, URL:, Declared: OFL-1.1, Concluded: OFL-1.1 -->
         <p>The following software may be included in this product: Scheherazade fonts. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (c) 1994-2015, SIL International (http://www.sil.org/).</p>
@@ -2607,7 +2607,7 @@
         <h1><a id="a__Dictionaries" name="a__Dictionaries">Dictionaries</a></h1>
         <h2>Afrikaans</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-af-spell, Source: af_ZA, Package: dict-af, SPDX-License-Identifier: LGPL-2.1+ -->
+        <!-- Name: dict-af-spell, Vendor:, Source: af_ZA, URL:, Declared: LGPL-2.1-or-later, Concluded: LGPL-2.1-or-later -->
         <p>The following software may be included in this product: Afrikaans spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <h4>Afrikaans Wordlist</h4>
@@ -2624,7 +2624,7 @@
         <p>Copyright (C) 2003 Dwayne Bailey under the <a href="#a__LGPL_version_3">LGPL</a> based on the original ispell list by
         Renier de Vos which was released under the BSD license.</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-af-hyph, Source: af_ZA, Package: dict-af, SPDX-License-Identifier: LGPL-2.1+ -->
+        <!-- Name: dict-af-hyph, Vendor:, Source: af_ZA, URL:, Declared: LGPL-2.1-or-later, Concluded: LGPL-2.1-or-later -->
         <p>The following software may be included in this product: Afrikaans hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2005 Friedel Wolff</p>
@@ -2633,7 +2633,7 @@
         Foundation; either version 2.1 of the License, or (at your option) any later version.</p>
         <h2>Albanian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sq-spell, Source: sq_AL, Package: dict-sq, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-sq-spell, Vendor:, Source: sq_AL, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Albanian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
@@ -2643,7 +2643,7 @@
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
         <h2>Arabic</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ar-spell, Source: ar, Package: dict-ar, SPDX-License-Identifier: GPL-2.0+ OR LGPL-2.1+ OR MPL-1.1 OR MPL 2.0 -->
+        <!-- Name: dict-ar-spell, Vendor:, Source: ar, URL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL 2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Arabic spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Author of Hunspell-ar, the arabic dictionary for Hunspell (spellchecker): 2006-2008, Mohamed Kebdani,
@@ -2657,7 +2657,7 @@
         either express or implied. See the licenses for the specific language governing rights and limitations under
         the licenses.</p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-ar-thes, Source: ar, Package: dict-ar, SPDX-License-Identifier: GPL-2.0+ OR LGPL-2.1+ OR MPL-1.1 OR MPL 2.0 -->
+        <!-- Name: dict-ar-thes, Vendor:, Source: ar, URL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL 2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Arabic thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>2006-2009, Taha Zerrouki, taha_zerrouki at gawab.com</p>
@@ -2671,7 +2671,7 @@
         the licenses.</p>
         <h2>Aragonese</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-an-spell, Source: an_ES, Package: dict-an, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-1.1 -->
+        <!-- Name: dict-an-spell, Vendor:, Source: an_ES, URL:, Declared: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Aragonese spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (c) 2011 Santiago Paricio (sparicio&lt;at&gt;gmail&lt;dot&gt;com)<br />
@@ -2684,14 +2684,14 @@
         "http://apertium.svn.sourceforge.net/viewvc/apertium/tags/apertium-es-an/release-2.0/">http://apertium.svn.sourceforge.net/viewvc/apertium/tags/apertium-es-an/release-2.0/</a>).</p>
         <h2>Belarusian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-be-spell, Source: be_BY, Package: dict-be, SPDX-License-Identifier: LGPL-3.0 OR CC-BY-SA-4.0 -->
+        <!-- Name: dict-be-spell, Vendor:, Source: be_BY, URL:, Declared: LGPL-3.0 OR CC-BY-SA-4.0, Concluded: LGPL-3.0 OR CC-BY-SA-4.0 -->
         <p>The following software may be included in this product: Belarusian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Creative Commons <a href="#a__CC-BY-SA_3_0">CC-BY-SA</a></p>
         <p>Author: Mikalai Udodau &lt;mikalai.udodau@gmail.com&gt;<br />
         Origin: Словазбор аўтарскі; арфаграфія паводле ТСБМ-2005</p>
         <h3>Hyphenation Dictionary</h3>
-        <!-- Name: dict-be-hyph, Source: be_BY, Package: dict-be, SPDX-License-Identifier: LGPL-3.0 OR CC-BY-SA-4.0 -->
+        <!-- Name: dict-be-hyph, Vendor:, Source: be_BY, URL:, Declared: LGPL-3.0 OR CC-BY-SA-4.0, Concluded: LGPL-3.0 OR CC-BY-SA-4.0 -->
         <p>The following software may be included in this product: Belarusian hyphenation dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Creative Commons <a href="#a__CC-BY-SA_4_0">CC-BY-SA</a> or <a href="#a__LGPL_version_3">LGPLv3</a></p>
@@ -2699,45 +2699,45 @@
         Hyphenation rules according to 'Pravapis 2008'</p>
         <h2>Bengali</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-bn-spell, Source: bn_BD, Package: dict-bn, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-bn-spell, Vendor:, Source: bn_BD, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Bengali spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h2>Bosnian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-bs-spell, Source: bs_BA, Package: dict-bs, SPDX-License-Identifier: GPL-2.0+ OR LGPL-2.1+ OR MPL-1.1 OR MPL 2.0 -->
+        <!-- Name: dict-bs-spell, Vendor:, Source: bs_BA, URL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL 2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Bosnian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">GPL 2.0</a>/<a href="#a__LGPL_version_2_1">LGPL 2.1</a>/<a href="#a__MPL_version_1_1">MPL 1.1</a>
         tri-license</p>
         <h2>Breton</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-br-spell, Source: br_FR, Package: dict-br, SPDX-License-Identifier: LGPL-3.0 -->
+        <!-- Name: dict-br-spell, Vendor:, Source: br_FR, URL:, Declared: LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Breton spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>LICENSE: "An Drouizig" spelling dictionary: <a href="#a__LGPL_version_3">LGPL</a></p>
         <h2>Bulgarian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-bg-spell, Source: bg_BG, Package: dict-bg, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-bg-spell, Vendor:, Source: bg_BG, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Bulgarian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-bg-hyph, Source: bg_BG, Package: dict-bg, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-bg-hyph, Vendor:, Source: bg_BG, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Bulgarian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2001 Anton Zinoviev and Borislav Mitev<br />
         Maintained by Radostin Radnev</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-bg-thes, Source: bg_BG, Package: dict-bg, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-bg-thes, Vendor:, Source: bg_BG, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Bulgarian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (C) 2001 Radostin Radnev</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h2>Catalan</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ca-spell, Source: ca, Package: dict-ca, SPDX-License-Identifier: GPL-3.0 OR LGPL-3.0 -->
+        <!-- Name: dict-ca-spell, Vendor:, Source: ca, URL:, Declared: GPL-3.0 OR LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Catalan spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2002-2008 Joan Moratinos &lt;<a href=
@@ -2751,12 +2751,12 @@
         Suite 330, Boston, MA 02111-1307, USA.</p>
         <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-ca-hyph, Source: ca, Package: dict-ca, SPDX-License-Identifier: GPL-3.0 OR LGPL-3.0 -->
+        <!-- Name: dict-ca-hyph, Vendor:, Source: ca, URL:, Declared: GPL-3.0 OR LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Catalan hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-ca-thes, Source: ca, Package: dict-ca, SPDX-License-Identifier: CC-BY-4.0 -->
+        <!-- Name: dict-ca-thes, Vendor:, Source: ca, URL:, Declared: CC-BY-4.0, Concluded: CC-BY-4.0 -->
         <p>The following software may be included in this product: Catalan thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (C) 2009 Joan Montané &lt;joan@montane.cat&gt; --- Softcatalà</p>
@@ -2765,17 +2765,17 @@
         <p><a href="#a__LGPL_version_3">Jump to LGPL version 3</a></p>
         <h2>Czech</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-cs-spell, Source: cs_CZ, Package: dict-cs, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-cs-spell, Vendor:, Source: cs_CZ, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Czech spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-cs-hyph, Source: cs_CZ, Package: dict-cs, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-cs-hyph, Vendor:, Source: cs_CZ, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Czech hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-cs-thes, Source: cs_CZ, Package: dict-cs, SPDX-License-Identifier: GFDL-1.1 -->
+        <!-- Name: dict-cs-thes, Vendor:, Source: cs_CZ, URL:, Declared: GFDL-1.1, Concluded: GFDL-1.1 -->
         <p>The following software may be included in this product: Czech thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Origin: Generated from an English &lt;-&gt; Czech translation dictionary, <a href=
@@ -2786,19 +2786,19 @@
         on idea of Zdenek Zabokrtsky - big thanks!</p>
         <h2>Central Kurdish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ckb-spell, Source: ckb, Package: dict-ckb, SPDX-License-Identifier: CC-BY-SA-4.0 -->
+        <!-- Name: dict-ckb-spell, Vendor:, Source: ckb, URL:, Declared: CC-BY-SA-4.0, Concluded: CC-BY-SA-4.0 -->
         <p>Author: Sina Ahmadi &lt;ahmadi.sina@outlook.com&gt;<br />The following software may be included in this product: Central Kurdish spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Creative Commons <a href="#a__CC-BY-SA_4_0">CC-BY-SA</a></p>
         <p>The source CKB dictionary is available from <a href="https://github.com/sinaahmadi/KurdishHunspell">Kurdish Hunspell</a> project.</p>
         <h2>Croatian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-hr-spell, Source: hr_HR, Package: dict-hr, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-hr-spell, Vendor:, Source: hr_HR, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Croatian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-hr-hyph, Source: hr_HR, Package: dict-hr, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-hr-hyph, Vendor:, Source: hr_HR, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Croatian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>These patterns were manually converted from TeX hyphenation patterns using the guide at <a href=
@@ -2839,7 +2839,7 @@
         <p>For more information see <a href="http://tug.org/tex-hyphen">http://tug.org/tex-hyphen</a></p>
         <h2>Danish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-da-spell, Source: da_DK, Package: dict-da, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL-1.1 -->
+        <!-- Name: dict-da-spell, Vendor:, Source: da_DK, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Danish spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Stavekontrolden - Danish dictionary files for Hunspell</p>
@@ -2855,11 +2855,12 @@
         <p>This dictionary is based on data from Det Danske Sprog- og Litteraturselskab</p>
         <p>(The Danish Society for Language and Literature), <a href="http://www.dsl.dk/">http://www.dsl.dk</a>.</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-da-hyph, Source: da_DK, Package: dict-da, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-da-hyph, Vendor:, Source: da_DK, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Danish hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
+        <a href="#a__LGPL_version_2_1">GNU LGPL version 2.1</a>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-da-thes, Source: da_DK, Package: dict-da, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL-1.1 -->
+        <!-- Name: dict-da-thes, Vendor:, Source: da_DK, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Danish thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <ul>
@@ -2874,8 +2875,8 @@
         <p>© 2007 Foreningen for frit tilgængelige sprogværktøjer</p>
         <h2>Dutch</h2>
         <h3>Spelling dictionary and hyphenation patterns</h3>
-        <!-- Name: dict-nl-spell, Source: nl_NL, Package: dict-nl, SPDX-License-Identifier: BSD-2-Clause OR CC-BY-3.0 -->
-        <!-- Name: dict-nl-hyph, Source: nl_NL, Package: dict-nl, SPDX-License-Identifier: BSD-2-Clause OR CC-BY-3.0 -->
+        <!-- Name: dict-nl-spell, Vendor:, Source: nl_NL, URL:, Declared: BSD-2-Clause OR CC-BY-3.0, Concluded: BSD-2-Clause OR CC-BY-3.0 -->
+        <!-- Name: dict-nl-hyph, Vendor:, Source: nl_NL, URL:, Declared: BSD-2-Clause OR CC-BY-3.0, Concluded: BSD-2-Clause OR CC-BY-3.0 -->
         <p>The following software may be included in this product: Dutch spelling dictionary and hyphenation patterns.
         Use of any of this software is governed by the terms of the license below:</p>
         <p>1. Name: Dutch word list for spell checking - OpenTaal</p>
@@ -2918,7 +2919,7 @@
         bestuur@opentaal.org</p>
         <h2>German</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-de-spell, Source: de, Package: dict-de, SPDX-License-Identifier: GPL-2.0 OR GPL-3.0 -->
+        <!-- Name: dict-de-spell, Vendor:, Source: de, URL:, Declared: GPL-2.0 OR GPL-3.0, Concluded: GPL-2.0 OR GPL-3.0 -->
         <p>The following software may be included in this product: German spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Author: Franz Michael Baumann &lt;frami.baumann@web.de&gt;</p>
@@ -2940,7 +2941,7 @@
         <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <p><a href="#a__GPL_version_2">Jump to GPL version 2</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-de-hyph, Source: de, Package: dict-de, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-de-hyph, Vendor:, Source: de, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: German hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Authors: Marco Huggenberger &lt;marco@by-night.ch&gt; / Daniel Naber &lt;naber at danielnaber de&gt;</p>
@@ -2948,7 +2949,7 @@
         <p>License: GNU LGPL</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-de-thes, Source: de, Package: dict-de, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-de-thes, Vendor:, Source: de, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: German thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>OpenThesaurus - Deutscher Thesaurus - Synonyme und Assoziationen</p>
@@ -2957,13 +2958,13 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Greek</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-el-spell, Source: el_GR, Package: dict-el, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL-1.1 -->
+        <!-- Name: dict-el-spell, Vendor:, Source: el_GR, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Greek spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">GPL 2.0</a>/<a href="#a__LGPL_version_2_1">LGPL 2.1</a>/<a href="#a__MPL_version_1_1">MPL 1.1</a>
         tri-license</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-el-hyph, Source: el_GR, Package: dict-el, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-el-hyph, Vendor:, Source: el_GR, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Greek hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
@@ -3299,7 +3300,7 @@
         distribution of the software and/or database. Title to copyright in this software, database and any associated
         documentation shall at all times remain with Princeton University and LICENSEE agrees to preserve same.</p>
         <h3>English sentence checker for LibreOffice</h3>
-        <!-- Name: dict-en-grammar, Source: en, Package: dict-en, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-1.1 -->
+        <!-- Name: dict-en-grammar, Vendor:, Source: en, URL:, Declared: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: English sentence checker. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>2011-2012 (c) László Németh, license: MPL 1.1 / GPLv3+ / LGPLv3+</p>
@@ -3308,15 +3309,15 @@
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h2>Esperanto</h2>
         <h3>Spelling dictionary, hyphenation patterns, and thesaurus</h3>
-        <!-- Name: dict-eo-spell, Source: eo, Package: dict-eo, SPDX-License-Identifier: GPL-3.0 -->
-        <!-- Name: dict-eo-hyph, Source: eo, Package: dict-eo, SPDX-License-Identifier: GPL-3.0 -->
-        <!-- Name: dict-eo-thes, Source: eo, Package: dict-eo, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-eo-spell, Vendor:, Source: eo, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
+        <!-- Name: dict-eo-hyph, Vendor:, Source: eo, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
+        <!-- Name: dict-eo-thes, Vendor:, Source: eo, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Esperanto spelling dictionary, hyphenation patterns,
         and thesaurus. Use of any of this software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_3">GNU General Public License version 3</a>.</p>
         <h2>Estonian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-et-spell, Source: et_EE, Package: dict-et, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-et-spell, Vendor:, Source: et_EE, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Estonian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Dictionary is adapted to myspell by Jaak Pruulmann (jjpp@meso.ee, <a href=
@@ -3351,7 +3352,7 @@
         Phone &amp; Fax: +372-6411443</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-et-hyph, Source: et_EE, Package: dict-et, SPDX-License-Identifier: LGPL-2.1 OR LPPL-1.3c-->
+        <!-- Name: dict-et-hyph, Vendor:, Source: et_EE, URL:, Declared: LGPL-2.1 OR LPPL-1.3c, Concluded: LGPL-2.1 OR LPPL-1.3c -->
         <p>The following software may be included in this product: Estonian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Hyphenation file is adapted to OpenOffice.org by Jaak Pruulmann (jjpp@meso.ee, <a href=
@@ -3365,7 +3366,7 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>French</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-fr-spell, Source: fr_FR, Package: dict-fr, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL-1.1 -->
+        <!-- Name: dict-fr-spell, Vendor:, Source: fr_FR, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: French spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Olivier R. - dicollecte&lt;at&gt;free&lt;dot&gt;fr</p>
@@ -3380,7 +3381,7 @@
             version 2.1</a> or higher </li>
         </ul>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-fr-hyph, Source: fr_FR, Package: dict-fr, SPDX-License-Identifier: LPPL-1.3c -->
+        <!-- Name: dict-fr-hyph, Vendor:, Source: fr_FR, URL:, Declared: LPPL-1.3c, Concluded: LPPL-1.3c -->
         <p>The following software may be included in this product: French hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Origin: Based on the TeX hyphenation tables frhyph.tex (V2.12) &lt;2002/12/11&gt; <a href=
@@ -3393,14 +3394,14 @@
         <p>Author: Conversion author is Paul Pichaureau &lt;paul.pichaureau@alcandre.net&gt;</p>
         <p>Based on a previous conversion by Blaise Drayer &lt;blaise@drayer.ch&gt;</p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-fr-thes, Source: fr_FR, Package: dict-fr, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-fr-thes, Vendor:, Source: fr_FR, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: French thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Licence: LGPL: GNU Lesser General Public License version 2.1 or higher.</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Galician</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-gl-spell, Source: gl, Package: dict-gl, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-gl-spell, Vendor:, Source: gl, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Galician spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>This extension was made by Frco. Javier Rial Rodríguez for Mancomún, Centro de Referencia e Servizos de
@@ -3410,10 +3411,10 @@
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Guarani</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-gug-spell, Source: gug, Package: dict-gug, SPDX-License-Identifier: NOASSERTION -->
+        <!-- Name: dict-gug-spell, Vendor:, Source: gug, URL:, Declared: NOASSERTION, Concluded: NOASSERTION -->
         <p>The following software may be included in this product: Guarani spelling dictionary.</p> <!-- FIXME license missing -->
         <h3>Thesaurus</h3>
-        <!-- Name: dict-gug-thes, Source: gug, Package: dict-gug, SPDX-License-Identifier: GFDL-1.3 -->
+        <!-- Name: dict-gug-thes, Vendor:, Source: gug, URL:, Declared: GFDL-1.3, Concluded: GFDL-1.3 -->
         <p>The following software may be included in this product: Guarani thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free
@@ -3422,13 +3423,13 @@
         section entitled "GNU Free Documentation License".</p>
         <h2>Gujarati</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-gu-spell, Source: gu_IN, Package: dict-gu, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-gu-spell, Vendor:, Source: gu_IN, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Gujarati spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Hebrew</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-he-spell, Source: he_IL, Package: dict-he, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-he-spell, Vendor:, Source: he_IL, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Hebrew spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>This dictionary is Copyright (C) 2000-2009, Nadav Har'El (nyh@math.technion.ac.il) and Dan Kenigsberg
@@ -3437,7 +3438,7 @@
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Hindi</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-hi-spell, Source: hi_IN, Package: dict-hi, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-hi-spell, Vendor:, Source: hi_IN, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Hindi spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>GNU Aspell Hindi Word List Package<br />
@@ -3450,7 +3451,7 @@
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h2>Hungarian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-hu-spell, Source: hu_HU, Package: dict-hu, SPDX-License-Identifier: LGPL-3.0 OR MPL-2.0 -->
+        <!-- Name: dict-hu-spell, Vendor:, Source: hu_HU, URL:, Declared: LGPL-3.0 OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Hungarian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>MPLv2 and LesserGPLv3+</p>
@@ -3464,7 +3465,7 @@
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-hu-hyph, Source: hu_HU, Package: dict-hu, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL-1.1-->
+        <!-- Name: dict-hu-hyph, Vendor:, Source: hu_HU, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Hungarian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright © Bence Nagy &lt;gimb (at) freemail (dot) hu&gt;, 2006</p>
@@ -3475,13 +3476,13 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-hu-thes, Source: hu_HU, Package: dict-hu, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-hu-thes, Vendor:, Source: hu_HU, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Hungarian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (C) 2009, László Németh</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Hungarian sentence checker for LibreOffice</h3>
-        <!-- Name: dict-hu-grammar, Source: hu_HU, Package: dict-hu, SPDX-License-Identifier: GPL-3.0 OR LGPL-3.0 OR MPL-1.1 -->
+        <!-- Name: dict-hu-grammar, Vendor:, Source: hu_HU, URL:, Declared: GPL-3.0 OR LGPL-3.0 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Hungarian sentence checker. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>2009-2012 (c) László Németh, license: MPL 1.1 / GPLv3+ / LGPLv3+</p>
@@ -3490,23 +3491,23 @@
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h2>Indonesian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-id-spell, Source: id, Package: dict-id, SPDX-License-Identifier: LGPL-3.0 -->
+        <!-- Name: dict-id-spell, Vendor:, Source: id, URL:, Declared: LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Indonesian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-id-hyph, Source: id, Package: dict-id, SPDX-License-Identifier: NOASSERTION -->
+        <!-- Name: dict-id-hyph, Vendor:, Source: id, URL:, Declared: NOASSERTION, Concluded: NOASSERTION -->
         <p>The following software may be included in this product: Indonesian hyphenation patterns.</p> <!-- FIXME license missing -->
         <h3>Thesaurus</h3>
-        <!-- Name: dict-id-thes, Source: id, Package: dict-id, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-id-thes, Vendor:, Source: id, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Indonesian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Icelandic</h2>
         <h3>Spelling dictionary, hyphenation and thesaurus</h3>
-        <!-- Name: dict-is-spell, Source: is, Package: dict-is, SPDX-License-Identifier: CC-BY-4.0 -->
-        <!-- Name: dict-is-hyph, Source: is, Package: dict-is, SPDX-License-Identifier: CC-BY-SA-3.0 -->
-        <!-- Name: dict-is-thes, Source: is, Package: dict-is, SPDX-License-Identifier: CC-BY-4.0 -->
+        <!-- Name: dict-is-spell, Vendor:, Source: is, URL:, Declared: CC-BY-4.0, Concluded: CC-BY-4.0 -->
+        <!-- Name: dict-is-hyph, Vendor:, Source: is, URL:, Declared: CC-BY-SA-3.0, Concluded: CC-BY-SA-3.0 -->
+        <!-- Name: dict-is-thes, Vendor:, Source: is, URL:, Declared: CC-BY-4.0, Concluded: CC-BY-4.0 -->
         <p>The wordlist was developed by Orðabók Háskólans in cooperation with Reiknistofnun Háskóla Íslands in
         the early nineties and was released into the public domain. Further modifications to the wordlist are also
         released into the public domain.</p>
@@ -3533,7 +3534,7 @@
         <p><a href="#a__CC-BY-SA_3_0">Jump to CC-BY-SA 3.0</a></p>
         <h2>Italian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-it-spell, Source: it_IT, Package: dict-it, SPDX-License-Identifier: GPL-3.0 OR LGPL-3.0 -->
+        <!-- Name: dict-it-spell, Vendor:, Source: it_IT, URL:, Declared: GPL-3.0 OR LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Italian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2001, 2002 Gianluca Turconi<br />
@@ -3542,7 +3543,7 @@
         Copyright (C) 2010  Andrea Pescetti</p>
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-it-hyph, Source: it_IT, Package: dict-it, SPDX-License-Identifier: LGPL-3.0 -->
+        <!-- Name: dict-it-hyph, Vendor:, Source: it_IT, URL:, Declared: LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Italian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Origin:   Based on the TeX hyphenation tables by Claudio Beccari</p>
@@ -3550,7 +3551,7 @@
         "mailto:giuseppe.bilotta@gmail.com">giuseppe.bilotta@gmail.com</a>&gt;</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-it-thes, Source: it_IT, Package: dict-it, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-it-thes, Vendor:, Source: it_IT, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Italian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (C) 2004,2005,2006,2007,2008 Daniela Volta<br />
@@ -3560,7 +3561,7 @@
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Kurdish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-kmr-Latn-spell, Source: kmr_Latn, Package: dict-kmr-Latn, SPDX-License-Identifier: GPL-3.0 OR LGPL-3.0 OR MPL-1.1 -->
+        <!-- Name: dict-kmr-Latn-spell, Vendor:, Source: kmr_Latn, URL:, Declared: GPL-3.0 OR LGPL-3.0 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Kurdish spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>(C) Copyright Reimar Heider &lt;hunspell at ferheng dot org&gt;</p>
@@ -3583,33 +3584,33 @@
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Lao</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-lo-spell, Source: lo_LA, Package: dict-lo, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-lo-spell, Vendor:, Source: lo_LA, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Lao spelling dictionary. Use of any of this software
         is governed by the terms of the license below:</p>
         <p>Copyright (C) 2013 by Brian Eugene Wilson, Robert Martin Campbell</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Latvian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-lv-spell, Source: lv_LV, Package: dict-lv, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-lv-spell, Vendor:, Source: lv_LV, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Latvian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2002-2010 Janis Eisaks, jancs@dv.lv, <a href="http://dict.dv.lv/">http://dict.dv.lv</a></p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-lv-hyph, Source: lv_LV, Package: dict-lv, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-lv-hyph, Vendor:, Source: lv_LV, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Latvian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2004-2005 Jânis Vilims, jvilims@apollo.lv</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-lv-thes, Source: lv_LV, Package: dict-lv, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-lv-thes, Vendor:, Source: lv_LV, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Latvian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (C) 2002-2010 Janis Eisaks, jancs@dv.lv, <a href="http://dict.dv.lv/">http://dict.dv.lv</a></p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Lithuanian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-lt-spell, Source: lt_LT, Package: dict-lt, SPDX-License-Identifier: BSD-3-Clause -->
+        <!-- Name: dict-lt-spell, Vendor:, Source: lt_LT, URL:, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Lithuanian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (c) Albertas Agejevas &lt;alga@uosis.mif.vu.lt&gt;, 2000, 2001. All rights reserved.</p>
@@ -3632,7 +3633,7 @@
         OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
         DAMAGE.</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-lt-thes, Source: lt_LT, Package: dict-lt, SPDX-License-Identifier: LPPL-1.3c -->
+        <!-- Name: dict-lt-thes, Vendor:, Source: lt_LT, URL:, Declared: LPPL-1.3c, Concluded: LPPL-1.3c -->
         <p>The following software may be included in this product: Lithuanian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Origin: TeX hyphenation tables by Sigitas Tolusis and Vytas Statulevicius. The original tables can be found
@@ -3643,43 +3644,43 @@
         <p><a href="#a__LPPL">Jump to LPPL</a></p>
         <h2>Mongolian</h2>
         <h3>Spelling dictionary and hyphenation patterns</h3>
-        <!-- Name: dict-mn-spell, Source: mn_MN, Package: dict-mn, SPDX-License-Identifier: LPPL-1.3c -->
-        <!-- Name: dict-mn-thes, Source: mn_MN, Package: dict-mn, SPDX-License-Identifier: LPPL-1.3c -->
+        <!-- Name: dict-mn-spell, Vendor:, Source: mn_MN, URL:, Declared: LPPL-1.3c, Concluded: LPPL-1.3c -->
+        <!-- Name: dict-mn-thes, Vendor:, Source: mn_MN, URL:, Declared: LPPL-1.3c, Concluded: LPPL-1.3c -->
         <p>The following software may be included in this product: Mongolian spelling dictionary and hyphenation patterns.
         Use of any of this software is governed by the terms of the license below:</p>
         <p><a href="#a__LPPL">Jump to LPPL</a></p>
         <h2>Nepali</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ne-spell, Source: ne_NP, Package: dict-ne, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-ne-spell, Vendor:, Source: ne_NP, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Nepali spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Compiled by Madan Puraskar Pustakalaya</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-ne-thes, Source: ne_NP, Package: dict-ne, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-ne-thes, Vendor:, Source: ne_NP, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Nepali thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Compiled by Madan Puraskar Pustakalaya</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Norwegian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-no-spell, Source: no, Package: dict-no, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-no-spell, Vendor:, Source: no, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Norwegian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-no-hyph, Source: no, Package: dict-no, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-no-hyph, Vendor:, Source: no, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Norwegian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-no-thes, Source: no, Package: dict-no, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-no-thes, Vendor:, Source: no, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Norwegian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h2>Occitan</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-oc-spell, Source: oc_FR, Package: dict-oc, SPDX-License-Identifier: GPL-2.0+ -->
+        <!-- Name: dict-oc-spell, Vendor:, Source: oc_FR, URL:, Declared: GPL-2.0-or-later, Concluded: GPL-2.0-or-later -->
         <p>The following software may be included in this product: Occitan spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2006 Bruno GALLART</p>
@@ -3689,7 +3690,7 @@
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h2>Persian (Farsi)</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-fa-spell, Source: fa_IR, Package: dict-fa, SPDX-License-Identifier: Apache-2.0 -->
+        <!-- Name: dict-fa-spell, Vendor:, Source: fa_IR, URL:, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Persian (Farsi) spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Lilak, Persian Spell Checking Dictionary</p>
@@ -3699,14 +3700,14 @@
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
         <h2>Polish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-pl-spell, Source: pl_PL, Package: dict-pl, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 OR Apache-2.0 OR CC-BY-SA-1.0 -->
+        <!-- Name: dict-pl-spell, Vendor:, Source: pl_PL, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1 OR Apache-2.0 OR CC-BY-SA-1.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Polish spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>This dictionary for spell-checking Polish texts is licensed under GPL, LGPL, MPL (Mozilla Public License),
         Apache 2.0, and Creative Commons ShareAlike licenses (see <a href=
         "http://creativecommons.org/licenses/sa/1.0">http://creativecommons.org/licenses/sa/1.0</a>).</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-pl-hyph, Source: pl_PL, Package: dict-pl, SPDX-License-Identifier: LGPL-3.0 -->
+        <!-- Name: dict-pl-hyph, Vendor:, Source: pl_PL, URL:, Declared: LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Polish hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Origin:   Based on the TeX hyphenation patterns plhyph.tex, version 3.0a, Wednesday, May 17th, 1995. The
@@ -3717,7 +3718,7 @@
         <p>Author: conversion and corrects author is Artur Polaczyński &lt;artiip@gmail.com&gt;</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-pl-thes, Source: pl_PL, Package: dict-pl, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-pl-thes, Vendor:, Source: pl_PL, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Polish thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (C) 2004-2008 Marcin Miłkowski &lt;<a href=
@@ -3726,7 +3727,7 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Portuguese</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-pt-PT-spell, Source: pt_PT, Package: dict-pt-PT, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 -->
+        <!-- Name: dict-pt-PT-spell, Vendor:, Source: pt_PT, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Portuguese spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2006  Jose Joao de Almeida, Rui Vilela, Alberto Simões</p>
@@ -3736,7 +3737,7 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-pt-PT-hyph, Source: pt_PT, Package: dict-pt-PT, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-pt-PT-hyph, Vendor:, Source: pt_PT, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Portuguese hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Based on the TeX hyphenation tables by Pedro J. de Rezende (Brazilian) and tuned up by J.Joao Dias
@@ -3744,13 +3745,13 @@
         <p>Author: conversion author is Paulo Morgado</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-pt-PT-thes, Source: pt_PT, Package: dict-pt-PT, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-pt-PT-thes, Vendor:, Source: pt_PT, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Portuguese thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h2>Portuguese (Brazilian)</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-pt-BR-spell, Source: pt_BR, Package: dict-pt-BR, SPDX-License-Identifier: LGPL-3.0 OR MPL-1.1 -->
+        <!-- Name: dict-pt-BR-spell, Vendor:, Source: pt_BR, URL:, Declared: LGPL-3.0 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Portuguese (Brazilian) spelling dictionary. Use of
         any of this software is governed by the terms of the license below:</p>
         <p>This dictionary is under continuous development by Raimundo Moura and his team. It is icensed under the
@@ -3764,7 +3765,7 @@
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-pt-BR-hyph, Source: pt_BR, Package: dict-pt-BR, SPDX-License-Identifier: LGPL-3.0 OR MPL-1.1 -->
+        <!-- Name: dict-pt-BR-hyph, Vendor:, Source: pt_BR, URL:, Declared: LGPL-3.0 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Portuguese (Brazilian) hyphenation patterns. Use of
         any of this software is governed by the terms of the license below:</p>
         <p>These hyphenation patterns are under continuous development by Raimundo Moura and his team. It is icensed
@@ -3809,7 +3810,7 @@
         OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
         SUCH DAMAGE.</p>
         <h3>Portuguese Brazilian sentence checker for LibreOffice</h3>
-        <!-- Name: dict-pt-BR-grammar, Source: pt_BR, Package: dict-pt-BR, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-1.1 -->
+        <!-- Name: dict-pt-BR-grammar, Vendor:, Source: pt_BR, URL:, Declared: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Portuguese (Brazilian) sentence checker. Use of any
         of this software is governed by the terms of the license below:</p>
         <p>MPL 1.1 / GPLv3+ / LGPLv3+</p>
@@ -3819,7 +3820,7 @@
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h2>Romanian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ro-spell, Source: ro, Package: dict-ro, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 -->
+        <!-- Name: dict-ro-spell, Vendor:, Source: ro, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Romanian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>GPL 2.0/LGPL 2.1/MPL 1.1 tri-license.</p>
@@ -3827,20 +3828,20 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-ro-hyph, Source: ro, Package: dict-ro, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-ro-hyph, Vendor:, Source: ro, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Romanian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>GNU General Public License Version 2</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-ro-thes, Source: ro, Package: dict-ro, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-ro-thes, Vendor:, Source: ro, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Romanian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>GNU General Public License Version 2 or later</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h2>Russian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ru-spell, Source: ru_RU, Package: dict-ru, SPDX-License-Identifier: BSD-4-Clause -->
+        <!-- Name: dict-ru-spell, Vendor:, Source: ru_RU, URL:, Declared: BSD-4-Clause, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Russian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (c) 1997-2008, Alexander I. Lebedev</p>
@@ -3865,12 +3866,12 @@
         OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
         DAMAGE.</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-ru-hyph, Source: ru_RU, Package: dict-ru, SPDX-License-Identifier: NOASSERTION -->
+        <!-- Name: dict-ru-hyph, Vendor:, Source: ru_RU, URL:, Declared: NOASSERTION, Concluded: NOASSERTION -->
         <p>The following software may be included in this product: Russian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>unknown</p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-ru-thes, Source: ru_RU, Package: dict-ru, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-ru-thes, Vendor:, Source: ru_RU, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Russian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>License: GNU LGPL</p>
@@ -3878,26 +3879,26 @@
         <p>Origin: Абрамовъ, Н. Словарь русскихъ синонимовъ и сходныхъ по
         смыслу выраженiй. Изд. 3-е, доп., Пг., 1911</p>
         <h3>Russian grammar checker</h3>
-        <!-- Name: dict-ru-grammar, Source: ru_RU, Package: dict-ru, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 -->
+        <!-- Name: dict-ru-grammar, Vendor:, Source: ru_RU, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Russian grammar checker. Use of any of this software
         is governed by the terms of the license below:</p>
         <p>2009, 2011, 2012 (c) Yakov Reztsov &lt;yr at myooo dot ru&gt;, license: MPL 1.1 / GPL / LGPL</p>
         <h2>Scottish Gaelic</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-gd-spell, Source: gd_GB, Package: dict-gd, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-gd-spell, Vendor:, Source: gd_GB, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Scottish Gaelic spelling dictionary. Use of any of
         this software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Serbian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sr-spell, Source: sr, Package: dict-sr, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-2.0 -->
+        <!-- Name: dict-sr-spell, Vendor:, Source: sr, URL:, Declared: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Serbian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Serbian spelling dictionary is developed by Milutin Smiljanic &lt;msmiljanic.gm@gmail.com&gt; and is
         released under GNU LGPL version 3 or later / MPL version 2 or later / GNU GPL version 3 or later, giving
         you the choice of one of the three sets of free software licensing terms.</p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-sr-hyph, Source: sr, Package: dict-sr, SPDX-License-Identifier: LGPL-2.1+ -->
+        <!-- Name: dict-sr-hyph, Vendor:, Source: sr, URL:, Declared: LGPL-2.1-or-later, Concluded: LGPL-2.1-or-later -->
         <p>The following software may be included in this product: Serbian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Serbian hyphenation patterns (files hyph_sr.dic and hyph_sh.dic) are derived from the official TeX patterns
@@ -3907,14 +3908,14 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Sinhala</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-si-spell, Source: si_LK, Package: dict-si, SPDX-License-Identifier: GPL-3.0 -->
+        <!-- Name: dict-si-spell, Vendor:, Source: si_LK, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
         <p>The following software may be included in this product: Sinhala spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) &lt;2010&gt;  Laknath Semage &lt;blaknath [at] gmail [dot] com&gt;</p>
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <h2>Slovak</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sk-spell, Source: sk_SK, Package: dict-sk, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 -->
+        <!-- Name: dict-sk-spell, Vendor:, Source: sk_SK, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Slovak spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Data are released under these licenses (you can select one):</p>
@@ -3927,7 +3928,7 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-sk-hyph, Source: sk_SK, Package: dict-sk, SPDX-License-Identifier: LPPL-1.3c -->
+        <!-- Name: dict-sk-hyph, Vendor:, Source: sk_SK, URL:, Declared: LPPL-1.3c, Concluded: LPPL-1.3c -->
         <p>The following software may be included in this product: Slovak hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Dictionary is created by converting TeX hyphenation patterns for Slovak (Author: Jana Chlebíková) with
@@ -3936,7 +3937,7 @@
         <p>Original license: LPPL</p>
         <p><a href="#a__LPPL">Jump to LPPL</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-sk-thes, Source: sk_SK, Package: dict-sk, SPDX-License-Identifier: MIT -->
+        <!-- Name: dict-sk-thes, Vendor:, Source: sk_SK, URL:, Declared: MIT, Concluded: MIT -->
         <p>The following software may be included in this product: Slovak thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>Copyright (c) 2004-2010 Tibor Bako, yorik (at) szm.sk, Zdenko Podobný, zposter (at) gmail.com</p>
@@ -3953,52 +3954,52 @@
         IN THE DATA.</p>
         <h2>Slovenian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sl-spell, Source: sl_SI, Package: dict-sl, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 -->
+        <!-- Name: dict-sl-spell, Vendor:, Source: sl_SI, URL:, Declared: GPL-2.0 OR LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Slovenian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-sl-hyph, Source: sl_SI, Package: dict-sl, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 -->
+        <!-- Name: dict-sl-hyph, Vendor:, Source: sl_SI, URL:, Declared: GPL-2.0 OR LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Slovenian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-sl-thes, Source: sl_SI, Package: dict-sl, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-sl-thes, Vendor:, Source: sl_SI, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Slovenian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Spanish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-es-spell, Source: es, Package: dict-es, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-1.1 -->
+        <!-- Name: dict-es-spell, Vendor:, Source: es, URL:, Declared: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Spanish spelling dictionary. Use of any of this
         software is governed by the terms of the licenses (or any later versions) below:</p>
         <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-es-hyph, Source: es, Package: dict-es, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-1.1 OR MIT -->
+        <!-- Name: dict-es-hyph, Vendor:, Source: es, URL:, Declared: GPL-3.0-or-later OR LGPL-3.0-or-later OR MPL-1.1 OR MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Spanish hyphenation patterns. Use of any of this
         software is governed by the terms of the licenses (or any later versions) below:</p>
         <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-es-thes, Source: es, Package: dict-es, SPDX-License-Identifier: GPL-3.0+ OR LGPL-3.0+ OR MPL-1.1 -->
+        <!-- Name: dict-es-thes, Vendor:, Source: es, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Spanish thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Swahili</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sw-spell, Source: sw_TZ, Package: dict-sw, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-sw-spell, Vendor:, Source: sw_TZ, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Swahili spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2004 Jason M Githeko</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h2>Swedish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sv-spell, Source: sv_SE, Package: dict-sv, SPDX-License-Identifier: LGPL-3.0 -->
+        <!-- Name: dict-sv-spell, Vendor:, Source: sv_SE, URL:, Declared: LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Swedish spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright © 2003-12 Göran Andersson &lt;<a href="mailto:goran@init.se">goran@init.se</a>&gt;.</p>
@@ -4009,7 +4010,7 @@
         software is governed by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-sv-thes, Source: sv_SE, Package: dict-sv, SPDX-License-Identifier: MIT -->
+        <!-- Name: dict-sv-thes, Vendor:, Source: sv_SE, URL:, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Swedish thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This thesaurus was directly converted from Synlex. The synonyms will be displayed sorted by their voted
@@ -4024,7 +4025,7 @@
         notice.</p>
         <h2>Telugu</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-te-spell, Source: te_IN, Package: dict-te, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-te-spell, Vendor:, Source: te_IN, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Telugu spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>GNU Hunspell Telugu  Word List Package adaptation</p>
@@ -4035,7 +4036,7 @@
         option) any later version.</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-te-hyph, Source: te_IN, Package: dict-te, SPDX-License-Identifier: GPL-3.0 OR LGPL-3.0 -->
+        <!-- Name: dict-te-hyph, Vendor:, Source: te_IN, URL:, Declared: GPL-3.0 OR LGPL-3.0, Concluded: LGPL-3.0 -->
         <p>The following software may be included in this product: Telugu hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright © 2009 Santhosh Thottingal</p>
@@ -4045,12 +4046,12 @@
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <h2>Thai</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-th-spell, Source: th_TH, Package: dict-th, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-th-spell, Vendor:, Source: th_TH, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Thai spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-th-hyph, Source: th_TH, Package: dict-th, SPDX-License-Identifier: LPPL-1.3c -->
+        <!-- Name: dict-th-hyph, Vendor:, Source: th_TH, URL:, Declared: LPPL-1.3c, Concluded: LPPL-1.3c -->
         <p>The following software may be included in this product: Thai hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__LPPL">Jump to LPPL</a></p>
@@ -4062,20 +4063,20 @@
         <p>Author: Theppitak Karoonboonyanan &lt;theppitak@gmail.com&gt;</p>
         <h2>Tibetan</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-bo-spell, Source: bo, Package: dict-bo, SPDX-License-Identifier: CC0-1.0 -->
+        <!-- Name: dict-bo-spell, Vendor:, Source: bo, URL:, Declared: CC0-1.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Classical Tibetan syllable spellchecker for
         Hunspell. Use of any of this software is governed by the terms of the license below:</p>
         <p>This work and the derived files are under the Creative Commons CC0 license (Public Domain).</p>
         <h2>Turkish</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-tr-spell, Source: tr_TR, Package: dict-tr, SPDX-License-Identifier: MPL-2.0 -->
+        <!-- Name: dict-tr-spell, Vendor:, Source: tr_TR, URL:, Declared: MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Turkish spellchecker dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>This dictionary is released under Mozilla Public License Version 2.0.</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
         <h2>Ukrainian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-uk-spell, Source: uk_UA, Package: dict-uk, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 -->
+        <!-- Name: dict-uk-spell, Vendor:, Source: uk_UA, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Ukrainian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 1999 Vladimir Yakovchuk, Oleg Podgurniy<br />
@@ -4089,14 +4090,14 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-uk-hyph, Source: uk_UA, Package: dict-uk, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-uk-hyph, Vendor:, Source: uk_UA, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Ukrainian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright 1998-2002 Maksym Polyakov.</p>
         <p>License: GNU General Public License version 2 or any later version</p>
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-uk-thes, Source: uk_UA, Package: dict-uk, SPDX-License-Identifier: GPL-2.0 OR LGPL-2.1 OR MPL 1.1 -->
+        <!-- Name: dict-uk-thes, Vendor:, Source: uk_UA, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Ukrainian thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>This thesaurus is based on: П. М. Деркач, Короткий словник синонімів
@@ -4109,7 +4110,7 @@
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h2>Vietnamese</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-vi-spell, Source: vi, Package: dict-vi, SPDX-License-Identifier: GPL-2.0 -->
+        <!-- Name: dict-vi-spell, Vendor:, Source: vi, URL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
         <p>The following software may be included in this product: Vietnamese spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Authors:<br />
@@ -4121,7 +4122,7 @@
         <p><a href="#a__GPL_version_2">Jump to GPL Version 2</a></p>
         <h2>Zulu</h2>
         <h3>Hyphenation patterns</h3>
-        <!-- Name: dict-zu-hyph, Source: zu_ZA, Package: dict-zu, SPDX-License-Identifier: LGPL-2.1 -->
+        <!-- Name: dict-zu-hyph, Vendor:, Source: zu_ZA, URL:, Declared: LGPL-2.1, Concluded: LGPL-2.1 -->
         <p>The following software may be included in this product: Zulu hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2005, 2007 Friedel Wolff</p>

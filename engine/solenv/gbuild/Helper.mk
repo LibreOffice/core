@@ -239,6 +239,15 @@ gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS),$(3))
 
 endef
 
+# $(call gb_Helper_register_external_libraries_for_install,external,layer,installmodule,libs)
+define gb_Helper_register_external_libraries_for_install
+$(if $(strip $(4)),,$(call gb_Output_error,gb_Helper_register_external_libraries_for_install: no libraries - need 4 parameters))
+$(call gb_Helper_register_libraries_for_install,$(2),$(3),$(4))
+
+gb_Externals += $(foreach lib,$(4),$(1);native;$$(call gb_Library_get_target,$(lib)))
+
+endef
+
 # a plugin is a library, why can't be dynamically linked and must be dlopen'd, but must be linked static
 define gb_Helper_register_plugins_for_install
 $(call gb_Helper_register_libraries_for_install,$(1),$(2),$(3))
@@ -279,6 +288,15 @@ gb_Jar_MODULE_$(2) += $(3)
 
 endef
 
+# $(call gb_Helper_register_external_jars_for_install,external,layer,installmodule,jars)
+define gb_Helper_register_external_jars_for_install
+$(if $(strip $(4)),,$(call gb_Output_error,gb_Helper_register_external_jars_for_install: no jars - need 4 parameters))
+$(call gb_Helper_register_jars_for_install,$(2),$(3),$(4))
+
+gb_Externals += $(foreach jar,$(4),$(1);jar;$$(call gb_Jar_get_install_target,$(jar)))
+
+endef
+
 define gb_Helper__register_packages
 $(foreach target,$(1),\
  $(if $(filter $(target),$(gb_Package_REGISTERED)),\
@@ -302,6 +320,15 @@ $(if $(2),,$(call gb_Output_error,gb_Helper_register_packages_for_install: no pa
 $(call gb_Helper__register_packages,$(2))
 
 gb_Package_MODULE_$(1) += $(2)
+
+endef
+
+# $(call gb_Helper_register_external_packages_for_install,external,installmodule,packages)
+define gb_Helper_register_external_packages_for_install
+$(if $(strip $(3)),,$(call gb_Output_error,gb_Helper_register_external_packages_for_install: no packages - need 3 parameters))
+$(call gb_Helper_register_packages_for_install,$(2),$(3))
+
+gb_Externals += $(foreach pkg,$(3),$(1);pkg;$(pkg))
 
 endef
 

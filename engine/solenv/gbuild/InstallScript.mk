@@ -15,11 +15,15 @@ gb_InstallScript_COMMAND := $(PERL) $(gb_InstallScript_TARGET)
 gb_InstallScript__make_arglist = $(subst $(WHITESPACE),$(COMMA),$(strip $(1)))
 
 define gb_InstallScript__get_files
-$(notdir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module)))))
+$(if $(1),\
+	$(notdir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module))))),\
+	$(call gb_Output_error,gb_InstallScript__get_files without argument on $@))
 endef
 
 define gb_InstallScript__get_dirs
-$(sort $(dir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module))))))
+$(if $(1),\
+	$(sort $(dir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module)))))),\
+	$(call gb_Output_error,gb_InstallScript__get_dirs without argument) on $@)
 endef
 
 # Pass first arg if make is running in silent mode, second arg otherwise
