@@ -130,6 +130,7 @@ void SAL_CALL BufferedDecompositionFlusher::run()
         auto aNow = std::chrono::steady_clock::now();
         std::vector<rtl::Reference<BufferedDecompositionPrimitive2D>> aRemoved1;
         std::vector<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> aRemoved2;
+        std::vector<rtl::Reference<BasePrimitive2D>> aDelayRelease;
         {
             std::unique_lock l1(maMutex);
             // exit if we have been shutdown
@@ -146,7 +147,10 @@ void SAL_CALL BufferedDecompositionFlusher::run()
                     it = maRegistered1.erase(it);
                 }
                 else
+                {
+                    aDelayRelease.push_back(std::move(xPrimitive));
                     ++it;
+                }
             }
             for (auto it = maRegistered2.begin(); it != maRegistered2.end();)
             {
@@ -159,9 +163,18 @@ void SAL_CALL BufferedDecompositionFlusher::run()
                     it = maRegistered2.erase(it);
                 }
                 else
+                {
+                    aDelayRelease.push_back(std::move(xPrimitive));
                     ++it;
+                }
             }
         }
+        // There is a very very small window where, if :
+        // This-thread: we create a strong reference from a weak reference inside the loop
+        // Another-thread: releases the second last strong reference to the the object
+        // This-thread: we clear the reference, which triggers object destruction, which tries to call back
+        //  into BufferedDecompositionFlusher and then deadlocks because the mutex is already acquired.
+        aDelayRelease.clear();
 
         {
             // some parts of skia do not take kindly to being accessed from multiple threads
