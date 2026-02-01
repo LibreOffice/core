@@ -1690,8 +1690,12 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
         pExternalLink->startElement(XML_sheetNames);
         for (size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos)
         {
-            pExternalLink->singleElement(XML_sheetName,
-                XML_val, XclXmlUtils::ToOString(maXctList.GetRecord(nPos)->GetTabName()));
+            OString sSheetName = XclXmlUtils::ToOString(maXctList.GetRecord(nPos)->GetTabName());
+            // Sometimes `ReadUniString` could result in a garbage string
+            // Guess whether the SheetName is valid by checking if it contains '?'
+            if (sSheetName.indexOf("?") != -1)
+                sSheetName = "Invalid_Sheet_Name_" + OString::number(sSheetName.getLength());
+            pExternalLink->singleElement(XML_sheetName, XML_val, sSheetName);
         }
         pExternalLink->endElement( XML_sheetNames);
 
