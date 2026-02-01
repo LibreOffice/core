@@ -42,6 +42,7 @@ inline constexpr TabData RID_TAB_ASIANTYPO{ NC_("RID_TAB_ASIANTYPO", "Asian Typo
 inline constexpr TabData RID_TAB_POSITION{ NC_("RID_TAB_POSITION", "Position"), u"fontwork.png"_ustr }; // font
 inline constexpr TabData RID_TAB_HIGHLIGHTING{ NC_("RID_TAB_HIGHLIGHTING", "Highlighting"), u"backcolor.png"_ustr };
 inline constexpr TabData RID_TAB_COLORPALETTE{ NC_("RID_TAB_COLORPALETTE", "Color Palette"), u"colorsettings.png"_ustr };
+inline constexpr TabData RID_TAB_GRADIENT_PRESETS{ NC_("RID_TAB_GRADIENT_PRESETS", "Gradient Presets"), u"colorsettings.png"_ustr };
 inline constexpr TabData RID_TAB_NUMBERS{ NC_("RID_TAB_NUMBERS", "Numbers"), u"numberformatdecimal.png"_ustr };
 inline constexpr TabData RID_TAB_INDENTS{ NC_("RID_TAB_INDENTS", "Indents & Spacing"), u"paraspaceincrease.png"_ustr };
 inline constexpr TabData RID_TAB_TABS{ NC_("RID_TAB_TABS", "Tabs"), u"hangingindent.png"_ustr };

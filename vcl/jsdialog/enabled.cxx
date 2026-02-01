@@ -312,6 +312,7 @@ constexpr auto SchartDialogList
         { u"modules/schart/ui/smoothlinesdlg.ui" },
         { u"modules/schart/ui/steppedlinesdlg.ui" },
         { u"modules/schart/ui/tp_ChartColorPalette.ui" },
+        { u"modules/schart/ui/tp_ChartGradients.ui" },
         { u"modules/schart/ui/tp_ChartType.ui" },
         { u"modules/schart/ui/tp_DataLabel.ui" },
         { u"modules/schart/ui/tp_DataSource.ui" },
@@ -391,6 +392,7 @@ constexpr auto PopupList
         // schart
         { u"modules/schart/ui/chartcolorpalettepopup.ui" },
         { u"modules/schart/ui/chartthemepopup.ui" },
+        { u"modules/schart/ui/chartgradientpalettepopup.ui" },
         // svt
         { u"svt/ui/datewindow.ui" },
         { u"svt/ui/linewindow.ui" },
@@ -432,6 +434,7 @@ constexpr auto SidebarList
         // schart
         { u"modules/schart/ui/sidebaraxis.ui" },
         { u"modules/schart/ui/sidebarcolors.ui" },
+        { u"modules/schart/ui/sidebargradients.ui" },
         { u"modules/schart/ui/sidebarelements.ui" },
         { u"modules/schart/ui/sidebarerrorbar.ui" },
         { u"modules/schart/ui/sidebarseries.ui" },

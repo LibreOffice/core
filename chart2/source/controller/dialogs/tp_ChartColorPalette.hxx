@@ -46,6 +46,7 @@ public:
     void init(const rtl::Reference<ChartModel>& xChartModel);
 
 private:
+    bool isCurrentColorPalette(ChartColorPaletteType eType, sal_uInt32 nIndex) const;
     void selectItem(ChartColorPaletteType eType, sal_uInt32 nIndex) const;
     void initColorPalettes() const;
 
@@ -54,6 +55,8 @@ private:
     std::unique_ptr<ChartColorPaletteHelper> mxHelper;
     std::unique_ptr<ChartColorPalettes> mxColorfulPalettes;
     std::unique_ptr<ChartColorPalettes> mxMonoPalettes;
+    ChartColorPaletteType meCurrentType;
+    sal_uInt32 mnCurrentIndex;
 
     DECL_LINK(SelectColorfulPaletteHdl, weld::IconView&, bool);
     DECL_LINK(SelectMonoPaletteHdl, weld::IconView&, bool);

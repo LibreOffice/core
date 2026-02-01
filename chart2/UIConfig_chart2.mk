@@ -38,6 +38,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/3dviewdialog \
 	chart2/uiconfig/ui/attributedialog \
 	chart2/uiconfig/ui/chartcolorpalettepopup \
+	chart2/uiconfig/ui/chartgradientpalettepopup \
 	chart2/uiconfig/ui/chartthemepopup \
 	chart2/uiconfig/ui/chardialog \
 	chart2/uiconfig/ui/chartdatadialog \
@@ -57,6 +58,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/paradialog \
 	chart2/uiconfig/ui/sidebaraxis \
 	chart2/uiconfig/ui/sidebarcolors \
+	chart2/uiconfig/ui/sidebargradients \
 	chart2/uiconfig/ui/sidebartheme \
 	chart2/uiconfig/ui/sidebarelements \
 	chart2/uiconfig/ui/sidebarerrorbar \
@@ -71,6 +73,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/tp_axisLabel \
 	chart2/uiconfig/ui/tp_AxisPositions \
 	chart2/uiconfig/ui/tp_ChartColorPalette \
+	chart2/uiconfig/ui/tp_ChartGradients \
 	chart2/uiconfig/ui/tp_ChartType \
 	chart2/uiconfig/ui/tp_DataLabel \
 	chart2/uiconfig/ui/tp_DataPointOption \

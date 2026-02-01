@@ -1733,6 +1733,7 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/3dviewdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/attributedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/chartcolorpalettepopup.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/chartgradientpalettepopup.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/chardialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/chartdatadialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/chartthemepopup.ui \
@@ -1750,6 +1751,7 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/paradialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/sidebaraxis.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/sidebarcolors.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/sidebargradients.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/sidebarelements.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/sidebarerrorbar.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/schart/ui/sidebarseries.ui \

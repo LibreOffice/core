@@ -22,6 +22,7 @@ $(eval $(call gb_Library_set_precompiled_header,chart2,chart2/inc/pch/precompile
 
 $(eval $(call gb_Library_use_externals,chart2,\
 	boost_headers \
+	frozen \
 	libxml2 \
 ))
 
@@ -38,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,chart2,\
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayercore \
     drawinglayer \
     docmodel \
     editeng \
@@ -141,6 +143,7 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/controller/dialogs/tp_AxisLabel \
     chart2/source/controller/dialogs/tp_AxisPositions \
     chart2/source/controller/dialogs/tp_ChartColorPalette \
+    chart2/source/controller/dialogs/tp_ChartGradients \
     chart2/source/controller/dialogs/tp_ChartType \
     chart2/source/controller/dialogs/tp_DataLabel \
     chart2/source/controller/dialogs/tp_DataPointOption \
@@ -210,6 +213,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/controller/sidebar/ChartColorsPanel \
     chart2/source/controller/sidebar/ChartColorPaletteControl \
     chart2/source/controller/sidebar/ChartEffectPanel \
+    chart2/source/controller/sidebar/ChartGradientsPanel \
+    chart2/source/controller/sidebar/ChartGradientPaletteControl \
     chart2/source/controller/sidebar/ChartAxisPanel \
     chart2/source/controller/sidebar/ChartColorWrapper \
     chart2/source/controller/sidebar/ChartElementsPanel \
@@ -362,6 +367,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/tools/CharacterProperties \
     chart2/source/tools/ChartColorPalettes \
     chart2/source/tools/ChartColorPaletteHelper \
+    chart2/source/tools/ChartGradientPalettes \
+    chart2/source/tools/ChartGradientPaletteHelper \
     chart2/source/tools/ChartColorScheme \
     chart2/source/tools/ChartTypeHelper \
     chart2/source/tools/ChartViewHelper \

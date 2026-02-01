@@ -59,11 +59,13 @@ void ChartColorPaletteTabPage::init(const rtl::Reference<ChartModel>& xChartMode
 {
     assert(xChartModel);
     mxChartModel = xChartModel;
+    meCurrentType = mxChartModel->getColorPaletteType();
+    mnCurrentIndex = mxChartModel->getColorPaletteIndex();
 
     const std::shared_ptr<model::Theme> pTheme = mxChartModel->getDocumentTheme();
     mxHelper = std::make_unique<ChartColorPaletteHelper>(pTheme);
 
-    selectItem(mxChartModel->getColorPaletteType(), mxChartModel->getColorPaletteIndex() + 1);
+    selectItem(meCurrentType, mnCurrentIndex + 1);
     initColorPalettes();
 }
 
@@ -79,6 +81,12 @@ void ChartColorPaletteTabPage::initColorPalettes() const
     for (size_t i = 0; i < ChartColorPaletteHelper::MonotonicPaletteSize; ++i)
         mxMonoPalettes->insert(mxHelper->getColorPalette(ChartColorPaletteType::Monochromatic, i));
     mxMonoPalettes->Fill();
+}
+
+bool ChartColorPaletteTabPage::isCurrentColorPalette(const ChartColorPaletteType eType,
+                                                     const sal_uInt32 nIndex) const
+{
+    return eType == meCurrentType && nIndex == mnCurrentIndex;
 }
 
 void ChartColorPaletteTabPage::selectItem(const ChartColorPaletteType eType,
@@ -118,7 +126,8 @@ bool ChartColorPaletteTabPage::FillItemSet(SfxItemSet* pOutAttrs)
         nIndex = mxMonoPalettes->GetSelectedItemId() - 1;
     }
 
-    pOutAttrs->Put(SvxChartColorPaletteItem(eType, nIndex, SCHATTR_COLOR_PALETTE));
+    if (!isCurrentColorPalette(eType, nIndex))
+        pOutAttrs->Put(SvxChartColorPaletteItem(eType, nIndex, SCHATTR_COLOR_PALETTE));
 
     return true;
 }
