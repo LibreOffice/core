@@ -141,7 +141,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 	-DSKIA_DLL \
 )
 endef
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,skia,OOOLIBS,ooo,\
         skia \
 ))
 endif
@@ -253,7 +253,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,epoxy,PLAINLIBS_OOO,ooo,\
 	epoxy \
 ))
 
@@ -859,7 +859,7 @@ endef
 
 else # !SYSTEM_LIBNUMBERTEXT
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,libnumbertext,ooo, \
 	libnumbertext_numbertext \
 ))
 
@@ -905,7 +905,7 @@ gb_ExternalProject__use_libxml2:=
 
 else # !SYSTEM_LIBXML
 
-$(eval $(call gb_Helper_register_packages_for_install,ure,\
+$(eval $(call gb_Helper_register_external_packages_for_install,libxml2,ure,\
 	libxml2 \
 ))
 
@@ -960,7 +960,7 @@ endef
 
 else # !SYSTEM_LIBXSLT
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,libxslt,ooo,\
 	libxslt \
 ))
 
@@ -1023,7 +1023,7 @@ gb_ExternalProject__use_xmlsec:=
 
 else # !SYSTEM_XMLSEC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,xmlsec,ooo,\
 	xmlsec \
 ))
 
@@ -1049,7 +1049,7 @@ gb_ExternalProject__use_liblangtag :=
 
 else # !SYSTEM_LIBLANGTAG
 
-$(eval $(call gb_Helper_register_packages_for_install,ure,\
+$(eval $(call gb_Helper_register_external_packages_for_install,liblangtag,ure,\
 	liblangtag_data \
 ))
 
@@ -1067,7 +1067,7 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_packages_for_install,ure,\
+$(eval $(call gb_Helper_register_external_packages_for_install,liblangtag,ure,\
 	liblangtag \
 ))
 
@@ -1140,15 +1140,23 @@ endef
 ifneq ($(OS),ANDROID)
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+$(eval $(call gb_Helper_register_external_libraries_for_install,raptor_rdf_syntax_library,PLAINLIBS_OOO,ooo, \
 	raptor2 \
+))
+$(eval $(call gb_Helper_register_external_libraries_for_install,rasqal,PLAINLIBS_OOO,ooo, \
 	rasqal \
+))
+$(eval $(call gb_Helper_register_external_libraries_for_install,redland,PLAINLIBS_OOO,ooo, \
 	rdf \
 ))
 else
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,raptor_rdf_syntax_library,ooo, \
 	raptor \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,rasqal,ooo, \
 	rasqal \
+))
+$(eval $(call gb_Helper_register_external_packages_for_install,redland,ooo, \
 	redland \
 ))
 endif
@@ -1198,9 +1206,12 @@ else # !SYSTEM_CAIRO
 
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	cairo \
+$(eval $(call gb_Helper_register_external_packages_for_install,pixman,ooo,\
     pixman \
+))
+
+$(eval $(call gb_Helper_register_external_packages_for_install,cairo,ooo,\
+	cairo \
 ))
 
 define gb_LinkTarget__use_cairo
@@ -1276,7 +1287,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
 endef
 
 ifeq ($(OS),EMSCRIPTEN)
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,fontconfig,ooo,\
     libfontconfig_data \
 ))
 endif
@@ -1287,7 +1298,7 @@ else # SYSTEM_FONTCONFIG
 
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,fontconfig,ooo,\
 	fontconfig \
 ))
 
@@ -1372,11 +1383,11 @@ endef
 
 else # !SYSTEM_ICU
 
-$(eval $(call gb_Helper_register_packages_for_install,ure, \
+$(eval $(call gb_Helper_register_external_packages_for_install,international_components_for_unicode,ure, \
 	icu_ure \
 ))
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,international_components_for_unicode,ooo, \
 	icu \
 ))
 
@@ -1507,7 +1518,7 @@ endef
 
 else # !SYSTEM_OPENSSL
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,openssl,ooo, \
 	openssl \
 ))
 
@@ -1566,7 +1577,7 @@ endef
 
 else # !SYSTEM_ARGON2
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,argon2,ooo, \
 	argon2 \
 ))
 
@@ -1661,7 +1672,7 @@ else # !SYSTEM_ETONYEK
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libetonyek,PLAINLIBS_OOO,ooo,\
 	etonyek \
 ))
 
@@ -1678,7 +1689,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,libetonyek,ooo, \
 	libetonyek \
 ))
 
@@ -1757,7 +1768,7 @@ else # !SYSTEM_ODFGEN
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libodfgen,PLAINLIBS_OOO,ooo,\
 	odfgen \
 ))
 
@@ -1774,7 +1785,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,libodfgen,ooo, \
 	libodfgen \
 ))
 
@@ -1847,7 +1858,7 @@ else # !SYSTEM_REVENGE
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,librevenge,PLAINLIBS_OOO,ooo,\
 	revenge \
 ))
 
@@ -1869,7 +1880,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,librevenge,ooo, \
 	librevenge \
 ))
 
@@ -2100,7 +2111,7 @@ else # !SYSTEM_WPD
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libwpd,PLAINLIBS_OOO,ooo,\
 	wpd \
 ))
 
@@ -2122,7 +2133,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,libwpd,ooo, \
 	libwpd \
 ))
 
@@ -2165,7 +2176,7 @@ else # !SYSTEM_WPG
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libwpg,PLAINLIBS_OOO,ooo,\
 	wpg \
 ))
 
@@ -2182,7 +2193,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,libwpg,ooo, \
 	libwpg \
 ))
 
@@ -2220,7 +2231,7 @@ else # !SYSTEM_WPS
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libwps,PLAINLIBS_OOO,ooo,\
 	wps \
 ))
 
@@ -2238,7 +2249,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,libwps,ooo, \
 	libwps \
 ))
 
@@ -2275,7 +2286,7 @@ else # !SYSTEM_MWAW
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libmwaw,PLAINLIBS_OOO,ooo,\
 	mwaw \
 ))
 
@@ -2293,7 +2304,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,libmwaw,ooo,\
 	libmwaw \
 ))
 
@@ -2329,7 +2340,7 @@ else # !SYSTEM_STAROFFICE
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,libstaroffice,PLAINLIBS_OOO,ooo,\
 	staroffice \
 ))
 
@@ -2347,7 +2358,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,libstaroffice,ooo,\
 	libstaroffice \
 ))
 
@@ -2384,7 +2395,7 @@ gb_ExternalProject__use_lcms2 :=
 
 else # !SYSTEM_LCMS2
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,little_cms_color_engine,ooo,\
 	lcms2 \
 ))
 
@@ -2451,7 +2462,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,lpsolve,ooo,\
 	lpsolve \
 ))
 
@@ -2492,7 +2503,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,coinmp,ooo,\
 	coinmp \
 ))
 
@@ -2767,7 +2778,7 @@ endef
 else # !SYSTEM_CURL
 
 $(if $(ENABLE_CURL),\
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,curl,ooo,\
 	curl \
 )))
 
@@ -2832,7 +2843,7 @@ endef
 
 else # !SYSTEM_POPPLER
 
-$(eval $(call gb_Helper_register_packages_for_install,pdfimport,\
+$(eval $(call gb_Helper_register_external_packages_for_install,poppler,pdfimport,\
 	poppler_data \
 ))
 
@@ -2906,7 +2917,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,clucene,PLAINLIBS_OOO,ooo,\
     $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,clucene) \
 ))
 
@@ -3026,7 +3037,7 @@ endef
 
 else # !SYSTEM_FIREBIRD
 
-$(eval $(call gb_Helper_register_packages_for_install,firebirdsdbc,\
+$(eval $(call gb_Helper_register_external_packages_for_install,firebird,firebirdsdbc,\
 	firebird \
 ))
 
@@ -3088,7 +3099,7 @@ else # !SYSTEM_POSTGRESQL
 
 ifeq ($(OS),WNT)
 $(if $(MPL_SUBSET),,\
-$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
+$(eval $(call gb_Helper_register_external_packages_for_install,postgresql,postgresqlsdbc,\
 	postgresql \
 )))
 endif # WNT
@@ -3256,10 +3267,15 @@ endef
 
 else # !SYSTEM_PYTHON
 
-$(eval $(call gb_Helper_register_packages_for_install,python,\
+$(eval $(call gb_Helper_register_external_packages_for_install,python,python,\
 	python3 \
-    $(if $(filter WNT,$(OS)),libffi) \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_external_packages_for_install,libffi,python,\
+    libffi \
+))
+endif
 
 define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_use_external_project,$(1),python3,full)
@@ -3331,7 +3347,7 @@ else # !SYSTEM_LIBORCUS
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,liborcus,PLAINLIBS_OOO,ooo,\
 	orcus \
 	orcus-parser \
 ))
@@ -3362,7 +3378,7 @@ endef
 
 else # !MSC
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,liborcus,ooo,\
 	liborcus \
 ))
 
@@ -3513,7 +3529,7 @@ endef
 
 else # !SYSTEM_NSS
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+$(eval $(call gb_Helper_register_external_packages_for_install,nss,ooo, \
 	nss \
 ))
 
@@ -3698,13 +3714,19 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	gpgmepp \
-	libassuan \
+$(eval $(call gb_Helper_register_external_packages_for_install,libgpg-error,ooo,\
 	libgpg-error \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+$(eval $(call gb_Helper_register_external_packages_for_install,libassuan,ooo,\
+	libassuan \
+))
+
+$(eval $(call gb_Helper_register_external_packages_for_install,gpgme,ooo,\
+	gpgmepp \
+))
+
+$(eval $(call gb_Helper_register_external_libraries_for_install,gpgme,PLAINLIBS_OOO,ooo,\
 	gpgmepp \
 ))
 
@@ -3730,10 +3752,16 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	gpgmepp \
-	libassuan \
+$(eval $(call gb_Helper_register_external_packages_for_install,libgpg-error,ooo,\
 	libgpg-error \
+))
+
+$(eval $(call gb_Helper_register_external_packages_for_install,libassuan,ooo,\
+	libassuan \
+))
+
+$(eval $(call gb_Helper_register_external_packages_for_install,gpgme,ooo,\
+	gpgmepp \
 ))
 
 endif
@@ -3775,7 +3803,7 @@ endef
 else # !SYSTEM_HSQLDB
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
+$(eval $(call gb_Helper_register_external_jars_for_install,hypersql_database,OOO,ooo, \
 	hsqldb \
 ))
 endif
@@ -3801,7 +3829,7 @@ endef
 else # !SYSTEM_BSH
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
+$(eval $(call gb_Helper_register_external_jars_for_install,beanshell,OOO,extensions_bsh, \
 	bsh \
 ))
 endif
@@ -3825,7 +3853,7 @@ endef
 else # !SYSTEM_RHINO
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
+$(eval $(call gb_Helper_register_external_jars_for_install,rhino,OOO,extensions_rhino, \
 	js \
 ))
 endif
@@ -3887,17 +3915,37 @@ endef
 else # !SYSTEM_JFREEREPORT
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-flow-engine-java,OOO,reportbuilder,\
 	flow-engine \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,flute,OOO,reportbuilder,\
 	flute-1.1.6 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-libbase-java,OOO,reportbuilder,\
 	libbase-1.1.6 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-libfonts-java,OOO,reportbuilder,\
 	libfonts-1.1.6 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-libformula-java,OOO,reportbuilder,\
 	libformula-1.1.7 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-liblayout-java,OOO,reportbuilder,\
 	liblayout \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-libloader-java,OOO,reportbuilder,\
 	libloader-1.1.6 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-librepository-java,OOO,reportbuilder,\
 	librepository-1.1.6 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-libserializer-java,OOO,reportbuilder,\
 	libserializer-1.1.6 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,libpentaho-reporting-libxml-java,OOO,reportbuilder,\
 	libxml-1.1.7 \
+))
+$(eval $(call gb_Helper_register_external_jars_for_install,sac,OOO,reportbuilder,\
 	sac \
 ))
 endif
@@ -3951,7 +3999,7 @@ endif # SYSTEM_JFREEREPORT
 # no known distro packaged Java-Websocket at present
 
 ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
+$(eval $(call gb_Helper_register_external_jars_for_install,java_websocket,URE,ure, \
 	java_websocket \
 ))
 endif
@@ -4237,7 +4285,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_use_libraries,$(1),pdfium)
 endef
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
+$(eval $(call gb_Helper_register_external_libraries_for_install,pdfium,OOOLIBS,ooo,\
        pdfium \
 ))
 endif
