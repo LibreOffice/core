@@ -21,6 +21,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 using namespace com::sun::star;
 
@@ -39,12 +40,9 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     createSwDoc("tdf135774_numberingCRProps.docx");
 
     // This only affects when saving as w:highlight - which is not the default since 7.0.
-    bool bWasExportToShade = !officecfg::Office::Common::Filter::Microsoft::Export::
-                                 CharBackgroundToHighlighting::get();
-    auto batch = comphelper::ConfigurationChanges::create();
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true,
-                                                                                            batch);
-    batch->commit();
+    ScopedConfigValue<
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting>
+        aCfg(true);
 
     //Simulate a user editing the char background color of the paragraph 2 marker (CR)
     uno::Reference<beans::XPropertySet> properties(getParagraph(2), uno::UNO_QUERY);
@@ -84,13 +82,6 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
                 "//w:style[@w:styleId='CustomParaStyleHighlightGreen']/w:rPr/w:highlight", "val",
                 u"green");
     // Visually, the last bullet point's text should be green-highlighted (but the bullet point itself shouldn't)
-
-    if (bWasExportToShade)
-    {
-        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(
-            false, batch);
-        batch->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132766)

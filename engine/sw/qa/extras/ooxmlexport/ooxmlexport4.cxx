@@ -27,6 +27,7 @@
 #include <officecfg/Office/Writer.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <test/commontesttools.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -880,17 +881,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_true)
 
 CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_false)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(false, batch);
-    batch->commit();
-    comphelper::ScopeGuard g(
-        [batch]
-        {
-            officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true,
-                                                                                           batch);
-            batch->commit();
-        });
+    ScopedConfigValue<officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown>
+        aCfg(false);
 
     createSwDoc("combobox-control.docx");
     verifyComboBoxExport(false);

@@ -15,6 +15,7 @@
 #include <ndtxt.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <swacorr.hxx>
+#include <test/commontesttools.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
@@ -339,18 +340,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testFieldMark)
 
 CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testUnderlineWeight)
 {
-    Resetter resetter([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(false, pBatch);
-        officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(true, pBatch);
-    officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight> aCfg(true);
 
     createSwDoc(); // Default lang is en-US
 

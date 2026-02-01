@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <test/commontesttools.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <string_view>
@@ -404,14 +405,8 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
 {
     // Make sure SmartArt is loaded as group shape
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     // The document contains SmartArt with shapes with not default text area. Without fix the
     // text was shifted up because of wrong values in TextLowerDistance and TextUpperDistance.
@@ -443,14 +438,6 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
         CPPUNIT_ASSERT_EQUAL(aExpected[i].nLowerDistance, nLower);
         CPPUNIT_ASSERT_EQUAL(aExpected[i].nUpperDistance, nUpper);
     }
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
@@ -460,14 +447,8 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     // Error was, that the theme was not considered and therefore the text was white.
 
     // Make sure it is not loaded as metafile but with single shapes.
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     // get SmartArt
     loadFromFile(u"tdf54095_SmartArtThemeTextColor.docx");
@@ -499,14 +480,6 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     CPPUNIT_ASSERT(xComplexColor.is());
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aComplexColor.getThemeColorType());
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)

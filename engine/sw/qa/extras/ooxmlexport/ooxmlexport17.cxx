@@ -32,6 +32,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <test/commontesttools.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -560,18 +561,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaListRightIndent, "testParaListRightIndent.docx"
 CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 {
     // Given a document that lacks builtin styles, and addition of them is disabled:
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Load::DisableBuiltinStyles::set(true, pBatch);
-        pBatch->commit();
-    }
-    comphelper::ScopeGuard g([] {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Load::DisableBuiltinStyles::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Load::DisableBuiltinStyles> aCfg(true);
 
     // When saving that document:
     createSwDoc("dont-add-new-styles.docx");

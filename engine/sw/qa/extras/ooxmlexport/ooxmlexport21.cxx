@@ -26,6 +26,7 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <pam.hxx>
 #include <unotxdoc.hxx>
@@ -783,9 +784,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 {
     // 1. Remove all personal info
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving>
+        aCfg1(true);
+
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
 
@@ -801,8 +802,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
 
     // 2. Remove personal information, keep user information
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving>
+        aCfg2(true);
+
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
 
@@ -816,11 +818,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf169072_illegalDates)
@@ -846,19 +843,14 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 1);
 
     // Set config RemoveEditingTimeOnSaving to true
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving>
+        aCfg(true);
 
     // 2. Check edit time info is removed
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
     pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")

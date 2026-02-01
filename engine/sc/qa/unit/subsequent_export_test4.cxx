@@ -28,6 +28,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <formula/grammar.hxx>
+#include <test/commontesttools.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/numformat.hxx>
 

@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <officecfg/Office/Writer.hxx>
+#include <test/commontesttools.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -441,17 +442,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
     // export doesn't change the annotation sizes in the document.
 
     // Annotation size depends on DisplayWidthFactor. Set it to a fixed value for testing.
-    comphelper::ScopeGuard
-        aReset([oldValue = officecfg::Office::Writer::Notes::DisplayWidthFactor::get()]() {
-            auto pChanges(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Writer::Notes::DisplayWidthFactor::set(oldValue, pChanges);
-            pChanges->commit();
-        });
-    {
-        auto pChanges(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::Notes::DisplayWidthFactor::set(4.0, pChanges);
-        pChanges->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Writer::Notes::DisplayWidthFactor> aCfg(4.0);
 
     createSwDoc("tdf163194-two-comments.fodt");
 

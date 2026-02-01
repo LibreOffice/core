@@ -65,6 +65,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -1378,17 +1379,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo87488)
     // The shape on the right (index 0, CustomShape within a
     // GroupShape) is rotated 90 degrees clockwise and contains text
     // rotated 90 degrees anticlockwise.
-    bool bOrigSet = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    Resetter resetter(
-        [bOrigSet] () {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(bOrigSet, pBatch);
-            return pBatch->commit();
-        });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
+
     createSwDoc("fdo87488.docx");
     uno::Reference<container::XIndexAccess> group(getShape(1), uno::UNO_QUERY);
     {

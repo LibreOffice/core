@@ -39,6 +39,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <test/commontesttools.hxx>
 #include <unotools/saveopt.hxx>
 
 namespace
@@ -865,16 +866,9 @@ void Test::testSkipImages()
 void Test::testNestedFieldmark()
 {
     // experimental config setting
-    Resetter resetter(
-        [] () {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::set(false, pBatch);
-            return pBatch->commit();
-        });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<
+        officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields>
+        aCfg(true);
 
     auto verify = [this](OUString const& rTestName) {
         SwDoc* pDoc = getSwDoc();

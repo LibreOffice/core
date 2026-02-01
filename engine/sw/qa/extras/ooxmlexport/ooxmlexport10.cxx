@@ -34,6 +34,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <test/commontesttools.hxx>
 
 #include <unotxdoc.hxx>
 
@@ -65,17 +66,8 @@ DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
 CPPUNIT_TEST_FIXTURE(Test, testSmartart)
 {
     // experimental config setting
-    bool bOrigSet = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    Resetter resetter(
-        [bOrigSet] () {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(bOrigSet, pBatch);
-            return pBatch->commit();
-        });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     auto verify = [this]() {
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -605,17 +597,8 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
 CPPUNIT_TEST_FIXTURE(Test, testSmartartStrict)
 {
     // experimental config setting
-    bool bOrigSet = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    Resetter resetter(
-        [bOrigSet] () {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(bOrigSet, pBatch);
-            return pBatch->commit();
-        });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     auto verify = [this]() {
         uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);

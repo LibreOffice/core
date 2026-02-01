@@ -48,6 +48,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <comphelper/scopeguard.hxx>
+#include <test/commontesttools.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include <officecfg/Office/Common.hxx>
@@ -1474,14 +1475,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import)
     // Error was, that the background shape had size zero and the diagram shapes where missing.
 
     // Make sure SmartArt is loaded as group shape
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     // Get document and shape
     createScDoc("xlsx/tdf83671_SmartArt_import.xlsx");
@@ -1500,14 +1495,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import)
     tools::Rectangle aBackground = pChildren->GetObj(0)->GetLogicRect();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6000), aBackground.getOpenWidth(), 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4200), aBackground.getOpenHeight(), 10);
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import2)
@@ -1517,14 +1504,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import2)
     // had size 100x100 Hmm and position 0|0.
 
     // Make sure SmartArt is loaded with converting to metafile
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        false);
 
     // Get document and shape
     createScDoc("xlsx/tdf83671_SmartArt_import.xlsx");
@@ -1544,14 +1525,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import2)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6000), aBackground.getOpenWidth(), 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4200), aBackground.getOpenHeight(), 10);
     CPPUNIT_ASSERT_EQUAL(Point(1164, 1270), aBackground.GetPos());
-
-    if (bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
@@ -1561,14 +1534,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     // Error was, that the theme was not considered and therefore the text was white.
 
     // Make sure it is not loaded as metafile but with single shapes.
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     // Get document and shape in SmartArt object
     createScDoc("xlsx/tdf151818_SmartartThemeFontColor.xlsx");
@@ -1597,14 +1564,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2),
                          xPortion->getPropertyValue(u"CharColorTheme"_ustr).get<sal_Int16>());
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf137216_HideCol)

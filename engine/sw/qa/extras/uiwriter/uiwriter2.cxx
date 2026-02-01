@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
+#include <test/commontesttools.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -389,18 +390,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
-    Resetter resetter([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(false, pBatch);
-        officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(true, pBatch);
-    officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle> aCfg1(
+        true);
+    ScopedConfigValue<officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle> aCfg2(
+        true);
 
     createSwDoc();
     SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();

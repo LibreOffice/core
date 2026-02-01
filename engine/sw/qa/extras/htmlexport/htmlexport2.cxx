@@ -24,6 +24,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/dibtools.hxx>
 #include <editeng/brushitem.hxx>
+#include <test/commontesttools.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1318,19 +1319,9 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportAbsoluteURLs_ownRelative)
 {
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    Resetter resetter([
-        bInternetPreviousValue = officecfg::Office::Common::Save::URL::Internet::get(),
-        bFileSystemPreviousValue = officecfg::Office::Common::Save::URL::FileSystem::get(), pBatch
-    ]() {
-        officecfg::Office::Common::Save::URL::Internet::set(bInternetPreviousValue, pBatch);
-        officecfg::Office::Common::Save::URL::FileSystem::set(bFileSystemPreviousValue, pBatch);
-        return pBatch->commit();
-    });
     // Set saving absolute URLs
-    officecfg::Office::Common::Save::URL::Internet::set(false, pBatch);
-    officecfg::Office::Common::Save::URL::FileSystem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::Internet> aCfg1(false);
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::FileSystem> aCfg2(false);
 
     createSwDoc("URLs.odt");
     // Export to ReqIF, using absolute URLs
@@ -1439,19 +1430,9 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportRelativeURLs)
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_exportAbsoluteURLs_ownRelative)
 {
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    Resetter resetter([
-        bInternetPreviousValue = officecfg::Office::Common::Save::URL::Internet::get(),
-        bFileSystemPreviousValue = officecfg::Office::Common::Save::URL::FileSystem::get(), pBatch
-    ]() {
-        officecfg::Office::Common::Save::URL::Internet::set(bInternetPreviousValue, pBatch);
-        officecfg::Office::Common::Save::URL::FileSystem::set(bFileSystemPreviousValue, pBatch);
-        return pBatch->commit();
-    });
     // Set saving absolute URLs
-    officecfg::Office::Common::Save::URL::Internet::set(false, pBatch);
-    officecfg::Office::Common::Save::URL::FileSystem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::Internet> aCfg1(false);
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::FileSystem> aCfg2(false);
 
     createSwDoc("URLs.odt");
     // Export to HTML, using absolute URLs
