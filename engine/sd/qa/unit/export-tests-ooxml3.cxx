@@ -13,6 +13,7 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <test/commontesttools.hxx>
 
 #include <sdpage.hxx>
 
@@ -384,14 +385,8 @@ int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages
 
     // check if fallback images were not created if AddReplacementImages=true/false
     // set AddReplacementImages
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create());
-        if (!officecfg::Office::Common::Save::Graphic::AddReplacementImages::isReadOnly())
-            officecfg::Office::Common::Save::Graphic::AddReplacementImages::set(
-                bAddReplacementImages, batch);
-        batch->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Save::Graphic::AddReplacementImages> aCfg(
+        bAddReplacementImages);
 
     // save the file with already set options
     save(TestFilter::ODP);
