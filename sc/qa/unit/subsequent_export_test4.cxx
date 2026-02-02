@@ -2502,6 +2502,30 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165733_leap_day_BCE)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf170565_empty_functions)
+{
+    createScDoc("ods/tdf170565_empty_functions.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Without the fix these would've been exported as SUM(), MIN(), MAX(), which aren't valid in Excel
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", u"SUM(0)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[1]/x:f", u"MIN(#VALUE!)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[1]/x:f", u"MAX(#VALUE!)");
+    // Further checks to ensure there are no regressions
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", u"SUM(,)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[3]/x:f", u"SUM(100)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[4]/x:f", u"SUM(C1:C3)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[2]/x:f", u"MIN(,)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[3]/x:f", u"MIN(200)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[4]/x:f", u"MIN(C1:C3)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[2]/x:f", u"MAX(,)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[3]/x:f", u"MAX(-100)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[4]/x:f", u"MAX(C1:C3)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
