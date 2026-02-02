@@ -806,10 +806,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
 {
-    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
-    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (!IsDefaultDPI())
-        return;
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
         return;
