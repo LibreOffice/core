@@ -150,6 +150,50 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeOmitInsertDelete)
     CPPUNIT_ASSERT_EQUAL(120, GetColorHue(aColor3));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMoveRedlineRenderModeOmitDelete)
+{
+    // Given a <from>move it</from>baseline<to>move it</to> bugdoc:
+    createSwDoc("redline-move.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
+    pWrtShell->ApplyViewOptions(aOpt);
+
+    // When rendering that while omitting deletes:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure "from" has no strikethrough and "to" has no underline:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPath(pXmlDoc, "//textarray", 3);
+    OUString aContent = getXPathContent(pXmlDoc, "(//textarray)[1]/text");
+    sal_Int32 nIndex1 = getXPath(pXmlDoc, "(//textarray)[1]", "index").toInt32();
+    sal_Int32 nLength1 = getXPath(pXmlDoc, "(//textarray)[1]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(u"move it"_ustr, aContent.copy(nIndex1, nLength1));
+    OUString aFontStrikeout
+        = getXPath(pXmlDoc, "(//textarray)[1]/preceding-sibling::font[1]", "strikeout");
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aFontStrikeout);
+    OUString aFontUnderline
+        = getXPath(pXmlDoc, "(//textarray)[1]/preceding-sibling::font[1]", "underline");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. there was an unexpected underline, while only coloring is expected for moves when
+    // non-standard redline render mode is used.
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aFontUnderline);
+    sal_Int32 nIndex2 = getXPath(pXmlDoc, "(//textarray)[2]", "index").toInt32();
+    sal_Int32 nLength2 = getXPath(pXmlDoc, "(//textarray)[2]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(u"baseline"_ustr, aContent.copy(nIndex2, nLength2));
+    sal_Int32 nIndex3 = getXPath(pXmlDoc, "(//textarray)[3]", "index").toInt32();
+    sal_Int32 nLength3 = getXPath(pXmlDoc, "(//textarray)[3]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(u"move it"_ustr, aContent.copy(nIndex3, nLength3));
+    aFontStrikeout = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::font[1]", "strikeout");
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aFontStrikeout);
+    aFontUnderline = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::font[1]", "underline");
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aFontUnderline);
+}
+
 struct ImageInfo
 {
     Bitmap m_aBitmap;
