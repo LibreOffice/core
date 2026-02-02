@@ -295,7 +295,21 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     pDefStrm->startElement(XML_cacheFields,
         XML_count, OString::number(static_cast<tools::Long>(nCount + nGroupFieldCount)));
 
-    auto WriteFieldGroup = [this, &rCache, pDefStrm](size_t i, size_t base) {
+    SvNumberFormatter& rFormatter = GetFormatter();
+
+    // In Excel, DATE can't be later than 9999-12-31.
+    // Number of days from 1900-01-01 to 9999-12-31 is 2958465.
+    constexpr double MAX_DATE = 2.958465e6;
+    auto GetClampedDate = [&](double fVal, double fSub)
+    {
+        if (fVal > MAX_DATE)
+            return GetExcelFormattedDate(fSub, rFormatter);
+        else
+            return GetExcelFormattedDate(fVal, rFormatter);
+    };
+
+    auto WriteFieldGroup = [&rCache, pDefStrm, &GetClampedDate](size_t i, size_t base)
+    {
         const sal_Int32 nDatePart = rCache.GetGroupType(i);
         if (!nDatePart)
             return;
@@ -328,15 +342,13 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         // fieldGroup element
         pDefStrm->startElement(XML_fieldGroup, XML_base, OString::number(base));
 
-        SvNumberFormatter& rFormatter = GetFormatter();
-
         // rangePr element
         const ScDPNumGroupInfo* pGI = rCache.GetNumGroupInfo(i);
         auto pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         pGroupAttList->add(XML_groupBy, sGroupBy);
         // Possible TODO: find out when to write autoStart attribute for years grouping
-        pGroupAttList->add(XML_startDate, GetExcelFormattedDate(pGI->mfStart, rFormatter).toUtf8());
-        pGroupAttList->add(XML_endDate, GetExcelFormattedDate(pGI->mfEnd, rFormatter).toUtf8());
+        pGroupAttList->add(XML_startDate, GetClampedDate(pGI->mfStart, 0).toUtf8());
+        pGroupAttList->add(XML_endDate, GetClampedDate(pGI->mfEnd, MAX_DATE).toUtf8());
         if (pGI->mfStep)
             pGroupAttList->add(XML_groupInterval, OString::number(pGI->mfStep));
         pDefStrm->singleElement(XML_rangePr, pGroupAttList);
@@ -457,8 +469,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         if (isContainsDate)
         {
-            pAttList->add(XML_minDate, GetExcelFormattedDate(fMin, GetFormatter()).toUtf8());
-            pAttList->add(XML_maxDate, GetExcelFormattedDate(fMax, GetFormatter()).toUtf8());
+            pAttList->add(XML_minDate, GetClampedDate(fMin, 0).toUtf8());
+            pAttList->add(XML_maxDate, GetClampedDate(fMax, MAX_DATE).toUtf8());
         }
 
         //if (bListItems) // see TODO above
@@ -485,8 +497,13 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                     case ScDPItemData::Value:
                         if (isContainsDate)
                         {
-                            pDefStrm->singleElement(XML_d,
-                                XML_v, GetExcelFormattedDate(rItem.GetValue(), GetFormatter()).toUtf8());
+                            double fDate = rItem.GetValue();
+                            if (fDate > MAX_DATE)
+                                pDefStrm->singleElement(XML_n, XML_v, OString::number(fDate));
+                            else
+                                pDefStrm->singleElement(
+                                    XML_d, XML_v,
+                                    GetExcelFormattedDate(fDate, GetFormatter()).toUtf8());
                         }
                         else
                             pDefStrm->singleElement(XML_n,
