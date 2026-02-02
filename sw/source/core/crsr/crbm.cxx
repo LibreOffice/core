@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <crossrefbookmark.hxx>
 #include <crsrsh.hxx>
 #include <ndtxt.hxx>
 #include <rootfrm.hxx>
@@ -153,6 +154,10 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::MarkBase const& rMark)
         if (rMark.GetMarkPos().GetContentIndex() == pTextNode->Len())
         {   // at end of node: never deleted (except if node deleted)
             return pTextNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden;
+        }
+        else if (dynamic_cast<mark::CrossRefBookmark const*>(&rMark))
+        {
+            return pFrame->GetMergedPara() && pFrame->GetMergedPara()->pParaPropsNode != pTextNode;
         }
         else
         {   // check character following mark pos
