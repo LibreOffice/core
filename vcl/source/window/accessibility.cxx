@@ -590,13 +590,20 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
     auto const& aMnemonicLabels = list_mnemonic_labels();
     if (!aMnemonicLabels.empty())
     {
-        //if we have multiple labels, then prefer the first that is visible
         for (auto const & rCandidate : aMnemonicLabels)
         {
+            if (rCandidate->mpWindowImpl->mpAccessibleInfos
+                && rCandidate->mpWindowImpl->mpAccessibleInfos->pLabelForWindow)
+                continue;
+
             if (rCandidate->IsVisible())
                 return rCandidate;
         }
-        return aMnemonicLabels[0];
+        // only sent mnemonic label if explicit label-for not exist
+        auto const& pFallback = aMnemonicLabels[0];
+        if (!(pFallback->mpWindowImpl->mpAccessibleInfos
+              && pFallback->mpWindowImpl->mpAccessibleInfos->pLabelForWindow))
+            return pFallback;
     }
 
     // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
