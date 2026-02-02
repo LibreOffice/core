@@ -347,6 +347,7 @@ ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const Attr
             mrModel.mnMinorTickMark = rAttribs.getToken( XML_type, XML_cross );
             return nullptr;
         case CX_TOKEN(tickLabels) :
+            mrModel.mnTickLabelPos = XML_nextTo;    // Is this the right default?
             // TODO (contents is only an extLst)
             return nullptr;
         case CX_TOKEN(numFmt):
