@@ -266,6 +266,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxes)
 
     // Should be two axes
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 2);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:tickLabels", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)

@@ -4966,8 +4966,18 @@ void ChartExport::exportOneAxis_chartex(
                 getTickMarkLocStr(nValue));
     }
 
-    // ==== tickLabels consists of nothing but an extLst so I don't know how to
-    // handle it
+    // ==== tickLabels
+    bool bDisplayLabel = false;
+    if (GetProperty( xAxisProp, u"DisplayLabels"_ustr ) )
+    {
+        mAny >>= bDisplayLabel;
+
+        if( bDisplayLabel )
+        {
+            pFS->singleElement(FSNS(XML_cx, XML_tickLabels));
+        }
+    }
+    // There's also an extLst but not sure what to do with it
 
     // ==== numFmt
     bool bLinkedNumFmt = true;
