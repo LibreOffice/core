@@ -612,6 +612,11 @@ OFFICEOTRON_JAR := officeotron-0.8.8.jar
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+VERAPDF_SHA256SUM := bdeef807f7e883fe3ff4e0a4712dc216064ca670d5c857fbc94408266719f0f4
+VERAPDF_JAR := verapdf-cli-1.29.0.jar
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 ONLINEUPDATE_SHA256SUM := 37206cf981e8409d048b59ac5839621ea107ff49af72beb9d7769a2f41da8d90
 ONLINEUPDATE_TARBALL := onlineupdate-c003be8b9727672e7d30972983b375f4c200233f-2.tar.xz
 # three static lines

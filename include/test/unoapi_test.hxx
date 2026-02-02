@@ -26,7 +26,8 @@ enum ValidationFormat
 {
     OOXML,
     ODF,
-    MSBINARY
+    MSBINARY,
+    PDF
 };
 
 enum class TestFilter
@@ -176,11 +177,11 @@ protected:
 
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
+    void validate(TestFilter eFilter);
+
 private:
     void setTestInteractionHandler(const char* pPassword,
                                    std::vector<css::beans::PropertyValue>& rFilterOptions);
-
-    void validate(const OUString& rURL, TestFilter eFilter) const;
 
     bool mbSkipValidation;
     OUString m_aBaseString;

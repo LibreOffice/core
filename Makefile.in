@@ -229,6 +229,7 @@ distclean : clean compilerplugins-clean mac-app-store-package.clean
         $(BUILDDIR)/bin/bffvalidator.sh \
         $(BUILDDIR)/bin/odfvalidator.sh \
         $(BUILDDIR)/bin/officeotron.sh \
+        $(BUILDDIR)/bin/verapdf.sh \
         $(BUILDDIR)/config.Build.log \
         $(BUILDDIR)/config.Build.warn \
         $(BUILDDIR)/config.log \

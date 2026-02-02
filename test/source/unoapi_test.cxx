@@ -110,7 +110,7 @@ constexpr std::u16string_view grand_total = u"Grand total of errors in submitted
 }
 #endif
 
-void UnoApiTest::validate(const OUString& rPath, TestFilter eFilter) const
+void UnoApiTest::validate(TestFilter eFilter)
 {
     ValidationFormat eFormat = ValidationFormat::ODF;
     if (eFilter == TestFilter::XLSX)
@@ -133,6 +133,8 @@ void UnoApiTest::validate(const OUString& rPath, TestFilter eFilter) const
         eFormat = ValidationFormat::MSBINARY;
     else if (eFilter == TestFilter::PPT)
         eFormat = ValidationFormat::MSBINARY;
+    else if (eFilter == TestFilter::PDF_WRITER)
+        eFormat = ValidationFormat::PDF;
     else
     {
         SAL_INFO("test", "UnoApiTest::validate: unknown filter");
@@ -148,6 +150,10 @@ void UnoApiTest::validate(const OUString& rPath, TestFilter eFilter) const
     else if (eFormat == ValidationFormat::ODF)
     {
         var = "ODFVALIDATOR";
+    }
+    else if (eFormat == ValidationFormat::PDF)
+    {
+        var = "VERAPDF";
     }
     else if (eFormat == ValidationFormat::MSBINARY)
     {
@@ -185,7 +191,7 @@ void UnoApiTest::validate(const OUString& rPath, TestFilter eFilter) const
     utl::TempFileNamed aOutput;
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
-    OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile + " 2>&1";
+    OUString aCommand = aValidator + " " + maTempFile.GetFileName() + " > " + aOutputFile + " 2>&1";
 
 #if !defined _WIN32
     // For now, this is only needed by some Linux ASan builds, so keep it simply and disable it on
@@ -212,42 +218,53 @@ void UnoApiTest::validate(const OUString& rPath, TestFilter eFilter) const
     OString aContentString = loadFile(aOutput.GetURL());
     OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
 
-    if (eFormat == ValidationFormat::OOXML && !aContentOUString.isEmpty())
+    if (eFormat == ValidationFormat::PDF)
     {
-        // check for validation errors here
-        sal_Int32 nIndex = aContentOUString.lastIndexOf(grand_total);
-        if (nIndex == -1)
-        {
-            SAL_WARN("test", "no summary line");
-        }
-        else
-        {
-            sal_Int32 nStartOfNumber = nIndex + grand_total.size();
-            std::u16string_view aNumber = aContentOUString.subView(nStartOfNumber);
-            sal_Int32 nErrors = o3tl::toInt32(aNumber);
-            OString aMsg = "validation error in OOXML export: Errors: " + OString::number(nErrors);
-            if (nErrors)
-            {
-                SAL_WARN("test", aContentOUString);
-            }
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(0), nErrors);
-        }
-    }
-    else if (eFormat == ValidationFormat::ODF && !aContentOUString.isEmpty())
-    {
-        if (aContentOUString.indexOf("Error") != -1 || aContentOUString.indexOf("Fatal") != -1)
+        if (aContentOUString.indexOf("isCompliant=\"true\"") == -1)
         {
             SAL_WARN("test", aContentOUString);
-            CPPUNIT_FAIL(aContentString.getStr());
+            CPPUNIT_FAIL("VeraPDF validation failed: document is not compliant");
         }
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("failed to execute: " + OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8) + "\n"
-                + OUStringToOString(aContentOUString, RTL_TEXTENCODING_UTF8))
-            .getStr(),
-        0, returnValue);
+    else
+    {
+        if (eFormat == ValidationFormat::OOXML && !aContentOUString.isEmpty())
+        {
+            // check for validation errors here
+            sal_Int32 nIndex = aContentOUString.lastIndexOf(grand_total);
+            if (nIndex == -1)
+            {
+                SAL_WARN("test", "no summary line");
+            }
+            else
+            {
+                sal_Int32 nStartOfNumber = nIndex + grand_total.size();
+                std::u16string_view aNumber = aContentOUString.subView(nStartOfNumber);
+                sal_Int32 nErrors = o3tl::toInt32(aNumber);
+                OString aMsg
+                    = "validation error in OOXML export: Errors: " + OString::number(nErrors);
+                if (nErrors)
+                {
+                    SAL_WARN("test", aContentOUString);
+                }
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(0), nErrors);
+            }
+        }
+        else if (eFormat == ValidationFormat::ODF && !aContentOUString.isEmpty())
+        {
+            if (aContentOUString.indexOf("Error") != -1 || aContentOUString.indexOf("Fatal") != -1)
+            {
+                SAL_WARN("test", aContentOUString);
+                CPPUNIT_FAIL(aContentString.getStr());
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            OString("failed to execute: " + OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8)
+                    + "\n" + OUStringToOString(aContentOUString, RTL_TEXTENCODING_UTF8))
+                .getStr(),
+            0, returnValue);
+    }
 #else
-    (void)rPath;
     (void)eFormat;
 #endif
 }
@@ -356,8 +373,9 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
-    if (!mbSkipValidation)
-        validate(maTempFile.GetFileName(), eFilter);
+    // FIXME: Don't validate pdf files by default for now
+    if (!mbSkipValidation && eFilter != TestFilter::PDF_WRITER)
+        validate(eFilter);
 }
 
 void UnoApiTest::saveAndReload(TestFilter eFilter, const char* pPassword)

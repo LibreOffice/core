@@ -59,6 +59,7 @@
 /bin/bffvalidator.sh
 /bin/odfvalidator.sh
 /bin/officeotron.sh
+/bin/verapdf.sh
 /hardened_runtime.xcent
 /lo.xcent
 /vs-code.code-workspace.template

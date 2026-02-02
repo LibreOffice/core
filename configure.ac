@@ -6203,6 +6203,7 @@ if test "$cross_compiling" = "yes"; then
         bin/bffvalidator.sh.in \
         bin/odfvalidator.sh.in \
         bin/officeotron.sh.in \
+        bin/verapdf.sh.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
@@ -9676,6 +9677,31 @@ if test "$with_export_validation" != "no"; then
             OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
         else
             OFFICEOTRON="sh $OFFICEOTRON"
+        fi
+
+        AC_PATH_PROGS(VERAPDF, verapdf)
+        if test -z "$VERAPDF"; then
+            # remember to download the verapdf with validator later
+            AC_MSG_NOTICE([no verapdf found, will download it])
+            BUILD_TYPE="$BUILD_TYPE VERAPDF"
+            VERAPDF="$BUILDDIR/bin/verapdf.sh"
+
+            # and fetch name of verapdf jar name from download.lst
+            VERAPDF_JAR=`$SED -n -e "s/^VERAPDF_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+            AC_SUBST(VERAPDF_JAR)
+
+            if test -z "$VERAPDF_JAR"; then
+                AC_MSG_ERROR([cannot determine verapdf jar location (--with-export-validation)])
+            fi
+        fi
+        if test "$build_os" = "cygwin"; then
+            # In case of Cygwin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            VERAPDF="bash.exe `cygpath -m "$VERAPDF"`"
+        else
+            VERAPDF="sh $VERAPDF"
         fi
     fi
     AC_SUBST(OFFICEOTRON)
@@ -16335,6 +16361,7 @@ AC_CONFIG_FILES([
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
+                 bin/verapdf.sh
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
                  sysui/desktop/macosx/LaunchConstraint.plist

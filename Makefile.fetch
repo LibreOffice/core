@@ -251,7 +251,8 @@ fetch_SRC_TARBALLS := \
 fetch_EXTERN_TARBALLS := \
 	$(call fetch_Optional,OPENSYMBOL,OPENSYMBOL_TTF) \
 	$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
-	$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR)
+	$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
+	$(call fetch_Optional,VERAPDF,VERAPDF_JAR)
 
 fetch_NOTO_TARBALLS := \
 	$(call fetch_Optional,NOTO_FONT,FONT_NOTO_MORE_TARBALL) \
