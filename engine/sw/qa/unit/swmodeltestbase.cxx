@@ -24,8 +24,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/configuration.hxx>
-#include <officecfg/Office/Writer.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
@@ -483,20 +481,6 @@ void SwModelTestBase::emulateTyping(std::u16string_view rStr)
         pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
-}
-
-SwExportFormFieldsGuard::SwExportFormFieldsGuard()
-{
-    m_pBatch = comphelper::ConfigurationChanges::create();
-    m_bValue = officecfg::Office::Common::Filter::PDF::Export::ExportFormFields::get();
-    officecfg::Office::Common::Filter::PDF::Export::ExportFormFields::set(true, m_pBatch);
-    m_pBatch->commit();
-}
-
-SwExportFormFieldsGuard::~SwExportFormFieldsGuard()
-{
-    officecfg::Office::Common::Filter::PDF::Export::ExportFormFields::set(m_bValue, m_pBatch);
-    m_pBatch->commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
