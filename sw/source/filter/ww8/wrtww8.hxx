@@ -1592,7 +1592,6 @@ public:
     const SwFormatDrop& GetSwFormatDrop() const { return mrSwFormatDrop; }
 
     bool IsWatermarkFrame();
-    bool IsAnchorLinkedToThisNode( SwNodeOffset nNodePos );
 
     void SplitRun( sal_Int32 nSplitEndPos );
 

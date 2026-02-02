@@ -278,7 +278,6 @@ public:
     void EndRedline(const SwRedlineData* pRedlineData, bool bLastRun, bool bParagraphProps = false);
 
     virtual void SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame ) override;
-    virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode ) override;
     virtual bool IsFlyProcessingPostponed() override;
     virtual void ResetFlyProcessingFlag() override;
 
@@ -873,7 +872,6 @@ private:
 
     /// Flag indicating that the header \ footer are being written
     bool m_bWritingHeaderFooter;
-    bool m_bAnchorLinkedToNode;
 
     /// Flag indicating that multiple runs of a field are being written
     bool m_bWritingField;

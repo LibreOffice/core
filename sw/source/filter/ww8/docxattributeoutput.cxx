@@ -1265,7 +1265,7 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
 
     m_pSerializer->endElementNS( XML_w, XML_p );
     // on export sdt blocks are never nested ATM
-    if (!m_bAnchorLinkedToNode && !m_aParagraphSdt.m_bStartedSdt)
+    if (!m_aParagraphSdt.m_bStartedSdt)
     {
         m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
 
@@ -1799,11 +1799,6 @@ void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFram
     m_nStateOfFlyFrame = nStateOfFlyFrame;
 }
 
-void DocxAttributeOutput::SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode )
-{
-    m_bAnchorLinkedToNode = bAnchorLinkedToNode ;
-}
-
 void DocxAttributeOutput::ResetFlyProcessingFlag()
 {
     m_bPostponedProcessingFly = false ;
@@ -2122,7 +2117,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
-    if ( !m_bAnchorLinkedToNode && !m_aRunSdt.m_bStartedSdt)
+    if (!m_aRunSdt.m_bStartedSdt)
     {
         m_aRunSdt.WriteSdtBlock(m_pSerializer, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
     }
@@ -10696,7 +10691,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bOpenedParaPr( false ),
       m_bRunTextIsOn( false ),
       m_bWritingHeaderFooter( false ),
-      m_bAnchorLinkedToNode(false),
       m_bWritingField( false ),
       m_bPreventDoubleFieldsHandling( false ),
       m_nNextBookmarkId( 0 ),

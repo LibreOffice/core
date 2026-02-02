@@ -300,8 +300,6 @@ public:
 
     /// Set the state of the Fly at current position
     virtual void SetStateOfFlyFrame( FlyProcessingState /*nStateOfFlyFrame*/ ){};
-    /// If the node has an anchor linked.
-    virtual void SetAnchorIsLinkedToNode( bool /*bAnchorLinkedToNode*/){};
 
     /// Is processing of fly postponed ?
     virtual bool IsFlyProcessingPostponed(){ return false; };

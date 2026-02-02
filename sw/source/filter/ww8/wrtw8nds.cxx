@@ -717,17 +717,6 @@ bool SwWW8AttrIter::IsWatermarkFrame()
     return false;
 }
 
-bool SwWW8AttrIter::IsAnchorLinkedToThisNode( SwNodeOffset nNodePos )
-{
-    if ( maFlyIter == maFlyFrames.end() )
-        return false;
-
-    /* if current node position and the anchor position are the same
-        then the frame anchor is linked to this node
-    */
-    return nNodePos == maFlyIter->GetPosition().GetNodeIndex();
-}
-
 bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos, const ww8::Frame** pInlineHeading) const
 {
     for (const auto& rFly : maFlyFrames)
@@ -2543,7 +2532,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
             AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
-            AttrOutput().SetAnchorIsLinkedToNode(false);
+
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
             AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData );
