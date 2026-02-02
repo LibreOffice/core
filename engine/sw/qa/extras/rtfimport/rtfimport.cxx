@@ -45,7 +45,8 @@
 #include <tools/UnitConversion.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Linguistic.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -865,17 +866,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo68291)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf105511)
 {
-    struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, OUString>
-    {
-        static OUString path()
-        {
-            return u"/org.openoffice.Office.Linguistic/General/DefaultLocale"_ustr;
-        }
-        ~DefaultLocale() = delete;
-    };
-    auto batch = comphelper::ConfigurationChanges::create();
-    DefaultLocale::set(u"ru-RU"_ustr, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Linguistic::General::DefaultLocale> aCfg(u"ru-RU"_ustr);
     createSwDoc("tdf105511.rtf");
     getParagraph(1, u"\u0418\u043C\u044F"_ustr);
 }
