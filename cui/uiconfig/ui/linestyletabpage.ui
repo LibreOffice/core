@@ -135,7 +135,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="FT_DISTANCE">
+                      <object class="GtkLabel" id="FT_SPACING">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="linestyletabpage|FT_DISTANCE">_Spacing:</property>
@@ -168,6 +168,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="active">1</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_TYPE"/>
+                        </accessibility>
                         <items>
                           <item translatable="yes" context="linestyletabpage|liststoreTYPE">Dots</item>
                           <item translatable="yes" context="linestyletabpage|liststoreTYPE">Dash</item>
@@ -198,6 +201,9 @@
                         <property name="activates_default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustmentNUM1</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_NUMBER"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -226,6 +232,9 @@
                         <property name="adjustment">adjustmentDIST1</property>
                         <property name="truncate-multiline">True</property>
                         <property name="digits">2</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_LENGTH"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
