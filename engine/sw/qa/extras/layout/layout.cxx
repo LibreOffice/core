@@ -28,6 +28,7 @@
 #include <fldmgr.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase
@@ -764,14 +765,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
 {
     // disable Field Names warning dialog
-    const bool bAsk = officecfg::Office::Common::Misc::QueryShowFieldName::get();
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges;
-    if (bAsk)
-    {
-        xChanges = comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Misc::QueryShowFieldName::set(false, xChanges);
-        xChanges->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
     createSwDoc("fly_hidden_paragraph.fodt");
 
@@ -819,12 +813,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     // so just hardcode it...
     dispatchCommand(mxComponent, ".uno:Fieldnames", args);
     Scheduler::ProcessEventsToIdle();
-
-    if (bAsk)
-    {
-        officecfg::Office::Common::Misc::QueryShowFieldName::set(true, xChanges);
-        xChanges->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)

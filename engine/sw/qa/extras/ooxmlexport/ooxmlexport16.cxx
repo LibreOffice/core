@@ -31,6 +31,7 @@
 #include <o3tl/string_view.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -555,22 +556,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 {
-    bool bIsExportAsShading = !officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get();
-    auto batch = comphelper::ConfigurationChanges::create();
-
-    // This function is run at the end of the test - returning the filter options to normal.
-    comphelper::ScopeGuard g(
-        [bIsExportAsShading, batch]
-        {
-            if (bIsExportAsShading)
-            {
-                officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
-                batch->commit();
-            }
-        });
     // For these test, ensure exporting CharBackground as w:highlight.
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
-    batch->commit();
+    ScopedConfigValue<
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting>
+        aCfg(true);
 
     createSwDoc("tdf135774_numberingShading.docx");
     save(TestFilter::DOCX);

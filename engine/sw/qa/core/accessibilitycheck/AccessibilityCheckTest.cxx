@@ -17,6 +17,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 class AccessibilityCheckTest : public SwModelTestBase
 {
@@ -434,16 +435,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
     CPPUNIT_ASSERT(pWrtShell);
 
     // Enable online a11y checker
-    {
-        auto pBatch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(true, pBatch);
-        pBatch->commit();
-    }
-    comphelper::ScopeGuard g([] {
-        auto pBatch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck> aCfg(
+        true);
 
     Scheduler::ProcessEventsToIdle();
 

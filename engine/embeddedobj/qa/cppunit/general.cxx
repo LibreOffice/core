@@ -8,6 +8,7 @@
  */
 
 #include <config_poppler.h>
+#include <test/commontesttools.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
@@ -36,17 +37,8 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
 {
     // Explicitly disable Word->Writer mapping for this test.
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::set(false, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatchReset(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::set(true,
-                                                                                   pBatchReset);
-        pBatchReset->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter> aCfg(
+        false);
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // Insert a file as an embedded object.
@@ -68,17 +60,9 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
 {
-    // Explicitly disable Word->Writer mapping for this test.
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::set(false, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatchReset(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::set(true, pBatchReset);
-        pBatchReset->commit();
-    });
+    // Explicitly disable Visio->Draw mapping for this test.
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw> aCfg(
+        false);
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // Insert a file as an embedded object.
@@ -101,17 +85,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
 #if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
 {
-    // Explicitly disable Word->Writer mapping for this test.
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(false, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatchReset(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(true, pBatchReset);
-        pBatchReset->commit();
-    });
+    // Explicitly disable PDF->Draw mapping for this test.
+    ScopedConfigValue<officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw> aCfg(false);
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // Insert a PDF file as an embedded object.

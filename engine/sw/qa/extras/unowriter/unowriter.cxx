@@ -51,6 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/compbase.hxx>
+#include <test/commontesttools.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -973,16 +974,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
 {
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject> aCfg(
+        true);
 
     createSwDoc();
 

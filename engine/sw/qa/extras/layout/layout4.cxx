@@ -31,6 +31,7 @@
 #include <frameformats.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -48,27 +49,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
 {
     createSwDoc("hidden-sections-with-pagestyles.odt");
 
-    // disable Field Names warning dialog
-    const bool bAsk = officecfg::Office::Common::Misc::QueryShowFieldName::get();
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges;
-    if (bAsk)
     {
-        xChanges = comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Misc::QueryShowFieldName::set(false, xChanges);
-        xChanges->commit();
-    }
+        // disable Field Names warning dialog
+        ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
-    // hide these just so that the height of the section is what is expected;
-    // otherwise height depends on which tests run previously
-    uno::Sequence<beans::PropertyValue> argsSH(
-        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
-    uno::Sequence<beans::PropertyValue> args(
-        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
-    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
-    Scheduler::ProcessEventsToIdle();
+        // hide these just so that the height of the section is what is expected;
+        // otherwise height depends on which tests run previously
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+        uno::Sequence<beans::PropertyValue> args(
+            comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+        dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+        Scheduler::ProcessEventsToIdle();
 
-    {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page", 2);
         assertXPath(pXmlDoc, "/root/page[1]", "formatName", u"Hotti");
@@ -85,12 +79,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
         assertXPath(pXmlDoc, "/root/page[2]/body/section[2]", "formatName", u"Rueckantwort");
         assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "height", u"0");
         assertXPath(pXmlDoc, "/root/page[2]", "formatName", u"Folgeseite");
-    }
-
-    if (bAsk)
-    {
-        officecfg::Office::Common::Misc::QueryShowFieldName::set(true, xChanges);
-        xChanges->commit();
     }
 
     // toggle one section hidden and other visible

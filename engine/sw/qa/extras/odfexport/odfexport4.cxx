@@ -35,9 +35,12 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
+using ScriptingCfg = officecfg::Office::Common::Security::Scripting;
+
 class Test : public SwModelTestBase
 {
 public:
@@ -81,63 +84,60 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
 
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 {
-    // 1. Remove personal info, keep user info
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<ScriptingCfg::RemovePersonalInfoOnSaving> aCfg1(true);
+    {
+        // 1. Remove personal info, keep user info
+        ScopedConfigValue<ScriptingCfg::KeepDocUserInfoOnSaving> aCfg2(true);
 
-    createSwDoc("personalmetadata.odt");
-    saveAndReload(TestFilter::ODT);
-    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
-    pXmlDoc = parseExport(u"settings.xml"_ustr);
-    assertXPath(pXmlDoc,
-                "/office:document-settings/office:settings/config:config-item-set[2]/"
-                "config:config-item[@config:name='PrinterName']",
-                0);
-    assertXPath(pXmlDoc,
-                "/office:document-settings/office:settings/config:config-item-set[2]/"
-                "config:config-item[@config:name='PrinterSetup']",
-                0);
+        createSwDoc("personalmetadata.odt");
+        saveAndReload(TestFilter::ODT);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 1);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 1);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 1);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 1);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 1);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 1);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
+        pXmlDoc = parseExport(u"settings.xml"_ustr);
+        assertXPath(pXmlDoc,
+                    "/office:document-settings/office:settings/config:config-item-set[2]/"
+                    "config:config-item[@config:name='PrinterName']",
+                    0);
+        assertXPath(pXmlDoc,
+                    "/office:document-settings/office:settings/config:config-item-set[2]/"
+                    "config:config-item[@config:name='PrinterSetup']",
+                    0);
+    }
 
-    // 2. Remove user info too
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
-    pBatch->commit();
+    {
+        // 2. Remove user info too
+        ScopedConfigValue<ScriptingCfg::KeepDocUserInfoOnSaving> aCfg2(false);
 
-    createSwDoc("personalmetadata.odt");
-    saveAndReload(TestFilter::ODT);
-    pXmlDoc = parseExport(u"meta.xml"_ustr);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
-    pXmlDoc = parseExport(u"settings.xml"_ustr);
-    assertXPath(pXmlDoc,
-                "/office:document-settings/office:settings/config:config-item-set[2]/"
-                "config:config-item[@config:name='PrinterName']",
-                0);
-    assertXPath(pXmlDoc,
-                "/office:document-settings/office:settings/config:config-item-set[2]/"
-                "config:config-item[@config:name='PrinterSetup']",
-                0);
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
-    pBatch->commit();
+        createSwDoc("personalmetadata.odt");
+        saveAndReload(TestFilter::ODT);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
+        assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
+        pXmlDoc = parseExport(u"settings.xml"_ustr);
+        assertXPath(pXmlDoc,
+                    "/office:document-settings/office:settings/config:config-item-set[2]/"
+                    "config:config-item[@config:name='PrinterName']",
+                    0);
+        assertXPath(pXmlDoc,
+                    "/office:document-settings/office:settings/config:config-item-set[2]/"
+                    "config:config-item[@config:name='PrinterSetup']",
+                    0);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
@@ -150,19 +150,13 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
                        u"PT21M22S");
 
     // Set config RemoveEditingTimeOnSaving to true
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<ScriptingCfg::RemoveEditingTimeOnSaving> aCfg(true);
 
     // 2. Check edit time info is 0
     createSwDoc("personalmetadata.odt");
     save(TestFilter::ODT);
     pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", u"P0D");
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf151100)

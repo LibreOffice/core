@@ -68,6 +68,7 @@
 #include <pagefrm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -160,14 +161,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionShape)
                                                ->getName());
 
     // prevent the warning dialog which is automatically cancelled
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(false, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(true, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection> aCfg(
+        false);
 
     // backspace should delete the hidden section
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
@@ -998,14 +993,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 {
     // Turn "Enclose with characters" on temporarily
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters> aCfg(
+        true);
 
     createSwDoc();
 
@@ -1088,14 +1077,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
 {
     // Turn "Enclose with characters" on temporarily
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters> aCfg(
+        true);
 
     // Given a document with several paragraphs, and a formula object
     createSwDoc("text-with-formula.fodt");
@@ -1173,14 +1156,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167133)
 {
     // Turn "Enclose with characters" on temporarily
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters> aCfg(
+        true);
 
     // Given a document with a single paragraph, having a formula object
     createSwDoc("text-with-formula-one-paragraph.fodt");
@@ -1236,16 +1213,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([] {
-        std::shared_ptr<comphelper::ConfigurationChanges> _pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(false, _pBatch);
-        _pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::DisableActiveContent> aCfg(
+        true);
 
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1300,16 +1269,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([] {
-        std::shared_ptr<comphelper::ConfigurationChanges> _pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(false, _pBatch);
-        _pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::DisableActiveContent> aCfg(
+        true);
 
     // Enable COKit mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
     // finds out that the test runs headless.

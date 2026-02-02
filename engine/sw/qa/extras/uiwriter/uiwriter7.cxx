@@ -72,6 +72,7 @@
 #include <rootfrm.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <vcl/idletask.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -1849,11 +1850,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
     createSwDoc("tdf151605.odt");
 
     // disable IncludeHiddenText
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(false, batch);
-    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText> aCfg1(
+        false);
+    ScopedConfigValue<officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection> aCfg2(
+        false);
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
@@ -1866,11 +1866,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
 
     CPPUNIT_ASSERT_EQUAL(u"Before"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u"After"_ustr, getParagraph(2)->getString());
-
-    // re-enable it
-    officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(true, batch);
-    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(true, batch);
-    batch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf90362)
