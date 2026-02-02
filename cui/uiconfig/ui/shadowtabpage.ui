@@ -213,7 +213,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="FT_TRANSPARENT">
+                  <object class="GtkLabel" id="FT_TRANSPARENT_SHADOW">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="shadowtabpage|FT_TRANSPARENT">_Transparency:</property>
