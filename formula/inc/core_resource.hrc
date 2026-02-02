@@ -534,7 +534,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "OR" , SC_OPCODE_OR },
     { "_xlfn.XOR" , SC_OPCODE_XOR },
     { " " , SC_OPCODE_INTERSECT },
-    { "~" , SC_OPCODE_UNION },
+    { "," , SC_OPCODE_UNION },  // Excel uses ',' as Union operator
     { ":" , SC_OPCODE_RANGE },
     { "NOT" , SC_OPCODE_NOT },
     { "NEG" , SC_OPCODE_NEG },
