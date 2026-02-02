@@ -24,21 +24,44 @@ using namespace css;
 class SheetViewTest : public ScTiledRenderingTest
 {
 protected:
-    static bool checkValues(ScTabViewShell* pTabView, SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                            std::vector<std::u16string_view> const& rValues)
+    static OUString expectedValues(std::vector<std::u16string_view> const& rValues)
     {
+        OUString aString;
+        bool bFirst = true;
+        for (auto const& rValue : rValues)
+        {
+            if (bFirst)
+            {
+                bFirst = false;
+                aString = u"\""_ustr + rValue + u"\""_ustr;
+            }
+            else
+                aString += u", \""_ustr + rValue + u"\""_ustr;
+        }
+        return aString;
+    }
+
+    static OUString getValues(ScTabViewShell* pTabView, SCCOL nCol, SCROW nStartRow, SCROW nEndRow)
+    {
+        OUString aString;
+
         size_t nSize = nEndRow - nStartRow + 1;
-        if (nSize != rValues.size())
-            return false;
+
+        bool bFirst = true;
 
         for (size_t nIndex = 0; nIndex < nSize; nIndex++)
         {
-            OUString value = pTabView->GetCurrentString(nCol, nStartRow + nIndex);
-            if (value != rValues[nIndex])
-                return false;
+            OUString aValue = pTabView->GetCurrentString(nCol, nStartRow + nIndex);
+            if (bFirst)
+            {
+                bFirst = false;
+                aString = u"\""_ustr + aValue + u"\""_ustr;
+            }
+            else
+                aString += u", \""_ustr + aValue + u"\""_ustr;
         }
 
-        return true;
+        return aString;
     }
 };
 
@@ -71,14 +94,14 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     Scheduler::ProcessEventsToIdle();
 
     // Check AutoFilter values
-    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
 
     // Switch to view 2
     SfxLokHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Check auto-filter values
-    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView2, 0, 1, 4));
 
     // Check what sheet we currently have selected for view 1 & 2
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
@@ -99,10 +122,10 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
 
     // Check view 2 - sorted
-    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }), getValues(pTabView2, 0, 1, 4));
 
     // Check view 1 - unsorted
-    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
@@ -218,8 +241,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // Check AutoFilter values for each view
-    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
-    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView2, 0, 1, 4));
 
     // Switch to View2
     SfxLokHelper::setView(aView2.getViewID());
@@ -230,8 +253,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // Check values are sorted for view 2
-    CPPUNIT_ASSERT(checkValues(pTabView1, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
-    CPPUNIT_ASSERT(checkValues(pTabView2, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }), getValues(pTabView2, 0, 1, 4));
 
     // Sheet view must be present
     auto pSheetViewManager = pDocument->GetSheetViewManager(0);
@@ -783,27 +806,35 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
 
         // Check values
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
 
         typeCharsInCell(std::string("9"), 0, 1, pTabViewDefaultView, pModelObj);
 
         // Check values
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"9", u"4", u"5", u"7" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"4", u"5", u"7" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"9", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
 
         // Sort AutoFilter AGAIN descending
         dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
 
         // Check values
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"9", u"7", u"5", u"4" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"5", u"4" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"9", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
 
         typeCharsInCell(std::string("6"), 0, 3, pTabViewDefaultView, pModelObj);
 
         // Check values
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"9", u"7", u"6", u"4" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"4", u"6", u"9", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"6", u"4" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"6", u"9", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
     }
 }
 
@@ -847,26 +878,34 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
         dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
 
         // Check values - Sheet View
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
 
         typeCharsInCell(std::string("9"), 0, 1, pTabViewSheetView, pModelObj);
 
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"4", u"5", u"7" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"4", u"5", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"9", u"7" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
 
         // Scenario 2
 
         // Sort AutoFilter
         dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
 
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"7", u"5", u"4" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"5", u"4" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"9", u"7" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
 
         typeCharsInCell(std::string("6"), 0, 3, pTabViewSheetView, pModelObj);
 
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"7", u"6", u"4" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"6", u"9", u"7" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"6", u"4" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"6", u"9", u"7" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
     }
 }
 
@@ -909,8 +948,11 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
         dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
 
         // Check values
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
     }
 
     {
@@ -919,8 +961,10 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
 
         typeCharsInCell(std::string("44"), 0, 2, pTabViewSheetView, pModelObj);
 
-        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"44", u"5", u"7" }));
-        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"7", u"5", u"44", u"3" }));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"44", u"5", u"7" }),
+                             getValues(pTabViewSheetView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"44", u"3" }),
+                             getValues(pTabViewDefaultView, 0, 1, 4));
     }
 }
 
