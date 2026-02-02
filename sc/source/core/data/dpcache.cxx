@@ -149,7 +149,12 @@ void initFromCell(
 
     if (rCell.hasError())
     {
-        rData.SetErrorStringInterned(internString(rStrPool, rDoc.GetString(rPos.Col(), rPos.Row(), rPos.Tab())));
+        if (ScGlobal::IsValidOOXMLError(rCell.getFormula()->GetErrCode()))
+            rData.SetErrorStringInterned(
+                internString(rStrPool, rDoc.GetString(rPos.Col(), rPos.Row(), rPos.Tab())));
+        else
+            rData.SetErrorStringInterned(
+                internString(rStrPool, ScGlobal::GetErrorString(FormulaError::NotAvailable)));
     }
     else if (rCell.hasNumeric())
     {

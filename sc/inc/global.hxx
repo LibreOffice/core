@@ -627,6 +627,8 @@ public:
                                             const SfxItemSet& rOldAttrs,
                                             const sal_uInt16      nWhich );
 
+    static bool IsValidOOXMLError(FormulaError nErrNumber);
+
     static ScUnitConverter* GetUnitConverter();
 
     /// strchr() functionality on unicode, as long as we need it for FormulaToken etc.

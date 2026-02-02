@@ -444,6 +444,23 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
     return ScResId(pErrNumber);
 }
 
+bool ScGlobal::IsValidOOXMLError(FormulaError nErrNumber)
+{
+    switch (nErrNumber)
+    {
+        case FormulaError::DivisionByZero:
+        case FormulaError::NotAvailable:
+        case FormulaError::NoName:
+        case FormulaError::NoCode:
+        case FormulaError::IllegalFPOperation:
+        case FormulaError::NoRef:
+        case FormulaError::NoValue:
+            return true;
+        default:
+            return false;
+    }
+}
+
 SvxBrushItem* ScGlobal::GetButtonBrushItem()
 {
     assert(!bThreadedGroupCalcInProgress);
