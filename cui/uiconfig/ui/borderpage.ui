@@ -89,6 +89,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="framesel-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="borderpage|framesel">Border Preview</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
