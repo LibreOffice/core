@@ -138,6 +138,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf68364InsertConditionalFieldWithTwoDots)
     CPPUNIT_ASSERT_EQUAL(u"19.12.2023"_ustr, pWrtShell->GetCurField()->ExpandField(true, nullptr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170392FilenameFormatConstants)
+{
+    // Create an empty document
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // Insert a filename field containing SwFileNameFormat::Path
+    SwFieldMgr aFieldMgr(pWrtShell);
+    SwInsertField_Data aFieldData(SwFieldTypesEnum::Filename, 0, u""_ustr, u""_ustr, 3);
+    CPPUNIT_ASSERT(aFieldMgr.InsertField(aFieldData));
+
+    // First reload in order to get a value for the filename field
+    saveAndReload(TestFilter::ODT);
+    pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(true);
+    const auto aExpandedField = pWrtShell->GetCurField()->ExpandField(true, nullptr);
+
+    // Second reload in order to check consistency for the filename field
+    saveAndReload(TestFilter::ODT);
+    pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(true);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: filename field is the same
+    // - Actual  : filename field differ since the filename format constants differ
+    CPPUNIT_ASSERT_EQUAL(aExpandedField, pWrtShell->GetCurField()->ExpandField(true, nullptr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
 {
     // Given a document with a single selected word:
