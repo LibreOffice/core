@@ -2512,11 +2512,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // Don't redline content-controls--Word doesn't do them.
             SwTextAttr* pAttr = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
                                                     sw::GetTextAttrMode::Default);
-            bool bIsStartOfContentControl = false;
             if (pAttr && pAttr->GetStart() == nCurrentPos)
             {
                 pRedlineData = nullptr;
-                bIsStartOfContentControl = true;
             }
 
             sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nCurrentPos );
@@ -2546,20 +2544,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
             }
 
-            /*
-               1) If there is a text node and an overlapping anchor, then write them in two different
-               runs and not as part of the same run.
-               2) Ensure that it is a text node and not in a fly.
-               3) If the anchor is associated with a text node with empty text then we ignore.
-               */
-            if (GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
-                && aStr != OUStringChar(CH_TXTATR_BREAKWORD) && !aStr.isEmpty()
-                    && !rNode.GetFlyFormat()
-                    && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
-            {
-                bPostponeWritingText = true ;
-            }
-
             FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
             AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
             AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
@@ -2581,16 +2565,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             OUString aSymbolFont;
             sal_Int32 nLen = nNextAttr - nCurrentPos;
 
-            if (!bPostponeWritingText && bIsStartOfContentControl
-                && nStateOfFlyFrame == FLY_PROCESSED
+            // DOCX: Put the flies in their own run.
+            // This is critical for plainText content controls and fields.
+            if (nStateOfFlyFrame == FLY_PROCESSED && !aStr.isEmpty()
+                && aStr != OUStringChar(CH_TXTATR_BREAKWORD)
                 && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX)
             {
                 // FLY_PROCESSED: there is at least 1 fly already written
-
-                // assurance: this will not duplicate what is done for fields below...
-                assert(bTextAtr); // because SwTextContentControl always SetHasDummyChar(true)
-
-                // write flys in a separate run before Sdt content control
                 AttrOutput().EndRun(&rNode, nCurrentPos, /*nLen=*/-1, /*bLastRun=*/false);
                 AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
             }
@@ -2604,16 +2585,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                     || ch == CH_TXT_ATR_FIELDEND
                                     || ch == CH_TXT_ATR_FORMELEMENT)
                                 ? 1 : 0;
-                if (ofs == 1
-                    && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
-                    // FLY_PROCESSED: there's at least 1 fly already written
-                    && nStateOfFlyFrame == FLY_PROCESSED)
-                {
-                    // write flys in a separate run before field character
-                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, nNextAttr == nEnd);
-                    AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
-                }
-
                 IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
                 if ( ch == CH_TXT_ATR_FIELDSTART )
                 {
