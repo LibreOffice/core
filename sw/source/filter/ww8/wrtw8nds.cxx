@@ -2505,9 +2505,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         do {
 
             const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nCurrentPos );
-            bool bPostponeWritingText    = false ;
-            bool bStartedPostponedRunProperties = false;
-            OUString aSavedSnippet ;
 
             // Don't redline content-controls--Word doesn't do them.
             SwTextAttr* pAttr = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
@@ -2546,7 +2543,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
             AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
-            AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
+            AttrOutput().SetAnchorIsLinkedToNode(false);
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
             AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData );
@@ -2753,15 +2750,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos + ofs,
                                                 nCurrentPos + ofs + nLen);
 
-                if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
-                {
-                    aSavedSnippet = aSnippet ;
-                }
-                else
-                {
-                    bPostponeWritingText = false ;
-                    AttrOutput().RunText( aSnippet, eChrSet, aSymbolFont );
-                }
+                AttrOutput().RunText( aSnippet, eChrSet, aSymbolFont );
 
                 if (ofs == 1 && nNextAttr == nEnd)
                 {
@@ -2775,13 +2764,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if ( aAttrIter.IsDropCap( nNextAttr ) )
                 AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFormatDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
 
-            // Only output character attributes if this is not a postponed text run.
-            if (0 != nEnd && !(bPostponeWritingText
-                    && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)))
+            if (0 != nEnd)
             {
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
-                bStartedPostponedRunProperties = true;
                 AttrOutput().StartRunProperties();
                 aAttrIter.OutAttr(nCurrentPos, false);
                 AttrOutput().EndRunProperties( pRedlineData );
@@ -2887,32 +2873,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos, nCurrentPos + nLen);
 
-            if (bPostponeWritingText)
-            {
-                if (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)
-                {
-                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, /*bLastRun=*/false);
-                    if (!aSavedSnippet.isEmpty())
-                        bStartedPostponedRunProperties = false;
-
-                    AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
-                    AttrOutput().SetAnchorIsLinkedToNode( false );
-                    AttrOutput().ResetFlyProcessingFlag();
-                }
-                if (0 != nEnd && !bStartedPostponedRunProperties)
-                {
-                    AttrOutput().StartRunProperties();
-                    aAttrIter.OutAttr( nCurrentPos, false );
-                    AttrOutput().EndRunProperties( pRedlineData );
-
-                    // OutAttr may have introduced new comments, so write them out now
-                    AttrOutput().WritePostitFieldReference();
-                }
-                AttrOutput().RunText( aSavedSnippet, eChrSet, aSymbolFont );
-                AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
-            }
-            else
-                AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
+            AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
 
             nCurrentPos = nNextAttr;
             UpdatePosition( &aAttrIter, nCurrentPos );
