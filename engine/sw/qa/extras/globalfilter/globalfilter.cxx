@@ -45,6 +45,8 @@
 
 namespace
 {
+using MSFilterCfg = officecfg::Office::Common::Filter::Microsoft;
+
 class Test : public SwModelTestBase
 {
 public:
@@ -560,18 +562,17 @@ void Test::testCharStyleHighlight()
 
 void Test::testCharHighlight()
 {
-    auto batch = comphelper::ConfigurationChanges::create();
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
-    batch->commit();
+    {
+        ScopedConfigValue<MSFilterCfg::Export::CharBackgroundToHighlighting> aCfg(false);
+        testCharHighlightBody();
+        testCharStyleHighlight();
+    }
 
-    testCharHighlightBody();
-    testCharStyleHighlight();
-
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
-    batch->commit();
-
-    testCharHighlightBody();
-    testCharStyleHighlight();
+    {
+        ScopedConfigValue<MSFilterCfg::Export::CharBackgroundToHighlighting> aCfg(true);
+        testCharHighlightBody();
+        testCharStyleHighlight();
+    }
 }
 
 void Test::testCharHighlightODF()
@@ -653,9 +654,7 @@ void Test::testMSCharBackgroundEditing()
         TestFilter::DOCX,
     };
 
-    auto batch = comphelper::ConfigurationChanges::create();
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
-    batch->commit();
+    ScopedConfigValue<MSFilterCfg::Export::CharBackgroundToHighlighting> aCfg(true);
 
     for (TestFilter eFilterName : aFilterNames)
     {
@@ -759,9 +758,7 @@ void Test::testCharBackgroundToHighlighting()
 
         OString sFailedMessage = OString::Concat("Failed on filter: ") + TestFilterNames.at(eFilterName).toUtf8();
 
-        auto batch = comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
-        batch->commit();
+        ScopedConfigValue<MSFilterCfg::Export::CharBackgroundToHighlighting> aCfg(true);
 
         // Export the document and import again for a check
         saveAndReload(eFilterName);
@@ -867,9 +864,7 @@ void Test::testSkipImages()
 void Test::testNestedFieldmark()
 {
     // experimental config setting
-    ScopedConfigValue<
-        officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields>
-        aCfg(true);
+    ScopedConfigValue<MSFilterCfg::Import::ForceImportWWFieldsAsGenericFields> aCfg(true);
 
     auto verify = [this](OUString const& rTestName) {
         SwDoc* pDoc = getSwDoc();

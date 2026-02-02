@@ -57,6 +57,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
+#include <test/commontesttools.hxx>
 #include <unomodel.hxx>
 
 using namespace ::com::sun::star;
@@ -549,10 +550,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     createSdDrawDoc("tdf101242_ODF.odg");
 
     // Saving including items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
     save(TestFilter::ODG);
 
     // Verify, that the saved document still has the ODF attributes
@@ -603,10 +601,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     createSdDrawDoc("tdf101242_ODF.odg");
 
     // Saving without items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(false);
     save(TestFilter::ODG);
 
     // Verify, that the saved document still has the ODF attributes
@@ -640,10 +635,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     createSdDrawDoc("tdf101242_settings.odg");
 
     // Saving including items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
     save(TestFilter::ODG);
 
     // Verify, that the saved document has the ODF attributes
@@ -695,10 +687,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     createSdDrawDoc("tdf101242_settings.odg");
 
     // Saving without config items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(false);
     save(TestFilter::ODG);
 
     // Verify, that the saved document has the ODF attributes
@@ -728,10 +717,7 @@ void SdMiscTest::testTdf119392()
     // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
     // Checks, that the bitfields in the saved file have the bits in the correct order, in case
     // option WriteLayerAsConfigItem is true and the config items are written.
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
 
     createSdDrawDoc("tdf119392_InsertLayer.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -1254,10 +1240,7 @@ void SdMiscTest::testCanvasSlideExportODP()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDocument->GetSdPageCount(PageKind::Standard));
 
     // saving with config items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
     save(TestFilter::ODP);
 
     // Verify if the "HasCanvasPage" item is true

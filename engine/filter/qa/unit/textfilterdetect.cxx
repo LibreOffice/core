@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <test/commontesttools.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -188,12 +191,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
 {
     // Make sure that file locking is ON
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::set(true, xChanges);
-        xChanges->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Misc::UseDocumentSystemFileLocking> aCfg(true);
 
     // Given a hybrid PDF file
 

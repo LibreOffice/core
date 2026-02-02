@@ -18,6 +18,7 @@
 #include <editeng/numitem.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
@@ -1225,34 +1226,34 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNotesAuthorDate)
 {
     createSdImpressDoc("pptx/pres-with-notes.pptx");
 
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    // 1. Remove all personal info, but keep note info
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(true,
-                                                                                        pBatch);
-    pBatch->commit();
+    using ScriptingCfg = officecfg::Office::Common::Security::Scripting;
+    ScopedConfigValue<ScriptingCfg::RemovePersonalInfoOnSaving> aCfg1(true);
+    {
+        // 1. Remove all personal info, but keep note info
+        ScopedConfigValue<ScriptingCfg::KeepNoteAuthorDateInfoOnSaving> aCfg2(true);
 
-    saveAndReload(TestFilter::PPTX);
+        saveAndReload(TestFilter::PPTX);
 
-    xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Hans Wurst");
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Max Muster");
+        xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Hans Wurst");
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Max Muster");
 
-    pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
-    assertXPath(pXml, "/p:cmLst/p:cm", "dt", u"2024-06-13T12:03:08.000000000");
+        pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
+        assertXPath(pXml, "/p:cmLst/p:cm", "dt", u"2024-06-13T12:03:08.000000000");
+    }
 
-    // 2. Remove all personal info
-    officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(false,
-                                                                                        pBatch);
-    pBatch->commit();
-    saveAndReload(TestFilter::PPTX);
+    {
+        // 2. Remove all personal info
+        ScopedConfigValue<ScriptingCfg::KeepNoteAuthorDateInfoOnSaving> aCfg2(false);
+        saveAndReload(TestFilter::PPTX);
 
-    pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Author1");
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Author2");
+        xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Author1");
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Author2");
 
-    pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
-    assertXPathNoAttribute(pXml, "/p:cmLst/p:cm", "dt");
+        pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
+        assertXPathNoAttribute(pXml, "/p:cmLst/p:cm", "dt");
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)

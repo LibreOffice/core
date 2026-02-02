@@ -31,6 +31,7 @@
 #include <tools/UnitConversion.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -586,10 +587,9 @@ CPPUNIT_TEST_FIXTURE(Test, testNotesAuthorDate)
 {
     createSwDoc("text-with-comment.rtf");
 
-    auto pBatch(comphelper::ConfigurationChanges::create());
     // Remove all personal info
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving>
+        aCfg(true);
     saveAndReload(TestFilter::RTF);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
@@ -612,10 +612,9 @@ CPPUNIT_TEST_FIXTURE(Test, testChangesAuthor)
 {
     createSwDoc("text-change-tracking.rtf");
 
-    auto pBatch(comphelper::ConfigurationChanges::create());
     // Remove all personal info
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving>
+        aCfg(true);
     saveAndReload(TestFilter::RTF);
 
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);

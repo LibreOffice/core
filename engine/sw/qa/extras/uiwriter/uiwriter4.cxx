@@ -49,6 +49,7 @@
 #include <unotxdoc.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -2026,10 +2027,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105625)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(false);
     // We should be able to edit at positions adjacent to fields.
     // Check if the start and the end of the 1st paragraph are not protected
     // (they are adjacent to FORMCHECKBOX)
@@ -2060,10 +2058,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protected)
     createSwDoc("tdf125151_protected.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(false);
     pWrtShell->Down(/*bSelect=*/false);
     // The cursor moved inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
@@ -2078,10 +2073,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protectedB)
     createSwDoc("tdf125151_protectedB.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(false);
     // The cursor starts inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
     // Move left to the start/definition of the textbox

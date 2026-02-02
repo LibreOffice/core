@@ -1872,23 +1872,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf90362)
 {
     createSwDoc("tdf90362.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
-    // First check if the end of the second paragraph is indeed protected.
-    pWrtShell->EndPara();
-    pWrtShell->Down(/*bSelect=*/false);
-    CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+    {
+        // Ensure correct initial setting
+        ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(
+            false);
+        // First check if the end of the second paragraph is indeed protected.
+        pWrtShell->EndPara();
+        pWrtShell->Down(/*bSelect=*/false);
+        CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+    }
 
-    // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(true, batch);
-    batch->commit();
-    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
-    // Clean up, otherwise following tests will have that option set
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    {
+        // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
+        ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(
+            true);
+        CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUndoDelAsCharTdf107512)
