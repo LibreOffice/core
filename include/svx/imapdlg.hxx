@@ -66,7 +66,7 @@ class SvxIMapDlg;
 
 class SvxIMapDlgItem final : public SfxControllerItem
 {
-    SvxIMapDlg& rIMap;
+    SvxIMapDlg& m_rIMap;
 
     virtual void StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState ) override;
