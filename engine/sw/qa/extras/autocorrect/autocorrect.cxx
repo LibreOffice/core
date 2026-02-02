@@ -88,19 +88,9 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, tdfTdf44293)
 
 CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf151801)
 {
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(0, pBatch);
-        officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(0, pBatch);
-        return pBatch->commit();
-    });
     // Set Single Quotes › and ‹
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(8250, pBatch);
-    officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(8249, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart> aCfg1(8250);
+    ScopedConfigValue<officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd> aCfg2(8249);
 
     createSwDoc("de-DE.fodt");
 
