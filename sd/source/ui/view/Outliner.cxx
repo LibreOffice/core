@@ -1221,7 +1221,7 @@ namespace
 bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
 {
     auto* pObject = DynCastSdrTextObj( rPosition.mxObject.get().get() );
-    return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
+    return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj() && !pObject->IsInEditMode();
 }
 
 bool isValidVectorGraphicObject(const sd::outliner::IteratorPosition& rPosition)
