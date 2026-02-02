@@ -488,6 +488,7 @@ public:
     FormulaToken* AddBad( const OUString& rStr );          /// ocBad with OUString
     FormulaToken* AddStringXML( const OUString& rStr );    /// ocStringXML with OUString, temporary during import
     FormulaToken* AddStringName( const OUString& rStr );   /// ocStringName with OUString - Lambda functions
+    FormulaToken* AddError( FormulaError nErr );
 
     virtual FormulaToken* MergeArray( );
 
