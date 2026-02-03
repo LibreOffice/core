@@ -2137,7 +2137,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCh
         {
             try
             {
-                xStyle->setPropertyValue( rCharProp.Name, rCharProp.Value );
+                xStyle->setPropertyValueIgnoreUnknown( rCharProp.Name, rCharProp.Value );
             }
             catch( const uno::Exception& )
             {

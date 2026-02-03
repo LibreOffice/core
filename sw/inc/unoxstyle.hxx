@@ -80,7 +80,8 @@ protected:
     void SetPropertyValue(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&,
                           const css::uno::Any&, SwStyleBase_Impl&);
     void SetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames,
-                                const css::uno::Sequence<css::uno::Any>& aValues);
+                                const css::uno::Sequence<css::uno::Any>& aValues,
+                                bool bIgnoreUnknown);
     SfxStyleSheetBase* GetStyleSheetBase();
     void PrepareStyleBase(SwStyleBase_Impl& rBase);
     template <sal_uInt16>
@@ -217,6 +218,10 @@ public:
         css::awt::FontSlant& reCharStylePosture, css::awt::FontSlant& reCharStylePostureComplex,
         sal_Int16& rnCharStyleCaseMap, sal_Int16& rnCharStyleRelief, bool& rbCharStyleContoured,
         bool& rbCharStyleShadowed, sal_Int16& rnCharStyleStrikeThrough, bool& rbCharStyleHidden);
+    // Set without throwing exceptions for unknown props, which is faster than throwing and then
+    // ignoring.
+    SW_DLLPUBLIC void setPropertyValueIgnoreUnknown(const OUString& aPropertyName,
+                                                    const css::uno::Any& aValue);
 };
 
 typedef cppu::ImplInheritanceHelper<SwXStyle, css::document::XEventsSupplier> SwXFrameStyle_Base;
