@@ -2181,7 +2181,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 }
 
 
-OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
+OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
 {
     //find out if any of the styles already has the required properties then return its name
     OUString sListLabel = HasListCharStyle(rCharProperties);
