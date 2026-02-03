@@ -291,9 +291,17 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         /* Save the master's clrMap before importing the layouts. A layout's
         clrMapOvr/overrideClrMapping element replaces the shared master persist's
         clrMap with the layout-local override */
-        saveColorMapToGrabBag(pMasterPersistPtr->getClrMap());
+        oox::drawingml::ClrMapPtr pMasterClrMap = pMasterPersistPtr->getClrMap();
+        saveColorMapToGrabBag(pMasterClrMap);
 
         rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
+
+        // Check if layout had a color map override (clrMap changed during layout import)
+        if (pMasterPersistPtr->getClrMap() != pMasterClrMap && pMasterPersistPtr->getClrMap())
+        {
+            saveLayoutColorMapToGrabBag(pMasterPersistPtr->getClrMap(), nIndex);
+        }
+
         pMasterPersistPtr->createBackground( rFilter );
         pMasterPersistPtr->createXShapes( rFilter );
 
@@ -489,6 +497,59 @@ void PresentationFragmentHandler::saveSections()
     catch (const uno::Exception&)
     {
         SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveSections failed");
+    }
+}
+
+void PresentationFragmentHandler::saveLayoutColorMapToGrabBag(
+    const oox::drawingml::ClrMapPtr& pClrMapPtr,
+    sal_Int32 nMasterIndex)
+{
+    if (!pClrMapPtr)
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(getFilter().getModel(), uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            static constexpr OUString aGrabBagPropName = u"InteropGrabBag"_ustr;
+            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            {
+                static constexpr auto constTokenArray = std::to_array<sal_Int32>({
+                        XML_bg1,     XML_tx1,     XML_bg2,     XML_tx2,
+                        XML_accent1, XML_accent2, XML_accent3, XML_accent4,
+                        XML_accent5, XML_accent6, XML_hlink,   XML_folHlink
+                });
+
+                comphelper::SequenceAsHashMap aGrabBag(
+                    xDocProps->getPropertyValue(aGrabBagPropName));
+
+                std::vector<beans::PropertyValue> aClrMapList;
+                size_t nColorMapSize = constTokenArray.size();
+                aClrMapList.reserve(nColorMapSize);
+                for (size_t i = 0; i < nColorMapSize; ++i)
+                {
+                    sal_Int32 nToken = constTokenArray[i];
+                    pClrMapPtr->getColorMap(nToken);
+                    aClrMapList.push_back(
+                        comphelper::makePropertyValue(OUString::number(i), nToken));
+                }
+
+                // Build key: "OOXLayoutClrMapOvr_<masterIndex>"
+                OUString sKey = "OOXLayoutClrMapOvr_" + OUString::number(nMasterIndex);
+
+                aGrabBag[sKey] <<= comphelper::containerToSequence(aClrMapList);
+
+                xDocProps->setPropertyValue(aGrabBagPropName,
+                                            uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveLayoutColorMapToGrabBag, Failed to save grab bag");
     }
 }
 
