@@ -63,6 +63,30 @@ protected:
 
         return aString;
     }
+
+    static OUString getValues(ScDocument* pDocument, SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+                              SCTAB nTab)
+    {
+        OUString aString;
+
+        size_t nSize = nEndRow - nStartRow + 1;
+
+        bool bFirst = true;
+
+        for (size_t nIndex = 0; nIndex < nSize; nIndex++)
+        {
+            OUString aValue = pDocument->GetString({ nCol, SCROW(nStartRow + nIndex), nTab });
+            if (bFirst)
+            {
+                bFirst = false;
+                aString = u"\""_ustr + aValue + u"\""_ustr;
+            }
+            else
+                aString += u", \""_ustr + aValue + u"\""_ustr;
+        }
+
+        return aString;
+    }
 };
 
 /** Check auto-filter sorting.
@@ -966,6 +990,111 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"44", u"3" }),
                              getValues(pTabViewDefaultView, 0, 1, 4));
     }
+}
+
+/** Test class that contains methods commonly used for testing sync of sheet views. */
+class SyncTest : public SheetViewTest
+{
+public:
+    void tearDown() override
+    {
+        maSheetView = std::nullopt;
+        maDefaultView = std::nullopt;
+        SheetViewTest::tearDown();
+    }
+
+protected:
+    std::optional<ScTestViewCallback> maSheetView;
+    std::optional<ScTestViewCallback> maDefaultView;
+    ScTabViewShell* mpTabViewSheetView = nullptr;
+    ScTabViewShell* mpTabViewDefaultView = nullptr;
+
+    void setupViews()
+    {
+        maSheetView.emplace();
+        mpTabViewSheetView = maSheetView->getTabViewShell();
+
+        SfxLokHelper::createView();
+        Scheduler::ProcessEventsToIdle();
+
+        maDefaultView.emplace();
+        mpTabViewDefaultView = maDefaultView->getTabViewShell();
+
+        CPPUNIT_ASSERT(mpTabViewSheetView != mpTabViewDefaultView);
+        CPPUNIT_ASSERT(maSheetView->getViewID() != maDefaultView->getViewID());
+    }
+
+    void switchToSheetView()
+    {
+        SfxLokHelper::setView(maSheetView->getViewID());
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    void switchToDefaultView()
+    {
+        SfxLokHelper::setView(maDefaultView->getViewID());
+        Scheduler::ProcessEventsToIdle();
+    }
+};
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Switch to Sheet View and Create
+    {
+        switchToSheetView();
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    }
+
+    // Switch to Default View
+    {
+        switchToDefaultView();
+
+        dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                        comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3"_ustr) } }));
+
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    }
+
+    OUString aExpected = expectedValues({ u"4", u"", u"3", u"7" });
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteCellOperation)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Switch to Sheet View and Create
+    {
+        switchToSheetView();
+
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+        dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                        comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3"_ustr) } }));
+
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    }
+
+    OUString aExpected = expectedValues({ u"4", u"", u"3", u"7" });
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 1));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

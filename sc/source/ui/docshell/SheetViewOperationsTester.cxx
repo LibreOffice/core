@@ -137,6 +137,40 @@ constexpr bool doesUnsyncSheetView(OperationType eOperationType)
 
 } // end anonymous namespace
 
+bool SheetViewOperationsTester::doesUnsync(OperationType eOperationType)
+{
+    bool bOperationAllowed = eOperationType == OperationType::EnterData
+                             || eOperationType == OperationType::SetNormalString;
+    return !bOperationAllowed;
+}
+
+void SheetViewOperationsTester::sync()
+{
+    if (!mpViewData)
+    {
+        return;
+    }
+
+    auto& rDocument = mpViewData->GetDocument();
+    SCTAB nTab = mpViewData->GetTabNumber();
+
+    if (rDocument.IsSheetViewHolder(nTab))
+    {
+        return;
+    }
+
+    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nTab);
+
+    if (!pManager->isEmpty())
+    {
+        for (auto const& pSheetView : pManager->getSheetViews())
+        {
+            SCTAB nSheetViewTab = pSheetView->getTableNumber();
+            rDocument.OverwriteContent(nTab, nSheetViewTab);
+        }
+    }
+}
+
 bool SheetViewOperationsTester::check(OperationType eOperationType) const
 {
     if (!mpViewData)
