@@ -11,9 +11,12 @@
 
 #include <o3tl/string_view.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -211,6 +214,51 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnoteContSeparator)
     // - Actual  : 2880 (2 inches)
     // i.e. the separator was too short vs Word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9360), nEndnoteSeparatorLength);
+}
+
+int CountPolyPolygons(const GDIMetaFile& rMetaFile)
+{
+    int nCount = 0;
+    for (size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
+    {
+        MetaAction* pAction = rMetaFile.GetAction(nAction);
+        if (pAction->GetType() != MetaActionType::POLYPOLYGON)
+        {
+            continue;
+        }
+
+        ++nCount;
+    }
+    return nCount;
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableRedlineRenderMode)
+{
+    // Given a document with table redlines, standard redline render mode:
+    createSwDoc("redline-table.docx");
+
+    // When painting those redlines:
+    SwDocShell* pDocShell = getSwDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Make sure we have the filled polygons for the rows:
+    CPPUNIT_ASSERT_EQUAL(2, CountPolyPolygons(*xMetaFile));
+
+    // And given a document with 'omit inserts' redline render mode:
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
+    pWrtShell->ApplyViewOptions(aOpt);
+
+    // When painting those redlines:
+    xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Make sure we have no filled polygons for the rows:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. we had unexpected filled polygons where just colored text was wanted.
+    CPPUNIT_ASSERT_EQUAL(0, CountPolyPolygons(*xMetaFile));
 }
 }
 
