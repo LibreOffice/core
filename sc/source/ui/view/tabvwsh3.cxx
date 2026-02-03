@@ -1604,6 +1604,31 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         }
         break;
 
+        case SID_ADD_THEME:
+        {
+            // Create empty color set as starting point for new theme
+            auto pCurrentColorSet = std::make_shared<model::ColorSet>(OUString());
+
+            // Open ThemeColorEditDialog to create/edit the new color set
+            auto pSubDialog = std::make_shared<svx::ThemeColorEditDialog>(GetFrameWeld(), *pCurrentColorSet);
+
+            weld::DialogController::runAsync(pSubDialog, [pSubDialog, this](sal_uInt32 nResult) {
+                if (nResult != RET_OK)
+                    return;
+
+                auto aColorSet = pSubDialog->getColorSet();
+                if (!aColorSet.getName().isEmpty())
+                {
+                    // Add the new color set to the global collection with auto-rename if needed
+                    svx::ColorSets::get().insert(aColorSet);
+                    GetViewFrame().GetBindings().Invalidate(SID_ADD_THEME);
+                }
+            });
+
+            rReq.Ignore();
+        }
+        break;
+
         case SID_THEME_DIALOG:
         {
             MakeDrawLayer();
