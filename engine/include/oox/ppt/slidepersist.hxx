@@ -97,6 +97,7 @@ public:
     bool isNotesPage() const { return mbNotes; }
 
     void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
+    sal_Int32 getLayoutValueToken() const { return mnLayoutValueToken; }
     sal_Int16 getLayoutFromValueToken() const;
 
 
