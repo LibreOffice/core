@@ -315,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
     // tdf#170588: stop duplicating bookmarkStarts
     // Counts of bookmark Starts and Ends really ought to be identical...
     assertXPath(pXmlDoc, "//w:bookmarkEnd", 4);
-    assertXPath(pXmlDoc, "//w:bookmarkStart", 5);
+    assertXPath(pXmlDoc, "//w:bookmarkStart", 4);
 }
 
 // Test the same testdoc used for testFdo77129.

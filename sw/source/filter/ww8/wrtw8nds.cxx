@@ -2563,10 +2563,14 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
-            AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData );
-            // Sadly only possible for main or glossary document parts: ECMA-376 Part 1 sect. 11.3.2
-            if ( m_nTextTyp == TXT_MAINTEXT )
-                AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
+            if (0 != nEnd) // start == final position is written when nNextAttr == nEnd
+            {
+                AppendBookmarks(rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData);
+                // Sadly, comments are only possible
+                // for main or glossary document parts: ECMA-376 Part 1 sect. 11.3.2
+                if (m_nTextTyp == TXT_MAINTEXT)
+                    AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
+            }
 
             // At the moment smarttags are only written for paragraphs, at the
             // beginning of the paragraph.
