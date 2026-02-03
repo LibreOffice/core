@@ -2183,15 +2183,18 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 
 OUString StyleSheetTable::getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
 {
-    //find out if any of the styles already has the required properties then return its name
-    OUString sListLabel = HasListCharStyle(rCharProperties);
-    // Don't try to reuse an existing character style if requested.
-    if( !sListLabel.isEmpty() && !bAlwaysCreate)
-        return sListLabel;
+    if (!bAlwaysCreate)
+    {
+        //find out if any of the styles already has the required properties then return its name
+        OUString sListLabel = HasListCharStyle(rCharProperties);
+        // Don't try to reuse an existing character style if requested.
+        if( !sListLabel.isEmpty())
+            return sListLabel;
+    }
 
     //create a new one otherwise
     const rtl::Reference< SwXStyleFamily >& xCharStyles = m_rDMapper.GetCharacterStyles();
-    sListLabel = m_rDMapper.GetUnusedCharacterStyleName();
+    OUString sListLabel = m_rDMapper.GetUnusedCharacterStyleName();
     if (!m_xTextDocument)
         throw uno::RuntimeException();
     try
