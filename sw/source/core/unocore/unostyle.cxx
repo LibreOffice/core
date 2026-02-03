@@ -557,11 +557,17 @@ public:
             { m_vPropertyValues.clear(); }
     void Apply(SwXStyle& rStyle)
     {
+        std::vector<OUString> aPropNames;
+        std::vector<css::uno::Any> aPropVals;
         for(const auto& rPropertyPair : m_vPropertyValues)
         {
             if(rPropertyPair.second.hasValue())
-                rStyle.setPropertyValue(rPropertyPair.first, rPropertyPair.second);
+            {
+                aPropNames.push_back(rPropertyPair.first);
+                aPropVals.push_back(rPropertyPair.second);
+            }
         }
+        rStyle.SetPropertyValues(aPropNames, aPropVals);
     }
 };
 
@@ -2037,14 +2043,19 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const Sfx
     }
 }
 
-void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<uno::Any>& rValues, bool bIgnoreUnknown)
+void SwXStyle::SetPropertyValues(std::span<const OUString> rPropertyNames, std::span<const uno::Any> rValues)
+{
+    SetPropertyValues_Impl(rPropertyNames, rValues, /*bIgnoreUnknown*/false);
+}
+
+void SwXStyle::SetPropertyValues_Impl(std::span<const OUString> rPropertyNames, std::span<const uno::Any> rValues, bool bIgnoreUnknown)
 {
     if(!m_pDoc)
         throw uno::RuntimeException();
     sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-    if(rPropertyNames.getLength() != rValues.getLength())
+    if(rPropertyNames.size() != rValues.size())
         throw lang::IllegalArgumentException();
 
     SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleUIName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
@@ -2059,22 +2070,20 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
     if(!aBaseImpl.getNewBase().is() && !m_bIsDescriptor)
         throw uno::RuntimeException();
 
-    const OUString* pNames = rPropertyNames.getConstArray();
-    const uno::Any* pValues = rValues.getConstArray();
-    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
+    for(size_t nProp = 0; nProp < rPropertyNames.size(); ++nProp)
     {
-        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pNames[nProp]);
-        if(!pEntry || (!m_bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropertyNames[nProp]);
+        if(!pEntry || (!m_bIsConditional && rPropertyNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
         {
             if (bIgnoreUnknown)
                 continue;
-            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], getXWeak());
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyNames[nProp], getXWeak());
         }
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], getXWeak());
+            throw beans::PropertyVetoException ("Property is read-only: " + rPropertyNames[nProp], getXWeak());
         if(aBaseImpl.getNewBase().is())
-            SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl);
-        else if(!m_pPropertiesImpl->SetProperty(pNames[nProp], pValues[nProp]))
+            SetStyleProperty(*pEntry, *pPropSet, rValues[nProp], aBaseImpl);
+        else if(!m_pPropertiesImpl->SetProperty(rPropertyNames[nProp], rValues[nProp]))
             throw lang::IllegalArgumentException();
     }
 
@@ -2088,7 +2097,9 @@ void SwXStyle::setPropertyValues(const uno::Sequence<OUString>& rPropertyNames, 
     // workaround for bad designed API
     try
     {
-        SetPropertyValues_Impl( rPropertyNames, rValues, /*bIgnoreUnknown*/false );
+        SetPropertyValues_Impl( std::span<const OUString>{ rPropertyNames.getConstArray(), static_cast<size_t>(rPropertyNames.getLength()) },
+                                std::span<const uno::Any>{ rValues.getConstArray(), static_cast<size_t>(rValues.getLength()) },
+                                 /*bIgnoreUnknown*/false );
     }
     catch (const beans::UnknownPropertyException &rException)
     {
