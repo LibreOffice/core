@@ -820,6 +820,86 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
     return bValid;
 }
 
+void ScDocument::CopyContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo, const ScMarkData* pOnlyMarked, sc::RefUpdateInsertTabContext& rContext)
+{
+    SetNoListening( true );     // not yet at CopyToTable/Insert
+
+    const bool bGlobalNamesToLocal = true;
+    const SCTAB nRealOldPos = (nTargetTabNo < nSourceTabNo) ? nSourceTabNo - 1 : nSourceTabNo;
+    const ScRangeName* pNames = GetRangeName( nSourceTabNo);
+    if (pNames)
+        pNames->CopyUsedNames( nSourceTabNo, nRealOldPos, nTargetTabNo, *this, *this, bGlobalNamesToLocal);
+    GetRangeName()->CopyUsedNames( -1, nRealOldPos, nTargetTabNo, *this, *this, bGlobalNamesToLocal);
+
+    sc::CopyToDocContext aCopyDocCxt(*this);
+    pDBCollection->CopyToTable(nSourceTabNo, nTargetTabNo);
+    maTabs[nSourceTabNo]->CopyToTable(aCopyDocCxt, 0, 0, MaxCol(), MaxRow(), InsertDeleteFlags::ALL,
+            (pOnlyMarked != nullptr), maTabs[nTargetTabNo].get(), pOnlyMarked,
+            false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal, false /*bCopyCaptions*/ );
+    maTabs[nTargetTabNo]->SetTabBgColor(maTabs[nSourceTabNo]->GetTabBgColor());
+
+    SCTAB nDz = nTargetTabNo - nSourceTabNo;
+    sc::RefUpdateContext aRefContext(*this);
+    aRefContext.meMode = URM_COPY;
+    aRefContext.maRange = ScRange(0, 0, nTargetTabNo, MaxCol(), MaxRow(), nTargetTabNo);
+    aRefContext.mnTabDelta = nDz;
+    maTabs[nTargetTabNo]->UpdateReference(aRefContext);
+
+    maTabs[nTargetTabNo]->UpdateInsertTabAbs(nTargetTabNo); // move all paragraphs up by one!!
+    maTabs[nSourceTabNo]->UpdateInsertTab(rContext);
+
+    maTabs[nSourceTabNo]->UpdateCompile();
+    maTabs[nTargetTabNo]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation
+    SetNoListening( false );
+    sc::StartListeningContext aSLCxt(*this);
+    maTabs[nSourceTabNo]->StartListeners(aSLCxt, true);
+    maTabs[nTargetTabNo]->StartListeners(aSLCxt, true);
+
+    sc::SetFormulaDirtyContext aFormulaDirtyCxt;
+    SetAllFormulasDirty(aFormulaDirtyCxt);
+
+    if (mpDrawLayer) //  Skip cloning Note caption object
+        // page is already created in ScTable ctor
+        mpDrawLayer->ScCopyPage( static_cast<sal_uInt16>(nSourceTabNo), static_cast<sal_uInt16>(nTargetTabNo) );
+
+    if (pDPCollection)
+        pDPCollection->CopyToTab(nSourceTabNo, nTargetTabNo);
+
+    maTabs[nTargetTabNo]->SetPageStyle( maTabs[nSourceTabNo]->GetPageStyle() );
+    maTabs[nTargetTabNo]->SetPendingRowHeights( maTabs[nSourceTabNo]->IsPendingRowHeights() );
+
+    // Copy the custom print range if exists.
+    maTabs[nTargetTabNo]->CopyPrintRange(*maTabs[nSourceTabNo]);
+
+    // Copy the RTL settings
+    maTabs[nTargetTabNo]->SetLayoutRTL(maTabs[nSourceTabNo]->IsLayoutRTL());
+    maTabs[nTargetTabNo]->SetLoadingRTL(maTabs[nSourceTabNo]->IsLoadingRTL());
+
+    // Finally copy the note captions, which need
+    // 1. the updated source ScColumn::nTab members if nTargetTabNo <= nSourceTabNo
+    // 2. row heights and column widths of the destination
+    // 3. RTL settings of the destination
+    maTabs[nSourceTabNo]->CopyCaptionsToTable( 0, 0, MaxCol(), MaxRow(), maTabs[nTargetTabNo].get(), true /*bCloneCaption*/);
+}
+
+bool ScDocument::OverwriteContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo)
+{
+    ScTable* pSourceTable = FetchTable(nSourceTabNo);
+    ScTable* pTargetTable = FetchTable(nTargetTabNo);
+
+    if (pSourceTable && pTargetTable)
+    {
+        pTargetTable->DeleteArea(0, 0, MaxCol(), MaxRow(), InsertDeleteFlags::ALL);
+
+        sc::AutoCalcSwitch aACSwitch(*this, false);
+        sc::RefUpdateInsertTabContext aContext(*this, nTargetTabNo, 1);
+        CopyContent(nSourceTabNo, nTargetTabNo, nullptr, aContext);
+        return true;
+    }
+    return false;
+}
+
+
 bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
     if (SC_TAB_APPEND == nNewPos  || nNewPos >= GetTableCount())
@@ -839,6 +919,10 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         bValid = ValidNewTabName(aName);
     else
         bValid = !GetTable( aName, nDummy );
+
+    // Early return
+    if (!bValid)
+        return false;
 
     sc::AutoCalcSwitch aACSwitch(*this, false);
     sc::RefUpdateInsertTabContext aCxt( *this, nNewPos, 1);
@@ -899,64 +983,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     if (bValid)
     {
-        SetNoListening( true );     // not yet at CopyToTable/Insert
-
-        const bool bGlobalNamesToLocal = true;
-        const SCTAB nRealOldPos = (nNewPos < nOldPos) ? nOldPos - 1 : nOldPos;
-        const ScRangeName* pNames = GetRangeName( nOldPos);
-        if (pNames)
-            pNames->CopyUsedNames( nOldPos, nRealOldPos, nNewPos, *this, *this, bGlobalNamesToLocal);
-        GetRangeName()->CopyUsedNames( -1, nRealOldPos, nNewPos, *this, *this, bGlobalNamesToLocal);
-
-        sc::CopyToDocContext aCopyDocCxt(*this);
-        pDBCollection->CopyToTable(nOldPos, nNewPos);
-        maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MaxCol(), MaxRow(), InsertDeleteFlags::ALL,
-                (pOnlyMarked != nullptr), maTabs[nNewPos].get(), pOnlyMarked,
-                false /*bAsLink*/, true /*bColRowFlags*/, bGlobalNamesToLocal, false /*bCopyCaptions*/ );
-        maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
-
-        SCTAB nDz = nNewPos - nOldPos;
-        sc::RefUpdateContext aRefCxt(*this);
-        aRefCxt.meMode = URM_COPY;
-        aRefCxt.maRange = ScRange(0, 0, nNewPos, MaxCol(), MaxRow(), nNewPos);
-        aRefCxt.mnTabDelta = nDz;
-        maTabs[nNewPos]->UpdateReference(aRefCxt);
-
-        maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // move all paragraphs up by one!!
-        maTabs[nOldPos]->UpdateInsertTab(aCxt);
-
-        maTabs[nOldPos]->UpdateCompile();
-        maTabs[nNewPos]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation
-        SetNoListening( false );
-        sc::StartListeningContext aSLCxt(*this);
-        maTabs[nOldPos]->StartListeners(aSLCxt, true);
-        maTabs[nNewPos]->StartListeners(aSLCxt, true);
-
-        sc::SetFormulaDirtyContext aFormulaDirtyCxt;
-        SetAllFormulasDirty(aFormulaDirtyCxt);
-
-        if (mpDrawLayer) //  Skip cloning Note caption object
-            // page is already created in ScTable ctor
-            mpDrawLayer->ScCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
-
-        if (pDPCollection)
-            pDPCollection->CopyToTab(nOldPos, nNewPos);
-
-        maTabs[nNewPos]->SetPageStyle( maTabs[nOldPos]->GetPageStyle() );
-        maTabs[nNewPos]->SetPendingRowHeights( maTabs[nOldPos]->IsPendingRowHeights() );
-
-        // Copy the custom print range if exists.
-        maTabs[nNewPos]->CopyPrintRange(*maTabs[nOldPos]);
-
-        // Copy the RTL settings
-        maTabs[nNewPos]->SetLayoutRTL(maTabs[nOldPos]->IsLayoutRTL());
-        maTabs[nNewPos]->SetLoadingRTL(maTabs[nOldPos]->IsLoadingRTL());
-
-        // Finally copy the note captions, which need
-        // 1. the updated source ScColumn::nTab members if nNewPos <= nOldPos
-        // 2. row heights and column widths of the destination
-        // 3. RTL settings of the destination
-        maTabs[nOldPos]->CopyCaptionsToTable( 0, 0, MaxCol(), MaxRow(), maTabs[nNewPos].get(), true /*bCloneCaption*/);
+        CopyContent(nOldPos, nNewPos, pOnlyMarked, aCxt);
     }
 
     return bValid;

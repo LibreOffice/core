@@ -90,8 +90,8 @@ class SharedStringPool;
 
 namespace tools { class Guid; }
 
-namespace sc {
-
+namespace sc
+{
 struct BroadcasterState;
 struct FormulaGroupContext;
 class StartListeningContext;
@@ -121,6 +121,8 @@ class Sparkline;
 class SparklineGroup;
 class SparklineList;
 class SheetViewManager;
+class AutoCalcSwitch;
+struct RefUpdateInsertTabContext;
 }
 
 class Fraction;
@@ -1067,8 +1069,11 @@ public:
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
                                            bool bExternalDocument = false );
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
-    SC_DLLPUBLIC bool           CopyTab( SCTAB nOldPos, SCTAB nNewPos,
-                                         const ScMarkData* pOnlyMarked = nullptr );
+    SC_DLLPUBLIC bool           CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked = nullptr );
+
+    void CopyContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo, const ScMarkData* pOnlyMarked, sc::RefUpdateInsertTabContext& rContext);
+    bool OverwriteContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo);
+
     SC_DLLPUBLIC bool      TransferTab(ScDocument& rSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
                                             bool bInsertNew = true,
                                             bool bResultsOnly = false );

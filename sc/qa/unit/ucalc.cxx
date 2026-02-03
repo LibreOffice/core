@@ -7149,6 +7149,59 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentModelAccessor_getDocumentCurrencies)
     CPPUNIT_ASSERT_EQUAL(u"€"_ustr, aCurrencyIDs[0].aSymbol);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testOverwriteContent)
+{
+    m_pDoc->InsertTab(0, u"Tab1"_ustr);
+    m_pDoc->InsertTab(1, u"Tab2"_ustr);
+    m_pDoc->InsertTab(2, u"Tab3"_ustr);
+
+    std::vector<std::vector<OUString>> aData = {
+        { u"C1"_ustr, u"C2"_ustr, u"C3"_ustr },
+        {  u"7"_ustr,  u"1"_ustr,  u"A"_ustr },
+        {  u"3"_ustr,  u"2"_ustr,   u""_ustr },
+        {  u"2"_ustr,  u"4"_ustr,  u"B"_ustr },
+        {  u"4"_ustr,  u"3"_ustr,  u"B"_ustr }
+    };
+
+    // Populate cells.
+    for (size_t i = 0; i < aData.size(); ++i)
+    {
+        for (size_t j = 0; j < aData[0].size(); ++j)
+        {
+            if (!aData[i][j].isEmpty())
+            {
+                m_pDoc->SetString(j, i, 0, aData[i][j]);
+            }
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+
+    m_pDoc->OverwriteContent(0, 1);
+
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+
+    m_pDoc->SetString(0, 1, 0, u"9.0"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+
+
+    m_pDoc->OverwriteContent(0, 1);
+
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+
+    m_pDoc->DeleteTab(0);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(2);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
