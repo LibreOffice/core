@@ -82,6 +82,7 @@
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
 #include <jsdialog/jsdialogbuilder.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>
@@ -192,7 +193,9 @@ void Application::EnableUICoverage(bool bEnable)
         ImplGetSVData()->mpDefInst->getUsedUIList().clear();
 }
 
-void Application::UICoverageReport(tools::JsonWriter& rJson, bool linguisticDataAvailable)
+void Application::UICoverageReport(tools::JsonWriter& rJson,
+        /*LibreOfficeKitDocumentType*/ int docType,
+        bool linguisticDataAvailable)
 {
     auto resultNode = rJson.startNode("result");
 
@@ -204,43 +207,44 @@ void Application::UICoverageReport(tools::JsonWriter& rJson, bool linguisticData
             rJson.putSimpleValue(entry);
     }
 
-    std::vector<OUString> missingWriterDialogUIs = jsdialog::completeWriterDialogList(entries);
-    rJson.put("CompleteWriterDialogCoverage", missingWriterDialogUIs.empty());
-    if (!missingWriterDialogUIs.empty())
+    std::string sAppName;
+    std::vector<OUString> missingAppDialogUIs, missingAppSidebarUIs;
+    switch (docType)
     {
-        auto childrenNode = rJson.startArray("MissingWriterDialogCoverage");
-        for (const auto& entry : missingWriterDialogUIs)
+        case LOK_DOCTYPE_TEXT:
+            sAppName = "Writer";
+            missingAppDialogUIs = jsdialog::completeWriterDialogList(entries);
+            missingAppSidebarUIs = jsdialog::completeWriterSidebarList(entries);
+            break;
+        case LOK_DOCTYPE_SPREADSHEET:
+            sAppName = "Calc";
+            missingAppDialogUIs = jsdialog::completeCalcDialogList(entries);
+            missingAppSidebarUIs = jsdialog::completeCalcSidebarList(entries);
+            break;
+        default:
+            sAppName = "Unknown";
+            SAL_WARN("vcl", "Impress coverage not implemented");
+            break;
+    };
+
+    rJson.put("Complete" + sAppName + "DialogCoverage", missingAppDialogUIs.empty());
+    if (!missingAppDialogUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("Missing" + sAppName + "DialogCoverage");
+        for (const auto& entry : missingAppDialogUIs)
             rJson.putSimpleValue(entry);
     }
 
-    std::vector<OUString> missingWriterSidebarUIs = jsdialog::completeWriterSidebarList(entries);
-    rJson.put("CompleteWriterSidebarCoverage", missingWriterSidebarUIs.empty());
-    if (!missingWriterSidebarUIs.empty())
+    rJson.put("Complete" + sAppName + "SidebarCoverage", missingAppSidebarUIs.empty());
+    if (!missingAppSidebarUIs.empty())
     {
-        auto childrenNode = rJson.startArray("MissingWriterSidebarCoverage");
-        for (const auto& entry : missingWriterSidebarUIs)
+        auto childrenNode = rJson.startArray("Missing" + sAppName + "SidebarCoverage");
+        for (const auto& entry : missingAppSidebarUIs)
             rJson.putSimpleValue(entry);
     }
 
-    std::vector<OUString> missingCalcDialogUIs = jsdialog::completeCalcDialogList(entries);
-    rJson.put("CompleteCalcDialogCoverage", missingCalcDialogUIs.empty());
-    if (!missingCalcDialogUIs.empty())
-    {
-        auto childrenNode = rJson.startArray("MissingCalcDialogCoverage");
-        for (const auto& entry : missingCalcDialogUIs)
-            rJson.putSimpleValue(entry);
-    }
-
-    std::vector<OUString> missingCalcSidebarUIs = jsdialog::completeCalcSidebarList(entries);
-    rJson.put("CompleteCalcSidebarCoverage", missingCalcSidebarUIs.empty());
-    if (!missingCalcSidebarUIs.empty())
-    {
-        auto childrenNode = rJson.startArray("MissingCalcSidebarCoverage");
-        for (const auto& entry : missingCalcSidebarUIs)
-            rJson.putSimpleValue(entry);
-    }
-
-    std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries, linguisticDataAvailable);
+    std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries,
+            docType, linguisticDataAvailable);
     rJson.put("CompleteCommonDialogCoverage", missingCommonDialogUIs.empty());
     if (!missingCommonDialogUIs.empty())
     {

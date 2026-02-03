@@ -1239,7 +1239,9 @@ public:
     static void                 EnableUICoverage(bool bEnable);
 
     /** Report on what .ui files were used*/
-    static void UICoverageReport(tools::JsonWriter& rJson, bool linguisticDataAvailable);
+    static void UICoverageReport(tools::JsonWriter& rJson,
+            /*LibreOfficeKitDocumentType*/ int eDocType,
+            bool linguisticDataAvailable);
 
     ///@}
 

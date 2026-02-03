@@ -5669,7 +5669,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             tools::JsonWriter aJson;
             aJson.put("commandName", aCommand);
             aJson.put("success", true);
-            Application::UICoverageReport(aJson, linguisticDataAvailable);
+            Application::UICoverageReport(aJson, getDocumentType(pThis), linguisticDataAvailable);
             pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
         }
 

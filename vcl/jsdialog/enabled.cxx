@@ -12,6 +12,8 @@
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_set.h>
 #include <jsdialog/enabled.hxx>
+#include <o3tl/string_view.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vector>
 
 namespace
@@ -758,6 +760,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
 }
 
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
+                                               /*LibreOfficeKitDocumentType*/ int docType,
                                                bool linguisticDataAvailable)
 {
     std::vector<OUString> missing;
@@ -772,6 +775,26 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 // Skip the dialogs that can't be reached in the absense of
                 // linguistic data.
                 continue;
+            }
+
+            if (docType != LOK_DOCTYPE_TEXT)
+            {
+                // The 'writerperfect' ones are writer only
+                if (o3tl::starts_with(entry, u"writerperfect"))
+                    continue;
+                // The manage changes dialog is only enabled in writer
+                else if (entry == u"svx/ui/acceptrejectchangesdialog.ui")
+                    continue;
+            }
+
+            if (docType == LOK_DOCTYPE_SPREADSHEET)
+            {
+                // Not supported in Calc
+                if (entry == u"svx/ui/gotopagedialog.ui" ||
+                    entry == u"cui/ui/splitcellsdialog.ui")
+                {
+                    continue;
+                }
             }
 
             // Skip this one, I don't think it can appear in practice
