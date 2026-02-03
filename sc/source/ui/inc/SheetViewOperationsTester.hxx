@@ -77,7 +77,9 @@ public:
     {
     }
 
+    static bool doesUnsync(OperationType eOperationType);
     bool check(OperationType eOperationType) const;
+    void sync();
 };
 }
 

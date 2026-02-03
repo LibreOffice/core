@@ -44,8 +44,6 @@ bool DeleteCellOperation::runImplementation()
         mbRecord = false;
 
     sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-    if (!aSheetViewTester.check(meType))
-        return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
         rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
@@ -101,6 +99,9 @@ bool DeleteCellOperation::runImplementation()
     if (!mrDocFunc.AdjustRowHeight(ScRange(rPos), true, mbApi))
         mrDocShell.PostPaint(rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
                              PaintPartFlags::Grid, nExtFlags, nBefore);
+
+    if (sc::SheetViewOperationsTester::doesUnsync(meType))
+        aSheetViewTester.sync();
 
     aModificator.SetDocumentModified();
 

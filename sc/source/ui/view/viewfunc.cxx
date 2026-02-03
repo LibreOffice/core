@@ -2346,7 +2346,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     {
         aMarkRange.aStart.SetCol(GetViewData().GetCurX());
         aMarkRange.aStart.SetRow(GetViewData().GetCurY());
-        aMarkRange.aStart.SetTab(GetViewData().CurrentTabForData());
+        aMarkRange.aStart.SetTab(GetViewData().GetTabNumber());
         aMarkRange.aEnd = aMarkRange.aStart;
         if ( rDoc.HasAttrib( aMarkRange, HasAttrFlags::Merged ) )
         {
