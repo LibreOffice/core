@@ -311,6 +311,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
 
     // Data was lost from this paragraph.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t", u"Abstract");
+
+    // tdf#170588: stop duplicating bookmarkStarts
+    // Counts of bookmark Starts and Ends really ought to be identical...
+    assertXPath(pXmlDoc, "//w:bookmarkEnd", 4);
+    assertXPath(pXmlDoc, "//w:bookmarkStart", 5);
 }
 
 // Test the same testdoc used for testFdo77129.
