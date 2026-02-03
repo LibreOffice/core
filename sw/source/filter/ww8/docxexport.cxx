@@ -177,10 +177,10 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
-            if ( nStart == nCurrentPos )
+            if (nStart == nCurrentPos && rNode == pMark->GetMarkStart().GetNode())
                 aStarts.push_back( pMark->GetName().toString() );
 
-            if ( nEnd == nCurrentPos )
+            if (nEnd == nCurrentPos && rNode == pMark->GetMarkEnd().GetNode())
                 aEnds.push_back( pMark->GetName().toString() );
         }
     }
