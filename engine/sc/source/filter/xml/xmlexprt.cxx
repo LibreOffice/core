@@ -1598,7 +1598,7 @@ void ScXMLExport::ExportFormatRanges(ScDocument& rDoc, const sal_Int32 nStartCol
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);
-                    nRows += nTotalRows - nRows;
+                    nRows = nTotalRows;
                 }
                 else
                 {
