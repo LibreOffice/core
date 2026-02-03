@@ -8,9 +8,13 @@
  */
 
 #include "../helper/qahelper.hxx"
+
+#include <comphelper/compbase.hxx>
 #include <editeng/brushitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sot/exchange.hxx>
 #include <svx/svdpage.hxx>
+#include <tools/stream.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 #include <stlsheet.hxx>
@@ -20,6 +24,9 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <dbdata.hxx>
@@ -1736,6 +1743,80 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testcommand_SetOptimalColumnWidth)
 
     CPPUNIT_ASSERT_LESS(nWidthA, pDoc->GetColWidth(0, 0));
     CPPUNIT_ASSERT_EQUAL(nWidthB, pDoc->GetColWidth(1, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
+{
+    // A simple XTransferable implementation, that can provide a Biff12 content from file
+    class Biff12Transferable : public comphelper::WeakImplHelper<datatransfer::XTransferable>
+    {
+    public:
+        Biff12Transferable(const OUString& url)
+            : m_aFileURL(url)
+        {
+        }
+
+        // XTransferable
+        uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        {
+            if (!isDataFlavorSupported(aFlavor))
+                return {};
+            SvFileStream aStream(m_aFileURL, StreamMode::READ);
+            uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
+            aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
+            return uno::Any(bytes);
+        }
+        uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        {
+            return { getBiff12Flavor() };
+        }
+        sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        {
+            return aFlavor.MimeType.equalsIgnoreAsciiCase(getBiff12Flavor().MimeType);
+        }
+
+    private:
+        OUString m_aFileURL;
+
+        static datatransfer::DataFlavor getBiff12Flavor()
+        {
+            datatransfer::DataFlavor ret;
+            CPPUNIT_ASSERT(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::BIFF_12, ret));
+            return ret;
+        }
+    };
+
+    // Put a Biff12 format data into system clipboard:
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xClipboard = xContext->getServiceManager()
+                          ->createInstanceWithContext(
+                              u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, xContext)
+                          .queryThrow<datatransfer::clipboard::XClipboard>();
+    xClipboard->setContents(new Biff12Transferable(createFileURL(u"biff12.clipboard.xlsb")), {});
+
+    // Create document, and paste into C4 (important that first row is empty):
+    createScDoc();
+    goToCell(u"C4"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(2, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(ScAddress(3, 4, 0)));
+
+    // Save to ODS and realod. Without the fix in place, this test used to hang (and now there is
+    // an assertion that would fail):
+    saveAndReload(TestFilter::ODS);
+
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(2, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(ScAddress(3, 4, 0)));
+
+    // No need to keep clipboard content after the test
+    xClipboard->setContents({}, {});
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
