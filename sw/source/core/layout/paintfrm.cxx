@@ -6814,7 +6814,13 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode, /*bConsiderTextBox=*/false );
 
     // show track changes of table row
-    if( IsRowFrame() && !getRootFrame()->IsHideRedlines() )
+    const SwViewOption* pViewOptions = pSh->GetViewOptions();
+    SwRedlineRenderMode eRedlineRenderMode = pViewOptions->GetRedlineRenderMode();
+    // Non-standard redline render mode means we don't paint a custom background color for table
+    // redlines.
+    bool bHideTableRedlines
+        = getRootFrame()->IsHideRedlines() || eRedlineRenderMode != SwRedlineRenderMode::Standard;
+    if( IsRowFrame() && !bHideTableRedlines )
     {
         RedlineType eType = static_cast<const SwRowFrame*>(this)->GetTabLine()->GetRedlineType();
         if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
@@ -6823,7 +6829,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             bBack = true;
         }
     }
-    else if ( IsCellFrame() && !getRootFrame()->IsHideRedlines() )
+    else if ( IsCellFrame() && !bHideTableRedlines )
     {
         RedlineType eType = static_cast<const SwCellFrame*>(this)->GetTabBox()->GetRedlineType();
         if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
@@ -6833,7 +6839,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
         }
     }
 
-    if ( bBack && IsCellFrame() && !getRootFrame()->IsHideRedlines() &&
+    if ( bBack && IsCellFrame() && !bHideTableRedlines &&
         // skip cell background to show the row colored according to its tracked change
         RedlineType::None != static_cast<const SwRowFrame*>(GetUpper())->GetTabLine()->GetRedlineType() )
     {
@@ -6859,7 +6865,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             //  #i6467# - on print output, pdf output and in embedded mode not editing color COL_WHITE is used
             // instead of the global retouche color.
             if ( pSh->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
-                 pSh->GetViewOptions()->IsPDFExport() ||
+                 pViewOptions->IsPDFExport() ||
                  ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                    !pSh->GetDoc()->GetDocShell()->IsInPlaceActive()
                  )
