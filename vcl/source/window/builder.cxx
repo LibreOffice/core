@@ -222,6 +222,24 @@ void Application::UICoverageReport(tools::JsonWriter& rJson, bool linguisticData
             rJson.putSimpleValue(entry);
     }
 
+    std::vector<OUString> missingCalcDialogUIs = jsdialog::completeCalcDialogList(entries);
+    rJson.put("CompleteCalcDialogCoverage", missingCalcDialogUIs.empty());
+    if (!missingCalcDialogUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingCalcDialogCoverage");
+        for (const auto& entry : missingCalcDialogUIs)
+            rJson.putSimpleValue(entry);
+    }
+
+    std::vector<OUString> missingCalcSidebarUIs = jsdialog::completeCalcSidebarList(entries);
+    rJson.put("CompleteCalcSidebarCoverage", missingCalcSidebarUIs.empty());
+    if (!missingCalcSidebarUIs.empty())
+    {
+        auto childrenNode = rJson.startArray("MissingCalcSidebarCoverage");
+        for (const auto& entry : missingCalcSidebarUIs)
+            rJson.putSimpleValue(entry);
+    }
+
     std::vector<OUString> missingCommonDialogUIs = jsdialog::completeCommonDialogList(entries, linguisticDataAvailable);
     rJson.put("CompleteCommonDialogCoverage", missingCommonDialogUIs.empty());
     if (!missingCommonDialogUIs.empty())

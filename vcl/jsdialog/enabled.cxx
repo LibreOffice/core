@@ -683,6 +683,30 @@ std::vector<OUString> completeWriterSidebarList(const o3tl::sorted_vector<OUStri
     return missing;
 }
 
+std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : ScalcDialogList)
+    {
+        OUString sEntry(entry);
+        if (!entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
+std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+        if (sEntry.startsWith("modules/scalc/") && !entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
 std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries)
 {
     std::vector<OUString> missing;
