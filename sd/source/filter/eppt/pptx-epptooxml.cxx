@@ -2226,6 +2226,84 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     pFS->endDocument();
 }
 
+void PowerPointExport::WriteLayoutClrMapOvr(const FSHelperPtr& pFS, sal_uInt32 nMasterNum)
+{
+    // Build key: "OOXLayoutClrMapOvr_<masterIndex>"
+    OUString sKey = "OOXLayoutClrMapOvr_" + OUString::number(nMasterNum);
+
+    // Get grab bag
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    Reference<XPropertySet> xModel(mXModel, UNO_QUERY);
+    if (xModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        xModel->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+
+    // Look for layout color map override
+    uno::Sequence<beans::PropertyValue> aClrMapOvr;
+    for (const auto& rProp : aGrabBag)
+    {
+        if (rProp.Name == sKey)
+        {
+            rProp.Value >>= aClrMapOvr;
+            break;
+        }
+    }
+
+    pFS->startElementNS(XML_p, XML_clrMapOvr);
+
+    if (aClrMapOvr.hasElements())
+    {
+        // Convert token values to string names
+        std::vector<OUString> aClrMap(12);
+        for (const auto& item : aClrMapOvr)
+        {
+            sal_Int32 nToken = XML_TOKEN_INVALID;
+            item.Value >>= nToken;
+            OUString sName;
+            switch (nToken)
+            {
+                case XML_dk1:      sName = u"dk1"_ustr;      break;
+                case XML_lt1:      sName = u"lt1"_ustr;      break;
+                case XML_dk2:      sName = u"dk2"_ustr;      break;
+                case XML_lt2:      sName = u"lt2"_ustr;      break;
+                case XML_accent1:  sName = u"accent1"_ustr;  break;
+                case XML_accent2:  sName = u"accent2"_ustr;  break;
+                case XML_accent3:  sName = u"accent3"_ustr;  break;
+                case XML_accent4:  sName = u"accent4"_ustr;  break;
+                case XML_accent5:  sName = u"accent5"_ustr;  break;
+                case XML_accent6:  sName = u"accent6"_ustr;  break;
+                case XML_hlink:    sName = u"hlink"_ustr;    break;
+                case XML_folHlink: sName = u"folHlink"_ustr; break;
+                default:           sName = u"lt1"_ustr;      break;
+            }
+            sal_Int32 nIndex = item.Name.toInt32();
+            if (nIndex >= 0 && nIndex < 12)
+                aClrMap[nIndex] = sName;
+        }
+
+        // Write override color mapping
+        pFS->singleElementNS(XML_a, XML_overrideClrMapping,
+                             XML_bg1, aClrMap[0],
+                             XML_tx1, aClrMap[1],
+                             XML_bg2, aClrMap[2],
+                             XML_tx2, aClrMap[3],
+                             XML_accent1, aClrMap[4],
+                             XML_accent2, aClrMap[5],
+                             XML_accent3, aClrMap[6],
+                             XML_accent4, aClrMap[7],
+                             XML_accent5, aClrMap[8],
+                             XML_accent6, aClrMap[9],
+                             XML_hlink, aClrMap[10],
+                             XML_folHlink, aClrMap[11]);
+    }
+    else
+    {
+        // No override - inherit from master
+        pFS->singleElementNS(XML_a, XML_masterClrMapping);
+    }
+
+    pFS->endElementNS(XML_p, XML_clrMapOvr);
+}
+
 sal_Int32 PowerPointExport::GetLayoutFileId(sal_Int32 nOffset, sal_uInt32 nMasterNum)
 {
     SAL_INFO("sd.eppt", "GetLayoutFileId offset: " << nOffset << " master: " << nMasterNum);
@@ -2295,6 +2373,8 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
 
     pFS->endElementNS(XML_p, XML_cSld);
 
+    WriteLayoutClrMapOvr(pFS, nMasterNum);
+
     pFS->endElementNS(XML_p, XML_sldLayout);
 
     mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ] = mnLayoutFileIdMax;
@@ -2354,6 +2434,8 @@ void PowerPointExport::ImplWritePPTXLayoutWithContent(
     WriteShapeTree(pFS, MASTER, true);
 
     pFS->endElementNS(XML_p, XML_cSld);
+
+    WriteLayoutClrMapOvr(pFS, nMasterNum);
 
     pFS->endElementNS(XML_p, XML_sldLayout);
 

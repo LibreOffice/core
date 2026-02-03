@@ -65,6 +65,28 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf160591)
     assertXPath(pXmlDoc2, "/p:sldMaster/p:cSld/p:bg/p:bgPr/a:solidFill/a:schemeClr", "val", u"dk1");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLayoutClrMapOvr)
+{
+    // Test that slide layout color map override (clrMapOvr) is preserved on round-trip
+    createSdImpressDoc("pptx/layout-clrmap-override.pptx");
+    save(TestFilter::PPTX);
+
+    // Verify the slide layout has clrMapOvr with overrideClrMapping
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "bg1", u"dk1");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "tx1", u"lt1");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "bg2", u"dk2");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "tx2", u"lt2");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "accent1", u"accent1");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "accent2", u"accent2");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "accent3", u"accent3");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "accent4", u"accent4");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "accent5", u"accent5");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "accent6", u"accent6");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "hlink", u"hlink");
+    assertXPath(pXmlDoc, "/p:sldLayout/p:clrMapOvr/a:overrideClrMapping", "folHlink", u"folHlink");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSmartArtPreserve)
 {
     createSdImpressDoc("pptx/smartart-preserve.pptx");

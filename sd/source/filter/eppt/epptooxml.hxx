@@ -94,6 +94,7 @@ private:
     void ImplWritePPTXLayoutWithContent(
         sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName,
         css::uno::Reference<css::beans::XPropertySet> const& aXBackgroundPropSet);
+    void WriteLayoutClrMapOvr(const ::sax_fastparser::FSHelperPtr& pFS, sal_uInt32 nMasterNum);
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
 
