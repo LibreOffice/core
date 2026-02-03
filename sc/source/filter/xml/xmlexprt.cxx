@@ -1578,7 +1578,12 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             {
                 pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
-                OSL_ENSURE(nMaxRows, "something went wrong");
+                assert(nMaxRows && "ScXMLExport::ExportFormatRanges cannot make progress with zero rows, something went wrong");
+                if (!nMaxRows)
+                {
+                    SetError(XMLERROR_CANCEL | XMLERROR_FLAG_SEVERE, {});
+                    break;
+                }
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);

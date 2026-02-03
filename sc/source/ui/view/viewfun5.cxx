@@ -601,11 +601,15 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             SfxFilterMatcher aMatcher(ScDocShell::Factory().GetFilterContainer()->GetName());
             if (auto pFilter = aMatcher.GetFilter4ClipBoardId(SotClipboardFormatId::BIFF_12))
             {
+                // Do not use rDoc as "source" in the call to ResetClip: DoLoad would call InitNew,
+                // which resets many pooled items, shared between source and clipboard documents,
+                // which modifies the source. We don't want that, so use a temporary document.
+                ScDocument aTmpClipSrc(SCDOCMODE_DOCUMENT);
                 ScDocShellRef pClipShell(new ScDocShell(SfxModelFlags::NONE, SCDOCMODE_CLIP));
                 SCTAB nSrcTab = 0;
-                pClipShell->GetDocument().ResetClip(pDoc, nSrcTab);
+                pClipShell->GetDocument().ResetClip(&aTmpClipSrc, nSrcTab);
                 auto pMed = std::make_unique<SfxMedium>();
-                pMed->GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, uno::Any(xStm)));
+                pMed->GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::Any( xStm ) ) );
                 pMed->SetFilter(pFilter);
 
                 if (pClipShell->DoLoad(pMed.release()))
@@ -614,6 +618,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                                        bAllowDialogs);
                     bRet = true;
                 }
+                pClipShell->DoClose();
             }
         }
     }
