@@ -1582,10 +1582,7 @@ void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntr
 {
     // default ItemSet handling
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
-    aSet.SetParent(&rStyleSet);
-    SfxItemPropertySet::setPropertyValue(rEntry, rValue, aSet);
-    rStyleSet.Put(aSet);
+    SfxItemPropertySet::setPropertyValue(rEntry, rValue, rStyleSet);
 }
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
