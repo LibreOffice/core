@@ -901,15 +901,15 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         if (nWdt==0) aTmpPt2.setX(0 );
         if (nHgt==0) aTmpPt2.setY(0 );
         aTmpPt2+=aCenter;
-        if (maGeo.m_nRotationAngle)
-        {
-            RotatePoint(aTmpPt1, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
-            RotatePoint(aTmpPt2, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
-        }
         if (maGeo.m_nShearAngle)
         {
             ShearPoint(aTmpPt1, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
             ShearPoint(aTmpPt2, getRectangle().TopLeft(), maGeo.mfTanShearAngle);
+        }
+        if (maGeo.m_nRotationAngle)
+        {
+            RotatePoint(aTmpPt1, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+            RotatePoint(aTmpPt2, getRectangle().TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         }
     }
     SdrTextObj::NbcMirror(rRef1,rRef2);

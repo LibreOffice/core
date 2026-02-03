@@ -10,6 +10,9 @@
 #include <test/unoapi_test.hxx>
 #include <rtl/ustring.hxx>
 #include <editeng/unoprnms.hxx>
+#include <svx/svdocirc.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svx/svdview.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -186,6 +189,31 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
                                          .getStr(),
                                      26000.0, nAngle2);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf139968ShearRotateArcFlip)
+{
+    // The document contains an arc that is rotated and sheared. When horizonally flipped, start and
+    // end angles had got wrong values.
+    loadFromFile(u"tdf139968_shear45_rot30.odg");
+
+    // get shape and flip it
+    uno::Reference<drawing::XShape> xShape(getShape(0, 0));
+    SdrCircObj* pSdrCircObj(static_cast<SdrCircObj*>(SdrObject::getSdrObjectFromXShape(xShape)));
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(pSdrCircObj, pSdrView->GetSdrPageView());
+    dispatchCommand(mxComponent, u".uno:FlipHorizontal"_ustr, {});
+
+    // make sure start and end angle are correct.
+    double fAngleS(0.0), fAngleE(0.0);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CircleStartAngle"_ustr) >>= fAngleS);
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CircleEndAngle"_ustr) >>= fAngleE);
+    // without fix, start angle was 19419, end angle was 18176. Tolerance for to ignore round errors.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("StartAngle wrong", 22500.0, fAngleS, 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EndAngle wrong", 18000.0, fAngleE, 2.0);
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
