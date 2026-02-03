@@ -277,7 +277,6 @@ public:
     /// End of the tag that encloses the run.
     void EndRedline(const SwRedlineData* pRedlineData, bool bLastRun, bool bParagraphProps = false);
 
-    virtual void SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame ) override;
     virtual bool IsFlyProcessingPostponed() override;
     virtual void ResetFlyProcessingFlag() override;
 
@@ -1085,9 +1084,6 @@ private:
 
     SdtBlockHelper m_aParagraphSdt;
     SdtBlockHelper m_aRunSdt;
-
-    /// State of the Fly at current position
-    FlyProcessingState m_nStateOfFlyFrame;
 
     /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.
     OUString m_aStartedParagraphSdtPrAlias;

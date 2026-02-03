@@ -298,9 +298,6 @@ public:
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage() = 0;
 
-    /// Set the state of the Fly at current position
-    virtual void SetStateOfFlyFrame( FlyProcessingState /*nStateOfFlyFrame*/ ){};
-
     /// Is processing of fly postponed ?
     virtual bool IsFlyProcessingPostponed(){ return false; };
 

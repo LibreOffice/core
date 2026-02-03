@@ -1794,11 +1794,6 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     m_bOpenedParaPr = false;
 }
 
-void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame )
-{
-    m_nStateOfFlyFrame = nStateOfFlyFrame;
-}
-
 void DocxAttributeOutput::ResetFlyProcessingFlag()
 {
     m_bPostponedProcessingFly = false ;
@@ -10662,7 +10657,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             if (m_aRunSdt.m_bStartedSdt)
                 m_bEndCharSdt = true;
         }
-        else if (rGrabBagElement.first == "SdtPr" && FLY_NOT_PROCESSED != m_nStateOfFlyFrame )
+        else if (rGrabBagElement.first == "SdtPr")
         {
             const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
@@ -10718,8 +10713,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),
-      m_nParaAfterSpacing(0),
-      m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
+      m_nParaAfterSpacing(0)
 {
     m_nHyperLinkCount.push_back(0);
 }
