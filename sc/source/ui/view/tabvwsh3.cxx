@@ -66,6 +66,8 @@
 
 #include <svx/dialog/ThemeDialog.hxx>
 #include <ThemeColorChanger.hxx>
+#include <svx/dialog/ThemeColorEditDialog.hxx>
+#include <svx/ColorSets.hxx>
 #include <dialogs/SelectSheetViewDialog.hxx>
 
 namespace
