@@ -61,8 +61,7 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
 {
     // Import the bugdoc and export as PDF.
     loadFromFile(rFile);
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-    saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 }
 
 void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)

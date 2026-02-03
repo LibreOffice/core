@@ -58,10 +58,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
     dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
 
     // Export the selection to SVG.
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_svg_Export"_ustr),
-        comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
-    });
+    save(TestFilter::SVG_WRITER, { comphelper::makePropertyValue(u"SelectionOnly"_ustr, true) });
 
     // Make sure that the original JPG data is reused and we don't perform a PNG re-compress.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();

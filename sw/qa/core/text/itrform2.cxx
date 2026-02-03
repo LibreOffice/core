@@ -342,10 +342,9 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFComments)
         comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
         comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true),
     };
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
-        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-    });
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
 
     // Then make sure the only widget for the content control has a correct position:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();

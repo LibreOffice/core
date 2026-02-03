@@ -320,11 +320,15 @@ uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
     return aRet;
 }
 
-void UnoApiTest::save(TestFilter eFilter, const char* pPassword)
+void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyValue>& rParams,
+                      const char* pPassword)
 {
     OUString aFilter(TestFilterNames.at(eFilter));
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= aFilter;
+
+    if (rParams.hasElements())
+        aMediaDescriptor.update(rParams);
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor[u"FilterOptions"_ustr] <<= maFilterOptions;
 
@@ -349,35 +353,16 @@ void UnoApiTest::save(TestFilter eFilter, const char* pPassword)
         skipValidation();
     }
 
-    saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
-}
-
-void UnoApiTest::saveWithParams(const uno::Sequence<beans::PropertyValue>& rParams)
-{
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeToURL(maTempFile.GetURL(), rParams);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     if (!mbSkipValidation)
-    {
-        ::comphelper::SequenceAsHashMap aParamsHash(rParams);
-        OUString aFilterName;
-        aParamsHash.getValue(u"FilterName"_ustr) >>= aFilterName;
-        TestFilter eFilter = TestFilter::NONE;
-        for (const auto & [ key, value ] : TestFilterNames)
-        {
-            if (value == aFilterName)
-            {
-                eFilter = key;
-                break;
-            }
-        }
         validate(maTempFile.GetFileName(), eFilter);
-    }
 }
 
 void UnoApiTest::saveAndReload(TestFilter eFilter, const char* pPassword)
 {
-    save(eFilter, pPassword);
+    save(eFilter, /*rParams*/ {}, pPassword);
     loadFromURL(maTempFile.GetURL(), pPassword);
 }
 

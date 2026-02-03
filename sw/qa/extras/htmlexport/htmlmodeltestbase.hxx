@@ -213,13 +213,7 @@ void SwHtmlDomExportTest::ExportToReqif()
     save(TestFilter::HTML_WRITER);
 }
 
-void SwHtmlDomExportTest::ExportToHTML()
-{
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-    };
-    saveWithParams(aStoreProperties);
-}
+void SwHtmlDomExportTest::ExportToHTML() { save(TestFilter::HTML_WRITER); }
 
 void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
 {

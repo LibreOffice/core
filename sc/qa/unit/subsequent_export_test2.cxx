@@ -880,7 +880,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testOpenDocumentAsReadOnly)
     ScDocShell* pDocSh = getScDocShell();
     CPPUNIT_ASSERT(pDocSh->IsSecurityOptOpenReadOnly());
 
-    saveWithParams(uno::Sequence<beans::PropertyValue>());
+    save(TestFilter::XLSX);
     loadWithParams(maTempFile.GetURL(), aParams);
 
     pDocSh = getScDocShell();

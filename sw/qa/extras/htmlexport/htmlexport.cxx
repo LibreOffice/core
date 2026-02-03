@@ -565,11 +565,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
     ImportFromReqif(createFileURL(u"reqif-png-img.xhtml"));
     verify(/*bExported=*/false);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
     ImportFromReqif(maTempFile.GetURL());
     verify(/*bExported=*/true);
 }
@@ -800,11 +799,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTransparentImageReqIf)
 {
     createSwDoc("transparent-image.odt");
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
     OUString aSource = getXPath(
@@ -935,11 +933,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
 
     // Export it.
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"RTFOLEMimeType"_ustr, aType),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -1114,11 +1111,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PaintBitmapFormat)
 
     // When exporting to reqif-xhtml with ExportImagesAsOLE enabled:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure the resulting bitmap is 24bpp:
     OUString aRtfUrl = GetOlePath();
@@ -1455,11 +1451,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
 
     // When exporting to XHTML:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure we export that PNG as WMF in ReqIF mode:
     OUString aRtfUrl = GetOlePath();

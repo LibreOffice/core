@@ -65,6 +65,7 @@ enum class TestFilter
     RTF,
     SVG_DRAW,
     SVG_IMPRESS,
+    SVG_WRITER,
     TEXT,
     TEXT_ENCODED,
     XHTML_CALC,
@@ -111,6 +112,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::RTF, u"Rich Text Format"_ustr },
     { TestFilter::SVG_DRAW, u"draw_svg_Export"_ustr },
     { TestFilter::SVG_IMPRESS, u"impress_svg_Export"_ustr },
+    { TestFilter::SVG_WRITER, u"writer_svg_Export"_ustr },
     { TestFilter::TEXT, u"Text"_ustr },
     { TestFilter::TEXT_ENCODED, u"Text (encoded)"_ustr },
     { TestFilter::XHTML_CALC, u"XHTML Calc File"_ustr },
@@ -143,8 +145,8 @@ public:
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
-    void save(TestFilter eFilter, const char* pPassword = nullptr);
-    void saveWithParams(const css::uno::Sequence<css::beans::PropertyValue>& rParams);
+    void save(TestFilter eFilter, const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+              const char* pPassword = nullptr);
     void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
