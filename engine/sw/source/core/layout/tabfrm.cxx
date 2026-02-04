@@ -1158,7 +1158,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
-    bool bSplitRowAllowed = bTryToSplit;
+    bool bSplitRowAllowed = bTryToSplit && nRemainingSpaceForLastRow > 0;
     if (bSplitRowAllowed && !pRow->IsRowSplitAllowed())
     {
         // A row larger than the entire page ought to be allowed to split regardless of setting,
