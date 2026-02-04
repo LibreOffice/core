@@ -44,9 +44,8 @@ void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
         if (pEntry)
         {
             VclPtr<VirtualDevice> pColorVDev = createColorVirtualDevice(pEntry->GetColor());
-            OUString sColorName = pEntry->GetName();
             OUString sId = OUString::number(nIndex);
-            pIconView.insert(nIndex, &sColorName, &sId, pColorVDev, nullptr);
+            pIconView.insert(nIndex, nullptr, &sId, pColorVDev, nullptr);
         }
         else
         {
@@ -65,10 +64,8 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
         for (const auto& rColor : rColorSet)
         {
             VclPtr<VirtualDevice> pColorVDev = createColorVirtualDevice(rColor);
-            OUString sName = OUString::Concat(rNamePrefix) + OUString::number(nStartIndex);
             OUString sId = OUString::number(nStartIndex);
-            // InsertEntry(sName, aColorImage, aColorImage);
-            pIconView.insert(nStartIndex, &sName, &sId, pColorVDev, nullptr);
+            pIconView.insert(nStartIndex, nullptr, &sId, pColorVDev, nullptr);
             nStartIndex++;
         }
     }
@@ -78,9 +75,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
         {
             VclPtr<VirtualDevice> pColorVDev = createColorVirtualDevice(rColor);
             OUString sId = OUString::number(nStartIndex);
-            OUString sName = u""_ustr;
-            // InsertEntry(u""_ustr, aColorImage, aColorImage);
-            pIconView.insert(nStartIndex, &sName, &sId, pColorVDev, nullptr);
+            pIconView.insert(nStartIndex, nullptr, &sId, pColorVDev, nullptr);
             nStartIndex++;
         }
     }

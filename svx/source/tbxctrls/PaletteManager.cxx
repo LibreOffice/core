@@ -269,14 +269,12 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
     {
         pIconView.clear();
         css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
-        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
             Color aColor(ColorTransparency, CustomColorList[i]);
             VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
             OUString sId = OUString::number(i);
-            OUString sColorName = CustomColorNameList[i];
-            pIconView.insert(i, &sColorName, &sId, pColorVDev, nullptr);
+            pIconView.insert(i, nullptr, &sId, pColorVDev, nullptr);
         }
     }
     else if (IsThemePaletteSelected())
@@ -304,9 +302,8 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
                     auto const& rEffect = rColorData.maEffects[nEffect];
                     Color aColor = rEffect.maColor;
                     VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
-                    OUString sColorName = rEffect.maColorName;
                     OUString sId = OUString::number(nItemId);
-                    pIconView.insert(nItemId, &sColorName, &sId, pColorVDev, nullptr);
+                    pIconView.insert(nItemId, nullptr, &sId, pColorVDev, nullptr);
                     nItemId++;
                 }
             }
@@ -346,7 +343,7 @@ void PaletteManager::ReloadRecentColorSet(weld::IconView& pIconView)
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
         OUString sId = OUString::number(nIx);
-        pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
+        pIconView.insert(nIx, nullptr, &sId, pColorVDev, nullptr);
         ++nIx;
     }
 }
