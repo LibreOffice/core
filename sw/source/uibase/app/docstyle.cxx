@@ -1641,7 +1641,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
 
     SwFormat* pFormat = nullptr;
     std::vector<sal_uInt16> aWhichIdsToReset;
-    std::unique_ptr<SwPageDesc> pNewDsc;
+    std::optional<SwPageDesc> oNewDsc;
     size_t nPgDscPos = 0;
 
     switch(nFamily)
@@ -1797,13 +1797,13 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
 
                 if (m_rDoc.FindPageDesc(m_pDesc->GetName(), &nPgDscPos))
                 {
-                    pNewDsc.reset( new SwPageDesc( *m_pDesc ) );
+                    oNewDsc.emplace( *m_pDesc );
                     // #i48949# - no undo actions for the
                     // copy of the page style
                     ::sw::UndoGuard const ug(m_rDoc.GetIDocumentUndoRedo());
-                    m_rDoc.CopyPageDesc(*m_pDesc, *pNewDsc); // #i7983#
+                    m_rDoc.CopyPageDesc(*m_pDesc, *oNewDsc); // #i7983#
 
-                    pFormat = &pNewDsc->GetMaster();
+                    pFormat = &oNewDsc->GetMaster();
 
                     // tdf#134166: Changing page style can affect toolbar button state.
                     if (SwEditShell* pSh = m_rDoc.GetEditShell())
@@ -1889,13 +1889,13 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
 
         m_aCoreSet.ClearItem();
 
-        if( pNewDsc )
+        if( oNewDsc )
         {
-            ::ItemSetToPageDesc( aSet, *pNewDsc );
-            m_rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
+            ::ItemSetToPageDesc( aSet, *oNewDsc );
+            m_rDoc.ChgPageDesc( nPgDscPos, *oNewDsc );
             m_pDesc = &m_rDoc.GetPageDesc( nPgDscPos );
-            m_rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
-            pNewDsc.reset();
+            m_rDoc.PreDelPageDesc(&*oNewDsc); // #i7983#
+            oNewDsc.reset();
         }
         else
         {
@@ -1907,10 +1907,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
     else
     {
         m_aCoreSet.ClearItem();
-        if( pNewDsc )       // we still need to delete it
+        if( oNewDsc )       // we still need to delete it
         {
-            m_rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
-            pNewDsc.reset();
+            m_rDoc.PreDelPageDesc(&*oNewDsc); // #i7983#
+            oNewDsc.reset();
         }
     }
 
