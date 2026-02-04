@@ -1,0 +1,11 @@
+--- build.xml
++++ build.xml
+@@ -101,7 +101,7 @@
+ 	<!--  Add up all of the excludes -->
+ 	<!-- how do I add strings to break this long line? -->
+ 	<property name="excludes" 
+-		value="${exclude-1.2},${exclude-1.1},${exclude-bsf},${exclude-engine},${exclude-servlet},${excludes-legacy},${exclude-classgen},${excludes-arbitrary}"/>
++		value="${exclude-1.2},${exclude-1.1},${exclude-bsf},${exclude-engine},${exclude-servlet},${excludes-legacy},${exclude-classgen},${excludes-arbitrary},bsh/util/AWTDemoApplet.java,bsh/util/AWTRemoteApplet.java,bsh/util/JDemoApplet.java,bsh/util/JRemoteApplet.java"/>
+ 
+ 	<!-- JARs -->
+ 	<property name="javadoc-zip" value="${dist-dir}/bsh-${version}-javadoc.zip"/>
