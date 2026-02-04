@@ -618,7 +618,8 @@ void Scheduler::CallbackTaskScheduling()
     }
     catch (css::uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("vcl.schedule", "Uncaught");
+        TOOLS_WARN_EXCEPTION("vcl.schedule",
+                             "Uncaught exception for task '" << pTask->GetDebugName() << "'");
         std::abort();
     }
     catch (std::exception& e)
