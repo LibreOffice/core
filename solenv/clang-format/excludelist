@@ -1,4 +1,4 @@
-hUnoControls/inc/basecontainercontrol.hxx
+UnoControls/inc/basecontainercontrol.hxx
 UnoControls/inc/basecontrol.hxx
 UnoControls/inc/multiplexer.hxx
 UnoControls/source/base/basecontainercontrol.cxx
