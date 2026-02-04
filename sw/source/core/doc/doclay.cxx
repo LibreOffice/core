@@ -140,7 +140,7 @@ rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveW
     // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
     if ( dynamic_cast<const SwFlyDrawObj*>( pObj.get() ) ==  nullptr &&
-         dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get() ) ==  nullptr &&
+         DynCastSwVirtFlyDrawObj( pObj.get() ) ==  nullptr &&
          pObj->GetObjIdentifier() != SdrObjKind::NewFrame )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )

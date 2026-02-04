@@ -755,7 +755,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     for ( size_t i = 0; i < _rMrkList.GetMarkCount(); ++i )
     {
         SdrObject* pObj = _rMrkList.GetMark( i )->GetMarkedSdrObj();
-        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+        if ( DynCastSwVirtFlyDrawObj( pObj) ==  nullptr )
         {
             SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 

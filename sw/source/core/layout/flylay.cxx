@@ -1219,7 +1219,7 @@ void SwPageFrame::PlaceFly( SwFlyFrame* pFly, SwFlyFrameFormat* pFormat )
 bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
 {
     bool bRet = true;
-    if ( auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pSdrObj) )
+    if ( auto pVirtFlyDrawObj = DynCastSwVirtFlyDrawObj(pSdrObj) )
     {
         const SwFlyFrame* pFly = pVirtFlyDrawObj->GetFlyFrame();
         const bool bFollowTextFlow = pFly->GetFormat()->GetFollowTextFlow().GetValue();

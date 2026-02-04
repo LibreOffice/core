@@ -318,7 +318,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
 {
     assert(pObj);
     uno::Reference< drawing::XShape >  xRet;
-    if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
+    if(DynCastSwVirtFlyDrawObj( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
     {
         SwFlyDrawContact* pFlyContact = static_cast<SwFlyDrawContact*>(pObj->GetUserCall());
         if(pFlyContact)

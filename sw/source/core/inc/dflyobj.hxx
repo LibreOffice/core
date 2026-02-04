@@ -154,7 +154,7 @@ public:
 };
 
 // this serves a similar function to the DynCast* functions in include/svx/svdobj.hxx
-SwVirtFlyDrawObj* DynCastSwVirtFlyDrawObj(SdrObject*);
+SW_DLLPUBLIC SwVirtFlyDrawObj* DynCastSwVirtFlyDrawObj(SdrObject*);
 inline const SwVirtFlyDrawObj* DynCastSwVirtFlyDrawObj(const SdrObject* p) { return DynCastSwVirtFlyDrawObj(const_cast<SdrObject*>(p)); }
 
 #endif

@@ -168,7 +168,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     const SdrObject* pObj = pSdrHint->GetObject();
     if (pObj &&
            ( dynamic_cast< const SwFlyDrawObj* >(pObj) ||
-             dynamic_cast< const SwVirtFlyDrawObj* >(pObj) ||
+             DynCastSwVirtFlyDrawObj(pObj) ||
              pObj->GetObjIdentifier() == SdrObjKind::NewFrame ) )
     {
         return;

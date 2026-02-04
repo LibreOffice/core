@@ -4109,7 +4109,7 @@ bool SwFlyFrame::IsPaint(SdrObject *pObj, const SwViewShell& rSh)
 
     if ( (!rSh.GetViewOptions()->IsDraw()
              && (dynamic_cast<SdrUnoObj*>(pObj) || dynamic_cast<SdrAttrObj*>(pObj) || dynamic_cast<SwFlyDrawObj*>(pObj)))
-        || (!rSh.GetViewOptions()->IsGraphic() && dynamic_cast<SwVirtFlyDrawObj*>(pObj)) )
+        || (!rSh.GetViewOptions()->IsGraphic() && DynCastSwVirtFlyDrawObj(pObj)) )
     {
         SwRect rBoundRect = GetBoundRectOfAnchoredObj( pObj );
         lcl_PaintReplacement(rBoundRect, rSh);
@@ -4131,7 +4131,7 @@ bool SwFlyFrame::IsPaint(SdrObject *pObj, const SwViewShell& rSh)
         {
             bPaint = false;
         }
-        if ( auto pFlyDraw = dynamic_cast<SwVirtFlyDrawObj *>( pObj ) )
+        if ( auto pFlyDraw = DynCastSwVirtFlyDrawObj( pObj ) )
         {
             SwFlyFrame *pFly = pFlyDraw->GetFlyFrame();
             if ( gProp.pSFlyOnlyDraw && gProp.pSFlyOnlyDraw == pFly )

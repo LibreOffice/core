@@ -723,7 +723,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly2ndRowSelect)
     // Then make sure the first row is selected:
     const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
     SdrObject* pSelectedObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    auto pSelectedVirtObj = dynamic_cast<SwVirtFlyDrawObj*>(pSelectedObj);
+    auto pSelectedVirtObj = DynCastSwVirtFlyDrawObj(pSelectedObj);
     auto pSelected = static_cast<SwFlyAtContentFrame*>(pSelectedVirtObj->GetFlyFrame());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 5

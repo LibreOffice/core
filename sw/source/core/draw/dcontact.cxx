@@ -120,7 +120,7 @@ void setContextWritingMode(SdrObject* pObj, SwFrame const * pAnchor)
 */
 SwFrameFormat *FindFrameFormat( SdrObject *pObj )
 {
-    if (SwVirtFlyDrawObj* pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
+    if (SwVirtFlyDrawObj* pFlyDrawObj = DynCastSwVirtFlyDrawObj(pObj))
        return pFlyDrawObj->GetFormat();
 
     if (SwContact* pContact = GetUserCall(pObj))
@@ -559,7 +559,7 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly,
 const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(const SdrObject* pSdrObj) const
 {
     assert(pSdrObj);
-    assert(dynamic_cast<const SwVirtFlyDrawObj*>(pSdrObj) != nullptr);
+    assert(DynCastSwVirtFlyDrawObj(pSdrObj) != nullptr);
     assert(GetUserCall(pSdrObj) == this &&
         "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belong to this contact");
 
@@ -586,7 +586,7 @@ SdrObject* SwFlyDrawContact::GetMaster()
  */
 void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
-    assert(dynamic_cast<const SwVirtFlyDrawObj*>(_pDrawObj) != nullptr);
+    assert(DynCastSwVirtFlyDrawObj(_pDrawObj) != nullptr);
 
     if ( GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
@@ -626,7 +626,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
  */
 void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
-    assert(dynamic_cast<const SwVirtFlyDrawObj*>(_pDrawObj) != nullptr);
+    assert(DynCastSwVirtFlyDrawObj(_pDrawObj) != nullptr);
 
     if ( !GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {

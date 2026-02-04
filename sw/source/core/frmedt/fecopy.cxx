@@ -1274,7 +1274,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
     if( rMrkList.GetMarkCount() )
     {
         if( rMrkList.GetMarkCount() == 1 &&
-            dynamic_cast< const SwVirtFlyDrawObj* >(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) != nullptr )
+            DynCastSwVirtFlyDrawObj(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) != nullptr )
         {
             // select frame
             if( CNT_GRF == GetCntType() )
@@ -1424,7 +1424,7 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
         SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
         assert(pOldObj);
 
-        if( SwPasteSdr::SetAttr == nAction && dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
+        if( SwPasteSdr::SetAttr == nAction && DynCastSwVirtFlyDrawObj( pOldObj) !=  nullptr )
             nAction = SwPasteSdr::Replace;
 
         switch( nAction )
@@ -1433,7 +1433,7 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
             {
                 const SwFrameFormat* pFormat(nullptr);
                 const SwFrame* pAnchor(nullptr);
-                if( dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
+                if( DynCastSwVirtFlyDrawObj( pOldObj) !=  nullptr )
                 {
                     pFormat = FindFrameFormat( pOldObj );
 
@@ -1470,7 +1470,7 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
                 else
                     pNewObj->SetLayer( pOldObj->GetLayer() );
 
-                if( dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
+                if( DynCastSwVirtFlyDrawObj( pOldObj) !=  nullptr )
                 {
                     // store attributes, then set SdrObject
                     SfxItemSetFixed<RES_SURROUND, RES_ANCHOR> aFrameSet( mxDoc->GetAttrPool() );

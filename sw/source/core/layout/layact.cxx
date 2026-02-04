@@ -119,7 +119,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
 
     for ( size_t i = 0; i < rObjs.size() && !aTmp.empty(); ++i )
     {
-        SwVirtFlyDrawObj *pVirtFly = dynamic_cast<SwVirtFlyDrawObj*>(rObjs[i]->DrawObj());
+        SwVirtFlyDrawObj *pVirtFly = DynCastSwVirtFlyDrawObj(rObjs[i]->DrawObj());
         if ( !pVirtFly )
             continue;
 

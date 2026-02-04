@@ -343,7 +343,7 @@ SwFlyFrame* SwFEShell::GetSelectedFlyFrame() const
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        SwVirtFlyDrawObj *pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pO);
+        SwVirtFlyDrawObj *pFlyObj = DynCastSwVirtFlyDrawObj(pO);
 
         return pFlyObj ? pFlyObj->GetFlyFrame() : nullptr;
     }
@@ -394,7 +394,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
     if( pFormat && RndStdIds::FLY_AT_FLY == pFormat->GetAnchor().GetAnchorId() )
     {
         const SwFrame* pFly;
-        if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj *>(pObj))
+        if (SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj))
         {
             pFly = pFlyObj->GetFlyFrame()->GetAnchorFrame();
         }
@@ -507,7 +507,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     if ( RndStdIds::FLY_AS_CHAR == nAnchorId )
         return aRet;
 
-    bool bFlyFrame = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr;
+    bool bFlyFrame = DynCastSwVirtFlyDrawObj(pObj) != nullptr;
 
     bool bTextBox = false;
     if (pFormat->Which() == RES_DRAWFRMFMT)
@@ -1629,7 +1629,7 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     pDView->SetHitTolerancePixel( 2 );
 
     SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO);
-    SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+    SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj);
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
@@ -1697,7 +1697,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
     SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV);
-    SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+    SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj);
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
@@ -1744,7 +1744,7 @@ const SwFrameFormat* SwFEShell::GetFormatFromObj( const Point& rPt, SwRect** pRe
         if (pObj)
         {
            // first check it:
-            if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
+            if (SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj))
                 pRet = pFlyObj->GetFormat();
             else if ( pObj->GetUserCall() ) //not for group objects
                 pRet = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
@@ -1809,7 +1809,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
             }
         }
     }
-    else if (const SwVirtFlyDrawObj *pFlyObj = dynamic_cast<const SwVirtFlyDrawObj*>(pInvestigatedObj))
+    else if (const SwVirtFlyDrawObj *pFlyObj = DynCastSwVirtFlyDrawObj(pInvestigatedObj))
     {
         const SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
         const SwFrame* pLower = pFly->Lower();
@@ -1923,7 +1923,7 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
     aFrameSet.Set( pFormat->GetAttrSet() );
 
     // set size and position?
-    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) == nullptr )
+    if( DynCastSwVirtFlyDrawObj( pObj) == nullptr )
     {
         // then let's do it:
         const tools::Rectangle &rBound = pObj->GetSnapRect();

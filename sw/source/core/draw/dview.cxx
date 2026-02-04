@@ -84,7 +84,7 @@ bool SwSdrHdl::IsFocusHdl() const
 
 static const SwFrame *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 {
-    const SwVirtFlyDrawObj *pVirt = dynamic_cast< const SwVirtFlyDrawObj *>( pObj );
+    const SwVirtFlyDrawObj *pVirt = DynCastSwVirtFlyDrawObj( pObj );
     if ( pVirt )
     {
         if ( bAll || !pVirt->GetFlyFrame()->IsFlyInContentFrame() )
@@ -149,7 +149,7 @@ static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, s
         // detect if object is selected) are no longer valid.
         // The standard primitive hit-test for SwVirtFlyDrawObj now is the outer bound. The old
         // implementation reduced this excluding the inner bound when the object was not selected.
-        SwVirtFlyDrawObj* pSwVirtFlyDrawObj = dynamic_cast< SwVirtFlyDrawObj* >(pRetval);
+        SwVirtFlyDrawObj* pSwVirtFlyDrawObj = DynCastSwVirtFlyDrawObj(pRetval);
 
         if(pSwVirtFlyDrawObj)
         {
@@ -646,7 +646,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
                 aMovedChildObjs.push_back( pTmpObj );
                 // adjustments for accessibility API
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-                if ( auto pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj *>( pTmpObj ) )
+                if ( auto pFlyDrawObj = DynCastSwVirtFlyDrawObj( pTmpObj ) )
                 {
                     const SwFlyFrame *pTmpFlyFrame = pFlyDrawObj->GetFlyFrame();
                     m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
@@ -713,7 +713,7 @@ const SwFrame* SwDrawView::CalcAnchor()
     //current anchor. Search only if we currently drag.
     const SwFrame* pAnch = nullptr;
     tools::Rectangle aMyRect;
-    auto pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj *>( pObj );
+    auto pFlyDrawObj = DynCastSwVirtFlyDrawObj( pObj );
     if ( pFlyDrawObj )
     {
         pAnch = pFlyDrawObj->GetFlyFrame()->GetAnchorFrame();
@@ -862,7 +862,7 @@ void SwDrawView::CheckPossibilities()
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         const SwFrame *pFrame = nullptr;
-        if ( auto pVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) )
+        if ( auto pVirtFlyDrawObj = DynCastSwVirtFlyDrawObj( pObj ) )
         {
             const SwFlyFrame *pFly = pVirtFlyDrawObj->GetFlyFrame();
             if ( pFly  )

@@ -222,7 +222,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         ::basegfx::B2DPolyPolygon aPolyPolygon;
         std::optional<::basegfx::B2DPolyPolygon> pPolyPolygon;
 
-        if ( auto pVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) )
+        if ( auto pVirtFlyDrawObj = DynCastSwVirtFlyDrawObj( pObj ) )
         {
             // GetContour() causes the graphic to be loaded, which may cause
             // the graphic to change its size, call ClrObject()

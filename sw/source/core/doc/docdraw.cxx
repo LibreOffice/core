@@ -460,7 +460,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         if( 1 == rMrkList.GetMarkCount() )
         {
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( auto pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>( pObj) )
+            if( auto pDrawObj = DynCastSwVirtFlyDrawObj( pObj) )
             {
                 SwFlyFrameFormat* pFrameFormat = pDrawObj->GetFlyFrame()->GetFormat();
                 if( pFrameFormat )
@@ -474,7 +474,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+            if( DynCastSwVirtFlyDrawObj( pObj) ==  nullptr )
             {
                 if (SwDrawContact* pC = static_cast<SwDrawContact*>(GetUserCall(pObj)))
                 {
@@ -638,7 +638,7 @@ namespace docfunc
             while( aIter.IsMore() )
             {
                 SdrObject* pObj( aIter.Next() );
-                if ( !dynamic_cast<SwVirtFlyDrawObj*>(pObj) &&
+                if ( !DynCastSwVirtFlyDrawObj(pObj) &&
                      !dynamic_cast<SwFlyDrawObj*>(pObj) )
                 {
                     bExistsDrawObjs = true;
@@ -663,7 +663,7 @@ namespace docfunc
             while( aIter.IsMore() )
             {
                 SdrObject* pObj( aIter.Next() );
-                if ( !dynamic_cast<SwVirtFlyDrawObj*>(pObj) &&
+                if ( !DynCastSwVirtFlyDrawObj(pObj) &&
                      !dynamic_cast<SwFlyDrawObj*>(pObj) )
                 {
                     SwDrawContact* pDrawContact =

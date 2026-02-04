@@ -158,7 +158,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
 
         SdrPageView* pPV;
         SdrObject* pObj = pView->PickObj(aPos, 0, pPV, SdrSearchOptions::PICKMACRO);
-        SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+        SwVirtFlyDrawObj* pDrawObj = DynCastSwVirtFlyDrawObj(pObj);
         OUString sText;
         tools::Rectangle aPixRect;
         bool bTooltip = false;

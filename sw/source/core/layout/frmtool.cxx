@@ -2740,7 +2740,7 @@ void SwOrderIter::Top()
     for (SwAnchoredObject* i : *pObjs)
     {
         const SdrObject* pObj = i->GetDrawObj();
-        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+        if ( DynCastSwVirtFlyDrawObj( pObj) ==  nullptr )
             continue;
         sal_uInt32 nTmp = pObj->GetOrdNumDirect();
         if ( nTmp >= nTopOrd )
@@ -2764,7 +2764,7 @@ const SdrObject *SwOrderIter::Bottom()
             for (SwAnchoredObject* i : *pObjs)
             {
                 const SdrObject* pObj = i->GetDrawObj();
-                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( DynCastSwVirtFlyDrawObj( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nBotOrd )
@@ -2822,7 +2822,7 @@ void SwOrderIter::Prev()
     for (SwAnchoredObject* i : *pObjs)
     {
         const SdrObject* pObj = i->GetDrawObj();
-        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+        if ( DynCastSwVirtFlyDrawObj( pObj) ==  nullptr )
             continue;
         sal_uInt32 nTmp = pObj->GetOrdNumDirect();
         if ( nTmp < nCurOrd && nTmp >= nOrd )
@@ -3443,7 +3443,7 @@ void Notify_Background( const SdrObject* pObj,
     SwLayoutFrame* pArea;
     SwFlyFrame *pFlyFrame = nullptr;
     SwFrame* pAnchor;
-    if( auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) )
+    if( auto pVirtFlyDrawObj = DynCastSwVirtFlyDrawObj( pObj) )
     {
         pFlyFrame = const_cast<SwVirtFlyDrawObj*>(pVirtFlyDrawObj)->GetFlyFrame();
         pAnchor = pFlyFrame->AnchorFrame();
@@ -3647,7 +3647,7 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
 {
     Point aPos;
     const SwFrame* pFrame;
-    if (const SwVirtFlyDrawObj *pFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pObj))
+    if (const SwVirtFlyDrawObj *pFlyDrawObj = DynCastSwVirtFlyDrawObj(pObj))
     {
         const SwFlyFrame* pFly = pFlyDrawObj->GetFlyFrame();
         pFrame = pFly->GetAnchorFrame();
