@@ -392,7 +392,7 @@ void SvxColorTabPage::AddColorFromNameDialog(const OUString& aName)
     sal_Int32 nId = !sLastColorItemId.isEmpty() ? sLastColorItemId.toInt32() : -1;
     ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorVirtualDevice(m_aCurrentColor.m_aColor);
     OUString sId = OUString::number(nId + 1);
-    m_xIconViewColorList->insert( nId + 1, &aName, &sId, pVDev, nullptr);
+    m_xIconViewColorList->insert( nId + 1, nullptr, &sId, pVDev, nullptr);
     m_xIconViewColorList->select( nId + 1 );
     if (m_xIconViewRecentList)
         m_xIconViewRecentList->unselect_all(); // needed if color is added from recent colors

@@ -50,9 +50,8 @@ void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
         if (pEntry)
         {
             drawColor(*pVDev, pEntry->GetColor());
-            OUString sColorName = pEntry->GetName();
             OUString sId = OUString::number(nIndex);
-            pIconView.insert(nIndex, &sColorName, &sId, pVDev.get(), nullptr);
+            pIconView.insert(nIndex, nullptr, &sId, pVDev.get(), nullptr);
         }
         else
         {
@@ -73,9 +72,8 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
         for (const auto& rColor : rColorSet)
         {
             drawColor(*pVDev, rColor);
-            OUString sName = OUString::Concat(rNamePrefix) + OUString::number(nStartIndex);
             OUString sId = OUString::number(nStartIndex);
-            pIconView.insert(nStartIndex, &sName, &sId, pVDev.get(), nullptr);
+            pIconView.insert(nStartIndex, nullptr, &sId, pVDev.get(), nullptr);
             nStartIndex++;
         }
     }
@@ -85,8 +83,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
         {
             drawColor(*pVDev, rColor);
             OUString sId = OUString::number(nStartIndex);
-            OUString sName = u""_ustr;
-            pIconView.insert(nStartIndex, &sName, &sId, pVDev.get(), nullptr);
+            pIconView.insert(nStartIndex, nullptr, &sId, pVDev.get(), nullptr);
             nStartIndex++;
         }
     }
