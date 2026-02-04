@@ -687,6 +687,10 @@ bool QtInstanceWidget::get_direction() const
     return bRTL;
 }
 
+const OUString& QtInstanceWidget::get_cargo_text() { return EMPTY_OUSTRING; }
+
+void QtInstanceWidget::set_cargo_text(const OUString& /*rCargo*/) {}
+
 void QtInstanceWidget::set_direction(bool bRTL)
 {
     SolarMutexGuard g;
