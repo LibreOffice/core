@@ -70,12 +70,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 TaskManager::UnqPathData::UnqPathData() = default;
 
 TaskManager::UnqPathData::UnqPathData(TaskManager::UnqPathData&&) = default;
@@ -542,7 +536,7 @@ TaskManager::associate( const OUString& aUnqPath,
 
     auto it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::PropertyExistException( THROW_WHERE );
+        throw beans::PropertyExistException();
 
     {
         std::unique_lock aGuard( m_aMutex );
@@ -555,7 +549,7 @@ TaskManager::associate( const OUString& aUnqPath,
         PropertySet& properties = it->second.properties;
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
-            throw beans::PropertyExistException(THROW_WHERE );
+            throw beans::PropertyExistException();
 
         // Property does not exist
         properties.insert( newProperty );
@@ -573,7 +567,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
 
     auto it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::NotRemoveableException( THROW_WHERE );
+        throw beans::NotRemoveableException();
 
     std::unique_lock aGuard( m_aMutex );
 
@@ -855,7 +849,7 @@ TaskManager::setv( const OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            retRange[i] <<= beans::UnknownPropertyException( THROW_WHERE );
+            retRange[i] <<= beans::UnknownPropertyException();
             continue;
         }
 
@@ -865,7 +859,7 @@ TaskManager::setv( const OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            retRange[i] <<= lang::IllegalAccessException( THROW_WHERE );
+            retRange[i] <<= lang::IllegalAccessException();
             continue;
         }
 
@@ -934,7 +928,7 @@ TaskManager::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    retRange[i] <<= beans::IllegalTypeException( THROW_WHERE );
+                    retRange[i] <<= beans::IllegalTypeException();
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -1041,7 +1035,7 @@ TaskManager::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    retRange[i] <<= beans::IllegalTypeException( THROW_WHERE );
+                    retRange[i] <<= beans::IllegalTypeException();
             }
         }
     }   // end for

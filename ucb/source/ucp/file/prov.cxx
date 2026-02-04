@@ -39,13 +39,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::ucb;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
-
 /****************************************************************************/
 /*                                                                          */
 /*                                                                          */
@@ -117,7 +110,7 @@ FileProvider::queryContent(
 
     if(  err )
     {
-        throw IllegalIdentifierException( THROW_WHERE );
+        throw IllegalIdentifierException();
     }
 
     return Reference<XContent>(new BaseContent(m_pMyShell.get(), xIdentifier, aUnc));
