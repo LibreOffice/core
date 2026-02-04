@@ -28,12 +28,6 @@
 
 using namespace ::com::sun::star;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 WrapStreamForShare::WrapStreamForShare( uno::Reference< io::XInputStream > xInStream,
                                         rtl::Reference< comphelper::RefCountedMutex > xMutexRef )
 : m_xMutex(std::move( xMutexRef ))
@@ -43,7 +37,7 @@ WrapStreamForShare::WrapStreamForShare( uno::Reference< io::XInputStream > xInSt
     if ( !m_xMutex.is() || !m_xInStream.is() )
     {
         OSL_FAIL( "Wrong initialization of wrapping stream!" );
-        throw uno::RuntimeException(THROW_WHERE );
+        throw uno::RuntimeException();
     }
     m_xSeekable.set( m_xInStream, uno::UNO_QUERY_THROW );
     mpByteReader = dynamic_cast<comphelper::ByteReader*>(m_xInStream.get());
@@ -58,7 +52,7 @@ WrapStreamForShare::~WrapStreamForShare()
 sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     m_xSeekable->seek( m_nCurPos );
 
@@ -71,7 +65,7 @@ sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aDa
 sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     m_xSeekable->seek( m_nCurPos );
 
@@ -84,7 +78,7 @@ sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( uno::Sequence< sal_Int8 >&
 sal_Int32 WrapStreamForShare::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead )
 {
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     m_xSeekable->seek( m_nCurPos );
 
@@ -99,7 +93,7 @@ void SAL_CALL WrapStreamForShare::skipBytes( sal_Int32 nBytesToSkip )
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     m_xSeekable->seek( m_nCurPos );
 
@@ -112,7 +106,7 @@ sal_Int32 SAL_CALL WrapStreamForShare::available()
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     return m_xInStream->available();
 }
@@ -122,7 +116,7 @@ void SAL_CALL WrapStreamForShare::closeInput()
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     // the package is the owner so it will close the stream
     // m_xInStream->closeInput();
@@ -137,7 +131,7 @@ void SAL_CALL WrapStreamForShare::seek( sal_Int64 location )
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     // let stream implementation do all the checking
     m_xSeekable->seek( location );
@@ -150,7 +144,7 @@ sal_Int64 SAL_CALL WrapStreamForShare::getPosition()
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     return m_nCurPos;
 }
@@ -160,7 +154,7 @@ sal_Int64 SAL_CALL WrapStreamForShare::getLength()
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xInStream.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     return m_xSeekable->getLength();
 }

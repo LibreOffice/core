@@ -35,12 +35,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 ZipPackageEntry::ZipPackageEntry()
 : mbIsFolder( false )
 , mbAllowRemoveOnInsert(false)
@@ -68,7 +62,7 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     // unfortunately no other exception than RuntimeException can be thrown here
     // usually the package is used through storage implementation, the problem should be detected there
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, true ) )
-        throw RuntimeException(THROW_WHERE "Unexpected character is used in file name." );
+        throw RuntimeException("Unexpected character is used in file name." );
 
     msName = aName;
 
@@ -92,10 +86,10 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent )
 void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xNewParent )
 {
     if ( !xNewParent.is() )
-        throw NoSupportException(THROW_WHERE );
+        throw NoSupportException();
     ZipPackageFolder* pNewParent = dynamic_cast<ZipPackageFolder*>(xNewParent.get());
     if (!pNewParent)
-        throw NoSupportException(THROW_WHERE );
+        throw NoSupportException();
 
     if ( pNewParent != mpParent )
     {

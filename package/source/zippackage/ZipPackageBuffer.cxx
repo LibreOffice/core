@@ -30,12 +30,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using com::sun::star::lang::IllegalArgumentException;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 ZipPackageBuffer::ZipPackageBuffer()
 : m_nBufferSize (n_ConstBufferSize)
 , m_nEnd(0)
@@ -50,7 +44,7 @@ ZipPackageBuffer::~ZipPackageBuffer()
 sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if (nBytesToRead < 0)
-        throw BufferSizeExceededException(THROW_WHERE, *this );
+        throw BufferSizeExceededException(u""_ustr, *this );
 
     if (nBytesToRead + m_nCurrent > m_nEnd)
         nBytesToRead = static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
@@ -68,7 +62,7 @@ sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData,
 void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
 {
     if (nBytesToSkip < 0)
-        throw BufferSizeExceededException(THROW_WHERE, *this );
+        throw BufferSizeExceededException(u""_ustr, *this );
 
     if (nBytesToSkip + m_nCurrent > m_nEnd)
         nBytesToSkip = static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
@@ -113,7 +107,7 @@ void SAL_CALL ZipPackageBuffer::closeOutput(  )
 void SAL_CALL ZipPackageBuffer::seek( sal_Int64 location )
 {
     if ( location > m_nEnd || location < 0 )
-        throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+        throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
     m_nCurrent = location;
 }
 sal_Int64 SAL_CALL ZipPackageBuffer::getPosition(  )

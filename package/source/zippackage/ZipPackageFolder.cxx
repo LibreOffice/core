@@ -42,12 +42,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 using namespace cppu;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 ZipPackageFolder::ZipPackageFolder( const css::uno::Reference < css::uno::XComponentContext >& xContext,
                                     sal_Int32 nFormat,
                                     bool bAllowRemoveOnInsert )
@@ -156,17 +150,17 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::Any& aElement )
 {
     if (hasByName(aName))
-        throw ElementExistException(THROW_WHERE );
+        throw ElementExistException();
 
     uno::Reference < XInterface > xRef;
     if ( !(aElement >>= xRef) )
-        throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+        throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 0 );
 
     ZipPackageEntry* pEntry = dynamic_cast<ZipPackageFolder*>(xRef.get());
     if (!pEntry)
         pEntry = dynamic_cast<ZipPackageStream*>(xRef.get());
     if (!pEntry)
-       throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+       throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 0 );
 
     if (pEntry->getName() != aName )
         pEntry->setName (aName);
@@ -182,7 +176,7 @@ void ZipPackageFolder::removeByName( std::u16string_view aName )
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end() )
-        throw NoSuchElementException(THROW_WHERE );
+        throw NoSuchElementException();
     maContents.erase( aIter );
 }
     // XEnumerationAccess
@@ -204,7 +198,7 @@ ZipContentInfo& ZipPackageFolder::doGetByName( std::u16string_view aName )
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
-        throw NoSuchElementException(THROW_WHERE );
+        throw NoSuchElementException();
     return aIter->second;
 }
 
@@ -232,7 +226,7 @@ bool ZipPackageFolder::hasByName( std::u16string_view aName )
 void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
     if ( !hasByName( aName ) )
-        throw NoSuchElementException(THROW_WHERE );
+        throw NoSuchElementException();
 
     removeByName( aName );
     insertByName(aName, aElement);
@@ -295,11 +289,11 @@ void ZipPackageFolder::saveContents(
         }
         catch ( ZipException& )
         {
-            throw uno::RuntimeException( THROW_WHERE );
+            throw uno::RuntimeException();
         }
         catch ( IOException& )
         {
-            throw uno::RuntimeException( THROW_WHERE );
+            throw uno::RuntimeException();
         }
     }
 
@@ -315,7 +309,7 @@ void ZipPackageFolder::saveContents(
             if (!aIter->second.pStream->saveChild(rPath + aIter->first, rManList, rZipOut,
                     rEncryptionKey, oPBKDF2IterationCount, oArgon2Args))
             {
-                throw uno::RuntimeException( THROW_WHERE );
+                throw uno::RuntimeException();
             }
         }
     }
@@ -329,7 +323,7 @@ void ZipPackageFolder::saveContents(
                 if (!rInfo.pFolder->saveChild(rPath + rShortName, rManList, rZipOut,
                         rEncryptionKey, oPBKDF2IterationCount, oArgon2Args))
                 {
-                    throw uno::RuntimeException( THROW_WHERE );
+                    throw uno::RuntimeException();
                 }
             }
             else
@@ -337,7 +331,7 @@ void ZipPackageFolder::saveContents(
                 if (!rInfo.pStream->saveChild(rPath + rShortName, rManList, rZipOut,
                         rEncryptionKey, oPBKDF2IterationCount, oArgon2Args))
                 {
-                    throw uno::RuntimeException( THROW_WHERE );
+                    throw uno::RuntimeException();
                 }
             }
         }
@@ -350,7 +344,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException(THROW_WHERE );
+        //  throw UnknownPropertyException();
 
         aValue >>= msMediaType;
     }
@@ -367,7 +361,7 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException(THROW_WHERE );
+        //  throw UnknownPropertyException();
 
         return uno::Any ( msMediaType );
     }
