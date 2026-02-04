@@ -3830,18 +3830,7 @@ PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamil
 
             if(!bDone)
             {
-                try
-                {
-                    pPropSet->setPropertyValue( rPropName, aValue, aSet );
-                }
-                catch (const beans::UnknownPropertyException &)
-                {
-                    OSL_FAIL( "Unknown property" );
-                }
-                catch (const lang::IllegalArgumentException &)
-                {
-                    OSL_FAIL( "Illegal argument" );
-                }
+                pPropSet->setPropertyValue( rPropName, aValue, aSet, /*bIgnoreUnknownProperty*/true );
             }
         }
 

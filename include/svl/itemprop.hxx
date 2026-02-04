@@ -120,17 +120,21 @@ public:
     css::uno::Any
         getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet ) const;
+    /// @param bIgnoreUnknownProperty if true, dont throw an exception when the property is not one we know about
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     static void setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const css::uno::Any& aVal,
-                                          SfxItemSet& rSet );
+                                          SfxItemSet& rSet,
+                                  bool bIgnoreUnknownProperty = false);
+    /// @param bIgnoreUnknownProperty if true, dont throw an exception when the property is not one we know about
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::UnknownPropertyException
     void                  setPropertyValue( const OUString& rPropertyName,
                                             const css::uno::Any& aVal,
-                                            SfxItemSet& rSet ) const;
+                                            SfxItemSet& rSet,
+                                            bool bIgnoreUnknownProperty = false) const;
 
     /// @throws css::beans::UnknownPropertyException
     css::beans::PropertyState
