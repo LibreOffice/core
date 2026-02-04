@@ -17,6 +17,7 @@
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <map>
 #include <memory>
@@ -94,7 +95,10 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     GtvMainToolbarPrivate& priv = getPrivate(toolbar);
     priv.m_pImpl = new GtvMainToolbarPrivateImpl();
 
-    const std::string uiFilePath = GtvHelpers::getDirPath(__FILE__) + std::string(UI_FILE_NAME);
+    std::string uiFilePath = GtvHelpers::getDirPath(__FILE__) + std::string(UI_FILE_NAME);
+    if (!std::filesystem::exists(uiFilePath))
+        uiFilePath = GtvHelpers::getRelativePath(uiFilePath);
+
     GtvGtkWrapper<GtkBuilder> builder(gtk_builder_new_from_file(uiFilePath.c_str()),
                                       [](GtkBuilder* pBuilder) {
                                           g_object_unref(pBuilder);

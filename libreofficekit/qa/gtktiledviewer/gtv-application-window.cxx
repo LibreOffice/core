@@ -9,6 +9,7 @@
 
 #include <gtk/gtk.h>
 
+#include <filesystem>
 #include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
@@ -67,7 +68,10 @@ getPrivate(GtvApplicationWindow* win)
 static void
 gtv_application_window_init(GtvApplicationWindow* win)
 {
-    const std::string uiFilePath = GtvHelpers::getDirPath(__FILE__) + std::string(UI_FILE_NAME);
+    std::string uiFilePath = GtvHelpers::getDirPath(__FILE__) + std::string(UI_FILE_NAME);
+    if (!std::filesystem::exists(uiFilePath))
+        uiFilePath = GtvHelpers::getRelativePath(uiFilePath);
+
     GtvGtkWrapper<GtkBuilder> builder(gtk_builder_new_from_file(uiFilePath.c_str()),
                                       [](GtkBuilder* pBuilder) {
                                           g_object_unref(pBuilder);

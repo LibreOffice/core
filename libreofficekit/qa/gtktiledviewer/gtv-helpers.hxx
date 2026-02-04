@@ -39,6 +39,8 @@ namespace GtvHelpers
 
     std::string getDirPath(const std::string& filePath);
 
+    std::string getRelativePath(const std::string& aFilePath);
+
     template<typename T>
     std::vector<T> split(const std::string& aPayload, const std::string& aDelim, const int nItems)
     {

@@ -10,9 +10,12 @@
 #include <gtk/gtk.h>
 
 #include <cstring>
+#include <filesystem>
 
 #include "gtv-helpers.hxx"
 #include "gtv-signal-handlers.hxx"
+
+#include <config_folders.h>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -145,6 +148,18 @@ std::string GtvHelpers::getDirPath(const std::string& filePath)
 {
     int position = filePath.find_last_of('/');
     return filePath.substr(0, position + 1);
+}
+
+std::string GtvHelpers::getRelativePath(const std::string& aFilePath)
+{
+    std::filesystem::path aBaseDir(SRC_ROOT);
+    std::filesystem::path aFullPath(aFilePath);
+    std::error_code err;
+    std::filesystem::path aRelPath = std::filesystem::relative(aFullPath, aBaseDir, err);
+    if (err)
+        return aFilePath;
+
+    return aRelPath.string();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
