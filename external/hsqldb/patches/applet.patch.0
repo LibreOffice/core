@@ -1,0 +1,13 @@
+--- build/build.xml
++++ build/build.xml
+@@ -430,6 +430,10 @@
+       >
+          <include name="org/hsqldb/util/**"/>
+          <exclude name="org/hsqldb/util/*Swing.java"/>
++         <exclude name="org/hsqldb/util/DatabaseManager.java"/>
++         <exclude name="org/hsqldb/util/QueryTool.java"/>
++         <exclude name="org/hsqldb/util/Transfer.java"/>
++         <exclude name="org/hsqldb/util/ZaurusDatabaseManager.java"/>
+          <exclude name="org/hsqldb/util/TableSorter.java"/>
+       </javac>
+       <copy todir="classes/org/hsqldb/util">
