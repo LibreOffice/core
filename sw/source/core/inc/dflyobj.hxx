@@ -148,7 +148,13 @@ public:
 
     virtual bool IsTextBox() const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+    virtual bool IsSwVirtFlyDrawObj() const override { return true; }
 };
+
+// this serves a similar function to the DynCast* functions in include/svx/svdobj.hxx
+SwVirtFlyDrawObj* DynCastSwVirtFlyDrawObj(SdrObject*);
+inline const SwVirtFlyDrawObj* DynCastSwVirtFlyDrawObj(const SdrObject* p) { return DynCastSwVirtFlyDrawObj(const_cast<SdrObject*>(p)); }
 
 #endif
 

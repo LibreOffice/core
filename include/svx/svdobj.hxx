@@ -763,6 +763,7 @@ public:
     virtual bool IsSdrTextObj() const { return false; }
     virtual bool IsSdrOle2Obj() const { return false; }
     virtual bool IsTextPath() const { return false ; }
+    virtual bool IsSwVirtFlyDrawObj() const { return false ; }
 
     /// Whether the aspect ratio should be kept by default when resizing.
     virtual bool shouldKeepAspectRatio() const { return false; }
