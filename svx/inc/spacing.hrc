@@ -13,6 +13,12 @@
 
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
+#define RID_ABOVE        NC_("RID_ABOVE", "Above:")
+#define RID_BELOW        NC_("RID_BELOW", "Below:")
+#define RID_BEFORE       NC_("RID_BEFORE", "Before:")
+#define RID_AFTER        NC_("RID_AFTER", "After:")
+#define RID_FIRST        NC_("RID_FIRST", "First:")
+
 struct measurement
 {
     TranslateId key;

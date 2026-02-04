@@ -3407,6 +3407,13 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         }
     }
 
+    const OUString& aCargo = GetCargoText();
+    if (!aCargo.isEmpty())
+    {
+        auto node = rJsonWriter.startNode("cargo");
+        rJsonWriter.putRaw(OUStringToOString(aCargo, RTL_TEXTENCODING_UTF8));
+    }
+
     OUString sAccRole;
     sal_uInt16 nAccessibleRole = GetAccessibleRole();
     if (nAccessibleRole == css::accessibility::AccessibleRole::PAGE_TAB_LIST)
