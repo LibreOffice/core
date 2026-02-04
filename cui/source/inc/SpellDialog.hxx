@@ -68,6 +68,7 @@ private:
 
     void DoScroll();
     void SetScrollBarRange();
+    void SetSizeRequest();
 
 protected:
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
