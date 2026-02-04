@@ -269,15 +269,13 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
     {
         pIconView.clear();
         css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
-        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
         ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
             Color aColor(ColorTransparency, CustomColorList[i]);
             SvxColorIconView::drawColor(*pVDev, aColor);
             OUString sId = OUString::number(i);
-            OUString sColorName = CustomColorNameList[i];
-            pIconView.insert(i, &sColorName, &sId, pVDev.get(), nullptr);
+            pIconView.insert(i, nullptr, &sId, pVDev.get(), nullptr);
         }
     }
     else if (IsThemePaletteSelected())
@@ -305,9 +303,8 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
                 {
                     auto const& rEffect = rColorData.maEffects[nEffect];
                     SvxColorIconView::drawColor(*pVDev, rEffect.maColor);
-                    OUString sColorName = rEffect.maColorName;
                     OUString sId = OUString::number(nItemId);
-                    pIconView.insert(nItemId, &sColorName, &sId, pVDev.get(), nullptr);
+                    pIconView.insert(nItemId, nullptr, &sId, pVDev.get(), nullptr);
                     nItemId++;
                 }
             }
@@ -348,7 +345,7 @@ void PaletteManager::ReloadRecentColorSet(weld::IconView& pIconView)
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
         OUString sId = OUString::number(nIx);
-        pIconView.insert(nIx, &sColorName, &sId, pVDev.get(), nullptr);
+        pIconView.insert(nIx, nullptr, &sId, pVDev.get(), nullptr);
         ++nIx;
     }
 }
