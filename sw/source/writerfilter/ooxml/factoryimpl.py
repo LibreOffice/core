@@ -159,7 +159,7 @@ def getFastParser():
         xInit->initialize(args);
 """)
     for url in sorted(ooxUrlAliases.keys()):
-        print("""        mxFastParser->registerNamespace("%s", oox::NMSP_%s);""" % (url, ooxUrlAliases[url]))
+        print("""        mxFastParser->registerNamespace(u"%s"_ustr, oox::NMSP_%s);""" % (url, ooxUrlAliases[url]))
     print("""    }
 
     return mxFastParser;
