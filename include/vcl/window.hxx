@@ -1060,6 +1060,9 @@ public:
     void                                SetHelpId( const OUString& );
     const OUString&                     GetHelpId() const;
 
+    void                                SetCargoText( const OUString& rCargoText );
+    const OUString&                     GetCargoText() const;
+
     sal_uInt16                          GetChildCount() const;
     vcl::Window*                        GetChild( sal_uInt16 nChild ) const;
     vcl::Window*                        GetWindow( GetWindowType nType ) const;

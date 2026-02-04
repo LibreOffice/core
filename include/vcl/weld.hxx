@@ -301,6 +301,9 @@ public:
     virtual bool get_direction() const = 0;
     virtual void set_direction(bool bRTL) = 0;
 
+    virtual const OUString& get_cargo_text() = 0;
+    virtual void set_cargo_text(const OUString& rCargo) = 0;
+
     /* Increases the freeze count on widget.
 
        If the freeze count is non-zero, emission of the widget's notifications

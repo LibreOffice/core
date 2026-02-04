@@ -136,6 +136,10 @@ public:
 
     virtual void set_direction(bool) override;
 
+    const OUString& get_cargo_text() override;
+
+    void set_cargo_text(const OUString& rCargo) override;
+
     virtual void freeze() override;
 
     virtual void thaw() override;

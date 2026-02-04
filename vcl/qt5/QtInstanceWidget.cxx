@@ -471,6 +471,10 @@ bool QtInstanceWidget::get_direction() const
     return false;
 }
 
+const OUString& QtInstanceWidget::get_cargo_text() {}
+
+void QtInstanceWidget::set_cargo_text(const OUString& /*rCargo*/) { return EMPTY_OUSTRING; }
+
 void QtInstanceWidget::set_direction(bool) { assert(false && "Not implemented yet"); }
 
 void QtInstanceWidget::freeze(){};

@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/builder.hxx>
 #include <o3tl/string_view.hxx>
+#include <tools/json_writer.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
@@ -1321,6 +1322,20 @@ void Window::SetQuickHelpText( const OUString& rHelpText )
 const OUString& Window::GetQuickHelpText() const
 {
     return mpWindowImpl->maQuickHelpText;
+}
+
+void Window::SetCargoText( const OUString& rCargoText )
+{
+    if (mpWindowImpl)
+        mpWindowImpl->maCargoText = rCargoText;
+}
+
+const OUString& Window::GetCargoText() const
+{
+    if (mpWindowImpl)
+        return mpWindowImpl->maCargoText;
+
+    return EMPTY_OUSTRING;
 }
 
 bool Window::IsCreatedWithToolkit() const

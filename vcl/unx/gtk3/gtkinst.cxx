@@ -4198,6 +4198,15 @@ public:
         gtk_widget_set_direction(m_pWidget, bRTL ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
     }
 
+    const OUString& get_cargo_text() override
+    {
+        return EMPTY_OUSTRING;
+    }
+
+    void set_cargo_text(const OUString& /*rCargo*/) override
+    {
+    }
+
     virtual void freeze() override
     {
         ++m_nFreezeCount;

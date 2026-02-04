@@ -616,6 +616,10 @@ bool SalInstanceWidget::get_direction() const { return m_xWidget->IsRTLEnabled()
 
 void SalInstanceWidget::set_direction(bool bRTL) { m_xWidget->EnableRTL(bRTL); }
 
+const OUString& SalInstanceWidget::get_cargo_text() { return m_xWidget->GetCargoText(); };
+
+void SalInstanceWidget::set_cargo_text(const OUString& rCargo) { m_xWidget->SetCargoText(rCargo); }
+
 void SalInstanceWidget::freeze()
 {
     if (m_nFreezeCount == 0)
