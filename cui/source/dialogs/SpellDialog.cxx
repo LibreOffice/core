@@ -254,7 +254,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 
     Size aEdSize(m_xSuggestionLB->get_approximate_digit_width() * 60,
                  m_xSuggestionLB->get_height_rows(6));
-    m_xSuggestionLB->set_size_request(aEdSize.Width(), -1);
+    m_xSuggestionLB->set_size_request(aEdSize.Width(), aEdSize.Height());
     m_sIgnoreOnceST = m_xIgnorePB->get_label();
     m_xAddToDictMB->set_help_id(m_xAddToDictPB->get_help_id());
     xSpell = LinguMgr::GetSpellChecker();
@@ -1217,6 +1217,11 @@ void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetDocumentColor(pDrawingArea);
 }
 
+void SentenceEditWindow_Impl::SetSizeRequest()
+{
+    m_xScrolledWindow->set_size_request(m_xScrolledWindow->get_preferred_size().Width(), -1);
+}
+
 void SentenceEditWindow_Impl::SetDocumentColor(weld::DrawingArea* pDrawingArea)
 {
     if (!pDrawingArea || !m_xEditView || !m_xEditEngine)
@@ -1689,6 +1694,10 @@ void SentenceEditWindow_Impl::Init(weld::Toolbar* pToolbar)
 {
     m_pToolbar = pToolbar;
     m_pToolbar->connect_clicked(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
+    // tdf#170524 Lock in the starting size request including space required
+    // for a vertical scrollbar that might be needed later in the lifetime of
+    // the dialog even if it doesn't need it at startup time.
+    SetSizeRequest();
 }
 
 IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OUString&, rCurItemId, void)
