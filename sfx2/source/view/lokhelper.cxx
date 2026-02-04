@@ -456,6 +456,16 @@ void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
         pViewShell->SetLOKLocale(rBcp47LanguageTag);
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            // sync also global getter if we are the current view
+            bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
+            if (bIsCurrShell)
+            {
+                comphelper::LibreOfficeKit::setLocale(LanguageTag(rBcp47LanguageTag));
+            }
+            return;
+        }
     }
 }
 

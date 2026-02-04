@@ -3532,14 +3532,14 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
         comphelper::LibreOfficeKit::setLanguageTag(GetLOKLanguageTag());
         comphelper::LibreOfficeKit::setLocale(GetLOKLocale());
     }
+    mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
+    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
 }
 
 void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
 {
     SetLOKLanguageTag(rBcp47LanguageTag);
     SetLOKLocale(rBcp47LanguageTag);
-    mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
-    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
 }
 
 CalendarWrapper& SfxViewShell::GetLOKCalendar()

@@ -247,15 +247,12 @@ public:
     DECL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, void);
 };
 
-void lcl_setLOKLanguageAndLocale(ScDocShell& rDocSh, ScTabViewShell& rViewShell, const LanguageType eLang)
+void lcl_setLOKLocale(ScTabViewShell& rViewShell, const LanguageType eLang)
 {
     OUString aLang = LanguageTag(eLang).getBcp47();
     /// This is only used for building the lok calendar as of date.
-    SfxLokHelper::setViewLanguageAndLocale(SfxLokHelper::getView(rViewShell), aLang);
-    if (SfxBindings* pBindings = rDocSh.GetViewBindings())
-    {
-        pBindings->Invalidate(SID_LANGUAGE_STATUS);
-    }
+    /// Don't change the view language as it affects the js-dialog language as well.
+    SfxLokHelper::setViewLocale(SfxLokHelper::getView(rViewShell), aLang);
 }
 
 } // end anonymous namespace
@@ -272,7 +269,7 @@ void ScDocShell::SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageTyp
     {
         if (ScTabViewShell* pViewShell = GetBestViewShell())
         {
-            lcl_setLOKLanguageAndLocale(*this, *pViewShell, eLatin);
+            lcl_setLOKLocale(*pViewShell, eLatin);
         }
     }
 
