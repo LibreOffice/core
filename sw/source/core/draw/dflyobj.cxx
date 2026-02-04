@@ -455,6 +455,13 @@ SwFrameFormat *SwVirtFlyDrawObj::GetFormat()
     return GetFlyFrame()->GetFormat();
 }
 
+SwVirtFlyDrawObj* DynCastSwVirtFlyDrawObj(SdrObject* pObj)
+{
+    if( pObj && pObj->IsSwVirtFlyDrawObj() )
+        return static_cast<SwVirtFlyDrawObj*>(pObj);
+    return nullptr;
+}
+
 // --> OD #i102707#
 namespace
 {

@@ -2792,7 +2792,7 @@ const SdrObject *SwOrderIter::Next()
             for (SwAnchoredObject* i : *pObjs)
             {
                 const SdrObject* pObj = i->GetDrawObj();
-                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( DynCastSwVirtFlyDrawObj( pObj) == nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp > nCurOrd && nTmp < nOrd )
