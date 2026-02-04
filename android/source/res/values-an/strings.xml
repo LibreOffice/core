@@ -21,4 +21,5 @@
     <string name="no_save_document">NO</string>
     <string name="action_redo">Refer</string>
     <string name="title_recents">Ficheros recients</string>
+    <string name="compress_photo_max_quality">Calidat maxima</string>
 </resources>
