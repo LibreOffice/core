@@ -898,6 +898,8 @@ vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const S
     // fill the font object
     vcl::Font aFont;
     ScPatternAttr::fillFontOnly(aFont, rItemSet, nullptr, nullptr, nullptr, nullptr, nScScript);
+    if (aFont.GetFamilyName().isEmpty())
+        aFont.SetFamilyName(rRoot.GetFontBuffer().GetAppFontData().maName);
     return aFont;
 }
 
