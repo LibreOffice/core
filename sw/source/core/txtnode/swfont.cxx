@@ -365,6 +365,11 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
         ss << GetWeight();
         (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("weight"), BAD_CAST(ss.str().c_str()));
     }
+    {
+        std::stringstream ss;
+        ss << GetUnderline();
+        (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("underline"), BAD_CAST(ss.str().c_str()));
+    }
     (void)xmlTextWriterEndElement(writer);
 }
 
