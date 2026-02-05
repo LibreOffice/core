@@ -751,7 +751,7 @@ bool FramePrHelper::UseFrameTextDirection(sal_Int32 nTableDepth)
     return m_bUseFrameTextDirection;
 }
 
-void SdtBlockHelper::DeleteAndResetTheLists()
+void SdtBlockHelper::clearGrabbagValues()
 {
     if (m_pTokenChildren.is() )
         m_pTokenChildren.clear();
@@ -773,6 +773,7 @@ void SdtBlockHelper::DeleteAndResetTheLists()
         m_aAppearance.clear();
     m_bShowingPlaceHolder = false;
     m_nId = 0;
+    m_nSdtPrToken = 0;
     m_nTabIndex = 0;
 }
 
@@ -832,8 +833,7 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
     m_bStartedSdt = true;
 
     // clear sdt status
-    m_nSdtPrToken = 0;
-    DeleteAndResetTheLists();
+    clearGrabbagValues();
 }
 
 void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer)
@@ -1274,8 +1274,7 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
-        m_aParagraphSdt.m_nSdtPrToken = 0;
-        m_aParagraphSdt.DeleteAndResetTheLists();
+        m_aParagraphSdt.clearGrabbagValues();
     }
 
     m_pSerializer->mark(Tag_StartParagraph_2);
@@ -2113,8 +2112,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
-        m_aRunSdt.m_nSdtPrToken = 0;
-        m_aRunSdt.DeleteAndResetTheLists();
+        m_aRunSdt.clearGrabbagValues();
     }
 
     if (bCloseEarlierSDT)

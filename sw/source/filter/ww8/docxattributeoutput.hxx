@@ -185,7 +185,7 @@ public:
     OUString m_aLock;
     sal_Int32 m_nSdtPrToken; // 0 means either not set, or richText
 
-    void DeleteAndResetTheLists();
+    void clearGrabbagValues();
 
     void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
     void WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer);
