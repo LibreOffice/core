@@ -46,33 +46,38 @@ void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
     }
 }
 
-SCROW SortOrderReverser::unsort(SCROW nRow) const
+SCROW SortOrderReverser::unsort(SCROW nRow, SCCOL nColumn) const
 {
     if (maSortInfo.maOrder.empty())
         return nRow;
 
-    if (nRow >= maSortInfo.mnFirstRow && nRow <= maSortInfo.mnLastRow)
-    {
-        size_t index = nRow - maSortInfo.mnFirstRow;
-        auto nUnsortedRow = maSortInfo.mnFirstRow + maSortInfo.maOrder[index] - 1;
-        return nUnsortedRow;
-    }
-    return nRow;
+    if (nColumn < maSortInfo.mnFirstColumn || nColumn > maSortInfo.mnLastColumn)
+        return nRow;
+
+    if (nRow < maSortInfo.mnFirstRow || nRow > maSortInfo.mnLastRow)
+        return nRow;
+
+    size_t index = nRow - maSortInfo.mnFirstRow;
+    auto nUnsortedRow = maSortInfo.mnFirstRow + maSortInfo.maOrder[index] - 1;
+    return nUnsortedRow;
 }
 
-SCROW SortOrderReverser::resort(SCROW nRow) const
+SCROW SortOrderReverser::resort(SCROW nRow, SCCOL nColumn) const
 {
     if (maSortInfo.maOrder.empty())
         return nRow;
 
-    if (nRow >= maSortInfo.mnFirstRow && nRow <= maSortInfo.mnLastRow)
+    if (nColumn < maSortInfo.mnFirstColumn || nColumn > maSortInfo.mnLastColumn)
+        return nRow;
+
+    if (nRow < maSortInfo.mnFirstRow || nRow > maSortInfo.mnLastRow)
+        return nRow;
+
+    SCCOLROW nOrderValue = nRow - maSortInfo.mnFirstRow + 1;
+    for (size_t nIndex = 0; nIndex < maSortInfo.maOrder.size(); ++nIndex)
     {
-        SCCOLROW nOrderValue = nRow - maSortInfo.mnFirstRow + 1;
-        for (size_t nIndex = 0; nIndex < maSortInfo.maOrder.size(); ++nIndex)
-        {
-            if (maSortInfo.maOrder[nIndex] == nOrderValue)
-                return maSortInfo.mnFirstRow + nIndex;
-        }
+        if (maSortInfo.maOrder[nIndex] == nOrderValue)
+            return maSortInfo.mnFirstRow + nIndex;
     }
     return nRow;
 }

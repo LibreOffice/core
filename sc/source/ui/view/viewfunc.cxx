@@ -853,7 +853,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     SCROW nUnsortedRow = nRow;
                     if (pManager->getSortOrder())
-                        nUnsortedRow = pManager->getSortOrder()->unsort(nUnsortedRow);
+                        nUnsortedRow = pManager->getSortOrder()->unsort(nUnsortedRow, nCol);
                     applyText(*this, nCol, nUnsortedRow, nSheetViewTab, rString, bNumFmtChanged);
                 }
                 else if (GetViewData().GetSheetViewID() == pSheetView->getID())
@@ -874,9 +874,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     auto pSheetView = pManager->get(nSheetViewID);
 
                     if (pSheetView->getSortOrder())
-                        nUnsortedRow = pSheetView->getSortOrder()->unsort(nUnsortedRow);
+                        nUnsortedRow = pSheetView->getSortOrder()->unsort(nUnsortedRow, nCol);
                     if (pManager->getSortOrder())
-                        nUnsortedRow = pManager->getSortOrder()->resort(nUnsortedRow);
+                        nUnsortedRow = pManager->getSortOrder()->resort(nUnsortedRow, nCol);
                 }
                 applyText(*this, nCol, nUnsortedRow, rTab, rString, bNumFmtChanged);
             }

@@ -23,6 +23,8 @@ namespace sc
 /** Contains the information of an performed sort action */
 struct SC_DLLPUBLIC SortOrderInfo
 {
+    SCCOL mnFirstColumn = -1;
+    SCCOL mnLastColumn = -1;
     SCROW mnFirstRow = -1;
     SCROW mnLastRow = -1;
     std::vector<SCCOLROW> maOrder; // Remember the sort order
@@ -40,8 +42,8 @@ public:
      * Uses the sort order. The row must be between range of [first row, last row]
      * or it will return the input row without modification.
      **/
-    SCROW unsort(SCROW nRow) const;
-    SCROW resort(SCROW nRow) const;
+    SCROW unsort(SCROW nRow, SCCOL nColumn) const;
+    SCROW resort(SCROW nRow, SCCOL nColumn) const;
 
     /** Adds or combines the order indices.
      *

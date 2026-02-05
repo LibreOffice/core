@@ -1765,6 +1765,8 @@ void ScTable::Sort(
                         aSortOrderInfo.maKeyStates.push_back(rState);
                 }
 
+                aSortOrderInfo.mnFirstColumn = rSortParam.nCol1;
+                aSortOrderInfo.mnLastColumn = rSortParam.nCol2;
                 aSortOrderInfo.mnFirstRow = nRow1;
                 aSortOrderInfo.mnLastRow = nLastRow;
                 aSortOrderInfo.maOrder = pArray->GetOrderIndices();
