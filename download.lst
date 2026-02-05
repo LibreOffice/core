@@ -599,8 +599,8 @@ LIBTIFF_TARBALL := tiff-4.7.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POPPLER_SHA256SUM := 1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089
-POPPLER_TARBALL := poppler-26.01.0.tar.xz
+POPPLER_SHA256SUM := dded8621f7b2f695c91063aab1558691c8418374cd583501e89ed39487e7ab77
+POPPLER_TARBALL := poppler-26.02.0.tar.xz
 POPPLER_DATA_SHA256SUM := c835b640a40ce357e1b83666aabd95edffa24ddddd49b8daff63adb851cdab74
 POPPLER_DATA_TARBALL := poppler-data-0.4.12.tar.gz
 # three static lines
