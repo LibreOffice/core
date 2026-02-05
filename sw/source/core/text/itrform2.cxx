@@ -1267,7 +1267,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 }
             }
             assert(2 <= sal_Int32(nFieldLen));
-            pPor = new SwFieldPortion(SwFieldType::GetTypeStr(SwFieldTypesEnum::Input), nullptr, nFieldLen);
+            pPor = new SwFieldPortion(SwFieldType::GetTypeStr(SwFieldTypesEnum::Input), nullptr, nullptr, nFieldLen);
         }
         else
         {
