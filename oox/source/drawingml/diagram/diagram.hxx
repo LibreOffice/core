@@ -153,7 +153,10 @@ public:
 
     // check if mandatory DiagramDomS exist (or can be created)
     bool checkMinimalDataDoms() const;
-    void tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML);
+
+    // helpers to write some specific DiagramDoms
+    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
+    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.

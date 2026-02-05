@@ -1788,7 +1788,10 @@ void DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rX
 
     sRelId = writeGraphicToStorage(aGraphic, bRelPathToMedia);
 
-    mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
+    if (isDiagaramExport())
+        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_embed), sRelId);
+    else
+        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
     const auto& pVectorGraphicDataPtr = aGraphic.getVectorGraphicData();
 
@@ -2902,11 +2905,18 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                                             sURL, bExtURL);
                 }
                 if (bExtURL)
-                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                {
+                    if (isDiagaramExport())
+                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_id), sRelId);
+                    else
+                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                }
                 else
+                {
                     mpFS->singleElementNS(
                         XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
                         sURL.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
+                }
             }
             else
             {
@@ -6806,79 +6816,109 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
 }
 
-bool DrawingML::PrepareToWriteAsDiagram(const css::uno::Reference<css::drawing::XShape>& rXRootShape)
-{
-    SdrObject* pObj(SdrObject::getSdrObjectFromXShape(rXRootShape));
-
-    if (nullptr == pObj)
-        return false;
-
-    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pObj->getDiagramHelper());
-
-    if (!rIDiagramHelper)
-        return false;
-
-    DiagramHelper_oox* pAdvancedDiagramHelper = static_cast<DiagramHelper_oox*>(rIDiagramHelper.get());
-
-    if (nullptr == pAdvancedDiagramHelper)
-        return false;
-
-    // try to re-create (if needed is decided there)
-    pAdvancedDiagramHelper->tryToCreateMissingDataDoms(*this);
-
-    if (!pAdvancedDiagramHelper->checkMinimalDataDoms())
-        return false;
-
-    return true;
-}
-
 void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
-    assert(pObj && "no SdrObject");
-    assert(pObj->isDiagram() && "is no Diagram");
-
-    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
-    assert(rIDiagramHelper && "has no DiagramHelper");
-
-    const DiagramHelper_oox* pAdvancedDiagramHelper = static_cast<DiagramHelper_oox*>(rIDiagramHelper.get());
-    assert(pAdvancedDiagramHelper && "has no DiagramHelper");
-
-    if (!pAdvancedDiagramHelper->checkMinimalDataDoms())
+    if (nullptr == pObj)
         return;
 
-    // get/check mandatory DomS
-    uno::Reference<xml::dom::XDocument> dataDom;
-    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData) >>= dataDom;
-    assert(dataDom && "mandatory DiagramDom missing");
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
+    if (!rIDiagramHelper)
+        return;
 
+    const DiagramHelper_oox* pAdvancedDiagramHelper = static_cast<DiagramHelper_oox*>(rIDiagramHelper.get());
+    if (nullptr == pAdvancedDiagramHelper)
+        return;
+
+    // check mandatory and originally imported DataDom OOXLayout
     uno::Reference<xml::dom::XDocument> layoutDom;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXLayout) >>= layoutDom;
-    assert(layoutDom && "mandatory DiagramDom missing");
+    if (!layoutDom)
+        return;
 
+    // check mandatory and originally imported DataDom OOXStyle
     uno::Reference<xml::dom::XDocument> styleDom;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXStyle) >>= styleDom;
-    assert(styleDom && "mandatory DiagramDom missing");
+    if (!styleDom)
+        return;
 
+    // check mandatory and originally imported DataDom OOXColor
     uno::Reference<xml::dom::XDocument> colorDom;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXColor) >>= colorDom;
-    assert(colorDom && "mandatory DiagramDom missing");
+    if (!colorDom)
+        return;
 
-    // get optional DomS
+    // handle drawingDom OOXDrawing before OOXData. It may exist if Diagram is untouched
+    // from original import. it needs a drawingRelId that is referenced inside dataDom
     uno::Reference<xml::dom::XDocument> drawingDom;
     rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing) >>= drawingDom;
+    const OUString drawingFileName("diagrams/drawing" + OUString::number(nDiagramId) + ".xml");
+    const OUString sRelationCompPrefix(GetRelationCompPrefix());
+    const OUString sDir(GetComponentDir());
+    static bool bForceAlwaysReCreate(nullptr != std::getenv("FORCE_RECREATE_DIAGRAM_DATADOMS"));
 
-    uno::Sequence<uno::Sequence<uno::Any>> xDataImageRelSeq;
-    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels)
-        >>= xDataImageRelSeq;
+    // check if re-creation is forced (for test purposes)
+    if (drawingDom && bForceAlwaysReCreate)
+        drawingDom.clear();
 
-    uno::Sequence<uno::Sequence<uno::Any>> xDataHlinkRelSeq;
-    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels)
-        >>= xDataHlinkRelSeq;
+    // add relation in any case. If we have a drawingDom the dataDom will be adapted,
+    // if drawingDom gets written it's needed to embed it there
+    OUString drawingRelId;
 
-    // generate a unique id
+    // CAUTION! We have stuff like testfdo79822 with file "fdo79822.docx"
+    // that do not originally have a drawingDom at all. The test mentions
+    // that this file was created in ms word 2007. In those cases we might
+    // try in the future to 'repair' stuff by writing a DrawingDom, but for
+    // now just do as version before did - write no DrawingSDom at all
+    const bool bWriteNoDrawingDomAtAll(pAdvancedDiagramHelper->getInitiallyNoDrawingDom());
+
+    if (!bWriteNoDrawingDomAtAll)
+    {
+        // only add Relation if we write a DrawingDom
+        drawingRelId = mpFB->addRelation(
+            mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDRAWING),
+            Concat2View(sRelationCompPrefix + drawingFileName));
+    }
+
+    if (!drawingDom && !bWriteNoDrawingDomAtAll)
+    {
+        // no drawingDom exists, so it was either not originally imported or the
+        // Diagram was changed, so it got deleted. write drawingDom directly as
+        // sub-content
+        uno::Reference<io::XOutputStream> xOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + drawingFileName,
+            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+
+        if (xOutputStream)
+            pAdvancedDiagramHelper->writeDiagramOOXDrawing(*this, xOutputStream);
+    }
+
+    // check DataDom OOXData
+    uno::Reference<xml::dom::XDocument> dataDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData) >>= dataDom;
+
+    // check if re-creation is forced (for test purposes)
+    if (dataDom && bForceAlwaysReCreate)
+        dataDom.clear();
+
+    if (!dataDom)
+    {
+        // no dataDom exists, so  the  Diagram was changed, so it got deleted.
+        // write dataDom directly as sub-content
+        OUString dataFileName = u"diagrams/data"_ustr + OUString::number(nDiagramId) + u".xml"_ustr;
+        uno::Reference<io::XOutputStream> xOutputStream = mpFB->openFragmentStream(
+            sDir + u"/"_ustr + dataFileName,
+            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+
+        if (xOutputStream)
+            pAdvancedDiagramHelper->writeDiagramOOXData(*this, xOutputStream, drawingRelId);
+    }
+
+    // prepare AttributeList for export of this GroupObject representing the Diagram
+    // as reference to Diagram
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
+
     // id in cNvPr under cNvGraphicFramePr must be unique among shapes,
     // but can be different from diagram's own id
     const sal_Int32 nExpShapeId = nShapeId != -1 ? nShapeId : nDiagramId;
@@ -6935,8 +6975,6 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     mpFS->startElementNS(XML_a, XML_graphicData, XML_uri,
                          "http://schemas.openxmlformats.org/drawingml/2006/diagram");
 
-    OUString sRelationCompPrefix = GetRelationCompPrefix();
-
     // add data relation
     OUString dataFileName = "diagrams/data" + OUString::number(nDiagramId) + ".xml";
     OUString dataRelId =
@@ -6961,33 +6999,6 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
                                               oox::getRelationship(Relationship::DIAGRAMCOLORS),
                                               Concat2View(sRelationCompPrefix + colorFileName));
 
-    OUString drawingFileName;
-    if (drawingDom.is())
-    {
-        // add drawing relation
-        drawingFileName = "diagrams/drawing" + OUString::number(nDiagramId) + ".xml";
-        OUString drawingRelId = mpFB->addRelation(
-            mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDRAWING),
-            Concat2View(sRelationCompPrefix + drawingFileName));
-
-        // the data dom contains a reference to the drawing relation. We need to update it with the new generated
-        // relation value before writing the dom to a file
-
-        // Get the dsp:damaModelExt node from the dom
-        uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
-            u"http://schemas.microsoft.com/office/drawing/2008/diagram"_ustr, u"dataModelExt"_ustr);
-
-        // There must be one element only so get it
-        uno::Reference<xml::dom::XNode> node = nodeList->item(0);
-
-        // Get the list of attributes of the node
-        uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
-
-        // Get the node with the relId attribute and set its new value
-        uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
-        relIdNode->setNodeValue(drawingRelId);
-    }
-
     mpFS->singleElementNS(XML_dgm, XML_relIds,
         FSNS(XML_xmlns, XML_dgm), mpFB->getNamespaceURL(OOX_NS(dmlDiagram)),
         FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)),
@@ -7001,19 +7012,54 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     uno::Reference<xml::sax::XWriter> writer
         = xml::sax::Writer::create(comphelper::getProcessComponentContext());
 
-    OUString sDir = GetComponentDir();
+    if (dataDom)
+    {
+        if (!drawingRelId.isEmpty())
+        {
+            // NOTE: drawingRelId may be empty if bWriteNoDrawingDomAtAll is set, see
+            // comments above
+            // the original and unchanged dataDom contains a reference to the drawing
+            // relation. We need to update it with the new generated relation value
+            // before writing the dom to the file
 
-    // write data file
-    serializer.set(dataDom, uno::UNO_QUERY);
-    uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + dataFileName,
-        u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
-    writer->setOutputStream(xDataOutputStream);
-    serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                          uno::Sequence<beans::StringPair>());
+            // Get the dsp:damaModelExt node from the dom
+            uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
+                u"http://schemas.microsoft.com/office/drawing/2008/diagram"_ustr, u"dataModelExt"_ustr);
 
-    writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
-    writeDiagramHlinkRels(xDataHlinkRelSeq, xDataOutputStream);
+            // There must be one element only so get it
+            uno::Reference<xml::dom::XNode> node = nodeList->item(0);
+
+            // Get the list of attributes of the node
+            uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
+
+            // Get the node with the relId attribute and set its new value
+            uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
+            relIdNode->setNodeValue(drawingRelId);
+        }
+
+        // write originally imported & untouched data file
+        serializer.set(dataDom, uno::UNO_QUERY);
+        uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + dataFileName,
+            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+        writer->setOutputStream(xDataOutputStream);
+        serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+                            uno::Sequence<beans::StringPair>());
+
+        // get originally imported OOXDataImageRels
+        uno::Sequence<uno::Sequence<uno::Any>> xDataImageRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels)
+            >>= xDataImageRelSeq;
+
+        // get originally imported OOXDataHlinkRels
+        uno::Sequence<uno::Sequence<uno::Any>> xDataHlinkRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels)
+            >>= xDataHlinkRelSeq;
+
+        // write the associated Images and rels for data file
+        writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
+        writeDiagramHlinkRels(xDataHlinkRelSeq, xDataOutputStream);
+    }
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -7039,23 +7085,23 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
 
-    // write drawing file
-    if (!drawingDom.is())
-        return;
+    if (drawingDom.is())
+    {
+        // write original and untouched drawingDom
+        serializer.set(drawingDom, uno::UNO_QUERY);
+        uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + drawingFileName, u"application/vnd.ms-office.drawingml.diagramDrawing+xml"_ustr);
+        writer->setOutputStream(xDrawingOutputStream);
+        serializer->serialize(
+            uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+            uno::Sequence<beans::StringPair>());
 
-    serializer.set(drawingDom, uno::UNO_QUERY);
-    uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + drawingFileName, u"application/vnd.ms-office.drawingml.diagramDrawing+xml"_ustr);
-    writer->setOutputStream(xDrawingOutputStream);
-    serializer->serialize(
-        uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-        uno::Sequence<beans::StringPair>());
-
-    // write the associated Images and rels for drawing file
-    uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
-    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingRels) >>= xDrawingRelSeq;
-    writeDiagramImageRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels",
-                          nDiagramId);
+        // write the associated Images and rels for drawing file
+        uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingRels) >>= xDrawingRelSeq;
+        writeDiagramImageRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels",
+                            nDiagramId);
+    }
 }
 
 void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,

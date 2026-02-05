@@ -122,6 +122,9 @@ public:
     // access to PropertyValues
     virtual css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const = 0;
 
+    // check if mandatory DiagramDomS exist and/or were not touched
+    virtual bool checkMinimalDataDoms() const = 0;
+
     // access to RootShape - the GroupObject used to host this Diagram
     css::uno::Reference< css::drawing::XShape >& getRootShape() { return accessRootShape(); }
 };

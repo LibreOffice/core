@@ -190,8 +190,6 @@ void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
     }
     else
         rTarget->singleElementNS(XML_dgm, XML_prSet, pAttributeList);
-
-    rTarget->singleElementNS(XML_dgm, XML_spPr);
 }
 
 DiagramData_svx::DiagramData_svx()

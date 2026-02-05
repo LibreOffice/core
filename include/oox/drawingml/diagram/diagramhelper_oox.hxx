@@ -56,6 +56,9 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
     OUString msNewNodeId;
     OUString msNewNodeText;
 
+    // flag to remember if initial import had a DrawingDom at all
+    bool mbInitiallyNoDrawingDom;
+
     bool hasDiagramData() const;
 
     static void moveDiagramModelDataFromOldToNewXShape(
@@ -101,9 +104,16 @@ public:
     void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
     virtual css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const override;
 
-    // check if mandatory DiagramDomS exist (or can be created)
-    bool checkMinimalDataDoms() const;
-    void tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML);
+    // check if mandatory DiagramDomS exist and/or were not touched
+    virtual bool checkMinimalDataDoms() const override;
+
+    // helpers to write some specific DiagramDoms
+    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
+    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
+
+    // flag to remember if initial import had a DrawingDom at all
+    void setInitiallyNoDrawingDom(bool bNew) { mbInitiallyNoDrawingDom = bNew; }
+    bool getInitiallyNoDrawingDom() const { return mbInitiallyNoDrawingDom; }
 };
 
 }

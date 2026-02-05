@@ -48,6 +48,9 @@ DiagramHelper_oox::DiagramHelper_oox(std::shared_ptr<Diagram> xDiagramPtr,
     : mpDiagramPtr(std::move(xDiagramPtr))
     , mpThemePtr(std::move(xTheme))
     , maImportSize(aImportSize)
+    , msNewNodeId()
+    , msNewNodeText()
+    , mbInitiallyNoDrawingDom(false)
 {
 }
 
@@ -469,12 +472,23 @@ bool DiagramHelper_oox::checkMinimalDataDoms() const
     return mpDiagramPtr->checkMinimalDataDoms();
 }
 
-void DiagramHelper_oox::tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML)
+void DiagramHelper_oox::writeDiagramOOXData(DrawingML& rOriginalDrawingML,
+                                            uno::Reference<io::XOutputStream>& xOutputStream,
+                                            std::u16string_view rDrawingRelId) const
 {
     if (!mpDiagramPtr)
         return;
 
-    mpDiagramPtr->tryToCreateMissingDataDoms(rOriginalDrawingML);
+    mpDiagramPtr->writeDiagramOOXData(rOriginalDrawingML, xOutputStream, rDrawingRelId);
+}
+
+void DiagramHelper_oox::writeDiagramOOXDrawing(
+    DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream) const
+{
+    if (!mpDiagramPtr)
+        return;
+
+    mpDiagramPtr->writeDiagramOOXDrawing(rOriginalDrawingML, xOutputStream);
 }
 }
 

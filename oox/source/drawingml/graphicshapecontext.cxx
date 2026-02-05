@@ -40,6 +40,7 @@
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
@@ -313,7 +314,12 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
 
         // No DrawingML fallback, need to warn the user at the end.
         if (mpShapePtr->getExtDrawings().empty())
+        {
             getFilter().setMissingExtDrawing();
+            DiagramHelper_oox* pHelper(mpShapePtr->getDiagramHelper());
+            if (nullptr != pHelper)
+                pHelper->setInitiallyNoDrawingDom(true);
+        }
         else
         {
             for (const auto& rRelId : mpShapePtr->getExtDrawings())

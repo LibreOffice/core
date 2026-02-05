@@ -49,6 +49,10 @@
 #ifdef DBG_UTIL
 #include <osl/file.hxx>
 #include <o3tl/environment.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <com/sun/star/embed/XRelationshipAccess.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -186,7 +190,10 @@ void Diagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
 
 bool Diagram::checkMinimalDataDoms() const
 {
-    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
+    // check if re-creation is activated
+    static bool bReCreateDiagramDataDoms(nullptr != std::getenv("ACTIVATE_RECREATE_DIAGRAM_DATADOMS"));
+
+    if (!bReCreateDiagramDataDoms && maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
         return false;
 
     if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXLayout))
@@ -201,98 +208,83 @@ bool Diagram::checkMinimalDataDoms() const
     return true;
 }
 
-void Diagram::tryToCreateMissingDataDoms(DrawingML& rOriginalDrawingML)
+void Diagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const
 {
-    // internal testing: allow to force to always recreate
-    static bool bForceAlwaysReCreate(nullptr != std::getenv("FORCE_RECREATE_DIAGRAM_DATADOMS"));
-
-    // check if activated, return if not to stay compatible for now
-    static bool bReCreateDiagramDataDoms(nullptr != std::getenv("ACTIVATE_RECREATE_DIAGRAM_DATADOMS"));
-    SAL_INFO("oox", "DiagramReCreate: always==" << bForceAlwaysReCreate << ",bReCreate==" << bReCreateDiagramDataDoms);
-    if (!bForceAlwaysReCreate && !bReCreateDiagramDataDoms)
+    if (!xOutputStream)
         return;
 
-    oox::core::XmlFilterBase& rFB(*rOriginalDrawingML.GetFB());
+    // re-create OOXData DomFile from model data
+    sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutputStream, true);
+    getData()->writeDiagramData(rOriginalDrawingML, aFS, rDrawingRelId);
 
-    if (bForceAlwaysReCreate || maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
-    {
-        // re-create OOXData DomFile from model data
-        SAL_INFO("oox", "DiagramReCreate: creating DomMapFlag::OOXData");
-        uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(comphelper::getProcessComponentContext());
-        uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
-
-        if (xOutput)
-        {
-            sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutput, true);
-            getData()->writeDiagramData(rFB, aFS);
-            xOutput->flush();
-
-            // this call is *important*, without it xDocBuilder->parse below fails and some strange
-            // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
-            xOutput->closeOutput();
-
-            uno::Reference<xml::dom::XDocumentBuilder> xDocBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
-            if (xDocBuilder)
-            {
-                uno::Reference<xml::dom::XDocument> xInstance = xDocBuilder->parse(xTempFile->getInputStream());
-                if (xInstance)
-                {
-                    maDiagramPRDomMap[svx::diagram::DomMapFlag::OOXData] <<= xInstance;
-                }
-            }
+    // this call is *important*, without it xDocBuilder->parse below fails and some strange
+    // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+    xOutputStream->closeOutput();
 
 #ifdef DBG_UTIL
-            const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
-            if(!env.isEmpty())
-            {
-                OUString url;
-                ::osl::FileBase::getFileURLFromSystemPath(env, url);
-                osl::File::move(xTempFile->getUri(), url + "data_T.xml");
-            }
-#endif
+    uno::Reference< embed::XRelationshipAccess > xRelations( xOutputStream, uno::UNO_QUERY );
+    if( xRelations.is() )
+    {
+        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+        {
+            SAL_INFO("oox", "RelationData:");
+            for (const beans::StringPair& aPair : aSeq)
+                SAL_INFO("oox", "  Key: " << aPair.First << ", Value: " << aPair.Second);
         }
     }
 
-    if (bForceAlwaysReCreate || maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXDrawing))
+    const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+    if(!env.isEmpty())
     {
-        // re-create OOXDrawing DomFile from model data
-        SAL_INFO("oox", "DiagramReCreate: creating DomMapFlag::OOXDrawing");
-        uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(comphelper::getProcessComponentContext());
-        uno::Reference< io::XOutputStream > xOutput = xTempFile->getOutputStream();
+        OUString url;
+        ::osl::FileBase::getFileURLFromSystemPath(env, url);
+        SvFileStream aOutStream(url + "data_T.xml", StreamMode::WRITE|StreamMode::TRUNC);
+        uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+        uno::Reference<io::XStream> xInStream(xOutputStream, uno::UNO_QUERY);
+        comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(), xOutStream->getOutputStream());
+    }
+#endif
+}
 
-        if (xOutput)
-        {
-            sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutput, true);
-            getData()->writeDiagramReplacement(rOriginalDrawingML, aFS);
-            xOutput->flush();
+void Diagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream) const
+{
+    if (!xOutputStream)
+        return;
 
-            // this call is *important*, without it xDocBuilder->parse below fails and some strange
-            // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
-            xOutput->closeOutput();
+    // re-create OOXDrawing DomFile from model data
+    SAL_INFO("oox", "DiagramReCreate: creating DomMapFlag::OOXDrawing");
+    sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutputStream, true);
+    getData()->writeDiagramReplacement(rOriginalDrawingML, aFS);
 
-            uno::Reference<xml::dom::XDocumentBuilder> xDocBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
-            if (xDocBuilder)
-            {
-                uno::Reference<xml::dom::XDocument> xInstance = xDocBuilder->parse(xTempFile->getInputStream());
-                if (xInstance)
-                {
-                    maDiagramPRDomMap[svx::diagram::DomMapFlag::OOXDrawing] <<= xInstance;
-                }
-            }
+    // this call is *important*, without it xDocBuilder->parse below fails and some strange
+    // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+    xOutputStream->closeOutput();
 
 #ifdef DBG_UTIL
-            const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
-            if(!env.isEmpty())
-            {
-                OUString url;
-                ::osl::FileBase::getFileURLFromSystemPath(env, url);
-                osl::File::move(xTempFile->getUri(), url + "drawing_T.xml");
-            }
-#endif
+    uno::Reference< embed::XRelationshipAccess > xRelations( xOutputStream, uno::UNO_QUERY );
+    if( xRelations.is() )
+    {
+        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+        {
+            SAL_INFO("oox", "RelationDrawing:");
+            for (const beans::StringPair& aPair : aSeq)
+                SAL_INFO("oox", "  Key: " << aPair.First << ", Value: " << aPair.Second);
         }
     }
 
-    // more to do...
+    const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+    if(!env.isEmpty())
+    {
+        OUString url;
+        ::osl::FileBase::getFileURLFromSystemPath(env, url);
+        SvFileStream aOutStream(url + "drawing_T.xml", StreamMode::WRITE|StreamMode::TRUNC);
+        uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+        uno::Reference<io::XStream> xInStream(xOutputStream, uno::UNO_QUERY);
+        comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(), xOutStream->getOutputStream());
+    }
+#endif
 }
 
 using ShapePairs

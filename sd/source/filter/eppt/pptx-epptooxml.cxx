@@ -2338,13 +2338,21 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
-            bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+            bool bSaveAsDiagram(false);
 
-            // check if export as Diagram is possible
-            if (bIsDiagram && !aDML.PrepareToWriteAsDiagram(mXShape))
-                bIsDiagram = false;
+            if (nullptr != pDiagramCandidate)
+            {
+                const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pDiagramCandidate->getDiagramHelper());
 
-            if (bIsDiagram)
+                if (rIDiagramHelper)
+                {
+                    // check if all needed data exists to either write unchanged/untouched
+                    // Diagram or with re-creation of some DataDoms
+                    bSaveAsDiagram = rIDiagramHelper->checkMinimalDataDoms();
+                }
+            }
+
+            if (bSaveAsDiagram)
             {
                 sal_Int32 nShapeId = aDML.GetNewShapeID(mXShape);
                 SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(mnDiagramId) + " with Shape Id " + OUString::number(nShapeId));
