@@ -3407,19 +3407,9 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         }
     }
 
-    // If GtkLabel has a static accessibility role, mark renderAsStatic.
-    // so LOK renders it as <span> instead of <label> for correct accessibility.
     OUString sAccRole;
     sal_uInt16 nAccessibleRole = GetAccessibleRole();
-    const std::initializer_list<sal_uInt16> staticRoles = {
-        css::accessibility::AccessibleRole::STATIC,
-        css::accessibility::AccessibleRole::NOTIFICATION
-    };
-
-    if (std::find(staticRoles.begin(), staticRoles.end(), nAccessibleRole) != staticRoles.end()
-        && GetType() == WindowType::FIXEDTEXT)
-        rJsonWriter.put("renderAsStatic", true);
-    else if (nAccessibleRole == css::accessibility::AccessibleRole::PAGE_TAB_LIST)
+    if (nAccessibleRole == css::accessibility::AccessibleRole::PAGE_TAB_LIST)
         sAccRole = "tablist";
 
     vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();

@@ -461,16 +461,6 @@ void SelectableFixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Edit::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("type", "fixedtext");
     rJsonWriter.put("selectable", true);
-
-    // Add renderAsStatic for accessibility
-    sal_uInt16 nAccessibleRole = GetAccessibleRole();
-    const std::initializer_list<sal_uInt16> staticRoles = {
-        css::accessibility::AccessibleRole::STATIC,
-        css::accessibility::AccessibleRole::NOTIFICATION
-    };
-
-    if (std::find(staticRoles.begin(), staticRoles.end(), nAccessibleRole) != staticRoles.end())
-        rJsonWriter.put("renderAsStatic", true);
 }
 
 void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
