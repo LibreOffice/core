@@ -711,13 +711,17 @@ void PDFOutDev::restoreState(GfxState*)
     printf( "restoreState\n" );
 }
 
-#if POPPLER_CHECK_VERSION(0, 71, 0)
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+void PDFOutDev::setDefaultCTM(const std::array<double, 6> &pMat)
+#elif POPPLER_CHECK_VERSION(0, 71, 0)
 void PDFOutDev::setDefaultCTM(const double *pMat)
 #else
 void PDFOutDev::setDefaultCTM(double *pMat)
 #endif
 {
+#if !POPPLER_CHECK_VERSION(26, 2, 0)
     assert(pMat);
+#endif
 
     OutputDev::setDefaultCTM(pMat);
 
@@ -737,8 +741,12 @@ void PDFOutDev::updateCTM(GfxState* state,
 {
     assert(state);
 
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+    const std::array<double, 6> pMat = state->getCTM();
+#else
     const double* const pMat = state->getCTM();
     assert(pMat);
+#endif
 
     printf( "updateCtm %f %f %f %f %f %f\n",
             normalize(pMat[0]),
@@ -1044,7 +1052,11 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 
     double csdx = 0.0;
     double csdy = 0.0;
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+    if (!state->getFont() || GfxFont::WritingMode::Horizontal == state->getFont()->getWMode())
+#else
     if (!state->getFont() || !state->getFont()->getWMode())
+#endif
     {
         csdx = state->getCharSpace();
         if (*u == ' ')
@@ -1067,7 +1079,11 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     const double aPositionX(x-originX);
     const double aPositionY(y-originY);
 
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+    const std::array<double, 6> pTextMat=state->getTextMat();
+#else
     const double* pTextMat=state->getTextMat();
+#endif
     printf( "drawChar %f %f %f %f %f %f %f %f %f ",
             normalize(aPositionX),
             normalize(aPositionY),
@@ -1348,7 +1364,11 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
 
     const int nDPI = 72; // GfxState seems to have 72.0 as magic for some reason
     auto pSplashGfxState = new GfxState(nDPI, nDPI, &aBox, 0, false);
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+    auto pSplashOut = new SplashOutputDev(splashModeRGB8, 1, nullptr);
+#else
     auto pSplashOut = new SplashOutputDev(splashModeRGB8, 1, false, nullptr);
+#endif
     pSplashOut->setEnableFreeType(false);
     pSplashOut->startDoc(m_pDoc);
     pSplashOut->startPage(0 /* pageNum */, pSplashGfxState, nullptr /* xref */);
