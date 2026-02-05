@@ -39,6 +39,7 @@ class SwFieldPortion : public SwExpandPortion
 protected:
     OUString  m_aExpand;          // The expanded field
     std::unique_ptr<SwFont> m_pFont;  // For multi-line fields
+    std::unique_ptr<SwFont> m_pRedlineRenderModeFont;
     TextFrameIndex m_nNextOffset;  // Offset of the follow in the original string
     TextFrameIndex m_nNextScriptChg;
     TextFrameIndex m_nFieldLen; //< Length of field text, 1 for normal fields, any number for input fields
@@ -61,7 +62,7 @@ protected:
 
 public:
     SwFieldPortion( const SwFieldPortion& rField );
-    SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFnt = nullptr, TextFrameIndex nLen = TextFrameIndex(1));
+    SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFnt = nullptr, std::unique_ptr<SwFont> pRedlineRenderModeFont = nullptr, TextFrameIndex nLen = TextFrameIndex(1));
     virtual ~SwFieldPortion() override;
 
     void TakeNextOffset( const SwFieldPortion* pField );
@@ -141,6 +142,7 @@ protected:
 public:
     SwNumberPortion( const OUString &rExpand,
                      std::unique_ptr<SwFont> pFnt,
+                     std::unique_ptr<SwFont> pRedlineRenderModeFont,
                      const bool bLeft,
                      const bool bCenter, const SwTwips nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );

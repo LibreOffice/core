@@ -79,8 +79,8 @@ void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
     m_bFollow = true;
 }
 
-SwFieldPortion::SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFont, TextFrameIndex const nFieldLen)
-    : m_aExpand(std::move(aExpand)), m_pFont(std::move(pFont)), m_nNextOffset(0)
+SwFieldPortion::SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFont, std::unique_ptr<SwFont> pRedlineRenderModeFont, TextFrameIndex const nFieldLen)
+    : m_aExpand(std::move(aExpand)), m_pFont(std::move(pFont)), m_pRedlineRenderModeFont(std::move(pRedlineRenderModeFont)), m_nNextOffset(0)
     , m_nNextScriptChg(COMPLETE_STRING), m_nFieldLen(nFieldLen), m_nViewWidth(0)
     , m_bFollow( false ), m_bLeft( false), m_bHide( false)
     , m_bCenter (false), m_bHasFollow( false )
@@ -110,6 +110,8 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
 {
     if ( rField.HasFont() )
         m_pFont.reset( new SwFont( *rField.GetFont() ) );
+    if (rField.m_pRedlineRenderModeFont)
+        m_pRedlineRenderModeFont.reset(new SwFont(*rField.m_pRedlineRenderModeFont));
 
     SetWhichPor( PortionType::Field );
 }
@@ -520,6 +522,12 @@ void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
     {
         m_pFont->dumpAsXml(pWriter);
     }
+    if (m_pRedlineRenderModeFont)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("redline-render-mode-font"));
+        m_pRedlineRenderModeFont->dumpAsXml(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
+    }
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -557,10 +565,11 @@ bool SwHiddenPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) 
 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   std::unique_ptr<SwFont> pFont,
+                                  std::unique_ptr<SwFont> pRedlineRenderModeFont,
                                   const bool bLft,
                                   const bool bCntr, const SwTwips nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-    : SwFieldPortion(rExpand, std::move(pFont), TextFrameIndex(0))
+    : SwFieldPortion(rExpand, std::move(pFont), std::move(pRedlineRenderModeFont), TextFrameIndex(0))
     , m_nFixWidth(0)
     , m_nMinDist(nMinDst)
     , mbLabelAlignmentPosAndSpaceModeActive(bLabelAlignmentPosAndSpaceModeActive)
@@ -581,8 +590,11 @@ SwFieldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
     std::unique_ptr<SwFont> pNewFnt;
     if( m_pFont )
         pNewFnt.reset(new SwFont( *m_pFont ));
+    std::unique_ptr<SwFont> pNewRedlineRenderModeFont;
+    if (m_pRedlineRenderModeFont)
+        pNewRedlineRenderModeFont.reset(new SwFont(*m_pRedlineRenderModeFont));
 
-    return new SwNumberPortion( rExpand, std::move(pNewFnt), IsLeft(), IsCenter(),
+    return new SwNumberPortion( rExpand, std::move(pNewFnt), std::move(pNewRedlineRenderModeFont), IsLeft(), IsCenter(),
                                 m_nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
 }
 
@@ -741,7 +753,17 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                         STRIKEOUT_NONE != m_pFont->GetStrikeout() ) &&
                         !m_pFont->IsWordLineMode();
 
-    SwFontSave aSave( rInf, m_pFont.get() );
+    const SwViewShell* pViewShell = rInf.GetVsh();
+    const SwViewOption* pViewOptions = pViewShell ? pViewShell->GetViewOptions() : nullptr;
+    SwRedlineRenderMode eRedlineRenderMode = pViewOptions ? pViewOptions->GetRedlineRenderMode() : SwRedlineRenderMode::Standard;
+    SwFont* pFont = m_pFont.get();
+    if (eRedlineRenderMode != SwRedlineRenderMode::Standard)
+    {
+        // Non-standard redline render mode: avoid using the font which is decorated with
+        // underline/strike-through.
+        pFont = m_pRedlineRenderModeFont.get();
+    }
+    SwFontSave aSave(rInf, pFont);
 
     if( m_nFixWidth == Width() && ! HasFollow() )
         SwExpandPortion::Paint( rInf );
@@ -809,7 +831,7 @@ SwBulletPortion::SwBulletPortion( const sal_UCS4 cBullet,
                                  const SwTwips nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
     : SwNumberPortion( OUString(&cBullet, 1) + rBulletFollowedBy,
-                       std::move(pFont), bLft, bCntr, nMinDst,
+                       std::move(pFont), nullptr, bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {
     SetWhichPor( PortionType::Bullet );
@@ -823,7 +845,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         const SwFormatVertOrient* pGrfOrient, const Size& rGrfSize,
         const bool bLft, const bool bCntr, const SwTwips nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
-    SwNumberPortion( rGraphicFollowedBy, nullptr, bLft, bCntr, nMinDst,
+    SwNumberPortion( rGraphicFollowedBy, nullptr, nullptr, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
     m_pBrush( new SvxBrushItem(RES_BACKGROUND) ), m_nId( 0 )
 {

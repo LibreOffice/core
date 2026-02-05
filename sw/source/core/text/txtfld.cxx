@@ -692,13 +692,21 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                     checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
 
+                    auto pNumRedlineRenderModeFont = std::make_unique<SwFont>(*pNumFnt);
+
                     if ( !lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt ) && bHasHiddenNum )
+                    {
                         pNumFnt->SetColor(SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
+                        pNumRedlineRenderModeFont->SetColor(
+                            SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
+                    }
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
+                    pNumRedlineRenderModeFont->SetVertical(
+                        pNumRedlineRenderModeFont->GetOrientation(), m_pFrame->IsVertical());
 
-                    pRet = new SwNumberPortion( aTextNow, std::move(pNumFnt),
+                    pRet = new SwNumberPortion( aTextNow, std::move(pNumFnt), std::move(pNumRedlineRenderModeFont),
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
                 }
