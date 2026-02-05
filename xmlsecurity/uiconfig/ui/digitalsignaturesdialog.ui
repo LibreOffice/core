@@ -88,6 +88,11 @@
                 <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="digitalsignaturesdialog|dochint">The following have signed the document content: </property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="dochint-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -296,10 +301,15 @@
                 <property name="hexpand">True</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="signed">
+                  <object class="GtkLabel" id="digsignsigned">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="digsignsigned-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -311,6 +321,11 @@
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="issued-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -322,6 +337,11 @@
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="date-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -332,6 +352,11 @@
                   <object class="GtkLabel" id="description">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="description-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -342,6 +367,11 @@
                   <object class="GtkLabel" id="type">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -361,6 +391,11 @@
                 <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="digitalsignaturesdialog|macrohint">The following have signed the document macro:</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="macrohint-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -384,6 +419,11 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="digitalsignaturesdialog|validft">The signatures in this document are valid</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="validft-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -408,6 +448,11 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="digitalsignaturesdialog|invalidft">The signatures in this document are invalid</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="invalidft-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -421,6 +466,11 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="digitalsignaturesdialog|oldsignatureft">At least one signature has problems: the document is only partially signed.</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="oldsignatureft-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -434,6 +484,11 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="digitalsignaturesdialog|notvalidatedft">At least one signature has problems: the certificate could not be validated.</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="notvalidatedft-atkobject">
+                          <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>

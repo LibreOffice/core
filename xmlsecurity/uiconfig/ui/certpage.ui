@@ -116,7 +116,7 @@
         <property name="vexpand">True</property>
         <property name="row-spacing">6</property>
         <child>
-          <object class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="certlabel2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="certpage|label2">Certificate status</property>
@@ -168,6 +168,11 @@
         <property name="can-focus">False</property>
         <property name="no-show-all">True</property>
         <property name="label" translatable="yes" context="certpage|certok">The certificate is OK.</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="certok-atkobject">
+              <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -180,6 +185,11 @@
         <property name="can-focus">False</property>
         <property name="no-show-all">True</property>
         <property name="label" translatable="yes" context="certpage|certnotok">The certificate could not be validated.</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="certnotok-atkobject">
+              <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

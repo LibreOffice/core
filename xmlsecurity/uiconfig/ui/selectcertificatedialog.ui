@@ -102,6 +102,11 @@
                 <property name="width-chars">56</property>
                 <property name="max-width-chars">56</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="sign-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -117,6 +122,11 @@
                 <property name="width-chars">56</property>
                 <property name="max-width-chars">56</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="encrypt-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -131,6 +141,11 @@
                 <property name="width-chars">56</property>
                 <property name="max-width-chars">56</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="loaded-certs-atkobject">
+                      <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -256,6 +271,7 @@
                 <property name="primary-icon-stock">gtk-find</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="searchbox-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="selectcertificatedialog|searchbox-atkobject">Search</property>
                     <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|searchbox">Search for certificate by issuer name or email.</property>
                   </object>
                 </child>
@@ -276,6 +292,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="selectcertificatedialog|label2">Description:</property>
+                    <property name="mnemonic_widget">description</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
