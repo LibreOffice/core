@@ -744,6 +744,10 @@ public:
     virtual void expand_row(const weld::TreeIter& rIter) override;
     virtual void collapse_row(const weld::TreeIter& rIter) override;
 
+    virtual void set_sort_order(bool bAscending) override;
+    virtual void set_sort_indicator(TriState eState, int col) override;
+    virtual void set_sort_column(int col) override;
+
     virtual void set_cursor(const weld::TreeIter& rIter) override;
     void set_cursor_without_notify(const weld::TreeIter& rIter);
     virtual void set_cursor(int pos) override;

@@ -680,6 +680,12 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
 
                     return true;
                 }
+                else if (sAction == "columnclick")
+                {
+                    sal_Int32 nColumn = o3tl::toInt32(rData.at(u"data"_ustr));
+                    LOKTrigger::trigger_column_clicked(*pTreeView, nColumn);
+                    return true;
+                }
             }
         }
         else if (sControlType == "iconview")

@@ -1878,6 +1878,24 @@ void JSTreeView::collapse_row(const weld::TreeIter& rIter)
         sendUpdate();
 }
 
+void JSTreeView::set_sort_order(bool bAscending)
+{
+    SalInstanceTreeView::set_sort_order(bAscending);
+    sendUpdate();
+}
+
+void JSTreeView::set_sort_indicator(TriState eState, int col)
+{
+    SalInstanceTreeView::set_sort_indicator(eState, col);
+    sendUpdate();
+}
+
+void JSTreeView::set_sort_column(int col)
+{
+    SalInstanceTreeView::set_sort_column(col);
+    sendUpdate();
+}
+
 void JSTreeView::render_entry(int pos, int dpix, int dpiy)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);

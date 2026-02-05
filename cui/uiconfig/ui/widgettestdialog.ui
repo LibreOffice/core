@@ -624,7 +624,6 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn0">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="sort-indicator">True</property>
                             <property name="clickable">True</property>
                             <property name="title" translatable="no">.</property>
                             <child>
@@ -639,7 +638,6 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="sort-indicator">True</property>
                             <property name="clickable">True</property>
                             <property name="title" translatable="no">Column 1</property>
                             <child>
@@ -654,7 +652,6 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="sort-indicator">True</property>
                             <property name="clickable">True</property>
                             <property name="title" translatable="no">Column 2</property>
                             <child>

@@ -20,9 +20,11 @@ private:
     std::unique_ptr<weld::Button> m_xCancelButton;
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeView> m_xTreeView2;
+    bool bIsTreeSorted = false;
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(HeaderBarClick, int, void);
 
     void FillTreeView();
 
