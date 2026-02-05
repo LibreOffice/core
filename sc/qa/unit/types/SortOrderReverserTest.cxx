@@ -23,34 +23,50 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testUnsort)
     // Unchanged order - output rows should be the same as input
     {
         sc::SortOrderReverser aReverser;
-        aReverser.addOrderIndices({ 5, 8, { 1, 2, 3, 4 }, {} });
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 1, 2, 3, 4 }, {} });
 
-        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(5));
-        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(6));
-        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(7));
-        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(8));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(5, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(7, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(8, 0));
     }
 
     // Reversed order - output rows should be in reverse order than input
     {
         sc::SortOrderReverser aReverser;
-        aReverser.addOrderIndices({ 5, 8, { 4, 3, 2, 1 }, {} });
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 4, 3, 2, 1 }, {} });
 
-        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(5));
-        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(6));
-        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(7));
-        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(8));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(5, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(7, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(8, 0));
+
+        // Column outside sort area - no change
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(5, 1));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(8, 1));
+
+        // Row outside sort area - no change
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), aReverser.unsort(4, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(9), aReverser.unsort(9, 0));
     }
 
     // Some random order - output rows should follow the order
     {
         sc::SortOrderReverser aReverser;
-        aReverser.addOrderIndices({ 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
 
-        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(5));
-        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(6));
-        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(7));
-        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(8));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(5, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(7, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(8, 0));
+
+        // Column outside sort area - no change
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(5, 1));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(8, 1));
+
+        // Row outside sort area - no change
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), aReverser.unsort(4, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(9), aReverser.unsort(9, 0));
     }
 }
 
@@ -59,16 +75,16 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testCombiningSortOrder)
     sc::SortOrderReverser aReverser;
 
     // first sorting order
-    aReverser.addOrderIndices({ 5, 8, { 3, 1, 4, 2 }, {} });
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
 
     // second sorting order - only reverses the order
-    aReverser.addOrderIndices({ 5, 8, { 4, 3, 2, 1 }, {} });
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 4, 3, 2, 1 }, {} });
 
     // check
-    CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(5));
-    CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(6));
-    CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(7));
-    CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(8));
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.unsort(5, 0));
+    CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.unsort(6, 0));
+    CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.unsort(7, 0));
+    CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.unsort(8, 0));
 
     // directly compare the order
     std::vector<SCCOLROW> aExpectedOrder{ 2, 4, 1, 3 };
@@ -80,22 +96,30 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testResort)
 {
     {
         sc::SortOrderReverser aReverser;
-        aReverser.addOrderIndices({ 5, 8, { 4, 3, 2, 1 }, {} });
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 4, 3, 2, 1 }, {} });
 
-        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(5));
-        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.resort(6));
-        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.resort(7));
-        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(8));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(5, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.resort(6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.resort(7, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(8, 0));
     }
 
     {
         sc::SortOrderReverser aReverser;
-        aReverser.addOrderIndices({ 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
 
-        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.resort(5));
-        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(6));
-        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(7));
-        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.resort(8));
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.resort(5, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(7, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.resort(8, 0));
+
+        // Column outside sort area - no change
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(5, 1));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(8, 1));
+
+        // Row outside sort area - no change
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), aReverser.resort(4, 0));
+        CPPUNIT_ASSERT_EQUAL(SCROW(9), aReverser.resort(9, 0));
     }
 }
 
