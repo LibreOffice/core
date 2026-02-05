@@ -20,6 +20,7 @@ WidgetTestDialog::WidgetTestDialog(weld::Window* pParent)
 
     m_xOKButton->connect_clicked(LINK(this, WidgetTestDialog, OkHdl));
     m_xCancelButton->connect_clicked(LINK(this, WidgetTestDialog, CancelHdl));
+    m_xTreeView2->connect_column_clicked(LINK(this, WidgetTestDialog, HeaderBarClick));
 
     FillTreeView();
 }
@@ -31,6 +32,37 @@ IMPL_LINK_NOARG(WidgetTestDialog, OkHdl, weld::Button&, void) { m_xDialog->respo
 IMPL_LINK_NOARG(WidgetTestDialog, CancelHdl, weld::Button&, void)
 {
     m_xDialog->response(RET_CANCEL);
+}
+
+IMPL_LINK(WidgetTestDialog, HeaderBarClick, int, nColumn, void)
+{
+    if (!bIsTreeSorted)
+    {
+        m_xTreeView2->make_sorted();
+        bIsTreeSorted = true;
+    }
+
+    bool bSortAtoZ = m_xTreeView2->get_sort_order();
+
+    //set new arrow positions in headerbar
+    if (nColumn == m_xTreeView2->get_sort_column())
+    {
+        bSortAtoZ = !bSortAtoZ;
+        m_xTreeView2->set_sort_order(bSortAtoZ);
+    }
+    else
+    {
+        int nOldSortColumn = m_xTreeView2->get_sort_column();
+        if (nOldSortColumn != -1)
+            m_xTreeView2->set_sort_indicator(TRISTATE_INDET, nOldSortColumn);
+        m_xTreeView2->set_sort_column(nColumn);
+    }
+
+    if (nColumn != -1)
+    {
+        //sort lists
+        m_xTreeView2->set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
 }
 
 void WidgetTestDialog::FillTreeView()
@@ -58,10 +90,10 @@ void WidgetTestDialog::FillTreeView()
 
         int nRow = m_xTreeView2->n_children();
         m_xTreeView2->append();
-        m_xTreeView2->set_image(nRow, (nCount % 2 == 0) ? aImage1 : aImage2);
-        m_xTreeView2->set_text(nRow, u"First Column"_ustr, 0);
+        m_xTreeView2->set_image(nRow, (nCount % 2 == 0) ? aImage1 : aImage2, 0);
+        m_xTreeView2->set_text(nRow, u"First Column"_ustr, 1);
         m_xTreeView2->set_text(
-            nRow, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 1);
+            nRow, OUString::Concat("Row ") + OUString::Concat(OUString::number(nCount)), 2);
         m_xTreeView2->set_id(nRow, OUString::number(nCount));
     }
 }
