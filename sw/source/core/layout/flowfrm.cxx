@@ -1995,10 +1995,23 @@ bool SwFlowFrame::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnK
 {
     if (m_rThis.IsHiddenNow())
         return false;
-    const SwFrame* pNxt = m_rThis.GetIndNext();
+    auto isIgnoredIndNext = [](const SwFrame* pNxt)
+    {
+        if (!pNxt)
+            return true;
+        // We ignore non-null next, when it's empty master, than doesn't host a split fly:
+        if (pNxt->IsTextFrame())
+        {
+            auto pTextFrame = static_cast<const SwTextFrame*>(pNxt);
+            if (pTextFrame->IsEmptyMaster() && !pTextFrame->HasNonLastSplitFlyDrawObj())
+                return true;
+        }
+        return false;
+    };
 
-    if ( bKeep && //!bMovedBwd &&
-         ( !pNxt || ( pNxt->IsTextFrame() && static_cast<const SwTextFrame*>(pNxt)->IsEmptyMaster() ) ) &&
+    if ( const SwFrame* pNxt;
+         bKeep && //!bMovedBwd &&
+         isIgnoredIndNext(m_rThis.GetIndNext()) &&
          ( nullptr != (pNxt = m_rThis.FindNext()) ) && IsKeepFwdMoveAllowed(bIgnoreMyOwnKeepValue) )
     {
         if( pNxt->IsSctFrame() )
