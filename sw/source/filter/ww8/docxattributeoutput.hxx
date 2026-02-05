@@ -183,7 +183,7 @@ public:
     OUString m_aTag;
     sal_Int32 m_nTabIndex;
     OUString m_aLock;
-    sal_Int32 m_nSdtPrToken;
+    sal_Int32 m_nSdtPrToken; // 0 means either not set, or richText
 
     void DeleteAndResetTheLists();
 
