@@ -96,6 +96,7 @@
                 <property name="label" translatable="yes" context="fontworkgallerydialog|label1">Select a Fontwork style:</property>
                 <property name="use-underline">True</property>
                 <property name="xalign">0</property>
+                <property name="mnemonic-widget">ctlFavoriteswin</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>

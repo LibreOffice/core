@@ -98,6 +98,7 @@
             <property name="vexpand">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="valuedetails-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="certdetails|valuedetails-atkobject">Value Details</property>
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|valuedetails">Use the value list box to view values and copy them to the clipboard.</property>
               </object>
             </child>
