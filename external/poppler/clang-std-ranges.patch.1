@@ -214,9 +214,9 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
      parse(tree, seen);
      if (!entries.empty()) {
 +#ifndef __clang__
-         std::ranges::sort(entries, [](const auto &first, const auto &second) { return first->name.cmp(&second->name) < 0; });
+         std::ranges::sort(entries, [](const auto &first, const auto &second) { return first->name.compare(second->name.toStr()) < 0; });
 +#else
-+        std::sort(entries.begin(), entries.end(), [](const auto &first, const auto &second) { return first->name.cmp(&second->name) < 0; });
++        std::sort(entries.begin(), entries.end(), [](const auto &first, const auto &second) { return first->name.compare(second->name.toStr()) < 0; });
 +#endif
      }
  }
@@ -228,10 +228,10 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 +#ifndef __clang__
      auto entry = std::ranges::lower_bound(entries, name, EntryGooStringComparer {});
 +#else
-+    auto entry = std::lower_bound(entries.begin(), entries.end(), name, [](const auto &element, const GooString *n) { return element->name.cmp(n) < 0; });
++    auto entry = std::lower_bound(entries.begin(), entries.end(), name, [](const auto &element, const GooString *n) { return element->name.compare(*n) < 0; });
 +#endif
  
-     if (entry != entries.end() && (*entry)->name.cmp(name) == 0) {
+     if (entry != entries.end() && (*entry)->name.compare(name->toStr()) == 0) {
          return (*entry)->value.fetch(xref);
 --- poppler/poppler/GfxFont.cc.orig2	2025-01-09 17:26:15.227421640 +0100
 +++ poppler/poppler/GfxFont.cc	2025-01-09 17:27:06.930929833 +0100
@@ -328,7 +328,7 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 @@ -596,7 +596,11 @@
                  if (fw->getType() == formSignature) {
                      assert(fw->getField()->getType() == formSignature);
-                     FormFieldSignature *ffs = static_cast<FormFieldSignature *>(fw->getField());
+                     auto *ffs = static_cast<FormFieldSignature *>(fw->getField());
 +#ifndef __clang__
                      if (std::ranges::find(res, ffs) == res.end()) {
 +#else
@@ -394,9 +394,9 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
  
      // Try to find the font in the cache
 +#ifndef __clang__
-     auto fontIt = std::ranges::find_if(fontCache, [&](const SplashFont *font) { return font && font->matches(fontFile, mat, textMat); });
+     auto fontIt = std::ranges::find_if(fontCache, [&](const SplashFont *font) { return font && font->matches(fontFile, mat, textMat); }); // NOLINT(readability-qualified-auto) https://github.com/llvm/llvm-project/issues/175731
 +#else
-+    auto fontIt = std::find_if(fontCache.begin(), fontCache.end(), [&](const SplashFont *font) { return font && font->matches(fontFile, mat, textMat); });
++    auto fontIt = std::find_if(fontCache.begin(), fontCache.end(), [&](const SplashFont *font) { return font && font->matches(fontFile, mat, textMat); }); // NOLINT(readability-qualified-auto) https://github.com/llvm/llvm-project/issues/175731
 +#endif
  
      // The requested font has been found in the cache
@@ -431,7 +431,7 @@ diff -ur poppler.org/poppler/TextOutputDev.cc poppler/poppler/TextOutputDev.cc
      } else {
          for (flow = text->flows; flow; flow = flow->next) {
 @@ -4402,9 +4406,17 @@
-             assignColumns(&frags[0], frags.size(), true);
+             assignColumns(frags.data(), frags.size(), oneRot);
          }
          if (oneRot) {
 +#ifndef __clang__
