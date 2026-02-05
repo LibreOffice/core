@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,i18nutil,\
 
 $(eval $(call gb_Module_add_check_targets,i18nutil,\
 	CppunitTest_i18nutil \
+	CppunitTest_i18nutil_unicodeescape \
 ))
 
 # vim: set noet sw=4:

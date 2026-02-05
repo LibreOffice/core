@@ -52,6 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,i18nutil,\
 	i18nutil/source/utility/scriptclass \
 	i18nutil/source/utility/scripttypedetector \
 	i18nutil/source/utility/unicode \
+	i18nutil/source/utility/unicodeescape \
 	i18nutil/source/utility/widthfolding \
 ))
 
