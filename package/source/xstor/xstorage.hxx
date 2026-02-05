@@ -96,18 +96,10 @@ public:
 
 class OStorage;
 
-struct StorageHolder_Impl
-{
-    OStorage* m_pPointer;
-    css::uno::WeakReference< css::embed::XStorage > m_xWeakRef;
-
-    explicit inline StorageHolder_Impl( OStorage* pStorage );
-};
-
 class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
-    typedef std::vector<StorageHolder_Impl> StorageHoldersType;
+    typedef std::vector<unotools::WeakReference< OStorage >> StorageHoldersType;
 
     rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
 
@@ -534,12 +526,6 @@ public:
     // XHierarchicalStorageAccess2
     virtual css::uno::Reference< css::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 };
-
-StorageHolder_Impl::StorageHolder_Impl( OStorage* pStorage )
-: m_pPointer( pStorage )
-, m_xWeakRef( css::uno::Reference< css::embed::XStorage >( pStorage ) )
-{
-}
 
 #endif
 

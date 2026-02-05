@@ -262,10 +262,10 @@ OStorage_Impl::~OStorage_Impl()
         {
             for ( auto& rStorage : m_aReadOnlyWrapVector )
             {
-                uno::Reference< embed::XStorage > xTmp = rStorage.m_xWeakRef;
+                rtl::Reference< OStorage > xTmp = rStorage;
                 if ( xTmp.is() )
                     try {
-                        rStorage.m_pPointer->InternalDispose( false );
+                        xTmp->InternalDispose( false );
                     } catch( const uno::Exception& )
                     {
                         TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
@@ -342,11 +342,13 @@ void OStorage_Impl::RemoveReadOnlyWrap( const OStorage& aStorage )
     for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapVector.begin();
       pStorageIter != m_aReadOnlyWrapVector.end();)
     {
-        uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
-        if ( !xTmp.is() || pStorageIter->m_pPointer == &aStorage )
+        rtl::Reference< OStorage > xTmp = *pStorageIter;
+        if ( !xTmp )
+            pStorageIter = m_aReadOnlyWrapVector.erase(pStorageIter);
+        else if ( xTmp && xTmp.get() == &aStorage )
         {
             try {
-                pStorageIter->m_pPointer->InternalDispose( false );
+                xTmp->InternalDispose( false );
             } catch( const uno::Exception& )
             {
                 TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
