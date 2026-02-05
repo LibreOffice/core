@@ -172,11 +172,6 @@
                     <property name="label" translatable="yes" context="watermarkdialog|ColorLabel">Color</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">Color</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="ColorLabel-atkobject">
-                          <property name="AtkObject::accessible-role">static</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
