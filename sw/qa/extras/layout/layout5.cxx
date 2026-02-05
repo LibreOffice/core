@@ -2349,6 +2349,73 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf170477)
     calcLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf170620_float_table_after_keep_with_next_para)
+{
+    // Given a document with a keep-with-next paragraph, followed by floating table containing
+    // another floating table which is split across pages:
+    createSwDoc("tdf170620.docx");
+
+    // The keep-with-next paragraph and the floating table must start on page 1:
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Exactly two pages:
+    assertXPath(pXmlDoc, "//page", 2);
+
+    // "Keep-with-next paragraph" is on the first page:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]//SwLineLayout", "portion",
+                u"Keep-with-next paragraph");
+
+    // Exactly two objects anchored at each page:
+    assertXPath(pXmlDoc, "//page[1]/sorted_objs/fly", 2);
+    assertXPath(pXmlDoc, "//page[2]/sorted_objs/fly", 2);
+
+    // Get master/follow paragraph isd:
+    assertXPath(pXmlDoc, "//page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "//page[2]/body/txt", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]", "follow",
+                getXPath(pXmlDoc, "//page[2]/body/txt", "id"));
+    assertXPath(pXmlDoc, "//page[2]/body/txt", "precede",
+                getXPath(pXmlDoc, "//page[1]/body/txt[3]", "id"));
+
+    // Page 1's paragraph 3 has two anchored flys:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly", 2);
+
+    // Get the ids of the two outer flys.
+    // Page 1:
+    OString f1 = getXPath(pXmlDoc, "//page[1]/sorted_objs/fly[1]", "ptr").toUtf8();
+    OString f2 = getXPath(pXmlDoc, "//page[1]/sorted_objs/fly[2]", "ptr").toUtf8();
+    CPPUNIT_ASSERT(f1 != f2);
+    OString filter1 = "@ptr='" + f1 + "' or @ptr='" + f2 + "'";
+    OUString id = getXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly[" + filter1 + "]", "id");
+    OString aP1OuterFlyTab = "//anchored/fly[@id='" + id.toUtf8() + "']/tab";
+
+    // Page 2:
+    f1 = getXPath(pXmlDoc, "//page[2]/sorted_objs/fly[1]", "ptr").toUtf8();
+    f2 = getXPath(pXmlDoc, "//page[2]/sorted_objs/fly[2]", "ptr").toUtf8();
+    CPPUNIT_ASSERT(f1 != f2);
+    OString filter2 = "@ptr='" + f1 + "' or @ptr='" + f2 + "'";
+    id = getXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly[" + filter2 + "]", "id");
+    OString aP2OuterFlyTab = "//anchored/fly[@id='" + id.toUtf8() + "']/tab";
+
+    // One row in top-level floating table on page 1, four rows on page 2:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row", 1);
+    assertXPath(pXmlDoc, aP2OuterFlyTab + "/row", 4);
+
+    // One cell in top-level floating table on page 1, four cells on page 2:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell", 1);
+    assertXPath(pXmlDoc, aP2OuterFlyTab + "/row/cell", 4);
+
+    // First page's top-level floating table's cell has two paragraphs:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt", 2);
+    // Check text in the first paragraph:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[1]//SwLineLayout", "portion",
+                u"Something");
+    // The second paragraph has two attached inner floating tables:
+    assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[2]/anchored/fly", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
