@@ -121,7 +121,20 @@ void ScDatabasePropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eSt
                 m_xChkBandedRows->set_active(pItem->HasStripedRows());
                 m_xChkBandedColumns->set_active(pItem->HasStripedCols());
                 m_xChkFilterButtons->set_active(pItem->HasShowFilters());
-                m_xCmbStyle->set_active_id(pItem->GetStyleID());
+
+                const OUString& rName = pItem->GetStyleID();
+                if (!rName.isEmpty())
+                {
+                    int nPos = m_xCmbStyle->find_id(rName);
+                    if (nPos == -1)
+                    {
+                        m_xCmbStyle->insert(0, rName);
+                        m_xCmbStyle->set_id(0, rName);
+                        nPos = 0;
+                    }
+
+                    m_xCmbStyle->set_active(nPos);
+                }
             }
             break;
     }
