@@ -12,6 +12,8 @@
 #include <docsh.hxx>
 #include <viewdata.hxx>
 #include <sal/log.hxx>
+#include <dbdata.hxx>
+#include <queryparam.hxx>
 
 namespace sc
 {
@@ -161,13 +163,36 @@ void SheetViewOperationsTester::sync()
 
     std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nTab);
 
-    if (!pManager->isEmpty())
+    if (pManager->isEmpty())
+        return;
+
+    for (auto const& pSheetView : pManager->getSheetViews())
     {
-        for (auto const& pSheetView : pManager->getSheetViews())
+        SCTAB nSheetViewTab = pSheetView->getTableNumber();
+
+        std::optional<ScQueryParam> oQueryParam;
+        std::optional<ScSortParam> oSortParam;
+        ScDBData* pNoNameData = rDocument.GetAnonymousDBData(nSheetViewTab);
+        if (pNoNameData && pNoNameData->HasAutoFilter())
         {
-            SCTAB nSheetViewTab = pSheetView->getTableNumber();
-            rDocument.OverwriteContent(nTab, nSheetViewTab);
+            if (pNoNameData->HasQueryParam())
+            {
+                oQueryParam.emplace();
+                pNoNameData->GetQueryParam(*oQueryParam);
+            }
+            if (pNoNameData->HasSortParam())
+            {
+                oSortParam.emplace();
+                pNoNameData->GetSortParam(*oSortParam);
+            }
         }
+
+        rDocument.OverwriteContent(nTab, nSheetViewTab);
+
+        if (oQueryParam)
+            rDocument.Query(nSheetViewTab, *oQueryParam, false, false);
+        if (oSortParam)
+            rDocument.Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
     }
 }
 

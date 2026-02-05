@@ -1046,11 +1046,21 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
 
     setupViews();
 
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"", u"", u"" }), getValues(pDocument, 0, 1, 4, 1));
+
     // Switch to Sheet View and Create
     {
         switchToSheetView();
         dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
     }
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 1));
 
     // Switch to Default View
     {
@@ -1064,9 +1074,11 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
 
     OUString aExpected = expectedValues({ u"4", u"", u"3", u"7" });
     CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewDefaultView, 0, 1, 4));
-    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewSheetView, 0, 1, 4));
     CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 1));
+
+    OUString aExpectedSorted = expectedValues({ u"7", u"4", u"3", u"" });
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(pDocument, 0, 1, 4, 1));
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteCellOperation)
@@ -1078,23 +1090,35 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteCellOperation)
 
     setupViews();
 
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"", u"", u"" }), getValues(pDocument, 0, 1, 4, 1));
+
     // Switch to Sheet View and Create
     {
         switchToSheetView();
 
         dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(pDocument, 0, 1, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(pDocument, 0, 1, 4, 1));
 
         dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
-                        comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3"_ustr) } }));
+                        comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A4"_ustr) } }));
 
         dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
     }
 
-    OUString aExpected = expectedValues({ u"4", u"", u"3", u"7" });
+    OUString aExpected = expectedValues({ u"", u"5", u"3", u"7" });
     CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewDefaultView, 0, 1, 4));
-    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewSheetView, 0, 1, 4));
     CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 1));
+
+    OUString aExpectedSorted = expectedValues({ u"7", u"5", u"3", u"" });
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(pDocument, 0, 1, 4, 1));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
