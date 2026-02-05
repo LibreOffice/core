@@ -260,8 +260,7 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             = GetItemFromPattern(mpLastHeaderCellPattern.get(), ATTR_BORDER);
         if (mpTablePattern)
         {
-            if (const SvxBoxItem* pBoxItem
-                = GetItemFromPattern(mpTotalRowPattern.get(), ATTR_BORDER))
+            if (const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER))
             {
                 const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                 const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
@@ -292,8 +291,7 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             = GetItemFromPattern(mpFirstHeaderCellPattern.get(), ATTR_BORDER);
         if (mpTablePattern)
         {
-            if (const SvxBoxItem* pBoxItem
-                = GetItemFromPattern(mpTotalRowPattern.get(), ATTR_BORDER))
+            if (const SvxBoxItem* pBoxItem = GetItemFromPattern(mpTablePattern.get(), ATTR_BORDER))
             {
                 const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                 const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
