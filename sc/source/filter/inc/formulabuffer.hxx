@@ -92,6 +92,8 @@ private:
 
     SheetItem getSheetItem( SCTAB nTab );
 
+    std::vector<ScRange> maDataTables;
+
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
     void                finalizeImport();
@@ -113,6 +115,8 @@ public:
 
     /// ensure sizes of vectors matches the number of sheets
     void SetSheetCount( SCTAB nSheets );
+
+    void addDataTable(const ScRange& rRange) { maDataTables.push_back(rRange); }
 };
 
 }
