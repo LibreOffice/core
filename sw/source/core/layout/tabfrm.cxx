@@ -4844,10 +4844,21 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
         {
             // #i26945# - if <pTmp> is follow, the
             // anchor character frame has to be <pTmp>.
-            if ( bIsFollow &&
-                 pAnchoredObj->FindAnchorCharFrame() != pTmp )
+            if (bIsFollow)
             {
-                continue;
+                if (pAnchoredObj->FindAnchorCharFrame() != pTmp)
+                    continue;
+
+                if (SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame())
+                {
+                    if (pFly->IsSplitButNotYetMovedFollow())
+                    {
+                        // A follow split fly, that is yet to move forward: upper's height is not
+                        // correct yet - just return a huge value to signal "too large". This will
+                        // eventually force split / move to the next page.
+                        return SAL_MAX_INT32 / 2; // ~19 km
+                    }
+                }
             }
             // #i26945# - consider also drawing objects
             {
