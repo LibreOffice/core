@@ -40,13 +40,14 @@ bool DeleteContentOperation::runImplementation()
         return false;
     }
 
+    ScMarkData aMultiMark = convertMark(mrMark);
+
     ScDocument& rDoc = mrDocShell.GetDocument();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    if (!checkSheetViewProtection())
-        return false;
+    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, mrMark);
     if (!aTester.IsEditable())
@@ -56,7 +57,6 @@ bool DeleteContentOperation::runImplementation()
         return false;
     }
 
-    ScMarkData aMultiMark = mrMark;
     aMultiMark.SetMarking(false); // for MarkToMulti
 
     ScDocumentUniquePtr pUndoDoc;
@@ -113,6 +113,9 @@ bool DeleteContentOperation::runImplementation()
                                                aExtendedRange, std::move(pUndoDoc), mnFlags,
                                                pDataSpans, bMulti, bDrawUndo);
     }
+
+    if (sc::SheetViewOperationsTester::doesUnsync(meType))
+        aSheetViewTester.sync();
 
     if (!mrDocFunc.AdjustRowHeight(aExtendedRange, true, mbApi))
         mrDocShell.PostPaint(aExtendedRange, PaintPartFlags::Grid, nExtFlags);

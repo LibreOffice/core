@@ -11,6 +11,9 @@
 
 #include <SheetViewOperationsTester.hxx>
 
+class ScMarkData;
+class ScAddress;
+
 namespace sc
 {
 /** Operation is one atomic coarse change to the document model that can be run from UI or API
@@ -45,6 +48,12 @@ public:
 
     bool run() { return runImplementation(); }
     bool checkSheetViewProtection();
+
+    /** Convert address from a sheet view to the address in default view, take sorting into account. */
+    static ScAddress convertAddress(ScAddress const& rAddress);
+
+    /** Convert a mark from a sheet view to the mark in default view, take sorting into account. */
+    static ScMarkData convertMark(ScMarkData const& rMarkData);
 
     virtual bool runImplementation() = 0;
 };

@@ -1121,6 +1121,92 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteCellOperation)
     CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(pDocument, 0, 1, 4, 1));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteContentOperation)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"", u"", u"" }), getValues(pDocument, 0, 1, 4, 1));
+
+    // Switch to Sheet View and Create
+    {
+        switchToSheetView();
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Switch to Default View
+    {
+        switchToDefaultView();
+
+        dispatchCommand(
+            mxComponent, u".uno:GoToCell"_ustr,
+            comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3:A4"_ustr) } }));
+
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    }
+
+    OUString aExpected = expectedValues({ u"4", u"", u"", u"7" });
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 0));
+
+    OUString aExpectedSorted = expectedValues({ u"7", u"4", u"", u"" });
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(pDocument, 0, 1, 4, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteContentOperation)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"", u"", u"" }), getValues(pDocument, 0, 1, 4, 1));
+
+    // Switch to Sheet View and Create
+    {
+        switchToSheetView();
+
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(pDocument, 0, 1, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(pDocument, 0, 1, 4, 1));
+
+        dispatchCommand(
+            mxComponent, u".uno:GoToCell"_ustr,
+            comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3:A4"_ustr) } }));
+
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    }
+
+    OUString aExpected = expectedValues({ u"", u"", u"3", u"7" });
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpected, getValues(pDocument, 0, 1, 4, 0));
+
+    OUString aExpectedSorted = expectedValues({ u"7", u"3", u"", u"" });
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(pDocument, 0, 1, 4, 1));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
