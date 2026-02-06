@@ -6239,9 +6239,9 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
     {
         xProps->setPropertyValue(u"TextBoxContent"_ustr, uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
     }
-    catch (...)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter.dmapper", "Exception while trying to attach textboxes!");
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception while trying to attach textboxes!");
         return;
     }
 
@@ -6302,9 +6302,9 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
             m_vTextFramesForChaining.push_back(xShape);
         }
     }
-    catch (...)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter.dmapper", "Exception while trying to link textboxes!");
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception while trying to link textboxes!");
     }
 }
 
