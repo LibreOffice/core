@@ -99,6 +99,7 @@
 #include <unotextbodyhf.hxx>
 #include <unoport.hxx>
 #include <unofield.hxx>
+#include <unotextcursor.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -708,14 +709,14 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl(sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-static void insertFieldToDocument(uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
+static void insertFieldToDocument(uno::Reference<text::XText> const & rxText, rtl::Reference<SwXTextCursor> const & rxParagraphCursor,
                            OUString const & rsKey)
 {
     rtl::Reference<SwXTextField> xField = SwXTextField::CreateXTextField(nullptr, nullptr, SwServiceType::FieldTypeDocInfoCustom);
     xField->setPropertyValue(UNO_NAME_NAME, uno::Any(rsKey));
     uno::Reference<text::XTextContent> xTextContent(xField);
 
-    rxText->insertTextContent(rxParagraphCursor, xTextContent, false);
+    rxText->insertTextContent(static_cast<text::XSentenceCursor*>(rxParagraphCursor.get()), xTextContent, false);
 }
 
 static void removeAllClassificationFields(std::u16string_view rPolicy, uno::Reference<text::XText> const & rxText)
@@ -871,8 +872,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         aWatermarkItem.SetText(aHelper.GetDocumentWatermark());
         SetWatermark(aWatermarkItem);
 
-        uno::Reference<text::XParagraphCursor> xHeaderParagraphCursor(xHeaderText->createTextCursor(), uno::UNO_QUERY);
-        uno::Reference<text::XParagraphCursor> xFooterParagraphCursor(xFooterText->createTextCursor(), uno::UNO_QUERY);
+        rtl::Reference<SwXTextCursor> xHeaderParagraphCursor = dynamic_cast<SwXTextCursor*>(xHeaderText->createTextCursor().get());
+        rtl::Reference<SwXTextCursor> xFooterParagraphCursor = dynamic_cast<SwXTextCursor*>(xFooterText->createTextCursor().get());
 
         sal_Int32 nParagraph = -1;
 
@@ -929,17 +930,15 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                     xHeaderParagraphCursor->gotoStartOfParagraph(false);
                     xFooterParagraphCursor->gotoStartOfParagraph(false);
 
-                    uno::Reference<beans::XPropertySet> xHeaderPropertySet(xHeaderParagraphCursor, uno::UNO_QUERY_THROW);
-                    uno::Reference<beans::XPropertySet> xFooterPropertySet(xFooterParagraphCursor, uno::UNO_QUERY_THROW);
                     if (rResult.msName == "BOLD")
                     {
-                        xHeaderPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
-                        xFooterPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+                        xHeaderParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+                        xFooterParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
                     }
                     else
                     {
-                        xHeaderPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
-                        xFooterPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
+                        xHeaderParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
+                        xFooterParagraphCursor->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
                     }
                 }
                 break;

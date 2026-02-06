@@ -606,7 +606,7 @@ void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xPa
     }
 
     // If so, search for the next paragraph.
-    uno::Reference<text::XParagraphCursor> xParaCursor(xCursor, uno::UNO_QUERY);
+    rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(xCursor.get());
     if (!xParaCursor.is())
     {
         return;
@@ -618,13 +618,7 @@ void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xPa
         return;
     }
 
-    uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xParaCursor, uno::UNO_QUERY);
-    if (!xEnumerationAccess.is())
-    {
-        return;
-    }
-
-    uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+    uno::Reference<container::XEnumeration> xEnumeration = xParaCursor->createEnumeration();
     if (!xEnumeration.is())
     {
         return;
@@ -847,7 +841,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             xCursor->gotoEnd(false);
         }
         else
-            xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_SET_THROW);
+            xCursor.set(static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), uno::UNO_SET_THROW);
 
         // Keep the character properties of the last but one paragraph, even if
         // it's empty. This works for headers/footers, and maybe in other cases
@@ -1102,7 +1096,7 @@ void DomainMapper_Impl::PopSdt()
         // Go to the start of the end's paragraph. This helps in case
         // DomainMapper_Impl::AddDummyParaForTableInSection() would make our range multi-paragraph,
         // while the intention is to keep start/end inside the same paragraph for run SDTs.
-        uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+        rtl::Reference<SwXTextCursor> xParagraphCursor = dynamic_cast<SwXTextCursor*>(xCursor.get());
         if (xParagraphCursor.is()
             && m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
         {
@@ -1852,8 +1846,10 @@ static void lcl_AddRange(
     uno::Reference< text::XTextAppend > const& xTextAppend,
     TextAppendContext const & rAppendContext)
 {
-    uno::Reference<text::XParagraphCursor> xParaCursor(
-        xTextAppend->createTextCursorByRange( rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd()), uno::UNO_QUERY_THROW );
+    rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(
+        xTextAppend->createTextCursorByRange( rAppendContext.xCursor.is() ? static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()) : xTextAppend->getEnd()).get() );
+    if (!xParaCursor)
+        throw uno::RuntimeException();
     pToBeSavedProperties->SetEndingRange(xParaCursor->getStart());
     xParaCursor->gotoStartOfParagraph( false );
 
@@ -2506,13 +2502,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             bool bKeepLastParagraphProperties = false;
             if( bIsDropCap )
             {
-                uno::Reference<text::XParagraphCursor> xParaCursor(
-                    xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
+                    (xTextAppend->createTextCursorByRange(xTextAppend->getEnd()).get());
+                if (!xParaCursor)
+                    throw uno::RuntimeException();
                 //select paragraph
                 xParaCursor->gotoStartOfParagraph( true );
-                uno::Reference< beans::XPropertyState > xParaProperties( xParaCursor, uno::UNO_QUERY_THROW );
-                xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
-                xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
+                xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
+                xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
                 //handles (2) and part of (6)
                 pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
                 sal_Int32 nCount = xParaCursor->getString().getLength();
@@ -2549,8 +2546,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     {
                         //handles (7)
                         rAppendContext.pLastParagraphProperties->SetEndingRange(
-                            rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition
-                                                                : xTextAppend->getEnd());
+                            rAppendContext.xCursor.is() ? static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get())
+                                                        : xTextAppend->getEnd());
                         bKeepLastParagraphProperties = true;
                     }
                     else
@@ -2711,9 +2708,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     aProperties.push_back(aValue);
                 }
                 uno::Reference< text::XTextRange > xTextRange;
-                if (rAppendContext.xInsertPosition.is())
+                if (rAppendContext.xCursor.is())
                 {
-                    xTextRange = xTextAppend->finishParagraphInsert( comphelper::containerToSequence(aProperties), rAppendContext.xInsertPosition );
+                    xTextRange = xTextAppend->finishParagraphInsert( comphelper::containerToSequence(aProperties), static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()) );
                     rAppendContext.xCursor->gotoNextParagraph(false);
                     if (rAppendContext.pLastParagraphProperties)
                         rAppendContext.pLastParagraphProperties->SetEndingRange(xTextRange->getEnd());
@@ -2852,8 +2849,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             // tdf#164878 skip empty paragraphs, i.e. math formula and other objects
                             m_StreamStateStack.top().bParaChanged )
                     {
-                        uno::Reference<text::XParagraphCursor> xParaCursor(
-                            xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                        rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(
+                            xTextAppend->createTextCursorByRange(xTextAppend->getEnd()).get());
+                        if (!xParaCursor)
+                            throw uno::RuntimeException();
                         //select paragraph
                         xParaCursor->gotoStartOfParagraph( true );
 
@@ -2992,8 +2991,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     // Get the end of paragraph character inserted
                     uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
-                    if (rAppendContext.xInsertPosition.is())
-                        xCur->gotoRange( rAppendContext.xInsertPosition, false );
+                    if (rAppendContext.xCursor.is())
+                        xCur->gotoRange( static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()), false );
                     else
                         xCur->gotoEnd( false );
 
@@ -3012,8 +3011,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 break;
                         }
 
-                        if (rAppendContext.xInsertPosition.is())
-                            xCur->gotoRange(rAppendContext.xInsertPosition, false);
+                        if (rAppendContext.xCursor.is())
+                            xCur->gotoRange(static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()), false);
                         else
                             xCur->gotoEnd(false);
                     }
@@ -3037,8 +3036,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     uno::Reference<text::XTextCursor> xCur = xTextRange->getText( )->createTextCursor( );
                     xCur->gotoEnd(false);
                     xCur->goLeft(1, false);
-                    uno::Reference<text::XTextCursor> xCur2 =  xTextRange->getText()->createTextCursorByRange(xCur);
-                    uno::Reference<text::XParagraphCursor> xParaCursor(xCur2, uno::UNO_QUERY_THROW);
+                    rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
+                            (xTextRange->getText()->createTextCursorByRange(xCur).get());
+                    if (!xParaCursor)
+                        throw uno::RuntimeException();
                     xParaCursor->gotoStartOfParagraph(false);
                     if (0 < m_StreamStateStack.top().nTableDepth)
                     {
@@ -3060,7 +3061,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 pHidden->second >>= bIsHidden;
                             if (!bIsHidden)
                             {
-                                uno::Reference<text::XTextCursor> xCur3 =  xTextRange->getText()->createTextCursorByRange(xParaCursor);
+                                uno::Reference<text::XTextCursor> xCur3 = xTextRange->getText()->createTextCursorByRange(static_cast<text::XSentenceCursor*>(xParaCursor.get()));
                                 xCur3->goRight(1, true);
                                 if (xCur3->getString() == SAL_NEWLINE_STRING)
                                 {
@@ -3538,9 +3539,9 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         MergeAtContentImageRedlineWithNext(xTextAppend);
 
         uno::Reference< text::XTextRange > xTextRange;
-        if (m_aTextAppendStack.top().xInsertPosition.is())
+        if (m_aTextAppendStack.top().xCursor.is())
         {
-            xTextRange = xTextAppend->insertTextPortion(rString, aValues, m_aTextAppendStack.top().xInsertPosition);
+            xTextRange = xTextAppend->insertTextPortion(rString, aValues, static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()));
             m_aTextAppendStack.top().xCursor->gotoRange(xTextRange->getEnd(), true);
         }
         else
@@ -3647,8 +3648,8 @@ void DomainMapper_Impl::appendTextContent(
 
     try
     {
-        if (m_aTextAppendStack.top().xInsertPosition.is())
-            xTextAppendAndConvert->insertTextContentWithProperties( xContent, xPropertyValues, m_aTextAppendStack.top().xInsertPosition );
+        if (m_aTextAppendStack.top().xCursor.is())
+            xTextAppendAndConvert->insertTextContentWithProperties( xContent, xPropertyValues, static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()) );
         else
             xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
     }
@@ -3938,12 +3939,15 @@ rtl::Reference< SwXTextSection > DomainMapper_Impl::appendTextSectionAfter(
 
     try
     {
-        uno::Reference< text::XParagraphCursor > xCursor(
-            xTextAppend->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
+        rtl::Reference< SwXTextCursor > xCursor =
+            dynamic_cast<SwXTextCursor*>(
+                xTextAppend->createTextCursorByRange( xBefore ).get());
+        if (!xCursor)
+            return {};
         //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
         xCursor->gotoStartOfParagraph( false );
-        if (m_aTextAppendStack.top().xInsertPosition.is())
-            xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
+        if (m_aTextAppendStack.top().xCursor.is())
+            xCursor->gotoRange( static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), true );
         else
             xCursor->gotoEnd( true );
         // The paragraph after this new section is already inserted. The previous node may be a
@@ -3960,7 +3964,7 @@ rtl::Reference< SwXTextSection > DomainMapper_Impl::appendTextSectionAfter(
         copyAllProps(xEndPara, xNewPara);
 
         xSection = m_xTextDocument->createTextSection();
-        xSection->attach(xCursor);
+        xSection->attach(static_cast<text::XSentenceCursor*>(xCursor.get()));
 
         // Remove the extra paragraph (last inside the section)
         xEndPara->dispose();
@@ -5477,7 +5481,7 @@ void DomainMapper_Impl::HandlePTab(sal_Int32 nAlignment)
     }
 
     uno::Reference<css::text::XTextRange> xInsertPosition
-        = m_aTextAppendStack.top().xInsertPosition;
+        = static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get());
     if (!xInsertPosition.is())
     {
         xInsertPosition = xTextAppend->getEnd();
@@ -5493,7 +5497,7 @@ void DomainMapper_Impl::HandlePTab(sal_Int32 nAlignment)
     }
 
     // Assume that there is some content before the tab character.
-    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    rtl::Reference<SwXTextCursor> xParagraphCursor(dynamic_cast<SwXTextCursor*>(xCursor.get()));
     if (!xParagraphCursor.is())
     {
         return;
@@ -6376,8 +6380,8 @@ void DomainMapper_Impl::PushFieldContext()
         uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
         if (xTextAppend.is())
             xCrsr = xTextAppend->createTextCursorByRange(
-                        m_aTextAppendStack.top().xInsertPosition.is()
-                            ? m_aTextAppendStack.top().xInsertPosition
+                        m_aTextAppendStack.top().xCursor.is()
+                            ? static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get())
                             : xTextAppend->getEnd());
     }
 
@@ -7247,15 +7251,16 @@ OUString DomainMapper_Impl::extractTocTitle()
     // try-catch was added in the same way as inside appendTextSectionAfter()
     try
     {
-        uno::Reference<text::XParagraphCursor> const xCursor(
-            xTextAppend->createTextCursorByRange(m_StreamStateStack.top().xSdtEntryStart), uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXTextCursor> const xCursor =
+            dynamic_cast<SwXTextCursor*>(
+                xTextAppend->createTextCursorByRange(m_StreamStateStack.top().xSdtEntryStart).get());
         if (!xCursor.is())
             return OUString();
 
         //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
         xCursor->gotoStartOfParagraph( false );
-        if (m_aTextAppendStack.top().xInsertPosition.is())
-            xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
+        if (m_aTextAppendStack.top().xCursor.is())
+            xCursor->gotoRange( static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), true );
         else
             xCursor->gotoEnd( true );
 
@@ -7289,7 +7294,7 @@ DomainMapper_Impl::StartIndexSectionChecked(std::u16string_view sServiceName)
     const auto& xTextAppend = GetTopTextAppend();
     const auto xTextRange = xTextAppend->getEnd();
     const auto xRet = createSectionForRange(xTextRange, xTextRange, sServiceName, false);
-    if (!m_aTextAppendStack.top().xInsertPosition)
+    if (!m_aTextAppendStack.top().xCursor)
     {
         try
         {
@@ -7738,8 +7743,8 @@ rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
     rtl::Reference< SwXSection > xSection;
     try
     {
-        uno::Reference< text::XParagraphCursor > xCursor(
-            xTextAppend->createTextCursorByRange( xStart ), uno::UNO_QUERY );
+        rtl::Reference< SwXTextCursor > xCursor =
+            dynamic_cast<SwXTextCursor*>(xTextAppend->createTextCursorByRange( xStart ).get());
         if(!xCursor)
             return {};
         //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
@@ -7751,7 +7756,7 @@ rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
         xSection = m_xTextDocument->createSection(sObjectType);
         if (!xSection)
             return {};
-        xSection->attach( xCursor );
+        xSection->attach( static_cast<text::XSentenceCursor*>(xCursor.get()) );
     }
     catch(const uno::Exception&)
     {
@@ -7849,17 +7854,17 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
     uno::Reference<text::XTextAppend> const& xTextAppend(rTextAppendStack.top().xTextAppend);
     uno::Reference<text::XTextCursor> const xCursor =
         xTextAppend->createTextCursorByRange(xStartRange);
-    if (rTextAppendStack.top().xInsertPosition.is())
+    if (rTextAppendStack.top().xCursor.is())
     {
         uno::Reference<text::XTextRangeCompare> const xCompare(
                 rTextAppendStack.top().xTextAppend,
                 uno::UNO_QUERY);
-        if (xCompare->compareRegionStarts(xStartRange, rTextAppendStack.top().xInsertPosition) < 0)
+        if (xCompare->compareRegionStarts(xStartRange, static_cast<text::XSentenceCursor*>(rTextAppendStack.top().xCursor.get())) < 0)
         {
             SAL_WARN("writerfilter.dmapper", "invalid field mark positions");
             assert(false);
         }
-        xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, true);
+        xCursor->gotoRange(static_cast<text::XSentenceCursor*>(rTextAppendStack.top().xCursor.get()), true);
     }
     else
     {
@@ -7892,7 +7897,7 @@ static auto PopFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
     {
         return; // only a single CH_TXT_ATR_FORMELEMENT!
     }
-    xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, false);
+    xCursor->gotoRange(static_cast<text::XSentenceCursor*>(rTextAppendStack.top().xCursor.get()), false);
     xCursor->goRight(1, true);
     xCursor->setString(OUString()); // undo SplitNode from CloseFieldCommand()
     // note: paragraph properties will be overwritten
@@ -9151,8 +9156,8 @@ void DomainMapper_Impl::PopFieldContext()
                             // should not be part of index
                             auto xCursor
                                 = xTextAppend->createTextCursorByRange(
-                                    m_aTextAppendStack.top().xInsertPosition.is()
-                                    ? m_aTextAppendStack.top().xInsertPosition
+                                    m_aTextAppendStack.top().xCursor.is()
+                                    ? static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get())
                                     : xTextAppend->getEnd());
                             xCursor->goLeft(1, true);
                             // delete
@@ -9165,7 +9170,7 @@ void DomainMapper_Impl::PopFieldContext()
                             else
                             {
                                 xTextAppend->finishParagraphInsert(css::beans::PropertyValues(),
-                                    m_aTextAppendStack.top().xInsertPosition);
+                                    static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()));
                             }
                         }
                         m_bStartedTOC = false;
@@ -9236,9 +9241,9 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                         else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
                         {
-                            if (m_aTextAppendStack.top().xInsertPosition.is())
+                            if (m_aTextAppendStack.top().xCursor.is())
                             {
-                                xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, true);
+                                xCrsr->gotoRange(static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), true);
                             }
                             else
                             {
@@ -9428,8 +9433,8 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
             {
                 uno::Reference<text::XTextCursor> const xCursor =
                     xTextAppend->createTextCursorByRange(
-                        m_aTextAppendStack.top().xInsertPosition.is()
-                            ? m_aTextAppendStack.top().xInsertPosition
+                        m_aTextAppendStack.top().xCursor.is()
+                            ? static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get())
                             : xTextAppend->getEnd() );
 
                 if (!xCursor)
@@ -9594,7 +9599,7 @@ void DomainMapper_Impl::AddAnnotationPosition(
         if (m_bIsNewDoc)
             xCursor = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
         else
-            xCursor = m_aTextAppendStack.top().xCursor;
+            xCursor = static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get());
         if (xCursor.is())
             xCurrent = xCursor->getStart();
     }

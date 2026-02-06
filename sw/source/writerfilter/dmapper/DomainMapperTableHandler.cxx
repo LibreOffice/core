@@ -1271,8 +1271,10 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 {
                     if (!oParagraphText) // do it only once
                     {
-                        uno::Reference<text::XParagraphCursor> xParagraph(
-                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph), uno::UNO_QUERY_THROW );
+                        rtl::Reference<SwXTextCursor> xParagraph = dynamic_cast<SwXTextCursor*>(
+                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph).get() );
+                        if (!xParagraph)
+                            throw uno::RuntimeException();
                         // select paragraph
                         xParagraph->gotoStartOfParagraph( true );
                         oParagraphText = xParagraph->getString();
@@ -1587,7 +1589,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                         std::vector<TableParagraph>::iterator aIt = pTableParagraphs->begin();
                         while ( aIt != pTableParagraphs->end() ) try
                         {
-                            if (!bApply && xTextRangeCompare->compareRegionStarts(rStartPara, aIt->m_rStartParagraph) == 0)
+                            if (!bApply && xTextRangeCompare->compareRegionStarts(rStartPara, static_cast<text::XSentenceCursor*>(aIt->m_rStartParagraph.get())) == 0)
                                 bApply = true;
                             if (bApply)
                             {
