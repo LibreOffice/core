@@ -112,6 +112,7 @@
 #include <memory>
 #include <operation/DeleteContentOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
+#include <operation/SetNormalStringOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -683,78 +684,13 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags
     return true;
 }
 
-bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi )
+bool ScDocFunc::SetNormalString(bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    bool bUndo(rDoc.IsUndoEnabled());
-
-    if (!CheckSheetViewProtection(sc::OperationType::SetNormalString))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row());
-    if (!aTester.IsEditable())
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
-    }
-
-    bool bEditDeleted = (rDoc.GetCellType(rPos) == CELLTYPE_EDIT);
-    ScUndoEnterData::ValuesType aOldValues;
-
-    if (bUndo)
-    {
-        ScUndoEnterData::Value aOldValue;
-
-        aOldValue.mnTab = rPos.Tab();
-        aOldValue.maCell.assign(rDoc, rPos);
-
-        const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );
-        if ( const SfxUInt32Item* pItem = pPattern->GetItemSet().GetItemIfSet(
-                                ATTR_VALUE_FORMAT,false) )
-        {
-            aOldValue.mbHasFormat = true;
-            aOldValue.mnFormat = pItem->GetValue();
-        }
-        else
-            aOldValue.mbHasFormat = false;
-
-        aOldValues.push_back(aOldValue);
-    }
-
-    tools::Long nBefore(rDocShell.GetTwipWidthHint(rPos));
-    o_rbNumFmtSet = rDoc.SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
-    tools::Long nAfter(rDocShell.GetTwipWidthHint(rPos));
-
-    if (bUndo)
-    {
-        //  because of ChangeTracking, UndoAction can be created only after SetString was called
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoEnterData>(&rDocShell, rPos, aOldValues, rText, nullptr));
-    }
-
-    if ( bEditDeleted || rDoc.HasAttrib( ScRange(rPos), HasAttrFlags::NeedHeight ) )
-        AdjustRowHeight( ScRange(rPos), true, bApi );
-
-    rDocShell.PostPaintCell( rPos, std::max(nBefore, nAfter) );
-    aModificator.SetDocumentModified();
-
-    // notify input handler here the same way as in PutCell
-    if (bApi)
-        NotifyInputHandler( rPos );
-
-    const SfxUInt32Item* pItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
-    const ScValidationData* pData = rDoc.GetValidationEntry(pItem->GetValue());
-    if (pData)
-    {
-        ScRefCellValue aCell(rDoc, rPos);
-        if (pData->IsDataValid(aCell, rPos))
-            ScDetectiveFunc(rDoc, rPos.Tab()).DeleteCirclesAt(rPos.Col(), rPos.Row());
-    }
-
-    return true;
+    sc::SetNormalStringOperation aOperation(*this, rDocShell, rPos, rText, bApi);
+    bool bResult = aOperation.run();
+    if (bResult)
+        o_rbNumFmtSet = aOperation.isNumberFormatSet();
+    return bResult;
 }
 
 bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
