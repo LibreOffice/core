@@ -685,6 +685,7 @@ void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataT
         aParam.aRefRowCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
         aParam.aRefColCell.Set(aRef2.Col(), aRef2.Row(), aRef2.Tab(), false, false, false);
         rDoc.setTableOpCells(aScRange, aParam);
+        getFormulaBuffer().addDataTable(aScRange);
 
         return;
     }
@@ -700,6 +701,7 @@ void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataT
         aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
         aScRange.aStart.IncRow(-1);
         rDoc.setTableOpCells(aScRange, aParam);
+        getFormulaBuffer().addDataTable(aScRange);
     }
     else
     {
@@ -710,6 +712,7 @@ void SheetDataBuffer::finalizeTableOperation( const ScRange& rRange, const DataT
         aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
         aScRange.aStart.IncCol(-1);
         rDoc.setTableOpCells(aScRange, aParam);
+        getFormulaBuffer().addDataTable(aScRange);
     }
 }
 

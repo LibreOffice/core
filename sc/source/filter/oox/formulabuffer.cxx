@@ -381,6 +381,22 @@ void processSheetFormulaCells(
         applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues, rWorkbookHelper);
 }
 
+void processDataTables(ScDocumentImport& rDoc, const std::vector<ScRange>& rDataTables)
+{
+    for (const auto& rRange : rDataTables)
+    {
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        {
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                ScAddress aAddr(nCol, nRow, rRange.aStart.Tab());
+                if (ScFormulaCell* pCell = rDoc.getDoc().GetFormulaCell(aAddr))
+                    pCell->SetDirty();
+            }
+        }
+    }
+}
+
 }
 
 FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
@@ -432,6 +448,8 @@ void FormulaBuffer::finalizeImport()
     for (SheetItem& rItem : aSheetItems)
         processSheetFormulaCells(rDoc, rItem, getExternalLinks().getLinkInfos(),
                 *this);
+
+    processDataTables(rDoc, maDataTables);
 
     // With formula results being set and not recalculated we need to
     // force-trigger adding all linked external files to the LinkManager.
