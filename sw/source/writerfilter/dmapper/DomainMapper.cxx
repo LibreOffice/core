@@ -3433,6 +3433,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 if (nIntValue)
                     m_pImpl->m_pSdtHelper->SetShowingPlcHdr();
+                break;
             }
 
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_color)
