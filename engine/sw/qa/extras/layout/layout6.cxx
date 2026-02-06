@@ -2034,7 +2034,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170620_float_table_after_keep_with_
     assertXPath(pXmlDoc, "//page[1]/sorted_objs/fly", 2);
     assertXPath(pXmlDoc, "//page[2]/sorted_objs/fly", 2);
 
-    // Get master/follow paragraph isd:
+    // Get master/follow paragraph ids:
     assertXPath(pXmlDoc, "//page[1]/body/txt", 3);
     assertXPath(pXmlDoc, "//page[2]/body/txt", 1);
     assertXPath(pXmlDoc, "//page[1]/body/txt[3]", "follow",
