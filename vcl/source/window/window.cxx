@@ -3414,7 +3414,10 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();
     if (pAccLabelFor)
+    {
         rJsonWriter.put("labelFor", pAccLabelFor->get_id());
+        rJsonWriter.put("labelForType", windowTypeName(pAccLabelFor->GetType()));
+    }
 
     vcl::Window* pAccLabelledBy = GetAccessibleRelationLabeledBy();
     if (pAccLabelledBy)
