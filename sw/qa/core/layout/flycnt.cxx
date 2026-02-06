@@ -229,7 +229,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
     // No vert offset on the second page:
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage2FlyTop - nPage2AnchorTop);
     // 3rd page:
-    auto pPage3 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    auto pPage3 = dynamic_cast<SwPageFrame*>(pPage2->GetNext());
     CPPUNIT_ASSERT(pPage3);
     const SwSortedObjs& rPage3Objs = *pPage3->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage3Objs.size());
@@ -241,6 +241,17 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
     SwTwips nPage3FlyTop = pPage3Fly->getFrameArea().Top();
     // No vert offset on the 3rd page:
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage3FlyTop - nPage3AnchorTop);
+
+    // Check that the split fly frames, that are all registered at the same (first fly's) anchor,
+    // are sorted there from precede to follow (previously, the order was the opposite):
+    auto pRootAnchor = pPage3Fly->GetAnchorFrame(); // Unlike FindAnchorCharFrame, this gives root
+    CPPUNIT_ASSERT(pRootAnchor);
+    CPPUNIT_ASSERT_EQUAL(pPage1Fly->GetAnchorFrame(), pRootAnchor);
+    const auto& rAnchoredObjects = *pRootAnchor->GetDrawObjs();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rAnchoredObjects.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwAnchoredObject*>(pPage1Fly), rAnchoredObjects[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwAnchoredObject*>(pPage2Fly), rAnchoredObjects[1]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwAnchoredObject*>(pPage3Fly), rAnchoredObjects[2]);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRow)
