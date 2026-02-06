@@ -703,14 +703,14 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     if (IsInShape() || IsInHeaderFooter() || m_StreamStateStack.top().bIsInTextBox)
         return;
 
-    if (!m_aTextAppendStack.empty())
+    if (m_aTextAppendStack.empty())
+        return;
+
+    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (xTextAppend.is())
     {
-        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-        if (xTextAppend.is())
-        {
-            xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
-            SetIsDummyParaAddedForTableInSection(true);
-        }
+        xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
+        SetIsDummyParaAddedForTableInSection(true);
     }
 }
 
@@ -1282,7 +1282,7 @@ void DomainMapper_Impl::PopSdt()
     m_pSdtHelper->clear();
 }
 
-void    DomainMapper_Impl::PushProperties(ContextType eId)
+void DomainMapper_Impl::PushProperties(ContextType eId)
 {
     PropertyMapPtr pInsert(eId == CONTEXT_SECTION ?
         (new SectionPropertyMap( m_bIsFirstSection )) :
@@ -1351,7 +1351,7 @@ void DomainMapper_Impl::PushListProperties(const PropertyMapPtr& pListProperties
 }
 
 
-void    DomainMapper_Impl::PopProperties(ContextType eId)
+void DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
     if ( m_aPropertyStacks[eId].empty() )
@@ -1669,8 +1669,7 @@ OUString DomainMapper_Impl::GetListStyleName(sal_Int32 nListId)
 ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
-        m_pListTable =
-            new ListsManager( m_rDMapper, m_xTextDocument );
+        m_pListTable = new ListsManager( m_rDMapper, m_xTextDocument );
     return m_pListTable;
 }
 
@@ -3326,143 +3325,143 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap)
 {
     std::optional<PropertyMap::Property> charStyleProperty = pPropertyMap->getProperty(PROP_CHAR_STYLE_NAME);
-    if (charStyleProperty.has_value())
+    if (!charStyleProperty.has_value())
+        return;
+
+    OUString sCharStyleName;
+    charStyleProperty->second >>= sCharStyleName;
+    float fCharStyleBold = css::awt::FontWeight::NORMAL;
+    float fCharStyleBoldComplex = css::awt::FontWeight::NORMAL;
+    css::awt::FontSlant eCharStylePosture = css::awt::FontSlant_NONE;
+    css::awt::FontSlant eCharStylePostureComplex = css::awt::FontSlant_NONE;
+    sal_Int16 nCharStyleCaseMap = css::style::CaseMap::NONE;
+    sal_Int16 nCharStyleRelief = css::awt::FontRelief::NONE;
+    bool bCharStyleContoured = false;//Outline;
+    bool bCharStyleShadowed = false;
+    sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
+    bool bCharStyleHidden = false;
+
+    rtl::Reference<SwXStyle> xCharStylePropertySet = GetCharacterStyles()->getCharacterStyleByName(sCharStyleName);
+    xCharStylePropertySet->getToggleAttributes(
+            fCharStyleBold,
+            fCharStyleBoldComplex,
+            eCharStylePosture,
+            eCharStylePostureComplex,
+            nCharStyleCaseMap,
+            nCharStyleRelief,
+            bCharStyleContoured,
+            bCharStyleShadowed,
+            nCharStyleStrikeThrough,
+            bCharStyleHidden);
+
+    if (!(fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
+          nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
+          nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden))
+        return;
+
+    rtl::Reference<SwXStyle> const xParaStylePropertySet =
+        GetParagraphStyles()->getParagraphStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
+    float fParaStyleBold = css::awt::FontWeight::NORMAL;
+    float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
+    css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
+    css::awt::FontSlant eParaStylePostureComplex = css::awt::FontSlant_NONE;
+    sal_Int16 nParaStyleCaseMap = css::style::CaseMap::NONE;
+    sal_Int16 nParaStyleRelief = css::awt::FontRelief::NONE;
+    bool bParaStyleContoured = false;
+    bool bParaStyleShadowed = false;
+    sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
+    bool bParaStyleHidden = false;
+    xParaStylePropertySet->getToggleAttributes(
+            fParaStyleBold,
+            fParaStyleBoldComplex,
+            eParaStylePosture,
+            eParaStylePostureComplex,
+            nParaStyleCaseMap,
+            nParaStyleRelief,
+            bParaStyleContoured,
+            bParaStyleShadowed,
+            nParaStyleStrikeThrough,
+            bParaStyleHidden);
+    if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
     {
-        OUString sCharStyleName;
-        charStyleProperty->second >>= sCharStyleName;
-        float fCharStyleBold = css::awt::FontWeight::NORMAL;
-        float fCharStyleBoldComplex = css::awt::FontWeight::NORMAL;
-        css::awt::FontSlant eCharStylePosture = css::awt::FontSlant_NONE;
-        css::awt::FontSlant eCharStylePostureComplex = css::awt::FontSlant_NONE;
-        sal_Int16 nCharStyleCaseMap = css::style::CaseMap::NONE;
-        sal_Int16 nCharStyleRelief = css::awt::FontRelief::NONE;
-        bool bCharStyleContoured = false;//Outline;
-        bool bCharStyleShadowed = false;
-        sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
-        bool bCharStyleHidden = false;
-
-        rtl::Reference<SwXStyle> xCharStylePropertySet = GetCharacterStyles()->getCharacterStyleByName(sCharStyleName);
-        xCharStylePropertySet->getToggleAttributes(
-                fCharStyleBold,
-                fCharStyleBoldComplex,
-                eCharStylePosture,
-                eCharStylePostureComplex,
-                nCharStyleCaseMap,
-                nCharStyleRelief,
-                bCharStyleContoured,
-                bCharStyleShadowed,
-                nCharStyleStrikeThrough,
-                bCharStyleHidden);
-
-        if (fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
-            nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
-            nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
+        std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);
+        if (!charBoldProperty.has_value())
         {
-            rtl::Reference<SwXStyle> const xParaStylePropertySet =
-                GetParagraphStyles()->getParagraphStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
-            float fParaStyleBold = css::awt::FontWeight::NORMAL;
-            float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
-            css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
-            css::awt::FontSlant eParaStylePostureComplex = css::awt::FontSlant_NONE;
-            sal_Int16 nParaStyleCaseMap = css::style::CaseMap::NONE;
-            sal_Int16 nParaStyleRelief = css::awt::FontRelief::NONE;
-            bool bParaStyleContoured = false;
-            bool bParaStyleShadowed = false;
-            sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
-            bool bParaStyleHidden = false;
-            xParaStylePropertySet->getToggleAttributes(
-                    fParaStyleBold,
-                    fParaStyleBoldComplex,
-                    eParaStylePosture,
-                    eParaStylePostureComplex,
-                    nParaStyleCaseMap,
-                    nParaStyleRelief,
-                    bParaStyleContoured,
-                    bParaStyleShadowed,
-                    nParaStyleStrikeThrough,
-                    bParaStyleHidden);
-            if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
-            {
-                std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);
-                if (!charBoldProperty.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::NORMAL));
-                }
-            }
-            if (fCharStyleBoldComplex > css::awt::FontWeight::NORMAL && fParaStyleBoldComplex > css::awt::FontWeight::NORMAL)
-            {
-                std::optional<PropertyMap::Property> charBoldPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_WEIGHT_COMPLEX);
-                if (!charBoldPropertyComplex.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_COMPLEX, uno::Any(css::awt::FontWeight::NORMAL));
-                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_ASIAN, uno::Any(css::awt::FontWeight::NORMAL));
-                }
-            }
-            if (eCharStylePosture != css::awt::FontSlant_NONE && eParaStylePosture != css::awt::FontSlant_NONE)
-            {
-                std::optional<PropertyMap::Property> charItalicProperty = pPropertyMap->getProperty(PROP_CHAR_POSTURE);
-                if (!charItalicProperty.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_POSTURE, uno::Any(css::awt::FontSlant_NONE));
-                }
-            }
-            if (eCharStylePostureComplex != css::awt::FontSlant_NONE && eParaStylePostureComplex != css::awt::FontSlant_NONE)
-            {
-                std::optional<PropertyMap::Property> charItalicPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_POSTURE_COMPLEX);
-                if (!charItalicPropertyComplex.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_POSTURE_COMPLEX, uno::Any(css::awt::FontSlant_NONE));
-                    pPropertyMap->Insert(PROP_CHAR_POSTURE_ASIAN, uno::Any(css::awt::FontSlant_NONE));
-                }
-            }
-            if (nCharStyleCaseMap == nParaStyleCaseMap && nCharStyleCaseMap != css::style::CaseMap::NONE)
-            {
-                std::optional<PropertyMap::Property> charCaseMap = pPropertyMap->getProperty(PROP_CHAR_CASE_MAP);
-                if (!charCaseMap.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_CASE_MAP, uno::Any(css::style::CaseMap::NONE));
-                }
-            }
-            if (nParaStyleRelief != css::awt::FontRelief::NONE && nCharStyleRelief == nParaStyleRelief)
-            {
-                std::optional<PropertyMap::Property> charRelief = pPropertyMap->getProperty(PROP_CHAR_RELIEF);
-                if (!charRelief.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_RELIEF, uno::Any(css::awt::FontRelief::NONE));
-                }
-            }
-            if (bParaStyleContoured && bCharStyleContoured)
-            {
-                std::optional<PropertyMap::Property> charContoured = pPropertyMap->getProperty(PROP_CHAR_CONTOURED);
-                if (!charContoured.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_CONTOURED, uno::Any(false));
-                }
-            }
-            if (bParaStyleShadowed && bCharStyleShadowed)
-            {
-                std::optional<PropertyMap::Property> charShadow = pPropertyMap->getProperty(PROP_CHAR_SHADOWED);
-                if (!charShadow.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_SHADOWED, uno::Any(false));
-                }
-            }
-            if (nParaStyleStrikeThrough == css::awt::FontStrikeout::SINGLE && nParaStyleStrikeThrough == nCharStyleStrikeThrough)
-            {
-                std::optional<PropertyMap::Property> charStrikeThrough = pPropertyMap->getProperty(PROP_CHAR_STRIKEOUT);
-                if (!charStrikeThrough.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_STRIKEOUT, uno::Any(css::awt::FontStrikeout::NONE));
-                }
-            }
-            if (bParaStyleHidden && bCharStyleHidden)
-            {
-                std::optional<PropertyMap::Property> charHidden = pPropertyMap->getProperty(PROP_CHAR_HIDDEN);
-                if (!charHidden.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_HIDDEN, uno::Any(false));
-                }
-            }
+            pPropertyMap->Insert(PROP_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::NORMAL));
+        }
+    }
+    if (fCharStyleBoldComplex > css::awt::FontWeight::NORMAL && fParaStyleBoldComplex > css::awt::FontWeight::NORMAL)
+    {
+        std::optional<PropertyMap::Property> charBoldPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_WEIGHT_COMPLEX);
+        if (!charBoldPropertyComplex.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_WEIGHT_COMPLEX, uno::Any(css::awt::FontWeight::NORMAL));
+            pPropertyMap->Insert(PROP_CHAR_WEIGHT_ASIAN, uno::Any(css::awt::FontWeight::NORMAL));
+        }
+    }
+    if (eCharStylePosture != css::awt::FontSlant_NONE && eParaStylePosture != css::awt::FontSlant_NONE)
+    {
+        std::optional<PropertyMap::Property> charItalicProperty = pPropertyMap->getProperty(PROP_CHAR_POSTURE);
+        if (!charItalicProperty.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_POSTURE, uno::Any(css::awt::FontSlant_NONE));
+        }
+    }
+    if (eCharStylePostureComplex != css::awt::FontSlant_NONE && eParaStylePostureComplex != css::awt::FontSlant_NONE)
+    {
+        std::optional<PropertyMap::Property> charItalicPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_POSTURE_COMPLEX);
+        if (!charItalicPropertyComplex.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_POSTURE_COMPLEX, uno::Any(css::awt::FontSlant_NONE));
+            pPropertyMap->Insert(PROP_CHAR_POSTURE_ASIAN, uno::Any(css::awt::FontSlant_NONE));
+        }
+    }
+    if (nCharStyleCaseMap == nParaStyleCaseMap && nCharStyleCaseMap != css::style::CaseMap::NONE)
+    {
+        std::optional<PropertyMap::Property> charCaseMap = pPropertyMap->getProperty(PROP_CHAR_CASE_MAP);
+        if (!charCaseMap.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_CASE_MAP, uno::Any(css::style::CaseMap::NONE));
+        }
+    }
+    if (nParaStyleRelief != css::awt::FontRelief::NONE && nCharStyleRelief == nParaStyleRelief)
+    {
+        std::optional<PropertyMap::Property> charRelief = pPropertyMap->getProperty(PROP_CHAR_RELIEF);
+        if (!charRelief.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_RELIEF, uno::Any(css::awt::FontRelief::NONE));
+        }
+    }
+    if (bParaStyleContoured && bCharStyleContoured)
+    {
+        std::optional<PropertyMap::Property> charContoured = pPropertyMap->getProperty(PROP_CHAR_CONTOURED);
+        if (!charContoured.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_CONTOURED, uno::Any(false));
+        }
+    }
+    if (bParaStyleShadowed && bCharStyleShadowed)
+    {
+        std::optional<PropertyMap::Property> charShadow = pPropertyMap->getProperty(PROP_CHAR_SHADOWED);
+        if (!charShadow.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_SHADOWED, uno::Any(false));
+        }
+    }
+    if (nParaStyleStrikeThrough == css::awt::FontStrikeout::SINGLE && nParaStyleStrikeThrough == nCharStyleStrikeThrough)
+    {
+        std::optional<PropertyMap::Property> charStrikeThrough = pPropertyMap->getProperty(PROP_CHAR_STRIKEOUT);
+        if (!charStrikeThrough.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_STRIKEOUT, uno::Any(css::awt::FontStrikeout::NONE));
+        }
+    }
+    if (bParaStyleHidden && bCharStyleHidden)
+    {
+        std::optional<PropertyMap::Property> charHidden = pPropertyMap->getProperty(PROP_CHAR_HIDDEN);
+        if (!charHidden.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_HIDDEN, uno::Any(false));
         }
     }
 }
@@ -3472,7 +3471,7 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
     // remove workaround for change tracked images, if they are part of a redline,
     // i.e. if the next run is a tracked change with the same type, author and date,
     // as in the change tracking of the image.
-    if ( m_bRedlineImageInPreviousRun )
+    if ( !m_bRedlineImageInPreviousRun )
     {
         auto pCurrentRedline = m_aRedlines.top().size() > 0
             ? m_aRedlines.top().back()
@@ -3504,7 +3503,7 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
     }
 }
 
-    void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
+void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -3934,43 +3933,41 @@ rtl::Reference< SwXTextSection > DomainMapper_Impl::appendTextSectionAfter(
     if (m_aTextAppendStack.empty())
         return xSection;
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(xTextAppend.is())
+    if(!xTextAppend)
+        return xSection;
+
+    try
     {
-        try
-        {
-            uno::Reference< text::XParagraphCursor > xCursor(
-                xTextAppend->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
-            //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
-            xCursor->gotoStartOfParagraph( false );
-            if (m_aTextAppendStack.top().xInsertPosition.is())
-                xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
-            else
-                xCursor->gotoEnd( true );
-            // The paragraph after this new section is already inserted. The previous node may be a
-            // table; then trying to go left would skip the whole table. Split the trailing
-            // paragraph; let the section span over the first of the two resulting paragraphs;
-            // destroy the last section's paragraph afterwards.
-            xTextAppend->insertControlCharacter(
-                xCursor->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK, false);
-            auto xNewPara = getParagraphOfRange(xCursor->getEnd());
-            xCursor->gotoPreviousParagraph(true);
-            auto xEndPara = getParagraphOfRange(xCursor->getEnd());
-            // xEndPara may already have properties (like page break); make sure to apply them
-            // to the newly appended paragraph, which will be kept in the end.
-            copyAllProps(xEndPara, xNewPara);
+        uno::Reference< text::XParagraphCursor > xCursor(
+            xTextAppend->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
+        //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
+        xCursor->gotoStartOfParagraph( false );
+        if (m_aTextAppendStack.top().xInsertPosition.is())
+            xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
+        else
+            xCursor->gotoEnd( true );
+        // The paragraph after this new section is already inserted. The previous node may be a
+        // table; then trying to go left would skip the whole table. Split the trailing
+        // paragraph; let the section span over the first of the two resulting paragraphs;
+        // destroy the last section's paragraph afterwards.
+        xTextAppend->insertControlCharacter(
+            xCursor->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+        auto xNewPara = getParagraphOfRange(xCursor->getEnd());
+        xCursor->gotoPreviousParagraph(true);
+        auto xEndPara = getParagraphOfRange(xCursor->getEnd());
+        // xEndPara may already have properties (like page break); make sure to apply them
+        // to the newly appended paragraph, which will be kept in the end.
+        copyAllProps(xEndPara, xNewPara);
 
-            xSection = m_xTextDocument->createTextSection();
-            xSection->attach(xCursor);
+        xSection = m_xTextDocument->createTextSection();
+        xSection->attach(xCursor);
 
-            // Remove the extra paragraph (last inside the section)
-            xEndPara->dispose();
-        }
-        catch(const uno::Exception&)
-        {
-        }
-
+        // Remove the extra paragraph (last inside the section)
+        xEndPara->dispose();
     }
-
+    catch(const uno::Exception&)
+    {
+    }
     return xSection;
 }
 
@@ -5267,23 +5264,22 @@ void DomainMapper_Impl::PopShapeContext()
 
 bool DomainMapper_Impl::IsSdtEndBefore()
 {
-    bool bIsSdtEndBefore = false;
     PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
-    if(pContext)
+    if(!pContext)
+        return false;
+    bool bIsSdtEndBefore = false;
+    const uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
+    for (const auto& rCurrentCharProp : currentCharProps)
     {
-        const uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
-        for (const auto& rCurrentCharProp : currentCharProps)
+        if (rCurrentCharProp.Name == "CharInteropGrabBag")
         {
-            if (rCurrentCharProp.Name == "CharInteropGrabBag")
+            uno::Sequence<beans::PropertyValue> aCharGrabBag;
+            rCurrentCharProp.Value >>= aCharGrabBag;
+            for (const auto& rProp : aCharGrabBag)
             {
-                uno::Sequence<beans::PropertyValue> aCharGrabBag;
-                rCurrentCharProp.Value >>= aCharGrabBag;
-                for (const auto& rProp : aCharGrabBag)
+                if(rProp.Name == "SdtEndBefore")
                 {
-                    if(rProp.Name == "SdtEndBefore")
-                    {
-                        rProp.Value >>= bIsSdtEndBefore;
-                    }
+                    rProp.Value >>= bIsSdtEndBefore;
                 }
             }
         }
@@ -5571,102 +5567,102 @@ static sal_Int16 lcl_ParseNumberingType( std::u16string_view rCommand )
         sNumber = o3tl::getToken(rCommand, 0, ' ', nStartIndex2);
     }
 
-    if( !sNumber.isEmpty() )
+    if( sNumber.isEmpty() )
+        return nRet;
+
+    //todo: might make sense to hash this list, too
+    struct NumberingPairs
     {
-        //todo: might make sense to hash this list, too
-        struct NumberingPairs
-        {
-            const char* cWordName;
-            sal_Int16 nType;
-        };
-        static const NumberingPairs aNumberingPairs[] =
-        {
-            {"Arabic", style::NumberingType::ARABIC}
-            ,{"ROMAN", style::NumberingType::ROMAN_UPPER}
-            ,{"roman", style::NumberingType::ROMAN_LOWER}
-            ,{"ALPHABETIC", style::NumberingType::CHARS_UPPER_LETTER}
-            ,{"alphabetic", style::NumberingType::CHARS_LOWER_LETTER}
-            ,{"CircleNum", style::NumberingType::CIRCLE_NUMBER}
-            ,{"ThaiArabic", style::NumberingType::CHARS_THAI}
-            ,{"ThaiCardText", style::NumberingType::CHARS_THAI}
-            ,{"ThaiLetter", style::NumberingType::CHARS_THAI}
+        const char* cWordName;
+        sal_Int16 nType;
+    };
+    static const NumberingPairs aNumberingPairs[] =
+    {
+        {"Arabic", style::NumberingType::ARABIC}
+        ,{"ROMAN", style::NumberingType::ROMAN_UPPER}
+        ,{"roman", style::NumberingType::ROMAN_LOWER}
+        ,{"ALPHABETIC", style::NumberingType::CHARS_UPPER_LETTER}
+        ,{"alphabetic", style::NumberingType::CHARS_LOWER_LETTER}
+        ,{"CircleNum", style::NumberingType::CIRCLE_NUMBER}
+        ,{"ThaiArabic", style::NumberingType::CHARS_THAI}
+        ,{"ThaiCardText", style::NumberingType::CHARS_THAI}
+        ,{"ThaiLetter", style::NumberingType::CHARS_THAI}
 //            ,{"SBCHAR", style::NumberingType::}
 //            ,{"DBCHAR", style::NumberingType::}
 //            ,{"DBNUM1", style::NumberingType::}
 //            ,{"DBNUM2", style::NumberingType::}
 //            ,{"DBNUM3", style::NumberingType::}
 //            ,{"DBNUM4", style::NumberingType::}
-            ,{"Aiueo", style::NumberingType::AIU_FULLWIDTH_JA}
-            ,{"Iroha", style::NumberingType::IROHA_FULLWIDTH_JA}
+        ,{"Aiueo", style::NumberingType::AIU_FULLWIDTH_JA}
+        ,{"Iroha", style::NumberingType::IROHA_FULLWIDTH_JA}
 //            ,{"ZODIAC1", style::NumberingType::}
 //            ,{"ZODIAC2", style::NumberingType::}
 //            ,{"ZODIAC3", style::NumberingType::}
 //            ,{"CHINESENUM1", style::NumberingType::}
 //            ,{"CHINESENUM2", style::NumberingType::}
 //            ,{"CHINESENUM3", style::NumberingType::}
-            ,{"ArabicAlpha", style::NumberingType::CHARS_ARABIC}
-            ,{"ArabicAbjad", style::NumberingType::FULLWIDTH_ARABIC}
-            ,{"Ganada", style::NumberingType::HANGUL_JAMO_KO}
-            ,{"Chosung", style::NumberingType::HANGUL_SYLLABLE_KO}
-            ,{"KoreanCounting", style::NumberingType::NUMBER_HANGUL_KO}
-            ,{"KoreanLegal", style::NumberingType::NUMBER_LEGAL_KO}
-            ,{"KoreanDigital", style::NumberingType::NUMBER_DIGITAL_KO}
-            ,{"KoreanDigital2", style::NumberingType::NUMBER_DIGITAL2_KO}
+        ,{"ArabicAlpha", style::NumberingType::CHARS_ARABIC}
+        ,{"ArabicAbjad", style::NumberingType::FULLWIDTH_ARABIC}
+        ,{"Ganada", style::NumberingType::HANGUL_JAMO_KO}
+        ,{"Chosung", style::NumberingType::HANGUL_SYLLABLE_KO}
+        ,{"KoreanCounting", style::NumberingType::NUMBER_HANGUL_KO}
+        ,{"KoreanLegal", style::NumberingType::NUMBER_LEGAL_KO}
+        ,{"KoreanDigital", style::NumberingType::NUMBER_DIGITAL_KO}
+        ,{"KoreanDigital2", style::NumberingType::NUMBER_DIGITAL2_KO}
 /* possible values:
 style::NumberingType::
 
-    CHARS_UPPER_LETTER_N
-    CHARS_LOWER_LETTER_N
-    TRANSLITERATION
-    NATIVE_NUMBERING
-    CIRCLE_NUMBER
-    NUMBER_LOWER_ZH
-    NUMBER_UPPER_ZH
-    NUMBER_UPPER_ZH_TW
-    TIAN_GAN_ZH
-    DI_ZI_ZH
-    NUMBER_TRADITIONAL_JA
-    AIU_HALFWIDTH_JA
-    IROHA_HALFWIDTH_JA
-    NUMBER_UPPER_KO
-    NUMBER_HANGUL_KO
-    HANGUL_JAMO_KO
-    HANGUL_SYLLABLE_KO
-    HANGUL_CIRCLED_JAMO_KO
-    HANGUL_CIRCLED_SYLLABLE_KO
-    CHARS_HEBREW
-    CHARS_NEPALI
-    CHARS_KHMER
-    CHARS_LAO
-    CHARS_TIBETAN
-    CHARS_CYRILLIC_UPPER_LETTER_BG
-    CHARS_CYRILLIC_LOWER_LETTER_BG
-    CHARS_CYRILLIC_UPPER_LETTER_N_BG
-    CHARS_CYRILLIC_LOWER_LETTER_N_BG
-    CHARS_CYRILLIC_UPPER_LETTER_RU
-    CHARS_CYRILLIC_LOWER_LETTER_RU
-    CHARS_CYRILLIC_UPPER_LETTER_N_RU
-    CHARS_CYRILLIC_LOWER_LETTER_N_RU
-    CHARS_CYRILLIC_UPPER_LETTER_SR
-    CHARS_CYRILLIC_LOWER_LETTER_SR
-    CHARS_CYRILLIC_UPPER_LETTER_N_SR
-    CHARS_CYRILLIC_LOWER_LETTER_N_SR
-    CHARS_CYRILLIC_UPPER_LETTER_UK
-    CHARS_CYRILLIC_LOWER_LETTER_UK
-    CHARS_CYRILLIC_UPPER_LETTER_N_UK
-    CHARS_CYRILLIC_LOWER_LETTER_N_UK*/
+CHARS_UPPER_LETTER_N
+CHARS_LOWER_LETTER_N
+TRANSLITERATION
+NATIVE_NUMBERING
+CIRCLE_NUMBER
+NUMBER_LOWER_ZH
+NUMBER_UPPER_ZH
+NUMBER_UPPER_ZH_TW
+TIAN_GAN_ZH
+DI_ZI_ZH
+NUMBER_TRADITIONAL_JA
+AIU_HALFWIDTH_JA
+IROHA_HALFWIDTH_JA
+NUMBER_UPPER_KO
+NUMBER_HANGUL_KO
+HANGUL_JAMO_KO
+HANGUL_SYLLABLE_KO
+HANGUL_CIRCLED_JAMO_KO
+HANGUL_CIRCLED_SYLLABLE_KO
+CHARS_HEBREW
+CHARS_NEPALI
+CHARS_KHMER
+CHARS_LAO
+CHARS_TIBETAN
+CHARS_CYRILLIC_UPPER_LETTER_BG
+CHARS_CYRILLIC_LOWER_LETTER_BG
+CHARS_CYRILLIC_UPPER_LETTER_N_BG
+CHARS_CYRILLIC_LOWER_LETTER_N_BG
+CHARS_CYRILLIC_UPPER_LETTER_RU
+CHARS_CYRILLIC_LOWER_LETTER_RU
+CHARS_CYRILLIC_UPPER_LETTER_N_RU
+CHARS_CYRILLIC_LOWER_LETTER_N_RU
+CHARS_CYRILLIC_UPPER_LETTER_SR
+CHARS_CYRILLIC_LOWER_LETTER_SR
+CHARS_CYRILLIC_UPPER_LETTER_N_SR
+CHARS_CYRILLIC_LOWER_LETTER_N_SR
+CHARS_CYRILLIC_UPPER_LETTER_UK
+CHARS_CYRILLIC_LOWER_LETTER_UK
+CHARS_CYRILLIC_UPPER_LETTER_N_UK
+CHARS_CYRILLIC_LOWER_LETTER_N_UK*/
 
-        };
-        for(const NumberingPairs& rNumberingPair : aNumberingPairs)
+    };
+    for(const NumberingPairs& rNumberingPair : aNumberingPairs)
+    {
+        if( /*sCommand*/sNumber.equalsAscii(rNumberingPair.cWordName ))
         {
-            if( /*sCommand*/sNumber.equalsAscii(rNumberingPair.cWordName ))
-            {
-                nRet = rNumberingPair.nType;
-                break;
-            }
+            nRet = rNumberingPair.nType;
+            break;
         }
-
     }
+
     return nRet;
 }
 
@@ -5676,24 +5672,22 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
     //  The command looks like: " DATE \@"dd MMMM yyyy" or "09/02/2014"
     OUString command;
     sal_Int32 delimPos = rCommand.indexOf("\\@");
-    if (delimPos != -1)
-    {
-        // Remove whitespace permitted by standard between \@ and "
-        const sal_Int32 nQuoteIndex = rCommand.indexOf('\"');
-        if (nQuoteIndex != -1)
-        {
-            sal_Int32 wsChars = nQuoteIndex - delimPos - 2;
-            command = rCommand.replaceAt(delimPos+2, wsChars, u"");
-        }
-        else
-        {
-            // turn date \@ MM into date \@"MM"
-            command = OUString::Concat(rCommand.subView(0, delimPos + 2)) + "\"" + o3tl::trim(rCommand.subView(delimPos + 2)) + "\"";
-        }
-        return OUString(msfilter::util::findQuotedText(command, u"\\@\"", '\"'));
-    }
+    if (delimPos == -1)
+        return command;
 
-    return OUString();
+    // Remove whitespace permitted by standard between \@ and "
+    const sal_Int32 nQuoteIndex = rCommand.indexOf('\"');
+    if (nQuoteIndex != -1)
+    {
+        sal_Int32 wsChars = nQuoteIndex - delimPos - 2;
+        command = rCommand.replaceAt(delimPos+2, wsChars, u"");
+    }
+    else
+    {
+        // turn date \@ MM into date \@"MM"
+        command = OUString::Concat(rCommand.subView(0, delimPos + 2)) + "\"" + o3tl::trim(rCommand.subView(delimPos + 2)) + "\"";
+    }
+    return OUString(msfilter::util::findQuotedText(command, u"\\@\"", '\"'));
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
@@ -6143,21 +6137,21 @@ void DomainMapper_Impl::ChainTextFrames()
         //Finally - go through and attach the chains based on matching ID and incremented sequence number (dml-style).
         for (const auto& rOuter : chainingWPS)
         {
-                for (const auto& rInner : chainingWPS)
+            for (const auto& rInner : chainingWPS)
+            {
+                if (rInner.nId == rOuter.nId)
                 {
-                    if (rInner.nId == rOuter.nId)
+                    if (rInner.nSeq == (rOuter.nSeq + nDirection))
                     {
-                        if (rInner.nSeq == (rOuter.nSeq + nDirection))
-                        {
-                            uno::Reference<text::XTextContent> const xTextContent(rOuter.xShape, uno::UNO_QUERY_THROW);
-                            uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
+                        uno::Reference<text::XTextContent> const xTextContent(rOuter.xShape, uno::UNO_QUERY_THROW);
+                        uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
 
-                            //The reverse chaining happens automatically, so only one direction needs to be set
-                            xPropertySet->setPropertyValue(sChainNextName, uno::Any(rInner.shapeName));
-                            break ; //there cannot be more than one next frame
-                        }
+                        //The reverse chaining happens automatically, so only one direction needs to be set
+                        xPropertySet->setPropertyValue(sChainNextName, uno::Any(rInner.shapeName));
+                        break ; //there cannot be more than one next frame
                     }
                 }
+            }
         }
         m_vTextFramesForChaining.clear(); //clear the vector
     }
