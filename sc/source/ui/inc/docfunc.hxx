@@ -61,6 +61,7 @@ namespace sc
     enum class OperationType;
     class DeleteContentOperation;
     class DeleteCellOperation;
+    class SetNormalStringOperation;
 }
 namespace tools
 {
@@ -71,6 +72,7 @@ class ScDocFunc
 {
     friend class sc::DeleteContentOperation;
     friend class sc::DeleteCellOperation;
+    friend class sc::SetNormalStringOperation;
 
     ScDocShell&     rDocShell;
     static bool CheckSheetViewProtection(sc::OperationType eOperation);
