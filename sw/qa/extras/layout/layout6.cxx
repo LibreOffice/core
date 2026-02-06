@@ -2116,6 +2116,34 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170620_float_table_after_keep_with_
     assertXPath(pXmlDoc, aP1OuterFlyTab + "/row/cell/txt[2]/anchored/fly", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170630)
+{
+    // Given a document with a keep-with-next paragraph, followed by floating table containing
+    // two keep-with-next paragraphs and another floating table which is split across pages:
+    createSwDoc("tdf170630.docx");
+
+    // The keep-with-next paragraph and the floating table must start on page 1:
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Exactly two pages (without the fix, there was only one):
+    assertXPath(pXmlDoc, "//page", 2);
+
+    // "Keep-with-next paragraph" is on the first page:
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]//SwLineLayout", "portion",
+                u"Keep-with-next paragraph");
+
+    // Exactly two objects anchored at each page (without the fix, the first page had three: one
+    // outer, and two inner, where the follow frame never moved forward):
+    assertXPath(pXmlDoc, "//page[1]/sorted_objs/fly", 2);
+    assertXPath(pXmlDoc, "//page[2]/sorted_objs/fly", 2);
+
+    // Page 1's paragraph 3 has two anchored flys (without the fix, it was one: the outer table
+    // never split):
+    assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly", 2);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
