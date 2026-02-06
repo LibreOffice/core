@@ -1085,9 +1085,6 @@ private:
     SdtBlockHelper m_aParagraphSdt;
     SdtBlockHelper m_aRunSdt;
 
-    /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.
-    OUString m_aStartedParagraphSdtPrAlias;
-
     std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
 
     std::optional<SwLineBreakClear> m_oLineBreakClear;
