@@ -527,7 +527,7 @@ SwXText::insertTextContent(
             pRange->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
         }
-        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(dynamic_cast<OTextCursorHelper*>(xRange.get())))
+        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(xRange.get()))
         {
             pCursor->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
