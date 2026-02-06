@@ -691,6 +691,10 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
     std::vector<OUString> missing;
     for (const auto& entry : ScalcDialogList)
     {
+        // Skip this one, its marked in calc as: "TODO: handle this case in LOK too"
+        // for SID_OUTLINE_REMOVE
+        if (entry == u"modules/scalc/ui/ungroupdialog.ui")
+            continue;
         OUString sEntry(entry);
         if (!entries.contains(sEntry))
             missing.push_back(sEntry);
