@@ -1158,7 +1158,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xCancelButton(m_xBuilder->weld_button(u"cancel"_ustr))
     , m_xDescriptionText(m_xBuilder->weld_text_view(u"description"_ustr))
-    , m_xDescriptionFrame(m_xBuilder->weld_frame(u"descriptionframe"_ustr))
+    , m_xDescriptionBox(m_xBuilder->weld_box(u"descriptionbox"_ustr))
 {
     m_xCancelButton->show();
     m_xDialogDescription->show();
@@ -1200,7 +1200,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     UpdateUI();
 
     if (comphelper::LibreOfficeKit::isActive())
-        m_xDescriptionFrame->hide();
+        m_xDescriptionBox->hide();
 }
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
