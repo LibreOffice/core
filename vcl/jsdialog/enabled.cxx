@@ -61,6 +61,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/areadialog.ui" },
         { u"cui/ui/asiantypography.ui" },
         { u"cui/ui/borderareatransparencydialog.ui" },
+        { u"cui/ui/borderbackgrounddialog.ui" },
         { u"cui/ui/borderpage.ui" },
         { u"cui/ui/bulletandposition.ui" },
         { u"cui/ui/cellalignment.ui" },
