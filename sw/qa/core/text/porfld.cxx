@@ -66,6 +66,41 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionRedlineRenderMode)
     // i.e. there was an unexpected underline.
     CPPUNIT_ASSERT_EQUAL(u"0"_ustr, aUnderline);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTabPortionRedlineRenderMode)
+{
+    // Given a document with redlines, the tab number portion is deleted:
+    createSwDoc("redline-bullet.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+
+    // When redline render mode is standard:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure we paint a strikeout:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    assertXPath(pXmlDoc, "//stretchtext", 1);
+    OUString aStrikeout
+        = getXPath(pXmlDoc, "(//stretchtext)[1]/preceding-sibling::font[1]", "strikeout");
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aStrikeout);
+
+    // And given "omit inserts" redline render mode:
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
+    pWrtShell->ApplyViewOptions(aOpt);
+
+    // When rendering:
+    xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure we don't paint a strikeout:
+    pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the stretched text was painted, which used a strikeout font.
+    assertXPath(pXmlDoc, "//stretchtext", 0);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

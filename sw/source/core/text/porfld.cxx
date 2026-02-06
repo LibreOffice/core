@@ -753,9 +753,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                         STRIKEOUT_NONE != m_pFont->GetStrikeout() ) &&
                         !m_pFont->IsWordLineMode();
 
-    const SwViewShell* pViewShell = rInf.GetVsh();
-    const SwViewOption* pViewOptions = pViewShell ? pViewShell->GetViewOptions() : nullptr;
-    SwRedlineRenderMode eRedlineRenderMode = pViewOptions ? pViewOptions->GetRedlineRenderMode() : SwRedlineRenderMode::Standard;
+    SwRedlineRenderMode eRedlineRenderMode = rInf.GetOpt().GetRedlineRenderMode();
     SwFont* pFont = m_pFont.get();
     if (eRedlineRenderMode != SwRedlineRenderMode::Standard)
     {
