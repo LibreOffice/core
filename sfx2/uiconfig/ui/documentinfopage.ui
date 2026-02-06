@@ -434,6 +434,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="has-entry">True</property>
+            <accessibility>
+              <relation type="labelled-by" target="image-preferred-dpi-checkbutton"/>
+            </accessibility>
             <items>
               <item>96</item>
               <item>150</item>
@@ -447,9 +450,6 @@
                 <property name="can-focus">False</property>
               </object>
             </child>
-            <accessibility>
-              <relation type="labelled-by" target="image-preferred-dpi-checkbutton"/>
-            </accessibility>
           </object>
           <packing>
             <property name="expand">False</property>
