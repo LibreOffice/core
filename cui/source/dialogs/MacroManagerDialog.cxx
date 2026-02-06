@@ -647,7 +647,7 @@ MacroManagerDialog::MacroManagerDialog(weld::Window* pParent,
     , m_xRunButton(m_xBuilder->weld_button(u"run"_ustr))
     , m_xCloseButton(m_xBuilder->weld_button(u"close"_ustr))
     , m_xDescriptionText(m_xBuilder->weld_text_view(u"description"_ustr))
-    , m_xDescriptionFrame(m_xBuilder->weld_frame(u"descriptionframe"_ustr))
+    , m_xDescriptionBox(m_xBuilder->weld_box(u"descriptionbox"_ustr))
     , m_xNewLibraryButton(m_xBuilder->weld_button(u"newlibrary"_ustr))
     , m_xNewModuleButton(m_xBuilder->weld_button(u"newmodule"_ustr))
     , m_xNewDialogButton(m_xBuilder->weld_button(u"newdialog"_ustr))

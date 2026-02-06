@@ -186,7 +186,7 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
     std::unique_ptr<weld::Button> m_xRunButton;
     std::unique_ptr<weld::Button> m_xCloseButton;
     std::unique_ptr<weld::TextView> m_xDescriptionText;
-    std::unique_ptr<weld::Frame> m_xDescriptionFrame;
+    std::unique_ptr<weld::Box> m_xDescriptionBox;
     std::unique_ptr<weld::Button> m_xNewLibraryButton;
     std::unique_ptr<weld::Button> m_xNewModuleButton;
     std::unique_ptr<weld::Button> m_xNewDialogButton;
