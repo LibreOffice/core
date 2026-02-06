@@ -39,6 +39,7 @@ class SwFieldPortion : public SwExpandPortion
 protected:
     OUString  m_aExpand;          // The expanded field
     std::unique_ptr<SwFont> m_pFont;  // For multi-line fields
+    /// This is used when the view's redline render mode is not standard.
     std::unique_ptr<SwFont> m_pRedlineRenderModeFont;
     TextFrameIndex m_nNextOffset;  // Offset of the follow in the original string
     TextFrameIndex m_nNextScriptChg;
@@ -70,6 +71,7 @@ public:
     bool HasFont() const { return nullptr != m_pFont; }
     // #i89179# - made public
     const SwFont *GetFont() const { return m_pFont.get(); }
+    const SwFont *GetRedlineRenderModeFont() const { return m_pRedlineRenderModeFont.get(); }
 
     const OUString& GetExp() const { return m_aExpand; }
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

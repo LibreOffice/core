@@ -593,8 +593,15 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
              pPrevPortion->InNumberGrp() &&
              static_cast<const SwNumberPortion*>(pPrevPortion)->HasFont() )
         {
-            const SwFont* pNumberPortionFont =
-                    static_cast<const SwNumberPortion*>(pPrevPortion)->GetFont();
+            SwRedlineRenderMode eRedlineRenderMode = rInf.GetOpt().GetRedlineRenderMode();
+            auto pPrevNumberPortion = static_cast<const SwNumberPortion*>(pPrevPortion);
+            const SwFont* pNumberPortionFont = pPrevNumberPortion->GetFont();
+            if (eRedlineRenderMode != SwRedlineRenderMode::Standard)
+            {
+                // The number portion uses a font specific to the redline render mode, do the same
+                // for the subsequent tab portion, too.
+                pNumberPortionFont = pPrevNumberPortion->GetRedlineRenderModeFont();
+            }
             oSave.emplace( rInf, const_cast<SwFont*>(pNumberPortionFont) );
             bAfterNumbering = true;
         }
