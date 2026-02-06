@@ -460,9 +460,12 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
+                VclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
                     pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
-                pDialog->Execute();
+                pDialog->StartExecuteAsync([pDialog](sal_Int32) {
+                    pDialog->disposeOnce();
+                });
+
                 break;
             }
 
