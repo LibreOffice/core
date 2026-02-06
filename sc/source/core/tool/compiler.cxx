@@ -5970,11 +5970,11 @@ bool ScCompiler::HandleColRowName()
                                     rDoc.GetDocOptions().IsLookUpColRowNames());
     SetError(nError);
 
-    ScTokenArray* pNew = new ScTokenArray(rDoc);
     if (bValid)
     {
         if (mbJumpCommandReorder)
         {
+            ScTokenArray* pNew = new ScTokenArray(rDoc);
             // If it's a SingleRef
             if (aRef.Ref1 == aRef.Ref2)
                 pNew->AddSingleReference(aRef.Ref1);
