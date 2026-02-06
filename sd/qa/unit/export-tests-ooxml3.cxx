@@ -1159,6 +1159,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952)
     CPPUNIT_ASSERT_MESSAGE("Without the fix chart2.xml is not exported", pXmlDoc);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952_multiple_OLEs)
+{
+    createSdImpressDoc("odp/tdf169952_multiple_OLEs.odp");
+    save(TestFilter::PPTX);
+
+    // Without the fix two of the three OLE objects would get lost, and only oleObject1.bin
+    // would exist
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject1.bin"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject2.bin"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject3.bin"_ustr)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
