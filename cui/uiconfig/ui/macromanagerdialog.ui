@@ -503,15 +503,29 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="descriptionframe">
+              <object class="GtkBox" id="descriptionbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">6</property>
                 <property name="margin-end">6</property>
                 <property name="margin-top">6</property>
                 <property name="margin-bottom">6</property>
-                <property name="label-xalign">0</property>
-                <property name="shadow-type">none</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="label" translatable="yes" context="macroselectordialog|label1">_Description</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">description</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="height-request">100</property>
@@ -526,18 +540,6 @@
                         <property name="cursor-visible">False</property>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="margin-bottom">6</property>
-                    <property name="label" translatable="yes" context="macromanagerdialog|label1">_Description</property>
-                    <property name="use-underline">True</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
                   </object>
                 </child>
               </object>
