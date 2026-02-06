@@ -241,9 +241,7 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 
         // track changes: cross out the image, if it is deleted
         const SwFrame *pFrame = m_pFly->Lower();
-        const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
-        SwRedlineRenderMode eRedlineRenderMode
-            = pViewOptions ? pViewOptions->GetRedlineRenderMode() : SwRedlineRenderMode::Standard;
+        SwRedlineRenderMode eRedlineRenderMode = rInf.GetOpt().GetRedlineRenderMode();
         if (GetAuthor() != std::string::npos && IsDeleted() && pFrame
             && eRedlineRenderMode == SwRedlineRenderMode::Standard)
         {
