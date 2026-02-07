@@ -1901,6 +1901,7 @@ def __loadlang__(lang, a):
         if i[0:3] not in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and i not in __STRCONST__: # uppercase native commands
             a[i] = a[i].upper()
     repcount = a['REPCOUNT'].split('|')[0]
+    repcount = re.sub("[ .']", '_', repcount)
     loopi = itertools.count()
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
         { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
@@ -1913,10 +1914,10 @@ def __loadlang__(lang, a):
     [r"(?<!\n)\[(?= |\n)", ":\n[\n"], # start block
     [r"( ]|\n]$)", "\n]\n"], # finish block
     [r"(?<!:)\b(?:%s)\b" % a['FOR'], "\nfor"],
+    [r"(?<!:)\b(?:%s)\b" % a['REPCOUNT'], repcount],
     [r"(?<!:)\b(?:%s)\b" % a['REPEAT'], "\n__repeat__"],
     [r"(?<!:)\b(?:%s)\b" % a['BREAK'], "\nbreak"],
     [r"(?<!:)\b(?:%s)\b" % a['CONTINUE'], "\ncontinue"],
-    [r"(?<!:)\b(?:%s)\b" % a['REPCOUNT'], repcount],
     [r"(?<!:)\b(?:%s)\b" % a['IF'], "\nif"],
     [r"(?<!:)\b(?:%s)\b" % a['WHILE'], "\nwhile"],
     [r"(?<!:)\b(?:%s)\b" % a['OUTPUT'], "\nreturn"],
