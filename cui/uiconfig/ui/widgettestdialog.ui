@@ -156,6 +156,11 @@
                     <property name="has-entry">True</property>
                     <property name="entry-text-column">0</property>
                     <property name="id-column">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="combo_box_disable-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="widgettestdialog|combo_box_disable-atkobject">Test Type</property>
+                      </object>
+                    </child>
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="sensitive">False</property>
