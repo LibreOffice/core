@@ -354,7 +354,7 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
     }
 
     m_xBtnAdd->set_label( aStrModify );
-    if (!pData->GetTableStyleInfo())
+    if (pData && !pData->GetTableStyleInfo())
     {
         m_xOptions->set_sensitive(true);
         m_xBtnAdd->set_sensitive(true);
