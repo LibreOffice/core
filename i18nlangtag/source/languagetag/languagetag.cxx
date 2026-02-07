@@ -2877,9 +2877,10 @@ OUString LanguageTagImpl::convertToBcp47( const css::lang::Locale& rLocale )
 */
 static void appendAscii(StackString64& rBuf, const OUString& s)
 {
-    rBuf.setLength(rBuf.getLength() + s.getLength());
+    const sal_Int32 nDestLen = rBuf.getLength();
+    rBuf.setLength(nDestLen + s.getLength());
     const sal_Unicode* pSrc = s.getStr();
-    char* pDest = rBuf.getMutableStr();
+    char* pDest = rBuf.getMutableStr() + nDestLen;
     for (int i=0; i<s.getLength(); i++)
     {
         assert(*pSrc < 127);
