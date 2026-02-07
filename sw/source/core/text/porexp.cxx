@@ -195,7 +195,7 @@ void SwBlankPortion::FormatEOL( SwTextFormatInfo &rInf )
  */
 bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 {
-    const bool bFull = rInf.IsUnderflow() || SwExpandPortion::Format( rInf );
+    const bool bFull = rInf.IsUnderflow() || SwTextPortion::Format(rInf);
     if( bFull && MayUnderflow( rInf, rInf.GetIdx(), rInf.IsUnderflow() ) )
     {
         Truncate();
@@ -211,7 +211,7 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Draw field shade (can be disabled individually)
     if (!m_bMulti) // No gray background for multiportion brackets
         rInf.DrawViewOpt(*this, PortionType::Blank);
-    SwExpandPortion::Paint(rInf);
+    SwTextPortion::Paint(rInf);
 
     if (rInf.GetOpt().IsViewMetaChars() && rInf.GetOpt().IsHardBlank())
     {

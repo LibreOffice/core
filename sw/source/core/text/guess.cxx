@@ -43,7 +43,8 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace{
 
-bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_NB_SPACE || ch == CH_SIX_PER_EM; }
+// UAX #14: spaces from SP and BA classes (elided in the end of a line)
+bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_SIX_PER_EM; }
 
 // Used when spaces should not be counted in layout
 // Returns adjusted cut position

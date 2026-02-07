@@ -39,7 +39,7 @@ public:
 };
 
 /// Non-breaking space or non-breaking hyphen.
-class SwBlankPortion : public SwExpandPortion
+class SwBlankPortion final : public SwTextPortion
 {
     sal_Unicode m_cChar;
     bool m_bMulti;        // For multiportion brackets
