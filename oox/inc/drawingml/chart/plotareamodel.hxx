@@ -66,6 +66,8 @@ struct PlotAreaModel
     LayoutRef           mxLayout;           /// Layout/position of the plot area.
     DataTableRef        mxDataTable;        /// Data table of the plot area.
 
+    sal_Int32           mnCurSeriesIdx = 0; /// For populating the series index
+
     explicit            PlotAreaModel();
                         ~PlotAreaModel();
 };

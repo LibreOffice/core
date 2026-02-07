@@ -1049,6 +1049,30 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf94259)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, TestParetoDefaultColor)
+{
+    loadFromFile(u"xlsx/paretoLine.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    // First series is clusteredColumn, second is paretoLine
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0, 1);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
+
+    // Fill should be the second theme color
+    uno::Any aAny = xPropSet->getPropertyValue(u"FillStyle"_ustr);
+    com::sun::star::drawing::FillStyle aFillStyle(com::sun::star::drawing::FillStyle_NONE);
+    CPPUNIT_ASSERT(aAny >>= aFillStyle);
+    CPPUNIT_ASSERT_EQUAL(com::sun::star::drawing::FillStyle_SOLID, aFillStyle);
+
+    aAny = xPropSet->getPropertyValue(u"FillColor"_ustr);
+    sal_uInt32 nFillColor = 0;
+    CPPUNIT_ASSERT(aAny >>= nFillColor);
+    const sal_uInt32 nCorrectColor = 0xED7D31u;
+    CPPUNIT_ASSERT_EQUAL(nCorrectColor, nFillColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

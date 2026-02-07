@@ -233,7 +233,7 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                         mrModel.maTypeGroups.create(nTypeId, false);
                         std::shared_ptr<TypeGroupModel> aTGM =
                             mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
-                        return new ChartexSeriesContext(*this, aTGM->maSeries.create(false));
+                        return new ChartexSeriesContext(*this, aTGM->maSeries.create(false), mrModel.mnCurSeriesIdx++);
                     }
                     return nullptr;
                 case CX_TOKEN(plotSurface) :

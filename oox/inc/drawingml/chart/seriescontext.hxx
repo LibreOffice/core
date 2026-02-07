@@ -244,7 +244,8 @@ public:
 class ChartexSeriesContext final : public SeriesContextBase
 {
 public:
-    explicit            ChartexSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    explicit            ChartexSeriesContext(
+            ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel, sal_Int32 nIndex );
     virtual             ~ChartexSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;

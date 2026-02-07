@@ -1533,6 +1533,12 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
 
     if (!aCooSysSeq.hasElements()) return;
 
+    // There's a possibility that multiple sub-charts in the same overall chart
+    // could reference the same data. In that case we don't want to output it
+    // multiple times. So we use this list to keep track of the ids we've
+    // already exported.
+    std::unordered_set<sal_Int32> aExportedIds;
+
     for( const auto& rCS : aCooSysSeq ) {
         Reference< chart2::XChartTypeContainer > xCTCnt( rCS, uno::UNO_QUERY );
         if( ! xCTCnt.is())
@@ -1567,7 +1573,6 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
 
                     // search for main sequence and create a series element
                     sal_Int32 nMainSequenceIndex = -1;
-                    sal_Int32 nSeriesLength = 0;
                     Reference< chart2::data::XDataSequence > xValueSeq;
                     Reference< chart2::data::XDataSequence > xLabelSeq;
                     sal_Int32 nSeqIdx=0;
@@ -1588,10 +1593,14 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                                 nMainSequenceIndex = nSeqIdx;
                             }
                         }
-                        sal_Int32 nSequenceLength = (xTempValueSeq.is()? xTempValueSeq->getData().getLength() : sal_Int32(0));
-                        if( nSeriesLength < nSequenceLength )
-                            nSeriesLength = nSequenceLength;
                     }
+
+                    if (aExportedIds.contains(nSeriesIndex)) {
+                        continue;
+                    } else {
+                        aExportedIds.insert(nSeriesIndex);
+                    }
+
                     FSHelperPtr pFS = GetFS();
 
                     // The data id needs to agree with the id in exportSeries(). See DATA_ID_COMMENT

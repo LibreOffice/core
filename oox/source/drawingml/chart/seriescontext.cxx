@@ -762,9 +762,10 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
-ChartexSeriesContext::ChartexSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
+ChartexSeriesContext::ChartexSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel, sal_Int32 nIndex ) :
     SeriesContextBase( rParent, rModel )
 {
+    rModel.mnIndex = nIndex;
 }
 
 ChartexSeriesContext::~ChartexSeriesContext()
@@ -790,7 +791,6 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                     return new DataLabelsContext( *this, mrModel.mxLabels.create(false) );
                 case CX_TOKEN( dataId ):
                     mrModel.mnDataId = rAttribs.getInteger(XML_val, -1);
-                    mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
                     return nullptr;
                 case CX_TOKEN( layoutPr ):
                     // This looks complicated. TODO
