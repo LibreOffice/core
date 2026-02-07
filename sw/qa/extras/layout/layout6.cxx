@@ -2144,6 +2144,45 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170630)
     assertXPath(pXmlDoc, "//page[1]/body/txt[3]/anchored/fly", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf167946)
+{
+    // Given a document with a sequence of non-breaking spaces after a text and a space, which
+    // sequence doesn't fit the rest of the line. Before the fix, only the comma was moved to the
+    // second line, and all NBSPs were elided as a hole portion at the end of the first line:
+    createSwDoc("nbsp-moved-to-new-line.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // One page:
+    assertXPath(pXmlDoc, "//page", 1);
+
+    // One paragraph:
+    assertXPath(pXmlDoc, "//txt", 1);
+
+    // Two lines in the paragraph:
+    assertXPath(pXmlDoc, "//txt/SwParaPortion/SwLineLayout", 2);
+    assertXPath(pXmlDoc, "//SwLineLayout", 2);
+
+    // First line consists of a text portion with, and a hole portion for the following space:
+    assertXPath(pXmlDoc, "//SwLineLayout[1]/child::*[1]", "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "//SwLineLayout[1]/child::*[1]", "portion",
+                u"Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    assertXPath(pXmlDoc, "//SwLineLayout[1]/child::*[2]", "type", u"PortionType::Hole");
+    assertXPath(pXmlDoc, "//SwLineLayout[1]/child::*[2]", "portion", u" ");
+
+    // Second line has blank portions for the leading NBSPs, followed by a text portion with comma:
+    assertXPathChildren(pXmlDoc, "//SwLineLayout[2]", 81);
+    for (int i = 1; i <= 80; ++i)
+    {
+        OString aXPath = "//SwLineLayout[2]/child::*[" + OString::number(i) + "]";
+        assertXPath(pXmlDoc, aXPath, "type", u"PortionType::Blank");
+        assertXPath(pXmlDoc, aXPath, "portion", u"\xA0");
+    }
+    assertXPath(pXmlDoc, "//SwLineLayout[2]/child::*[81]", "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "//SwLineLayout[2]/child::*[81]", "portion", u",");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
