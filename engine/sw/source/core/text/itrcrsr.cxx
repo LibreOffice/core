@@ -1763,8 +1763,8 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             sal_uInt8 nOldProp;
             if( GetPropFont() )
             {
-                const_cast<SwFont*>(GetFnt())->SetProportion( GetPropFont() );
                 nOldProp = GetFnt()->GetPropr();
+                const_cast<SwFont*>(GetFnt())->SetProportion( GetPropFont() );
             }
             else
                 nOldProp = 0;
