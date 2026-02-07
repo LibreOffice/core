@@ -23,6 +23,9 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/wmf.hxx>
 
 #include <memory>
 #include <string_view>
@@ -1280,6 +1283,27 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipTransform)
                 u"Opaque ClipP-");
     assertXPath(pDocument, aXPathPrefix + "group[3]/mask/group/textsimpleportion", "fontcolor",
                 u"#000000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testUnderlineTransparentBackground)
+{
+    // EMF with SETBKMODE=TRANSPARENT, SETBKCOLOR=black, underlined font, and EXTTEXTOUTW "TEST".
+    // The font's fill color must be COL_TRANSPARENT when BkMode is TRANSPARENT.
+    // Before the fix, the fill color was unconditionally set to maBkColor (black),
+    // causing VCL's underline rendering to draw an opaque background.
+    OUString aUrl = m_directories.getURLFromSrc(
+        u"/emfio/qa/cppunit/emf/data/TestUnderlineTransparentBackground.emf");
+    SvFileStream aFileStream(aUrl, StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // The font must have fillcolor="#ffffff" (COL_TRANSPARENT), not "#000000" (maBkColor).
+    assertXPath(pDoc, "/metafile/push[2]/font", "fillcolor", u"#ffffff");
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray/text", u"TEST");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativeWinOrg)
