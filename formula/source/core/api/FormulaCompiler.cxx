@@ -2641,6 +2641,10 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         else
             rBuffer.append(mxSymbols->getSymbol(eOp));
     }
+    else if (eOp == ocNoName && FormulaGrammar::isOOXML(meGrammar))
+    {
+        // Don't export "#name!" in OOXML
+    }
     else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
         rBuffer.append( mxSymbols->getSymbol( eOp));
     else
