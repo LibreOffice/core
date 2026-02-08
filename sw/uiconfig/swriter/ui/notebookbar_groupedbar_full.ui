@@ -2689,7 +2689,7 @@
       <object class="GtkMenuItem" id="MenuReference-UpdateFields">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:UpdateFields</property>
+        <property name="action_name">.uno:UpdateFields?UnlockSoftFixed:bool=1</property>
       </object>
     </child>
     <child>

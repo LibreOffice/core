@@ -672,7 +672,8 @@ bool SwField::IsFixed() const
         break;
 
     case SwFieldIds::DocInfo:
-        bRet = bool(static_cast<const SwDocInfoField*>(this)->GetSubType() & SwDocInfoSubType::SubFixed);
+        bRet = bool(static_cast<const SwDocInfoField*>(this)->GetSubType() &
+                    (SwDocInfoSubType::SubFixed | SwDocInfoSubType::SubSoftFixed));
         break;
     default: break;
     }

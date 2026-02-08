@@ -800,7 +800,7 @@
           <menu:menuitem menu:id=".uno:Repaginate"/>
           <menu:menuitem menu:id=".uno:UpdateSelectedField" menu:style="text"/>
           <menu:menuitem menu:id=".uno:ConvertSelectedField" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:UpdateFields"/>
+          <menu:menuitem menu:id=".uno:UpdateFields?UnlockSoftFixed:bool=1"/>
           <menu:menuitem menu:id=".uno:UpdateAllIndexes"/>
           <menu:menuitem menu:id=".uno:UpdateCurIndex"/>
           <menu:menuitem menu:id=".uno:UpdateAllLinks"/>

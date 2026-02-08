@@ -225,7 +225,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             if (pField)
             {
-               rSh.UpdateOneField(*pField);
+                if (pField->GetTypeId() == SwFieldTypesEnum::DocumentInfo)
+                {
+                    // FN_UPDATE_SEL_FIELD is not called automatically. See SubSoftFixed definition.
+                    SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pField );
+                    pDocInfo->SetSubType(~SwDocInfoSubType::SubSoftFixed & pDocInfo->GetSubType());
+                }
+                rSh.UpdateOneField(*pField);
             }
             break;
         }

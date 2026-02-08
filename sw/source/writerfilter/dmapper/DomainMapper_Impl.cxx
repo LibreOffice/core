@@ -9048,8 +9048,8 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     // LO always automatically updates a DocInfo field from the File-Properties-Custom Prop
                     // while MS Word requires the user to manually refresh the field (with F9).
                     // In other words, Word lets the field to be out of sync with the controlling variable.
-                    // Marking as FIXEDFLD solves the automatic replacement problem, but of course prevents
-                    // Writer from making any changes, even on an F9 refresh.
+                    // Marking as SoftFixed solves the automatic replacement problem and lets the user
+                    // manually update the field (e.g. F9 refresh).
                     OUString sVariable = pContext->GetVariableValue();
                     if (rResult.getLength() != sVariable.getLength())
                     {
@@ -9057,10 +9057,13 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         if (nLen >= 0)
                             sVariable = sVariable.copy(0, nLen);
                     }
-                    bool bCustomFixedField = rResult != sVariable &&
-                        xServiceInfo->supportsService(u"com.sun.star.text.TextField.DocInfo.Custom"_ustr);
+                    if (rResult != sVariable &&
+                        xServiceInfo->supportsService(u"com.sun.star.text.TextField.DocInfo.Custom"_ustr))
+                    {
+                        xFieldProperties->setPropertyValue(u"IsSoftFixed"_ustr, uno::Any(true));
+                    }
 
-                    if (bCustomFixedField || xServiceInfo->supportsService(
+                    if (xServiceInfo->supportsService(
                             u"com.sun.star.text.TextField.DocInfo.CreateDateTime"_ustr))
                     {
                         // Creation time is const, don't try to update it.

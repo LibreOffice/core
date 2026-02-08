@@ -97,6 +97,10 @@ enum class SwDocInfoSubType : sal_uInt16
     SubTime       = 0x0200,
     SubDate       = 0x0300,
     SubFixed      = 0x1000,
+    // SubSoftFixed: not saved to file (ephemeral / transient),
+    // prevents automatic updates (especially import time updates),
+    // unset when user explicitly triggers update (e.g. via UI button)
+    SubSoftFixed  = 0x2000,
     SubMask       = 0x0f00,
 
     Max           = 0xffff // used as a flag by SwFieldDokInfPage
