@@ -400,6 +400,7 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
             {
                 // non ASCII character is allowed.
                 ++p;
+                only_digits = false;
             }
             else
                 break;

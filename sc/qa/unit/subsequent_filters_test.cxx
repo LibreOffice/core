@@ -1587,6 +1587,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowIndex1BasedXLSX)
     CPPUNIT_ASSERT_EQUAL(u"Third line."_ustr, aStr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNonAsciiWithDotXLSX)
+{
+    createScDoc("xlsx/tdf100154.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    OUString aStr = pDoc->GetFormula(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(u"=$'Новый.лист'.A1"_ustr, aStr);
+
+    pDoc->CalcAll();
+    double aValue = pDoc->GetValue(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(5.0, aValue);
+}
+
 ScFiltersTest::ScFiltersTest()
     : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
