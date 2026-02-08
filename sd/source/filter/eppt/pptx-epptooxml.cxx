@@ -616,26 +616,6 @@ private:
         std::vector<editeng::Section> aSections;
         rEditText.GetAllSections(aSections);
 
-        {
-            SfxStyleSheet* pStyleSheet = pTextObject->getSdrPageFromSdrObject()->GetTextStyleSheetForObject(pTextObject);
-            if (pStyleSheet)
-            {
-                const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
-                if (const SvxFontItem* pItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO, false))
-                {
-                    addFontItem(pItem);
-                }
-                if (const SvxFontItem* pItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK, false))
-                {
-                    addFontItem(pItem);
-                }
-                if (const SvxFontItem* pItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL, false))
-                {
-                    addFontItem(pItem);
-                }
-            }
-        }
-
         for (editeng::Section const& rSection : aSections)
         {
             if (SvxFontItem const* pFontItem = getFontItem(rSection, EE_CHAR_FONTINFO); pFontItem && mbEmbedLatinScript)
@@ -665,23 +645,8 @@ protected:
     void handleSdrObject(SdrObject* pObject) override
     {
         SdrTextObj* pTextShape = DynCastSdrTextObj(pObject);
-        if (pTextShape)
+        if (pTextShape && !pTextShape->IsEmptyPresObj())
         {
-            auto& rItemSet = pTextShape->GetMergedItemSet();
-
-            if (SvxFontItem const* pFontItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO, true); pFontItem && mbEmbedLatinScript)
-            {
-                addFontItem(pFontItem);
-            }
-            if (SvxFontItem const* pFontItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK, true); pFontItem && mbEmbedAsianScript)
-            {
-                addFontItem(pFontItem);
-            }
-            if (SvxFontItem const* pFontItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL, true); pFontItem && mbEmbedComplexScript)
-            {
-                addFontItem(pFontItem);
-            }
-
             traverseEditEng(pTextShape);
         }
     }
