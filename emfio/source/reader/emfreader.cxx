@@ -1259,10 +1259,8 @@ namespace emfio
                             SAL_INFO("emfio", "\t\tIndex: " << nIndex << " Style: 0x" << std::hex
                                                             << nPenStyle << std::dec
                                                             << " PenWidth: " << nPenWidth);
-                            // PS_COSMETIC width is always fixed at one logical unit
-                            // and is not affected by any geometric transformations like scaling
-                            if (nPenStyle == PS_COSMETIC)
-                                nPenWidth = 1;
+                            if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
+                                nPenStyle = PS_COSMETIC;
                             CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(ReadColor(), nPenStyle, nPenWidth));
                         }
                     }
@@ -1285,10 +1283,8 @@ namespace emfio
                             else
                             {
                                 SAL_INFO("emfio", "\t\tStyle: 0x" << std::hex << nPenStyle << std::dec);
-                                // PS_COSMETIC width is always fixed at one logical unit
-                                // and is not affected by any geometric transformations like scaling
-                                if (nPenStyle == PS_COSMETIC)
-                                    nWidth = 1;
+                                if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
+                                    nPenStyle = PS_COSMETIC;
                                 SAL_INFO("emfio", "\t\tWidth: " << nWidth);
                                 CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(aColorRef, nPenStyle, nWidth));
                             }
