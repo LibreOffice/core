@@ -1879,6 +1879,81 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_SMALLTEXTOUT :
+                    {
+                        sal_Int32   ptlReferenceX, ptlReferenceY;
+                        sal_uInt32  nLen, nOptions, nGfxMode;
+                        float       nXScale, nYScale;
+
+                        mpInputStream->ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY )
+                           .ReadUInt32( nLen ).ReadUInt32( nOptions )
+                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale );
+                        SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
+                        SAL_INFO("emfio", "\t\tcChars: " << nLen);
+                        SAL_INFO("emfio", "\t\tfuOptions: 0x" << std::hex << nOptions << std::dec);
+                        SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
+                        SAL_INFO("emfio", "\t\tScale: " << nXScale << " x " << nYScale);
+
+                        // Read optional bounding rectangle (present only if ETO_NO_RECT is NOT set)
+                        tools::Rectangle aRect;
+                        if ( !( nOptions & ETO_NO_RECT ) )
+                        {
+                            sal_Int32 nLeftRect, nTopRect, nRightRect, nBottomRect;
+                            mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
+                            aRect = tools::Rectangle( nLeftRect, nTopRect, nRightRect, nBottomRect );
+                            SAL_INFO("emfio", "\t\tBounds: " << nLeftRect << ", " << nTopRect << ", " << nRightRect << ", " << nBottomRect);
+                        }
+
+                        if (!mpInputStream->good())
+                        {
+                            bStatus = false;
+                        }
+                        else
+                        {
+                            const BackgroundMode mnBkModeBackup = mnBkMode;
+                            if ( nOptions & ETO_NO_RECT )
+                                mnBkMode = BackgroundMode::Transparent;
+                            else if ( nOptions & ETO_OPAQUE )
+                                DrawRectWithBGColor( aRect );
+
+                            vcl::text::ComplexTextLayoutFlags nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
+                            if ( nOptions & ETO_RTLREADING )
+                                nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+                            SetTextLayoutMode( nTextLayoutMode );
+
+                            Point aPos( ptlReferenceX, ptlReferenceY );
+                            OUString aText;
+                            if ( nOptions & ETO_SMALL_CHARS )
+                            {
+                                if ( nLen <= ( mnEndPos - mpInputStream->Tell() ) )
+                                {
+                                    std::vector<char> pBuf( nLen );
+                                    mpInputStream->ReadBytes(pBuf.data(), nLen);
+                                    aText = OUString(pBuf.data(), nLen, GetCharSet());
+                                }
+                            }
+                            else
+                            {
+                                if ( ( nLen * sizeof(sal_Unicode) ) <= ( mnEndPos - mpInputStream->Tell() ) )
+                                {
+                                    aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
+                                }
+                            }
+                            SAL_INFO("emfio", "\t\tText: " << aText);
+
+                            if ( nOptions & ETO_CLIPPED )
+                            {
+                                Push();
+                                IntersectClipRect( aRect );
+                            }
+                            DrawText(aPos, aText, nullptr, nullptr, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                            if ( nOptions & ETO_CLIPPED )
+                                Pop();
+                            mnBkMode = mnBkModeBackup;
+                        }
+                    }
+                    break;
+
                     case EMR_POLYTEXTOUTA :
                     case EMR_EXTTEXTOUTA :
                         bFlag = true;
@@ -2219,7 +2294,6 @@ namespace emfio
                     case EMR_DRAWESCAPE :
                     case EMR_EXTESCAPE :
                     case EMR_STARTDOC :
-                    case EMR_SMALLTEXTOUT :
                     case EMR_FORCEUFIMAPPING :
                     case EMR_NAMEDESCAPE :
                     case EMR_COLORCORRECTPALETTE :
