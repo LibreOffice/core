@@ -1702,6 +1702,38 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignRtlReading)
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[3]", "rtl", u"true");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSmallTextOut)
+{
+    // EMR_SMALLTEXTOUT with Unicode text (no ETO_SMALL_CHARS), ETO_NO_RECT.
+    // Verifies the text "SmallTextOut" is correctly imported.
+    OUString aUrl = m_directories.getURLFromSrc(u"/emfio/qa/cppunit/emf/data/TestSmallTextOut.emf");
+    SvFileStream aFileStream(aUrl, StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray/text", u"SmallTextOut");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSmallTextOutAnsi)
+{
+    // EMR_SMALLTEXTOUT with ETO_SMALL_CHARS (8-bit text) and bounds rectangle.
+    OUString aUrl
+        = m_directories.getURLFromSrc(u"/emfio/qa/cppunit/emf/data/TestSmallTextOutAnsi.emf");
+    SvFileStream aFileStream(aUrl, StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/metafile/push[2]/textarray/text", u"AnsiSmall");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

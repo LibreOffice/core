@@ -264,6 +264,7 @@ namespace emfio
         ETO_RTLREADING  = 0x0080,
         /* _WIN32_WINNT >= 0x0500 */
         ETO_NO_RECT     = 0x0100,
+        ETO_SMALL_CHARS = 0x0200,
         ETO_PDY         = 0x2000
     };
 
