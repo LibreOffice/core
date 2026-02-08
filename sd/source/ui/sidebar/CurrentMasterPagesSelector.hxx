@@ -46,6 +46,11 @@ public:
         ViewShellBase& rBase,
         const std::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+    CurrentMasterPagesSelector (
+        weld::Widget* pParent,
+        SdDrawDocument& rDocument,
+        ViewShellBase& rBase,
+        const std::shared_ptr<MasterPageContainer>& rpContainer);
     virtual ~CurrentMasterPagesSelector() override;
 
     /** Set the selection so that the master page is selected that is

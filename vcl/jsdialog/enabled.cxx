@@ -527,6 +527,7 @@ constexpr auto NotebookbarList
         { u"svx/ui/themeselectorpanel.ui" },
         // not interim builder, but regular builder:
         { u"modules/simpress/ui/masterpagepanelall.ui" },
+        { u"modules/simpress/ui/masterpagepanel.ui" },
         { u"modules/simpress/ui/slidetransitionspanel.ui" }
     });
 

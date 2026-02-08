@@ -72,6 +72,18 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector(
     mpEventMultiplexer = rBase.GetEventMultiplexer();
     mpEventMultiplexer->AddEventListener(aLink);
 }
+CurrentMasterPagesSelector::CurrentMasterPagesSelector(
+    weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
+    const std::shared_ptr<MasterPageContainer>& rpContainer)
+    : MasterPagesSelector(pParent, rDocument, rBase, rpContainer,
+                          u"modules/simpress/ui/masterpagepanel.ui"_ustr,
+                          u"masterpagecurrent_icons"_ustr)
+{
+    Link<sdtools::EventMultiplexerEvent&, void> aLink(
+        LINK(this, CurrentMasterPagesSelector, EventMultiplexerListener));
+    mpEventMultiplexer = rBase.GetEventMultiplexer();
+    mpEventMultiplexer->AddEventListener(aLink);
+}
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 {
