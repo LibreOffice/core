@@ -1212,6 +1212,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
                     {UNO_NAME_NAME,   FIELD_PROP_PAR4,    cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     {UNO_NAME_CURRENT_PRESENTATION, FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     {UNO_NAME_IS_FIXED,   FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,0},
+                    {"IsSoftFixed",   FIELD_PROP_BOOL3,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,0},
                     {UNO_NAME_NUMBER_FORMAT, FIELD_PROP_FORMAT,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,    0},
                     {UNO_NAME_IS_FIXED_LANGUAGE, FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES

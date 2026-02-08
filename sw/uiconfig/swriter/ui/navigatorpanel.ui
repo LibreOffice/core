@@ -1181,7 +1181,7 @@
                             <property name="toolbar-style">icons</property>
                             <property name="show-arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id=".uno:UpdateFields">
+                              <object class="GtkToolButton" id=".uno:UpdateFields?UnlockSoftFixed:bool=1">
                                 <property name="visible">True</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>

@@ -1584,6 +1584,8 @@ void SAL_CALL SwXTextField::attach(
                 }
                 if (m_pImpl->m_pProps->bBool1)
                     nSubType |= SwDocInfoSubType::SubFixed;
+                if (m_pImpl->m_pProps->bBool3)
+                    nSubType |= SwDocInfoSubType::SubSoftFixed;
                 xField.reset(new SwDocInfoField(
                         static_cast<SwDocInfoFieldType*>(pFieldType), nSubType,
                         m_pImpl->m_pProps->sPar4, m_pImpl->m_pProps->nFormat));

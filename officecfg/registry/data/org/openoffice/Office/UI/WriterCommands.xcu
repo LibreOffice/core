@@ -2106,7 +2106,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:UpdateFields" oor:op="replace">
+      <node oor:name=".uno:UpdateFields?UnlockSoftFixed:bool=1" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Fields</value>
         </prop>

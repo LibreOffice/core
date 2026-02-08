@@ -1260,6 +1260,9 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_BOOL1:
         rAny <<= bool(m_nSubType & SwDocInfoSubType::SubFixed);
         break;
+    case FIELD_PROP_BOOL3:
+        rAny <<= bool(m_nSubType & SwDocInfoSubType::SubSoftFixed);
+        break;
 
     case FIELD_PROP_FORMAT:
         rAny  <<= static_cast<sal_Int32>(GetFormat());
@@ -1309,6 +1312,12 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             m_nSubType |= SwDocInfoSubType::SubFixed;
         else
             m_nSubType &= ~SwDocInfoSubType::SubFixed;
+        break;
+    case FIELD_PROP_BOOL3:
+        if(*o3tl::doAccess<bool>(rAny))
+            m_nSubType |= SwDocInfoSubType::SubSoftFixed;
+        else
+            m_nSubType &= ~SwDocInfoSubType::SubSoftFixed;
         break;
     case FIELD_PROP_FORMAT:
         {

@@ -83,9 +83,11 @@
 #include <strings.hrc>
 #include <unotxdoc.hxx>
 #include <doc.hxx>
+#include <docufld.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <ThemeColorChanger.hxx>
 #include <swabstdlg.hxx>
@@ -206,6 +208,20 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, SelectionType nSel )
         }
     }
     return bRet;
+}
+
+/// See SubSoftFixed definition.
+/// It may only be unlocked on explicit user action (e.g. "Update All" button click).
+static void lcl_UnlockSoftFixed( SwWrtShell &rSh )
+{
+    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
+    std::vector<SwFormatField*> vFields;
+    pType->GatherFields(vFields);
+    for (auto pFormatField : vFields)
+    {
+        SwDocInfoField* pDocInfoField = static_cast<SwDocInfoField*>(pFormatField->GetField());
+        pDocInfoField->SetSubType(pDocInfoField->GetSubType() & ~SwDocInfoSubType::SubSoftFixed);
+    }
 }
 
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
@@ -967,6 +983,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     break;
                 }
 
+                if (pArgs)
+                {
+                    // FN_UPDATE_FIELDS may be triggered automatically.
+                    // That's why SubSoftFix unlock must not happen implicitly here.
+                    const SfxBoolItem* pUnlockSoftFixed = rReq.GetArg<SfxBoolItem>(FN_PARAM_7);
+                    if (pUnlockSoftFixed && pUnlockSoftFixed->GetValue())
+                        lcl_UnlockSoftFixed(rSh);
+                }
                 rSh.UpdateDocStat();
                 rSh.EndAllTableBoxEdit();
                 rSh.SwViewShell::UpdateFields(true);
@@ -1012,6 +1036,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.EndAllAction();
                 }
                 SfxDispatcher &rDis = *rTempView.GetViewFrame().GetDispatcher();
+                lcl_UnlockSoftFixed(rSh);
                 rDis.Execute( FN_UPDATE_FIELDS );
                 rDis.Execute( FN_UPDATE_TOX );
                 rDis.Execute( FN_UPDATE_CHARTS );
