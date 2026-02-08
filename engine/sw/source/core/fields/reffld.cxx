@@ -632,8 +632,8 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 return;
 
             case ReferencesSubtype::Style:
-                nStart = 0;
-                nEnd = nLen;
+                nStart = nNumStart;
+                nEnd = nNumEnd;
                 break;
 
             default:
@@ -1302,6 +1302,7 @@ namespace
             return pTextNode;
         }
 
+        bool bHasHint = false;
         if (auto const pHints = pTextNode->GetpSwpHints())
         {
             for (size_t i = 0, nCnt = pHints->Count(); i < nCnt; ++i)
@@ -1313,15 +1314,26 @@ namespace
                         ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
                         : pHint->GetCharFormat().GetCharFormat()->GetName().toString().equalsIgnoreAsciiCase(rStyleName))
                     {
-                        *pStart = pHint->GetStart();
+                        if ( !bHasHint )
+                        {
+                            *pStart = pHint->GetStart();
+                            bHasHint = true;
+                        }
+                        // if the next hint is not adjacent, return with the last end stored in pEnd,
+                        // i.e. with the first continuous text in the paragraph, which is formatted
+                        // with the requested character style
+                        else if ( !pEnd || *pEnd != pHint->GetStart() )
+                            return pTextNode;
+
                         if (pEnd)
                         {
                             *pEnd = *pHint->End();
                         }
-                        return pTextNode;
                     }
                 }
             }
+            if ( bHasHint )
+                return pTextNode;
         }
 
         return nullptr;

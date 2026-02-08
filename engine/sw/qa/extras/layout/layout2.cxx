@@ -1321,6 +1321,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40277)
     CPPUNIT_ASSERT(xSpell->isValid(sWord3, LanguageTag::convertToLocale(eLang), aProperties));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf163894)
+{
+    createSwDoc("tdf163894.fodt");
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // This was "Mauris ... nonummy.", i.e. full text of the paragraph containing the text
+    // formatted by the character style "Emphasis"
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"Etiam eget dui. Aliquet pede. Donec. ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     createSwDoc("tdf85610.fodt");
