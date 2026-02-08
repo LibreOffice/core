@@ -1977,6 +1977,45 @@ ScCompiler::~ScCompiler()
 {
 }
 
+static bool lcl_TabContainsReference(const OUString& rString)
+{
+    sal_Int32 nLen = rString.getLength(), nPos = 0;
+
+    if (nLen < 2 || !rtl::isAsciiAlpha(static_cast<unsigned char>(rString[0])))
+        return false;
+
+    // If the first two characters are a R1C1 style reference, Excel always quotes the string
+    sal_Unicode first = rString[0];
+    if ((first == 'R' || first == 'r' || first == 'C' || first == 'c')
+        && rtl::isAsciiDigit(static_cast<unsigned char>(rString[1])))
+    {
+        return true;
+    }
+
+    // Check for A1 style refernce
+    while (nPos < nLen && rtl::isAsciiAlpha(static_cast<unsigned char>(rString[nPos])))
+        nPos++;
+
+    sal_Int32 nAlphaEnd = nPos;
+
+    while (nPos < nLen && rtl::isAsciiDigit(static_cast<unsigned char>(rString[nPos])))
+        nPos++;
+
+    if (nPos != nLen || nAlphaEnd == nLen || nAlphaEnd > 3)
+        return false;
+
+    // Max row: 2^20 and Max col: XFD
+    constexpr sal_Int32 MAX_ROW = 1048576;
+
+    OUString sCol = rString.copy(0, nAlphaEnd).toAsciiUpperCase();
+    sal_Int32 nRow = rtl_ustr_toInt32(rString.getStr() + nAlphaEnd, 10);
+
+    bool bValidCol = (nAlphaEnd < 3 || sCol.compareToAscii("XFD") < 0);
+    bool bValidRow = (nRow > 0 && nRow <= MAX_ROW);
+
+    return bValidCol && bValidRow;
+}
+
 void ScCompiler::CheckTabQuotes( OUString& rString,
                                  const FormulaGrammar::AddressConvention eConv )
 {
@@ -1984,7 +2023,9 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
     sal_Int32 nContFlags = nStartFlags | KParseTokens::ANY_NUMBER;
     ParseResult aRes = ScGlobal::getCharClass().parsePredefinedToken(
         KParseType::IDENTNAME, rString, 0, nStartFlags, OUString(), nContFlags, OUString());
-    bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength());
+    bool bNeedsQuote
+        = (!((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength())
+           || lcl_TabContainsReference(rString));
 
     switch ( eConv )
     {
