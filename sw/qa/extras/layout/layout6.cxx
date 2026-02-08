@@ -2183,6 +2183,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf167946)
     assertXPath(pXmlDoc, "//SwLineLayout[2]/child::*[81]", "portion", u",");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169607)
+{
+    // Given a document with a sequence of huge letters, each of which don't fit to page vertically:
+    createSwDoc("tdf169607-big-letters.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // There must be three pages, because the sequence must split two characters per page. Before
+    // the fix, there was only one page:
+    assertXPath(pXmlDoc, "//page", 3);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
