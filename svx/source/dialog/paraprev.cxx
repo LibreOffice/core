@@ -23,16 +23,16 @@
 #include <vcl/settings.hxx>
 
 SvxParaPrevWindow::SvxParaPrevWindow() :
-    nLeftMargin     ( 0 ),
-    nRightMargin    ( 0 ),
-    nFirstLineOffset  ( 0 ),
-    nUpper          ( 0 ),
-    nLower          ( 0 ),
-    eAdjust         ( SvxAdjust::Left ),
-    eLastLine       ( SvxAdjust::Left ),
-    eLine           ( SvxPrevLineSpace::N1 )
+    m_nLeftMargin     ( 0 ),
+    m_nRightMargin    ( 0 ),
+    m_nFirstLineOffset  ( 0 ),
+    m_nUpper          ( 0 ),
+    m_nLower          ( 0 ),
+    m_eAdjust         ( SvxAdjust::Left ),
+    m_eLastLine       ( SvxAdjust::Left ),
+    m_eLine           ( SvxPrevLineSpace::N1 )
 {
-    aSize = Size(11905, 16837);
+    m_aSize = Size(11905, 16837);
 }
 
 void SvxParaPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -83,7 +83,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         if (i == 3)
         {
             rRenderContext.SetFillColor(COL_GRAY);
-            auto nTop = nUpper * aLineSiz.Height() / aSize.Height();
+            auto nTop = m_nUpper * aLineSiz.Height() / m_aSize.Height();
             aPnt.AdjustY(nTop * 2 );
         }
 
@@ -92,8 +92,8 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         if (3 <= i && 6 > i)
         {
-            tools::Long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
-            tools::Long nFirst = nFirstLineOffset * aLineSiz.Width() / aSize.Width();
+            tools::Long nLeft = m_nLeftMargin * aLineSiz.Width() / m_aSize.Width();
+            tools::Long nFirst = m_nFirstLineOffset * aLineSiz.Width() / m_aSize.Width();
             tools::Long nTmp = nLeft + nFirst;
 
             if (i == 3)
@@ -106,13 +106,13 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                 aPnt.AdjustX(nLeft );
                 aSiz.AdjustWidth( -nLeft );
             }
-            tools::Long nRight = nRightMargin * aLineSiz.Width() / aSize.Width();
+            tools::Long nRight = m_nRightMargin * aLineSiz.Width() / m_aSize.Width();
             aSiz.AdjustWidth( -nRight );
         }
 
         if (4 == i || 5 == i || 6 == i)
         {
-            switch (eLine)
+            switch (m_eLine)
             {
                 case SvxPrevLineSpace::N1:
                     break;
@@ -153,7 +153,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
             if (nLW > aSiz.Width())
                 nLW = aSiz.Width();
 
-            switch (eAdjust)
+            switch (m_eAdjust)
             {
                 case SvxAdjust::Left:
                     break;
@@ -165,11 +165,11 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                     break;
                 default: ; //prevent warning
             }
-            if (SvxAdjust::Block == eAdjust)
+            if (SvxAdjust::Block == m_eAdjust)
             {
                 if(5 == i)
                 {
-                    switch( eLastLine )
+                    switch( m_eLastLine )
                     {
                         case SvxAdjust::Left:
                             break;
@@ -197,7 +197,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         if (5 == i)
         {
-            auto nBottom = nLower * aLineSiz.Height() / aSize.Height();
+            auto nBottom = m_nLower * aLineSiz.Height() / m_aSize.Height();
             aPnt.AdjustY(nBottom * 2 );
         }
 
