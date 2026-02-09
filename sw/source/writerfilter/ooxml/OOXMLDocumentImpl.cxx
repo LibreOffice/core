@@ -28,7 +28,7 @@
 #include <oox/drawingml/theme.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include "OOXMLStreamImpl.hxx"
-#include "OOXMLDocumentImpl.hxx"
+#include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLBinaryObjectReference.hxx"
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLPropertySet.hxx"
@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 namespace writerfilter::ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream,
+OOXMLDocument::OOXMLDocument(OOXMLStream::Pointer_t pStream,
                                      uno::Reference<task::XStatusIndicator> xStatusIndicator,
                                      bool bSkipImages,
                                      const uno::Sequence<beans::PropertyValue>& rDescriptor,
@@ -75,11 +75,11 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream,
     pushShapeContext();
 }
 
-OOXMLDocumentImpl::~OOXMLDocumentImpl()
+OOXMLDocument::~OOXMLDocument()
 {
 }
 
-void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
+void OOXMLDocument::resolveFastSubStream(Stream & rStreamHandler,
                                              OOXMLStream::StreamType_t nType)
 {
     OOXMLStream::Pointer_t pStream;
@@ -124,14 +124,14 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     mpStream = std::move(savedStream);
 }
 
-void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
+void OOXMLDocument::resolveFastSubStreamWithId(Stream & rStream,
                                     const writerfilter::Reference<Stream>::Pointer_t& pStream,
                                     sal_uInt32 nId)
 {
     rStream.substream(nId, pStream);
 }
 
-uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStream::StreamType_t nType)
+uno::Reference<xml::dom::XDocument> OOXMLDocument::importSubStream(OOXMLStream::StreamType_t nType)
 {
     uno::Reference<xml::dom::XDocument> xRet;
 
@@ -177,7 +177,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
 }
 
 
-void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& pStream, OOXMLStream::StreamType_t nType)
+void OOXMLDocument::importSubStreamRelations(const OOXMLStream::Pointer_t& pStream, OOXMLStream::StreamType_t nType)
 {
     uno::Reference<xml::dom::XDocument> xRelation;
     OOXMLStream::Pointer_t cStream;
@@ -228,31 +228,31 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
     }
 }
 
-void OOXMLDocumentImpl::setXNoteId(const sal_Int32 nId)
+void OOXMLDocument::setXNoteId(const sal_Int32 nId)
 {
     mnXNoteId = nId;
 }
 
-sal_Int32 OOXMLDocumentImpl::getXNoteId() const
+sal_Int32 OOXMLDocument::getXNoteId() const
 {
     return mnXNoteId;
 }
 
-const OUString & OOXMLDocumentImpl::getTarget() const
+const OUString & OOXMLDocument::getTarget() const
 {
     return mpStream->getTarget();
 }
 
 writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getSubStream(const OUString & rId)
+OOXMLDocument::getSubStream(const OUString & rId)
 {
     OOXMLStream::Pointer_t pStream
         (OOXMLDocumentFactory::createStream(mpStream, rId));
 
-    OOXMLDocumentImpl * pTemp;
+    OOXMLDocument * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp =
-            new OOXMLDocumentImpl(std::move(pStream), uno::Reference<task::XStatusIndicator>(),
+            new OOXMLDocument(std::move(pStream), uno::Reference<task::XStatusIndicator>(),
                                   mbSkipImages, maMediaDescriptor, getShapeFilterBase()));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
@@ -261,10 +261,10 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 }
 
 writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int32 nId)
+OOXMLDocument::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int32 nId)
 {
     // See above, no status indicator for the note stream, either.
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(OOXMLDocumentFactory::createStream(mpStream, nType),
+    OOXMLDocument * pDocument = new OOXMLDocument(OOXMLDocumentFactory::createStream(mpStream, nType),
             uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor, nullptr);
     pDocument->setXNoteId(nId);
     pDocument->setModel(getModel());
@@ -273,7 +273,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int
     return writerfilter::Reference<Stream>::Pointer_t(pDocument);
 }
 
-void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
+void OOXMLDocument::resolveFootnote(Stream & rStream,
                                         Id aType,
                                         const sal_Int32 nNoteId)
 {
@@ -295,7 +295,7 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
     resolveFastSubStreamWithId(rStream, mpXFootnoteStream, nId);
 }
 
-void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
+void OOXMLDocument::resolveEndnote(Stream & rStream,
                                        Id aType,
                                        const sal_Int32 nNoteId)
 {
@@ -317,12 +317,12 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
     resolveFastSubStreamWithId(rStream, mpXEndnoteStream, nId);
 }
 
-void OOXMLDocumentImpl::resolveCommentsExtendedStream(Stream& rStream)
+void OOXMLDocument::resolveCommentsExtendedStream(Stream& rStream)
 {
     resolveFastSubStream(rStream, OOXMLStream::StreamType_t::COMMENTS_EXTENDED);
 }
 
-void OOXMLDocumentImpl::resolveComment(Stream & rStream,
+void OOXMLDocument::resolveComment(Stream & rStream,
                                        const sal_Int32 nId)
 {
     if (!mbCommentsExtendedResolved)
@@ -337,7 +337,7 @@ void OOXMLDocumentImpl::resolveComment(Stream & rStream,
     resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_annotation);
 }
 
-OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
+OOXMLPropertySet * OOXMLDocument::getPicturePropSet
 (const OUString & rId)
 {
     OOXMLStream::Pointer_t xStream
@@ -361,7 +361,7 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
     return pProps;
 }
 
-void OOXMLDocumentImpl::resolvePicture(Stream & rStream,
+void OOXMLDocument::resolvePicture(Stream & rStream,
                                        const OUString & rId)
 {
     OOXMLPropertySet::Pointer_t pProps(getPicturePropSet(rId));
@@ -369,12 +369,12 @@ void OOXMLDocumentImpl::resolvePicture(Stream & rStream,
     rStream.props(pProps.get());
 }
 
-OUString OOXMLDocumentImpl::getTargetForId(const OUString & rId)
+OUString OOXMLDocument::getTargetForId(const OUString & rId)
 {
     return mpStream->getTargetForId(rId);
 }
 
-void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
+void OOXMLDocument::resolveHeader(Stream & rStream,
                                       const sal_Int32 type,
                                       const OUString & rId)
 {
@@ -396,7 +396,7 @@ void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
      }
 }
 
-void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
+void OOXMLDocument::resolveFooter(Stream & rStream,
                                       const sal_Int32 type,
                                       const OUString & rId)
 {
@@ -420,7 +420,7 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 }
 
 namespace {
-// Ensures that the indicator is reset after exiting OOXMLDocumentImpl::resolve
+// Ensures that the indicator is reset after exiting OOXMLDocument::resolve
 class StatusIndicatorGuard{
 public:
     explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator> xStatusIndicator)
@@ -439,7 +439,7 @@ private:
 };
 }
 
-void OOXMLDocumentImpl::resolve(Stream & rStream)
+void OOXMLDocument::resolve(Stream & rStream)
 {
     StatusIndicatorGuard aStatusIndicatorGuard(mxStatusIndicator);
 
@@ -535,17 +535,17 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     catch (uno::Exception const&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << exceptionToString(anyEx));
+        SAL_WARN("writerfilter.ooxml", "OOXMLDocument::resolve(): " << exceptionToString(anyEx));
         throw lang::WrappedTargetRuntimeException(u""_ustr, nullptr, anyEx);
     }
     catch (...)
     {
         SAL_WARN("writerfilter.ooxml",
-            "OOXMLDocumentImpl::resolve(): non-UNO exception");
+            "OOXMLDocument::resolve(): non-UNO exception");
     }
 }
 
-void OOXMLDocumentImpl::incrementProgress()
+void OOXMLDocument::incrementProgress()
 {
     mnProgressCurrentPos++;
     // 1) If we know the end
@@ -559,7 +559,7 @@ void OOXMLDocumentImpl::incrementProgress()
     }
 }
 
-void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
+void OOXMLDocument::resolveCustomXmlStream(Stream & rStream)
 {
     // Resolving all item[n].xml files from CustomXml folder.
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
@@ -640,7 +640,7 @@ constexpr OUStringLiteral sFonttableContentType = u"application/vnd.openxmlforma
 }
 
 // See DocxExport::WriteGlossary
-void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
+void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
 {
     OOXMLStream::Pointer_t pStream;
     try
@@ -731,7 +731,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
     mxGlossaryDomList = comphelper::containerToSequence(aGlossaryDomList);
 }
 
-void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream)
+void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream)
 {
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
     xRelationshipAccess.set(dynamic_cast<OOXMLStreamImpl&>(*pStream).accessDocumentStream(), uno::UNO_QUERY);
@@ -817,55 +817,55 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
         mxEmbeddingsList = comphelper::containerToSequence(m_aEmbeddings);
 }
 
-uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getGlossaryDocDom( )
+const uno::Reference<xml::dom::XDocument>& OOXMLDocument::getGlossaryDocDom() const
 {
     return mxGlossaryDocDom;
 }
 
-uno::Sequence<uno::Sequence< beans::NamedValue> > OOXMLDocumentImpl::getGlossaryDomList()
+const uno::Sequence<uno::Sequence< beans::NamedValue> >& OOXMLDocument::getGlossaryDomList() const
 {
     return mxGlossaryDomList;
 }
 
-uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OUString & rId)
+uno::Reference<io::XInputStream> OOXMLDocument::getInputStreamForId(const OUString & rId)
 {
     OOXMLStream::Pointer_t pStream(OOXMLDocumentFactory::createStream(mpStream, rId));
 
     return pStream->getDocumentStream();
 }
 
-void OOXMLDocumentImpl::setModel(uno::Reference<frame::XModel> xModel)
+void OOXMLDocument::setModel(const uno::Reference<frame::XModel>& xModel)
 {
     mxModel.set(xModel);
 }
 
-uno::Reference<frame::XModel> OOXMLDocumentImpl::getModel()
+const uno::Reference<frame::XModel> & OOXMLDocument::getModel() const
 {
     return mxModel;
 }
 
-void OOXMLDocumentImpl::setDrawPage(const rtl::Reference<SwFmDrawPage>& xDrawPage)
+void OOXMLDocument::setDrawPage(const rtl::Reference<SwFmDrawPage>& xDrawPage)
 {
     mxDrawPage = xDrawPage;
 }
 
-rtl::Reference<SwFmDrawPage> OOXMLDocumentImpl::getDrawPage()
+const rtl::Reference<SwFmDrawPage>& OOXMLDocument::getDrawPage() const
 {
     return mxDrawPage;
 }
 
-const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor() const
+const uno::Sequence<beans::PropertyValue>& OOXMLDocument::getMediaDescriptor() const
 {
     return maMediaDescriptor;
 }
 
-void OOXMLDocumentImpl::setShapeContext(const rtl::Reference<oox::shape::ShapeContextHandler>& xContext)
+void OOXMLDocument::setShapeContext(const rtl::Reference<oox::shape::ShapeContextHandler>& xContext)
 {
     if (!maShapeContexts.empty())
         maShapeContexts.top() = xContext;
 }
 
-rtl::Reference<oox::shape::ShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
+rtl::Reference<oox::shape::ShapeContextHandler> OOXMLDocument::getShapeContext( )
 {
     if (!maShapeContexts.empty())
         return maShapeContexts.top();
@@ -873,45 +873,45 @@ rtl::Reference<oox::shape::ShapeContextHandler> OOXMLDocumentImpl::getShapeConte
         return {};
 }
 
-void OOXMLDocumentImpl::pushShapeContext()
+void OOXMLDocument::pushShapeContext()
 {
     maShapeContexts.push({});
 }
 
-void OOXMLDocumentImpl::popShapeContext()
+void OOXMLDocument::popShapeContext()
 {
     if (!maShapeContexts.empty())
         maShapeContexts.pop();
 }
 
-uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )
+const uno::Reference<xml::dom::XDocument> & OOXMLDocument::getThemeDom() const
 {
     return mxThemeDom;
 }
 
-uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomList( )
+const uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomList( ) const
 {
     return mxCustomXmlDomList;
 }
 
-uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomPropsList( )
+const uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomPropsList( ) const
 {
     return mxCustomXmlDomPropsList;
 }
 
-uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
+const uno::Sequence<beans::PropertyValue >& OOXMLDocument::getEmbeddingsList( ) const
 {
     return mxEmbeddingsList;
 }
 
-const rtl::Reference<oox::shape::ShapeFilterBase>& OOXMLDocumentImpl::getShapeFilterBase()
+const rtl::Reference<oox::shape::ShapeFilterBase>& OOXMLDocument::getShapeFilterBase()
 {
     if (!mxShapeFilterBase)
         mxShapeFilterBase = new oox::shape::ShapeFilterBase(mpStream->getContext());
     return mxShapeFilterBase;
 }
 
-const rtl::Reference<oox::drawingml::ThemeFilterBase>& OOXMLDocumentImpl::getThemeFilterBase()
+const rtl::Reference<oox::drawingml::ThemeFilterBase>& OOXMLDocument::getThemeFilterBase()
 {
     if (!mxThemeFilterBase)
         mxThemeFilterBase = new oox::drawingml::ThemeFilterBase(mpStream->getContext());
@@ -924,7 +924,7 @@ OOXMLDocumentFactory::createDocument
  const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
  bool mbSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor, nullptr);
+    return new OOXMLDocument(pStream, xStatusIndicator, mbSkipImages, rDescriptor, nullptr);
 }
 
 }

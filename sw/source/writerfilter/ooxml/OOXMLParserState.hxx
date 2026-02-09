@@ -19,7 +19,7 @@
 #pragma once
 
 #include <stack>
-#include "OOXMLDocumentImpl.hxx"
+#include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLPropertySet.hxx"
 
 namespace writerfilter::ooxml
@@ -45,7 +45,7 @@ class OOXMLParserState final : public virtual SvRefBase
     bool mbForwardEvents;
     unsigned int mnContexts;
     unsigned int mnHandle;
-    OOXMLDocumentImpl* mpDocument;
+    OOXMLDocument* mpDocument;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     std::stack<OOXMLPropertySet::Pointer_t> mCellProps;
     std::stack<OOXMLPropertySet::Pointer_t> mRowProps;
@@ -87,8 +87,8 @@ public:
     std::string getHandle() const;
     void setHandle();
 
-    void setDocument(OOXMLDocumentImpl* pDocument);
-    OOXMLDocumentImpl* getDocument() const { return mpDocument; }
+    void setDocument(OOXMLDocument* pDocument);
+    OOXMLDocument* getDocument() const { return mpDocument; }
 
     void setXNoteId(const sal_Int32 rId);
     sal_Int32 getXNoteId() const;

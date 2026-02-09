@@ -830,12 +830,12 @@ void OOXMLFastContextHandler::setDefaultStringValue()
 {
 }
 
-void OOXMLFastContextHandler::setDocument(OOXMLDocumentImpl* pDocument)
+void OOXMLFastContextHandler::setDocument(OOXMLDocument* pDocument)
 {
     mpParserState->setDocument(pDocument);
 }
 
-OOXMLDocumentImpl* OOXMLFastContextHandler::getDocument()
+OOXMLDocument* OOXMLFastContextHandler::getDocument()
 {
     return mpParserState->getDocument();
 }

@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
     uno::Reference< uno::XComponentContext > context,
     Stream* pStream,
-    OOXMLDocumentImpl* pDocument,
+    OOXMLDocument* pDocument,
     sal_Int32 nXNoteId )
     : m_xContext(std::move(context))
     , mpStream( pStream )

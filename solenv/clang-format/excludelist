@@ -13200,7 +13200,6 @@ sw/source/writerfilter/dmapper/WrapPolygonHandler.cxx
 sw/source/writerfilter/ooxml/Handler.cxx
 sw/source/writerfilter/ooxml/OOXMLBinaryObjectReference.cxx
 sw/source/writerfilter/ooxml/OOXMLDocumentImpl.cxx
-sw/source/writerfilter/ooxml/OOXMLDocumentImpl.hxx
 sw/source/writerfilter/ooxml/OOXMLFactory.cxx
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx
 sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx
