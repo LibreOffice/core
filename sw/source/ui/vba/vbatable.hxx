@@ -28,16 +28,17 @@
 #include <rtl/ref.hxx>
 
 class SwXTextDocument;
+class SwXTextTable;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTable > SwVbaTable_BASE;
 
 class SwVbaTable : public SwVbaTable_BASE
 {
     rtl::Reference< SwXTextDocument > mxTextDocument;
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
+    rtl::Reference< SwXTextTable > mxTextTable;
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable);
+    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xDocument, const rtl::Reference< SwXTextTable >& xTextTable);
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) override;
     virtual void SAL_CALL Select(  ) override;
     virtual void SAL_CALL Delete(  ) override;

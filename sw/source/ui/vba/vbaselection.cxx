@@ -805,7 +805,9 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
     xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     if( xTextTable.is() )
     {
-            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, xTextTable );
+            auto pSwTextTable = dynamic_cast<SwXTextTable*>(xTextTable.get());
+            assert(pSwTextTable);
+            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, pSwTextTable );
             aRet <<= xVBATable;
             return aRet;
     }
@@ -910,7 +912,7 @@ uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index )
 
     sal_Int32 nStartRow = 0;
     sal_Int32 nEndRow = 0;
-    uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
+    rtl::Reference< SwXTextTable > xTextTable = GetXTextTable();
     SwVbaTableHelper aTableHelper( xTextTable );
     nStartRow = aTableHelper.getTabRowIndex( sTLName );
     if( !sBRName.isEmpty() )
@@ -954,12 +956,16 @@ uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
     return uno::Any( xCol );
 }
 
-uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() const
+rtl::Reference< SwXTextTable > SwVbaSelection::GetXTextTable() const
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
     xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
-    return xTextTable;
+    if (!xTextTable)
+        return nullptr;
+    auto pSwTextTable = dynamic_cast<SwXTextTable*>(xTextTable.get());
+    assert(pSwTextTable);
+    return pSwTextTable;
 }
 
 bool SwVbaSelection::IsInTable() const

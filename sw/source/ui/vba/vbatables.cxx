@@ -43,7 +43,9 @@ static uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xPare
                                  const uno::Any& aSource )
 {
     uno::Reference< text::XTextTable > xTextTable( aSource, uno::UNO_QUERY_THROW );
-    uno::Reference< word::XTable > xTable( new SwVbaTable( xParent, xContext, xDocument, xTextTable ) );
+    auto pSwTextTable = dynamic_cast<SwXTextTable*>(xTextTable.get());
+    assert(pSwTextTable);
+    uno::Reference< word::XTable > xTable( new SwVbaTable( xParent, xContext, xDocument, pSwTextTable ) );
     return uno::Any( xTable );
 }
 
@@ -189,7 +191,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     xText->insertTextContent( xTextRange, xContext, true );
 
     // move the current cursor to the first table cell
-    uno::Reference< text::XText> xFirstCellText( xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+    rtl::Reference<SwXCell> xFirstCellText( xTable->getSwCellByPosition(0, 0) );
     word::getXTextViewCursor( mxDocument )->gotoRange( xFirstCellText->getStart(), false );
 
     uno::Reference< word::XTable > xVBATable( new SwVbaTable( mxParent, mxContext,  pVbaRange->getDocument(), xTable ) );

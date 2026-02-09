@@ -30,6 +30,8 @@
 #include <ooo/vba/word/XHeaderFooter.hpp>
 #include "wordvbahelper.hxx"
 
+class SwXTextTable;
+
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XSelection > SwVbaSelection_BASE;
 
 class SwVbaSelection : public SwVbaSelection_BASE
@@ -50,7 +52,7 @@ private:
     /// @throws css::uno::RuntimeException
     void GetSelectedCellRange( OUString& sTLName, OUString& sBRName );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::text::XTextTable > GetXTextTable() const;
+    rtl::Reference< SwXTextTable > GetXTextTable() const;
     /// @throws css::uno::RuntimeException
     bool IsInTable() const;
     /// @throws css::uno::RuntimeException

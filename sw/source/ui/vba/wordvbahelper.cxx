@@ -34,6 +34,7 @@
 #include <viewsh.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <unostyle.hxx>
+#include <unotbl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -97,8 +98,8 @@ uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference<
         uno::Reference< lang::XServiceInfo > xServiceInfo( xParaEnum->nextElement(), uno::UNO_QUERY_THROW );
         if( xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr) )
         {
-            uno::Reference< table::XCellRange > xCellRange( xServiceInfo, uno::UNO_QUERY_THROW );
-            uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+            rtl::Reference< SwXTextTable > xCellRange = dynamic_cast<SwXTextTable*>(xServiceInfo.get());
+            rtl::Reference< SwXCell> xFirstCellText( xCellRange->getSwCellByPosition(0, 0) );
             xTextRange = xFirstCellText->getStart();
         }
     }

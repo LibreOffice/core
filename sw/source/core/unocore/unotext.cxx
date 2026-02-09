@@ -1795,11 +1795,11 @@ namespace {
 // Move previously imported paragraphs into a new text table.
 struct VerticallyMergedCell
 {
-    std::vector<uno::Reference< beans::XPropertySet > > aCells;
+    std::vector<rtl::Reference< SwXCell > > aCells;
     sal_Int32                                           nLeftPosition;
     bool                                                bOpen;
 
-    VerticallyMergedCell(uno::Reference< beans::XPropertySet > const& rxCell,
+    VerticallyMergedCell(rtl::Reference< SwXCell > const& rxCell,
             const sal_Int32 nLeft)
         : nLeftPosition( nLeft )
         , bOpen( true )
@@ -2074,10 +2074,9 @@ static void
 lcl_ApplyCellProperties(
     const sal_Int32 nLeftPos,
     const uno::Sequence< beans::PropertyValue >& rCellProperties,
-    const uno::Reference< uno::XInterface >& xCell,
+    const rtl::Reference< SwXCell >& xCell,
     std::vector<VerticallyMergedCell> & rMergedCells)
 {
-    const uno::Reference< beans::XPropertySet > xCellPS(xCell, uno::UNO_QUERY);
     for (const auto& rCellProperty : rCellProperties)
     {
         const OUString & rName  = rCellProperty.Name;
@@ -2100,7 +2099,7 @@ lcl_ApplyCellProperties(
                     }
                 }
                 // add the new group of merged cells
-                rMergedCells.emplace_back(xCellPS, nLeftPos);
+                rMergedCells.emplace_back(xCell, nLeftPos);
             }
             else
             {
@@ -2110,7 +2109,7 @@ lcl_ApplyCellProperties(
                 {
                     if (aMergedCell.bOpen && lcl_SimilarPosition(aMergedCell.nLeftPosition, nLeftPos))
                     {
-                        aMergedCell.aCells.push_back( xCellPS );
+                        aMergedCell.aCells.push_back( xCell );
                         bFound = true;
                     }
                 }
@@ -2138,7 +2137,7 @@ lcl_ApplyCellProperties(
                 };
                 if (std::find(vDenylist.begin(), vDenylist.end(), rName) == vDenylist.end())
                 {
-                    xCellPS->setPropertyValue(rName, rValue);
+                    xCell->setPropertyValue(rName, rValue);
                 }
             }
             catch (const uno::Exception&)
@@ -2325,7 +2324,7 @@ SwXText::convertToSwTable(
             {
                 lcl_ApplyCellProperties(lcl_GetLeftPos(nCell, aRowSeparators[nRow]),
                     rCellProps,
-                    xRet->getCellByPosition(nCell, nRow),
+                    xRet->getSwCellByPosition(nCell, nRow),
                     aMergedCells);
                 ++nCell;
             }
