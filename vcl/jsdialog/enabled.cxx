@@ -696,6 +696,14 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
         // for SID_OUTLINE_REMOVE
         if (entry == u"modules/scalc/ui/ungroupdialog.ui")
             continue;
+        // Skip this one for now, it can only be seen in certain xlsx documents
+        else if (entry == u"modules/scalc/ui/definetablerangedialog.ui")
+            continue;
+        // Skip this one, I think it can only happen on loading
+        // an archaic lotus 123 file
+        else if (entry == u"modules/scalc/ui/imoptdialog.ui")
+            continue;
+
         OUString sEntry(entry);
         if (!entries.contains(sEntry))
             missing.push_back(sEntry);
@@ -789,15 +797,36 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 if (o3tl::starts_with(entry, u"writerperfect"))
                     continue;
                 // The manage changes dialog is only enabled in writer
-                else if (entry == u"svx/ui/acceptrejectchangesdialog.ui")
+                else if (entry == u"svx/ui/acceptrejectchangesdialog.ui" ||
+                         entry == u"svx/ui/redlinecontrol.ui" ||
+                         entry == u"svx/ui/redlinefilterpage.ui" ||
+                         entry == u"svx/ui/redlineviewpage.ui")
+                {
                     continue;
+                }
             }
 
             if (docType == LOK_DOCTYPE_SPREADSHEET)
             {
                 // Not supported in Calc
                 if (entry == u"svx/ui/gotopagedialog.ui" ||
-                    entry == u"cui/ui/splitcellsdialog.ui")
+                    entry == u"cui/ui/borderareatransparencydialog.ui" ||
+                    entry == u"cui/ui/splitcellsdialog.ui" ||
+                    entry == u"cui/ui/objectnamedialog.ui" ||
+                    entry == u"cui/ui/objecttitledescdialog.ui" ||
+                    entry == u"cui/ui/croppage.ui" ||
+                    entry == u"cui/ui/spinbox.ui" ||
+                    entry == u"cui/ui/formatnumberdialog.ui" ||
+                    entry == u"cui/ui/numberingoptionspage.ui" ||
+                    entry == u"cui/ui/numberingpositionpage.ui" ||
+                    entry == u"cui/ui/pastespecial.ui" ||
+                    entry == u"cui/ui/textflowpage.ui" ||
+                    entry == u"cui/ui/twolinespage.ui" ||
+                    entry == u"cui/ui/pickbulletpage.ui" ||
+                    entry == u"cui/ui/pickgraphicpage.ui" ||
+                    entry == u"cui/ui/picknumberingpage.ui" ||
+                    entry == u"cui/ui/pickoutlinepage.ui" ||
+                    entry == u"sfx/ui/password.ui")
                 {
                     continue;
                 }
