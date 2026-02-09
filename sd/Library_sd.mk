@@ -231,7 +231,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/controller/slidelayoutcontroller \
 	sd/source/ui/controller/displaymodecontroller \
 	sd/source/ui/controller/SlideTransitionsToolBoxControl \
-	sd/source/ui/controller/ThemeColorsToolBoxControl \
 	sd/source/ui/dlg/AnimationChildWindow \
 	sd/source/ui/dlg/LayerTabBar \
 	sd/source/ui/dlg/NavigatorChildWindow \

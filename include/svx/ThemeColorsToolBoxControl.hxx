@@ -7,26 +7,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#pragma once
+
+#include <svx/svxdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/vclptr.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <svx/dialog/ThemeColorsPaneBase.hxx>
 
-namespace sd
-{
-class ViewShellBase;
-}
-
 // Used to put theme colors pane to the notebookbar
 
-class ThemeColorsPaneWrapper final : public InterimItemWindow, public svx::ThemeColorsPaneBase
+class SVX_DLLPUBLIC ThemeColorsPaneWrapper final : public InterimItemWindow,
+                                                   public svx::ThemeColorsPaneBase
 {
 private:
-    sd::ViewShellBase& mrViewShellBase;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 public:
-    ThemeColorsPaneWrapper(vcl::Window* pParent, sd::ViewShellBase& rBase);
+    ThemeColorsPaneWrapper(vcl::Window* pParent,
+                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~ThemeColorsPaneWrapper() override;
     virtual void dispose() override;
     void SetOptimalSize();
@@ -38,7 +39,7 @@ protected:
     void onColorSetActivated() override;
 };
 
-class ThemeColorsToolBoxControl final
+class SVX_DLLPUBLIC ThemeColorsToolBoxControl final
     : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     VclPtr<ThemeColorsPaneWrapper> m_xVclBox;

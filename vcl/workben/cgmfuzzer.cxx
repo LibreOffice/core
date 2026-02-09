@@ -62,7 +62,7 @@ void com_sun_star_comp_sd_InsertSlideController_get_implementation( void );
 void com_sun_star_comp_sd_SlideLayoutController_get_implementation( void );
 void com_sun_star_comp_sd_DisplayModeController_get_implementation( void );
 void com_sun_star_comp_sd_SlideTransitionsToolBoxControl_get_implementation( void );
-void com_sun_star_comp_sd_ThemeColorsToolBoxControl_get_implementation( void );
+void com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation( void );
 void ucb_UcbCommandEnvironment_get_implementation( void );
 void ucb_UcbContentProviderProxyFactory_get_implementation( void );
 void ucb_UcbPropertiesManager_get_implementation( void );
@@ -131,7 +131,7 @@ lo_get_constructor_map(void)
         { "com_sun_star_comp_sd_SlideLayoutController_get_implementation", com_sun_star_comp_sd_SlideLayoutController_get_implementation },
         { "com_sun_star_comp_sd_DisplayModeController_get_implementation", com_sun_star_comp_sd_DisplayModeController_get_implementation },
         { "com_sun_star_comp_sd_SlideTransitionsToolBoxControl_get_implementation", com_sun_star_comp_sd_SlideTransitionsToolBoxControl_get_implementation },
-        { "com_sun_star_comp_sd_ThemeColorsToolBoxControl_get_implementation", com_sun_star_comp_sd_ThemeColorsToolBoxControl_get_implementation },
+        { "com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation", com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation },
         { "ucb_UcbCommandEnvironment_get_implementation", ucb_UcbCommandEnvironment_get_implementation, },
         { "ucb_UcbContentProviderProxyFactory_get_implementation", ucb_UcbContentProviderProxyFactory_get_implementation },
         { "ucb_UcbPropertiesManager_get_implementation", ucb_UcbPropertiesManager_get_implementation },

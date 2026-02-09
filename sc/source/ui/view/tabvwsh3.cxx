@@ -53,6 +53,7 @@
 
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/ColorSets.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -1577,6 +1578,31 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_PROTECT_TABLE:
             ExecProtectTable( rReq );
             break;
+
+        case SID_APPLY_THEME:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            if (pArgs)
+            {
+                const SfxPoolItem* pItem;
+                if (pArgs->GetItemState(FN_PARAM_1, true, &pItem) == SfxItemState::SET)
+                {
+                    OUString aThemeName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    auto pColorSet = svx::ColorSets::get().getColorSet(aThemeName);
+
+                    if (pColorSet)
+                    {
+                        // Create shared pointer from raw pointer
+                        auto pSharedColorSet = std::shared_ptr<model::ColorSet>(new model::ColorSet(*pColorSet));
+                        sc::ThemeColorChanger aChanger(*GetViewData().GetDocShell());
+                        aChanger.apply(pSharedColorSet);
+                    }
+                }
+            }
+
+            rReq.Done();
+        }
+        break;
 
         case SID_THEME_DIALOG:
         {
