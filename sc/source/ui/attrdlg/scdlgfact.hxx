@@ -208,13 +208,14 @@ public:
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
 {
-    std::unique_ptr<ScDeleteContentsDlg> m_xDlg;
+    std::shared_ptr<ScDeleteContentsDlg> m_xDlg;
 public:
     explicit AbstractScDeleteContentsDlg_Impl(std::unique_ptr<ScDeleteContentsDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short   Execute() override;
+    virtual bool    StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual void    DisableObjects() override;
     virtual InsertDeleteFlags GetDelContentsCmdBits() const override;
 

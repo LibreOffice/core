@@ -169,6 +169,11 @@ short AbstractScDeleteContentsDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScDeleteContentsDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScFillSeriesDlg_Impl::Execute()
 {
     return m_xDlg->run();

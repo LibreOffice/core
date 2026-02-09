@@ -506,16 +506,23 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetFrameWeld()));
+                        VclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetFrameWeld()));
                         ScDocument& rDoc = GetViewData().GetDocument();
                         SCTAB nTab = GetViewData().CurrentTabForData();
                         if ( rDoc.IsTabProtected(nTab) )
                             pDlg->DisableObjects();
-                        if (pDlg->Execute() == RET_OK)
-                        {
-                            InsertDeleteFlags nFlags = pDlg->GetDelContentsCmdBits();
-                            DeleteContents(pTabViewShell, rReq, nFlags);
-                        }
+
+                        auto xRequest = std::make_shared<SfxRequest>(rReq);
+                        rReq.Ignore(); // the 'old' request is not relevant any more
+
+                        pDlg->StartExecuteAsync([pDlg, pTabViewShell, xRequest=std::move(xRequest)](sal_Int32 nResult){
+                            if (nResult == RET_OK)
+                            {
+                                InsertDeleteFlags nFlags = pDlg->GetDelContentsCmdBits();
+                                DeleteContents(pTabViewShell, *xRequest, nFlags);
+                            }
+                            pDlg->disposeOnce();
+                        });
                     }
                     else
                         pTabViewShell->ErrorMessage(aTester.GetMessageId());
