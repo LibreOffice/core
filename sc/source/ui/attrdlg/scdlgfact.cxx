@@ -277,7 +277,7 @@ VclPtr<AbstractScDataFormDlg> ScAbstractDialogFactory_Impl::CreateScDataFormDlg(
 namespace
 {
 class AbstractScDeleteContentsDlg_Impl
-    : public ScreenshottedDialog_Impl_Sync<AbstractScDeleteContentsDlg, ScDeleteContentsDlg>
+    : public ScreenshottedDialog_Impl_Async<AbstractScDeleteContentsDlg, ScDeleteContentsDlg>
 {
 public:
     using ScreenshottedDialog_Impl_BASE::ScreenshottedDialog_Impl_BASE;
