@@ -529,7 +529,7 @@ public:
             if (!aInfo.maParagraphs.empty()) // we need to render paragraphs
             {
                 auto* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
-                if (pTextObject)
+                if (pTextObject && pTextObject->GetOutlinerParaObject())
                 {
                     sal_Int32 nNumberOfParagraphs = pTextObject->GetOutlinerParaObject()->Count();
 
