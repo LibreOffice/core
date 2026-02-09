@@ -116,6 +116,8 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxSourceRadioNamedRange->connect_toggled(aLink2);
     mxSourceRadioSelection->connect_toggled(aLink2);
 
+    mxCheckDrillToDetail->connect_toggled(LINK(this, ScPivotLayoutDialog, UpdateCheckExpandCollapse));
+
     mxSourceEdit->SetReferences(this, mxSourceFrame.get());
     mxSourceButton->SetReferences(this, mxSourceEdit.get());
 
@@ -182,6 +184,8 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxCheckIdentifyCategories->set_active(maPivotParameters.bDetectCategories);
     mxCheckTotalColumns->set_active(maPivotParameters.bMakeTotalCol);
     mxCheckTotalRows->set_active(maPivotParameters.bMakeTotalRow);
+
+    UpdateCheckExpandCollapse(*mxCheckDrillToDetail);
 
     SetupSource();
     SetupDestination();
@@ -717,6 +721,14 @@ void ScPivotLayoutDialog::ToggleDestination()
     mxDestinationListBox->set_sensitive(bNamedRange);
     mxDestinationButton->GetWidget()->set_sensitive(bSelection);
     mxDestinationEdit->GetWidget()->set_sensitive(bSelection);
+}
+
+IMPL_LINK_NOARG(ScPivotLayoutDialog, UpdateCheckExpandCollapse, weld::Toggleable&, void)
+{
+    bool bChecked = mxCheckDrillToDetail->get_active();
+    if (!bChecked)
+        mxCheckExpandCollapse->set_active(false);
+    mxCheckExpandCollapse->set_sensitive(bChecked);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
