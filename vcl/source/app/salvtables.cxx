@@ -5308,7 +5308,7 @@ void SalInstanceIconView::do_insert(int pos, const OUString* pStr, const OUStrin
     pEntry->SetUserData(pUserData);
     m_xIconView->Insert(pEntry, nullptr, nInsertPos);
     if (!m_bFixedItemWidth)
-        m_xIconView->UpdateEntrySize(rImage);
+        m_xIconView->UpdateEntrySize(*pEntry);
 
     if (pRet)
     {
@@ -5533,7 +5533,7 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
         pItem->SetBitmap1(aImage);
         pItem->SetBitmap2(aImage);
         if (!m_bFixedItemWidth)
-            m_xIconView->UpdateEntrySize(aImage);
+            m_xIconView->UpdateEntrySize(*pEntry);
         m_xIconView->ModelHasEntryInvalidated(pEntry);
     }
 }
