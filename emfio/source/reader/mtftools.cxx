@@ -1979,6 +1979,290 @@ namespace emfio
         SetGfxMode( nOldGfxMode );
     }
 
+    bool MtfTools::DrawGlyphs( Point& rPosition, const std::vector<sal_uInt16>& rGlyphIds,
+                               KernArray* pDXArry, tools::Long* pDYArry,
+                               const float fXScale, const float fYScale,
+                               bool bRecordPath, GraphicsMode nGfxMode )
+    {
+        if (rGlyphIds.empty())
+            return true;
+
+        // Check that the required font is actually available — glyph indices
+        // are font-specific and meaningless if a different font is substituted.
+        {
+            SolarMutexGuard aGuard;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            if ( !pVDev->IsFontAvailable( maFont.GetFamilyName() ) )
+            {
+                SAL_WARN("emfio", "ETO_GLYPH_INDEX: font '"
+                                  << maFont.GetFamilyName()
+                                  << "' not available, falling back to text path, which will be a "
+                                     "garbled nonsense");
+                return false;
+            }
+        }
+
+        UpdateClipRegion();
+        rPosition = ImplMap( rPosition );
+        GraphicsMode nOldGfxMode = GetGfxMode();
+        SetGfxMode( GraphicsMode::GM_COMPATIBLE );
+
+        // Map DX/DY arrays (same as DrawText)
+        sal_Int32 nLen = static_cast<sal_Int32>(rGlyphIds.size());
+        if (pDXArry)
+        {
+            sal_Int64 nSumX = 0, nSumY = 0;
+            for (sal_Int32 i = 0; i < nLen; i++)
+            {
+                nSumX += (*pDXArry)[i];
+                const Size aSizeX(ImplMap(Size(nSumX, 0)));
+                const basegfx::B2DVector aVectorX(aSizeX.Width(), aSizeX.Height());
+                (*pDXArry)[i] = aVectorX.getLength() * (nSumX >= 0 ? 1 : -1);
+
+                if (pDYArry)
+                {
+                    nSumY += pDYArry[i];
+                    const Size aSizeY(ImplMap(Size(0, nSumY)));
+                    const basegfx::B2DVector aVectorY(aSizeY.Width(), aSizeY.Height());
+                    pDYArry[i] = basegfx::fround<tools::Long>(aVectorY.getLength());
+                    pDYArry[i] *= (nSumY >= 0 ? -1 : 1);
+                }
+            }
+        }
+
+        // Text layout mode (same as DrawText)
+        if ( mnLatestTextLayoutMode != mnTextLayoutMode )
+        {
+            mnLatestTextLayoutMode = mnTextLayoutMode;
+            mpGDIMetaFile->AddAction( new MetaLayoutModeAction( mnTextLayoutMode ) );
+        }
+        SetGfxMode(nGfxMode);
+
+        // Text alignment (same as DrawText)
+        TextAlign eTextAlign;
+        if (mnTextAlign & TA_BASELINE)
+            eTextAlign = ALIGN_BASELINE;
+        else if (mnTextAlign & TA_BOTTOM)
+            eTextAlign = ALIGN_BOTTOM;
+        else
+            eTextAlign = ALIGN_TOP;
+
+        bool bChangeFont = false;
+        if ( mnLatestTextAlign != mnTextAlign )
+        {
+            bChangeFont = true;
+            mnLatestTextAlign = mnTextAlign;
+            mpGDIMetaFile->AddAction( new MetaTextAlignAction( eTextAlign ) );
+        }
+        if ( maLatestTextColor != maTextColor )
+        {
+            bChangeFont = true;
+            maLatestTextColor = maTextColor;
+            mpGDIMetaFile->AddAction( new MetaTextColorAction( maTextColor ) );
+        }
+        bool bChangeFillColor = false;
+        if ( maLatestBkColor != maBkColor )
+        {
+            bChangeFillColor = true;
+            maLatestBkColor = maBkColor;
+        }
+        if ( mnLatestBkMode != mnBkMode )
+        {
+            bChangeFillColor = true;
+            mnLatestBkMode = mnBkMode;
+        }
+        if ( bChangeFillColor )
+        {
+            bChangeFont = true;
+            mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
+        }
+        vcl::Font aTmp( maFont );
+        aTmp.SetColor( maTextColor );
+
+        if( mnBkMode == BackgroundMode::Transparent )
+        {
+            aTmp.SetFillColor( COL_TRANSPARENT );
+            aTmp.SetTransparent( true );
+        }
+        else
+        {
+            aTmp.SetFillColor( maBkColor );
+            aTmp.SetTransparent( false );
+        }
+
+        aTmp.SetAlignment( eTextAlign );
+
+        if ( nGfxMode == GraphicsMode::GM_ADVANCED )
+        {
+            Point aP1( ImplMap( Point() ) );
+            Point aP2( ImplMap( Point( 0, 100 ) ) );
+            aP2.setX(o3tl::saturating_sub(aP2.X(), aP1.X()));
+            aP2.setY(o3tl::saturating_sub(aP2.Y(), aP1.Y()));
+            double fX = aP2.X();
+            double fY = aP2.Y();
+            if ( fX )
+            {
+                double fOrientation = basegfx::rad2deg(acos(fX / std::hypot(fX, fY)));
+                if ( fY > 0 )
+                    fOrientation = 360 - fOrientation;
+                fOrientation += 90;
+                fOrientation *= 10;
+                aTmp.SetOrientation( aTmp.GetOrientation() + Degree10( static_cast<sal_Int16>(fOrientation) ) );
+            }
+        }
+        else if (nGfxMode == GraphicsMode::GM_COMPATIBLE)
+        {
+            if (fXScale != 0.0)
+            {
+                const bool bNeedsWidthScale = (std::fabs(fYScale) != std::fabs(fXScale));
+                if (bNeedsWidthScale)
+                {
+                    Size aFontSize = aTmp.GetFontSize();
+                    const float fTestWidthScale = std::fabs(fYScale / fXScale);
+
+                    if (aFontSize.Width() == 0)
+                        aFontSize.setWidth(basegfx::fround<tools::Long>(aFontSize.Height() * fTestWidthScale));
+                    else
+                        aFontSize.setWidth(basegfx::fround<tools::Long>(aFontSize.Width() * fTestWidthScale));
+                    aTmp.SetFontSize(aFontSize);
+                    bChangeFont = true;
+                }
+            }
+
+            if ((fYScale < 0.0) && (fXScale < 0.0))
+            {
+                aTmp.SetOrientation(aTmp.GetOrientation() + Degree10(1800));
+            }
+            else if ((fYScale < 0.0) || (fXScale < 0.0))
+            {
+                aTmp.SetOrientation(Degree10(3600) - aTmp.GetOrientation());
+            }
+        }
+
+        if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
+        {
+            SolarMutexGuard aGuard;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            sal_Int32 nTextWidth;
+            Point aActPosDelta;
+            pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
+            pVDev->SetFont( maFont );
+            if (nLen && pDXArry)
+            {
+                // Approximate width of last glyph
+                nTextWidth = pVDev->GetTextWidth( u"M"_ustr );
+                if( nLen > 1 )
+                    nTextWidth += (*pDXArry)[ nLen - 2 ];
+                aActPosDelta.setX( (*pDXArry)[ nLen - 1 ] );
+                if ( pDYArry )
+                    aActPosDelta.setY( pDYArry[ nLen - 1 ] );
+            }
+            else
+            {
+                nTextWidth = 0;
+                aActPosDelta.setX( nTextWidth );
+            }
+
+            if( mnTextAlign & TA_UPDATECP )
+                rPosition = maActPos;
+
+            if (mnTextAlign & TA_RIGHT_CENTER)
+            {
+                Point aDisplacement(((mnTextAlign & TA_RIGHT_CENTER) == TA_CENTER) ? nTextWidth >> 1: nTextWidth, 0);
+                Point().RotateAround(aDisplacement, maFont.GetOrientation());
+                rPosition -= aDisplacement;
+            }
+
+            if( mnTextAlign & TA_UPDATECP )
+            {
+                Point().RotateAround(aActPosDelta, maFont.GetOrientation());
+                maActPos = rPosition + aActPosDelta;
+            }
+        }
+
+        if(bChangeFont || (maLatestFont != aTmp))
+        {
+            maLatestFont = aTmp;
+            rtl::Reference<MetaFontAction> aNewMetaFontAction(new MetaFontAction(aTmp));
+            maScaledFontHelper.endCurrentMetaFontAction();
+            mpGDIMetaFile->AddAction( aNewMetaFontAction );
+            mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlignment() ) );
+            mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
+            mpGDIMetaFile->AddAction( new MetaTextFillColorAction( aTmp.GetFillColor(), !aTmp.IsTransparent() ) );
+        }
+
+        // Convert glyph indices to polypolygon outlines
+        if ( !bRecordPath )
+        {
+            SolarMutexGuard aGuard;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
+            pVDev->SetFont( maLatestFont );
+
+            // GetGlyphOutlines() returns outlines in the OutputDevice's
+            // logical coordinates; since the VirtualDevice is set to
+            // Map100thMM above, outlines come back in 100th-mm — no
+            // additional scaling is needed.
+            std::vector<sal_uInt32> aGlyphIds32(rGlyphIds.begin(), rGlyphIds.end());
+            basegfx::B2DPolyPolygonVector aOutlines;
+            pVDev->GetGlyphOutlines(aGlyphIds32.data(), nLen, aOutlines);
+
+            // Emit each glyph as a separate filled PolyPolygon. We must NOT
+            // combine all glyphs into a single PolyPolygon because the even-odd
+            // fill rule would cancel out overlapping regions where Arabic
+            // connected glyphs overlap, leaving visible white gaps.
+            bool bHasGlyphs = false;
+            for (sal_Int32 i = 0; i < nLen && i < static_cast<sal_Int32>(aOutlines.size()); ++i)
+            {
+                basegfx::B2DPolyPolygon aGlyph = aOutlines[i];
+                if (aGlyph.count() == 0)
+                    continue;
+
+                // Position glyph: glyph 0 at origin, glyph i at DX[i-1]
+                double fDX = 0, fDY = 0;
+                if (pDXArry && i > 0)
+                    fDX = (*pDXArry)[i - 1];
+                if (pDYArry && i > 0)
+                    fDY = pDYArry[i - 1];
+
+                basegfx::B2DHomMatrix aMat;
+                if (fDX != 0 || fDY != 0)
+                    aMat.translate(fDX, fDY);
+
+                // Translate to text position
+                aMat.translate(rPosition.X(), rPosition.Y());
+                aGlyph.transform(aMat);
+
+                tools::PolyPolygon aGlyphPoly(aGlyph);
+                // Use aTmp's orientation so scale-induced rotation (GM_COMPATIBLE
+                // with negative fXScale/fYScale, or GM_ADVANCED world transform)
+                // is applied to the emitted polygons.
+                if (aTmp.GetOrientation() != 0_deg10)
+                {
+                    for (sal_uInt16 p = 0; p < aGlyphPoly.Count(); ++p)
+                        aGlyphPoly[p].Rotate(rPosition, aTmp.GetOrientation());
+                }
+
+                if (!bHasGlyphs)
+                {
+                    // Emit Push/FillColor/LineColor once before the first glyph
+                    mpGDIMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR ) );
+                    mpGDIMetaFile->AddAction( new MetaFillColorAction( maTextColor, true ) );
+                    mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
+                    bHasGlyphs = true;
+                }
+
+                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aGlyphPoly ) );
+            }
+
+            if (bHasGlyphs)
+                mpGDIMetaFile->AddAction( new MetaPopAction() );
+        }
+
+        SetGfxMode( nOldGfxMode );
+        return true;
+    }
+
     void MtfTools::ImplDrawBitmap( const Point& rPos, const Size& rSize, const Bitmap& rBitmap )
     {
         Bitmap aBmp( rBitmap );

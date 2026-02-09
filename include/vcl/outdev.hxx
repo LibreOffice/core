@@ -990,6 +990,16 @@ public:
                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
                                                  std::span<const sal_Bool> pKashidaArray = {} ) const;
 
+    /** Get outlines for raw glyph IDs (bypassing text shaping).
+        Returns one B2DPolyPolygon per glyph. The outlines are in the
+        OutputDevice's logical coordinates: this function internally
+        disables MapMode so the font's numeric size is treated as
+        pixels, which makes the returned outline values numerically
+        match whatever unit the font size was set in (e.g. with
+        MapMode 100thMM, outlines are in 100thMM). */
+    bool                        GetGlyphOutlines( const sal_uInt32* pGlyphIds, sal_Int32 nGlyphs,
+                                                  basegfx::B2DPolyPolygonVector& rOutlines ) const;
+
 
     OUString                    GetEllipsisString( const OUString& rStr, tools::Long nMaxWidth,
                                                    DrawTextFlags nStyle = DrawTextFlags::EndEllipsis ) const;

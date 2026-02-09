@@ -1999,104 +1999,169 @@ namespace emfio
                             if ( nOptions & ETO_RTLREADING )
                                 nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
                             SetTextLayoutMode( nTextLayoutMode );
-                            SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                             Point aPos( ptlReferenceX, ptlReferenceY );
                             bool bOffStringSane = nOffString <= nNextPos - nCurPos;
                             if ( bOffStringSane )
                             {
-                                mpInputStream->Seek( nCurPos + nOffString );
-                                OUString aText;
-                                if ( bFlag )
+                                // ETO_GLYPH_INDEX: string data contains pre-shaped glyph indices,
+                                // not Unicode codepoints. Render as polypolygon outlines to bypass
+                                // text shaping (tdf#168107). Falls back to text path if the
+                                // required font is not available.
+                                bool bGlyphsDone = false;
+                                if ( (nOptions & ETO_GLYPH_INDEX) && !bFlag )
                                 {
-                                    if ( nLen <= ( nNextPos - mpInputStream->Tell() ) )
+                                    mpInputStream->Seek( nCurPos + nOffString );
+                                    std::vector<sal_uInt16> aGlyphIds;
+                                    if ( ( nLen * sizeof(sal_uInt16) ) <= ( nNextPos - mpInputStream->Tell() ) )
                                     {
-                                        std::vector<char> pBuf( nLen );
-                                        mpInputStream->ReadBytes(pBuf.data(), nLen);
-                                        aText = OUString(pBuf.data(), nLen, GetCharSet());
-                                    }
-                                }
-                                else
-                                {
-                                    if ( ( nLen * sizeof(sal_Unicode) ) <= ( nNextPos - mpInputStream->Tell() ) )
-                                    {
-                                        aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
-                                    }
-                                }
-
-                                SAL_INFO("emfio", "\t\tText: " << aText);
-                                SAL_INFO("emfio", "\t\tDxBuffer:");
-
-                                KernArray aDXAry;
-                                std::unique_ptr<tools::Long[]> pDYAry;
-
-                                sal_Int32 nDxSize;
-                                sal_Int32 nBytesEach;
-
-                                // Reading OutputDx
-                                // ETO_PDY flag indicates that we should read twice values
-                                // compared to the number of characters in the output string.
-                                // Values are stored in an array of 32-bit unsigned integers
-                                // named OutputDx, so there will be either 8 bytes or 4 bytes
-                                // each depending on ETO_PDY is set or not.
-                                if (nOptions & ETO_PDY)
-                                    nBytesEach = 8;
-                                else
-                                    nBytesEach = 4;
-
-                                bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, nBytesEach, nDxSize);
-                                if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
-                                {
-                                    mpInputStream->Seek( nCurPos + offDx );
-                                    aDXAry.resize(aText.getLength());
-                                    if (nOptions & ETO_PDY)
-                                    {
-                                        pDYAry.reset( new tools::Long[aText.getLength()] );
-                                    }
-
-                                    for (sal_Int32 i = 0; i < aText.getLength(); ++i)
-                                    {
-                                        sal_Int32 nDxCount = 1;
-                                        if ( static_cast<sal_uInt32>( aText.getLength() ) !=  nLen )
+                                        aGlyphIds.resize(nLen);
+                                        for (sal_uInt32 i = 0; i < nLen; ++i)
                                         {
-                                            sal_Unicode cUniChar = aText[i];
-                                            OString aTmp(&cUniChar, 1, GetCharSet());
-                                            if (aTmp.getLength() > 1)
-                                            {
-                                                nDxCount = aTmp.getLength();
-                                            }
+                                            sal_uInt16 nGlyphId = 0;
+                                            mpInputStream->ReadUInt16(nGlyphId);
+                                            aGlyphIds[i] = nGlyphId;
                                         }
+                                    }
 
-                                        aDXAry[i] = 0;
+                                    SAL_INFO("emfio", "\t\tGlyph indices: " << nLen << " glyphs");
+                                    SAL_INFO("emfio", "\t\tDxBuffer:");
+
+                                    KernArray aDXAry;
+                                    std::unique_ptr<tools::Long[]> pDYAry;
+
+                                    sal_Int32 nDxSize;
+                                    sal_Int32 nBytesEach = (nOptions & ETO_PDY) ? 8 : 4;
+
+                                    bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, nBytesEach, nDxSize);
+                                    if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
+                                    {
+                                        mpInputStream->Seek( nCurPos + offDx );
+                                        sal_Int32 nGlyphs = static_cast<sal_Int32>(aGlyphIds.size());
+                                        aDXAry.resize(nGlyphs);
                                         if (nOptions & ETO_PDY)
-                                        {
-                                            pDYAry[i] = 0;
-                                        }
+                                            pDYAry.reset( new tools::Long[nGlyphs] );
 
-                                        while (nDxCount--)
+                                        for (sal_Int32 i = 0; i < nGlyphs; ++i)
                                         {
                                             sal_Int32 nDxTmp = 0;
                                             mpInputStream->ReadInt32(nDxTmp);
-                                            aDXAry[i] += nDxTmp;
+                                            aDXAry[i] = nDxTmp;
                                             if (nOptions & ETO_PDY)
                                             {
                                                 sal_Int32 nDyTmp = 0;
                                                 mpInputStream->ReadInt32(nDyTmp);
-                                                pDYAry[i] += nDyTmp;
+                                                pDYAry[i] = nDyTmp;
                                             }
+                                            SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << aDXAry[i]);
+                                        }
+                                    }
+                                    if ( nOptions & ETO_CLIPPED )
+                                    {
+                                        Push();
+                                        IntersectClipRect( aRect );
+                                    }
+                                    // DrawGlyphs returns false if the font is not available
+                                    bGlyphsDone = DrawGlyphs(aPos, aGlyphIds, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                                    if ( nOptions & ETO_CLIPPED )
+                                        Pop();
+                                }
+                                if ( !bGlyphsDone )
+                                {
+                                    // Standard text path: read Unicode or ANSI text
+                                    mpInputStream->Seek( nCurPos + nOffString );
+                                    OUString aText;
+                                    if ( bFlag )
+                                    {
+                                        if ( nLen <= ( nNextPos - mpInputStream->Tell() ) )
+                                        {
+                                            std::vector<char> pBuf( nLen );
+                                            mpInputStream->ReadBytes(pBuf.data(), nLen);
+                                            aText = OUString(pBuf.data(), nLen, GetCharSet());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ( ( nLen * sizeof(sal_Unicode) ) <= ( nNextPos - mpInputStream->Tell() ) )
+                                        {
+                                            aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
+                                        }
+                                    }
+
+                                    SAL_INFO("emfio", "\t\tText: " << aText);
+                                    SAL_INFO("emfio", "\t\tDxBuffer:");
+
+                                    KernArray aDXAry;
+                                    std::unique_ptr<tools::Long[]> pDYAry;
+
+                                    sal_Int32 nDxSize;
+                                    sal_Int32 nBytesEach;
+
+                                    // Reading OutputDx
+                                    // ETO_PDY flag indicates that we should read twice values
+                                    // compared to the number of characters in the output string.
+                                    // Values are stored in an array of 32-bit unsigned integers
+                                    // named OutputDx, so there will be either 8 bytes or 4 bytes
+                                    // each depending on ETO_PDY is set or not.
+                                    if (nOptions & ETO_PDY)
+                                        nBytesEach = 8;
+                                    else
+                                        nBytesEach = 4;
+
+                                    bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, nBytesEach, nDxSize);
+                                    if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
+                                    {
+                                        mpInputStream->Seek( nCurPos + offDx );
+                                        aDXAry.resize(aText.getLength());
+                                        if (nOptions & ETO_PDY)
+                                        {
+                                            pDYAry.reset( new tools::Long[aText.getLength()] );
                                         }
 
-                                        SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << aDXAry[i]);
+                                        for (sal_Int32 i = 0; i < aText.getLength(); ++i)
+                                        {
+                                            sal_Int32 nDxCount = 1;
+                                            if ( static_cast<sal_uInt32>( aText.getLength() ) !=  nLen )
+                                            {
+                                                sal_Unicode cUniChar = aText[i];
+                                                OString aTmp(&cUniChar, 1, GetCharSet());
+                                                if (aTmp.getLength() > 1)
+                                                {
+                                                    nDxCount = aTmp.getLength();
+                                                }
+                                            }
+
+                                            aDXAry[i] = 0;
+                                            if (nOptions & ETO_PDY)
+                                            {
+                                                pDYAry[i] = 0;
+                                            }
+
+                                            while (nDxCount--)
+                                            {
+                                                sal_Int32 nDxTmp = 0;
+                                                mpInputStream->ReadInt32(nDxTmp);
+                                                aDXAry[i] += nDxTmp;
+                                                if (nOptions & ETO_PDY)
+                                                {
+                                                    sal_Int32 nDyTmp = 0;
+                                                    mpInputStream->ReadInt32(nDyTmp);
+                                                    pDYAry[i] += nDyTmp;
+                                                }
+                                            }
+
+                                            SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << aDXAry[i]);
+                                        }
                                     }
+                                    if ( nOptions & ETO_CLIPPED )
+                                    {
+                                        Push(); // Save the current clip. It will be restored after text drawing
+                                        IntersectClipRect( aRect );
+                                    }
+                                    DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                                    if ( nOptions & ETO_CLIPPED )
+                                        Pop();
                                 }
-                                if ( nOptions & ETO_CLIPPED )
-                                {
-                                    Push(); // Save the current clip. It will be restored after text drawing
-                                    IntersectClipRect( aRect );
-                                }
-                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
-                                if ( nOptions & ETO_CLIPPED )
-                                    Pop();
                             }
                             mnBkMode = mnBkModeBackup;
                         }

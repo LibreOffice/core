@@ -813,6 +813,18 @@ namespace emfio
             bool bRecordPath = false,
             GraphicsMode nGraphicsMode = GraphicsMode::GM_COMPATIBLE);
 
+        /// Render pre-shaped glyph indices as polypolygon outlines.
+        /// Returns false if the required font is not available (caller
+        /// should fall back to DrawText).
+        bool                DrawGlyphs(Point& rPosition,
+            const std::vector<sal_uInt16>& rGlyphIds,
+            KernArray* pDXArry = nullptr,
+            tools::Long* pDYArry = nullptr,
+            const float fXScale = 1.0,
+            const float fYScale = 1.0,
+            bool bRecordPath = false,
+            GraphicsMode nGraphicsMode = GraphicsMode::GM_COMPATIBLE);
+
         void                ResolveBitmapActions(std::vector<BSaveStruct>& rSaveList);
 
         void                IntersectClipRect(const tools::Rectangle& rRect);

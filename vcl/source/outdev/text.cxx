@@ -2171,6 +2171,50 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     return bRet;
 }
 
+bool OutputDevice::GetGlyphOutlines( const sal_uInt32* pGlyphIds, sal_Int32 nGlyphs,
+                                         basegfx::B2DPolyPolygonVector& rOutlines ) const
+{
+    if (!InitFont())
+        return false;
+
+    rOutlines.clear();
+    rOutlines.reserve(nGlyphs);
+
+    bool bOldMap = mbMap;
+    if (bOldMap)
+    {
+        const_cast<OutputDevice&>(*this).mbMap = false;
+        const_cast<OutputDevice&>(*this).mbNewFont = true;
+        if (!InitFont())
+        {
+            const_cast<OutputDevice&>(*this).mbMap = true;
+            const_cast<OutputDevice&>(*this).mbNewFont = true;
+            return false;
+        }
+    }
+
+    bool bRet = true;
+    for (sal_Int32 i = 0; i < nGlyphs; ++i)
+    {
+        basegfx::B2DPolyPolygon aOutline;
+        if (mpFontInstance->GetGlyphOutline(pGlyphIds[i], aOutline, false))
+            rOutlines.push_back(aOutline);
+        else
+        {
+            rOutlines.emplace_back(); // empty placeholder
+            bRet = false;
+        }
+    }
+
+    if (bOldMap)
+    {
+        const_cast<OutputDevice&>(*this).mbMap = true;
+        const_cast<OutputDevice&>(*this).mbNewFont = true;
+    }
+
+    return bRet;
+}
+
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
