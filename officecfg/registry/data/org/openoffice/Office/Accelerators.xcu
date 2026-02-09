@@ -2828,7 +2828,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="R_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Ruler</value>
+            <value xml:lang="en-US">.uno:InsertReferenceField</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
@@ -4367,12 +4367,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RightPara</value>
-          </prop>
-        </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Ruler</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
@@ -6948,7 +6942,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="R_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Ruler</value>
+            <value xml:lang="en-US">.uno:InsertReferenceField</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
@@ -7794,7 +7788,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="R_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:Ruler</value>
+            <value xml:lang="en-US">.uno:InsertReferenceField</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
