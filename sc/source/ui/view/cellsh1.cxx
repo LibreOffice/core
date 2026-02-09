@@ -271,6 +271,22 @@ void DeleteCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, DelCellCmd eCm
         }
     }
 }
+
+void DeleteContents(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsertDeleteFlags nFlags)
+{
+    if( nFlags != InsertDeleteFlags::NONE )
+    {
+        pTabViewShell->DeleteContents( nFlags );
+
+        if( ! rReq.IsAPI() )
+        {
+            OUString aFlags = FlagsToString( nFlags, InsertDeleteFlags::ALL );
+
+            rReq.AppendItem( SfxStringItem( SID_DELETE, aFlags ) );
+            rReq.Done();
+        }
+    }
+}
 }
 
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -503,18 +519,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pTabViewShell->ErrorMessage(aTester.GetMessageId());
                 }
 
-                if( nFlags != InsertDeleteFlags::NONE )
-                {
-                    pTabViewShell->DeleteContents( nFlags );
-
-                    if( ! rReq.IsAPI() )
-                    {
-                        OUString aFlags = FlagsToString( nFlags, InsertDeleteFlags::ALL );
-
-                        rReq.AppendItem( SfxStringItem( SID_DELETE, aFlags ) );
-                        rReq.Done();
-                    }
-                }
+                DeleteContents(pTabViewShell, rReq, nFlags);
             }
             break;
 
