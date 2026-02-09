@@ -30,6 +30,7 @@ public:
     virtual ~ThemeColorsPaneWrapper() override;
     virtual void dispose() override;
     void SetOptimalSize();
+    void refreshThemeColors();
 
     DECL_LINK(SelectionChangedHdl, weld::IconView&, void);
 
@@ -50,6 +51,7 @@ public:
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XToolbarController
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
     virtual css::uno::Reference<css::awt::XWindow>
         SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
