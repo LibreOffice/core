@@ -510,9 +510,6 @@ excludelist:
     include/linguistic/misc.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XTerminateListener.hpp
-    include/cppcanvas/renderer.hxx:
-    # Used in boost::optional type
-    - basegfx/matrix/b2dhommatrix.hxx
     include/basic/modsizeexceeded.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionRequest.hpp
