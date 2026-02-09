@@ -5517,24 +5517,24 @@ OUString SalInstanceIconView::get_id(int pos) const
 
 void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
 {
-    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
-    if (aEntry == nullptr)
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+    if (pEntry == nullptr)
         return;
-    SvLBoxContextBmp* aItem
-        = static_cast<SvLBoxContextBmp*>(aEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+    SvLBoxContextBmp* pItem
+        = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
     Image aImage = createImage(rIcon);
-    if (aItem == nullptr)
+    if (pItem == nullptr)
     {
-        aEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
     else
     {
-        aItem->SetBitmap1(aImage);
-        aItem->SetBitmap2(aImage);
+        pItem->SetBitmap1(aImage);
+        pItem->SetBitmap2(aImage);
         if (!m_bFixedItemWidth)
             m_xIconView->UpdateEntrySize(aImage);
-        m_xIconView->ModelHasEntryInvalidated(aEntry);
+        m_xIconView->ModelHasEntryInvalidated(pEntry);
     }
 }
 

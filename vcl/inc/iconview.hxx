@@ -57,7 +57,7 @@ public:
     OUString renderEntry(int pos, int dpix, int dpiy) const;
 
     /// Update entry size based on image size
-    void UpdateEntrySize(const Image& pImage);
+    void UpdateEntrySize(const Image& rImage);
 
 protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
