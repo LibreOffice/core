@@ -59,11 +59,11 @@ void IconView::SetFixedColumnCount(short nColumnCount)
     m_nColumnCount = nColumnCount;
 }
 
-void IconView::UpdateEntrySize(const Image& pImage)
+void IconView::UpdateEntrySize(const Image& rImage)
 {
     int spacing = nSpacing * 2;
-    SetEntryHeight(pImage.GetSizePixel().getHeight() + spacing);
-    SetEntryWidth(pImage.GetSizePixel().getWidth() + spacing);
+    SetEntryHeight(rImage.GetSizePixel().getHeight() + spacing);
+    SetEntryWidth(rImage.GetSizePixel().getWidth() + spacing);
 }
 
 bool IconView::HasSeparatorEntry() const
