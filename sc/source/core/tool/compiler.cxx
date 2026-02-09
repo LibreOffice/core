@@ -2015,18 +2015,23 @@ void ScCompiler::FormExcelSheetRange( OUStringBuffer& rBuf, sal_Int32 nQuotePos,
     OUString aEndTabName(rEndTabName);
     if (nQuotePos < rBuf.getLength())
     {
+        const bool bQuoted1 = rBuf[nQuotePos] == '\'';
         const bool bQuoted2 = (!aEndTabName.isEmpty() && aEndTabName[0] == '\'');
-        if (bQuoted2)
-            aEndTabName = aEndTabName.subView(1);   //  Sheet2'
-        if (rBuf[nQuotePos] == '\'')                // 'Sheet1'
+        if (bQuoted1 && bQuoted2) // Both sheets are quoted
         {
-            const sal_Int32 nLast = rBuf.getLength() - 1;
-            if (rBuf[nLast] == '\'')
-                rBuf.remove(nLast, 1);              // 'Sheet1
+            rBuf.remove(rBuf.getLength() - 1, 1);
+            aEndTabName = aEndTabName.subView(1);
         }
-        else if (bQuoted2)                          //  Sheet1
+        else if (bQuoted1) // Only Sheet1 is quoted
         {
-            rBuf.insert(nQuotePos, '\'');           // 'Sheet1
+            rBuf.remove(rBuf.getLength() - 1, 1);
+            if (!aEndTabName.isEmpty())
+                aEndTabName = aEndTabName + "\'";
+        }
+        else if (bQuoted2) // Only Sheet2 is quoted
+        {
+            rBuf.insert(nQuotePos, '\'');
+            aEndTabName = aEndTabName.subView(1);
         }
     }
     rBuf.append( ':' );
