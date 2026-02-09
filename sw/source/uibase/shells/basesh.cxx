@@ -101,6 +101,7 @@
 
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/dialog/ThemeDialog.hxx>
+#include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -3045,6 +3046,32 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                     });
                 }
             }
+        }
+        break;
+
+        case SID_ADD_THEME:
+        {
+            // Create empty color set as starting point for new theme
+            auto pCurrentColorSet = std::make_shared<model::ColorSet>(OUString());
+
+            // Open ThemeColorEditDialog to create/edit the new color set
+            auto pSubDialog = std::make_shared<svx::ThemeColorEditDialog>(GetView().GetFrameWeld(), *pCurrentColorSet);
+
+            weld::DialogController::runAsync(pSubDialog, [pSubDialog, this](sal_uInt32 nResult) {
+                if (nResult != RET_OK)
+                    return;
+
+                auto aColorSet = pSubDialog->getColorSet();
+                if (!aColorSet.getName().isEmpty())
+                {
+                    // Add the new color set to the global collection with auto-rename if needed
+                    svx::ColorSets::get().insert(aColorSet, svx::ColorSets::IdenticalNameAction::AutoRename);
+                    // Invalidate to update the toolbar control
+                    GetView().GetViewFrame().GetBindings().Invalidate(SID_ADD_THEME);
+                }
+            });
+
+            rReq.Done();
         }
         break;
 
