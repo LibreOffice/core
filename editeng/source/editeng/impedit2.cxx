@@ -3174,7 +3174,8 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aLineStart);
     const tools::Long nColumnWidth = GetColumnWidth(maPaperSize);
     sal_Int16 nColumn = 0;
-    sal_Int32 nUrlYHack = 0;
+    sal_Int32 nUrlYJump = 0;
+    bool bUrlYSkipLine = false;
     for (sal_Int32 n = 0, nPortions = GetParaPortions().Count(); n < nPortions; ++n)
     {
         ParaPortion& rPortion = GetParaPortions().getRef(n);
@@ -3216,17 +3217,21 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                 tools::Long nLineHeight = rLine.GetHeight();
                 if (nLine != nLines - 1)
                     nLineHeight += nVertLineSpacing;
-                MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin,
-                               &aInfo.nHeightNeededToNotWrap);
+                if (!bUrlYSkipLine)
+                {
+                    MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin,
+                                   &aInfo.nHeightNeededToNotWrap);
+                }
+                else
+                    bUrlYSkipLine = false;
 
                 // Position the actual line some lines down,
                 // if the previous line ended with a multiline hyperlink
-                if (nUrlYHack != 0)
+                if (nUrlYJump != 0)
                 {
-                    MoveToNextLine(aLineStart, nUrlYHack, nColumn, aOrigin);
-                    nUrlYHack = 0;
+                    MoveToNextLine(aLineStart, nUrlYJump, nColumn, aOrigin);
+                    nUrlYJump = 0;
                 }
-
                 // Check if this line has a textportion with a multiline hyperlink
                 // then the next line should be positioned further away
                 for (sal_Int32 nPortion = rLine.GetStartPortion();
@@ -3236,11 +3241,17 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                     if (rTextPortion.GetKind() == PortionKind::FIELD)
                     {
                         ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
-                        if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 2)
+                        if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 1)
                         {
                             // Use the same size calculation as in ImpEditEngine::Paint
                             const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
-                            nUrlYHack = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 2);
+                            nUrlYJump = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 1);
+                            // if this is not the end of the line ..
+                            // if some caracters (even a soft-break) follows the link
+                            if (nLine + 1 < nLines)
+                            {
+                                bUrlYSkipLine = true;
+                            }
                         }
                     }
                 }
