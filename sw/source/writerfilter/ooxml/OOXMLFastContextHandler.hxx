@@ -31,7 +31,7 @@
 
 namespace writerfilter::ooxml
 {
-class OOXMLDocumentImpl;
+class OOXMLDocument;
 
 class OOXMLFastContextHandler: public ::cppu::WeakImplHelper<css::xml::sax::XFastContextHandler>
 {
@@ -110,8 +110,8 @@ public:
 
     OUString getTargetForId(const OUString & rId);
 
-    void setDocument(OOXMLDocumentImpl* pDocument);
-    OOXMLDocumentImpl* getDocument();
+    void setDocument(OOXMLDocument* pDocument);
+    OOXMLDocument* getDocument();
     void setXNoteId(const OOXMLValue& pValue);
     void setXNoteId(const sal_Int32 nId);
     sal_Int32 getXNoteId() const;

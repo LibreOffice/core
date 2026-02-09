@@ -23,7 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <dmapper/resourcemodel.hxx>
-#include <ooxml/OOXMLDocumentImpl.hxx>
+#include <ooxml/OOXMLDocument.hxx>
 #include <rtl/ref.hxx>
 
 namespace writerfilter::ooxml
@@ -37,7 +37,7 @@ public:
     OOXMLFastDocumentHandler(
         css::uno::Reference< css::uno::XComponentContext > context,
         Stream* pStream,
-        OOXMLDocumentImpl* pDocument,
+        OOXMLDocument* pDocument,
         sal_Int32 nXNoteId );
     virtual ~OOXMLFastDocumentHandler() override;
 
@@ -80,7 +80,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     Stream * mpStream;
-    OOXMLDocumentImpl* mpDocument;
+    OOXMLDocument* mpDocument;
     sal_Int32 mnXNoteId;
     mutable rtl::Reference<OOXMLFastContextHandler> mxContextHandler;
     rtl::Reference<OOXMLFastContextHandler> const & getContextHandler() const;

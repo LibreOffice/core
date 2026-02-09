@@ -89,7 +89,7 @@ void OOXMLParserState::setHandle()
     mnHandle = mnContexts;
 }
 
-void OOXMLParserState::setDocument(OOXMLDocumentImpl* pDocument)
+void OOXMLParserState::setDocument(OOXMLDocument* pDocument)
 {
     mpDocument = pDocument;
 }
