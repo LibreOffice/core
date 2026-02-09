@@ -2567,9 +2567,19 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             }
             else if (0 < aOptions.nSheetToExport && aOptions.nSheetToExport <= nCount)
             {
-                // One sheet, 1-based.
-                nCount = aOptions.nSheetToExport;
-                nStartTab = nCount - 1;
+                // Single sheet export, 1-based.
+                // Write to the provided output stream so that LOKit convert-to
+                // finds the result at the expected URL (instead of a separate
+                // file named with the sheet name).
+                SvStream* pStream = rMed.GetOutStream();
+                if (pStream)
+                {
+                    AsciiSave(*pStream, aOptions, aOptions.nSheetToExport - 1);
+                    bRet = true;
+                }
+                // Skip the separate-files loop below.
+                nStartTab = 0;
+                nCount = 0;
             }
             else
             {
