@@ -963,6 +963,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn.ORG.LIBREOFFICE.RAND.NV" , SC_OPCODE_RANDOM_NV },
     { "_xlfn.ORG.LIBREOFFICE.RANDBETWEEN.NV" , SC_OPCODE_RANDBETWEEN_NV },
     { "_xlfn.RANDARRAY" , SC_OPCODE_RANDARRAY },
+    { "#REF!", SC_OPCODE_STOP },
     { nullptr,  -1 }
 };
 
