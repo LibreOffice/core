@@ -966,24 +966,14 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         return;
     }
 
-    SfxBindings&        rBindings   = GetViewData().GetBindings();
-    const SCTAB         nCurTab     = GetViewData().CurrentTabForData();
     ScDocShell*         pDocSh      = GetViewData().GetDocShell();
     ScDocument&         rDoc        = pDocSh->GetDocument();
-    ScMarkData&         rMark       = GetViewData().GetMarkData();
     ScModule*           pScMod      = ScModule::get();
-    SdrObject*          pEditObject = GetDrawView()->GetTextEditObject();
-    OutlinerView*       pOLV        = GetDrawView()->GetTextEditOutlinerView();
-    ESelection          aSelection  = pOLV ? pOLV->GetSelection() : ESelection();
     OUString            aRefName;
-    bool                bUndo       = rDoc.IsUndoEnabled();
 
     SfxStyleSheetBasePool*  pStylePool  = rDoc.GetStyleSheetPool();
     SfxStyleSheetBase*      pStyleSheet = nullptr;
 
-    bool bStyleToMarked = false;
-    bool bListAction = false;
-    bool bAddUndo = false;          // add ScUndoModifyStyle (style modified)
     auto xOldData = std::make_shared<ScStyleSaveData>();       // for undo/redo
     auto xNewData = std::make_shared<ScStyleSaveData>();
 
@@ -1004,7 +994,6 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     }
 
     OUString                aStyleName;
-    sal_uInt16              nRetMask = 0xffff;
 
     switch ( nSlotId )
     {
@@ -1135,6 +1124,31 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         default:
             break;
     }
+
+    ExecuteApplyStyle(rReq, pStylePool, pStyleSheet, nSlotId, aStyleName, xOldData, xNewData, eFamily);
+}
+
+void ScTabViewShell::ExecuteApplyStyle(SfxRequest& rReq, SfxStyleSheetBasePool* pStylePool, SfxStyleSheetBase* pStyleSheet,
+                                       sal_uInt16 nSlotId, const OUString& aStyleName,
+                                       const std::shared_ptr<ScStyleSaveData>& rOldData,
+                                       const std::shared_ptr<ScStyleSaveData>& rNewData, SfxStyleFamily eFamily)
+{
+    SfxBindings&        rBindings   = GetViewData().GetBindings();
+    const SCTAB         nCurTab     = GetViewData().CurrentTabForData();
+    ScDocShell*         pDocSh      = GetViewData().GetDocShell();
+    ScDocument&         rDoc        = pDocSh->GetDocument();
+    ScMarkData&         rMark       = GetViewData().GetMarkData();
+    ScModule*           pScMod      = ScModule::get();
+    SdrObject*          pEditObject = GetDrawView()->GetTextEditObject();
+    OutlinerView*       pOLV        = GetDrawView()->GetTextEditOutlinerView();
+    ESelection          aSelection  = pOLV ? pOLV->GetSelection() : ESelection();
+    bool                bUndo       = rDoc.IsUndoEnabled();
+
+    bool bStyleToMarked = false;
+    bool bListAction = false;
+    bool bAddUndo = false;          // add ScUndoModifyStyle (style modified)
+
+    sal_uInt16 nRetMask = 0xffff;
 
     // set new style for paintbrush format mode
     if ( nSlotId == SID_STYLE_APPLY && pScMod->GetIsWaterCan() && pStyleSheet )
@@ -1271,7 +1285,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         if ( pStyleSheet )
                         {
-                            xOldData->InitFromStyle( pStyleSheet );
+                            rOldData->InitFromStyle( pStyleSheet );
 
                             if ( bUndo )
                             {
@@ -1289,7 +1303,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                         }
                     }
 
-                    xNewData->InitFromStyle( pStyleSheet );
+                    rNewData->InitFromStyle( pStyleSheet );
                     bAddUndo = true;
                     rReq.Done();
                 }
@@ -1400,7 +1414,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                         if ( bUsed )
                             ScPrintFunc( pDocSh, GetPrinter(true), nInTab ).UpdatePages();
 
-                        xNewData->InitFromStyle( pStyleSheet );
+                        rNewData->InitFromStyle( pStyleSheet );
                         bAddUndo = true;
                         rReq.Done();
                         nRetMask = sal_uInt16(true);
@@ -1477,7 +1491,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     else
                     {
                         pStyleSheet = GetDrawView()->GetStyleSheet();
-                        xOldData->InitFromStyle( pStyleSheet );
+                        rOldData->InitFromStyle( pStyleSheet );
                     }
 
                     if ( bUndo )
@@ -1494,7 +1508,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     pStyleSet->Put(aCoreSet);
                     static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
 
-                    xNewData->InitFromStyle( pStyleSheet );
+                    rNewData->InitFromStyle( pStyleSheet );
                     bAddUndo = true;
 
                     //  call SetStyleSheet after adding the ScUndoModifyStyle
@@ -1518,13 +1532,13 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         if (pStyleSheet)
         {
             ExecuteStyleEdit(rReq, pStyleSheet, nRetMask, nSlotId, bAddUndo, bUndo,
-                    xOldData, xNewData, eFamily, bStyleToMarked, bListAction, pEditObject, aSelection);
+                    rOldData, rNewData, eFamily, bStyleToMarked, bListAction, pEditObject, aSelection);
             return; // skip calling ExecuteStyleEditPost because we invoked an async dialog
         }
     }
 
     ExecuteStyleEditPost(rReq, pStyleSheet, nSlotId, nRetMask, bAddUndo, bUndo,
-            eFamily, *xOldData, *xNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
+            eFamily, *rOldData, *rNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
 }
 
 void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nRetMask,

@@ -503,6 +503,10 @@ private:
     void ExecuteSetTableBackgroundCol( SfxRequest& rReq );
     void ExecuteTableBackgroundDialog( const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
     bool DoTableBackgroundDialog( sal_Int32 nResult, const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
+    void ExecuteApplyStyle(SfxRequest& rReq, SfxStyleSheetBasePool* pStylePool, SfxStyleSheetBase* pStyleSheet,
+                           sal_uInt16 nSlotId, const OUString& aStyleName,
+                           const std::shared_ptr<ScStyleSaveData>& rOldData,
+                           const std::shared_ptr<ScStyleSaveData>& rNewData, SfxStyleFamily eFamily);
     void ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nRetMask, sal_uInt16 nSlotId,
                             bool bAddUndo, bool bUndo,
                             const std::shared_ptr<ScStyleSaveData>& rOldData,
