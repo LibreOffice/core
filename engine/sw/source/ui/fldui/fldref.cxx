@@ -730,6 +730,24 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 pStyle = stylesheetIterator->Next();
             }
 
+            // add character styles
+
+            stylesheetIterator
+                = pStyleSheetPool->CreateIterator(SfxStyleFamily::Char, SfxStyleSearchBits::Used);
+
+            pStyle = stylesheetIterator->First();
+            while (pStyle != nullptr)
+            {
+                bool isSubstring = MatchSubstring(pStyle->GetName(), filterString);
+
+                if (isSubstring)
+                {
+                    m_xSelectionLB->append_text(pStyle->GetName());
+                }
+
+                pStyle = stylesheetIterator->Next();
+            }
+
             if (IsFieldEdit() && pRefField) {
                 sOldSel = pRefField->GetPar1();
                 m_xStylerefFromBottomCB->set_active((pRefField->GetFlags() & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM);
