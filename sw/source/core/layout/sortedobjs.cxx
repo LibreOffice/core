@@ -222,12 +222,16 @@ struct ObjAnchorOrder
 
             if (pLHSplitFly && pRHSplitFly)
             {
-                // standalone split fly after grouped
-                auto isInGroup
+                // standalone split fly after chained. This case happens when a follow fly gets
+                // emptied, dropped from chain, and eventually will be removed; but at this point,
+                // it's still there in the sorted vector. Without this code, the vector would not
+                // be properly partitioned relative to newly added follow, causing assertion in
+                // clang/dbgutil:
+                auto isInChain
                     = [](const SwFlyAtContentFrame* p) { return p->HasFollow() || p->IsFollow(); };
-                if (isInGroup(pLHSplitFly) && !isInGroup(pRHSplitFly))
+                if (isInChain(pLHSplitFly) && !isInChain(pRHSplitFly))
                     return true;
-                if (!isInGroup(pLHSplitFly) && isInGroup(pRHSplitFly))
+                if (!isInChain(pLHSplitFly) && isInChain(pRHSplitFly))
                     return false;
 
                 if (pLHSplitFly->HasFollow() && pRHSplitFly->IsFollow())
