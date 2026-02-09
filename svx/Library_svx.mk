@@ -282,6 +282,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/tbunosearchcontrollers \
     svx/source/tbxctrls/tbxcolor \
     svx/source/tbxctrls/tbxdrctl \
+    svx/source/tbxctrls/ThemeColorsToolBoxControl \
     svx/source/tbxctrls/verttexttbxctrl \
     svx/source/uitest/uiobject \
     svx/source/unodraw/unoctabl \

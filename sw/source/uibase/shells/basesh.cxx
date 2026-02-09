@@ -37,6 +37,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
+#include <svx/ColorSets.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
 #include <svl/slstitm.hxx>
@@ -3050,6 +3051,30 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                     });
                 }
             }
+        }
+        break;
+
+        case SID_APPLY_THEME:
+        {
+            if (pArgs)
+            {
+                if (pArgs->GetItemState(FN_PARAM_1, true, &pItem) == SfxItemState::SET)
+                {
+                    OUString aThemeName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    auto pColorSet = svx::ColorSets::get().getColorSet(aThemeName);
+                    auto* pDocument = rSh.GetDoc();
+                    auto* pDocumentShell = pDocument->GetDocShell();
+
+                    if (pColorSet && pDocumentShell)
+                    {
+                        auto pSharedColorSet = std::shared_ptr<model::ColorSet>(new model::ColorSet(*pColorSet));
+                        std::shared_ptr<svx::IThemeColorChanger> xChanger(new sw::ThemeColorChanger(pDocumentShell));
+                        xChanger->apply(pSharedColorSet);
+                    }
+                }
+            }
+
+            rReq.Done();
         }
         break;
 

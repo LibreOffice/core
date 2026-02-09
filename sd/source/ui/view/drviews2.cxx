@@ -4309,6 +4309,34 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_APPLY_THEME:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            if (pArgs)
+            {
+                const SfxPoolItem* pItem;
+                if (pArgs->GetItemState(FN_PARAM_1, true, &pItem) == SfxItemState::SET)
+                {
+                    OUString aThemeName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    auto pColorSet = svx::ColorSets::get().getColorSet(aThemeName);
+
+                    if (pColorSet)
+                    {
+                        SdrPage* pMasterPage = &GetActualPage()->TRG_GetMasterPage();
+                        auto* pDocShell = GetDocSh();
+
+                        auto pSharedColorSet = std::shared_ptr<model::ColorSet>(new model::ColorSet(*pColorSet));
+                        sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
+                        aChanger.apply(pSharedColorSet);
+                    }
+                }
+            }
+
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
         case SID_ATTR_GLOW_TRANSPARENCY:
