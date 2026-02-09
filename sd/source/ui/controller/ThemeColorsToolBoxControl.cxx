@@ -32,8 +32,22 @@ void SAL_CALL ThemeColorsToolBoxControl::dispose()
 }
 
 void SAL_CALL
-ThemeColorsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/)
+ThemeColorsToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
+    svt::ToolboxController::initialize(rArguments);
+
+    // Register to listen for AddTheme command changes
+    addStatusListener(".uno:AddTheme");
+}
+
+void SAL_CALL ThemeColorsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    if (m_xVclBox && rEvent.FeatureURL.Complete == ".uno:AddTheme")
+        m_xVclBox->refreshThemeColors();
+
+    svt::ToolboxController::statusChanged(rEvent);
 }
 
 css::uno::Reference<css::awt::XWindow>
@@ -104,6 +118,8 @@ ThemeColorsPaneWrapper::ThemeColorsPaneWrapper(vcl::Window* pParent, sd::ViewShe
 ThemeColorsPaneWrapper::~ThemeColorsPaneWrapper() { disposeOnce(); }
 
 void ThemeColorsPaneWrapper::SetOptimalSize() { SetSizePixel(GetOptimalSize()); }
+
+void ThemeColorsPaneWrapper::refreshThemeColors() { initColorSets(); }
 
 void ThemeColorsPaneWrapper::dispose()
 {
