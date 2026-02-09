@@ -230,10 +230,9 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     }
     m_pSh->EndAllAction();
 
-    if (xObj.is() && !comphelper::LibreOfficeKit::isActive())
+    if (xObj.is())
     {
-        // Let the chart be activated after the inserting (unless
-        // via LibreOfficeKit)
+        // Let the chart be activated after the inserting
         SfxInPlaceClient* pClient = m_pSh->GetView().FindIPClient( xObj, &m_pSh->GetView().GetEditWin() );
         if ( !pClient )
         {
