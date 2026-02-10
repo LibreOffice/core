@@ -1203,6 +1203,15 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_EXCLUDECLIPRECT :
+                    {
+                        mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
+                        ExcludeClipRect( ReadRectangle( nX32, nY32, nx32, ny32 ) );
+                        SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
+                        SAL_INFO("emfio", "\t\tPoint: (" << nx32 << ", " << ny32 << ")");
+                    }
+                    break;
+
                     case EMR_INTERSECTCLIPRECT :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
@@ -2381,7 +2390,6 @@ namespace emfio
                     case EMR_SETBRUSHORGEX :
                     case EMR_SETMETARGN :
                     case EMR_SETMITERLIMIT :
-                    case EMR_EXCLUDECLIPRECT :
                     case EMR_REALIZEPALETTE :
                     case EMR_SELECTPALETTE :
                     case EMR_CREATEPALETTE :

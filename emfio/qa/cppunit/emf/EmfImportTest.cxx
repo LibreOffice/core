@@ -1988,6 +1988,26 @@ CPPUNIT_TEST_FIXTURE(Test, testSmallTextOutAnsi)
     assertXPathContent(pDoc, "/metafile/push[2]/textarray/text", u"AnsiSmall");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExcludeClipRect)
+{
+    // EMR_EXCLUDECLIPRECT punches a hole in the clip region.
+    // The EMF sets clip to (0,0)-(1000,1000), then excludes (200,200)-(800,800),
+    // then fills the whole area with red — only the frame outside the hole is visible.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestExcludeClipRect.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The clip mask polypolygon has two sub-polygons: the excluded inner rect
+    // and the outer clip rect, forming a frame-shaped clip region.
+    assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygon", "path",
+                u"m1323 1319v2613h2619v-2613zm-1323-1319h5265v5251h-5265z");
+
+    // The red fill covers the whole area, but is clipped by the mask above.
+    assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor", "color", u"#ff0000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
