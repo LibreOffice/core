@@ -163,7 +163,7 @@
 #define EMR_SETICMPROFILEA             112
 #define EMR_SETICMPROFILEW             113
 #define EMR_ALPHABLEND                 114
-#define EMR_ALPHADIBBLEND              115
+#define EMR_SETLAYOUT                  115
 #define EMR_TRANSPARENTBLT             116
 #define EMR_TRANSPARENTDIB             117
 #define EMR_GRADIENTFILL               118
@@ -310,7 +310,7 @@ record_type_name(sal_uInt32 nRecType)
     case EMR_SETICMPROFILEA: return "SETICMPROFILEA";
     case EMR_SETICMPROFILEW: return "SETICMPROFILEW";
     case EMR_ALPHABLEND: return "ALPHABLEND";
-    case EMR_ALPHADIBBLEND: return "ALPHADIBBLEND";
+    case EMR_SETLAYOUT: return "SETLAYOUT";
     case EMR_TRANSPARENTBLT: return "TRANSPARENTBLT";
     case EMR_TRANSPARENTDIB: return "TRANSPARENTDIB";
     case EMR_GRADIENTFILL: return "GRADIENTFILL";
@@ -1126,6 +1126,19 @@ namespace emfio
                         mpInputStream->ReadUInt32( nDat32 );
                         SAL_INFO("emfio", "\t\tBkMode: 0x" << std::hex << nDat32 << std::dec);
                         SetBkMode( static_cast<BackgroundMode>(nDat32) );
+                    }
+                    break;
+
+                    case EMR_SETLAYOUT :
+                    {
+                        // [MS-EMF] 2.3.11.23 — LayoutMode flags:
+                        //   LAYOUT_LTR                         0x00000000
+                        //   LAYOUT_RTL                         0x00000001
+                        //   LAYOUT_BITMAPORIENTATIONPRESERVED  0x00000008
+                        sal_uInt32 nLayoutMode(0);
+                        mpInputStream->ReadUInt32( nLayoutMode );
+                        if ( nLayoutMode != 0 )
+                            SAL_WARN("emfio", "\t\tEMR_SETLAYOUT: unhandled LayoutMode 0x" << std::hex << nLayoutMode << std::dec);
                     }
                     break;
 
@@ -2372,7 +2385,6 @@ namespace emfio
                     case EMR_REALIZEPALETTE :
                     case EMR_SELECTPALETTE :
                     case EMR_CREATEPALETTE :
-                    case EMR_ALPHADIBBLEND :
                     case EMR_SETTEXTJUSTIFICATION :
                     {
                         SAL_WARN("emfio", "TODO: EMF record not implemented: " << record_type_name(nRecType));
