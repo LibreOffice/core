@@ -30,6 +30,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/escapementitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/voiditem.hxx>
 #include <editeng/fontitem.hxx>
@@ -130,6 +131,7 @@ public:
     void testTdf154248MultilineFieldWrapping();
     void testTdf151748StaleKashidaArray();
     void testTdf162803StaleKashidaArray();
+    void testEscapementNotPreservedOnParaBreak();
 
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
@@ -164,6 +166,7 @@ public:
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
+    CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2366,6 +2369,50 @@ void Test::testTdf162803StaleKashidaArray()
         // Without the bug fix, this will be 17:
         CPPUNIT_ASSERT_EQUAL(size_t(0), rArray.size());
     }
+}
+
+void Test::testEscapementNotPreservedOnParaBreak()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+
+    OUString aParaText = u"item 1st"_ustr;
+    aEditEngine.SetText(aParaText);
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(0));
+
+    {
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+        SvxEscapementItem aSuperscript(SvxEscapement::Superscript, EE_CHAR_ESCAPEMENT);
+        pSet->Put(aSuperscript);
+        aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 6, 0, 8));
+    }
+
+    {
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+        SvxWeightItem aBold(WEIGHT_BOLD, EE_CHAR_WEIGHT);
+        pSet->Put(aBold);
+        aEditEngine.QuickSetAttribs(*pSet, ESelection(0, 6, 0, 8));
+    }
+
+    // new para break at the end of the text (cf. pressing enter)
+    ContentNode* pNode = rDoc.GetObject(0);
+    CPPUNIT_ASSERT(pNode);
+    EditPaM aEndPaM(pNode, pNode->Len());
+    rDoc.InsertParaBreak(aEndPaM, true /* bKeepEndingAttribs */);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rDoc.Count());
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(0));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(1));
+
+    // Check new para's character attributes
+    pNode = rDoc.GetObject(1);
+    CPPUNIT_ASSERT(pNode);
+
+    const EditCharAttrib* pBoldAttr = pNode->GetCharAttribs().FindEmptyAttrib(EE_CHAR_WEIGHT, 0);
+    CPPUNIT_ASSERT_MESSAGE("Bold attribute should be carried over.", pBoldAttr != nullptr);
+
+    const EditCharAttrib* pEscAttr = pNode->GetCharAttribs().FindEmptyAttrib(EE_CHAR_ESCAPEMENT, 0);
+    CPPUNIT_ASSERT_MESSAGE("Escapement attribute should NOT be included.", !pEscAttr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

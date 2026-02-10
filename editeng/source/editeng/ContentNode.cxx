@@ -300,7 +300,8 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         else if ( pAttrib->GetEnd() == nCut )
         {
             // must be copied as an empty attributes.
-            if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !maCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
+            if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !maCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 )
+                && pAttrib->GetItem()->Which() != EE_CHAR_ESCAPEMENT )
             {
                 EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
                 assert(pNewAttrib);
