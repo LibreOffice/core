@@ -4101,6 +4101,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // They are stored as matching the originals, so that we will be later
     // able to build the chains accordingly.
     std::vector< SwFrameFormat* > aVecSwFrameFormat;
+    aVecSwFrameFormat.reserve(aSet.size());
     std::set< ZSortFly >::const_iterator it=aSet.begin();
 
     while (it != aSet.end())
