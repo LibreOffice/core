@@ -1436,6 +1436,7 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
                 if( DynCastSwVirtFlyDrawObj( pOldObj) !=  nullptr )
                 {
                     pFormat = FindFrameFormat( pOldObj );
+                    assert(pFormat);
 
                     Point aNullPt;
                     SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrameFormat*>(pFormat)->GetFrame( &aNullPt );
@@ -1472,6 +1473,9 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
 
                 if( DynCastSwVirtFlyDrawObj( pOldObj) !=  nullptr )
                 {
+                    assert(pFormat);
+                    assert(pAnchor);
+
                     // store attributes, then set SdrObject
                     SfxItemSetFixed<RES_SURROUND, RES_ANCHOR> aFrameSet( mxDoc->GetAttrPool() );
                     aFrameSet.Set( pFormat->GetAttrSet() );
