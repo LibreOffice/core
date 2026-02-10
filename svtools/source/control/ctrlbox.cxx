@@ -611,7 +611,7 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
     if (bSelected)
         rDevice.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rDevice.SetTextColor(rStyleSettings.GetDialogTextColor());
+        rDevice.SetTextColor(rStyleSettings.GetWindowTextColor());
 
     tools::Long nX = rTopLeft.X();
     tools::Long nH = gUserItemSz.Height();
