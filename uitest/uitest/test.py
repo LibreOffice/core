@@ -12,6 +12,7 @@ from contextlib import contextmanager
 from uitest.uihelper.common import get_state_as_dict, select_by_text
 
 from com.sun.star.uno import RuntimeException
+from com.sun.star.awt import Toolkit
 
 from libreoffice.uno.eventlistener import EventListener
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -197,8 +198,7 @@ class UITest(object):
                     self._xUITest.executeCommandForProvider(".uno:CloseWin", frame)
                 # Closing the window will happen asynchronously on the main thread so let’s wait
                 # until the close actually completes.
-                xToolkit = self._xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-                xToolkit.waitUntilAllIdlesDispatched()
+                Toolkit.create(self._xContext).waitUntilAllIdlesDispatched()
 
     # Calls UITest.close_doc at exit
     @contextmanager
@@ -301,8 +301,7 @@ class UITest(object):
                 # execute_dialog_through_command will end up dispatching the command asynchronously
                 # on the main thread. The Base code seems to have a few race conditions so to avoid
                 # that let’s wait to make sure the close completes before continuing
-                xToolkit = self._xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-                xToolkit.waitUntilAllIdlesDispatched()
+                Toolkit.create(self._xContext).waitUntilAllIdlesDispatched()
             else:
                 self._xUITest.executeCommand(".uno:CloseDoc")
         frames = desktop.getFrames()
