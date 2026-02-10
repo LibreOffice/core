@@ -405,6 +405,10 @@ lcl_GetSwUndoId(SwFrameFormat const *const pFrameFormat)
     {
         const SwFormatContent& rContent = pFrameFormat->GetContent();
         OSL_ENSURE( rContent.GetContentIdx(), "Fly without content" );
+        if (!rContent.GetContentIdx())
+        {
+            return SwUndoId::DELLAYFMT;
+        }
 
         SwNodeIndex firstNode(*rContent.GetContentIdx(), 1);
         SwNoTextNode *const pNoTextNode(firstNode.GetNode().GetNoTextNode());
