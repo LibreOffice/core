@@ -792,6 +792,66 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155707)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:jc", "val", u"highKashida");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163894)
+{
+    createSwDoc("tdf163894.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"handbooks");
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"infuriating");
+
+    // backward search reaches the whole content of the first node on the page,
+    // i.e. which content was typeset on the previous pages, like here
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"initializes");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"misfitting");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"misrepresenting");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"modicum");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf163894_hidden)
+{
+    createSwDoc("tdf163894_hidden.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"handbooks");
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    // there is a single paragraph on the page: choose the nearest reference from the previous pages,
+    // not the nearest one on the following pages
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"infuriating");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    // hiding the field content by a hidden space formatted with the referred character style,
+    // separated by an also hidden space without the referred characters style from the other
+    // marching text content
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u" ");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u" ");
+
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"mitosis");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"modicum");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 {
     createSwDoc("fdo76163.docx");
