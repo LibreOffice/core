@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,embindtest))
 
 $(eval $(call gb_Library_add_exception_objects,embindtest, \
     unotest/source/embindtest/embindtest \
+    unotest/source/embindtest/serviceconstructors \
 ))
 
 $(eval $(call gb_Library_set_componentfile,embindtest,unotest/source/embindtest/embindtest,services))
