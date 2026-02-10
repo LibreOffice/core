@@ -834,52 +834,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
     else
     {
-        sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
         for (const auto& rTab : aMark)
         {
-            if (rDoc.IsSheetViewHolder(rTab))
-                continue;
-
-            auto pManager = rDoc.GetSheetViewManager(rTab);
-
-            for (auto const& pSheetView : pManager->getSheetViews())
-            {
-                if (!pSheetView)
-                    continue;
-
-                SCTAB nSheetViewTab = pSheetView->getTableNumber();
-
-                if (GetViewData().GetSheetViewID() == sc::DefaultSheetViewID)
-                {
-                    SCROW nUnsortedRow = nRow;
-                    if (pManager->getSortOrder())
-                        nUnsortedRow = pManager->getSortOrder()->unsort(nUnsortedRow, nCol);
-                    applyText(*this, nCol, nUnsortedRow, nSheetViewTab, rString, bNumFmtChanged);
-                }
-                else if (GetViewData().GetSheetViewID() == pSheetView->getID())
-                {
-                    applyText(*this, nCol, nRow, nSheetViewTab, rString, bNumFmtChanged);
-                }
-                else
-                {
-                    // TODO - we need to update other sheet views as well, test case needed
-                }
-            }
-
-            {
-                SCROW nUnsortedRow = nRow;
-
-                if (nSheetViewID != sc::DefaultSheetViewID)
-                {
-                    auto pSheetView = pManager->get(nSheetViewID);
-
-                    if (pSheetView->getSortOrder())
-                        nUnsortedRow = pSheetView->getSortOrder()->unsort(nUnsortedRow, nCol);
-                    if (pManager->getSortOrder())
-                        nUnsortedRow = pManager->getSortOrder()->resort(nUnsortedRow, nCol);
-                }
-                applyText(*this, nCol, nUnsortedRow, rTab, rString, bNumFmtChanged);
-            }
+           applyText(*this, nCol, nRow, rTab, rString, bNumFmtChanged);
         }
 
         performAutoFormatAndUpdate(rString, aMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);

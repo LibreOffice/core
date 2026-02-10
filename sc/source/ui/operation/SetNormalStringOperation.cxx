@@ -39,12 +39,12 @@ bool SetNormalStringOperation::runImplementation()
 
     bool bUndo(rDoc.IsUndoEnabled());
 
-    if (!checkSheetViewProtection())
-        return false;
+    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
+
+    ScAddress aPosition = convertAddress(mrPosition);
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
-        rDoc, mrPosition.Tab(), mrPosition.Col(), mrPosition.Row(), mrPosition.Col(),
-        mrPosition.Row());
+        rDoc, aPosition.Tab(), aPosition.Col(), aPosition.Row(), aPosition.Col(), aPosition.Row());
     if (!aTester.IsEditable())
     {
         if (!mbApi)
@@ -52,18 +52,18 @@ bool SetNormalStringOperation::runImplementation()
         return false;
     }
 
-    bool bEditDeleted = (rDoc.GetCellType(mrPosition) == CELLTYPE_EDIT);
+    bool bEditDeleted = (rDoc.GetCellType(aPosition) == CELLTYPE_EDIT);
     ScUndoEnterData::ValuesType aOldValues;
 
     if (bUndo)
     {
         ScUndoEnterData::Value aOldValue;
 
-        aOldValue.mnTab = mrPosition.Tab();
-        aOldValue.maCell.assign(rDoc, mrPosition);
+        aOldValue.mnTab = aPosition.Tab();
+        aOldValue.maCell.assign(rDoc, aPosition);
 
         const ScPatternAttr* pPattern
-            = rDoc.GetPattern(mrPosition.Col(), mrPosition.Row(), mrPosition.Tab());
+            = rDoc.GetPattern(aPosition.Col(), aPosition.Row(), aPosition.Tab());
         if (const SfxUInt32Item* pItem
             = pPattern->GetItemSet().GetItemIfSet(ATTR_VALUE_FORMAT, false))
         {
@@ -76,36 +76,38 @@ bool SetNormalStringOperation::runImplementation()
         aOldValues.push_back(aOldValue);
     }
 
-    tools::Long nBefore(mrDocShell.GetTwipWidthHint(mrPosition));
-    mbIsNumberFormatSet
-        = rDoc.SetString(mrPosition.Col(), mrPosition.Row(), mrPosition.Tab(), mrText);
-    tools::Long nAfter(mrDocShell.GetTwipWidthHint(mrPosition));
+    tools::Long nBefore(mrDocShell.GetTwipWidthHint(aPosition));
+    mbIsNumberFormatSet = rDoc.SetString(aPosition.Col(), aPosition.Row(), aPosition.Tab(), mrText);
+    tools::Long nAfter(mrDocShell.GetTwipWidthHint(aPosition));
 
     if (bUndo)
     {
         //  because of ChangeTracking, UndoAction can be created only after SetString was called
-        mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoEnterData>(
-            &mrDocShell, mrPosition, aOldValues, mrText, nullptr));
+        mrDocShell.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoEnterData>(&mrDocShell, aPosition, aOldValues, mrText, nullptr));
     }
 
-    if (bEditDeleted || rDoc.HasAttrib(ScRange(mrPosition), HasAttrFlags::NeedHeight))
-        mrDocFunc.AdjustRowHeight(ScRange(mrPosition), true, mbApi);
+    if (bEditDeleted || rDoc.HasAttrib(ScRange(aPosition), HasAttrFlags::NeedHeight))
+        mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);
 
-    mrDocShell.PostPaintCell(mrPosition, std::max(nBefore, nAfter));
+    if (sc::SheetViewOperationsTester::doesUnsync(meType))
+        aSheetViewTester.sync();
+
+    mrDocShell.PostPaintCell(aPosition, std::max(nBefore, nAfter));
     aModificator.SetDocumentModified();
 
     // notify input handler here the same way as in PutCell
     if (mbApi)
-        mrDocFunc.NotifyInputHandler(mrPosition);
+        mrDocFunc.NotifyInputHandler(aPosition);
 
-    const SfxUInt32Item* pItem = rDoc.GetAttr(mrPosition, ATTR_VALIDDATA);
+    const SfxUInt32Item* pItem = rDoc.GetAttr(aPosition, ATTR_VALIDDATA);
     const ScValidationData* pData = rDoc.GetValidationEntry(pItem->GetValue());
     if (pData)
     {
-        ScRefCellValue aCell(rDoc, mrPosition);
-        if (pData->IsDataValid(aCell, mrPosition))
-            ScDetectiveFunc(rDoc, mrPosition.Tab())
-                .DeleteCirclesAt(mrPosition.Col(), mrPosition.Row());
+        ScRefCellValue aCell(rDoc, aPosition);
+        if (pData->IsDataValid(aCell, aPosition))
+            ScDetectiveFunc(rDoc, aPosition.Tab())
+                .DeleteCirclesAt(aPosition.Col(), aPosition.Row());
     }
 
     return true;

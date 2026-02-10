@@ -12,6 +12,25 @@
 
 namespace sc
 {
+namespace
+{
+/** Merge sort order arrays, so the order is the same as it would be by doing multiple independent sort operation */
+std::vector<SCCOLROW> mergeOrder(std::vector<SCCOLROW> const& rExistingOrder,
+                                 std::vector<SCCOLROW> const& rAddedOrder)
+{
+    size_t nOrderSize = rExistingOrder.size();
+    assert(nOrderSize == rAddedOrder.size());
+
+    std::vector<SCCOLROW> aNewOrder(nOrderSize);
+    for (size_t nIndex = 0; nIndex < nOrderSize; ++nIndex)
+    {
+        size_t nSortedIndex = rAddedOrder[nIndex] - 1;
+        aNewOrder[nIndex] = rExistingOrder[nSortedIndex];
+    }
+    return aNewOrder;
+}
+}
+
 void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
     bool bKeyStatesEqual = std::equal(rSortInfo.maKeyStates.begin(), rSortInfo.maKeyStates.begin(),
@@ -27,17 +46,7 @@ void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
         }
         else
         {
-            // merge the order
-            size_t nOrderSize = maSortInfo.maOrder.size();
-            assert(nOrderSize == rSortInfo.maOrder.size());
-
-            std::vector<SCCOLROW> aNewOrder(nOrderSize);
-            for (size_t nIndex = 0; nIndex < nOrderSize; ++nIndex)
-            {
-                size_t nSortedIndex = rSortInfo.maOrder[nIndex];
-                aNewOrder[nIndex] = maSortInfo.maOrder[nSortedIndex - 1];
-            }
-            maSortInfo.maOrder = aNewOrder;
+            maSortInfo.maOrder = mergeOrder(maSortInfo.maOrder, rSortInfo.maOrder);
         }
     }
     else
@@ -103,6 +112,50 @@ void SheetView::addOrderIndices(SortOrderInfo const& rSortInfo)
         moSortOrder.emplace();
     moSortOrder->addOrderIndices(rSortInfo);
 }
+
+void SheetView::mergeReorderParameters(ReorderParam const& rReorderParameters)
+{
+    if (moOriginalReorderParams)
+    {
+        moOriginalReorderParams->maOrderIndices = mergeOrder(
+            moOriginalReorderParams->maOrderIndices, rReorderParameters.maOrderIndices);
+    }
+    else
+    {
+        moOriginalReorderParams = rReorderParameters;
+    }
 }
+
+SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
+{
+    SCROW nUnsortedRow = nRow;
+
+    // Unsort the sheet view's sort and bring it to the default view's order
+    // when the sheet view was created.
+    if (moSortOrder)
+    {
+        nUnsortedRow = moSortOrder->unsort(nRow, nColumn);
+    }
+
+    // Resort the default view's sort done since the sheet view creation.
+    SCROW nResortedRow = nUnsortedRow;
+    if (moOriginalReorderParams)
+    {
+        ScRange const& rRange = moOriginalReorderParams->maSortRange;
+
+        SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ rRange.aStart.Col(),
+                                    rRange.aEnd.Col(),
+                                    rRange.aStart.Row(),
+                                    rRange.aEnd.Row(),
+                                    moOriginalReorderParams->maOrderIndices,
+                                    {} });
+
+        nResortedRow = aReverser.resort(nUnsortedRow, nColumn);
+    }
+    return nResortedRow;
+}
+
+} // end sc namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
