@@ -62,6 +62,10 @@ namespace sc
     class DeleteContentOperation;
     class DeleteCellOperation;
     class SetNormalStringOperation;
+    class SetValueOperation;
+    class SetStringOperation;
+    class SetEditTextOperation;
+    class SetFormulaOperation;
 }
 namespace tools
 {
@@ -73,6 +77,10 @@ class ScDocFunc
     friend class sc::DeleteContentOperation;
     friend class sc::DeleteCellOperation;
     friend class sc::SetNormalStringOperation;
+    friend class sc::SetValueOperation;
+    friend class sc::SetStringOperation;
+    friend class sc::SetEditTextOperation;
+    friend class sc::SetFormulaOperation;
 
     ScDocShell&     rDocShell;
     static bool CheckSheetViewProtection(sc::OperationType eOperation);
