@@ -1033,7 +1033,13 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
     // When exporting that document back to DOCX:
     // Then make sure that completes without an assertion failure, which would mean not-well-formed
     // output was produced, since the <w:sdt> was conditional but the </w:sdt> was unconditional:
-    save(u"Office Open XML Text"_ustr);
+    save(TestFilter::DOCX);
+
+    // tdf#170686: floating shapes are not allowed inside plainText date controls
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 1); // only one sdt
+    assertXPath(pXmlDoc, "//mc:AlternateContent", 1); // only one drawing
+    assertXPath(pXmlDoc, "//w:body/w:p/w:r/mc:AlternateContent", 1); // and it is not inside the sdt
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
