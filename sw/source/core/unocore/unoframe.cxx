@@ -2236,7 +2236,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     m_xParentText = sw::CreateParentXText(pFormat->GetDoc(), *rFormatAnchor.GetContentAnchor());
                 }
             }
-            aAny <<= m_xParentText;
+            aAny <<= uno::Reference<text::XText>(m_xParentText);
         }
         else
         {

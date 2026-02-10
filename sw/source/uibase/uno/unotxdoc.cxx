@@ -934,7 +934,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        const uno::Reference< text::XText >  xParent =
+        const uno::Reference< SwXText >  xParent =
             ::sw::CreateParentXText(GetDocOrThrow(),
                     *pResultCursor->GetPoint());
         xRet = *new SwXTextCursor(xParent, *pResultCursor);
@@ -956,7 +956,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        const uno::Reference< text::XText >  xParent =
+        const uno::Reference< SwXText >  xParent =
             ::sw::CreateParentXText(GetDocOrThrow(),
                     *pResultCursor->GetPoint());
 

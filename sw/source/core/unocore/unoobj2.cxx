@@ -1275,7 +1275,7 @@ SwXTextRange::CreateXTextRange(
     SwDoc & rDoc, const SwPosition& rPos, const SwPosition *const pMark,
     RangePosition const eRange)
 {
-    const uno::Reference<text::XText> xParentText(
+    const uno::Reference<SwXText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
     const auto pNewCursor(rDoc.CreateUnoCursor(rPos));
     if(pMark)

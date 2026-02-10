@@ -1067,7 +1067,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
                 m_xParentText = sw::CreateParentXText(rDoc, aPos);
             }
 
-            return uno::Any(m_xParentText);
+            return uno::Any(uno::Reference<text::XText>(m_xParentText));
         }
         break;
         default:
