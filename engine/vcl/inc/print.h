@@ -62,6 +62,5 @@ void                    Add( std::unique_ptr<SalPrinterQueueInfo> pData );
 };
 
 void ImplDeletePrnQueueList();
-void ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
