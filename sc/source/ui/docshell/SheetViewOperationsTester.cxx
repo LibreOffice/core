@@ -35,6 +35,14 @@ constexpr std::string_view getOperationName(OperationType eOperation)
             return "TransliterateText";
         case OperationType::SetNormalString:
             return "SetNormalString";
+        case OperationType::SetValue:
+            return "SetValue";
+        case OperationType::SetString:
+            return "SetString";
+        case OperationType::SetTextEdit:
+            return "SetTextEdit";
+        case OperationType::SetFormula:
+            return "SetFormula";
         case OperationType::SetNoteText:
             return "SetNoteText";
         case OperationType::ReplaceNoteText:

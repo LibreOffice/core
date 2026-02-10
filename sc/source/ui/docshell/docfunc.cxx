@@ -113,6 +113,10 @@
 #include <operation/DeleteContentOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
+#include <operation/SetValueOperation.hxx>
+#include <operation/SetStringOperation.hxx>
+#include <operation/SetFormulaOperation.hxx>
+#include <operation/SetEditTextOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -695,37 +699,8 @@ bool ScDocFunc::SetNormalString(bool& o_rbNumFmtSet, const ScAddress& rPos, cons
 
 bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
 {
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bUndo = rDoc.IsUndoEnabled();
-
-    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
-
-    ScCellValue aOldVal;
-    if (bUndo)
-        aOldVal.assign(rDoc, rPos);
-
-    rDoc.SetValue(rPos, fVal);
-
-    if (bUndo)
-    {
-        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        ScCellValue aNewVal;
-        aNewVal.assign(rDoc, rPos);
-        pUndoMgr->AddUndoAction(std::make_unique<ScUndoSetCell>(&rDocShell, rPos, aOldVal, aNewVal));
-    }
-
-    if (bHeight)
-        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
-
-    rDocShell.PostPaintCell( rPos );
-    aModificator.SetDocumentModified();
-
-    // #103934#; notify editline and cell in edit mode
-    if (!bInteraction)
-        NotifyInputHandler( rPos );
-
-    return true;
+    sc::SetValueOperation aOperation(*this, rDocShell, rPos, fVal, !bInteraction);
+    return aOperation.run();
 }
 
 void ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>& aVals, bool bInteraction )
@@ -764,74 +739,14 @@ void ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>&
 
 bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
 {
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bUndo = rDoc.IsUndoEnabled();
-
-    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
-
-    ScCellValue aOldVal;
-    if (bUndo)
-        aOldVal.assign(rDoc, rPos);
-
-    ScSetStringParam aParam;
-    aParam.setTextInput();
-    rDoc.SetString(rPos, rStr, &aParam);
-
-    if (bUndo)
-    {
-        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        ScCellValue aNewVal;
-        aNewVal.assign(rDoc, rPos);
-        pUndoMgr->AddUndoAction(std::make_unique<ScUndoSetCell>(&rDocShell, rPos, aOldVal, aNewVal));
-    }
-
-    if (bHeight)
-        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
-
-    rDocShell.PostPaintCell( rPos );
-    aModificator.SetDocumentModified();
-
-    // #103934#; notify editline and cell in edit mode
-    if (!bInteraction)
-        NotifyInputHandler( rPos );
-
-    return true;
+    sc::SetStringOperation aOperation(*this, rDocShell, rPos, rStr, !bInteraction);
+    return aOperation.run();
 }
 
 bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction )
 {
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bUndo = rDoc.IsUndoEnabled();
-
-    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
-
-    ScCellValue aOldVal;
-    if (bUndo)
-        aOldVal.assign(rDoc, rPos);
-
-    rDoc.SetEditText(rPos, rStr.Clone());
-
-    if (bUndo)
-    {
-        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        ScCellValue aNewVal;
-        aNewVal.assign(rDoc, rPos);
-        pUndoMgr->AddUndoAction(std::make_unique<ScUndoSetCell>(&rDocShell, rPos, aOldVal, aNewVal));
-    }
-
-    if (bHeight)
-        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
-
-    rDocShell.PostPaintCell( rPos );
-    aModificator.SetDocumentModified();
-
-    // #103934#; notify editline and cell in edit mode
-    if (!bInteraction)
-        NotifyInputHandler( rPos );
-
-    return true;
+    sc::SetEditTextOperation aOperation(*this, rDocShell, rPos, rStr, !bInteraction);
+    return aOperation.run();
 }
 
 bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
@@ -851,51 +766,8 @@ bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr
 
 bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction )
 {
-    std::unique_ptr<ScFormulaCell> xCell(pCell);
-
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bUndo = rDoc.IsUndoEnabled();
-
-    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
-
-    ScCellValue aOldVal;
-    if (bUndo)
-        aOldVal.assign(rDoc, rPos);
-
-    pCell = rDoc.SetFormulaCell(rPos, xCell.release());
-
-    // For performance reasons API calls may disable calculation while
-    // operating and recalculate once when done. If through user interaction
-    // and AutoCalc is disabled, calculate the formula (without its
-    // dependencies) once so the result matches the current document's content.
-    if (bInteraction && !rDoc.GetAutoCalc() && pCell)
-    {
-        // calculate just the cell once and set Dirty again
-        pCell->Interpret();
-        pCell->SetDirtyVar();
-        rDoc.PutInFormulaTree( pCell);
-    }
-
-    if (bUndo)
-    {
-        SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        ScCellValue aNewVal;
-        aNewVal.assign(rDoc, rPos);
-        pUndoMgr->AddUndoAction(std::make_unique<ScUndoSetCell>(&rDocShell, rPos, aOldVal, aNewVal));
-    }
-
-    if (bHeight)
-        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
-
-    rDocShell.PostPaintCell( rPos );
-    aModificator.SetDocumentModified();
-
-    // #103934#; notify editline and cell in edit mode
-    if (!bInteraction)
-        NotifyInputHandler( rPos );
-
-    return true;
+    sc::SetFormulaOperation aOperation(*this, rDocShell, rPos, pCell, !bInteraction);
+    return aOperation.run();
 }
 
 bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells, bool bInteraction )
