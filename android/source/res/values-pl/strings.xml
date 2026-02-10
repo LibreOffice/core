@@ -26,13 +26,13 @@
     <string name="action_parts">Części</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_keyboard">Pokaż klawiaturę</string>
-    <string name="action_about">O aplikacji</string>
+    <string name="action_about">O aplikacji</string>
     <string name="action_fromat">Włącz formatowanie</string>
     <string name="action_search">Szukaj</string>
     <string name="action_UNO_commands">Wyślij polecenie UNO</string>
     <string name="message_saved">Zapisywanie ukończone</string>
     <string name="message_saving">Zapisywanie dokumentu…</string>
-    <string name="message_saving_failed">Zapisanie dokumentu nie powiodło się.</string>
+    <string name="message_saving_failed">Zapisanie dokumentu się nie powiodło.</string>
     <string name="password">Hasło</string>
     <string name="action_undo">Cofnij</string>
     <string name="action_redo">Ponów</string>
