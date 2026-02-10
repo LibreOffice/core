@@ -2328,6 +2328,69 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_CREATEMONOBRUSH :
+                    {
+                        sal_uInt64  nStart = mpInputStream->Tell() - 8;
+                        Bitmap aBitmap;
+
+                        mpInputStream->ReadUInt32( nIndex );
+
+                        if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                        {
+                            sal_uInt32 usage, offBmi, cbBmi, offBits, cbBits;
+
+                            mpInputStream->ReadUInt32( usage );
+                            mpInputStream->ReadUInt32( offBmi );
+                            mpInputStream->ReadUInt32( cbBmi );
+                            mpInputStream->ReadUInt32( offBits );
+                            mpInputStream->ReadUInt32( cbBits );
+
+                            if ( !mpInputStream->good() || (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
+                               bStatus = false;
+                            else if ( offBmi )
+                            {
+                                sal_uInt32  nSize = cbBmi + cbBits + 14;
+                                if ( nSize <= ( mnEndPos - mnStartPos ) )
+                                {
+                                    char*   pBuf = new char[ nSize ];
+
+                                    SvMemoryStream aTmp( pBuf, nSize, StreamMode::READ | StreamMode::WRITE );
+                                    aTmp.ObjectOwnsMemory( true );
+                                    aTmp.WriteUChar( 'B' )
+                                        .WriteUChar( 'M' )
+                                        .WriteUInt32( cbBits )
+                                        .WriteUInt16( 0 )
+                                        .WriteUInt16( 0 )
+                                        .WriteUInt32( cbBmi + 14 );
+
+                                    mpInputStream->Seek( nStart + offBmi );
+                                    char* pWritePos = pBuf + 14;
+                                    auto nRead = mpInputStream->ReadBytes(pWritePos, cbBmi);
+                                    if (nRead != cbBmi)
+                                    {
+                                        // zero remainder if short read
+                                        memset(pWritePos + nRead, 0, cbBmi - nRead);
+                                    }
+
+                                    mpInputStream->Seek( nStart + offBits );
+                                    pWritePos = pBuf + 14 + cbBmi;
+                                    nRead = mpInputStream->ReadBytes(pWritePos, cbBits);
+                                    if (nRead != cbBits)
+                                    {
+                                        // zero remainder if short read
+                                        memset(pWritePos + nRead, 0, cbBits - nRead);
+                                    }
+
+                                    aTmp.Seek( 0 );
+                                    ReadDIB(aBitmap, aTmp, true);
+                                }
+                            }
+                        }
+
+                        CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( aBitmap ));
+                    }
+                    break;
+
                     case EMR_CREATECOLORSPACE :
                     {
                         sal_uInt32 nRemainingRecSize = nRecSize - 8;
@@ -2386,7 +2449,6 @@ namespace emfio
                     case EMR_SETLINKEDUFIS :
                     case EMR_SETMAPPERFLAGS :
                     case EMR_SETICMMODE :
-                    case EMR_CREATEMONOBRUSH :
                     case EMR_SETBRUSHORGEX :
                     case EMR_SETMETARGN :
                     case EMR_SETMITERLIMIT :
