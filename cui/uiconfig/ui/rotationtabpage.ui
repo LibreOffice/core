@@ -248,7 +248,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkLabel" id="FT_ANGLE">
+                      <object class="GtkLabel" id="ROT_FT_ANGLE">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLE">_Angle:</property>
@@ -273,7 +273,7 @@
                         <property name="digits">2</property>
                         <property name="wrap">True</property>
                         <accessibility>
-                          <relation type="labelled-by" target="FT_ANGLE"/>
+                          <relation type="labelled-by" target="ROT_FT_ANGLE"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="NF_ANGLE-atkobject">
@@ -402,7 +402,7 @@
     <widgets>
       <widget name="FT_POS_X"/>
       <widget name="FT_POS_Y"/>
-      <widget name="FT_ANGLE"/>
+      <widget name="ROT_FT_ANGLE"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">

@@ -130,7 +130,7 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
-              <object class="GtkLabel" id="target_label">
+              <object class="GtkLabel" id="hyperlink_target_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
@@ -431,7 +431,7 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="path_label"/>
-      <widget name="target_label"/>
+      <widget name="hyperlink_target_label"/>
       <widget name="url_label"/>
     </widgets>
   </object>
