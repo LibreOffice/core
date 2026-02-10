@@ -14,6 +14,7 @@
 #include <sal/log.hxx>
 #include <dbdata.hxx>
 #include <queryparam.hxx>
+#include <sortparam.hxx>
 
 namespace sc
 {
@@ -139,12 +140,7 @@ constexpr bool doesUnsyncSheetView(OperationType eOperationType)
 
 } // end anonymous namespace
 
-bool SheetViewOperationsTester::doesUnsync(OperationType eOperationType)
-{
-    bool bOperationAllowed = eOperationType == OperationType::EnterData
-                             || eOperationType == OperationType::SetNormalString;
-    return !bOperationAllowed;
-}
+bool SheetViewOperationsTester::doesUnsync(OperationType /*eOperationType*/) { return true; }
 
 void SheetViewOperationsTester::sync()
 {
@@ -166,12 +162,11 @@ void SheetViewOperationsTester::sync()
     if (pManager->isEmpty())
         return;
 
-    for (auto const& pSheetView : pManager->getSheetViews())
+    for (std::shared_ptr<SheetView> const& pSheetView : pManager->getSheetViews())
     {
         SCTAB nSheetViewTab = pSheetView->getTableNumber();
 
         std::optional<ScQueryParam> oQueryParam;
-        std::optional<ScSortParam> oSortParam;
         ScDBData* pNoNameData = rDocument.GetAnonymousDBData(nSheetViewTab);
         if (pNoNameData && pNoNameData->HasAutoFilter())
         {
@@ -180,19 +175,30 @@ void SheetViewOperationsTester::sync()
                 oQueryParam.emplace();
                 pNoNameData->GetQueryParam(*oQueryParam);
             }
-            if (pNoNameData->HasSortParam())
-            {
-                oSortParam.emplace();
-                pNoNameData->GetSortParam(*oSortParam);
-            }
         }
 
         rDocument.OverwriteContent(nTab, nSheetViewTab);
 
+        // Reverse the sorting of the default view in the sheet view
+        if (auto const& rReorderParameters = pSheetView->getReorderParameters())
+        {
+            sc::ReorderParam aReorderParameters(*rReorderParameters);
+            aReorderParameters.maSortRange.aStart.SetTab(nSheetViewTab);
+            aReorderParameters.maSortRange.aEnd.SetTab(nSheetViewTab);
+            aReorderParameters.reverse();
+            rDocument.Reorder(aReorderParameters);
+        }
+
+        auto const& oSortParam = pSheetView->getSortPram();
+        if (oSortParam)
+        {
+            // We need to reset the sort order for the sheet view as we will sort again
+            pSheetView->resetSortOrder();
+            rDocument.Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
+        }
+
         if (oQueryParam)
             rDocument.Query(nSheetViewTab, *oQueryParam, false, false);
-        if (oSortParam)
-            rDocument.Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
     }
 }
 

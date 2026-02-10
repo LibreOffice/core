@@ -46,23 +46,30 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
     if (!pSheetView)
         return rAddress;
 
+    ScAddress aAddress = rAddress;
+    SCTAB nTab = aAddress.Tab();
+
+    // Change the tab number if it is the one from sheet view
+    if (pViewData->CurrentTabForData() == nTab)
+        nTab = pViewData->GetTabNumber();
+    aAddress.SetTab(nTab);
+
     std::optional<SortOrderReverser> const& oSortOrder = pSheetView->getSortOrder();
     if (!oSortOrder)
-        return rAddress;
+        return aAddress;
 
-    SCTAB nTab = rAddress.Tab();
-    SCCOL nColumn = rAddress.Col();
-    SCROW nRow = rAddress.Row();
+    SCCOL nColumn = aAddress.Col();
+    SCROW nRow = aAddress.Row();
 
     if (pViewData->GetTabNumber() != nTab)
-        return rAddress;
+        return aAddress;
 
-    SCROW nUnsortedRow = oSortOrder->unsort(nRow, nColumn);
-    if (nUnsortedRow != nRow)
-    {
-        return ScAddress(nColumn, nUnsortedRow, nTab);
-    }
-    return rAddress;
+    SCROW nReversedRow = pSheetView->reverseSortingToDefaultView(nRow, nColumn);
+
+    if (nReversedRow == nRow)
+        return aAddress;
+
+    return ScAddress(nColumn, nReversedRow, nTab);
 }
 
 ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
@@ -70,6 +77,8 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     ScViewData* pViewData = ScDocShell::GetViewData();
 
     std::shared_ptr<SheetView> pSheetView = getCurrentSheetView(pViewData);
+
+    // We get a valid pSheetView if we currently are in a sheet view, otherwise we don't need to convert
     if (!pSheetView)
         return rMarkData;
 
@@ -81,11 +90,26 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     aNewMark.MarkToMulti();
     bool bChanged = false;
 
-    for (const SCTAB& nTab : aNewMark)
-    {
-        if (pViewData->GetTabNumber() != nTab)
-            continue;
+    SCTAB nDefaultViewTab = pViewData->GetTabNumber();
+    SCTAB nSheetViewTab = pViewData->CurrentTabForData();
 
+    // Adjust tab to default view in ranges
+    if (nSheetViewTab == aNewMark.GetArea().aStart.Tab()
+        && nSheetViewTab == aNewMark.GetArea().aEnd.Tab())
+    {
+        aNewMark.SetAreaTab(nDefaultViewTab);
+    }
+
+    // If sheet view tab is selected, deselect and select default view tab instead
+    if (aNewMark.GetTableSelect(nSheetViewTab))
+    {
+        aNewMark.SelectTable(nSheetViewTab, false);
+        aNewMark.SelectTable(nDefaultViewTab, true);
+    }
+
+    // Take sorting into account when we convert to default view
+    if (aNewMark.GetTableSelect(nDefaultViewTab))
+    {
         std::vector<std::pair<SCCOL, SCROW>> aMarkedCells;
         SortOrderInfo const& rSortInfo = oSortOrder->maSortInfo;
         for (SCROW nRow = rSortInfo.mnFirstRow; nRow <= rSortInfo.mnLastRow; ++nRow)
@@ -95,17 +119,18 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
             {
                 if (aNewMark.IsCellMarked(nColumn, nRow))
                 {
-                    aNewMark.SetMultiMarkArea(ScRange(nColumn, nRow, nTab, nColumn, nRow, nTab),
-                                              false);
+                    ScRange aRange(nColumn, nRow, nDefaultViewTab, nColumn, nRow, nDefaultViewTab);
+                    aNewMark.SetMultiMarkArea(aRange, false);
                     aMarkedCells.emplace_back(nColumn, nRow);
                 }
             }
         }
         for (auto & [ nColumn, nRow ] : aMarkedCells)
         {
-            SCROW nUnsortedRow = oSortOrder->unsort(nRow, nColumn);
-            aNewMark.SetMultiMarkArea(
-                ScRange(nColumn, nUnsortedRow, nTab, nColumn, nUnsortedRow, nTab), true);
+            SCROW nReversedRow = pSheetView->reverseSortingToDefaultView(nRow, nColumn);
+            ScRange aRange(nColumn, nReversedRow, nDefaultViewTab, nColumn, nReversedRow,
+                           nDefaultViewTab);
+            aNewMark.SetMultiMarkArea(aRange, true);
             bChanged = true;
         }
     }
