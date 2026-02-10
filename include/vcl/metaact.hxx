@@ -913,7 +913,7 @@ public:
     SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
     SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaGradientAction( const tools::Rectangle& rRect, Gradient aGradient );
+    VCL_DLLPUBLIC       MetaGradientAction( const tools::Rectangle& rRect, Gradient aGradient );
 
     SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;

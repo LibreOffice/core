@@ -23,6 +23,8 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/dibtools.hxx>
+#include <vcl/gradient.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <o3tl/environment.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sprintf.hxx>
@@ -2391,6 +2393,70 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_GRADIENTFILL :
+                    {
+                        // [MS-EMF] 2.3.5.12 EMR_GRADIENTFILL
+                        sal_Int32 BoundsLeft, BoundsTop, BoundsRight, BoundsBottom;
+                        sal_uInt32 nVer, nTri, ulMode;
+                        mpInputStream->ReadInt32( BoundsLeft ).ReadInt32( BoundsTop )
+                                      .ReadInt32( BoundsRight ).ReadInt32( BoundsBottom );
+                        mpInputStream->ReadUInt32( nVer ).ReadUInt32( nTri ).ReadUInt32( ulMode );
+
+                        SAL_INFO("emfio", "\t\tGradientFill nVer: " << nVer << " nTri: " << nTri << " mode: " << ulMode);
+
+                        if ( !mpInputStream->good() || nVer > 256 * 1024 || nTri > 256 * 1024 )
+                        {
+                            bStatus = false;
+                            break;
+                        }
+
+                        // Read TriVertex array (each 16 bytes: x, y, Red, Green, Blue, Alpha as int32+int32+4*uint16)
+                        struct TriVertex { sal_Int32 x, y; sal_uInt16 Red, Green, Blue, Alpha; };
+                        std::vector<TriVertex> vertices(nVer);
+                        for (sal_uInt32 i = 0; i < nVer && mpInputStream->good(); ++i)
+                        {
+                            mpInputStream->ReadInt32( vertices[i].x ).ReadInt32( vertices[i].y );
+                            mpInputStream->ReadUInt16( vertices[i].Red ).ReadUInt16( vertices[i].Green )
+                                          .ReadUInt16( vertices[i].Blue ).ReadUInt16( vertices[i].Alpha );
+                        }
+
+                        if (ulMode == 0x00 || ulMode == 0x01) // GRADIENT_FILL_RECT_H or GRADIENT_FILL_RECT_V
+                        {
+                            for (sal_uInt32 i = 0; i < nTri && mpInputStream->good(); ++i)
+                            {
+                                sal_uInt32 nUpperLeft, nLowerRight;
+                                mpInputStream->ReadUInt32( nUpperLeft ).ReadUInt32( nLowerRight );
+
+                                if (nUpperLeft >= nVer || nLowerRight >= nVer)
+                                    continue;
+
+                                const TriVertex& ul = vertices[nUpperLeft];
+                                const TriVertex& lr = vertices[nLowerRight];
+
+                                Color aStartColor( static_cast<sal_uInt8>(ul.Red >> 8),
+                                                   static_cast<sal_uInt8>(ul.Green >> 8),
+                                                   static_cast<sal_uInt8>(ul.Blue >> 8) );
+                                Color aEndColor( static_cast<sal_uInt8>(lr.Red >> 8),
+                                                 static_cast<sal_uInt8>(lr.Green >> 8),
+                                                 static_cast<sal_uInt8>(lr.Blue >> 8) );
+
+                                Gradient aGradient( css::awt::GradientStyle_LINEAR, aStartColor, aEndColor );
+                                // GRADIENT_FILL_RECT_H: left-to-right -> angle 900
+                                // GRADIENT_FILL_RECT_V: top-to-bottom -> angle 0
+                                aGradient.SetAngle( Degree10(ulMode == 0x00 ? 900 : 0) );
+
+                                tools::Rectangle aRect( Point( ul.x, ul.y ), Point( lr.x, lr.y ) );
+                                DrawRect( aRect, false );
+                                mpGDIMetaFile->AddAction( new MetaGradientAction( ImplMap( aRect ), aGradient ) );
+                            }
+                        }
+                        else if (ulMode == 0x02) // GRADIENT_FILL_TRIANGLE
+                        {
+                            SAL_WARN("emfio", "TODO: EMR_GRADIENTFILL triangle mode not implemented");
+                        }
+                    }
+                    break;
+
                     case EMR_CREATECOLORSPACE :
                     {
                         sal_uInt32 nRemainingRecSize = nRecSize - 8;
@@ -2445,7 +2511,6 @@ namespace emfio
                     case EMR_SETICMPROFILEW :
                     case EMR_TRANSPARENTBLT :
                     case EMR_TRANSPARENTDIB :
-                    case EMR_GRADIENTFILL :
                     case EMR_SETLINKEDUFIS :
                     case EMR_SETMAPPERFLAGS :
                     case EMR_SETICMMODE :
