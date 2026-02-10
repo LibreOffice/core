@@ -150,10 +150,11 @@ enum class SwFieldTypesEnum : sal_uInt16 {
 };
 
 // tdf#170392 - this should be aligned with FMT_FF_ARY in sw/source/uibase/fldui/fldmgr.cxx
+// including com::sun::star::text::FilenameDisplayFormat
 enum class SwFileNameFormat {
     // most of the constants are a regular enum
-    Path,
     PathName,
+    Path,
     NameNoExt,
     Name,
     UIName,
