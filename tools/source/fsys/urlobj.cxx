@@ -4894,7 +4894,19 @@ bool INetURLObject::IsExoticProtocol() const
         m_eScheme == INetProtocol::Uno ||
         m_eScheme == INetProtocol::VndSunStarExpand ||
         isSchemeEqualTo(u"vnd.sun.star.script") ||
-        isSchemeEqualTo(u"service"))
+        isSchemeEqualTo(u"service") ||
+        // Follina, Microsoft Support Diagnostic Tool
+        isSchemeEqualTo(u"ms-msdt") ||
+        // https://learn.microsoft.com/en-us/office/client-developer/office-uri-schemes
+        isSchemeEqualTo(u"ms-word") ||
+        isSchemeEqualTo(u"ms-powerpoint") ||
+        isSchemeEqualTo(u"ms-excel") ||
+        isSchemeEqualTo(u"ms-visio") ||
+        isSchemeEqualTo(u"ms-access") ||
+        isSchemeEqualTo(u"ms-project") ||
+        isSchemeEqualTo(u"ms-publisher") ||
+        isSchemeEqualTo(u"ms-spd") ||
+        isSchemeEqualTo(u"ms-infopath"))
     {
         SAL_INFO_IF(
             m_eScheme == INetProtocol::VndSunStarExpand, "tools.urlobj",
