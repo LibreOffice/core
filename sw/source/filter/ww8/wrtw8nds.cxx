@@ -2496,9 +2496,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nCurrentPos );
 
             // Don't redline content-controls--Word doesn't do them.
-            SwTextAttr* pAttr = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
-                                                    sw::GetTextAttrMode::Default);
-            if (pAttr && pAttr->GetStart() == nCurrentPos)
+            const SwTextAttr* pSdt = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
+                                                         sw::GetTextAttrMode::Default);
+            if (pSdt && pSdt->GetStart() == nCurrentPos)
             {
                 pRedlineData = nullptr;
             }
@@ -2778,6 +2778,16 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     else
                     {
                         // insert final graphic anchors if any before CR
+                        if (pSdt && *pSdt->GetEnd() == nEnd && aAttrIter.HasFlysAt(nEnd))
+                        {
+                            // Close the content control run before exporting final flies,
+                            // otherwise the flies will be moved into the Sdt run,
+                            // which (for a non-richText Sdt) will be considered corrupt in MS Word.
+                            AttrOutput().EndRun(&rNode, nCurrentPos, nLen, /*bLastRun=*/false);
+                            nLen = 0;
+                            nCurrentPos = nEnd;
+                            AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+                        }
                         aAttrIter.OutFlys(nEnd);
                         // insert final bookmarks if any before CR and after flys
                         AppendBookmarks( rNode, nEnd, 1 );
