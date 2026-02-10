@@ -384,7 +384,7 @@ def _uno_import(name, *optargs, **kwargs):
             failed = False
 
             try:
-                # check for structs, exceptions or interfaces
+                # check for structs, exceptions, interfaces or services
                 d[class_name] = pyuno.getClass(name + "." + class_name)
             except RuntimeException:
                 # check for enums

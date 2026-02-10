@@ -56,6 +56,8 @@ namespace com::sun::star::container { class XEnumeration; }
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
 namespace com::sun::star::lang { class XSingleServiceFactory; }
 namespace com::sun::star::reflection { class XIdlReflection; }
+namespace com::sun::star::reflection { class XServiceConstructorDescription; }
+namespace com::sun::star::reflection { class XServiceTypeDescription2; }
 namespace com::sun::star::script { class XInvocation2; }
 namespace com::sun::star::script { class XInvocationAdapterFactory2; }
 namespace com::sun::star::script { class XTypeConverter; }
@@ -178,6 +180,10 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 PyRef PyUNO_callable_new (
     const css::uno::Reference<css::script::XInvocation2> &xInv,
     const OUString &methodName );
+
+PyRef PyUNO_service_constructor_new(
+    const css::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
+    const css::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor);
 
 PyObject* PyUNO_Type_new (const char *typeName , css::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
