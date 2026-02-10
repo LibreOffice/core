@@ -1364,7 +1364,7 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     if (!bIsNotSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetWindowTextColor());
 
     // handle the push-button
     if (!bIsNotSelected)
