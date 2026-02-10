@@ -40,6 +40,7 @@ class SwXTextCursor;
 class SwXParagraph;
 class SwXTextRange;
 class SwXTextTable;
+class SwXTextFrame;
 
 class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXText
     : public css::lang::XTypeProvider
@@ -161,7 +162,7 @@ public:
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         finishParagraphInsert(
             const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
-            const css::uno::Reference< css::text::XTextRange >&     xInsertPosition) override;
+            const css::uno::Reference< css::text::XTextRange >&     xInsertPosition) override final;
 
     // XTextPortionAppend
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
@@ -191,7 +192,7 @@ public:
         convertToTextFrame(
             const css::uno::Reference< css::text::XTextRange >& xStart,
             const css::uno::Reference< css::text::XTextRange >& xEnd,
-            const css::uno::Sequence< css::beans::PropertyValue >& xFrameProperties) override;
+            const css::uno::Sequence< css::beans::PropertyValue >& xFrameProperties) override final;
     virtual css::uno::Reference<
                 css::text::XTextTable > SAL_CALL
         convertToTable(
@@ -240,6 +241,10 @@ public:
     virtual void SAL_CALL removeTextContentAfter(
             const css::uno::Reference< css::text::XTextContent>& xPredecessor) override;
 
+    SW_DLLPUBLIC rtl::Reference< SwXParagraph >
+        finishSwParagraphInsert(
+            const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
+            const css::uno::Reference< css::text::XTextRange >&     xInsertPosition);
     SW_DLLPUBLIC rtl::Reference< SwXTextTable >
         convertToSwTable(
             css::uno::Sequence<
@@ -260,6 +265,11 @@ public:
            css::uno::Sequence<
                 css::beans::PropertyValue > const&
                 rTableProperties);
+    SW_DLLPUBLIC rtl::Reference< SwXTextFrame >
+        convertToSwTextFrame(
+            const css::uno::Reference< css::text::XTextRange >& xStart,
+            const css::uno::Reference< css::text::XTextRange >& xEnd,
+            const std::vector< css::beans::PropertyValue >& xFrameProperties);
 
 private:
     rtl::Reference< SwXTextCursor > getEndImpl(SolarMutexGuard& rGuard);

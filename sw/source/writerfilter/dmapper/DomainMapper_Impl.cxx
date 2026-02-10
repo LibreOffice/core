@@ -155,6 +155,7 @@
 #include <unotextbodyhf.hxx>
 #include <unosett.hxx>
 #include <unodraw.hxx>
+#include <unoparagraph.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -2878,22 +2879,20 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                         fillEmptyFrameProperties(aFrameProperties, false);
 
-                        uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
+                        rtl::Reference<SwXText> xBodyText = dynamic_cast<SwXText*>(xRangeStart->getText().get());
 
-                        uno::Reference<text::XTextContent> xFrame = xBodyText->convertToTextFrame(xRangeStart, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
-                        uno::Reference<beans::XPropertySet> xFrameProps(xFrame, uno::UNO_QUERY);
+                        rtl::Reference<SwXTextFrame> xFrame = xBodyText->convertToSwTextFrame(xRangeStart, xRangeEnd, aFrameProperties);
                         // set frame style now to avoid losing text content (convertToTextFrame() doesn't work
                         // with frame styles anchored "as character")
-                        xFrameProps->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Inline Heading"_ustr));
+                        xFrame->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Inline Heading"_ustr));
                         // set anchoring because setting frame style doesn't modify the anchoring to
                         // its default "anchored as character" setting
-                        xFrameProps->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                        xFrame->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
                         // tdf#164903 empty top and bottom margins to emulate the behaviour of style separators
-                        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xFrame, uno::UNO_QUERY);
-                        if ( xParaEnumAccess.is() && !pParaContext->isSet(PROP_PARA_TOP_MARGIN) )
+                        if ( !pParaContext->isSet(PROP_PARA_TOP_MARGIN) )
                         {
-                            uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+                            rtl::Reference<SwXParagraphEnumeration> xParaEnum = xFrame->createSwEnumeration();
                             if ( xParaEnum.is() )
                             {
                                 uno::Reference<beans::XPropertySet> xParaProps(xParaEnum->nextElement(), uno::UNO_QUERY);
@@ -3641,7 +3640,7 @@ void DomainMapper_Impl::appendTextContent(
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
     if (m_aTextAppendStack.empty())
         return;
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
+    rtl::Reference< SwXText > xTextAppendAndConvert = dynamic_cast<SwXText*>( m_aTextAppendStack.top().xTextAppend.get() );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
     if (!xTextAppendAndConvert.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
@@ -4045,8 +4044,8 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), text::VertOrientation::BOTTOM));
             }
-            uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
-            xBodyText->convertToTextFrame(xTextAppend, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
+            rtl::Reference<SwXText> xBodyText = dynamic_cast<SwXText*>(xRangeStart->getText().get());
+            xBodyText->convertToSwTextFrame(xTextAppend, xRangeEnd, aFrameProperties);
         }
         m_aHeaderFooterTextAppendStack.pop();
     }
@@ -6174,9 +6173,11 @@ void DomainMapper_Impl::PushTextBoxContent()
     {
         rtl::Reference<SwXTextFrame> xTBoxFrame(m_xTextDocument->createTextFrame());
         xTBoxFrame->setName("textbox" + OUString::number(m_xPendingTextBoxFrames.size() + 1));
-        uno::Reference<text::XTextAppendAndConvert>(m_aTextAppendStack.top().xTextAppend,
-            uno::UNO_QUERY_THROW)
-            ->appendTextContent(static_cast<SwXFrame*>(xTBoxFrame.get()), beans::PropertyValues());
+        rtl::Reference<SwXText> xText = dynamic_cast<SwXText*>(m_aTextAppendStack.top().xTextAppend.get());
+        assert(xText);
+        if (!xText)
+            return;
+        xText->appendTextContent(static_cast<SwXFrame*>(xTBoxFrame.get()), beans::PropertyValues());
         m_xPendingTextBoxFrames.push(xTBoxFrame);
 
         m_aTextAppendStack.push(TextAppendContext(xTBoxFrame, {}));
@@ -9882,18 +9883,17 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         std::vector<sal_Int32> redPos, redLen;
         try
         {
-            uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( GetTopTextAppend(), uno::UNO_QUERY_THROW );
+            rtl::Reference< SwXText > xTextAppendAndConvert = dynamic_cast<SwXText*>( GetTopTextAppend().get() );
             // convert redline ranges to cursor movement and character length
             sal_Int32 redIdx;
             lcl_CopyRedlines(GetTopTextAppend(), m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
 
-            const uno::Reference< text::XTextContent > xTextContent = xTextAppendAndConvert->convertToTextFrame(
+            const rtl::Reference< SwXTextFrame > xTextContent = xTextAppendAndConvert->convertToSwTextFrame(
                 m_xFrameStartRange,
                 m_xFrameEndRange,
-                comphelper::containerToSequence(m_aFrameProperties) );
+                m_aFrameProperties );
 
-            uno::Reference< text::XText > xDest( xTextContent, uno::UNO_QUERY_THROW );
-            lcl_PasteRedlines(xDest, m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
+            lcl_PasteRedlines(xTextContent, m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
         }
         catch( const uno::Exception&)
         {

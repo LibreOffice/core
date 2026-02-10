@@ -1148,6 +1148,16 @@ SwXText::finishParagraphInsert(
     return finishOrAppendParagraph(rProperties, xInsertPosition);
 }
 
+rtl::Reference< SwXParagraph >
+SwXText::finishSwParagraphInsert(
+        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const uno::Reference< text::XTextRange >& xInsertPosition)
+{
+    SolarMutexGuard g;
+
+    return finishOrAppendParagraph(rProperties, xInsertPosition);
+}
+
 rtl::Reference<SwXParagraph>
 SwXText::finishOrAppendParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties,
@@ -1470,6 +1480,17 @@ SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xEnd,
     const uno::Sequence< beans::PropertyValue >& rFrameProperties)
 {
+    return static_cast<SwXFrame*>(convertToSwTextFrame(xStart, xEnd, comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(rFrameProperties)).get());
+}
+
+// move previously appended paragraphs into a text frames
+// to support import filters
+rtl::Reference< SwXTextFrame >
+SwXText::convertToSwTextFrame(
+    const uno::Reference< text::XTextRange >& xStart,
+    const uno::Reference< text::XTextRange >& xEnd,
+    const std::vector< beans::PropertyValue >& rFrameProperties)
+{
     SolarMutexGuard aGuard;
 
     if(!IsValid())
@@ -1492,7 +1513,6 @@ SwXText::convertToTextFrame(
             break;
         }
     }
-    uno::Reference< text::XTextContent > xRet;
     std::optional<SwUnoInternalPaM> pTempStartPam(*GetDoc());
     std::optional<SwUnoInternalPaM> pEndPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart, eMode)
@@ -1748,7 +1768,6 @@ SwXText::convertToTextFrame(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    xRet = static_cast<SwXFrame*>(xNewFrame.get());
     if (bParaBeforeInserted || bParaAfterInserted)
     {
         const rtl::Reference<SwXTextCursor> xFrameTextCursor =
@@ -1787,7 +1806,7 @@ SwXText::convertToTextFrame(
             throw uno::RuntimeException(sMessage);
         }
     }
-    return xRet;
+    return xNewFrame;
 }
 
 namespace {

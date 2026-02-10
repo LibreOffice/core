@@ -47,6 +47,7 @@ class SwFormat;
 class SwUnoInternalPaM;
 class SfxItemPropertySet;
 class SwXOLEListener;
+struct SwXParagraphEnumeration;
 namespace com::sun::star::frame { class XModel; }
 
 class BaseFrameProperties_Impl;
@@ -150,6 +151,8 @@ public:
     void attachToRange(css::uno::Reference<css::text::XTextRange> const& xTextRange,
             SwPaM const* pCopySource = nullptr);
 
+    SW_DLLPUBLIC rtl::Reference< SwXTextRange > getSwAnchor();
+
     const SwFrameFormat* GetFrameFormat() const
         { return m_pFrameFormat; }
     SwFrameFormat* GetFrameFormat()
@@ -215,7 +218,7 @@ public:
 
     //XTextContent
     virtual void SAL_CALL attach( const css::uno::Reference< css::text::XTextRange >& xTextRange ) override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor(  ) override;
+    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor(  ) override final;
 
     //XComponent
     virtual void SAL_CALL dispose(  ) override;
@@ -233,6 +236,9 @@ public:
     //XPropertySet
     virtual SW_DLLPUBLIC css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     using SwXFrame::setPropertyValue;
+
+    SW_DLLPUBLIC rtl::Reference< SwXParagraphEnumeration > createSwEnumeration();
+
 private:
     rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwFrameFormat& rFormat, SwUnoInternalPaM& rPam);
 };

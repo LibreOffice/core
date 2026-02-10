@@ -2638,6 +2638,11 @@ void SwXFrame::dispose()
 
 uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
 {
+    return getSwAnchor();
+}
+
+rtl::Reference< SwXTextRange >  SwXFrame::getSwAnchor()
+{
     SolarMutexGuard aGuard;
     rtl::Reference<SwXTextRange> aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
@@ -3278,6 +3283,11 @@ rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRangeImpl(
 }
 
 uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration()
+{
+    return createSwEnumeration();
+}
+
+rtl::Reference< SwXParagraphEnumeration >  SwXTextFrame::createSwEnumeration()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
