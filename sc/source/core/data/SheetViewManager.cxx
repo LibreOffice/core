@@ -141,6 +141,14 @@ void SheetViewManager::addOrderIndices(SortOrderInfo const& rSortInfo)
         moSortOrder.emplace();
     moSortOrder->addOrderIndices(rSortInfo);
 }
+
+void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParameters)
+{
+    for (auto& pSheetView : maViews)
+    {
+        pSheetView->mergeReorderParameters(rReorderParameters);
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

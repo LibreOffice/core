@@ -69,6 +69,9 @@ private:
     std::optional<SortOrderReverser> moSortOrder;
     SheetViewID mnID;
 
+    std::optional<ReorderParam> moOriginalReorderParams;
+    std::optional<ScSortParam> moSortParam;
+
 public:
     SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID);
 
@@ -88,6 +91,7 @@ public:
     bool isSynced() const { return mbSynced; }
 
     std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
+    void resetSortOrder() { moSortOrder.reset(); }
 
     /** Adds or combines the order indices.
      *
@@ -95,6 +99,20 @@ public:
      * were already added previously.
      **/
     void addOrderIndices(SortOrderInfo const& rSortInfo);
+
+    /** Merges the reorder parameters */
+    void mergeReorderParameters(ReorderParam const& rReorderParameters);
+    std::optional<ReorderParam> const& getReorderParameters() { return moOriginalReorderParams; }
+
+    /** Reverses the complete (sheet view and default view) sorting order for the input row */
+    SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;
+
+    // Last used sort parameters
+
+    std::optional<ScSortParam> const& getSortPram() { return moSortParam; }
+
+    /// Remember last used sort parameters when sheet view was sorted.
+    void setSortParam(ScSortParam const& rSortParam) { moSortParam = rSortParam; }
 };
 }
 

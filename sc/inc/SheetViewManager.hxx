@@ -70,6 +70,8 @@ public:
 
     std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
     void addOrderIndices(SortOrderInfo const& rSortInfo);
+
+    void mergeReorderParameters(ReorderParam const& rReorderParameters);
 };
 }
 
