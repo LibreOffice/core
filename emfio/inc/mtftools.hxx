@@ -590,6 +590,7 @@ namespace emfio
 
         bool                bClockWiseArcDirection;
         bool                bFillStyleSelected;
+        sal_uInt32          nPolyFillMode;
     };
 
     struct BSaveStruct
@@ -696,6 +697,7 @@ namespace emfio
         bool                mbNopMode : 1;
         bool                mbClockWiseArcDirection : 1;
         bool                mbFillStyleSelected : 1;
+        sal_uInt32          mnPolyFillMode;     // ALTERNATE(1) or WINDING(2)
         bool                mbClipNeedsUpdate : 1;
         bool                mbComplexClip : 1;
         bool                mbIsMapWinSet : 1;
@@ -753,6 +755,7 @@ namespace emfio
         void                SetGfxMode(GraphicsMode nGfxMode) { meGfxMode = nGfxMode; };
         GraphicsMode        GetGfxMode() const { return meGfxMode; };
         void                SetBkMode(BackgroundMode nMode);
+        void                SetPolyFillMode(sal_uInt32 nPolyFillMode);
         void                SetBkColor(const Color& rColor);
         void                SetTextColor(const Color& rColor);
         void                SetTextAlign(sal_uInt32 nAlign);

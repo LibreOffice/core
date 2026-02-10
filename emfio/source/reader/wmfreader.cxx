@@ -1389,8 +1389,17 @@ namespace emfio
             }
             break;
 
-            case W_META_SETRELABS:
             case W_META_SETPOLYFILLMODE:
+            {
+                if ((nRecordSize != 4) && (nRecordSize != 5))
+                    bRecordOk = false;
+                sal_uInt16 nDat = 0;
+                mpInputStream->ReadUInt16( nDat );
+                SetPolyFillMode( nDat );
+            }
+            break;
+
+            case W_META_SETRELABS:
             case W_META_SETSTRETCHBLTMODE:
             case W_META_SETTEXTCHAREXTRA:
             case W_META_SETTEXTJUSTIFICATION:

@@ -684,13 +684,16 @@ CPPUNIT_TEST_FIXTURE(Test, testEnglishMapMode)
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width", u"424");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "height", u"424");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 5);
+    // WINDING fill mode: fill and stroke are separated; strokes come from
+    // MetaPolyLineAction instead of MetaPolygonAction, one per shape.
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 3);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[1]/polygon",
                        u"-1,-1 29699,-1 29699,21000 -1,21000");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[2]/polygon",
                        u"1058,7937 1058,13230 4233,13230 4233,12171 2115,12171 2115,7937");
-    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[3]/polygon",
-                       u"1058,7937 1058,13230 4233,13230 4233,12171 2115,12171 2115,7937");
+    assertXPathContent(
+        pDocument, aXPathPrefix + "mask/polygonhairline[3]/polygon",
+        u"12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRectangleWithModifyWorldTransform)
@@ -2006,6 +2009,32 @@ CPPUNIT_TEST_FIXTURE(Test, testExcludeClipRect)
 
     // The red fill covers the whole area, but is clipped by the mask above.
     assertXPath(pDocument, aXPathPrefix + "group/mask/polypolygoncolor", "color", u"#ff0000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPolyFillModeWinding)
+{
+    // EMR_SETPOLYFILLMODE sets WINDING mode, then draws a self-intersecting
+    // pentagram (5-pointed star) filled with red. With WINDING the entire
+    // star including the center is filled; with ALTERNATE the center pentagon
+    // would be a hole. The geometry is converted by CreateWindingFillPolyPolygon()
+    // so that even-odd rendering fills the star completely.
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPolyFillModeWinding.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The pentagram is filled with red. The self-intersecting polygon is
+    // resolved into a non-self-intersecting outer boundary via union of
+    // sub-regions, so even-odd fill covers the entire star including the center.
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", u"#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor/polypolygon/polygon", 1);
+
+    // The stroke preserves the original 5-vertex star shape.
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline", 1);
+    assertXPathContent(pDocument, aXPathPrefix + "polygonhairline/polygon",
+                       u"2646,264 4048,4565 370,1900 4921,1900 1244,4565");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

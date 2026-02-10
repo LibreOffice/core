@@ -22,6 +22,7 @@
 #include <cstdlib>
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
@@ -882,6 +883,11 @@ namespace emfio
         mnBkMode = nMode;
     }
 
+    void MtfTools::SetPolyFillMode( sal_uInt32 nPolyFillMode )
+    {
+        mnPolyFillMode = nPolyFillMode;
+    }
+
     void MtfTools::SetBkColor( const Color& rColor )
     {
         maBkColor = rColor;
@@ -902,12 +908,60 @@ namespace emfio
         mvGDIObj.resize(nNewEntrys);
     }
 
+    // Convert a PolyPolygon so that nonzero/winding fill rule gives the same visual
+    // result when rendered with even-odd fill rule (which is all VCL supports).
+    static tools::PolyPolygon CreateWindingFillPolyPolygon(const tools::PolyPolygon& rPolyPoly)
+    {
+        basegfx::B2DPolyPolygon aB2D = rPolyPoly.getB2DPolyPolygon();
+
+        if (aB2D.count() == 1)
+        {
+            // Single self-intersecting polygon (e.g. pentagram star): resolve
+            // self-intersections, then union (OR) all resulting sub-regions.
+            // This gives the outer boundary of the filled area, which even-odd
+            // fill renders correctly.  createNonzeroConform() fails here because
+            // solveCrossovers() produces overlapping loops for odd-crossing
+            // polygons, and the center ends up inside an even number of loops.
+            basegfx::B2DPolyPolygon aResolved
+                = basegfx::utils::solveCrossovers(aB2D.getB2DPolygon(0));
+            aResolved = basegfx::utils::stripNeutralPolygons(aResolved);
+
+            if (aResolved.count() > 1)
+            {
+                basegfx::B2DPolyPolygonVector aInput;
+                for (sal_uInt32 i = 0; i < aResolved.count(); ++i)
+                    aInput.push_back(basegfx::B2DPolyPolygon(aResolved.getB2DPolygon(i)));
+                aB2D = basegfx::utils::mergeToSinglePolyPolygon(aInput);
+            }
+            else
+            {
+                aB2D = aResolved;
+            }
+        }
+        else
+        {
+            // Multiple polygons: use createNonzeroConform (handles nested
+            // same-orientation polygons by removing inner duplicates).
+            aB2D = basegfx::utils::createNonzeroConform(aB2D);
+        }
+
+        return tools::PolyPolygon(aB2D);
+    }
+
     void MtfTools::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     {
         if ( !rPolyPoly.Count() )
             return;
 
         ImplSetNonPersistentLineColorTransparenz();
+
+        if (mnPolyFillMode == 2) // WINDING
+        {
+            tools::PolyPolygon aFill = CreateWindingFillPolyPolygon(rPolyPoly);
+            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aFill ) );
+            return;
+        }
+
         if ( rPolyPoly.Count() == 1 )
         {
             if ( rPolyPoly.IsRect() )
@@ -1112,6 +1166,7 @@ namespace emfio
         mbNopMode(false),
         mbClockWiseArcDirection(false),
         mbFillStyleSelected(false),
+        mnPolyFillMode(1),          // ALTERNATE
         mbClipNeedsUpdate(true),
         mbComplexClip(false),
         mbIsMapWinSet(false),
@@ -1291,26 +1346,39 @@ namespace emfio
         UpdateClipRegion();
         UpdateLineStyle();
         UpdateFillStyle();
+        bool bWindingFill = (mnPolyFillMode == 2);
         if ( bFill )
         {
-            if ( !bStroke )
+            // When using WINDING fill mode, we convert the geometry so it renders
+            // correctly with even-odd fill. We must also disable line color to avoid
+            // stroking internal edges of the converted fill geometry.
+            if ( !bStroke || bWindingFill )
             {
                 mpGDIMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::LINECOLOR ) );
                 mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
             }
-            if ( maPathObj.Count() == 1 )
-                mpGDIMetaFile->AddAction( new MetaPolygonAction( maPathObj.GetObject( 0 ) ) );
+            if (bWindingFill)
+            {
+                tools::PolyPolygon aFill = CreateWindingFillPolyPolygon(maPathObj);
+                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aFill ) );
+            }
             else
-                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
+            {
+                if ( maPathObj.Count() == 1 )
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( maPathObj.GetObject( 0 ) ) );
+                else
+                    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
+            }
 
-            if ( !bStroke )
+            if ( !bStroke || bWindingFill )
                 mpGDIMetaFile->AddAction( new MetaPopAction() );
         }
         // tdf#142014 By default the stroke is made with hairline. If width is bigger, we need to use PolyLineAction
         if ( bStroke )
         {
             // bFill is drawing hairstyle line. So we need to draw it only when the width is different than 0
-            if ( !bFill || maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
+            // When using WINDING fill mode, line was disabled for the fill, so always draw stroke
+            if ( !bFill || bWindingFill || maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
             {
                 sal_uInt16 i, nCount = maPathObj.Count();
                 for ( i = 0; i < nCount; i++ )
@@ -1551,21 +1619,47 @@ namespace emfio
                         }
                     }
                     ImplSetNonPersistentLineColorTransparenz();
-                    mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                    if (mnPolyFillMode == 2) // WINDING
+                    {
+                        tools::PolyPolygon aFill = CreateWindingFillPolyPolygon(tools::PolyPolygon(rPolygon));
+                        mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aFill ) );
+                    }
+                    else
+                    {
+                        mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                    }
                     UpdateLineStyle();
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
                 }
                 else
                 {
                     UpdateLineStyle();
 
                     if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
-                        mpGDIMetaFile->AddAction( new MetaPolygonAction( std::move(rPolygon) ) );
+                    {
+                        if (mnPolyFillMode == 2) // WINDING
+                        {
+                            tools::PolyPolygon aFill = CreateWindingFillPolyPolygon(tools::PolyPolygon(rPolygon));
+                            ImplSetNonPersistentLineColorTransparenz();
+                            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aFill ) );
+                            UpdateLineStyle();
+                            // Stroke with original polygon, closing it for the polyline
+                            sal_uInt16 nCount = rPolygon.GetSize();
+                            if (nCount && rPolygon[nCount - 1] != rPolygon[0])
+                            {
+                                Point aPoint(rPolygon[0]);
+                                rPolygon.Insert(nCount, aPoint);
+                            }
+                            mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolygon, maLineStyle.aLineInfo));
+                        }
+                        else
+                            mpGDIMetaFile->AddAction( new MetaPolygonAction( std::move(rPolygon) ) );
+                    }
                     else {
                         SvtGraphicFill aFill( tools::PolyPolygon( rPolygon ),
                                               Color(),
                                               0.0,
-                                              SvtGraphicFill::fillNonZero,
+                                              mnPolyFillMode == 2 ? SvtGraphicFill::fillNonZero : SvtGraphicFill::fillEvenOdd,
                                               SvtGraphicFill::fillTexture,
                                               SvtGraphicFill::Transform(),
                                               true,
@@ -1613,12 +1707,30 @@ namespace emfio
             else
             {
                 UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
-                if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
+                if (mnPolyFillMode == 2) // WINDING
                 {
+                    // Convert geometry so even-odd rendering matches winding fill.
+                    // Disable line to avoid stroking internal resolved edges.
+                    tools::PolyPolygon aFill = CreateWindingFillPolyPolygon(rPolyPolygon);
+                    mpGDIMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::LINECOLOR ) );
+                    mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
+                    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aFill ) );
+                    mpGDIMetaFile->AddAction( new MetaPopAction() );
+                    // Stroke with original geometry
                     for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
                     {
                         mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
+                    }
+                }
+                else
+                {
+                    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
+                    if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
+                    {
+                        for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
+                        {
+                            mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
+                        }
                     }
                 }
             }
@@ -2781,6 +2893,7 @@ namespace emfio
         pSave->aBkColor = maBkColor;
         pSave->bClockWiseArcDirection = mbClockWiseArcDirection;
         pSave->bFillStyleSelected = mbFillStyleSelected;
+        pSave->nPolyFillMode = mnPolyFillMode;
 
         pSave->aActPos = maActPos;
         pSave->aXForm = maXForm;
@@ -2843,6 +2956,7 @@ namespace emfio
         maBkColor = pSave->aBkColor;
         mbClockWiseArcDirection = pSave->bClockWiseArcDirection;
         mbFillStyleSelected = pSave->bFillStyleSelected;
+        mnPolyFillMode = pSave->nPolyFillMode;
 
         maActPos = pSave->aActPos;
         maXForm = pSave->aXForm;
