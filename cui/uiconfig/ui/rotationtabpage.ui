@@ -222,7 +222,7 @@
                 <property name="valign">start</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="FT_ANGLE">
+                  <object class="GtkLabel" id="ROT_FT_ANGLE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLE">_Angle:</property>
@@ -340,7 +340,7 @@
     <widgets>
       <widget name="FT_POS_X"/>
       <widget name="FT_POS_Y"/>
-      <widget name="FT_ANGLE"/>
+      <widget name="ROT_FT_ANGLE"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">

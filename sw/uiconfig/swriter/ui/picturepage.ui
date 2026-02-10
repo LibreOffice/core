@@ -66,7 +66,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="picturelabel1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="picturepage|label1">_File name</property>
@@ -478,7 +478,7 @@
       <widget name="allpages"/>
       <widget name="leftpages"/>
       <widget name="rightpages"/>
-      <widget name="label1"/>
+      <widget name="picturelabel1"/>
       <widget name="FT_ANGLE"/>
     </widgets>
   </object>

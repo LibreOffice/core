@@ -112,7 +112,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="label2">
+                  <object class="GtkLabel" id="croplabel2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label2">_Left:</property>
@@ -140,7 +140,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label3">
+                  <object class="GtkLabel" id="croplabel3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label3">_Right:</property>
@@ -180,7 +180,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="label4">
+                  <object class="GtkLabel" id="croplabel4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label4">_Top:</property>
@@ -194,7 +194,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label5">
+                  <object class="GtkLabel" id="croplabel5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="croppage|label5">_Bottom:</property>
@@ -360,7 +360,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="GtkLabel" id="label6">
+              <object class="GtkLabel" id="croplabel6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label6">_Width:</property>
@@ -387,7 +387,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label7">
+              <object class="GtkLabel" id="croplabel7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label7">_Height:</property>
@@ -446,7 +446,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="GtkLabel" id="label8">
+              <object class="GtkLabel" id="croplabel8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label8">_Width:</property>
@@ -474,7 +474,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label9">
+              <object class="GtkLabel" id="croplabel9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="croppage|label9">_Height:</property>
@@ -522,14 +522,14 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="label2"/>
-      <widget name="label3"/>
-      <widget name="label4"/>
-      <widget name="label5"/>
-      <widget name="label6"/>
-      <widget name="label7"/>
-      <widget name="label8"/>
-      <widget name="label9"/>
+      <widget name="croplabel2"/>
+      <widget name="croplabel3"/>
+      <widget name="croplabel4"/>
+      <widget name="croplabel5"/>
+      <widget name="croplabel6"/>
+      <widget name="croplabel7"/>
+      <widget name="croplabel8"/>
+      <widget name="croplabel9"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">

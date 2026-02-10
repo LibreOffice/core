@@ -103,7 +103,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="simsearchlabel2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="similaritysearchdialog|label2">_Exchange characters:</property>
@@ -131,7 +131,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="simsearchlabel4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="similaritysearchdialog|label4">_Remove characters:</property>
