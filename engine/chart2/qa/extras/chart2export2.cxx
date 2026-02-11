@@ -269,6 +269,19 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxes)
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:tickLabels", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexBinningXLSX)
+{
+    loadFromFile(u"xlsx/paretoLine.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(
+        pXmlDoc,
+        "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:layoutPr/cx:binning",
+        "intervalClosed", u"r");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
 {
     loadFromFile(u"xlsx/axis_title_rotation.xlsx");

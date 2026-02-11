@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_SERIESMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_SERIESMODEL_HXX
 
+#include <variant>
+
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 
@@ -174,6 +176,27 @@ struct DataPointModel
                         ~DataPointModel();
 };
 
+struct BinningModel
+{
+    enum ClosedSide {
+        L,
+        R
+    };
+
+    std::optional<std::variant<double, sal_uInt32>> maBinSizeOrCount;
+    std::optional<ClosedSide> meIntervalClosed;   // Which side of an interval is closed
+
+    explicit            BinningModel();
+};
+
+struct LayoutPropsModel
+{
+    typedef ModelRef< BinningModel >        BinningRef;
+    // There's also a CT_Aggregation but no content given
+
+    BinningRef          mxBinning;          // Binning settings.
+};
+
 enum class DataSourceType: sal_Int32
 {
     CATEGORIES,         /// Data point categories.
@@ -192,6 +215,7 @@ struct SeriesModel
     typedef ModelRef< PictureOptionsModel >         PictureOptionsRef;
     typedef ModelRef< TextModel >                   TextRef;
     typedef ModelRef< DataLabelsModel >             DataLabelsRef;
+    typedef ModelRef< LayoutPropsModel >            LayoutPropsRef;
 
     DataSourceMap       maSources;          /// Series source ranges.
     ErrorBarVector      maErrorBars;        /// All error bars of this series.
@@ -202,6 +226,7 @@ struct SeriesModel
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
     TextRef             mxText;             /// Series title source.
     DataLabelsRef       mxLabels;           /// Data point label settings for all points.
+    LayoutPropsRef      mxLayoutPr;         /// Chartex CT_SeriesLayoutProperties
     std::optional< sal_Int32 > monShape;         /// 3D bar shape type.
     sal_Int32           mnExplosion;        /// Pie slice moved from pie center.
     sal_Int32           mnIndex;            /// Series index used for automatic formatting.

@@ -81,6 +81,12 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "IntervalClosed",
+                  PROP_DATASERIES_INTERVAL_CLOSED,
+                  cppu::UnoType<sal_uInt32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
 }

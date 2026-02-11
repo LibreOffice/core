@@ -106,6 +106,12 @@ DataPointModel::~DataPointModel()
 {
 }
 
+BinningModel::BinningModel() :
+    maBinSizeOrCount(),
+    meIntervalClosed()
+{
+}
+
 SeriesModel::SeriesModel(bool bMSO2007Doc) :
     mnExplosion( 0 ),
     mnIndex( -1 ),

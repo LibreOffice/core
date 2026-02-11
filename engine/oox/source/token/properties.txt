@@ -292,6 +292,7 @@ IncludeHiddenCells
 InputMessage
 InputTitle
 InterceptValue
+IntervalClosed
 InvalidUrl
 InvertNegative
 IsActive

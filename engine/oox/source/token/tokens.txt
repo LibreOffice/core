@@ -501,6 +501,7 @@ afterAutospacing
 afterEffect
 afterGroup
 afterLines
+aggregation
 ahLst
 ahPolar
 ahXY
@@ -881,6 +882,9 @@ bidi
 bidiVisual
 bilevel
 billions
+binCount
+binSize
+binning
 birds
 birdsFlight
 bisque
@@ -2521,6 +2525,7 @@ gear6
 gear9
 gems
 general
+geography
 gfxdata
 ghostCol
 ghostRow
@@ -2922,6 +2927,7 @@ interactiveSeq
 intercept
 intermediate
 interval
+intervalClosed
 intraSp
 inv
 invGamma
@@ -3948,6 +3954,7 @@ parameterType
 parameters
 parent
 parentId
+parentLabelLayout
 parentSet
 paretoLine
 parsePre
@@ -4359,6 +4366,7 @@ refreshOnLoad
 refreshedBy
 refreshedDate
 refreshedVersion
+regionLabelLayout
 regionMap
 regroupid
 regrouptable
@@ -5052,6 +5060,7 @@ startarrow
 startarrowlength
 startarrowwidth
 state
+statistics
 status
 statusBar
 statusText
@@ -5133,6 +5142,7 @@ subject
 subscript
 subsetted
 subtotal
+subtotals
 subtotalCaption
 subtotalHiddenItems
 subtotalTop

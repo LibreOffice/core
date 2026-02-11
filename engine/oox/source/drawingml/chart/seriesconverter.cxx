@@ -962,6 +962,17 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         aLabelsConv.convertFromModel( xDataSeries, rTypeGroup );
     }
 
+    // Layout properties
+    if (mrModel.mxLayoutPr.is() && mrModel.mxLayoutPr->mxBinning.is()) {
+        ModelRef<BinningModel> xBinning = mrModel.mxLayoutPr->mxBinning;
+
+        if (xBinning->meIntervalClosed) {
+            sal_uInt32 nBinSideChar = xBinning->meIntervalClosed.value() ==
+                BinningModel::ClosedSide::L ? 'l' : 'r';
+            aSeriesProp.setProperty(PROP_IntervalClosed, nBinSideChar);
+        }
+    }
+
     return xDataSeries;
 }
 

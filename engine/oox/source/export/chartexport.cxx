@@ -3972,6 +3972,25 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                     OString::number(nSeriesCnt++));
 
             // layoutPr
+            PropertySet aSeriesProp(rSeries);
+            sal_uInt32 nIntervalClosedChar = '\0';
+            if (aSeriesProp.getProperty(nIntervalClosedChar, PROP_IntervalClosed)) {
+                pFS->startElement(FSNS(XML_cx, XML_layoutPr));
+
+                switch (nIntervalClosedChar) {
+                    case 'l' :
+                        pFS->singleElement(FSNS(XML_cx, XML_binning), XML_intervalClosed, "l");
+                        break;
+                    case 'r' :
+                        pFS->singleElement(FSNS(XML_cx, XML_binning), XML_intervalClosed, "r");
+                        break;
+                    default:
+                        assert(false);
+                        break;
+                }
+
+                pFS->endElement(FSNS(XML_cx, XML_layoutPr));
+            }
 
             // axisId
 

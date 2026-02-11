@@ -762,6 +762,119 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
+//======
+// BinningContext
+//======
+BinningContext::BinningContext( ContextHandler2Helper& rParent, BinningModel& rModel ) :
+    ContextBase( rParent, rModel )
+{
+}
+
+BinningContext::~BinningContext()
+{
+}
+
+void BinningContext::onCharacters( const OUString& rChars )
+{
+    switch (getCurrentElement())
+    {
+        case CX_TOKEN( binSize ) :
+            mrModel.maBinSizeOrCount = rChars.toDouble();
+            break;
+        case CX_TOKEN(binCount) :
+            mrModel.maBinSizeOrCount = rChars.toUInt32();
+            break;
+        default:
+            assert(false);
+    }
+}
+
+ContextHandlerRef BinningContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case CX_TOKEN( layoutPr ):
+            switch( nElement )
+            {
+                case CX_TOKEN( binSize ):
+                    mrModel.maBinSizeOrCount = rAttribs.getDouble( XML_val, 0.0 );
+                    return nullptr;
+                case CX_TOKEN( binCount ):
+                    mrModel.maBinSizeOrCount = std::variant<double, sal_uInt32>(
+                            static_cast<sal_uInt32>(rAttribs.getInteger( XML_val, 0 )));
+
+                    // TODO
+                    return nullptr;
+            }
+    }
+    return ContextBase::onCreateContext( nElement, rAttribs );
+}
+
+//======
+// LayoutPropsContext
+//======
+LayoutPropsContext::LayoutPropsContext( ContextHandler2Helper& rParent, LayoutPropsModel& rModel ) :
+    ContextBase( rParent, rModel )
+{
+}
+
+LayoutPropsContext::~LayoutPropsContext()
+{
+}
+
+ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case CX_TOKEN( layoutPr ):
+            switch( nElement )
+            {
+                case CX_TOKEN( parentLabelLayout ):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( regionLabelLayout ):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( visibility ):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( aggregation ):
+                    // The schema gives an empty definition for this type??
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( binning ):
+                {
+                    BinningModel& rB = mrModel.mxBinning.create();
+                    if (rAttribs.getString( XML_intervalClosed ) == "l") {
+                        rB.meIntervalClosed = BinningModel::ClosedSide::L;
+                    } else if (rAttribs.getString( XML_intervalClosed ) == "r") {
+                        rB.meIntervalClosed = BinningModel::ClosedSide::R;
+                    } else {
+                        assert(false);  // no other options
+                    }
+                    // TODO: Also handle attributes underflow, overflow
+                    return new BinningContext( *this, rB );
+                }
+                case CX_TOKEN( geography ):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( statistics ):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( subtotals ):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN( extLst ):
+                    // TODO
+                    return nullptr;
+            }
+    }
+    return ContextBase::onCreateContext( nElement, rAttribs );
+}
+
+//======
+// ChartexSeriesContext
+//======
 ChartexSeriesContext::ChartexSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel, sal_Int32 nIndex ) :
     SeriesContextBase( rParent, rModel )
 {
@@ -793,8 +906,7 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                     mrModel.mnDataId = rAttribs.getInteger(XML_val, -1);
                     return nullptr;
                 case CX_TOKEN( layoutPr ):
-                    // This looks complicated. TODO
-                    return nullptr;
+                    return new LayoutPropsContext( *this, mrModel.mxLayoutPr.create());
                 case CX_TOKEN( axisId ):
                     mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
                     return nullptr;

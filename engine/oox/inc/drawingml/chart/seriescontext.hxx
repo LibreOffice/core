@@ -237,6 +237,36 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
+
+struct BinningModel;
+
+/** Handler for a chartex binning context (cx:binning element).
+ */
+class BinningContext final : public ContextBase< BinningModel >
+{
+public:
+    explicit            BinningContext( ::oox::core::ContextHandler2Helper& rParent, BinningModel& rModel );
+    virtual             ~BinningContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    void                onCharacters( const OUString& rChars ) override;
+};
+
+
+struct LayoutPropsModel;
+
+/** Handler for a chartex layout properties context (cx:layoutPr element).
+ */
+class LayoutPropsContext final : public ContextBase< LayoutPropsModel >
+{
+public:
+    explicit            LayoutPropsContext( ::oox::core::ContextHandler2Helper& rParent, LayoutPropsModel& rModel );
+    virtual             ~LayoutPropsContext() override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+};
+
+
 /** Handler for a data series context for chartex chart types (cx:series element
  * for boxWhisker, clusteredColumn/histogram, funnel, paretoLine, waterfall,
  * sunburst, treemap, and regionMap).
