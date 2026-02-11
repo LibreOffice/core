@@ -245,4 +245,6 @@ inline bool AquaSalFrame::isAlive( const AquaSalFrame* pFrame )
     return pInst && pInst->isFrameAlive( pFrame );
 }
 
+sal_uInt16 ImplGetModifierMask( unsigned int nMask );
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

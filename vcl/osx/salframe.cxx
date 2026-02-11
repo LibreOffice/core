@@ -49,14 +49,6 @@
 
 #include <salwtype.hxx>
 
-#include <premac.h>
-#include <objc/objc-runtime.h>
-// needed for theming
-// FIXME: move theming code to salnativewidgets.cxx
-#include <Carbon/Carbon.h>
-#include <quartz/CGHelpers.hxx>
-#include <postmac.h>
-
 const int nMinBlinkCursorDelay = 500;
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = nullptr;
@@ -1923,6 +1915,20 @@ void AquaSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
     rRect.SetBottom( static_cast<tools::Long>(aRect.origin.y + aRect.size.height - 1) );
 }
 
+sal_uInt16 ImplGetModifierMask( unsigned int nMask )
+{
+    sal_uInt16 nRet = 0;
+    if( (nMask & NSEventModifierFlagShift) != 0 )
+        nRet |= KEY_SHIFT;
+    if( (nMask & NSEventModifierFlagControl) != 0 )
+        nRet |= KEY_MOD3;
+    if( (nMask & NSEventModifierFlagOption) != 0 )
+        nRet |= KEY_MOD2;
+    if( (nMask & NSEventModifierFlagCommand) != 0 )
+        nRet |= KEY_MOD1;
+    return nRet;
+}
+
 SalFrame::SalPointerState AquaSalFrame::GetPointerState()
 {
     OSX_SALDATA_RUNINMAIN_UNION( GetPointerState(), state )
@@ -1935,88 +1941,15 @@ SalFrame::SalPointerState AquaSalFrame::GetPointerState()
     CocoaToVCL( aPt, false );
     state.maPos = Point(static_cast<tools::Long>(aPt.x), static_cast<tools::Long>(aPt.y));
 
-    NSEvent* pCur = [NSApp currentEvent];
-    bool bMouseEvent = false;
-    if( pCur )
-    {
-        bMouseEvent = true;
-        switch( [pCur type] )
-        {
-        case NSEventTypeLeftMouseDown:
-            state.mnState |= MOUSE_LEFT;
-            break;
-        case NSEventTypeLeftMouseUp:
-            break;
-        case NSEventTypeRightMouseDown:
-            state.mnState |= MOUSE_RIGHT;
-            break;
-        case NSEventTypeRightMouseUp:
-            break;
-        case NSEventTypeOtherMouseDown:
-            state.mnState |= ([pCur buttonNumber] == 2) ? MOUSE_MIDDLE : 0;
-            break;
-        case NSEventTypeOtherMouseUp:
-            break;
-        case NSEventTypeMouseMoved:
-            break;
-        case NSEventTypeLeftMouseDragged:
-            state.mnState |= MOUSE_LEFT;
-            break;
-        case NSEventTypeRightMouseDragged:
-            state.mnState |= MOUSE_RIGHT;
-            break;
-        case NSEventTypeOtherMouseDragged:
-            state.mnState |= ([pCur buttonNumber] == 2) ? MOUSE_MIDDLE : 0;
-            break;
-        default:
-            bMouseEvent = false;
-            break;
-        }
-    }
-    if( bMouseEvent )
-    {
-        unsigned int nMask = static_cast<unsigned int>([pCur modifierFlags]);
-        if( (nMask & NSEventModifierFlagShift) != 0 )
-            state.mnState |= KEY_SHIFT;
-        if( (nMask & NSEventModifierFlagControl) != 0 )
-            state.mnState |= KEY_MOD3;
-        if( (nMask & NSEventModifierFlagOption) != 0 )
-            state.mnState |= KEY_MOD2;
-        if( (nMask & NSEventModifierFlagCommand) != 0 )
-            state.mnState |= KEY_MOD1;
+    NSUInteger buttons = [NSEvent pressedMouseButtons];
+    if (buttons & 1)
+        state.mnState |= MOUSE_LEFT;
+    if (buttons & 2)
+        state.mnState |= MOUSE_RIGHT;
+    if (buttons & 4)
+        state.mnState |= MOUSE_MIDDLE;
 
-    }
-    else
-    {
-        // FIXME: replace Carbon by Cocoa
-        // Cocoa does not have an equivalent for GetCurrentEventButtonState
-        // and GetCurrentEventKeyModifiers.
-        // we could try to get away with tracking all events for modifierKeys
-        // and all mouse events for button state in VCL_NSApplication::sendEvent,
-        // but it is unclear whether this will get us the same result.
-        // leave in GetCurrentEventButtonState and GetCurrentEventKeyModifiers for now
-
-        // fill in button state
-        UInt32 nState = GetCurrentEventButtonState();
-        state.mnState = 0;
-        if( nState & 1 )
-            state.mnState |= MOUSE_LEFT;    // primary button
-        if( nState & 2 )
-            state.mnState |= MOUSE_RIGHT;   // secondary button
-        if( nState & 4 )
-            state.mnState |= MOUSE_MIDDLE;  // tertiary button
-
-        // fill in modifier state
-        nState = GetCurrentEventKeyModifiers();
-        if( nState & shiftKey )
-            state.mnState |= KEY_SHIFT;
-        if( nState & controlKey )
-            state.mnState |= KEY_MOD3;
-        if( nState & optionKey )
-            state.mnState |= KEY_MOD2;
-        if( nState & cmdKey )
-            state.mnState |= KEY_MOD1;
-    }
+    state.mnState |= ImplGetModifierMask([NSEvent modifierFlags]);
 
     return state;
 }
