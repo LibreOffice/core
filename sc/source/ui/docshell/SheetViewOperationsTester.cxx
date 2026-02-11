@@ -27,6 +27,8 @@ constexpr std::string_view getOperationName(OperationType eOperation)
     {
         case OperationType::Unknown:
             return "Unknown";
+        case OperationType::ApplyAttributes:
+            return "ApplyAttributes";
         case OperationType::DeleteContent:
             return "DeleteContent";
         case OperationType::DeleteCell:
