@@ -35,38 +35,42 @@ SetEditTextOperation::SetEditTextOperation(ScDocFunc& rDocFunc, ScDocShell& rDoc
 
 bool SetEditTextOperation::runImplementation()
 {
-    ScAddress const& rPos = mrPosition;
+    ScAddress aPosition = convertAddress(mrPosition);
+
+    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
 
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
+    bool bHeight = rDoc.HasAttrib(ScRange(aPosition), HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
-        aOldVal.assign(rDoc, rPos);
+        aOldVal.assign(rDoc, aPosition);
 
-    rDoc.SetEditText(rPos, mrEditObject.Clone());
+    rDoc.SetEditText(aPosition, mrEditObject.Clone());
 
     if (bUndo)
     {
         SfxUndoManager* pUndoMgr = mrDocShell.GetUndoManager();
         ScCellValue aNewVal;
-        aNewVal.assign(rDoc, rPos);
+        aNewVal.assign(rDoc, aPosition);
         pUndoMgr->AddUndoAction(
-            std::make_unique<ScUndoSetCell>(&mrDocShell, rPos, aOldVal, aNewVal));
+            std::make_unique<ScUndoSetCell>(&mrDocShell, aPosition, aOldVal, aNewVal));
     }
 
-    if (bHeight)
-        mrDocFunc.AdjustRowHeight(ScRange(rPos), true, mbApi);
+    aSheetViewTester.sync();
 
-    mrDocShell.PostPaintCell(rPos);
+    if (bHeight)
+        mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);
+
+    mrDocShell.PostPaintCell(aPosition);
     aModificator.SetDocumentModified();
 
     // #103934#; notify editline and cell in edit mode
     if (mbApi)
-        mrDocFunc.NotifyInputHandler(rPos);
+        mrDocFunc.NotifyInputHandler(aPosition);
 
     return true;
 }

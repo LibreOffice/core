@@ -87,6 +87,75 @@ protected:
 
         return aString;
     }
+
+    void gotoCell(std::u16string_view aCellAddress)
+    {
+        dispatchCommand(
+            mxComponent, u".uno:GoToCell"_ustr,
+            comphelper::InitPropertySequence({ { "ToPoint", uno::Any(OUString(aCellAddress)) } }));
+    }
+
+    void createNewSheetViewInCurrentView()
+    {
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    }
+
+    void sortAscendingForCell(std::u16string_view aCellAddress)
+    {
+        gotoCell(aCellAddress);
+        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+    }
+
+    void sortDescendingForCell(std::u16string_view aCellAddress)
+    {
+        gotoCell(aCellAddress);
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    }
+};
+
+/** Test class that contains methods commonly used for testing sync of sheet views. */
+class SyncTest : public SheetViewTest
+{
+public:
+    void tearDown() override
+    {
+        maSheetView = std::nullopt;
+        maDefaultView = std::nullopt;
+        SheetViewTest::tearDown();
+    }
+
+protected:
+    std::optional<ScTestViewCallback> maSheetView;
+    std::optional<ScTestViewCallback> maDefaultView;
+    ScTabViewShell* mpTabViewSheetView = nullptr;
+    ScTabViewShell* mpTabViewDefaultView = nullptr;
+
+    void setupViews()
+    {
+        maSheetView.emplace();
+        mpTabViewSheetView = maSheetView->getTabViewShell();
+
+        SfxLokHelper::createView();
+        Scheduler::ProcessEventsToIdle();
+
+        maDefaultView.emplace();
+        mpTabViewDefaultView = maDefaultView->getTabViewShell();
+
+        CPPUNIT_ASSERT(mpTabViewSheetView != mpTabViewDefaultView);
+        CPPUNIT_ASSERT(maSheetView->getViewID() != maDefaultView->getViewID());
+    }
+
+    void switchToSheetView()
+    {
+        SfxLokHelper::setView(maSheetView->getViewID());
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    void switchToDefaultView()
+    {
+        SfxLokHelper::setView(maDefaultView->getViewID());
+        Scheduler::ProcessEventsToIdle();
+    }
 };
 
 /** Check auto-filter sorting.
@@ -1018,50 +1087,71 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
     }
 }
 
-/** Test class that contains methods commonly used for testing sync of sheet views. */
-class SyncTest : public SheetViewTest
+CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultAndSheetView_Formulas)
 {
-public:
-    void tearDown() override
+    // Input is an test file that uses formulas instead of values.
+    // This test checks if the sorting of the document behaves the same
+    // for formulas as values.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Formulas.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    setupViews();
+
+    // Switch to Sheet View and Create
     {
-        maSheetView = std::nullopt;
-        maDefaultView = std::nullopt;
-        SheetViewTest::tearDown();
+        switchToSheetView();
+
+        createNewSheetViewInCurrentView();
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7", u"1", u"6" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 6));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7", u"1", u"6" }),
+                             getValues(mpTabViewSheetView, 0, 1, 6));
+
+        // Sort AutoFilter
+        sortAscendingForCell(u"A1");
+
+        // No change to sorted values
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7", u"1", u"6" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 6));
+        // Expect sorted values for the sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"4", u"5", u"6", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 6));
     }
 
-protected:
-    std::optional<ScTestViewCallback> maSheetView;
-    std::optional<ScTestViewCallback> maDefaultView;
-    ScTabViewShell* mpTabViewSheetView = nullptr;
-    ScTabViewShell* mpTabViewDefaultView = nullptr;
-
-    void setupViews()
+    // Switch to Default view and sort
     {
-        maSheetView.emplace();
-        mpTabViewSheetView = maSheetView->getTabViewShell();
+        switchToDefaultView();
 
-        SfxLokHelper::createView();
-        Scheduler::ProcessEventsToIdle();
+        // Sort AutoFilter
+        sortDescendingForCell(u"A1");
 
-        maDefaultView.emplace();
-        mpTabViewDefaultView = maDefaultView->getTabViewShell();
+        // Expect sorted values for the default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"4", u"3", u"1" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 6));
 
-        CPPUNIT_ASSERT(mpTabViewSheetView != mpTabViewDefaultView);
-        CPPUNIT_ASSERT(maSheetView->getViewID() != maDefaultView->getViewID());
+        // Previously sorted values - no change
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"4", u"5", u"6", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 6));
     }
 
-    void switchToSheetView()
+    // Switch to Sheet view and set a value
     {
-        SfxLokHelper::setView(maSheetView->getViewID());
-        Scheduler::ProcessEventsToIdle();
-    }
+        switchToSheetView();
 
-    void switchToDefaultView()
-    {
-        SfxLokHelper::setView(maDefaultView->getViewID());
-        Scheduler::ProcessEventsToIdle();
+        // Change "4" to "44"
+        typeCharsInCell(std::string("=40+4"), 0, 3, mpTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"6", u"5", u"44", u"3", u"1" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 6));
+
+        // Result in { u"1", u"3", u"4", u"5", u"6", u"7" } but we resort the sheet view immediately
+        // so we get { u"1", u"3", u"5", u"6", u"7", u"44" }.
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"6", u"7", u"44" }),
+                             getValues(mpTabViewSheetView, 0, 1, 6));
     }
-};
+}
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
 {
