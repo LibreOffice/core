@@ -165,7 +165,7 @@ const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 // but also large enough to match where the ppd side rounded up to the next
 // point. Seen with C5/C6/C65 envelopes which can be found over 1 point away
 // from the values in aDinTab
-#define MAXSLOPPY PT2MM100(1.25)
+constexpr auto MAXSLOPPY = PT2MM100(1.25);
 
 void PaperInfo::doSloppyFit(bool bAlsoTryRotated)
 {
