@@ -2523,8 +2523,9 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     while( t )
     {
         // Discard writing unknown functions without a name in OOXML ex: #NAME!()
-        if (t->GetOpCode() == ocNoName && t->GetType() == svByte
-            && FormulaGrammar::isOOXML(meGrammar))
+        if (FormulaGrammar::isOOXML(meGrammar)
+            && (t->GetOpCode() == ocNoName || t->GetOpCode() == ocExternal)
+            && t->GetType() == svByte)
         {
             rBuffer.setLength(0);
             rBuffer.append(GetNativeSymbol(ocErrRef));
