@@ -1020,11 +1020,14 @@ void NetProducer::produceService(
                 .append("(com.sun.star.uno.XComponentContext ctx");
             if (!ctor.parameters.empty())
                 file.append(", ");
-            separatedForeach(
-                ctor.parameters, [&file]() { file.append(", "); },
-                [this, &file](const auto& p) {
-                    file.append(getNetName(p.type)).append(" ").append(getSafeIdentifier(p.name));
-                });
+            separatedForeach(ctor.parameters, [&file]() { file.append(", "); },
+                             [this, &file, restParam](const auto& p) {
+                                 if (&p == restParam)
+                                     file.append("params ").append(getNetName(p.type)).append("[]");
+                                 else
+                                     file.append(getNetName(p.type));
+                                 file.append(" ").append(getSafeIdentifier(p.name));
+                             });
             file.append(")").endLine().beginBlock();
 
             file.beginLine()
