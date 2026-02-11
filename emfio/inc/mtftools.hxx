@@ -24,6 +24,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/rendercontext/State.hxx>
+#include <vcl/hatch.hxx>
 #include <vcl/metaact.hxx>
 #include <rtl/ref.hxx>
 
@@ -326,6 +327,10 @@ namespace emfio
     //Scalar constants
     constexpr sal_Int32 UNDOCUMENTED_WIN_RCL_RELATION = 32;
     constexpr sal_Int32 MS_FIXPOINT_BITCOUNT_28_4 = 4;
+
+    /** Map a Windows hatch index (HS_*) to a VCL Hatch.
+     *  [MS-WMF] 2.1.1.12 HatchStyle Enumeration */
+    Hatch mapWindowsHatch(sal_uInt32 nHatchIndex, const Color& rColor);
 }
 
 //============================ WmfReader ==================================
@@ -398,7 +403,7 @@ namespace emfio
 
     enum class WinMtfFillStyleType
     {
-        Solid, Pattern
+        Solid, Pattern, Hatch
     };
 
     struct WinMtfFillStyle final : GDIObj
@@ -407,6 +412,7 @@ namespace emfio
         bool                bTransparent;
         WinMtfFillStyleType aType;
         Bitmap              aBmp;
+        Hatch               aHatch;
 
         WinMtfFillStyle()
             : aFillColor(COL_BLACK)
@@ -426,11 +432,19 @@ namespace emfio
             , aBmp(rBmp)
         {}
 
+        WinMtfFillStyle(const Color& rColor, const Hatch& rHatch)
+            : aFillColor(rColor)
+            , bTransparent(false)
+            , aType(WinMtfFillStyleType::Hatch)
+            , aHatch(rHatch)
+        {}
+
         bool operator==(const WinMtfFillStyle& rStyle) const
         {
             return aFillColor == rStyle.aFillColor
                 && bTransparent == rStyle.bTransparent
-                && aType == rStyle.aType;
+                && aType == rStyle.aType
+                && aHatch == rStyle.aHatch;
         }
     };
 
@@ -455,19 +469,24 @@ namespace emfio
         Color       aLineColor;
         LineInfo    aLineInfo;
         bool        bTransparent;
+        bool        bHasHatch;
+        Hatch       aHatch;
 
         WinMtfLineStyle()
             : aLineColor(COL_BLACK)
             , bTransparent(false)
+            , bHasHatch(false)
         {}
 
         WinMtfLineStyle(const Color& rColor, bool bTrans = false)
             : aLineColor(rColor)
             , bTransparent(bTrans)
+            , bHasHatch(false)
         {}
 
         WinMtfLineStyle(const Color& rColor, const sal_uInt32 nStyle, const sal_uInt32 nPenWidth)
             : aLineColor(rColor)
+            , bHasHatch(false)
         {
             // According to documentation: nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
             // tdf#140271 Based on observed behaviour the line width is not constant with PS_COSMETIC
@@ -540,7 +559,9 @@ namespace emfio
         {
             return aLineColor == rStyle.aLineColor
                 && bTransparent == rStyle.bTransparent
-                && aLineInfo == rStyle.aLineInfo;
+                && aLineInfo == rStyle.aLineInfo
+                && bHasHatch == rStyle.bHasHatch
+                && aHatch == rStyle.aHatch;
         }
     };
 
@@ -720,6 +741,7 @@ namespace emfio
         void                ImplSetNonPersistentLineColorTransparenz();
         void                ImplDrawClippedPolyPolygon(const tools::PolyPolygon& rPolyPoly);
         void                ImplDrawBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitmap);
+        bool                ImplEmitLineHatch(const tools::Polygon& rPoly);
 
     public:
 

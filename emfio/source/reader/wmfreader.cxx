@@ -1092,11 +1092,16 @@ namespace emfio
             {
                 if (nRecordSize != 7)
                     bRecordOk = false;
-                sal_uInt16  nBrushStyle = 0;
+                sal_uInt16 nBrushStyle = 0;
                 mpInputStream->ReadUInt16( nBrushStyle );
                 BrushStyle eBrushStyle = static_cast<BrushStyle>(nBrushStyle);
-                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( eBrushStyle == BrushStyle::BS_NULL ) ));
-                SAL_WARN_IF( (eBrushStyle != BrushStyle::BS_SOLID) && (eBrushStyle != BrushStyle::BS_NULL), "emfio", "TODO: Brush style not implemented. Please fill the bug report" );
+                Color aColor = ReadColor();
+                sal_uInt16 nHatch(0);
+                mpInputStream->ReadUInt16( nHatch );
+                if (eBrushStyle == BrushStyle::BS_HATCHED)
+                    CreateObject(std::make_unique<WinMtfFillStyle>( aColor, mapWindowsHatch(nHatch, aColor) ));
+                else
+                    CreateObject(std::make_unique<WinMtfFillStyle>( aColor, eBrushStyle == BrushStyle::BS_NULL ));
             }
             break;
 

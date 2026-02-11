@@ -967,7 +967,7 @@ public:
     SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
     SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaHatchAction( tools::PolyPolygon aPolyPoly, const Hatch& rHatch );
+    VCL_DLLPUBLIC       MetaHatchAction( tools::PolyPolygon aPolyPoly, const Hatch& rHatch );
 
     SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;

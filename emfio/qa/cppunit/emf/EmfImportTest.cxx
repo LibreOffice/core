@@ -2037,6 +2037,37 @@ CPPUNIT_TEST_FIXTURE(Test, testPolyFillModeWinding)
                        u"2646,264 4048,4565 370,1900 4921,1900 1244,4565");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testHatchedBrush)
+{
+    // EMR_CREATEBRUSHINDIRECT with BS_HATCHED (HS_DIAGCROSS, red hatch color)
+    // draws a hatched rectangle.  The MetaHatchAction should produce a
+    // mask primitive wrapping a FillHatchPrimitive2D in the drawinglayer output.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestHatchedBrush.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The polygon is filled (polypolygoncolor from the background fill)
+    // and a mask primitive should be present for the hatch pattern.
+    assertXPath(pDocument, aXPathPrefix + "mask", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHatchedPen)
+{
+    // EMR_EXTCREATEPEN with BS_HATCHED (HS_DIAGCROSS, red, width 300)
+    // draws a polyline with a wide hatched pen.  The ImplEmitLineHatch
+    // path should produce a mask primitive for the stroke area hatch.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestHatchedPen.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // The hatched pen stroke area should produce a mask primitive.
+    assertXPath(pDocument, aXPathPrefix + "mask", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

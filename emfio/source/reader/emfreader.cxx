@@ -1309,7 +1309,25 @@ namespace emfio
                                 if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
                                     nPenStyle = PS_COSMETIC;
                                 SAL_INFO("emfio", "\t\tWidth: " << nWidth);
-                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(aColorRef, nPenStyle, nWidth));
+
+                                // [MS-EMF] 2.2.20: when elpBrushStyle is BS_HATCHED,
+                                // elpHatch specifies the hatch pattern or color alias.
+                                BrushStyle ePenBrush = static_cast<BrushStyle>(nBrushStyle);
+                                if (ePenBrush == BrushStyle::BS_HATCHED)
+                                {
+                                    if (elpHatch == 8 || elpHatch == 9)        // HS_SOLIDTEXTCLR / HS_DITHEREDTEXTCLR
+                                        aColorRef = maTextColor;
+                                    else if (elpHatch == 10 || elpHatch == 11) // HS_SOLIDBKCLR / HS_DITHEREDBKCLR
+                                        aColorRef = maBkColor;
+                                    // 0-7: keep aColorRef (brush/hatch color)
+                                }
+                                auto pLineStyle = std::make_unique<WinMtfLineStyle>(aColorRef, nPenStyle, nWidth);
+                                if (ePenBrush == BrushStyle::BS_HATCHED && elpHatch >= 0 && elpHatch <= 5)
+                                {
+                                    pLineStyle->bHasHatch = true;
+                                    pLineStyle->aHatch = mapWindowsHatch(elpHatch, aColorRef);
+                                }
+                                CreateObjectIndexed(nIndex, std::move(pLineStyle));
                             }
                         }
                     }
@@ -1320,10 +1338,31 @@ namespace emfio
                         mpInputStream->ReadUInt32( nIndex );
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
-                            sal_uInt32  nStyle;
+                            sal_uInt32 nStyle;
                             mpInputStream->ReadUInt32( nStyle );
                             BrushStyle eStyle = static_cast<BrushStyle>(nStyle);
-                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( ReadColor(), ( eStyle == BrushStyle::BS_HOLLOW ) ));
+                            Color aColor = ReadColor();
+                            sal_Int32 nHatch(0);
+                            mpInputStream->ReadInt32( nHatch );
+                            if (eStyle == BrushStyle::BS_HATCHED && nHatch >= 0 && nHatch <= 5)
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( aColor, mapWindowsHatch(nHatch, aColor) ));
+                            else if (eStyle == BrushStyle::BS_HATCHED && (nHatch == 6 || nHatch == 7))
+                            {
+                                // [MS-EMF] 2.1.17 HS_SOLIDCLR / HS_DITHEREDCLR: brush color
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( aColor ));
+                            }
+                            else if (eStyle == BrushStyle::BS_HATCHED && (nHatch == 8 || nHatch == 9))
+                            {
+                                // [MS-EMF] 2.1.17 HS_SOLIDTEXTCLR / HS_DITHEREDTEXTCLR: text color
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( maTextColor ));
+                            }
+                            else if (eStyle == BrushStyle::BS_HATCHED && (nHatch == 10 || nHatch == 11))
+                            {
+                                // [MS-EMF] 2.1.17 HS_SOLIDBKCLR / HS_DITHEREDBKCLR: background color
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( maBkColor ));
+                            }
+                            else
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( aColor, eStyle == BrushStyle::BS_HOLLOW ));
                         }
                     }
                     break;

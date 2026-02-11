@@ -22,6 +22,7 @@
 #include <cstdlib>
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/metric.hxx>
@@ -75,6 +76,31 @@ namespace emfio
             }
         }
         return rInStream;
+    }
+
+    Hatch mapWindowsHatch(sal_uInt32 nHatchIndex, const Color& rColor)
+    {
+        HatchStyle eStyle;
+        Degree10 nAngle;
+        switch (nHatchIndex)
+        {
+            case 0: // HS_HORIZONTAL
+                eStyle = HatchStyle::Single; nAngle = 0_deg10; break;
+            case 1: // HS_VERTICAL
+                eStyle = HatchStyle::Single; nAngle = Degree10(900); break;
+            case 2: // HS_FDIAGONAL
+                eStyle = HatchStyle::Single; nAngle = Degree10(1350); break;
+            case 3: // HS_BDIAGONAL
+                eStyle = HatchStyle::Single; nAngle = Degree10(450); break;
+            case 4: // HS_CROSS
+                eStyle = HatchStyle::Double; nAngle = 0_deg10; break;
+            case 5: // HS_DIAGCROSS
+                eStyle = HatchStyle::Double; nAngle = Degree10(450); break;
+            default:
+                SAL_WARN("emfio", "Unknown hatch index: " << nHatchIndex);
+                eStyle = HatchStyle::Single; nAngle = 0_deg10; break;
+        }
+        return Hatch(eStyle, rColor, 50, nAngle);
     }
 
     void WinMtfClipPath::intersectClip( const basegfx::B2DPolyPolygon& rPolyPolygon )
@@ -983,6 +1009,9 @@ namespace emfio
         }
         else
             mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
+
+        if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+            mpGDIMetaFile->AddAction( new MetaHatchAction( rPolyPoly, maLatestFillStyle.aHatch ) );
     }
 
     void MtfTools::CreateObject( std::unique_ptr<GDIObj> pObject )
@@ -1246,6 +1275,33 @@ namespace emfio
         }
     }
 
+    bool MtfTools::ImplEmitLineHatch(const tools::Polygon& rPoly)
+    {
+        if (!maLineStyle.bHasHatch || maLineStyle.aLineInfo.GetWidth() <= 0)
+            return false;
+
+        basegfx::B2DPolyPolygon aArea = basegfx::utils::createAreaGeometry(
+            rPoly.getB2DPolygon(),
+            maLineStyle.aLineInfo.GetWidth() / 2.0,
+            maLineStyle.aLineInfo.GetLineJoin(),
+            maLineStyle.aLineInfo.GetLineCap());
+        tools::PolyPolygon aPP(aArea);
+
+        // Fill the stroke area with background color (opaque) or transparent
+        mpGDIMetaFile->AddAction(new MetaPushAction(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR));
+        mpGDIMetaFile->AddAction(new MetaLineColorAction(Color(), false));
+        if (mnBkMode == BackgroundMode::OPAQUE)
+            mpGDIMetaFile->AddAction(new MetaFillColorAction(maBkColor, true));
+        else
+            mpGDIMetaFile->AddAction(new MetaFillColorAction(Color(), false));
+        mpGDIMetaFile->AddAction(new MetaPolyPolygonAction(aPP));
+        mpGDIMetaFile->AddAction(new MetaPopAction());
+
+        // Draw the hatch pattern on top
+        mpGDIMetaFile->AddAction(new MetaHatchAction(aPP, maLineStyle.aHatch));
+        return true;
+    }
+
     void MtfTools::ImplSetNonPersistentLineColorTransparenz()
     {
         WinMtfLineStyle aTransparentLine( COL_TRANSPARENT, true );
@@ -1288,6 +1344,13 @@ namespace emfio
             maLatestFillStyle = maFillStyle;
             if (maFillStyle.aType == WinMtfFillStyleType::Solid)
                 mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
+            else if (maFillStyle.aType == WinMtfFillStyleType::Hatch)
+            {
+                if (mnBkMode == BackgroundMode::OPAQUE)
+                    mpGDIMetaFile->AddAction( new MetaFillColorAction( maBkColor, true ) );
+                else
+                    mpGDIMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
+            }
         }
     }
 
@@ -1370,6 +1433,9 @@ namespace emfio
                     mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
             }
 
+            if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+                mpGDIMetaFile->AddAction( new MetaHatchAction( maPathObj, maLatestFillStyle.aHatch ) );
+
             if ( !bStroke || bWindingFill )
                 mpGDIMetaFile->AddAction( new MetaPopAction() );
         }
@@ -1382,7 +1448,10 @@ namespace emfio
             {
                 sal_uInt16 i, nCount = maPathObj.Count();
                 for ( i = 0; i < nCount; i++ )
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
+                {
+                    if (!ImplEmitLineHatch( maPathObj[ i ] ))
+                        mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
+                }
             }
         }
         ClearPath();
@@ -1416,7 +1485,11 @@ namespace emfio
         else
         {
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaLineAction( maActPos, aDest, maLineStyle.aLineInfo ) );
+            tools::Polygon aLinePoly(2);
+            aLinePoly.SetPoint(maActPos, 0);
+            aLinePoly.SetPoint(aDest, 1);
+            if (!ImplEmitLineHatch(aLinePoly))
+                mpGDIMetaFile->AddAction( new MetaLineAction( maActPos, aDest, maLineStyle.aLineInfo ) );
         }
         maActPos = aDest;
     }
@@ -1460,7 +1533,9 @@ namespace emfio
                     ImplSetNonPersistentLineColorTransparenz();
                     mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
                     UpdateLineStyle();
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
+                    tools::Polygon aEdgePoly( ImplMap( rRect ) );
+                    if (!ImplEmitLineHatch( aEdgePoly ))
+                        mpGDIMetaFile->AddAction( new MetaPolyLineAction( aEdgePoly, maLineStyle.aLineInfo ) );
                 }
                 else
                 {
@@ -1472,6 +1547,12 @@ namespace emfio
             {
                 ImplSetNonPersistentLineColorTransparenz();
                 mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
+            }
+
+            if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+            {
+                tools::PolyPolygon aPolyPoly( tools::Polygon( ImplMap( rRect ) ) );
+                mpGDIMetaFile->AddAction( new MetaHatchAction( aPolyPoly, maLatestFillStyle.aHatch ) );
             }
         }
     }
@@ -1486,7 +1567,9 @@ namespace emfio
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
             tools::Polygon aRoundRectPoly( rRect, rSize.Width(), rSize.Height() );
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( ImplMap( aRoundRectPoly ), maLineStyle.aLineInfo ) );
+            ImplMap( aRoundRectPoly );
+            if (!ImplEmitLineHatch( aRoundRectPoly ))
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( aRoundRectPoly, maLineStyle.aLineInfo ) );
         }
     }
 
@@ -1503,7 +1586,9 @@ namespace emfio
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( std::move(aCenter), aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+            tools::Polygon aEllipsePoly( aCenter, aRad.Width(), aRad.Height() );
+            if (!ImplEmitLineHatch( aEllipsePoly ))
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( aEllipsePoly, maLineStyle.aLineInfo ) );
         }
         else
         {
@@ -1528,11 +1613,16 @@ namespace emfio
             {   // SJ: #i53768# if start & end is identical, then we have to draw a full ellipse
                 Point aCenter( aRect.Center() );
                 Size  aRad( aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
-
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( std::move(aCenter), aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+                tools::Polygon aArcPoly( aCenter, aRad.Width(), aRad.Height() );
+                if (!ImplEmitLineHatch( aArcPoly ))
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( aArcPoly, maLineStyle.aLineInfo ) );
             }
             else
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Arc ), maLineStyle.aLineInfo ) );
+            {
+                tools::Polygon aArcPoly( aRect, aStart, aEnd, PolyStyle::Arc );
+                if (!ImplEmitLineHatch( aArcPoly ))
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( aArcPoly, maLineStyle.aLineInfo ) );
+            }
         }
         else
             mpGDIMetaFile->AddAction( new MetaArcAction( aRect, aStart, aEnd ) );
@@ -1555,7 +1645,11 @@ namespace emfio
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaPieAction( aRect, aStart, aEnd ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Pie ), maLineStyle.aLineInfo ) );
+            {
+                tools::Polygon aPiePoly( aRect, aStart, aEnd, PolyStyle::Pie );
+                if (!ImplEmitLineHatch( aPiePoly ))
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( aPiePoly, maLineStyle.aLineInfo ) );
+            }
         }
         else
         {
@@ -1578,7 +1672,11 @@ namespace emfio
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Chord ), maLineStyle.aLineInfo ) );
+            {
+                tools::Polygon aChordPoly( aRect, aStart, aEnd, PolyStyle::Chord );
+                if (!ImplEmitLineHatch( aChordPoly ))
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( aChordPoly, maLineStyle.aLineInfo ) );
+            }
         }
         else
         {
@@ -1628,14 +1726,22 @@ namespace emfio
                     {
                         mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
                     }
+                    if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+                        mpGDIMetaFile->AddAction( new MetaHatchAction( tools::PolyPolygon( rPolygon ), maLatestFillStyle.aHatch ) );
                     UpdateLineStyle();
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+                    if (!ImplEmitLineHatch( rPolygon ))
+                        mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
                 }
                 else
                 {
                     UpdateLineStyle();
 
-                    if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
+                    if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+                    {
+                        mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                        mpGDIMetaFile->AddAction( new MetaHatchAction( tools::PolyPolygon( std::move(rPolygon) ), maLatestFillStyle.aHatch ) );
+                    }
+                    else if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
                     {
                         if (mnPolyFillMode == 2) // WINDING
                         {
@@ -1650,7 +1756,8 @@ namespace emfio
                                 Point aPoint(rPolygon[0]);
                                 rPolygon.Insert(nCount, aPoint);
                             }
-                            mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolygon, maLineStyle.aLineInfo));
+                            if (!ImplEmitLineHatch( rPolygon ))
+                                mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolygon, maLineStyle.aLineInfo));
                         }
                         else
                             mpGDIMetaFile->AddAction( new MetaPolygonAction( std::move(rPolygon) ) );
@@ -1716,20 +1823,26 @@ namespace emfio
                     mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
                     mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aFill ) );
                     mpGDIMetaFile->AddAction( new MetaPopAction() );
+                    if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+                        mpGDIMetaFile->AddAction( new MetaHatchAction( rPolyPolygon, maLatestFillStyle.aHatch ) );
                     // Stroke with original geometry
                     for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
                     {
-                        mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
+                        if (!ImplEmitLineHatch( rPolyPolygon[nPoly] ))
+                            mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
                     }
                 }
                 else
                 {
                     mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
+                    if (maLatestFillStyle.aType == WinMtfFillStyleType::Hatch)
+                        mpGDIMetaFile->AddAction( new MetaHatchAction( rPolyPolygon, maLatestFillStyle.aHatch ) );
                     if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
                     {
                         for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
                         {
-                            mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
+                            if (!ImplEmitLineHatch( rPolyPolygon[nPoly] ))
+                                mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
                         }
                     }
                 }
@@ -1756,7 +1869,8 @@ namespace emfio
         else
         {
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
+            if (!ImplEmitLineHatch( rPolygon ))
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
         }
     }
 
@@ -1807,7 +1921,8 @@ namespace emfio
         else
         {
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
+            if (!ImplEmitLineHatch( rPolygon ))
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
         }
     }
 
