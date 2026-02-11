@@ -234,6 +234,7 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,REDLAND,REDLAND_TARBALL) \
 	$(call fetch_Optional,REVENGE,REVENGE_TARBALL) \
 	$(call fetch_Optional,RHINO,RHINO_TARBALL) \
+	$(call fetch_Optional,QUICKJS,QUICKJS_TARBALL) \
 	$(call fetch_Optional,SKIA,SKIA_TARBALL) \
 	$(call fetch_Optional,SQLITE3,SQLITE3_TARBALL) \
 	$(call fetch_Optional,STAROFFICE,STAROFFICE_TARBALL) \

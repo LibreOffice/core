@@ -3043,6 +3043,10 @@ AC_ARG_ENABLE(rust-uno,
     AS_HELP_STRING([--enable-rust-uno],
         [Enable experimental Rust UNO support.]))
 
+AC_ARG_ENABLE(quickjs,
+    AS_HELP_STRING([--enable-quickjs],
+        [Enable QuickJS-based JS UNO support.]))
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -5920,6 +5924,17 @@ if test "$WITH_YRS" = "yes" -o "$ENABLE_RUST_UNO" = "TRUE"; then
         AC_MSG_ERROR([install cargo to build rust components or use --without-yrs/--disable-rust-uno])
     fi
 fi
+
+AC_MSG_CHECKING([whether to enable QuickJS-based JS UNO support])
+if test "$enable_quickjs" = "yes"; then
+    ENABLE_QUICKJS=TRUE
+    BUILD_TYPE="$BUILD_TYPE QUICKJS"
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_QUICKJS=
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_QUICKJS)
 
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then

@@ -4601,6 +4601,12 @@ gb_LinkTarget__use_yrs :=
 
 endif
 
+ifeq ($(ENABLE_QUICKJS),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+    qjs \
+))
+endif
+
 gb_ExternalProject__use_meson :=
 ifneq (,$(filter MESON,$(BUILD_TYPE)))
 define gb_ExternalProject__use_meson

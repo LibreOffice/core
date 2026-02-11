@@ -1,0 +1,21 @@
+--- cutils.c
++++ cutils.c
+@@ -31,6 +31,9 @@
+ #if !defined(_MSC_VER)
+ #include <sys/time.h>
+ #endif
++
++#include "cutils.h"
++
+ #if defined(_WIN32)
+ #include <windows.h>
+ #include <process.h> // _beginthread
+@@ -39,8 +42,6 @@
+ #include <mach-o/dyld.h>
+ #endif
+ 
+-#include "cutils.h"
+-
+ #undef NANOSEC
+ #define NANOSEC ((uint64_t) 1e9)
+ 

@@ -91,6 +91,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,POPPLER,poppler) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	$(call gb_Helper_optional,PYTHON,python3) \
+	$(call gb_Helper_optional,QUICKJS,quickjs) \
 	$(call gb_Helper_optional,QXP,libqxp) \
 	$(call gb_Helper_optional,ZXCVBN,zxcvbn-c) \
 	$(call gb_Helper_optional,ZXING,zxing) \

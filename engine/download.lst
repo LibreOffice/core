@@ -694,6 +694,11 @@ PYTHON_BOOTSTRAP_TARBALL := python.3.12.8.nupkg
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+QUICKJS_SHA256SUM := c882895d2dde0920fbfc668ec5de514774db1d400390692f4f6bfa8e513f6084
+QUICKJS_TARBALL := quickjs-v0.12.0.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 QXP_SHA256SUM := e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c
 QXP_TARBALL := libqxp-0.0.2.tar.xz
 # three static lines
