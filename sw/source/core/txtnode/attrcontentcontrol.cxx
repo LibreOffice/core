@@ -369,41 +369,41 @@ void SwContentControl::ClearListItems()
         GetTextAttr()->Invalidate();
 }
 
-OUString SwContentControl::GetDateString() const
+OUString SwContentControl::GetDateString(bool bAsISO8601) const
 {
     SwDoc& rDoc = m_pTextNode->GetDoc();
     SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
-    sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(
-        m_aDateFormat, LanguageTag(m_aDateLanguage).getLanguageType());
+    OUString aFormat = bAsISO8601 ? "YYYY-MM-DDTHH:MM:SSZ" : m_aDateFormat;
+    sal_uInt32 nFormat
+        = pNumberFormatter->GetEntryKey(aFormat, LanguageTag(m_aDateLanguage).getLanguageType());
 
     if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         // If not found, then create it.
         sal_Int32 nCheckPos = 0;
         SvNumFormatType nType;
-        OUString aFormat = m_aDateFormat;
         pNumberFormatter->PutEntry(aFormat, nCheckPos, nType, nFormat,
                                    LanguageTag(m_aDateLanguage).getLanguageType());
     }
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        return OUString();
 
-    const Color* pColor = nullptr;
-    OUString aFormatted;
-    double fSelectedDate = 0;
+    std::optional<double> ofSelectedDate;
     if (m_oSelectedDate)
     {
-        fSelectedDate = *m_oSelectedDate;
+        ofSelectedDate = *m_oSelectedDate;
     }
     else
     {
-        fSelectedDate = GetCurrentDateValue();
+        ofSelectedDate = GetCurrentDateValue();
     }
 
-    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
-    {
+    if (!ofSelectedDate.has_value())
         return OUString();
-    }
 
-    pNumberFormatter->GetOutputString(fSelectedDate, nFormat, aFormatted, &pColor, false);
+    const Color* pColor = nullptr;
+    OUString aFormatted;
+    pNumberFormatter->GetOutputString(*ofSelectedDate, nFormat, aFormatted, &pColor, false);
     return aFormatted;
 }
 
@@ -430,34 +430,37 @@ void SwContentControl::SetCurrentDateValue(double fCurrentDate)
     const Color* pColor = nullptr;
     pNumberFormatter->GetOutputString(fCurrentDate, nFormat, aFormatted, &pColor, false);
     m_aCurrentDate = aFormatted + "T00:00:00Z";
+    m_aDateFormat = CURRENT_DATE_FORMAT;
 }
 
-double SwContentControl::GetCurrentDateValue() const
+std::optional<double> SwContentControl::GetCurrentDateValue() const
 {
     if (m_aCurrentDate.isEmpty())
     {
-        return 0;
+        return std::nullopt;
     }
 
     SwDoc& rDoc = m_pTextNode->GetDoc();
     SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
-    sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(CURRENT_DATE_FORMAT, LANGUAGE_ENGLISH_US);
+    OUString sFormat = m_aDateFormat.isEmpty() ? CURRENT_DATE_FORMAT : m_aDateFormat;
+    sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(sFormat, LANGUAGE_ENGLISH_US);
     if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         sal_Int32 nCheckPos = 0;
         SvNumFormatType nType;
-        OUString sFormat = CURRENT_DATE_FORMAT;
         pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat, LANGUAGE_ENGLISH_US);
     }
 
     if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        return 0;
+        return std::nullopt;
     }
 
     double dCurrentDate = 0;
     OUString aCurrentDate = m_aCurrentDate.replaceAll("T00:00:00Z", "");
-    (void)pNumberFormatter->IsNumberFormat(aCurrentDate, nFormat, dCurrentDate);
+    if (!pNumberFormatter->IsNumberFormat(aCurrentDate, nFormat, dCurrentDate))
+        return std::nullopt;
+
     return dCurrentDate;
 }
 
