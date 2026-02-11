@@ -195,6 +195,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168988_grabbagDatePicker)
                        u"                                     2012./2013.");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169101_datePicker)
+{
+    createSwDoc("tdf169101_datePicker.docx");
+
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 1); // only one sdt
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1); // it is a date content control
+    // there is no valid date, so fullDate must not be provided (or MS Word says 'corrupt file')
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:date", "fullDate");
+    assertXPathContent(pXmlDoc, "//w:sdt/w:sdtContent/w:r/w:t", u"Week #");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
 {
     createSwDoc("tdf170389_manyTabstops.odt");

@@ -2810,14 +2810,23 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     if (m_pContentControl->GetDate())
     {
-        OUString aCurrentDate = m_pContentControl->GetCurrentDate();
-        if (aCurrentDate.isEmpty())
+        // fullDate must be a valid date (YYYY-MM-DDTHH:MM:SSZ) or MS Word calls the file corrupt
+        OUString aFullDate = m_pContentControl->GetDateString(/*bAsISO8601=*/true);
+        if (aFullDate.isEmpty())
+        {
+            // Round-trip fullDate (if valid) in case it just doesn't match the display format
+            const OUString sDisplayVal = m_pContentControl->GetCurrentDate();
+            if (sDisplayVal.getLength() == 20 && sDisplayVal[10] == 'T' && sDisplayVal[19] == 'Z')
+                aFullDate = sDisplayVal;
+        }
+
+        if (aFullDate.isEmpty())
         {
             m_pSerializer->startElementNS(XML_w, XML_date);
         }
         else
         {
-            m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), aCurrentDate);
+            m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), aFullDate);
         }
         OUString aDateFormat = m_pContentControl->GetDateFormat().replaceAll("\"", "'");
         if (!aDateFormat.isEmpty())
