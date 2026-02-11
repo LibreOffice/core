@@ -28,4 +28,10 @@
         <service name="org.libreoffice.embindtest.ImplicitConstructor"/>
         <service name="org.libreoffice.embindtest.ExplicitConstructors"/>
     </implementation>
+    <implementation
+            constructor="org_libreoffice_comp_embindtest_Singleton_get_implementation"
+            name="org.libreoffice.comp.embindtest.theSingleton"
+            single-instance="true">
+        <singleton name="org.libreoffice.embindtest.theSingleton"/>
+    </implementation>
 </component>
