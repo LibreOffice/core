@@ -1691,6 +1691,20 @@ static NSString* getCurrentSelection()
     }
 }
 
+-(void)contextMenuKeyDown: (NSEvent*)pEvent
+{
+    SolarMutexGuard aGuard;
+
+    vcl::Window *pWin = ImplGetSVData()->mpWinData->mpFocusWin;
+    if( pWin )
+    {
+        CommandEvent aCEvt(Point(), CommandEventId::ContextMenu, false);
+        NotifyEvent aNCmdEvt( NotifyEventType::COMMAND, pWin, &aCEvt );
+
+        if ( !ImplCallPreNotify( aNCmdEvt ) )
+            pWin->Command( aCEvt );
+    }
+}
 
 -(void)keyDown: (NSEvent*)pEvent
 {

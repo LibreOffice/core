@@ -146,6 +146,7 @@ enum class SalEvent;
 -(void)magnifyWithEvent: (NSEvent*)pEvent;
 -(void)rotateWithEvent: (NSEvent*)pEvent;
 -(void)swipeWithEvent: (NSEvent*)pEvent;
+-(void)contextMenuKeyDown: (NSEvent*)pEvent;
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(SalEvent)nEvent;
