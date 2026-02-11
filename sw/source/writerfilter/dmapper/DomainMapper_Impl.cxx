@@ -1273,7 +1273,8 @@ void DomainMapper_Impl::PopSdt()
     {
         OUString aDateString;
         xContentControl->getPropertyValue(u"DateString"_ustr) >>= aDateString;
-        xCursor->setString(aDateString);
+        if (!aDateString.isEmpty())
+            xCursor->setString(aDateString);
     }
 
     m_pSdtHelper->clear();
