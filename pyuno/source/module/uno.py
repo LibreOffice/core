@@ -384,7 +384,7 @@ def _uno_import(name, *optargs, **kwargs):
             failed = False
 
             try:
-                # check for structs, exceptions, interfaces or services
+                # check for structs, exceptions, interfaces, services or singletons
                 d[class_name] = pyuno.getClass(name + "." + class_name)
             except RuntimeException:
                 # check for enums
@@ -556,5 +556,14 @@ def _uno_extract_printable_stacktrace(trace):
     """
 
     return ''.join(traceback.format_tb(trace))
+
+def _uno_make_singleton_getter(singleton_name):
+    value_name = "/singletons/" + singleton_name
+
+    @classmethod
+    def get(_cls, ctx):
+        return ctx.getValueByName(value_name)
+
+    return get
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

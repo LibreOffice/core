@@ -21,6 +21,7 @@
 #include <typelib/typedescription.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 
 
@@ -221,6 +222,23 @@ static PyRef createClassForService(
     return ret;
 }
 
+static PyRef createClassForSingleton(
+    const css::uno::Reference<css::reflection::XSingletonTypeDescription>& xSingleton,
+    const Runtime& runtime)
+{
+    PyRef ret = createEmptyPyTypeForTypeDescription(xSingleton);
+
+    // Set “get” to be a class method to get the singleton given a single context parameter. The
+    // name of the service is stored via a closure.
+    OUString singletonName = xSingleton->getName();
+    PyRef makeGetter = getObjectFromUnoModule(runtime, "_uno_make_singleton_getter");
+    PyRef getter = PyObject_CallOneArg(makeGetter.get(), ustring2PyString(singletonName).get());
+
+    PyObject_SetAttrString(ret.get(), "get", getter.get());
+
+    return ret;
+}
+
 /// @throws RuntimeException
 static PyRef createClass( const OUString & name, const Runtime &runtime )
 {
@@ -230,8 +248,8 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     if (desc.is())
         return createClassFromTypeDescription(name, desc.get(), runtime);
 
-    // If there’s no type description from the typelib then check if it’s a service using the type
-    // description manager.
+    // If there’s no type description from the typelib then check if it’s a service or a singleton
+    // using the type description manager.
     css::uno::Any xType;
 
     try
@@ -243,10 +261,18 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         // This will flow through to throw a runtime exception below
     }
 
-    css::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
+    if (xType.hasValue())
+    {
+        css::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
 
-    if ((xType >>= xService) && xService.is())
-        return createClassForService(xService);
+        if ((xType >>= xService) && xService.is())
+            return createClassForService(xService);
+
+        css::uno::Reference<css::reflection::XSingletonTypeDescription> xSingleton;
+
+        if ((xType >>= xSingleton) && xSingleton.is())
+            return createClassForSingleton(xSingleton, runtime);
+    }
 
     throw RuntimeException("pyuno.getClass: uno exception " + name + " is unknown");
 }
