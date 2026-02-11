@@ -441,7 +441,8 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
 
         if ( nCount && (nCount != GDI_ERROR) )
         {
-            WORD* pBins = static_cast<WORD*>(rtl_allocateZeroMemory( nCount*sizeof(WORD) ));
+            WORD* pBins = static_cast<WORD*>(std::calloc(nCount, sizeof(WORD)));
+            assert(pBins);
             ImplDeviceCaps( pPrinter, DC_BINS, pBins, pSetupData );
             pSetupData->SetPaperBin( 0 );
 
@@ -475,12 +476,12 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
             POINT*  pPaperSizes = nullptr;
             if ( nPaperCount && (nPaperCount != GDI_ERROR) )
             {
-                pPapers = static_cast<WORD*>(rtl_allocateZeroMemory(nPaperCount*sizeof(WORD)));
+                pPapers = static_cast<WORD*>(std::calloc(nPaperCount, sizeof(WORD)));
                 ImplDeviceCaps( pPrinter, DC_PAPERS, pPapers, pSetupData );
             }
             if ( nPaperSizeCount && (nPaperSizeCount != GDI_ERROR) )
             {
-                pPaperSizes = static_cast<POINT*>(rtl_allocateZeroMemory(nPaperSizeCount*sizeof(POINT)));
+                pPaperSizes = static_cast<POINT*>(std::calloc(nPaperSizeCount, sizeof(POINT)));
                 ImplDeviceCaps( pPrinter, DC_PAPERSIZE, pPaperSizes, pSetupData );
             }
             if( nPaperSizeCount == nPaperCount && pPaperSizes && pPapers )
@@ -710,7 +711,8 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
 
         if ( nCount && (nCount != GDI_ERROR) )
         {
-            WORD* pBins = static_cast<WORD*>(rtl_allocateZeroMemory(nCount*sizeof(WORD)));
+            WORD* pBins = static_cast<WORD*>(std::calloc(nCount, sizeof(WORD)));
+            assert(pBins);
             ImplDeviceCaps( pPrinter, DC_BINS, pBins, pSetupData );
             pDevModeW->dmFields |= DM_DEFAULTSOURCE;
             pDevModeW->dmDefaultSource = pBins[ pSetupData->GetPaperBin() ];
@@ -888,12 +890,12 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
                 DWORD   nLandscapeAngle = ImplDeviceCaps( pPrinter, DC_ORIENTATION, nullptr, pSetupData );
                 if ( nPaperCount && (nPaperCount != GDI_ERROR) )
                 {
-                    pPapers = static_cast<WORD*>(rtl_allocateZeroMemory(nPaperCount*sizeof(WORD)));
+                    pPapers = static_cast<WORD*>(std::calloc(nPaperCount, sizeof(WORD)));
                     ImplDeviceCaps( pPrinter, DC_PAPERS, pPapers, pSetupData );
                 }
                 if ( nPaperSizeCount && (nPaperSizeCount != GDI_ERROR) )
                 {
-                    pPaperSizes = static_cast<POINT*>(rtl_allocateZeroMemory(nPaperSizeCount*sizeof(POINT)));
+                    pPaperSizes = static_cast<POINT*>(std::calloc(nPaperSizeCount, sizeof(POINT)));
                     ImplDeviceCaps( pPrinter, DC_PAPERSIZE, pPaperSizes, pSetupData );
                 }
                 if ( (nPaperSizeCount == nPaperCount) && pPapers && pPaperSizes )
@@ -1095,7 +1097,8 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 
     if( nCount )
     {
-        POINT* pPaperSizes = static_cast<POINT*>(rtl_allocateZeroMemory(nCount*sizeof(POINT)));
+        POINT* pPaperSizes = static_cast<POINT*>(std::calloc(nCount, sizeof(POINT)));
+        assert(pPaperSizes);
         ImplDeviceCaps( this, DC_PAPERSIZE, pPaperSizes, pSetupData );
 
         SAL_INFO("vcl.print", "DC_PAPERSIZE sizes (mm) from printer: " << DC_PAPERSIZE_array_to_string(pPaperSizes, nCount));
