@@ -2936,20 +2936,10 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         FieldMarkParamsHelper params(rFieldmark);
 
         OUString sFullDate;
-        OUString sCurrentDate;
-        params.extractParam( ODF_FORMDATE_CURRENTDATE, sCurrentDate );
-        if(!sCurrentDate.isEmpty())
-        {
-            sFullDate = sCurrentDate + "T00:00:00Z";
-        }
-        else
-        {
-            std::pair<bool, double> aResult = rFieldmark.GetCurrentDate();
-            if(aResult.first)
-            {
-                sFullDate = rFieldmark.GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
-            }
-        }
+        std::pair<bool, double> aResult = rFieldmark.GetCurrentDate();
+        // fullDate must be a valid ISO8601 date string or MS Word reports the file as corrupt
+        if (aResult.first) // bFoundValidDate is true
+            sFullDate = rFieldmark.GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
 
         OUString sDateFormat;
         params.extractParam( ODF_FORMDATE_DATEFORMAT, sDateFormat );
