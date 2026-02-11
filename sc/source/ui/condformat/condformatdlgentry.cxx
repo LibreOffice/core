@@ -87,8 +87,11 @@ void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
     OUString sLabel = maStrCondition + OUString::number(nIndex);
     mxFtCondNr->set_label(sLabel);
 
-    // tdf#124412: uitest
-    mxFtCondition->set_buildable_name(sLabel);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // tdf#124412: uitest
+        mxFtCondition->set_buildable_name(sLabel);
+    }
 }
 
 void ScCondFrmtEntry::Select()
