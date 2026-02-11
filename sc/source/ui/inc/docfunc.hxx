@@ -66,6 +66,7 @@ namespace sc
     class SetStringOperation;
     class SetEditTextOperation;
     class SetFormulaOperation;
+    class ApplyAttributesOperation;
 }
 namespace tools
 {
@@ -81,6 +82,7 @@ class ScDocFunc
     friend class sc::SetStringOperation;
     friend class sc::SetEditTextOperation;
     friend class sc::SetFormulaOperation;
+    friend class sc::ApplyAttributesOperation;
 
     ScDocShell&     rDocShell;
     static bool CheckSheetViewProtection(sc::OperationType eOperation);

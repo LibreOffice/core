@@ -117,6 +117,7 @@
 #include <operation/SetStringOperation.hxx>
 #include <operation/SetFormulaOperation.hxx>
 #include <operation/SetEditTextOperation.hxx>
+#include <operation/ApplyAttributesOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -1133,74 +1134,10 @@ void ScDocFunc::ImportNote( const ScAddress& rPos,
     aModificator.SetDocumentModified();
 }
 
-bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                    bool bApi )
+bool ScDocFunc::ApplyAttributes(const ScMarkData& rMark, const ScPatternAttr& rPattern, bool bApi )
 {
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
-    if ( !rDoc.IsUndoEnabled() )
-        bRecord = false;
-
-    bool bImportingXML = rDoc.IsImportingXML();
-    bool bImportingXLSX = rDoc.IsImportingXLSX();
-    // Cell formats can still be set if the range isn't editable only because of matrix formulas.
-    // #i62483# When loading XML, the check can be skipped altogether.
-    bool bOnlyNotBecauseOfMatrix;
-    if ( !bImportingXML && !rDoc.IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
-            && !bOnlyNotBecauseOfMatrix )
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
-        return false;
-    }
-
-    ScDocShellModificator aModificator( rDocShell );
-
-    //! Border
-
-    ScRange aMultiRange;
-    bool bMulti = rMark.IsMultiMarked();
-    if ( bMulti )
-        aMultiRange = rMark.GetMultiMarkArea();
-    else
-        aMultiRange = rMark.GetMarkArea();
-
-    if ( bRecord )
-    {
-        ScDocumentUniquePtr pUndoDoc( new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( rDoc, aMultiRange.aStart.Tab(), aMultiRange.aEnd.Tab() );
-        rDoc.CopyToDocument(aMultiRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &rMark);
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoSelectionAttr>(
-                    &rDocShell, rMark,
-                    aMultiRange.aStart.Col(), aMultiRange.aStart.Row(), aMultiRange.aStart.Tab(),
-                    aMultiRange.aEnd.Col(), aMultiRange.aEnd.Row(), aMultiRange.aEnd.Tab(),
-                    std::move(pUndoDoc), bMulti, &rPattern ) );
-    }
-
-    // While loading XML it is not necessary to ask HasAttrib. It needs too much time.
-    sal_uInt16 nExtFlags = 0;
-    if ( !bImportingXML && !bImportingXLSX )
-        rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change
-
-    bool bChanged = false;
-    rDoc.ApplySelectionPattern( rPattern, rMark, nullptr, &bChanged );
-
-    if(bChanged)
-    {
-        if ( !bImportingXML && !bImportingXLSX )
-            rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
-
-        if (!AdjustRowHeight( aMultiRange, true, bApi ))
-            rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
-        else if (nExtFlags & SC_PF_LINES)
-            PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
-
-        aModificator.SetDocumentModified();
-    }
-
-    return true;
+    sc::ApplyAttributesOperation aOperation(*this, rDocShell, rMark, rPattern, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
