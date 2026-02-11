@@ -43,7 +43,7 @@ public:
     {
     }
 
-    bool run() { return runImplementation(); }
+    bool run();
     bool checkSheetViewProtection();
 
     virtual bool runImplementation() = 0;

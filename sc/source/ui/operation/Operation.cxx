@@ -10,6 +10,7 @@
 #include <operation/Operation.hxx>
 #include <SheetViewOperationsTester.hxx>
 #include <docsh.hxx>
+#include <sal/log.hxx>
 
 namespace sc
 {
@@ -17,6 +18,16 @@ bool Operation::checkSheetViewProtection()
 {
     sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     return aSheetViewTester.check(meType);
+}
+
+bool Operation::run()
+{
+    SAL_INFO("sc",
+             "Running operation '" << SheetViewOperationsTester::operationName(meType) << "'.");
+    bool bResult = runImplementation();
+    SAL_INFO("sc", "Operation '" << SheetViewOperationsTester::operationName(meType)
+                                 << (bResult ? "' succeded." : "' failed."));
+    return bResult;
 }
 }
 
