@@ -46,7 +46,7 @@ public:
     {
     }
 
-    bool run() { return runImplementation(); }
+    bool run();
     bool checkSheetViewProtection();
 
     /** Convert address from a sheet view to the address in default view, take sorting into account. */

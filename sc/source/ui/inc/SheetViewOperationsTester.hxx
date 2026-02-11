@@ -82,6 +82,7 @@ public:
     }
 
     static bool doesUnsync(OperationType eOperationType);
+    static std::string_view operationName(OperationType eType);
     bool check(OperationType eOperationType) const;
     void sync();
 };

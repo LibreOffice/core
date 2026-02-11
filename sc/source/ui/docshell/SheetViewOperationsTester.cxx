@@ -255,5 +255,10 @@ bool SheetViewOperationsTester::check(OperationType eOperationType) const
 
     return true;
 }
+
+std::string_view SheetViewOperationsTester::operationName(OperationType eType)
+{
+    return getOperationName(eType);
+}
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
