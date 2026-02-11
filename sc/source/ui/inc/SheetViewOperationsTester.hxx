@@ -19,6 +19,7 @@ namespace sc
 enum class OperationType
 {
     Unknown,
+    ApplyAttributes,
     DeleteContent,
     DeleteCell,
     TransliterateText,
