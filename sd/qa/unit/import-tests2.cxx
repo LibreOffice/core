@@ -2249,6 +2249,37 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf169524)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(18073), nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf168109)
+{
+    createSdImpressDoc("odp/tdf168109.fodp");
+
+    // Slide 1
+    {
+        auto xPage = getPage(0).queryThrow<presentation::XPresentationPage>();
+        auto xNotesPage = xPage->getNotesPage();
+        auto xThumbnail = getShape(0, xNotesPage);
+        auto xDescriptor = xThumbnail.queryThrow<drawing::XShapeDescriptor>();
+
+        CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.PageShape"_ustr,
+                             xDescriptor->getShapeType());
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1)),
+                             xThumbnail->getPropertyValue(u"PageNumber"_ustr));
+    }
+
+    // Slide 2
+    {
+        auto xPage = getPage(1).queryThrow<presentation::XPresentationPage>();
+        auto xNotesPage = xPage->getNotesPage();
+        auto xThumbnail = getShape(0, xNotesPage);
+        auto xDescriptor = xThumbnail.queryThrow<drawing::XShapeDescriptor>();
+
+        CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.PageShape"_ustr,
+                             xDescriptor->getShapeType());
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(2)),
+                             xThumbnail->getPropertyValue(u"PageNumber"_ustr));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
