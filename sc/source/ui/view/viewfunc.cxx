@@ -79,6 +79,7 @@
 #include <SparklineList.hxx>
 #include <SheetViewManager.hxx>
 #include <SheetViewOperationsTester.hxx>
+#include <operation/ApplyAttributesOperation.hxx>
 
 #include <memory>
 
@@ -1400,9 +1401,15 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
     ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
 
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
-        bRecord = false;
+    bool bMultiMarked = aFuncMark.IsMultiMarked();
+    aFuncMark.MarkToMulti();
+    ScAddress aPosition(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData());
+    bool bOnlyTab = (!aFuncMark.IsMultiMarked() && !bCursorOnly && aFuncMark.GetSelectCount() > 1);
+    if (bOnlyTab)
+    {
+        aFuncMark.SetMarkArea(ScRange(aPosition));
+        aFuncMark.MarkToMulti();
+    }
 
     //  State from old ItemSet doesn't matter for paint flags, as any change will be
     //  from SfxItemState::SET in the new ItemSet (default is ignored in ApplyPattern).
@@ -1419,113 +1426,23 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
     if ( bSetAlign )
         nExtFlags |= SC_PF_WHOLEROWS;
 
-    ScDocShellModificator aModificator( *pDocSh );
-
-    bool bMulti = aFuncMark.IsMultiMarked();
-    aFuncMark.MarkToMulti();
-    bool bOnlyTab = (!aFuncMark.IsMultiMarked() && !bCursorOnly && aFuncMark.GetSelectCount() > 1);
-    if (bOnlyTab)
-    {
-        SCCOL nCol = rViewData.GetCurX();
-        SCROW nRow = rViewData.GetCurY();
-        SCTAB nTab = rViewData.CurrentTabForData();
-        aFuncMark.SetMarkArea(ScRange(nCol,nRow,nTab));
-        aFuncMark.MarkToMulti();
-    }
-
     ScRangeList aChangeRanges;
-
+    bool bResult = false;
     if (aFuncMark.IsMultiMarked() && !bCursorOnly)
     {
-        const ScRange& aMarkRange = aFuncMark.GetMultiMarkArea();
-        SCTAB nTabCount = rDoc.GetTableCount();
-        for (const auto& rTab : aFuncMark)
-        {
-            ScRange aChangeRange( aMarkRange );
-            aChangeRange.aStart.SetTab( rTab );
-            aChangeRange.aEnd.SetTab( rTab );
-            aChangeRanges.push_back( aChangeRange );
-        }
-
-        SCCOL nStartCol = aMarkRange.aStart.Col();
-        SCROW nStartRow = aMarkRange.aStart.Row();
-        SCTAB nStartTab = aMarkRange.aStart.Tab();
-        SCCOL nEndCol = aMarkRange.aEnd.Col();
-        SCROW nEndRow = aMarkRange.aEnd.Row();
-        SCTAB nEndTab = aMarkRange.aEnd.Tab();
-
-        ScEditDataArray* pEditDataArray = nullptr;
-        if (bRecord)
-        {
-            ScRange aCopyRange = aMarkRange;
-            aCopyRange.aStart.SetTab(0);
-            aCopyRange.aEnd.SetTab(nTabCount-1);
-
-            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab );
-            for (const auto& rTab : aFuncMark)
-                if (rTab != nStartTab)
-                    pUndoDoc->AddUndoTab( rTab, rTab );
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &aFuncMark );
-
-            aFuncMark.MarkToMulti();
-
-            ScUndoSelectionAttr* pUndoAttr = new ScUndoSelectionAttr(
-                pDocSh, aFuncMark, nStartCol, nStartRow, nStartTab,
-                nEndCol, nEndRow, nEndTab, std::move(pUndoDoc), bMulti, &rAttr );
-            pDocSh->GetUndoManager()->AddUndoAction(std::unique_ptr<ScUndoSelectionAttr>(pUndoAttr));
-            pEditDataArray = pUndoAttr->GetDataArray();
-        }
-
-        rDoc.ApplySelectionPattern( rAttr, aFuncMark, pEditDataArray );
-
-        pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
-                           nEndCol,   nEndRow,   nEndTab,
-                           PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
-        pDocSh->UpdateOle(GetViewData());
-        aModificator.SetDocumentModified();
-        CellContentChanged();
+        sc::ApplyAttributesWithChangedRangeOperation aOperation(*pDocSh, aFuncMark, bMultiMarked, rAttr, nExtFlags, false);
+        bResult = aOperation.run();
+        aChangeRanges = aOperation.getChangedRangeList();
     }
-    else                            // single cell - simpler undo
+    else
     {
-        SCCOL nCol = rViewData.GetCurX();
-        SCROW nRow = rViewData.GetCurY();
-        SCTAB nTab = rViewData.CurrentTabForData();
-
-        std::unique_ptr<EditTextObject> pOldEditData;
-        std::unique_ptr<EditTextObject> pNewEditData;
-        ScAddress aPos(nCol, nRow, nTab);
-        ScRefCellValue aCell(rDoc, aPos);
-        if (aCell.getType() == CELLTYPE_EDIT)
-        {
-            const EditTextObject* pEditObj = aCell.getEditText();
-            pOldEditData = pEditObj->Clone();
-            rDoc.RemoveEditTextCharAttribs(aPos, rAttr);
-            pEditObj = rDoc.GetEditText(aPos);
-            pNewEditData = pEditObj->Clone();
-        }
-
-        aChangeRanges.push_back(ScRange(aPos));
-        std::optional<ScPatternAttr> pOldPat(*rDoc.GetPattern( nCol, nRow, nTab ));
-
-        rDoc.ApplyPattern( nCol, nRow, nTab, rAttr );
-
-        const ScPatternAttr* pNewPat = rDoc.GetPattern( nCol, nRow, nTab );
-
-        if (bRecord)
-        {
-            std::unique_ptr<ScUndoCursorAttr> pUndo(new ScUndoCursorAttr(
-                pDocSh, nCol, nRow, nTab, &*pOldPat, pNewPat, &rAttr ));
-            pUndo->SetEditData(std::move(pOldEditData), std::move(pNewEditData));
-            pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndo));
-        }
-        pOldPat.reset();     // is copied in undo (Pool)
-
-        pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
-        pDocSh->UpdateOle(GetViewData());
-        aModificator.SetDocumentModified();
-        CellContentChanged();
+        sc::ApplyAttributesToCellOperation aOperation(*pDocSh, aPosition, rAttr, nExtFlags, false);
+        bResult = aOperation.run();
+        aChangeRanges = aOperation.getChangedRangeList();
     }
+
+    if (bResult)
+        CellContentChanged();
 
     ScModelObj* pModelObj = pDocSh->GetModel();
 
