@@ -220,6 +220,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169101_datePicker)
     // there is no valid date, so fullDate must not be provided (or MS Word says 'corrupt file')
     assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:date", "fullDate");
     assertXPathContent(pXmlDoc, "//w:sdt/w:sdtContent/w:r/w:t", u"Week #");
+
+    // if the relationship is missing, then MS Word shows placeholder text instead of customXml date
+    xmlDocUniquePtr pXmlCustomXmlRels = parseExport(u"customXml/_rels/item1.xml.rels"_ustr);
+    assertXPath(pXmlCustomXmlRels, "//rels:Relationship", "Target", u"itemProps1.xml");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
