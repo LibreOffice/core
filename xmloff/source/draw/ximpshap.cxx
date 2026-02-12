@@ -2246,7 +2246,7 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
     SetTransformation();
 
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if (xPropSet.is() && mnPageNumber >= 0) // mnPageNumber < 0 means "ignore"
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
         static constexpr OUString aPageNumberStr(u"PageNumber"_ustr);
