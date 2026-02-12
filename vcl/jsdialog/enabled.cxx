@@ -181,6 +181,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/movingaveragedialog.ui" },
         { u"modules/scalc/ui/optimalcolwidthdialog.ui" },
         { u"modules/scalc/ui/optimalrowheightdialog.ui" },
+        { u"modules/scalc/ui/paradialog.ui" },
         { u"modules/scalc/ui/pagetemplatedialog.ui" },
         { u"modules/scalc/ui/paratemplatedialog.ui" },
         { u"modules/scalc/ui/pastespecial.ui" },
