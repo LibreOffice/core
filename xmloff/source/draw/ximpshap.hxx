@@ -340,7 +340,7 @@ public:
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
-// draw:page context
+// draw:thumbnail context
 
 class SdXMLPageShapeContext : public SdXMLShapeContext
 {
@@ -359,6 +359,9 @@ public:
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
+
+    // Do not try to set page number to the thumbnail (keep the default association)
+    void ignorePageNumber() { mnPageNumber = -1; }
 };
 
 // draw:caption context
