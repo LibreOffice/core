@@ -106,13 +106,13 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        rtl::Reference<SdrObject> xObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>(xObj.get()) )
             if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, pGraphicObj->GetGraphicObject(),
-                    [pView, pGraphicObj, pObj, rMarkList] (GraphicObject aFilterObj) -> void
+                    [pView, pGraphicObj, xObj, rMarkList] (GraphicObject aFilterObj) -> void
                     {
                         if( SdrPageView* pPageView = pView->GetSdrPageView() )
                         {
@@ -120,7 +120,7 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
                             OUString aStr = rMarkList.GetMarkDescription() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
                             pView->BegUndo( aStr );
                             pFilteredObj->SetGraphicObject( aFilterObj );
-                            pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
+                            pView->ReplaceObjectAtView( xObj.get(), *pPageView, pFilteredObj.get() );
                             pView->EndUndo();
                         }
                     });
@@ -198,25 +198,29 @@ void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        rtl::Reference<SdrObject> xObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>(xObj.get()) )
+        {
             if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
-                CompressGraphicsDialog dialog(GetViewData().GetDialogParent(), pGraphicObj, GetViewData().GetBindings());
-                if (dialog.run() == RET_OK)
-                {
-                    rtl::Reference<SdrGrafObj> pNewObject = dialog.GetCompressedSdrGrafObj();
-                    SdrPageView* pPageView = pView->GetSdrPageView();
-                    OUString aUndoString = rMarkList.GetMarkDescription() + " Compress";
-                    pView->BegUndo( aUndoString );
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject.get() );
-                    pView->EndUndo();
-                }
-            }
-    }
+                auto xDialog = std::make_shared<CompressGraphicsDialog>(GetViewData().GetDialogParent(), pGraphicObj, GetViewData().GetBindings());
+                OUString aUndoString = rMarkList.GetMarkDescription() + " Compress";
+                weld::DialogController::runAsync(xDialog, [this, pView, xObj, xDialog, aUndoString](sal_uInt32 nResult) {
+                    if (nResult == RET_OK)
+                    {
+                        rtl::Reference<SdrGrafObj> pNewObject = xDialog->GetCompressedSdrGrafObj();
+                        SdrPageView* pPageView = pView->GetSdrPageView();
+                        pView->BegUndo( aUndoString );
+                        pView->ReplaceObjectAtView( xObj.get(), *pPageView, pNewObject.get() );
+                        pView->EndUndo();
 
-    Invalidate();
+                        Invalidate();
+                    }
+                });
+            }
+        }
+    }
 }
 
 void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
