@@ -723,6 +723,12 @@ const OUString* TokenPool::GetExternal( const TokenId& rId ) const
             if ( nExt < ppP_Ext.m_writemark && ppP_Ext[ nExt ] )
                 p = &ppP_Ext[ nExt ]->aText;
         }
+        else if (pType[n] == T_ExtName)
+        {
+            sal_uInt16 nExt = pElement[n];
+            if (nExt < maExtNames.size())
+                p = &maExtNames[nExt].maName;
+        }
     }
 
     return p;
