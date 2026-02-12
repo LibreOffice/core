@@ -465,7 +465,8 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
         throw RuntimeException();
 
     bool bRet = false;
-    setMediaDescriptor( rMediaDescSeq );
+    if (!mxImpl->mxStorage)
+        setMediaDescriptor( rMediaDescSeq );
     DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
     if( aOpenedGuard.isValid() || mxImpl->maFileUrl.isEmpty() )
     {
@@ -480,7 +481,9 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
             case FILTERDIRECTION_UNKNOWN:
             break;
             case FILTERDIRECTION_IMPORT:
-                if( mxImpl->mxInStream.is() )
+                if (mxImpl->mxStorage)
+                    bRet = true;
+                else if( mxImpl->mxInStream.is() )
                 {
                     mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream );
                     bRet = mxImpl->mxStorage && importDocument();
