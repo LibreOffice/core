@@ -313,8 +313,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
                 mpThemePtr = std::make_shared<Theme>();
                 auto pTheme = std::make_shared<model::Theme>();
                 mpThemePtr->setTheme(pTheme);
-                uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxShapeFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
-                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr, *pTheme), xDoc);
+                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr, *pTheme));
                 mxShapeFilterBase->setCurrentTheme(mpThemePtr);
             }
         }
