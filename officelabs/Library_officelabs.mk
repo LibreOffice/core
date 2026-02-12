@@ -38,10 +38,34 @@ $(eval $(call gb_Library_use_externals,officelabs,\
 $(eval $(call gb_Library_add_exception_objects,officelabs,\
     officelabs/source/AgentConnection \
     officelabs/source/DocumentController \
-    officelabs/source/ChatPanel \
-    officelabs/source/ChatPanelChildWindow \
-    officelabs/source/AgenticPanel \
-    officelabs/source/AgenticPanelChildWindow \
 ))
+
+# === CEF WebView support (conditional on --with-cef) ===
+ifeq ($(ENABLE_CEF),TRUE)
+
+$(eval $(call gb_Library_add_defs,officelabs,\
+    -DHAVE_FEATURE_CEF \
+))
+
+$(eval $(call gb_Library_set_include,officelabs,\
+    -I$(SRCDIR)/officelabs/inc \
+    -I$(CEF_DIR) \
+    -I$(CEF_DIR)/include \
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_add_libs,officelabs,\
+    $(CEF_LIBS) \
+    $(CEF_DIR)/libcef_dll_wrapper/Release/libcef_dll_wrapper.lib \
+))
+
+$(eval $(call gb_Library_add_exception_objects,officelabs,\
+    officelabs/source/CefInit \
+    officelabs/source/WebViewPanel \
+    officelabs/source/WebViewMessageHandler \
+))
+
+endif
+# === End CEF ===
 
 # vim: set noet sw=4 ts=4:

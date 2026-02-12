@@ -22,6 +22,11 @@
 
 #include "A11yCheckIssuesPanel.hxx"
 #include "AIAssistantPanel.hxx"
+
+// CEF WebView panel (replaces AIAssistantPanel when CEF is available)
+#ifdef HAVE_FEATURE_CEF
+#include <officelabs/WebViewPanel.hxx>
+#endif
 #include "CommentsPanel.hxx"
 #include "ThemePanel.hxx"
 #include "StylePresetsPanel.hxx"
@@ -227,7 +232,13 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/AIAssistantPanel"))
     {
+#ifdef HAVE_FEATURE_CEF
+        // Use CEF WebView panel when available
+        std::unique_ptr<PanelLayout> xPanel = officelabs::WebViewPanel::Create(pParent, pBindings);
+#else
+        // Fallback to VCL-based panel
         std::unique_ptr<PanelLayout> xPanel = sw::sidebar::AIAssistantPanel::Create(pParent, pBindings);
+#endif
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }

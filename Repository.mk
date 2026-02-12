@@ -234,6 +234,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 	) \
 ))
 
+ifeq ($(ENABLE_CEF),TRUE)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
+	officelabs_cef_subprocess \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
@@ -852,6 +858,7 @@ endif
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
 	$(if $(ENABLE_CLI),cli_basetypes_copy) \
+	$(if $(ENABLE_CEF),cef) \
 	extras_wordbook \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \

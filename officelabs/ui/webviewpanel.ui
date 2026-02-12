@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- OfficeLabs WebViewPanel UI - minimal container for CEF browser -->
+<interface domain="officelabs">
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkBox" id="WebViewPanel">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="vexpand">True</property>
+    <property name="hexpand">True</property>
+    <!-- CEF browser is embedded via SystemChildWindow filling this container -->
+    <child>
+      <object class="GtkDrawingArea" id="cef_container">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="vexpand">True</property>
+        <property name="hexpand">True</property>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -51,6 +51,32 @@ $(eval $(call gb_Library_add_defs,sw,\
 	-DSWUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,swui))\" \
 ))
 
+# === CEF WebView support (conditional on --with-cef) ===
+ifeq ($(ENABLE_CEF),TRUE)
+
+$(eval $(call gb_Library_add_defs,sw,\
+    -DHAVE_FEATURE_CEF \
+))
+
+$(eval $(call gb_Library_set_include,sw,\
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/officelabs/inc \
+    -I$(CEF_DIR) \
+    -I$(CEF_DIR)/include \
+    -I$(WORKDIR)/SdiTarget/sw/sdi \
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_use_libraries,sw,\
+    officelabs \
+))
+
+endif
+# === End CEF ===
+
 $(eval $(call gb_Library_use_libraries,sw,\
     avmedia \
     basegfx \

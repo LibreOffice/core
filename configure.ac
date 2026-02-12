@@ -3183,6 +3183,36 @@ AC_ARG_WITH(coredumpctl,
         [Use coredumpctl (together with systemd-run) to retrieve core dumps of crashing test
         processes.]))
 
+dnl CEF (Chromium Embedded Framework) for AI WebView panel
+AC_ARG_WITH(cef,
+    AS_HELP_STRING([--with-cef=DIR],
+        [Path to CEF binary distribution for WebView-based AI panel.
+         Specify the directory containing include/, Release/, and Resources/.
+         If not specified, the VCL-based panel is used instead.]),
+[],[with_cef=no])
+
+ENABLE_CEF=
+CEF_DIR=
+CEF_CFLAGS=
+CEF_LIBS=
+if test "$with_cef" != "no" -a -n "$with_cef"; then
+    if test -d "$with_cef/include" -a -d "$with_cef/Release"; then
+        ENABLE_CEF=TRUE
+        CEF_DIR="$with_cef"
+        CEF_CFLAGS="-I$with_cef -I$with_cef/include"
+        CEF_LIBS="$with_cef/Release/libcef.lib"
+        AC_MSG_RESULT([using CEF from $with_cef])
+    else
+        AC_MSG_ERROR([CEF directory $with_cef does not contain expected structure (include/ and Release/ required)])
+    fi
+else
+    AC_MSG_RESULT([CEF disabled, using VCL-based AI panel])
+fi
+AC_SUBST(ENABLE_CEF)
+AC_SUBST(CEF_DIR)
+AC_SUBST(CEF_CFLAGS)
+AC_SUBST(CEF_LIBS)
+
 AC_ARG_WITH(buildconfig-recorded,
     AS_HELP_STRING([--with-buildconfig-recorded],
         [Put build config into version info reported by LOK. Incompatible with reproducible builds.]),
