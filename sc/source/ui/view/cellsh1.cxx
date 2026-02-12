@@ -1783,16 +1783,25 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAddress aCellPos(nPosX, nPosY, GetViewData().CurrentTabForData());
                     auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
                     pObj->SetOverwriting(true);
-                    if (pDlg->Execute()) {
-                        ScAsciiOptions aOptions;
-                        pDlg->GetOptions(aOptions);
-                        pDlg->SaveParameters();
-                        pObj->SetExtOptions(aOptions);
-                        pObj->ImportString(sStrBuffer, format);
-                    }
-                    pDlg->disposeOnce();
-                    rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success, 0 = fail
-                    rReq.Done();
+
+                    auto xRequest = std::make_shared<SfxRequest>(rReq);
+                    rReq.Ignore(); // the 'old' request is not relevant any more
+
+                    pDlg->StartExecuteAsync(
+                            [pDlg, pObj, format, sStrBuffer, xRequest=std::move(xRequest)](sal_Int32 nResult){
+                            if (nResult) {
+                                ScAsciiOptions aOptions;
+                                pDlg->GetOptions(aOptions);
+                                pDlg->SaveParameters();
+                                pObj->SetExtOptions(aOptions);
+                                pObj->ImportString(sStrBuffer, format);
+                            }
+
+                            pDlg->disposeOnce();
+                            xRequest->SetReturnValue(SfxInt16Item(SID_PASTE_TEXTIMPORT_DIALOG, 1)); // 1 = success, 0 = fail
+                            xRequest->Done();
+                        }
+                    );
                 }
             }
             if (!bSuccess)
