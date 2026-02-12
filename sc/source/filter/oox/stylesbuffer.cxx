@@ -2037,8 +2037,8 @@ void Fill::finalizeImport()
         maApiData.mbUsed = rModel.mbPatternUsed;
         if( rModel.mnPattern == XML_none )
         {
-            maApiData.mnColor = API_RGB_TRANSPARENT;
-            maApiData.mbTransparent = true;
+            // XML_none should not apply any color
+            maApiData.mbUsed = false;
         }
         else
         {

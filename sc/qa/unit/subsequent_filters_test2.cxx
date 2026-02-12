@@ -1745,6 +1745,21 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testBackColorFilter)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf66377)
+{
+    createScDoc("xlsx/tdf66377.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    const ScPatternAttr* pAttr = pDoc->GetPattern(2, 2, 0);
+    CPPUNIT_ASSERT(pAttr);
+    const SvxBrushItem* pExplicitBackground = pAttr->GetItemSet().GetItemIfSet(ATTR_BACKGROUND);
+    CPPUNIT_ASSERT(!pExplicitBackground);
+    // Without the fix in place it would not have fail and
+    // we would have a transparent white color set
+    /*const Color& rColor = pExplicitBackground->GetColor();
+    CPPUNIT_ASSERT_EQUAL(Color(COL_TRANSPARENT), rColor);*/
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
