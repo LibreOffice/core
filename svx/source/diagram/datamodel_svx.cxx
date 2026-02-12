@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 namespace svx::diagram {
 
-void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList)
+void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint)
 {
     if (TypeConstant::XML_none != aTypeConstant)
     {
@@ -46,9 +46,9 @@ void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Referen
             case TypeConstant::XML_type: rAttributeList->add(::XML_type, "Type"); break;
             case TypeConstant::XML_asst: rAttributeList->add(::XML_type, "asst"); break;
             case TypeConstant::XML_doc: rAttributeList->add(::XML_type, "doc"); break;
-            case TypeConstant::XML_node: /* XML_node is default, no need to write */ break;
+            case TypeConstant::XML_node: if(!bPoint) rAttributeList->add(::XML_type, "node"); break;
             case TypeConstant::XML_norm: rAttributeList->add(::XML_type, "norm"); break;
-            case TypeConstant::XML_parOf: rAttributeList->add(::XML_type, "parOf"); break;
+            case TypeConstant::XML_parOf: if(bPoint) rAttributeList->add(::XML_type, "parOf"); break;
             case TypeConstant::XML_parTrans: rAttributeList->add(::XML_type, "parTrans"); break;
             case TypeConstant::XML_pres: rAttributeList->add(::XML_type, "pres"); break;
             case TypeConstant::XML_presOf: rAttributeList->add(::XML_type, "presOf"); break;
@@ -61,7 +61,7 @@ void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Referen
 }
 
 Connection::Connection()
-: mnXMLType( XML_none )
+: mnXMLType( XML_parOf )
 , mnSourceOrder( 0 )
 , mnDestOrder( 0 )
 {
@@ -74,21 +74,27 @@ void Connection::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
 
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(sax_fastparser::FastSerializerHelper::createAttrList());
 
-    addTypeConstantToFastAttributeList(mnXMLType, pAttributeList);
-    if (!msModelId.isEmpty()) pAttributeList->add(XML_modelId, msModelId);
-    if (!msSourceId.isEmpty()) pAttributeList->add(XML_srcId, msSourceId);
-    if (!msDestId.isEmpty()) pAttributeList->add(XML_destId, msDestId);
-    if (!msPresId.isEmpty()) pAttributeList->add(XML_presId, msPresId);
-    if (!msSibTransId.isEmpty()) pAttributeList->add(XML_sibTransId, msSibTransId);
-    if (!msParTransId.isEmpty()) pAttributeList->add(XML_parTransId, msParTransId);
-    if (0 != mnSourceOrder) pAttributeList->add(XML_srcOrd, OUString::number(mnSourceOrder));
-    if (0 != mnDestOrder) pAttributeList->add(XML_destOrd, OUString::number(mnDestOrder));
+    if (!msModelId.isEmpty())
+        pAttributeList->add(XML_modelId, msModelId);
+    addTypeConstantToFastAttributeList(mnXMLType, pAttributeList, false);
+    if (!msSourceId.isEmpty())
+        pAttributeList->add(XML_srcId, msSourceId);
+    if (!msDestId.isEmpty())
+        pAttributeList->add(XML_destId, msDestId);
+    pAttributeList->add(XML_srcOrd, OUString::number(mnSourceOrder));
+    pAttributeList->add(XML_destOrd, OUString::number(mnDestOrder));
+    if (!msPresId.isEmpty())
+        pAttributeList->add(XML_presId, msPresId);
+    if (!msParTransId.isEmpty())
+        pAttributeList->add(XML_parTransId, msParTransId);
+    if (!msSibTransId.isEmpty())
+        pAttributeList->add(XML_sibTransId, msSibTransId);
 
     rTarget->singleElementNS(XML_dgm, XML_cxn, pAttributeList);
 }
 
 Point::Point()
-: mnXMLType(XML_none)
+: mnXMLType(XML_node)
 , mnMaxChildren(-1)
 , mnPreferredChildren(-1)
 , mnDirection(XML_norm)
@@ -193,6 +199,30 @@ void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
 }
 
 DiagramData_svx::DiagramData_svx()
+: mxRootShape()
+, maExtDrawings()
+, maConnections()
+, maPoints()
+, mxThemeDocument()
+, maPointNameMap()
+, maPointsPresNameMap()
+, maConnectionNameMap()
+, maPresOfNameMap()
+, msBackgroundShapeModelID()
+{
+}
+
+DiagramData_svx::DiagramData_svx(DiagramData_svx const& rSource)
+: mxRootShape()
+, maExtDrawings()
+, maConnections(rSource.maConnections)
+, maPoints(rSource.maPoints)
+, mxThemeDocument()
+, maPointNameMap()
+, maPointsPresNameMap()
+, maConnectionNameMap()
+, maPresOfNameMap()
+, msBackgroundShapeModelID()
 {
 }
 
@@ -271,7 +301,8 @@ DomMapFlags DiagramData_svx::removeDiagramNode(const OUString& rNodeId)
     aRetval.push_back(DomMapFlag::OOXDrawing);
     aRetval.push_back(DomMapFlag::OOXDataImageRels);
     aRetval.push_back(DomMapFlag::OOXDataHlinkRels);
-    aRetval.push_back(DomMapFlag::OOXDrawingRels);
+    aRetval.push_back(DomMapFlag::OOXDrawingImageRels);
+    aRetval.push_back(DomMapFlag::OOXDrawingHlinkRels);
 
     return aRetval;
 }
@@ -468,7 +499,8 @@ std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode()
     aRetval.push_back(DomMapFlag::OOXDrawing);
     aRetval.push_back(DomMapFlag::OOXDataImageRels);
     aRetval.push_back(DomMapFlag::OOXDataHlinkRels);
-    aRetval.push_back(DomMapFlag::OOXDrawingRels);
+    aRetval.push_back(DomMapFlag::OOXDrawingImageRels);
+    aRetval.push_back(DomMapFlag::OOXDrawingHlinkRels);
 
     return std::make_pair(sNewNodeId, aRetval);
 }

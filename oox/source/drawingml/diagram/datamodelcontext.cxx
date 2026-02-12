@@ -343,7 +343,9 @@ DataModelContext::DataModelContext( ContextHandler2Helper const& rParent,
 DataModelContext::~DataModelContext()
 {
     // some debug
+#ifdef DBG_UTIL
     mpDataModel->dump();
+#endif
 }
 
 ContextHandlerRef

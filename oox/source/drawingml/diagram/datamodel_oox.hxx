@@ -42,13 +42,16 @@ public:
     typedef std::map< OUString, ShapePtr > PointShapeMap;
 
     DiagramData_oox();
+    explicit DiagramData_oox(DiagramData_oox const& rSource);
     virtual ~DiagramData_oox();
 
     // creates temporary processing data from model data
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
     FillPropertiesPtr& getBackgroundShapeFillProperties() { return mpBackgroundShapeFillProperties; }
+#ifdef DBG_UTIL
     virtual void dump() const;
+#endif
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 

@@ -118,10 +118,10 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
 }
 
 
-void Diagram::createShapeHierarchyFromModel( const ShapePtr & pParentShape, bool bCreate )
+void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentShape, bool bCreate )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
-        SAL_WARN("oox.drawingml", "Diagram cannot be correctly laid out. Size: "
+        SAL_WARN("oox.drawingml", "SmartArtDiagram cannot be correctly laid out. Size: "
             << pParentShape->getSize().Width << "x" << pParentShape->getSize().Height);
 
     pParentShape->setChildSize(pParentShape->getSize());
@@ -157,12 +157,27 @@ void Diagram::createShapeHierarchyFromModel( const ShapePtr & pParentShape, bool
     aChildren.insert(aChildren.begin(), pBackground);
 }
 
-Diagram::Diagram()
+SmartArtDiagram::SmartArtDiagram()
 : maDiagramFontHeights()
+, mpData()
+, mpLayout()
+, maStyles()
+, maColors()
+, maDiagramPRDomMap()
 {
 }
 
-uno::Any Diagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
+SmartArtDiagram::SmartArtDiagram(SmartArtDiagram const& rSource)
+: maDiagramFontHeights()
+, mpData(rSource.mpData ? new DiagramData_oox(*rSource.mpData) : nullptr)
+, mpLayout(rSource.mpLayout)
+, maStyles(rSource.maStyles)
+, maColors(rSource.maColors)
+, maDiagramPRDomMap(rSource.maDiagramPRDomMap)
+{
+}
+
+uno::Any SmartArtDiagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
 {
     const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(aDomMapFlag);
 
@@ -172,12 +187,12 @@ uno::Any Diagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
     return uno::Any();
 }
 
-void Diagram::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const uno::Any& rValue)
+void SmartArtDiagram::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const uno::Any& rValue)
 {
     maDiagramPRDomMap[aDomMapFlag] = rValue;
 }
 
-void Diagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
+void SmartArtDiagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
 {
     for (const auto& rEntry : aDomMapFlags)
     {
@@ -188,12 +203,12 @@ void Diagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
     }
 }
 
-bool Diagram::checkMinimalDataDoms() const
+bool SmartArtDiagram::checkMinimalDataDoms() const
 {
     // check if re-creation is activated
-    static bool bReCreateDiagramDataDoms(nullptr != std::getenv("ACTIVATE_RECREATE_DIAGRAM_DATADOMS"));
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
 
-    if (!bReCreateDiagramDataDoms && maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
+    if (!bActivateAdvancedDiagramFeatures && maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
         return false;
 
     if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXLayout))
@@ -208,7 +223,7 @@ bool Diagram::checkMinimalDataDoms() const
     return true;
 }
 
-void Diagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const
+void SmartArtDiagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const
 {
     if (!xOutputStream)
         return;
@@ -247,7 +262,7 @@ void Diagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Reference<
 #endif
 }
 
-void Diagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream) const
+void SmartArtDiagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream) const
 {
     if (!xOutputStream)
         return;
@@ -290,7 +305,7 @@ void Diagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno::Referen
 using ShapePairs
     = std::map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
 
-void Diagram::syncDiagramFontHeights()
+void SmartArtDiagram::syncDiagramFontHeights()
 {
     // Each name represents a group of shapes, for which the font height should have the same
     // scaling.
@@ -421,7 +436,7 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations )
 {
-    DiagramPtr pDiagram = std::make_shared<Diagram>();
+    DiagramPtr pDiagram = std::make_shared<SmartArtDiagram>();
 
     OoxDiagramDataPtr pData = std::make_shared<DiagramData_oox>();
     pDiagram->setData( pData );
@@ -540,6 +555,9 @@ void loadDiagram( ShapePtr const & pShape,
         // collect data, init maps
         // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
         pData->buildDiagramDataModel(false);
+#ifdef DBG_UTIL
+        pData->dump();
+#endif
 
         // diagram loaded. now lump together & attach to shape
         // create own geometry if extLst is not present (no geometric

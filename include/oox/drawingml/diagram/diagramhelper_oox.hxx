@@ -28,7 +28,7 @@
 
 namespace oox::drawingml {
 
-class Diagram;
+class SmartArtDiagram;
 class DrawingML;
 
 // Advanced DiagramHelper
@@ -46,18 +46,15 @@ class DrawingML;
 // - im/export Diagram model to other representations
 class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
 {
-    const std::shared_ptr< Diagram >            mpDiagramPtr;
-    std::shared_ptr<::oox::drawingml::Theme>    mpThemePtr;
+    const std::shared_ptr< SmartArtDiagram >         mpDiagramPtr;
+    std::shared_ptr<::oox::drawingml::Theme>    mpDiagramThemePtr;
 
-    css::awt::Size maImportSize;
+    css::awt::Size maDiagramImportSize;
 
     // data values set by addDiagramNode to be used by next reLayout call
     // when a new ode gets added
     OUString msNewNodeId;
     OUString msNewNodeText;
-
-    // flag to remember if initial import had a DrawingDom at all
-    bool mbInitiallyNoDrawingDom;
 
     bool hasDiagramData() const;
 
@@ -71,9 +68,10 @@ protected:
 
 public:
     DiagramHelper_oox(
-        std::shared_ptr< Diagram > xDiagramPtr,
+        std::shared_ptr< SmartArtDiagram > xDiagramPtr,
         std::shared_ptr<::oox::drawingml::Theme> xTheme,
         css::awt::Size aImportSize);
+    explicit DiagramHelper_oox(DiagramHelper_oox const& rSource);
     virtual ~DiagramHelper_oox();
 
     // re-create XShapes
@@ -111,9 +109,8 @@ public:
     void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
     void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
 
-    // flag to remember if initial import had a DrawingDom at all
-    void setInitiallyNoDrawingDom(bool bNew) { mbInitiallyNoDrawingDom = bNew; }
-    bool getInitiallyNoDrawingDom() const { return mbInitiallyNoDrawingDom; }
+    // needed to create DiagramHelper_oox in svx' SdrObjGroup copy constructor
+    virtual DiagramHelper_oox* clone() const override;
 };
 
 }

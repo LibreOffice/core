@@ -89,6 +89,16 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
 
     // copy local parameters
     maRefPoint  = rSource.maRefPoint;
+
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+    if (bActivateAdvancedDiagramFeatures && rSource.getDiagramHelper())
+    {
+        // create complete clone of current DiagramData
+        mp_DiagramHelper.reset(rSource.getDiagramHelper()->clone());
+
+        // need to set new RootShape to newly created associated XShape
+        mp_DiagramHelper->getRootShape() = getUnoShape();
+    }
 }
 
 void SdrObjGroup::AddToHdlList(SdrHdlList& rHdlList) const

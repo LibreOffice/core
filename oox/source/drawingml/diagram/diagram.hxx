@@ -35,7 +35,7 @@ namespace com::sun::star {
 
 namespace oox::drawingml {
 
-class Diagram;
+class SmartArtDiagram;
 class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 class LayoutAtom;
@@ -46,7 +46,7 @@ typedef std::map< const svx::diagram::Point*, ShapePtr > PresPointShapeMap;
 class DiagramLayout
 {
 public:
-    DiagramLayout(Diagram& rDgm)
+    DiagramLayout(SmartArtDiagram& rDgm)
         : mrDgm(rDgm)
     {
     }
@@ -60,7 +60,7 @@ public:
         { msTitle = sTitle; }
     void setDesc( const OUString & sDesc )
         { msDesc = sDesc; }
-    Diagram& getDiagram() { return mrDgm; }
+    SmartArtDiagram& getDiagram() { return mrDgm; }
     LayoutNodePtr & getNode()
         { return mpNode; }
     const LayoutNodePtr & getNode() const
@@ -79,7 +79,7 @@ public:
         { return maPresPointShapeMap; }
 
 private:
-    Diagram& mrDgm;
+    SmartArtDiagram& mrDgm;
     OUString msDefStyle;
     OUString msMinVer;
     OUString msUniqueId;
@@ -125,10 +125,11 @@ struct DiagramColor
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
 typedef std::map<svx::diagram::DomMapFlag,css::uno::Any> DiagramPRDomMap;
 
-class Diagram
+class SmartArtDiagram
 {
 public:
-    explicit Diagram();
+    explicit SmartArtDiagram();
+    explicit SmartArtDiagram(SmartArtDiagram const& rSource);
     void setData( const OoxDiagramDataPtr& pData )
         { mpData = pData; }
     const OoxDiagramDataPtr& getData() const
@@ -169,7 +170,7 @@ private:
     DiagramPRDomMap                maDiagramPRDomMap;
 };
 
-typedef std::shared_ptr< Diagram > DiagramPtr;
+typedef std::shared_ptr< SmartArtDiagram > DiagramPtr;
 
 }
 

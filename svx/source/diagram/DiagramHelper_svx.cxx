@@ -412,6 +412,13 @@ DiagramHelper_svx::DiagramHelper_svx()
 {
 }
 
+DiagramHelper_svx::DiagramHelper_svx(DiagramHelper_svx const& rSource)
+: mbUseDiagramThemeData(rSource.mbUseDiagramThemeData)
+, mbUseDiagramModelData(rSource.mbUseDiagramModelData)
+, mbForceThemePtrRecreation(rSource.mbForceThemePtrRecreation)
+{
+}
+
 DiagramHelper_svx::~DiagramHelper_svx() {}
 
 void DiagramHelper_svx::disconnectFromSdrObjGroup()

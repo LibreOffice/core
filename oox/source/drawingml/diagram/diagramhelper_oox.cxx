@@ -42,15 +42,24 @@ namespace oox::drawingml
 {
 bool DiagramHelper_oox::hasDiagramData() const { return mpDiagramPtr && mpDiagramPtr->getData(); }
 
-DiagramHelper_oox::DiagramHelper_oox(std::shared_ptr<Diagram> xDiagramPtr,
+DiagramHelper_oox::DiagramHelper_oox(std::shared_ptr<SmartArtDiagram> xDiagramPtr,
                                      std::shared_ptr<::oox::drawingml::Theme> xTheme,
                                      awt::Size aImportSize)
     : mpDiagramPtr(std::move(xDiagramPtr))
-    , mpThemePtr(std::move(xTheme))
-    , maImportSize(aImportSize)
+    , mpDiagramThemePtr(std::move(xTheme))
+    , maDiagramImportSize(aImportSize)
     , msNewNodeId()
     , msNewNodeText()
-    , mbInitiallyNoDrawingDom(false)
+{
+}
+
+DiagramHelper_oox::DiagramHelper_oox(DiagramHelper_oox const& rSource)
+    : DiagramHelper_svx(rSource)
+    , mpDiagramPtr(rSource.mpDiagramPtr ? new SmartArtDiagram(*rSource.mpDiagramPtr) : nullptr)
+    , mpDiagramThemePtr(rSource.mpDiagramThemePtr)
+    , maDiagramImportSize(rSource.maDiagramImportSize)
+    , msNewNodeId()
+    , msNewNodeText()
 {
 }
 
@@ -100,7 +109,7 @@ void DiagramHelper_oox::reLayout()
     // to get the same layout(s)
     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>("com.sun.star.drawing.GroupShape");
     pShapePtr->setDiagramType();
-    pShapePtr->setSize(maImportSize);
+    pShapePtr->setSize(maDiagramImportSize);
 
     // remember exsiting DrawingLayerModelData. Do this before createShapeHierarchyFromModel
     // below, that will create a new BackgroundShapeModelID and the BGShape would
@@ -374,7 +383,8 @@ void DiagramHelper_oox::TextInformationChange()
     aFlags.push_back(DomMapFlag::OOXDrawing);
     aFlags.push_back(DomMapFlag::OOXDataImageRels);
     aFlags.push_back(DomMapFlag::OOXDataHlinkRels);
-    aFlags.push_back(DomMapFlag::OOXDrawingRels);
+    aFlags.push_back(DomMapFlag::OOXDrawingImageRels);
+    aFlags.push_back(DomMapFlag::OOXDrawingHlinkRels);
     mpDiagramPtr->resetOOXDomValues(std::move(aFlags));
 
     // still reset GrabBag at Associated SdrObjGroup object. There are no "OOX.*"
@@ -424,7 +434,7 @@ const std::shared_ptr<::oox::drawingml::Theme>& DiagramHelper_oox::getOrCreateTh
 {
     // (Re-)Use already existing Theme if existing/imported if possible.
     // If not, re-import Theme if data is available and thus possible
-    if (hasDiagramData() && (ForceThemePtrRecreation() || !mpThemePtr))
+    if (hasDiagramData() && (ForceThemePtrRecreation() || !mpDiagramThemePtr))
     {
         // get the originally imported dom::XDocument
         const uno::Reference<xml::dom::XDocument>& xThemeDocument(
@@ -434,20 +444,20 @@ const std::shared_ptr<::oox::drawingml::Theme>& DiagramHelper_oox::getOrCreateTh
         {
             // reset local Theme ModelData *always* to get rid of former data that would
             // else be added additionally
-            const_cast<DiagramHelper_oox*>(this)->mpThemePtr
+            const_cast<DiagramHelper_oox*>(this)->mpDiagramThemePtr
                 = std::make_shared<oox::drawingml::Theme>();
             auto pTheme = std::make_shared<model::Theme>();
-            mpThemePtr->setTheme(pTheme);
+            mpDiagramThemePtr->setTheme(pTheme);
 
             // import Theme ModelData
             rxFilter->importFragment(
-                new ThemeFragmentHandler(*rxFilter, OUString(), *mpThemePtr, *pTheme),
+                new ThemeFragmentHandler(*rxFilter, OUString(), *mpDiagramThemePtr, *pTheme),
                 uno::Reference<xml::sax::XFastSAXSerializable>(xThemeDocument,
                                                                uno::UNO_QUERY_THROW));
         }
     }
 
-    return mpThemePtr;
+    return mpDiagramThemePtr;
 }
 
 void DiagramHelper_oox::setOOXDomValue(DomMapFlag aDomMapFlag, const uno::Any& rValue)
@@ -489,6 +499,14 @@ void DiagramHelper_oox::writeDiagramOOXDrawing(
         return;
 
     mpDiagramPtr->writeDiagramOOXDrawing(rOriginalDrawingML, xOutputStream);
+}
+
+DiagramHelper_oox* DiagramHelper_oox::clone() const
+{
+    if (!mpDiagramPtr)
+        return nullptr;
+
+    return new DiagramHelper_oox(*this);
 }
 }
 

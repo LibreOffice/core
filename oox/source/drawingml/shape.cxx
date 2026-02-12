@@ -254,7 +254,7 @@ Shape::~Shape()
 }
 
 void Shape::prepareDiagramHelper(
-    const std::shared_ptr< Diagram >& rDiagramPtr,
+    const std::shared_ptr< SmartArtDiagram >& rDiagramPtr,
     const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
 {
     // Prepare Diagram data collecting for this Shape
@@ -2416,8 +2416,11 @@ void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFrag
         svx::diagram::DomMapFlag::OOXDrawing,
         uno::Any(rFilterBase.importFragment(rFragmentPath)));
     pAdvancedDiagramHelper->setOOXDomValue(
-        svx::diagram::DomMapFlag::OOXDrawingRels,
+        svx::diagram::DomMapFlag::OOXDrawingImageRels,
         uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image")));
+    pAdvancedDiagramHelper->setOOXDomValue(
+        svx::diagram::DomMapFlag::OOXDrawingHlinkRels,
+        uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"hlink")));
 }
 
 void Shape::convertSmartArtToMetafile(XmlFilterBase const & rFilterBase)

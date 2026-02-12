@@ -34,7 +34,8 @@ enum class SVXCORE_DLLPUBLIC DomMapFlag : sal_uInt16
     OOXStyle = 4,
     OOXColor = 5,
     OOXDrawing = 6,
-    OOXDrawingRels = 7
+    OOXDrawingImageRels = 7,
+    OOXDrawingHlinkRels = 8
 };
 
 typedef std::vector<DomMapFlag> DomMapFlags;

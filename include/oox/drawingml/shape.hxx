@@ -99,7 +99,7 @@ struct LinkedTxbxAttr
     LinkedTxbxAttr(): id(0),seq(0){};
 };
 
-class Diagram;
+class SmartArtDiagram;
 
 class OOX_DLLPUBLIC Shape
     : public std::enable_shared_from_this< Shape >
@@ -270,7 +270,7 @@ public:
     // Allows preparation of a local Diagram helper && propagate an eventually
     // existing one to the data holder object later
     SAL_DLLPRIVATE void prepareDiagramHelper(
-        const std::shared_ptr< Diagram >& rDiagramPtr,
+        const std::shared_ptr< SmartArtDiagram >& rDiagramPtr,
         const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
     SAL_DLLPRIVATE void propagateDiagramHelper();
 

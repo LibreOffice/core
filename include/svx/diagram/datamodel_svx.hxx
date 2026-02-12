@@ -60,7 +60,7 @@ struct SVXCORE_DLLPUBLIC Connection
 {
     Connection();
 
-    TypeConstant mnXMLType;
+    TypeConstant mnXMLType; // default is XML_parOf
     OUString msModelId;
     OUString msSourceId;
     OUString msDestId;
@@ -81,51 +81,56 @@ struct SVXCORE_DLLPUBLIC Point
 {
     Point();
 
-    OUString msCnxId;
-    OUString msModelId;
-    OUString msColorTransformCategoryId;
-    OUString msColorTransformTypeId;
-    OUString msLayoutCategoryId;
-    OUString msLayoutTypeId;
-    OUString msPlaceholderText;
-    OUString msPresentationAssociationId;
-    OUString msPresentationLayoutName;
-    OUString msPresentationLayoutStyleLabel;
-    OUString msQuickStyleCategoryId;
-    OUString msQuickStyleTypeId;
-    OUString msResizeHandles;
+    // PT: dgm:pt
+    // PRS: dgm:prSet
+    // PLV: dgm:presLayoutVars
 
-    TypeConstant mnXMLType;
-    sal_Int32     mnMaxChildren;
-    sal_Int32     mnPreferredChildren;
-    sal_Int32     mnDirection;
-    std::optional<sal_Int32> moHierarchyBranch;
-    sal_Int32     mnCustomAngle;
-    sal_Int32     mnPercentageNeighbourWidth;
-    sal_Int32     mnPercentageNeighbourHeight;
-    sal_Int32     mnPercentageOwnWidth;
-    sal_Int32     mnPercentageOwnHeight;
-    sal_Int32     mnIncludeAngleScale;
-    sal_Int32     mnRadiusScale;
-    sal_Int32     mnWidthScale;
-    sal_Int32     mnHeightScale;
-    sal_Int32     mnWidthOverride;
-    sal_Int32     mnHeightOverride;
-    sal_Int32     mnLayoutStyleCount;
-    sal_Int32     mnLayoutStyleIndex;
+    /* PT  */ OUString msCnxId;
+    /* PT  */ OUString msModelId;
+    /* PRS */ OUString msColorTransformCategoryId;
+    /* PRS */ OUString msColorTransformTypeId;
+    /* PRS */ OUString msLayoutCategoryId;
+    /* PRS */ OUString msLayoutTypeId;
+    /* PRS */ OUString msPlaceholderText;
+    /* PRS */ OUString msPresentationAssociationId;
+    /* PRS */ OUString msPresentationLayoutName;
+    /* PRS */ OUString msPresentationLayoutStyleLabel;
+    /* PRS */ OUString msQuickStyleCategoryId;
+    /* PRS */ OUString msQuickStyleTypeId;
+    /* PLV */ OUString msResizeHandles;
 
-    bool          mbOrgChartEnabled;
-    bool          mbBulletEnabled;
-    bool          mbCoherent3DOffset;
-    bool          mbCustomHorizontalFlip;
-    bool          mbCustomVerticalFlip;
-    bool          mbCustomText;
-    bool          mbIsPlaceholder;
+    /* PT  */ TypeConstant mnXMLType; // default is XML_node
+    /* PLV */ sal_Int32 mnMaxChildren;
+    /* PLV */ sal_Int32 mnPreferredChildren;
+    /* PLV */ sal_Int32 mnDirection;
+    /* PLV */ std::optional<sal_Int32> moHierarchyBranch;
+
+    /* PRS */ sal_Int32 mnCustomAngle;
+    /* PRS */ sal_Int32 mnPercentageNeighbourWidth;
+    /* PRS */ sal_Int32 mnPercentageNeighbourHeight;
+    /* PRS */ sal_Int32 mnPercentageOwnWidth;
+    /* PRS */ sal_Int32 mnPercentageOwnHeight;
+    /* PRS */ sal_Int32 mnIncludeAngleScale;
+    /* PRS */ sal_Int32 mnRadiusScale;
+    /* PRS */ sal_Int32 mnWidthScale;
+    /* PRS */ sal_Int32 mnHeightScale;
+    /* PRS */ sal_Int32 mnWidthOverride;
+    /* PRS */ sal_Int32 mnHeightOverride;
+    /* PRS */ sal_Int32 mnLayoutStyleCount;
+    /* PRS */ sal_Int32 mnLayoutStyleIndex;
+
+    /* PLV */ bool mbOrgChartEnabled : 1;
+    /* PLV */ bool mbBulletEnabled : 1;
+    /* PRS */ bool mbCoherent3DOffset : 1;
+    /* PRS */ bool mbCustomHorizontalFlip : 1;
+    /* PRS */ bool mbCustomVerticalFlip : 1;
+    /* PRS */ bool mbCustomText : 1;
+    /* PRS */ bool mbIsPlaceholder : 1;
 
     void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
 };
 
-void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList);
+void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint);
 typedef std::vector< Point >        Points;
 
 /** Snippet of Diagram ModelData for Diagram-defining data undo/redo
@@ -166,6 +171,7 @@ protected:
     // Make constructor protected to signal that this anyway pure virtual class
     // shall not be incarnated - target to use is oox::drawingml::DiagramData_oox
     DiagramData_svx();
+    explicit DiagramData_svx(DiagramData_svx const& rSource);
 
 public:
     // access associated SdrObjGroup/XShape/RootShape
@@ -178,7 +184,9 @@ public:
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
     // dump to readable format
+#ifdef DBG_UTIL
     virtual void dump() const = 0;
+    #endif
 
     // read accesses
     Connections& getConnections() { return maConnections; }

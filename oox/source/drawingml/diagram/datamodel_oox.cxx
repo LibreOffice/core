@@ -129,7 +129,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
         rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(sax_fastparser::FastSerializerHelper::createAttrList());
 
         pAttributeList->add(XML_modelId, rPoint.msModelId);
-        addTypeConstantToFastAttributeList(rPoint.mnXMLType, pAttributeList);
+        addTypeConstantToFastAttributeList(rPoint.mnXMLType, pAttributeList, true);
         if (!rPoint.msCnxId.isEmpty())
             pAttributeList->add(XML_cxnId, rPoint.msCnxId);
         rTarget->startElementNS(XML_dgm, XML_pt, pAttributeList);
@@ -212,9 +212,13 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
 
         if (bWriteFill)
         {
+            rTarget->startElementNS(XML_dgm, XML_spPr);
+
             DrawingML aTempML(rTarget, pOriginalFB);
             aTempML.setDiagaramExport(true);
             aTempML.WriteFill( xProps, xAssociatedShape->getSize());
+
+            rTarget->endElementNS(XML_dgm, XML_spPr);
         }
         else
         {
@@ -274,7 +278,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
     {
         aDspLine += u"relId=\""_ustr + rDrawingRelId + u"\" "_ustr;
     }
-    aDspLine += u"minVer=\""_ustr + aNsDml + u"\"/>"_ustr;
+    aDspLine += u"minVer=\""_ustr + aNsDmlDiagram + u"\"/>"_ustr;
     rTarget->write(aDspLine);
     rTarget->endElementNS(XML_a, XML_ext);
     rTarget->endElementNS(XML_dgm, XML_extLst);
@@ -289,38 +293,64 @@ DiagramData_oox::DiagramData_oox()
 {
 }
 
+DiagramData_oox::DiagramData_oox(DiagramData_oox const& rSource)
+: svx::diagram::DiagramData_svx(rSource)
+, mpBackgroundShapeFillProperties()
+, maPointShapeMap()
+{
+}
+
 DiagramData_oox::~DiagramData_oox()
 {
 }
 
+#ifdef DBG_UTIL
 static void Connection_dump(const svx::diagram::Connection& rConnection)
 {
     SAL_INFO(
         "oox.drawingml",
-        "cnx modelId " << rConnection.msModelId << ", srcId " << rConnection.msSourceId << ", dstId "
+        "  CNX: modelId " << rConnection.msModelId << ", srcId " << rConnection.msSourceId << ", dstId "
             << rConnection.msDestId << ", parTransId " << rConnection.msParTransId << ", presId "
             << rConnection.msPresId << ", sibTransId " << rConnection.msSibTransId << ", srcOrd "
             << rConnection.mnSourceOrder << ", dstOrd " << rConnection.mnDestOrder);
 }
 
-static void Point_dump(const svx::diagram::Point& rPoint, const Shape* pShape)
+static void Point_dump(const svx::diagram::Point& rPoint, const uno::Reference<drawing::XShape>& rXShape)
 {
-    SAL_INFO(
-        "oox.drawingml",
-        "pt text " << pShape << ", cnxId " << rPoint.msCnxId << ", modelId "
-            << rPoint.msModelId << ", type " << rPoint.mnXMLType);
+    SAL_INFO("oox.drawingml", "PT: " << rXShape.is() << ", cnxId " << rPoint.msCnxId << ", modelId " << rPoint.msModelId << ", type " << rPoint.mnXMLType);
+
+    SAL_INFO("oox.drawingml", "  PRS_0: " << rPoint.msColorTransformCategoryId << "," << rPoint.msColorTransformTypeId << "," << rPoint.msLayoutCategoryId << "," << rPoint.msLayoutTypeId << "," << rPoint.msPlaceholderText);
+    SAL_INFO("oox.drawingml", "  PRS_1: " << rPoint.msPresentationAssociationId << "," << rPoint.msPresentationLayoutName << "," << rPoint.msPresentationLayoutStyleLabel << "," << rPoint.msQuickStyleCategoryId << "," << rPoint.msQuickStyleTypeId);
+    SAL_INFO("oox.drawingml", "  PRS_2: " << rPoint.mnCustomAngle << "," << rPoint.mnPercentageNeighbourWidth << "," << rPoint.mnPercentageNeighbourHeight << "," << rPoint.mnPercentageOwnWidth << "," << rPoint.mnPercentageOwnHeight);
+    SAL_INFO("oox.drawingml", "  PRS_3: " << rPoint.mnIncludeAngleScale<< rPoint.mnRadiusScale << "," << rPoint.mnWidthScale << "," << rPoint.mnHeightScale << "," << rPoint.mnWidthOverride << "," << rPoint.mnHeightOverride << "," <<  rPoint.mnLayoutStyleCount << "," << rPoint.mnLayoutStyleIndex);
+    SAL_INFO("oox.drawingml", "  PRS_4: " << rPoint.mbCoherent3DOffset << "," << rPoint.mbCustomHorizontalFlip << "," << rPoint.mbCustomVerticalFlip << "," << rPoint.mbCustomText << "," << rPoint.mbIsPlaceholder);
+
+    SAL_INFO("oox.drawingml", "  PLV_0: " << rPoint.msResizeHandles << "," << rPoint.mnMaxChildren << "," << rPoint.mnPreferredChildren << "," << rPoint.mnDirection << "," << rPoint.mbOrgChartEnabled << "," << rPoint.mbBulletEnabled);
+    SAL_INFO("oox.drawingml", "  PLV_1: " << (rPoint.moHierarchyBranch.has_value() ? rPoint.moHierarchyBranch.value() : 0));
+
 }
 
 void DiagramData_oox::dump() const
 {
-    SAL_INFO("oox.drawingml", "Dgm: DiagramData_oox # of cnx: " << maConnections.size() );
+    size_t a = maConnections.size();
+    SAL_INFO("oox.drawingml", "Dgm: DiagramData_oox # of cnx: " << a );
+    a = 0;
     for (const auto& rConnection : maConnections)
+    {
+        SAL_INFO("oox.drawingml", "cnx #" << a++ << ":");
         Connection_dump(rConnection);
+    }
 
-    SAL_INFO("oox.drawingml", "Dgm: DiagramData_oox # of pt: " << maPoints.size() );
+    a = maPoints.size();
+    SAL_INFO("oox.drawingml", "Dgm: DiagramData_oox # of pt: " << a );
+    a = 0;
     for (const auto& rPoint : maPoints)
-        Point_dump(rPoint, getOrCreateAssociatedShape(rPoint));
+    {
+        SAL_INFO("oox.drawingml", "pt #" << a++ << ":");
+        Point_dump(rPoint, getXShapeByModelID(rPoint.msModelId));
+    }
 }
+#endif
 
 void DiagramData_oox::buildDiagramDataModel(bool bClearOoxShapes)
 {

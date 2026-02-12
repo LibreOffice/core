@@ -202,6 +202,20 @@ struct SdrObject::Impl
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
+void SdrObject::setDiagramDataModelID(const OUString& rID)
+{
+    if (!m_pPlusData)
+        ImpForcePlusData();
+    m_pPlusData->aObjTitle = rID;
+}
+
+const OUString& SdrObject::getDiagramDataModelID() const
+{
+    if(m_pPlusData)
+        return m_pPlusData->aObjTitle;
+    return EMPTY_OUSTRING;
+}
+
 bool SdrObject::isDiagram() const
 {
     return false;
@@ -367,7 +381,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     , mpSvxShape( nullptr )
     , mbDoNotInsertIntoPageAutomatically(false)
     , msHyperlink()
-    , msDiagramDataModelID()
 {
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
@@ -405,7 +418,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     , mpSvxShape( nullptr )
     , mbDoNotInsertIntoPageAutomatically(false)
     , msHyperlink()
-    , msDiagramDataModelID()
 {
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
