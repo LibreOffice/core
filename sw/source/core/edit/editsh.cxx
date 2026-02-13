@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 #include <hintids.hxx>
 #include <osl/diagnose.h>
 #include <vcl/commandevent.hxx>
@@ -27,6 +29,9 @@
 #include <i18nutil/guessparadirection.hxx>
 #include <editeng/autodiritem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <tools/json_writer.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sax/tools/converter.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
@@ -59,6 +64,7 @@
 #include <SwNodeNum.hxx>
 #include <unocrsr.hxx>
 #include <calbck.hxx>
+#include <docsh.hxx>
 
 using namespace com::sun::star;
 
@@ -934,11 +940,57 @@ sal_Int32 SwEditShell::GetLineCount()
     return nRet;
 }
 
+namespace
+{
+/// Write document compare metadata about rDoc into rWriter.
+void WriteCompareDocMetadata(tools::JsonWriter& rWriter, const SwDoc& rDoc)
+{
+    const SwDocShell* pDocShell = rDoc.GetDocShell();
+    if (!pDocShell)
+    {
+        return;
+    }
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(),
+                                                               uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+    rWriter.put("modifiedBy", xDocProps->getModifiedBy());
+
+    util::DateTime aModificationDate = xDocProps->getModificationDate();
+    OUStringBuffer aBuffer;
+    sax::Converter::convertDateTime(aBuffer, aModificationDate, nullptr, true);
+    rWriter.put("modificationDate", aBuffer.makeStringAndClear());
+}
+}
+
 tools::Long SwEditShell::CompareDoc( const SwDoc& rDoc )
 {
+    SwDoc* pThisDoc = GetDoc();
     StartAllAction();
-    tools::Long nRet = GetDoc()->CompareDoc( rDoc );
+    tools::Long nRet = pThisDoc->CompareDoc( rDoc );
     EndAllAction();
+
+    SfxViewShell* pSfxViewShell = GetSfxViewShell();
+    if (pSfxViewShell && pSfxViewShell->getLibreOfficeKitViewCallback())
+    {
+        tools::JsonWriter aWriter;
+        aWriter.put("commandName", "CompareDocumentsProperties");
+        {
+            auto aState = aWriter.startNode("state");
+            auto aMetadata = aWriter.startNode("metadata");
+            {
+                auto aDocument = aWriter.startNode("otherDocument");
+                WriteCompareDocMetadata(aWriter, rDoc);
+            }
+            {
+                auto aDocument = aWriter.startNode("thisDocument");
+                WriteCompareDocMetadata(aWriter, *pThisDoc);
+            }
+        }
+        OString aPayload = aWriter.finishAndGetAsOString();
+        pSfxViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+    }
+
     return nRet;
 }
 
