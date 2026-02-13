@@ -2043,8 +2043,7 @@ RTFError RTFTokenizer::resolveParse()
                     {
                         SAL_INFO("writerfilter.rtf", __func__ << ": hex internal state");
                         // Assume that \'<number><junk> means \'0<number>.
-                        if (rtl::isAsciiDigit(static_cast<unsigned char>(ch))
-                            || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))
+                        if (rtl::isAsciiHexDigit(static_cast<unsigned char>(ch)))
                         {
                             b = b << 4;
                             sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
