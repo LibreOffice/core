@@ -2723,12 +2723,14 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
     }
 
-    if (!m_pContentControl->GetDataBindingPrefixMappings().isEmpty() || !m_pContentControl->GetDataBindingXpath().isEmpty() || !m_pContentControl->GetDataBindingStoreItemID().isEmpty())
+    const OUString sID = m_pContentControl->GetDataBindingStoreItemID();
+    if (!sID.isEmpty() || !m_pContentControl->GetDataBindingPrefixMappings().isEmpty()
+        || !m_pContentControl->GetDataBindingXpath().isEmpty())
     {
         m_pSerializer->singleElementNS( XML_w, XML_dataBinding,
             FSNS(XML_w, XML_prefixMappings), m_pContentControl->GetDataBindingPrefixMappings(),
             FSNS(XML_w, XML_xpath), m_pContentControl->GetDataBindingXpath(),
-            FSNS(XML_w, XML_storeItemID), m_pContentControl->GetDataBindingStoreItemID());
+            FSNS(XML_w, XML_storeItemID), sax_fastparser::UseIf(sID, !sID.isEmpty()));
     }
 
     if (m_pContentControl->GetTabIndex())

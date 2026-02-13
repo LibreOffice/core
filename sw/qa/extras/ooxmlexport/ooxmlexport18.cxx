@@ -608,8 +608,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151912)
     assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id", "val", u"1802566103");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf147724)
 {
+    skipValidation(); // ERROR Attribute 'storeItemID' must appear on element 'w:dataBinding'.
+    createSwDoc("tdf147724.docx");
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
@@ -619,6 +621,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
     // There 2 variants possible, both are acceptable
     OUString sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]");
     CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
+
+    saveAndReload(TestFilter::DOCX);
+    pLayout = parseLayoutDump();
+
+    // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]", u"Placeholder -> *ABC*");
+
+    // This SDT has no storage id, it is not an error, but content can be taken from any suitable XML
+    // There 2 variants possible, both are acceptable
+    sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]");
+    CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:p/w:sdt/w:sdtPr/w:dataBinding", 2); // two w:sdt's with w:dataBinding
+    assertXPath(pXmlDoc, "//w:p[1]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID",
+                u"{4E8A9591-F074-446B-902F-511FF79C122F}");
+    // empty storeItemID's must not be specified: MS Word considers those document corrupt
+    assertXPathNoAttribute(pXmlDoc, "//w:p[2]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130782, "chart.docx")
