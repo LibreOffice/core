@@ -2452,6 +2452,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf170565_empty_functions)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", u"SUM(0)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[1]/x:f", u"MIN(#VALUE!)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[1]/x:f", u"MAX(#VALUE!)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[1]/x:f", u"AVERAGE(#DIV/0!)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[5]/x:c[1]/x:f", u"COUNT(\"\")");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[6]/x:c[1]/x:f", u"PRODUCT(0)");
     // Further checks to ensure there are no regressions
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", u"SUM(,)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[3]/x:f", u"SUM(100)");
@@ -2462,6 +2465,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf170565_empty_functions)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[2]/x:f", u"MAX(,)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[3]/x:f", u"MAX(-100)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[4]/x:f", u"MAX(C1:C3)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]/x:f", u"AVERAGE(,)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[5]/x:c[2]/x:f", u"COUNT(,)");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[6]/x:c[2]/x:f", u"PRODUCT(,)");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
