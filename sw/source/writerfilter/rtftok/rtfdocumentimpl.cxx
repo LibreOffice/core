@@ -1379,6 +1379,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
             // note: apparently \'0d\'0a is interpreted as 2 breaks, not 1
             if ((ch == '\r' || ch == '\n')
                 && m_aStates.top().getDestination() != Destination::DOCCOMM
+                && m_aStates.top().getDestination() != Destination::DOCVAR
                 && m_aStates.top().getDestination() != Destination::LEVELNUMBERS
                 && m_aStates.top().getDestination() != Destination::LEVELTEXT)
             {
