@@ -1077,9 +1077,12 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
 {
     switch (eOp)
     {
+        case ocAverage:
+        case ocCount:
         case ocIf:
         case ocMax:
         case ocMin:
+        case ocProduct:
         case ocSum:
 
         case ocExternal:
@@ -1213,11 +1216,25 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         }
                         break;
 
+                    case ocCount:
+                        if (mnCurArg == 0 && mbEmpty)
+                        {
+                            // Excel expects at least one parameter in COUNT function
+                            pNewArr->AddString(svl::SharedString::getEmptyString());
+                        }
+                        break;
+
+                    case ocAverage:
+                        if (mnCurArg == 0 && mbEmpty)
+                            pNewArr->AddError(FormulaError::DivisionByZero);
+                        break;
+
+                    case ocProduct:
                     case ocSum:
                         if ( mnCurArg == 0 && mbEmpty )
                         {
-                            // Excel needs at least one parameter in SUM function
-                            pNewArr->AddDouble( 0.0 );      // SUM() = 0
+                            // Excel needs at least one parameter in aggregate functions
+                            pNewArr->AddDouble( 0.0 );
                         }
                         break;
 
