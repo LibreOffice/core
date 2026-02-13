@@ -527,13 +527,13 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
     return false;
 }
 
-static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
+static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent, const bool bIsBlankWidthStringEmpty = true )
 {
     bool bQuote = true;
     sal_Int32 nLength = rContent.getLength();
     const SvXMLStylesTokens nFormatType = rParent.GetType();
 
-    if (nFormatType != SvXMLStylesTokens::BOOLEAN_STYLE &&
+    if (nFormatType != SvXMLStylesTokens::BOOLEAN_STYLE && bIsBlankWidthStringEmpty &&
             ((nLength == 1 && lcl_ValidChar( rContent[0], rParent)) ||
              (nLength == 2 &&
               ((rContent[0] == ' ' && rContent[1] == '-') ||
@@ -544,6 +544,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  Or space followed by minus (used in currency formats) that would
         //  lead to almost duplicated formats with built-in formats just with
         //  the difference of quotes.
+        //  tdf#170670: except if it is inside a blank width string
         bQuote = false;
     }
     else if ( nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE && nLength > 1 )
@@ -971,7 +972,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
             }
             if ( !aContent.isEmpty() )
             {
-                lcl_EnquoteIfNecessary( aContent, rParent );
+                lcl_EnquoteIfNecessary( aContent, rParent, sBlankWidthString.isEmpty() );
                 if ( !sBlankWidthString.isEmpty() )
                 {
                     lcl_InsertBlankWidthChars( sBlankWidthString, aContent );

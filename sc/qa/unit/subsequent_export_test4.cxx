@@ -1684,6 +1684,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testBlankWidthCharacter)
     // save to XLSX and reload
     saveAndReload(TestFilter::XLSX);
     lcl_TestNumberFormat(*getScDoc(), u"_-?0;-?0;_-?0;@"_ustr);
+
+    createScDoc("ods/tdf170670-Blank-width-char.ods");
+
+    // save to ODS and reload
+    saveAndReload(TestFilter::ODS);
+    lcl_TestNumberFormat(*getScDoc(), u"[>0]#,##0_);[<0](#,##0);\"-\"_)"_ustr);
+
+    // save to XLSX and reload
+    saveAndReload(TestFilter::XLSX);
+    lcl_TestNumberFormat(*getScDoc(), u"#,##0_);\\(#,##0\\);-_)"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testEmbeddedTextInDecimal)
