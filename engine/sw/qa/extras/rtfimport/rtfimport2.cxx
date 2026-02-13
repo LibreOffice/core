@@ -1100,6 +1100,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167254)
     // It must not crash on import
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf169298_CrLfDontSpillToDocumentBody)
+{
+    // Given a document with a document variable value contailing foo\'0d\'0abar
+    createSwDoc("tdf169298.rtf");
+
+    // The sequence must not cause newlines to appear in the beginning of the document text.
+
+    // Before fix, this was 5:
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    // Before this paragraph, there were two empty paragraphs:
+    CPPUNIT_ASSERT_EQUAL(u"This document contains some document variables:"_ustr,
+                         getParagraph(1)->getString());
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(2)->getString());
+
+    // It is questionable what *this* paragraph should display. Currently we strip all the codes
+    // below 0x20, and refresh the variable on document load. Word replaces almost all such codes
+    // with '_', except \'0a and \'0d, which it replaces with characters 'a' and 'd'; the variable
+    // value would become "boodabar". But Word also uses cached field expansion; so it will show
+    // the previous "foo{newline}bar", until refreshed.
+    // I comment out the last line test because of that.
+    // CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, getParagraph(3)->getString());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
