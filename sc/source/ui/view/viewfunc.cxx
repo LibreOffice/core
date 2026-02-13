@@ -1096,7 +1096,27 @@ const ScPatternAttr* ScViewFunc::GetSelectionPattern()
 
         // copy sheet selection
         aMark.SetMarkArea( ScRange( nCol, nRow, nTab ) );
-        const ScPatternAttr* pAttr = rDoc.GetSelectionPattern( aMark );
+
+        // We want to get the state of the sheet view, so we need to convert what is marked
+        if (GetViewData().GetSheetViewID() != sc::DefaultSheetViewID)
+        {
+            SCTAB nDefaultViewTab = GetViewData().GetTabNumber();
+            SCTAB nSheetViewTab = GetViewData().CurrentTabForData();
+
+            if (nDefaultViewTab == aMark.GetArea().aStart.Tab()
+                && nDefaultViewTab == aMark.GetArea().aEnd.Tab())
+            {
+                aMark.SetAreaTab(nSheetViewTab);
+            }
+
+            if (aMark.GetTableSelect(nDefaultViewTab))
+            {
+                aMark.SelectTable(nDefaultViewTab, false);
+                aMark.SelectTable(nSheetViewTab, true);
+            }
+        }
+
+        const ScPatternAttr* pAttr = rDoc.GetSelectionPattern(aMark);
         return pAttr;
     }
 }

@@ -42,7 +42,7 @@ bool ApplyAttributesOperation::runImplementation()
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark = mrMark;
+    ScMarkData aMark = convertMark(mrMark);
 
     bool bImportingXML = rDoc.IsImportingXML();
     bool bImportingXLSX = rDoc.IsImportingXLSX();
@@ -57,6 +57,7 @@ bool ApplyAttributesOperation::runImplementation()
         return false;
     }
 
+    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     ScDocShellModificator aModificator(mrDocShell);
 
     //! Border
@@ -98,6 +99,7 @@ bool ApplyAttributesOperation::runImplementation()
         else if (nExtFlags & SC_PF_LINES)
             ScDocFunc::PaintAbove(mrDocShell, aMultiRange); // because of lines above the range
 
+        aSheetViewTester.sync();
         aModificator.SetDocumentModified();
     }
 
@@ -107,7 +109,7 @@ bool ApplyAttributesOperation::runImplementation()
 ApplyAttributesWithChangedRangeOperation::ApplyAttributesWithChangedRangeOperation(
     ScDocShell& rDocShell, const ScMarkData& rMark, bool bMultiMarked,
     const ScPatternAttr& rPattern, sal_uInt16 nExtFlags, bool bApi)
-    : Operation(OperationType::ApplyAttributes, true, bApi)
+    : Operation(OperationType::ApplyAttributesWithChangedRange, true, bApi)
     , mrDocShell(rDocShell)
     , mrMark(rMark)
     , mrPattern(rPattern)
@@ -128,8 +130,9 @@ bool ApplyAttributesWithChangedRangeOperation::runImplementation()
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark = mrMark;
+    ScMarkData aMark = convertMark(mrMark);
 
+    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     ScDocShellModificator aModificator(mrDocShell);
 
     const ScRange& aMarkRange = aMark.GetMultiMarkArea();
@@ -175,6 +178,8 @@ bool ApplyAttributesWithChangedRangeOperation::runImplementation()
 
     rDoc.ApplySelectionPattern(mrPattern, aMark, pEditDataArray);
 
+    aSheetViewTester.sync();
+
     mrDocShell.PostPaint(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
                          PaintPartFlags::Grid, mnExtFlags | SC_PF_TESTMERGE);
     mrDocShell.UpdateOle(*pViewData);
@@ -188,7 +193,7 @@ ApplyAttributesToCellOperation::ApplyAttributesToCellOperation(ScDocShell& rDocS
                                                                ScAddress const& rPosition,
                                                                const ScPatternAttr& rPattern,
                                                                sal_uInt16 nExtFlags, bool bApi)
-    : Operation(OperationType::ApplyAttributes, true, bApi)
+    : Operation(OperationType::ApplyAttributesToCell, true, bApi)
     , mrDocShell(rDocShell)
     , mrPosition(rPosition)
     , mrPattern(rPattern)
@@ -207,8 +212,9 @@ bool ApplyAttributesToCellOperation::runImplementation()
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScAddress aPosition = mrPosition;
+    ScAddress aPosition = convertAddress(mrPosition);
 
+    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     ScDocShellModificator aModificator(mrDocShell);
 
     SCCOL nCol = aPosition.Col();
@@ -243,6 +249,8 @@ bool ApplyAttributesToCellOperation::runImplementation()
         mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
     }
     pOldPat.reset(); // is copied in undo (Pool)
+
+    aSheetViewTester.sync();
 
     mrDocShell.PostPaint(nCol, nRow, nTab, nCol, nRow, nTab, PaintPartFlags::Grid,
                          mnExtFlags | SC_PF_TESTMERGE);
