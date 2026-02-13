@@ -88,6 +88,47 @@ protected:
         return aString;
     }
 
+    static OUString getTextWeight(ScDocument* pDocument, SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+                                  SCTAB nTab)
+    {
+        OUString aString;
+
+        size_t nSize = nEndRow - nStartRow + 1;
+
+        bool bFirst = true;
+        vcl::Font aFont;
+        const ScPatternAttr* pPattern;
+        for (size_t nIndex = 0; nIndex < nSize; nIndex++)
+        {
+            pPattern = pDocument->GetPattern(nCol, SCROW(nStartRow + nIndex), nTab);
+            pPattern->fillFontOnly(aFont);
+            OUString aWeight;
+
+            switch (aFont.GetWeight())
+            {
+                case WEIGHT_NORMAL:
+                    aWeight = "N";
+                    break;
+                case WEIGHT_BOLD:
+                    aWeight = "B";
+                    break;
+                default:
+                    aWeight = "?";
+                    break;
+            }
+
+            if (bFirst)
+            {
+                bFirst = false;
+                aString = u"\""_ustr + aWeight + u"\""_ustr;
+            }
+            else
+                aString += u", \""_ustr + aWeight + u"\""_ustr;
+        }
+
+        return aString;
+    }
+
     void gotoCell(std::u16string_view aCellAddress)
     {
         dispatchCommand(
@@ -110,6 +151,12 @@ protected:
     {
         gotoCell(aCellAddress);
         dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    }
+
+    void setCellBold(std::u16string_view aCellAddress)
+    {
+        gotoCell(aCellAddress);
+        dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
     }
 };
 
@@ -1150,6 +1197,171 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultAndSheetView_Fo
         // so we get { u"1", u"3", u"5", u"6", u"7", u"44" }.
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"6", u"7", u"44" }),
                              getValues(mpTabViewSheetView, 0, 1, 6));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultView_Attributes)
+{
+    // Instead of the number, we set the attribute
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Create new sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to Sheet view and set "bold" text attribute to all cells in the auto filter one by one
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // Current font weight state
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A4 in sheet view -> A5 in default view
+        setCellBold(u"A4");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"B", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A2 in sheet view -> A4 in default view
+        setCellBold(u"A2");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"N", u"B", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A3 in sheet view -> A3 in default view
+        setCellBold(u"A3");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A5 in sheet view -> A2 in default view
+        setCellBold(u"A5");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set range A4:A5, which are A2, A5 in default view
+        setCellBold(u"A4:A5");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"B", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultAndSheetView_Attributes)
+{
+    // Instead of the number, we set the attribute
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to Sheet view and set "bold" text attribute to all cells in the auto filter one by one
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // Current font weight state
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A5 in sheet view -> A2 in default view
+        setCellBold(u"A5");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A4 in sheet view -> A3 in default view
+        setCellBold(u"A4");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A3 in sheet view -> A4 in default view
+        setCellBold(u"A3");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Set A2 in sheet view -> A4 in default view
+        setCellBold(u"A2");
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"B" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
     }
 }
 

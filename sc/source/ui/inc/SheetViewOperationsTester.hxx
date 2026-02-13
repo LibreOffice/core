@@ -20,6 +20,8 @@ enum class OperationType
 {
     Unknown,
     ApplyAttributes,
+    ApplyAttributesWithChangedRange,
+    ApplyAttributesToCell,
     DeleteContent,
     DeleteCell,
     TransliterateText,

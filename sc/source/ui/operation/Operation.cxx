@@ -44,29 +44,28 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
     ScViewData* pViewData = ScDocShell::GetViewData();
 
     std::shared_ptr<SheetView> pSheetView = getCurrentSheetView(pViewData);
+
+    // We get a valid pSheetView if we currently are in a sheet view, otherwise we don't need to convert
     if (!pSheetView)
         return rAddress;
 
     ScAddress aAddress = rAddress;
-    SCTAB nTab = aAddress.Tab();
 
     // Change the tab number if it is the one from sheet view
-    if (pViewData->CurrentTabForData() == nTab)
-        nTab = pViewData->GetTabNumber();
-    aAddress.SetTab(nTab);
+    if (aAddress.Tab() == pViewData->CurrentTabForData())
+        aAddress.SetTab(pViewData->GetTabNumber());
 
-    std::optional<SortOrderReverser> const& oSortOrder = pSheetView->getSortOrder();
-    if (!oSortOrder)
+    // Should be the default view tab
+    if (aAddress.Tab() != pViewData->GetTabNumber())
         return aAddress;
 
     SCCOL nColumn = aAddress.Col();
     SCROW nRow = aAddress.Row();
-
-    if (pViewData->GetTabNumber() != nTab)
-        return aAddress;
+    SCTAB nTab = aAddress.Tab();
 
     SCROW nReversedRow = pSheetView->reverseSortingToDefaultView(nRow, nColumn);
 
+    // Check if there was a change
     if (nReversedRow == nRow)
         return aAddress;
 
@@ -81,10 +80,6 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
 
     // We get a valid pSheetView if we currently are in a sheet view, otherwise we don't need to convert
     if (!pSheetView)
-        return rMarkData;
-
-    std::optional<SortOrderReverser> const& oSortOrder = pSheetView->getSortOrder();
-    if (!oSortOrder)
         return rMarkData;
 
     ScMarkData aNewMark(rMarkData);
@@ -111,28 +106,57 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     // Take sorting into account when we convert to default view
     if (aNewMark.GetTableSelect(nDefaultViewTab))
     {
-        std::vector<std::pair<SCCOL, SCROW>> aMarkedCells;
-        SortOrderInfo const& rSortInfo = oSortOrder->maSortInfo;
-        for (SCROW nRow = rSortInfo.mnFirstRow; nRow <= rSortInfo.mnLastRow; ++nRow)
+        std::optional<SortOrderReverser> const& oSortOrder = pSheetView->getSortOrder();
+        std::optional<ReorderParam> const& oReorderParams = pSheetView->getReorderParameters();
+        if (oSortOrder || oReorderParams)
         {
-            for (SCROW nColumn = rSortInfo.mnFirstColumn; nColumn <= rSortInfo.mnLastColumn;
-                 ++nColumn)
+            std::vector<std::pair<SCCOL, SCROW>> aMarkedCells;
+
+            SCROW nRowStart = -1;
+            SCROW nRowEnd = -1;
+            SCCOL nColumnStart = -1;
+            SCCOL nColumnEnd = -1;
+
+            if (oSortOrder)
             {
-                if (aNewMark.IsCellMarked(nColumn, nRow))
+                SortOrderInfo const& rSortInfo = oSortOrder->maSortInfo;
+                nRowStart = rSortInfo.mnFirstRow;
+                nRowEnd = rSortInfo.mnLastRow;
+                nColumnStart = rSortInfo.mnFirstColumn;
+                nColumnEnd = rSortInfo.mnLastColumn;
+            }
+            else
+            {
+                ScRange const& aSortRange = oReorderParams->maSortRange;
+                nRowStart = aSortRange.aStart.Row();
+                nRowEnd = aSortRange.aEnd.Row();
+                nColumnStart = aSortRange.aStart.Col();
+                nColumnEnd = aSortRange.aEnd.Col();
+            }
+
+            for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
+            {
+                for (SCROW nColumn = nColumnStart; nColumn <= nColumnEnd; ++nColumn)
                 {
-                    ScRange aRange(nColumn, nRow, nDefaultViewTab, nColumn, nRow, nDefaultViewTab);
-                    aNewMark.SetMultiMarkArea(aRange, false);
-                    aMarkedCells.emplace_back(nColumn, nRow);
+                    if (aNewMark.IsCellMarked(nColumn, nRow))
+                    {
+                        // unmark the cell here, but remember which cell it was
+                        ScRange aRange(nColumn, nRow, nDefaultViewTab, nColumn, nRow,
+                                       nDefaultViewTab);
+                        aNewMark.SetMultiMarkArea(aRange, false);
+                        aMarkedCells.emplace_back(nColumn, nRow);
+                    }
                 }
             }
-        }
-        for (auto & [ nColumn, nRow ] : aMarkedCells)
-        {
-            SCROW nReversedRow = pSheetView->reverseSortingToDefaultView(nRow, nColumn);
-            ScRange aRange(nColumn, nReversedRow, nDefaultViewTab, nColumn, nReversedRow,
-                           nDefaultViewTab);
-            aNewMark.SetMultiMarkArea(aRange, true);
-            bChanged = true;
+            for (auto & [ nColumn, nRow ] : aMarkedCells)
+            {
+                // reverse the row and mark the cell again
+                SCROW nReversedRow = pSheetView->reverseSortingToDefaultView(nRow, nColumn);
+                ScRange aRange(nColumn, nReversedRow, nDefaultViewTab, nColumn, nReversedRow,
+                               nDefaultViewTab);
+                aNewMark.SetMultiMarkArea(aRange, true);
+                bChanged = true;
+            }
         }
     }
 

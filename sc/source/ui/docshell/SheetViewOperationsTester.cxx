@@ -29,6 +29,10 @@ constexpr std::string_view getOperationName(OperationType eOperation)
             return "Unknown";
         case OperationType::ApplyAttributes:
             return "ApplyAttributes";
+        case OperationType::ApplyAttributesWithChangedRange:
+            return "ApplyAttributesWithChangedRange";
+        case OperationType::ApplyAttributesToCell:
+            return "ApplyAttributesToCell";
         case OperationType::DeleteContent:
             return "DeleteContent";
         case OperationType::DeleteCell:
@@ -155,21 +159,16 @@ bool SheetViewOperationsTester::doesUnsync(OperationType /*eOperationType*/) { r
 void SheetViewOperationsTester::sync()
 {
     if (!mpViewData)
-    {
         return;
-    }
 
     auto& rDocument = mpViewData->GetDocument();
     SCTAB nTab = mpViewData->GetTabNumber();
 
     if (rDocument.IsSheetViewHolder(nTab))
-    {
         return;
-    }
 
     std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nTab);
-
-    if (pManager->isEmpty())
+    if (!pManager || pManager->isEmpty())
         return;
 
     for (std::shared_ptr<SheetView> const& pSheetView : pManager->getSheetViews())
