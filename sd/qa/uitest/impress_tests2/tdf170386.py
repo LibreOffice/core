@@ -28,8 +28,7 @@ class tdf170386(UITestCase):
         # object used to collect text properties on save wasn't notified on the changes that
         # happened when the model was locked.
 
-        with tempfile.NamedTemporaryFile(suffix=".odg", delete_on_close=False) as temp:
-            temp.close()
+        with tempfile.NamedTemporaryFile(suffix=".odg") as temp:
             url = pathlib.Path(temp.name).as_uri()
 
             with self.ui_test.create_doc_in_start_center("draw") as xModel:
