@@ -612,7 +612,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Point
     if (bEndParaSdt || (m_aParagraphSdt.m_bStartedSdt && m_bHadSectPr))
     {
         // This is the common case: "close sdt before the current paragraph" was requested by the next paragraph.
-        m_aParagraphSdt.EndSdtBlock(m_pSerializer);
+        EndParaSdtBlock();
     }
     m_bHadSectPr = false;
 
@@ -1301,7 +1301,7 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
         const bool bOldStartedSdt = m_aParagraphSdt.m_bStartedSdt;
         m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
         if (!bOldStartedSdt && m_aParagraphSdt.m_bStartedSdt)
-            m_aParagraphSdt.EndSdtBlock(m_pSerializer);
+            EndParaSdtBlock();
         m_aFramePr.SetFrame(nullptr);
     }
 
