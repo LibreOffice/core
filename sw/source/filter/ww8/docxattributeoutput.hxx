@@ -162,15 +162,19 @@ class SdtBlockHelper
 {
 public:
     SdtBlockHelper()
-        : m_nId(0)
-        , m_bStartedSdt(false)
+        : m_bStartedSdt(false)
         , m_bShowingPlaceHolder(false)
         , m_nTabIndex(0)
-        , m_nSdtPrToken(0)
     {}
 
-    sal_Int32 m_nId;
+    // m_bStartedSdt tracks whether startElementNS(XML_w, XML_sdt) has been written
     bool m_bStartedSdt;
+    // m_oSdtPrToken is a key GrabBag value, with a two-fold purpose:
+    // - the absence of m_oSdtPrToken also means that (XML_w, XML_sdt) should not be written
+    // - it describes the type of content control: richText(0), plainText, checkbox, dropdown...
+    std::optional<sal_Int32> m_oSdtPrToken;
+    // MS Word (silently) creates a random Id for an Sdt with a missing/zero/non-unique Id
+    std::optional<sal_Int32> m_oId;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenChildren;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenAttributes;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTextAttrs;
@@ -183,7 +187,6 @@ public:
     OUString m_aTag;
     sal_Int32 m_nTabIndex;
     OUString m_aLock;
-    sal_Int32 m_nSdtPrToken; // 0 means either not set, or richText
 
     void clearGrabbagValues();
 

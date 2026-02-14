@@ -772,15 +772,15 @@ void SdtBlockHelper::clearGrabbagValues()
     if (!m_aAppearance.isEmpty())
         m_aAppearance.clear();
     m_bShowingPlaceHolder = false;
-    m_nId = 0;
-    m_nSdtPrToken = 0;
+    m_oId = std::nullopt;
+    m_oSdtPrToken = std::nullopt;
     m_nTabIndex = 0;
 }
 
 void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing)
 {
-    if (!m_nSdtPrToken && !m_pDataBindingAttrs.is() && !m_nId)
-        return;
+    if (!m_oSdtPrToken.has_value())
+        return; // not a full Sdt definition
 
     // sdt start mark
     pSerializer->mark(DocxAttributeOutput::Tag_WriteSdtBlock);
@@ -792,32 +792,32 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
     WriteExtraParams(pSerializer);
 
-    if (m_nSdtPrToken && m_pTokenChildren.is())
+    if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && m_pTokenChildren.is())
     {
         if (!m_pTokenAttributes.is())
-            pSerializer->startElement(m_nSdtPrToken);
+            pSerializer->startElement(*m_oSdtPrToken);
         else
         {
-            pSerializer->startElement(m_nSdtPrToken, detachFrom(m_pTokenAttributes));
+            pSerializer->startElement(*m_oSdtPrToken, detachFrom(m_pTokenAttributes));
         }
 
-        assert(m_nSdtPrToken != FSNS(XML_w, XML_date) && "date is never grabbagged, so SdtPrToken is never set to date");
-        if (/*m_nSdtPrToken == FSNS(XML_w, XML_date) ||*/ m_nSdtPrToken == FSNS(XML_w, XML_docPartObj) || m_nSdtPrToken == FSNS(XML_w, XML_docPartList) || m_nSdtPrToken == FSNS(XML_w14, XML_checkbox)) {
+        assert(m_oSdtPrToken != FSNS(XML_w, XML_date) && "date is never grabbagged, so SdtPrToken is never set to date");
+        if (/* m_oSdtPrToken == FSNS(XML_w, XML_date) ||*/ m_oSdtPrToken == FSNS(XML_w, XML_docPartObj) || m_oSdtPrToken == FSNS(XML_w, XML_docPartList) || m_oSdtPrToken == FSNS(XML_w14, XML_checkbox)) {
             for (auto& it : *m_pTokenChildren)
             {
                 pSerializer->singleElement(it.getToken(), FSNS(XML_w, XML_val), it.toCString());
             }
         }
 
-        pSerializer->endElement(m_nSdtPrToken);
+        pSerializer->endElement(*m_oSdtPrToken);
     }
-    else if (m_nSdtPrToken && !(bRunTextIsOn && bParagraphHasDrawing))
+    else if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && !(bRunTextIsOn && bParagraphHasDrawing))
     {
         if (!m_pTokenAttributes.is())
-            pSerializer->singleElement(m_nSdtPrToken);
+            pSerializer->singleElement(*m_oSdtPrToken);
         else
         {
-            pSerializer->singleElement(m_nSdtPrToken, detachFrom(m_pTokenAttributes));
+            pSerializer->singleElement(*m_oSdtPrToken, detachFrom(m_pTokenAttributes));
         }
     }
 
@@ -844,9 +844,9 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
     if (!m_aTag.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_tag, FSNS(XML_w, XML_val), m_aTag);
 
-    if (m_nId)
+    if (m_oId.has_value() && *m_oId)
     {
-        pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val), OString::number(m_nId));
+        pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val), OString::number(*m_oId));
     }
 
     if (!m_aLock.isEmpty())
@@ -900,7 +900,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
     {
         if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
         {
-            m_nSdtPrToken = FSNS(XML_w14, XML_checkbox);
+            m_oSdtPrToken = FSNS(XML_w14, XML_checkbox);
             uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
@@ -949,7 +949,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             else
             {
                 // We still have w:text, but no attrs
-                m_nSdtPrToken = FSNS(XML_w, XML_text);
+                m_oSdtPrToken = FSNS(XML_w, XML_text);
             }
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPlaceholder_docPart")
@@ -994,8 +994,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
         {
-            if (!(aPropertyValue.Value >>= m_nId))
+            sal_Int32 nId = 0;
+            if (!(aPropertyValue.Value >>= nId))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt id value");
+            else
+                m_oId = nId;
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_tabIndex" && !m_nTabIndex)
         {
@@ -1008,14 +1011,14 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt lock value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
-            m_nSdtPrToken = FSNS(XML_w, XML_citation);
+            m_oSdtPrToken = FSNS(XML_w, XML_citation);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
             aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
         {
             if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
-                m_nSdtPrToken = FSNS(XML_w, XML_docPartObj);
+                m_oSdtPrToken = FSNS(XML_w, XML_docPartObj);
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
-                m_nSdtPrToken = FSNS(XML_w, XML_docPartList);
+                m_oSdtPrToken = FSNS(XML_w, XML_docPartList);
 
             uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
@@ -1038,13 +1041,24 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             }
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
-            m_nSdtPrToken = FSNS(XML_w, XML_equation);
+            m_oSdtPrToken = FSNS(XML_w, XML_equation);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
-            m_nSdtPrToken = FSNS(XML_w, XML_picture);
+            m_oSdtPrToken = FSNS(XML_w, XML_picture);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
-            m_nSdtPrToken = FSNS(XML_w, XML_group);
+            m_oSdtPrToken = FSNS(XML_w, XML_group);
         else
             SAL_WARN("sw.ww8", "GetSdtParamsFromGrabBag unhandled SdtPr grab bag property " << aPropertyValue.Name);
+    }
+
+    // richText does not have a SdtPr token. Provide a zero value if this is a full grabbag Sdt.
+    // Historically, LO round-trips an Sdt if it has an Id, or a dataBinding, or an SdtPrToken.
+    if (!m_oSdtPrToken.has_value())
+    {
+         // MS Word treats richText-with-dataBinding as a plainText content control
+        if (m_pDataBindingAttrs.is())
+            m_oSdtPrToken = FSNS(XML_w, XML_text);
+        else if (m_oId.has_value())
+            m_oSdtPrToken = 0; // indicates richText - no marker is written into SdtPr for richText
     }
 }
 
@@ -1862,10 +1876,12 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     if (m_bEndCharSdt)
     {
         // This is the common case: "close sdt before the current run" was requested by the next run.
+        // This is NOT common anymore. Hardly any runSdt's are grabbagged nowadays,
+        // but yes, if is is grabbagged, then this is the common way that it is closed.
 
         // if another sdt starts in this run, then wait
         // as closing the sdt now, might cause nesting of sdts
-        if (m_aRunSdt.m_nSdtPrToken)
+        if (m_aRunSdt.m_oSdtPrToken.has_value())
             bCloseEarlierSDT = true;
         else
             m_aRunSdt.EndSdtBlock(m_pSerializer);
@@ -2613,10 +2629,10 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
         aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
         aSdtBlock.WriteExtraParams(m_pSerializer);
 
-        if (aSdtBlock.m_nSdtPrToken)
+        if (aSdtBlock.m_oSdtPrToken.has_value() && *aSdtBlock.m_oSdtPrToken)
         {
             // Write <w:text/> or whatsoever from grabbag
-            m_pSerializer->singleElement(aSdtBlock.m_nSdtPrToken);
+            m_pSerializer->singleElement(*aSdtBlock.m_oSdtPrToken);
         }
 
         // Store databindings data for later writing to corresponding XMLs
