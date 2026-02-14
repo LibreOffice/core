@@ -70,8 +70,6 @@ enum class GalleryGraphicImportRet
 
 #define GALLERY_PROGRESS_RANGE  10000
 
-#define GALLERY_BG_COLOR        Application::GetSettings().GetStyleSettings().GetWindowColor()
-
 class SvStream;
 class Graphic;
 class FmFormModel;

@@ -114,7 +114,7 @@ bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::R
 
 void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetWindowColor()));
     rRenderContext.Erase();
 
     if (ImplGetGraphicCenterRect(m_aGraphicObj.GetGraphic(), m_aPreviewRect))
@@ -259,7 +259,7 @@ bool DialogGalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, to
 
 void DialogGalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetWindowColor()));
 
     if (ImplGetGraphicCenterRect(maGraphicObj.GetGraphic(), maPreviewRect))
     {
