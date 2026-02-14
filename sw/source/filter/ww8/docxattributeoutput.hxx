@@ -1170,14 +1170,13 @@ public:
     static const sal_Int32 Tag_StartRun_2 = 7;
     static const sal_Int32 Tag_StartRun_3 = 8;
     static const sal_Int32 Tag_EndRun_1 = 9;
-    static const sal_Int32 Tag_EndRun_2 = 10;
-    static const sal_Int32 Tag_StartRunProperties = 11;
-    static const sal_Int32 Tag_InitCollectedRunProperties = 12;
-    static const sal_Int32 Tag_Redline_1 = 13;
-    static const sal_Int32 Tag_Redline_2 = 14;
-    static const sal_Int32 Tag_TableDefinition = 15;
-    static const sal_Int32 Tag_OutputFlyFrame = 16;
-    static const sal_Int32 Tag_StartSection = 17;
+    static const sal_Int32 Tag_StartRunProperties = 10;
+    static const sal_Int32 Tag_InitCollectedRunProperties = 11;
+    static const sal_Int32 Tag_Redline_1 = 12;
+    static const sal_Int32 Tag_Redline_2 = 13;
+    static const sal_Int32 Tag_TableDefinition = 14;
+    static const sal_Int32 Tag_OutputFlyFrame = 15;
+    static const sal_Int32 Tag_StartSection = 16;
 };
 
 /**
