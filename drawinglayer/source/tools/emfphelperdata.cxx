@@ -442,6 +442,7 @@ namespace emfplushelper
         // To evtl. correct and see where this came from, please compare with the implementations
         // of EmfPlusHelperData::MapToDevice and EmfPlusHelperData::Map* in prev versions
         maMapTransform = maWorldTransform;
+        maMapTransform.scale(mfPageScaleX, mfPageScaleY);
         maMapTransform *= basegfx::utils::createScaleTranslateB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY,
                                                                            double(-mnFrameLeft), double(-mnFrameTop));
         maMapTransform *= maBaseTransform;
@@ -906,7 +907,8 @@ namespace emfplushelper
         SvMemoryStream& rMS,
         wmfemfhelper::TargetHolders& rTargetHolders,
         wmfemfhelper::PropertyHolders& rPropertyHolders)
-    :   mfPageScale(0.0),
+    :   mfPageScaleX(1.0),
+        mfPageScaleY(1.0),
         mnOriginX(0),
         mnOriginY(0),
         mnHDPI(0),
@@ -1750,19 +1752,14 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetPageTransform:
                     {
-                        rMS.ReadFloat(mfPageScale);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t Scale: " << mfPageScale << " unit: " << UnitTypeToString(flags));
+                        float pageScale;
+                        rMS.ReadFloat(pageScale);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Scale: " << pageScale << " unit: " << UnitTypeToString(flags));
 
-                        if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
-                        {
-                            SAL_WARN("drawinglayer.emf", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by SetPageTransform in EMF+ specification.");
-                        }
-                        else
-                        {
-                            mnMmX = std::round(unitToPixel(static_cast<double>(mnMmX) * mfPageScale, flags, Direction::horizontal));
-                            mnMmY = std::round(unitToPixel(static_cast<double>(mnMmY) * mfPageScale, flags, Direction::vertical));
-                            mappingChanged();
-                        }
+                        mfPageScaleX = unitToPixel(pageScale, flags, Direction::horizontal);
+                        mfPageScaleY = unitToPixel(pageScale, flags, Direction::vertical);
+                        mappingChanged();
+
                         break;
                     }
                     case EmfPlusRecordTypeSetRenderingOrigin:
@@ -1846,11 +1843,6 @@ namespace emfplushelper
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Begin Container stack index: " << stackIndex << ", PageUnit: " << flags);
 
-                        if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
-                        {
-                            SAL_WARN("drawinglayer.emf", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by BeginContainer in EMF+ specification.");
-                            break;
-                        }
                         GraphicStatePush(mGSContainerStack, stackIndex);
                         const basegfx::B2DHomMatrix transform = basegfx::utils::createScaleTranslateB2DHomMatrix(
                             unitToPixel(static_cast<double>(dw) / sw, flags, Direction::horizontal),
