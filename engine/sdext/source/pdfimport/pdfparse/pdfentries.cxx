@@ -22,6 +22,7 @@
 
 #include <comphelper/hash.hxx>
 
+#include <o3tl/numeric.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -163,22 +164,8 @@ OUString PDFName::getFilteredName() const
     {
         if( (i < nLen - 3) && pStr[i] == '#' )
         {
-            char rResult = 0;
-            i++;
-            if( pStr[i] >= '0' && pStr[i] <= '9' )
-                rResult = char( pStr[i]-'0' ) << 4;
-            else if( pStr[i] >= 'a' && pStr[i] <= 'f' )
-                rResult = char( pStr[i]-'a' + 10 ) << 4;
-            else if( pStr[i] >= 'A' && pStr[i] <= 'F' )
-                rResult = char( pStr[i]-'A' + 10 ) << 4;
-            i++;
-            if( pStr[i] >= '0' && pStr[i] <= '9' )
-                rResult |= char( pStr[i]-'0' );
-            else if( pStr[i] >= 'a' && pStr[i] <= 'f' )
-                rResult |= char( pStr[i]-'a' + 10 );
-            else if( pStr[i] >= 'A' && pStr[i] <= 'F' )
-                rResult |= char( pStr[i]-'A' + 10 );
-            aFilter.append( rResult );
+            aFilter.append(o3tl::convertToHex<char, 0>(pStr[i + 1], pStr[i + 2]));
+            i += 2;
         }
         else
             aFilter.append( pStr[i] );

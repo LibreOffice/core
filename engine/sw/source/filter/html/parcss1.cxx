@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/numeric.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
@@ -311,11 +314,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 do {
                     sTmpBuffer.append( m_cNextCh );
                     m_cNextCh = GetNextChar();
-                } while( sTmpBuffer.getLength() < 7 &&
-                         ( ('0'<=m_cNextCh && '9'>=m_cNextCh) ||
-                           ('A'<=m_cNextCh && 'F'>=m_cNextCh) ||
-                           ('a'<=m_cNextCh && 'f'>=m_cNextCh) ) &&
-                         !IsEOF() );
+                } while (sTmpBuffer.getLength() < 7 && rtl::isAsciiHexDigit(m_cNextCh) && !IsEOF());
 
                 if( sTmpBuffer.getLength()==6 )
                 {
@@ -510,11 +509,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 do {
                     sTmpBuffer.append( m_cNextCh );
                     m_cNextCh = GetNextChar();
-                } while( sTmpBuffer.getLength() < 9 &&
-                         ( ('0'<=m_cNextCh && '9'>=m_cNextCh) ||
-                           ('A'<=m_cNextCh && 'F'>=m_cNextCh) ||
-                           ('a'<=m_cNextCh && 'f'>=m_cNextCh) ) &&
-                         !IsEOF() );
+                } while (sTmpBuffer.getLength() < 9 && rtl::isAsciiHexDigit(m_cNextCh) && !IsEOF());
 
                 if( sTmpBuffer.getLength()==6 || sTmpBuffer.getLength()==3 )
                 {
@@ -587,10 +582,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     sTmpBuffer.append( m_cNextCh );
                     if( bHexColor )
                     {
-                        bHexColor =  sTmpBuffer.getLength()<7 &&
-                                     ( ('0'<=m_cNextCh && '9'>=m_cNextCh) ||
-                                       ('A'<=m_cNextCh && 'F'>=m_cNextCh) ||
-                                       ('a'<=m_cNextCh && 'f'>=m_cNextCh) );
+                        bHexColor = sTmpBuffer.getLength() < 7 && rtl::isAsciiHexDigit(m_cNextCh);
                     }
                     m_cNextCh = GetNextChar();
                 } while( (rtl::isAsciiAlphanumeric(m_cNextCh) ||
@@ -1325,14 +1317,7 @@ bool CSS1Expression::GetColor( Color &rColor ) const
             {
                 sal_Unicode c = (i<aValue.getLength() ? aValue[i]
                                                          : '0' );
-                if( c >= '0' && c <= '9' )
-                    c -= 48;
-                else if( c >= 'A' && c <= 'F' )
-                    c -= 55;
-                else if( c >= 'a' && c <= 'f' )
-                    c -= 87;
-                else
-                    c = 16;
+                c = o3tl::convertToHex<sal_Unicode, 16>(c);
 
                 nColor *= 16;
                 if( c<16 )

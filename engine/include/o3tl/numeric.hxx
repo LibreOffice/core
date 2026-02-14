@@ -23,7 +23,7 @@ struct divide_by_zero final : public std::runtime_error
     }
 };
 
-template <o3tl::integral T, o3tl::integral U>
+template <o3tl::integral T, T error = T(-1), o3tl::integral U>
 constexpr T convertToHex(U aChar)
 {
     if (aChar >= '0' && aChar <= '9')
@@ -32,13 +32,13 @@ constexpr T convertToHex(U aChar)
         return T(aChar - 'a' + 10);
     else if (aChar >= 'A' && aChar <= 'F')
         return T(aChar - 'A' + 10);
-    return T(-1);
+    return error;
 }
 
-template <o3tl::integral T, o3tl::integral U>
+template <o3tl::integral T, T error = T(-1), o3tl::integral U>
 constexpr T convertToHex(U cHigh, U cLow)
 {
-    return (o3tl::convertToHex<T>(cHigh) << 4) | o3tl::convertToHex<T>(cLow);
+    return (o3tl::convertToHex<T, error>(cHigh) << 4) | o3tl::convertToHex<T, error>(cLow);
 }
 
 template <o3tl::integral T>

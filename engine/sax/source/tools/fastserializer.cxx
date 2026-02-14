@@ -135,7 +135,7 @@ namespace sax_fastparser {
 
     static bool isHexDigit( char c )
     {
-        return ('0' <= c && c <= '9') || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f');
+        return rtl::isAsciiHexDigit(static_cast<unsigned char>(c));
     }
 
     void FastSaxSerializer::write( const char* pStr, sal_Int32 nLen, bool bEscape )

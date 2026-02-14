@@ -20,7 +20,9 @@
 #include <svgtools.hxx>
 #include <sal/log.hxx>
 #include <tools/color.hxx>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/numeric.hxx>
 #include <o3tl/string_view.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -340,21 +342,9 @@ namespace svgio::svgreader
 
         void copyHex(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
-            bool bOnHex(true);
-
-            while(bOnHex && nPos < nLen)
+            for (; nPos < nLen && rtl::isAsciiHexDigit(rCandidate[nPos]); ++nPos)
             {
-                const sal_Unicode aChar(rCandidate[nPos]);
-
-                bOnHex = ('0' <= aChar && '9' >= aChar)
-                    || ('A' <= aChar && 'F' >= aChar)
-                    || ('a' <= aChar && 'f' >= aChar);
-
-                if(bOnHex)
-                {
-                    rTarget.append(aChar);
-                    nPos++;
-                }
+                rTarget.append(rCandidate[nPos]);
             }
         }
 
@@ -617,27 +607,6 @@ namespace svgio::svgreader
             return false;
         }
 
-        sal_Int32 read_hex(sal_Unicode nChar)
-        {
-            if(nChar >= '0' && nChar <= '9')
-            {
-                return nChar - u'0';
-            }
-            else if(nChar >= 'A' && nChar <= 'F')
-            {
-                return 10 + sal_Int32(nChar - u'A');
-            }
-            else if(nChar >= 'a' && nChar <= 'f')
-            {
-                return 10 + sal_Int32(nChar - u'a');
-            }
-            else
-            {
-                // error
-                return 0;
-            }
-        }
-
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName)
         {
             auto const aResult = aColorTokenMapperList.find(rName.toAsciiLowerCase().trim());
@@ -673,9 +642,9 @@ namespace svgio::svgreader
 
                     if(3 == nLength)
                     {
-                        const sal_Int32 nR(read_hex(aNum[0]));
-                        const sal_Int32 nG(read_hex(aNum[1]));
-                        const sal_Int32 nB(read_hex(aNum[2]));
+                        const sal_Int32 nR(o3tl::convertToHex<sal_Int32, 0>(aNum[0]));
+                        const sal_Int32 nG(o3tl::convertToHex<sal_Int32, 0>(aNum[1]));
+                        const sal_Int32 nB(o3tl::convertToHex<sal_Int32, 0>(aNum[2]));
 
                         rColor.setRed((nR | (nR << 4)) * fFactor);
                         rColor.setGreen((nG | (nG << 4)) * fFactor);
@@ -685,12 +654,12 @@ namespace svgio::svgreader
                     }
                     else if(6 == nLength)
                     {
-                        const sal_Int32 nR1(read_hex(aNum[0]));
-                        const sal_Int32 nR2(read_hex(aNum[1]));
-                        const sal_Int32 nG1(read_hex(aNum[2]));
-                        const sal_Int32 nG2(read_hex(aNum[3]));
-                        const sal_Int32 nB1(read_hex(aNum[4]));
-                        const sal_Int32 nB2(read_hex(aNum[5]));
+                        const sal_Int32 nR1(o3tl::convertToHex<sal_Int32, 0>(aNum[0]));
+                        const sal_Int32 nR2(o3tl::convertToHex<sal_Int32, 0>(aNum[1]));
+                        const sal_Int32 nG1(o3tl::convertToHex<sal_Int32, 0>(aNum[2]));
+                        const sal_Int32 nG2(o3tl::convertToHex<sal_Int32, 0>(aNum[3]));
+                        const sal_Int32 nB1(o3tl::convertToHex<sal_Int32, 0>(aNum[4]));
+                        const sal_Int32 nB2(o3tl::convertToHex<sal_Int32, 0>(aNum[5]));
 
                         rColor.setRed((nR2 | (nR1 << 4)) * fFactor);
                         rColor.setGreen((nG2 | (nG1 << 4)) * fFactor);

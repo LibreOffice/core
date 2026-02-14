@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/stream.hxx>
@@ -163,7 +164,7 @@ void HTMLOption::GetColor( Color& rColor ) const
     DBG_ASSERT( (nToken>=HtmlOptionId::COLOR_START && nToken<HtmlOptionId::COLOR_END) || nToken==HtmlOptionId::SIZE,
         "GetColor: Option is not a color." );
 
-    OUString aTmp(aValue.toAsciiLowerCase());
+    OUString aTmp(aValue);
     sal_uInt32 nColor = SAL_MAX_UINT32;
     if (!aTmp.isEmpty() && aTmp[0] != '#')
         nColor = GetHTMLColor(aTmp);
@@ -184,10 +185,7 @@ void HTMLOption::GetColor( Color& rColor ) const
                     c = nPos<aTmp.getLength() ? aTmp[nPos++] : '0';
             }
             nColor *= 16;
-            if( c >= '0' && c <= '9' )
-                nColor += (c - '0');
-            else if( c >= 'a' && c <= 'f' )
-                nColor += (c + 0xa - 'a');
+            nColor += o3tl::convertToHex<sal_uInt32, 0>(c);
         }
     }
 

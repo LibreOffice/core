@@ -105,7 +105,6 @@ namespace svgio::svgreader
         SvgUnit readUnit(std::u16string_view rCandidate, sal_Int32& nPos, const sal_Int32 nLen);
         bool readNumberAndUnit(std::u16string_view rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen);
         bool readAngle(std::u16string_view rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen);
-        sal_Int32 read_hex(sal_Unicode aChar);
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName);
         bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, SvgNumber& rOpacity);
         basegfx::B2DRange readViewBox(std::u16string_view rCandidate, InfoProvider const & rInfoProvider);
