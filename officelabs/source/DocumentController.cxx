@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 
 using namespace css;
@@ -110,13 +111,43 @@ OUString DocumentController::getSelectedText()
         return OUString();
 
     uno::Any aSelection = xSelSupplier->getSelection();
+
+    // Try direct XTextRange first (Calc cells, some simple cases)
     uno::Reference<text::XTextRange> xRange;
     aSelection >>= xRange;
-
     if (xRange.is())
-    {
         return xRange->getString();
+
+    // Writer returns TextRanges (XIndexAccess of XTextRange elements)
+    uno::Reference<container::XIndexAccess> xRanges;
+    aSelection >>= xRanges;
+    if (xRanges.is())
+    {
+        sal_Int32 nCount = xRanges->getCount();
+        if (nCount == 1)
+        {
+            xRanges->getByIndex(0) >>= xRange;
+            if (xRange.is())
+                return xRange->getString();
+        }
+        else if (nCount > 1)
+        {
+            OUStringBuffer aBuf;
+            for (sal_Int32 i = 0; i < nCount; ++i)
+            {
+                uno::Reference<text::XTextRange> xR;
+                xRanges->getByIndex(i) >>= xR;
+                if (xR.is())
+                {
+                    if (i > 0)
+                        aBuf.append('\n');
+                    aBuf.append(xR->getString());
+                }
+            }
+            return aBuf.makeStringAndClear();
+        }
     }
+
     return OUString();
 }
 
@@ -188,12 +219,29 @@ void DocumentController::replaceSelection(const OUString& text)
         return;
 
     uno::Any aSelection = xSelSupplier->getSelection();
+
+    // Try direct XTextRange first
     uno::Reference<text::XTextRange> xRange;
     aSelection >>= xRange;
-
     if (xRange.is())
     {
         xRange->setString(text);
+        return;
+    }
+
+    // Writer returns TextRanges (XIndexAccess) — replace all selected ranges
+    uno::Reference<container::XIndexAccess> xRanges;
+    aSelection >>= xRanges;
+    if (xRanges.is() && xRanges->getCount() > 0)
+    {
+        // Replace the first range with text, clear the rest
+        for (sal_Int32 i = xRanges->getCount() - 1; i >= 0; --i)
+        {
+            uno::Reference<text::XTextRange> xR;
+            xRanges->getByIndex(i) >>= xR;
+            if (xR.is())
+                xR->setString(i == 0 ? text : OUString());
+        }
     }
 }
 
