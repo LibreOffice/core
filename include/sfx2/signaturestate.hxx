@@ -23,7 +23,14 @@
 #include <config_options.h>
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
+namespace com::sun::star::security
+{
+struct DocumentSignatureInformation;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
 enum class SignatureState
 {

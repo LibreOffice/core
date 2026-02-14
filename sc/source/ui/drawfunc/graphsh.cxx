@@ -20,6 +20,7 @@
 #include <sfx2/objface.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>

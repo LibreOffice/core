@@ -67,6 +67,7 @@
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <o3tl/typed_flags_set.hxx>

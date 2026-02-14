@@ -26,6 +26,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 
 #include <svl/intitem.hxx>

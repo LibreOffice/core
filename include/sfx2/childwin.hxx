@@ -27,16 +27,17 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/window.hxx>
 
-#include <sfx2/chalign.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <comphelper/lok.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 
+class SfxDialogController;
 class SfxWorkWindow;
 class SfxModule;
 class SfxChildWindow;
 class SfxBindings;
+
+enum class SfxChildAlignment;
 
 enum class SfxChildWindowFlags
 {

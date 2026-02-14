@@ -36,6 +36,8 @@
 
 #include <wrtsh.hxx>
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 /** helper function to select all objects in an SdrMarkList;
  * implementation: see below */
 static void lcl_SelectSdrMarkList( SwEditShell* pShell,

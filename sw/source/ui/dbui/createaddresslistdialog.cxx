@@ -27,6 +27,7 @@
 #include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
 #include <utility>
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/Builder.hxx>

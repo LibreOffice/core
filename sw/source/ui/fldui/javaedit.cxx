@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <comphelper/documentconstants.hxx>
 #include <svl/urihelper.hxx>
 #include <view.hxx>
 #include <sfx2/docfile.hxx>

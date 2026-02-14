@@ -18,6 +18,7 @@
  */
 
 #include <vcl/errinf.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/eitem.hxx>

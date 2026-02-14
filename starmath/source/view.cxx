@@ -34,6 +34,7 @@
 #include <i18nutil/unicode.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <officecfg/Office/Common.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,6 +51,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfac.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
@@ -71,9 +73,11 @@
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include <tools/svborder.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/temporary.hxx>

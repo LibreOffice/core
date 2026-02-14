@@ -24,15 +24,14 @@
 
 #include <vcl/abstdlg.hxx>
 
-#include <sot/formats.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <com/sun/star/uno/Reference.h>
 
 class SfxItemSet;
 class SfxItemPool;
 class SvObjectServerList;
 class TransferableDataHelper;
 class SvGlobalName;
+enum class SotClipboardFormatId : sal_uInt32;
 
 namespace sfx2
 {
@@ -44,6 +43,7 @@ namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SfxAbstractDialog : virtual public VclAbstractDialog
 {

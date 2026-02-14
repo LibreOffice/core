@@ -26,6 +26,7 @@
 #include <sdresid.hxx>
 
 #include <sfx2/bindings.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/dispatch.hxx>
 
 namespace sd {

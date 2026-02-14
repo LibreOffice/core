@@ -21,12 +21,12 @@
 #include <memory>
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <comphelper/errcode.hxx>
 
 namespace com::sun::star::ui::dialogs { class XFilePickerControlAccess; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace weld { class Window; }
 
+class ErrCode;
 class Graphic;
 struct  SvxOpenGrf_Impl;
 

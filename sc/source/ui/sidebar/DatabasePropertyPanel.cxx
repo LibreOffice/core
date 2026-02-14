@@ -19,6 +19,7 @@
 #include <svl/itemset.hxx>
 #include <svx/rotmodit.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <dbdata.hxx>
 

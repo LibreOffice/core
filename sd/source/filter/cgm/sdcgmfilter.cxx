@@ -30,6 +30,8 @@
 #include <drawdoc.hxx>
 #include <sdcgmfilter.hxx>
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 #include <DrawDocShell.hxx>
 
 using namespace ::com::sun::star;

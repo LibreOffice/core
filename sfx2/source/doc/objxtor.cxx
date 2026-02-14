@@ -41,6 +41,7 @@
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/eventcfg.hxx>
 
@@ -51,8 +52,10 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>

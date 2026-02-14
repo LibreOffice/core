@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/print.hxx>

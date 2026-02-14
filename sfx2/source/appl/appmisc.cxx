@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
 #include <svl/stritem.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
 #include <sfx2/app.hxx>

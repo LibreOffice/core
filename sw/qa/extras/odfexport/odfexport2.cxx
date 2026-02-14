@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/BarCodeErrorCorrection.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>

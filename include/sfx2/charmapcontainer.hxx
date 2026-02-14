@@ -21,11 +21,18 @@
 
 #include <sfx2/dllapi.h>
 #include <vcl/vclenum.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/IconView.hxx>
-#include <vcl/weld/weld.hxx>
 #include <deque>
+
+class VirtualDevice;
+namespace weld
+{
+class Builder;
+}
+namespace weld
+{
+class Widget;
+}
 
 struct CharAndFont
 {

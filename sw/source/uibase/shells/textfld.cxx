@@ -82,6 +82,7 @@
 #include <ndtxt.hxx>
 #include <translatehelper.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/svapp.hxx>
 
 
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )

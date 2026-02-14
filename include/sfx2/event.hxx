@@ -32,10 +32,10 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XController2.hpp>
-#include <com/sun/star/view/PrintableState.hpp>
 #include <utility>
 
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::view { enum class PrintableState; }
 
 /**
   these values get stored in streams in a 16-bit value

@@ -22,14 +22,16 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/Builder.hxx>
-#include <vcl/weld/MenuButton.hxx>
-#include <vcl/weld/Toolbar.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <functional>
 
 namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::graphic { class XGraphic; }
+
+namespace weld { class MenuButton; }
+namespace weld { class Toolbar; }
 
 namespace sfx2::sidebar {
 

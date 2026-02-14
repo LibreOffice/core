@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <test/htmltesttools.hxx>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 
 #include <vcl/gdimtf.hxx>

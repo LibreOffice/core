@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
-#include <sot/formats.hxx>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
 #include <memory>
@@ -34,6 +33,7 @@ namespace com::sun::star::uno
 }
 
 namespace com::sun::star::io { class XInputStream; }
+enum class SotClipboardFormatId : sal_uInt32;
 
 enum class SfxLinkUpdateMode {
     NONE   = 0,

@@ -12,11 +12,11 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 
 class DateTime;
 class LocaleDataWrapper;
 class OutputDevice;
+class Size;
 
 //when two tab pages both have the same basic layout with a preview on the
 //right, get both of their non-preview areas to request the same size so that

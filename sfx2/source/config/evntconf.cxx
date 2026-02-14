@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 

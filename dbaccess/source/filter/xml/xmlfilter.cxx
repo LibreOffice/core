@@ -30,6 +30,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include "xmlfilter.hxx"
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <xmloff/xmlnamespace.hxx>

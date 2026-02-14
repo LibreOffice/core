@@ -22,12 +22,13 @@
 
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 
 namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 enum class SfxModelFlags
 {

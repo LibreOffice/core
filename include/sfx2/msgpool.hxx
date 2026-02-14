@@ -23,9 +23,9 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/groupid.hxx>
 #include <vector>
 
+enum class SfxGroupId;
 class SfxInterface;
 class SfxSlot;
 class SfxViewFrame;

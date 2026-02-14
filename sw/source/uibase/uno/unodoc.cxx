@@ -21,6 +21,8 @@
 #include <config_features.h>
 #include <config_fuzzers.h>
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 #include <sfx2/sfxmodelfactory.hxx>
 #include <swdll.hxx>
 #include <docsh.hxx>

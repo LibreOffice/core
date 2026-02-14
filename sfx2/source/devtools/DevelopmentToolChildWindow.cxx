@@ -8,6 +8,7 @@
  *
  */
 
+#include <sfx2/chalign.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <DevelopmentToolDockingWindow.hxx>
 #include <sfx2/sfxsids.hrc>

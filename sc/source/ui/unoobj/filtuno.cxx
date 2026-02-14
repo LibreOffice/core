@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>

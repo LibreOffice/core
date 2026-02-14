@@ -23,7 +23,9 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <svl/flagitem.hxx>
-#include <svl/style.hxx>
+//#include <svl/style.hxx>
+
+enum class SfxStyleSearchBits;
 
 class SFX2_DLLPUBLIC SfxTemplateItem final : public SfxFlagItem
 {

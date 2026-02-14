@@ -28,6 +28,7 @@
 #include "shellid.hxx"
 
 #include <svl/lstner.hxx>
+#include <svl/style.hxx>
 #include <sfx2/StyleManager.hxx>
 #include <o3tl/deleter.hxx>
 

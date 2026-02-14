@@ -46,6 +46,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/stream.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>

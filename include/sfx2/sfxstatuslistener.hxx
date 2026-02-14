@@ -22,11 +22,13 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <svl/poolitem.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
+
+class SfxPoolItem;
+enum class SfxItemState;
 
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }

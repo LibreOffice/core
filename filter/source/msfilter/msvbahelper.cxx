@@ -30,6 +30,7 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>

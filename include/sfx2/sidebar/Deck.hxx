@@ -20,8 +20,19 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weld/ScrolledWindow.hxx>
-#include <vcl/weld/weld.hxx>
+
+namespace weld
+{
+class Box;
+}
+namespace weld
+{
+class ScrolledWindow;
+}
+namespace weld
+{
+class Widget;
+}
 
 namespace sfx2::sidebar
 {

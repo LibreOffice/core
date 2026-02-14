@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/XSidebarProvider.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <sfx2/sidebar/Context.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
 

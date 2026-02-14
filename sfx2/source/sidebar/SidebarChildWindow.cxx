@@ -18,6 +18,7 @@
  */
 
 #include <tools/mapunit.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>

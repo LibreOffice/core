@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
 #define INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
 
+#include <tools/stream.hxx>
+
 // Open file for editing, then only the third option (reading a copy) works
 #define SFX_STREAM_READWRITE (StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE)
 // I work on the original, not a copy

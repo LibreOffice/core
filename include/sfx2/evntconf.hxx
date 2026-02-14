@@ -22,7 +22,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <sfx2/event.hxx>
 #include <svl/poolitem.hxx>
 #include <memory>
 #include <utility>
@@ -30,6 +29,7 @@
 
 class SfxObjectShell;
 class SvxMacro;
+enum class SvMacroItemId : sal_uInt16;
 
 struct SFX2_DLLPUBLIC SfxEventName
 {

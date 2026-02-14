@@ -19,6 +19,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/signaturestate.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <comphelper/propertyvalue.hxx>

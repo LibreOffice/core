@@ -8,7 +8,8 @@
  */
 
 #include <vcl/uitest/uiobject.hxx>
-#include <sfx2/templatedlg.hxx>
+
+class TemplateDlgLocalView;
 
 class TemplateDlgLocalViewUIObject : public DrawingAreaUIObject
 {

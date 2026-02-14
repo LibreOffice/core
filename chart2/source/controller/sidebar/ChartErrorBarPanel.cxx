@@ -24,6 +24,7 @@
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <sal/log.hxx>
 
 

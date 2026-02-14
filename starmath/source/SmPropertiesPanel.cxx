@@ -27,6 +27,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include "SmPropertiesPanel.hxx"
 

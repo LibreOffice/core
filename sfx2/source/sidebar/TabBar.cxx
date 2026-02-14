@@ -33,6 +33,8 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MenuButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <osl/diagnose.h>
 

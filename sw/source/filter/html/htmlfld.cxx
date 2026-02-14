@@ -20,6 +20,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <docsh.hxx>

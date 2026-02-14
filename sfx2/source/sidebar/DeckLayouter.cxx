@@ -27,6 +27,7 @@
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 #include <comphelper/processfactory.hxx>
 

@@ -22,10 +22,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <svl/style.hxx>
-#include <unotools/resmgr.hxx>
 #include <utility>
 #include <vector>
+
+enum class SfxStyleFamily;
+enum class SfxStyleSearchBits;
+struct TranslateId;
 
 struct SFX2_DLLPUBLIC SfxFilterTuple
 {

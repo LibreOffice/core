@@ -19,6 +19,7 @@
 
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 
 #include <cmdid.h>
 #include <wlistsh.hxx>

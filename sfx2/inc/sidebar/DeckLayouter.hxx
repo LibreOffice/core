@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/sidebar/Panel.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace tools { class Rectangle; }
 

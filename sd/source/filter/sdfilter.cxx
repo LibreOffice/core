@@ -27,6 +27,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 #include <DrawDocShell.hxx>
 
 #include <pres.hxx>

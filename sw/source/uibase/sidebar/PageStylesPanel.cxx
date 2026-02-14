@@ -32,6 +32,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <cmdid.h>
 #include <strings.hrc>
 #include <swtypes.hxx>

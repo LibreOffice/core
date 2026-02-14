@@ -21,6 +21,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <swdbdata.hxx>
 #include <sharedconnection.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace com::sun::star{
     namespace sdb{

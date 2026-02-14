@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

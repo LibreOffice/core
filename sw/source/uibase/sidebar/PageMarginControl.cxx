@@ -33,6 +33,7 @@
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/weld/Builder.hxx>

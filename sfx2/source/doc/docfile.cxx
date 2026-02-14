@@ -85,6 +85,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <comphelper/string.hxx>
 #include <framework/interaction.hxx>

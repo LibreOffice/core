@@ -42,6 +42,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/random.hxx>

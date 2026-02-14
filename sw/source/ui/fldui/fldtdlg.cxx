@@ -46,6 +46,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <vcl/tabs.hrc>
 #include <vcl/weld/Dialog.hxx>

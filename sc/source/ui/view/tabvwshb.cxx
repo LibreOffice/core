@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <vcl/errinf.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

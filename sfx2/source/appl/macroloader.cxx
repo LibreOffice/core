@@ -22,6 +22,7 @@
 #include <macroloader.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>

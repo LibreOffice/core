@@ -70,6 +70,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

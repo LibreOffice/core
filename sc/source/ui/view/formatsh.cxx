@@ -27,6 +27,7 @@
 #include <sfx2/namedcolor.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <svl/whiter.hxx>
 
 #include <svl/stritem.hxx>

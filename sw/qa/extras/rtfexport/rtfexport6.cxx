@@ -11,6 +11,7 @@
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>

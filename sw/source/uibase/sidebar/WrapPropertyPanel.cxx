@@ -27,6 +27,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <hintids.hxx>
 #include <strings.hrc>
 #include <uitool.hxx>

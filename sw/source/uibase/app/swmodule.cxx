@@ -103,6 +103,7 @@
 
 #include <comphelper/configuration.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <vcl/svapp.hxx>
 
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>

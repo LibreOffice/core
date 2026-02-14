@@ -30,16 +30,17 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <tools/link.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <sfx2/shell.hxx>
+#include <svl/typedwhich.hxx>
+
+#include <boost/property_tree/ptree_fwd.hpp>
 
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XDispatchRecorder; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::util { struct URL; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SfxSlot;
 class SfxSlotServer;
@@ -53,6 +54,10 @@ class SfxWorkWindow;
 struct SfxFoundCache_Impl;
 class SfxFoundCacheArr_Impl;
 class SfxPoolItemHolder;
+class SfxPoolItem;
+class SfxRequest;
+class SfxShell;
+enum class SfxItemState;
 
 enum class SfxCallMode : sal_uInt16
 {

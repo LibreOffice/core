@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
+#include <vcl/weld/Builder.hxx>
 
 #include <svx/dialmgr.hxx>
 

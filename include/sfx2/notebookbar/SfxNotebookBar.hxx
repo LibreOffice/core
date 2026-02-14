@@ -12,7 +12,7 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <vcl/notebookbar/notebookbar.hxx>
+#include <tools/link.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <string_view>

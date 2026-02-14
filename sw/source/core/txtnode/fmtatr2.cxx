@@ -39,6 +39,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <com/sun/star/uno/Any.h>
 #include <SwStyleNameMapper.hxx>

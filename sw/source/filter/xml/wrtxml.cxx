@@ -27,6 +27,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/fileformat.h>

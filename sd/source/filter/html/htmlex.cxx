@@ -20,6 +20,7 @@
 #include "htmlex.hxx"
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
@@ -47,6 +48,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotable.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <tools/debug.hxx>

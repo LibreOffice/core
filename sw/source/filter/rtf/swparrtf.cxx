@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

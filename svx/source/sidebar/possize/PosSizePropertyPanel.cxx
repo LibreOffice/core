@@ -45,6 +45,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 #include <svtools/unitconv.hxx>

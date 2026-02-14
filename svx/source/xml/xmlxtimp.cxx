@@ -34,6 +34,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/stream.hxx>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>

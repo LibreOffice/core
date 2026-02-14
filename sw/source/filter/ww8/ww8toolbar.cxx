@@ -10,6 +10,7 @@
 #include "ww8toolbar.hxx"
 #include "ww8scan.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>

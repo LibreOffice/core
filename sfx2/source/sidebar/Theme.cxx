@@ -19,6 +19,7 @@
 
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/app.hxx>
+#include <tools/color.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

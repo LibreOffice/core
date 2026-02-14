@@ -29,6 +29,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/commandevent.hxx>

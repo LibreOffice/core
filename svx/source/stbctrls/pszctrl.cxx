@@ -39,6 +39,7 @@
 #include <svx/strings.hrc>
 #include <svl/intitem.hxx>
 #include <sal/log.hxx>
+#include <tools/fldunit.hxx>
 
 #include <svx/pszctrl.hxx>
 

@@ -37,6 +37,7 @@ class ScTabViewShell;
 class ScViewData;
 class ScNavigatorControllerItem;
 class ScNavigatorSettings;
+namespace weld { class ComboBox; }
 
 #define SC_DROPMODE_URL         0
 #define SC_DROPMODE_LINK        1

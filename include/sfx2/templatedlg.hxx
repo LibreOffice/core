@@ -18,11 +18,7 @@
 
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/Entry.hxx>
-#include <vcl/weld/MenuButton.hxx>
-#include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <sfx2/templatedlglocalview.hxx>
@@ -36,6 +32,22 @@ namespace sun::star::frame
 class XDesktop2;
 class XModel;
 }
+}
+namespace weld
+{
+class ComboBox;
+}
+namespace weld
+{
+class Entry;
+}
+namespace weld
+{
+class TreeView;
+}
+namespace weld
+{
+class MenuButton;
 }
 
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public weld::GenericDialogController

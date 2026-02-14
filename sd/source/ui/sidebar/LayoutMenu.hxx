@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
+#include <rtl/ref.hxx>
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 #include <vcl/image.hxx>

@@ -39,8 +39,6 @@
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 #include <tools/link.hxx>
 
-#include <sfx2/groupid.hxx>
-
 namespace weld { class Button; }
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
@@ -48,6 +46,7 @@ struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold memb
 class NotifyEvent;
 class SfxViewFrame;
 class SfxViewShell;
+enum class SfxGroupId;
 
 sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID );
 

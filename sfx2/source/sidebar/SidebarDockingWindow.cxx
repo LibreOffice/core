@@ -25,6 +25,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/acceleratorexecute.hxx>

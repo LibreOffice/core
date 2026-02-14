@@ -30,6 +30,9 @@
 
 // forward
 namespace vcl { class Window; }
+namespace weld { class ComboBox; }
+namespace weld { class Menu; }
+namespace weld { class Toolbar; }
 
 namespace sd {
 class DrawDocShell;

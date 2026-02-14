@@ -10,7 +10,6 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
@@ -19,9 +18,11 @@ namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template<class E> class Sequence; }
 
+class Point;
 class SfxInPlaceClient;
 class SfxViewShell;
 class VirtualDevice;
+namespace tools { class Rectangle; }
 
 /// A class for chart editing support via LibreOfficeKit.
 class SFX2_DLLPUBLIC LokChartHelper

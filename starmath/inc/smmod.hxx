@@ -23,6 +23,7 @@
 #include <sfx2/app.hxx>
 #include <vcl/vclptr.hxx>
 #include <unotools/options.hxx>
+#include <unotools/syslocale.hxx>
 #include <optional>
 
 namespace svtools { class ColorConfig; }

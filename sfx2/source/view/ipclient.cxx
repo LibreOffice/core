@@ -35,6 +35,7 @@
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>

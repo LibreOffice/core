@@ -17,13 +17,20 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/XView.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <optional>
+
+namespace com::sun::star::awt
+{
+class XGraphics;
+}
+namespace com::sun::star::awt
+{
+class XWindowPeer;
+}
 
 class LokControlHandler
 {

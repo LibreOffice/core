@@ -22,13 +22,16 @@
 
 #include <sal/config.h>
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-
-#include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::task
 {
 class XInteractionRequest;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 class RequestPackageReparation_Impl;

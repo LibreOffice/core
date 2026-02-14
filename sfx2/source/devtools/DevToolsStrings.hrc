@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define STR_TEXT_PORTION NC_("STR_TEXT_PORTION", "Text Portion %1")

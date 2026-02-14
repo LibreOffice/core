@@ -22,6 +22,7 @@
 #include <comphelper/OAccessible.hxx>
 
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>

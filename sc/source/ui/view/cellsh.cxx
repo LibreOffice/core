@@ -30,6 +30,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>

@@ -18,6 +18,7 @@
 #include <officecfg/Setup.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Notebook.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -26,6 +27,8 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/weld/Dialog.hxx>
+
+#include <com/sun/star/frame/XModel3.hpp>
 
 constexpr OUString sNewsTab = u"WhatsNewTabPage"_ustr;
 constexpr OUString sUITab = u"UITabPage"_ustr;

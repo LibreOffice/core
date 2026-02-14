@@ -27,14 +27,13 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/builderpage.hxx>
-#include <vcl/weld/Notebook.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/setitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+class Bitmap;
 class SfxTabPage;
 
 typedef std::unique_ptr<SfxTabPage> (*CreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rAttrSet);
@@ -42,6 +41,8 @@ typedef const WhichRangesContainer & (*GetTabPageRanges)(); // provides internat
 struct TabPageImpl;
 
 struct TabDlg_Impl;
+
+namespace weld { class Notebook; }
 
 namespace com::sun::star::frame { class XFrame; }
 

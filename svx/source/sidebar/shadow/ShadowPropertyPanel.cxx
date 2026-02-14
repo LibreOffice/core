@@ -11,6 +11,7 @@
 #include <o3tl/untaint.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>

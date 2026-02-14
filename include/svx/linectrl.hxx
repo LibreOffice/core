@@ -27,6 +27,7 @@
 namespace svx {
     class ToolboxButtonLineStyleUpdater;
 }
+enum class MapUnit : sal_uInt8;
 
 typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSelectFunction;
 typedef std::function<void(bool)> LineStyleIsNoneFunction;

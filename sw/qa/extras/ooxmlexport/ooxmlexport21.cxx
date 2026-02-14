@@ -27,6 +27,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <test/commontesttools.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include <pam.hxx>
 #include <unotxdoc.hxx>

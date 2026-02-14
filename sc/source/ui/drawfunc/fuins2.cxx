@@ -44,6 +44,7 @@
 #include <scmod.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weldutils.hxx>
 

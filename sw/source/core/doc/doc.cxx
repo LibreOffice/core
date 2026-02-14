@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <DocumentFieldsManager.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentDrawModelManager.hxx>

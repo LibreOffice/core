@@ -25,10 +25,13 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <vcl/weld/Builder.hxx>
 
 class SfxBindings;
 class SfxTemplateDialog_Impl;
+namespace weld
+{
+class Builder;
+}
 
 class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxTemplatePanelControl final
     : public PanelLayout,

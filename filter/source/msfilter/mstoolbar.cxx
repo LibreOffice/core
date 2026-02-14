@@ -16,6 +16,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>

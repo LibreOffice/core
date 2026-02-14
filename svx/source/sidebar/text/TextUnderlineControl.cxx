@@ -27,7 +27,9 @@
 #include <helpids.h>
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 namespace svx {
 

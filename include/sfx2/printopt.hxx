@@ -24,8 +24,15 @@
 #include <sfx2/tabdlg.hxx>
 #include <sal/types.h>
 #include <vcl/printer/Options.hxx>
-#include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/SpinButton.hxx>
+
+namespace weld { class CheckButton; }
+namespace weld { class ComboBox; }
+namespace weld { class Container; }
+namespace weld { class DialogController; }
+namespace weld { class RadioButton; }
+namespace weld { class SpinButton; }
+namespace weld { class Toggleable; }
+namespace weld { class Widget; }
 
 class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage final : public SfxTabPage
 {

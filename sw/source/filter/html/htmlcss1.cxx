@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <tools/stream.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/urihelper.hxx>
 #include <i18nlangtag/languagetag.hxx>

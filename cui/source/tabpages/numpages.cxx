@@ -24,6 +24,7 @@
 #include <o3tl/untaint.hxx>
 #include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
@@ -72,6 +73,7 @@
 #include <sal/log.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/temporary.hxx>

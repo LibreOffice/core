@@ -26,6 +26,7 @@
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 
 #include <editeng/editview.hxx>

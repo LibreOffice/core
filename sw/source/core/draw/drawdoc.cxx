@@ -20,6 +20,7 @@
 #include <svx/svxids.hrc>
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <svx/drawitem.hxx>
 #include <osl/diagnose.h>
 #include <doc.hxx>

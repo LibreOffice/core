@@ -25,6 +25,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <editeng/adjustitem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>

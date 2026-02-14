@@ -23,6 +23,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <svl/fstathelper.hxx>
+#include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <unotools/syslocale.hxx>

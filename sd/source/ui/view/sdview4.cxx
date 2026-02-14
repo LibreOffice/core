@@ -30,6 +30,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <tools/stream.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfread.hxx>
@@ -64,6 +65,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <svtools/soerr.hxx>
 #include <sfx2/ipclient.hxx>

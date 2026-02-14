@@ -11,6 +11,7 @@
 #include <o3tl/string_view.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/vectorgraphicdata.hxx>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 namespace
 {

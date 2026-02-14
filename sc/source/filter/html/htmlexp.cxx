@@ -46,6 +46,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
+#include <tools/stream.hxx>
 #include <vcl/outdev.hxx>
 #include <stdio.h>
 #include <osl/diagnose.h>

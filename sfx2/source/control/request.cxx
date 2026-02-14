@@ -34,6 +34,7 @@
 #include <svl/itempool.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <svl/hint.hxx>
 

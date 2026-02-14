@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "CellLineStyleControl.hxx"
 #include "CellBorderStyleControl.hxx"

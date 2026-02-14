@@ -73,6 +73,7 @@
 #include <svl/numformat.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/stream.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>

@@ -21,6 +21,7 @@
 #include <o3tl/any.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/windowstate.hxx>

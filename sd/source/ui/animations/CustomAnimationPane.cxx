@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/ui/LayoutSize.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>

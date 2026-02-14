@@ -41,6 +41,7 @@
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/transfer.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

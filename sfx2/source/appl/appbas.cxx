@@ -23,6 +23,7 @@
 
 #include <cassert>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <svl/intitem.hxx>

@@ -15,6 +15,7 @@
 #include <svx/svdobj.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>

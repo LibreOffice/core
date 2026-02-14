@@ -22,9 +22,8 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <comphelper/errcode.hxx>
 
-
+class ErrCode;
 class GDIMetaFile;
 class SotStorage;
 

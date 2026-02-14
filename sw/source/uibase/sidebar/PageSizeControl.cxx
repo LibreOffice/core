@@ -36,7 +36,9 @@
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/fldunit.hxx>
 #include <editeng/sizeitem.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 
 #include <PageSizePopup.hxx>

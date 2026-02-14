@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>

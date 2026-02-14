@@ -25,6 +25,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <i18npool/breakiterator.hxx>
 #include <comphelper/string.hxx>

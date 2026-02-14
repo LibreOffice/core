@@ -19,6 +19,7 @@
 
 #include <sfx2/sfxmodelfactory.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <sddll.hxx>
 #include <DrawDocShell.hxx>

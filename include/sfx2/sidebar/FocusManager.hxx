@@ -20,7 +20,10 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 #include <tools/link.hxx>
-#include <vcl/keycod.hxx>
+
+class KeyEvent;
+
+namespace vcl { class KeyCode; }
 
 namespace weld {
 class Widget;

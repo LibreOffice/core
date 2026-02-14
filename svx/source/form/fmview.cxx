@@ -51,6 +51,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/string_view.hxx>
 

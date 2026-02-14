@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <comphelper/classids.hxx>
 #include <svx/charthelper.hxx>

@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

@@ -23,13 +23,10 @@
 
 #include <sfx2/sidebar/AsynchronousCall.hxx>
 #include <sfx2/sidebar/Context.hxx>
-#include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
-#include <sfx2/viewfrm.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -40,8 +37,10 @@
 #include <comphelper/compbase.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::ui { class XUIElement; }
+namespace sfx2::sidebar { class Deck; }
 
 typedef comphelper::WeakComponentImplHelper <
     css::ui::XContextChangeEventListener,
@@ -53,6 +52,7 @@ typedef comphelper::WeakComponentImplHelper <
 
 class SfxSplitWindow;
 class SfxViewShell;
+class SfxViewFrame;
 
 namespace sfx2::sidebar {
 

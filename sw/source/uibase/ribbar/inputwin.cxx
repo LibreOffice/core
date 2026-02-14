@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -32,6 +33,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 

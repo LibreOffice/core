@@ -23,18 +23,19 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <svl/poolitem.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/vclptr.hxx>
 
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XFrame; }
 namespace vcl { class Window; }
+template <class reference_type> class VclPtr;
 
 class InterimItemWindow;
 class SfxToolBoxControl;
 class SfxModule;
+class SfxPoolItem;
+enum class SfxItemState;
 
 rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, ToolBox* pToolbox, ToolBoxItemId nID, const OUString& aCommandURL );
 

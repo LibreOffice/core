@@ -22,6 +22,7 @@
 #include <unotext.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 

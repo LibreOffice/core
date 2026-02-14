@@ -27,6 +27,7 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

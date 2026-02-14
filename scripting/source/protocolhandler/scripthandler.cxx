@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>

@@ -11,6 +11,7 @@
 #include <memory>
 
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
+#include <sfx2/devtools/ObjectInspectorWidgets.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -45,8 +46,15 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 
+#include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Notebook.hxx>
+#include <vcl/weld/Paned.hxx>
+#include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace css;

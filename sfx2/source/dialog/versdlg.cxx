@@ -21,6 +21,7 @@
 
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 

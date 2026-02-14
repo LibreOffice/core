@@ -52,6 +52,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/hostfilter.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/configuration.hxx>

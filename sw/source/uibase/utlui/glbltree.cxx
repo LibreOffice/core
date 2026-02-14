@@ -31,6 +31,8 @@
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <osl/diagnose.h>
 

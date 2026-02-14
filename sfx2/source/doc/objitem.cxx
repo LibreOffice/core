@@ -21,6 +21,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 
 SfxPoolItem* SfxObjectShellItem::CreateDefault() { return new SfxObjectShellItem; }

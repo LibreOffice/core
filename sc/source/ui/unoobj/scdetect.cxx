@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/stream.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

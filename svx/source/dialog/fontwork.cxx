@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/module.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <svx/colorbox.hxx>
@@ -35,6 +36,7 @@
 
 #include <svtools/unitconv.hxx>
 #include <svx/svxids.hrc>
+#include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 #include <bitmaps.hlst>
 #include <svx/fontwork.hxx>

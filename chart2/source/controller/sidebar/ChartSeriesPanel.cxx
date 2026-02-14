@@ -21,6 +21,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <sal/log.hxx>
 
 #include "ChartSeriesPanel.hxx"

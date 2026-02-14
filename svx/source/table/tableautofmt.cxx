@@ -32,6 +32,7 @@ common functionality of SwTableAutoFormatTable and ScAutoFormat
 #include <editeng/memberids.h>
 #include <rtl/bootstrap.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/svxtableitems.hxx>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -41,6 +42,7 @@ common functionality of SwTableAutoFormatTable and ScAutoFormat
 #include <editeng/svxenum.hxx>
 #include <svl/typedwhich.hxx>
 #include <svx/TableStylesParser.hxx>
+#include <tools/stream.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star;

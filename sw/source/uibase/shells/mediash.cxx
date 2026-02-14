@@ -25,6 +25,7 @@
 #include <mediash.hxx>
 
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/MediaShellHelpers.hxx>
 

@@ -23,6 +23,7 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
 #include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
 

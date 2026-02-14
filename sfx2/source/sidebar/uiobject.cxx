@@ -10,6 +10,7 @@
 #include "uiobject.hxx"
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 namespace sfx2::sidebar
 {

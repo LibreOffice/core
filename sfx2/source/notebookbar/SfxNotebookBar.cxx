@@ -12,6 +12,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/syswin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>

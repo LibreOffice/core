@@ -40,6 +40,7 @@ class SwWrtShell;
 class SfxBindings;
 class SwNavigationConfig;
 class SwView;
+namespace weld { class ComboBox; }
 
 class SwNavigationPI final : public PanelLayout
                      , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface

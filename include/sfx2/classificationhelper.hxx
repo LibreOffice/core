@@ -17,7 +17,8 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/infobar.hxx>
+
+enum class InfobarType;
 
 namespace com::sun::star::beans
 {
@@ -26,6 +27,10 @@ class XPropertyContainer;
 namespace com::sun::star::document
 {
 class XDocumentProperties;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 class SfxViewFrame;

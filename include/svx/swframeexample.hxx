@@ -26,6 +26,8 @@
 #include <vcl/weld/customweld.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
+#include <optional>
+
 class SVX_DLLPUBLIC SwFrameExample final : public weld::CustomWidgetController
 {
     Color       m_aBgCol;           ///< background

@@ -10,7 +10,11 @@
 #pragma once
 
 #include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+
+namespace weld
+{
+class TreeIter;
+}
 
 enum class TemplateViewMode
 {

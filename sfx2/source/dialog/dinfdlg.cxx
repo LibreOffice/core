@@ -24,6 +24,7 @@
 #include <tools/urlobj.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
@@ -57,6 +58,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTimeWithTimezone.hpp>

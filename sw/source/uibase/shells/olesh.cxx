@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <vcl/EnumContext.hxx>
 #include <view.hxx>
 #include <frmsh.hxx>

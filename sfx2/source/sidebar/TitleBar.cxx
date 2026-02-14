@@ -18,6 +18,7 @@
  */
 
 #include <sidebar/TitleBar.hxx>
+#include <tools/color.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 

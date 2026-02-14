@@ -15,6 +15,7 @@
 #include <svx/svxdllapi.h>
 #include <vector>
 #include <sfx2/classificationhelper.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com::sun::star::beans
 {

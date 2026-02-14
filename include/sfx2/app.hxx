@@ -25,19 +25,19 @@
 #include <sal/types.h>
 #include <comphelper/errcode.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/bitmap.hxx>
 #include <tools/link.hxx>
-#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <unordered_map>
 
 #include <sfx2/shell.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::script { class XStorageBasedLibraryContainer; }
+namespace com::sun::star::ui { class XAcceleratorConfiguration; }
 
 namespace weld { class Window; }
 
 class BasicManager;
+class Bitmap;
 class DdeService;
 class SfxAppData_Impl;
 class SfxDispatcher;

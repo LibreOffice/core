@@ -37,6 +37,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <fmshimp.hxx>
 #include <o3tl/safeint.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>

@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>

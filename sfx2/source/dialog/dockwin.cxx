@@ -35,6 +35,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <svl/itemset.hxx>
 
+#include <sfx2/chalign.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

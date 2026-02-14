@@ -22,11 +22,10 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
-#include <comphelper/sequenceashashmap.hxx>
-
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace comphelper { class SequenceAsHashMap; }
 
 class SfxAllItemSet ;
 class SfxItemSet    ;

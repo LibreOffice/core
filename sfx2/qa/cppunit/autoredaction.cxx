@@ -11,6 +11,7 @@
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 
 #include <sfx2/objsh.hxx>

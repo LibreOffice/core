@@ -15,6 +15,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace sfx2::sidebar;
 

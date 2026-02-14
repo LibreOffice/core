@@ -22,13 +22,27 @@
 #include <comphelper/string.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <svl/style.hxx>
-#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
-#include <vcl/weld/MessageDialog.hxx>
-#include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+
+class SfxStyleSheetBasePool;
+enum class SfxStyleFamily;
+namespace weld
+{
+class ComboBox;
+}
+namespace weld
+{
+class TreeView;
+}
+namespace weld
+{
+class Widget;
+}
+namespace weld
+{
+class MessageDialog;
+}
 
 class SFX2_DLLPUBLIC SfxNewStyleDlg final : public weld::GenericDialogController
 {

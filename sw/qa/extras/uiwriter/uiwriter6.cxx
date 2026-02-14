@@ -38,6 +38,7 @@
 #include <tools/UnitConversion.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

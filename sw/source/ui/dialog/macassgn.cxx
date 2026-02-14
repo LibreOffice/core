@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <sfx2/event.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
 #include <svl/macitem.hxx>

@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <comphelper/flagguard.hxx>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
@@ -91,6 +92,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svx/dialog/TableStylesDlg.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 using namespace ::com::sun::star;
 

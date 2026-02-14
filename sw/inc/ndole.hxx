@@ -23,6 +23,7 @@
 #include <svtools/embedhlp.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <rtl/ref.hxx>
+#include <tools/link.hxx>
 
 class SvxDrawPage;
 class SwGrfFormatColl;

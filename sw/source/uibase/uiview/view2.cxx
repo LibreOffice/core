@@ -59,6 +59,7 @@
 #include <editeng/lrspitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/MessageDialog.hxx>

@@ -26,6 +26,7 @@
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <swwait.hxx>
 

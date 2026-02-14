@@ -28,7 +28,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/shell.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/svapp.hxx>
 
 namespace weld {
     class Button;
@@ -45,6 +44,8 @@ class SfxChildWindow;
 class SfxInfoBarWindow;
 enum class InfobarType;
 class CommandPopupHandler;
+struct ImplSVHelpData;
+struct ImplSVWinData;
 
 class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
 {

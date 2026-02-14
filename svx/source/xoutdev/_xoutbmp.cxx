@@ -24,6 +24,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/gfxlink.hxx>
@@ -43,6 +44,7 @@
 #include <memory>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 constexpr OUStringLiteral FORMAT_SVG = u"svg";
 constexpr OUStringLiteral FORMAT_WMF = u"wmf";

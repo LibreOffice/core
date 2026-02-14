@@ -20,13 +20,13 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
 
 #include <string_view>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
+class SfxViewFrame;
 
 namespace sfx2::sidebar {
 

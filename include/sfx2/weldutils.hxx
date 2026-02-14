@@ -10,17 +10,23 @@
 #ifndef INCLUDED_SFX2_WELDUTILS_HXX
 #define INCLUDED_SFX2_WELDUTILS_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>
 #include <svtools/miscopt.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/weld/weld.hxx>
 
 #include <map>
+
+namespace com::sun::star::frame
+{
+class XFrame;
+}
+namespace vcl
+{
+enum class ImageType;
+}
 
 namespace weld
 {

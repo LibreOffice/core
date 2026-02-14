@@ -21,7 +21,8 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <unotools/resmgr.hxx>
+
+struct TranslateId;
 
 SFX2_DLLPUBLIC OUString SfxResId(TranslateId aId);
 

@@ -11,18 +11,37 @@
 
 #include <functional>
 
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/security/CertificateKind.hpp>
-
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 class SfxViewShell;
 namespace svl::crypto
 {
 class SigningContext;
+}
+namespace com::sun::star::embed
+{
+class XStorage;
+}
+namespace com::sun::star::frame
+{
+class XModel;
+}
+namespace com::sun::star::io
+{
+class XStream;
+}
+namespace com::sun::star::security
+{
+class XCertificate;
+}
+namespace com::sun::star::security
+{
+enum class CertificateKind;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 namespace sfx2

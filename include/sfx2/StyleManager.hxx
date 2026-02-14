@@ -12,13 +12,15 @@
 
 #include <sfx2/dllapi.h>
 
-#include <svl/style.hxx>
 #include <tools/long.hxx>
 
 #include <memory>
+#include <string_view>
 
 class OutputDevice;
 class SfxObjectShell;
+class SfxStyleSheetBase;
+enum class SfxStyleFamily;
 namespace sfx2 { class StylePreviewRenderer; }
 
 namespace sfx2

@@ -27,6 +27,7 @@
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx> //SAL_WARN
 #include <tools/color.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx> //Graphic
 #include <vcl/settings.hxx> //GetSettings
 #include <vcl/svapp.hxx> //Application::

@@ -21,6 +21,7 @@
 #include <mailmergehelper.hxx>
 #include <mmconfigitem.hxx>
 #include <docsh.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -34,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/stream.hxx>
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <o3tl/any.hxx>
+#include <tools/stream.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>

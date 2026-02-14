@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include <svx/svdomedia.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
 using namespace ::com::sun::star;

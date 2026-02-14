@@ -34,6 +34,7 @@
 #include <DrawDocShell.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/gfxlink.hxx>

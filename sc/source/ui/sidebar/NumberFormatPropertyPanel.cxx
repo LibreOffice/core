@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svx/numfmtsh.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;

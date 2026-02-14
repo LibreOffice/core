@@ -21,13 +21,14 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <vcl/vclptr.hxx>
 
 class SfxModule;
 class SfxStatusBarControl;
 class StatusBar;
+class SfxPoolItem;
+enum class SfxItemState;
 
 rtl::Reference<svt::StatusbarController> SfxStatusBarControllerFactory(
     const css::uno::Reference< css::frame::XFrame >& rFrame,

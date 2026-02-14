@@ -10,13 +10,13 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 class DataChangedEvent;
 class VclSimpleEvent;
 namespace sfx2 { namespace sidebar { class Panel; } }
 namespace tools { class JsonWriter; }
+namespace weld { class Builder; }
 
 /// This class is the base for the Widget Layout-based sidebar panels.
 class SFX2_DLLPUBLIC PanelLayout

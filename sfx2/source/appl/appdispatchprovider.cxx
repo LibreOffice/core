@@ -31,6 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>

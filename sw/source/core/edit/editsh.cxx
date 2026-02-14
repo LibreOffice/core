@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <hintids.hxx>
 #include <osl/diagnose.h>

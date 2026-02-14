@@ -27,8 +27,10 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -70,6 +72,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <unotools/saveopt.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/debug.hxx>

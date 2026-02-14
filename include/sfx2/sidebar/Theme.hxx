@@ -20,7 +20,6 @@
 
 #include <sfx2/dllapi.h>
 
-#include <tools/color.hxx>
 #include <comphelper/compbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,6 +27,7 @@
 #include <map>
 #include <unordered_map>
 
+class Color;
 
 namespace sfx2::sidebar {
 

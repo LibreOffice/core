@@ -23,8 +23,11 @@
 #include <unotools/historyoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/inethist.hxx>
+#include <svl/itemset.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>

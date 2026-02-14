@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -45,6 +46,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -58,6 +60,7 @@
 #include <preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>

@@ -10,7 +10,12 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <vcl/weld/weld.hxx>
+#include <rtl/ustring.hxx>
+
+namespace weld
+{
+class Window;
+}
 
 class SFX2_DLLPUBLIC AdditionsDialogHelper
 {

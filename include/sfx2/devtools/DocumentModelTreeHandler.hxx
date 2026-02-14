@@ -10,11 +10,19 @@
 
 #pragma once
 
-#include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+#include <tools/link.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+
+namespace weld
+{
+class TreeIter;
+}
+namespace weld
+{
+class TreeView;
+}
 
 /** Document model tree handler
  *

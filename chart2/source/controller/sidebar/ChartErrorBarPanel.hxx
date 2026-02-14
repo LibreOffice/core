@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>

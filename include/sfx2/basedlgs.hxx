@@ -22,8 +22,9 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <tools/link.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
+//#include <vcl/weld/weld.hxx>
 
 class SfxTabPage;
 class SfxBindings;
@@ -31,6 +32,9 @@ class SfxChildWindow;
 struct SfxChildWinInfo;
 class SfxItemSet;
 class WhichRangesContainer;
+namespace vcl { class ILibreOfficeKitNotifier; }
+namespace weld { class Button; }
+namespace weld { class Window; }
 
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {

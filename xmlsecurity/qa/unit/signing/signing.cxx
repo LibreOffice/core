@@ -40,6 +40,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/signaturestate.hxx>
 #include <osl/thread.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <unotools/streamwrap.hxx>

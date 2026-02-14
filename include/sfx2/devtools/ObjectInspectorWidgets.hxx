@@ -11,13 +11,37 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-#include <vcl/weld/Builder.hxx>
-#include <vcl/weld/Notebook.hxx>
-#include <vcl/weld/Paned.hxx>
-#include <vcl/weld/TextView.hxx>
-#include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
+
+#include <memory>
+
+namespace weld
+{
+class Builder;
+}
+namespace weld
+{
+class Label;
+}
+namespace weld
+{
+class Notebook;
+}
+namespace weld
+{
+class Paned;
+}
+namespace weld
+{
+class TextView;
+}
+namespace weld
+{
+class Toolbar;
+}
+namespace weld
+{
+class TreeView;
+}
 
 struct SFX2_DLLPUBLIC ObjectInspectorWidgets
 {

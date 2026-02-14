@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -38,6 +39,7 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 
+#include <comphelper/documentconstants.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

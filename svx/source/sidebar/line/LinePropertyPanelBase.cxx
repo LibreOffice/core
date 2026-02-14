@@ -27,6 +27,7 @@
 #include <svx/xlinjoit.hxx>
 #include <svx/xtable.hxx>
 #include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <bitmaps.hlst>
 
 using namespace css;

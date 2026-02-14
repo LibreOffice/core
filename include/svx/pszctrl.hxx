@@ -22,6 +22,7 @@
 #include <memory>
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/long.hxx>
 
 struct SvxPosSizeStatusBarControl_Impl;
 

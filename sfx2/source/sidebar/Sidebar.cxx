@@ -26,6 +26,7 @@
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 

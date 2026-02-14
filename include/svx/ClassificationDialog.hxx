@@ -30,6 +30,8 @@ namespace weld
 class CustomWeld;
 }
 
+struct ImplSVEvent;
+
 namespace svx
 {
 class SVX_DLLPUBLIC ClassificationDialog final : public weld::GenericDialogController

@@ -13,6 +13,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
+#include <tools/stream.hxx>
 
 #include <com/sun/star/document/MacroExecMode.hpp>
 

@@ -24,6 +24,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <vcl/weld/Builder.hxx>
+
+#include <com/sun/star/frame/XModel3.hpp>
 
 using namespace css;
 

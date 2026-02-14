@@ -10,19 +10,34 @@
 
 #pragma once
 
-#include <vcl/weld/TreeView.hxx>
-#include <vcl/weld/weld.hxx>
-#include <vcl/commandevent.hxx>
 #include <comphelper/string.hxx>
+#include <tools/link.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <sfx2/devtools/ObjectInspectorWidgets.hxx>
 
 #include <memory>
 #include <deque>
+
+class CommandEvent;
+struct ObjectInspectorWidgets;
+
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
+namespace com::sun::star::uno
+{
+class XInterface;
+}
+
+namespace weld
+{
+class TreeIter;
+}
+namespace weld
+{
+class TreeView;
+}
 
 /** Object inspector tree handler
  *

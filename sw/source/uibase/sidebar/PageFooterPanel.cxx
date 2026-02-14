@@ -28,6 +28,7 @@
 #include "PageFooterPanel.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <cmdid.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

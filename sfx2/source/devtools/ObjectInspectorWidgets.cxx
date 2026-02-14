@@ -9,6 +9,12 @@
  */
 
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Notebook.hxx>
+#include <vcl/weld/Paned.hxx>
+#include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
+#include <vcl/weld/TreeView.hxx>
 
 ObjectInspectorWidgets::ObjectInspectorWidgets(const std::unique_ptr<weld::Builder>& rxBuilder)
     : mpClassNameLabel(rxBuilder->weld_label(u"class_name_value_id"_ustr))

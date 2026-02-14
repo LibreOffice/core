@@ -24,9 +24,6 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 
-#include <tools/gen.hxx>
-
-#include <comphelper/errcode.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }
@@ -37,7 +34,8 @@ class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
 class Fraction;
-
+class ErrCodeMsg;
+namespace tools { class Rectangle; }
 
 class SFX2_DLLPUBLIC SfxInPlaceClient
 {

@@ -33,6 +33,7 @@
 #include <svx/dialmgr.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <sfx2/chalign.hxx>
 #include <sfx2/objitem.hxx>
 #include <vcl/weld/Builder.hxx>
 

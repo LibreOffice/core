@@ -58,7 +58,9 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>

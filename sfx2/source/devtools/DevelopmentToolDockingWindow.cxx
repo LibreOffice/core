@@ -12,6 +12,7 @@
 
 #include <DevelopmentToolDockingWindow.hxx>
 
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <sfx2/dispatch.hxx>
@@ -19,6 +20,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <vcl/weld/Builder.hxx>
 
 #include "SelectionChangeHandler.hxx"
 

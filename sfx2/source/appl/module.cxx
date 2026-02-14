@@ -30,6 +30,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>

@@ -11,7 +11,6 @@
 #define INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/templateproperties.hxx>
 #include <functional>
 #include <memory>
 #include <set>
@@ -33,6 +32,7 @@
 class SfxDocumentTemplates;
 class TemplateContainerItem;
 class TemplateViewItem;
+struct TemplateItemProperties;
 
 namespace weld { class Menu; }
 

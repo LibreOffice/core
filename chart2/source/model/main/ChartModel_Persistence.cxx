@@ -50,6 +50,7 @@
 
 #include <chart2/AbstractPivotTableDataProvider.hxx>
 
+#include <tools/stream.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>

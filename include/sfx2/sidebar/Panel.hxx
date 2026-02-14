@@ -19,9 +19,10 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/weld/Builder.hxx>
-#include <vcl/weld/weld.hxx>
+
 #include <vector>
 
 namespace com::sun::star::frame
@@ -39,6 +40,30 @@ class XUIElement;
 namespace com::sun::star::awt
 {
 class XWindow;
+}
+namespace tools
+{
+class JsonWriter;
+}
+namespace tools
+{
+class Rectangle;
+}
+namespace weld
+{
+class Box;
+}
+namespace weld
+{
+class Builder;
+}
+namespace weld
+{
+class Widget;
+}
+namespace weld
+{
+class Window;
 }
 
 namespace sfx2::sidebar

@@ -25,10 +25,12 @@
 #include <basic/sbmod.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/event.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

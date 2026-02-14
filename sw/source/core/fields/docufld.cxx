@@ -24,6 +24,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>

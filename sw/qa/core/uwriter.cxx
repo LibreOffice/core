@@ -31,6 +31,7 @@
 #include <svl/intitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>

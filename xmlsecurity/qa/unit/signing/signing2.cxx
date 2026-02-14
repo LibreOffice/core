@@ -25,6 +25,7 @@
 
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/signaturestate.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>

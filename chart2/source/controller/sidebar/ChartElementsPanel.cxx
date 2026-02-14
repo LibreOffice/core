@@ -21,6 +21,7 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include "ChartElementsPanel.hxx"
 #include <ChartController.hxx>

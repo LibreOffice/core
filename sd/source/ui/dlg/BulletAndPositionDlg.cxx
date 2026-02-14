@@ -42,6 +42,7 @@
 #include <svl/stritem.hxx>
 #include <sal/log.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <View.hxx>

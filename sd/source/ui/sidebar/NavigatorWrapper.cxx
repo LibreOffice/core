@@ -21,6 +21,8 @@
 #include <ViewShellBase.hxx>
 #include <navigatr.hxx>
 
+#include <com/sun/star/ui/LayoutSize.hpp>
+
 namespace sd::sidebar {
 
 NavigatorWrapper::NavigatorWrapper (

@@ -56,6 +56,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <framework/FrameworkHelper.hxx>
 

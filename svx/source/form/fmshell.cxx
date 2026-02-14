@@ -36,6 +36,7 @@
 #include <svl/visitem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdobj.hxx>

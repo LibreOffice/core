@@ -21,6 +21,7 @@
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/xflftrit.hxx>
 #include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace svx::sidebar {
 

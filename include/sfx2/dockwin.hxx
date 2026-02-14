@@ -23,13 +23,14 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <vcl/dockwin.hxx>
-
-#include <com/sun/star/uno/Reference.hxx>
+#include <vcl/weld/weld.hxx>
 
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace weld { class Builder; }
 
 class SfxDockingWindow_Impl;
 

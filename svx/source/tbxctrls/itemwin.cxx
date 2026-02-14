@@ -39,6 +39,7 @@
 #include <svx/xtable.hxx>
 #include <svx/itemwin.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 #include "linemetricbox.hxx"
 

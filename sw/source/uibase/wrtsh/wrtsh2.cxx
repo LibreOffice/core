@@ -54,6 +54,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <memory>
 
@@ -63,6 +64,7 @@
 #include <sal/log.hxx>
 
 #include <fldmgr.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>

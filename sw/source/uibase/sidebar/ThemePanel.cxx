@@ -19,6 +19,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

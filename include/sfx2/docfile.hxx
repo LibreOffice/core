@@ -22,17 +22,17 @@
 
 #include <memory>
 #include <sal/config.h>
+#include <comphelper/errcode.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/signaturestate.hxx>
 #include <svl/lockfilecommon.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <svl/itemset.hxx>
 #include <tools/link.hxx>
-#include <tools/stream.hxx>
+#include <tools/ref.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
+#include <functional>
 #include <mutex>
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -46,6 +46,7 @@ namespace com::sun::star::ucb { class XCommandEnvironment; }
 namespace com::sun::star::ucb { class XContent; }
 namespace com::sun::star::util { struct DateTime; }
 namespace com::sun::star::util { struct RevisionTag; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 namespace com::sun::star::frame
 {
 class XModel;
@@ -59,9 +60,13 @@ class SfxFilter;
 class SfxMedium_Impl;
 class INetURLObject;
 class SfxFrame;
+class SfxItemSet;
 class SfxViewShell;
+class SvStream;
 class DateTime;
 struct ImplSVEvent;
+enum class SignatureState;
+enum class StreamMode;
 
 namespace weld
 {

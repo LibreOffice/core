@@ -24,7 +24,6 @@
 #include <optional>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.h>
 #include <svl/lstner.hxx>
 #include <sfx2/shell.hxx>
 #include <i18nlangtag/languagetag.hxx>

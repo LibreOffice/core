@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

@@ -27,13 +27,16 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/util/VetoException.hpp>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>

@@ -30,6 +30,7 @@
 #include <svtools/unitconv.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;

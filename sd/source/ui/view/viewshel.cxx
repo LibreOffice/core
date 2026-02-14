@@ -37,6 +37,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/svxids.hrc>

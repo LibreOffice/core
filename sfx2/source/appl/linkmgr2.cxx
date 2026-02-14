@@ -27,11 +27,13 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/itemset.hxx>
 #include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>

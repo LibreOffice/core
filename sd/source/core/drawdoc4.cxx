@@ -23,6 +23,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>

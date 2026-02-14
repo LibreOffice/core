@@ -28,6 +28,7 @@
 #include <svx/svdview.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/chinese_translation_unodialog.hxx>

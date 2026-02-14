@@ -48,6 +48,7 @@
 
 #include <navicfg.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>

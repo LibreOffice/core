@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

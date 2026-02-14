@@ -33,6 +33,7 @@
 #include <vcl/event.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
 #include <bitmaps.hlst>
 #include <svl/itemset.hxx>
 

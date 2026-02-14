@@ -38,6 +38,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>

@@ -29,6 +29,7 @@
 
 #include <i18nutil/transliteration.hxx>
 #include <sfx2/namedcolor.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

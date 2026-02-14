@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sfx2/templatedlg.hxx>
 #include <sfx2/uiobject.hxx>
 #include <templateviewitem.hxx>
 

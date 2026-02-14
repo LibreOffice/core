@@ -30,6 +30,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <tools/datetime.hxx>
+#include <tools/stream.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
@@ -51,6 +52,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 using namespace ::com::sun::star;
 

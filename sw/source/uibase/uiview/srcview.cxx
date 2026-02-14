@@ -20,6 +20,7 @@
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
@@ -41,6 +42,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfilt.hxx>

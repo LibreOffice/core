@@ -24,8 +24,6 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sal/types.h>
-#include <tools/fldunit.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 
 class SfxObjectFactory;
 class SfxModule_Impl;
@@ -34,10 +32,12 @@ struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SfxTabPage;
+enum class FieldUnit : sal_uInt16;
 
 namespace com::sun::star::frame {
     class XFrame;
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace weld {
     class Container;

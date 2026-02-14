@@ -8,12 +8,14 @@
  */
 
 #include <hyperlinknewdoctabpage.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>

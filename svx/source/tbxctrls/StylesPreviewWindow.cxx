@@ -30,6 +30,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
+#include <tools/stream.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/virdev.hxx>

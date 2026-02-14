@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <avmedia/MediaControlBase.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

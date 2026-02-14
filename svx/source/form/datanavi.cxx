@@ -35,6 +35,7 @@
 #include <unotools/resmgr.hxx>
 #include <svx/xmlexchg.hxx>
 #include <unotools/viewoptions.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
@@ -43,6 +44,7 @@
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Menu.hxx>

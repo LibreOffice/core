@@ -18,6 +18,7 @@
  */
 #include "ListsPropertyPanel.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <vcl/weld/Builder.hxx>
 
 using namespace css;
 using namespace css::uno;

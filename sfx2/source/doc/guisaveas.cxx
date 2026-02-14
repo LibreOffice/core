@@ -63,6 +63,7 @@
 #include <svl/eitem.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/json_writer.hxx>

@@ -11,6 +11,7 @@
 
 #include <config_fonts.h>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>

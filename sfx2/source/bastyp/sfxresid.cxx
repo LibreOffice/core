@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/sfxresid.hxx>
+#include <unotools/resmgr.hxx>
 
 OUString SfxResId(TranslateId aId) { return Translate::get(aId, Translate::Create("sfx")); }
 

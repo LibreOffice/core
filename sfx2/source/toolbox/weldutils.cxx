@@ -8,6 +8,7 @@
  */
 
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <sidebar/ControllerFactory.hxx>
 #include <sfx2/weldutils.hxx>

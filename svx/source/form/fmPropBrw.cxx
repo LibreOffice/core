@@ -41,6 +41,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
 #include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>

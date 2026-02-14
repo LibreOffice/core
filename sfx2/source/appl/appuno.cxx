@@ -30,10 +30,12 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <osl/diagnose.h>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>

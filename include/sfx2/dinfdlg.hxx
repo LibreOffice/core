@@ -38,7 +38,6 @@
 #include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/SpinButton.hxx>
-#include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <sfx2/tabdlg.hxx>
@@ -47,13 +46,12 @@
 #include <memory>
 #include <vcl/abstdlg.hxx>
 
-namespace com::sun::star::beans { struct PropertyValue; }
-
 namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
 }
+namespace weld { class TextView; }
 
 struct CustomProperty;
 

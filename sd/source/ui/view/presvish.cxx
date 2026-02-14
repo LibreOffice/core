@@ -23,9 +23,11 @@
 #include <PresentationViewShell.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ruler.hxx>
+#include <vcl/svapp.hxx>
 #include <FrameView.hxx>
 #include <DrawDocShell.hxx>
 #include <slideshow.hxx>

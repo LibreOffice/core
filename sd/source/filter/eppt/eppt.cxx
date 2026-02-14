@@ -41,6 +41,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <comphelper/sequence.hxx>
+#include <sot/formats.hxx>
 #include <tools/zcodec.hxx>
 #include <unotools/securityoptions.hxx>
 #include <filter/msfilter/classids.hxx>

@@ -86,6 +86,7 @@
 #include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/svborder.hxx>
+#include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/errcode.hxx>

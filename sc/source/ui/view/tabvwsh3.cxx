@@ -25,6 +25,7 @@
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objface.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

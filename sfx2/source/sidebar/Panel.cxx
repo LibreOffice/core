@@ -23,20 +23,20 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 
 
-#if OSL_DEBUG_LEVEL >= 2
 #include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/Deck.hxx>
-#endif
 
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <utility>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 using namespace css;

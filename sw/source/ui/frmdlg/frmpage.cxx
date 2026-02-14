@@ -72,6 +72,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <svtools/embedhlp.hxx>
 #include <comphelper/lok.hxx>

@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>

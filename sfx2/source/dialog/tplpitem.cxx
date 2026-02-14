@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/tplpitem.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/frame/status/Template.hpp>
 #include <utility>
 

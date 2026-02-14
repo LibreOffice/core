@@ -20,12 +20,16 @@
 #define INCLUDED_SFX2_CTRLITEM_HXX
 
 #include <sal/config.h>
+#include <boost/property_tree/ptree_fwd.hpp>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <svl/poolitem.hxx>
 #include <tools/debug.hxx>
 
+
 class SfxBindings;
+class SfxPoolItem;
+enum class MapUnit : sal_uInt8;
+enum class SfxItemState;
 
 class SFX2_DLLPUBLIC SfxControllerItem
 {

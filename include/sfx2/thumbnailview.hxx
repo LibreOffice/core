@@ -17,11 +17,11 @@
 #include <vector>
 
 #include <tools/color.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 
 class Bitmap;
+class StyleSettings;
 class ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
 class ThumbnailViewAcc;

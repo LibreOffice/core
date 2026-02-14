@@ -31,6 +31,7 @@
 #include <vcl/weld/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <sfx2/AccessibilityIssue.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>

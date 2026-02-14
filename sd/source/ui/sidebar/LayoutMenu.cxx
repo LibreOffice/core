@@ -53,6 +53,8 @@
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Menu.hxx>
 #include <xmloff/autolayout.hxx>
 #include <comphelper/lok.hxx>
@@ -61,6 +63,8 @@
 
 #include <string_view>
 #include <vector>
+
+#include <com/sun/star/ui/LayoutSize.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

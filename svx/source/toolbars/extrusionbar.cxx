@@ -29,6 +29,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/xsflclit.hxx>

@@ -47,12 +47,10 @@
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-//#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -79,6 +77,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct EventObject; }
 namespace com::sun::star::frame { class XController2; }
 namespace com::sun::star::ui { class XUIConfigurationManager2; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 
 

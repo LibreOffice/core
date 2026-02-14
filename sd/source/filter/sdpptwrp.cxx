@@ -21,6 +21,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <filter/msfilter/msoleexp.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svxerr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sot/storage.hxx>

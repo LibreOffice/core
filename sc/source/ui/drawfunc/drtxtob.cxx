@@ -53,6 +53,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cliplistener.hxx>
 #include <vcl/transfer.hxx>

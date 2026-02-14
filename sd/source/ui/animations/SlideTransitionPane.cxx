@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/ui/LayoutSize.hpp>
 #include <SlideTransitionPane.hxx>
 
 #include <TransitionPreset.hxx>
@@ -40,6 +41,7 @@
 #include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <tools/urlobj.hxx>

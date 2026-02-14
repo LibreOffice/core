@@ -43,6 +43,7 @@
 #include <svx/flagsdef.hxx>
 #include <vector>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <limits>
 #include <memory>

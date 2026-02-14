@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace css;
 

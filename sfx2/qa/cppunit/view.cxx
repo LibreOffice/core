@@ -24,6 +24,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <sfx2/signaturestate.hxx>
 #include <tools/json_writer.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/base64.hxx>

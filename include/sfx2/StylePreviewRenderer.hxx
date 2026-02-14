@@ -11,10 +11,15 @@
 #define INCLUDED_SFX2_STYLEPREVIEWRENDERER_HXX
 
 #include <sfx2/dllapi.h>
-#include <sfx2/objsh.hxx>
+#include <tools/long.hxx>
 
+#include <string_view>
+
+class Color;
 class OutputDevice;
+class SfxObjectShell;
 class SfxStyleSheetBase;
+namespace tools { class Rectangle; }
 
 namespace sfx2
 {

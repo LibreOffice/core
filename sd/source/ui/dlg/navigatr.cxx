@@ -22,6 +22,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/stritem.hxx>
@@ -51,6 +52,8 @@
 #include <vcl/jsdialog/executor.hxx>
 
 #include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <comphelper/lok.hxx>
 
 #include <sdpage.hxx>

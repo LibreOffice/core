@@ -41,6 +41,8 @@
 
 #include <sfx2/strings.hrc>
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 #include "securitypage.hxx"
 
 using namespace ::com::sun::star;

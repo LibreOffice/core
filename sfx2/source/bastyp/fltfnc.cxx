@@ -32,6 +32,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <sot/exchange.hxx>
+#include <svl/itemset.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>

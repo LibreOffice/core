@@ -22,11 +22,10 @@
 #include <memory>
 #include <span>
 #include <sal/config.h>
-#include <rtl/ref.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/toolbarids.hxx>
 #include <sal/types.h>
 
+#include <rtl/ustring.hxx>
 #include <sfx2/bindings.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -38,11 +37,16 @@ class SfxRequest;
 class SfxViewFrame;
 class SfxItemSet;
 class SfxModule;
+class SfxShell;
 class Point;
 struct SfxDispatcher_Impl;
 class VCLXPopupMenu;
 class SfxPoolItemHolder;
+enum class ToolbarId : sal_uInt32;
+enum class SfxDisableFlags;
 
+namespace com::sun::star::uno { class Any; }
+namespace rtl { template <class reference_type> class Reference; }
 namespace vcl { class Window; }
 
 enum class SfxDispatcherPopFlags

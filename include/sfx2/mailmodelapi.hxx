@@ -19,7 +19,6 @@
 #pragma once
 
 #include <config_options.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <vector>
@@ -32,6 +31,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 // class AddressList_Impl ------------------------------------------------
 typedef ::std::vector< OUString > AddressList_Impl;

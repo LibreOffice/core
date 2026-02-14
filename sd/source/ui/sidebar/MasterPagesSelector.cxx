@@ -41,7 +41,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <memory>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+
+#include <com/sun/star/ui/LayoutSize.hpp>
 
 namespace sd::sidebar {
 

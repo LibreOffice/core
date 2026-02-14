@@ -12,11 +12,15 @@
 
 #include <sfx2/dllapi.h>
 
-#include <vcl/weld/weld.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vector>
 #include <memory>
+
+namespace weld
+{
+class Window;
+}
 
 namespace sfx
 {

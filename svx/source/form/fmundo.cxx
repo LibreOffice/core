@@ -39,6 +39,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>

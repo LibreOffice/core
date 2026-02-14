@@ -25,6 +25,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>

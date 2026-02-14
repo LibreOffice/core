@@ -55,6 +55,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>

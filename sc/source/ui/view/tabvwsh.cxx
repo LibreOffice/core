@@ -20,6 +20,7 @@
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>

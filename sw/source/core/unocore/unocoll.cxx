@@ -65,6 +65,7 @@
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>

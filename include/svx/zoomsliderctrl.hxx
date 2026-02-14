@@ -22,6 +22,7 @@
 
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/long.hxx>
 #include <memory>
 
 class SVX_DLLPUBLIC SvxZoomSliderControl final : public SfxStatusBarControl

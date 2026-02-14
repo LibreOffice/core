@@ -40,6 +40,7 @@
 #include <tools/debug.hxx>
 
 #include <sfx2/evntconf.hxx>
+#include <sfx2/event.hxx>
 
 #include <sot/formats.hxx>
 

@@ -44,6 +44,7 @@
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/int64item.hxx>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/lok.hxx>
 #include <svtools/unitconv.hxx>

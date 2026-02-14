@@ -36,6 +36,7 @@
 #include <vcl/event.hxx>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/virdev.hxx>

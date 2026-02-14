@@ -21,20 +21,15 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/signaturestate.hxx>
 #include <sal/types.h>
 #include <comphelper/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/frame/XModel3.hpp>
-#include <vcl/bitmap.hxx>
 
 #include <svl/poolitem.hxx>
-#include <sot/formats.hxx>
 #include <sot/object.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/stream.hxx>
 
 #include <sfx2/shell.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -44,17 +39,20 @@
 
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
-#include <sfx2/AccessibilityIssue.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
-
-#include <unotools/ucbstreamhelper.hxx>
 
 namespace weld {class Button; }
 namespace model {class ColorSet; }
+namespace rtl
+{
+template <class reference_type> class Reference;
+}
+
 struct NamedColor;
 class SbxValue;
 class SbxArray;
 class BasicManager;
+class Bitmap;
 class SfxMedium;
 class SfxObjectFactory;
 class SfxDocumentInfoDialog;
@@ -73,12 +71,16 @@ class OutputDevice;
 class Color;
 class Fraction;
 class SvGlobalName;
+class SvStream;
 class InfobarData;
 class VirtualDevice;
 
 enum class SfxModelFlags;
 enum class SfxEventHintId;
 enum class InfobarType;
+enum class SignatureState;
+enum class SotClipboardFormatId : sal_uInt32;
+enum class SvStreamEndian;
 
 // These values presumably must match exactly the corresponding
 // css::embed::Aspects ones (in offapi/com/sun/star/embed/Aspects.idl)
@@ -97,12 +99,14 @@ namespace sfx2
 }
 
 namespace sfx { class IDocumentModelAccessor; }
+namespace sfx { class AccessibilityIssueCollection; }
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::frame { class XModel3; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XStream; }
 namespace com::sun::star::script { class XStorageBasedLibraryContainer ; }

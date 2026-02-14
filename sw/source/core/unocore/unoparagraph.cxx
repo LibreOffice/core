@@ -48,6 +48,7 @@
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

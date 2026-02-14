@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

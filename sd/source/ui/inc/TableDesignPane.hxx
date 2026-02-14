@@ -25,6 +25,8 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
+#include <com/sun/star/ui/LayoutSize.hpp>
+
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::container { class XIndexAccess; class XNameContainer; }
 

@@ -18,6 +18,7 @@
  */
 
 #include "parametrizedattributedispatcher.hxx"
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
 #include <svl/itemset.hxx>

@@ -21,6 +21,7 @@
 #include <docsh.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XModule.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/xforms/Model.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>

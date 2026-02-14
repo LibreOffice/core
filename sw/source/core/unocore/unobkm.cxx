@@ -19,6 +19,8 @@
 
 #include <unobookmark.hxx>
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>

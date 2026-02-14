@@ -24,6 +24,7 @@
 #include <vcl/weld/weld.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

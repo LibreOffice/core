@@ -22,11 +22,9 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/documentconstants.hxx>
 #include <tools/link.hxx>
 #include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -44,9 +42,11 @@ namespace com::sun::star::ui::dialogs
 }
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace weld { class Window; }
 
+enum class SfxFilterFlags;
 enum class SignatureState;
 class Graphic;
 class SfxFilter;

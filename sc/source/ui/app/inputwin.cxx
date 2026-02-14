@@ -24,6 +24,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
+#include <sfx2/chalign.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>

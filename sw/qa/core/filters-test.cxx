@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/frame/XModel3.hpp>
+
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
@@ -19,6 +21,8 @@
 #include <sfx2/fcontnr.hxx>
 
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 
 #include <iodetect.hxx>

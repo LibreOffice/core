@@ -20,6 +20,7 @@
 #include <svx/xcolit.hxx>
 #include <svl/itemset.hxx>
 #include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace svx::sidebar
 {

@@ -9,6 +9,7 @@
  */
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>

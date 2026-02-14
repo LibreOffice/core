@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>

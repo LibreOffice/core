@@ -34,9 +34,11 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/event.hxx>

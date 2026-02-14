@@ -16,8 +16,27 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/weld/TextView.hxx>
-#include <vcl/weld/Toolbar.hxx>
+
+namespace weld
+{
+class Button;
+}
+namespace weld
+{
+class Image;
+}
+namespace weld
+{
+class Label;
+}
+namespace weld
+{
+class TextView;
+}
+namespace weld
+{
+class Toolbar;
+}
 
 // These must match the values in offapi/com/sun/star/frame/InfobarType.idl
 enum class InfobarType

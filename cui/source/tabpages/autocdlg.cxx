@@ -27,6 +27,7 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <sfx2/app.hxx>
@@ -47,6 +48,7 @@
 #include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/fldunit.hxx>
 
 #include <autocdlg.hxx>
 #include <editeng/acorrcfg.hxx>

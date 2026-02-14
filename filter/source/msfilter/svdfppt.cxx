@@ -34,6 +34,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/text/XText.hpp>

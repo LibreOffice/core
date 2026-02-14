@@ -21,6 +21,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/windowstate.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/weld/Dialog.hxx>
 
 #include <cmdid.h>

@@ -22,9 +22,7 @@
 
 #include <config_options.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/signaturestate.hxx>
-
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 
@@ -32,6 +30,8 @@ namespace com::sun::star::document { class XEmbeddedScripts; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::script { class XLibraryContainer; }
 namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+enum class SignatureState;
 
 
 namespace sfx2

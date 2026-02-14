@@ -51,6 +51,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/restartdialog.hxx>
@@ -74,12 +75,14 @@
 #include <osl/file.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/themecolors.hxx>
+#include <vcl/svapp.hxx>
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sfx2/AdditionsDialogHelper.hxx>

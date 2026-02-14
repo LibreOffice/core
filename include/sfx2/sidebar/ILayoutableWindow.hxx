@@ -20,7 +20,11 @@
 
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/ui/LayoutSize.hpp>
+
+namespace com::sun::star::ui
+{
+struct LayoutSize;
+}
 
 namespace sfx2::sidebar
 {

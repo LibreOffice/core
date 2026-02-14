@@ -20,11 +20,13 @@
 #include <sal/config.h>
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <sfx2/objsh.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/servicehelper.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
+#include <tools/stream.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>

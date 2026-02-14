@@ -20,6 +20,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
+#include <sot/formats.hxx>
 #include <tools/globname.hxx>
 
 #include <swtypes.hxx>

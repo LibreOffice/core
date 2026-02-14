@@ -20,6 +20,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/unoapi.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

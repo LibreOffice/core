@@ -26,6 +26,7 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoattr.hxx>
 #include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

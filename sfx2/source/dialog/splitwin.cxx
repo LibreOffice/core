@@ -33,6 +33,7 @@
 
 #include <splitwin.hxx>
 #include <workwin.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/dockwin.hxx>
 #include <o3tl/string_view.hxx>
 

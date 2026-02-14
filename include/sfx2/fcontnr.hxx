@@ -25,7 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <comphelper/documentconstants.hxx>
-#include <sot/formats.hxx>
 
 #include <memory>
 
@@ -38,6 +37,7 @@ class ErrCode;
 class SfxFilter;
 class SfxMedium;
 class SfxFilterContainer_Impl;
+enum class SotClipboardFormatId : sal_uInt32;
 
 
 class SFX2_DLLPUBLIC SfxFilterContainer

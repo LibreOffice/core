@@ -22,6 +22,7 @@
 #include <svx/graphichelper.hxx>
 
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <chartsh.hxx>

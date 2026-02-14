@@ -25,6 +25,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/SpinButton.hxx>
 
 #include <sfx2/printopt.hxx>
 

@@ -45,6 +45,7 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 

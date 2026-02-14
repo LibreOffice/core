@@ -36,6 +36,7 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>

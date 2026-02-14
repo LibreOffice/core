@@ -20,10 +20,13 @@
 #include <memory>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
+#include <com/sun/star/view/PrintableState.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <utility>

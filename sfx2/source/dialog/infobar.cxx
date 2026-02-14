@@ -17,6 +17,7 @@
 #include <officecfg/Office/UI/Infobar.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
@@ -29,6 +30,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <bitmaps.hlst>
 

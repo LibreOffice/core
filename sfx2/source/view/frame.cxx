@@ -25,8 +25,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
 #include <tools/svborder.hxx>

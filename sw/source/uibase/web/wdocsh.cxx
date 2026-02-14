@@ -22,6 +22,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <sfx2/objface.hxx>
+#include <sot/formats.hxx>
 #include <tools/globname.hxx>
 #include <osl/diagnose.h>
 

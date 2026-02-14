@@ -18,17 +18,21 @@
  */
 #pragma once
 
-#include <unotools/confignode.hxx>
 #include <map>
+#include <memory>
 #include <vector>
 #include <set>
 
 #include <sfx2/dllapi.h>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace sfx2::sidebar { class DeckDescriptor; }
 namespace sfx2::sidebar { class PanelDescriptor; }
+namespace utl { class OConfigurationNode; }
+namespace utl { class OConfigurationTreeRoot; }
 
 namespace sfx2::sidebar {
 

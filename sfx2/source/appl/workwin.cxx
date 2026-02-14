@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <sfx2/chalign.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -40,6 +41,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 #include <tools/svborder.hxx>
 #include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>

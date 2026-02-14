@@ -27,6 +27,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include "LineWidthValueSet.hxx"
 #include <bitmaps.hlst>
 

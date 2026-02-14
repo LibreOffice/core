@@ -36,6 +36,7 @@
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/fldunit.hxx>
+#include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>

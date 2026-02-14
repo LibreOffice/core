@@ -34,6 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <tools/stream.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>

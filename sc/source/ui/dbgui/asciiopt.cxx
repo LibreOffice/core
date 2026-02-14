@@ -23,6 +23,7 @@
 #include <osl/thread.h>
 #include <o3tl/string_view.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/stream.hxx>
 
 constexpr std::u16string_view pStrFix = u"FIX";
 constexpr std::u16string_view pStrMrg = u"MRG";

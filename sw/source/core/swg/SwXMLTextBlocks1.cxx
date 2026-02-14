@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>

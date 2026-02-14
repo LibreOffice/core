@@ -28,6 +28,7 @@
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>

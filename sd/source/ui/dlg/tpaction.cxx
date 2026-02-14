@@ -32,6 +32,7 @@
 #include <sfx2/strings.hrc>
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/stritem.hxx>

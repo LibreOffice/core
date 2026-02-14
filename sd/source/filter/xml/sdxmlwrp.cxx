@@ -56,6 +56,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

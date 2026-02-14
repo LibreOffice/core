@@ -14,6 +14,7 @@
 
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/stream.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>

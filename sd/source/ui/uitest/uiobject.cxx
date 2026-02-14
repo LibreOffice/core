@@ -16,6 +16,7 @@
 
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include <utility>
 

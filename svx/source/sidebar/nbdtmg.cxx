@@ -18,6 +18,7 @@
  */
 #include <svx/nbdtmg.hxx>
 #include <svx/svxids.hrc>
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>

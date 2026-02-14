@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <o3tl/any.hxx>
 #include <vcl/errinf.hxx>
 #include <sfx2/docfile.hxx>

@@ -24,10 +24,10 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
-#include <sfx2/toolbarids.hxx>
 
 struct SfxInterface_Impl;
 class  SfxModule;
+enum class ToolbarId : sal_uInt32;
 
 #define SFX_OBJECTBAR_APPLICATION       0
 #define SFX_OBJECTBAR_OBJECT            1

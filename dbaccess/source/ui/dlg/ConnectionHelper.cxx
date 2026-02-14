@@ -22,6 +22,7 @@
 #include "ConnectionHelper.hxx"
 #include <IItemSetHelper.hxx>
 #include <strings.hrc>
+#include <comphelper/documentconstants.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>

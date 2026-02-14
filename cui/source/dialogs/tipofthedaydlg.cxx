@@ -25,6 +25,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/weld/Builder.hxx>
@@ -33,6 +34,7 @@
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
