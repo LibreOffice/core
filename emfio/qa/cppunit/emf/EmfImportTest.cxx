@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawLine)
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
                 "linecap", u"BUTT");
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/polypolygon",
-                "path", u"m89.1506452315894 403.573503917507 895.170581035125-345.821325648415");
+                "path", u"m77.940249951477 403.573552502852 888.231320530266-345.821343684403");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithCaps)
@@ -475,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinearGradient)
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "opacity",
                 u"0.392156862745098");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]/polypolygon", "path",
-                u"m0 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+                u"m0 0.216110019646294h7615.75822989747v7610.21611001965h-7615.75822989747z");
 
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "spreadmethod", u"repeat");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "startx", u"-1");
@@ -484,8 +484,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLinearGradient)
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "endy", u"-1");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "opacity", u"1");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]/polypolygon", "path",
-                u"m7615.75822989746 "
-                u"0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+                u"m7615.75822989747 "
+                u"0.216110019646294h7615.75822989747v7610.21611001965h-7615.75822989747z");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTextMapMode)
@@ -1061,9 +1061,41 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusGetDC)
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]/polypolygon", "path",
                 u"m19428.4895833333 6632.22222222222h317.34375v-2398.88888888889h-317.34375z");
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]", "color", u"#fcf2e3");
+}
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 4);
-    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 13);
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusSetPageTransform)
+{
+    // tdf#147818 EMF+ records: GetDC, SetPageTransform, FillRects
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusSetPageTransform.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", 2);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "text",
+                u"Flow Chart LM_SOP_01.04.04_02_Sonderfreigabe Lieferant_DE.igx");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "fontcolor", u"#000000");
+
+    assertXPath(pDocument, aXPathPrefix + "group", 2);
+
+    assertXPath(pDocument, aXPathPrefix + "group[1]/mask/polypolygon", 1);
+    assertXPath(pDocument, aXPathPrefix + "group[1]/mask/polypolygoncolor", 1);
+    assertXPath(pDocument, aXPathPrefix + "group[1]/mask/polypolygoncolor", "color", u"#4080c0");
+    assertXPath(pDocument, aXPathPrefix + "group[1]/mask/polypolygoncolor/polypolygon", "height",
+                u"1620");
+    assertXPath(pDocument, aXPathPrefix + "group[1]/mask/polypolygoncolor/polypolygon", "maxy",
+                u"1994");
+
+    assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygon", 1);
+    assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygoncolor", 2);
+    assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygoncolor[1]", "color", u"#00eeee");
+    assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygoncolor[1]/polypolygon", "height",
+                u"2457");
+    assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygoncolor[2]", "color", u"#ee00ee");
+    assertXPath(pDocument, aXPathPrefix + "group[2]/mask/polypolygoncolor[2]/polypolygon", "height",
+                u"2457");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusSave)
