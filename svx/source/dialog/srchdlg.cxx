@@ -390,6 +390,8 @@ void SvxSearchDialog::SetReplaceCtrlsVisible(bool bVisible)
     m_xReplaceFrame->set_visible(bVisible);
     m_xReplaceBtn->set_visible(bVisible);
     m_xReplaceAllBtn->set_visible(bVisible);
+
+    m_xDialog->resize_to_request();
 }
 
 void SvxSearchDialog::Construct_Impl()
