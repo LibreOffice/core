@@ -172,6 +172,7 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
     IMarkVector aMarks;
     if ( GetBookmarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
+        const bool bSdtGetsBookmarkEnd = m_pAttrOutput->DoesParaSdtPreventBookmarkEnd(nCurrentPos);
         for ( MarkBase* pMark : aMarks )
         {
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
@@ -181,7 +182,12 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
                 aStarts.push_back( pMark->GetName().toString() );
 
             if (nEnd == nCurrentPos && rNode == pMark->GetMarkEnd().GetNode())
-                aEnds.push_back( pMark->GetName().toString() );
+            {
+                if (bSdtGetsBookmarkEnd)
+                    m_pAttrOutput->WriteBookmarkEndWithParaSdt(pMark->GetName().toString());
+                else
+                    aEnds.push_back(pMark->GetName().toString());
+            }
         }
     }
 

@@ -1137,6 +1137,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtPr/w:picture", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[2]/w:sdtPr/w:group", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:citation", 1);
+
+    // tdf#170602: bookmarkEnd not allowed inside plainText Sdt
+    // This is a pre-emptive test - just asserting where it currently is.
+    // Probably the bookmark belongs before the w:sdt,
+    // but definitely not after the first </w:r>
+    // and definitely not bookmarking the entire sdt (not after the picture </w:sdt>)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtContent/w:p/w:bookmarkEnd", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)

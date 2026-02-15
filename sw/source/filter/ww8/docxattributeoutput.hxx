@@ -176,6 +176,7 @@ public:
     // If the SDT has not beeen started (!m_bStartedSdt) and the text positions do not match,
     // then this SdtBlockHelper cache may be cleared and re-populated.
     const SwPosition* m_pStartPosition; // only used by m_aParagraphSdt
+    std::vector<OUString> m_vBookmarkEnd; // only used by m_aParagraphSdt
 
     // m_oSdtPrToken is a key GrabBag value, with a two-fold purpose:
     // - the absence of m_oSdtPrToken also means that (XML_w, XML_sdt) should not be written
@@ -1159,6 +1160,14 @@ public:
     void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
     bool IsAlternateContentChoiceOpen( ) const { return m_bAlternateContentChoiceOpen; }
     void GetSdtEndBefore(const SdrObject* pSdrObj);
+
+    // returns m_aParagraphSdt's effective m_oSdtPrToken for the current node
+    std::optional<sal_Int32> GetGrabBagParaSdtPrToken();
+
+    // PlainText-y blockSdt content controls are considered corrupt if they contain a bookmarkEnd
+    bool DoesParaSdtPreventBookmarkEnd(const sal_Int32 nPos);
+    void WriteBookmarkEndWithParaSdt(const OUString& rString);
+
     bool IsFirstParagraph() const { return m_bIsFirstParagraph; }
 
     /// Stores the table export state to the passed context and resets own state.

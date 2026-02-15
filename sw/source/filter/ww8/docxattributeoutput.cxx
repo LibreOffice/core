@@ -3813,6 +3813,106 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
         pProp->Value >>= m_bEndCharSdt;
 }
 
+std::optional<sal_Int32> DocxAttributeOutput::GetGrabBagParaSdtPrToken()
+{
+    // NOTE: just because w:sdt has started doesn't mean THIS paragraph will be in the sdt.
+    // It won't be if lcl_hasParaSdtEndBefore (unless it also has 'SdtPr'),
+    // So don't call this function before StartParagraph has completed EndParaSdtBlock.
+
+    if (m_aParagraphSdt.m_bStartedSdt)
+        return m_aParagraphSdt.m_oSdtPrToken;
+
+    // update from the grabbag
+    SwPosition* pStartPosition = m_rExport.m_pCurPam->Start();
+    const SwTextNode* pTextNd = pStartPosition->GetNode().GetTextNode();
+    if (!pTextNd)
+        return std::nullopt;
+    const SfxItemSet* pSet = pTextNd->GetpSwAttrSet();
+    if (!pSet)
+        return std::nullopt;
+    const SfxGrabBagItem* pParaGrabBag = pSet->GetItem(RES_PARATR_GRABBAG);
+    if (!pParaGrabBag)
+        return std::nullopt;
+    std::map<OUString, css::uno::Any> rMap = pParaGrabBag->GetGrabBag();
+    if (!rMap.contains(u"SdtPr"_ustr))
+        return std::nullopt;
+
+    const uno::Sequence<beans::PropertyValue> aGrabBagSdt
+        = rMap[u"SdtPr"_ustr].get<uno::Sequence<beans::PropertyValue>>();
+    m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, pStartPosition);
+
+    return m_aParagraphSdt.m_oSdtPrToken;
+}
+
+// Microsoft Word complains about a corrupt document
+// if a bookmarkEnd exists inside most types of blockSdt content controls.
+bool DocxAttributeOutput::DoesParaSdtPreventBookmarkEnd(const sal_Int32 nPos)
+{
+    if (!nPos && !m_aParagraphSdt.m_bStartedSdt)
+         return false; // don't delay position 0 bookmarkEnds. They should be in front of the Sdt.
+
+    SwPosition* pStartPosition = m_rExport.m_pCurPam->Start();
+    const SwTextNode* pTextNd = pStartPosition->GetNode().GetTextNode();
+    if (!pTextNd && !m_aParagraphSdt.m_bStartedSdt)
+        return false; // there cannot be a paragraph blockSdt here.
+
+    SwTextAttr* pContentControl = nullptr;
+    if (pTextNd)
+    {
+        pContentControl = pTextNd->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL,
+                                                 sw::GetTextAttrMode::Default);
+    }
+
+    // Not concerned with real content controls - only grabbagged ones are causing problems.
+    if (pContentControl) // native content controls are always runSdt
+        return false; // not dealing with a grabbag blockSdt here.
+
+    // NOTE: just because w:sdt has started doesn't mean THIS paragraph will be in the sdt.
+    // It won't be if lcl_hasParaSdtEndBefore (unless it also has 'SdtPr'),
+    // but practically speaking, m_bStartedSdt will be turned off
+    // before THIS paragraph tries to process any bookmarks - so the complication is just ignored.
+    bool bParagraphHasGrabBagSdt = m_aParagraphSdt.m_bStartedSdt;
+
+    // check if m_aParagraphSdt is cached for the right paragraph
+    if (!bParagraphHasGrabBagSdt && m_aParagraphSdt.m_pStartPosition == pStartPosition)
+    {
+        // yes - it is already cached.
+        if (!m_aParagraphSdt.m_oSdtPrToken.has_value())
+            return false; // not a full Sdt
+
+        bParagraphHasGrabBagSdt = true;
+    }
+
+    if (!bParagraphHasGrabBagSdt && pTextNd)
+        bParagraphHasGrabBagSdt = GetGrabBagParaSdtPrToken().has_value();
+
+    bool bSdtDoesNotAllowBookmarkEnd = false;
+    if (bParagraphHasGrabBagSdt)
+    {
+        // rich blockSdt are allowed to contain bookmarkEnd: richText(0), Group ...
+        // plain blockSdt are not allowed to contain bookmarkEnd.
+        switch (*m_aParagraphSdt.m_oSdtPrToken)
+        {
+            case FSNS(XML_w14, XML_checkbox):
+            case FSNS(XML_w, XML_text):
+            case FSNS(XML_w, XML_dropDownList):
+            case FSNS(XML_w, XML_comboBox):
+            // case FSNS(XML_w, XML_date):
+            case FSNS(XML_w, XML_picture):
+                bSdtDoesNotAllowBookmarkEnd = true;
+                break;
+            default:
+                break;
+        }
+    }
+    return bSdtDoesNotAllowBookmarkEnd;
+}
+
+void DocxAttributeOutput::WriteBookmarkEndWithParaSdt(const OUString& rString)
+{
+    m_aParagraphSdt.m_vBookmarkEnd.push_back(rString);
+}
+
 void DocxAttributeOutput::WritePostponedGraphic()
 {
     for (const auto & rPostponedDiagram : *m_oPostponedGraphic)
@@ -7199,6 +7299,8 @@ void DocxAttributeOutput::EndParaSdtBlock()
     {
         // Paragraph-level SDT still open? Close it now.
         m_aParagraphSdt.EndSdtBlock(m_pSerializer);
+
+        DoWriteBookmarksEnd(m_aParagraphSdt.m_vBookmarkEnd);
     }
 }
 

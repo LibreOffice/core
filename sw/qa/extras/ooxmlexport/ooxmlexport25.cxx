@@ -241,6 +241,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
     CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nSize); // nSize > 1500
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170602_checkbox_bookmarkEnd)
+{
+    createSwDoc("tdf170602_checkbox_bookmarkEnd.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if a plainText blockSdt contains a bookmarkEnd
+    assertXPath(pXmlDoc, "//w:body/w:tbl/w:tr[2]/w:tc[1]/w:bookmarkEnd", 1); // Tempestades
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInvalidDatetimeInProps)
 {
     createSwDoc("invalidDatetimeInProps.fodt");
