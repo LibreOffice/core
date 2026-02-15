@@ -554,6 +554,112 @@ void DocumentController::refreshCursor()
     }
 }
 
+// Phase 4: Advanced AI Features Implementation
+
+OUString DocumentController::getCursorContext(sal_Int32 charsBefore, sal_Int32 charsAfter)
+{
+    if (!m_xController.is() || !m_xText.is())
+        return u"{\"before\":\"\",\"after\":\"\",\"position\":0}"_ustr;
+
+    // Get the view cursor
+    uno::Reference<text::XTextViewCursorSupplier> xCursorSupplier(m_xController, uno::UNO_QUERY);
+    if (!xCursorSupplier.is())
+        return u"{\"before\":\"\",\"after\":\"\",\"position\":0}"_ustr;
+
+    uno::Reference<text::XTextViewCursor> xViewCursor = xCursorSupplier->getViewCursor();
+    if (!xViewCursor.is())
+        return u"{\"before\":\"\",\"after\":\"\",\"position\":0}"_ustr;
+
+    // Get cursor position in document
+    uno::Reference<text::XTextCursor> xPosCursor = m_xText->createTextCursorByRange(xViewCursor);
+    if (!xPosCursor.is())
+        return u"{\"before\":\"\",\"after\":\"\",\"position\":0}"_ustr;
+
+    // Calculate position by getting all text from start to cursor
+    uno::Reference<text::XTextCursor> xStartCursor = m_xText->createTextCursor();
+    xStartCursor->gotoStart(false);
+    xStartCursor->gotoRange(xViewCursor->getStart(), true);  // Select from start to cursor
+    sal_Int32 position = xStartCursor->getString().getLength();
+
+    // Get text before cursor
+    OUString textBefore;
+    {
+        uno::Reference<text::XTextCursor> xBeforeCursor = m_xText->createTextCursorByRange(xViewCursor);
+        xBeforeCursor->goLeft(charsBefore, true);  // Select up to charsBefore chars before cursor
+        textBefore = xBeforeCursor->getString();
+    }
+
+    // Get text after cursor
+    OUString textAfter;
+    {
+        uno::Reference<text::XTextCursor> xAfterCursor = m_xText->createTextCursorByRange(xViewCursor);
+        xAfterCursor->goRight(charsAfter, true);  // Select up to charsAfter chars after cursor
+        textAfter = xAfterCursor->getString();
+    }
+
+    // Build JSON response
+    // Note: Simple JSON building - for production should use proper JSON library or escaping
+    OUStringBuffer json;
+    json.append(u"{\"before\":\""_ustr);
+    // Simple escape: replace " with \" and \ with \\, newlines with \n
+    OUString escapedBefore = textBefore;
+    escapedBefore = escapedBefore.replaceAll(u"\\"_ustr, u"\\\\"_ustr);
+    escapedBefore = escapedBefore.replaceAll(u"\""_ustr, u"\\\""_ustr);
+    escapedBefore = escapedBefore.replaceAll(u"\n"_ustr, u"\\n"_ustr);
+    escapedBefore = escapedBefore.replaceAll(u"\r"_ustr, u"\\r"_ustr);
+    escapedBefore = escapedBefore.replaceAll(u"\t"_ustr, u"\\t"_ustr);
+    json.append(escapedBefore);
+
+    json.append(u"\",\"after\":\""_ustr);
+    OUString escapedAfter = textAfter;
+    escapedAfter = escapedAfter.replaceAll(u"\\"_ustr, u"\\\\"_ustr);
+    escapedAfter = escapedAfter.replaceAll(u"\""_ustr, u"\\\""_ustr);
+    escapedAfter = escapedAfter.replaceAll(u"\n"_ustr, u"\\n"_ustr);
+    escapedAfter = escapedAfter.replaceAll(u"\r"_ustr, u"\\r"_ustr);
+    escapedAfter = escapedAfter.replaceAll(u"\t"_ustr, u"\\t"_ustr);
+    json.append(escapedAfter);
+
+    json.append(u"\",\"position\":"_ustr);
+    json.append(OUString::number(position));
+    json.append(u"}"_ustr);
+
+    return json.makeStringAndClear();
+}
+
+bool DocumentController::insertCompletion(const OUString& completionText, bool moveCursor)
+{
+    if (!m_xController.is() || !m_xText.is())
+        return false;
+
+    // Get the view cursor
+    uno::Reference<text::XTextViewCursorSupplier> xCursorSupplier(m_xController, uno::UNO_QUERY);
+    if (!xCursorSupplier.is())
+        return false;
+
+    uno::Reference<text::XTextViewCursor> xViewCursor = xCursorSupplier->getViewCursor();
+    if (!xViewCursor.is())
+        return false;
+
+    try
+    {
+        // Insert text at cursor position
+        m_xText->insertString(xViewCursor, completionText, false);
+
+        // If moveCursor is false, move cursor back to original position
+        if (!moveCursor)
+        {
+            sal_Int32 textLength = completionText.getLength();
+            xViewCursor->goLeft(static_cast<sal_Int16>(textLength), false);
+        }
+
+        return true;
+    }
+    catch (const uno::Exception&)
+    {
+        return false;
+    }
+}
+
 } // namespace officelabs
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
