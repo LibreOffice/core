@@ -200,9 +200,9 @@ public:
     void clearGrabbagValues();
 
     // pStartPosition must be nullptr unless this SdtBlockHelper is m_aParagraphSdt.
+    // ForceRichText (by not writing any SdtPrToken) to avoid creating a corrupt document.
     void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer,
-                       const SwPosition* pStartPosition,
-                       bool bRunTextIsOn, bool bParagraphHasDrawing);
+                       const SwPosition* pStartPosition, bool bForceRichText);
     void WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
     /// Closes a currently open SDT block.

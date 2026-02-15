@@ -782,8 +782,7 @@ void SdtBlockHelper::clearGrabbagValues()
 }
 
 void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer,
-                                   const SwPosition* pStartPosition,
-                                   bool bRunTextIsOn, bool bParagraphHasDrawing)
+                                   const SwPosition* pStartPosition, bool bForceRichText)
 {
     if (!m_oSdtPrToken.has_value())
         return; // not a full Sdt definition
@@ -803,6 +802,7 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
     if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && m_pTokenChildren.is())
     {
+        assert((!bForceRichText || m_oSdtPrToken != FSNS(XML_w14, XML_checkbox)) && "This document will probably be reported as corrupt by MS Word");
         if (!m_pTokenAttributes.is())
             pSerializer->startElement(*m_oSdtPrToken);
         else
@@ -820,7 +820,7 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
         pSerializer->endElement(*m_oSdtPrToken);
     }
-    else if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && !(bRunTextIsOn && bParagraphHasDrawing))
+    else if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && !bForceRichText)
     {
         if (!m_pTokenAttributes.is())
             pSerializer->singleElement(*m_oSdtPrToken);
@@ -1292,8 +1292,9 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
     // on export sdt blocks are never nested ATM
     if (!m_aParagraphSdt.m_bStartedSdt)
     {
-        m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_rExport.m_pCurPam->Start(),
-                                      m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
+        const bool bForceRichText
+            = m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing();
+        m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_rExport.m_pCurPam->Start(), bForceRichText);
 
         if (m_aParagraphSdt.m_bStartedSdt)
         {
@@ -2128,7 +2129,11 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
     if (!m_aRunSdt.m_bStartedSdt)
-        m_aRunSdt.WriteSdtBlock(m_pSerializer, nullptr, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
+    {
+        const bool bForceRichText
+            = m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing();
+        m_aRunSdt.WriteSdtBlock(m_pSerializer, nullptr, bForceRichText);
+    }
 
     m_pSerializer->mergeTopMarks(Tag_StartRun_1);
 
