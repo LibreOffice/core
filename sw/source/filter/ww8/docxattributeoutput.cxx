@@ -781,10 +781,15 @@ void SdtBlockHelper::clearGrabbagValues()
     m_nTabIndex = 0;
 }
 
-void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing)
+void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer,
+                                   const SwPosition* pStartPosition,
+                                   bool bRunTextIsOn, bool bParagraphHasDrawing)
 {
     if (!m_oSdtPrToken.has_value())
         return; // not a full Sdt definition
+
+    if (pStartPosition != m_pStartPosition)
+        return; // Sdt grabbag data is not for the current paragraph - only used for m_aParagraphSdt
 
     // sdt start mark
     pSerializer->mark(DocxAttributeOutput::Tag_WriteSdtBlock);
@@ -835,9 +840,6 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
     // write the ending tags after the paragraph
     m_bStartedSdt = true;
-
-    // clear sdt status
-    clearGrabbagValues();
 }
 
 void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer)
@@ -896,10 +898,22 @@ void SdtBlockHelper::EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerialize
     pSerializer->endElementNS(XML_w, XML_sdtContent);
     pSerializer->endElementNS(XML_w, XML_sdt);
     m_bStartedSdt = false;
+    m_pStartPosition = nullptr;
+    clearGrabbagValues();
 }
 
-void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
+void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
+                                             const SwPosition* pStartPosition)
 {
+    if (m_bStartedSdt)
+        return; // must not change grabbag cache while <w:sdt> is being written
+
+    if (m_pStartPosition && pStartPosition == m_pStartPosition)
+        return; // m_aParagraphSdt's params have already been cached from the grabbag.
+
+    clearGrabbagValues();
+    m_pStartPosition = pStartPosition; // grabbag cache is valid for this paragraph
+
     for (const beans::PropertyValue& aPropertyValue : aGrabBagSdt)
     {
         if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
@@ -1278,7 +1292,8 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
     // on export sdt blocks are never nested ATM
     if (!m_aParagraphSdt.m_bStartedSdt)
     {
-        m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
+        m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_rExport.m_pCurPam->Start(),
+                                      m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
 
         if (m_aParagraphSdt.m_bStartedSdt)
         {
@@ -1287,12 +1302,6 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
             if (m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
                 m_rExport.SdrExporter().setParagraphSdtOpen(true);
         }
-    }
-    else
-    {
-        //These should be written out to the actual Node and not to the anchor.
-        //Clear them as they will be repopulated when the node is processed.
-        m_aParagraphSdt.clearGrabbagValues();
     }
 
     m_pSerializer->mark(Tag_StartParagraph_2);
@@ -2119,15 +2128,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
     if (!m_aRunSdt.m_bStartedSdt)
-    {
-        m_aRunSdt.WriteSdtBlock(m_pSerializer, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
-    }
-    else
-    {
-        //These should be written out to the actual Node and not to the anchor.
-        //Clear them as they will be repopulated when the node is processed.
-        m_aRunSdt.clearGrabbagValues();
-    }
+        m_aRunSdt.WriteSdtBlock(m_pSerializer, nullptr, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
 
     m_pSerializer->mergeTopMarks(Tag_StartRun_1);
 
@@ -2582,7 +2583,7 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
     {
         // There are some extra sdt parameters came from grab bag
         SdtBlockHelper aSdtBlock;
-        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
+        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         aSdtBlock.WriteExtraParams(m_pSerializer);
     }
 
@@ -2617,7 +2618,7 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
     {
         // There are some extra sdt parameters came from grab bag
         SdtBlockHelper aSdtBlock;
-        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
+        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         aSdtBlock.WriteExtraParams(m_pSerializer);
 
         if (aSdtBlock.m_oSdtPrToken.has_value() && *aSdtBlock.m_oSdtPrToken)
@@ -10538,7 +10539,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
-            m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt);
+            m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, m_rExport.m_pCurPam->Start());
         }
         else if (rGrabBagElement.first == "ParaCnfStyle")
         {
@@ -10657,7 +10658,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
-            m_aRunSdt.GetSdtParamsFromGrabBag(aGrabBagSdt);
+            m_aRunSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << rGrabBagElement.first);

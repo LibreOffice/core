@@ -163,12 +163,20 @@ class SdtBlockHelper
 public:
     SdtBlockHelper()
         : m_bStartedSdt(false)
+        , m_pStartPosition(nullptr)
         , m_bShowingPlaceHolder(false)
         , m_nTabIndex(0)
     {}
 
     // m_bStartedSdt tracks whether startElementNS(XML_w, XML_sdt) has been written
     bool m_bStartedSdt;
+    // In order to cache the SdtBlockHelper value, some mechanism is needed to check its validity.
+    // Currently this is needed only for m_aParagraphSdt, so tracking the SwPosition is sufficient.
+
+    // If the SDT has not beeen started (!m_bStartedSdt) and the text positions do not match,
+    // then this SdtBlockHelper cache may be cleared and re-populated.
+    const SwPosition* m_pStartPosition; // only used by m_aParagraphSdt
+
     // m_oSdtPrToken is a key GrabBag value, with a two-fold purpose:
     // - the absence of m_oSdtPrToken also means that (XML_w, XML_sdt) should not be written
     // - it describes the type of content control: richText(0), plainText, checkbox, dropdown...
@@ -190,13 +198,17 @@ public:
 
     void clearGrabbagValues();
 
-    void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
+    // pStartPosition must be nullptr unless this SdtBlockHelper is m_aParagraphSdt.
+    void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer,
+                       const SwPosition* pStartPosition,
+                       bool bRunTextIsOn, bool bParagraphHasDrawing);
     void WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
     /// Closes a currently open SDT block.
     void EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
-    void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
+    void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
+                                 const SwPosition* pStartPosition);
 };
 
 /// The class that has handlers for various resource types when exporting as DOCX.
@@ -1085,7 +1097,13 @@ private:
     // store hardcoded value which was set during import.
     sal_Int32 m_nParaBeforeSpacing,m_nParaAfterSpacing;
 
+    // m_aParagraphSdt contains a grabbagged block content control that needs to be round-tripped
+    // because in LO it is not a native content control.
+    // Some content controls can span multiple paragraphs.
+    // It starts at the paragraph containing the 'SdtPr' grabbag property,
+    // and ends at the paragraph before the one containing the 'ParaSdtEndBefore' property.
     SdtBlockHelper m_aParagraphSdt;
+    // Same as m_aParagraphSdt except it ends on the run before the one containng 'SdtEndBefore'
     SdtBlockHelper m_aRunSdt;
 
     std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
