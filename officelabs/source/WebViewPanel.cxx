@@ -316,6 +316,19 @@ void WebViewPanel::syncCefWindowSize()
     if (!pParent)
         return;
 
+    // When the sidebar switches to a different deck, our panel's VCL parent
+    // becomes invisible.  Hide the CEF HWND (which is parented to the frame
+    // window and therefore not affected by VCL visibility changes).
+    bool bVisible = pParent->IsReallyVisible();
+    bool bIsShown = IsWindowVisible(m_hCefParentWnd);
+    if (bVisible && !bIsShown)
+        ShowWindow(m_hCefParentWnd, SW_SHOWNA);
+    else if (!bVisible && bIsShown)
+        ShowWindow(m_hCefParentWnd, SW_HIDE);
+
+    if (!bVisible)
+        return;
+
     Size aSize = pParent->GetSizePixel();
     auto aScrPos = pParent->OutputToAbsoluteScreenPixel(Point(0, 0));
     POINT pt = { static_cast<LONG>(aScrPos.X()), static_cast<LONG>(aScrPos.Y()) };
