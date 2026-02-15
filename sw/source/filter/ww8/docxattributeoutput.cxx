@@ -437,6 +437,21 @@ bool lclHasSolidFillTransformations(const model::ComplexColor& aComplexColor)
     return idx != transformations.end();
 }
 
+// Does this paragraph indicate that a grabbagged 'SdtPr' (in a previous paragraph) should end here?
+bool lcl_hasParaSdtEndBefore(const SwNode& rNode)
+{
+    const SwTextNode* pTextNode = rNode.GetTextNode();
+    if (!pTextNode || !pTextNode->GetpSwAttrSet())
+        return false;
+
+    const SfxGrabBagItem* pParaGrabBag = pTextNode->GetpSwAttrSet()->GetItem(RES_PARATR_GRABBAG);
+    if (!pParaGrabBag)
+        return false;
+
+    const std::map<OUString, css::uno::Any>& rMap = pParaGrabBag->GetGrabBag();
+    return rMap.contains(u"ParaSdtEndBefore"_ustr);
+}
+
 } // end anonymous namespace
 
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
@@ -593,21 +608,10 @@ sal_Int32 DocxAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Point
     // Look up the "sdt end before this paragraph" property early, when it
     // would normally arrive, it would be too late (would be after the
     // paragraph start has been written).
-    bool bEndParaSdt = false;
-    if (m_aParagraphSdt.m_bStartedSdt)
-    {
-        SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
-        if (pTextNode && pTextNode->GetpSwAttrSet())
-        {
-            const SfxItemSet* pSet = pTextNode->GetpSwAttrSet();
-            if (const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_GRABBAG))
-            {
-                const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
-                const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
-                bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.contains(u"ParaSdtEndBefore"_ustr);
-            }
-        }
-    }
+    const bool bEndParaSdt
+        = m_aParagraphSdt.m_bStartedSdt
+            && lcl_hasParaSdtEndBefore(m_rExport.m_pCurPam->GetPointNode());
+
     // TODO also avoid multiline paragraphs in those SDT types for shape text
     if (bEndParaSdt || (m_aParagraphSdt.m_bStartedSdt && m_bHadSectPr))
     {
