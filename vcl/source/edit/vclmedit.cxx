@@ -1509,6 +1509,8 @@ void VclMultiLineEdit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Edit::DumpAsPropertyTree(rJsonWriter);
 
     rJsonWriter.put("cursor", pImpVclMEdit->GetTextWindow()->GetTextView()->IsCursorEnabled());
+    if (IsReadOnly())
+        rJsonWriter.put("readonly", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
