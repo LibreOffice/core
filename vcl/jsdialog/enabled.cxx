@@ -372,6 +372,7 @@ constexpr auto OtherDialogList
         { u"writerperfect/ui/exportepub.ui" },
         { u"writerperfect/ui/wpftencodingdialog.ui" },
         // xmlsec
+        { u"xmlsec/ui/certdetails.ui" },
         { u"xmlsec/ui/certgeneral.ui" },
         { u"xmlsec/ui/certpage.ui" },
         { u"xmlsec/ui/digitalsignaturesdialog.ui" },
