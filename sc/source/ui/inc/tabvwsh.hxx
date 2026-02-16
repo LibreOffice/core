@@ -342,6 +342,7 @@ public:
     void            SetPivotShell( bool bActive );
     void            SetSparklineShell(bool bActive);
     void            SetTableShell(bool bActive);
+    void            UpdateContextShells();
     void            SetDialogDPObject( std::unique_ptr<ScDPObject> pObj );
     const ScDPObject* GetDialogDPObject() const { return pDialogDPObject.get(); }
 

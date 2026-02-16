@@ -774,6 +774,28 @@ void ScTabViewShell::SetTableShell(bool bActive)
         SetCurSubShell(OST_Cell);
 }
 
+void ScTabViewShell::UpdateContextShells()
+{
+    ScDocument& rDoc = GetViewData().GetDocument();
+    bool bDataPilot = rDoc.HasDataPilotAtPosition(GetViewData().GetCurPos());
+    SetPivotShell(bDataPilot);
+
+    if (!bDataPilot)
+    {
+        const ScAddress rAddr = GetViewData().GetCurPos();
+        bool bSparkline = rDoc.HasSparkline(rAddr);
+        SetSparklineShell(bSparkline);
+        if (!bSparkline)
+        {
+            if (rDoc.GetTableDBAtCursor(rAddr.Col(), rAddr.Row(), rAddr.Tab(),
+                                        ScDBDataPortion::AREA))
+                SetTableShell(true);
+            else
+                SetTableShell(false);
+        }
+    }
+}
+
 void ScTabViewShell::SetAuditShell( bool bActive )
 {
     if ( bActive )
