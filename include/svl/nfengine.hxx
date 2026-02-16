@@ -124,6 +124,7 @@ public:
     sal_uInt16 GetCurrencyFormatStrings(NfWSStringsDtor&, const NfCurrencyEntry&, bool bBank) const;
 
     void ChangeStandardPrec(short nPrec);
+    sal_uInt16 GetStandardPrec() const;
 
     sal_uInt16 ExpandTwoDigitYear(sal_uInt16 nYear) const;
 
