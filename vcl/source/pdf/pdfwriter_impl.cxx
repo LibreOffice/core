@@ -1396,11 +1396,6 @@ sal_Int32 PDFWriterImpl::emitBuildinFont(const pdf::BuildinFontFace* pFD, sal_In
     return nFontObject;
 }
 
-namespace
-{
-// Translate units from TT to PS (standard 1/1000)
-int XUnits(int nUPEM, int n) { return (n * 1000) / nUPEM; }
-}
 
 std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font::PhysicalFontFace* pFace, EmbedFont const & rEmbed )
 {

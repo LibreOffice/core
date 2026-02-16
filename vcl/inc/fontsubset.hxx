@@ -29,6 +29,9 @@
 
 class SvStream;
 
+// Translate units from TT to PS (standard 1/1000)
+inline int XUnits(int nUPEM, int n) { return (n * 1000) / nUPEM; }
+
 enum class FontType {
     NO_FONT     = 0,
     SFNT_TTF    = 1<<1,                     ///< SFNT container with TrueType glyphs

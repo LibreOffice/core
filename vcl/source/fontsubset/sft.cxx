@@ -120,12 +120,6 @@ static F16Dot16 fixedMulDiv(F16Dot16 a, F16Dot16 b, F16Dot16 c)
     return fixedDiv(res, c);
 }
 
-/*- Translate units from TT to PS (standard 1/1000) -*/
-static int XUnits(int unitsPerEm, int n)
-{
-    return (n * 1000) / unitsPerEm;
-}
-
 /* Outline Extraction functions */
 
 /* fills the aw and lsb entries of the TTGlyphMetrics structure from hmtx table -*/
