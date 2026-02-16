@@ -2835,6 +2835,9 @@ void setLanguageAndLocale(OUString const & aLangISO)
     aLocalOptions.SetLocaleConfigString(aLangISO);
     aLocalOptions.SetUILocaleConfigString(aLangISO);
     aLocalOptions.Commit();
+    LanguageTag aTag(aLangISO);
+    MsLangId::setConfiguredSystemUILanguage(aTag.getLanguageType(false));
+    LanguageTag::setConfiguredSystemLanguage(aTag.getLanguageType(false));
 }
 
 void setFormatSpecificFilterData(std::u16string_view sFormat, comphelper::SequenceAsHashMap & rFilterDataMap)
@@ -8671,6 +8674,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 SAL_INFO("lok", "CheckExtensionDependencies failed");
 #endif
 
+            // Configure system language early, before InitVCL() and service
+            // manager preload trigger locale-dependent code paths.
+            MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
+            LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
+
             if (eStage == PRE_INIT)
             {
                 {
@@ -8707,13 +8715,15 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                     VclAbstractDialogFactory::Create();
                 }
 
+                setLanguageAndLocale(u"en-US"_ustr);
+
                 preloadData();
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
             }
-
-            setLanguageAndLocale(u"en-US"_ustr);
+            else
+                setLanguageAndLocale(u"en-US"_ustr);
         }
 
         if (eStage != PRE_INIT)
