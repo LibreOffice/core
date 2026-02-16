@@ -2204,6 +2204,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170811)
     parseLayoutDump();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169999)
+{
+    // Open a document with a section with a paragraph with a footnote
+    createSwDoc("tdf169999.fodt");
+
+    // Initially, the hide condition evaluates to false, so footnote is visible:
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//ftn", 1);
+    }
+
+    // Set hide condition to "1"
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    Scheduler::ProcessEventsToIdle();
+
+    // The footnote must get hidden - without the fix, the text failed, because there was a ftn
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//ftn", 0);
+    }
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
