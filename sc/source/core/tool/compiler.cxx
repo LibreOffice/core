@@ -5484,6 +5484,8 @@ OUString ScCompiler::SanitizeDefinedName(const OUString& rStr, const ScDocument&
     // Name can't be a valid cell reference
     if ((ScAddress().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_A1) != ScRefFlags::ZERO)
         || (ScRange().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_R1C1)
+            != ScRefFlags::ZERO)
+        || (ScAddress().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_R1C1)
             != ScRefFlags::ZERO))
         bValidName = false;
 
