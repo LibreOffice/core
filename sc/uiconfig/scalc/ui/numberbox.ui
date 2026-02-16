@@ -12,6 +12,11 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="numbertype-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="numberbox|numbertype|accessible_name">Number Format</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
