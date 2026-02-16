@@ -541,8 +541,7 @@ void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rC
             "Subdivision/YAxis",
             "Option/SnapToGrid",
             "Option/Synchronize",
-            "Option/VisibleGrid",
-            "SnapGrid/Size"
+            "Option/VisibleGrid"
         };
         ppNames = aPropNamesMetric;
         rCount = SAL_N_ELEMENTS(aPropNamesMetric);
@@ -557,8 +556,7 @@ void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rC
             "Subdivision/YAxis",
             "Option/SnapToGrid",
             "Option/Synchronize",
-            "Option/VisibleGrid",
-            "SnapGrid/Size"
+            "Option/VisibleGrid"
         };
         ppNames = aPropNamesNonMetric;
         rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
