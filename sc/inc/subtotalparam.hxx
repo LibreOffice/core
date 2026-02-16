@@ -98,10 +98,10 @@ struct SC_DLLPUBLIC ScSubTotalParam
                        const SCCOL* ptrSubTotals,
                        const ScSubTotalFunc* ptrFunctions,
                        sal_uInt16 nCount );
-    void SetCustFuncs( sal_uInt16 nGroup,
+    void SetCustFuncs( sal_uInt16 nGroupIdx,
                        std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>>& rColFuncs,
                        sal_uInt16 nCount );
-    void SetSubLabels( sal_uInt16 nGroup,
+    void SetSubLabels( sal_uInt16 nGroupIdx,
                        std::vector<std::pair<SCCOL, rtl::OUString>>& rColLabels,
                        sal_uInt16 nCount );
 };
