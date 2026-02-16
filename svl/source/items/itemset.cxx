@@ -1292,6 +1292,12 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
 
 size_t SfxItemSet::GetHashCode() const
 {
+    // We are calculating a hash in an odd way here. This is not ideal, because
+    // it does not produce as good a result as using o3tl::hash_combine.
+    // However, m_aPoolItemMap is an __unordered__ map, and so using o3tl::hash_combine
+    // will not necessarily produce the same hash for two otherwise identical SfxItemSet.
+    // Using addition is invariant with respect to ordering, so we sacrifice some hashing
+    // quality in favour of correctness.
     size_t seed = 0;
 
     for (PoolItemMap::const_iterator it(m_aPoolItemMap.begin()); it != m_aPoolItemMap.end(); it++)
@@ -1299,10 +1305,10 @@ size_t SfxItemSet::GetHashCode() const
         const sal_uInt16 nWhich = it->first;
         const SfxPoolItem *pItem = it->second;
 
-        o3tl::hash_combine(seed, nWhich);
+        seed += nWhich;
         if (!IsInvalidItem(pItem) && !IsDisabledItem(pItem)
             && pItem && pItem->supportsHashCode())
-            o3tl::hash_combine(seed, pItem->hashCode());
+            seed += pItem->hashCode();
     }
 
     return seed;
