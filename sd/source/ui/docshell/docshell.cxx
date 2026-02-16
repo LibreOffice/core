@@ -50,6 +50,7 @@
 #include <sdmod.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
+#include <slideshow.hxx>
 
 #include <ViewShell.hxx>
 #include <unomodel.hxx>
@@ -319,8 +320,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                     bool bVisible = false;
                     if(bImpress)
                     {
-                        bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
-                                                                      u"modules/simpress/ui/");
+                        // tdf#170719 only bother with NotebookBar
+                        // stuff, if this is not the runing SlideShow
+                        if(!sd::SlideShow::IsRunning(mpViewShell->GetViewShellBase()))
+                            bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
+                                                                         u"modules/simpress/ui/");
                     }
                     else
                     {
