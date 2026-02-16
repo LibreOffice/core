@@ -118,12 +118,12 @@ void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon
 {
     rWriter.startElement("polypolygon");
     const basegfx::B2DRange aB2DRange(rB2DPolyPolygon.getB2DRange());
-    rWriter.attributeDouble("height", aB2DRange.getHeight());
-    rWriter.attributeDouble("width", aB2DRange.getWidth());
-    rWriter.attributeDouble("minx", aB2DRange.getMinX());
-    rWriter.attributeDouble("miny", aB2DRange.getMinY());
-    rWriter.attributeDouble("maxx", aB2DRange.getMaxX());
-    rWriter.attributeDouble("maxy", aB2DRange.getMaxY());
+    rWriter.attribute("height", aB2DRange.getHeight());
+    rWriter.attribute("width", aB2DRange.getWidth());
+    rWriter.attribute("minx", aB2DRange.getMinX());
+    rWriter.attribute("miny", aB2DRange.getMinY());
+    rWriter.attribute("maxx", aB2DRange.getMaxX());
+    rWriter.attribute("maxy", aB2DRange.getMaxY());
     rWriter.attribute("path", basegfx::utils::exportToSvgD(rB2DPolyPolygon, true, true, false));
 
     for (basegfx::B2DPolygon const& rPolygon : rB2DPolyPolygon)
