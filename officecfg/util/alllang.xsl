@@ -34,6 +34,7 @@
 <xsl:param name="schemaRoot">.</xsl:param>
 <xsl:param name="fallback-locale">en-US</xsl:param>
 
+<xsl:param name="disabled-modules"/>
 <xsl:param name="LIBO_SHARE_FOLDER"/>
 <xsl:param name="LIBO_SHARE_HELP_FOLDER"/>
 
@@ -70,6 +71,9 @@
 
 <!-- locale dependent data -->
     <xsl:template match="node|prop" mode = "locale">
+        <xsl:if test="not(ancestor-or-self::*[@install:module and
+                      contains(concat(' ', $disabled-modules, ' '),
+                               concat(' ', @install:module, ' '))])">
         <xsl:choose>
             <xsl:when test="$locale=$fallback-locale">
                 <xsl:if test="descendant::value[@xml:lang=$locale]/../value[not (@xml:lang)]">
@@ -88,6 +92,7 @@
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="value" mode="locale">

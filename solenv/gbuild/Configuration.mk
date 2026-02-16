@@ -63,6 +63,10 @@ endef
 
 gb_Configuration_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
+gb_Configuration_DISABLED_MODULES := \
+    $(if $(filter LIBRELOGO,$(BUILD_TYPE)),,librelogo) \
+    $(if $(filter REPORTBUILDER,$(BUILD_TYPE)),,reportbuilder)
+
 gb_XcsTarget_XSLT_SchemaVal := $(SRCDIR)/officecfg/util/schema_val.xsl
 gb_XcsTarget_XSLT_SchemaTrim := $(SRCDIR)/officecfg/util/schema_trim.xsl
 gb_XcsTarget_DTD_Schema := $(SRCDIR)/officecfg/registry/component-schema.dtd
@@ -261,6 +265,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam locale $(word 2,$(subst /, ,$(2))) \
+		--stringparam disabled-modules "$(strip $(gb_Configuration_DISABLED_MODULES))" \
 		--stringparam LIBO_SHARE_FOLDER $(LIBO_SHARE_FOLDER) \
 		--stringparam LIBO_SHARE_HELP_FOLDER $(LIBO_SHARE_HELP_FOLDER) \
 		--path $(SRCDIR)/officecfg/registry \
