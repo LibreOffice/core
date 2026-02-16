@@ -36,8 +36,12 @@ struct TextBodyProperties
     PropertyMap                                     maPropertyMap;
     // TextPreRotateAngle. Used in diagram (SmartArt) import.
     std::optional< sal_Int32 >                      moTextPreRotation;
-    // TextRotateAngle. ODF draw:text-rotate-angle, OOXML 'rot' attribute in <bodyPr> element
+    // TextRotateAngle. ODF draw:text-rotate-angle, OOXML 'rot' attribute in <bodyPr> element.
+    // Note: also accumulates txXfrm rotation from SmartArt/diagram layout.
     std::optional< sal_Int32 >                      moTextAreaRotation;
+    // True when moTextAreaRotation was set from bodyPr 'rot' attribute (not txXfrm).
+    // Used to decide whether to compensate margins for text area rotation.
+    bool                                            mbBodyPrRotation = false;
     bool                                            mbAnchorCtr;
     std::optional< sal_Int32 >                      moVert;
     bool                                            moUpright = false;

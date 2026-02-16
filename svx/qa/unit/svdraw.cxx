@@ -770,8 +770,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     // Test vertically overflowing text, with vertical text direction
     assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)", u"12");
     // make sure text is aligned correctly after the overflowing text is clipped
-    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", u"13093");
-    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", u"4711");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", u"12964");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", u"4582");
 
     // make sure the text that isn't overflowing is still aligned properly
     assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)", u"3");
