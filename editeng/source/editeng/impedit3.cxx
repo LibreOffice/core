@@ -3602,7 +3602,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     //It is not perfect, it still use lineBreaksList, so it won’t seek
                                     //word ends to wrap text there, but it would be difficult to change
                                     //this due to needed adaptations in EditEngine
-                                    if (bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
+                                    if (!bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
