@@ -143,6 +143,11 @@
               <item translatable="yes" context="sidebarelements|comboboxtext_legend">Bottom</item>
               <item translatable="yes" context="sidebarelements|comboboxtext_legend">Left</item>
             </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="comboboxtext_legend-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarelements|comboboxtext_legend-atkobject">Legend Position</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
