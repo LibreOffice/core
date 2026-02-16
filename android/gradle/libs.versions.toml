@@ -1,0 +1,14 @@
+[versions]
+constraintlayout_version = "2.2.1"
+gradle_version = "8.13.1"
+material_version = "1.13.0"
+preference_version = "1.2.1"
+
+[libraries]
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout_version" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle_version" }
+material = { module = "com.google.android.material:material", version.ref = "material_version" }
+preference = { module = "androidx.preference:preference", version.ref = "preference_version" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "gradle_version" }

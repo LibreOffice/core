@@ -1,5 +1,7 @@
-/source/.gradle/
-/source/.idea/
+/build
+/.gradle
+/.idea
+/local.properties
 /source/assets/
 /source/assets_strippedUI/
 /source/build/
@@ -7,8 +9,7 @@
 /source/jni/Application.mk
 /source/res_generated
 /jniLibs/
-/source/liboSettings.gradle
-/source/local.properties
+/source/liboSettings.gradle.kts
 /source/native-code.cxx
 /obj/
 /source/source.iml
