@@ -2520,14 +2520,19 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     while( t )
     {
         // Discard writing unknown functions without a name in OOXML ex: #NAME!()
-        if (FormulaGrammar::isOOXML(meGrammar)
-            && (t->GetOpCode() == ocNoName || t->GetOpCode() == ocExternal)
+        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocNoName
             && t->GetType() == svByte)
         {
             rBuffer.setLength(0);
             rBuffer.append(GetNativeSymbol(ocErrRef));
             break;
         }
+        if (t->GetOpCode() == ocExternal && t->GetType() == svByte)
+        {
+            rBuffer.append(GetNativeSymbol(ocErrRef));
+            continue;
+        }
+
         t = CreateStringFromToken(rBuffer, t, true);
     }
 
