@@ -97,6 +97,7 @@ public:
     void testTdf157117();
     void testPageBackgroundImages();
     void testCanvasSlideExportODP();
+    void testDuplicateAndMove();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testTdf157117);
     CPPUNIT_TEST(testPageBackgroundImages);
     CPPUNIT_TEST(testCanvasSlideExportODP);
+    CPPUNIT_TEST(testDuplicateAndMove);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1268,6 +1270,30 @@ void SdMiscTest::testCanvasSlideExportODP()
                                         "config:config-item-map-entry"_ostr);
     assertXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='HasCanvasPage']",
                        u"true");
+}
+
+void SdMiscTest::testDuplicateAndMove()
+{
+    createSdImpressDoc("slide_with_text.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pFirstPage = pViewShell->GetActualPage();
+
+    // SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    pXImpressDocument->setPart(2);
+    dispatchCommand(mxComponent, u".uno:MovePageLast"_ustr, {});
+
+    pXImpressDocument->setPart(3);
+    SdPage* aLastPage = pViewShell->GetActualPage();
+    // Without the fix in place, the textbox changes size
+    // - Expected: 25200x2630@(1400,628)
+    // - Actual  : 19799x11137@(600,2257)
+    CPPUNIT_ASSERT_EQUAL(pFirstPage->GetObj(0)->GetSnapRect(), aLastPage->GetObj(0)->GetSnapRect());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
