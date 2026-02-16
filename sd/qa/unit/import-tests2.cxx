@@ -1501,6 +1501,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149985)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166030)
+{
+    // Without the fix in place, no bullet spacing was applied
+    createSdImpressDoc("ppt/tdf166030.ppt");
+    const SdrPage* pPage = GetPage(1);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
+    const SvxNumberFormat& rFmt = pNumFmt->GetNumRule().GetLevel(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), rFmt.GetAbsLSpace());
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf150770)
 {
     // Without the fix in place, this test would have failed to load the file
