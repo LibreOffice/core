@@ -2046,28 +2046,30 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
 }
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString,
-                                          const NativeNumberWrapper& rNatNum) const
+                                          const NativeNumberWrapper& rNatNum,
+                                          const SvNFLanguageData& rCurrentLang) const
 {
     OUString sTemp;
-    ImpGetOutputStandard(fNumber, sTemp, rNatNum);
+    ImpGetOutputStandard(fNumber, sTemp, rNatNum, rCurrentLang);
     rOutString = sTemp;
 }
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString,
-                                          const NativeNumberWrapper& rNatNum) const
+                                          const NativeNumberWrapper& rNatNum,
+                                          const SvNFLanguageData& rCurrentLang) const
 {
-    sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
+    sal_uInt16 nStandardPrec = rCurrentLang.GetStandardPrec();
 
     if ( fabs(fNumber) > EXP_ABS_UPPER_BOUND )
     {
         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
         rOutString = ::rtl::math::doubleToUString( fNumber,
                                                   rtl_math_StringFormat_E2, nStandardPrec /*2*/,
-                                                  GetCurrentLanguageData().GetNumDecimalSep()[0]);
+                                                  rCurrentLang.GetNumDecimalSep()[0]);
     }
     else
     {
-        ImpGetOutputStdToPrecision(fNumber, rOutString, nStandardPrec, rNatNum);
+        ImpGetOutputStdToPrecision(fNumber, rOutString, nStandardPrec, rNatNum, rCurrentLang);
     }
 }
 
@@ -2124,7 +2126,8 @@ void impTransliterate(OUStringBuffer& rStr, const SvNumberNatNum& rNum, const Na
 }
 
 void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutString, sal_uInt16 nPrecision,
-                                                const NativeNumberWrapper& rNatNum) const
+                                                const NativeNumberWrapper& rNatNum,
+                                                const SvNFLanguageData& rCurrentLang) const
 {
     // Make sure the precision doesn't go over the maximum allowable precision.
     nPrecision = ::std::min(UPPER_PRECISION, nPrecision);
@@ -2136,7 +2139,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 
     rOutString = ::rtl::math::doubleToUString( rNumber,
                                                rtl_math_StringFormat_F, nPrecision /*2*/,
-                                               GetCurrentLanguageData().GetNumDecimalSep()[0], true );
+                                               rCurrentLang.GetNumDecimalSep()[0], true );
     if (rOutString[0] == '-' && checkForAll0s(rOutString, 1))
     {
         rOutString = comphelper::string::stripStart(rOutString, '-'); // not -0
@@ -2144,7 +2147,8 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
     rOutString = ::impTransliterate(rOutString, NumFor[0].GetNatNum(), rNatNum);
 }
 
-void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) const
+void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString,
+                                           const SvNFLanguageData& rCurrentLang) const
 {
     bool bModified = false;
     if ( (eType & SvNumFormatType::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))
@@ -2167,7 +2171,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) 
     OutString = ::rtl::math::doubleToUString( fNumber,
                                               rtl_math_StringFormat_Automatic,
                                               rtl_math_DecimalPlaces_Max,
-                                              GetCurrentLanguageData().GetNumDecimalSep()[0], true );
+                                              rCurrentLang.GetNumDecimalSep()[0], true );
 
     if ( eType & SvNumFormatType::PERCENT && bModified)
     {
@@ -2468,7 +2472,7 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUSt
         // Subtract the decimal point.
         --nPrec;
     }
-    ImpGetOutputStdToPrecision(fNumber, rOutString, nPrec, rNatNum);
+    ImpGetOutputStdToPrecision(fNumber, rOutString, nPrec, rNatNum, GetCurrentLanguageData());
     if (rOutString.getLength() > nCharCount)
     {
         // String still wider than desired.  Switch to scientific notation.
@@ -2527,22 +2531,22 @@ bool SvNumberformat::GetOutputString(double fNumber,
     OUStringBuffer sBuff(64);
     if (eType & SvNumFormatType::TEXT)
     {
-        ImpGetOutputStandard(fNumber, sBuff, rNatNum);
+        ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
         OutString = sBuff.makeStringAndClear();
         return false;
     }
     bool bHadStandard = false;
     if (bStandard) // Individual standard formats
     {
-        if (rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION) // All number format InputLine
+        if (rCurrentLang.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION) // All number format InputLine
         {
-            ImpGetOutputInputLine(fNumber, OutString);
+            ImpGetOutputInputLine(fNumber, OutString, rCurrentLang);
             return false;
         }
         switch (eType)
         {
         case SvNumFormatType::NUMBER: // Standard number format
-            if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
+            if (rCurrentLang.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
             {
                 if (std::signbit(fNumber))
                 {
@@ -2575,23 +2579,23 @@ bool SvNumberformat::GetOutputString(double fNumber,
                         OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_F,
                                 rtl_math_DecimalPlaces_Max,
-                                GetCurrentLanguageData().GetNumDecimalSep()[0], true);
+                                rCurrentLang.GetNumDecimalSep()[0], true);
                     else
                         OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_E2,
                                 rtl_math_DecimalPlaces_Max,
-                                GetCurrentLanguageData().GetNumDecimalSep()[0], true);
+                                rCurrentLang.GetNumDecimalSep()[0], true);
                 }
                 else
                 {
                     OutString = ::rtl::math::doubleToUString( fNumber,
                                 rtl_math_StringFormat_Automatic,
                                 rtl_math_DecimalPlaces_Max,
-                                GetCurrentLanguageData().GetNumDecimalSep()[0], true);
+                                rCurrentLang.GetNumDecimalSep()[0], true);
                 }
                 return false;
             }
-            ImpGetOutputStandard(fNumber, sBuff, rNatNum);
+            ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
             bHadStandard = true;
             break;
         case SvNumFormatType::DATE:
@@ -2627,7 +2631,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         else if (nCnt == 0) // Else Standard Format
         {
-            ImpGetOutputStandard(fNumber, sBuff, rNatNum);
+            ImpGetOutputStandard(fNumber, sBuff, rNatNum, rCurrentLang);
             OutString = sBuff.makeStringAndClear();
             return false;
         }
@@ -4627,7 +4631,7 @@ bool SvNumberformat::ImpDecimalFill(const NativeNumberWrapper& rNatNum,
             case NF_KEY_GENERAL: // Standard in the String
             {
                 OUStringBuffer sNum;
-                ImpGetOutputStandard(rNumber, sNum, rNatNum);
+                ImpGetOutputStandard(rNumber, sNum, rNatNum, GetCurrentLanguageData());
                 sNum.stripStart('-');
                 sStr.insert(k, sNum);
                 break;
@@ -4795,7 +4799,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( const NativeNumberWrapper& rNat
         case NF_KEY_GENERAL: // "General" in string
         {
             OUStringBuffer sNum;
-            ImpGetOutputStandard(rNumber, sNum, rNatNum);
+            ImpGetOutputStandard(rNumber, sNum, rNatNum, GetCurrentLanguageData());
             sNum.stripStart('-');
             sBuff.insert(k, sNum);
             break;
@@ -4933,7 +4937,7 @@ bool SvNumberformat::ImpNumberFill( const NativeNumberWrapper& rNatNum,
         {
             OUStringBuffer sNum;
             bFoundNumber = true;
-            ImpGetOutputStandard(rNumber, sNum, rNatNum);
+            ImpGetOutputStandard(rNumber, sNum, rNatNum, GetCurrentLanguageData());
             sNum.stripStart('-');
             sBuff.insert(k, sNum);
         }
