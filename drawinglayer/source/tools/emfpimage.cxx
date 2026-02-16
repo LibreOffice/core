@@ -60,6 +60,40 @@ namespace emfplushelper
             SvMemoryStream mfStream(const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), dataSize, StreamMode::READ);
             filter.ImportGraphic(graphic, u"", mfStream);
 
+            mfStream.Seek(0);
+            // 1 = Wmf, 2 = WmfPlaceable, 3 = Emf, 4 = EmfPlusOnly, 5 = EmfPlusDual
+            if (mfType == 3 || mfType == 4 || mfType == 5)
+            {
+                sal_uInt32 dwRecordType, dwRecordSize, dSignature, nVersion;
+                sal_Int32 rclBoundsLeft, rclBoundsTop, rclBoundsRight, rclBoundsBottom;
+
+                mfStream.ReadUInt32(dwRecordType);
+                mfStream.ReadUInt32(dwRecordSize);
+                mfStream.ReadInt32(rclBoundsLeft);
+                mfStream.ReadInt32(rclBoundsTop);
+                mfStream.ReadInt32(rclBoundsRight);
+                mfStream.ReadInt32(rclBoundsBottom);
+
+                mfStream.SeekRel(16);
+
+                mfStream.ReadUInt32(dSignature);
+                mfStream.ReadUInt32(nVersion);
+
+                if (dwRecordType == 1 && dSignature == 0x464D4520)
+                {
+                    x = rclBoundsLeft;
+                    y = rclBoundsTop;
+                    width = rclBoundsRight - rclBoundsLeft;
+                    height = rclBoundsBottom - rclBoundsTop;
+                    SAL_INFO("drawinglayer.emf", "EMF+\tNested EMF Header detected.");
+                    SAL_INFO("drawinglayer.emf",
+                            "EMF+\tBounds: [" << rclBoundsLeft << "," << rclBoundsTop << ", "
+                                              << rclBoundsRight << ", " << rclBoundsBottom << "]");
+                    SAL_INFO("drawinglayer.emf",
+                            "EMF+\tVersion: 0x" << std::hex << nVersion << std::dec);
+                }
+            }
+
             // debug code - write the stream to debug file /tmp/emf-stream.emf
 #if OSL_DEBUG_LEVEL > 1
             mfStream.Seek(0);

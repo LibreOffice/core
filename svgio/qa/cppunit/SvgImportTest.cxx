@@ -1424,8 +1424,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158445)
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf158445.svg");
 
     assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor", "color", u"#000000");
-    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor/polypolygon", "height", u"8.052");
-    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor/polypolygon", "width", u"5.328");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor/polypolygon", "height", u"8");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor/polypolygon", "width", u"5");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159594)
@@ -1433,8 +1433,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159594)
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf159594.svg");
 
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", u"#000000");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor/polypolygon", "height", u"11.671875");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor/polypolygon", "width", u"7.5");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor/polypolygon", "height", u"12");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor/polypolygon", "width", u"8");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf97663)

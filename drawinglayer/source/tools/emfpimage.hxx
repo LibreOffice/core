@@ -35,11 +35,23 @@ namespace emfplushelper
     struct EMFPImage : public EMFPObject
     {
         sal_uInt32 type;
+        sal_Int32 x;
+        sal_Int32 y;
         sal_Int32 width;
         sal_Int32 height;
         sal_Int32 stride;
         sal_uInt32 pixelFormat;
         Graphic graphic;
+
+        EMFPImage():
+            type(ImageDataTypeUnknown),
+            x(0),
+            y(0),
+            width(0),
+            height(0),
+            stride(0),
+            pixelFormat(0)
+        {}
 
         void Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream);
     };
