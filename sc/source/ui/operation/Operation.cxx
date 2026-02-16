@@ -179,11 +179,11 @@ bool Operation::checkSheetViewProtection()
 
 bool Operation::run()
 {
-    SAL_INFO("sc",
+    SAL_INFO("sc.op",
              "Running operation '" << SheetViewOperationsTester::operationName(meType) << "'.");
     bool bResult = runImplementation();
-    SAL_INFO("sc", "Operation '" << SheetViewOperationsTester::operationName(meType)
-                                 << (bResult ? "' succeded." : "' failed."));
+    SAL_INFO("sc.op", "Operation '" << SheetViewOperationsTester::operationName(meType)
+                                    << (bResult ? "' succeded." : "' failed."));
     return bResult;
 }
 }
