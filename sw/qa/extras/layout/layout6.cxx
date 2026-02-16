@@ -2196,6 +2196,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169607)
     assertXPath(pXmlDoc, "//page", 3);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170811)
+{
+    // This used to fail assertion
+    createSwDoc("tdf170811.fodt");
+    // This must succeed
+    parseLayoutDump();
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -195,6 +195,15 @@ void SwBlankPortion::FormatEOL( SwTextFormatInfo &rInf )
  */
 bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 {
+    std::optional<SwTextSlot> oTextSlot;
+    if (!GetLen())
+    {
+        // This is a hook char of a field portion. Use expansion.
+        // FIXME: tdf#56085 the slot must use parent field portion text, to correctly format
+        // in the context of surrounding text
+        oTextSlot.emplace(&rInf, this, true, false);
+    }
+
     const bool bFull = rInf.IsUnderflow() || SwTextPortion::Format(rInf);
     if( bFull && MayUnderflow( rInf, rInf.GetIdx(), rInf.IsUnderflow() ) )
     {
