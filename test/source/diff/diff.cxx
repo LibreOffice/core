@@ -368,13 +368,38 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
         }
         else
         {
+            bool bIgnoreGUIDStrings(false);
 
-#if USE_CPPUNIT
-            cppunitAssertEqual(node1, attr1, val1, val2);
-#else
             if(!xmlStrEqual( val1, val2 ))
-                return false;
+            {
+                // there might be GuidString's used, these may get created
+                // at every export or internal usage, so these cannot be
+                // compared to a saved pattern. To identify, use their
+                // format. An example is:
+                // "{662825F2-FD0A-477C-81F6-D00196403932}"
+                // We can use here their specific length of 38, that
+                // should be good for now. If needed this may be extended
+                // to check for
+                // - curly braces at start/end
+                // - minus ('-') at positions 9, 14, 19 and 24
+                // - upper-case hex alphabet (0..9, A..F) for the characters
+                // also see ObjectNameIsDiagramModelID() which is similar
+                const int len1(xmlStrlen(val1));
+                const int len2(xmlStrlen(val2));
+
+                if (len1 == len2 && 38 == len1)
+                    bIgnoreGUIDStrings = true;
+            }
+
+            if (!bIgnoreGUIDStrings)
+            {
+#if USE_CPPUNIT
+                cppunitAssertEqual(node1, attr1, val1, val2);
+#else
+                if(!xmlStrEqual( val1, val2 ))
+                    return false;
 #endif
+            }
         }
 
         xmlFree(val1);

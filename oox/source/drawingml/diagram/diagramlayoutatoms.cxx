@@ -909,12 +909,10 @@ bool ConditionAtom::getDecision(const svx::diagram::Point* pPresPoint) const
                 // point, ask the parent.
                 OUString aParent = navigate(mrLayoutNode, svx::diagram::TypeConstant::XML_presParOf, pPresPoint->msModelId,
                                             /*bSourceToDestination*/ false);
-                DiagramData_oox::PointNameMap& rPointNameMap
-                    = mrLayoutNode.getDiagram().getData()->getPointNameMap();
-                auto it = rPointNameMap.find(aParent);
-                if (it != rPointNameMap.end())
+                const svx::diagram::Point* it(mrLayoutNode.getDiagram().getData()->getPointByModelID(aParent));
+                if (nullptr != it)
                 {
-                    const svx::diagram::Point* pParent = it->second;
+                    const svx::diagram::Point* pParent = it;
                     if (pParent->moHierarchyBranch.has_value())
                         nHierarchyBranch = pParent->moHierarchyBranch.value();
                 }
@@ -1077,8 +1075,6 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
         = rLayoutNode.getDiagram().getLayout()->getPresPointShapeMap();
     const DiagramData_oox::StringMap& rPresOfNameMap
         = rLayoutNode.getDiagram().getData()->getPresOfNameMap();
-    const DiagramData_oox::PointNameMap& rPointNameMap
-        = rLayoutNode.getDiagram().getData()->getPointNameMap();
     // Get the first presentation node of the shape.
     const svx::diagram::Point* pPresNode = nullptr;
     for (const auto& rPair : rPresPointShapeMap)
@@ -1090,7 +1086,7 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
         }
     }
     // Get the first data node of the presentation node.
-    svx::diagram::Point* pDataNode = nullptr;
+    const svx::diagram::Point* pDataNode = nullptr;
     if (pPresNode)
     {
         auto itPresToData = rPresOfNameMap.find(pPresNode->msModelId);
@@ -1099,10 +1095,10 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
             for (const auto& rPair : itPresToData->second)
             {
                 const DiagramData_oox::SourceIdAndDepth& rItem = rPair.second;
-                auto it = rPointNameMap.find(rItem.msSourceId);
-                if (it != rPointNameMap.end())
+                const svx::diagram::Point* it(rLayoutNode.getDiagram().getData()->getPointByModelID(rItem.msSourceId));
+                if (nullptr != it)
                 {
-                    pDataNode = it->second;
+                    pDataNode = it;
                     break;
                 }
             }
@@ -1887,23 +1883,22 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* 
         for (const auto& rPair : aNodeName->second)
         {
             const DiagramData_oox::SourceIdAndDepth& rItem = rPair.second;
-            DiagramData_oox::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
             // pPresNode is the presentation node of the aDataNode2 data node.
-            DiagramData_oox::PointNameMap::const_iterator aDataNode2 = rMap.find(rItem.msSourceId);
-            if (aDataNode2 == rMap.end())
+            const svx::diagram::Point* pDataNode2(mrDgm.getData()->getPointByModelID(rItem.msSourceId));
+            if (nullptr == pDataNode2)
             {
                 //busted, skip it
                 continue;
             }
 
-            Shape* pDataNode2Shape(mrDgm.getData()->getOrCreateAssociatedShape(*aDataNode2->second));
+            Shape* pDataNode2Shape(mrDgm.getData()->getOrCreateAssociatedShape(*pDataNode2));
             if (nullptr == pDataNode2Shape)
             {
                 //busted, skip it
                 continue;
             }
 
-            rShape->setDataNodeType(aDataNode2->second->mnXMLType);
+            rShape->setDataNodeType(pDataNode2->mnXMLType);
 
             if (rItem.mnDepth == 0)
             {

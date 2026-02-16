@@ -204,7 +204,6 @@ DiagramData_svx::DiagramData_svx()
 , maConnections()
 , maPoints()
 , mxThemeDocument()
-, maPointNameMap()
 , maPointsPresNameMap()
 , maConnectionNameMap()
 , maPresOfNameMap()
@@ -215,14 +214,16 @@ DiagramData_svx::DiagramData_svx()
 DiagramData_svx::DiagramData_svx(DiagramData_svx const& rSource)
 : mxRootShape()
 , maExtDrawings()
+// copy all Connections
 , maConnections(rSource.maConnections)
+// copy all Points
 , maPoints(rSource.maPoints)
 , mxThemeDocument()
-, maPointNameMap()
 , maPointsPresNameMap()
 , maConnectionNameMap()
 , maPresOfNameMap()
-, msBackgroundShapeModelID()
+// copy BackgroundShapeModelID, the BGSgape will need to be identified on reLayout
+, msBackgroundShapeModelID(rSource.msBackgroundShapeModelID)
 {
 }
 
@@ -359,9 +360,9 @@ void DiagramData_svx::getDiagramChildrenString(
         {
             if (rCxn.mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
                 aChildren.resize(rCxn.mnSourceOrder + 1);
-            const auto pChild = maPointNameMap.find(rCxn.msDestId);
-            if (pChild != maPointNameMap.end())
-                aChildren[rCxn.mnSourceOrder] = pChild->second;
+            const Point* pChild(getPointByModelID(rCxn.msDestId));
+            if (nullptr != pChild)
+                aChildren[rCxn.mnSourceOrder] = pChild;
         }
 
     for (auto pChild : aChildren)
@@ -387,6 +388,15 @@ uno::Reference<drawing::XShape> DiagramData_svx::getXShapeByModelID(std::u16stri
     }
 
     return xRetval;
+}
+
+const Point* DiagramData_svx::getPointByModelID(std::u16string_view rModelID) const
+{
+    for (const auto& rCandidate : getPoints())
+        if (rModelID == rCandidate.msModelId)
+            return &rCandidate;
+
+    return nullptr;
 }
 
 uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const Point& rPoint) const
@@ -426,12 +436,12 @@ std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(c
         {
             if (rCxn.mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
                 aChildren.resize(rCxn.mnSourceOrder + 1);
-            const auto pChild = maPointNameMap.find(rCxn.msDestId);
-            if (pChild != maPointNameMap.end())
+            const Point* pChild(getPointByModelID(rCxn.msDestId));
+            if (nullptr != pChild)
             {
-                const OUString aText(getTextForPoint(*pChild->second));
+                const OUString aText(getTextForPoint(*pChild));
                 aChildren[rCxn.mnSourceOrder] = std::make_pair(
-                    pChild->second->msModelId,
+                    pChild->msModelId,
                     aText);
             }
         }
@@ -479,7 +489,7 @@ std::pair<OUString, DomMapFlags> DiagramData_svx::addDiagramNode()
     if (!sPresSibling.isEmpty())
     {
         // no idea where to get these values from, so copy from previous sibling
-        const svx::diagram::Point* pSiblingPoint = maPointNameMap[sPresSibling];
+        const svx::diagram::Point* pSiblingPoint(getPointByModelID(sPresSibling));
         aPresPoint.msPresentationLayoutName = pSiblingPoint->msPresentationLayoutName;
         aPresPoint.msPresentationLayoutStyleLabel = pSiblingPoint->msPresentationLayoutStyleLabel;
         aPresPoint.mnLayoutStyleIndex = pSiblingPoint->mnLayoutStyleIndex;
@@ -563,7 +573,6 @@ static sal_Int32 calcDepth( std::u16string_view rNodeName,
 void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 {
     // build name-object maps
-    maPointNameMap.clear();
     maPointsPresNameMap.clear();
     maConnectionNameMap.clear();
     maPresOfNameMap.clear();
@@ -628,9 +637,7 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 #endif
         }
 
-        const bool bInserted1 = getPointNameMap().insert(
-            std::make_pair(point.msModelId,&point)).second;
-
+        const bool bInserted1(nullptr != getPointByModelID(point.msModelId));
         SAL_WARN_IF(!bInserted1, "oox.drawingml", "DiagramData_svx::build(): non-unique point model id");
 
         if( !point.msPresentationLayoutName.isEmpty() )

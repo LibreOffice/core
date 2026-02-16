@@ -202,17 +202,45 @@ struct SdrObject::Impl
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
+bool SdrObject::ObjectNameIsDiagramModelID()
+{
+    if (!m_pPlusData)
+        return false;
+
+    const OUString& rStr(m_pPlusData->aObjName);
+    if (rStr.isEmpty())
+        return false;
+
+    // length is fixed (38 chars)
+    if (38 != rStr.getLength())
+        return false;
+
+    // starts and ends with curly braces
+    const sal_Unicode* pStr(rStr.getStr());
+    if (pStr[0] != '{' || pStr[37] != '}')
+        return false;
+
+    // has 'minus' signs at positions 9, 14, 19 and 24
+    const char minus('-');
+    if (pStr[9] != minus || pStr[14] != minus || pStr[19] != minus || pStr[24] != minus)
+        return false;
+
+    // we could also check for upper-case hex alphabet (0..9, A..F) for
+    // the rest of characters, but should be safe enough already
+    return true;
+}
+
 void SdrObject::setDiagramDataModelID(const OUString& rID)
 {
     if (!m_pPlusData)
         ImpForcePlusData();
-    m_pPlusData->aObjTitle = rID;
+    m_pPlusData->aObjName = rID;
 }
 
 const OUString& SdrObject::getDiagramDataModelID() const
 {
     if(m_pPlusData)
-        return m_pPlusData->aObjTitle;
+        return m_pPlusData->aObjName;
     return EMPTY_OUSTRING;
 }
 
@@ -3212,6 +3240,10 @@ void SdrObject::MakeNameUnique()
 void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
 {
     if (GetName().isEmpty())
+        return;
+
+    if (ObjectNameIsDiagramModelID())
+        // do not make name unique for DiagramModelID's
         return;
 
     OUString sName(GetName().trim());

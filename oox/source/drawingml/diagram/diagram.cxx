@@ -146,7 +146,12 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     pBackground->setSubType(XML_rect);
     pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
     pBackground->setSize(pParentShape->getSize());
-    pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
+    if (mpData->getBackgroundShapeFillProperties())
+        pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
+    // MoveProtect/SizeProtect..? Keep for now, but mnay be removed
+    // when IA needs change - the Diagram will be a closed GroupObject.
+    // If it gets 'broken' (un-grouped) the BGShape will keep that attributes,
+    // despite main reason to break that Diagram is probably to edit it.
     pBackground->setLocked(true);
 
     // create and set ModelID for BackgroundShape to allow later association

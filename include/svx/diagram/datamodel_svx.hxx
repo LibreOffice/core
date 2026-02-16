@@ -154,7 +154,6 @@ typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;
 class SVXCORE_DLLPUBLIC DiagramData_svx
 {
 public:
-    typedef std::map< OUString, Point* > PointNameMap;
     typedef std::map< OUString, std::vector< Point* > > PointsNameMap;
     typedef std::map< OUString, const Connection* > ConnectionNameMap;
 
@@ -193,7 +192,6 @@ public:
     Points& getPoints() { return maPoints; }
     const Points& getPoints() const { return maPoints; }
     StringMap& getPresOfNameMap() { return maPresOfNameMap; }
-    PointNameMap& getPointNameMap() { return maPointNameMap; }
     PointsNameMap& getPointsPresNameMap() { return maPointsPresNameMap; }
     ::std::vector<OUString>& getExtDrawings() { return maExtDrawings; }
     const Point* getRootPoint() const;
@@ -217,6 +215,7 @@ public:
     css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint) const;
     OUString getTextForPoint(const Point& rPoint) const;
     css::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
+    const Point* getPointByModelID(std::u16string_view rModelID) const;
 
 protected:
     // helpers
@@ -246,7 +245,6 @@ protected:
     css::uno::Reference< css::xml::dom::XDocument > mxThemeDocument;
 
     // temporary processing data, partially deleted when using build()
-    PointNameMap      maPointNameMap;
     PointsNameMap     maPointsPresNameMap;
     ConnectionNameMap maConnectionNameMap;
     StringMap         maPresOfNameMap;

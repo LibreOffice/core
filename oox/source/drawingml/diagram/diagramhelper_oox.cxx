@@ -143,6 +143,14 @@ void DiagramHelper_oox::reLayout()
         }
     }
 
+    // reset temporary buffered ModelData association lists & rebuild them
+    // and the Diagram DataModel
+    mpDiagramPtr->getData()->buildDiagramDataModel(true);
+
+    // also reset temporary buffered layout data - that might
+    // still refer to changed oox::Shape data
+    mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
+
     // Re-create the oox::Shapes for the diagram content
     mpDiagramPtr->createShapeHierarchyFromModel(pShapePtr, true);
 
