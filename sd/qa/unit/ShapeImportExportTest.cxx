@@ -31,12 +31,14 @@ public:
     void testTextDistancesOOXML_LargerThanTextAreaSpecialCase();
     void testTextDistancesOOXML_Export();
     void testTextDistancesODP_OOXML_Export();
+    void testTextDistancesWithRotationOOXML();
 
     CPPUNIT_TEST_SUITE(ShapeImportExportTest);
     CPPUNIT_TEST(testTextDistancesOOXML);
     CPPUNIT_TEST(testTextDistancesOOXML_LargerThanTextAreaSpecialCase);
     CPPUNIT_TEST(testTextDistancesOOXML_Export);
     CPPUNIT_TEST(testTextDistancesODP_OOXML_Export);
+    CPPUNIT_TEST(testTextDistancesWithRotationOOXML);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -381,6 +383,70 @@ void ShapeImportExportTest::testTextDistancesODP_OOXML_Export()
     // The text had ended about 3.3cm below the top edge in PowerPoint.
     assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr",
                      { { "tIns", u"720000" }, { "bIns", u"2520000" } });
+}
+
+/* Test text distances (insets) with text area rotation */
+void ShapeImportExportTest::testTextDistancesWithRotationOOXML()
+{
+    createSdImpressDoc("TextDistancesInsetsWithRotation.pptx");
+    SdrPage const* pPage = GetPage(1);
+
+    // 90° CW + lIns=1cm: nOff=1 → lIns maps to TextUpperDistance
+    {
+        auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, u"Rot90_L1cm"));
+        CPPUNIT_ASSERT(pTextObj);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLeftDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1000), pTextObj->GetTextUpperDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextRightDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLowerDistance());
+    }
+    // 90° CW + tIns=2cm: nOff=1 → tIns maps to TextRightDistance
+    {
+        auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, u"Rot90_T2cm"));
+        CPPUNIT_ASSERT(pTextObj);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLeftDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextUpperDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(2000), pTextObj->GetTextRightDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLowerDistance());
+    }
+    // 270° CW + lIns=1cm: nOff=3 → lIns maps to TextLowerDistance
+    {
+        auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, u"Rot270_L1cm"));
+        CPPUNIT_ASSERT(pTextObj);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLeftDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextUpperDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextRightDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1000), pTextObj->GetTextLowerDistance());
+    }
+    // 180° + lIns=1cm: nOff=2 → lIns maps to TextRightDistance
+    {
+        auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, u"Rot180_L1cm"));
+        CPPUNIT_ASSERT(pTextObj);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLeftDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextUpperDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1000), pTextObj->GetTextRightDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLowerDistance());
+    }
+    // No rotation control: lIns=1cm stays as TextLeftDistance
+    {
+        auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, u"NoRot_L1cm"));
+        CPPUNIT_ASSERT(pTextObj);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1000), pTextObj->GetTextLeftDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextUpperDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextRightDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pTextObj->GetTextLowerDistance());
+    }
+    // vert270 with default insets (no explicit lIns/tIns/rIns/bIns):
+    // OOXML defaults are lIns=254, tIns=127, rIns=254, bIns=127 (HMM).
+    // With nOff=1 for vert270: bIns→Left, lIns→Upper, tIns→Right, rIns→Lower
+    {
+        auto* pTextObj = DynCastSdrTextObj(searchObject(pPage, u"Vert270_DefaultIns"));
+        CPPUNIT_ASSERT(pTextObj);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(127), pTextObj->GetTextLeftDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(254), pTextObj->GetTextUpperDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(127), pTextObj->GetTextRightDistance());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(254), pTextObj->GetTextLowerDistance());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ShapeImportExportTest);

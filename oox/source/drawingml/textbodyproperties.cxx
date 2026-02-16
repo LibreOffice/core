@@ -92,6 +92,48 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
     else if (moVert && moVert.value() == XML_vert270)
         nOff = (nOff + 1) % aProps.size();
 
+    // Compensate for text area rotation (bodyPr rot attribute).
+    // In PowerPoint, margins are relative to the unrotated frame.
+    // The rendering rotates the text area including margins, so pre-rotate
+    // margins in the opposite direction to compensate.
+    // Only do this for bodyPr 'rot', not for txXfrm rotation (SmartArt/diagram).
+    if (mbBodyPrRotation && moTextAreaRotation)
+    {
+        sal_Int32 nRotDeg = (*moTextAreaRotation / 60000) % 360;
+        if (nRotDeg < 0)
+            nRotDeg += 360;
+
+        if (nRotDeg >= 45 && nRotDeg < 135)       // ~90° CW
+            nOff = (nOff + 1) % aProps.size();
+        else if (nRotDeg >= 135 && nRotDeg < 225)  // ~180°
+            nOff = (nOff + 2) % aProps.size();
+        else if (nRotDeg >= 225 && nRotDeg < 315)  // ~270° CW
+            nOff = (nOff + 3) % aProps.size();
+    }
+
+    // When vert or bodyPr rot is active, fill in OOXML default insets for any
+    // not explicitly specified, so the defaults get rotated to the correct edges.
+    // Without rotation, LO's own defaults (which match OOXML) are fine as-is.
+    // Only do this for moVert / bodyPr rot (OOXML shape-level attributes),
+    // not for moTextPreRotation or txXfrm rotation (SmartArt/diagram mechanism).
+    // OOXML defaults: lIns=91440 tIns=45720 rIns=91440 bIns=45720 (EMU)
+    //                 → 254, 127, 254, 127 (HMM)
+    bool bNeedsDefaultInsets
+        = (moVert.has_value()
+           && (moVert.value() == XML_eaVert || moVert.value() == XML_vert
+               || moVert.value() == XML_vert270))
+          || mbBodyPrRotation;
+    auto aInsets = moInsets;
+    if (nOff != 0 && bNeedsDefaultInsets)
+    {
+        static constexpr sal_Int32 aDefaultInsets[] = { 254, 127, 254, 127 };
+        for (size_t i = 0; i < aInsets.size(); i++)
+        {
+            if (!aInsets[i])
+                aInsets[i] = aDefaultInsets[i];
+        }
+    }
+
     for (size_t i = 0; i < aProps.size(); i++)
     {
         sal_Int32 nVal = 0;
@@ -113,14 +155,14 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 
         sal_Int32 nTextOffsetValue = nVal;
 
-        if (moInsets[i])
+        if (aInsets[i])
         {
-            nTextOffsetValue = *moInsets[i] + nVal;
+            nTextOffsetValue = *aInsets[i] + nVal;
         }
 
         // if inset is set, then always set the value
         // this prevents the default to be set (0 is a valid value)
-        if (moInsets[i] || nTextOffsetValue)
+        if (aInsets[i] || nTextOffsetValue)
         {
             maTextDistanceValues[nOff] = nTextOffsetValue;
         }

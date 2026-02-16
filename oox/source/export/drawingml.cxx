@@ -4219,6 +4219,36 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
+    // Reverse the margin compensation applied during import for text area rotation.
+    if (nTextRotateAngleDeg100.has_value())
+    {
+        // Convert LO CCW Degree100 to CW degrees
+        sal_Int32 nCWDeg = (-nTextRotateAngleDeg100->get() / 100) % 360;
+        if (nCWDeg < 0)
+            nCWDeg += 360;
+
+        if (nCWDeg >= 45 && nCWDeg < 135)        // ~90° CW
+        {
+            sal_Int32 nHelp = nLeft;
+            nLeft = nTop;
+            nTop = nRight;
+            nRight = nBottom;
+            nBottom = nHelp;
+        }
+        else if (nCWDeg >= 135 && nCWDeg < 225)   // ~180°
+        {
+            std::swap(nLeft, nRight);
+            std::swap(nTop, nBottom);
+        }
+        else if (nCWDeg >= 225 && nCWDeg < 315)   // ~270° CW
+        {
+            sal_Int32 nHelp = nLeft;
+            nLeft = nBottom;
+            nBottom = nRight;
+            nRight = nTop;
+            nTop = nHelp;
+        }
+    }
 
     std::optional<OString> sTextRotateAngleMSUnit;
     if (nTextRotateAngleDeg100.has_value())
