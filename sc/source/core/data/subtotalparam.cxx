@@ -166,30 +166,30 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
         aGroups[nGroup].pSubTotals[i] = { ptrSubTotals[i], ptrFunctions[i] };
 }
 
-void ScSubTotalParam::SetCustFuncs(sal_uInt16 nGroup,
+void ScSubTotalParam::SetCustFuncs(sal_uInt16 nGroupIdx,
                        std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>>& rColFuncs,
                        sal_uInt16 nCount )
 {
-    OSL_ENSURE((nGroup <= MAXSUBTOTAL), "ScSubTotalParam::SetCustFuncs(): nGroup > MAXSUBTOTAL!");
-    if (nGroup > MAXSUBTOTAL)
+    OSL_ENSURE((nGroupIdx < MAXSUBTOTAL), "ScSubTotalParam::SetCustFuncs(): nGroupIdx >= MAXSUBTOTAL!");
+    if (nGroupIdx >= MAXSUBTOTAL)
         return;
 
-    aGroups[nGroup].AllocCustFuncs(nCount);
+    aGroups[nGroupIdx].AllocCustFuncs(nCount);
     for (sal_uInt16 i = 0; i < nCount; i++)
-        aGroups[nGroup].pCustFuncs[i] = std::make_pair(rColFuncs[i].first, std::move(rColFuncs[i].second));
+        aGroups[nGroupIdx].pCustFuncs[i] = std::make_pair(rColFuncs[i].first, std::move(rColFuncs[i].second));
 }
 
-void ScSubTotalParam::SetSubLabels(sal_uInt16 nGroup,
+void ScSubTotalParam::SetSubLabels(sal_uInt16 nGroupIdx,
                        std::vector<std::pair<SCCOL, rtl::OUString>>& rColLabels,
                        sal_uInt16 nCount )
 {
-    OSL_ENSURE((nGroup <= MAXSUBTOTAL), "ScSubTotalParam::SetSubLabels(): nGroup > MAXSUBTOTAL!");
-    if (nGroup > MAXSUBTOTAL)
+    OSL_ENSURE((nGroupIdx < MAXSUBTOTAL), "ScSubTotalParam::SetSubLabels(): nGroupIdx > MAXSUBTOTAL!");
+    if (nGroupIdx >= MAXSUBTOTAL)
         return;
 
-    aGroups[nGroup].AllocSubLabels(nCount);
+    aGroups[nGroupIdx].AllocSubLabels(nCount);
     for (sal_uInt16 i = 0; i < nCount; i++)
-        aGroups[nGroup].pSubLabels[i] = std::make_pair(rColLabels[i].first, std::move(rColLabels[i].second));
+        aGroups[nGroupIdx].pSubLabels[i] = std::make_pair(rColLabels[i].first, std::move(rColLabels[i].second));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
