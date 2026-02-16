@@ -62,7 +62,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
-		$(MESON) compile -C builddir lib \
+		$(MESON) compile -C builddir libs \
 			$(if $(verbose),--verbose) \
 	)
 	$(call gb_Trace_EndRange,harfbuzz,EXTERNAL)
