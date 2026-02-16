@@ -611,13 +611,17 @@ private:
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard(double& fNumber, OUString& OutString,
-                                             const NativeNumberWrapper& rNatNum) const;
+                                             const NativeNumberWrapper& rNatNum,
+                                             const SvNFLanguageData& rCurrentLang) const;
     SVL_DLLPRIVATE void ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString,
-                                             const NativeNumberWrapper& rNatNum) const;
+                                             const NativeNumberWrapper& rNatNum,
+                                             const SvNFLanguageData& rCurrentLang) const;
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutString, sal_uInt16 nPrecision,
-                                                   const NativeNumberWrapper& rNatNum) const;
+                                                   const NativeNumberWrapper& rNatNum,
+                                                   const SvNFLanguageData& rCurrentLang) const;
     // numbers in input line
-    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString ) const;
+    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString,
+                                               const SvNFLanguageData& rCurrentLang ) const;
 
     // check subcondition
     // OP undefined => -1

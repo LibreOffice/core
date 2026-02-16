@@ -509,6 +509,11 @@ void SvNFLanguageData::ChangeStandardPrec(short nPrec)
     pFormatScanner->ChangeStandardPrec(nPrec);
 }
 
+sal_uInt16 SvNFLanguageData::GetStandardPrec() const
+{
+    return pFormatScanner->GetStandardPrec();
+}
+
 const Date& SvNumberFormatter::GetNullDate() const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
