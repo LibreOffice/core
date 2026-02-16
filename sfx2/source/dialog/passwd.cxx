@@ -331,6 +331,9 @@ void SfxPasswordDialog::PreRun()
     m_xConfirm2FT->hide();
     m_xConfirm2ED->hide();
     m_xPassword2StrengthBar->hide();
+    m_xBtn2->hide();
+    m_xBtn3->hide();
+    m_xBtn4->hide();
 
     if (mnExtras != SfxShowExtras::NONE)
         m_xPassword1FT->show();
@@ -344,18 +347,21 @@ void SfxPasswordDialog::PreRun()
         m_xConfirm1FT->show();
         m_xConfirm1ED->show();
         m_xPassword1StrengthBar->show();
+        m_xBtn2->show();
     }
     if (mnExtras & SfxShowExtras::PASSWORD2)
     {
         m_xPassword2Box->show();
         m_xPassword2FT->show();
         m_xPassword2ED->show();
+        m_xBtn3->show();
     }
     if (mnExtras & SfxShowExtras::CONFIRM2)
     {
         m_xConfirm2FT->show();
         m_xConfirm2ED->show();
         m_xPassword2StrengthBar->show();
+        m_xBtn4->show();
     }
 }
 
