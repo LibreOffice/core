@@ -146,6 +146,65 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
         "b63539,b53335,ba3236,a2393e,1c0000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsWithMetafile)
+{
+    // tdf166084 tdf138087 tdf59814 EMF+ file with ObjectTypeImage, DrawImagePoints
+    // The test is checking the position and scale of embedded metafile drawed by DrawImagePoints
+
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusDrawImagePointsWithMetafile.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", 1);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "minx", u"0");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "miny", u"0");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "maxx", u"6921");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "maxy", u"20306");
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy11", 1.36,
+                           0.01);
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy12", 0.0,
+                           0.01);
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy13",
+                           -3278.56, 0.01);
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy21", 0.0,
+                           0.01);
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy22", 1.34,
+                           0.01);
+    assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy23",
+                           -176.13, 0.01);
+
+    assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/polypolygon", "height",
+                u"15747");
+    assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/polypolygon", "width",
+                u"10088");
+
+    assertXPath(
+        pDocument,
+        aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform/mask/group", 17);
+
+    assertXPathDoubleValue(
+        pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
+        "xy11", 0.79, 0.01);
+    assertXPathDoubleValue(
+        pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
+        "xy12", 0.0, 0.01);
+    assertXPathDoubleValue(
+        pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
+        "xy13", 3.44, 0.01);
+    assertXPathDoubleValue(
+        pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
+        "xy21", 0.0, 0.01);
+    assertXPathDoubleValue(
+        pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
+        "xy22", 0.79, 0.01);
+    assertXPathDoubleValue(
+        pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
+        "xy23", -139.63, 0.01);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFillRectsWithTextureBrush)
 {
     // tdf#129342 tdf#170985 EMF+ file with ObjectTypeBrush, ObjectTypepen, FillRects

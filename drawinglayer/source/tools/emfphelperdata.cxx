@@ -30,19 +30,20 @@
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1542,11 +1543,8 @@ namespace emfplushelper
                                 ReadPoint(rMS, x2, y2, flags); // upper-right
                                 ReadPoint(rMS, x3, y3, flags); // lower-left
 
-                                SAL_INFO("drawinglayer.emf", "EMF+\t destination points: "
-                                                                << x1 << "," << y1 << " " << x2 << ","
-                                                                << y2 << " " << x3 << "," << y3);
                                 dx = x1;
-                                dy = y2;
+                                dy = y1;
                                 dw = x2 - x1;
                                 dh = y3 - y1;
                                 fShearX = x3 - x1;
@@ -1556,7 +1554,7 @@ namespace emfplushelper
                                 ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
 
                             SAL_INFO("drawinglayer.emf",
-                                    "EMF+\t Rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
+                                    "EMF+\t Destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
                             Size aSize;
                             if (image->type == ImageDataTypeBitmap)
                             {
@@ -1588,22 +1586,15 @@ namespace emfplushelper
                                 else if (sy + sh > aSize.Height())
                                     dh = ((aSize.Height() - sy) / sh) * dh;
                             }
-                            else
-                                SAL_INFO(
-                                    "drawinglayer.emf",
-                                    "EMF+\t TODO: Add support for SrcRect to ImageDataTypeMetafile");
-                            const ::basegfx::B2DPoint aDstPoint(dx, dy);
-                            const ::basegfx::B2DSize aDstSize(dw, dh);
 
-                            const basegfx::B2DHomMatrix aTransformMatrix
-                                = maMapTransform
-                                * basegfx::B2DHomMatrix(
-                                    /* Row 0, Column 0 */ aDstSize.getWidth(),
+                            const basegfx::B2DHomMatrix aDestMatrix =
+                                maMapTransform * basegfx::B2DHomMatrix(
+                                    /* Row 0, Column 0 */ dw,
                                     /* Row 0, Column 1 */ fShearX,
-                                    /* Row 0, Column 2 */ aDstPoint.getX(),
+                                    /* Row 0, Column 2 */ dx,
                                     /* Row 1, Column 0 */ fShearY,
-                                    /* Row 1, Column 1 */ aDstSize.getHeight(),
-                                    /* Row 1, Column 2 */ aDstPoint.getY());
+                                    /* Row 1, Column 1 */ dh,
+                                    /* Row 1, Column 2 */ dy);
 
                             if (image->type == ImageDataTypeBitmap)
                             {
@@ -1614,18 +1605,46 @@ namespace emfplushelper
                                 {
                                     mrTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::BitmapPrimitive2D(
-                                            aBmp, aTransformMatrix));
+                                            aBmp, aDestMatrix));
                                 }
                                 else
                                     SAL_WARN("drawinglayer.emf", "EMF+\t warning: empty bitmap");
                             }
                             else if (image->type == ImageDataTypeMetafile)
                             {
-                                GDIMetaFile aGDI(image->graphic.GetGDIMetaFile());
-                                aGDI.Clip(aSource);
+                                SAL_INFO("drawinglayer.emf",
+                                        "\t\t Metafile Dimensions: " << image->x << "," << image->y
+                                                                     << " [" << image->width << "x"
+                                                                     << image->height);
+
+                                const GDIMetaFile aGDI(image->graphic.GetGDIMetaFile());
+                                basegfx::B2DHomMatrix aFinalMatrix = aDestMatrix;
+                                if (image->width > 0 && image->height > 0 && sw > 0. && sh > 0.)
+                                {
+                                    const double fRelSrcX = sx - static_cast<double>(image->x);
+                                    const double fRelSrcY = sy - static_cast<double>(image->y);
+                                    const basegfx::B2DHomMatrix aNormalizeMatrix(
+                                        /* Row 0, Column 0 */ static_cast<double>(image->width) / sw,
+                                        /* Row 0, Column 1 */ 0.0,
+                                        /* Row 0, Column 2 */ -fRelSrcX / sw,
+                                        /* Row 1, Column 0 */ 0.0,
+                                        /* Row 1, Column 1 */ static_cast<double>(image->height) / sh,
+                                        /* Row 1, Column 2 */ -fRelSrcY / sh);
+
+                                    aFinalMatrix = aDestMatrix * aNormalizeMatrix;
+                                }
+
+                                basegfx::B2DPolygon aClipPoly = basegfx::utils::createUnitPolygon();
+                                aClipPoly.transform(aDestMatrix);
+
                                 mrTargetHolders.Current().append(
-                                    new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix,
-                                                                                    aGDI));
+                                    new drawinglayer::primitive2d::MaskPrimitive2D(
+                                        basegfx::B2DPolyPolygon(aClipPoly),
+                                        drawinglayer::primitive2d::Primitive2DContainer {
+                                            new drawinglayer::primitive2d::MetafilePrimitive2D(aFinalMatrix, aGDI)
+                                        }
+                                    )
+                                );
                             }
                         }
                         else
