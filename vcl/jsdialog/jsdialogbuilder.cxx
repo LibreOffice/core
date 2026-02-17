@@ -1357,11 +1357,11 @@ void JSComboBox::do_set_active_id(const OUString& rStr)
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }
 
-void JSComboBox::render_entry(int pos, int dpix, int dpiy)
+void JSComboBox::render_entry(int pos, int dpiscale)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITH_ALPHA);
-    pDevice->SetDPIX(96.0 * dpix / 100);
-    pDevice->SetDPIY(96.0 * dpiy / 100);
+    pDevice->SetDPIX(96.0 * dpiscale / 100);
+    pDevice->SetDPIY(96.0 * dpiscale / 100);
 
     Size aRenderSize = signal_custom_get_size(*pDevice);
     pDevice->SetOutputSize(aRenderSize);
@@ -1929,11 +1929,11 @@ void JSTreeView::set_sort_column(int col)
     sendUpdate();
 }
 
-void JSTreeView::render_entry(int pos, int dpix, int dpiy)
+void JSTreeView::render_entry(int pos, int dpiscale)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
-    pDevice->SetDPIX(96.0 * dpix / 100);
-    pDevice->SetDPIY(96.0 * dpiy / 100);
+    pDevice->SetDPIX(96.0 * dpiscale / 100);
+    pDevice->SetDPIY(96.0 * dpiscale / 100);
 
     SvTreeListEntry* pEntry = m_xTreeView->GetEntryAtAbsPos(pos);
     if (!pEntry)
@@ -2025,9 +2025,9 @@ void JSIconView::do_unselect(int pos)
     sendUpdate();
 }
 
-void JSIconView::render_entry(int pos, int dpix, int dpiy)
+void JSIconView::render_entry(int pos, int dpiscale)
 {
-    OUString sImage = m_xIconView->renderEntry(pos, dpix, dpiy);
+    OUString sImage = m_xIconView->renderEntry(pos, dpiscale);
     if (sImage.isEmpty())
         return;
 

@@ -5376,8 +5376,8 @@ void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&
 IMPL_LINK(SalInstanceIconView, DumpImageHdl, const ::IconView::encoded_image_query&, rQuery, bool)
 {
     SvTreeListEntry* pEntry = std::get<1>(rQuery);
-    return m_aGetPropertyTreeElemHdl.Call(
-        weld::encoded_image_query(std::get<0>(rQuery), SalInstanceTreeIter(pEntry)));
+    return m_aGetPropertyTreeElemHdl.Call(weld::encoded_image_query(
+        std::get<0>(rQuery), SalInstanceTreeIter(pEntry), std::get<2>(rQuery)));
 }
 
 void SalInstanceIconView::connect_get_image(

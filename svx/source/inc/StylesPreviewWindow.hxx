@@ -130,8 +130,8 @@ public:
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
-    static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle);
-    static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle);
+    static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
+    static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
 
 private:
     void UpdateStylesList();

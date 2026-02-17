@@ -1649,7 +1649,7 @@ public:
     using Widget::get_sensitive;
 };
 
-typedef std::tuple<OUString&, const TreeIter&> encoded_image_query;
+typedef std::tuple<OUString&, const TreeIter&, int> encoded_image_query;
 
 class VCL_DLLPUBLIC IconView : virtual public Widget
 {

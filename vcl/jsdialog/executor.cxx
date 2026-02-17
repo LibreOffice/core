@@ -42,11 +42,9 @@ bool CustomRendererExecutor(weld::Widget& rWidget, const StringMap& rData)
     // pos;dpix;dpiy
     const OUString& sParams = rData.at(u"data"_ustr);
     const OUString aPos = sParams.getToken(0, ';');
-    const OUString aDpiScaleX = sParams.getToken(1, ';');
-    const OUString aDpiScaleY = sParams.getToken(2, ';');
+    const OUString aDpiScale = sParams.getToken(1, ';');
 
-    pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScaleX),
-                            o3tl::toInt32(aDpiScaleY));
+    pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScale));
 
     return true;
 };

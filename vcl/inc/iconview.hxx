@@ -46,7 +46,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
-    typedef std::tuple<OUString&, SvTreeListEntry*> encoded_image_query;
+    typedef std::tuple<OUString&, SvTreeListEntry*, int> encoded_image_query;
 
     void SetDumpImageHdl(const Link<const encoded_image_query&, bool>& rLink)
     {
@@ -54,7 +54,7 @@ public:
     }
 
     /// returns string with encoded image for an entry
-    OUString renderEntry(int pos, int dpix, int dpiy) const;
+    OUString renderEntry(int pos, int dpiscale) const;
 
     /// Update entry size based on the given entry's image size and text
     void UpdateEntrySize(const SvTreeListEntry& rEntry);

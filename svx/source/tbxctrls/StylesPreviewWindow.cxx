@@ -80,21 +80,21 @@ private:
         virtual void Invoke() override { StylePreviewCache::gJsonStylePreviewCache.clear(); }
     };
 
-    static std::map<OUString, Bitmap> gStylePreviewCache;
-    static std::map<OUString, OString> gJsonStylePreviewCache;
+    static std::map<int, std::map<OUString, Bitmap>> gStylePreviewCache;
+    static std::map<int, std::map<OUString, OString>> gJsonStylePreviewCache;
     static int gStylePreviewCacheClients;
     static JsonStylePreviewCacheClear gJsonIdleClear;
 
 public:
-    static std::map<OUString, Bitmap>& Get() { return gStylePreviewCache; }
-    static std::map<OUString, OString>& GetJson() { return gJsonStylePreviewCache; }
+    static std::map<int, std::map<OUString, Bitmap>>& Get() { return gStylePreviewCache; }
+    static std::map<int, std::map<OUString, OString>>& GetJson() { return gJsonStylePreviewCache; }
 
     static void ClearCache(bool bHard)
     {
         gStylePreviewCache.clear();
         if (bHard)
         {
-            StylePreviewCache::gJsonStylePreviewCache.clear();
+            gJsonStylePreviewCache.clear();
             gJsonIdleClear.Stop();
         }
         else
@@ -119,8 +119,8 @@ public:
     }
 };
 
-std::map<OUString, Bitmap> StylePreviewCache::gStylePreviewCache;
-std::map<OUString, OString> StylePreviewCache::gJsonStylePreviewCache;
+std::map<int, std::map<OUString, Bitmap>> StylePreviewCache::gStylePreviewCache;
+std::map<int, std::map<OUString, OString>> StylePreviewCache::gJsonStylePreviewCache;
 int StylePreviewCache::gStylePreviewCacheClients;
 StylePreviewCache::JsonStylePreviewCacheClear StylePreviewCache::gJsonIdleClear;
 }
@@ -564,13 +564,16 @@ static OString extractPngString(const Bitmap& rBitmap)
     return ""_ostr;
 }
 
-// 0: OUString, 1: TreeIter, returns true if supported
+// 0: OUString, 1: TreeIter, 2: dpiscale, returns true if supported
 IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_query&, rQuery, bool)
 {
     const weld::TreeIter& rIter = std::get<1>(rQuery);
+    int nDpiScale = std::get<2>(rQuery);
+    if (nDpiScale <= 0)
+        nDpiScale = 100;
     OUString sStyleId(m_xStylesView->get_id(rIter));
     OUString sStyleName(m_xStylesView->get_text(rIter));
-    OString sBase64Png(GetCachedPreviewJson({ sStyleId, sStyleName }));
+    OString sBase64Png(GetCachedPreviewJson({ sStyleId, sStyleName }, nDpiScale));
     if (sBase64Png.isEmpty())
         return false;
 
@@ -580,35 +583,39 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
+Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle,
+                                                  int nDpiScale)
 {
-    auto aFound = StylePreviewCache::Get().find(rStyle.translatedName);
-    if (aFound != StylePreviewCache::Get().end())
-        return StylePreviewCache::Get()[rStyle.translatedName];
-    else
-    {
-        ScopedVclPtrInstance<VirtualDevice> pImg;
-        const Size aSize(100, 30);
-        pImg->SetOutputSizePixel(aSize);
+    auto& rDpiCache = StylePreviewCache::Get()[nDpiScale];
+    auto aFound = rDpiCache.find(rStyle.translatedName);
+    if (aFound != rDpiCache.end())
+        return aFound->second;
 
-        StyleItemController aStyleController(rStyle);
-        aStyleController.Paint(*pImg);
-        Bitmap aBitmap(pImg->GetBitmap(Point(0, 0), aSize));
-        StylePreviewCache::Get()[rStyle.translatedName] = aBitmap;
+    ScopedVclPtrInstance<VirtualDevice> pImg;
+    const Size aSize(100 * nDpiScale / 100, 30 * nDpiScale / 100);
+    pImg->SetDPIX(96.0 * nDpiScale / 100);
+    pImg->SetDPIY(96.0 * nDpiScale / 100);
+    pImg->SetOutputSizePixel(aSize);
 
-        return aBitmap;
-    }
+    StyleItemController aStyleController(rStyle);
+    aStyleController.Paint(*pImg);
+    Bitmap aBitmap(pImg->GetBitmap(Point(0, 0), aSize));
+    rDpiCache[rStyle.translatedName] = aBitmap;
+
+    return aBitmap;
 }
 
-OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle)
+OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle,
+                                                       int nDpiScale)
 {
-    auto aJsonFound = StylePreviewCache::GetJson().find(rStyle.translatedName);
-    if (aJsonFound != StylePreviewCache::GetJson().end())
-        return StylePreviewCache::GetJson()[rStyle.translatedName];
+    auto& rDpiJsonCache = StylePreviewCache::GetJson()[nDpiScale];
+    auto aJsonFound = rDpiJsonCache.find(rStyle.translatedName);
+    if (aJsonFound != rDpiJsonCache.end())
+        return aJsonFound->second;
 
-    Bitmap aBitmap = GetCachedPreview(rStyle);
+    Bitmap aBitmap = GetCachedPreview(rStyle, nDpiScale);
     OString sResult = extractPngString(aBitmap);
-    StylePreviewCache::GetJson()[rStyle.translatedName] = sResult;
+    rDpiJsonCache[rStyle.translatedName] = sResult;
     return sResult;
 }
 

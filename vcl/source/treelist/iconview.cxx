@@ -309,16 +309,15 @@ static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
     return ""_ostr;
 }
 
-OUString IconView::renderEntry(int pos, int /*dpix*/, int /*dpiy*/) const
+OUString IconView::renderEntry(int pos, int dpiscale) const
 {
-    // TODO: support various DPI
     SvTreeListEntry* pEntry = GetEntry(pos);
     if (!pEntry)
         return "";
 
     OUString sResult;
-    const bool bHandled
-        = maDumpImageHdl.IsSet() && maDumpImageHdl.Call(encoded_image_query(sResult, pEntry));
+    const bool bHandled = maDumpImageHdl.IsSet()
+                          && maDumpImageHdl.Call(encoded_image_query(sResult, pEntry, dpiscale));
 
     if (!bHandled)
     {
