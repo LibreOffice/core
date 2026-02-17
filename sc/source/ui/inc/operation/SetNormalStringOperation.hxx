@@ -27,7 +27,7 @@ private:
     ScDocShell& mrDocShell;
     ScAddress const& mrPosition;
     OUString const& mrText;
-    bool mbIsNumberFormatSet;
+    bool mbIsNumberFormatSet = false;
 
     bool runImplementation() override;
 
