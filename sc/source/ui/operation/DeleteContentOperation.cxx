@@ -45,8 +45,6 @@ bool DeleteContentOperation::runImplementation()
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, mrMark);
     if (!aTester.IsEditable())
     {
@@ -113,8 +111,7 @@ bool DeleteContentOperation::runImplementation()
                                                pDataSpans, bMulti, bDrawUndo);
     }
 
-    if (sc::SheetViewOperationsTester::doesUnsync(meType))
-        aSheetViewTester.sync();
+    syncSheetViews();
 
     if (!mrDocFunc.AdjustRowHeight(aExtendedRange, true, mbApi))
         mrDocShell.PostPaint(aExtendedRange, PaintPartFlags::Grid, nExtFlags);
