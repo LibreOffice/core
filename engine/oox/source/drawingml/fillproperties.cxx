@@ -451,13 +451,16 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                     rPropMap.setProperty( ShapeProperty::FillTransparency, maFillColor.getTransparency() );
 
                 model::ComplexColor aComplexColor;
-                if (aFillColor == nPhClr)
+                // It's a theme color if there's no explicit color given in the
+                // input, and the resolved color is the same as the placeholder
+                // color.
+                if (aFillColor == nPhClr && !moFillType.has_value())
                 {
                     aComplexColor.setThemeColor(model::convertToThemeColorType(nPhClrTheme));
                 }
                 else
                 {
-                    aComplexColor = maFillColor.getComplexColor();
+                    aComplexColor = maFillColor.createComplexColor(rGraphicHelper, nPhClrTheme);
                     OUString sColorName = getBestSolidColor().getSchemeColorName();
                     sal_Int32 nToken = Color::getColorMapToken(sColorName);
                     if (nToken != -1)
@@ -485,6 +488,8 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 // convert to BColorStops, check for contained transparency
                 for (const auto& rCandidate : maGradientProps.maGradientStops)
                 {
+                    // TODO: oox::drawingml::Color does not support transforms
+                    // (lumMod, etc). So those get lost at this point.
                     const ::Color aColor(rCandidate.second.getColor(rGraphicHelper, nPhClr));
                     aColorStops.addStop(rCandidate.first, aColor.getBColor());
                     bContainsTransparency = bContainsTransparency || rCandidate.second.hasTransparency();

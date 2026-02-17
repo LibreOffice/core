@@ -267,6 +267,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxes)
     // Should be two axes
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 2);
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:tickLabels", 2);
+
+    // There should *not* be a fill in the series shape properties
+    assertXPath(
+        pXmlDoc,
+        "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr/a:solidFill", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexBinningXLSX)

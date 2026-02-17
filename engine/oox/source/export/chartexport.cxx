@@ -28,6 +28,7 @@
 #include <drawingml/chart/typegroupconverter.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 #include <cstdio>
 #include <limits>
@@ -1396,6 +1397,16 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
         pFS->singleElement(FSNS(XML_a, XML_schemeClr),
                 XML_val, "accent1");
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent2");
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent3");
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent4");
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent5");
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent6");
 
         pFS->endElement(FSNS(XML_cs, XML_colorStyle));
     }
@@ -2939,6 +2950,28 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
         if (aTransparenceGradient.StartColor == 0xffffff && aTransparenceGradient.EndColor == 0xffffff)
             aFillStyle = FillStyle_NONE;
     }
+
+    model::ComplexColor aComplexColor;
+    if (GetProperty(xPropSet, u"FillComplexColor"_ustr)) {
+        uno::Reference<util::XComplexColor> xCC;
+        mAny >>= xCC;
+        aComplexColor = model::color::getFromXComplexColor(xCC);
+    }
+
+    // The following restriction to solidFill is not correct. Any color that's
+    // the default scheme color (e.g., as a gradient fill stop) shouldn't be
+    // exported. However, we lose transforms on gradient fills (and maybe other
+    // color usage), so we can't tell what should be equivalent to the default
+    // scheme color in that context. See FillProperties::pushToPropMap(). So
+    // play it safe and don't try to handle that here. TODO
+    if (aFillStyle == FillStyle_SOLID &&
+            aComplexColor.getType() == model::ColorType::Theme &&
+            aComplexColor.getTransformations().empty()) {
+        // If we're dealing with a theme color, then we don't want to export the
+        // explicit value. We want it to remain implicit, as a theme.
+        return;
+    }
+
     switch( aFillStyle )
     {
         case FillStyle_SOLID:
