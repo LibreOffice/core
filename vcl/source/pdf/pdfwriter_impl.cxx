@@ -2038,9 +2038,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* 
             case FontType::CFF_FONT:
                 aLine.append( "3" );
                 break;
-            case FontType::TYPE1_PFA:
             case FontType::TYPE1_PFB:
-            case FontType::ANY_TYPE1:
                 break;
             default:
                 OSL_FAIL( "unknown fonttype in PDF font descriptor" );
@@ -2201,7 +2199,7 @@ bool PDFWriterImpl::emitFonts()
                 if ( !updateObject( nFontObject ) ) return false;
                 aLine.setLength( 0 );
                 aLine.append( OString::number(nFontObject) + " 0 obj\n" );
-                aLine.append( (aSubsetInfo.m_nFontType & (FontType::ANY_TYPE1 | FontType::CFF_FONT)) ?
+                aLine.append( (aSubsetInfo.m_nFontType & (FontType::TYPE1_PFB | FontType::CFF_FONT)) ?
                              "<</Type/Font/Subtype/Type1/BaseFont/" :
                              "<</Type/Font/Subtype/TrueType/BaseFont/" );
                 appendSubsetName( s_subset.m_nFontID, aSubsetInfo.m_aPSName, aLine );

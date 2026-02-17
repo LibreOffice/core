@@ -2105,12 +2105,11 @@ namespace {
 class Type1Emitter
 {
 public:
-    explicit    Type1Emitter( SvStream* pOutFile, bool bPfbSubset);
+    explicit    Type1Emitter( SvStream* pOutFile);
     ~Type1Emitter();
 
     size_t      emitRawData( const char* pData, size_t nLength) const;
     void        emitAllRaw();
-    void        emitAllHex();
     void        emitAllCrypted();
     int         tellPos() const;
     void        updateLen( int nTellPos, size_t nLength);
@@ -2120,18 +2119,13 @@ private:
     unsigned    mnEECryptR;
 public:
     OStringBuffer maBuffer;
-
-    bool        mbPfbSubset;
-    int         mnHexLineCol;
 };
 
 }
 
-Type1Emitter::Type1Emitter( SvStream* pOutFile, bool bPfbSubset)
+Type1Emitter::Type1Emitter( SvStream* pOutFile)
 :   mpFileOut( pOutFile)
 ,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
-,   mbPfbSubset( bPfbSubset)
-,   mnHexLineCol( 0)
 {
 }
 
@@ -2178,31 +2172,6 @@ inline void Type1Emitter::emitAllRaw()
     maBuffer.setLength(0);
 }
 
-inline void Type1Emitter::emitAllHex()
-{
-    auto const end = maBuffer.getStr() + maBuffer.getLength();
-    for( const char* p = maBuffer.getStr(); p < end;) {
-        // convert binary chunk to hex
-        char aHexBuf[0x4000];
-        char* pOut = aHexBuf;
-        while( (p < end) && (pOut < aHexBuf+sizeof(aHexBuf)-4)) {
-            // convert each byte to hex
-            char cNibble = (static_cast<unsigned char>(*p) >> 4) & 0x0F;
-            cNibble += (cNibble < 10) ? '0' : 'A'-10;
-            *(pOut++) = cNibble;
-            cNibble = *(p++) & 0x0F;
-            cNibble += (cNibble < 10) ? '0' : 'A'-10;
-            *(pOut++) = cNibble;
-            // limit the line length
-            if( (++mnHexLineCol & 0x3F) == 0)
-                *(pOut++) = '\n';
-        }
-        // writeout hex-converted chunk
-        emitRawData( aHexBuf, pOut-aHexBuf);
-    }
-    // reset the raw buffer
-    maBuffer.setLength(0);
-}
 
 void Type1Emitter::emitAllCrypted()
 {
@@ -2213,10 +2182,7 @@ void Type1Emitter::emitAllCrypted()
     }
 
     // emit the t1crypt result
-    if( mbPfbSubset)
-        emitAllRaw();
-    else
-        emitAllHex();
+    emitAllRaw();
 }
 
 // #i110387# quick-and-dirty double->ascii conversion
@@ -2304,10 +2270,8 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     ++nUniqueId;
 
     // create a PFB+Type1 header
-    if( rEmitter.mbPfbSubset ) {
-        static const char aPfbHeader[] = "\x80\x01\x00\x00\x00\x00";
-        rEmitter.emitRawData( aPfbHeader, sizeof(aPfbHeader)-1);
-    }
+    static const char aPfbHeader[] = "\x80\x01\x00\x00\x00\x00";
+    rEmitter.emitRawData( aPfbHeader, sizeof(aPfbHeader)-1);
 
     rEmitter.maBuffer.append(
         "%!FontType1-1.0: " + OString::Concat(aSubsetName) + " 001.003\n");
@@ -2364,14 +2328,12 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     // emit PFB header
     rEmitter.emitAllRaw();
-    if( rEmitter.mbPfbSubset) {
-        // update PFB header segment
-        const int nPfbHeaderLen = rEmitter.tellPos() - 6;
-        rEmitter.updateLen( 2, nPfbHeaderLen);
+    // update PFB header segment
+    const int nPfbHeaderLen = rEmitter.tellPos() - 6;
+    rEmitter.updateLen( 2, nPfbHeaderLen);
 
-        // prepare start of eexec segment
-        rEmitter.emitRawData( "\x80\x02\x00\x00\x00\x00", 6);   // segment start
-    }
+    // prepare start of eexec segment
+    rEmitter.emitRawData( "\x80\x02\x00\x00\x00\x00", 6);   // segment start
     const int nEExecSegTell = rEmitter.tellPos();
 
     // which always starts with a privdict
@@ -2522,10 +2484,8 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rEmitter.emitAllCrypted();
 
     // mark stop of eexec encryption
-    if( rEmitter.mbPfbSubset) {
-        const int nEExecLen = rEmitter.tellPos() - nEExecSegTell;
-        rEmitter.updateLen( nEExecSegTell-4, nEExecLen);
-    }
+    const int nEExecLen = rEmitter.tellPos() - nEExecSegTell;
+    rEmitter.updateLen( nEExecSegTell-4, nEExecLen);
 
     // create PFB footer
     static const char aPfxFooter[] = "\x80\x01\x14\x02\x00\x00\n" // TODO: check segment len
@@ -2539,16 +2499,13 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "0000000000000000000000000000000000000000000000000000000000000000\n"
         "cleartomark\n"
         "\x80\x03";
-    if( rEmitter.mbPfbSubset)
-        rEmitter.emitRawData( aPfxFooter, sizeof(aPfxFooter)-1);
-    else
-        rEmitter.emitRawData( aPfxFooter+6, sizeof(aPfxFooter)-9);
+    rEmitter.emitRawData( aPfxFooter, sizeof(aPfxFooter)-1);
 
     // provide details to the subset requesters, TODO: move into own method?
     // note: Top and Bottom are flipped between Type1 and VCL
     // note: the rest of VCL expects the details below to be scaled like for an emUnits==1000 font
 
-    rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontType::TYPE1_PFB : FontType::TYPE1_PFA;
+    rFSInfo.m_nFontType = FontType::TYPE1_PFB;
 
     if (rFSInfo.m_bFilled)
         return;
@@ -2581,7 +2538,7 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
 
     // emit Type1 subset from the CFF input
     // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
-    Type1Emitter aType1Emitter(pStream, true);
+    Type1Emitter aType1Emitter(pStream);
     aCff.emitAsType1(aType1Emitter, pGlyphIds, pEncoding, nGlyphCount, rInfo);
 
     rOutBuffer.resize(pStream->TellEnd());
