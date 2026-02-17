@@ -380,6 +380,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
         {
             bNeedsRepaint = true;
             aRepaintPixel = LogicToPixel(rRect);    // only affected ranges
+            ScDocument::EnsureIdleUpdate();
         }
         return;
     }

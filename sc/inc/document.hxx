@@ -668,6 +668,8 @@ public:
                                             ScDocShell* pDocShell = nullptr );
     SC_DLLPUBLIC                ~ScDocument();
 
+    static void       EnsureIdleUpdate(); // ensure that the idle handler is called when needed
+
     void              SetName( const OUString& r ) { aDocName = r; }
     const OUString&   GetCodeName() const { return aDocCodeName; }
     void              SetCodeName( const OUString& r ) { aDocCodeName = r; }

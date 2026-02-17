@@ -247,7 +247,10 @@ void ScDdeLink::SetResult( const ScMatrixRef& pRes )
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)
+    {
         bNeedUpdate = true;         // cannot be executed now
+        ScDocument::EnsureIdleUpdate();
+    }
     else
     {
         bIsInUpdate = true;

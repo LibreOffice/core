@@ -538,7 +538,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
     if ( aViewData.IsActive() )
     {
         if (UpdateVisibleRange())
-            ScModule::get()->AnythingChanged(); // if visible area has changed
+            ScDocument::EnsureIdleUpdate(); // if visible area has changed
     }
 }
 

@@ -131,7 +131,7 @@ public:
     void                GetState( SfxItemSet& rSet );
     static void         HideDisabledSlots( SfxItemSet& rSet );
 
-    void                AnythingChanged();
+    void                EnsureIdleUpdate();
 
     //  Drag & Drop:
     const ScDragData*   GetDragData() const;

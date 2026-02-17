@@ -6239,6 +6239,14 @@ void ScDocument::GetDocStat( ScDocStat& rDocStat )
     rDocStat.nCellCount  = GetCellCount();
 }
 
+void ScDocument::EnsureIdleUpdate()
+{
+    if (ScModule* pMod = ScModule::get())
+    {
+        pMod->EnsureIdleUpdate();
+    }
+}
+
 bool ScDocument::HasPrintRange()
 {
     bool bResult = false;

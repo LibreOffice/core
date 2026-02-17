@@ -5284,8 +5284,11 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
     {
         // Do not start, switched to paint
         //  (then at least the MapMode would no longer be right)
-
-        bNeedsRepaint = true;           // -> at end of paint run Invalidate on all
+        if (!bNeedsRepaint)
+        {
+            bNeedsRepaint = true;           // -> at end of paint run Invalidate on all
+            ScDocument::EnsureIdleUpdate();
+        }
         aRepaintPixel = tools::Rectangle();    // All
         return;
     }

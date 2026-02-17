@@ -953,6 +953,7 @@ void ScTable::InvalidateTextWidth(const ScAddress* pAdrFrom, const ScAddress* pA
             return;
 
         rCol.SetTextWidth(nRow, TEXTWIDTH_DIRTY);
+        ScDocument::EnsureIdleUpdate();
 
         if (bNumFormatChanged)
             rCol.SetScriptType(nRow, SvtScriptType::UNKNOWN);
@@ -1017,6 +1018,7 @@ void ScTable::InvalidateTextWidth(const ScAddress* pAdrFrom, const ScAddress* pA
             }
         }
     }
+    ScDocument::EnsureIdleUpdate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

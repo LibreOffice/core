@@ -3085,7 +3085,7 @@ void ScDocShell::SetDrawModified()
         m_pDocument->UpdateChartListenerCollection();
         SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScDrawChanged ));    // Navigator
     }
-    ScModule::get()->AnythingChanged();
+    ScDocument::EnsureIdleUpdate();
 }
 
 void ScDocShell::SetInUndo(bool bSet)
