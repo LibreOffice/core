@@ -674,7 +674,6 @@ struct CffGlobal
     int     mnFontDictBase;
     int     mnFDAryCount;
 
-    std::vector<ValType>   maFontBBox;
     std::vector<ValType>   maFontMatrix;
 };
 
@@ -938,14 +937,14 @@ void CffSubsetterContext::readDictOp()
             } break;
         case 'a': { // array
             switch( nOpId) {
-            case   5: maFontBBox.clear(); break;     // "FontBBox"
+            case   5: break;     // "FontBBox"
             case 907: maFontMatrix.clear(); break; // "FontMatrix"
             default: break; // TODO: reset other arrays?
             }
             for( int i = 0; i < size(); ++i ) {
                 ValType nVal = getVal(i);
                 switch( nOpId) {
-                case   5: maFontBBox.push_back( nVal); break;     // "FontBBox"
+                case   5: break;     // "FontBBox"
                 case 907: maFontMatrix.push_back( nVal); break; // "FontMatrix"
                 default: break; // TODO: handle more array dictops?
                 }
@@ -2296,14 +2295,11 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         fYFactor = 1000.0F * maFontMatrix[3];
     }
 
-    auto aFontBBox = maFontBBox;
-    if (rFSInfo.m_bFilled)
-        aFontBBox = {
-            rFSInfo.m_aFontBBox.Left() / fXFactor, rFSInfo.m_aFontBBox.Top() / fYFactor,
-            rFSInfo.m_aFontBBox.Right() / fXFactor, (rFSInfo.m_aFontBBox.Bottom() + 1) / fYFactor
-        };
-    else if (aFontBBox.size() != 4)
-        aFontBBox = { 0, 0, 999, 999 }; // emit default FontBBox if needed
+    auto aFontBBox = {
+        rFSInfo.m_aFontBBox.Left() / fXFactor, rFSInfo.m_aFontBBox.Top() / fYFactor,
+        rFSInfo.m_aFontBBox.Right() / fXFactor, (rFSInfo.m_aFontBBox.Bottom() + 1) / fYFactor
+    };
+
     rEmitter.emitValVector( "/FontBBox {", "}readonly def\n", aFontBBox);
     // emit FONTINFO into TOPDICT
     rEmitter.maBuffer.append(
@@ -2506,20 +2502,6 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // note: the rest of VCL expects the details below to be scaled like for an emUnits==1000 font
 
     rFSInfo.m_nFontType = FontType::TYPE1_PFB;
-
-    if (rFSInfo.m_bFilled)
-        return;
-
-    rFSInfo.m_aFontBBox = { Point(static_cast<sal_Int32>(aFontBBox[0] * fXFactor),
-                                  static_cast<sal_Int32>(aFontBBox[1] * fYFactor)),
-                            Point(static_cast<sal_Int32>(aFontBBox[2] * fXFactor),
-                                  static_cast<sal_Int32>(aFontBBox[3] * fYFactor)) };
-    // PDF-Spec says the values below mean the ink bounds!
-    // TODO: use better approximations for these ink bounds
-    rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters
-    rFSInfo.m_nDescent = -rFSInfo.m_aFontBBox.Top();    // for all letters
-    rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;           // for top-flat capital letters
-
 }
 
 namespace vcl
