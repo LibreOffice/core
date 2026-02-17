@@ -35,7 +35,6 @@
 #include <strhelper.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
-#include <unotools/tempfile.hxx>
 
 typedef sal_uInt8 U8;
 typedef sal_uInt16 U16;
@@ -2104,8 +2103,7 @@ namespace {
 class Type1Emitter
 {
 public:
-    explicit    Type1Emitter( SvStream* pOutFile);
-    ~Type1Emitter();
+    explicit    Type1Emitter( SvMemoryStream& rStream);
 
     size_t      emitRawData( const char* pData, size_t nLength) const;
     void        emitAllRaw();
@@ -2114,7 +2112,7 @@ public:
     void        updateLen( int nTellPos, size_t nLength);
     void        emitValVector( const char* pLineHead, const char* pLineTail, const std::vector<ValType>&);
 private:
-    SvStream*   mpFileOut;
+    SvMemoryStream& mrStream;
     unsigned    mnEECryptR;
 public:
     OStringBuffer maBuffer;
@@ -2122,22 +2120,16 @@ public:
 
 }
 
-Type1Emitter::Type1Emitter( SvStream* pOutFile)
-:   mpFileOut( pOutFile)
+Type1Emitter::Type1Emitter( SvMemoryStream& rStream)
+:   mrStream( rStream)
 ,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
 {
 }
 
-Type1Emitter::~Type1Emitter()
-{
-    if( !mpFileOut)
-        return;
-    mpFileOut = nullptr;
-}
 
 int Type1Emitter::tellPos() const
 {
-    int nTellPos = mpFileOut->Tell();
+    int nTellPos = mrStream.Tell();
     return nTellPos;
 }
 
@@ -2149,18 +2141,18 @@ void Type1Emitter::updateLen( int nTellPos, size_t nLength)
     cData[1] = static_cast<U8>(nLength >>  8);
     cData[2] = static_cast<U8>(nLength >> 16);
     cData[3] = static_cast<U8>(nLength >> 24);
-    const tools::Long nCurrPos = mpFileOut->Tell();
+    const tools::Long nCurrPos = mrStream.Tell();
     if (nCurrPos < 0)
         return;
-    if (mpFileOut->Seek(nTellPos) != static_cast<sal_uInt64>(nTellPos))
+    if (mrStream.Seek(nTellPos) != static_cast<sal_uInt64>(nTellPos))
         return;
-    mpFileOut->WriteBytes(cData, sizeof(cData));
-    mpFileOut->Seek(nCurrPos);
+    mrStream.WriteBytes(cData, sizeof(cData));
+    mrStream.Seek(nCurrPos);
 }
 
 inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
 {
-    return mpFileOut->WriteBytes( pData, nLength );
+    return mrStream.WriteBytes( pData, nLength );
 }
 
 inline void Type1Emitter::emitAllRaw()
@@ -2515,22 +2507,15 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
     if (!bRC)
         return bRC;
 
-    utl::TempFileFast aTempFile;
-    SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
+    SvMemoryStream aStream;
 
     // emit Type1 subset from the CFF input
     // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
-    Type1Emitter aType1Emitter(pStream);
+    Type1Emitter aType1Emitter(aStream);
     aCff.emitAsType1(aType1Emitter, pGlyphIds, pEncoding, nGlyphCount, rInfo);
 
-    rOutBuffer.resize(pStream->TellEnd());
-    pStream->Seek(0);
-    auto nRead = pStream->ReadBytes(rOutBuffer.data(), rOutBuffer.size());
-    if (nRead != rOutBuffer.size())
-    {
-        rOutBuffer.clear();
-        return false;
-    }
+    rOutBuffer.assign(static_cast<const sal_uInt8*>(aStream.GetData()),
+                      static_cast<const sal_uInt8*>(aStream.GetData()) + aStream.Tell());
 
     return true;
 }
