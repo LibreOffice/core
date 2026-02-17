@@ -44,7 +44,6 @@
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
-#include <vcl/fontcharmap.hxx>
 #include <i18nlangtag/lang.h>
 
 #include "glyphid.hxx"
@@ -430,12 +429,11 @@ class TrueTypeFont;
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
  * @param  ttf     - returns the opened TrueTypeFont
- * @param  xCharMap  - optional parsed character map
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
     SFErrCodes VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum,
-                                              TrueTypeFont** ttf, const FontCharMapRef xCharMap = nullptr);
+                                              TrueTypeFont** ttf);
 #if !defined(_WIN32) || defined(DO_USE_TTF_ON_WIN32)
 /**
  * TrueTypeFont constructor.
@@ -445,12 +443,10 @@ class TrueTypeFont;
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
  * @param  ttf     - returns the opened TrueTypeFont
- * @param  xCharMap  - optional parsed character map
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    SFErrCodes VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf,
-                                            const FontCharMapRef xCharMap = nullptr);
+    SFErrCodes VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
     bool VCL_DLLPUBLIC getTTCoverage(
@@ -530,14 +526,13 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) AbstractTrueTypeFont
     sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
     sal_uInt32 m_nUnitsPerEm;
     std::vector<sal_uInt32> m_aGlyphOffsets;
-    FontCharMapRef m_xCharMap;
     bool m_bMicrosoftSymbolEncoded;
 
 protected:
     SFErrCodes indexGlyphData();
 
 public:
-    AbstractTrueTypeFont(const char* fileName = nullptr, const FontCharMapRef xCharMap = nullptr);
+    AbstractTrueTypeFont(const char* fileName = nullptr);
     virtual ~AbstractTrueTypeFont();
 
     SFErrCodes initialize();
@@ -576,7 +571,7 @@ public:
         sal_uInt8   *ptr;
         sal_uInt32  ntables;
 
-    TrueTypeFont(const char* pFileName = nullptr, const FontCharMapRef xCharMap = nullptr);
+    TrueTypeFont(const char* pFileName = nullptr);
     ~TrueTypeFont() override;
 
     SFErrCodes open(sal_uInt32 facenum);
