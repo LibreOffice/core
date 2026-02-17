@@ -40,8 +40,6 @@ bool DeleteCellOperation::runImplementation()
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-
     // Convert taking sheet view sorting into account
     ScAddress aPosition = convertAddress(mrPosition);
     ScMarkData aMarkData = convertMark(mrMark);
@@ -104,8 +102,7 @@ bool DeleteCellOperation::runImplementation()
                              aPosition.Row(), aPosition.Tab(), PaintPartFlags::Grid, nExtFlags,
                              nBefore);
 
-    if (sc::SheetViewOperationsTester::doesUnsync(meType))
-        aSheetViewTester.sync();
+    syncSheetViews();
 
     aModificator.SetDocumentModified();
 

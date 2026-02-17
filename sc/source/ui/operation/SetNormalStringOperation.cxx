@@ -39,8 +39,6 @@ bool SetNormalStringOperation::runImplementation()
 
     bool bUndo(rDoc.IsUndoEnabled());
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-
     ScAddress aPosition = convertAddress(mrPosition);
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
@@ -90,8 +88,7 @@ bool SetNormalStringOperation::runImplementation()
     if (bEditDeleted || rDoc.HasAttrib(ScRange(aPosition), HasAttrFlags::NeedHeight))
         mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);
 
-    if (sc::SheetViewOperationsTester::doesUnsync(meType))
-        aSheetViewTester.sync();
+    syncSheetViews();
 
     mrDocShell.PostPaintCell(aPosition, std::max(nBefore, nAfter));
     aModificator.SetDocumentModified();

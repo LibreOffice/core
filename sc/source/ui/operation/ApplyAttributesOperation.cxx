@@ -57,7 +57,6 @@ bool ApplyAttributesOperation::runImplementation()
         return false;
     }
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     ScDocShellModificator aModificator(mrDocShell);
 
     //! Border
@@ -99,7 +98,7 @@ bool ApplyAttributesOperation::runImplementation()
         else if (nExtFlags & SC_PF_LINES)
             ScDocFunc::PaintAbove(mrDocShell, aMultiRange); // because of lines above the range
 
-        aSheetViewTester.sync();
+        syncSheetViews();
         aModificator.SetDocumentModified();
     }
 
@@ -132,7 +131,6 @@ bool ApplyAttributesWithChangedRangeOperation::runImplementation()
 
     ScMarkData aMark = convertMark(mrMark);
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     ScDocShellModificator aModificator(mrDocShell);
 
     const ScRange& aMarkRange = aMark.GetMultiMarkArea();
@@ -178,7 +176,7 @@ bool ApplyAttributesWithChangedRangeOperation::runImplementation()
 
     rDoc.ApplySelectionPattern(mrPattern, aMark, pEditDataArray);
 
-    aSheetViewTester.sync();
+    syncSheetViews();
 
     mrDocShell.PostPaint(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
                          PaintPartFlags::Grid, mnExtFlags | SC_PF_TESTMERGE);
@@ -214,7 +212,6 @@ bool ApplyAttributesToCellOperation::runImplementation()
 
     ScAddress aPosition = convertAddress(mrPosition);
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
     ScDocShellModificator aModificator(mrDocShell);
 
     SCCOL nCol = aPosition.Col();
@@ -250,7 +247,7 @@ bool ApplyAttributesToCellOperation::runImplementation()
     }
     pOldPat.reset(); // is copied in undo (Pool)
 
-    aSheetViewTester.sync();
+    syncSheetViews();
 
     mrDocShell.PostPaint(nCol, nRow, nTab, nCol, nRow, nTab, PaintPartFlags::Grid,
                          mnExtFlags | SC_PF_TESTMERGE);
