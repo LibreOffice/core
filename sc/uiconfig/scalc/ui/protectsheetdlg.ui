@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -192,6 +192,7 @@
                         <property name="can-focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="passwordbar-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="protectsheetdlg|passwordbar-atkobject">Password Level Bar</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="protectsheetdlg|extended_tip|passwordbar">Measure of password strength</property>
                           </object>
                         </child>
