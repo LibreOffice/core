@@ -87,6 +87,5 @@ private:
     SAL_DLLPRIVATE bool CreateFontSubsetFromCff();
 };
 
-int VCL_DLLPUBLIC TestFontSubset(const void* data, sal_uInt32 size);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
