@@ -56,6 +56,7 @@
 #include <pivot/PivotTableFormats.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
@@ -3087,11 +3088,16 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
         {
             ScRange aRange;
             pData->GetArea(aRange);
-            for (auto nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); nCol++)
+            SCCOL nStartCol = aRange.aStart.Col();
+            SCROW nStartRow = aRange.aStart.Row();
+            SCCOL nEndCol = aRange.aEnd.Col();
+            SCROW nEndRow = aRange.aEnd.Row();
+            rRoot.GetDoc().ShrinkToUsedDataArea(o3tl::temporary<bool>(false), nTab,
+                                nStartCol, nStartRow, nEndCol, nEndRow, /*bColumnsOnly*/false);
+            for (auto nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
                 ScFilterEntries aFilterEntries;
-                rRoot.GetDoc().GetFilterEntriesArea(nCol, aRange.aStart.Row(),
-                                                    aRange.aEnd.Row(), nTab, true, aFilterEntries);
+                rRoot.GetDoc().GetFilterEntriesArea(nCol, nStartRow, nEndRow, nTab, true, aFilterEntries);
 
                 // Excel has all filter values stored as foreground colors
                 // Does not matter it is text color or cell background color

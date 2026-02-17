@@ -1565,7 +1565,7 @@ public:
 
                         @returns true if there is any data, false if not.
                      */
-    bool            ShrinkToUsedDataArea( bool& o_bShrunk,
+    SC_DLLPUBLIC bool ShrinkToUsedDataArea( bool& o_bShrunk,
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                           bool bStickyTopRow = false, bool bStickyLeftCol = false,
