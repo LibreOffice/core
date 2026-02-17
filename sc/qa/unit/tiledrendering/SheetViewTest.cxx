@@ -166,41 +166,41 @@ class SyncTest : public SheetViewTest
 public:
     void tearDown() override
     {
-        maSheetView = std::nullopt;
-        maDefaultView = std::nullopt;
+        moSheetView = std::nullopt;
+        moDefaultView = std::nullopt;
         SheetViewTest::tearDown();
     }
 
 protected:
-    std::optional<ScTestViewCallback> maSheetView;
-    std::optional<ScTestViewCallback> maDefaultView;
+    std::optional<ScTestViewCallback> moSheetView;
+    std::optional<ScTestViewCallback> moDefaultView;
     ScTabViewShell* mpTabViewSheetView = nullptr;
     ScTabViewShell* mpTabViewDefaultView = nullptr;
 
     void setupViews()
     {
-        maSheetView.emplace();
-        mpTabViewSheetView = maSheetView->getTabViewShell();
+        moSheetView.emplace();
+        mpTabViewSheetView = moSheetView->getTabViewShell();
 
         SfxLokHelper::createView();
         Scheduler::ProcessEventsToIdle();
 
-        maDefaultView.emplace();
-        mpTabViewDefaultView = maDefaultView->getTabViewShell();
+        moDefaultView.emplace();
+        mpTabViewDefaultView = moDefaultView->getTabViewShell();
 
         CPPUNIT_ASSERT(mpTabViewSheetView != mpTabViewDefaultView);
-        CPPUNIT_ASSERT(maSheetView->getViewID() != maDefaultView->getViewID());
+        CPPUNIT_ASSERT(moSheetView->getViewID() != moDefaultView->getViewID());
     }
 
     void switchToSheetView()
     {
-        SfxLokHelper::setView(maSheetView->getViewID());
+        SfxLokHelper::setView(moSheetView->getViewID());
         Scheduler::ProcessEventsToIdle();
     }
 
     void switchToDefaultView()
     {
-        SfxLokHelper::setView(maDefaultView->getViewID());
+        SfxLokHelper::setView(moDefaultView->getViewID());
         Scheduler::ProcessEventsToIdle();
     }
 };

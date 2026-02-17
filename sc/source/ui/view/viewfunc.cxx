@@ -815,7 +815,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {
         for (const auto& rTab : aMark)
         {
-           applyText(*this, nCol, nRow, rTab, rString, bNumFmtChanged);
+            applyText(*this, nCol, nRow, rTab, rString, bNumFmtChanged);
         }
 
         performAutoFormatAndUpdate(rString, aMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);

@@ -108,7 +108,7 @@ public:
 
     // Last used sort parameters
 
-    std::optional<ScSortParam> const& getSortPram() { return moSortParam; }
+    std::optional<ScSortParam> const& getSortParam() { return moSortParam; }
 
     /// Remember last used sort parameters when sheet view was sorted.
     void setSortParam(ScSortParam const& rSortParam) { moSortParam = rSortParam; }

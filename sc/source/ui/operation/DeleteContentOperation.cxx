@@ -40,8 +40,6 @@ bool DeleteContentOperation::runImplementation()
         return false;
     }
 
-    ScMarkData aMultiMark = convertMark(mrMark);
-
     ScDocument& rDoc = mrDocShell.GetDocument();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
@@ -57,6 +55,7 @@ bool DeleteContentOperation::runImplementation()
         return false;
     }
 
+    ScMarkData aMultiMark = convertMark(mrMark);
     aMultiMark.SetMarking(false); // for MarkToMulti
 
     ScDocumentUniquePtr pUndoDoc;

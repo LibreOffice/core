@@ -91,7 +91,7 @@ void SheetViewOperationsTester::sync()
             rDocument.Reorder(aReorderParameters);
         }
 
-        auto const& oSortParam = pSheetView->getSortPram();
+        auto const& oSortParam = pSheetView->getSortParam();
         if (oSortParam)
         {
             // We need to reset the sort order for the sheet view as we will sort again

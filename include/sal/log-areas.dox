@@ -151,7 +151,7 @@ certain functionality.
 @li @c sc.lok.poshelper
 @li @c sc.opencl - OpenCL-related stuff in general
 @li @c sc.opencl.source - Generated OpenCL source code
-@li @c sc.op
+@li @c sc.op - Calc operations
 @li @c sc.orcus
 @li @c sc.orcus.autofilter
 @li @c sc.orcus.condformat
