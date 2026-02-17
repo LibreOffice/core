@@ -541,10 +541,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 
     // Tear down LOK:
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
-    mxComponent->dispose();
-    mxComponent.clear();
     comphelper::LibreOfficeKit::setPartInInvalidation(false);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

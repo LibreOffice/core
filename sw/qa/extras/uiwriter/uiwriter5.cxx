@@ -1865,11 +1865,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
     // Without the accompanying fix in place, this test would have failed: the OLE object lost its
     // replacement on save if the edit was active while saving.
     CPPUNIT_ASSERT(xNameAccess->hasByName(u"ObjectReplacements/Object 1"_ustr));
-
-    // Dispose the document while LOK is still active to avoid leaks.
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf105330)

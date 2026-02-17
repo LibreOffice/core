@@ -37,17 +37,9 @@ void ScTiledRenderingTest::setUp()
 
 void ScTiledRenderingTest::tearDown()
 {
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
     m_callbackWrapper.clear();
 
     comphelper::LibreOfficeKit::resetCompatFlag();
-
-    comphelper::LibreOfficeKit::setActive(false);
 
     UnoApiXmlTest::tearDown();
 }

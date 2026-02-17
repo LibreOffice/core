@@ -57,13 +57,10 @@ void SwTiledRenderingTest::tearDown()
         {
             pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
         }
-        mxComponent->dispose();
-        mxComponent.clear();
     }
     m_callbackWrapper.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 
-    test::BootstrapFixture::tearDown();
+    SwModelTestBase::tearDown();
 }
 
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)

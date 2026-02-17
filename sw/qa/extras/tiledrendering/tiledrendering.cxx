@@ -2124,9 +2124,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf115088)
 
     // Check the resulting text in the document. (it was 1Text\n1\n1\n1)
     CPPUNIT_ASSERT_EQUAL(u"1\n1Text\n1\n1"_ustr, pXTextDocument->getText()->getString());
-
-    mxComponent->dispose();
-    mxComponent.clear();
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineField)

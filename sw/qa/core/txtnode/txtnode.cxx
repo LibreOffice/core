@@ -201,9 +201,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
 
     // Tear down LOK.
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)

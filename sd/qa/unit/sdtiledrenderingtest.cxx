@@ -46,17 +46,10 @@ void SdTiledRenderingTest::setUp()
 
 void SdTiledRenderingTest::tearDown()
 {
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
 
     m_callbackWrapper.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 
     UnoApiXmlTest::tearDown();
 }

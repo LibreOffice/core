@@ -1328,11 +1328,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
     uno::Reference<document::XEmbeddedObjectSupplier2> xEmbedSupplier(xShape, uno::UNO_QUERY);
     auto xEmbeddedObj = xEmbedSupplier->getExtendedControlOverEmbeddedObject();
     CPPUNIT_ASSERT_EQUAL(embed::EmbedStates::LOADED, xEmbeddedObj->getCurrentState());
-
-    // Dispose the document while LOK is still active to avoid leaks.
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
