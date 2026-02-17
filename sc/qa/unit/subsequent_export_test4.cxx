@@ -2470,6 +2470,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf170565_empty_functions)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[6]/x:c[2]/x:f", u"PRODUCT(,)");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testMacrosInXLSX)
+{
+    // Array formula
+    createScDoc("xls/formula_with_macros.xls");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[1]/x:f", 0);
+
+    // Regular formula
+    createScDoc("xls/array_formula_with_macros.xls");
+    save(u"Calc Office Open XML"_ustr);
+    pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[2]/x:f", u"");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
