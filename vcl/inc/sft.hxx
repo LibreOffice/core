@@ -141,23 +141,8 @@ namespace vcl
         int   width = 0;              /**< value of WidthClass or 0 if can't be determined         */
         int   pitch = 0;              /**< 0: proportional font, otherwise: monospaced             */
         int   italicAngle = 0;        /**< in counter-clockwise degrees * 65536                    */
-        int   xMin = 0;               /**< global bounding box: xMin                               */
-        int   yMin = 0;               /**< global bounding box: yMin                               */
-        int   xMax = 0;               /**< global bounding box: xMax                               */
-        int   yMax = 0;               /**< global bounding box: yMax                               */
-        int   ascender = 0;           /**< typographic ascent.                                     */
-        int   descender = 0;          /**< typographic descent.                                    */
-        int   linegap = 0;            /**< typographic line gap.\ Negative values are treated as
-                                     zero in Win 3.1, System 6 and System 7.                 */
-        int   typoAscender = 0;       /**< OS/2 portable typographic ascender                      */
-        int   typoDescender = 0;      /**< OS/2 portable typographic descender                     */
-        int   typoLineGap = 0;        /**< OS/2 portable typographic line gap                       */
-        int   winAscent = 0;          /**< ascender metric for Windows                             */
-        int   winDescent = 0;         /**< descender metric for Windows                            */
         bool  microsoftSymbolEncoded = false;  /**< true: MS symbol encoded */
-        sal_uInt8  panose[10] = {};   /**< PANOSE classification number                            */
         sal_uInt32 typeFlags = 0;     /**< type flags (copyright bits)                             */
-        sal_uInt16 fsSelection = 0;   /**< OS/2 fsSelection */
     } TTGlobalFontInfo;
 
 
@@ -234,24 +219,16 @@ namespace vcl
 
 */
 constexpr int OS2_Legacy_length = 68;
-constexpr int OS2_V0_length = 78;
 constexpr int OS2_V1_length = 86;
 
 constexpr int OS2_usWeightClass_offset = 4;
 constexpr int OS2_usWidthClass_offset = 6;
 constexpr int OS2_fsType_offset = 8;
-constexpr int OS2_panose_offset = 32;
-constexpr int OS2_panoseNbBytes_offset = 10;
 constexpr int OS2_ulUnicodeRange1_offset = 42;
 constexpr int OS2_ulUnicodeRange2_offset = 46;
 constexpr int OS2_ulUnicodeRange3_offset = 50;
 constexpr int OS2_ulUnicodeRange4_offset = 54;
 constexpr int OS2_fsSelection_offset = 62;
-constexpr int OS2_typoAscender_offset = 68;
-constexpr int OS2_typoDescender_offset = 70;
-constexpr int OS2_typoLineGap_offset = 72;
-constexpr int OS2_winAscent_offset = 74;
-constexpr int OS2_winDescent_offset = 76;
 constexpr int OS2_ulCodePageRange1_offset = 78;
 constexpr int OS2_ulCodePageRange2_offset = 82;
 
@@ -477,22 +454,6 @@ class TrueTypeFont;
  */
 void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
 
-/**
- * Returns part of the head table info, normally collected by GetTTGlobalFontInfo.
- *
- * Just implemented separate, because this info not available via Qt API.
- *
- * @param ttf         pointer to a AbstractTrueTypeFont structure
- * @param xMin        global glyph bounding box min X
- * @param yMin        global glyph bounding box min Y
- * @param xMax        global glyph bounding box max X
- * @param yMax        global glyph bounding box max Y
- * @param macStyle    encoded Mac style flags of the font
- * @return            true, if table data could be decoded
- * @ingroup sft
- */
-bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
-
 OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const LanguageTag& rPrefLang);
 
 FontWeight AnalyzeTTFWeight(const TrueTypeFont* pTTFont);
@@ -505,26 +466,19 @@ constexpr int O_glyf = 1;    /* 'glyf' */
 constexpr int O_head = 2;    /* 'head' */
 constexpr int O_loca = 3;    /* 'loca' */
 constexpr int O_name = 4;    /* 'name' */
-constexpr int O_hhea = 5;    /* 'hhea' */
-constexpr int O_hmtx = 6;    /* 'hmtx' */
-constexpr int O_cmap = 7;    /* 'cmap' */
-constexpr int O_vhea = 8;    /* 'vhea' */
-constexpr int O_vmtx = 9;    /* 'vmtx' */
-constexpr int O_OS2  = 10;   /* 'OS/2' */
-constexpr int O_post = 11;   /* 'post' */
-constexpr int O_cvt  = 12;   /* 'cvt_' - only used in TT->TT generation */
-constexpr int O_prep = 13;   /* 'prep' - only used in TT->TT generation */
-constexpr int O_fpgm = 14;   /* 'fpgm' - only used in TT->TT generation */
-constexpr int O_CFF = 15;   /* 'CFF' */
-constexpr int NUM_TAGS = 16;
+constexpr int O_cmap = 5;    /* 'cmap' */
+constexpr int O_OS2  = 6;   /* 'OS/2' */
+constexpr int O_post = 7;   /* 'post' */
+constexpr int O_cvt  = 8;   /* 'cvt_' - only used in TT->TT generation */
+constexpr int O_prep = 9;   /* 'prep' - only used in TT->TT generation */
+constexpr int O_fpgm = 10;   /* 'fpgm' - only used in TT->TT generation */
+constexpr int O_CFF = 11;   /* 'CFF' */
+constexpr int NUM_TAGS = 12;
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) AbstractTrueTypeFont
 {
     std::string m_sFileName;
     sal_uInt32 m_nGlyphs;
-    sal_uInt32 m_nHorzMetrics;
-    sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
-    sal_uInt32 m_nUnitsPerEm;
     std::vector<sal_uInt32> m_aGlyphOffsets;
     bool m_bMicrosoftSymbolEncoded;
 
@@ -540,9 +494,6 @@ public:
     std::string const & fileName() const { return m_sFileName; }
     sal_uInt32 glyphCount() const { return m_nGlyphs; }
     sal_uInt32 glyphOffset(sal_uInt32 glyphID) const;
-    sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
-    sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
-    sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
     bool IsMicrosoftSymbolEncoded() const { return m_bMicrosoftSymbolEncoded; }
 
     virtual bool hasTable(sal_uInt32 ord) const = 0;

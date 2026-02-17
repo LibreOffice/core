@@ -446,9 +446,6 @@ bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sa
 
 AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName)
     : m_nGlyphs(0xFFFFFFFF)
-    , m_nHorzMetrics(0)
-    , m_nVertMetrics(0)
-    , m_nUnitsPerEm(0)
     , m_bMicrosoftSymbolEncoded(false)
 {
     if (pFileName)
@@ -509,10 +506,10 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
     if (table_size < HEAD_Length)
         return SFErrCodes::TtFormat;
 
-    m_nUnitsPerEm = GetUInt16(table, HEAD_unitsPerEm_offset);
+    sal_uInt32 unitsPerEm = GetUInt16(table, HEAD_unitsPerEm_offset);
     int indexfmt = GetInt16(table, HEAD_indexToLocFormat_offset);
 
-    if (((indexfmt != 0) && (indexfmt != 1)) || (m_nUnitsPerEm <= 0))
+    if (((indexfmt != 0) && (indexfmt != 1)) || (unitsPerEm <= 0))
         return SFErrCodes::TtFormat;
 
     if (hasTable(O_glyf) && (table = this->table(O_loca, table_size))) /* TTF or TTF-OpenType */
@@ -542,12 +539,6 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
         // non-subsetting code should not be calling this.
         m_aGlyphOffsets.clear();
     }
-
-    table = this->table(O_hhea, table_size);
-    m_nHorzMetrics = (table && table_size >= 36) ? GetUInt16(table, 34) : 0;
-
-    table = this->table(O_vhea, table_size);
-    m_nVertMetrics = (table && table_size >= 36) ? GetUInt16(table, 34) : 0;
 
     table = this->table(O_cmap, table_size);
     m_bMicrosoftSymbolEncoded = HasMicrosoftSymbolCmap(table, table_size);
@@ -606,11 +597,7 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
             case T_head: nIndex = O_head; break;
             case T_loca: nIndex = O_loca; break;
             case T_name: nIndex = O_name; break;
-            case T_hhea: nIndex = O_hhea; break;
-            case T_hmtx: nIndex = O_hmtx; break;
             case T_cmap: nIndex = O_cmap; break;
-            case T_vhea: nIndex = O_vhea; break;
-            case T_vmtx: nIndex = O_vmtx; break;
             case T_OS2 : nIndex = O_OS2;  break;
             case T_post: nIndex = O_post; break;
             case T_cvt : nIndex = O_cvt;  break;
@@ -695,28 +682,8 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
     return AbstractTrueTypeFont::initialize();
 }
 
-bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
-{
-    sal_uInt32 table_size;
-    const sal_uInt8* table = ttf->table(O_head, table_size);
-    if (table_size < 46)
-        return false;
-
-    const int UPEm = ttf->unitsPerEm();
-    if (UPEm == 0)
-        return false;
-    xMin = XUnits(UPEm, GetInt16(table, HEAD_xMin_offset));
-    yMin = XUnits(UPEm, GetInt16(table, HEAD_yMin_offset));
-    xMax = XUnits(UPEm, GetInt16(table, HEAD_xMax_offset));
-    yMax = XUnits(UPEm, GetInt16(table, HEAD_yMax_offset));
-    macStyle = GetUInt16(table, HEAD_macStyle_offset);
-    return true;
-}
-
 void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
 {
-    int UPEm = ttf->unitsPerEm();
-
     info->family = ttf->family;
     info->ufamily = ttf->ufamily;
     info->subfamily = ttf->subfamily;
@@ -730,19 +697,6 @@ void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info
     {
         info->weight = GetUInt16(table, OS2_usWeightClass_offset);
         info->width  = GetUInt16(table, OS2_usWidthClass_offset);
-
-        if (table_size >= OS2_V0_length && UPEm != 0) {
-            info->typoAscender = XUnits(UPEm,GetInt16(table, OS2_typoAscender_offset));
-            info->typoDescender = XUnits(UPEm, GetInt16(table, OS2_typoDescender_offset));
-            info->typoLineGap = XUnits(UPEm, GetInt16(table, OS2_typoLineGap_offset));
-            info->winAscent = XUnits(UPEm, GetUInt16(table, OS2_winAscent_offset));
-            info->winDescent = XUnits(UPEm, GetUInt16(table, OS2_winDescent_offset));
-            /* sanity check; some fonts treat winDescent as signed
-           * violating the standard */
-            if( info->winDescent > 5*UPEm )
-                info->winDescent = XUnits(UPEm, GetInt16(table, OS2_winDescent_offset));
-        }
-        memcpy(info->panose, table + OS2_panose_offset, OS2_panoseNbBytes_offset);
         info->typeFlags = GetUInt16( table, OS2_fsType_offset );
     }
 
@@ -753,15 +707,9 @@ void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info
         info->italicAngle = GetInt32(table, POST_italicAngle_offset);
     }
 
-    GetTTGlobalFontHeadInfo(ttf, info->xMin, info->yMin, info->xMax, info->yMax, info->macStyle);
-
-    table  = ttf->table(O_hhea, table_size);
-    if (table_size >= 10 && UPEm != 0)
-    {
-        info->ascender  = XUnits(UPEm, GetInt16(table, HHEA_ascender_offset));
-        info->descender = XUnits(UPEm, GetInt16(table, HHEA_descender_offset));
-        info->linegap   = XUnits(UPEm, GetInt16(table, HHEA_lineGap_offset));
-    }
+    table = ttf->table(O_head, table_size);
+    if (table_size >= 46)
+        info->macStyle = GetUInt16(table, HEAD_macStyle_offset);
 }
 
 
