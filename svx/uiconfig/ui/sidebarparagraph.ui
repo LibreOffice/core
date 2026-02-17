@@ -136,6 +136,11 @@
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="horizontalalignment-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -173,6 +178,11 @@
                     <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="writedirection-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -229,6 +239,11 @@
                 <property name="pack-type">end</property>
                 <property name="position">2</property>
               </packing>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="box1-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
             </child>
           </object>
           <packing>
@@ -288,6 +303,11 @@
                     <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="paraspacing-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -492,6 +512,11 @@
                     <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="indent-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -874,6 +899,11 @@
                 <property name="homogeneous">False</property>
               </packing>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="numberbullet-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -1051,6 +1081,11 @@
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="box2-atkobject">
+                    <property name="AtkObject::accessible-role">grouping</property>
+                  </object>
                 </child>
               </object>
               <packing>
