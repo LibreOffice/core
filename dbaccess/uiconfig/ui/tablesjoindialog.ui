@@ -220,7 +220,6 @@
                     <property name="headers-visible">False</property>
                     <property name="search-column">1</property>
                     <property name="show-expanders">False</property>
-                    <property name="enable-tree-lines">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Macro Library List-selection3"/>
                     </child>
