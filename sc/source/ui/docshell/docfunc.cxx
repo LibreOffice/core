@@ -110,6 +110,7 @@
 #include <config_features.h>
 
 #include <memory>
+#include <operation/OperationType.hxx>
 #include <operation/DeleteContentOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
