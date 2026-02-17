@@ -1613,7 +1613,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             // Open ThemeColorEditDialog to create/edit the new color set
             auto pSubDialog = std::make_shared<svx::ThemeColorEditDialog>(GetFrameWeld(), *pCurrentColorSet);
 
-            weld::DialogController::runAsync(pSubDialog, [pSubDialog, this](sal_uInt32 nResult) {
+            weld::DialogController::runAsync(pSubDialog, [pSubDialog](sal_uInt32 nResult) {
                 if (nResult != RET_OK)
                     return;
 
@@ -1622,7 +1622,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     // Add the new color set to the global collection with auto-rename if needed
                     svx::ColorSets::get().insert(aColorSet, svx::ColorSets::IdenticalNameAction::AutoRename);
-                    GetViewFrame().GetBindings().Invalidate(SID_ADD_THEME);
                 }
             });
 
