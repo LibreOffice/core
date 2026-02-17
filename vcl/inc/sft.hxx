@@ -47,14 +47,11 @@
 #include <vcl/fontcharmap.hxx>
 #include <i18nlangtag/lang.h>
 
-#include "fontsubset.hxx"
 #include "glyphid.hxx"
 
 #include <array>
-#include <memory>
 #include <vector>
-
-#include "font/TTFStructure.hxx"
+#include "fontsubset.hxx"
 
 class LanguageTag;
 
@@ -119,26 +116,7 @@ namespace vcl
         OVERLAP_COMPOUND          = 1<<10
     };
 
-/** Structure used by GetTTSimpleCharMetrics() functions */
-    typedef struct {
-        sal_uInt16 adv;                         /**< advance width or height            */
-        sal_Int16 sb;                           /**< left or top sidebearing            */
-    } TTSimpleGlyphMetrics;
 
-/** Structure used by the TrueType Creator and GetRawGlyphData() */
-
-    typedef struct {
-        sal_uInt32 glyphID;                     /**< glyph ID                           */
-        sal_uInt16 nbytes;                      /**< number of bytes in glyph data      */
-        std::unique_ptr<sal_uInt8[]> ptr;       /**< pointer to glyph data              */
-        sal_uInt16 aw;                          /**< advance width                      */
-        sal_Int16  lsb;                         /**< left sidebearing                   */
-        bool compflag;                          /**< false- if non-composite */
-        sal_uInt16 npoints;                     /**< number of points                   */
-        sal_uInt16 ncontours;                   /**< number of contours                 */
-        /* */
-        sal_uInt32 newID;                       /**< used internally by the TTCR        */
-    } GlyphData;
 
 /** Structure used by the TrueType Creator and CreateTTFromTTGlyphs() */
     struct NameRecord {
@@ -183,15 +161,6 @@ namespace vcl
         sal_uInt16 fsSelection = 0;   /**< OS/2 fsSelection */
     } TTGlobalFontInfo;
 
-/** ControlPoint structure used by GetTTGlyphPoints() */
-    typedef struct {
-        sal_uInt32 flags;             /**< 00000000 00000000 e0000000 bbbbbbbb */
-        /**< b - byte flags from the glyf array  */
-        /**< e == 0 - regular point              */
-        /**< e == 1 - end contour                */
-        sal_Int16 x;                  /**< X coordinate in EmSquare units      */
-        sal_Int16 y;                  /**< Y coordinate in EmSquare units      */
-    } ControlPoint;
 
 
 /*
@@ -494,88 +463,6 @@ class TrueTypeFont;
  * @ingroup sft
  */
     void VCL_DLLPUBLIC CloseTTFont(TrueTypeFont *);
-
-/**
- * Extracts TrueType control points, and stores them in an allocated array pointed to
- * by *pointArray. This function returns the number of extracted points.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param glyphID     Glyph ID
- * @param pointArray  Return value - address of the pointer to the first element of the array
- *                    of points allocated by the function
- * @return            Returns the number of points in *pointArray or -1 if glyphID is
- *                    invalid.
- * @ingroup sft
- *
- */
-    int GetTTGlyphPoints(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector<ControlPoint>& pointArray);
-
-/**
- * Extracts raw glyph data from the 'glyf' table and returns it in an allocated
- * GlyphData structure.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param glyphID     Glyph ID
- *
- * @return            pointer to an allocated GlyphData structure or NULL if
- *                    glyphID is not present in the font
- * @ingroup sft
- *
- */
-    std::unique_ptr<GlyphData> GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID);
-
-/**
- * For a specified glyph adds all component glyphs IDs to the list and
- * return their number. If the glyph is a single glyph it has one component
- * glyph (which is added to the list) and the function returns 1.
- * For a composite glyphs it returns the number of component glyphs
- * and adds all of them to the list.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param glyphID     Glyph ID
- * @param glyphlist   list of glyphs
- *
- * @return            number of component glyphs
- * @ingroup sft
- *
- */
-    int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist);
-
-/**
- * Extracts all Name Records from the font and stores them in an allocated
- * array of NameRecord structs
- *
- * @param ttf       pointer to the TrueTypeFont struct
- * @param nr        reference to the vector of NameRecord structs
- *
- * @ingroup sft
- */
-
-    void GetTTNameRecords(AbstractTrueTypeFont const *ttf, std::vector<NameRecord>& nr);
-
-/**
- * Generates a new TrueType font and dumps it to <b>outf</b> file.
- * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
- * @param ttf         pointer to the TrueTypeFont structure
- * @param fname       file name for the output TrueType font file
- * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf. The first
- *                    element of this array has to be glyph 0 (default glyph)
- * @param encoding    array of encoding values. encoding[i] specifies character code for
- *                    the glyphID glyphArray[i]. Character code 0 usually points to a default
- *                    glyph (glyphID 0)
- * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @param flags       or'ed TTCreationFlags
- * @return            return the value of SFErrCodes enum
- * @see               SFErrCodes
- * @ingroup sft
- *
- */
-    VCL_DLLPUBLIC SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
-                              std::vector<sal_uInt8>& rOutBuffer,
-                              sal_uInt16 const *glyphArray,
-                              sal_uInt8 const *encoding,
-                              int            nGlyphs);
-
 
     bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
                               std::vector<sal_uInt8>& rOutBuffer,
