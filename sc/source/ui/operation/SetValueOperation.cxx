@@ -35,8 +35,6 @@ bool SetValueOperation::runImplementation()
 {
     ScAddress aPosition = convertAddress(mrPosition);
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
@@ -57,7 +55,7 @@ bool SetValueOperation::runImplementation()
             std::make_unique<ScUndoSetCell>(&mrDocShell, aPosition, aOldVal, aNewVal));
     }
 
-    aSheetViewTester.sync();
+    syncSheetViews();
 
     if (bHeight)
         mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);

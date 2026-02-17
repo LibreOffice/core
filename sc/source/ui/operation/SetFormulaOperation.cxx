@@ -41,8 +41,6 @@ bool SetFormulaOperation::runImplementation()
     ScFormulaCell* pCell(mpFormulaCell);
     std::unique_ptr<ScFormulaCell> xCell(mpFormulaCell);
 
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
-
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
@@ -76,7 +74,7 @@ bool SetFormulaOperation::runImplementation()
             std::make_unique<ScUndoSetCell>(&mrDocShell, aPosition, aOldVal, aNewVal));
     }
 
-    aSheetViewTester.sync();
+    syncSheetViews();
 
     if (bHeight)
         mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);

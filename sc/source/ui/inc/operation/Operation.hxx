@@ -14,6 +14,7 @@
 
 class ScMarkData;
 class ScAddress;
+class ScViewData;
 
 namespace sc
 {
@@ -38,23 +39,23 @@ protected:
     OperationType meType = OperationType::Unknown;
     bool mbApi : 1 = false;
     bool mbRecord : 1 = false;
+    ScViewData* mpViewData;
 
-public:
-    Operation(OperationType eType, bool bRecord, bool bApi)
-        : meType(eType)
-        , mbApi(bApi)
-        , mbRecord(bRecord)
-    {
-    }
-
-    bool run();
     bool checkSheetViewProtection();
 
     /** Convert address from a sheet view to the address in default view, take sorting into account. */
-    static ScAddress convertAddress(ScAddress const& rAddress);
+    ScAddress convertAddress(ScAddress const& rAddress);
 
     /** Convert a mark from a sheet view to the mark in default view, take sorting into account. */
-    static ScMarkData convertMark(ScMarkData const& rMarkData);
+    ScMarkData convertMark(ScMarkData const& rMarkData);
+
+    /** Synchronizes the sheet views and the default view */
+    void syncSheetViews();
+
+public:
+    Operation(OperationType eType, bool bRecord, bool bApi);
+
+    bool run();
 
     virtual bool runImplementation() = 0;
 };

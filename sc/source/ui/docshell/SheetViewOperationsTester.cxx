@@ -47,63 +47,6 @@ constexpr bool doesUnsyncSheetView(OperationType eOperationType)
 
 } // end anonymous namespace
 
-bool SheetViewOperationsTester::doesUnsync(OperationType /*eOperationType*/) { return true; }
-
-void SheetViewOperationsTester::sync()
-{
-    if (!mpViewData)
-        return;
-
-    auto& rDocument = mpViewData->GetDocument();
-    SCTAB nTab = mpViewData->GetTabNumber();
-
-    if (rDocument.IsSheetViewHolder(nTab))
-        return;
-
-    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nTab);
-    if (!pManager || pManager->isEmpty())
-        return;
-
-    for (std::shared_ptr<SheetView> const& pSheetView : pManager->getSheetViews())
-    {
-        SCTAB nSheetViewTab = pSheetView->getTableNumber();
-
-        std::optional<ScQueryParam> oQueryParam;
-        ScDBData* pNoNameData = rDocument.GetAnonymousDBData(nSheetViewTab);
-        if (pNoNameData && pNoNameData->HasAutoFilter())
-        {
-            if (pNoNameData->HasQueryParam())
-            {
-                oQueryParam.emplace();
-                pNoNameData->GetQueryParam(*oQueryParam);
-            }
-        }
-
-        rDocument.OverwriteContent(nTab, nSheetViewTab);
-
-        // Reverse the sorting of the default view in the sheet view
-        if (auto const& rReorderParameters = pSheetView->getReorderParameters())
-        {
-            sc::ReorderParam aReorderParameters(*rReorderParameters);
-            aReorderParameters.maSortRange.aStart.SetTab(nSheetViewTab);
-            aReorderParameters.maSortRange.aEnd.SetTab(nSheetViewTab);
-            aReorderParameters.reverse();
-            rDocument.Reorder(aReorderParameters);
-        }
-
-        auto const& oSortParam = pSheetView->getSortParam();
-        if (oSortParam)
-        {
-            // We need to reset the sort order for the sheet view as we will sort again
-            pSheetView->resetSortOrder();
-            rDocument.Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
-        }
-
-        if (oQueryParam)
-            rDocument.Query(nSheetViewTab, *oQueryParam, false, false);
-    }
-}
-
 bool SheetViewOperationsTester::check(OperationType eOperationType) const
 {
     if (!mpViewData)
