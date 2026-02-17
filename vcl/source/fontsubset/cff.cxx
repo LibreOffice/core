@@ -676,9 +676,6 @@ struct CffGlobal
 
     std::vector<ValType>   maFontBBox;
     std::vector<ValType>   maFontMatrix;
-
-    int     mnFontNameSID;
-    int     mnFullNameSID;
 };
 
 struct CffLocal
@@ -974,9 +971,9 @@ void CffSubsetterContext::readDictOp()
         case 's':   // stringid (SID)
             nInt = popInt();
             switch( nOpId ) {
-            case   2: mnFullNameSID = nInt; break;      // "FullName"
+            case   2: break;    // "FullName"
             case   3: break;    // "FamilyName"
-            case 938: mnFontNameSID = nInt; break;      // "FontName"
+            case 938: break;    // "FontName"
             default: break; // TODO: handle more string dictops?
             }
             break;
@@ -1823,8 +1820,6 @@ CffGlobal::CffGlobal()
 ,   mnFDSelectBase( 0)
 ,   mnFontDictBase( 0)
 ,   mnFDAryCount( 1)
-,   mnFontNameSID( 0)
-,   mnFullNameSID( 0)
 {
 }
 
@@ -2112,7 +2107,6 @@ class Type1Emitter
 public:
     explicit    Type1Emitter( SvStream* pOutFile, bool bPfbSubset);
     ~Type1Emitter();
-    void        setSubsetName( const char* );
 
     size_t      emitRawData( const char* pData, size_t nLength) const;
     void        emitAllRaw();
@@ -2127,7 +2121,6 @@ private:
 public:
     OStringBuffer maBuffer;
 
-    char        maSubsetName[256];
     bool        mbPfbSubset;
     int         mnHexLineCol;
 };
@@ -2140,7 +2133,6 @@ Type1Emitter::Type1Emitter( SvStream* pOutFile, bool bPfbSubset)
 ,   mbPfbSubset( bPfbSubset)
 ,   mnHexLineCol( 0)
 {
-    maSubsetName[0] = '\0';
 }
 
 Type1Emitter::~Type1Emitter()
@@ -2148,14 +2140,6 @@ Type1Emitter::~Type1Emitter()
     if( !mpFileOut)
         return;
     mpFileOut = nullptr;
-}
-
-void Type1Emitter::setSubsetName( const char* pSubsetName)
-{
-    maSubsetName[0] = '\0';
-    if( pSubsetName)
-        strncpy( maSubsetName, pSubsetName, sizeof(maSubsetName) - 1);
-    maSubsetName[sizeof(maSubsetName)-1] = '\0';
 }
 
 int Type1Emitter::tellPos() const
@@ -2310,39 +2294,14 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     const sal_GlyphId* pReqGlyphIds, const U8* pReqEncoding,
     int nGlyphCount, FontSubsetInfo& rFSInfo)
 {
+    OString aSubsetName = rFSInfo.m_aPSName.toUtf8();
+    if (aSubsetName.getLength() > 255)
+        aSubsetName = aSubsetName.copy(0, 255);
+
     // prepare some fontdirectory details
     static const int nUniqueIdBase = 4100000; // using private-interchange UniqueIds
     static int nUniqueId = nUniqueIdBase;
     ++nUniqueId;
-
-    char* pFontName = rEmitter.maSubsetName;
-    if( !*pFontName ) {
-        if( mnFontNameSID) {
-            // get the fontname directly if available
-            strncpy(
-                pFontName, getString( mnFontNameSID).getStr(), sizeof(rEmitter.maSubsetName) - 1);
-            pFontName[sizeof(rEmitter.maSubsetName) - 1] = 0;
-        } else if( mnFullNameSID) {
-            // approximate fontname as fullname-whitespace
-            auto const str = getString( mnFullNameSID);
-            const char* pI = str.getStr();
-            char* pO = pFontName;
-            const char* pLimit = pFontName + sizeof(rEmitter.maSubsetName) - 1;
-            while( pO < pLimit) {
-                const char c = *(pI++);
-                if( c != ' ')
-                    *(pO++) = c;
-                if( !c)
-                    break;
-            }
-            *pO = '\0';
-        } else {
-            // fallback name of last resort
-            strncpy( pFontName, "DummyName", sizeof(rEmitter.maSubsetName));
-        }
-    }
-    const char* pFullName = pFontName;
-    const char* pFamilyName = pFontName;
 
     // create a PFB+Type1 header
     if( rEmitter.mbPfbSubset ) {
@@ -2351,13 +2310,13 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     }
 
     rEmitter.maBuffer.append(
-        "%!FontType1-1.0: " + OString::Concat(rEmitter.maSubsetName) + " 001.003\n");
+        "%!FontType1-1.0: " + OString::Concat(aSubsetName) + " 001.003\n");
     // emit TOPDICT
     rEmitter.maBuffer.append(
         "11 dict begin\n"   // TODO: dynamic entry count for TOPDICT
         "/FontType 1 def\n"
         "/PaintType 0 def\n");
-    rEmitter.maBuffer.append( "/FontName /" + OString::Concat(rEmitter.maSubsetName) + " def\n");
+    rEmitter.maBuffer.append( "/FontName /" + OString::Concat(aSubsetName) + " def\n");
     rEmitter.maBuffer.append( "/UniqueID " + OString::number(nUniqueId) + " def\n");
     // emit FontMatrix
     if( maFontMatrix.size() == 6)
@@ -2385,8 +2344,8 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // emit FONTINFO into TOPDICT
     rEmitter.maBuffer.append(
         "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
-        " /FullName (" + OString::Concat(pFullName) + ") readonly def\n"
-        " /FamilyName (" + pFamilyName + ") readonly def\n"
+        " /FullName (" + OString::Concat(aSubsetName) + ") readonly def\n"
+        " /FamilyName (" + aSubsetName + ") readonly def\n"
         "end readonly def\n");
 
     rEmitter.maBuffer.append(
@@ -2604,7 +2563,6 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rFSInfo.m_nDescent = -rFSInfo.m_aFontBBox.Top();    // for all letters
     rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;           // for top-flat capital letters
 
-    rFSInfo.m_aPSName   = OUString( rEmitter.maSubsetName, strlen(rEmitter.maSubsetName), RTL_TEXTENCODING_UTF8 );
 }
 
 namespace vcl
@@ -2624,8 +2582,6 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
     // emit Type1 subset from the CFF input
     // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
     Type1Emitter aType1Emitter(pStream, true);
-    OString maReqFontName = rInfo.m_aPSName.toUtf8();
-    aType1Emitter.setSubsetName(maReqFontName.getStr());
     aCff.emitAsType1(aType1Emitter, pGlyphIds, pEncoding, nGlyphCount, rInfo);
 
     rOutBuffer.resize(pStream->TellEnd());
