@@ -2230,6 +2230,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169999)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170846_1)
+{
+    // In this document, the whole floating table must move to page 2
+    createSwDoc("tdf170846_1.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, the next test failed:
+    assertXPath(pXmlDoc, "//page[1]//tab", 0); // No tables on page 1
+    assertXPath(pXmlDoc, "//page[2]//tab", 1); // One table on page 2
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf170846_2)
+{
+    // In this document, the whole floating table must move to page 2
+    createSwDoc("tdf170846_2.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, the next test failed:
+    assertXPath(pXmlDoc, "//page[1]//tab", 0); // No tables on page 1
+    assertXPath(pXmlDoc, "//page[2]//tab", 3); // Three tables on page 2
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
