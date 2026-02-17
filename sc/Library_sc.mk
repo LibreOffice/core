@@ -533,6 +533,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
     sc/source/ui/operation/Operation \
+    sc/source/ui/operation/OperationType \
     sc/source/ui/operation/SetEditTextOperation \
     sc/source/ui/operation/SetFormulaOperation \
     sc/source/ui/operation/SetNormalStringOperation \

@@ -8,6 +8,8 @@
  */
 
 #include <SheetViewOperationsTester.hxx>
+#include <operation/Operation.hxx>
+#include <operation/OperationType.hxx>
 #include <SheetViewManager.hxx>
 #include <docsh.hxx>
 #include <viewdata.hxx>
@@ -20,115 +22,6 @@ namespace sc
 {
 namespace
 {
-/** Return operation as string. */
-constexpr std::string_view getOperationName(OperationType eOperation)
-{
-    switch (eOperation)
-    {
-        case OperationType::Unknown:
-            return "Unknown";
-        case OperationType::ApplyAttributes:
-            return "ApplyAttributes";
-        case OperationType::ApplyAttributesWithChangedRange:
-            return "ApplyAttributesWithChangedRange";
-        case OperationType::ApplyAttributesToCell:
-            return "ApplyAttributesToCell";
-        case OperationType::DeleteContent:
-            return "DeleteContent";
-        case OperationType::DeleteCell:
-            return "DeleteCell";
-        case OperationType::TransliterateText:
-            return "TransliterateText";
-        case OperationType::SetNormalString:
-            return "SetNormalString";
-        case OperationType::SetValue:
-            return "SetValue";
-        case OperationType::SetString:
-            return "SetString";
-        case OperationType::SetTextEdit:
-            return "SetTextEdit";
-        case OperationType::SetFormula:
-            return "SetFormula";
-        case OperationType::SetNoteText:
-            return "SetNoteText";
-        case OperationType::ReplaceNoteText:
-            return "ReplaceNoteText";
-        case OperationType::InsertColumnsBefore:
-            return "InsertColumnsBefore";
-        case OperationType::InsertColumnsAfter:
-            return "InsertColumnsAfter";
-        case OperationType::InsertRowsBefore:
-            return "InsertRowsBefore";
-        case OperationType::InsertRowsAfter:
-            return "InsertRowsAfter";
-        case OperationType::InsertCellsDown:
-            return "InsertCellsDown";
-        case OperationType::InsertCellsRight:
-            return "InsertCellsRight";
-        case OperationType::DeleteColumns:
-            return "DeleteColumns";
-        case OperationType::DeleteRows:
-            return "DeleteRows";
-        case OperationType::DeleteCellsLeft:
-            return "DeleteCellsLeft";
-        case OperationType::DeleteCellsUp:
-            return "DeleteCellsUp";
-        case OperationType::MoveBlock:
-            return "MoveBlock";
-        case OperationType::ClearItems:
-            return "ClearItems";
-        case OperationType::ChangeIndent:
-            return "ChangeIndent";
-        case OperationType::AutoFormat:
-            return "AutoFormat";
-        case OperationType::EnterMatrix:
-            return "EnterMatrix";
-        case OperationType::TabOperation:
-            return "TabOperation";
-        case OperationType::FillSimple:
-            return "FillSimple";
-        case OperationType::FillSeries:
-            return "FillSeries";
-        case OperationType::FillAuto:
-            return "FillAuto";
-        case OperationType::MergeCells:
-            return "MergeCells";
-        case OperationType::InsertNameList:
-            return "InsertNameList";
-        case OperationType::ConvertFormulaToValue:
-            return "ConvertFormulaToValue";
-        case OperationType::Sort:
-            return "Sort";
-        case OperationType::Query:
-            return "Query";
-        case OperationType::SubTotals:
-            return "SubTotals";
-        case OperationType::PivotTableUpdate:
-            return "PivotTableUpdate";
-        case OperationType::PivotTableRemove:
-            return "PivotTableRemove";
-        case OperationType::PivotTableCreate:
-            return "PivotTableCreate";
-        case OperationType::SparklineInsert:
-            return "SparklineInsert";
-        case OperationType::SparklineDelete:
-            return "SparklineDelete";
-        case OperationType::SparklineChange:
-            return "SparklineChange";
-        case OperationType::SparklineGroup:
-            return "SparklineGroup";
-        case OperationType::SparklineUngroup:
-            return "SparklineUngroup";
-        case OperationType::SparklineGroupDelete:
-            return "SparklineGroupDelete";
-        case OperationType::SparklineGroupChange:
-            return "SparklineGroupChange";
-        case OperationType::EnterData:
-            return "EnterData";
-    }
-    return "";
-}
-
 /** Supported operations by sheet view. */
 constexpr bool isSupported(OperationType eOperationType)
 {
@@ -233,7 +126,7 @@ bool SheetViewOperationsTester::check(OperationType eOperationType) const
         if (!pSheetViewManager->isEmpty())
         {
             pSheetViewManager->unsyncAllSheetViews();
-            SAL_INFO("sc.ui", "Operation '" << getOperationName(eOperationType)
+            SAL_INFO("sc.ui", "Operation '" << operationTypeString(eOperationType)
                                             << "' unsynced all sheet views for TAB " << nTab);
         }
     }
@@ -241,14 +134,14 @@ bool SheetViewOperationsTester::check(OperationType eOperationType) const
     {
         bool bSupported = isSupported(eOperationType);
         SAL_INFO_IF(!bSupported, "sc.ui",
-                    "Operation '" << getOperationName(eOperationType)
+                    "Operation '" << operationTypeString(eOperationType)
                                   << "' not supported on sheet view '" << nSheetViewID << "'");
 
         if (bSupported && doesUnsyncSheetView(eOperationType))
         {
             std::shared_ptr<sc::SheetView> pSheetView = pSheetViewManager->get(nSheetViewID);
             pSheetView->unsync();
-            SAL_INFO("sc.ui", "Operation '" << getOperationName(eOperationType)
+            SAL_INFO("sc.ui", "Operation '" << operationTypeString(eOperationType)
                                             << "' unsynced sheet view '" << nSheetViewID << "'");
         }
         return bSupported;
@@ -257,9 +150,6 @@ bool SheetViewOperationsTester::check(OperationType eOperationType) const
     return true;
 }
 
-std::string_view SheetViewOperationsTester::operationName(OperationType eType)
-{
-    return getOperationName(eType);
-}
-}
+} // end sc namespace
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <SheetViewOperationsTester.hxx>
+#include <operation/OperationType.hxx>
 
 class ScMarkData;
 class ScAddress;

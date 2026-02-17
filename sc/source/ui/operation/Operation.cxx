@@ -8,6 +8,7 @@
  */
 
 #include <operation/Operation.hxx>
+#include <operation/OperationType.hxx>
 #include <SheetViewOperationsTester.hxx>
 #include <docsh.hxx>
 #include <markdata.hxx>
@@ -179,11 +180,10 @@ bool Operation::checkSheetViewProtection()
 
 bool Operation::run()
 {
-    SAL_INFO("sc.op",
-             "Running operation '" << SheetViewOperationsTester::operationName(meType) << "'.");
+    SAL_INFO("sc.op", "Running operation '" << operationTypeString(meType) << "'.");
     bool bResult = runImplementation();
-    SAL_INFO("sc.op", "Operation '" << SheetViewOperationsTester::operationName(meType)
-                                    << (bResult ? "' succeded." : "' failed."));
+    SAL_INFO("sc.op", "Operation '" << operationTypeString(meType)
+                                    << (bResult ? "' succeeded." : "' failed."));
     return bResult;
 }
 }
