@@ -1039,13 +1039,16 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 rWorksheet->startElement(XML_f, XML_aca,
                                          ToPsz((mxTokArr && mxTokArr->IsVolatile())
                                                || (mxAddRec && mxAddRec->IsVolatile())));
+                bTagStarted = true;
             }
             rWorksheet->writeEscaped(XclXmlUtils::ToOUString(
                 rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, &aTokenArray,
                 mrScFmlaCell.GetErrCode()));
-            rWorksheet->endElement(XML_f);
         }
     }
+
+    if (bTagStarted)
+        rWorksheet->endElement(XML_f);
 
     if( strcmp( sType, "inlineStr" ) == 0 )
     {
