@@ -1828,6 +1828,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkTreeView")
     {
+        m_pVclParserState->m_nTreeViewRenderers = 0;
+        m_pVclParserState->m_nTreeViewExpanders = 0;
+        m_pVclParserState->m_nTreeViewColumnCount = 0;
+        m_pVclParserState->m_bTreeViewSeenTextInColumn = false;
+
         if (!isLegacy())
         {
             assert(rMap.find(u"model"_ustr) != rMap.end() && "GtkTreeView must have a model");
@@ -1900,6 +1905,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkTreeViewColumn")
     {
+        m_pVclParserState->m_nTreeViewColumnCount++;
+        m_pVclParserState->m_bTreeViewSeenTextInColumn = false;
+
         if (!isLegacy())
         {
             SvHeaderTabListBox* pTreeView = dynamic_cast<SvHeaderTabListBox*>(pParent);
@@ -1921,6 +1929,25 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
                 OUString sTitle(extractTitle(rMap));
                 pHeaderBar->InsertItem(nItemId, sTitle, 100, nBits);
             }
+        }
+    }
+    // The somewhat convoluted GtkCellRenderer* rules here are intended to
+    // match those of the GtkInstanceTreeView so we can take advantage of the
+    // consistency of the .ui format to determine the role of a GtkTreeView in
+    // terms of tree/treegrid/grid/listbox
+    else if (name == "GtkCellRendererText")
+    {
+        m_pVclParserState->m_nTreeViewRenderers++;
+        m_pVclParserState->m_bTreeViewSeenTextInColumn = true;
+    }
+    else if (name == "GtkCellRendererPixbuf" || name == "GtkCellRendererToggle")
+    {
+        m_pVclParserState->m_nTreeViewRenderers++;
+        // leading non-text renderers in the first column are expander decorations
+        if (m_pVclParserState->m_nTreeViewColumnCount == 1
+            && !m_pVclParserState->m_bTreeViewSeenTextInColumn)
+        {
+            m_pVclParserState->m_nTreeViewExpanders++;
         }
     }
     else if (name == "GtkLabel")
@@ -2596,6 +2623,22 @@ void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentC
                                     std::string_view sType, std::string_view sInternalChild)
 {
     assert(pCurrentChild);
+
+    if (SvTabListBox* pTabListBox = dynamic_cast<SvTabListBox*>(pCurrentChild))
+    {
+        const bool bTree(pTabListBox->GetStyle() & (WB_HASBUTTONS | WB_HASBUTTONSATROOT));
+        const sal_uInt16 nRealColumns = m_pVclParserState->m_nTreeViewRenderers -
+                                        m_pVclParserState->m_nTreeViewExpanders;
+        const bool bMultiColumn = nRealColumns > 1;
+        if (bTree && bMultiColumn)
+            pTabListBox->SetRole(SvTabListBoxRole::TreeGrid);
+        else if (bTree)
+            pTabListBox->SetRole(SvTabListBoxRole::Tree);
+        else if (bMultiColumn)
+            pTabListBox->SetRole(SvTabListBoxRole::Grid);
+        else
+            pTabListBox->SetRole(SvTabListBoxRole::ListBox);
+    }
 
     //Select the first page if it's a notebook
     if (pCurrentChild->GetType() == WindowType::TABCONTROL)
@@ -4007,6 +4050,10 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
 VclBuilder::VclParserState::VclParserState()
     : m_nLastToolbarId(0)
     , m_nLastMenuItemId(0)
+    , m_nTreeViewRenderers(0)
+    , m_nTreeViewExpanders(0)
+    , m_nTreeViewColumnCount(0)
+    , m_bTreeViewSeenTextInColumn(false)
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

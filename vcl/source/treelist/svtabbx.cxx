@@ -197,6 +197,25 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
 
+    switch (m_eRole)
+    {
+        case SvTabListBoxRole::Unknown:
+            assert(false && "this shouldn't be possible on load from .ui");
+            break;
+        case SvTabListBoxRole::Tree:
+            rJsonWriter.put("role", "tree");
+            break;
+        case SvTabListBoxRole::TreeGrid:
+            rJsonWriter.put("role", "treegrid");
+            break;
+        case SvTabListBoxRole::ListBox:
+            rJsonWriter.put("role", "listbox");
+            break;
+        case SvTabListBoxRole::Grid:
+            rJsonWriter.put("role", "grid");
+            break;
+    }
+
     bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
 
     bool isRadioButton = false;
@@ -287,6 +306,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
+    , m_eRole(SvTabListBoxRole::Unknown)
 {
     SetHighlightRange();    // select full width
 }
