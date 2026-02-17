@@ -24,9 +24,15 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 
 sal_uInt32 SvxColorIconView::getEntryEdgeLength()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        return 26;
+    }
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     return rStyleSettings.GetListBoxPreviewDefaultPixelSize().Height() + 1;
 }
