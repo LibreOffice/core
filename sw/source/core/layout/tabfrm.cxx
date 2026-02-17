@@ -3290,6 +3290,27 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     // Don't try to move floating table forward. It's done elsewhere moving its fly.
                     bSkipMoveFwd = true;
+                    // Only limit the InsertMovedFwdFrame hack to non-split floating tables for now:
+                    // it seems that split tables don't need it.
+                    if (!IsFollow() && !HasFollow())
+                    {
+                        // This floating table doesn't fit on this page. Instead of the complex
+                        // MoveFwd sequence (split anchor, create follow fly, move table, destroy
+                        // old fly, merge anchor - which may oscillate), signal the anchor to move
+                        // forward. The fly will follow.
+                        SwTextFrame* pAnchor = pFlyFrame->FindAnchorCharFrame();
+                        if (pAnchor)
+                        {
+                            SwPageFrame* pPage = pAnchor->FindPageFrame();
+                            if (pPage)
+                            {
+                                SwLayouter::InsertMovedFwdFrame(pPage->GetFormat()->GetDoc(),
+                                                                *pAnchor,
+                                                                pPage->GetPhyPageNum() + 1);
+                                pAnchor->InvalidatePos();
+                            }
+                        }
+                    }
                 }
             }
             // don't make the effort to move fwd if its known
