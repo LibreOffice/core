@@ -15,60 +15,7 @@ class ScViewData;
 
 namespace sc
 {
-/** Operations that can be performed on a sheet. */
-enum class OperationType
-{
-    Unknown,
-    ApplyAttributes,
-    ApplyAttributesWithChangedRange,
-    ApplyAttributesToCell,
-    DeleteContent,
-    DeleteCell,
-    TransliterateText,
-    SetNormalString,
-    SetValue,
-    SetString,
-    SetTextEdit,
-    SetFormula,
-    SetNoteText,
-    ReplaceNoteText,
-    InsertColumnsBefore,
-    InsertColumnsAfter,
-    InsertRowsBefore,
-    InsertRowsAfter,
-    InsertCellsDown,
-    InsertCellsRight,
-    DeleteColumns,
-    DeleteRows,
-    DeleteCellsLeft,
-    DeleteCellsUp,
-    MoveBlock,
-    ClearItems,
-    ChangeIndent,
-    AutoFormat,
-    EnterMatrix,
-    TabOperation,
-    FillSimple,
-    FillSeries,
-    FillAuto,
-    MergeCells,
-    InsertNameList,
-    ConvertFormulaToValue,
-    Sort,
-    Query,
-    SubTotals,
-    PivotTableUpdate,
-    PivotTableRemove,
-    PivotTableCreate,
-    SparklineInsert,
-    SparklineDelete,
-    SparklineChange,
-    SparklineGroup,
-    SparklineUngroup,
-    SparklineGroupDelete,
-    SparklineGroupChange,
-    EnterData,
-};
+enum class OperationType;
 
 /** Tester for operations on sheet views and default views
  *
@@ -85,7 +32,6 @@ public:
     }
 
     static bool doesUnsync(OperationType eOperationType);
-    static std::string_view operationName(OperationType eType);
     bool check(OperationType eOperationType) const;
     void sync();
 };
