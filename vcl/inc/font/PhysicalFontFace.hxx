@@ -31,6 +31,7 @@
 
 #include <fontattributes.hxx>
 #include <fontsubset.hxx>
+#include <glyphid.hxx>
 
 #include <hb.h>
 #include <hb-ot.h>

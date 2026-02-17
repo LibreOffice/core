@@ -25,10 +25,6 @@
 
 #include <vcl/dllapi.h>
 
-#include "glyphid.hxx"
-
-class SvStream;
-
 // Translate units from TT to PS (standard 1/1000)
 inline int XUnits(int nUPEM, int n) { return (n * 1000) / nUPEM; }
 
@@ -48,44 +44,15 @@ namespace o3tl {
 
 class VCL_DLLPUBLIC FontSubsetInfo final
 {
-public:
-    SAL_DLLPRIVATE explicit FontSubsetInfo();
-    SAL_DLLPRIVATE ~FontSubsetInfo();
-
-    SAL_DLLPRIVATE void LoadFont( FontType eInFontType,
-                    const unsigned char* pFontBytes, int nByteLength );
-
-    SAL_DLLPRIVATE bool CreateFontSubset( FontType nOutFontTypeMask,
-                    SvStream* pOutFile,
-                    const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncodedIds,
-                    int nReqGlyphCount);
-
 public: // TODO: make subsetter results private and provide accessor methods instead
         // subsetter-provided subset details needed by e.g. Postscript or PDF
     OUString                m_aPSName;
-    int                     m_nAscent;          ///< all metrics in PS font units
-    int                     m_nDescent;
-    int                     m_nCapHeight;
-    tools::Rectangle               m_aFontBBox;
-    FontType                m_nFontType;        ///< font-type of subset result
-    bool                    m_bFilled;
-
-private:
-    // input-font-specific details
-    unsigned const char*    mpInFontBytes;
-    int                     mnInByteLength;
-    FontType                meInFontType;       ///< allowed mask of input font-types
-
-    // subset-request details
-    FontType                mnReqFontTypeMask;  ///< allowed subset-target font types
-    SvStream*               mpOutFile;
-    OString                 maReqFontName;
-    const sal_GlyphId*      mpReqGlyphIds;
-    const sal_uInt8*        mpReqEncodedIds;
-    int                     mnReqGlyphCount;
-
-    SAL_DLLPRIVATE bool CreateFontSubsetFromCff();
+    int                     m_nAscent = 0;                   ///< all metrics in PS font units
+    int                     m_nDescent = 0;
+    int                     m_nCapHeight = 0;
+    tools::Rectangle        m_aFontBBox;
+    FontType                m_nFontType = FontType::NO_FONT; ///< font-type of subset result
+    bool                    m_bFilled = false;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,9 @@
 #include <vector>
 #include <assert.h>
 
+#include <sft.hxx>
 #include <fontsubset.hxx>
+#include <glyphid.hxx>
 
 #include <comphelper/flagguard.hxx>
 #include <o3tl/safeint.hxx>
@@ -33,6 +35,7 @@
 #include <strhelper.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 
 typedef sal_uInt8 U8;
 typedef sal_uInt16 U16;
@@ -2604,22 +2607,38 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rFSInfo.m_aPSName   = OUString( rEmitter.maSubsetName, strlen(rEmitter.maSubsetName), RTL_TEXTENCODING_UTF8 );
 }
 
-bool FontSubsetInfo::CreateFontSubsetFromCff()
+namespace vcl
 {
-    CffSubsetterContext aCff( mpInFontBytes, mnInByteLength);
+bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
+                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
+                         const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
+{
+    CffSubsetterContext aCff(pFontBytes, nByteLength);
     bool bRC = aCff.initialCffRead();
     if (!bRC)
         return bRC;
 
+    utl::TempFileFast aTempFile;
+    SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
+
     // emit Type1 subset from the CFF input
     // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
-    const bool bPfbSubset(mnReqFontTypeMask & FontType::TYPE1_PFB);
-    Type1Emitter aType1Emitter( mpOutFile, bPfbSubset);
-    aType1Emitter.setSubsetName( maReqFontName.getStr() );
-    aCff.emitAsType1( aType1Emitter,
-        mpReqGlyphIds, mpReqEncodedIds,
-        mnReqGlyphCount, *this);
+    Type1Emitter aType1Emitter(pStream, true);
+    OString maReqFontName = rInfo.m_aPSName.toUtf8();
+    aType1Emitter.setSubsetName(maReqFontName.getStr());
+    aCff.emitAsType1(aType1Emitter, pGlyphIds, pEncoding, nGlyphCount, rInfo);
+
+    rOutBuffer.resize(pStream->TellEnd());
+    pStream->Seek(0);
+    auto nRead = pStream->ReadBytes(rOutBuffer.data(), rOutBuffer.size());
+    if (nRead != rOutBuffer.size())
+    {
+        rOutBuffer.clear();
+        return false;
+    }
+
     return true;
 }
+} // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

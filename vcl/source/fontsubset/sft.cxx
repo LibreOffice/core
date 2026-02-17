@@ -703,35 +703,6 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
     return AbstractTrueTypeFont::initialize();
 }
 
-
-
-bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
-                         const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
-{
-    utl::TempFileFast aTempFile;
-    SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
-
-    rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
-    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, pGlyphIds, pEncoding,
-                                       nGlyphCount);
-
-    if (bRet)
-    {
-        rOutBuffer.resize(pStream->TellEnd());
-        pStream->Seek(0);
-        auto nRead = pStream->ReadBytes(rOutBuffer.data(), rOutBuffer.size());
-        if (nRead != rOutBuffer.size())
-        {
-            rOutBuffer.clear();
-            return false;
-        }
-    }
-
-    return bRet;
-}
-
-
 bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
 {
     sal_uInt32 table_size;
