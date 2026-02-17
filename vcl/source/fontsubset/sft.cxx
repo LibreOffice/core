@@ -1406,35 +1406,6 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
     return res;
 }
 
-namespace
-{
-void FillFontSubsetInfo(const AbstractTrueTypeFont* ttf, FontSubsetInfo& rInfo)
-{
-    TTGlobalFontInfo aTTInfo;
-    GetTTGlobalFontInfo(ttf, &aTTInfo);
-
-    rInfo.m_aPSName = OUString::fromUtf8(aTTInfo.psname);
-    rInfo.m_nFontType = FontType::SFNT_TTF;
-    rInfo.m_aFontBBox
-        = tools::Rectangle(Point(aTTInfo.xMin, aTTInfo.yMin), Point(aTTInfo.xMax, aTTInfo.yMax));
-    rInfo.m_nCapHeight = aTTInfo.yMax; // Well ...
-    rInfo.m_nAscent = aTTInfo.winAscent;
-    rInfo.m_nDescent = aTTInfo.winDescent;
-
-    // mac fonts usually do not have an OS2-table
-    // => get valid ascent/descent values from other tables
-    if (!rInfo.m_nAscent)
-        rInfo.m_nAscent = +aTTInfo.typoAscender;
-    if (!rInfo.m_nAscent)
-        rInfo.m_nAscent = +aTTInfo.ascender;
-    if (!rInfo.m_nDescent)
-        rInfo.m_nDescent = +aTTInfo.typoDescender;
-    if (!rInfo.m_nDescent)
-        rInfo.m_nDescent = -aTTInfo.descender;
-
-    rInfo.m_bFilled = true;
-}
-}
 
 bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
                          std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
@@ -1462,73 +1433,6 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
     return bRet;
 }
 
-bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, std::vector<sal_uInt8>& rOutBuffer,
-                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                         const int nOrigGlyphCount, FontSubsetInfo& rInfo)
-{
-    // Get details about the subset font.
-    FillFontSubsetInfo(&rTTF, rInfo);
-
-    // Shortcut for CFF-subsetting.
-    sal_uInt32 nCFF;
-    const sal_uInt8* pCFF = rTTF.table(O_CFF, nCFF);
-    if (nCFF)
-        return CreateCFFfontSubset(pCFF, nCFF, rOutBuffer, pGlyphIds, pEncoding,
-                                   nOrigGlyphCount, rInfo);
-
-    // Multiple questions:
-    // - Why is there a glyph limit?
-    //   MacOS used to handle 257 glyphs...
-    //   Also the much more complex PrintFontManager variant has this limit.
-    //   Also the very first implementation has the limit in
-    //   commit 8789ed701e98031f2a1657ea0dfd6f7a0b050992
-    // - Why doesn't the PrintFontManager care about the fake glyph? It
-    //   is used on all unx platforms to create the subset font.
-    // - Should the SAL_WARN actually be asserts, like on MacOS?
-    if (nOrigGlyphCount > 256)
-    {
-        SAL_WARN("vcl.fonts", "too many glyphs for subsetting");
-        return false;
-    }
-
-    int nGlyphCount = nOrigGlyphCount;
-    sal_uInt16 aShortIDs[256];
-    sal_uInt8 aTempEncs[256];
-
-    // handle the undefined / first font glyph
-    int nNotDef = -1, i;
-    for (i = 0; i < nGlyphCount; ++i)
-    {
-        aTempEncs[i] = pEncoding[i];
-        aShortIDs[i] = static_cast<sal_uInt16>(pGlyphIds[i]);
-        if (!aShortIDs[i])
-            if (nNotDef < 0)
-                nNotDef = i;
-    }
-
-    // nNotDef glyph must be in pos 0 => swap glyphids
-    if (nNotDef != 0)
-    {
-        if (nNotDef < 0)
-        {
-            if (nGlyphCount == 256)
-            {
-                SAL_WARN("vcl.fonts", "too many glyphs for subsetting");
-                return false;
-            }
-            nNotDef = nGlyphCount++;
-        }
-
-        aShortIDs[nNotDef] = aShortIDs[0];
-        aTempEncs[nNotDef] = aTempEncs[0];
-        aShortIDs[0] = 0;
-        aTempEncs[0] = 0;
-    }
-
-    // write subset into destination file
-    return (CreateTTFromTTGlyphs(&rTTF, rOutBuffer, aShortIDs, aTempEncs, nGlyphCount)
-            == vcl::SFErrCodes::Ok);
-}
 
 bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
 {

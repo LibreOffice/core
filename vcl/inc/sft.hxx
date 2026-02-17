@@ -576,11 +576,6 @@ class TrueTypeFont;
                               sal_uInt8 const *encoding,
                               int            nGlyphs);
 
-    VCL_DLLPUBLIC bool CreateTTFfontSubset(AbstractTrueTypeFont& aTTF,
-                              std::vector<sal_uInt8>& rOutBuffer,
-                              const sal_GlyphId* pGlyphIds,
-                              const sal_uInt8* pEncoding,
-                              int nGlyphCount, FontSubsetInfo& rInfo);
 
     bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
                               std::vector<sal_uInt8>& rOutBuffer,
