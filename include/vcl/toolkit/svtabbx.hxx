@@ -34,11 +34,21 @@
 #include <memory>
 #include <vector>
 
+enum class SvTabListBoxRole
+{
+    Unknown,
+    Tree,       // hierarchical, single-column
+    TreeGrid,   // hierarchical, multi-column
+    ListBox,    // flat, single-column
+    Grid        // flat, multi-column
+};
+
 class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
     OUString                    aCurEntry;
+    SvTabListBoxRole            m_eRole;
 
 protected:
     static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
@@ -74,6 +84,9 @@ public:
 
     void             SetTabAlignCenter(sal_uInt16 nTab);
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
+
+    void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
+    SvTabListBoxRole GetRole() const { return m_eRole; }
 
     virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };

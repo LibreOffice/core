@@ -194,6 +194,23 @@ private:
 
         sal_uInt16 m_nLastMenuItemId;
 
+        /* The renderer/column structure in .ui files for GtkTreeView is a set
+           of compromise rules of expressing a layout in gtk terms which the
+           vcl equivalent is also able to do.
+
+           The GtkInstanceTreeView ctor has some more details of that.
+
+           The ui files end up containing information as to what each TreeView
+           is limited to, whether it will be used as a tree or a list and
+           whether there are multiple columns or not, so here we extract enough
+           of that information in the generic loader to determine what type of
+           role this TreeView has.
+        */
+        sal_uInt16 m_nTreeViewRenderers;
+        sal_uInt16 m_nTreeViewExpanders;
+        sal_uInt16 m_nTreeViewColumnCount;
+        bool m_bTreeViewSeenTextInColumn;
+
         VclParserState();
     };
 
