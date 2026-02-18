@@ -21,10 +21,9 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
+#include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
-
-class ErrCode;
-struct TranslateId;
+#include <unotools/resmgr.hxx>
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
