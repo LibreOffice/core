@@ -902,7 +902,7 @@ void ScPDFExportTest::testTdf78897()
     // Without the fix in place, this test would have failed with
     // - Expected:  11.00 11.00
     // - Actual  :  11.00 ###
-    CPPUNIT_ASSERT_EQUAL(u" 11.00 11.00 "_ustr, aActualText);
+    CPPUNIT_ASSERT_EQUAL(u" 11.00 11.00"_ustr, aActualText);
 }
 
 // just needs to not crash on export to pdf

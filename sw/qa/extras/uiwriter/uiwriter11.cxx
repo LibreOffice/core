@@ -494,16 +494,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
         // of the comments is stable and independent of the DPI.
         const OUString aLines[] = {
             // First annotation
-            u"A comment. One two three four "_ustr,
-            u"five six seven eight nine ten "_ustr,
-            u"eleven twelve thirteen fourteen "_ustr,
-            u"fifteen sixteen seventeen "_ustr,
+            u"A comment. One two three four"_ustr,
+            u"five six seven eight nine ten"_ustr,
+            u"eleven twelve thirteen fourteen"_ustr,
+            u"fifteen sixteen seventeen"_ustr,
             u"eighteen nineteen twenty."_ustr,
             // Second annotation
-            u"Another comment. Twenty-one "_ustr,
-            u"twenty-two twenty-three "_ustr,
+            u"Another comment. Twenty-one"_ustr,
+            u"twenty-two twenty-three"_ustr,
             u"twenty-four twenty-five twenty-"_ustr,
-            u"six twenty-seven twenty-eight "_ustr,
+            u"six twenty-seven twenty-eight"_ustr,
             u"twenty-nine thirty."_ustr,
         };
         std::set<OUString> aFoundLines;

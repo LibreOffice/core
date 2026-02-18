@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testPageObjects)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPageObject->getType());
 
     CPPUNIT_ASSERT_EQUAL(u"The quick, brown fox jumps over a lazy dog. DJs flock by when "
-                         "MTV ax quiz prog. Junk MTV quiz "_ustr,
+                         "MTV ax quiz prog. Junk MTV quiz"_ustr,
                          pPageObject->getText(pTextPage));
 
     CPPUNIT_ASSERT_EQUAL(12.0, pPageObject->getFontSize());

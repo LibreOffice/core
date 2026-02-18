@@ -438,13 +438,19 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/string_data_template \
     UnpackedTarball/pdfium/core/fxcrt/binary_buffer \
     UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_span_stream \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_string_stream \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_vector_stream \
     UnpackedTarball/pdfium/core/fxcrt/fx_memory_malloc \
     UnpackedTarball/pdfium/core/fxcrt/widetext_buffer \
     UnpackedTarball/pdfium/core/fxcrt/debug/alias \
     UnpackedTarball/pdfium/core/fxcrt/string_template \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_stream \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_container_stream \
 ))
+
+ifneq ($(OS),WNT)
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/core/fxcrt/mapped_data_bytes \
+))
+endif
 
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
@@ -483,7 +489,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_glyphcache \
     UnpackedTarball/pdfium/core/fxge/cfx_folderfontinfo \
     UnpackedTarball/pdfium/core/fxge/cfx_font \
-    UnpackedTarball/pdfium/core/fxge/cfx_fontcache \
     UnpackedTarball/pdfium/core/fxge/cfx_fontmapper \
     UnpackedTarball/pdfium/core/fxge/cfx_fontmgr \
     UnpackedTarball/pdfium/core/fxge/cfx_gemodule \
@@ -494,7 +499,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_substfont \
     UnpackedTarball/pdfium/core/fxge/cfx_unicodeencoding \
     UnpackedTarball/pdfium/core/fxge/cfx_glyphbitmap \
-    UnpackedTarball/pdfium/core/fxge/scoped_font_transform \
     UnpackedTarball/pdfium/core/fxge/text_glyph_pos \
     UnpackedTarball/pdfium/core/fxge/fx_font \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_dibbase \

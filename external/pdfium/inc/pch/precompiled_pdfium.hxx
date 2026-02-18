@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-08-15 08:05:49 using:
+ Generated on 2026-02-18 10:54:25 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,6 +37,7 @@
 #include <climits>
 #include <cmath>
 #include <ctype.h>
+#include <fcntl.h>
 #include <functional>
 #include <initializer_list>
 #include <iterator>
@@ -62,6 +63,7 @@
 #include <time.h>
 #include <tuple>
 #include <type_traits>
+#include <unistd.h>
 #include <utility>
 #include <variant>
 #include <vector>
@@ -289,10 +291,10 @@
 #include <core/fxcrt/bytestring.h>
 #include <core/fxcrt/cfx_bitstream.h>
 #include <core/fxcrt/cfx_datetime.h>
+#include <core/fxcrt/cfx_fileaccess_stream.h>
 #include <core/fxcrt/cfx_memorystream.h>
+#include <core/fxcrt/cfx_read_only_container_stream.h>
 #include <core/fxcrt/cfx_read_only_span_stream.h>
-#include <core/fxcrt/cfx_read_only_string_stream.h>
-#include <core/fxcrt/cfx_read_only_vector_stream.h>
 #include <core/fxcrt/cfx_seekablestreamproxy.h>
 #include <core/fxcrt/cfx_timer.h>
 #include <core/fxcrt/check.h>
@@ -325,7 +327,6 @@
 #include <core/fxcrt/css/cfx_cssvaluelistparser.h>
 #include <core/fxcrt/data_vector.h>
 #include <core/fxcrt/debug/alias.h>
-#include <core/fxcrt/fileaccess_iface.h>
 #include <core/fxcrt/fixed_size_data_vector.h>
 #include <core/fxcrt/fx_2d_size.h>
 #include <core/fxcrt/fx_bidi.h>
@@ -344,6 +345,8 @@
 #include <core/fxcrt/fx_string_wrappers.h>
 #include <core/fxcrt/fx_system.h>
 #include <core/fxcrt/fx_unicode.h>
+#include <core/fxcrt/mapped_data_bytes.h>
+#include <core/fxcrt/mask.h>
 #include <core/fxcrt/maybe_owned.h>
 #include <core/fxcrt/notreached.h>
 #include <core/fxcrt/numerics/clamped_math.h>
@@ -386,7 +389,6 @@
 #include <core/fxge/cfx_fillrenderoptions.h>
 #include <core/fxge/cfx_folderfontinfo.h>
 #include <core/fxge/cfx_font.h>
-#include <core/fxge/cfx_fontcache.h>
 #include <core/fxge/cfx_fontmapper.h>
 #include <core/fxge/cfx_fontmgr.h>
 #include <core/fxge/cfx_gemodule.h>
@@ -415,7 +417,6 @@
 #include <core/fxge/fx_font.h>
 #include <core/fxge/fx_fontencoding.h>
 #include <core/fxge/renderdevicedriver_iface.h>
-#include <core/fxge/scoped_font_transform.h>
 #include <core/fxge/systemfontinfo_iface.h>
 #include <core/fxge/text_char_pos.h>
 #include <core/fxge/text_glyph_pos.h>
@@ -482,6 +483,8 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>
