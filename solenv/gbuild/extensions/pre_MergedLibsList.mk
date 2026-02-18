@@ -50,7 +50,7 @@ gb_MERGE_LIBRARY_LIST := \
 	fwk \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
-	$(call gb_Helper_optional,DESKTOP,helplinker) \
+	$(call gb_Helper_optionals_and,DESKTOP XMLHELP,helplinker) \
 	hyphen \
 	i18nsearch \
 	i18npool \
