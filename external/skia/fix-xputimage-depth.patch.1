@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: LibreOffice
+Date: Wed, 18 Feb 2026 00:00:00 +0000
+Subject: [PATCH] Fix XPutImage BadMatch on 32-bit X11 windows
+
+RasterWindowContext_xlib::onSwapBuffers() hardcoded image.depth = 24,
+but the target X11 window may have depth 32 (when BestVisual() selects
+a 32-bit TrueColor visual, which is preferred for compositing).
+XPutImage requires image.depth to exactly match the drawable's depth;
+mismatched depth results in a BadMatch X11 error.
+
+Fix: query the actual window depth once during construction via
+XGetWindowAttributes and store it as fDepth, then use fDepth instead of
+the hardcoded 24 in onSwapBuffers.
+---
+ tools/window/unix/RasterWindowContext_unix.cpp | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+--- skia.org/tools/window/unix/RasterWindowContext_unix.cpp
++++ skia/tools/window/unix/RasterWindowContext_unix.cpp
+@@ -34,6 +34,7 @@
+     Display* fDisplay;
+     XWindow  fWindow;
+     GC       fGC;
++    int      fDepth;
+ };
+
+ RasterWindowContext_xlib::RasterWindowContext_xlib(Display* display,
+@@ -43,6 +44,9 @@
+                                                    std::unique_ptr<const DisplayParams> params)
+         : RasterWindowContext(std::move(params)), fDisplay(display), fWindow(window) {
+     fGC = XCreateGC(fDisplay, fWindow, 0, nullptr);
++    XWindowAttributes attrs;
++    XGetWindowAttributes(fDisplay, fWindow, &attrs);
++    fDepth = attrs.depth;
+     this->resize(width, height);
+     fWidth = width;
+     fHeight = height;
+@@ -79,7 +83,7 @@
+     image.bitmap_unit = bitsPerPixel;
+     image.bitmap_bit_order = LSBFirst;
+     image.bitmap_pad = bitsPerPixel;
+-    image.depth = 24;
++    image.depth = fDepth;
+     image.bytes_per_line = pm.rowBytes() - pm.width() * pm.info().bytesPerPixel();
+     image.bits_per_pixel = bitsPerPixel;
+     if (!XInitImage(&image)) {
