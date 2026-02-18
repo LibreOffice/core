@@ -66,13 +66,9 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(
 # Obviously this list should not contain stuff with external dependencies
 # that may not be available on baseline systems.
 
-ifeq ($(CPUNAME),AARCH64)
-SOABI=-aarch64-linux-gnu
-else ifeq ($(CPUNAME),POWERPC64)
-SOABI=-powerpc64le-linux-gnu
-else
-SOABI=-x86_64-linux-gnu
-endif
+# Derive SOABI platform suffix from HOST_PLATFORM (e.g. x86_64-pc-linux-gnu
+# or aarch64-alpine-linux-musl), stripping the vendor field.
+SOABI=-$(word 1,$(subst -, ,$(HOST_PLATFORM)))-$(word 3,$(subst -, ,$(HOST_PLATFORM)))-$(word 4,$(subst -, ,$(HOST_PLATFORM)))
 python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)$(SOABI)
 python3_EXTENSION_MODULES= \
 	Modules/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
