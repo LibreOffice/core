@@ -331,14 +331,14 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     if(m_eCurveStyle==CurveStyle_CUBIC_SPLINES)
     {
         std::vector<std::vector<css::drawing::Position3D>> aSplinePoly;
-        SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
+        SplineCalculator::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
     else if(m_eCurveStyle==CurveStyle_B_SPLINES)
     {
         std::vector<std::vector<css::drawing::Position3D>> aSplinePoly;
-        SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
+        SplineCalculator::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }

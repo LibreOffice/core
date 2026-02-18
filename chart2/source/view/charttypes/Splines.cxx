@@ -519,7 +519,7 @@ void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p
 
 // Calculates uniform parametric splines with subinterval length 1,
 // according ODF1.2 part 1, chapter 'chart interpolation'.
-void SplineCalculater::CalculateCubicSplines(
+void SplineCalculator::CalculateCubicSplines(
     const std::vector<std::vector<css::drawing::Position3D>>& rInput
     , std::vector<std::vector<css::drawing::Position3D>>& rResult
     , sal_uInt32 nGranularity )
@@ -624,7 +624,7 @@ void SplineCalculater::CalculateCubicSplines(
     }
 }
 
-void SplineCalculater::CalculateBSplines(
+void SplineCalculator::CalculateBSplines(
             const std::vector<std::vector<css::drawing::Position3D>>& rInput
             , std::vector<std::vector<css::drawing::Position3D>>& rResult
             , sal_uInt32 nResolution
