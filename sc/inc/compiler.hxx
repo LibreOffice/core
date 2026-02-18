@@ -167,7 +167,7 @@ public:
     void SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const OUString& rName );
-    void SetExternal(const OUString& rStr);
+    void SetExternal(const OUString& rStr, OpCode eCode = ocExternal);
 
     /** If the token is a non-external reference, determine if the reference is
         valid. If the token is an external reference, return true. Else return

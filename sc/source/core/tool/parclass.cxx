@@ -391,6 +391,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
     switch ( eOp )
     {
         case ocExternal:
+        case ocUDExternal:
             return GetExternalParameterType( pToken, nParameter);
         case ocMacro:
             return (nParameter == SAL_MAX_UINT16 ? Value : Reference);

@@ -1686,6 +1686,7 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
     switch( rFuncData.GetOpCode() )
     {
         case ocExternal:
+        case ocUDExternal:
             AppendAddInCallToken( rFuncData.GetExtFuncData() );
         break;
         case ocEuroConvert:
@@ -1763,6 +1764,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
         break;
 
         case ocExternal:
+        case ocUDExternal:
         case ocMacro:
             // external or macro call without parameters needs the external name reference
             if( nParamCount == 0 )

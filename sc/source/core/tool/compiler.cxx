@@ -3180,12 +3180,14 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 
     if (!bFound)
     {
-        OUString aIntName;
+        OUString aIntName, aFuncName = rName, sUDPrefix = mxSymbols->getSymbol(ocUDExternal);
+        if (aFuncName.matchIgnoreAsciiCase(sUDPrefix))
+            aFuncName = aFuncName.copy(sUDPrefix.getLength());
+
         if (mxSymbols->hasExternals())
         {
             // If symbols are set by filters get mapping to exact name.
-            ExternalHashMap::const_iterator iExt(
-                    mxSymbols->getExternalHashMap().find( rName));
+            ExternalHashMap::const_iterator iExt(mxSymbols->getExternalHashMap().find(aFuncName));
             if (iExt != mxSymbols->getExternalHashMap().end())
             {
                 if (ScGlobal::GetAddInCollection()->GetFuncData( (*iExt).second))
@@ -3202,12 +3204,18 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
             else
                 // bLocalFirst=false for (English) upper full original name
                 // (service.function)
-                aIntName = ScGlobal::GetAddInCollection()->FindFunction(
-                        rName, !mxSymbols->isEnglish());
+                aIntName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName,
+                                                                        !mxSymbols->isEnglish());
         }
         if (!aIntName.isEmpty())
         {
             maRawToken.SetExternal( aIntName );     // international name
+            bFound = true;
+        }
+        else if (rName != aFuncName)
+        {
+            // User-defined function
+            maRawToken.SetExternal(aFuncName, ocUDExternal);
             bFound = true;
         }
     }
@@ -3861,6 +3869,11 @@ bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInval
     OUString aFile, aName;
     if (!pConv->parseExternalName( rSymbol, aFile, aName, rDoc, &maExternalLinks))
         return false;
+
+    // Remove the user-defined flag
+    OUString sUDPrefix = mxSymbols->getSymbol(ocUDExternal);
+    if (aName.matchIgnoreAsciiCase(sUDPrefix))
+        aName = aName.copy(sUDPrefix.getLength());
 
     if (aFile.getLength() > MAXSTRLEN || aName.getLength() > MAXSTRLEN)
         return false;

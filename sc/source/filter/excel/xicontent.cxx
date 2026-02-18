@@ -665,7 +665,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
             // If it's an external formula then skip the entry
             if (const formula::FormulaToken* pToken = pTokArr->FirstToken())
             {
-                if (pToken->GetOpCode() == ocExternal)
+                if (pToken->GetOpCode() == ocExternal || pToken->GetOpCode() == ocUDExternal)
                     return;
             }
             xTokArr1 = std::move( pTokArr );
@@ -685,7 +685,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
             // If it's an external formula then skip the entry
             if (const formula::FormulaToken* pToken = pTokArr->FirstToken())
             {
-                if (pToken->GetOpCode() == ocExternal)
+                if (pToken->GetOpCode() == ocExternal || pToken->GetOpCode() == ocUDExternal)
                     return;
             }
             xTokArr2 = std::move( pTokArr );
