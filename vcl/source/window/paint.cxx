@@ -1373,11 +1373,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     // TODO: Move to its own method
     if (comphelper::LibreOfficeKit::isActive())
     {
-        VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev);
+        VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev, DeviceFormat::WITH_ALPHA);
         pDevice->EnableRTL(IsRTLEnabled());
 
         Size aSize(GetOutputSizePixel());
-        pDevice->SetOutputSizePixel(aSize);
+        pDevice->SetOutputSizePixel(aSize, true, true);
 
         vcl::Font aCopyFont = GetFont();
         pDevice->SetFont(aCopyFont);
