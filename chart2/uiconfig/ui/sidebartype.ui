@@ -318,6 +318,11 @@
                 <attribute name="pixbuf">2</attribute>
               </attributes>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="cmb_chartType-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="sidebartype|cmb_chartType-atkobject">Chart Type</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
