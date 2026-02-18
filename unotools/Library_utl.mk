@@ -16,6 +16,12 @@ $(eval $(call gb_Library_use_externals,utl,\
 	boost_locale \
 ))
 
+ifneq ($(LIBINTL_LIBS),)
+$(eval $(call gb_Library_add_libs,utl,\
+	$(LIBINTL_LIBS) \
+))
+endif
+
 $(eval $(call gb_Library_use_custom_headers,utl,\
  officecfg/registry \
 ))

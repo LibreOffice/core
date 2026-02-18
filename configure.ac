@@ -1477,6 +1477,18 @@ if test "$usable_dlapi" != no; then
 fi
 AC_SUBST(UNIX_DLAPI_LIBS)
 
+# Check if libintl is needed (musl libc provides a stub bindtextdomain in libc,
+# but <libintl.h> from gettext-dev redefines it to libintl_bindtextdomain which
+# only exists in libintl.so)
+LIBINTL_LIBS=
+if test "$_os" = "Linux"; then
+    save_LIBS="$LIBS"
+    AC_SEARCH_LIBS([libintl_bindtextdomain], [intl],
+        [case "$ac_cv_search_libintl_bindtextdomain" in -l*) LIBINTL_LIBS="$ac_cv_search_libintl_bindtextdomain";; esac])
+    LIBS="$save_LIBS"
+fi
+AC_SUBST(LIBINTL_LIBS)
+
 # Check for a (GNU) backtrace implementation
 AC_ARG_VAR([BACKTRACE_CFLAGS], [Compiler flags needed to use backtrace(3)])
 AC_ARG_VAR([BACKTRACE_LIBS], [Linker flags needed to use backtrace(3)])
@@ -9549,7 +9561,7 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
-    linux-gnu*)
+    linux-gnu*|linux-musl*)
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
