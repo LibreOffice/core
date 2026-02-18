@@ -141,6 +141,11 @@ protected:
         dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     }
 
+    void removeSheetViewInCurrentView()
+    {
+        dispatchCommand(mxComponent, u".uno:RemoveSheetView"_ustr, {});
+    }
+
     void sortAscendingForCell(std::u16string_view aCellAddress)
     {
         gotoCell(aCellAddress);
@@ -408,7 +413,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // We remove the current sheet view
-    dispatchCommand(mxComponent, u".uno:RemoveSheetView"_ustr, {});
+    removeSheetViewInCurrentView();
     Scheduler::ProcessEventsToIdle();
 
     // Sheet view is retained, but null
@@ -1533,6 +1538,45 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteContentOperation)
     OUString aExpectedSorted = expectedValues({ u"7", u"3", u"", u"" });
     CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(mpTabViewSheetView, 0, 1, 4));
     CPPUNIT_ASSERT_EQUAL(aExpectedSorted, getValues(pDocument, 0, 1, 4, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testCreateAndDeleteSheetView)
+{
+    // Test that creating a sheet view, deleting it, creating a new one again,
+    // works without an issue.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Initial values
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+
+    // Create a sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Delete the sheet view
+    {
+        switchToSheetView();
+        removeSheetViewInCurrentView();
+    }
+
+    // Create a new sheet view again
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+
+        typeCharsInCell(std::string("99"), 0, 1, mpTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"99", u"5", u"3", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
