@@ -88,9 +88,15 @@
             <child>
               <object class="GtkMenuToolButton" id="SelectWidth">
                 <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarline|SelectWidth|tooltip_text">Line Thickness</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="SelectWidth-atkobject">
+                    <property name="AtkObject::accessible-name" context="sidebarline|SelectWidth-atkobject" translatable="yes">Line Thickness</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
