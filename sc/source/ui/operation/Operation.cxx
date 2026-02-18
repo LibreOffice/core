@@ -18,7 +18,6 @@
 #include <SheetView.hxx>
 #include <sal/log.hxx>
 
-#include <viewdata.hxx>
 #include <dbdata.hxx>
 #include <queryparam.hxx>
 #include <sortparam.hxx>
@@ -108,6 +107,7 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
         && nSheetViewTab == aNewMark.GetArea().aEnd.Tab())
     {
         aNewMark.SetAreaTab(nDefaultViewTab);
+        bChanged = true;
     }
 
     // If sheet view tab is selected, deselect and select default view tab instead
@@ -115,6 +115,7 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     {
         aNewMark.SelectTable(nSheetViewTab, false);
         aNewMark.SelectTable(nDefaultViewTab, true);
+        bChanged = true;
     }
 
     // Take sorting into account when we convert to default view
@@ -150,7 +151,7 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
 
             for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
             {
-                for (SCROW nColumn = nColumnStart; nColumn <= nColumnEnd; ++nColumn)
+                for (SCCOL nColumn = nColumnStart; nColumn <= nColumnEnd; ++nColumn)
                 {
                     if (aNewMark.IsCellMarked(nColumn, nRow))
                     {
@@ -242,7 +243,7 @@ void Operation::syncSheetViews()
 
 bool Operation::checkSheetViewProtection()
 {
-    sc::SheetViewOperationsTester aSheetViewTester(ScDocShell::GetViewData());
+    sc::SheetViewOperationsTester aSheetViewTester(mpViewData);
     return aSheetViewTester.check(meType);
 }
 
