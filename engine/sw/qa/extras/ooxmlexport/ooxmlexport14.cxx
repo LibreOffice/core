@@ -852,6 +852,43 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163894_hidden)
                 "expand", u"modicum");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf32363)
+{
+    createSwDoc("tdf32363.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"1 ");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Do not shorten this short heading");
+
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"2 ");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Beginning of the paragraph");
+
+    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"3 ");
+    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Beginning of the paragraph + ellipsis…");
+
+    assertXPath(pLayout, "/root/page[6]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"3 ");
+    assertXPath(pLayout, "/root/page[6]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Beginning of the paragraph + ellipsis…");
+
+    assertXPath(pLayout, "/root/page[7]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"4 ");
+    assertXPath(pLayout, "/root/page[7]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Hidden text with the referred character style");
+
+    assertXPath(pLayout, "/root/page[8]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"4 ");
+    assertXPath(pLayout, "/root/page[8]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Hidden text with the referred character style");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 {
     createSwDoc("fdo76163.docx");
