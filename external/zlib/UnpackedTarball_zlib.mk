@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,zlib,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,zlib, \
     external/zlib/missinginclude.patch \
+    external/zlib/werror-undef.patch \
 ))
 
 # cannot use post_action since $(file ..) would be run when the recipe is parsed, i.e. would always
