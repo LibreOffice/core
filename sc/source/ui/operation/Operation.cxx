@@ -203,6 +203,9 @@ void Operation::syncSheetViews()
 
     for (std::shared_ptr<SheetView> const& pSheetView : pManager->getSheetViews())
     {
+        if (!pSheetView)
+            continue;
+
         SCTAB nSheetViewTab = pSheetView->getTableNumber();
 
         std::optional<ScQueryParam> oQueryParam;
