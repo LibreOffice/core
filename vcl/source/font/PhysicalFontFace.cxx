@@ -458,12 +458,7 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
         const unsigned char* pCffData
             = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pCFFBlob, &nCffLen));
 
-        std::vector<sal_GlyphId> aNewGlyphIds(nGlyphCount);
-        for (int i = 0; i < nGlyphCount; ++i)
-            aNewGlyphIds[i] = i;
-
-        if (!CreateCFFfontSubset(pCffData, nCffLen, rOutBuffer, aNewGlyphIds.data(), pEncoding,
-                                 nGlyphCount, rInfo))
+        if (!ConvertCFFfontToType1(pCffData, nCffLen, rOutBuffer, rInfo))
             return false;
     }
     else

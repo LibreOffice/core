@@ -716,7 +716,7 @@ struct CharString
 };
 
 
-class CffSubsetterContext
+class CffContext
 :   private CffGlobal
 {
 public:
@@ -724,16 +724,14 @@ public:
     static const int NMAXHINTS = 2*96;  // see CFF.appendixB
     static const int NMAXTRANS = 32;    // see CFF.appendixB
 
-    explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
+    explicit CffContext( const U8* pBasePtr, int nBaseLen);
 
     bool    initialCffRead();
-    void    emitAsType1( class Type1Emitter&,
-                const sal_GlyphId* pGlyphIds, const U8* pEncoding,
-                int nGlyphCount, FontSubsetInfo& );
+    void    emitAsType1(class Type1Emitter&, FontSubsetInfo&);
 
 private:
-    void    convertCharStrings(const sal_GlyphId* pGlyphIds, int nGlyphCount,
-                std::vector<CharString>& rCharStrings);
+    void    convertCharStrings(std::vector<CharString>& rCharStrings,
+                                int nGlyphCount, const sal_GlyphId* pGlyphIds = nullptr);
     int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
     void    convertOneTypeOp();
     void    convertOneTypeEsc();
@@ -807,7 +805,7 @@ private:
 
 }
 
-CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
+CffContext::CffContext( const U8* pBasePtr, int nBaseLen)
     : mpBasePtr( pBasePtr)
     , mpBaseEnd( pBasePtr+nBaseLen)
     , mpReadPtr(nullptr)
@@ -830,7 +828,7 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     mpCffLocal = &maCffLocal[0];
 }
 
-inline int CffSubsetterContext::popInt()
+inline int CffContext::popInt()
 {
     const ValType aVal = popVal();
     const int nInt = static_cast<int>(aVal);
@@ -838,7 +836,7 @@ inline int CffSubsetterContext::popInt()
     return nInt;
 }
 
-inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
+inline void CffContext::updateWidth( bool bUseFirstVal)
 {
     // the first value is not a hint but the charwidth
     if( maCharWidth>0 )
@@ -855,7 +853,7 @@ inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
     }
 }
 
-void CffSubsetterContext::addHints( bool bVerticalHints)
+void CffContext::addHints( bool bVerticalHints)
 {
     // the first charstring value may a charwidth instead of a charwidth
     updateWidth( (mnStackIdx & 1) != 0);
@@ -883,7 +881,7 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
     mnStackIdx = 0;
 }
 
-void CffSubsetterContext::readDictOp()
+void CffContext::readDictOp()
 {
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
@@ -1010,7 +1008,7 @@ void CffSubsetterContext::readDictOp()
     }
 }
 
-void CffSubsetterContext::read2push()
+void CffContext::read2push()
 {
     ValType aVal = 0;
 
@@ -1040,7 +1038,7 @@ void CffSubsetterContext::read2push()
     push( aVal);
 }
 
-void CffSubsetterContext::writeType1Val( ValType aVal)
+void CffContext::writeType1Val( ValType aVal)
 {
     U8* pOut = mpWritePtr;
 
@@ -1095,18 +1093,18 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
     }
 }
 
-inline void CffSubsetterContext::writeTypeOp( int nTypeOp)
+inline void CffContext::writeTypeOp( int nTypeOp)
 {
     *(mpWritePtr++) = static_cast<U8>(nTypeOp);
 }
 
-inline void CffSubsetterContext::writeTypeEsc( int nTypeEsc)
+inline void CffContext::writeTypeEsc( int nTypeEsc)
 {
     *(mpWritePtr++) = TYPE1OP::T1ESC;
     *(mpWritePtr++) = static_cast<U8>(nTypeEsc);
 }
 
-void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor)
+void CffContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor)
 {
     for( int i = 0; i < mnStackIdx;) {
         for( int j = 0; j < nArgsPerTypo; ++j) {
@@ -1120,7 +1118,7 @@ void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTy
     clear();
 }
 
-void CffSubsetterContext::popAll2Write( int nTypeOp)
+void CffContext::popAll2Write( int nTypeOp)
 {
     // pop in reverse order, then write
     for( int i = 0; i < mnStackIdx; ++i) {
@@ -1131,7 +1129,7 @@ void CffSubsetterContext::popAll2Write( int nTypeOp)
     writeTypeOp( nTypeOp);
 }
 
-void CffSubsetterContext::writeCurveTo( int nStackPos,
+void CffContext::writeCurveTo( int nStackPos,
     int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3)
 {
     // get the values from the stack
@@ -1154,7 +1152,7 @@ void CffSubsetterContext::writeCurveTo( int nStackPos,
     writeTypeOp( TYPE1OP::RCURVETO );
 }
 
-void CffSubsetterContext::convertOneTypeOp()
+void CffContext::convertOneTypeOp()
 {
     const int nType2Op = *(mpReadPtr++);
 
@@ -1390,7 +1388,7 @@ void CffSubsetterContext::convertOneTypeOp()
     }
 }
 
-void CffSubsetterContext::convertOneTypeEsc()
+void CffContext::convertOneTypeEsc()
 {
     const int nType2Esc = *(mpReadPtr++);
     ValType* pTop = &mnValStack[ mnStackIdx-1];
@@ -1569,7 +1567,7 @@ void CffSubsetterContext::convertOneTypeEsc()
     }
 }
 
-void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
+void CffContext::callType2Subr( bool bGlobal, int nSubrNumber)
 {
     const U8* const pOldReadPtr = mpReadPtr;
     const U8* const pOldReadEnd = mpReadEnd;
@@ -1589,7 +1587,7 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     mpReadEnd = pOldReadEnd;
 }
 
-int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len, U8* const pT1Ops)
+int CffContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len, U8* const pT1Ops)
 {
     mpCffLocal = pCffLocal;
 
@@ -1611,7 +1609,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     mpReadEnd = pT2Ops + nT2Len;
     // prepend "hsbw" or "sbw"
     // TODO: only emit hsbw when charwidth is known
-    writeType1Val(0); // TODO: aSubsetterContext.getLeftSideBearing();
+    writeType1Val(0); // TODO: aContext.getLeftSideBearing();
     U8* pCharWidthPtr=mpWritePtr; // need to overwrite that later
     // pad out 5 bytes for the char width with default val 1000 (to be
     // filled with the actual value below)
@@ -1652,7 +1650,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     return nType1Len;
 }
 
-RealType CffSubsetterContext::readRealVal()
+RealType CffContext::readRealVal()
 {
     // TODO: more thorough number validity test
     bool bComma = false;
@@ -1723,7 +1721,7 @@ RealType CffSubsetterContext::readRealVal()
 }
 
 // prepare to access an element inside a CFF/CID index table
-int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
+int CffContext::seekIndexData( int nIndexBase, int nDataIndex)
 {
     assert( (nIndexBase > 0) && (mpBasePtr + nIndexBase + 3 <= mpBaseEnd));
     if( nDataIndex < 0)
@@ -1762,7 +1760,7 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
 }
 
 // skip over a CFF/CID index table
-void CffSubsetterContext::seekIndexEnd( int nIndexBase)
+void CffContext::seekIndexEnd( int nIndexBase)
 {
     assert( (nIndexBase > 0) && (mpBasePtr + nIndexBase + 3 <= mpBaseEnd));
     mpReadPtr = mpBasePtr + nIndexBase;
@@ -1821,7 +1819,7 @@ CffGlobal::CffGlobal()
 {
 }
 
-bool CffSubsetterContext::initialCffRead()
+bool CffContext::initialCffRead()
 {
     // get the CFFHeader
     mpReadPtr = mpBasePtr;
@@ -1879,7 +1877,7 @@ bool CffSubsetterContext::initialCffRead()
         mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
         if (o3tl::make_unsigned(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
         {
-            SAL_INFO("vcl.fonts", "CffSubsetterContext: too many CFF in font");
+            SAL_INFO("vcl.fonts", "CffContext: too many CFF in font");
             return false;
         }
 
@@ -1926,7 +1924,7 @@ bool CffSubsetterContext::initialCffRead()
 }
 
 // get a cstring from a StringID
-OString CffSubsetterContext::getString( int nStringID)
+OString CffContext::getString( int nStringID)
 {
     // get a standard string if possible
     const static int nStdStrings = SAL_N_ELEMENTS(pStringIds);
@@ -1951,7 +1949,7 @@ OString CffSubsetterContext::getString( int nStringID)
 }
 
 // access a CID's FDSelect table
-int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
+int CffContext::getFDSelect( int nGlyphIndex) const
 {
     assert( nGlyphIndex >= 0);
     assert( nGlyphIndex < mnCharStrCount);
@@ -1994,7 +1992,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
     return -1;
 }
 
-int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
+int CffContext::getGlyphSID( int nGlyphIndex) const
 {
     if( nGlyphIndex == 0)
         return 0;       // ".notdef"
@@ -2042,7 +2040,7 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
 }
 
 // NOTE: the result becomes invalid with the next call to this method
-OString CffSubsetterContext::getGlyphName( int nGlyphIndex)
+OString CffContext::getGlyphName( int nGlyphIndex)
 {
     // the first glyph is always the .notdef glyph
     if( nGlyphIndex == 0)
@@ -2076,7 +2074,7 @@ OString CffSubsetterContext::getGlyphName( int nGlyphIndex)
     }
 }
 
-bool CffSubsetterContext::getBaseAccent(ValType aBase, ValType aAccent, int* nBase, int* nAccent)
+bool CffContext::getBaseAccent(ValType aBase, ValType aAccent, int* nBase, int* nAccent)
 {
     bool bBase = false, bAccent = false;
     for (int i = 0; i < mnCharStrCount; i++)
@@ -2207,8 +2205,8 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     maBuffer.append( pLineTail);
 }
 
-void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int nGlyphCount,
-                                             std::vector<CharString>& rCharStrings)
+void CffContext::convertCharStrings(std::vector<CharString>& rCharStrings,
+     int nGlyphCount, const sal_GlyphId* pGlyphIds)
 {
     // If we are doing extra glyphs used for seac operator, check for already
     // converted glyphs.
@@ -2216,7 +2214,7 @@ void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int n
     rCharStrings.reserve(rCharStrings.size() + nGlyphCount);
     for (int i = 0; i < nGlyphCount; ++i)
     {
-        const int nCffGlyphId = pGlyphIds[i];
+        const int nCffGlyphId = pGlyphIds ? pGlyphIds[i] : i;
         assert((nCffGlyphId >= 0) && (nCffGlyphId < mnCharStrCount));
 
         if (!bCheckDuplicates)
@@ -2247,13 +2245,11 @@ void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int n
     }
 }
 
-void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
-    const sal_GlyphId* pReqGlyphIds, const U8* pReqEncoding,
-    int nGlyphCount, FontSubsetInfo& rFSInfo)
+void CffContext::emitAsType1(Type1Emitter& rEmitter, FontSubsetInfo& rFSInfo)
 {
-    OString aSubsetName = rFSInfo.m_aPSName.toUtf8();
-    if (aSubsetName.getLength() > 255)
-        aSubsetName = aSubsetName.copy(0, 255);
+    OString aFontName = rFSInfo.m_aPSName.toUtf8();
+    if (aFontName.getLength() > 255)
+        aFontName = aFontName.copy(0, 255);
 
     // prepare some fontdirectory details
     static const int nUniqueIdBase = 4100000; // using private-interchange UniqueIds
@@ -2265,13 +2261,13 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rEmitter.emitRawData( aPfbHeader, sizeof(aPfbHeader)-1);
 
     rEmitter.maBuffer.append(
-        "%!FontType1-1.0: " + OString::Concat(aSubsetName) + " 001.003\n");
+        "%!FontType1-1.0: " + OString::Concat(aFontName) + " 001.003\n");
     // emit TOPDICT
     rEmitter.maBuffer.append(
         "11 dict begin\n"   // TODO: dynamic entry count for TOPDICT
         "/FontType 1 def\n"
         "/PaintType 0 def\n");
-    rEmitter.maBuffer.append( "/FontName /" + OString::Concat(aSubsetName) + " def\n");
+    rEmitter.maBuffer.append( "/FontName /" + OString::Concat(aFontName) + " def\n");
     rEmitter.maBuffer.append( "/UniqueID " + OString::number(nUniqueId) + " def\n");
     // emit FontMatrix
     if( maFontMatrix.size() == 6)
@@ -2296,17 +2292,17 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // emit FONTINFO into TOPDICT
     rEmitter.maBuffer.append(
         "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
-        " /FullName (" + OString::Concat(aSubsetName) + ") readonly def\n"
-        " /FamilyName (" + aSubsetName + ") readonly def\n"
+        " /FullName (" + OString::Concat(aFontName) + ") readonly def\n"
+        " /FamilyName (" + aFontName + ") readonly def\n"
         "end readonly def\n");
 
     rEmitter.maBuffer.append(
         "/Encoding 256 array\n"
         "0 1 255 {1 index exch /.notdef put} for\n");
-    for( int i = 1; (i < nGlyphCount) && (i < 256); ++i) {
-        OString pGlyphName = getGlyphName( pReqGlyphIds[i]);
+    for( int i = 1; (i < mnCharStrCount) && (i < 256); ++i) {
+        OString pGlyphName = getGlyphName(i);
         rEmitter.maBuffer.append(
-            "dup " + OString::number(pReqEncoding[i]) + " /" + pGlyphName + " put\n");
+            "dup " + OString::number(i) + " /" + pGlyphName + " put\n");
     }
     rEmitter.maBuffer.append( "readonly def\n");
     rEmitter.maBuffer.append(
@@ -2441,14 +2437,14 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // emit the CharStrings for the requested glyphs
     std::vector<CharString> aCharStrings;
     mbDoSeac = true;
-    convertCharStrings(pReqGlyphIds, nGlyphCount, aCharStrings);
+    convertCharStrings(aCharStrings, mnCharStrCount);
 
     // The previous convertCharStrings might collect extra glyphs used in seac
     // operator, convert them as well
     if (!maExtraGlyphIds.empty())
     {
         mbDoSeac = false;
-        convertCharStrings(maExtraGlyphIds.data(), maExtraGlyphIds.size(), aCharStrings);
+        convertCharStrings(aCharStrings, maExtraGlyphIds.size(), maExtraGlyphIds.data());
     }
     rEmitter.maBuffer.append(
         "2 index /CharStrings " + OString::number(aCharStrings.size()) + " dict dup begin\n");
@@ -2489,30 +2485,25 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "\x80\x03";
     rEmitter.emitRawData( aPfxFooter, sizeof(aPfxFooter)-1);
 
-    // provide details to the subset requesters, TODO: move into own method?
-    // note: Top and Bottom are flipped between Type1 and VCL
-    // note: the rest of VCL expects the details below to be scaled like for an emUnits==1000 font
-
     rFSInfo.m_nFontType = FontType::TYPE1_PFB;
 }
 
 namespace vcl
 {
-bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
-                         std::vector<sal_uInt8>& rOutBuffer, const sal_GlyphId* pGlyphIds,
-                         const sal_uInt8* pEncoding, int nGlyphCount, FontSubsetInfo& rInfo)
+bool ConvertCFFfontToType1(const unsigned char* pFontBytes, int nByteLength,
+                         std::vector<sal_uInt8>& rOutBuffer,
+                         FontSubsetInfo& rInfo)
 {
-    CffSubsetterContext aCff(pFontBytes, nByteLength);
+    CffContext aCff(pFontBytes, nByteLength);
     bool bRC = aCff.initialCffRead();
     if (!bRC)
         return bRC;
 
     SvMemoryStream aStream;
 
-    // emit Type1 subset from the CFF input
-    // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
+    // emit Type1 font from the CFF input
     Type1Emitter aType1Emitter(aStream);
-    aCff.emitAsType1(aType1Emitter, pGlyphIds, pEncoding, nGlyphCount, rInfo);
+    aCff.emitAsType1(aType1Emitter, rInfo);
 
     rOutBuffer.assign(static_cast<const sal_uInt8*>(aStream.GetData()),
                       static_cast<const sal_uInt8*>(aStream.GetData()) + aStream.Tell());

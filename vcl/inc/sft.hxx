@@ -46,8 +46,6 @@
 #include <vcl/fontcapabilities.hxx>
 #include <i18nlangtag/lang.h>
 
-#include "glyphid.hxx"
-
 #include <array>
 #include <vector>
 #include "fontsubset.hxx"
@@ -437,11 +435,9 @@ class TrueTypeFont;
  */
     void VCL_DLLPUBLIC CloseTTFont(TrueTypeFont *);
 
-    bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
+    bool ConvertCFFfontToType1(const unsigned char* pFontBytes, int nByteLength,
                               std::vector<sal_uInt8>& rOutBuffer,
-                              const sal_GlyphId* pGlyphIds,
-                              const sal_uInt8* pEncoding,
-                              int nGlyphCount, FontSubsetInfo& rInfo);
+                              FontSubsetInfo& rInfo);
 
 /**
  * Returns global font information about the TrueType font.
