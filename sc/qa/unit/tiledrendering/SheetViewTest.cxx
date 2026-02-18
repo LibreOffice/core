@@ -253,15 +253,14 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
 
     // Create a new sheet view for view 2
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     // Check what sheet we currently have selected for view 1 & 2
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
 
     // Sort AutoFilter descending
-    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    sortDescendingForCell(u"A1");
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
@@ -315,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
     // Create a sheet view in View2
     SfxLokHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    createNewSheetViewInCurrentView();
 
     // Change content in View1 with default view -> default view ro sheet view sync
     SfxLokHelper::setView(aView1.getViewID());
@@ -382,8 +381,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // Create a new sheet view for view 1
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     // Check AutoFilter values for each view
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
@@ -394,8 +392,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     Scheduler::ProcessEventsToIdle();
 
     // Sort AutoFilter descending
-    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    sortDescendingForCell(u"A1");
 
     // Check values are sorted for view 2
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
@@ -451,14 +448,12 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
     // Create a new sheet view for view 1
     SfxLokHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     // Create a new sheet view for view 3
     SfxLokHelper::setView(aView3.getViewID());
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     // Check AutoFilter values for each view
     CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
@@ -490,8 +485,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
     CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
 
     // Sort, which will unsync sheet views
-    pTabView2->SetCursor(0, 0);
-    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    sortDescendingForCell(u"A1");
 
     CPPUNIT_ASSERT_EQUAL(false, pSheetView1->isSynced());
     CPPUNIT_ASSERT_EQUAL(false, pSheetView2->isSynced());
@@ -524,14 +518,12 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
     // Create a new sheet view for view 1
     SfxLokHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     // Create a new sheet view for view 3
     SfxLokHelper::setView(aView3.getViewID());
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     // Check AutoFilter values for each view
     CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
@@ -562,9 +554,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
     // Sort, which will unsync sheet views
     SfxLokHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
-    pTabView1->SetCursor(0, 0);
-    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    sortDescendingForCell(u"A1");
 
     CPPUNIT_ASSERT_EQUAL(false, pSheetView1->isSynced());
     CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
@@ -648,8 +638,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     save(u"calc8"_ustr);
 
@@ -664,8 +653,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+    createNewSheetViewInCurrentView();
 
     save(u"Calc Office Open XML"_ustr);
 
@@ -707,7 +695,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     }
 
     // Create first sheet views
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    createNewSheetViewInCurrentView();
 
     {
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
@@ -725,7 +713,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     }
 
     // Create second sheet views
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    createNewSheetViewInCurrentView();
 
     {
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
@@ -782,7 +770,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     }
 
     // Create first sheet views
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    createNewSheetViewInCurrentView();
 
     {
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
@@ -799,7 +787,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     }
 
     // Create second sheet views
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    createNewSheetViewInCurrentView();
 
     {
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
@@ -883,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRenderStateInSheetView)
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
 
     // Create a sheet view in View 2
-    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    createNewSheetViewInCurrentView();
 
     // View 2 - state includes view sheet ID
     CPPUNIT_ASSERT_EQUAL("S;Default;VS:0"_ostr, pModelObj->getViewRenderState());
@@ -930,7 +918,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
 
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        createNewSheetViewInCurrentView();
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
@@ -945,7 +933,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
 
         // Sort AutoFilter ascending
-        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+        sortAscendingForCell(u"A1");
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
@@ -965,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
                              getValues(pTabViewSheetView, 0, 1, 4));
 
         // Sort AutoFilter AGAIN descending
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        sortDescendingForCell(u"A1");
 
         // Check values
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"5", u"4" }),
@@ -1017,7 +1005,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
         Scheduler::ProcessEventsToIdle();
 
         // New Sheet view
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        createNewSheetViewInCurrentView();
 
         // Expect the data is same in both
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
@@ -1026,7 +1014,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
                              getValues(pTabViewDefaultView, 0, 1, 4));
 
         // Sort AutoFilter
-        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+        sortAscendingForCell(u"A1");
 
         // Check values - Sheet View
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
@@ -1047,7 +1035,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
         // Scenario 2
 
         // Sort AutoFilter
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        sortDescendingForCell(u"A1");
 
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"5", u"4" }),
                              getValues(pTabViewSheetView, 0, 1, 4));
@@ -1088,7 +1076,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
         SfxLokHelper::setView(aSheetView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+        createNewSheetViewInCurrentView();
 
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
                              getValues(pTabViewDefaultView, 0, 1, 4));
@@ -1097,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
                              getValues(pTabViewSheetView, 0, 1, 4));
 
         // Sort AutoFilter
-        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+        sortAscendingForCell(u"A1");
 
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
                              getValues(pTabViewDefaultView, 0, 1, 4));
@@ -1112,7 +1100,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
         Scheduler::ProcessEventsToIdle();
 
         // Sort AutoFilter
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        sortDescendingForCell(u"A1");
 
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
                              getValues(pTabViewDefaultView, 0, 1, 4));
@@ -1386,8 +1374,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
     // Switch to Sheet View and Create
     {
         switchToSheetView();
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
     }
 
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
@@ -1399,8 +1387,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
     {
         switchToDefaultView();
 
-        dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
-                        comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3"_ustr) } }));
+        gotoCell(u"A3");
 
         dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
     }
@@ -1431,16 +1418,15 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteCellOperation)
     {
         switchToSheetView();
 
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
 
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
                              getValues(pDocument, 0, 1, 4, 0));
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
                              getValues(pDocument, 0, 1, 4, 1));
 
-        dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
-                        comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A4"_ustr) } }));
+        gotoCell(u"A4");
 
         dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
     }
@@ -1470,8 +1456,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteContentOperation)
     // Switch to Sheet View and Create
     {
         switchToSheetView();
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
     }
 
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
@@ -1483,9 +1469,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteContentOperation)
     {
         switchToDefaultView();
 
-        dispatchCommand(
-            mxComponent, u".uno:GoToCell"_ustr,
-            comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3:A4"_ustr) } }));
+        gotoCell(u"A3:A4");
 
         dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
     }
@@ -1516,17 +1500,15 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteContentOperation)
     {
         switchToSheetView();
 
-        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
-        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
 
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
                              getValues(pDocument, 0, 1, 4, 0));
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
                              getValues(pDocument, 0, 1, 4, 1));
 
-        dispatchCommand(
-            mxComponent, u".uno:GoToCell"_ustr,
-            comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A3:A4"_ustr) } }));
+        gotoCell(u"A3:A4");
 
         dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
     }
