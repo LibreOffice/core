@@ -100,7 +100,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
     if (!pTextNd || !pTextNd->IsOutlineStateChanged())
         return;
 
-    bool bFound = m_aOutlineNodes.find(pTextNd) != m_aOutlineNodes.end();
+    bool bFound = m_aOutlineNodes.contains(pTextNd);
 
     if (pTextNd->IsOutline())
     {
