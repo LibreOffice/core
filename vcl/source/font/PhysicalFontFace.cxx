@@ -307,7 +307,8 @@ constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 
 
 bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                        const int nGlyphCount, FontSubsetInfo& rInfo) const
+                                        const int nGlyphCount, FontSubsetInfo& rInfo,
+                                        const std::vector<hb_variation_t>& rVariations) const
 {
     // Create subset input
     hb_subset_input_t* pInput = hb_subset_input_create_or_fail();
@@ -343,8 +344,20 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     for (auto nKeep : aKeepTables)
         hb_set_del(pDropTableSet, nKeep);
 
+    hb_face_t* pHbFace = GetHbFace();
+    bool bIsVariableFont = hb_ot_var_has_data(pHbFace);
+    if (bIsVariableFont)
+    {
+        // Instance variable font. We first pin all axes to their default values, so we don’t have to
+        // enumerate all axes in the font. Then we pin the axes we want to instance to their specified
+        // values.
+        hb_subset_input_pin_all_axes_to_default(pInput, pHbFace);
+        for (const auto& rVariation : rVariations)
+            hb_subset_input_pin_axis_location(pInput, pHbFace, rVariation.tag, rVariation.value);
+    }
+
     // Perform the subsettting
-    hb_face_t* pSubsetFace = hb_subset_or_fail(GetHbFace(), pInput);
+    hb_face_t* pSubsetFace = hb_subset_or_fail(pHbFace, pInput);
     comphelper::ScopeGuard aSubsetFaceGuard([&]() { hb_face_destroy(pSubsetFace); });
     if (!pSubsetFace)
         return false;

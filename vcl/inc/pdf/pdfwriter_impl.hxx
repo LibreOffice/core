@@ -348,6 +348,33 @@ struct FontSubset
     std::map<sal_GlyphId, Glyph>         m_aMapping;
 };
 
+struct FontSubsetKey
+{
+    const vcl::font::PhysicalFontFace* m_pFace;
+    const std::vector<hb_variation_t>& m_rVariations;
+    size_t m_nHash;
+
+    FontSubsetKey(const vcl::font::PhysicalFontFace* pFace, const LogicalFontInstance* pFont)
+        : m_pFace(pFace)
+        , m_rVariations(pFace->GetVariations(*pFont))
+        , m_nHash(0)
+    {
+        o3tl::hash_combine(m_nHash, m_rVariations.size());
+        for (const auto& rVar : m_rVariations)
+        {
+            o3tl::hash_combine(m_nHash, rVar.tag);
+            o3tl::hash_combine(m_nHash, rVar.value);
+        }
+    }
+
+    bool operator<(const FontSubsetKey& rOther) const
+    {
+        if (m_pFace != rOther.m_pFace)
+            return m_pFace < rOther.m_pFace;
+        return m_nHash < rOther.m_nHash;
+    }
+};
+
 struct EmbedFont
 {
     sal_Int32                       m_nNormalFontID;
@@ -786,7 +813,7 @@ private:
     std::vector< TilingEmit >           m_aTilings;
     std::vector< TransparencyEmit >     m_aTransparentObjects;
     /*  contains all font subsets in use */
-    std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aSubsets;
+    std::map<FontSubsetKey, FontSubset> m_aSubsets;
     std::map<const vcl::font::PhysicalFontFace*, EmbedFont> m_aSystemFonts;
     std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aType3Fonts;
     sal_Int32                           m_nNextFID;
@@ -866,7 +893,7 @@ private:
 private:
     /* creates fonts and subsets that will be emitted later */
     void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance* pFont, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
-    void registerSimpleGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
+    void registerSimpleGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */

@@ -2088,8 +2088,9 @@ bool PDFWriterImpl::emitFonts()
 
             std::vector<sal_uInt8> aBuffer;
             FontSubsetInfo aSubsetInfo;
-            const auto* pFace = subset.first;
-            if (pFace->CreateFontSubset(aBuffer, pGlyphIds, pEncoding, nGlyphs, aSubsetInfo))
+            const auto* pFace = subset.first.m_pFace;
+            if (pFace->CreateFontSubset(aBuffer, pGlyphIds, pEncoding, nGlyphs, aSubsetInfo,
+                                        subset.first.m_rVariations))
             {
                 // create font stream
                 if (g_bDebugDisableCompression)
@@ -2190,7 +2191,7 @@ bool PDFWriterImpl::emitFonts()
                 if ( !writeBuffer( aLine ) ) return false;
 
                 // write font descriptor
-                sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first, aSubsetInfo, s_subset.m_nFontID, nFontStream );
+                sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first.m_pFace, aSubsetInfo, s_subset.m_nFontID, nFontStream );
 
                 if( nToUnicodeStream )
                     nToUnicodeStream = createToUnicodeCMap( pEncoding, aCodeUnits, pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
@@ -5461,12 +5462,14 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 
 void PDFWriterImpl::registerSimpleGlyph(const sal_GlyphId nFontGlyphId,
                                   const vcl::font::PhysicalFontFace* pFace,
+                                  const LogicalFontInstance* pFont,
                                   const std::vector<sal_Ucs>& rCodeUnits,
                                   sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
 {
-    FontSubset& rSubset = m_aSubsets[ pFace ];
+    FontSubset& rSubset = m_aSubsets[ { pFace, pFont } ];
+
     // search for font specific glyphID
     auto it = rSubset.m_aMapping.find( nFontGlyphId );
     if( it != rSubset.m_aMapping.end() )
@@ -5509,21 +5512,19 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject)
 {
-    auto bVariations = !pFace->GetVariations(*pFont).empty();
     // tdf#155161
-    // PDF doesn’t support CFF2 table and we currently don’t convert them to
-    // Type 1 (like we do with CFF table), so treat it like fonts with
-    // variations and embed as Type 3 fonts.
-    if (!pFace->GetRawFontData(HB_TAG('C', 'F', 'F', '2')).empty())
-        bVariations = true;
+    // PDF doesn't support CFF2 table and we currently don't convert them to
+    // Type 1 (like we do with CFF table), so embed as Type 3 fonts.
+    // Non-CFF2 variable fonts are instanced via hb-subset and embedded normally.
+    bool bCFF2 = !pFace->GetRawFontData(HB_TAG('C', 'F', 'F', '2')).empty();
 
-    if (pFace->IsColorFont() || bVariations)
+    if (pFace->IsColorFont() || bCFF2)
     {
         // Font has colors, check if this glyph has color layers or bitmap.
         tools::Rectangle aRect;
         auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
         auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
-        if (!aLayers.empty() || !aBitmap.empty() || bVariations)
+        if (!aLayers.empty() || !aBitmap.empty() || bCFF2)
         {
             auto& rSubset = m_aType3Fonts[pFace];
             auto it = rSubset.m_aMapping.find(nFontGlyphId);
@@ -5562,8 +5563,8 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                     {
                         sal_uInt8 nLayerGlyph;
                         sal_Int32 nLayerFontID;
-                        registerSimpleGlyph(aLayer.nGlyphIndex, pFace, rCodeUnits, nGlyphWidth,
-                                            nLayerGlyph, nLayerFontID);
+                        registerSimpleGlyph(aLayer.nGlyphIndex, pFace, pFont, rCodeUnits,
+                                            nGlyphWidth, nLayerGlyph, nLayerFontID);
 
                         rNewGlyphEmit.addColorLayer(
                             { nLayerFontID, nLayerGlyph, aLayer.nColorIndex });
@@ -5571,7 +5572,7 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                 }
                 else if (!aBitmap.empty())
                     rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
-                else if (bVariations)
+                else if (bCFF2)
                     rNewGlyphEmit.setOutline(pFont->GetGlyphOutlineUntransformed(nFontGlyphId));
 
                 // add new glyph to font mapping
@@ -5584,7 +5585,7 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
     }
 
     // If we reach here then the glyph has no color layers.
-    registerSimpleGlyph(nFontGlyphId, pFace, rCodeUnits, nGlyphWidth, nMappedGlyph,
+    registerSimpleGlyph(nFontGlyphId, pFace, pFont, rCodeUnits, nGlyphWidth, nMappedGlyph,
                         nMappedFontObject);
 }
 
@@ -6018,7 +6019,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // instead.
         if (!aCodeUnits.empty() && !bUseActualText)
         {
-            for (const auto& rSubset : m_aSubsets[pFace].m_aSubsets)
+            for (const auto& rSubset : m_aSubsets[{ pFace, pGlyphFont }].m_aSubsets)
             {
                 const auto it = rSubset.m_aMapping.find(nGlyphId);
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
