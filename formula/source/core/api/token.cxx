@@ -79,7 +79,7 @@ bool FormulaToken::IsFunction() const
         || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     // one parameter
         || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     // x parameters (cByte==0 in
                                                                             // FuncAutoPilot)
-        || eOp == ocMacro || eOp == ocExternal                  // macros, AddIns
+        || eOp == ocMacro || eOp == ocExternal || eOp == ocUDExternal       // macros, AddIns
         || eOp == ocAnd || eOp == ocOr                          // former binary, now x parameters
         || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // internal
         ));
@@ -88,9 +88,8 @@ bool FormulaToken::IsFunction() const
 
 sal_uInt8 FormulaToken::GetParamCount() const
 {
-    if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
-         !FormulaCompiler::IsOpCodeJumpCommand( eOp ) &&
-         eOp != ocPercentSign )
+    if (eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro && eOp != ocUDExternal
+        && !FormulaCompiler::IsOpCodeJumpCommand(eOp) && eOp != ocPercentSign)
         return 0;       // parameters and specials
                         // ocIf... jump commands not for FAP, have cByte then
 //2do: bool parameter whether FAP or not?
@@ -435,7 +434,7 @@ bool FormulaTokenArray::AddFormulaToken(
                     AddStringXML( aStrVal );
                 else if ( eOpCode == ocStringName )
                     AddStringName( aStrVal );
-                else if ( eOpCode == ocExternal || eOpCode == ocMacro )
+                else if ( eOpCode == ocExternal || eOpCode == ocMacro || eOpCode == ocUDExternal)
                     Add( new formula::FormulaExternalToken( eOpCode, aStrVal ) );
                 else if ( eOpCode == ocWhitespace )
                 {

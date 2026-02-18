@@ -32,6 +32,7 @@ enum OpCode : sal_uInt16
         ocCall              = SC_OPCODE_CALL,
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
+        ocUDExternal        = SC_OPCODE_UD_EXTERNAL,
         ocName              = SC_OPCODE_NAME,
     // Jump commands
         ocIf                = SC_OPCODE_IF,
@@ -552,6 +553,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocCall: return "Call";
     case ocStop: return "Stop";
     case ocExternal: return "External";
+    case ocUDExternal: return "UDExternal";
     case ocName: return "Name";
     case ocIf: return "If";
     case ocIfError: return "IfError";

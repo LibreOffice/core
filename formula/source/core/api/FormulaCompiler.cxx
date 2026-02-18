@@ -1735,6 +1735,7 @@ void FormulaCompiler::Factor()
                     // functions may have to be recalculated or not, we don't
                     // know, classify as ONLOAD_LENIENT.
                 case ocExternal:
+                case ocUDExternal:
                     if (mpToken->GetExternal() == "com.sun.star.sheet.addin.Analysis.getRandbetween")
                         pArr->SetExclusiveRecalcModeAlways();
                     else
@@ -1885,6 +1886,7 @@ void FormulaCompiler::Factor()
         }
         else if ((SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)
                 || eOp == ocExternal
+                || eOp == ocUDExternal
                 || eOp == ocMacro
                 || eOp == ocAnd
                 || eOp == ocOr
@@ -2653,7 +2655,10 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         // Don't export "#name!" in OOXML
     }
     else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
-        rBuffer.append( mxSymbols->getSymbol( eOp));
+    {
+        if (eOp != ocUDExternal || maArrIterator.PeekNext()->GetOpCode() == ocOpen)
+            rBuffer.append(mxSymbols->getSymbol(eOp));
+    }
     else
     {
         SAL_WARN( "formula.core","unknown OpCode");

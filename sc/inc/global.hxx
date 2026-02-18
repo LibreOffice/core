@@ -578,6 +578,7 @@ public:
     static void                 ClearAutoFormat(); //BugId 54209
     static LegacyFuncCollection*      GetLegacyFuncCollection();
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
+    SC_DLLPUBLIC static bool IsValidExternal(const OUString& rAddIn);
     SC_DLLPUBLIC static ScUserList&         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
     /**

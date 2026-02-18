@@ -532,7 +532,8 @@
 #define SC_OPCODE_UNIQUE            517
 #define SC_OPCODE_WRAPCOLS          518
 #define SC_OPCODE_WRAPROWS          519
-#define SC_OPCODE_STOP_2_PAR        520     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_UD_EXTERNAL       520     /* User-defined external function */
+#define SC_OPCODE_STOP_2_PAR        521     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

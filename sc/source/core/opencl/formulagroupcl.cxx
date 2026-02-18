@@ -2369,6 +2369,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             CASE(ocZTest, std::make_shared<OpZTest>())
 #undef CASE
             case ocExternal:
+            case ocUDExternal:
 #define EXTCASE( name, createCode ) \
                 else if (pChild->GetExternal() == name) \
                 { \

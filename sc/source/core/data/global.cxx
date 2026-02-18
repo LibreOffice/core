@@ -291,6 +291,12 @@ ScUnoAddInCollection* ScGlobal::GetAddInCollection()
     return comphelper::doubleCheckedInit( pAddInCollection, []() { return new ScUnoAddInCollection(); });
 }
 
+bool ScGlobal::IsValidExternal(const OUString& rAddIn)
+{
+    return (ScGlobal::GetLegacyFuncCollection()->findByName(rAddIn)
+            || !ScGlobal::GetAddInCollection()->FindFunction(rAddIn, false).isEmpty());
+}
+
 ScUserList& ScGlobal::GetUserList()
 {
     assert(!bThreadedGroupCalcInProgress);

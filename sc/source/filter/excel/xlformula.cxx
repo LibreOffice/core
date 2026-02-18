@@ -219,7 +219,8 @@ const XclFunctionInfo saFuncTable_2[] =
     { ocLenB,               211,    1,  1,  V, { VR }, 0, nullptr },
     { ocRoundUp,            212,    2,  2,  V, { VR }, 0, nullptr },
     { ocRoundDown,          213,    2,  2,  V, { VR }, 0, nullptr },
-    { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_IMPORTONLY, nullptr }
+    { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_IMPORTONLY, nullptr },
+    { ocUDExternal,         255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_IMPORTONLY, nullptr }
 };
 
 /** Functions new in BIFF3. */
@@ -348,6 +349,7 @@ const XclFunctionInfo saFuncTable_5[] =
     { ocGetDiffDate360,     220,    2,  3,  V, { VR }, 0, nullptr },                  // BIFF3-4: 2, BIFF5: 2-3
     { ocMacro,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, nullptr },
     { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, nullptr },
+    { ocUDExternal,         255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, nullptr },
     { ocConcat,             336,    0,  MX, V, { VR }, 0, nullptr },
     { ocPower,              337,    2,  2,  V, { VR }, 0, nullptr },
     { ocRad,                342,    1,  1,  V, { VR }, 0, nullptr },

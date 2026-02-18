@@ -338,9 +338,9 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
     maExternalName = rName;
 }
 
-void ScRawToken::SetExternal( const OUString& rStr )
+void ScRawToken::SetExternal( const OUString& rStr, OpCode eCode )
 {
-    eOp   = ocExternal;
+    eOp   = eCode;
     eType = svExternal;
     maExternalName = rStr;
 }
@@ -1342,6 +1342,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
         ocText,
         ocSheet,
         ocExternal,
+        ocUDExternal,
         ocDde,
         ocWebservice,
         ocGetPivotData
@@ -1706,6 +1707,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             // Known good, don't change state.
             case ocStop:
             case ocExternal:
+            case ocUDExternal:
             case ocOpen:
             case ocClose:
             case ocSep:

@@ -2487,6 +2487,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testMacrosInXLSX)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[2]/x:f", u"");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testUserDefinedFunctions)
+{
+    createScDoc("xls/user_defined_function.xls");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[44]/x:c[1]/x:f",
+                       u"_xludf.Sum(B9:C42)");
+
+    createScDoc("xlsx/user_defined_function.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[42]/x:c[1]/x:f",
+                       u"_xludf.SUM(B9:C42)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
