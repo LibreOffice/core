@@ -979,6 +979,17 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
     if(mpProperties == nullptr)
         throw DisposedException();
 
+    SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool());
+
+    setPropertyValueImpl(rPropertyName, rValue, aSet);
+
+    GetObject().getSdrModelFromSdrObject().SetChanged();
+    mpProperties->SetMergedItemSetAndBroadcast( aSet );
+}
+
+// Code shared between setPropertyValue and setPropertyValues
+void Cell::setPropertyValueImpl( const OUString& rPropertyName, const Any& rValue, SfxItemSet& rSet )
+{
     const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
     if( !pMap )
         throw UnknownPropertyException( rPropertyName, getXWeak());
@@ -1035,8 +1046,8 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         aBox.SetAllDistances(pBorder->Distance); //TODO
         aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, pBorder->IsDistanceValid);
 
-        mpProperties->SetObjectItem(aBox);
-        mpProperties->SetObjectItem(aBoxInfo);
+        rSet.Put(aBox);
+        rSet.Put(aBoxInfo);
         return;
     }
     case OWN_ATTR_FILLBMP_MODE:
@@ -1051,8 +1062,8 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             eMode = static_cast<BitmapMode>(nMode);
         }
 
-        mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
-        mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
+        rSet.Put( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
+        rSet.Put( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
         return;
     }
     case SDRATTR_TABLE_TEXT_ROTATION:
@@ -1064,7 +1075,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         if (nRotVal != 27000 && nRotVal != 9000 && nRotVal != 0)
             throw IllegalArgumentException();
 
-        mpProperties->SetObjectItem(SvxTextRotateItem(Degree10(nRotVal/10), SDRATTR_TABLE_TEXT_ROTATION));
+        rSet.Put(SvxTextRotateItem(Degree10(nRotVal/10), SDRATTR_TABLE_TEXT_ROTATION));
         return;
     }
     case SDRATTR_TABLE_CELL_GRABBAG:
@@ -1077,8 +1088,11 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
     }
     default:
     {
-        SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
-        aSet.Put(mpProperties->GetItem(pMap->nWID));
+        // Sometimes we have multiple property names (like FillColor and FillComplexColor)
+        // that map to the same item, so when setting multiple properties at the same time,
+        // we need to be careful to not overwrite things we have already set.
+        if (!rSet.HasItem(pMap->nWID))
+            rSet.Put(mpProperties->GetItem(pMap->nWID));
 
         bool bSpecial = false;
 
@@ -1097,7 +1111,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                     OUString aApiName;
                     if( rValue >>= aApiName )
                     {
-                        if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, aSet, &GetObject().getSdrModelFromSdrObject()))
+                        if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, rSet, &GetObject().getSdrModelFromSdrObject()))
                             bSpecial = true;
                     }
                 }
@@ -1105,11 +1119,9 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             break;
         }
 
-        if( !bSpecial && !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
-            SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
+        if( !bSpecial && !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, rSet ))
+            SvxItemPropertySet_setPropertyValue( pMap, rValue, rSet );
 
-        GetObject().getSdrModelFromSdrObject().SetChanged();
-        mpProperties->SetMergedItemSetAndBroadcast( aSet );
         return;
     }
     }
@@ -1241,12 +1253,13 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 
     const OUString* pNames = aPropertyNames.getConstArray();
     const Any* pValues = aValues.getConstArray();
+    SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool());
 
     for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
     {
         try
         {
-            setPropertyValue( *pNames, *pValues );
+            setPropertyValueImpl( *pNames, *pValues, aSet );
         }
         catch( UnknownPropertyException& )
         {
@@ -1257,6 +1270,9 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
             TOOLS_WARN_EXCEPTION("svx.table", "");
         }
     }
+
+    GetObject().getSdrModelFromSdrObject().SetChanged();
+    mpProperties->SetMergedItemSetAndBroadcast( aSet );
 }
 
 
