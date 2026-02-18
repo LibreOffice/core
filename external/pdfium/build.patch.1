@@ -155,25 +155,3 @@ index bad07b723..b960f90b4 100644
    friend constexpr auto operator<=>(
        span lhs,
        span<OtherElementType, OtherExtent, OtherInternalPtrType> rhs) {
-diff --git a/fpdfsdk/fpdf_editpage.cpp b/fpdfsdk/fpdf_editpage.cpp
-index 76e3e2626..15287a263 100644
---- a/fpdfsdk/fpdf_editpage.cpp
-+++ b/fpdfsdk/fpdf_editpage.cpp
-@@ -168,7 +168,7 @@ RetainPtr<const CPDF_Object> GetParamObject(void* out_value,
- 
- struct ParamsAndObject {
-   RetainPtr<CPDF_Dictionary> params;
--  raw_ptr<CPDF_PageObject> page_obj;
-+  UnownedPtr<CPDF_PageObject> page_obj;
- };
- 
- ParamsAndObject SetParamValueHelper(FPDF_DOCUMENT document,
-@@ -179,7 +179,7 @@ ParamsAndObject SetParamValueHelper(FPDF_DOCUMENT document,
-     return {nullptr, nullptr};
-   }
-   RetainPtr<CPDF_Dictionary> params = GetOrCreateMarkParamsDict(document, mark);
--  return {params, page_obj};
-+  return {params, UnownedPtr<CPDF_PageObject>(page_obj)};
- }
- 
- }  // namespace
