@@ -25,6 +25,10 @@ gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(
 ifeq ($(WITH_COREDUMPCTL),)
 gb_CppunitTest_coredumpctl_setup :=
 gb_CppunitTest_coredumpctl_run :=
+else ifneq ($(shell $(SYSTEMD_RUN) --scope --user -- true 2>/dev/null && echo yes),yes)
+$(info warning: systemd-run --scope --user does not work, disabling coredumpctl)
+gb_CppunitTest_coredumpctl_setup :=
+gb_CppunitTest_coredumpctl_run :=
 else
 gb_CppunitTest_coredumpctl_setup = \
     export LIBO_TEST_UNIT=$$($(SYSTEMD_ESCAPE) "$1:$$(date -u +%Y%m%d%H%M%S):$$$$$(if $2,:$2)" | cut -b -249) &&
