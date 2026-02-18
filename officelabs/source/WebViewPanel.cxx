@@ -55,39 +55,6 @@ void postToVclThread(std::function<void()> fn)
 namespace officelabs {
 
 // ============================================================
-// CefHostWindow: SystemChildWindow that resizes CEF on layout
-// ============================================================
-class CefHostWindow final : public SystemChildWindow
-{
-public:
-    explicit CefHostWindow(vcl::Window* pParent)
-        : SystemChildWindow(pParent, 0)
-    {
-    }
-
-    void SetBrowser(CefRefPtr<CefBrowser> browser) { m_browser = browser; }
-
-    virtual void Resize() override
-    {
-        SystemChildWindow::Resize();
-        if (!m_browser)
-            return;
-
-        HWND cefHwnd = m_browser->GetHost()->GetWindowHandle();
-        if (cefHwnd)
-        {
-            Size aSize = GetSizePixel();
-            SetWindowPos(cefHwnd, nullptr, 0, 0,
-                         aSize.Width(), aSize.Height(),
-                         SWP_NOZORDER | SWP_NOMOVE);
-        }
-    }
-
-private:
-    CefRefPtr<CefBrowser> m_browser;
-};
-
-// ============================================================
 // CefClient implementation for this panel
 // ============================================================
 class WebViewCefClient final : public CefClient,
@@ -246,45 +213,58 @@ void WebViewPanel::initCefBrowser()
     if (!m_pBinWindow)
         return;
 
-    // The VclBin starts at 0x0. Walk up to find a parent with actual size.
+    // Get the sidebar panel parent for sizing reference
     vcl::Window* pSizedParent = m_pBinWindow->GetParent();
     Size aParentSize = pSizedParent ? pSizedParent->GetSizePixel() : Size(0, 0);
     int w = aParentSize.Width();
     int h = aParentSize.Height();
     if (w <= 0 || h <= 0) { w = 300; h = 800; }
 
-    // All lightweight VCL widgets share the top-level frame HWND.
-    // Create a raw Win32 child window directly inside the frame HWND
-    // at the correct position for CEF to render into.
+    // Get the frame HWND (all lightweight VCL widgets share this)
     const SystemEnvData* pFrameData = pSizedParent->GetSystemData();
     HWND hFrameWnd = pFrameData ? static_cast<HWND>(pFrameData->hWnd) : nullptr;
     if (!hFrameWnd)
         return;
 
-    // Map the panel content area's position from screen coords to frame client coords
+    m_hFrameWnd = hFrameWnd;
+
+    // Get the sidebar position in SCREEN coordinates.
+    // We use a POPUP window with NO OWNER so CEF lives entirely outside
+    // Win32's window hierarchy. This prevents crashes during:
+    //   - DrawPage paint (shapes, arrows)
+    //   - OLE in-place activation (charts, equations)
+    // An owned window receives WM_NCACTIVATE/WM_ACTIVATE during OLE
+    // activation, which causes CEF to interfere and crash LO.
+    // Without an owner, we manually track frame visibility/minimize state.
     auto aScrPos = pSizedParent->OutputToAbsoluteScreenPixel(Point(0, 0));
-    POINT framePos = { static_cast<LONG>(aScrPos.X()), static_cast<LONG>(aScrPos.Y()) };
-    ScreenToClient(hFrameWnd, &framePos);
+    int scrX = static_cast<int>(aScrPos.X());
+    int scrY = static_cast<int>(aScrPos.Y());
 
-    // Add WS_CLIPCHILDREN to the frame HWND so VCL's paint skips our CEF area.
-    // Without this, inserting shapes/drawing objects crashes because VCL's
-    // overlay/paint system conflicts with the non-VCL child window.
-    LONG frameStyle = GetWindowLong(hFrameWnd, GWL_STYLE);
-    if (!(frameStyle & WS_CLIPCHILDREN))
-        SetWindowLong(hFrameWnd, GWL_STYLE, frameStyle | WS_CLIPCHILDREN);
-
-    // Create a raw Win32 child window at the exact sidebar panel position
+    // Create an UNOWNED popup window at the sidebar's screen position.
+    // WS_EX_TOOLWINDOW: hidden from taskbar/alt-tab
+    // No owner (nullptr): completely isolated from frame's message flow.
+    // We manually manage Z-order, minimize, and visibility in the timer.
     HWND hCefParent = CreateWindowExW(
-        0, L"Static", L"",
-        WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-        framePos.x, framePos.y, w, h,
-        hFrameWnd, nullptr, GetModuleHandle(nullptr), nullptr);
+        WS_EX_TOOLWINDOW,
+        L"Static", L"",
+        WS_POPUP | WS_CLIPCHILDREN,
+        scrX, scrY, w, h,
+        nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
+
+    if (hCefParent)
+    {
+        // Show at top of Z-order without activating.
+        // HWND_TOP puts popup IN FRONT of the frame (hFrameWnd would put it behind).
+        // The resize timer maintains Z-order afterward.
+        SetWindowPos(hCefParent, HWND_TOP,
+                     0, 0, 0, 0,
+                     SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+    }
 
     // Store HWNDs for cleanup and resize tracking
     m_hCefParentWnd = hCefParent;
-    m_hFrameWnd = hFrameWnd;
     m_aLastSize = Size(w, h);
-    m_aLastPos = Point(framePos.x, framePos.y);
+    m_aLastPos = Point(scrX, scrY);
 
     if (!hCefParent)
         return;
@@ -316,31 +296,47 @@ void WebViewPanel::initCefBrowser()
 
 void WebViewPanel::syncCefWindowSize()
 {
-    if (!m_hCefParentWnd || !m_hFrameWnd || !m_pBinWindow)
+    if (!m_hCefParentWnd || !m_pBinWindow)
         return;
 
     vcl::Window* pParent = m_pBinWindow->GetParent();
     if (!pParent)
         return;
 
-    // When the sidebar switches to a different deck, our panel's VCL parent
-    // becomes invisible.  Hide the CEF HWND (which is parented to the frame
-    // window and therefore not affected by VCL visibility changes).
-    bool bVisible = pParent->IsReallyVisible();
+    // --- Visibility management (no owner, so we do this manually) ---
+
+    // Should the popup be visible?
+    // Hidden if: sidebar panel invisible, OR frame is minimized
+    bool bSidebarVisible = pParent->IsReallyVisible();
+    bool bFrameMinimized = m_hFrameWnd && IsIconic(m_hFrameWnd);
+    bool bShouldShow = bSidebarVisible && !bFrameMinimized;
+
     bool bIsShown = IsWindowVisible(m_hCefParentWnd);
-    if (bVisible && !bIsShown)
+    if (bShouldShow && !bIsShown)
         ShowWindow(m_hCefParentWnd, SW_SHOWNA);
-    else if (!bVisible && bIsShown)
+    else if (!bShouldShow && bIsShown)
         ShowWindow(m_hCefParentWnd, SW_HIDE);
 
-    if (!bVisible)
+    if (!bShouldShow)
         return;
 
+    // --- Z-order: keep popup in front of the LO frame ---
+    // Only adjust when the frame is foreground (avoid popping over other apps).
+    if (m_hFrameWnd && GetForegroundWindow() == m_hFrameWnd)
+    {
+        // Bring popup to top of Z-order (in front of everything).
+        // HWND_TOP is correct; using hFrameWnd would put popup BEHIND the frame.
+        SetWindowPos(m_hCefParentWnd, HWND_TOP,
+                     0, 0, 0, 0,
+                     SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    }
+
+    // --- Position and size tracking ---
     Size aSize = pParent->GetSizePixel();
+
+    // Get the sidebar position in SCREEN coordinates (popup uses screen coords)
     auto aScrPos = pParent->OutputToAbsoluteScreenPixel(Point(0, 0));
-    POINT pt = { static_cast<LONG>(aScrPos.X()), static_cast<LONG>(aScrPos.Y()) };
-    ScreenToClient(m_hFrameWnd, &pt);
-    Point aPos(pt.x, pt.y);
+    Point aPos(static_cast<int>(aScrPos.X()), static_cast<int>(aScrPos.Y()));
 
     if (aSize == m_aLastSize && aPos == m_aLastPos)
         return;
@@ -348,12 +344,13 @@ void WebViewPanel::syncCefWindowSize()
     m_aLastSize = aSize;
     m_aLastPos = aPos;
 
+    // Move the popup to the sidebar's current screen position
     SetWindowPos(m_hCefParentWnd, nullptr,
                  aPos.X(), aPos.Y(),
                  aSize.Width(), aSize.Height(),
-                 SWP_NOZORDER);
+                 SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Also resize the CEF browser window inside the parent
+    // Also resize the CEF browser window inside the popup
     if (m_browser)
     {
         HWND cefHwnd = m_browser->GetHost()->GetWindowHandle();
