@@ -103,6 +103,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_subsequent_export_test2 \
 	CppunitTest_sc_subsequent_export_test3 \
 	CppunitTest_sc_subsequent_export_test4 \
+	CppunitTest_sc_subsequent_export_test5 \
 	CppunitTest_sc_subsequent_export_test6 \
 	CppunitTest_sc_uicalc \
 	CppunitTest_sc_uicalc2 \
