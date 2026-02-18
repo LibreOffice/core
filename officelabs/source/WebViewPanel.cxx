@@ -266,10 +266,17 @@ void WebViewPanel::initCefBrowser()
     POINT framePos = { static_cast<LONG>(aScrPos.X()), static_cast<LONG>(aScrPos.Y()) };
     ScreenToClient(hFrameWnd, &framePos);
 
+    // Add WS_CLIPCHILDREN to the frame HWND so VCL's paint skips our CEF area.
+    // Without this, inserting shapes/drawing objects crashes because VCL's
+    // overlay/paint system conflicts with the non-VCL child window.
+    LONG frameStyle = GetWindowLong(hFrameWnd, GWL_STYLE);
+    if (!(frameStyle & WS_CLIPCHILDREN))
+        SetWindowLong(hFrameWnd, GWL_STYLE, frameStyle | WS_CLIPCHILDREN);
+
     // Create a raw Win32 child window at the exact sidebar panel position
     HWND hCefParent = CreateWindowExW(
         0, L"Static", L"",
-        WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN,
+        WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
         framePos.x, framePos.y, w, h,
         hFrameWnd, nullptr, GetModuleHandle(nullptr), nullptr);
 
