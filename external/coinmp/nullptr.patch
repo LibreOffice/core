@@ -1,0 +1,110 @@
+--- Cbc/src/CbcModel.cpp
++++ Cbc/src/CbcModel.cpp
+@@ -5363,7 +5363,7 @@
+         OsiClpSolverInterface * clpSolver
+         = dynamic_cast<OsiClpSolverInterface *> (solver_);
+         if (clpSolver)
+-            clpSolver->setFakeObjective(reinterpret_cast<double *> (NULL));
++            clpSolver->setFakeObjective(static_cast<double *>(nullptr));
+     }
+ #endif
+     moreSpecialOptions_ = saveMoreSpecialOptions;
+--- Cgl/src/CglLandP/CglLandPUtils.hpp
++++ Cgl/src/CglLandP/CglLandPUtils.hpp
+@@ -85,7 +85,7 @@
+     /** resize vector.*/
+     void resize(unsigned int i)
+     {
+-        cuts_.resize(i, reinterpret_cast<OsiRowCut *> (NULL));
++        cuts_.resize(i, static_cast<OsiRowCut *>(nullptr));
+     }
+ private:
+     /** Stores the number of cuts.*/
+--- Clp/src/AbcSimplex.cpp
++++ Clp/src/AbcSimplex.cpp
+@@ -368,19 +368,19 @@
+     // say Steepest pricing
+     abcDualRowPivot_ = new AbcDualRowSteepest();
+     abcPrimalColumnPivot_ = new AbcPrimalColumnSteepest();
+-    internalStatus_ = newArray(reinterpret_cast<unsigned char *>(NULL),
++    internalStatus_ = newArray(static_cast<unsigned char *>(nullptr),
+ 			       sizeArray+maximumNumberTotal_);
+-    abcLower_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-    abcUpper_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-    abcCost_ = newArray(reinterpret_cast<double *>(NULL),sizeArray+maximumNumberTotal_);
+-    abcDj_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-    abcSolution_ = newArray(reinterpret_cast<double *>(NULL),sizeArray+maximumNumberTotal_);
+-    //fromExternal_ = newArray(reinterpret_cast<int *>(NULL),sizeArray);
+-    //toExternal_ = newArray(reinterpret_cast<int *>(NULL),sizeArray);
+-    scaleFromExternal_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-    offset_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-    abcPerturbation_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-    abcPivotVariable_ = newArray(reinterpret_cast<int *>(NULL),maximumAbcNumberRows_);
++    abcLower_ = newArray(static_cast<double *>(nullptr),sizeArray);
++    abcUpper_ = newArray(static_cast<double *>(nullptr),sizeArray);
++    abcCost_ = newArray(static_cast<double *>(nullptr),sizeArray+maximumNumberTotal_);
++    abcDj_ = newArray(static_cast<double *>(nullptr),sizeArray);
++    abcSolution_ = newArray(static_cast<double *>(nullptr),sizeArray+maximumNumberTotal_);
++    //fromExternal_ = newArray(static_cast<int *>(nullptr),sizeArray);
++    //toExternal_ = newArray(static_cast<int *>(nullptr),sizeArray);
++    scaleFromExternal_ = newArray(static_cast<double *>(nullptr),sizeArray);
++    offset_ = newArray(static_cast<double *>(nullptr),sizeArray);
++    abcPerturbation_ = newArray(static_cast<double *>(nullptr),sizeArray);
++    abcPivotVariable_ = newArray(static_cast<int *>(nullptr),maximumAbcNumberRows_);
+     // Fill perturbation array
+     setupPointers(maximumAbcNumberRows_,maximumAbcNumberColumns_);
+     fillPerturbation(0,maximumNumberTotal_);
+@@ -554,19 +554,19 @@
+   subProblem->maximumNumberTotal_= maximumAbcNumberRows_+numberColumns;
+   subProblem->numberTotalWithoutFixed_= subProblem->numberTotal_;
+   int sizeArray=2*subProblem->maximumNumberTotal_+maximumAbcNumberRows_;
+-  subProblem->internalStatus_ = newArray(reinterpret_cast<unsigned char *>(NULL),
++  subProblem->internalStatus_ = newArray(static_cast<unsigned char *>(nullptr),
+ 					 sizeArray+subProblem->maximumNumberTotal_);
+-  subProblem->abcLower_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-  subProblem->abcUpper_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-  subProblem->abcCost_ = newArray(reinterpret_cast<double *>(NULL),sizeArray+subProblem->maximumNumberTotal_);
+-  subProblem->abcDj_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-  subProblem->abcSolution_ = newArray(reinterpret_cast<double *>(NULL),sizeArray+subProblem->maximumNumberTotal_);
+-  //fromExternal_ = newArray(reinterpret_cast<int *>(NULL),sizeArray);
+-  //toExternal_ = newArray(reinterpret_cast<int *>(NULL),sizeArray);
+-  subProblem->scaleFromExternal_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-  subProblem->offset_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-  subProblem->abcPerturbation_ = newArray(reinterpret_cast<double *>(NULL),sizeArray);
+-  subProblem->abcPivotVariable_ = newArray(reinterpret_cast<int *>(NULL),maximumAbcNumberRows_);
++  subProblem->abcLower_ = newArray(static_cast<double *>(nullptr),sizeArray);
++  subProblem->abcUpper_ = newArray(static_cast<double *>(nullptr),sizeArray);
++  subProblem->abcCost_ = newArray(static_cast<double *>(nullptr),sizeArray+subProblem->maximumNumberTotal_);
++  subProblem->abcDj_ = newArray(static_cast<double *>(nullptr),sizeArray);
++  subProblem->abcSolution_ = newArray(static_cast<double *>(nullptr),sizeArray+subProblem->maximumNumberTotal_);
++  //fromExternal_ = newArray(static_cast<int *>(nullptr),sizeArray);
++  //toExternal_ = newArray(static_cast<int *>(nullptr),sizeArray);
++  subProblem->scaleFromExternal_ = newArray(static_cast<double *>(nullptr),sizeArray);
++  subProblem->offset_ = newArray(static_cast<double *>(nullptr),sizeArray);
++  subProblem->abcPerturbation_ = newArray(static_cast<double *>(nullptr),sizeArray);
++  subProblem->abcPivotVariable_ = newArray(static_cast<int *>(nullptr),maximumAbcNumberRows_);
+   subProblem->setupPointers(maximumAbcNumberRows_,numberColumns);
+   // could use arrays - but for now be safe
+   int * backward = new int [numberFullColumns+numberRows_];
+--- Clp/src/ClpModel.cpp
++++ Clp/src/ClpModel.cpp
+@@ -3845,7 +3845,7 @@
+      writer.setMpsData(*(matrix_->getPackedMatrix()), COIN_DBL_MAX,
+                        getColLower(), getColUpper(),
+                        objective,
+-                       reinterpret_cast<const char*> (NULL) /*integrality*/,
++                       static_cast<const char*>(nullptr) /*integrality*/,
+                        getRowLower(), getRowUpper(),
+                        columnNames, rowNames);
+      // Pass in array saying if each variable integer
+--- Clp/src/OsiClp/OsiClpSolverInterface.cpp
++++ Clp/src/OsiClp/OsiClpSolverInterface.cpp
+@@ -1448,7 +1448,7 @@
+   if (stopPrinting) {
+     CoinMessages * messagesPointer = modelPtr_->messagesPointer();
+     // won't even build messages 
+-    messagesPointer->setDetailMessages(100,10000,reinterpret_cast<int *> (NULL));
++    messagesPointer->setDetailMessages(100,10000,static_cast<int *>(nullptr));
+   }
+ #endif
+ }

@@ -58,6 +58,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/const.patch.1 \
 	external/coinmp/const2.patch.1 \
 	external/coinmp/const3.patch.1 \
+	external/coinmp/nullptr.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
