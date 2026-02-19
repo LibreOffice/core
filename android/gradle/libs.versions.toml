@@ -1,6 +1,6 @@
 [versions]
 constraintlayout_version = "2.2.1"
-gradle_version = "8.13.1"
+gradle_version = "8.13.2"
 material_version = "1.13.0"
 preference_version = "1.2.1"
 
