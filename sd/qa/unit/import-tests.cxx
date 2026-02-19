@@ -1969,6 +1969,35 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf93830)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4024), nTextLeftDistance);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf165732)
+{
+    // Text insets larger than shape dimension should be clamped symmetrically.
+    createSdImpressDoc("pptx/tdf165732.pptx");
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+
+    // Shape "2": each side reduced by 1: 200 -> 199.
+    uno::Reference<beans::XPropertySet> xShape0(xPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nLeft = 0, nRight = 0;
+    xShape0->getPropertyValue(u"TextLeftDistance"_ustr) >>= nLeft;
+    xShape0->getPropertyValue(u"TextRightDistance"_ustr) >>= nRight;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(199), nLeft);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(199), nRight);
+
+    // Shape "1": no clamping.
+    uno::Reference<beans::XPropertySet> xShape1(xPage->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nLeft1 = 0;
+    xShape1->getPropertyValue(u"TextLeftDistance"_ustr) >>= nLeft1;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nLeft1);
+
+    // Shape "5": top and bottom reduced by 17.5: 200 -> 183 (rounded).
+    uno::Reference<beans::XPropertySet> xShape7(xPage->getByIndex(7), uno::UNO_QUERY);
+    sal_Int32 nUpper = 0, nLower = 0;
+    xShape7->getPropertyValue(u"TextUpperDistance"_ustr) >>= nUpper;
+    xShape7->getPropertyValue(u"TextLowerDistance"_ustr) >>= nLower;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(183), nUpper);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(183), nLower);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf127129)
 {
     createSdImpressDoc("pptx/tdf127129.pptx");
