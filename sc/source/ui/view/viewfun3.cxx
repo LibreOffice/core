@@ -782,7 +782,7 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi, boo
             pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurY(), false);
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pTabViewShell, true /* bColumns */, true /* bRows */,
-                true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.CurrentTabForData());
+                true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.GetTabNumber());
         }
     }
     return bRet;
