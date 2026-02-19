@@ -1560,6 +1560,79 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testCreateAndDeleteSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSorting_NonAutoFilterRange)
+{
+    // When we sort outside of the auto-filtered range, we sync the changes
+    // to all views. When sorting auto-filtered range, then we sort only the
+    // current view and don't sync.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    setupViews();
+
+    // Check sorting when no sheet view was created yet
+    {
+        switchToDefaultView();
+
+        // Check we have no sheet view yet
+        auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
+        CPPUNIT_ASSERT(pSheetViewManager);
+        CPPUNIT_ASSERT(pSheetViewManager->isEmpty());
+
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                             getValues(mpTabViewDefaultView, 1, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"22", u"11", u"33" }),
+                             getValues(mpTabViewDefaultView, 4, 1, 4));
+
+        // Select and sort the range - no sheet views yet
+        sortDescendingForCell(u"E2:E5");
+
+        // Check - we expect to be sorted descending
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"33", u"22", u"11" }),
+                             getValues(mpTabViewDefaultView, 4, 1, 4));
+    }
+
+    // Check sheet view sorting
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+
+        // Check initial values of the E2:E5 range
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"33", u"22", u"11" }),
+                             getValues(mpTabViewSheetView, 4, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"33", u"22", u"11" }),
+                             getValues(mpTabViewDefaultView, 4, 1, 4));
+
+        // Sort the range ascending
+        sortAscendingForCell(u"E2:E5");
+
+        // Check - we expect both views to be sorted ascending
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"11", u"22", u"33", u"44" }),
+                             getValues(mpTabViewSheetView, 4, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"11", u"22", u"33", u"44" }),
+                             getValues(mpTabViewDefaultView, 4, 1, 4));
+
+        // Check the auto-filtered values in column B
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                             getValues(mpTabViewSheetView, 1, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                             getValues(mpTabViewDefaultView, 1, 1, 4));
+
+        // Select the range of an auto-filtered range and sort ascending column B
+        sortAscendingForCell(u"B1");
+
+        // Check - only the sheet view should be sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"ccc", u"rrr", u"sss" }),
+                             getValues(mpTabViewSheetView, 1, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                             getValues(mpTabViewDefaultView, 1, 1, 4));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
