@@ -31,6 +31,7 @@ public:
     virtual             ~XclExpTables() override;
 
     void                AppendTable( const ScDBData* pData, sal_Int32 nTableId );
+    void                GetHeaderRows( ::std::vector<ScRange>& rRanges ) const;
 
 protected:
     struct Entry

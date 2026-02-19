@@ -34,6 +34,7 @@
 #include <formulacell.hxx>
 #include <patattr.hxx>
 #include <attrib.hxx>
+#include <xedbdata.hxx>
 #include <xehelper.hxx>
 #include <xecontent.hxx>
 #include <xeescher.hxx>
@@ -646,8 +647,7 @@ void XclExpNumberCell::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
             XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetStringBuf(), GetXclPos()).getStr(),
-            XML_s, lcl_GetStyleId(rStrm, *this),
-            XML_t, "n"
+            XML_s, lcl_GetStyleId(rStrm, *this)
             // OOXTODO: XML_cm, XML_vm, XML_ph
     );
     rWorksheet->startElement(XML_v);
@@ -1418,8 +1418,7 @@ void XclExpRkCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& r
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
             XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetStringBuf(), rAddress).getStr(),
-            XML_s, lcl_GetStyleId(rStrm, nXFId),
-            XML_t, "n"
+            XML_s, lcl_GetStyleId(rStrm, nXFId)
             // OOXTODO: XML_cm, XML_vm, XML_ph
     );
     rWorksheet->startElement( XML_v );
@@ -2617,6 +2616,16 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     SCROW nLastIterScRow = ulimit_cast< SCROW >( nLastUsedScRow, nMaxScRow );
     ScUsedAreaIterator aIt( rDoc, nScTab, 0, 0, nLastIterScCol, nLastIterScRow );
 
+    // Collect table header ranges for the current sheet so that numeric
+    // cells in table headers are exported as shared strings (not numbers).
+    std::vector<ScRange> aTableHeaderRanges;
+    if (GetOutput() == EXC_OUTPUT_XML_2007)
+    {
+        rtl::Reference<XclExpTables> xTables = GetTablesManager().GetTablesBySheet(nScTab);
+        if (xTables)
+            xTables->GetHeaderRows(aTableHeaderRanges);
+    }
+
     // activate the correct segment and sub segment at the progress bar
     GetProgressBar().ActivateCreateRowsSegment();
 
@@ -2658,6 +2667,20 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             case CELLTYPE_VALUE:
             {
                 double fValue = rScCell.getDouble();
+
+                // If the cell is in a table header row, force export as shared string
+                if (std::any_of(aTableHeaderRanges.begin(), aTableHeaderRanges.end(),
+                        [&aScPos](const ScRange& rRange) { return rRange.Contains(aScPos); }))
+                {
+                    OUString aStr;
+                    const Color* pColor = nullptr;
+                    sal_uInt32 nScNumFmt = pPattern
+                        ? pPattern->GetItem(ATTR_VALUE_FORMAT).GetValue() : 0;
+                    rFormatter.GetOutputString(fValue, nScNumFmt, aStr, &pColor);
+                    xCell = new XclExpLabelCell(
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, aStr);
+                    break;
+                }
 
                 if (pPattern)
                 {

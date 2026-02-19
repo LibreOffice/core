@@ -176,6 +176,20 @@ void XclExpTables::AppendTable( const ScDBData* pData, sal_Int32 nTableId )
     maTables.emplace_back( pData, nTableId);
 }
 
+void XclExpTables::GetHeaderRows( ::std::vector<ScRange>& rRanges ) const
+{
+    for (const auto& rEntry : maTables)
+    {
+        if (rEntry.mpData->HasHeader())
+        {
+            ScRange aArea;
+            rEntry.mpData->GetArea(aArea);
+            aArea.aEnd.SetRow(aArea.aStart.Row());
+            rRanges.push_back(aArea);
+        }
+    }
+}
+
 void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 {
     const ScDBData& rData = *rEntry.mpData;
