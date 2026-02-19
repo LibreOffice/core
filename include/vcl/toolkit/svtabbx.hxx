@@ -40,6 +40,9 @@ enum class SvTabJustify
     AdjustCenter = static_cast<int>(SvLBoxTabFlags::ADJUST_CENTER)
 };
 
+/// ARIA-inspired best fit accessibility roles for SvTabListBox/SvTreeListBox
+/// which could be used for all these purposes in order to indicate which one
+/// is the best fit.
 enum class SvTabListBoxRole
 {
     Unknown,
