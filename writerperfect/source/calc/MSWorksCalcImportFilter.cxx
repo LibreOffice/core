@@ -240,6 +240,11 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
             }
 
             fileEncoding = encoding.toUtf8().getStr(); // set default to the proposed encoding
+#ifdef ANDROID
+            // Dialogs are not supported on Android
+            (void)pParent;
+            (void)title;
+#else
             try
             {
                 writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
@@ -257,6 +262,7 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
                 SAL_WARN("writerperfect",
                          "ignoring Exception in MSWorksCalcImportFilter::doImportDocument");
             }
+#endif
         }
     }
     OString aUtf8Passwd;

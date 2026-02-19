@@ -74,6 +74,11 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
             }
 
             fileEncoding = encoding.toUtf8().getStr(); // set default to the proposed encoding
+#ifdef ANDROID
+            // Dialogs are not supported on Android
+            (void)pParent;
+            (void)title;
+#else
             try
             {
                 writerperfect::WPFTEncodingDialog aDlg(pParent, title, encoding);
@@ -90,6 +95,7 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
             {
                 TOOLS_WARN_EXCEPTION("writerperfect", "ignoring");
             }
+#endif
         }
     }
     return libwps::WPS_OK
