@@ -715,6 +715,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                                        comphelper::LibreOfficeKit::Compat::scNoGridBackground);
 
     SCTAB nTab = aOutputData.mnTab;
+    nTab = rDoc.GetDefaultViewTableNumber(nTab); // convert to default view tab
     SCCOL nX1 = aOutputData.mnX1;
     SCROW nY1 = aOutputData.mnY1;
     SCCOL nX2 = aOutputData.mnX2;
@@ -839,7 +840,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
-    bool bInPlaceEditing = bEditMode && (mrViewData.GetRefTabNo() == mrViewData.CurrentTabForData());
+    bool bInPlaceEditing = bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNumber());
     vcl::Cursor* pInPlaceCrsr = nullptr;
     bool bInPlaceVisCursor = false;
     if (bInPlaceEditing)

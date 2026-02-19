@@ -1124,6 +1124,16 @@ bool ScDocument::IsSheetViewHolder(SCTAB nTab) const
     return false;
 }
 
+SCTAB ScDocument::GetDefaultViewTableNumber(SCTAB nTab) const
+{
+    if (ScTable const* pTable = FetchTable(nTab))
+    {
+        if (ScTable const* pDefaultTable = pTable->GetDefaultViewTable())
+            return pDefaultTable->GetTab();
+    }
+    return nTab;
+}
+
 std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
 {
     if (ScTable* pTable = FetchTable(nTab))

@@ -2436,6 +2436,7 @@ public:
 
     /** Is a holder of the sheet view data */
     SC_DLLPUBLIC bool IsSheetViewHolder(SCTAB nTab) const;
+    SC_DLLPUBLIC SCTAB GetDefaultViewTableNumber(SCTAB nTab) const;
 
 private:
     ScDocument(const ScDocument& r) = delete;

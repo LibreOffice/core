@@ -1977,7 +1977,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         pSelEng->SetVisibleArea( tools::Rectangle(Point(), GetOutputSizePixel()) );
     }
 
-    if (bEditMode && (mrViewData.GetRefTabNo() == mrViewData.CurrentTabForData()))
+    if (bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNumber()))
     {
         Point   aPos = rMEvt.GetPosPixel();
         SCCOL  nPosX;
@@ -2954,7 +2954,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     bool bEditMode = mrViewData.HasEditView(eWhich);
 
     //! Test if refMode dragging !!!
-    if ( bEditMode && (mrViewData.GetRefTabNo() == mrViewData.CurrentTabForData()) )
+    if ( bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNumber()) )
     {
         Point   aPos = rMEvt.GetPosPixel();
         SCCOL  nPosX;
