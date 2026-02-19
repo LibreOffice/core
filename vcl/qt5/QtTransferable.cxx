@@ -56,9 +56,9 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         return css::uno::Sequence<css::datatransfer::DataFlavor>();
 
     QStringList aFormatList(m_pMimeData->formats());
-    // we might add the UTF-16 mime text variant later
-    const int nMimeTypeSeqSize = aFormatList.size() + 1;
-    bool bHaveNoCharset = false, bHaveUTF16 = false, bHaveUTF8 = false;
+    // we might add the UTF-16 mime text variant later and if plaintext is available then add markdown as well
+    const int nMimeTypeSeqSize = aFormatList.size() + 2;
+    bool bHaveNoCharset = false, bHaveUTF16 = false, bHaveUTF8 = false, bHavePlainText = false;
     css::uno::Sequence<css::datatransfer::DataFlavor> aMimeTypeSeq(nMimeTypeSeqSize);
     auto pMimeTypeSeq = aMimeTypeSeq.getArray();
 
@@ -79,6 +79,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         bool bIsNoCharset = false, bIsUTF16 = false, bIsUTF8 = false;
         if (lcl_textMimeInfo(toOUString(rMimeType), bIsNoCharset, bIsUTF16, bIsUTF8))
         {
+            bHavePlainText = true;
             bHaveNoCharset |= bIsNoCharset;
             bHaveUTF16 |= bIsUTF16;
             bHaveUTF8 |= bIsUTF8;
@@ -108,6 +109,15 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         nMimeTypeCount++;
     }
 
+    if (bHavePlainText)
+    {
+        aFlavor.MimeType = "text/markdown";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        assert(nMimeTypeCount < nMimeTypeSeqSize);
+        pMimeTypeSeq[nMimeTypeCount] = aFlavor;
+        nMimeTypeCount++;
+    }
+
     aMimeTypeSeq.realloc(nMimeTypeCount);
 
     return aMimeTypeSeq;
@@ -128,7 +138,7 @@ css::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::
     if (!isDataFlavorSupported(rFlavor))
         return aAny;
 
-    if (rFlavor.MimeType == "text/plain;charset=utf-16")
+    if (rFlavor.MimeType == "text/plain;charset=utf-16" || rFlavor.MimeType == "text/markdown")
     {
         OUString aString;
         // use existing UTF-16 encoded MIME data if present
