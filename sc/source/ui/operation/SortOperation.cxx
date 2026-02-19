@@ -57,12 +57,28 @@ bool SortOperation::runImplementation()
         return false;
     }
 
+    ScSortParam aLocalParam(mrSortParam);
+
+    // If we are in a sheet view and aren't sorting auto-filtered cell range, we need
+    // to sync the sorted cells. If this is the case then  we need to convert the tab
+    // from the sheet view tab to default view tab.
+    if (mpViewData && rDoc.IsSheetViewHolder(mnTab) && !pDBData->HasAutoFilter())
+    {
+        SCTAB nSheetViewTab = mnTab;
+        mnTab = mpViewData->GetTabNumber();
+
+        if (aLocalParam.nSourceTab == nSheetViewTab)
+            aLocalParam.nSourceTab = mnTab;
+
+        if (aLocalParam.nDestTab == nSheetViewTab)
+            aLocalParam.nDestTab = mnTab;
+    }
+
     bool bCopy = !mrSortParam.bInplace;
     if (bCopy && mrSortParam.nDestCol == mrSortParam.nCol1
         && mrSortParam.nDestRow == mrSortParam.nRow1 && mrSortParam.nDestTab == mnTab)
         bCopy = false;
 
-    ScSortParam aLocalParam(mrSortParam);
     if (bCopy)
     {
         // Copy the data range to the destination then move the sort range to it.
@@ -253,6 +269,10 @@ bool SortOperation::runImplementation()
 
     if (!bUniformRowHeight && nStartRow <= nOverallRow2)
         mrDocShell.AdjustRowHeight(nStartRow, nOverallRow2, mnTab);
+
+    // Perform syncing, but only if we don't sort the auto-filtered cell range
+    if (!pDBData->HasAutoFilter())
+        syncSheetViews();
 
     aModificator.SetDocumentModified();
 
