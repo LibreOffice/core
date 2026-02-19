@@ -1694,7 +1694,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
     if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
         return;
 
-    SCTAB nCurrentTabIndex = GetViewData().CurrentTabForData();
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNumber();
     SfxViewShell* pCurrentViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -1757,7 +1757,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
     if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
         return;
 
-    SCTAB nCurrentTabIndex = GetViewData().CurrentTabForData();
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNumber();
     SfxViewShell* pCurrentViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)

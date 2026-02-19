@@ -258,7 +258,7 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
     ScModule* pScMod = ScModule::get();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     ScDocument&         rDoc = GetViewData().GetDocument();
-    SCTAB               nTab = GetViewData().CurrentTabForData();
+    SCTAB               nTab = GetViewData().GetTabNumber();
     bool                bOldProtection = rDoc.IsTabProtected(nTab);
 
     if( pReqArgs )
@@ -1374,7 +1374,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScViewData& rViewData = GetViewData();
-                    SCTAB nThisTab = rViewData.CurrentTabForData();
+                    SCTAB nThisTab = rViewData.GetTabNumber();
                     bool bChangedX = false, bChangedY = false;
                     if (rViewData.GetLOKSheetFreezeIndex(true) > 0 ||
                         rViewData.GetLOKSheetFreezeIndex(false) > 0 )                             // remove freeze
@@ -1396,7 +1396,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // Invalidate the slot for all views on the same tab of the document.
                         SfxLokHelper::forEachOtherView(this, [nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
-                            if (rOtherViewData.CurrentTabForData() != nThisTab)
+                            if (rOtherViewData.GetTabNumber() != nThisTab)
                                 return;
 
                             SfxBindings& rOtherBind = rOtherViewData.GetBindings();
@@ -1426,7 +1426,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (comphelper::LibreOfficeKit::isActive())
                 {
                     ScViewData& rViewData = GetViewData();
-                    SCTAB nThisTab = rViewData.CurrentTabForData();
+                    SCTAB nThisTab = rViewData.GetTabNumber();
                     bool bChanged = rViewData.SetLOKSheetFreezeIndex(nFreezeIndex, bIsCol);
                     rReq.Done();
                     if (bChanged)
@@ -1436,7 +1436,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // Invalidate the slot for all views on the same tab of the document.
                         SfxLokHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
-                            if (rOtherViewData.CurrentTabForData() != nThisTab)
+                            if (rOtherViewData.GetTabNumber() != nThisTab)
                                 return;
 
                             SfxBindings& rOtherBind = rOtherViewData.GetBindings();
