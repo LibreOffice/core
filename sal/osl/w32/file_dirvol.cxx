@@ -1549,12 +1549,10 @@ oslFileError SAL_CALL osl_getFileStatus(
                 = { FILE_GENERIC_READ, FILE_GENERIC_WRITE, FILE_GENERIC_EXECUTE, FILE_ALL_ACCESS };
             DWORD grantedAccess = 0;
             BOOL accessStatus = TRUE;
-            PRIVILEGE_SET privSet;
-            DWORD privSetSize = sizeof(privSet);
 
             // https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-accesscheck
             BOOL bResult = AccessCheck(pSD, hImpersonationToken, FILE_GENERIC_WRITE, &mapping,
-                                       &privSet, &privSetSize, &grantedAccess, &accessStatus);
+                                       nullptr, nullptr, &grantedAccess, &accessStatus);
 
             if (bResult)
             {
@@ -1566,13 +1564,13 @@ oslFileError SAL_CALL osl_getFileStatus(
             }
             else
             {
-                SAL_WARN("sal.osl", "AccessCheck API failed with: " << GetLastError());
+                SAL_WARN("AccessCheck API failed with: ", oslTranslateFileError(GetLastError()));
             }
             LocalFree(pSD); // free memory
         }
         else
         {
-            SAL_WARN("sal.osl", "GetNamedSecurityInfoW API failed with: " << aResult);
+            SAL_WARN("GetNamedSecurityInfoW API failed with: ", aResult);
         }
         CloseHandle(hImpersonationToken); // free memory
         CloseHandle(hProcessToken); // free memory
