@@ -738,6 +738,8 @@ writer_constructor_list = [
     "com_sun_star_comp_Writer_WriterFilter_get_implementation",
 # writerperfect/source/writer/wpftwriter.component
     "com_sun_star_comp_Writer_EPUBExportFilter_get_implementation",
+    "com_sun_star_comp_Writer_MSWorksImportFilter_get_implementation",
+    "com_sun_star_comp_Writer_MWAWImportFilter_get_implementation",
 # sw/util/swui.component
     ("com_sun_star_text_DialogFactoryService_get_implementation", "#if !ENABLE_FUZZERS"),
     ]
