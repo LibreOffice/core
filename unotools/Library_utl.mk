@@ -16,10 +16,15 @@ $(eval $(call gb_Library_use_externals,utl,\
 	boost_locale \
 ))
 
+ifeq ($(USE_LIBINTL),TRUE)
+$(eval $(call gb_Library_add_defs,utl,\
+	-DHAVE_LIBINTL \
+))
 ifneq ($(LIBINTL_LIBS),)
 $(eval $(call gb_Library_add_libs,utl,\
 	$(LIBINTL_LIBS) \
 ))
+endif
 endif
 
 $(eval $(call gb_Library_use_custom_headers,utl,\

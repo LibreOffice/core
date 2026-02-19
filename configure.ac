@@ -1477,18 +1477,6 @@ if test "$usable_dlapi" != no; then
 fi
 AC_SUBST(UNIX_DLAPI_LIBS)
 
-# Check if libintl is needed (musl libc provides a stub bindtextdomain in libc,
-# but <libintl.h> from gettext-dev redefines it to libintl_bindtextdomain which
-# only exists in libintl.so)
-LIBINTL_LIBS=
-if test "$_os" = "Linux"; then
-    save_LIBS="$LIBS"
-    AC_SEARCH_LIBS([libintl_bindtextdomain], [intl],
-        [case "$ac_cv_search_libintl_bindtextdomain" in -l*) LIBINTL_LIBS="$ac_cv_search_libintl_bindtextdomain";; esac])
-    LIBS="$save_LIBS"
-fi
-AC_SUBST(LIBINTL_LIBS)
-
 # Check for a (GNU) backtrace implementation
 AC_ARG_VAR([BACKTRACE_CFLAGS], [Compiler flags needed to use backtrace(3)])
 AC_ARG_VAR([BACKTRACE_LIBS], [Linker flags needed to use backtrace(3)])
@@ -12649,6 +12637,22 @@ if test "$test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
 fi
 AC_SUBST(GTK4_LIBS)
 AC_SUBST(GTK4_CFLAGS)
+
+# libintl is only needed to register .mo files with bindtextdomain so that GTK
+# dialogs can find translations. Without GTK there is no point.
+# On musl, <libintl.h> from gettext-dev redefines bindtextdomain to
+# libintl_bindtextdomain which requires linking -lintl; on glibc it is in libc.
+LIBINTL_LIBS=
+USE_LIBINTL=
+if test "$ENABLE_GTK3" = "TRUE" -o "$ENABLE_GTK3_KDE5" = "TRUE" -o "$ENABLE_GTK4" = "TRUE"; then
+    USE_LIBINTL=TRUE
+    save_LIBS="$LIBS"
+    AC_SEARCH_LIBS([libintl_bindtextdomain], [intl],
+        [case "$ac_cv_search_libintl_bindtextdomain" in -l*) LIBINTL_LIBS="$ac_cv_search_libintl_bindtextdomain";; esac])
+    LIBS="$save_LIBS"
+fi
+AC_SUBST(LIBINTL_LIBS)
+AC_SUBST(USE_LIBINTL)
 
 if test "$enable_introspection" = yes; then
     if test "$ENABLE_GTK3" = "TRUE" -o "$ENABLE_GTK3_KDE5" = "TRUE"; then

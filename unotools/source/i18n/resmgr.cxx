@@ -36,7 +36,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined EMSCRIPTEN
+#ifdef HAVE_LIBINTL
 #   include <libintl.h>
 #endif
 
@@ -142,7 +142,7 @@ namespace Translate
         OString sPath(OUStringToOString(path, eEncoding));
 #endif
         gen.add_messages_path(std::string(sPath));
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined EMSCRIPTEN
+#ifdef HAVE_LIBINTL
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
         bindtextdomain(aPrefixName.data(), sPath.getStr());
         // tdf#131069 gtk, and anything sane, always wants utf-8 strings as output
