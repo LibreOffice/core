@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
 
     // Sheet view must be present
     auto pSheetViewManager = pDocument->GetSheetViewManager(0);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->size());
 
     // There should be 2 tables
     CPPUNIT_ASSERT_EQUAL(SCTAB(2), pDocument->GetTableCount());
@@ -413,9 +413,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     removeSheetViewInCurrentView();
     Scheduler::ProcessEventsToIdle();
 
-    // Sheet view is retained, but null
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
-    CPPUNIT_ASSERT(!pSheetViewManager->getSheetViews().at(0));
+    // Sheet view was removed
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->size());
 
     // Only 1 table left
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), pDocument->GetTableCount());
@@ -477,7 +476,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
 
     // Sheet view must be present
     auto pSheetViewManager = pDocument->GetSheetViewManager(SCTAB(0));
-    CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
     auto pSheetView1 = pSheetViewManager->get(0);
     CPPUNIT_ASSERT_EQUAL(true, pSheetView1->isSynced());
@@ -543,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
 
     // Sheet view must be present
     auto pSheetViewManager = pDocument->GetSheetViewManager(SCTAB(0));
-    CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
     auto pSheetView1 = pSheetViewManager->get(0);
     CPPUNIT_ASSERT_EQUAL(true, pSheetView1->isSynced());
@@ -684,7 +683,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     {
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->size());
 
         // Check we have the correct table selected
         CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
@@ -700,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     {
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->size());
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
         auto pSheetView1 = pSheetViewManager->get(0);
@@ -728,7 +727,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
 
-        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
         auto pSheetView1 = pSheetViewManager->get(0);
         CPPUNIT_ASSERT_EQUAL(SCTAB(2), pSheetView1->getTableNumber());
@@ -766,7 +765,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     {
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->size());
     }
 
     // Create first sheet views
@@ -775,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     {
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->size());
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
         auto pSheetView1 = pSheetViewManager->get(0);
@@ -801,7 +800,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
 
-        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
         auto pSheetView1 = pSheetViewManager->get(0);
         CPPUNIT_ASSERT_EQUAL(SCTAB(2), pSheetView1->getTableNumber());
@@ -839,7 +838,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
         auto pSheetViewManager = rDocument.GetSheetViewManager(SCTAB(0));
         CPPUNIT_ASSERT(pSheetViewManager);
 
-        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->size());
 
         auto pSheetView1 = pSheetViewManager->get(0);
         CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView1->getTableNumber());
