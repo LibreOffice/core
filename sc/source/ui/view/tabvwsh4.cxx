@@ -1329,7 +1329,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     HideNoteOverlay();   // note marker
 
     // don't do extra HideCursor/ShowCursor calls if EnterHandler will switch to a different sheet
-    bool bOnRefSheet = ( GetViewData().GetRefTabNo() == GetViewData().CurrentTabForData() );
+    bool bOnRefSheet = ( GetViewData().GetRefTabNo() == GetViewData().GetTabNumber() );
     bool bHideCursor = ( ( nCode == KEY_RETURN && bInPlace ) || nCode == KEY_TAB ) && bOnRefSheet;
 
     if (bHideCursor)
