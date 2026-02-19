@@ -119,7 +119,7 @@ ContextHandlerRef NsvFilterContext::onCreateContext(sal_Int32 nElement,
         }
         case XNSV_TOKEN(sortRules):
         {
-            mrNsvFilterData.maSortRules.reset();
+            mrNsvFilterData.maSortRules.emplace();
             mrNsvFilterData.maSortRules->mnMethod = rAttribs.getToken(XML_sortMethod, XML_none);
             mrNsvFilterData.maSortRules->mbCaseSensitive
                 = rAttribs.getBool(XML_caseSensitive, false);
