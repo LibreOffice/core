@@ -142,11 +142,11 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
             }
             else
             {
-                ScRange const& aSortRange = oReorderParams->maSortRange;
-                nRowStart = aSortRange.aStart.Row();
-                nRowEnd = aSortRange.aEnd.Row();
-                nColumnStart = aSortRange.aStart.Col();
-                nColumnEnd = aSortRange.aEnd.Col();
+                ScRange const& rSortRange = oReorderParams->maSortRange;
+                nRowStart = rSortRange.aStart.Row();
+                nRowEnd = rSortRange.aEnd.Row();
+                nColumnStart = rSortRange.aStart.Col();
+                nColumnEnd = rSortRange.aEnd.Col();
             }
 
             for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
