@@ -201,12 +201,9 @@ void Operation::syncSheetViews()
     if (!pManager || pManager->isEmpty())
         return;
 
-    for (std::shared_ptr<SheetView> const& pSheetView : pManager->getSheetViews())
+    for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
-        if (!pSheetView)
-            continue;
-
-        SCTAB nSheetViewTab = pSheetView->getTableNumber();
+        SCTAB nSheetViewTab = rSheetView.getTableNumber();
 
         std::optional<ScQueryParam> oQueryParam;
         ScDBData* pNoNameData = rDocument.GetAnonymousDBData(nSheetViewTab);
@@ -222,7 +219,7 @@ void Operation::syncSheetViews()
         rDocument.OverwriteContent(nTab, nSheetViewTab);
 
         // Reverse the sorting of the default view in the sheet view
-        if (auto const& rReorderParameters = pSheetView->getReorderParameters())
+        if (auto const& rReorderParameters = rSheetView.getReorderParameters())
         {
             sc::ReorderParam aReorderParameters(*rReorderParameters);
             aReorderParameters.maSortRange.aStart.SetTab(nSheetViewTab);
@@ -231,11 +228,11 @@ void Operation::syncSheetViews()
             rDocument.Reorder(aReorderParameters);
         }
 
-        auto const& oSortParam = pSheetView->getSortParam();
+        auto const& oSortParam = rSheetView.getSortParam();
         if (oSortParam)
         {
             // We need to reset the sort order for the sheet view as we will sort again
-            pSheetView->resetSortOrder();
+            rSheetView.resetSortOrder();
             rDocument.Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
         }
 
