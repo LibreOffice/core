@@ -1509,6 +1509,26 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
                 }
                 nLastColFilled = nCol;
             }
+            else if (pCell->getType() == CELLTYPE_VALUE)
+            {
+                // Numeric header: convert to string so the column name
+                // in table.xml matches the shared string exported for
+                // this cell.
+                double fValue = pCell->getDouble();
+                sal_uInt32 nFormat = pDoc->GetNumberFormat(nCol, nRow, nTable);
+                OUString aStr;
+                const Color* pColor = nullptr;
+                pDoc->GetFormatTable()->GetOutputString(fValue, nFormat, aStr, &pColor);
+                if (aStr.isEmpty())
+                    bHaveEmpty = true;
+                else
+                {
+                    SetTableColumnName( aNewNames, nCol-nStartCol, aStr, 0);
+                    if (nLastColFilled < nCol-1)
+                        bHaveEmpty = true;
+                }
+                nLastColFilled = nCol;
+            }
             else
                 bHaveEmpty = true;
         }
