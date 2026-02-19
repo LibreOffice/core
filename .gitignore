@@ -98,6 +98,22 @@ eclipsesettingfile.xml
 *.code-workspace
 .mold-*
 
+# assistants
+.ai
+.ai-cache
+*.ai.md
+CLAUDE.md
+claude.log
+.claude
+.cursor
+.cursorignore
+.copilot
+copilot.json
+.aider
+.aider.conf.yml
+.aider.history
+.continue
+
 # things below this point are targeted for elimination
 
 #stuff that we should no generated where they are
