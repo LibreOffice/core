@@ -807,6 +807,8 @@ namespace emfio
             OUString const & rString,
             KernArray* pDXArry = nullptr,
             tools::Long* pDYArry = nullptr,
+            const float fXScale = 1.0,
+            const float fYScale = 1.0,
             bool bRecordPath = false,
             GraphicsMode nGraphicsMode = GraphicsMode::GM_COMPATIBLE);
 

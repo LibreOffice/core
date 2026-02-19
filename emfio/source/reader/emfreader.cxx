@@ -1883,16 +1883,16 @@ namespace emfio
                     {
                         sal_Int32   ptlReferenceX, ptlReferenceY;
                         sal_uInt32  nLen, nOptions, nGfxMode;
-                        float       nXScale, nYScale;
+                        float       fXScale, fYScale;
 
                         mpInputStream->ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY )
                            .ReadUInt32( nLen ).ReadUInt32( nOptions )
-                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale );
+                           .ReadUInt32( nGfxMode ).ReadFloat( fXScale ).ReadFloat( fYScale );
                         SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
                         SAL_INFO("emfio", "\t\tcChars: " << nLen);
                         SAL_INFO("emfio", "\t\tfuOptions: 0x" << std::hex << nOptions << std::dec);
                         SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
-                        SAL_INFO("emfio", "\t\tScale: " << nXScale << " x " << nYScale);
+                        SAL_INFO("emfio", "\t\tScale: " << fXScale << " x " << fYScale);
 
                         // Read optional bounding rectangle (present only if ETO_NO_RECT is NOT set)
                         tools::Rectangle aRect;
@@ -1946,7 +1946,7 @@ namespace emfio
                                 Push();
                                 IntersectClipRect( aRect );
                             }
-                            DrawText(aPos, aText, nullptr, nullptr, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                            DrawText(aPos, aText, nullptr, nullptr, fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
                             if ( nOptions & ETO_CLIPPED )
                                 Pop();
                             mnBkMode = mnBkModeBackup;
@@ -1963,7 +1963,7 @@ namespace emfio
                     {
                         sal_Int32   nLeft, nTop, nRight, nBottom;
                         sal_uInt32  nGfxMode;
-                        float       nXScale, nYScale;
+                        float       fXScale, fYScale;
                         sal_uInt32  ncStrings( 1 );
                         sal_Int32   ptlReferenceX, ptlReferenceY;
                         sal_uInt32  nLen, nOffString, nOptions, offDx;
@@ -1972,10 +1972,10 @@ namespace emfio
                         nCurPos = mpInputStream->Tell() - 8;
 
                         mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom )
-                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale );
+                           .ReadUInt32( nGfxMode ).ReadFloat( fXScale ).ReadFloat( fYScale );
                         SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom);
                         SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
-                        SAL_INFO("emfio", "\t\t Scale: " << nXScale << " x " << nYScale);
+                        SAL_INFO("emfio", "\t\t Scale: " << fXScale << " x " << fYScale);
                         if ( ( nRecType == EMR_POLYTEXTOUTA ) || ( nRecType == EMR_POLYTEXTOUTW ) )
                         {
                             mpInputStream->ReadUInt32( ncStrings );
@@ -2100,7 +2100,7 @@ namespace emfio
                                     Push(); // Save the current clip. It will be restored after text drawing
                                     IntersectClipRect( aRect );
                                 }
-                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
                                 if ( nOptions & ETO_CLIPPED )
                                     Pop();
                             }

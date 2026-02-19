@@ -1317,6 +1317,49 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipTransform)
                 u"#000000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExtTextOutScaleGM_COMPATIBLE)
+{
+    // tdf#142495 EMF records: EXTTEXTOUTW with GM_COMPATIBLE.
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestExtTextOutScaleGM_COMPATIBLE.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion", 4);
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "text", u"Obliquité (ºC)");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "fontcolor", u"#202020");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "width", u"317");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "height", u"317");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "dx0", u"254");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "dx1", u"450");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "dx2", u"544");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[1]", "dx3", u"638");
+
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "text", u"23");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "fontcolor", u"#000000");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "width", u"161");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[2]", "height", u"317");
+
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "text", u"24");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "fontcolor", u"#000000");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "width", u"201");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[3]", "height", u"317");
+
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[4]", "text", u"25");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[4]", "fontcolor", u"#000000");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[4]", "width", u"268");
+    assertXPath(pDocument, aXPathPrefix + "textsimpleportion[4]", "height", u"317");
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke", 9);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 3);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path",
+                u"m0 0v21589h27944v-21589z");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path",
+                u"m24258 16413v264h383v-264z");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testUnderlineTransparentBackground)
 {
     // EMF with SETBKMODE=TRANSPARENT, SETBKCOLOR=black, underlined font, and EXTTEXTOUTW "TEST".
@@ -1661,13 +1704,15 @@ CPPUNIT_TEST_FIXTURE(Test, testCreatePen)
     assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 10);
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 69);
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width", u"374");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "height", u"374");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width", u"310");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "x", u"28124");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "y", u"16581");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "text", u"0.0");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "fontcolor", u"#000000");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "width", u"266");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "height", u"266");
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "width", u"221");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "x", u"28000");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "y", u"428");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[10]", "text", u"-6");
