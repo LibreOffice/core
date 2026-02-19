@@ -88,10 +88,10 @@ void EditLine::SetHeight(sal_uInt16 nHeight, sal_uInt16 nTextHeight)
 
 void EditLine::SetStartPosX(sal_Int32 nStart)
 {
-    if (nStart > 0)
-        mnStartPosX = nStart;
-    else
-        mnStartPosX = 0;
+    // tdf#165732 When centered text overflows its container (text width > paper width),
+    // the centering offset (paperWidth - textWidth) / 2 is negative.
+    // So we must not clamp the start pos here.
+    mnStartPosX = nStart;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
