@@ -1449,7 +1449,9 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
                 pFormControl->write(" fmlaLink=\"");
                 if (aCellLink.indexOf('!') < 0)
                 {
-                    pFormControl->write(GetTabInfo().GetScTabName(mxCellLinkAddress.Tab()));
+                    OUString sTabName = GetTabInfo().GetScTabName(mxCellLinkAddress.Tab());
+                    ScCompiler::CheckTabQuotes(sTabName);
+                    pFormControl->writeEscaped(sTabName);
                     pFormControl->write("!");
                 }
                 pFormControl->write(aCellLink);
