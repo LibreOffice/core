@@ -2013,7 +2013,6 @@ IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
         maFirstPageSize = Size();
 
         updateOrientationBox();
-        updatePageSize(mxOrientationBox->get_active());
 
         // update text fields
         mxOKButton->set_label(maPrintText);
@@ -2031,7 +2030,6 @@ IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
 
         setPaperSizes();
         updateOrientationBox();
-        updatePageSize(mxOrientationBox->get_active());
         maUpdatePreviewIdle.Start();
     }
 
