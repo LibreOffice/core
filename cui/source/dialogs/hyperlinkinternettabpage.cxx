@@ -14,6 +14,11 @@
 #include <sot/exchange.hxx>
 #include <hlmarkwn_def.hxx>
 
+namespace
+{
+bool bRemoveQueryString = false;
+}
+
 OUString HyperlinkInternetTP::CreateAbsoluteURL() const
 {
     // erase leading and trailing whitespaces
@@ -33,6 +38,7 @@ HyperlinkInternetTP::HyperlinkInternetTP(weld::Container* pParent,
     : HyperlinkTabPageBase(pParent, pController, u"cui/ui/hyperlinkinternetpage.ui"_ustr,
                            u"HyperlinkInternetPage"_ustr, pSet)
     , m_xCbbTarget(std::make_unique<SvxHyperURLBox>(m_xBuilder->weld_combo_box(u"target"_ustr)))
+    , m_xCbRemoveQueryString(m_xBuilder->weld_check_button(u"removequerystring"_ustr))
 {
     m_xCbbTarget->SetSmartProtocol(GetSmartProtocolFromButtons());
 
@@ -41,6 +47,8 @@ HyperlinkInternetTP::HyperlinkInternetTP(weld::Container* pParent,
     // set handlers
     m_xCbbTarget->connect_focus_out(LINK(this, HyperlinkInternetTP, LostFocusTargetHdl_Impl));
     m_xCbbTarget->connect_changed(LINK(this, HyperlinkInternetTP, ModifiedTargetHdl_Impl));
+    m_xCbRemoveQueryString->connect_toggled(
+        LINK(this, HyperlinkInternetTP, ClickRemoveQueryStringHdl_Impl));
     maTimer.SetInvokeHandler(LINK(this, HyperlinkInternetTP, TimeoutHdl_Impl));
 }
 
@@ -49,6 +57,23 @@ std::unique_ptr<SfxTabPage> HyperlinkInternetTP::Create(weld::Container* pParent
                                                         const SfxItemSet* pSet)
 {
     return std::make_unique<HyperlinkInternetTP>(pParent, pController, pSet);
+}
+
+void HyperlinkInternetTP::RemoveQueryString()
+{
+    OUString aStrURL(m_xCbbTarget->get_active_text());
+    sal_Int32 nQueryPos = aStrURL.indexOf('?');
+    if (nQueryPos != -1)
+    {
+        // Preserve #fragment if present
+        OUString aFragment;
+        sal_Int32 nFragPos = aStrURL.indexOf('#', nQueryPos);
+        if (nFragPos != -1)
+            aFragment = aStrURL.copy(nFragPos);
+
+        aStrURL = OUString::Concat(aStrURL.subView(0, nQueryPos)) + aFragment;
+        m_xCbbTarget->set_entry_text(aStrURL);
+    }
 }
 
 void HyperlinkInternetTP::FillDlgFields(const OUString& rStrURL)
@@ -97,6 +122,13 @@ void HyperlinkInternetTP::FillDlgFields(const OUString& rStrURL)
         m_xCbbTarget->set_entry_text(rStrURL);
 
     SetScheme(aStrScheme);
+
+    OUString aFinalURL(m_xCbbTarget->get_active_text());
+    bool bHasQuery = aFinalURL.indexOf('?') != -1;
+    m_xCbRemoveQueryString->set_active(bRemoveQueryString);
+
+    if (bRemoveQueryString && bHasQuery)
+        RemoveQueryString();
 }
 
 void HyperlinkInternetTP::GetCurrentItemData(OUString& rStrURL, OUString& aStrName,
@@ -107,7 +139,11 @@ void HyperlinkInternetTP::GetCurrentItemData(OUString& rStrURL, OUString& aStrNa
     GetDataFromCommonFields(aStrName, aStrIntName, aStrFrame, eMode);
 }
 
-void HyperlinkInternetTP::ClearPageSpecificControls() { m_xCbbTarget->set_entry_text(OUString()); }
+void HyperlinkInternetTP::ClearPageSpecificControls()
+{
+    m_xCbbTarget->set_entry_text(OUString());
+    m_xCbRemoveQueryString->set_active(bRemoveQueryString);
+}
 
 IMPL_LINK_NOARG(HyperlinkInternetTP, ModifiedTargetHdl_Impl, weld::ComboBox&, void)
 {
@@ -115,12 +151,30 @@ IMPL_LINK_NOARG(HyperlinkInternetTP, ModifiedTargetHdl_Impl, weld::ComboBox&, vo
     if (!aScheme.isEmpty())
         SetScheme(aScheme);
 
+    OUString aStrURL(m_xCbbTarget->get_active_text());
+    bool bHasQuery = aStrURL.indexOf('?') != -1;
+
+    if (m_xCbRemoveQueryString->get_active() && bHasQuery)
+    {
+        RemoveQueryString();
+    }
+
     // start timer
     maTimer.SetTimeout(2500);
     maTimer.Start();
 }
 
 IMPL_LINK_NOARG(HyperlinkInternetTP, TimeoutHdl_Impl, Timer*, void) { RefreshMarkWindow(); }
+
+IMPL_LINK_NOARG(HyperlinkInternetTP, ClickRemoveQueryStringHdl_Impl, weld::Toggleable&, void)
+{
+    bRemoveQueryString = m_xCbRemoveQueryString->get_active();
+
+    if (bRemoveQueryString)
+    {
+        RemoveQueryString();
+    }
+}
 
 void HyperlinkInternetTP::SetScheme(std::u16string_view rScheme)
 {

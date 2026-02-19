@@ -17,12 +17,16 @@ class HyperlinkInternetTP final : public HyperlinkTabPageBase
 {
 private:
     std::unique_ptr<SvxHyperURLBox> m_xCbbTarget;
+    std::unique_ptr<weld::CheckButton> m_xCbRemoveQueryString;
 
     DECL_LINK(ModifiedTargetHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LostFocusTargetHdl_Impl, weld::Widget&, void);
     DECL_LINK(TimeoutHdl_Impl, Timer*, void);
+    DECL_LINK(ClickRemoveQueryStringHdl_Impl, weld::Toggleable&, void);
 
     OUString CreateAbsoluteURL() const;
+
+    void RemoveQueryString();
 
     void SetScheme(std::u16string_view rScheme);
     void RemoveImproperProtocol(std::u16string_view aProperScheme);
