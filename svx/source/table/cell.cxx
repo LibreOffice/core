@@ -1104,24 +1104,8 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                 break;
             }
 
-            if( !bSpecial )
-            {
-
-                if( !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
-                {
-                    if( aSet.GetItemState( pMap->nWID ) != SfxItemState::SET )
-                    {
-                        // fetch the default from ItemPool
-                        if(SfxItemPool::IsWhich(pMap->nWID))
-                            aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
-                    }
-
-                    if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET )
-                    {
-                        SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
-                    }
-                }
-            }
+            if( !bSpecial && !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
+                SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
 
             GetObject().getSdrModelFromSdrObject().SetChanged();
             mpProperties->SetMergedItemSetAndBroadcast( aSet );
