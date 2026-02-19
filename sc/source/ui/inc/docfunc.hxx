@@ -59,15 +59,6 @@ namespace sc
     class SparklineGroup;
     class Sparkline;
     enum class OperationType;
-    class DeleteContentOperation;
-    class DeleteCellOperation;
-    class SetNormalStringOperation;
-    class SetValueOperation;
-    class SetStringOperation;
-    class SetEditTextOperation;
-    class SetFormulaOperation;
-    class ApplyAttributesOperation;
-    class InsertCellsOperation;
 }
 namespace tools
 {
@@ -76,30 +67,21 @@ namespace tools
 
 class ScDocFunc
 {
-    friend class sc::DeleteContentOperation;
-    friend class sc::DeleteCellOperation;
-    friend class sc::SetNormalStringOperation;
-    friend class sc::SetValueOperation;
-    friend class sc::SetStringOperation;
-    friend class sc::SetEditTextOperation;
-    friend class sc::SetFormulaOperation;
-    friend class sc::ApplyAttributesOperation;
-    friend class sc::InsertCellsOperation;
-
     ScDocShell&     rDocShell;
     static bool CheckSheetViewProtection(sc::OperationType eOperation);
 
 protected:
-    bool            AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi );
     void            CreateOneName( ScRangeName& rList,
                                     SCCOL nPosX, SCROW nPosY, SCTAB nTab,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     bool& rCancel, bool bApi );
-    void            NotifyInputHandler( const ScAddress& rPos );
 
                     ScDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
 public:
     virtual         ~ScDocFunc() {}
+
+    bool            AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi );
+    void            NotifyInputHandler( const ScAddress& rPos );
 
     void            NotifyDrawUndo(std::unique_ptr<SdrUndoAction>);
 
