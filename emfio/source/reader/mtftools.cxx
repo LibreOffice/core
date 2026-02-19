@@ -1685,7 +1685,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, KernArray* pDXArry, tools::Long* pDYArry, bool bRecordPath, GraphicsMode nGfxMode )
+    void MtfTools::DrawText(Point& rPosition, OUString const & rText, KernArray* pDXArry, tools::Long* pDYArry, const float fXScale, const float fYScale, bool bRecordPath, GraphicsMode nGfxMode)
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1771,6 +1771,8 @@ namespace emfio
             bChangeFont = true;
             mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
         }
+        // Create a local copy of the current font to apply transient modifications
+        // (such as color, alignment, and custom scaling) before recording it to the metafile.
         vcl::Font aTmp( maFont );
         aTmp.SetColor( maTextColor );
 
@@ -1804,6 +1806,43 @@ namespace emfio
                 fOrientation += 90;
                 fOrientation *= 10;
                 aTmp.SetOrientation( aTmp.GetOrientation() + Degree10( static_cast<sal_Int16>(fOrientation) ) );
+            }
+        }
+        else if (nGfxMode == GraphicsMode::GM_COMPATIBLE)
+        {
+            if (fXScale != 0.0)
+            {
+                // As we changing only font width, we are skippin if scales have the same values
+                const bool bNeedsWidthScale = (std::fabs(fYScale) != std::fabs(fXScale));
+                if (bNeedsWidthScale)
+                {
+                    Size aFontSize = aTmp.GetFontSize();
+                    const float fTestWidthScale = std::fabs(fYScale / fXScale);
+
+                    // If Width is 0, the font is scaled proportionally based on Height.
+                    if (aFontSize.Width() == 0)
+                        aFontSize.setWidth(basegfx::fround<tools::Long>(aFontSize.Height() * fTestWidthScale));
+                    else
+                        aFontSize.setWidth(basegfx::fround<tools::Long>(aFontSize.Width() * fTestWidthScale));
+                    aTmp.SetFontSize(aFontSize);
+                    bChangeFont = true;
+                }
+            }
+
+            if ((fYScale < 0.0) && (fXScale < 0.0))
+            {
+                // Both scales negative = 180 degree rotation. vcl::Font handles this perfectly.
+                aTmp.SetOrientation(aTmp.GetOrientation() + Degree10(1800));
+            }
+            else if ((fYScale < 0.0) || (fXScale < 0.0))
+            {
+                // Single-axis mirroring.
+                // In GM_COMPATIBLE, text glyphs are NOT physically mirrored.
+                // However, the flipped coordinate system reverses the rotation direction.
+                // Inverting the angle (360 degrees - current angle) fixes the text direction.
+                aTmp.SetOrientation(Degree10(3600) - aTmp.GetOrientation());
+
+                // TODO: True single-axis glyph mirroring would require a MapMode transform here
             }
         }
 
