@@ -66,17 +66,12 @@ void SheetViewBox::Update(sc::SheetViewID nSelectedID)
 
     if (pSheetManager)
     {
-        sc::SheetViewID nSheetViewID = 0;
-        for (auto const& pSheetView : pSheetManager->getSheetViews())
+        for (auto const& rSheetView : pSheetManager->iterateValidSheetViews())
         {
-            if (pSheetView)
-            {
-                OUString sID = OUString::number(nSheetViewID);
-                if (nSheetViewID == nSelectedID)
-                    sActiveID = sID;
-                m_xWidget->append(sID, pSheetView->GetName());
-            }
-            nSheetViewID++;
+            OUString sID = OUString::number(rSheetView.getID());
+            if (rSheetView.getID() == nSelectedID)
+                sActiveID = sID;
+            m_xWidget->append(sID, rSheetView.GetName());
         }
     }
     m_xWidget->thaw();

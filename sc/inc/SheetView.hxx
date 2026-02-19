@@ -76,9 +76,10 @@ public:
 
     ScTable* getTablePointer() const;
     SCTAB getTableNumber() const;
+
     SheetViewID getID() const { return mnID; }
 
-    OUString const& GetName() { return maName; }
+    OUString const& GetName() const { return maName; }
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
@@ -101,14 +102,17 @@ public:
 
     /** Merges the reorder parameters */
     void mergeReorderParameters(ReorderParam const& rReorderParameters);
-    std::optional<ReorderParam> const& getReorderParameters() { return moOriginalReorderParams; }
+    std::optional<ReorderParam> const& getReorderParameters() const
+    {
+        return moOriginalReorderParams;
+    }
 
     /** Reverses the complete (sheet view and default view) sorting order for the input row */
     SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;
 
     // Last used sort parameters
 
-    std::optional<ScSortParam> const& getSortParam() { return moSortParam; }
+    std::optional<ScSortParam> const& getSortParam() const { return moSortParam; }
 
     /// Remember last used sort parameters when sheet view was sorted.
     void setSortParam(ScSortParam const& rSortParam) { moSortParam = rSortParam; }

@@ -16,6 +16,7 @@
 #include <o3tl/safeint.hxx>
 #include <vector>
 #include <memory>
+#include <iterator>
 
 class ScTable;
 
@@ -26,6 +27,7 @@ class SC_DLLPUBLIC SheetViewManager
 {
 private:
     std::vector<std::shared_ptr<SheetView>> maViews;
+    size_t mnSheetViewCount = 0;
     sal_Int32 maNameCounter = 0;
 
     std::optional<SortOrderReverser> moSortOrder;
@@ -37,6 +39,64 @@ private:
 
     OUString generateName();
 
+    /** Forward iterator over valid (non-null) sheet views only. */
+    class SheetViewIterator
+    {
+    private:
+        using VectorIterator = std::vector<std::shared_ptr<SheetView>>::const_iterator;
+        VectorIterator maCurrentIt;
+        VectorIterator maEndIt;
+
+        void skipEmpty()
+        {
+            while (maCurrentIt != maEndIt && !(*maCurrentIt))
+            {
+                maCurrentIt++;
+            }
+        }
+
+    public:
+        SheetViewIterator(VectorIterator aBegin, VectorIterator aEnd)
+            : maCurrentIt(aBegin)
+            , maEndIt(aEnd)
+        {
+            skipEmpty();
+        }
+
+        SheetView& operator*() const { return **maCurrentIt; }
+
+        SheetViewIterator& operator++()
+        {
+            maCurrentIt++;
+            skipEmpty();
+            return *this;
+        }
+
+        bool operator==(SheetViewIterator const& rOther) const
+        {
+            return maCurrentIt == rOther.maCurrentIt;
+        }
+    };
+
+    /** Wrapper for SheetViewIterator so it is possible to use it with range-for loops. */
+    class SheetViewRange
+    {
+        std::vector<std::shared_ptr<SheetView>> const& mrViews;
+
+    public:
+        SheetViewRange(std::vector<std::shared_ptr<SheetView>> const& rViews)
+            : mrViews(rViews)
+        {
+        }
+
+        SheetViewIterator begin() const
+        {
+            return SheetViewIterator(mrViews.begin(), mrViews.end());
+        }
+
+        SheetViewIterator end() const { return SheetViewIterator(mrViews.end(), mrViews.end()); }
+    };
+
 public:
     SheetViewManager();
 
@@ -47,7 +107,10 @@ public:
     std::shared_ptr<SheetView> get(SheetViewID nID) const;
 
     /** True if there are no sheet views. */
-    bool isEmpty() const { return maViews.empty(); }
+    bool isEmpty() const { return mnSheetViewCount == 0; }
+
+    /** Number of sheet views. */
+    size_t size() const { return mnSheetViewCount; }
 
     /** Remove the sheet view with the ID. True if successful. */
     bool remove(SheetViewID nID);
@@ -55,8 +118,8 @@ public:
     /** Remove all sheet views. */
     void removeAll();
 
-    /** Return the list of sheet views. */
-    std::vector<std::shared_ptr<SheetView>> const& getSheetViews() const { return maViews; }
+    /** Returns a range that iterates only over valid (non-null) sheet views. */
+    SheetViewRange iterateValidSheetViews() const { return SheetViewRange(maViews); }
 
     /** Calculate the next sheet view ID from the current ID. */
     SheetViewID getNextSheetView(SheetViewID nID);

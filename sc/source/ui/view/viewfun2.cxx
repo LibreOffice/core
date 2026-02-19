@@ -2642,9 +2642,9 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB>& rTabs, bool bRecord)
 
         if (auto pManager = rDoc.GetSheetViewManager(nTab))
         {
-            for (auto const& pSheetView : pManager->getSheetViews())
+            for (auto const& rSheetView : pManager->iterateValidSheetViews())
             {
-                aSheetViewHolderTablesToDelete.push_back(pSheetView->getTablePointer());
+                aSheetViewHolderTablesToDelete.push_back(rSheetView.getTablePointer());
             }
         }
 

@@ -2130,8 +2130,8 @@ void ScViewFunc::RemoveCurrentSheetView()
     GetViewData().SetSheetViewID(sc::DefaultSheetViewID);
 
     SCTAB nSheetViewTab = rDocument.GetSheetViewNumber(nTab, nSheetViewID);
-    pSheetManager->remove(nSheetViewID);
 
+    // DeleteTable also removes the sheet view from the manager
     GetViewData().GetDocFunc().DeleteTable(nSheetViewTab, true);
 
     SheetViewChanged();

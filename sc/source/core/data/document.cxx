@@ -733,10 +733,10 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     auto pManager = pTable->GetSheetViewManager();
                     if (pManager)
                     {
-                        for (auto const& pSheetView : pManager->getSheetViews())
+                        for (auto const& rSheetView : pManager->iterateValidSheetViews())
                         {
                             // Set the table pointer to null as the table will be deleted
-                            pSheetView->getTablePointer()->RemoveSheetViewTablePointer();
+                            rSheetView.getTablePointer()->RemoveSheetViewTablePointer();
                         }
                     }
                 }

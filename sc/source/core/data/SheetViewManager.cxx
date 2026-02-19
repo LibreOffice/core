@@ -20,23 +20,34 @@ SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 {
     SheetViewID nID(maViews.size());
     maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName(), nID));
+    mnSheetViewCount++;
     return nID;
 }
 
 bool SheetViewManager::remove(SheetViewID nID)
 {
-    if (isValidSheetViewID(nID))
-    {
-        // We only reset the value and not actually remove if from the vector, because the SheetViewID
-        // also represents the index in the vector. If we removed the value it would make all the
-        // following indices / SheetViewIDs returning the wrong SheetView.
-        maViews[nID].reset();
-        return true;
-    }
-    return false;
+    if (!isValidSheetViewID(nID))
+        return false;
+
+    // It's probably a bug if we want to remove a non-existent sheet view.
+    SAL_WARN_IF(!maViews[nID], "sc", "Removing a non-existing sheet view.");
+
+    if (!maViews[nID])
+        return false;
+
+    // We only reset the value and not actually remove if from the vector, because the SheetViewID
+    // also represents the index in the vector. If we removed the value it would make all the
+    // following indices / SheetViewIDs returning the wrong SheetView.
+    maViews[nID].reset();
+    mnSheetViewCount--;
+    return true;
 }
 
-void SheetViewManager::removeAll() { maViews.clear(); }
+void SheetViewManager::removeAll()
+{
+    maViews.clear();
+    mnSheetViewCount = 0;
+}
 
 std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
 {
@@ -115,14 +126,9 @@ SheetViewID SheetViewManager::getPreviousSheetView(SheetViewID nID)
 
 void SheetViewManager::unsyncAllSheetViews()
 {
-    for (auto const& pSheetView : maViews)
+    for (auto& rSheetView : iterateValidSheetViews())
     {
-        if (!pSheetView)
-        {
-            continue;
-        }
-
-        pSheetView->unsync();
+        rSheetView.unsync();
     }
 }
 
@@ -144,9 +150,9 @@ void SheetViewManager::addOrderIndices(SortOrderInfo const& rSortInfo)
 
 void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParameters)
 {
-    for (auto& pSheetView : maViews)
+    for (auto& rSheetView : iterateValidSheetViews())
     {
-        pSheetView->mergeReorderParameters(rReorderParameters);
+        rSheetView.mergeReorderParameters(rReorderParameters);
     }
 }
 }
