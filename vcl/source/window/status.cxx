@@ -411,11 +411,13 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 
         if (bOffScreen)
         {
+            mpImplData->mpVirDev->EnableRTL(IsRTLEnabled());
             mpImplData->mpVirDev->DrawText(
                         aTextPos,
                         pItem->maText,
                         0, -1, nullptr, nullptr,
                         pGlyphs );
+            mpImplData->mpVirDev->EnableRTL(false);
         }
         else
         {
