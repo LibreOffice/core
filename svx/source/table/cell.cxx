@@ -980,140 +980,139 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         throw DisposedException();
 
     const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
-    if( pMap )
+    if( !pMap )
+        throw UnknownPropertyException( rPropertyName, getXWeak());
+
+    if( (pMap->nFlags & PropertyAttribute::READONLY ) != 0 )
+        throw PropertyVetoException();
+
+    switch( pMap->nWID )
     {
-        if( (pMap->nFlags & PropertyAttribute::READONLY ) != 0 )
-            throw PropertyVetoException();
+    case OWN_ATTR_STYLE:
+    {
+        Reference< XStyle > xStyle;
+        if( !( rValue >>= xStyle ) )
+            throw IllegalArgumentException();
+
+        SfxUnoStyleSheet* pStyle = SfxUnoStyleSheet::getUnoStyleSheet(xStyle);
+        SetStyleSheet( pStyle, true );
+        return;
+    }
+    case OWN_ATTR_TABLEBORDER:
+    {
+        auto pBorder = o3tl::tryAccess<TableBorder>(rValue);
+        if(!pBorder)
+            throw IllegalArgumentException();
+
+        SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
+        SvxBoxInfoItem aBoxInfo( SDRATTR_TABLE_BORDER_INNER );
+        SvxBorderLine aLine;
+
+        bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
+        aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::TOP);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, pBorder->IsTopLineValid);
+
+        bSet = SvxBoxItem::LineToSvxLine(pBorder->BottomLine, aLine, false);
+        aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::BOTTOM);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, pBorder->IsBottomLineValid);
+
+        bSet = SvxBoxItem::LineToSvxLine(pBorder->LeftLine, aLine, false);
+        aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::LEFT);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, pBorder->IsLeftLineValid);
+
+        bSet = SvxBoxItem::LineToSvxLine(pBorder->RightLine, aLine, false);
+        aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::RIGHT);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, pBorder->IsRightLineValid);
+
+        bSet = SvxBoxItem::LineToSvxLine(pBorder->HorizontalLine, aLine, false);
+        aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::HORI);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, pBorder->IsHorizontalLineValid);
+
+        bSet = SvxBoxItem::LineToSvxLine(pBorder->VerticalLine, aLine, false);
+        aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::VERT);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, pBorder->IsVerticalLineValid);
+
+        aBox.SetAllDistances(pBorder->Distance); //TODO
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, pBorder->IsDistanceValid);
+
+        mpProperties->SetObjectItem(aBox);
+        mpProperties->SetObjectItem(aBoxInfo);
+        return;
+    }
+    case OWN_ATTR_FILLBMP_MODE:
+    {
+        BitmapMode eMode;
+        if(!(rValue >>= eMode) )
+        {
+            sal_Int32 nMode = 0;
+            if(!(rValue >>= nMode))
+                throw IllegalArgumentException();
+
+            eMode = static_cast<BitmapMode>(nMode);
+        }
+
+        mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
+        mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
+        return;
+    }
+    case SDRATTR_TABLE_TEXT_ROTATION:
+    {
+        sal_Int32 nRotVal = 0;
+        if (!(rValue >>= nRotVal))
+            throw IllegalArgumentException();
+
+        if (nRotVal != 27000 && nRotVal != 9000 && nRotVal != 0)
+            throw IllegalArgumentException();
+
+        mpProperties->SetObjectItem(SvxTextRotateItem(Degree10(nRotVal/10), SDRATTR_TABLE_TEXT_ROTATION));
+        return;
+    }
+    case SDRATTR_TABLE_CELL_GRABBAG:
+    {
+        if (mpGrabBagItem == nullptr)
+            mpGrabBagItem.reset(new SfxGrabBagItem);
+
+        mpGrabBagItem->PutValue(rValue, 0);
+        return;
+    }
+    default:
+    {
+        SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
+        aSet.Put(mpProperties->GetItem(pMap->nWID));
+
+        bool bSpecial = false;
 
         switch( pMap->nWID )
         {
-        case OWN_ATTR_STYLE:
-        {
-            Reference< XStyle > xStyle;
-            if( !( rValue >>= xStyle ) )
-                throw IllegalArgumentException();
-
-            SfxUnoStyleSheet* pStyle = SfxUnoStyleSheet::getUnoStyleSheet(xStyle);
-            SetStyleSheet( pStyle, true );
-            return;
-        }
-        case OWN_ATTR_TABLEBORDER:
-        {
-            auto pBorder = o3tl::tryAccess<TableBorder>(rValue);
-            if(!pBorder)
-                break;
-
-            SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
-            SvxBoxInfoItem aBoxInfo( SDRATTR_TABLE_BORDER_INNER );
-            SvxBorderLine aLine;
-
-            bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::TOP);
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, pBorder->IsTopLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->BottomLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::BOTTOM);
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, pBorder->IsBottomLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->LeftLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::LEFT);
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, pBorder->IsLeftLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->RightLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::RIGHT);
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, pBorder->IsRightLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->HorizontalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::HORI);
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, pBorder->IsHorizontalLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->VerticalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::VERT);
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, pBorder->IsVerticalLineValid);
-
-            aBox.SetAllDistances(pBorder->Distance); //TODO
-            aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, pBorder->IsDistanceValid);
-
-            mpProperties->SetObjectItem(aBox);
-            mpProperties->SetObjectItem(aBoxInfo);
-            return;
-        }
-        case OWN_ATTR_FILLBMP_MODE:
-        {
-            BitmapMode eMode;
-            if(!(rValue >>= eMode) )
+            case XATTR_FILLBITMAP:
+            case XATTR_FILLGRADIENT:
+            case XATTR_FILLHATCH:
+            case XATTR_FILLFLOATTRANSPARENCE:
+            case XATTR_LINEEND:
+            case XATTR_LINESTART:
+            case XATTR_LINEDASH:
             {
-                sal_Int32 nMode = 0;
-                if(!(rValue >>= nMode))
-                    throw IllegalArgumentException();
-
-                eMode = static_cast<BitmapMode>(nMode);
-            }
-
-            mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
-            mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
-            return;
-        }
-        case SDRATTR_TABLE_TEXT_ROTATION:
-        {
-            sal_Int32 nRotVal = 0;
-            if (!(rValue >>= nRotVal))
-                throw IllegalArgumentException();
-
-            if (nRotVal != 27000 && nRotVal != 9000 && nRotVal != 0)
-                throw IllegalArgumentException();
-
-            mpProperties->SetObjectItem(SvxTextRotateItem(Degree10(nRotVal/10), SDRATTR_TABLE_TEXT_ROTATION));
-            return;
-        }
-        case SDRATTR_TABLE_CELL_GRABBAG:
-        {
-            if (mpGrabBagItem == nullptr)
-                mpGrabBagItem.reset(new SfxGrabBagItem);
-
-            mpGrabBagItem->PutValue(rValue, 0);
-            return;
-        }
-        default:
-        {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(mpProperties->GetItem(pMap->nWID));
-
-            bool bSpecial = false;
-
-            switch( pMap->nWID )
-            {
-                case XATTR_FILLBITMAP:
-                case XATTR_FILLGRADIENT:
-                case XATTR_FILLHATCH:
-                case XATTR_FILLFLOATTRANSPARENCE:
-                case XATTR_LINEEND:
-                case XATTR_LINESTART:
-                case XATTR_LINEDASH:
+                if( pMap->nMemberId == MID_NAME )
                 {
-                    if( pMap->nMemberId == MID_NAME )
+                    OUString aApiName;
+                    if( rValue >>= aApiName )
                     {
-                        OUString aApiName;
-                        if( rValue >>= aApiName )
-                        {
-                            if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, aSet, &GetObject().getSdrModelFromSdrObject()))
-                                bSpecial = true;
-                        }
+                        if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, aSet, &GetObject().getSdrModelFromSdrObject()))
+                            bSpecial = true;
                     }
                 }
-                break;
             }
-
-            if( !bSpecial && !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
-                SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
-
-            GetObject().getSdrModelFromSdrObject().SetChanged();
-            mpProperties->SetMergedItemSetAndBroadcast( aSet );
-            return;
+            break;
         }
-        }
+
+        if( !bSpecial && !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
+            SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
+
+        GetObject().getSdrModelFromSdrObject().SetChanged();
+        mpProperties->SetMergedItemSetAndBroadcast( aSet );
+        return;
     }
-    throw UnknownPropertyException( rPropertyName, getXWeak());
+    }
 }
 
 
@@ -1125,94 +1124,93 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         throw DisposedException();
 
     const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
-    if( pMap )
+    if( !pMap )
+        throw UnknownPropertyException( PropertyName, getXWeak());
+
+    switch( pMap->nWID )
     {
-        switch( pMap->nWID )
-        {
-        case OWN_ATTR_STYLE:
-        {
-            return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
-        }
-        case OWN_ATTR_TABLEBORDER:
-        {
-            const SvxBoxInfoItem& rBoxInfoItem = mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER);
-            const SvxBoxItem& rBox = mpProperties->GetItem(SDRATTR_TABLE_BORDER);
+    case OWN_ATTR_STYLE:
+    {
+        return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
+    }
+    case OWN_ATTR_TABLEBORDER:
+    {
+        const SvxBoxInfoItem& rBoxInfoItem = mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER);
+        const SvxBoxItem& rBox = mpProperties->GetItem(SDRATTR_TABLE_BORDER);
 
-            TableBorder aTableBorder;
-            aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
-            aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::TOP);
-            aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
-            aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::BOTTOM);
-            aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), false);
-            aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::LEFT);
-            aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), false);
-            aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::RIGHT );
-            aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), false);
-            aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
-            aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
-            aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
-            aTableBorder.Distance               = rBox.GetSmallestDistance();
-            aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
+        TableBorder aTableBorder;
+        aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
+        aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::TOP);
+        aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
+        aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::BOTTOM);
+        aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), false);
+        aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::LEFT);
+        aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), false);
+        aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::RIGHT );
+        aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), false);
+        aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
+        aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
+        aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
+        aTableBorder.Distance               = rBox.GetSmallestDistance();
+        aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
 
-            return Any( aTableBorder );
-        }
-        case OWN_ATTR_FILLBMP_MODE:
+        return Any( aTableBorder );
+    }
+    case OWN_ATTR_FILLBMP_MODE:
+    {
+        const XFillBmpStretchItem& rStretchItem = mpProperties->GetItem(XATTR_FILLBMP_STRETCH);
+        const XFillBmpTileItem& rTileItem = mpProperties->GetItem(XATTR_FILLBMP_TILE);
+        if( rTileItem.GetValue() )
         {
-            const XFillBmpStretchItem& rStretchItem = mpProperties->GetItem(XATTR_FILLBMP_STRETCH);
-            const XFillBmpTileItem& rTileItem = mpProperties->GetItem(XATTR_FILLBMP_TILE);
-            if( rTileItem.GetValue() )
-            {
-                return Any( BitmapMode_REPEAT );
-            }
-            else if( rStretchItem.GetValue() )
-            {
-                return Any(  BitmapMode_STRETCH );
-            }
-            else
-            {
-                return Any(  BitmapMode_NO_REPEAT );
-            }
+            return Any( BitmapMode_REPEAT );
         }
-        case SDRATTR_TABLE_TEXT_ROTATION:
+        else if( rStretchItem.GetValue() )
         {
-            const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
-            return Any(sal_Int32(to<Degree100>(rTextRotate.GetValue())));
+            return Any(  BitmapMode_STRETCH );
         }
-        case SDRATTR_TABLE_CELL_GRABBAG:
+        else
         {
-            if (mpGrabBagItem != nullptr)
-            {
-                Any aGrabBagSequence;
-                mpGrabBagItem->QueryValue(aGrabBagSequence);
-                return aGrabBagSequence;
-            }
-            else
-                return Any{css::uno::Sequence<css::beans::PropertyValue>()};
-        }
-        default:
-        {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(mpProperties->GetItem(pMap->nWID));
-
-            Any aAny;
-            if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
-            {
-                if(!aSet.Count())
-                {
-                    // fetch the default from ItemPool
-                    if(SfxItemPool::IsWhich(pMap->nWID))
-                        aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
-                }
-
-                if( aSet.Count() )
-                    aAny = GetAnyForItem( aSet, pMap );
-            }
-
-            return aAny;
-        }
+            return Any(  BitmapMode_NO_REPEAT );
         }
     }
-    throw UnknownPropertyException( PropertyName, getXWeak());
+    case SDRATTR_TABLE_TEXT_ROTATION:
+    {
+        const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
+        return Any(sal_Int32(to<Degree100>(rTextRotate.GetValue())));
+    }
+    case SDRATTR_TABLE_CELL_GRABBAG:
+    {
+        if (mpGrabBagItem != nullptr)
+        {
+            Any aGrabBagSequence;
+            mpGrabBagItem->QueryValue(aGrabBagSequence);
+            return aGrabBagSequence;
+        }
+        else
+            return Any{css::uno::Sequence<css::beans::PropertyValue>()};
+    }
+    default:
+    {
+        SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
+        aSet.Put(mpProperties->GetItem(pMap->nWID));
+
+        Any aAny;
+        if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
+        {
+            if(!aSet.Count())
+            {
+                // fetch the default from ItemPool
+                if(SfxItemPool::IsWhich(pMap->nWID))
+                    aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
+            }
+
+            if( aSet.Count() )
+                aAny = GetAnyForItem( aSet, pMap );
+        }
+
+        return aAny;
+    }
+    }
 }
 
 
