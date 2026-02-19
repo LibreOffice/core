@@ -1753,6 +1753,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         m_pVclParserState->m_nTreeViewExpanders = 0;
         m_pVclParserState->m_nTreeViewColumnCount = 0;
         m_pVclParserState->m_bTreeViewSeenTextInColumn = false;
+        m_pVclParserState->m_bTreeHasHeader = false;
 
         if (!isLegacy())
         {
@@ -1787,8 +1788,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         else
         {
             VclPtr<SvTabListBox> xBox;
-            bool bHeadersVisible = extractHeadersVisible(rMap);
-            if (bHeadersVisible)
+            m_pVclParserState->m_bTreeHasHeader = extractHeadersVisible(rMap);
+            if (m_pVclParserState->m_bTreeHasHeader)
             {
                 VclPtr<VclVBox> xContainer = VclPtr<VclVBox>::Create(pRealParent);
                 OUString containerid(id + "-container");
@@ -2552,15 +2553,22 @@ void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentC
         const bool bTree(pTabListBox->GetStyle() & (WB_HASBUTTONS | WB_HASBUTTONSATROOT));
         const sal_uInt16 nRealColumns = m_pVclParserState->m_nTreeViewRenderers -
                                         m_pVclParserState->m_nTreeViewExpanders;
+        const bool bHasHeader = m_pVclParserState->m_bTreeHasHeader;
         const bool bMultiColumn = nRealColumns > 1;
-        if (bTree && bMultiColumn)
-            pTabListBox->SetRole(SvTabListBoxRole::TreeGrid);
-        else if (bTree)
-            pTabListBox->SetRole(SvTabListBoxRole::Tree);
-        else if (bMultiColumn)
-            pTabListBox->SetRole(SvTabListBoxRole::Grid);
+        if (bHasHeader || bMultiColumn)
+        {
+            if (bTree)
+                pTabListBox->SetRole(SvTabListBoxRole::TreeGrid);
+            else
+                pTabListBox->SetRole(SvTabListBoxRole::Grid);
+        }
         else
-            pTabListBox->SetRole(SvTabListBoxRole::ListBox);
+        {
+            if (bTree)
+                pTabListBox->SetRole(SvTabListBoxRole::Tree);
+            else
+                pTabListBox->SetRole(SvTabListBoxRole::ListBox);
+        }
     }
 
     //Select the first page if it's a notebook
@@ -4044,6 +4052,7 @@ VclBuilder::VclParserState::VclParserState()
     , m_nTreeViewExpanders(0)
     , m_nTreeViewColumnCount(0)
     , m_bTreeViewSeenTextInColumn(false)
+    , m_bTreeHasHeader(false)
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -210,6 +210,7 @@ private:
         sal_uInt16 m_nTreeViewExpanders;
         sal_uInt16 m_nTreeViewColumnCount;
         bool m_bTreeViewSeenTextInColumn;
+        bool m_bTreeHasHeader;
 
         VclParserState();
     };
