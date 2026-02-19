@@ -13,9 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,harfbuzz,$(HARFBUZZ_TARBALL),,harfb
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,harfbuzz))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
+    external/harfbuzz/1265ff8d990284f04d8768f35b0e20ae5f60daae.patch \
     external/harfbuzz/tdf159529.patch.0 \
 ))
 
