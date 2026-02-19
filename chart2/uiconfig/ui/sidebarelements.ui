@@ -126,6 +126,9 @@
             <property name="halign">start</property>
             <property name="use-underline">True</property>
             <property name="draw-indicator">True</property>
+            <accessibility>
+              <relation type="label-for" target="comboboxtext_legend"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -143,11 +146,9 @@
               <item translatable="yes" context="sidebarelements|comboboxtext_legend">Bottom</item>
               <item translatable="yes" context="sidebarelements|comboboxtext_legend">Left</item>
             </items>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="comboboxtext_legend-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarelements|comboboxtext_legend-atkobject">Legend Position</property>
-              </object>
-            </child>
+            <accessibility>
+              <relation type="labelled-by" target="checkbutton_legend"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>

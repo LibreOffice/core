@@ -6,7 +6,6 @@ chart2/uiconfig/ui/dlg_InsertErrorBars.ui://GtkLabel[@id='STR_DATA_SELECT_RANGE_
 chart2/uiconfig/ui/dlg_InsertErrorBars.ui://GtkLabel[@id='STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS'] orphan-label
 chart2/uiconfig/ui/dlg_InsertErrorBars.ui://GtkLabel[@id='STR_CONTROLTEXT_ERROR_BARS_FROM_DATA'] orphan-label
 chart2/uiconfig/ui/sidebarelements.ui://GtkLabel[@id='placement_label'] orphan-label
-chart2/uiconfig/ui/sidebarelements.ui://GtkComboBoxText[@id='comboboxtext_legend'] no-labelled-by
 chart2/uiconfig/ui/sidebarelements.ui://GtkLabel[@id='text_title'] orphan-label
 chart2/uiconfig/ui/sidebarelements.ui://GtkLabel[@id='text_subtitle'] orphan-label
 chart2/uiconfig/ui/sidebarerrorbar.ui://GtkLabel[@id='label3'] orphan-label
