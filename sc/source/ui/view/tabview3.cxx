@@ -2152,11 +2152,11 @@ void ScTabView::OnLibreOfficeKitTabChanged()
         return;
 
     ScTabViewShell* pThisViewShell = aViewData.GetViewShell();
-    SCTAB nThisTabNo = pThisViewShell->GetViewData().CurrentTabForData();
+    SCTAB nThisTabNo = pThisViewShell->GetViewData().GetTabNumber();
     auto lTabSwitch = [pThisViewShell, nThisTabNo] (ScTabViewShell* pOtherViewShell)
     {
         ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
-        SCTAB nOtherTabNo = rOtherViewData.CurrentTabForData();
+        SCTAB nOtherTabNo = rOtherViewData.GetTabNumber();
         if (nThisTabNo == nOtherTabNo)
         {
             for (int i = 0; i < 4; ++i)

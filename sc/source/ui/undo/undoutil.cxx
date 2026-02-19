@@ -39,7 +39,7 @@ void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
     if (!pViewShell)
         return;
 
-    SCTAB nViewTab = pViewShell->GetViewData().CurrentTabForData();
+    SCTAB nViewTab = pViewShell->GetViewData().GetTabNumber();
     if ( nViewTab < nStartZ || nViewTab > nEndZ )
         pViewShell->SetTabNo( nStartZ );
 

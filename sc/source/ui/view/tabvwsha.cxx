@@ -272,7 +272,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_CURRENTTAB:
                 // Table for Basic is 1-based
-                rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData().CurrentTabForData()) + 1 ) );
+                rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData().GetTabNumber()) + 1 ) );
                 break;
 
             case SID_CURRENTDOC:
@@ -504,7 +504,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     Point aPos;
                     bool bIsCol = (nWhich == SID_WINDOW_FIX_COL);
                     aPos.setX(rViewData.GetLOKSheetFreezeIndex(bIsCol));
-                    aPos.setY(rViewData.CurrentTabForData());
+                    aPos.setY(rViewData.GetTabNumber());
                     rSet.Put(SfxPointItem(nWhich, aPos));
                 }
                 break;

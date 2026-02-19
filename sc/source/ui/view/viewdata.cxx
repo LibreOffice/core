@@ -3411,11 +3411,14 @@ void ScViewData::WriteUserData(OUString& rData)
     else
         rData += "0";
 
-    rData += ";" + OUString::number(CurrentTabForData()) + ";" + TAG_TABBARWIDTH + OUString::number( pView->GetTabBarWidth() );
+    rData += ";" + OUString::number(GetTabNumber()) + ";" + TAG_TABBARWIDTH + OUString::number( pView->GetTabBarWidth() );
 
     SCTAB nTabCount = mrDoc.GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
     {
+        if (mrDoc.IsSheetViewHolder(i))
+            continue;
+
         rData += ";";                   // Numbering must not get mixed up under any circumstances
         if (i < static_cast<SCTAB>(maTabData.size()) && maTabData[i])
         {
@@ -3556,7 +3559,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
     ScExtDocSettings& rDocSett = rDocOpt.GetDocSettings();
 
     // displayed sheet
-    rDocSett.mnDisplTab = CurrentTabForData();
+    rDocSett.mnDisplTab = GetTabNumber();
 
     // width of the tabbar, relative to frame window width
     rDocSett.mfTabBarWidth = pView->GetPendingRelTabBarWidth();
@@ -3855,7 +3858,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
 
     OUString sName;
-    GetDocument().GetName( CurrentTabForData(), sName );
+    GetDocument().GetName( GetTabNumber(), sName );
     pSettings[SC_ACTIVE_TABLE].Name = SC_ACTIVETABLE;
     pSettings[SC_ACTIVE_TABLE].Value <<= sName;
     pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;

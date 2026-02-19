@@ -2317,7 +2317,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 {
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocShell->GetDocument();
-    SCTAB nTab = GetViewData().CurrentTabForData();
+    SCTAB nTab = GetViewData().GetTabNumber();
     OUString aTmp;
     rDoc.GetName(nTab, aTmp);
     rData.aTabName = aTmp;

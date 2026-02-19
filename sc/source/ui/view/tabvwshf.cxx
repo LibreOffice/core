@@ -64,8 +64,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
     ScViewData& rViewData   = GetViewData();
     ScDocument& rDoc        = rViewData.GetDocument();
 
-    SCTAB       nCurrentTab = rViewData.CurrentTabForData();
-    SCTAB       nTabCount   = rDoc.GetTableCount();
+    SCTAB nCurrentTab = rViewData.GetTabNumber();
+
+    SCTAB nTabCount   = rDoc.GetTableCount();
     sal_uInt16  nSlot       = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -120,7 +121,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             if (it == rMark.GetSelectedTabs().end())
                             {
                                 // No it doesn't, so we won't shift the selected tab. Let's remember its position.
-                                nActiveTab = GetViewData().CurrentTabForData();
+                                nActiveTab = GetViewData().GetTabNumber();
                             }
                             rMark.SelectOneTable(nTabNumber);
                         }
@@ -212,7 +213,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TAB_DUPLICATE:
             {
                 // Get info about current document and selected tab
-                SCTAB nTab = rViewData.CurrentTabForData();
+                SCTAB nTab = rViewData.GetTabNumber();
                 OUString aDocName = GetViewData().GetDocShell()->GetTitle(SFX_TITLE_FULLNAME);
                 sal_uInt16 nDoc = 0;
                 bool bCpy = true;
@@ -394,7 +395,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 ScDocShell* pDocSh = rViewData.GetDocShell();
                 ScDocFunc &rFunc = pDocSh->GetDocFunc();
-                bool bSet = !rDoc.IsLayoutRTL( nCurrentTab );
+                bool bSet = !rDoc.IsLayoutRTL(nCurrentTab);
 
                 const ScMarkData& rMark = rViewData.GetMarkData();
                 if ( rMark.GetSelectCount() != 0 )
@@ -411,7 +412,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     pUndoManager->LeaveListAction();
                 }
                 else
-                    rFunc.SetLayoutRTL( nCurrentTab, bSet );
+                    rFunc.SetLayoutRTL(nCurrentTab, bSet);
             }
             break;
 
@@ -479,7 +480,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
     ScDocument& rDoc        = rViewData.GetDocument();
     ScDocShell* pDocShell   = rViewData.GetDocShell();
     ScMarkData& rMark       = GetViewData().GetMarkData();
-    SCTAB       nTab        = rViewData.CurrentTabForData();
+    SCTAB       nTab        = rViewData.GetTabNumber();
 
     SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
@@ -625,7 +626,7 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
 
     bool   bDoIt = false;
     sal_uInt16 nDoc = 0;
-    SCTAB nTab = rViewData.CurrentTabForData();
+    SCTAB nTab = rViewData.GetTabNumber();
     SCTAB nContextMenuTab = -1;
     bool bFromContextMenu = false;
     bool bFromMoveOrCopySheetDialog = false; // FN_PARAM_6
@@ -798,7 +799,7 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
     else
     {
         OUString aDefaultName;
-        rDoc.GetName( rViewData.CurrentTabForData(), aDefaultName );
+        rDoc.GetName( rViewData.GetTabNumber(), aDefaultName );
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -850,7 +851,7 @@ void ScTabViewShell::ExecuteInsertTable(SfxRequest& rReq)
     ScDocument& rDoc        = rViewData.GetDocument();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     sal_uInt16  nSlot       = rReq.GetSlot();
-    SCTAB       nCurrentTab = rViewData.CurrentTabForData();
+    SCTAB       nCurrentTab = rViewData.GetTabNumber();
     SCTAB       nTabCount   = rDoc.GetTableCount();
     ScMarkData& rMark    = rViewData.GetMarkData();
     SCTAB   nTabSelCount = rMark.GetSelectCount();
@@ -914,7 +915,7 @@ void ScTabViewShell::DoInsertTableFromDialog(SfxRequest& rReq, const VclPtr<Abst
 {
     ScViewData& rViewData   = GetViewData();
     ScDocument& rDoc        = rViewData.GetDocument();
-    SCTAB       nCurrentTab = rViewData.CurrentTabForData();
+    SCTAB       nCurrentTab = rViewData.GetTabNumber();
     SCTAB       nTabNr      = nCurrentTab;
     SCTAB       nTabCount   = rDoc.GetTableCount();
     ScMarkData& rMark    = rViewData.GetMarkData();
@@ -1058,7 +1059,7 @@ void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
     if ( nSlot == FID_TAB_MENU_RENAME )
         nSlot = FID_TAB_RENAME;             // equal execute
 
-    SCTAB nTabNr = rViewData.CurrentTabForData();
+    SCTAB nTabNr = rViewData.GetTabNumber();
     ScMarkData& rMark = rViewData.GetMarkData();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
@@ -1126,7 +1127,7 @@ void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
 
             case FID_TAB_RENAME:
                 aDlgTitle = ScResId(SCSTR_RENAMETAB);
-                rDoc.GetName( rViewData.CurrentTabForData(), aName );
+                rDoc.GetName( rViewData.GetTabNumber(), aName );
                 sHelpId = HID_SC_RENAME_NAME;
                 break;
         }
@@ -1167,7 +1168,7 @@ bool ScTabViewShell::DoAppendOrRenameTableDialog(sal_Int32 nResult, const VclPtr
         return false;
 
     ScViewData& rViewData   = GetViewData();
-    SCTAB nTabNr = rViewData.CurrentTabForData();
+    SCTAB nTabNr = rViewData.GetTabNumber();
     bool     bDone   = false;
 
     OUString aName = pDlg->GetInputString();
@@ -1217,10 +1218,10 @@ void ScTabViewShell::ExecuteSetTableBackgroundCol(SfxRequest& rReq)
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     if ( nSlot == FID_TAB_MENU_SET_TAB_BG_COLOR )
         nSlot = FID_TAB_SET_TAB_BG_COLOR;
-    SCTAB nTabNr = rViewData.CurrentTabForData();
+    SCTAB nTabNr = rViewData.GetTabNumber();
     ScMarkData& rMark = rViewData.GetMarkData();
     SCTAB nTabSelCount = rMark.GetSelectCount();
-    SCTAB nCurrentTab = rViewData.CurrentTabForData();
+    SCTAB nCurrentTab = rViewData.GetTabNumber();
 
     if ( !rDoc.IsDocEditable() )
         return;
@@ -1302,7 +1303,7 @@ bool ScTabViewShell::DoTableBackgroundDialog(sal_Int32 nResult, const VclPtr<Abs
     ScViewData& rViewData   = GetViewData();
     ScDocument& rDoc        = rViewData.GetDocument();
     ScMarkData& rMark = rViewData.GetMarkData();
-    SCTAB nCurrentTab = rViewData.CurrentTabForData();
+    SCTAB nCurrentTab = rViewData.GetTabNumber();
     SCTAB nTabSelCount = rMark.GetSelectCount();
     bool bDone   = false; /// temp
     Color aSelectedColor;

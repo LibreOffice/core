@@ -2392,7 +2392,7 @@ void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    SCTAB nCurrentTabIndex = GetViewData().CurrentTabForData();
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNumber();
     SfxViewShell* pThisViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
