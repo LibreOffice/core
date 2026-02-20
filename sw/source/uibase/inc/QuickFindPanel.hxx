@@ -17,6 +17,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/Toolbar.hxx>
@@ -26,33 +27,6 @@ namespace sw::sidebar
 {
 class QuickFindPanel : public PanelLayout
 {
-    class SearchOptionsDialog final : public weld::GenericDialogController
-    {
-        friend class QuickFindPanel;
-
-        std::unique_ptr<weld::CheckButton> m_xMatchCaseCheckButton;
-        std::unique_ptr<weld::CheckButton> m_xWholeWordsOnlyCheckButton;
-        std::unique_ptr<weld::CheckButton> m_xCommentsCheckButton;
-        std::unique_ptr<weld::CheckButton> m_xRegularExpressionsCheckButton;
-        std::unique_ptr<weld::CheckButton> m_xSimilarityCheckButton;
-        std::unique_ptr<weld::Button> m_xSimilaritySettingsDialogButton;
-
-        DECL_LINK(SimilarityCheckButtonToggledHandler, weld::Toggleable&, void);
-        DECL_LINK(SimilaritySettingsDialogButtonClickedHandler, weld::Button&, void);
-
-        short executeSubDialog(VclAbstractDialog* pVclAbstractDialog);
-
-        bool m_executingSubDialog = false;
-
-        bool m_bIsLEVRelaxed = true;
-        sal_uInt16 m_nLEVOther = 2;
-        sal_uInt16 m_nLEVShorter = 2;
-        sal_uInt16 m_nLEVLonger = 2;
-
-    public:
-        SearchOptionsDialog(weld::Window* pParent);
-    };
-
 public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
                                                const uno::Reference<frame::XFrame>& rxFrame,
@@ -66,13 +40,28 @@ private:
     friend class QuickFindPanelWindow;
     std::vector<std::unique_ptr<SwPaM>> m_vPaMs;
 
-    std::unique_ptr<weld::Entry> m_xSearchFindEntry;
+    std::unique_ptr<weld::ComboBox> m_xSearchComboBox;
     std::unique_ptr<weld::Toolbar> m_xSearchOptionsToolbar;
     std::unique_ptr<weld::Toolbar> m_xFindAndReplaceToolbar;
     std::unique_ptr<ToolbarUnoDispatcher> m_xFindAndReplaceToolbarDispatch;
     std::unique_ptr<weld::Box> m_xTopbar;
+    std::unique_ptr<weld::Box> m_xSearchOptionsBox;
     std::unique_ptr<weld::TreeView> m_xSearchFindsList;
     std::unique_ptr<weld::Label> m_xSearchFindFoundTimesLabel;
+
+    std::unique_ptr<weld::CheckButton> m_xMatchCaseCheckButton;
+    std::unique_ptr<weld::CheckButton> m_xWholeWordsOnlyCheckButton;
+    std::unique_ptr<weld::CheckButton> m_xCommentsCheckButton;
+    std::unique_ptr<weld::CheckButton> m_xRegularExpressionsCheckButton;
+    std::unique_ptr<weld::CheckButton> m_xSimilarityCheckButton;
+    std::unique_ptr<weld::Button> m_xSimilaritySettingsDialogButton;
+
+    bool m_executingSubDialog = false;
+
+    bool m_bIsLEVRelaxed = true;
+    sal_uInt16 m_nLEVOther = 2;
+    sal_uInt16 m_nLEVShorter = 2;
+    sal_uInt16 m_nLEVLonger = 2;
 
     SwWrtShell* m_pWrtShell;
     std::unique_ptr<svt::AcceleratorExecute> m_xAcceleratorExecute;
@@ -81,20 +70,10 @@ private:
 
     int m_nMinimumPanelWidth;
 
-    bool m_bMatchCase = false;
-    bool m_bWholeWordsOnly = false;
-    bool m_bComments = true;
-    bool m_bRegularExpression = false;
-    bool m_bSimilarity = false;
-    bool m_bIsLEVRelaxed = true;
-    sal_uInt16 m_nLEVOther = 2;
-    sal_uInt16 m_nLEVShorter = 2;
-    sal_uInt16 m_nLEVLonger = 2;
-
-    DECL_LINK(SearchFindEntryFocusInHandler, weld::Widget&, void);
-    DECL_LINK(SearchFindEntryActivateHandler, weld::Entry&, bool);
-    DECL_LINK(SearchFindEntryChangedHandler, weld::Entry&, void);
-    DECL_LINK(SearchFindEntryKeyInputHandler, const KeyEvent&, bool);
+    DECL_LINK(SearchComboBoxFocusInHandler, weld::Widget&, void);
+    DECL_LINK(SearchComboBoxActivateHandler, weld::ComboBox&, bool);
+    DECL_LINK(SearchComboBoxChangedHandler, weld::ComboBox&, void);
+    DECL_LINK(SearchComboBoxKeyInputHandler, const KeyEvent&, bool);
     DECL_LINK(SearchFindsListCustomGetSizeHandler, weld::TreeView::get_size_args, Size);
     DECL_LINK(SearchFindsListRender, weld::TreeView::render_args, void);
     DECL_LINK(SearchFindsListSelectionChangedHandler, weld::TreeView&, void);
@@ -102,9 +81,12 @@ private:
     DECL_LINK(SearchFindsListMousePressHandler, const MouseEvent&, bool);
     DECL_LINK(SearchOptionsToolbarClickedHandler, const OUString&, void);
     DECL_LINK(FindAndReplaceToolbarClickedHandler, const OUString&, void);
+    DECL_LINK(SimilarityCheckButtonToggledHandler, weld::Toggleable&, void);
+    DECL_LINK(SimilaritySettingsDialogButtonClickedHandler, weld::Button&, void);
 
     void FillSearchFindsList();
     bool UpgradeSearchToSearchDialog();
+    short executeSubDialog(VclAbstractDialog* pVclAbstractDialog);
 };
 
 class QuickFindPanelWrapper : public SfxQuickFindWrapper

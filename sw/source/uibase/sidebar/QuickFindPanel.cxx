@@ -64,23 +64,7 @@ void getAnchorPos(SwPosition& rPos)
 
 namespace sw::sidebar
 {
-QuickFindPanel::SearchOptionsDialog::SearchOptionsDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, u"modules/swriter/ui/sidebarquickfindoptionsdialog.ui"_ustr,
-                              u"SearchOptionsDialog"_ustr)
-    , m_xMatchCaseCheckButton(m_xBuilder->weld_check_button(u"matchcase"_ustr))
-    , m_xWholeWordsOnlyCheckButton(m_xBuilder->weld_check_button(u"wholewordsonly"_ustr))
-    , m_xCommentsCheckButton(m_xBuilder->weld_check_button(u"comments"_ustr))
-    , m_xRegularExpressionsCheckButton(m_xBuilder->weld_check_button(u"regularexpressions"_ustr))
-    , m_xSimilarityCheckButton(m_xBuilder->weld_check_button(u"similarity"_ustr))
-    , m_xSimilaritySettingsDialogButton(m_xBuilder->weld_button(u"similaritysettingsdialog"_ustr))
-{
-    m_xSimilarityCheckButton->connect_toggled(
-        LINK(this, SearchOptionsDialog, SimilarityCheckButtonToggledHandler));
-    m_xSimilaritySettingsDialogButton->connect_clicked(
-        LINK(this, SearchOptionsDialog, SimilaritySettingsDialogButtonClickedHandler));
-}
-
-short QuickFindPanel::SearchOptionsDialog::executeSubDialog(VclAbstractDialog* dialog)
+short QuickFindPanel::executeSubDialog(VclAbstractDialog* dialog)
 {
     assert(!m_executingSubDialog);
     comphelper::ScopeGuard g([this] { m_executingSubDialog = false; });
@@ -88,18 +72,16 @@ short QuickFindPanel::SearchOptionsDialog::executeSubDialog(VclAbstractDialog* d
     return dialog->Execute();
 }
 
-IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilarityCheckButtonToggledHandler,
-                weld::Toggleable&, void)
+IMPL_LINK_NOARG(QuickFindPanel, SimilarityCheckButtonToggledHandler, weld::Toggleable&, void)
 {
     m_xSimilaritySettingsDialogButton->set_sensitive(m_xSimilarityCheckButton->get_active());
 }
 
-IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilaritySettingsDialogButtonClickedHandler,
-                weld::Button&, void)
+IMPL_LINK_NOARG(QuickFindPanel, SimilaritySettingsDialogButtonClickedHandler, weld::Button&, void)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(
-        m_xDialog.get(), m_bIsLEVRelaxed, m_nLEVOther, m_nLEVShorter, m_nLEVLonger));
+        GetFrameWeld(), m_bIsLEVRelaxed, m_nLEVOther, m_nLEVShorter, m_nLEVLonger));
 
     if (executeSubDialog(pDlg.get()) == RET_OK)
     {
@@ -146,20 +128,28 @@ QuickFindPanel::Create(weld::Widget* pParent,
 QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame,
                                SfxBindings* pBindings)
     : PanelLayout(pParent, u"QuickFindPanel"_ustr, u"modules/swriter/ui/sidebarquickfind.ui"_ustr)
-    , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
+    , m_xSearchComboBox(m_xBuilder->weld_combo_box(u"searchterm"_ustr))
     , m_xSearchOptionsToolbar(m_xBuilder->weld_toolbar(u"searchoptionstoolbar"_ustr))
     , m_xFindAndReplaceToolbar(m_xBuilder->weld_toolbar(u"findandreplacetoolbar"_ustr))
     , m_xFindAndReplaceToolbarDispatch(
           new ToolbarUnoDispatcher(*m_xFindAndReplaceToolbar, *m_xBuilder, rxFrame))
     , m_xTopbar(m_xBuilder->weld_box(u"topbar"_ustr))
+    , m_xSearchOptionsBox(m_xBuilder->weld_box(u"searchoptionsbox"_ustr))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
+    , m_xMatchCaseCheckButton(m_xBuilder->weld_check_button(u"matchcase"_ustr))
+    , m_xWholeWordsOnlyCheckButton(m_xBuilder->weld_check_button(u"wholewordsonly"_ustr))
+    , m_xCommentsCheckButton(m_xBuilder->weld_check_button(u"comments"_ustr))
+    , m_xRegularExpressionsCheckButton(m_xBuilder->weld_check_button(u"regularexpressions"_ustr))
+    , m_xSimilarityCheckButton(m_xBuilder->weld_check_button(u"similarity"_ustr))
+    , m_xSimilaritySettingsDialogButton(m_xBuilder->weld_button(u"similaritysettingsdialog"_ustr))
     , m_pWrtShell(::GetActiveWrtShell())
     , m_xAcceleratorExecute(svt::AcceleratorExecute::createAcceleratorHelper())
     , m_pBindings(pBindings)
 {
     m_xAcceleratorExecute->init(comphelper::getProcessComponentContext(), rxFrame);
 
+    m_xSearchComboBox->set_entry_completion(false);
     if (comphelper::LibreOfficeKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
@@ -172,17 +162,17 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_nMinimumPanelWidth
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
     m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);
+    m_xCommentsCheckButton->set_active(true);
+    m_xSearchOptionsBox->set_visible(false);
 
-    m_xSearchFindEntry->connect_focus_in(LINK(this, QuickFindPanel, SearchFindEntryFocusInHandler));
-    m_xSearchFindEntry->connect_activate(
-        LINK(this, QuickFindPanel, SearchFindEntryActivateHandler));
-    m_xSearchFindEntry->connect_changed(LINK(this, QuickFindPanel, SearchFindEntryChangedHandler));
-    m_xSearchFindEntry->connect_key_press(
-        LINK(this, QuickFindPanel, SearchFindEntryKeyInputHandler));
+    m_xSearchComboBox->connect_focus_in(LINK(this, QuickFindPanel, SearchComboBoxFocusInHandler));
+    m_xSearchComboBox->connect_entry_activate(
+        LINK(this, QuickFindPanel, SearchComboBoxActivateHandler));
+    m_xSearchComboBox->connect_changed(LINK(this, QuickFindPanel, SearchComboBoxChangedHandler));
+    m_xSearchComboBox->connect_key_press(LINK(this, QuickFindPanel, SearchComboBoxKeyInputHandler));
 
     m_xSearchOptionsToolbar->connect_clicked(
         LINK(this, QuickFindPanel, SearchOptionsToolbarClickedHandler));
-
     m_xFindAndReplaceToolbar->connect_clicked(
         LINK(this, QuickFindPanel, FindAndReplaceToolbarClickedHandler));
 
@@ -195,48 +185,17 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
         m_xSearchFindsList->set_column_custom_renderer(1, true);
     }
 
+    m_xSimilaritySettingsDialogButton->set_sensitive(m_xSimilarityCheckButton->get_active());
+    m_xSimilarityCheckButton->connect_toggled(
+        LINK(this, QuickFindPanel, SimilarityCheckButtonToggledHandler));
+    m_xSimilaritySettingsDialogButton->connect_clicked(
+        LINK(this, QuickFindPanel, SimilaritySettingsDialogButtonClickedHandler));
     m_xSearchFindsList->connect_selection_changed(
         LINK(this, QuickFindPanel, SearchFindsListSelectionChangedHandler));
     m_xSearchFindsList->connect_row_activated(
         LINK(this, QuickFindPanel, SearchFindsListRowActivatedHandler));
     m_xSearchFindsList->connect_mouse_press(
         LINK(this, QuickFindPanel, SearchFindsListMousePressHandler));
-}
-
-IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUString&, void)
-{
-    SearchOptionsDialog aDlg(GetFrameWeld());
-
-    aDlg.m_xMatchCaseCheckButton->set_active(m_bMatchCase);
-    aDlg.m_xWholeWordsOnlyCheckButton->set_active(m_bWholeWordsOnly);
-    aDlg.m_xCommentsCheckButton->set_active(m_bComments);
-    aDlg.m_xRegularExpressionsCheckButton->set_active(m_bRegularExpression);
-    aDlg.m_xSimilarityCheckButton->set_active(m_bSimilarity);
-    aDlg.m_xSimilaritySettingsDialogButton->set_sensitive(m_bSimilarity);
-    if (m_bSimilarity)
-    {
-        aDlg.m_bIsLEVRelaxed = m_bIsLEVRelaxed;
-        aDlg.m_nLEVOther = m_nLEVOther;
-        aDlg.m_nLEVShorter = m_nLEVShorter;
-        aDlg.m_nLEVLonger = m_nLEVLonger;
-    }
-
-    if (aDlg.run() == RET_OK)
-    {
-        m_bMatchCase = aDlg.m_xMatchCaseCheckButton->get_active();
-        m_bWholeWordsOnly = aDlg.m_xWholeWordsOnlyCheckButton->get_active();
-        m_bComments = aDlg.m_xCommentsCheckButton->get_active();
-        m_bRegularExpression = aDlg.m_xRegularExpressionsCheckButton->get_active();
-        m_bSimilarity = aDlg.m_xSimilarityCheckButton->get_active();
-        if (m_bSimilarity)
-        {
-            m_bIsLEVRelaxed = aDlg.m_bIsLEVRelaxed;
-            m_nLEVOther = aDlg.m_nLEVOther;
-            m_nLEVShorter = aDlg.m_nLEVShorter;
-            m_nLEVLonger = aDlg.m_nLEVLonger;
-        }
-        FillSearchFindsList();
-    }
 }
 
 // tdf#162580 related: When upgrading from Find toolbar search to advanced Find and Replace
@@ -255,11 +214,17 @@ bool QuickFindPanel::UpgradeSearchToSearchDialog()
     if (pSearchDialog)
     {
         pSearchDialog->SetSearchLabel(EMPTY_OUSTRING);
-        pSearchDialog->SetSearchLBEntryTextAndGrabFocus(m_xSearchFindEntry->get_text());
+        pSearchDialog->SetSearchLBEntryTextAndGrabFocus(m_xSearchComboBox->get_active_text());
         pSearchDialog->Present();
         return true;
     }
     return false;
+}
+
+IMPL_LINK(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUString&, rCommand, void)
+{
+    if (rCommand == "searchoptionsbutton")
+        m_xSearchOptionsBox->set_visible(!m_xSearchOptionsBox->get_visible());
 }
 
 IMPL_LINK(QuickFindPanel, FindAndReplaceToolbarClickedHandler, const OUString&, rCommand, void)
@@ -268,7 +233,7 @@ IMPL_LINK(QuickFindPanel, FindAndReplaceToolbarClickedHandler, const OUString&, 
         UpgradeSearchToSearchDialog();
 }
 
-IMPL_LINK(QuickFindPanel, SearchFindEntryKeyInputHandler, const KeyEvent&, rKeyEvent, bool)
+IMPL_LINK(QuickFindPanel, SearchComboBoxKeyInputHandler, const KeyEvent&, rKeyEvent, bool)
 {
     const OUString aCommand(m_xAcceleratorExecute->findCommand(
         svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyEvent.GetKeyCode())));
@@ -279,26 +244,33 @@ IMPL_LINK(QuickFindPanel, SearchFindEntryKeyInputHandler, const KeyEvent&, rKeyE
 
 QuickFindPanel::~QuickFindPanel()
 {
-    m_xSearchFindEntry.reset();
+    m_xSearchComboBox.reset();
     m_xSearchFindsList.reset();
     m_xAcceleratorExecute.reset();
 }
 
-IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryFocusInHandler, weld::Widget&, void)
+IMPL_LINK_NOARG(QuickFindPanel, SearchComboBoxFocusInHandler, weld::Widget&, void)
 {
-    if (m_xSearchFindEntry->get_text().getLength())
-        m_xSearchFindEntry->select_region(0, m_xSearchFindEntry->get_text().getLength());
+    if (m_xSearchComboBox->get_active_text().getLength())
+        m_xSearchComboBox->select_entry_region(0, m_xSearchComboBox->get_active_text().getLength());
 }
 
-IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryChangedHandler, weld::Entry&, void)
+IMPL_LINK_NOARG(QuickFindPanel, SearchComboBoxChangedHandler, weld::ComboBox&, void)
 {
-    m_xSearchFindEntry->set_message_type(weld::EntryMessageType::Normal);
+    m_xSearchComboBox->set_entry_message_type(weld::EntryMessageType::Normal);
     m_xSearchFindsList->clear();
     m_xSearchFindFoundTimesLabel->set_label(OUString());
+
+    if (m_xSearchComboBox->get_popup_shown() && m_xSearchComboBox->get_active_text().getLength())
+        FillSearchFindsList();
 }
 
-IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bool)
+IMPL_LINK_NOARG(QuickFindPanel, SearchComboBoxActivateHandler, weld::ComboBox&, bool)
 {
+    if (int pos = m_xSearchComboBox->find_text(m_xSearchComboBox->get_active_text()); pos != -1)
+        m_xSearchComboBox->remove(pos);
+    m_xSearchComboBox->insert_text(0, m_xSearchComboBox->get_active_text());
+
     FillSearchFindsList();
     return true;
 }
@@ -505,7 +477,7 @@ void QuickFindPanel::FillSearchFindsList()
     m_xSearchFindsList->clear();
     m_xSearchFindFoundTimesLabel->set_label(OUString());
 
-    const OUString sFindEntry = m_xSearchFindEntry->get_text();
+    const OUString sFindEntry = m_xSearchComboBox->get_active_text();
     if (sFindEntry.isEmpty())
         return;
 
@@ -517,15 +489,15 @@ void QuickFindPanel::FillSearchFindsList()
     aSearchOptions.Locale = GetAppLanguageTag().getLocale();
     aSearchOptions.searchString = sFindEntry;
     aSearchOptions.replaceString.clear();
-    if (m_bRegularExpression)
+    if (m_xRegularExpressionsCheckButton->get_active())
     {
         aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
     }
     else
     {
-        if (m_bWholeWordsOnly)
+        if (m_xWholeWordsOnlyCheckButton->get_active())
             aSearchOptions.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
-        if (m_bSimilarity)
+        if (m_xSimilarityCheckButton->get_active())
         {
             aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::APPROXIMATE;
             if (m_bIsLEVRelaxed)
@@ -538,14 +510,14 @@ void QuickFindPanel::FillSearchFindsList()
             aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
     }
     TransliterationFlags nTransliterationFlags = TransliterationFlags::IGNORE_WIDTH;
-    if (!m_bMatchCase)
+    if (!m_xMatchCaseCheckButton->get_active())
         nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
     aSearchOptions.transliterateFlags = nTransliterationFlags;
 
     m_pWrtShell->StartAllAction();
     /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
-        aSearchOptions, m_bComments, SwDocPositions::Start, SwDocPositions::End,
-        FindRanges::InBody | FindRanges::InSelAll, false);
+        aSearchOptions, m_xCommentsCheckButton->get_active(), SwDocPositions::Start,
+        SwDocPositions::End, FindRanges::InBody | FindRanges::InSelAll, false);
     m_pWrtShell->EndAllAction();
 
     if (m_pWrtShell->HasMark())
@@ -712,8 +684,8 @@ void QuickFindPanel::FillSearchFindsList()
     auto nSearchFindFoundTimes = m_vPaMs.size();
 
     // set the search term entry background
-    m_xSearchFindEntry->set_message_type(nSearchFindFoundTimes ? weld::EntryMessageType::Normal
-                                                               : weld::EntryMessageType::Error);
+    m_xSearchComboBox->set_entry_message_type(
+        nSearchFindFoundTimes ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
     // make the search finds list focusable or not
     m_xSearchFindsList->set_sensitive(bool(nSearchFindFoundTimes));
 
