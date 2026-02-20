@@ -1892,6 +1892,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169559)
         "val", u"1701");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf114443_PPSX)
+{
+    createSdImpressDoc("ppsx/tdf114443-6.ppsx");
+    save(TestFilter::PPSX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
+
+    // Without the fix, this would have been:
+    //   application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml
+    // which means the file loses its slideshow/autoplay nature and PowerPoint rejects it.
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
+                "ContentType",
+                u"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

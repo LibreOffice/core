@@ -157,6 +157,8 @@ struct FilterBaseImpl
 
     bool mbExportTemplate;
 
+    bool mbExportSlideShow;
+
     /// @throws RuntimeException
     explicit            FilterBaseImpl( const Reference< XComponentContext >& rxContext );
 
@@ -169,7 +171,8 @@ FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext 
     meVersion(ECMA_376_1ST_EDITION),
     mxComponentContext( rxContext, UNO_SET_THROW ),
     mbExportVBA(false),
-    mbExportTemplate(false)
+    mbExportTemplate(false),
+    mbExportSlideShow(false)
 {
 }
 
@@ -436,6 +439,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
             sal_Int32 nFlags(0);
             rVal.Value >>= nFlags;
             mxImpl->mbExportTemplate = bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::TEMPLATE);
+            mxImpl->mbExportSlideShow = bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::STARTPRESENTATION);
         }
     }
 }
@@ -585,6 +589,11 @@ bool FilterBase::exportVBA() const
 bool FilterBase::isExportTemplate() const
 {
     return mxImpl->mbExportTemplate;
+}
+
+bool FilterBase::isExportSlideShow() const
+{
+    return mxImpl->mbExportSlideShow;
 }
 
 } // namespace oox::core

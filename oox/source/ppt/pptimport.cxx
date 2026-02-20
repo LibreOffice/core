@@ -221,6 +221,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
         {
             {"IsPPTM", uno::Any(exportVBA())},
             {"IsTemplate", uno::Any(isExportTemplate())},
+            {"IsSlideShow", uno::Any(isExportSlideShow())},
         }));
 
         Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
