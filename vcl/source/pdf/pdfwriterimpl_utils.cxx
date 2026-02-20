@@ -237,6 +237,7 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
 
     osl_getSystemTime(&aGMT);
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
+    osl_getDateTimeFromTimeValue( &aTVal, &aDT );
     OStringBuffer aCreationMetaDateString(64);
 
     // i59651: we fill the Metadata date string as well, if PDF/A is requested
