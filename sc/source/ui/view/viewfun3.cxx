@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/lok.hxx>
 #include <sot/formats.hxx>
@@ -2072,7 +2073,8 @@ void ScViewFunc::SheetViewChanged()
     ScViewData& rViewData = GetViewData();
     ScDocShell& rDocSh = *rViewData.GetDocShell();
     ScDocument& rDocument = rViewData.GetDocument();
-    rDocSh.PostPaint(0, 0, 0, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB, PaintPartFlags::All);
+    SCTAB nTab = rViewData.GetTabNumber();
+    rDocSh.PostPaint(0, 0, nTab, rDocument.MaxCol(), rDocument.MaxRow(), nTab, PaintPartFlags::All);
 
     if (ScTabViewShell* pViewShell = GetViewData().GetViewShell())
     {
@@ -2081,8 +2083,23 @@ void ScViewFunc::SheetViewChanged()
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, "all"_ostr);
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY, "all"_ostr);
     }
-    SfxBindings& rBindings = rViewData.GetBindings();
-    rBindings.Invalidate(FID_CURRENT_SHEET_VIEW);
+    // Invalidate for all views (connected to the current document)
+    ScTabViewShell* pThisViewShell = rViewData.GetViewShell();
+    if (pThisViewShell)
+    {
+        ViewShellDocId nDocID = pThisViewShell->GetDocId();
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell && pTabViewShell->GetDocId() == nDocID)
+            {
+                SfxBindings& rBindings = pTabViewShell->GetViewFrame().GetBindings();
+                rBindings.Invalidate(FID_CURRENT_SHEET_VIEW);
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
 }
 
 void ScViewFunc::MakeNewSheetView()
@@ -2162,8 +2179,7 @@ void ScViewFunc::SelectSheetView(sc::SheetViewID nSelectSheetViewID)
     if (GetViewData().GetDocument().IsSheetViewHolder(nTab))
         return;
 
-    sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
-    if (nSheetViewID == nSelectSheetViewID)
+    if (nSelectSheetViewID == GetViewData().GetSheetViewID())
         return;
 
     GetViewData().SetSheetViewID(nSelectSheetViewID);

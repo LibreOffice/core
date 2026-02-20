@@ -12,6 +12,8 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <SheetViewTypes.hxx>
 
+class ScViewData;
+
 /** Box / container for the combobox for showing / selecting the sheet view */
 class SheetViewBox final : public InterimItemWindow
 {
@@ -22,7 +24,7 @@ public:
 
     virtual void GetFocus() override;
 
-    void Update(sc::SheetViewID nID);
+    void Update(ScViewData& rViewData);
 
     weld::ComboBox* getWidget() { return m_xWidget.get(); }
 

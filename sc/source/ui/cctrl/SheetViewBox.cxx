@@ -50,26 +50,22 @@ void SheetViewBox::GetFocus()
     InterimItemWindow::GetFocus();
 }
 
-void SheetViewBox::Update(sc::SheetViewID nSelectedID)
+void SheetViewBox::Update(ScViewData& rViewData)
 {
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    if (!pViewData)
-        return;
-
     m_xWidget->clear();
     m_xWidget->freeze();
 
     OUString sActiveID = OUString::number(sc::DefaultSheetViewID);
     m_xWidget->append(sActiveID, sc::SheetViewManager::defaultViewName());
 
-    auto pSheetManager = pViewData->GetCurrentSheetViewManager();
+    auto pSheetManager = rViewData.GetCurrentSheetViewManager();
 
     if (pSheetManager)
     {
         for (auto const& rSheetView : pSheetManager->iterateValidSheetViews())
         {
             OUString sID = OUString::number(rSheetView.getID());
-            if (rSheetView.getID() == nSelectedID)
+            if (rSheetView.getID() == rViewData.GetSheetViewID())
                 sActiveID = sID;
             m_xWidget->append(sID, rSheetView.GetName());
         }
