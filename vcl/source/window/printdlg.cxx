@@ -662,13 +662,13 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     readFromSettings();
 
     // setup click hdl
-    mxOKButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
-    mxCancelButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
-    mxSetupButton->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
-    mxBackwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
-    mxForwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
-    mxFirstBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
-    mxLastBtn->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
+    mxOKButton->connect_clicked(LINK(this, PrintDialog, ClickOKCancelHdl));
+    mxCancelButton->connect_clicked(LINK(this, PrintDialog, ClickOKCancelHdl));
+    mxSetupButton->connect_clicked(LINK(this, PrintDialog, ClickSetupHdl));
+    mxBackwardBtn->connect_clicked(LINK(this, PrintDialog, ClickBackwardHdl));
+    mxForwardBtn->connect_clicked(LINK(this, PrintDialog, ClickForwardHdl));
+    mxFirstBtn->connect_clicked(LINK(this, PrintDialog, ClickFirstHdl));
+    mxLastBtn->connect_clicked(LINK(this, PrintDialog, ClickLastHdl));
 
     // setup toggle hdl
     mxReverseOrderBox->connect_toggled(LINK(this, PrintDialog, ToggleReverseOrderHdl));
@@ -1911,66 +1911,64 @@ IMPL_LINK_NOARG(PrintDialog, ToggleBrochureHdl, weld::Toggleable&, void)
     }
 }
 
-IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
+IMPL_LINK(PrintDialog, ClickOKCancelHdl, weld::Button&, rButton, void)
 {
-    if (&rButton == mxOKButton.get() || &rButton == mxCancelButton.get())
+    storeToSettings();
+    m_xDialog->response(&rButton == mxOKButton.get() ? RET_OK : RET_CANCEL);
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickForwardHdl, weld::Button&, void)
+{
+    previewForward();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickBackwardHdl, weld::Button&, void)
+{
+    previewBackward();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickFirstHdl, weld::Button&, void)
+{
+    previewFirst();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickLastHdl, weld::Button&, void)
+{
+    previewLast();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ClickSetupHdl, weld::Button&, void)
+{
+    maPController->setupPrinter(m_xDialog.get());
+
+    if (!isPrintToFile())
     {
-        storeToSettings();
-        m_xDialog->response(&rButton == mxOKButton.get() ? RET_OK : RET_CANCEL);
-    }
-    else if( &rButton == mxForwardBtn.get() )
-    {
-        previewForward();
-    }
-    else if( &rButton == mxBackwardBtn.get() )
-    {
-        previewBackward();
-    }
-    else if( &rButton == mxFirstBtn.get() )
-    {
-        previewFirst();
-    }
-    else if( &rButton == mxLastBtn.get() )
-    {
-        previewLast();
-    }
-    else
-    {
-        if( &rButton == mxSetupButton.get() )
+        VclPtr<Printer> aPrt( maPController->getPrinter() );
+        mePaper = aPrt->GetPaper();
+
+        for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
         {
-            maPController->setupPrinter(m_xDialog.get());
+            PaperInfo aInfo = aPrt->GetPaperInfo(nPaper);
+            aInfo.doSloppyFit(true);
+            Paper ePaper = aInfo.getPaper();
 
-            if ( !isPrintToFile() )
+            if (mePaper == ePaper)
             {
-                VclPtr<Printer> aPrt( maPController->getPrinter() );
-                mePaper = aPrt->GetPaper();
-
-                for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++ )
-                {
-                    PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
-                    aInfo.doSloppyFit(true);
-                    Paper ePaper = aInfo.getPaper();
-
-                    if ( mePaper == ePaper )
-                    {
-                        mxPaperSizeBox->set_active( nPaper );
-                        break;
-                    }
-                }
+                mxPaperSizeBox->set_active(nPaper);
+                break;
             }
-
-            updateOrientationBox( false );
-
-            updatePageSize(mxOrientationBox->get_active());
-
-            setupPaperSidesBox();
-
-            // tdf#63905 don't use cache: page size may change
-            maUpdatePreviewNoCacheIdle.Start();
         }
-        checkControlDependencies();
     }
 
+    updateOrientationBox(false);
+
+    updatePageSize(mxOrientationBox->get_active());
+
+    setupPaperSidesBox();
+
+    // tdf#63905 don't use cache: page size may change
+    maUpdatePreviewNoCacheIdle.Start();
+    checkControlDependencies();
 }
 
 IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
