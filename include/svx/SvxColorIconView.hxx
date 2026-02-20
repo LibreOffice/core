@@ -34,7 +34,7 @@ public:
     static void addEntriesForColorSet(weld::IconView& pIconView, const std::set<Color>& rColorSet,
                                       std::u16string_view rNamePrefix);
 
-    static VclPtr<VirtualDevice> createColorVirtualDevice(const Color& rColor);
+    static ScopedVclPtr<VirtualDevice> createColorVirtualDevice(const Color& rColor);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

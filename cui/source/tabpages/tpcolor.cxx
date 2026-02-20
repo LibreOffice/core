@@ -359,7 +359,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         batch->commit();
         OUString sLastColorItemId = nSize > 0 ? m_xIconViewColorList->get_id(nSize - 1) : OUString();
         sal_Int32 nId = !sLastColorItemId.isEmpty() ? sLastColorItemId.toInt32() : -1;
-        VclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorVirtualDevice(m_aCurrentColor.m_aColor);
+        auto pVDev = SvxColorIconView::createColorVirtualDevice(m_aCurrentColor.m_aColor);
         Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(nId + 1);
         m_xIconViewColorList->insert( nId + 1, &aName, &sId, &aBmp, nullptr);

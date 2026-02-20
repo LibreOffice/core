@@ -49,7 +49,7 @@ void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
 
         if (pEntry)
         {
-            VclPtr<VirtualDevice> pColorVDev = createColorVirtualDevice(pEntry->GetColor());
+            auto pColorVDev = createColorVirtualDevice(pEntry->GetColor());
             Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
             OUString sColorName = pEntry->GetName();
             OUString sId = OUString::number(nIndex);
@@ -71,7 +71,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
     {
         for (const auto& rColor : rColorSet)
         {
-            VclPtr<VirtualDevice> pColorVDev = createColorVirtualDevice(rColor);
+            auto pColorVDev = createColorVirtualDevice(rColor);
             Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
             OUString sName = OUString::Concat(rNamePrefix) + OUString::number(nStartIndex);
             OUString sId = OUString::number(nStartIndex);
@@ -83,7 +83,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
     {
         for (const auto& rColor : rColorSet)
         {
-            VclPtr<VirtualDevice> pColorVDev = createColorVirtualDevice(rColor);
+            auto pColorVDev = createColorVirtualDevice(rColor);
             Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
             OUString sId = OUString::number(nStartIndex);
             OUString sName = u""_ustr;
@@ -93,7 +93,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
     }
 }
 
-VclPtr<VirtualDevice> SvxColorIconView::createColorVirtualDevice(const Color& rColor)
+ScopedVclPtr<VirtualDevice> SvxColorIconView::createColorVirtualDevice(const Color& rColor)
 {
     const sal_uInt32 nEdgeLength = getEntryEdgeLength() - 2;
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();

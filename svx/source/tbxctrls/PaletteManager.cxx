@@ -253,7 +253,7 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
             Color aColor(ColorTransparency, CustomColorList[i]);
-            VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+            auto pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
             Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
             OUString sId = OUString::number(i);
             OUString sColorName = CustomColorNameList[i];
@@ -284,7 +284,7 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
                 {
                     auto const& rEffect = rColorData.maEffects[nEffect];
                     Color aColor = rEffect.maColor;
-                    VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+                    auto pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
                     Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
                     OUString sColorName = rEffect.maColorName;
                     OUString sId = OUString::number(nItemId);
@@ -324,7 +324,7 @@ void PaletteManager::ReloadRecentColorSet(weld::IconView& pIconView)
     for (int i = 0; i < Colorlist.getLength(); ++i)
     {
         Color aColor(ColorTransparency, Colorlist[i]);
-        VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
         Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
