@@ -1465,7 +1465,7 @@ static sal_Int32 lcl_getLevel(OUString& sText, sal_Int32 nIdx)
     return nRet;
 }
 
-bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable, bool bUseDetection)
+bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable)
 {
     SwPasteContext aPasteContext(rSh);
 
@@ -1697,7 +1697,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable, bUseDetection);
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable);
 }
 
 bool SwTransferable::PasteData( const TransferableDataHelper& rData,
@@ -1709,7 +1709,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
                             bool bPasteSelection, RndStdIds nAnchorType,
                             bool bIgnoreComments,
                             SwPasteContext* pContext,
-                            PasteTableType ePasteTable, bool bUseDetection )
+                            PasteTableType ePasteTable )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
     std::unique_ptr<SwTrnsfrActionAndUndo, o3tl::default_delete<SwTrnsfrActionAndUndo>> pAction;
@@ -1873,7 +1873,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::STRING:
             case SotClipboardFormatId::MARKDOWN:
                 bRet = SwTransferable::PasteFileContent( rData, rSh,
-                                                            nFormat, bMsg, bIgnoreComments, bUseDetection );
+                                                            nFormat, bMsg, bIgnoreComments );
                 break;
 
             case SotClipboardFormatId::NETSCAPE_BOOKMARK:
@@ -2178,7 +2178,7 @@ bool CanSkipInvalidateNumRules(const SwPosition& rInsertPosition)
 }
 
 bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments, bool bUseDetection )
+                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
 {
     TranslateId pResId = STR_CLPBRD_FORMAT_ERROR;
     bool bRet = false;
@@ -2196,42 +2196,28 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
         {
             pRead = ReadAscii;
 
+            const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
+            if (CanSkipInvalidateNumRules(rInsertPosition))
+            {
+                // Insertion point is not a numbering and we paste plain text: then no need to
+                // invalidate all numberings.
+                bSkipInvalidateNumRules = true;
+            }
+
             if( rData.GetString( nFormat, sData ) )
             {
-
-                if(bUseDetection && comphelper::IsMarkdownData(sData)) //markdown
-                {
-                    OString aData = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
-
-                    pStream = new SvMemoryStream();
-                    pStream->WriteBytes(aData.getStr(), aData.getLength());
-                    pStream->Seek(0);
-
-                    pRead = ReadMarkdown;
-                }
-                else
-                {
-                    const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
-                    if (CanSkipInvalidateNumRules(rInsertPosition))
-                    {
-                        // Insertion point is not a numbering and we paste plain text: then no need to
-                        // invalidate all numberings.
-                        bSkipInvalidateNumRules = true;
-                    }
-
-                    pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
-                            sData.getLength() * sizeof( sal_Unicode ),
-                            StreamMode::READ );
+                pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
+                        sData.getLength() * sizeof( sal_Unicode ),
+                        StreamMode::READ );
 #ifdef OSL_BIGENDIAN
-                    pStream->SetEndian( SvStreamEndian::BIG );
+                pStream->SetEndian( SvStreamEndian::BIG );
 #else
-                    pStream->SetEndian( SvStreamEndian::LITTLE );
+                pStream->SetEndian( SvStreamEndian::LITTLE );
 #endif
 
-                    SwAsciiOptions aAOpt;
-                    aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
-                    pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
-                }
+                SwAsciiOptions aAOpt;
+                aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
+                pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
                 break;
             }
         }
