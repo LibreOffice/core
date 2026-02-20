@@ -9,8 +9,10 @@
 
 #include <SheetViewControl.hxx>
 #include <SheetViewBox.hxx>
+#include <tabvwsh.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace sc;
 
@@ -23,12 +25,20 @@ SheetViewControl::SheetViewControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBo
 
 SheetViewControl::~SheetViewControl() {}
 
-void SheetViewControl::StateChangedAtToolBoxControl(sal_uInt16, SfxItemState eState,
+void SheetViewControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState,
                                                     const SfxPoolItem* pState)
 {
     ToolBoxItemId nId = GetId();
     ToolBox& rToolBox = GetToolBox();
     SheetViewBox* pSheetViewBox = static_cast<SheetViewBox*>(rToolBox.GetItemWindow(nId));
+
+    css::uno::Reference<css::frame::XFrame> xFrame = getFrameInterface();
+    SfxViewShell* pShell = SfxViewShell::Get(xFrame->getController());
+    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pShell);
+    if (!pTabViewShell)
+        return;
+
+    ScViewData& rViewData = pTabViewShell->GetViewData();
 
     if (SfxItemState::DISABLED == eState)
         pSheetViewBox->Disable();
@@ -41,15 +51,15 @@ void SheetViewControl::StateChangedAtToolBoxControl(sal_uInt16, SfxItemState eSt
     {
         case SfxItemState::DEFAULT:
         {
-            const auto* pItem = static_cast<const SfxInt32Item*>(pState);
-            sc::SheetViewID nValue = pItem->GetValue();
-            pSheetViewBox->Update(nValue);
+            pSheetViewBox->Update(rViewData);
             break;
         }
 
         default:
             break;
     }
+
+    SfxToolBoxControl::StateChangedAtToolBoxControl(nSID, eState, pState);
 }
 
 VclPtr<InterimItemWindow> SheetViewControl::CreateItemWindow(vcl::Window* pParent)
