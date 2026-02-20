@@ -2378,7 +2378,7 @@ void Test::testEscapementNotPreservedOnParaBreak()
 
     OUString aParaText = u"item 1st"_ustr;
     aEditEngine.SetText(aParaText);
-    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(0));
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
 
     {
         std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
@@ -2401,7 +2401,7 @@ void Test::testEscapementNotPreservedOnParaBreak()
     rDoc.InsertParaBreak(aEndPaM, true /* bKeepEndingAttribs */);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rDoc.Count());
-    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(0));
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
     CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(1));
 
     // Check new para's character attributes
