@@ -1267,8 +1267,6 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
         case NS_ooxml::LN_CT_SdtBlock_sdtContent:
         case NS_ooxml::LN_CT_SdtRun_sdtContent:
         {
-            m_pImpl->m_pSdtHelper->SetSdtType(nName);
-
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
             {
                 // Still not determined content type? and it is even not unsupported? Then it is plain text field
@@ -1330,10 +1328,12 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                     m_pImpl->clearDeferredBreaks();
                 }
 
+                m_pImpl->m_pSdtHelper->SetSdtType(nName);
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
                 m_pImpl->PushSdt();
                 break;
             }
+            m_pImpl->m_pSdtHelper->SetSdtType(nName);
             m_pImpl->SetSdt(true);
         }
         break;
