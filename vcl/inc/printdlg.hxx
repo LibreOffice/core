@@ -201,13 +201,13 @@ namespace vcl
         Size                                    maFirstPageSize;
 
         bool                                    mbShowLayoutFrame;
+        // cache is allowed, unless explicitly disabled for this update
+        bool mbUseCacheForPreview = true;
 
         Paper                                   mePaper;
 
         Idle maUpdatePreviewIdle;
         DECL_LINK(updatePreviewIdle, Timer*, void);
-        Idle maUpdatePreviewNoCacheIdle;
-        DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
         DECL_LINK(ClickOKCancelHdl, weld::Button&, void);
         DECL_LINK(ClickForwardHdl, weld::Button&, void);
@@ -241,6 +241,7 @@ namespace vcl
         css::beans::PropertyValue* getValueForWindow(weld::Widget*) const;
 
         void preparePreview( bool i_bMayUseCache );
+        void schedulePreviewUpdate(bool i_bMayUseCache);
         void setupPaperSidesBox();
         void storeToSettings();
         void readFromSettings();
