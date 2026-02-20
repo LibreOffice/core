@@ -17,6 +17,7 @@
 #include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <test/unoapi_test.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -26,7 +27,29 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
+#if defined MACOSX || defined _WIN32
+#include <set>
+static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OString>& rSet);
+#endif
+
+#include <test/unoapi_test.hxx>
+
 using namespace ::com::sun::star;
+
+#if defined MACOSX || defined _WIN32
+static std::ostream& operator<<(std::ostream& rStream, const std::set<OString>& rSet)
+{
+    rStream << "{ ";
+    for (auto it = rSet.begin(); it != rSet.end(); ++it)
+    {
+        if (it != rSet.begin())
+            rStream << ", ";
+        rStream << *it;
+    }
+    rStream << " }";
+    return rStream;
+}
+#endif
 
 namespace
 {
@@ -2064,6 +2087,81 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
     // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
     // This is now around 238 (228 on macOS).
     CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(250), aMeta.getWidth());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName1)
+{
+// Embedding variable fonts does not work on Linux, only the default instance is enumerated
+// https://bugs.documentfoundation.org/show_bug.cgi?id=155853
+#if defined MACOSX || defined _WIN32
+    loadFromFile(u"variable-font-psname-1.odt");
+    save(TestFilter::PDF_WRITER);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::set<OString> aFontNames;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pName
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
+            aFontNames.insert(pName->GetValue().copy(7)); // skip the subset id
+        }
+    }
+
+    std::set<OString> aExpected{ "STIXTwoText"_ostr,
+                                 "STIXTwoTextRoman-Bold"_ostr,
+                                 "STIXTwoText-Italic"_ostr,
+                                 "STIXTwoTextItalic-BoldItalic"_ostr,
+                                 "STIXTwoTextRoman-SemiBold"_ostr,
+                                 "STIXTwoTextItalic-SemiBoldItalic"_ostr };
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
+{
+// Embedding variable fonts does not work on Linux, only the default instance is enumerated
+// https://bugs.documentfoundation.org/show_bug.cgi?id=155853
+#if defined MACOSX || defined _WIN32
+    loadFromFile(u"variable-font-psname-2.odt");
+    save(TestFilter::PDF_WRITER);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::set<OString> aFontNames;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pName
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
+            aFontNames.insert(pName->GetValue().copy(7)); // skip the subset id
+        }
+    }
+
+    std::set<OString> aExpected{
+        "SourceCodePro-Regular"_ostr,  "SourceCodePro-Bold"_ostr,
+        "SourceCodePro-Italic"_ostr,   "SourceCodePro-BoldItalic"_ostr,
+        "SourceCodePro-SemiBold"_ostr, "SourceCodePro-SemiBoldItalic"_ostr
+    };
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157679)
