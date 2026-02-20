@@ -39,15 +39,12 @@
 #include <mach/mach_time.h>
 #endif
 
+#include <osl/time.h>
 #include <rtl/math.hxx>
 #include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <systemdatetime.hxx>
-
-#if defined(__sun) && defined(__GNUC__)
-extern long altzone;
-#endif
 
 namespace tools {
 
@@ -271,26 +268,9 @@ bool tools::Time::IsEqualIgnoreNanoSec( const tools::Time& rTime ) const
 
 Time tools::Time::GetUTCOffset()
 {
-#if defined(_WIN32)
-    TIME_ZONE_INFORMATION   aTimeZone;
-    aTimeZone.Bias = 0;
-    DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
-    sal_Int32 nTempTime = aTimeZone.Bias;
-    if ( nTimeZoneRet == TIME_ZONE_ID_STANDARD )
-        nTempTime += aTimeZone.StandardBias;
-    else if ( nTimeZoneRet == TIME_ZONE_ID_DAYLIGHT )
-        nTempTime += aTimeZone.DaylightBias;
-    tools::Time aTime( 0, static_cast<sal_uInt16>(abs( nTempTime )) );
-    if ( nTempTime > 0 )
-        aTime = -aTime;
-    return aTime;
-#else
     static sal_uInt64   nCacheTicks = 0;
     static sal_Int32    nCacheSecOffset = -1;
     sal_uInt64          nTicks = tools::Time::GetSystemTicks();
-    time_t          nTime;
-    tm              aTM;
-    short           nTempTime;
 
     // determine value again if needed
     if ( (nCacheSecOffset == -1)            ||
@@ -298,30 +278,25 @@ Time tools::Time::GetUTCOffset()
          ( nTicks < nCacheTicks ) // handle overflow
          )
     {
-        nTime = time( nullptr );
-        localtime_r( &nTime, &aTM );
-        auto nLocalTime = mktime( &aTM );
-#if defined(__sun)
-        // Solaris gmtime_r() seems not to handle daylight saving time
-        // flags correctly
-        auto nUTC = nLocalTime + ( aTM.tm_isdst == 0 ? timezone : altzone );
-#elif defined( LINUX )
-        // Linux mktime() seems not to handle tm_isdst correctly
-        auto nUTC = nLocalTime - aTM.tm_gmtoff;
-#else
-        gmtime_r( &nTime, &aTM );
-        auto nUTC = mktime( &aTM );
-#endif
-        nCacheTicks = nTicks;
-        nCacheSecOffset = (nLocalTime-nUTC) / 60;
+        TimeValue utcTv;
+        TimeValue localTv;
+        if (osl_getSystemTime(&utcTv) && osl_getLocalTimeFromSystemTime(&utcTv, &localTv))
+        {
+            nCacheTicks = nTicks;
+            nCacheSecOffset = (static_cast<sal_Int64>(localTv.Seconds)
+                               - static_cast<sal_Int64>(utcTv.Seconds)) / 60;
+        }
+        else
+        {
+            nCacheSecOffset = 0;
+        }
     }
 
-    nTempTime = abs( nCacheSecOffset );
+    sal_Int32 nTempTime = abs( nCacheSecOffset );
     tools::Time aTime( 0, static_cast<sal_uInt16>(nTempTime) );
     if ( nCacheSecOffset < 0 )
         aTime = -aTime;
     return aTime;
-#endif
 }
 
 sal_uInt64 tools::Time::GetSystemTicks()
