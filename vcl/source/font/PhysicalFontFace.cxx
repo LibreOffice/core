@@ -351,6 +351,72 @@ OUString GetNamedInstancePSName(const PhysicalFontFace& rFontFace,
 
     return OUString();
 }
+
+// Implements Adobe Technical Note #5902: “Generating PostScript Names for Fonts
+// Using OpenType Font Variations”
+// https://adobe-type-tools.github.io/font-tech-notes/pdfs/5902.AdobePSNameGeneration.pdf
+OUString GenerateVariableFontPSName(const PhysicalFontFace& rFace,
+                                    const std::vector<hb_variation_t>& rVariations)
+{
+    hb_face_t* pHbFace = rFace.GetHbFace();
+    OUString aPrefix = rFace.GetName(NAME_ID_VARIATIONS_PS_PREFIX);
+    if (aPrefix.isEmpty())
+    {
+        aPrefix = rFace.GetName(NAME_ID_TYPOGRAPHIC_FAMILY);
+        if (aPrefix.isEmpty())
+            aPrefix = rFace.GetName(NAME_ID_FONT_FAMILY);
+    }
+
+    if (aPrefix.isEmpty())
+        return OUString();
+
+    OUStringBuffer aName;
+    for (sal_Int32 i = 0; i < aPrefix.getLength(); ++i)
+    {
+        auto c = aPrefix[i];
+        if (rtl::isAsciiAlphanumeric(c))
+            aName.append(c);
+    }
+
+    if (auto nIndex = GetNamedInstanceIndex(pHbFace, rVariations))
+    {
+        aName.append('-');
+        auto nPSNameID = hb_ot_var_named_instance_get_subfamily_name_id(pHbFace, *nIndex);
+        OUString aSubFamilyName = rFace.GetName(static_cast<NameID>(nPSNameID));
+        for (sal_Int32 i = 0; i < aSubFamilyName.getLength(); ++i)
+        {
+            auto c = aSubFamilyName[i];
+            if (rtl::isAsciiAlphanumeric(c))
+                aName.append(c);
+        }
+    }
+    else
+    {
+        for (const auto& rVariation : rVariations)
+        {
+            hb_ot_var_axis_info_t info;
+            if (hb_ot_var_find_axis_info(pHbFace, rVariation.tag, &info))
+            {
+                if (rVariation.value == info.default_value)
+                    continue;
+                char aTag[5];
+                hb_tag_to_string(rVariation.tag, aTag);
+                aName.append("_" + OUString::number(rVariation.value)
+                             + o3tl::trim(OUString::createFromAscii(aTag)));
+            }
+        }
+    }
+
+    if (aName.getLength() > 127)
+    {
+        auto nIndex = aName.indexOf(u'-') + 1;
+        auto aHash = static_cast<sal_uInt32>(aName.copy(nIndex).makeStringAndClear().hashCode());
+        aName.truncate(nIndex);
+        aName.append(OUString::number(aHash, 16).toAsciiUpperCase() + "...");
+    }
+
+    return aName.makeStringAndClear();
+}
 }
 
 // These are “private” HarfBuzz metrics tags, they are supported by not exposed
@@ -422,7 +488,11 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
 
     // If this is a named instance and it has a PostScript name, we want to use it.
     if (bIsVariableFont)
+    {
         rInfo.m_aPSName = GetNamedInstancePSName(*this, rVariations);
+        if (rInfo.m_aPSName.isEmpty() && !rVariations.empty())
+            rInfo.m_aPSName = GenerateVariableFontPSName(*this, rVariations);
+    }
     if (rInfo.m_aPSName.isEmpty())
         rInfo.m_aPSName = GetName(NAME_ID_POSTSCRIPT_NAME);
 
