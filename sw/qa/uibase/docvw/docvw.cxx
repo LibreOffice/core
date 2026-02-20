@@ -9,15 +9,25 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <test/lokcallback.hxx>
 #include <vcl/event.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <docsh.hxx>
 #include <edtwin.hxx>
 #include <flyfrm.hxx>
 #include <frameformats.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <unotxdoc.hxx>
 #include <view.hxx>
+#include <viscrs.hxx>
 #include <wrtsh.hxx>
 
 namespace
@@ -185,6 +195,95 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
     // i.e. the fly frame's dialog was not dispatched, while a plain click or ctrl-click dispatched
     // it.
     CPPUNIT_ASSERT_GREATER(0, nGraphicDialogs);
+}
+
+namespace
+{
+/// Test LOK callback, handling just LOK_CALLBACK_TOOLTIP.
+struct TooltipCallback
+{
+    std::string rect;
+    std::string anchorRectangles;
+    std::string redlineType;
+
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
+};
+
+void TooltipCallback::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<TooltipCallback*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void TooltipCallback::callbackImpl(int nType, const char* pPayload)
+{
+    if (nType == LOK_CALLBACK_TOOLTIP)
+    {
+        std::stringstream aStream(pPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        rect = aTree.get_child("rectangle").get_value<std::string>();
+        auto it = aTree.find("anchorRectangles");
+        if (it != aTree.not_found())
+        {
+            std::vector<std::string> aRects;
+            for (const auto& rRect : it->second)
+                aRects.push_back(rRect.second.get_value<std::string>());
+            std::stringstream aRectStream;
+            for (size_t i = 0; i < aRects.size(); ++i)
+            {
+                if (i > 0)
+                    aRectStream << "; ";
+                aRectStream << aRects[i];
+            }
+            anchorRectangles = aRectStream.str();
+        }
+        auto itType = aTree.find("redlineType");
+        if (itType != aTree.not_found())
+            redlineType = itType->second.get_value<std::string>();
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
+{
+    // Set up LOK:
+    comphelper::LibreOfficeKit::setActive(true);
+
+    // Given a document with a redline:
+    createSwDoc();
+    getSwTextDoc()->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    TooltipCallback aCallback;
+    TestLokCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
+    pWrtShell->SetRedlineFlagsAndCheckInsMode(RedlineFlags::On | RedlineFlags::ShowMask);
+    pWrtShell->Insert(u"test"_ustr);
+
+    // When moving the mouse over the redline:
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT(pShellCursor);
+    pWrtShell->EndOfSection(/*bSelect=*/false);
+    Point aEnd = pShellCursor->GetSttPos();
+    pWrtShell->StartOfSection(/*bSelect=*/false);
+    Point aStart = pShellCursor->GetSttPos();
+    Point aMiddle((aStart.getX() + aEnd.getX()) / 2, (aStart.getY() + aEnd.getY()) / 2);
+    getSwTextDoc()->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aMiddle.getX(), aMiddle.getY(), 1, 0,
+                                   0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the tooltip callback has redlineType and anchorRectangles:
+    // Without the accompanying fix in place, this test would have failed, no anchor rectangles were
+    // emitted.
+    CPPUNIT_ASSERT(!aCallback.anchorRectangles.empty());
+    CPPUNIT_ASSERT_EQUAL(std::string("Insert"), aCallback.redlineType);
+
+    // Tear down LOK:
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -65,6 +65,7 @@
 #include <unomap.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <viscrs.hxx>
 
 namespace {
 
@@ -312,13 +313,31 @@ OUString SwEditWin::ClipLongToolTip(const OUString& rText)
     return sDisplayText;
 }
 
-static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect)
+static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect,
+                                 SwWrtShell& rSh,
+                                 const SwRangeRedline* pRedline = nullptr)
 {
     tools::JsonWriter writer;
     {
         writer.put("type", "generaltooltip");
         writer.put("text", tooltip);
         writer.put("rectangle", rect.SVRect().toString());
+
+        if (pRedline)
+        {
+            writer.put("redlineType",
+                       SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()));
+
+            SwShellCursor aCursor(rSh, *pRedline->Start());
+            aCursor.SetMark();
+            *aCursor.GetMark() = *pRedline->End();
+            aCursor.FillRects();
+            auto aArray = writer.startArray("anchorRectangles");
+            for (const auto& rRect : aCursor)
+            {
+                writer.putSimpleValue(OUString::fromUtf8(rRect.SVRect().toString()));
+            }
+        }
     }
     return writer.finishAndGetAsOString();
 }
@@ -659,8 +678,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    m_rView.libreOfficeKitViewCallback(
-                        LOK_CALLBACK_TOOLTIP, getTooltipPayload(sText, aFieldRect));
+                    const SwRangeRedline* pRedline = nullptr;
+                    if (aContentAtPos.eContentAtPos == IsAttrAtPos::Redline)
+                    {
+                        pRedline = aContentAtPos.aFnd.pRedl;
+                    }
+                    OString aPayload = getTooltipPayload(sText, aFieldRect, rSh, pRedline);
+                    m_rView.libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, aPayload);
                 }
                 else
                 {
