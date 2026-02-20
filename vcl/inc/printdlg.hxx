@@ -209,7 +209,12 @@ namespace vcl
         Idle maUpdatePreviewNoCacheIdle;
         DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
-        DECL_LINK( ClickHdl, weld::Button&, void );
+        DECL_LINK(ClickOKCancelHdl, weld::Button&, void);
+        DECL_LINK(ClickForwardHdl, weld::Button&, void);
+        DECL_LINK(ClickBackwardHdl, weld::Button&, void);
+        DECL_LINK(ClickFirstHdl, weld::Button&, void);
+        DECL_LINK(ClickLastHdl, weld::Button&, void);
+        DECL_LINK(ClickSetupHdl, weld::Button&, void);
         DECL_LINK(SelectPrinterHdl, weld::ComboBox&, void);
         DECL_LINK(SelectPaperSidesHdl, weld::ComboBox&, void);
         DECL_LINK(SelectOrientationHdl, weld::ComboBox&, void);
