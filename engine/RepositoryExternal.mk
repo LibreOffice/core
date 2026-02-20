@@ -4602,9 +4602,21 @@ gb_LinkTarget__use_yrs :=
 endif
 
 ifeq ($(ENABLE_QUICKJS),TRUE)
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     qjs \
 ))
+
+define gb_LinkTarget__use_qjs
+$(call gb_LinkTarget_set_include,$(1), \
+    $$(INCLUDE) \
+    -I$(gb_UnpackedTarball_workdir)/quickjs \
+)
+$(call gb_LinkTarget_use_libraries,$(1), \
+    qjs \
+)
+endef
+
 endif
 
 gb_ExternalProject__use_meson :=

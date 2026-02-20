@@ -430,6 +430,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	i18npool \
 	i18nsearch \
 	$(if $(ENABLE_JAVA),jdbc) \
+	$(call gb_Helper_optional,QUICKJS,jsuno) \
 	$(if $(filter WNT,$(OS)),jumplist) \
 	$(if $(ENABLE_LDAP),ldapbe2) \
 	$(if $(filter WNT,$(OS)),WinUserInfoBe) \

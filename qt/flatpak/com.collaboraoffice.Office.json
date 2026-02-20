@@ -88,6 +88,13 @@
           "dest-filename": "Open_Sans.zip"
         },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/quickjs-v0.13.0.tar.gz",
+                    "sha256": "13ed1d22cd4b2b693a94a234e752d1ea6a0064434a740031ff90439679257c6c",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "quickjs-v0.13.0.tar.gz"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/pdfium-7691.tar.bz2",
                     "sha256": "a4ca01c0e58b5c6bf52c0d17584eaaa2a893dc0240fd47cf94dfb27f0b8c03f6",
                     "type": "file",
