@@ -680,12 +680,12 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     mxLastBtn->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup toggle hdl
-    mxReverseOrderBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
-    mxCollateBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
-    mxSingleJobsBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
-    mxBrochureBtn->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
-    mxPreviewBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
-    mxBorderCB->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
+    mxReverseOrderBox->connect_toggled(LINK(this, PrintDialog, ToggleReverseOrderHdl));
+    mxCollateBox->connect_toggled(LINK(this, PrintDialog, ToggleCollateHdl));
+    mxSingleJobsBox->connect_toggled(LINK(this, PrintDialog, ToggleSingleJobsHdl));
+    mxBrochureBtn->connect_toggled(LINK(this, PrintDialog, ToggleBrochureHdl));
+    mxPreviewBox->connect_toggled(LINK(this, PrintDialog, TogglePreviewHdl));
+    mxBorderCB->connect_toggled(LINK(this, PrintDialog, ToggleBorderHdl));
 
     // setup select hdl
     mxPrinters->connect_changed(LINK(this, PrintDialog, SelectPrinterHdl));
@@ -1884,67 +1884,65 @@ PropertyValue* PrintDialog::getValueForWindow( weld::Widget* i_pWindow ) const
     return pVal;
 }
 
-IMPL_LINK(PrintDialog, ToggleHdl, weld::Toggleable&, rButton, void)
+IMPL_LINK_NOARG(PrintDialog, TogglePreviewHdl, weld::Toggleable&, void)
 {
-    if (&rButton == mxPreviewBox.get())
-    {
-        maUpdatePreviewIdle.Start();
-    }
-    else if( &rButton == mxBorderCB.get() )
-    {
-        updateNup();
-    }
-    else if (&rButton == mxSingleJobsBox.get())
-    {
-        maPController->setValue( u"SinglePrintJobs"_ustr,
-                                 Any( isSingleJobs() ) );
-        checkControlDependencies();
-    }
-    else if( &rButton == mxCollateBox.get() )
-    {
-        maPController->setValue( u"Collate"_ustr,
-                                 Any( isCollate() ) );
-        checkControlDependencies();
-    }
-    else if( &rButton == mxReverseOrderBox.get() )
-    {
-        bool bChecked = mxReverseOrderBox->get_active();
-        maPController->setReversePrint( bChecked );
-        maPController->setValue( u"PrintReverse"_ustr,
-                                 Any( bChecked ) );
-        maUpdatePreviewIdle.Start();
-    }
-    else if (&rButton == mxBrochureBtn.get())
-    {
-        PropertyValue* pVal = getValueForWindow(mxBrochureBtn.get());
-        if( pVal )
-        {
-            bool bVal = mxBrochureBtn->get_active();
-            pVal->Value <<= bVal;
+    maUpdatePreviewIdle.Start();
+}
 
-            checkOptionalControlDependencies();
+IMPL_LINK_NOARG(PrintDialog, ToggleBorderHdl, weld::Toggleable&, void)
+{
+    updateNup();
+}
 
-            // update preview and page settings
-            maUpdatePreviewNoCacheIdle.Start();
-        }
-        if (mxBrochureBtn->get_active())
-        {
-            mxOrientationBox->set_sensitive( false );
-            mxOrientationBox->set_active( ORIENTATION_LANDSCAPE );
-            mxNupPagesBox->set_active( 0 );
-            updateNupFromPages();
-            showAdvancedControls( false );
-            enableNupControls( false );
-        }
-        else
-        {
-            mxOrientationBox->set_sensitive( true );
-            mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
-            updatePageSize(mxOrientationBox->get_active());
-            enableNupControls( true );
-            updateNupFromPages();
-        }
+IMPL_LINK_NOARG(PrintDialog, ToggleSingleJobsHdl, weld::Toggleable&, void)
+{
+    maPController->setValue(u"SinglePrintJobs"_ustr, Any(isSingleJobs()));
+    checkControlDependencies();
+}
 
+IMPL_LINK_NOARG(PrintDialog, ToggleCollateHdl, weld::Toggleable&, void)
+{
+    maPController->setValue(u"Collate"_ustr, Any(isCollate()));
+    checkControlDependencies();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleReverseOrderHdl, weld::Toggleable&, void)
+{
+    bool bChecked = mxReverseOrderBox->get_active();
+    maPController->setReversePrint(bChecked);
+    maPController->setValue(u"PrintReverse"_ustr, Any(bChecked));
+    maUpdatePreviewIdle.Start();
+}
+
+IMPL_LINK_NOARG(PrintDialog, ToggleBrochureHdl, weld::Toggleable&, void)
+{
+    PropertyValue* pVal = getValueForWindow(mxBrochureBtn.get());
+    if (pVal)
+    {
+        bool bVal = mxBrochureBtn->get_active();
+        pVal->Value <<= bVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        maUpdatePreviewNoCacheIdle.Start();
+    }
+    if (mxBrochureBtn->get_active())
+    {
+        mxOrientationBox->set_sensitive(false);
+        mxOrientationBox->set_active(ORIENTATION_LANDSCAPE);
+        mxNupPagesBox->set_active(0);
+        updateNupFromPages();
+        showAdvancedControls(false);
+        enableNupControls(false);
+    }
+    else
+    {
+        mxOrientationBox->set_sensitive(true);
+        mxOrientationBox->set_active(ORIENTATION_AUTOMATIC);
+        updatePageSize(mxOrientationBox->get_active());
+        enableNupControls(true);
+        updateNupFromPages();
     }
 }
 

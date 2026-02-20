@@ -220,7 +220,12 @@ namespace vcl
         DECL_LINK( FocusOutHdl, weld::Widget&, void );
         DECL_LINK( SpinModifyHdl, weld::SpinButton&, void );
         DECL_LINK( MetricSpinModifyHdl, weld::MetricSpinButton&, void );
-        DECL_LINK( ToggleHdl, weld::Toggleable&, void );
+        DECL_LINK(TogglePreviewHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleBorderHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleSingleJobsHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleCollateHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleReverseOrderHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleBrochureHdl, weld::Toggleable&, void);
 
         DECL_LINK( UIOption_CheckHdl, weld::Toggleable&, void );
         DECL_LINK( UIOption_RadioHdl, weld::Toggleable&, void );
