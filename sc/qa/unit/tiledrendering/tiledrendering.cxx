@@ -3720,6 +3720,24 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLOKLanguageStatus)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testValidationCellCrash)
+{
+    ScModelObj* pModelObj = createDoc("validationcrash.xlsx");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScTestViewCallback aView1;
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(pView1);
+    CPPUNIT_ASSERT(pView);
+    typeCharsInCell("42", 0, 1, pView, pModelObj, false /* bInEdit */, true /* bCommit */); // Type "42" in A2.
+    // Without the fix this will crash.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
