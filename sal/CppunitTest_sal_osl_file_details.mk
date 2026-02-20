@@ -34,6 +34,9 @@ $(eval $(call gb_CppunitTest_set_include,sal_osl_file_details, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sal_osl_file_details, \
+    icu_headers \
+    icui18n \
+    icuuc \
     zlib \
 ))
 

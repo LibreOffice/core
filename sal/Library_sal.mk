@@ -45,6 +45,9 @@ $(eval $(call gb_Library_use_libraries,sal,\
 $(eval $(call gb_Library_use_externals,sal,\
     dragonbox \
     fast_float \
+    icu_headers \
+    icui18n \
+    icuuc \
     valgrind \
     zlib \
 ))
@@ -182,6 +185,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
+	sal/osl/unx/tz \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one. Ditto for system.mm

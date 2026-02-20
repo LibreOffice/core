@@ -20,7 +20,9 @@
 #include <sal/config.h>
 
 #include "saltime.hxx"
+#include "tz.hxx"
 
+#include <cstdint>
 #include <osl/time.h>
 #include <time.h>
 #include <unistd.h>
@@ -28,15 +30,6 @@
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>
-#endif
-
-/* FIXME: detection should be done in configure script */
-#if defined(MACOSX) || defined(IOS) || defined(FREEBSD) || defined(NETBSD) || \
-    defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
-#define STRUCT_TM_HAS_GMTOFF 1
-
-#elif defined(__sun)
-#define HAS_ALTZONE 1
 #endif
 
 #ifdef __MACH__
@@ -89,173 +82,72 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
-    struct tm *pSystemTime;
-    struct tm tmBuf;
-    time_t atime;
+    osl::tz::BrokenDown bd;
+    if (!osl::tz::epochToUtc(static_cast<std::int64_t>(pTimeVal->Seconds), bd))
+        return false;
 
-    atime = static_cast<time_t>(pTimeVal->Seconds);
+    pDateTime->NanoSeconds = pTimeVal->Nanosec;
+    pDateTime->Seconds = bd.second;
+    pDateTime->Minutes = bd.minute;
+    pDateTime->Hours = bd.hour;
+    pDateTime->Day = bd.day;
+    pDateTime->DayOfWeek = bd.dayOfWeek;
+    pDateTime->Month = bd.month;
+    pDateTime->Year = bd.year;
 
-    /* Convert time from type time_t to struct tm */
-    pSystemTime = gmtime_r( &atime, &tmBuf );
-
-    /* Convert struct tm to struct oslDateTime */
-    if ( pSystemTime != nullptr )
-    {
-        pDateTime->NanoSeconds  =   pTimeVal->Nanosec;
-        pDateTime->Seconds      =   pSystemTime->tm_sec;
-        pDateTime->Minutes      =   pSystemTime->tm_min;
-        pDateTime->Hours        =   pSystemTime->tm_hour;
-        pDateTime->Day          =   pSystemTime->tm_mday;
-        pDateTime->DayOfWeek    =   pSystemTime->tm_wday;
-        pDateTime->Month        =   pSystemTime->tm_mon + 1;
-        pDateTime->Year         =   pSystemTime->tm_year  + 1900;
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
-    struct tm   aTime;
-    time_t      nSeconds;
+    /* The API says pDateTime is in GMT, so this is a pure UTC-to-epoch conversion. */
+    osl::tz::BrokenDown bd;
+    bd.year = pDateTime->Year;
+    bd.month = pDateTime->Month;
+    bd.day = pDateTime->Day;
+    bd.hour = pDateTime->Hours;
+    bd.minute = pDateTime->Minutes;
+    bd.second = pDateTime->Seconds;
+    bd.dayOfWeek = 0; // unused for this conversion
 
-    /* Convert struct oslDateTime to struct tm */
-    aTime.tm_sec  = pDateTime->Seconds;
-    aTime.tm_min  = pDateTime->Minutes;
-    aTime.tm_hour = pDateTime->Hours;
-    aTime.tm_mday = pDateTime->Day;
-
-    if ( pDateTime->Month > 0 )
-        aTime.tm_mon = pDateTime->Month - 1;
-    else
+    std::int64_t epoch;
+    if (!osl::tz::utcToEpoch(bd, epoch))
         return false;
 
-    aTime.tm_year = pDateTime->Year - 1900;
+    pTimeVal->Seconds = static_cast<sal_uInt32>(epoch);
+    pTimeVal->Nanosec = pDateTime->NanoSeconds;
 
-    aTime.tm_isdst = -1;
-    aTime.tm_wday  = 0;
-    aTime.tm_yday  = 0;
-
-#if defined(STRUCT_TM_HAS_GMTOFF)
-    aTime.tm_gmtoff = 0;
-#endif
-
-    /* Convert time to calendar value */
-    nSeconds = mktime( &aTime );
-
-    /*
-     * mktime expects the struct tm to be in local timezone, so we have to adjust
-     * the returned value to be timezone neutral.
-     */
-
-    if ( nSeconds != time_t(-1) )
-    {
-        time_t bias;
-
-        /* timezone corrections */
-        tzset();
-
-#if defined(STRUCT_TM_HAS_GMTOFF)
-        /* members of struct tm are corrected by mktime */
-        bias = 0 - aTime.tm_gmtoff;
-
-#elif defined(HAS_ALTZONE)
-        /* check if daylight saving time is in effect */
-        bias = aTime.tm_isdst > 0 ? altzone : timezone;
-#else
-        /* expect daylight saving time to be one hour */
-        bias = aTime.tm_isdst > 0 ? timezone - 3600 : timezone;
-#endif
-
-        // coverity[store_truncates_time_t] - TODO: sal_uInt32 TimeValue::Seconds is only large
-        // enough for integer time_t values < 2^32 representing dates until year 2106:
-        pTimeVal->Seconds = nSeconds;
-        pTimeVal->Nanosec = pDateTime->NanoSeconds;
-
-        if ( nSeconds > bias )
-            pTimeVal->Seconds -= bias;
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
-    struct tm *pLocalTime;
-    struct tm tmBuf;
-    time_t bias;
-    time_t atime;
+    std::int64_t utcEpoch = static_cast<std::int64_t>(pSystemTimeVal->Seconds);
+    std::int32_t offset = osl::tz::getUtcOffsetForUtcTime(utcEpoch);
+    std::int64_t localEpoch = utcEpoch + offset;
 
-    atime = static_cast<time_t>(pSystemTimeVal->Seconds);
-    pLocalTime = localtime_r( &atime, &tmBuf );
+    if (localEpoch < 0)
+        return false;
 
-#if defined(STRUCT_TM_HAS_GMTOFF)
-    /* members of struct tm are corrected by mktime */
-    bias = -pLocalTime->tm_gmtoff;
+    pLocalTimeVal->Seconds = static_cast<sal_uInt32>(localEpoch);
+    pLocalTimeVal->Nanosec = pSystemTimeVal->Nanosec;
 
-#elif defined(HAS_ALTZONE)
-    /* check if daylight saving time is in effect */
-    bias = pLocalTime->tm_isdst > 0 ? altzone : timezone;
-#else
-    /* expect daylight saving time to be one hour */
-    bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
-#endif
-
-    if ( static_cast<sal_Int64>(pSystemTimeVal->Seconds) > bias )
-    {
-        pLocalTimeVal->Seconds = pSystemTimeVal->Seconds - bias;
-        pLocalTimeVal->Nanosec = pSystemTimeVal->Nanosec;
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
-    struct tm *pLocalTime;
-    struct tm tmBuf;
-    time_t bias;
-    time_t atime;
+    std::int64_t localEpoch = static_cast<std::int64_t>(pLocalTimeVal->Seconds);
+    std::int32_t offset = osl::tz::getUtcOffsetForLocalTime(localEpoch);
+    std::int64_t utcEpoch = localEpoch - offset;
 
-    atime = static_cast<time_t>(pLocalTimeVal->Seconds);
+    if (utcEpoch < 0)
+        return false;
 
-    /* Convert atime, which is a local time, to its GMT equivalent. Then, get
-     * the timezone offset for the local time for the GMT equivalent time. Note
-     * that we cannot directly use local time to determine the timezone offset
-     * because GMT is the only reliable time that we can determine timezone
-     * offset from.
-     */
+    pSystemTimeVal->Seconds = static_cast<sal_uInt32>(utcEpoch);
+    pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
 
-    atime = mktime( gmtime_r( &atime, &tmBuf ) );
-    pLocalTime = localtime_r( &atime, &tmBuf );
-
-#if defined(STRUCT_TM_HAS_GMTOFF)
-    /* members of struct tm are corrected by mktime */
-    bias = 0 - pLocalTime->tm_gmtoff;
-
-#elif defined(HAS_ALTZONE)
-    /* check if daylight saving time is in effect */
-    bias = pLocalTime->tm_isdst > 0 ? altzone : timezone;
-#else
-    /* expect daylight saving time to be one hour */
-    bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
-#endif
-
-    if ( static_cast<sal_Int64>(pLocalTimeVal->Seconds) + bias > 0 )
-    {
-        pSystemTimeVal->Seconds = pLocalTimeVal->Seconds + bias;
-        pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 void sal_initGlobalTimer()

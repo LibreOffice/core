@@ -338,9 +338,6 @@ static oslFileError osl_psz_setFileTime (
     int nRet=0;
     struct utimbuf aTimeBuffer;
     struct stat aFileStat;
-#ifdef DEBUG_OSL_FILE
-    struct tm* pTM=0;
-#endif
 
     if (isForbidden(pszFilePath, osl_File_OpenFlag_Write))
         return osl_File_E_ACCES;
@@ -354,14 +351,6 @@ static oslFileError osl_psz_setFileTime (
     }
 
 #ifdef DEBUG_OSL_FILE
-    fprintf(stderr,"File Times are (in localtime):\n");
-    pTM=localtime(&aFileStat.st_ctime);
-    fprintf(stderr,"CreationTime is '%s'\n",asctime(pTM));
-    pTM=localtime(&aFileStat.st_atime);
-    fprintf(stderr,"AccessTime   is '%s'\n",asctime(pTM));
-    pTM=localtime(&aFileStat.st_mtime);
-    fprintf(stderr,"Modification is '%s'\n",asctime(pTM));
-
     fprintf(stderr,"File Times are (in UTC):\n");
     fprintf(stderr,"CreationTime is '%s'\n",ctime(&aFileStat.st_ctime));
     fprintf(stderr,"AccessTime   is '%s'\n",ctime(&aTimeBuffer.actime));
@@ -389,14 +378,6 @@ static oslFileError osl_psz_setFileTime (
     /* mfe: Creation time not used here! */
 
 #ifdef DEBUG_OSL_FILE
-    fprintf(stderr,"File Times are (in localtime):\n");
-    pTM=localtime(&aFileStat.st_ctime);
-    fprintf(stderr,"CreationTime now '%s'\n",asctime(pTM));
-    pTM=localtime(&aTimeBuffer.actime);
-    fprintf(stderr,"AccessTime   now '%s'\n",asctime(pTM));
-    pTM=localtime(&aTimeBuffer.modtime);
-    fprintf(stderr,"Modification now '%s'\n",asctime(pTM));
-
     fprintf(stderr,"File Times are (in UTC):\n");
     fprintf(stderr,"CreationTime now '%s'\n",ctime(&aFileStat.st_ctime));
     fprintf(stderr,"AccessTime   now '%s'\n",ctime(&aTimeBuffer.actime));
