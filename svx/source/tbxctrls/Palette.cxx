@@ -56,12 +56,13 @@ void PaletteASE::LoadColorSet(weld::IconView& pIconView)
 {
     pIconView.clear();
     int nIx = 0;
+    ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
     for (const auto& rColor : maColors)
     {
-        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
+        SvxColorIconView::drawColor(*pVDev, rColor.m_aColor);
         OUString sColorName = rColor.m_aName;
         OUString sId = OUString::number(nIx);
-        pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
+        pIconView.insert(nIx, &sColorName, &sId, pVDev.get(), nullptr);
         ++nIx;
     }
 }
@@ -338,12 +339,13 @@ void PaletteGPL::LoadColorSet(weld::IconView& pIconView)
 
     pIconView.clear();
     int nIx = 0;
+    ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
     for (const auto& rColor : maColors)
     {
-        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
+        SvxColorIconView::drawColor(*pVDev, rColor.m_aColor);
         OUString sColorName = rColor.m_aName;
         OUString sId = OUString::number(nIx);
-        pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
+        pIconView.insert(nIx, &sColorName, &sId, pVDev.get(), nullptr);
         ++nIx;
     }
 }

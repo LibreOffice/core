@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
 
@@ -42,6 +41,7 @@ void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
                                                sal_uInt32 nStartIndex)
 {
     const sal_uInt32 nColorCount(rXColorList.Count());
+    ScopedVclPtr<VirtualDevice> pVDev = createColorDevice();
 
     for (sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++, nStartIndex++)
     {
@@ -49,10 +49,10 @@ void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
 
         if (pEntry)
         {
-            auto pColorVDev = createColorVirtualDevice(pEntry->GetColor());
+            drawColor(*pVDev, pEntry->GetColor());
             OUString sColorName = pEntry->GetName();
             OUString sId = OUString::number(nIndex);
-            pIconView.insert(nIndex, &sColorName, &sId, pColorVDev, nullptr);
+            pIconView.insert(nIndex, &sColorName, &sId, pVDev.get(), nullptr);
         }
         else
         {
@@ -66,15 +66,16 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
                                              std::u16string_view rNamePrefix)
 {
     sal_uInt32 nStartIndex = 0;
+    ScopedVclPtr<VirtualDevice> pVDev = createColorDevice();
+
     if (!rNamePrefix.empty())
     {
         for (const auto& rColor : rColorSet)
         {
-            auto pColorVDev = createColorVirtualDevice(rColor);
+            drawColor(*pVDev, rColor);
             OUString sName = OUString::Concat(rNamePrefix) + OUString::number(nStartIndex);
             OUString sId = OUString::number(nStartIndex);
-            // InsertEntry(sName, aColorImage, aColorImage);
-            pIconView.insert(nStartIndex, &sName, &sId, pColorVDev, nullptr);
+            pIconView.insert(nStartIndex, &sName, &sId, pVDev.get(), nullptr);
             nStartIndex++;
         }
     }
@@ -82,35 +83,37 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
     {
         for (const auto& rColor : rColorSet)
         {
-            auto pColorVDev = createColorVirtualDevice(rColor);
+            drawColor(*pVDev, rColor);
             OUString sId = OUString::number(nStartIndex);
             OUString sName = u""_ustr;
-            // InsertEntry(u""_ustr, aColorImage, aColorImage);
-            pIconView.insert(nStartIndex, &sName, &sId, pColorVDev, nullptr);
+            pIconView.insert(nStartIndex, &sName, &sId, pVDev.get(), nullptr);
             nStartIndex++;
         }
     }
 }
 
-ScopedVclPtr<VirtualDevice> SvxColorIconView::createColorVirtualDevice(const Color& rColor)
+VclPtr<VirtualDevice> SvxColorIconView::createColorDevice()
 {
     const sal_uInt32 nEdgeLength = getEntryEdgeLength() - 2;
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    pVDev->SetOutputSizePixel(Size(nEdgeLength, nEdgeLength));
+    const sal_Int32 nScaleFactor = pVDev->GetDPIScaleFactor();
+    const sal_uInt32 nScaledEdge = nEdgeLength * nScaleFactor;
+    pVDev->SetOutputSizePixel(Size(nScaledEdge, nScaledEdge));
+    return pVDev;
+}
 
-    // Fill with the color
-    pVDev->SetFillColor(rColor);
-    pVDev->SetLineColor(COL_BLACK);
-    pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(nEdgeLength, nEdgeLength)));
+void SvxColorIconView::drawColor(VirtualDevice& rDev, const Color& rColor)
+{
+    const Size aSize = rDev.GetOutputSizePixel();
+    rDev.SetFillColor(rColor);
+    rDev.SetLineColor(COL_BLACK);
+    rDev.DrawRect(tools::Rectangle(Point(0, 0), aSize));
+}
 
-    BitmapEx aPreviewBitmap = pVDev->GetBitmapEx(Point(0, 0), Size(nEdgeLength, nEdgeLength));
-    const Point aNull(0, 0);
-    if (pVDev->GetDPIScaleFactor() > 1)
-        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
-    const Size aSize(aPreviewBitmap.GetSizePixel());
-    pVDev->SetOutputSizePixel(aSize);
-    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
-
+ScopedVclPtr<VirtualDevice> SvxColorIconView::createColorVirtualDevice(const Color& rColor)
+{
+    VclPtr<VirtualDevice> pVDev = createColorDevice();
+    drawColor(*pVDev, rColor);
     return pVDev;
 }
 

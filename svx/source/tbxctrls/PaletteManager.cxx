@@ -270,13 +270,14 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
         pIconView.clear();
         css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
         css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
+        ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
             Color aColor(ColorTransparency, CustomColorList[i]);
-            auto pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+            SvxColorIconView::drawColor(*pVDev, aColor);
             OUString sId = OUString::number(i);
             OUString sColorName = CustomColorNameList[i];
-            pIconView.insert(i, &sColorName, &sId, pColorVDev, nullptr);
+            pIconView.insert(i, &sColorName, &sId, pVDev.get(), nullptr);
         }
     }
     else if (IsThemePaletteSelected())
@@ -296,17 +297,17 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
             moThemePaletteCollection = aThemeColorManager.generate();
 
             // Each row is one effect type (no effect + each type).
+            ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
             for (size_t nEffect : {0, 1, 2, 3, 4, 5})
             {
                 // Each column is one color type.
                 for (auto const& rColorData : moThemePaletteCollection->maColors)
                 {
                     auto const& rEffect = rColorData.maEffects[nEffect];
-                    Color aColor = rEffect.maColor;
-                    auto pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+                    SvxColorIconView::drawColor(*pVDev, rEffect.maColor);
                     OUString sColorName = rEffect.maColorName;
                     OUString sId = OUString::number(nItemId);
-                    pIconView.insert(nItemId, &sColorName, &sId, pColorVDev, nullptr);
+                    pIconView.insert(nItemId, &sColorName, &sId, pVDev.get(), nullptr);
                     nItemId++;
                 }
             }
@@ -339,14 +340,15 @@ void PaletteManager::ReloadRecentColorSet(weld::IconView& pIconView)
     css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
     int nIx = 0;
     const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
+    ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
     for (int i = 0; i < Colorlist.getLength(); ++i)
     {
         Color aColor(ColorTransparency, Colorlist[i]);
-        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(aColor);
+        SvxColorIconView::drawColor(*pVDev, aColor);
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
         OUString sId = OUString::number(nIx);
-        pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
+        pIconView.insert(nIx, &sColorName, &sId, pVDev.get(), nullptr);
         ++nIx;
     }
 }

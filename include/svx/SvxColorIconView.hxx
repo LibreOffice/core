@@ -34,6 +34,8 @@ public:
     static void addEntriesForColorSet(weld::IconView& pIconView, const std::set<Color>& rColorSet,
                                       std::u16string_view rNamePrefix);
 
+    static VclPtr<VirtualDevice> createColorDevice();
+    static void drawColor(VirtualDevice& rDev, const Color& rColor);
     static ScopedVclPtr<VirtualDevice> createColorVirtualDevice(const Color& rColor);
 };
 
