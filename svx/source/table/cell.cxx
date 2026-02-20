@@ -1196,17 +1196,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
 
         Any aAny;
         if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
-        {
-            if(!aSet.Count())
-            {
-                // fetch the default from ItemPool
-                if(SfxItemPool::IsWhich(pMap->nWID))
-                    aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetUserOrPoolDefaultItem(pMap->nWID));
-            }
-
-            if( aSet.Count() )
-                aAny = GetAnyForItem( aSet, pMap );
-        }
+            aAny = GetAnyForItem( aSet, pMap );
 
         return aAny;
     }
