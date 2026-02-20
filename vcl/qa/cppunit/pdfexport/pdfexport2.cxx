@@ -1766,6 +1766,17 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
     CPPUNIT_ASSERT_GREATEREQUAL(2, nArtifacts); // 1 watermark + 1 other thing
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf167290)
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(1)) },
+    }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    loadFromFile(u"tdf167290.odt");
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
 {
     // Enable PDF/UA
