@@ -910,7 +910,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const Imp
                     }
 
                     // If the printer supports landscape orientation, check paper sizes again
-                    // with landscape orientation. This is necessary as a printer driver provides
+                    // with landscape orientation. This is necessary as many printer drivers provide
                     // all paper sizes with portrait orientation only!!
                     if ( !nPaper && nLandscapeAngle != 0 )
                     {
@@ -1105,7 +1105,7 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 
         for( DWORD i = 0; i < nCount; ++i )
         {
-            PaperInfo aInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10);
+            PaperInfo aInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10, true);
             m_aPaperFormats.push_back( aInfo );
         }
         std::free( pNamesBuffer );

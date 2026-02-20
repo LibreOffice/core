@@ -58,10 +58,10 @@ int nImplSysDialog = 0;
 
 namespace
 {
-    Paper ImplGetPaperFormat( tools::Long nWidth100thMM, tools::Long nHeight100thMM )
+    Paper ImplGetPaperFormat( tools::Long nWidth100thMM, tools::Long nHeight100thMM, bool bAlsoTryRotated = false )
     {
         PaperInfo aInfo(nWidth100thMM, nHeight100thMM);
-        aInfo.doSloppyFit();
+        aInfo.doSloppyFit(bAlsoTryRotated);
         return aInfo.getPaper();
     }
 
@@ -1211,15 +1211,16 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
         if ( aInfo.sloppyEqual(rPaperInfo) )
         {
             rData.SetPaperFormat(
-                ImplGetPaperFormat( rPaperInfo.getWidth(),
-                    rPaperInfo.getHeight() ));
-            rData.SetOrientation( Orientation::Portrait );
+                ImplGetPaperFormat(rPaperInfo.getWidth(), rPaperInfo.getHeight(), true));
+            rData.SetOrientation(rPaperInfo.getWidth() <= rPaperInfo.getHeight()
+                                     ? Orientation::Portrait
+                                     : Orientation::Landscape);
             return;
         }
     }
 
     // If the printer supports landscape orientation, check paper sizes again
-    // with landscape orientation. This is necessary as a printer driver provides
+    // with landscape orientation. This is necessary as many printer drivers provide
     // all paper sizes with portrait orientation only!!
     if ( !(rData.GetPaperFormat() == PAPER_USER &&
          nLandscapeAngle != 0 &&
@@ -1237,9 +1238,10 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
         if ( aRotatedInfo.sloppyEqual( rPaperInfo ) )
         {
             rData.SetPaperFormat(
-                ImplGetPaperFormat( rPaperInfo.getWidth(),
-                    rPaperInfo.getHeight() ));
-            rData.SetOrientation( Orientation::Landscape );
+                ImplGetPaperFormat(rPaperInfo.getWidth(), rPaperInfo.getHeight(), true));
+            rData.SetOrientation(rPaperInfo.getWidth() < rPaperInfo.getHeight()
+                                     ? Orientation::Landscape
+                                     : Orientation::Portrait);
             return;
         }
     }

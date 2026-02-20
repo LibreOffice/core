@@ -376,20 +376,29 @@ PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
     m_nPaperHeight = aDinTab[m_eType].m_nHeight;
 }
 
-PaperInfo::PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight)
+PaperInfo::PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight, bool bAlsoTryRotated)
     : m_eType(PAPER_USER),
       m_nPaperWidth(nPaperWidth),
       m_nPaperHeight(nPaperHeight)
 {
     for ( size_t i = 0; i < nTabSize; ++i )
     {
-        if (
-             (nPaperWidth == aDinTab[i].m_nWidth) &&
-             (nPaperHeight == aDinTab[i].m_nHeight)
-           )
+        if (nPaperWidth == aDinTab[i].m_nWidth && nPaperHeight == aDinTab[i].m_nHeight)
         {
             m_eType = static_cast<Paper>(i);
-            break;
+            return;
+        }
+    }
+    if (!bAlsoTryRotated)
+        return;
+    // Only check rotated dimensions after completing the normal pass, because there are pairs like
+    // Tabloid (11x17) / Ledger (17x11) in aDinTab
+    for ( size_t i = 0; i < nTabSize; ++i )
+    {
+        if (nPaperHeight == aDinTab[i].m_nWidth && nPaperWidth == aDinTab[i].m_nHeight)
+        {
+            m_eType = static_cast<Paper>(i);
+            return;
         }
     }
 }
