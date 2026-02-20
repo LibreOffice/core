@@ -619,7 +619,7 @@
                         <property name="headers-visible">True</property>
                         <property name="reorderable">True</property>
                         <property name="search-column">1</property>
-                        <property name="enable-tree-lines">True</property>
+                        <property name="show-expanders">False</property>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn0">
                             <property name="resizable">True</property>
