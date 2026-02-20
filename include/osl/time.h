@@ -175,6 +175,18 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
         const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
 
+/** Set the timezone used by osl_getLocalTimeFromSystemTime and
+    osl_getSystemTimeFromLocalTime to the given IANA timezone ID
+    (e.g. "America/New_York"). Also sets the $TZ environment variable.
+
+    @param[in] pTimezone IANA timezone ID (null-terminated ASCII string).
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_setTimezone(const char* pTimezone);
+
+/** Reset the timezone to the system default.
+    Unsets the $TZ environment variable.
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_resetTimezone(void);
 
 /** Get the value of the global timer
     @return current timer value in milliseconds

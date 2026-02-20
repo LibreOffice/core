@@ -19,7 +19,7 @@
 
 namespace
 {
-/// RAII helper to set $TZ and restore it on destruction.
+/// RAII helper to set timezone via osl_setTimezone and restore on destruction.
 class TZGuard
 {
     std::string m_oldTZ;
@@ -32,14 +32,14 @@ public:
         m_hadTZ = (old != nullptr);
         if (m_hadTZ)
             m_oldTZ = old;
-        setenv("TZ", tz, 1);
+        osl_setTimezone(tz);
     }
     ~TZGuard()
     {
         if (m_hadTZ)
-            setenv("TZ", m_oldTZ.c_str(), 1);
+            osl_setTimezone(m_oldTZ.c_str());
         else
-            unsetenv("TZ");
+            osl_resetTimezone();
     }
 };
 

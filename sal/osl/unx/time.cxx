@@ -23,6 +23,7 @@
 #include "tz.hxx"
 
 #include <cstdint>
+#include <cstdlib>
 #include <osl/time.h>
 #include <time.h>
 #include <unistd.h>

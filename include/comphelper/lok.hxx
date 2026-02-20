@@ -134,7 +134,7 @@ COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
 COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 
 /// Update the current LOK's timezone.
-COMPHELPER_DLLPUBLIC void setTimezone(bool isSet, const OUString& rTimezone);
+COMPHELPER_DLLPUBLIC void setTimezone(bool isSet, std::u16string_view rTimezone);
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of

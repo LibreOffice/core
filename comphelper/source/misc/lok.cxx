@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <osl/process.h>
+#include <osl/time.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
 #ifdef _WIN32
@@ -312,22 +313,20 @@ bool isAllowlistedLanguage(const OUString& lang)
 #endif
 }
 
-void setTimezone(bool isSet, const OUString& rTimezone)
+void setTimezone(bool isSet, std::u16string_view rTimezone)
 {
     if (isSet)
     {
         // Set the given timezone, even if empty.
-        osl_setEnvironment(u"TZ"_ustr.pData, rTimezone.pData);
+        OString aTZ = OUStringToOString(rTimezone, RTL_TEXTENCODING_UTF8);
+        osl_setTimezone(aTZ.getStr());
     }
     else
     {
         // Unset and empty aren't the same.
         // When unset, it means default to the system configured timezone.
-        osl_clearEnvironment(u"TZ"_ustr.pData);
+        osl_resetTimezone();
     }
-
-    // Update the timezone data.
-    ::tzset();
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent, const char* pText)(nullptr);

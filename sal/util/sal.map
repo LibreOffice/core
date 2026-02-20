@@ -705,6 +705,12 @@ LIBO_UDK_6.2 { # symbols available in >= LibO 6.2
         osl_replaceFile;
 } LIBO_UDK_5.3;
 
+LIBO_UDK_26.08 { # symbols available in >= LibO 26.8
+    global:
+        osl_setTimezone;
+        osl_resetTimezone;
+} LIBO_UDK_6.2;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;
