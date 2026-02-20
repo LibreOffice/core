@@ -1378,6 +1378,14 @@ namespace
                     {
                         if ( !bHasHint )
                         {
+                            // looking for the hints on the actual page, but the first
+                            // matching hint is after the end of the actual page
+                            if ( bHasEndOffset &&
+                                      TextFrameIndex(pHint->GetStart()) > nEndOffset )
+                            {
+                                return nullptr;
+                            }
+
                             *pStart = pHint->GetStart();
                             bHasHint = true;
                         }
@@ -1433,15 +1441,17 @@ namespace
                 SwNode* pCurrent = rNodes[nCurrent];
                 SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, nPageStartOffset,
                                 nNodeStart == nNodeEnd ? nPageEndOffset : TextFrameIndex(0), bCaseSensitive);
-
                 if (pFound)
                     return pFound;
+
+                nCurrent++;
             }
 
             for (; nCurrent <= nNodeEnd; ++nCurrent)
             {
                 SwNode* pCurrent = rNodes[nCurrent];
-                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, TextFrameIndex(0), TextFrameIndex(0), bCaseSensitive);
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, TextFrameIndex(0),
+                                nCurrent == nNodeEnd ? nPageEndOffset : TextFrameIndex(0), bCaseSensitive);
                 if (pFound)
                     return pFound;
             }
@@ -1454,7 +1464,10 @@ namespace
             if ( nPageEndOffset != TextFrameIndex(0) )
             {
                 SwNode* pCurrent = rNodes[nCurrent];
-                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, nPageStartOffset, nPageEndOffset, bCaseSensitive, bSearchBackward);
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd,
+                                nNodeStart == nNodeEnd ? nPageStartOffset : TextFrameIndex(0),
+                                nPageEndOffset, bCaseSensitive, bSearchBackward);
+
                 if (pFound)
                     return pFound;
                 // continue with the last but one paragraph on the page
@@ -1465,7 +1478,10 @@ namespace
             for (; nCurrent >= nNodeStart; --nCurrent)
             {
                 SwNode* pCurrent = rNodes[nCurrent];
-                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, TextFrameIndex(0), TextFrameIndex(0), bCaseSensitive, bSearchBackward);
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd,
+                                nNodeStart == nCurrent ? nPageStartOffset : TextFrameIndex(0),
+                                TextFrameIndex(0), bCaseSensitive, bSearchBackward);
+
                 if (pFound)
                     return pFound;
             }
@@ -1781,12 +1797,18 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
         return pTextNd;
 
     // 2. Search up from the top of the page
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset);
+    if ( nPageStartOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart, /*bBackwards*/true, styleName, pStart, pEnd, TextFrameIndex(0), nPageStartOffset);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset);
     if (pTextNd)
         return pTextNd;
 
     // 3. Search down from the bottom of the page
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset);
+    if ( nPageEndOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd, nPageEndOffset);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
@@ -1798,13 +1820,21 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset,
-                                   false /* bCaseSensitive */);
+    if ( nPageStartOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd,
+                                   TextFrameIndex(0), nPageStartOffset, false /* bCaseSensitive */);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd,
+                                   nPageStartOffset, nPageEndOffset, false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset,
-                                   false /* bCaseSensitive */);
+    if ( nPageEndOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
+                                   nPageEndOffset, TextFrameIndex(0), false /* bCaseSensitive */);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
+                                   TextFrameIndex(0), TextFrameIndex(0), false /* bCaseSensitive */);
     return pTextNd;
 }
 

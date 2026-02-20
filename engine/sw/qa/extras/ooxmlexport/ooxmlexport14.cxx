@@ -896,6 +896,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf32363)
                 u"Do not shorten this short heading");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163894_from_top_to_beginning_of_the_documentMarguerite)
+{
+    createSwDoc("tdf163894_from_top.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"handbooks");
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    // This was "initializes"
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"infuriating");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"initializes");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Marguerite");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"maroon");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"modicum");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 {
     createSwDoc("fdo76163.docx");
