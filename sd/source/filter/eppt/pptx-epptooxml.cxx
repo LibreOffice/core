@@ -401,6 +401,7 @@ PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContex
     comphelper::SequenceAsHashMap aArgumentsMap(rArguments);
     mbPptm = aArgumentsMap.getUnpackedValueOrDefault(u"IsPPTM"_ustr, false);
     mbExportTemplate = aArgumentsMap.getUnpackedValueOrDefault(u"IsTemplate"_ustr, false);
+    mbSlideShow = aArgumentsMap.getUnpackedValueOrDefault(u"IsSlideShow"_ustr, false);
 }
 
 PowerPointExport::~PowerPointExport()
@@ -463,6 +464,10 @@ bool PowerPointExport::exportDocument()
         {
             aMediaType = "application/vnd.ms-powerpoint.template.macroEnabled.main+xml";
         }
+        else if (mbSlideShow)
+        {
+            aMediaType = "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml";
+        }
         else
         {
             aMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml";
@@ -473,6 +478,10 @@ bool PowerPointExport::exportDocument()
         if (mbExportTemplate)
         {
             aMediaType = "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml";
+        }
+        else if (mbSlideShow)
+        {
+            aMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml";
         }
         else
         {

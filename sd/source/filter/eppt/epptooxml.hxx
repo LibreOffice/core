@@ -147,6 +147,9 @@ private:
     // Export as a template
     bool mbExportTemplate;
 
+    // Export as a slideshow (PPSX/PPSM)
+    bool mbSlideShow;
+
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[AUTOLAYOUT_END];
