@@ -57,10 +57,11 @@ void PaletteASE::LoadColorSet(weld::IconView& pIconView)
 {
     pIconView.clear();
     int nIx = 0;
+    ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
     for (const auto& rColor : maColors)
     {
-        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
-        Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
+        SvxColorIconView::drawColor(*pVDev, rColor.m_aColor);
+        Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sColorName = rColor.m_aName;
         OUString sId = OUString::number(nIx);
         pIconView.insert(nIx, &sColorName, &sId, &aBmp, nullptr);
@@ -335,10 +336,11 @@ void PaletteGPL::LoadColorSet(weld::IconView& pIconView)
 
     pIconView.clear();
     int nIx = 0;
+    ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
     for (const auto& rColor : maColors)
     {
-        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
-        Bitmap aBmp = pColorVDev->GetBitmap(Point(), pColorVDev->GetOutputSizePixel());
+        SvxColorIconView::drawColor(*pVDev, rColor.m_aColor);
+        Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sColorName = rColor.m_aName;
         OUString sId = OUString::number(nIx);
         pIconView.insert(nIx, &sColorName, &sId, &aBmp, nullptr);
