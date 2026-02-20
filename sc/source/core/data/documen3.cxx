@@ -612,25 +612,22 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     OUString  aOptions; // Filter options
     sal_uInt32 nLinkCnt = pExtDocOptions ? pExtDocOptions->GetDocSettings().mnLinkCnt : 0;
     ScDocumentLoader aLoader( aFileName, aFilterName, aOptions, nLinkCnt + 1 );
-    if ( aLoader.IsError() )
+    ScDocument* pSrcDoc = aLoader.IsError() ? nullptr : aLoader.GetDocument();
+
+    if (!InsertTab(SC_TAB_APPEND, aDocTab, true))
+    {
+        OSL_FAIL("can't insert external document table");
         return false;
-    ScDocument* pSrcDoc = aLoader.GetDocument();
+    }
+    rTab = GetTableCount() - 1;
 
     // Copy table
     SCTAB nSrcTab;
-    if ( pSrcDoc->GetTable( aTabName, nSrcTab ) )
+    if (pSrcDoc && pSrcDoc->GetTable(aTabName, nSrcTab))
     {
-        if ( !InsertTab( SC_TAB_APPEND, aDocTab, true ) )
-        {
-            OSL_FAIL("can't insert external document table");
-            return false;
-        }
-        rTab = GetTableCount() - 1;
         // Don't insert anew, just the results
         TransferTab( *pSrcDoc, nSrcTab, rTab, false, true );
     }
-    else
-        return false;
 
     sal_Int32 nRefreshDelay = 0;
 
