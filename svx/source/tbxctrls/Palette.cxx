@@ -58,7 +58,7 @@ void PaletteASE::LoadColorSet(weld::IconView& pIconView)
     int nIx = 0;
     for (const auto& rColor : maColors)
     {
-        VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
+        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
         OUString sColorName = rColor.m_aName;
         OUString sId = OUString::number(nIx);
         pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
@@ -340,7 +340,7 @@ void PaletteGPL::LoadColorSet(weld::IconView& pIconView)
     int nIx = 0;
     for (const auto& rColor : maColors)
     {
-        VclPtr<VirtualDevice> pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
+        auto pColorVDev = SvxColorIconView::createColorVirtualDevice(rColor.m_aColor);
         OUString sColorName = rColor.m_aName;
         OUString sId = OUString::number(nIx);
         pIconView.insert(nIx, &sColorName, &sId, pColorVDev, nullptr);
