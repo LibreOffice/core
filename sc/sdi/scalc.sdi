@@ -6390,7 +6390,7 @@ SfxBoolItem CellProtection SID_SCATTR_CELLPROTECTION
 ]
 
 ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS
-
+(ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
@@ -6408,7 +6408,7 @@ ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS
 
 
 SfxVoidItem InsertCalcTable SID_INSERT_CALCTABLE
-()
+(ScDatabaseSettingItem DatabaseSettings SID_INSERT_CALCTABLE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
