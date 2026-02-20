@@ -11,7 +11,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_perfobj))
 
-$(eval $(call gb_CppunitTest_use_external,sc_perfobj,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_perfobj,boost_headers libxml2))
 
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_perfobj))
 
