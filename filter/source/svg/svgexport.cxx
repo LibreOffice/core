@@ -2005,7 +2005,9 @@ bool SVGFilter::implExportPage( std::u16string_view sPageId,
                 // Slide custom background, if any, is referenced at a different position
                 // in order to not overlap background objects.
                 std::unique_ptr<SvXMLElementExport> xDefsExp;
-                if (!bMaster) // insert the <defs> open tag related to the slide background
+                // tdf#151746
+                // Do not use def tags for Draw as it hides the background
+                if ( !bMaster && mbPresentation ) // insert the <defs> open tag related to the slide background
                 {
                     mpSVGExport->AddAttribute(u"class"_ustr, u"SlideBackground"_ustr);
                     xDefsExp.reset(new SvXMLElementExport(*mpSVGExport, u"defs"_ustr, true, true));
@@ -2047,27 +2049,49 @@ bool SVGFilter::implExportPage( std::u16string_view sPageId,
         // into a group element, this group will make up the so named "background objects"
         if( bMaster )
         {
-            // background objects id = "bo-" + page id
-            OUString sBackgroundObjectsId = OUString::Concat("bo-") + sPageId;
-            mpSVGExport->AddAttribute(u"id"_ustr, sBackgroundObjectsId);
-            if( !mbPresentation )
+            // tdf#151746
+            // For Draw, we want to wrap the Master Background Objects in defs tags so
+            // they can be drawn on top of the normal page background later
+            std::unique_ptr<SvXMLElementExport> xDefsExp;
+            if (!mbPresentation)
             {
-                if( !mVisiblePagePropSet.bAreBackgroundObjectsVisible )
-                {
-                    mpSVGExport->AddAttribute(u"visibility"_ustr, u"hidden"_ustr);
-                }
+                xDefsExp.reset(new SvXMLElementExport(*mpSVGExport, u"defs"_ustr, true, true));
             }
-            mpSVGExport->AddAttribute(u"class"_ustr, u"BackgroundObjects"_ustr);
 
-            // insert the <g> open tag related to the Background Objects
-            SvXMLElementExport aExp2(*mpSVGExport, u"g"_ustr, true, true);
+            {
+                // background objects id = "bo-" + page id
+                OUString sBackgroundObjectsId = OUString::Concat("bo-") + sPageId;
+                mpSVGExport->AddAttribute(u"id"_ustr, sBackgroundObjectsId);
+                if (!mbPresentation)
+                {
+                    if (!mVisiblePagePropSet.bAreBackgroundObjectsVisible)
+                    {
+                        mpSVGExport->AddAttribute(u"visibility"_ustr, u"hidden"_ustr);
+                    }
+                }
+                mpSVGExport->AddAttribute(u"class"_ustr, u"BackgroundObjects"_ustr);
 
-            // append all shapes that make up the Master Slide
-            bRet = implExportShapes( xShapes, true ) || bRet;
-        }   // append the </g> closing tag related to the Background Objects
+                // insert the <g> open tag related to the Background Objects
+                SvXMLElementExport aExp2(*mpSVGExport, u"g"_ustr, true, true);
+
+                // append all shapes that make up the Master Slide
+                bRet = implExportShapes(xShapes, true) || bRet;
+            } // append the </g> closing tag related to the Background Objects
+        } // append the </defs> closing tag related to the Background Objects
         else
         {
+            // tdf#151746
+            // For Draw, we want to reference the Master Background Objects after the normal page
+            // background but before the shapes that make up the slides
+            if ( !mMasterPageTargets.empty() && !mbPresentation )
+            {
+                std::u16string_view sMasterPageId = implGetValidIDFromInterface(mMasterPageTargets[0]);
+                OUString sMasterObjectsRef = OUString::Concat("#bo-") + sMasterPageId;
+                mpSVGExport->AddAttribute(u"href"_ustr, sMasterObjectsRef);
+                SvXMLElementExport aUseElem(*mpSVGExport, u"use"_ustr, true, true);
+            }
             // append all shapes that make up the Slide
+
             bRet = implExportShapes( xShapes, false ) || bRet;
         }
     }  // append the </g> closing tag related to the Slide/Master_Slide

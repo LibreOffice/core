@@ -71,13 +71,13 @@ class SdSVGFilterTest : public UnoApiTest
 {
 public:
     SdSVGFilterTest()
-        : UnoApiTest(u"/sd/qa/unit/data/odp/"_ustr)
+        : UnoApiTest(u"/sd/qa/unit/data/"_ustr)
     {
     }
 
     void testSVGExportTextDecorations()
     {
-        loadFromFile(u"svg-export-text-decorations.odp");
+        loadFromFile(u"odp/svg-export-text-decorations.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -100,7 +100,7 @@ public:
 
     void testSVGExportJavascriptURL()
     {
-        loadFromFile(u"textbox-link-javascript.odp");
+        loadFromFile(u"odp/textbox-link-javascript.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -115,7 +115,7 @@ public:
 
     void testSVGExportSlideCustomBackground()
     {
-        loadFromFile(u"slide-custom-background.odp");
+        loadFromFile(u"odp/slide-custom-background.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -126,7 +126,7 @@ public:
 
     void testSVGExportTextFieldsInMasterPage()
     {
-        loadFromFile(u"text-fields.odp");
+        loadFromFile(u"odp/text-fields.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -150,7 +150,7 @@ public:
 
     void testSVGExportEmbeddedVideo()
     {
-        loadFromFile(u"slide-video-thumbnail.odp");
+        loadFromFile(u"odp/slide-video-thumbnail.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -181,7 +181,7 @@ public:
 
     void testSVGExportSlideBitmapBackground()
     {
-        loadFromFile(u"slide-bitmap-background.odp");
+        loadFromFile(u"odp/slide-bitmap-background.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -210,7 +210,7 @@ public:
 
     void testSVGExportSlideTileBitmapBackground()
     {
-        loadFromFile(u"slide-tile-background.odp");
+        loadFromFile(u"odp/slide-tile-background.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -275,7 +275,7 @@ public:
         aSettings.SetLanguageTag(aLangISO, true);
         Application::SetSettings(aSettings);
 
-        loadFromFile(u"text-fields.odp");
+        loadFromFile(u"odp/text-fields.odp");
         save(TestFilter::SVG_IMPRESS);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
@@ -292,6 +292,32 @@ public:
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[8]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", u"PlaceholderText PageNumber");
     }
 
+    // tdf#151746
+    void testSVGExportDrawBackground()
+    {
+        loadFromFile(u"odg/tdf151746.odg");
+        save(TestFilter::SVG_DRAW);
+
+        xmlDocUniquePtr svgDoc = parseExportedFile();
+        CPPUNIT_ASSERT(svgDoc);
+
+        // Check that the Master Background Objects are wrapped in defs tags
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[1]/SVG_G ), "class", u"Master_Slide");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[1]/SVG_G/SVG_G[1] ), "class", u"Background");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[1]/SVG_G/SVG_DEFS/SVG_G ));
+        OUString sBgObjsId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[1]/SVG_G/SVG_DEFS/SVG_G ), "id");
+
+        // Check that the Page Background is not wrapped in defs tags
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G), "class", u"Page");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]), "class", u"Background");
+
+        // Check that the Master Background Objects are referenced correctly
+        OUString sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_USE ), "href");
+        CPPUNIT_ASSERT_MESSAGE("The <use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
+        sRef = sRef.copy(1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("The href attribute for <use> does not match the background objects id attribute: ", sBgObjsId, sRef);
+    }
+
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
     CPPUNIT_TEST(testSVGExportJavascriptURL);
@@ -301,6 +327,7 @@ public:
     CPPUNIT_TEST(testSVGExportSlideBitmapBackground);
     CPPUNIT_TEST(testSVGExportSlideTileBitmapBackground);
     CPPUNIT_TEST(testSVGPlaceholderLocale);
+    CPPUNIT_TEST(testSVGExportDrawBackground);
     CPPUNIT_TEST_SUITE_END();
 };
 
