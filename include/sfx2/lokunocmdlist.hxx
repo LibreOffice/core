@@ -34,6 +34,7 @@ enum class PayloadType
     StringOrStrSeqPayload,
     StrSeqPayload,
     TableSizePayload,
+    TableStylePayload,
 };
 
 struct KitUnoCommand

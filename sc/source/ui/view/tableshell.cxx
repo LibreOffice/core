@@ -69,6 +69,12 @@ void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
     {
         case SID_DATABASE_SETTINGS:
         {
+            if (!pSet)
+            {
+                SAL_WARN("sc", "No arguments provided for ExecuteDatabaseSettings");
+                break;
+            }
+
             const SfxPoolItem* pItem;
             SfxItemState eItemState = pSet->GetItemState(SCITEM_DATABASE_SETTING, true, &pItem);
             if (eItemState == SfxItemState::SET

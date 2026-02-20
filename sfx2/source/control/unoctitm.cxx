@@ -1149,6 +1149,29 @@ OString TableSizePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureSta
     return aBuffer.makeStringAndClear();
 }
 
+OString TableStylePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEvent& aEvent,
+                         const SfxPoolItem*)
+{
+    tools::JsonWriter aTree;
+    aTree.put("commandName", aEvent.FeatureURL.Complete);
+    aTree.put("enabled", !!aEvent.IsEnabled); // use boolean
+
+    css::uno::Sequence<css::beans::PropertyValue> aSeq;
+    if (aEvent.IsEnabled && (aEvent.State >>= aSeq))
+    {
+        auto aState = aTree.startNode("state");
+        for (const auto& rProp : aSeq)
+        {
+            OString sName = rProp.Name.toUtf8();
+            if (bool bVal; rProp.Value >>= bVal)
+                aTree.put(sName, bVal);
+            else if (OUString sVal; rProp.Value >>= sVal)
+                aTree.put(sName, sVal);
+        }
+    }
+    return aTree.finishAndGetAsOString();
+}
+
 constexpr auto enumToPayload = frozen::make_unordered_map<PayloadType, PayloadGetter_t>({
     { PayloadType::None, nullptr },
     { PayloadType::IsActivePayload, IsActivePayload },
@@ -1171,6 +1194,7 @@ constexpr auto enumToPayload = frozen::make_unordered_map<PayloadType, PayloadGe
     { PayloadType::StringOrStrSeqPayload, StringOrStrSeqPayload },
     { PayloadType::StrSeqPayload, StrSeqPayload },
     { PayloadType::TableSizePayload, TableSizePayload },
+    { PayloadType::TableStylePayload, TableStylePayload },
 });
 }
 
@@ -1353,7 +1377,6 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"EditHeaderAndFooter", { PayloadType::EnabledPayload, true } },
         { u"InsertCalcTable", { PayloadType::EnabledPayload, true } },
         { u"RemoveCalcTable", { PayloadType::EnabledPayload, true } },
-        { u"DatabaseSettings", { PayloadType::EnabledPayload, true } },
         { u"InsertSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparklineGroup", { PayloadType::EnabledPayload, true } },
@@ -1452,6 +1475,8 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
 
         { u"TableColumWidth", { PayloadType::TableSizePayload, false } },
         { u"TableRowHeight", { PayloadType::TableSizePayload, false } },
+
+        { u"DatabaseSettings", { PayloadType::TableStylePayload, true } },
 
         { u"BorderInner", { PayloadType::None, true } },
         { u"BorderOuter", { PayloadType::None, true } },

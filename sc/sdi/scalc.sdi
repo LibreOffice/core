@@ -6476,7 +6476,7 @@ SfxBoolItem CellProtection SID_SCATTR_CELLPROTECTION
 ]
 
 ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS
-
+(ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
