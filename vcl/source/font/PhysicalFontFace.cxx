@@ -37,6 +37,7 @@
 #include <comphelper/scopeguard.hxx>
 
 #include <string_view>
+#include <optional>
 
 #include <hb-ot.h>
 #include <hb-subset.h>
@@ -297,6 +298,61 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
+namespace
+{
+std::optional<unsigned int> GetNamedInstanceIndex(hb_face_t* pHbFace,
+                                                  const std::vector<hb_variation_t>& rVariations)
+{
+    unsigned int nAxes = hb_ot_var_get_axis_count(pHbFace);
+    std::vector<hb_ot_var_axis_info_t> aAxisInfos(nAxes);
+    hb_ot_var_get_axis_infos(pHbFace, 0, &nAxes, aAxisInfos.data());
+
+    // Pre-fill the coordinates with axes defaults
+    std::vector<float> aCurrentCoords(nAxes);
+    for (unsigned int i = 0; i < nAxes; ++i)
+        aCurrentCoords[i] = aAxisInfos[i].default_value;
+
+    // Then update coordinates with the current variations
+    hb_ot_var_axis_info_t info;
+    for (const auto& rVariation : rVariations)
+    {
+        if (hb_ot_var_find_axis_info(pHbFace, rVariation.tag, &info))
+            aCurrentCoords[info.axis_index] = rVariation.value;
+    }
+
+    // Find a named instance that matches the current coordinates and return its index
+    unsigned int nInstances = hb_ot_var_get_named_instance_count(pHbFace);
+    std::vector<float> aInstanceCoords(nAxes);
+    for (unsigned int i = 0; i < nInstances; ++i)
+    {
+        unsigned int nInstanceAxes = nAxes;
+        if (hb_ot_var_named_instance_get_design_coords(pHbFace, i, &nInstanceAxes,
+                                                       aInstanceCoords.data())
+            && aInstanceCoords == aCurrentCoords)
+        {
+            return i;
+        }
+    }
+
+    return std::nullopt;
+}
+
+OUString GetNamedInstancePSName(const PhysicalFontFace& rFontFace,
+                                const std::vector<hb_variation_t>& rVariations)
+{
+    hb_face_t* pHbFace = rFontFace.GetHbFace();
+    auto nIndex = GetNamedInstanceIndex(pHbFace, rVariations);
+    if (nIndex)
+    {
+        auto nPSNameID = hb_ot_var_named_instance_get_postscript_name_id(pHbFace, *nIndex);
+        if (nPSNameID != HB_OT_NAME_ID_INVALID)
+            return rFontFace.GetName(static_cast<NameID>(nPSNameID));
+    }
+
+    return OUString();
+}
+}
+
 // These are “private” HarfBuzz metrics tags, they are supported by not exposed
 // in the public header. They are safe to use, HarfBuzz just does not want to
 // advertise them.
@@ -363,7 +419,12 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
         return false;
 
     // Fill FontSubsetInfo
-    rInfo.m_aPSName = GetName(NAME_ID_POSTSCRIPT_NAME);
+
+    // If this is a named instance and it has a PostScript name, we want to use it.
+    if (bIsVariableFont)
+        rInfo.m_aPSName = GetNamedInstancePSName(*this, rVariations);
+    if (rInfo.m_aPSName.isEmpty())
+        rInfo.m_aPSName = GetName(NAME_ID_POSTSCRIPT_NAME);
 
     auto nUPEM = UnitsPerEm();
 
