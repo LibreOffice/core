@@ -823,6 +823,7 @@ void PrintDialog::setPaperSizes()
 #endif
     {
         int nExactMatch = -1;
+        int nExactRotatedMatch = -1;
         int nSizeMatch = -1;
         int nRotatedSizeMatch = -1;
         Size aSizeOfPaper = aPrt->GetSizeOfPaper();
@@ -860,8 +861,15 @@ void PrintDialog::setPaperSizes()
 
             mxPaperSizeBox->append_text(aPaperName);
 
+            // For exact match, check that paper orientation also matches
             if (ePaper != PAPER_USER && ePaper == mePaper)
-                nExactMatch = nPaper;
+            {
+                // Only get the first match, in case there are multiple papers with the same size
+                if (nExactMatch == -1 && aInfo.sloppyEqual(aPaperInfo))
+                    nExactMatch = nPaper;
+                else if (nExactRotatedMatch == -1 && aInfo.sloppyEqual(aRotatedPaperInfo))
+                    nExactRotatedMatch = nPaper;
+            }
 
             if (ePaper == PAPER_USER && aInfo.sloppyEqual(aPaperInfo))
                 nSizeMatch = nPaper;
@@ -872,6 +880,8 @@ void PrintDialog::setPaperSizes()
 
         if (nExactMatch != -1)
             mxPaperSizeBox->set_active(nExactMatch);
+        else if (nExactRotatedMatch != -1)
+            mxPaperSizeBox->set_active(nExactRotatedMatch);
         else if (nSizeMatch != -1)
             mxPaperSizeBox->set_active(nSizeMatch);
         else if (nRotatedSizeMatch != -1)
