@@ -440,10 +440,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( HasStyleOptions( aStyle, aId, aClass )  &&
         ParseStyleOptions( aStyle, aId, aClass, aStyleItemSet, aPropInfo ) )
     {
-        SfxItemIter aIter( aStyleItemSet );
-
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter( aStyleItemSet ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             PutEEPoolItem( aItemSet, *pItem );
         }
     }

@@ -704,7 +704,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             // this by remembering the WhichIDs of Items to delete
             std::vector<sal_uInt16> aDeleteWhichIDs;
 
-            for (SfxItemIter aIter(pOld->aAttrSet); !aIter.IsAtEnd(); aIter.NextItem())
+            for (SfxItemIter aIter(pOld->aAttrSet); !aIter.IsAtEnd(); aIter.Next())
             {
                 const SfxPoolItem* pGet(nullptr);
                 if (SfxItemState::SET == pCurrent->aAttrSet.GetItemState(aIter.GetCurWhich(), false, &pGet)
@@ -1102,7 +1102,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             // ITEM: SfxItemIter and removing SfxPoolItems:
             std::vector<sal_uInt16> aDeleteWhichIDs;
 
-            for (SfxItemIter aIter(aMrgSet); !aIter.IsAtEnd(); aIter.NextItem())
+            for (SfxItemIter aIter(aMrgSet); !aIter.IsAtEnd(); aIter.Next())
             {
                 const SfxPoolItem* pGet(nullptr);
                 if (SfxItemState::SET != pTmp->aAttrSet.GetItemState(aIter.GetCurWhich(), false, &pGet)
@@ -1146,15 +1146,13 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
 {
     if( rDefaults.Count() )
     {
-        SfxItemIter aIter( rDefaults );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do {
+        for (SfxItemIter aIter( rDefaults ); !aIter.IsAtEnd(); aIter.Next())
+        {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             sal_uInt16 nWhich = pItem->Which();
             if( SfxItemState::SET != aAttrSet.GetItemState( nWhich, false ))
                 aAttrSet.Put(*pItem);
-
-            pItem = aIter.NextItem();
-        } while(pItem);
+        }
     }
 }
 

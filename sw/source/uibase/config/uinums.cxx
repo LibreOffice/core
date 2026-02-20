@@ -187,13 +187,11 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
     m_nCharPoolId = pFormat->GetPoolFormatId();
     if( pFormat->GetAttrSet().Count() )
     {
-        SfxItemIter aIter( pFormat->GetAttrSet() );
-        const SfxPoolItem *pCurr = aIter.GetCurItem();
-        do
+        for (SfxItemIter aIter( pFormat->GetAttrSet() ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pCurr = aIter.GetCurItem();
             m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
-            pCurr = aIter.NextItem();
-        } while (pCurr);
+        }
     }
 
     m_aFormat.SetCharFormat( nullptr );

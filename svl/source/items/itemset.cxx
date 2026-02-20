@@ -1372,9 +1372,9 @@ void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     tools::XmlWriter aWriter(pWriter);
     aWriter.startElement("SfxItemSet");
-    SfxItemIter aIter(*this);
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( *this ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (IsInvalidItem(pItem))
         {
             aWriter.startElement("invalid");

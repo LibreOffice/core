@@ -91,10 +91,9 @@ namespace svx {
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(pParent, *pBBSet, true /*bEnableDrawingLayerFillStyles*/));
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
-            SfxItemIter aIter( *pDlg->GetOutputItemSet() );
-
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( *pDlg->GetOutputItemSet() ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if ( !IsInvalidItem( pItem ) )
                     pBBSet->Put( *pItem );
             }
@@ -625,10 +624,9 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
     pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult) {
         if (nResult == RET_OK && pDlg->GetOutputItemSet())
         {
-            SfxItemIter aIter(*pDlg->GetOutputItemSet());
-
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( *pDlg->GetOutputItemSet() ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if(!IsInvalidItem(pItem))
                 {
                     m_pBBSet->Put(*pItem);

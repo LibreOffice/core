@@ -22,8 +22,7 @@
 
 SfxItemState SfxItemIter::GetItemState(bool bSrchInParent, const SfxPoolItem** ppItem) const
 {
-    if (IsAtEnd())
-        return SfxItemState::UNKNOWN;
+    assert(!IsAtEnd());
 
     SfxItemState eState(SfxItemSet::GetItemState_ForIter(maCurrent, ppItem));
 

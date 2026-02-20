@@ -131,12 +131,10 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
             if ( aListAttrSet.Count() )
             {
                 aSavedAttrsSet.Put(aListAttrSet);
-                SfxItemIter aIter( aListAttrSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                while( pItem )
+                for (SfxItemIter aIter( aListAttrSet ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     aClearWhichIds.push_back( pItem->Which() );
-                    pItem = aIter.NextItem();
                 }
             }
         }
@@ -192,9 +190,9 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
             {
                 OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed." );
-                SfxItemIter aIter( *pPara->pDelSet );
-                for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                for (SfxItemIter aIter( *pPara->pDelSet ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
                            pItem->Which() != RES_FRMATR_STYLE_NAME &&
@@ -564,11 +562,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     sw::BroadcastingModify aCallMod;
     SwAttrSet aOld( GetAttrPool(), rSet.GetRanges() ),
             aNew( GetAttrPool(), rSet.GetRanges() );
-    SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
-    do
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         bool bCheckSdrDflt = false;
         const sal_uInt16 nWhich = pItem->Which();
         aOld.Put( GetAttrPool().GetUserOrPoolDefaultItem( nWhich ) );
@@ -617,9 +614,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 }
             }
         }
-
-        pItem = aIter.NextItem();
-    } while (pItem);
+    }
 
     if( aNew.Count() && aCallMod.HasWriterListeners() )
     {
@@ -1890,9 +1885,9 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
 
     const sal_Int32 nEnd(rPam.End()->GetContentIndex());
     std::vector<WhichPair> whichIds;
-    SfxItemIter iter(rSet);
-    for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (RES_CHRATR_BEGIN <= pItem->Which() && pItem->Which() < RES_CHRATR_END)
         {   // tdf#162911 don't add items with static default like INETFMT
             whichIds.push_back({pItem->Which(), pItem->Which()});
@@ -1945,10 +1940,9 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
         // invalidate all new items in <aOldSet> in order to clear these items,
         // if the undo action is triggered.
         {
-            SfxItemIter aIter(aSet);
-
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( aSet ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 aOldSet.InvalidateItem(pItem->Which());
             }
         }

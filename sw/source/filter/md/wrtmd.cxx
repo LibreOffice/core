@@ -231,7 +231,7 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
         {
             if (const auto* pNestedItem = iter.GetCurItem())
                 ApplyItem(rWrt, rChange, *pNestedItem, increment);
-            iter.NextItem();
+            iter.Next();
         }
     };
 
@@ -759,7 +759,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         NodePositions positions;
 
         // Start paragraph properties
-        for (SfxItemIter iter(rNode.GetSwAttrSet()); !iter.IsAtEnd(); iter.NextItem())
+        for (SfxItemIter iter(rNode.GetSwAttrSet()); !iter.IsAtEnd(); iter.Next())
             positions.hintStarts.add(nStrPos, iter.GetCurItem());
 
         // Store character formatting
@@ -786,7 +786,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         positions.hintEnds.sort();
 
         // End paragraph properties
-        for (SfxItemIter iter(rNode.GetSwAttrSet()); !iter.IsAtEnd(); iter.NextItem())
+        for (SfxItemIter iter(rNode.GetSwAttrSet()); !iter.IsAtEnd(); iter.Next())
             positions.hintEnds.add(nEnd, iter.GetCurItem());
 
         if (const SwRedlineTable& rRedlines

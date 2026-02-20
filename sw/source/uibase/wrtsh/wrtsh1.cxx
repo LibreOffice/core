@@ -2042,7 +2042,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
     // ITEM: SfxItemIter and removing SfxPoolItems:
     std::vector<sal_uInt16> aDeleteWhichIDs;
 
-    for (SfxItemIter aIter(aCoreSet); !aIter.IsAtEnd(); aIter.NextItem())
+    for (SfxItemIter aIter(aCoreSet); !aIter.IsAtEnd(); aIter.Next())
     {
         if(!IsInvalidItem(aIter.GetCurItem()))
         {

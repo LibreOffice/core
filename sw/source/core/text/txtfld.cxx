@@ -374,10 +374,9 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         pCleanedSet->ClearItem(RES_TXTATR_CHARFMT);
     };
 
-    SfxItemIter aIter(*pSet);
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    while (pItem)
+    for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
             pCleanedSet->ClearItem(pItem->Which());
         else if (pFormat && pFormat->HasItem(pItem->Which()))
@@ -411,7 +410,6 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             if (eCaseMap == SvxCaseMap::SmallCaps)
                 pCleanedSet->ClearItem(pItem->Which());
         }
-        pItem = aIter.NextItem();
     };
 
     // SetDiffFnt resets the background color (why?), so capture it and re-apply if it had a value,

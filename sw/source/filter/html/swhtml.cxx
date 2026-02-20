@@ -4835,7 +4835,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         std::unique_ptr<SfxItemSet> const pCharSet(new SfxItemSet(*m_pTargetCharAttrs));
         // do not use SfxItemSet::Differentiate(), it doesn't compare values!
         std::vector<sal_uInt16> clear;
-        for (SfxItemIter it{*pCharSet}; !it.IsAtEnd(); it.NextItem())
+        for (SfxItemIter it{*pCharSet}; !it.IsAtEnd(); it.Next())
         {
             SfxPoolItem const& rItem{*it.GetCurItem()};
             if (SfxPoolItem const*const pItem{pCollToSet->GetAttrSet().GetItem(rItem.Which(), true)})

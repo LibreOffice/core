@@ -322,10 +322,9 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
         return retval;
     }
     const SwFormatAutoFormat& afmt = hint.GetAutoFormat();
-    SfxItemIter aIter( *afmt.GetStyleHandle());
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    do
+    for (SfxItemIter aIter( *afmt.GetStyleHandle() ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (pItem->Which() == RES_CHRATR_ESCAPEMENT ||
             pItem->Which() == RES_CHRATR_POSTURE ||
             pItem->Which() == RES_CHRATR_CJK_POSTURE ||
@@ -333,8 +332,7 @@ ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& po
         {
             retval->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));
         }
-        pItem = aIter.NextItem();
-    } while (pItem);
+    }
     return retval;
 }
 

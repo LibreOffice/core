@@ -153,7 +153,6 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     OSL_ASSERT( m_xPropertySet.is());
 
     bool bItemsChanged = false;
-    SfxItemIter aIter( rItemSet );
     tPropertyNameWithMemberId aProperty;
     uno::Any aValue;
 
@@ -176,8 +175,9 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 bItemsChanged = ApplySpecialItem(pItem->Which(), rItemSet);
     }
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (SCHATTR_STAT_KIND_ERROR == pItem->Which())
             continue;
 

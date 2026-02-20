@@ -580,14 +580,13 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             m_aContexts.back().get() != pContext,
             "SwHTMLParser::InsertAttrs: Context already on the Stack");
 
-    SfxItemIter aIter( rItemSet );
-
     const SvxFirstLineIndentItem * pFirstLineItem(nullptr);
     const SvxTextLeftMarginItem * pTextLeftMargin(nullptr);
     const SvxRightMarginItem * pRightMargin(nullptr);
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         switch( pItem->Which() )
         {
         case RES_MARGIN_FIRSTLINE:
@@ -675,9 +674,9 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             }
 #endif
 
-    SfxItemIter aIter2(rItemSet);
-    for (const SfxPoolItem* pItem = aIter2.GetCurItem(); pItem; pItem = aIter2.NextItem())
+    for (SfxItemIter aIter( rItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         HTMLAttr **ppAttr = nullptr;
 
         switch( pItem->Which() )

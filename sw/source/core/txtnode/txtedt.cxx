@@ -337,19 +337,16 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     }
     else if ( pSet1->Count() )
     {
-        SfxItemIter aIter( *pSet1 );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        for (SfxItemIter aIter( *pSet1 ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if ( SfxItemState::SET == rSet2.GetItemState( pItem->Which(), false ) )
             {
                 if ( !pNewSet )
                     pNewSet = rSet2.Clone();
                 pNewSet->ClearItem( pItem->Which() );
             }
-
-            pItem = aIter.NextItem();
-        } while (pItem);
+        }
     }
 
     if ( pNewSet )

@@ -2176,11 +2176,10 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             if( aSet.Count() )
             {
                 OUStringBuffer sAttrs;
-                SfxItemIter aIter( aSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
                 const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
-                do
+                for (SfxItemIter aIter( aSet ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     if( !IsInvalidItem( pItem ))
                     {
                         OUString aStr;
@@ -2190,8 +2189,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             sAttrs.append(", ");
                         sAttrs.append(aStr);
                     }
-                    pItem = aIter.NextItem();
-                } while (pItem);
+                }
                 if (!sAttrs.isEmpty())
                 {
                     if( !rContentAtPos.sStr.isEmpty() )

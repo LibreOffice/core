@@ -458,7 +458,7 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
     std::vector<sal_uInt16> aDeleteWhichIDs;
     SfxItemSet aTmpSet(rDoc.GetAttrPool(), aFrameFormatSetRange);
 
-    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd() && 0 != aIter.GetCurWhich(); aIter.NextItem())
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd() && 0 != aIter.GetCurWhich(); aIter.Next())
     {
         switch(aIter.GetCurWhich())
         {
@@ -503,10 +503,10 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
 void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 {
     SwDrawModel& rDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-    SfxItemIter aIter(rSet);
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (IsInvalidItem(pItem))
             continue;
         std::unique_ptr<SfxPoolItem> pResult;

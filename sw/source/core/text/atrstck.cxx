@@ -307,20 +307,16 @@ void SwAttrHandler::Init( const SfxPoolItem* const* pPoolItem, const SwAttrSet* 
 
     if ( pAS && pAS->Count() )
     {
-        SfxItemIter aIter( *pAS );
-        sal_uInt16 nWhich;
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        for (SfxItemIter aIter( *pAS ); !aIter.IsAtEnd(); aIter.Next())
         {
-            nWhich = pItem->Which();
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            sal_uInt16 nWhich = pItem->Which();
             if (isCHRATR(nWhich))
             {
                 m_pDefaultArray[ StackPos[ nWhich ] ] = pItem;
                 FontChg( *pItem, rFnt, true );
             }
-
-            pItem = aIter.NextItem();
-        } while (pItem);
+        }
     }
 
     // It is possible, that Init is called more than once, e.g., in a

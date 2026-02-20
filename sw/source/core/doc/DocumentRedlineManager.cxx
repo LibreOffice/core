@@ -444,7 +444,7 @@ namespace
 
             if (!bSameSet)
             {
-                for (SfxItemIter aIter(aTmp); !aIter.IsAtEnd(); aIter.NextItem())
+                for (SfxItemIter aIter(aTmp); !aIter.IsAtEnd(); aIter.Next())
                 {
                     const sal_uInt16 nWhich(aIter.GetCurWhich());
                     if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&

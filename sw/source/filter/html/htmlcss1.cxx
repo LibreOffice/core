@@ -2252,10 +2252,9 @@ void SwHTMLParser::EndContextAttrs( HTMLAttrContext *pContext )
 
 void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
 {
-    SfxItemIter aIter( rItemSet );
-
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         // search for the table entry of the item...
         sal_uInt16 nWhich = pItem->Which();
         HTMLAttr **ppAttr = GetAttrTabEntry( nWhich );

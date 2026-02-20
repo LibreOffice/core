@@ -567,9 +567,9 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_pFrameFormat->DerivedFrom() != pDerivedFromFrameFormat)
         m_pFrameFormat->SetDerivedFrom(pDerivedFromFrameFormat);
 
-    SfxItemIter aIter( *m_oItemSet );
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( *m_oItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if( IsInvalidItem( pItem ))
             m_pFrameFormat->ResetFormatAttr( aIter.GetCurWhich() );
         else
@@ -704,9 +704,11 @@ void SwUndoSetFlyFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
         if(!pChangeHint->m_pOld)
             return;
-        SfxItemIter aIter(*pChangeHint->m_pOld->GetChgSet());
-        for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter( *pChangeHint->m_pOld->GetChgSet() ); !aIter.IsAtEnd(); aIter.Next())
+        {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             PutAttr(pItem->Which(), pItem);
+        }
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {

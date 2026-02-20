@@ -531,9 +531,9 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 
 static void InsertCharAttrs(SfxPoolItem const** pAttrs, SfxItemSet const& rItems)
 {
-    SfxItemIter iter(rItems);
-    for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
+    for (SfxItemIter aIter( rItems ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         auto const nWhich(pItem->Which());
         if (isCHRATR(nWhich) && RES_CHRATR_RSID != nWhich)
         {

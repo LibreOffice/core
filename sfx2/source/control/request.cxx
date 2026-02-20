@@ -474,9 +474,9 @@ void SfxRequest::Done
     }
     else
     {
-        SfxItemIter aIter(rSet);
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if(!IsInvalidItem(pItem))
                 pArgs->Put(*pItem);
         }
@@ -618,9 +618,9 @@ void SfxRequest::Done_Impl
         if ( pSet )
         {
             // iterate over Items
-            SfxItemIter aIter(*pSet);
-            for ( const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem() )
+            for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 // to determine the slot ID for the individual item
                 sal_uInt16 nSlotId = rPool.GetSlotId( pItem->Which() );
                 if ( nSlotId == nSlot )

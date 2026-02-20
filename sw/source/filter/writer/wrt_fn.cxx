@@ -64,9 +64,10 @@ SwHTMLWriter& Out_SfxItemSet( const SwAttrFnTab pTab, SwHTMLWriter& rWrt,
     if( !bDeep || !pSet->GetParent() )
     {
         OSL_ENSURE( rSet.Count(), "It has been handled already, right?" );
-        SfxItemIter aIter( *pSet );
-        pItem = aIter.GetCurItem();
-        do {
+        pItem = nullptr;
+        for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
+        {
+            pItem = aIter.GetCurItem();
             // pTab only covers POOLATTR_BEGIN..POOLATTR_END.
             if( pItem->Which() <= POOLATTR_END )
             {
@@ -80,7 +81,7 @@ SwHTMLWriter& Out_SfxItemSet( const SwAttrFnTab pTab, SwHTMLWriter& rWrt,
             {
                 bFillItemUsed = true;
             }
-        } while ((pItem = aIter.NextItem()));
+        }
     }
     else
     {

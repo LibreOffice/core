@@ -200,7 +200,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 
     SfxItemPool* pPool = rSet.GetPool();
 
-    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
     {
         const sal_uInt16 nWhich(aIter.GetCurWhich());
         const sal_uInt16 nSlot(pPool->GetSlotId(nWhich));

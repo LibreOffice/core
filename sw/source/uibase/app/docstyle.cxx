@@ -198,11 +198,11 @@ public:
         rItemSet.ClearItem();
 
         auto pCol = static_cast<SwDocStyleSheet*>(pSourceSheet)->GetCollection();
-        SfxItemIter aIter(pCol->GetAttrSet());
         std::optional<SvxLRSpaceItem> oLRSpaceItem;
 
-        for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter(pCol->GetAttrSet()); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if (aIter.GetItemState(false) != SfxItemState::SET)
                 continue;
 
@@ -996,11 +996,11 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         if( !pSet )
             GetItemSet();
 
-        SfxItemIter aIter( *pSet );
         OUStringBuffer aDesc;
 
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if(!IsInvalidItem(pItem))
             {
                 switch ( pItem->Which() )
@@ -1034,7 +1034,6 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         if( !pSet )
             GetItemSet();
 
-        SfxItemIter aIter( *pSet );
         OUStringBuffer aDesc;
         OUString sPageNum;
         OUString sModel;
@@ -1049,8 +1048,9 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         const drawing::FillStyle eFillStyle(pSet->Get(XATTR_FILLSTYLE).GetValue());
         const bool bUseFloatTransparence(pSet->Get(XATTR_FILLFLOATTRANSPARENCE).IsEnabled());
 
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if(!IsInvalidItem(pItem))
             {
                 switch ( pItem->Which() )
@@ -1860,19 +1860,16 @@ void SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet, const bool bBroadcast, 
             // of this method) but happens because lcl_setLineNumbering calls GetItemSet/SetItemSet
             // at the *same* xStyleSheet. You can see that SwDocStyleSheet::GetItemSet() above
             // does return m_aCoreSet. I guess that lcl_setLineNumbering should not do that...
-            SfxItemIter aIter( rSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            do
+            for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if( IsInvalidItem( pItem ) )            // Clear
                 {
                     // use method <SwDoc::ResetAttrAtFormat(..)> in order to
                     // create an Undo object for the attribute reset.
                     aWhichIdsToReset.emplace_back(aIter.GetCurWhich());
                 }
-
-                pItem = aIter.NextItem();
-            } while (pItem);
+            }
         }
 
         m_rDoc.ResetAttrAtFormat(aWhichIdsToReset, *pFormat);

@@ -4383,10 +4383,10 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
 
     SfxItemSet& rSet = *mpSet;
-    SfxItemIter aIter(rSet);
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         const sal_uInt16 nWID = pItem->Which();
 
         // TODO: Optimize - and fix! the old iteration filled each WhichId

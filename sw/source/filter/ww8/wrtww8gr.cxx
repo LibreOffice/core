@@ -89,9 +89,9 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotSto
                                     OUString const& rStorageName, SwOLENode& rOLENd)
 {
     bool bGraphicNeeded = false;
-    SfxItemIter aIter( rSet );
-    for (auto pItem = aIter.GetCurItem(); !bGraphicNeeded && pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rSet ); !bGraphicNeeded && !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         switch (pItem->Which())
         {
             /*

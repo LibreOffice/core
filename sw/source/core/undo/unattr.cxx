@@ -87,9 +87,11 @@ void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHin
         if(!GetUndo())
             m_pUndo.reset(new SwUndoFormatAttr(SfxItemSet(rChgSet), m_rFormat, m_bSaveDrawPt));
         else {
-            SfxItemIter aIter(rChgSet);
-            for(auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( rChgSet ); !aIter.IsAtEnd(); aIter.Next())
+            {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 m_pUndo->PutAttr(*pItem, rDoc);
+            }
         }
         return;
     }
@@ -594,9 +596,11 @@ void SwUndoFormatResetAttr::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoFormatResetAttr::RedoImpl(::sw::UndoRedoContext &)
 {
-    SfxItemIter aIter(m_aSet);
-    for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( m_aSet ); !aIter.IsAtEnd(); aIter.Next())
+    {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         m_pChangedFormat->ResetFormatAttr(pItem->Which());
+    }
     BroadcastStyleChange();
 }
 

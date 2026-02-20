@@ -988,8 +988,6 @@ public:
                          const std::map<sal_Int32, const SwTextAttr*>& rCharFormats)
     {
         const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
-        SfxItemIter aItemIter(*rAutoFormat.GetStyleHandle());
-        const SfxPoolItem* pItem = aItemIter.GetCurItem();
 
         const SwTextAttr* pCharAttr = nullptr;
         auto itr = rCharFormats.find(pTextAttr->GetStart());
@@ -1001,8 +999,9 @@ public:
             pCharformat = pCharAttr->GetCharFormat().GetCharFormat();
 
         std::vector<OUString> aFormattings;
-        while (pItem)
+        for (SfxItemIter aIter(*rAutoFormat.GetStyleHandle()); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             OUString sFormattingType;
             switch (pItem->Which())
             {
@@ -1375,7 +1374,6 @@ public:
             }
             if (!sFormattingType.isEmpty())
                 aFormattings.push_back(sFormattingType);
-            pItem = aItemIter.NextItem();
         }
         if (aFormattings.empty())
             return;
@@ -1958,10 +1956,9 @@ private:
     void checkAutoFormat(SwTextNode* pTextNode, const SwTextAttr* pTextAttr)
     {
         const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
-        SfxItemIter aItemIter(*rAutoFormat.GetStyleHandle());
-        const SfxPoolItem* pItem = aItemIter.GetCurItem();
-        while (pItem)
+        for (SfxItemIter aIter(*rAutoFormat.GetStyleHandle()); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if (pItem->Which() == RES_CHRATR_ESCAPEMENT)
             {
                 auto pEscapementItem = static_cast<const SvxEscapementItem*>(pItem);
@@ -1980,7 +1977,6 @@ private:
                     break;
                 }
             }
-            pItem = aItemIter.NextItem();
         }
     }
 

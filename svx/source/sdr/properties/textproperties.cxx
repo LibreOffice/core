@@ -330,11 +330,9 @@ namespace sdr::properties
                                     // remove all hard paragraph attributes
                                     // which occur in StyleSheet, take care of
                                     // parents (!)
-                                    SfxItemIter aIter(pNewStyleSheet->GetItemSet());
-
-                                    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem;
-                                         pItem = aIter.NextItem())
+                                    for (SfxItemIter aIter( pNewStyleSheet->GetItemSet() ); !aIter.IsAtEnd(); aIter.Next())
                                     {
+                                        const SfxPoolItem* pItem = aIter.GetCurItem();
                                         if(!IsInvalidItem(pItem))
                                         {
                                             sal_uInt16 nW(pItem->Which());
@@ -401,9 +399,9 @@ namespace sdr::properties
             { // own scope to get SfxItemIter aIter destroyed ASAP - it maybe detected
               // as reading source to the ItemSet when Items get changed below, but it
               // is no longer active/needed
-                SfxItemIter aIter(*moItemSet);
-                for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                for (SfxItemIter aIter( *moItemSet ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     if(!IsInvalidItem(pItem))
                         aChangedItems.push_back(pItem);
                 }

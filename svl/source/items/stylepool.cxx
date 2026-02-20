@@ -374,8 +374,6 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     Node* pCurNode = &maRoot[ rSet.GetParent() ];
     if (pParentName)
         maParentNames[ rSet.GetParent() ] = *pParentName;
-    SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
     // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
     // a complete empty SfxItemSet would stay at the root node.
     // #i86923# insert ignorable items to the tree leaves.
@@ -384,26 +382,24 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     {
         xFoundIgnorableItems.emplace( *mpIgnorableItems );
     }
-    while( pItem )
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (!pItem->isShareable())
             bNonShareable = true;
         if (!xFoundIgnorableItems || (xFoundIgnorableItems->Put(*pItem) == nullptr))
         {
             pCurNode = pCurNode->findChildNode( *pItem, false );
         }
-        pItem = aIter.NextItem();
     }
     if ( xFoundIgnorableItems && xFoundIgnorableItems->Count() > 0 )
     {
-        SfxItemIter aIgnorableItemsIter( *xFoundIgnorableItems );
-        pItem = aIgnorableItemsIter.GetCurItem();
-        while( pItem )
+        for (SfxItemIter aIter( *xFoundIgnorableItems ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if (!pItem->isShareable())
                 bNonShareable = true;
             pCurNode = pCurNode->findChildNode( *pItem, true );
-            pItem = aIgnorableItemsIter.NextItem();
         }
     }
     // Every leaf node represents an inserted item set, but "non-leaf" nodes represents subsets

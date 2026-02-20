@@ -1025,9 +1025,9 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                 && (pLowerLevelItemSet->Count() == pThisLevelItemSet->Count()) )
             {
                 nIdenticalItemSetLevel = nLowerLevel;
-                const SfxPoolItem* pItemIter = aIter.GetCurItem();
-                do
+                for ( ; !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItemIter = aIter.GetCurItem();
                     if(  // search for appropriate pItem in pLowerLevelItemSet
                          (SfxItemState::SET != pLowerLevelItemSet->GetItemState(
                                             pItemIter->Which(), false, &pItem ) )
@@ -1039,8 +1039,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                         nIdenticalItemSetLevel = nMaxLevel;
                         break;
                     }
-                    pItemIter = aIter.NextItem();
-                } while (pItemIter);
+                }
 
                 if( nIdenticalItemSetLevel != nMaxLevel )
                     break;

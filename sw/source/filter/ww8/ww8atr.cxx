@@ -6026,7 +6026,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
         const SfxPoolItem* pFillStyle(nullptr);
         const SfxPoolItem* pGradient(nullptr);
 
-        for (SfxItemIter aIter(*pSet); !aIter.IsAtEnd(); aIter.NextItem())
+        for (SfxItemIter aIter(*pSet); !aIter.IsAtEnd(); aIter.Next())
         {
             pItem = aIter.GetCurItem();
 

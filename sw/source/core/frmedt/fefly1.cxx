@@ -1300,9 +1300,9 @@ void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
 
     StartAllAction();
 
-    SfxItemIter aIter( *pSet );
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if( !IsInvalidItem( pItem ) )
         {
             sal_uInt16 nWhich = pItem->Which();

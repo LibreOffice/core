@@ -827,8 +827,8 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             {
                 SfxItemIter aNIter(*pChangeHint->m_pNew->GetChgSet());
                 SfxItemIter aOIter(*pChangeHint->m_pOld->GetChgSet());
-                const SfxPoolItem* pNItem = aNIter.GetCurItem();
-                const SfxPoolItem* pOItem = aOIter.GetCurItem();
+                const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
+                const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
                 SwAttrSetChg aOldSet(*pChangeHint->m_pOld);
                 SwAttrSetChg aNewSet(*pChangeHint->m_pNew);
                 do

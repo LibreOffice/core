@@ -391,7 +391,7 @@ namespace sw
         {
             if( bExportParentItemSet )
             {
-                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
                 {
                     const SfxPoolItem* pItem(nullptr);
                     if(SfxItemState::SET == aIter.GetItemState(true, &pItem))
@@ -400,7 +400,7 @@ namespace sw
             }
             else if( rSet.Count())
             {
-                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
                     rItems[aIter.GetCurWhich()] = aIter.GetCurItem();
             }
 //            DeduplicateItems(rItems);
@@ -421,11 +421,11 @@ namespace sw
             {
                 if (pCharFormat->GetAttrSet().Count())
                 {
-                    SfxItemIter aIter(pCharFormat->GetAttrSet());
-                    const SfxPoolItem *pItem = aIter.GetCurItem();
-                    do
+                    for (SfxItemIter aIter( pCharFormat->GetAttrSet() ); !aIter.IsAtEnd(); aIter.Next())
+                    {
+                        const SfxPoolItem* pItem = aIter.GetCurItem();
                         rSet.ClearItem(pItem->Which());
-                    while ((pItem = aIter.NextItem()));
+                    }
                 }
             }
         }

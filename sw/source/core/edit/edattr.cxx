@@ -351,10 +351,10 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                         const SfxItemSet* pAutoSet = CharFormat::GetItemSet( pHt->GetAttr() );
                         if( pAutoSet )
                         {
-                            SfxItemIter aItemIter( *pAutoSet );
-                            pItem = aItemIter.GetCurItem();
-                            while( pItem )
+                            pItem = nullptr;
+                            for (SfxItemIter aIter( *pAutoSet ); !aIter.IsAtEnd(); aIter.Next())
                             {
+                                pItem = aIter.GetCurItem();
                                 if( pItem->Which() == nWhich )
                                 {
                                     sal_Int32 nStart = 0, nStop = 0;
@@ -369,7 +369,6 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                                     vItem.emplace_back( pItem, std::make_unique<SwPaM>(*pNd, nStart, *pNd, nStop) );
                                     break;
                                 }
-                                pItem = aItemIter.NextItem();
                             }
                             // default item
                             if( !pItem && !pTextNd->HasSwAttrSet() )

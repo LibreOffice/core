@@ -826,17 +826,14 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     // is also set the new character style:
                     SfxItemSet aNewSet( *pOldStyle->GetPool(),
                         aCharAutoFormatSetRange);
-                    SfxItemIter aItemIter( *pOldStyle );
-                    const SfxPoolItem* pItem = aItemIter.GetCurItem();
-                    do
+                    for (SfxItemIter aIter( *pOldStyle ); !aIter.IsAtEnd(); aIter.Next())
                     {
+                        const SfxPoolItem* pItem = aIter.GetCurItem();
                         if ( !CharFormat::IsItemIncluded( pItem->Which(), &rNewHint ) )
                         {
                             aNewSet.Put( *pItem );
                         }
-
-                        pItem = aItemIter.NextItem();
-                    } while (pItem);
+                    }
 
                     // Remove old hint
                     Delete( pOther );
@@ -898,7 +895,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     const SfxItemSet& rWholeParaAttrSet(rNode.GetSwAttrSet());
                     std::vector<sal_uInt16> aDeleteWhichIDs;
 
-                    for (SfxItemIter aIter(aNewSet); !aIter.IsAtEnd(); aIter.NextItem())
+                    for (SfxItemIter aIter(aNewSet); !aIter.IsAtEnd(); aIter.Next())
                     {
                         const SfxPoolItem* pGet(nullptr);
                         if (SfxItemState::SET == rWholeParaAttrSet.GetItemState(aIter.GetCurWhich(), false, &pGet) &&
@@ -934,12 +931,11 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 {
                     std::unique_ptr<SfxItemSet> pNewSet;
 
-                    SfxItemIter aIter2( *pNewStyle );
-                    const SfxPoolItem* pItem = aIter2.GetCurItem();
                     const SfxItemSet& rWholeParaAttrSet = rNode.GetSwAttrSet();
 
-                    do
+                    for (SfxItemIter aIter2( *pNewStyle ); !aIter2.IsAtEnd(); aIter2.Next())
                     {
+                        const SfxPoolItem* pItem = aIter2.GetCurItem();
                         const SfxPoolItem* pTmpItem = nullptr;
                         // here direct SfxPoolItem ptr comp was wrong, found using SfxPoolItem::areSame
                         if ( SfxItemState::SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
@@ -954,7 +950,6 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                             }
                         }
                     }
-                    while ((pItem = aIter2.NextItem()));
 
                     if ( pNewSet )
                     {
@@ -1991,11 +1986,10 @@ bool SwTextNode::SetAttr(
     SfxItemSet aCharSet( *rSet.GetPool(), aCharAutoFormatSetRange );
 
     size_t nCount = 0;
-    SfxItemIter aIter( *pSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
 
-    do
+    for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (!IsInvalidItem(pItem))
         {
             const sal_uInt16 nWhich = pItem->Which();
@@ -2041,8 +2035,7 @@ bool SwTextNode::SetAttr(
                 }
             }
         }
-        pItem = aIter.NextItem();
-    } while(pItem);
+    }
 
     if ( aCharSet.Count() )
     {
@@ -2280,7 +2273,8 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                         if ( pAutoSet )
                         {
                             oItemIter.emplace( *pAutoSet );
-                            pItem = oItemIter->GetCurItem();
+                            if (!oItemIter->IsAtEnd())
+                                pItem = oItemIter->GetCurItem();
                         }
                     }
                     else
@@ -2425,7 +2419,7 @@ struct RemovePresentAttrs
         // ITEM: SfxItemIter and removing SfxPoolItems:
         std::vector<sal_uInt16> aDeleteWhichIDs;
 
-        for (SfxItemIter aIter(m_rAttrSet); !aIter.IsAtEnd(); aIter.NextItem())
+        for (SfxItemIter aIter(m_rAttrSet); !aIter.IsAtEnd(); aIter.Next())
         {
             if (CharFormat::IsItemIncluded(aIter.GetCurWhich(), pAutoStyle))
             {
@@ -2484,9 +2478,9 @@ void
 lcl_FillWhichIds(const SfxItemSet& i_rAttrSet, std::vector<sal_uInt16>& o_rClearIds)
 {
     o_rClearIds.reserve(i_rAttrSet.Count());
-    SfxItemIter aIter(i_rAttrSet);
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( i_rAttrSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         o_rClearIds.push_back(pItem->Which());
     }
 }
@@ -2605,13 +2599,13 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
 
         if( aThisSet.Count() )
         {
-            SfxItemIter aIter( aThisSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem(), *pNdItem = nullptr;
+            const SfxPoolItem* pNdItem = nullptr;
             SfxItemSet aConvertSet( GetDoc().GetAttrPool(), aCharFormatSetRange );
             std::vector<sal_uInt16> aClearWhichIds;
 
-            do
+            for (SfxItemIter aIter( aThisSet ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if( SfxItemState::SET == aNdSet.GetItemState( pItem->Which(), false, &pNdItem ) )
                 {
                     if (*pItem == *pNdItem) // 4
@@ -2628,9 +2622,7 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
                 {
                     aConvertSet.Put(*pItem);
                 }
-
-                pItem = aIter.NextItem();
-            } while (pItem);
+            }
 
             // 4/ clear items of this that are set with the same value on pNd
             ClearItemsFromAttrSet( aClearWhichIds );
@@ -2997,9 +2989,10 @@ static MergeResult lcl_Compare_Attributes(
             // sadly SfxItemSet::operator== does not seem to work?
             SfxItemIter iter1(rSet1);
             SfxItemIter iter2(rSet2);
-            for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
-                                  * pItem2 = iter2.GetCurItem();;)
+            for (;;)
             {
+                SfxPoolItem const* pItem1 = iter1.IsAtEnd() ? nullptr : iter1.GetCurItem();
+                SfxPoolItem const* pItem2 = iter2.IsAtEnd() ? nullptr : iter2.GetCurItem();
                 if (pItem1 && pItem1->Which() == RES_CHRATR_RSID)
                     pItem1 = iter1.NextItem();
                 if (pItem2 && pItem2->Which() == RES_CHRATR_RSID)
@@ -3022,8 +3015,10 @@ static MergeResult lcl_Compare_Attributes(
                 {
                     return DIFFER;
                 }
-                pItem1 = iter1.NextItem();
-                pItem2 = iter2.NextItem();
+                if (!iter1.IsAtEnd())
+                    iter1.Next();
+                if (!iter2.IsAtEnd())
+                    iter2.Next();
             }
         }
         ++aIter1;

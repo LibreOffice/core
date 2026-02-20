@@ -800,11 +800,8 @@ SfxPoolItemHolder SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
         SfxAllItemSet aSet( pShell->GetPool() );
         if ( pArgs )
         {
-            SfxItemIter aIter(*pArgs);
-            for ( const SfxPoolItem *pArg = aIter.GetCurItem();
-                pArg;
-                pArg = aIter.NextItem() )
-                MappedPut_Impl( aSet, *pArg );
+            for (SfxItemIter aIter( *pArgs ); !aIter.IsAtEnd(); aIter.Next())
+                MappedPut_Impl( aSet, *aIter.GetCurItem() );
         }
         SfxRequest aReq(nSlot, nCall, aSet);
         if (pInternalArgs)
@@ -891,11 +888,8 @@ SfxPoolItemHolder SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false, true ) )
     {
         SfxAllItemSet aSet( pShell->GetPool() );
-        SfxItemIter aIter(rArgs);
-        for ( const SfxPoolItem *pArg = aIter.GetCurItem();
-              pArg;
-              pArg = aIter.NextItem() )
-            MappedPut_Impl( aSet, *pArg );
+        for (SfxItemIter aIter( rArgs ); !aIter.IsAtEnd(); aIter.Next())
+            MappedPut_Impl( aSet, *aIter.GetCurItem() );
         SfxRequest aReq( nSlot, eCall, aSet );
         aReq.SetModifier( 0 );
         Execute_( *pShell, *pSlot, aReq, eCall );
@@ -1785,11 +1779,9 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         if ( rState.Count() )
         {
             SfxInterface *pIF = pSh->GetInterface();
-            SfxItemIter aIter( rState );
-            for ( const SfxPoolItem *pItem = aIter.GetCurItem();
-                  pItem;
-                  pItem = aIter.NextItem() )
+            for (SfxItemIter aIter( rState ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if ( !IsInvalidItem(pItem) && !IsDisabledItem(pItem) )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());

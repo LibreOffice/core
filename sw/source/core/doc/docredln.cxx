@@ -1229,9 +1229,9 @@ void SwRedlineExtraData_FormatColl::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
 {
-    SfxItemIter aIter( rSet );
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         m_aWhichIds.push_back( pItem->Which() );
     }
 }

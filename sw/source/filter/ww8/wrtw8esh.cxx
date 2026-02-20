@@ -1285,14 +1285,12 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
     const SfxItemSet* pOldSet = m_rExport.GetCurItemSet();
     m_rExport.SetCurItemSet( &aSet );
 
-    SfxItemIter aIter( aSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-
     const SfxItemPool* pSrcPool = m_pEditPool,
                      * pDstPool = &m_rExport.m_rDoc.GetAttrPool();
 
-    do
+    for (SfxItemIter aIter( aSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         sal_uInt16 nWhich = pItem->Which();
         if (pWhichsToIgnore && pWhichsToIgnore->find(nWhich) != pWhichsToIgnore->end())
             continue;
@@ -1311,7 +1309,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
             if (m_rExport.CollapseScriptsforWordOk(m_nScript,nWhich))
                 m_rExport.AttrOutput().OutputItem(*pI);
         }
-    } while ((pItem = aIter.NextItem()));
+    }
     m_rExport.SetCurItemSet( pOldSet );
 }
 
