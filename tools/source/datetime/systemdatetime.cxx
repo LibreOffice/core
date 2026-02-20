@@ -19,8 +19,7 @@
 
 #include <sal/config.h>
 
-#include <chrono>
-#include <time.h>
+#include <osl/time.h>
 
 #include <systemdatetime.hxx>
 
@@ -40,31 +39,24 @@ constexpr sal_Int64 ConvertHMSnToInt(sal_Int64 nHour, sal_Int64 nMin, sal_Int64 
 
 bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime)
 {
-    auto tp = std::chrono::system_clock::now();
-    const time_t nTmpTime = std::chrono::system_clock::to_time_t(tp);
-    struct tm aTime;
-#if defined(_WIN32)
-    bool ok = localtime_s(&aTime, &nTmpTime) == 0;
-#else
-    bool ok = localtime_r(&nTmpTime, &aTime) != nullptr;
-#endif
-    if (ok)
-    {
-        if (pDate)
-            *pDate = ConvertYMDToInt(static_cast<sal_Int32>(aTime.tm_year + 1900),
-                                     static_cast<sal_Int32>(aTime.tm_mon + 1),
-                                     static_cast<sal_Int32>(aTime.tm_mday));
-        if (pTime)
-        {
-            auto hms = std::chrono::hh_mm_ss(std::chrono::floor<std::chrono::nanoseconds>(
-                tp - std::chrono::floor<std::chrono::days>(tp)));
-            auto ns = hms.subseconds().count();
-            *pTime = ConvertHMSnToInt(aTime.tm_hour, aTime.tm_min, aTime.tm_sec, ns);
-        }
-        return true;
-    }
+    TimeValue utcTv;
+    if (!osl_getSystemTime(&utcTv))
+        return false;
 
-    return false;
+    TimeValue localTv;
+    if (!osl_getLocalTimeFromSystemTime(&utcTv, &localTv))
+        return false;
+
+    oslDateTime dt;
+    if (!osl_getDateTimeFromTimeValue(&localTv, &dt))
+        return false;
+
+    if (pDate)
+        *pDate = ConvertYMDToInt(dt.Year, dt.Month, dt.Day);
+    if (pTime)
+        *pTime = ConvertHMSnToInt(dt.Hours, dt.Minutes, dt.Seconds, dt.NanoSeconds);
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
