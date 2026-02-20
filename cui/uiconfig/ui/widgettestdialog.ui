@@ -645,7 +645,7 @@
                         <property name="model">liststore3</property>
                         <property name="reorderable">True</property>
                         <property name="search-column">1</property>
-                        <property name="enable-tree-lines">True</property>
+                        <property name="show-expanders">False</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
