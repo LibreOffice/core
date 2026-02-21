@@ -342,6 +342,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170952_delText)
+{
+    // Given a document with deleted text at the end of the paragraph
+
+    skipValidation(); // ERROR: The content of element 'w:rPrChange' is not complete. One of '{"http://schemas.openxmlformats.org/wordprocessingml/2006/main":rPr}' is expected.
+    createSwDoc("tdf170952_delText.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // delText must be inside a w:del or MS Word considers the document to be corrupt
+    assertXPath(pXmlDoc, "//w:delText", 3); // there are three delTree elements
+    CPPUNIT_ASSERT_EQUAL(3, countXPathNodes(pXmlDoc, "//w:del/w:r/w:delText")); // all are in w:del
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testRangeCommentInDeleteDocxExport)
 {
     // Given a document with a comment that is inside a delete redline:
