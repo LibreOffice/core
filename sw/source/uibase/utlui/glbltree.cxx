@@ -272,6 +272,16 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bPop = false;
     if (m_pActiveShell && !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
+        // tdf#166902 ensure right clicked entry is selected
+        if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+                rCEvt.IsMouseEvent() && m_xTreeView->get_dest_row_at_pos(
+                    rCEvt.GetMousePosPixel(), xEntry.get(), false))
+        {
+            // if clicked entry is not currently selected then clear selections and select it
+            if (!m_xTreeView->is_selected(*xEntry))
+                m_xTreeView->set_cursor(*xEntry);
+        }
+
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/swriter/ui/mastercontextmenu.ui"_ustr));
         std::unique_ptr<weld::Menu> xPopup = xBuilder->weld_menu(u"navmenu"_ustr);
         std::unique_ptr<weld::Menu> xSubPopup = xBuilder->weld_menu(u"insertmenu"_ustr);
