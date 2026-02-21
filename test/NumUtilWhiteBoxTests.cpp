@@ -867,7 +867,7 @@ void NumUtilWhiteBoxTests::testSafeAtoi()
 
     // Overflow: safe_atoi clamps to INT_MAX / -INT_MAX.
     LOK_ASSERT_EQUAL(std::numeric_limits<int>::max(), NumUtil::safe_atoi("9999999990", 10));
-    LOK_ASSERT_EQUAL(-std::numeric_limits<int>::max(), NumUtil::safe_atoi("-9999999990", 11));
+    LOK_ASSERT_EQUAL(std::numeric_limits<int>::min(), NumUtil::safe_atoi("-9999999990", 11));
     LOK_ASSERT_EQUAL(std::numeric_limits<int>::max(),
                      NumUtil::safe_atoi("2147483648", 10)); // INT_MAX + 1.
 

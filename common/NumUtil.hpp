@@ -341,52 +341,9 @@ inline std::uint64_t u64FromString(const std::string_view input, const std::uint
 */
 inline int safe_atoi(const char* p, int len)
 {
-    long ret{};
-    if (!p || !len)
-    {
-        return ret;
-    }
-
-    int multiplier = 1;
-    int offset = 0;
-    while (isspace(p[offset]))
-    {
-        ++offset;
-        if (offset >= len)
-        {
-            return ret;
-        }
-    }
-
-    switch (p[offset])
-    {
-        case '-':
-            multiplier = -1;
-            ++offset;
-            break;
-        case '+':
-            ++offset;
-            break;
-    }
-    if (offset >= len)
-    {
-        return ret;
-    }
-
-    while (isdigit(p[offset]))
-    {
-        std::int64_t next = ret * 10 + (p[offset] - '0');
-        if (next >= std::numeric_limits<int>::max())
-            return multiplier * std::numeric_limits<int>::max();
-        ret = next;
-        ++offset;
-        if (offset >= len)
-        {
-            return multiplier * ret;
-        }
-    }
-
-    return multiplier * ret;
+    std::size_t offset = 0;
+    const auto [value, res] = parseStrTo<std::int32_t>(std::string_view(p, len), offset);
+    return value;
 }
 
 /// Fast string to 32-bit signed int conversion.
