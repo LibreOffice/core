@@ -1546,6 +1546,8 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
         else
         {
+            const bool bSourceDataIsInsideBuffer = pData >= pBuf && pData <= (pBuf + nSize);
+            std::ptrdiff_t const offset = bSourceDataIsInsideBuffer ? static_cast<const char*>(pData) - reinterpret_cast<const char*>(pBuf) : 0;
             tools::Long nNewResize;
             if( nSize && nSize > nResize )
                 nNewResize = nSize;
@@ -1572,6 +1574,8 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
                     SetError( SVSTREAM_WRITE_ERROR );
                 }
             }
+            if (bSourceDataIsInsideBuffer)
+                pData = pBuf + offset;
         }
     }
     assert(pBuf && "Possibly Reallocate failed");
