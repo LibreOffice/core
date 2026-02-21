@@ -6597,7 +6597,7 @@ static char* getFontSubset (std::string_view aFontName)
     if (const vcl::Font* pFont = FindFont(aFoundFont))
     {
         FontCharMapRef xFontCharMap (new FontCharMap());
-        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
+        ScopedVclPtrInstance<VirtualDevice> aDevice(DeviceFormat::WITHOUT_ALPHA);
 
         aDevice->SetFont(*pFont);
         aDevice->GetFontCharMap(xFontCharMap);
@@ -7307,7 +7307,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     if (aText.isEmpty())
         aText = aFont.GetFamilyName();
 
-    auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
+    ScopedVclPtrInstance<VirtualDevice> aDevice(DeviceFormat::WITHOUT_ALPHA);
     ::tools::Rectangle aRect;
     aFont.SetFontSize(Size(0, nDefaultFontSize));
     aFont.SetOrientation(Degree10(pOrientation));

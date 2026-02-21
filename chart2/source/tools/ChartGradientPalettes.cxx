@@ -87,7 +87,7 @@ void ChartGradientPalettes::Fill()
 
     mxIconView->freeze();
 
-    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(aSize);
 
     tools::Rectangle aDrawArea(0, 0, aSize.getWidth(), aSize.getHeight());

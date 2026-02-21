@@ -4534,7 +4534,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         if ( bWithPadding )
                         {
                             // trim, remove additional space
-                            VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+                            ScopedVclPtrInstance<VirtualDevice> pDevice;
                             vcl::Font aFont = pDevice->GetFont();
                             aFont.SetFamilyName( aFontName );
                             aFont.SetFontSize( Size( 0, 96 ) );

@@ -204,7 +204,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     maPicture(this),
     maSaveAsText(CuiResId(RID_CUISTR_SAVE_SCREENSHOT_AS))
 {
-    VclPtr<VirtualDevice> xParentDialogSurface(rParentDialog.screenshot());
+    ScopedVclPtr<VirtualDevice> xParentDialogSurface(rParentDialog.screenshot());
     maParentDialogSize = xParentDialogSurface->GetOutputSizePixel();
     maParentDialogBitmap = xParentDialogSurface->GetBitmapEx(Point(), maParentDialogSize);
     maDimmedDialogBitmap = maParentDialogBitmap;
