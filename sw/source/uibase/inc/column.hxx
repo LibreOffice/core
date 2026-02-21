@@ -148,7 +148,7 @@ class SwColumnPage final : public SfxTabPage
 
     void InitColumnLayouts();
     static OUString GetColumnLayoutText(sal_Int32 nId);
-    static VclPtr<VirtualDevice> CreateColumnLayoutVDev(sal_uInt16 nItemId);
+    static ScopedVclPtr<VirtualDevice> CreateColumnLayoutVDev(sal_uInt16 nItemId);
 
 
     bool isLineNotNone() const;

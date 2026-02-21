@@ -496,8 +496,7 @@ void SwColumnPage::InitColumnLayouts()
         OUString aItemText = GetColumnLayoutText(i);
         OUString aItemId = OUString::number(i);
 
-        VclPtr<VirtualDevice> aColumnVDev = CreateColumnLayoutVDev(i + 1);
-        m_xDefaultIV->insert(i, &aItemText, &aItemId, aColumnVDev, nullptr);
+        m_xDefaultIV->insert(i, &aItemText, &aItemId, CreateColumnLayoutVDev(i + 1), nullptr);
     }
 
     m_xDefaultIV->thaw();
@@ -1336,7 +1335,7 @@ void SwColumnPage::SetInSection(bool bSet)
     m_xTextDirectionLB->set_visible(bSet);
 }
 
-VclPtr<VirtualDevice> SwColumnPage::CreateColumnLayoutVDev(sal_uInt16 nItemId)
+ScopedVclPtr<VirtualDevice> SwColumnPage::CreateColumnLayoutVDev(sal_uInt16 nItemId)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Size aSize(30, 30);
