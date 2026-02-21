@@ -77,6 +77,14 @@ private:
     OUString getUIUrl() const;
     void syncCefWindowSize();
 
+    // One-time registration of the "OfficeLabsCefHost" window class
+    static bool registerCefHostClass();
+
+    // Subclass proc installed on m_hFrameWnd for instant position tracking
+    static LRESULT CALLBACK FrameSubclassProc(
+        HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
+        UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+
     DECL_LINK(ResizeTimerHdl, Timer*, void);
 
     SfxBindings* m_pBindings;
@@ -88,10 +96,14 @@ private:
     HWND m_hCefParentWnd = nullptr;
     HWND m_hFrameWnd = nullptr;
 
-    // Resize tracking: timer polls for container size changes
+    // Resize tracking: timer polls for container size changes (fallback)
     Timer m_aResizeTimer{ "officelabs::WebViewPanel resize" };
     Size m_aLastSize;
     Point m_aLastPos;
+
+    // Subclass tracking
+    bool m_bInSizeMove = false;
+    bool m_bSubclassed = false;
 
     // Backend connections
     std::unique_ptr<AgentConnection> m_pAgent;

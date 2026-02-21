@@ -50,9 +50,149 @@ void postToVclThread(std::function<void()> fn)
     Application::PostUserEvent(LINK_NONMEMBER(pData, VclDispatchCb));
 }
 
+// WndProc for the "OfficeLabsCefHost" window class.
+// Unlike "Static", this class has no background brush and suppresses
+// WM_ERASEBKGND. This prevents the black flash when Windows invalidates
+// the popup during focus transitions between CEF and the document.
+LRESULT CALLBACK CefHostWndProc(HWND hWnd, UINT uMsg,
+                                WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+    case WM_ERASEBKGND:
+        // Do NOT erase the background. CEF paints the entire client area.
+        // Returning 1 tells Windows "I handled it" so it won't paint a
+        // default background (which causes the black flash).
+        return 1;
+
+    case WM_PAINT:
+    {
+        // Validate the dirty region without drawing anything.
+        // Without BeginPaint/EndPaint, Windows would keep sending WM_PAINT.
+        PAINTSTRUCT ps;
+        BeginPaint(hWnd, &ps);
+        EndPaint(hWnd, &ps);
+        return 0;
+    }
+
+    case WM_NCHITTEST:
+        // The popup should never receive mouse input itself --
+        // all input goes to the CEF child HWND inside it.
+        return HTTRANSPARENT;
+
+    default:
+        return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    }
+}
+
 } // anonymous namespace
 
 namespace officelabs {
+
+// Subclass ID — arbitrary unique value for our frame subclass
+static constexpr UINT_PTR CEFHOST_SUBCLASS_ID = 0x4F4C4345; // "OLCE"
+
+bool WebViewPanel::registerCefHostClass()
+{
+    static bool bRegistered = false;
+    if (bRegistered)
+        return true;
+
+    WNDCLASSEXW wc = {};
+    wc.cbSize        = sizeof(WNDCLASSEXW);
+    wc.style         = 0;
+    wc.lpfnWndProc   = CefHostWndProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = GetModuleHandle(nullptr);
+    wc.hIcon         = nullptr;
+    wc.hIconSm       = nullptr;
+    wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+    wc.hbrBackground = nullptr;   // KEY: no background brush = no flash
+    wc.lpszMenuName  = nullptr;
+    wc.lpszClassName = L"OfficeLabsCefHost";
+
+    if (!RegisterClassExW(&wc))
+    {
+        DWORD err = GetLastError();
+        if (err != ERROR_CLASS_ALREADY_EXISTS)
+        {
+            SAL_WARN("officelabs.cef",
+                     "RegisterClassExW(OfficeLabsCefHost) failed, error=" << err);
+            return false;
+        }
+    }
+
+    bRegistered = true;
+    SAL_INFO("officelabs.cef", "Registered OfficeLabsCefHost window class");
+    return true;
+}
+
+LRESULT CALLBACK WebViewPanel::FrameSubclassProc(
+    HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
+    UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+{
+    auto* pPanel = reinterpret_cast<WebViewPanel*>(dwRefData);
+
+    switch (uMsg)
+    {
+    case WM_WINDOWPOSCHANGED:
+    {
+        // Fires on every frame move/resize, including during drag.
+        // This is the primary fix for the lag: instant position sync.
+        LRESULT result = DefSubclassProc(hWnd, uMsg, wParam, lParam);
+        if (pPanel)
+            pPanel->syncCefWindowSize();
+        return result;
+    }
+
+    case WM_ACTIVATE:
+    {
+        LRESULT result = DefSubclassProc(hWnd, uMsg, wParam, lParam);
+        if (pPanel && pPanel->m_hCefParentWnd)
+        {
+            WORD wActivate = LOWORD(wParam);
+            if (wActivate == WA_ACTIVE || wActivate == WA_CLICKACTIVE)
+            {
+                // Frame activated: bring popup to top immediately.
+                // Fixes the Z-order gap during focus transitions.
+                SetWindowPos(pPanel->m_hCefParentWnd, HWND_TOP,
+                             0, 0, 0, 0,
+                             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            }
+        }
+        return result;
+    }
+
+    case WM_ENTERSIZEMOVE:
+    {
+        if (pPanel)
+            pPanel->m_bInSizeMove = true;
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+    }
+
+    case WM_EXITSIZEMOVE:
+    {
+        if (pPanel)
+        {
+            pPanel->m_bInSizeMove = false;
+            pPanel->syncCefWindowSize();
+        }
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+    }
+
+    case WM_NCDESTROY:
+    {
+        RemoveWindowSubclass(hWnd, FrameSubclassProc, uIdSubclass);
+        if (pPanel)
+            pPanel->m_bSubclassed = false;
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+    }
+
+    default:
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+    }
+}
 
 // ============================================================
 // CefClient implementation for this panel
@@ -176,6 +316,14 @@ WebViewPanel::~WebViewPanel()
 
     m_aResizeTimer.Stop();
 
+    // Remove frame subclass FIRST, before destroying any windows.
+    // This prevents the subclass proc from firing with a stale pointer.
+    if (m_bSubclassed && m_hFrameWnd && IsWindow(m_hFrameWnd))
+    {
+        RemoveWindowSubclass(m_hFrameWnd, FrameSubclassProc, CEFHOST_SUBCLASS_ID);
+        m_bSubclassed = false;
+    }
+
     if (m_browser)
     {
         m_browser->GetHost()->CloseBrowser(true);
@@ -240,13 +388,16 @@ void WebViewPanel::initCefBrowser()
     int scrX = static_cast<int>(aScrPos.X());
     int scrY = static_cast<int>(aScrPos.Y());
 
+    // Register custom window class (once) — no background brush = no flash.
+    registerCefHostClass();
+
     // Create an UNOWNED popup window at the sidebar's screen position.
     // WS_EX_TOOLWINDOW: hidden from taskbar/alt-tab
     // No owner (nullptr): completely isolated from frame's message flow.
-    // We manually manage Z-order, minimize, and visibility in the timer.
+    // We manually manage Z-order, minimize, and visibility.
     HWND hCefParent = CreateWindowExW(
         WS_EX_TOOLWINDOW,
-        L"Static", L"",
+        L"OfficeLabsCefHost", L"",
         WS_POPUP | WS_CLIPCHILDREN,
         scrX, scrY, w, h,
         nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
@@ -265,6 +416,24 @@ void WebViewPanel::initCefBrowser()
     m_hCefParentWnd = hCefParent;
     m_aLastSize = Size(w, h);
     m_aLastPos = Point(scrX, scrY);
+
+    // Subclass the frame HWND for instant move/resize/activate notifications.
+    // This replaces the timer as the primary position-tracking mechanism.
+    if (m_hFrameWnd)
+    {
+        if (SetWindowSubclass(m_hFrameWnd, FrameSubclassProc,
+                              CEFHOST_SUBCLASS_ID,
+                              reinterpret_cast<DWORD_PTR>(this)))
+        {
+            m_bSubclassed = true;
+            SAL_INFO("officelabs.cef", "Frame HWND subclassed for instant tracking");
+        }
+        else
+        {
+            SAL_WARN("officelabs.cef",
+                     "SetWindowSubclass failed, falling back to timer-only tracking");
+        }
+    }
 
     if (!hCefParent)
         return;
@@ -290,7 +459,7 @@ void WebViewPanel::initCefBrowser()
 
     // Start resize tracking timer
     m_aResizeTimer.SetInvokeHandler(LINK(this, WebViewPanel, ResizeTimerHdl));
-    m_aResizeTimer.SetTimeout(200);
+    m_aResizeTimer.SetTimeout(500);
     m_aResizeTimer.Start();
 }
 
@@ -321,11 +490,12 @@ void WebViewPanel::syncCefWindowSize()
         return;
 
     // --- Z-order: keep popup in front of the LO frame ---
-    // Only adjust when the frame is foreground (avoid popping over other apps).
-    if (m_hFrameWnd && GetForegroundWindow() == m_hFrameWnd)
+    // Adjust when frame or popup is foreground (avoid popping over other apps).
+    // With the frame subclass, WM_ACTIVATE handles the primary Z-order fixup
+    // instantly. This timer-based check is a fallback.
+    HWND hFg = GetForegroundWindow();
+    if (m_hFrameWnd && (hFg == m_hFrameWnd || hFg == m_hCefParentWnd))
     {
-        // Bring popup to top of Z-order (in front of everything).
-        // HWND_TOP is correct; using hFrameWnd would put popup BEHIND the frame.
         SetWindowPos(m_hCefParentWnd, HWND_TOP,
                      0, 0, 0, 0,
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);

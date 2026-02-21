@@ -59,6 +59,10 @@ $(eval $(call gb_Library_add_libs,officelabs,\
     $(CEF_DIR)/libcef_dll_wrapper/Release/libcef_dll_wrapper.lib \
 ))
 
+$(eval $(call gb_Library_use_system_win32_libs,officelabs,\
+    comctl32 \
+))
+
 $(eval $(call gb_Library_add_exception_objects,officelabs,\
     officelabs/source/CefInit \
     officelabs/source/WebViewPanel \
