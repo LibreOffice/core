@@ -1813,7 +1813,7 @@ namespace emfio
         {
             if (fXScale != 0.0)
             {
-                // As we changing only font width, we are skippin if scales have the same values
+                // As we changing only font width, we are skipping if scales have the same values
                 const bool bNeedsWidthScale = (std::fabs(fYScale) != std::fabs(fXScale));
                 if (bNeedsWidthScale)
                 {
