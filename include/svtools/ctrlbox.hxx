@@ -257,7 +257,7 @@ private:
     void            UpdateEntries();
 
     void UpdatePreview();
-    static VclPtr<VirtualDevice> GetVirtualDevice(const Bitmap& rBmp);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(const Bitmap& rBmp);
     ImpLineListData* getBorderLineData(sal_Int32 nId);
 
                     SvtLineListBox( const SvtLineListBox& ) = delete;
