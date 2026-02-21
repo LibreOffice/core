@@ -881,7 +881,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     size_t i = 0;
     for (auto & grfName : aGrfNames)
     {
-        VclPtr<VirtualDevice> pVDev = SvxBmpNumIconView::CreateBitmapBulletPreview(i);
+        auto pVDev = SvxBmpNumIconView::CreateBitmapBulletPreview(i);
 
         INetURLObject aObj(grfName);
         if (aObj.GetProtocol() == INetProtocol::File)
@@ -1147,7 +1147,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     size_t i = 0;
     for (auto & grfName : aGrfNames)
     {
-        VclPtr<VirtualDevice> pVDev = SvxBmpNumIconView::CreateBitmapBulletPreview(i);
+        auto pVDev = SvxBmpNumIconView::CreateBitmapBulletPreview(i);
 
         INetURLObject aObj(grfName);
         if (aObj.GetProtocol() == INetProtocol::File)

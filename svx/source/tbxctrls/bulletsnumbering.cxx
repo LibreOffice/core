@@ -183,9 +183,9 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
                 if (lcl_BulletIsDefault(sBullet, sFont))
                     continue;
 
-                VclPtr<VirtualDevice> pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(sBullet, sFont);
+                auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(sBullet, sFont);
                 OUString sId = OUString::number(aList.size());
-                mxIconViewDoc->insert(-1, nullptr, &sId, pVDev, nullptr);
+                mxIconViewDoc->insert(-1, nullptr, &sId, pVDev.get(), nullptr);
                 aList.emplace_back(sBullet, sFont);
             }
 

@@ -33,7 +33,7 @@ protected:
     std::shared_ptr<model::ColorSet> mpCurrentColorSet;
 
     void initColorSets(model::Theme* pTheme = nullptr);
-    static VclPtr<VirtualDevice> CreateColorSetPreview(const model::ColorSet& rColorSet);
+    static ScopedVclPtr<VirtualDevice> CreateColorSetPreview(const model::ColorSet& rColorSet);
 
 public:
     explicit ThemeColorsPaneBase(std::unique_ptr<weld::IconView> xIconView);

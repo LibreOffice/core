@@ -173,7 +173,7 @@ private:
     DECL_LINK(MenuSelectAsyncHdl, void*, void);
     DECL_LINK(OnPopupEnd, const OUString&, void);
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
     void HandleMenuSelect(std::u16string_view rIdent);
 
     TranslateId GetStringResourceIdForLayout(AutoLayout aLayout) const;

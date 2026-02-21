@@ -197,7 +197,7 @@ private:
         sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
 };
 
 } // end of namespace sd::sidebar

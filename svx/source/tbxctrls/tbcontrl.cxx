@@ -483,7 +483,7 @@ private:
 
     void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
     void SetDiagonalUpBorder(const SvxLineItem& dUpLineItem);
-    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aPreviewBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aPreviewBitmap);
 
 public:
     SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
@@ -559,7 +559,7 @@ private:
 
         void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
 
-        static VclPtr<VirtualDevice> GetVirtualDevice(Image pImage);
+        static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pImage);
         sal_Int32       GetStylePos( sal_Int32  nListPos, tools::Long nWidth );
 
         const Color& GetPaintColor() const
@@ -728,7 +728,7 @@ private:
         return nullptr;
     }
 
-    VclPtr<VirtualDevice> LineListBox::GetVirtualDevice(Image pImage)
+    ScopedVclPtr<VirtualDevice> LineListBox::GetVirtualDevice(Image pImage)
     {
         constexpr tools::Long nMarginTopBottom = 5;
         constexpr tools::Long nMarginLeftRight = 2;
@@ -764,7 +764,7 @@ private:
         if (!m_sNone.isEmpty())
         {
             Size aPreviewSize = getPreviewSize(rIconView);
-            VclPtr<VirtualDevice> pVDevNone = GetVirtualDevice(Image());
+            auto pVDevNone = GetVirtualDevice(Image());
             pVDevNone->SetOutputSizePixel(aPreviewSize);
             rIconView.append("0", m_sNone, pVDevNone.get());
 
@@ -789,7 +789,7 @@ private:
                         GetColorDist( n ),
                         pData->GetStyle(), aBmp );
 
-                VclPtr<VirtualDevice> pVDev = GetVirtualDevice(Image(aBmp));
+                auto pVDev = GetVirtualDevice(Image(aBmp));
                 OUString sStyleName = SvtLineListBox::GetLineStyleName(pData->GetStyle());
 
                 OUString sId = OUString::number(n + 1);
@@ -2585,7 +2585,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     // Writer uses 8 of them - for a single cell.
     for ( i=1; i < (m_bIsCalc ? 11 : 9); i++ )
     {
-        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImgVec[i-1].first);
+        auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
         mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, pVDev.get());
     }
 
@@ -2595,7 +2595,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
         // Writer has 12 border types and Calc has 15 of them.
         for ( i = (m_bIsCalc ? 11 : 9); i < (m_bIsCalc ? 16 : 13); i++ )
         {
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImgVec[i-1].first);
+            auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
             mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, pVDev.get());
         }
 
@@ -2849,7 +2849,7 @@ IMPL_LINK(SvxFrameWindow_Impl, KeyReleaseHdl, const KeyEvent&, /*rKEvt*/, bool)
     return true;
 }
 
-VclPtr<VirtualDevice> SvxFrameWindow_Impl::GetVirtualDevice(BitmapEx aPreviewBitmap)
+ScopedVclPtr<VirtualDevice> SvxFrameWindow_Impl::GetVirtualDevice(BitmapEx aPreviewBitmap)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);
@@ -2931,7 +2931,7 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
     {
         for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
         {
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImgVec[i-1].first);
+            auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
             OUString sId = OUString::number(i);
             mxFrameIV->insert(i - 1, &aImgVec[i-1].second, &sId, pVDev.get(), nullptr);
         }

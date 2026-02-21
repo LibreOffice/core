@@ -82,6 +82,8 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
 
 FontWorkGalleryDialog::~FontWorkGalleryDialog()
 {
+    for (auto& pVDev : maFavoritesHorizontal)
+        pVDev.disposeAndClear();
 }
 
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
