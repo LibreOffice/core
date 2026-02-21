@@ -153,7 +153,7 @@ void SvxHatchTabPage::FillPresetListBox()
 
         OUString sId = OUString::number(nId);
         BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview(nId, aIconSize);
-        VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aBitmap);
+        auto aVDev = GetVirtualDevice(aBitmap);
 
         if (!m_xHatchLB->get_id(nId).isEmpty())
         {
@@ -447,7 +447,7 @@ void SvxHatchTabPage::AddHatch(const OUString& aName, tools::Long nCount)
     OUString sId = nCount > 0 ? m_xHatchLB->get_id( nCount - 1 ) : OUString();
     sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
     BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, aIconSize );
-    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+    auto pVDev = GetVirtualDevice(aBitmap);
 
     m_xHatchLB->insert( nId + 1, &aName, &sId, pVDev, nullptr);
     FillPresetListBox();
@@ -529,7 +529,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_pHatchingList->Replace(std::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 
     BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), aIconSize );
-    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+    auto pVDev = GetVirtualDevice(aBitmap);
 
     m_xHatchLB->remove( nPos );
     m_xHatchLB->insert( nPos, &aName, &sId, pVDev, nullptr);
@@ -546,7 +546,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_nHatchingListState |= ChangeType::MODIFIED;
 }
 
-VclPtr<VirtualDevice> SvxHatchTabPage::GetVirtualDevice(BitmapEx aBitmap)
+ScopedVclPtr<VirtualDevice> SvxHatchTabPage::GetVirtualDevice(BitmapEx aBitmap)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);

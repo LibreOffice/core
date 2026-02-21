@@ -506,7 +506,7 @@ private:
 
     sal_Int32 SearchHatchList(std::u16string_view rHatchName);
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
     void MenuSelect(const OUString& rIdent);
