@@ -464,7 +464,7 @@ private:
 
     void AddHatch(const OUString& aName, tools::Long nCount);
     void runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::Long nCount);
-    static VclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
     void MenuSelect(const OUString& rIdent);
