@@ -597,7 +597,7 @@ private:
     void CalculateBitmapPresetSize();
     sal_Int32 SearchBitmapList(std::u16string_view rBitmapName);
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
-    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
     void ClickRenameHdl();
