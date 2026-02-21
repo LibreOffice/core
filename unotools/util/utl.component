@@ -27,5 +27,10 @@
     constructor="unotools_ServiceDocument_get_implementation"
     single-instance="true">
     <singleton name="com.sun.star.util.theServiceDocumenter"/>
+    <!-- tdf#170930 the singleton was created in the “script” namespace whereas the name in the
+         component file contained “util”. Let’s keep both names in order to make the singleton
+         getter work without breaking it for people that are used to using the old name with
+         getValueByName -->
+    <singleton name="com.sun.star.script.theServiceDocumenter"/>
   </implementation>
 </component>
