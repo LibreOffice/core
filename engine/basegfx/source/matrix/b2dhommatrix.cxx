@@ -18,15 +18,12 @@
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/hommatrixtemplate.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace basegfx
 {
-    constexpr int RowSize = 3;
-
     void B2DHomMatrix::set3x2(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
     {
         mfValues[0][0] = f_0x0;
@@ -39,30 +36,22 @@ namespace basegfx
 
     bool B2DHomMatrix::isIdentity() const
     {
-        for(sal_uInt16 a(0); a < RowSize - 1; a++)
-        {
-            for(sal_uInt16 b(0); b < RowSize; b++)
-            {
-                const double fDefault(internal::implGetDefaultValue(a, b));
-                const double fValueAB(get(a, b));
-
-                if(!::basegfx::fTools::equal(fDefault, fValueAB))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return fTools::equal(1.0, mfValues[0][0])
+            && fTools::equal(0.0, mfValues[0][1])
+            && fTools::equal(0.0, mfValues[0][2])
+            && fTools::equal(0.0, mfValues[1][0])
+            && fTools::equal(1.0, mfValues[1][1])
+            && fTools::equal(0.0, mfValues[1][2]);
     }
 
     void B2DHomMatrix::identity()
     {
-        for(sal_uInt16 a(0); a < RowSize - 1; a++)
-        {
-            for(sal_uInt16 b(0); b < RowSize; b++)
-                mfValues[a][b] = internal::implGetDefaultValue(a, b);
-        }
+        mfValues[0][0] = 1.0;
+        mfValues[0][1] = 0.0;
+        mfValues[0][2] = 0.0;
+        mfValues[1][0] = 0.0;
+        mfValues[1][1] = 1.0;
+        mfValues[1][2] = 0.0;
     }
 
     bool B2DHomMatrix::isInvertible() const
@@ -143,22 +132,19 @@ namespace basegfx
 
     void B2DHomMatrix::doMulMatrix(const B2DHomMatrix& rMat)
     {
-        // create a copy as source for the original values
-        const B2DHomMatrix aCopy(*this);
+        double r0 = mfValues[0][0];
+        double r1 = mfValues[0][1];
+        double r2 = mfValues[0][2];
+        double r3 = mfValues[1][0];
+        double r4 = mfValues[1][1];
+        double r5 = mfValues[1][2];
 
-        for(sal_uInt16 a(0); a < 2; ++a)
-        {
-            for(sal_uInt16 b(0); b < 3; ++b)
-            {
-                double fValue = 0.0;
-
-                for(sal_uInt16 c(0); c < 2; ++c)
-                    fValue += aCopy.mfValues[c][b] * rMat.mfValues[a][c];
-
-                mfValues[a][b] = fValue;
-            }
-            mfValues[a][2] += rMat.mfValues[a][2];
-        }
+        mfValues[0][0] = rMat.mfValues[0][0] * r0 + rMat.mfValues[0][1] * r3;
+        mfValues[0][1] = rMat.mfValues[0][0] * r1 + rMat.mfValues[0][1] * r4;
+        mfValues[0][2] = rMat.mfValues[0][0] * r2 + rMat.mfValues[0][1] * r5 + rMat.mfValues[0][2];
+        mfValues[1][0] = rMat.mfValues[1][0] * r0 + rMat.mfValues[1][1] * r3;
+        mfValues[1][1] = rMat.mfValues[1][0] * r1 + rMat.mfValues[1][1] * r4;
+        mfValues[1][2] = rMat.mfValues[1][0] * r2 + rMat.mfValues[1][1] * r5 + rMat.mfValues[1][2];
     }
 
     bool B2DHomMatrix::operator==(const B2DHomMatrix& rMat) const
@@ -190,26 +176,21 @@ namespace basegfx
         double fCos(1.0);
 
         utils::createSinCosOrthogonal(fSin, fCos, fRadiant);
-        B2DHomMatrix aRotMat;
 
-        aRotMat.set(0, 0, fCos);
-        aRotMat.set(1, 1, fCos);
-        aRotMat.set(1, 0, fSin);
-        aRotMat.set(0, 1, -fSin);
-
-        doMulMatrix(aRotMat);
+        for(sal_uInt16 j = 0; j < 3; ++j)
+        {
+            double fValue = fCos * mfValues[0][j] - fSin * mfValues[1][j];
+            mfValues[1][j] = fSin * mfValues[0][j] + fCos * mfValues[1][j];
+            mfValues[0][j] = fValue;
+        }
     }
 
     void B2DHomMatrix::translate(double fX, double fY)
     {
         if(!fTools::equalZero(fX) || !fTools::equalZero(fY))
         {
-            B2DHomMatrix aTransMat;
-
-            aTransMat.set(0, 2, fX);
-            aTransMat.set(1, 2, fY);
-
-            doMulMatrix(aTransMat);
+            mfValues[0][2] += fX;
+            mfValues[1][2] += fY;
         }
     }
 
@@ -224,12 +205,12 @@ namespace basegfx
 
         if(!fTools::equal(fOne, fX) || !fTools::equal(fOne, fY))
         {
-            B2DHomMatrix aScaleMat;
-
-            aScaleMat.set(0, 0, fX);
-            aScaleMat.set(1, 1, fY);
-
-            doMulMatrix(aScaleMat);
+            mfValues[0][0] *= fX;
+            mfValues[0][1] *= fX;
+            mfValues[0][2] *= fX;
+            mfValues[1][0] *= fY;
+            mfValues[1][1] *= fY;
+            mfValues[1][2] *= fY;
         }
     }
 
@@ -243,11 +224,9 @@ namespace basegfx
         // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
         if(!fTools::equalZero(fSx))
         {
-            B2DHomMatrix aShearXMat;
-
-            aShearXMat.set(0, 1, fSx);
-
-            doMulMatrix(aShearXMat);
+            mfValues[0][0] += fSx * mfValues[1][0];
+            mfValues[0][1] += fSx * mfValues[1][1];
+            mfValues[0][2] += fSx * mfValues[1][2];
         }
     }
 
@@ -256,11 +235,9 @@ namespace basegfx
         // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
         if(!fTools::equalZero(fSy))
         {
-            B2DHomMatrix aShearYMat;
-
-            aShearYMat.set(1, 0, fSy);
-
-            doMulMatrix(aShearYMat);
+            mfValues[1][0] += fSy * mfValues[0][0];
+            mfValues[1][1] += fSy * mfValues[0][1];
+            mfValues[1][2] += fSy * mfValues[0][2];
         }
     }
 
