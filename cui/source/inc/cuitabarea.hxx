@@ -659,7 +659,7 @@ private:
 
     sal_Int32 SearchPatternList(std::u16string_view rPatternName);
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
     void MenuSelect(const OUString& rIdent);
