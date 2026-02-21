@@ -403,7 +403,7 @@ public:
 
 class SmSymDefineDialog final : public weld::GenericDialogController
 {
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     SmSymbolManager m_aSymbolMgrCopy;
     SmSymbolManager& m_rSymbolMgr;
     SmShowChar m_aOldSymbolDisplay;
