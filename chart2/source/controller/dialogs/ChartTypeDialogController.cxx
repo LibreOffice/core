@@ -389,7 +389,7 @@ void ChartTypeDialogController::setTemplateProperties( const uno::Reference< bea
 {
 }
 
-VclPtr<VirtualDevice> ChartTypeDialogController::getVDev(Image pImage)
+ScopedVclPtr<VirtualDevice> ChartTypeDialogController::getVDev(Image pImage)
 {
     BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();

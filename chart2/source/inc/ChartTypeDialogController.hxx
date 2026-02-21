@@ -144,7 +144,7 @@ public:
 protected:
     bool bSupportsXAxisWithValues;
     bool bSupports3D;
-    static VclPtr<VirtualDevice> getVDev(Image pPreview);
+    static ScopedVclPtr<VirtualDevice> getVDev(Image pPreview);
 };
 
 class ColumnOrBarChartDialogController_Base : public ChartTypeDialogController
