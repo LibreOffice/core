@@ -80,6 +80,18 @@ LRESULT CALLBACK CefHostWndProc(HWND hWnd, UINT uMsg,
         // all input goes to the CEF child HWND inside it.
         return HTTRANSPARENT;
 
+    case WM_ACTIVATE:
+        // Suppress activation processing. During OLE in-place activation
+        // (charts, equations), Windows sends WM_ACTIVATE to owned popups.
+        // If DefWindowProc processes this, CEF interferes with the OLE
+        // operation and crashes LibreOffice. Return 0 = "handled".
+        return 0;
+
+    case WM_NCACTIVATE:
+        // Same rationale: suppress non-client activation visual updates.
+        // Return TRUE to accept the state change without visual update.
+        return TRUE;
+
     default:
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
@@ -162,6 +174,23 @@ LRESULT CALLBACK WebViewPanel::FrameSubclassProc(
             }
         }
         return result;
+    }
+
+    case WM_NCACTIVATE:
+    {
+        // When the CEF popup takes focus, the frame gets WM_NCACTIVATE(FALSE).
+        // This dims the title bar. We want the frame to still LOOK active
+        // when the user is interacting with the sidebar (it's part of LO).
+        if (!wParam && pPanel && pPanel->m_hCefParentWnd)
+        {
+            HWND hFg = GetForegroundWindow();
+            if (hFg == pPanel->m_hCefParentWnd)
+            {
+                // Force visual "active" state on the frame
+                return DefWindowProcW(hWnd, WM_NCACTIVATE, TRUE, lParam);
+            }
+        }
+        return DefSubclassProc(hWnd, uMsg, wParam, lParam);
     }
 
     case WM_ENTERSIZEMOVE:
@@ -391,16 +420,19 @@ void WebViewPanel::initCefBrowser()
     // Register custom window class (once) — no background brush = no flash.
     registerCefHostClass();
 
-    // Create an UNOWNED popup window at the sidebar's screen position.
+    // Create an OWNED popup window at the sidebar's screen position.
     // WS_EX_TOOLWINDOW: hidden from taskbar/alt-tab
-    // No owner (nullptr): completely isolated from frame's message flow.
-    // We manually manage Z-order, minimize, and visibility.
+    // Owner = hFrameWnd: popup is captured with the frame during screen
+    // sharing (Teams, Zoom, etc.) and auto-hides when frame is minimized.
+    // WM_ACTIVATE/WM_NCACTIVATE are suppressed in CefHostWndProc to
+    // prevent OLE in-place activation crashes (the original reason for
+    // using an unowned popup).
     HWND hCefParent = CreateWindowExW(
         WS_EX_TOOLWINDOW,
         L"OfficeLabsCefHost", L"",
         WS_POPUP | WS_CLIPCHILDREN,
         scrX, scrY, w, h,
-        nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
+        hFrameWnd, nullptr, GetModuleHandle(nullptr), nullptr);
 
     if (hCefParent)
     {

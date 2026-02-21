@@ -92,7 +92,7 @@ private:
     // VclBin created via CreateChildFrame() inside the weld container
     VclPtr<vcl::Window> m_pBinWindow;
 
-    // Popup window hosting the CEF browser (owned by frame, not a child)
+    // Popup window hosting the CEF browser (owned by frame, captured in screen sharing)
     HWND m_hCefParentWnd = nullptr;
     HWND m_hFrameWnd = nullptr;
 
