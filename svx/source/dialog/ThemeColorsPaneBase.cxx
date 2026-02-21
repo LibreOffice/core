@@ -47,9 +47,9 @@ void ThemeColorsPaneBase::initColorSets(model::Theme* pTheme)
         for (size_t i = 0; i < maColorSets.size(); ++i)
         {
             auto const& rColorSet = maColorSets[i];
-            VclPtr<VirtualDevice> pVirDev = CreateColorSetPreview(rColorSet);
-            Bitmap aBitmap(pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel()));
+            auto pVirDev = CreateColorSetPreview(rColorSet);
 
+            Bitmap aBitmap(pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel()));
             OUString sId = OUString::number(i);
             OUString sName = rColorSet.getName();
             mxIconViewThemeColors->insert(-1, &sName, &sId, &aBitmap, nullptr);
@@ -63,7 +63,8 @@ void ThemeColorsPaneBase::initColorSets(model::Theme* pTheme)
     }
 }
 
-VclPtr<VirtualDevice> ThemeColorsPaneBase::CreateColorSetPreview(const model::ColorSet& rColorSet)
+ScopedVclPtr<VirtualDevice>
+ThemeColorsPaneBase::CreateColorSetPreview(const model::ColorSet& rColorSet)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Size aSize(100, 50);

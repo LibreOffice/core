@@ -40,7 +40,7 @@ public:
         Reference<XNumberingFormatter> const& xFormatter = nullptr,
         const Locale& rLocale = Locale());
 
-    static VclPtr<VirtualDevice> CreatePreviewFromUserDraw(
+    static ScopedVclPtr<VirtualDevice> CreatePreviewFromUserDraw(
         NumberingPageType ePageType,
         sal_Int32 nIndex,
         Size previewSize,
@@ -50,7 +50,7 @@ public:
         const Locale& rLocale = Locale(),
         const std::vector<std::pair<OUString, OUString>>& rCustomBullets = std::vector<std::pair<OUString, OUString>>());
 
-    static VclPtr<VirtualDevice> CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName);
+    static ScopedVclPtr<VirtualDevice> CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName);
     static OUString GetNumberingDescription(NumberingPageType ePageType, sal_Int32 nIndex);
 
     static void SetNumberingSettings(
@@ -69,7 +69,7 @@ public:
         const Locale& rLocale,
         std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
 
-    static VclPtr<VirtualDevice> CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex);
+    static ScopedVclPtr<VirtualDevice> CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex);
     static void PopulateBitmapIconView(weld::IconView* pIconView);
 };
 

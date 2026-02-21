@@ -470,7 +470,6 @@ private:
     rtl::Reference<SvxFrameToolBoxControl> mxControl;
     std::unique_ptr<weld::IconView> mxFrameIV;
     std::vector<std::pair<Bitmap, OUString>> aImgVec;
-    static Bitmap ScaleBitmapForDPI(Bitmap aPreviewBitmap);
     bool                        bParagraphMode;
     bool                        m_bIsWriter;
     bool                        m_bIsCalc;
@@ -488,6 +487,8 @@ private:
 
     void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
     void SetDiagonalUpBorder(const SvxLineItem& dUpLineItem);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aPreviewBitmap);
+
 public:
     SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
     virtual void GrabFocus() override
@@ -562,7 +563,7 @@ private:
 
         void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
 
-        static VclPtr<VirtualDevice> GetVirtualDevice(Image pImage);
+        static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pImage);
         sal_Int32       GetStylePos( sal_Int32  nListPos, tools::Long nWidth );
 
         const Color& GetPaintColor() const
@@ -731,7 +732,7 @@ private:
         return nullptr;
     }
 
-    VclPtr<VirtualDevice> LineListBox::GetVirtualDevice(Image pImage)
+    ScopedVclPtr<VirtualDevice> LineListBox::GetVirtualDevice(Image pImage)
     {
         constexpr tools::Long nMarginTopBottom = 5;
         constexpr tools::Long nMarginLeftRight = 2;
@@ -767,7 +768,7 @@ private:
         if (!m_sNone.isEmpty())
         {
             Size aPreviewSize = getPreviewSize(rIconView);
-            VclPtr<VirtualDevice> pVDevNone = GetVirtualDevice(Image());
+            auto pVDevNone = GetVirtualDevice(Image());
             pVDevNone->SetOutputSizePixel(aPreviewSize);
             Bitmap aNoneBmp = pVDevNone->GetBitmap(Point(0,0), aPreviewSize);
             rIconView.append("0", m_sNone, &aNoneBmp);
@@ -793,12 +794,11 @@ private:
                         GetColorDist( n ),
                         pData->GetStyle(), aBmp );
 
-                VclPtr<VirtualDevice> pVDev = GetVirtualDevice(Image(aBmp));
-                Bitmap aPreview = pVDev->GetBitmap(Point(0,0), pVDev->GetOutputSizePixel());
+                auto pVDev = GetVirtualDevice(Image(aBmp));
                 OUString sStyleName = SvtLineListBox::GetLineStyleName(pData->GetStyle());
-
+                Bitmap aScaledBmp = pVDev->GetBitmap(Point(0,0), pVDev->GetOutputSizePixel());
                 OUString sId = OUString::number(n + 1);
-                rIconView.append(sId, sStyleName, &aPreview);
+                rIconView.append(sId, sStyleName, &aScaledBmp);
 
                 if (sCurrentSelectedId == sId)
                     rIconView.select(nPos);
@@ -2575,8 +2575,9 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     // Writer uses 8 of them - for a single cell.
     for ( i=1; i < (m_bIsCalc ? 11 : 9); i++ )
     {
-        Bitmap aScaled = ScaleBitmapForDPI(aImgVec[i-1].first);
-        mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, &aScaled);
+        auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
+        Bitmap aScaledBmp = pVDev->GetBitmap(Point(0,0), pVDev->GetOutputSizePixel());
+        mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, &aScaledBmp);
     }
 
     //bParagraphMode should have been set in StateChanged
@@ -2585,8 +2586,9 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
         // Writer has 12 border types and Calc has 15 of them.
         for ( i = (m_bIsCalc ? 11 : 9); i < (m_bIsCalc ? 16 : 13); i++ )
         {
-            Bitmap aScaled = ScaleBitmapForDPI(aImgVec[i-1].first);
-            mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, &aScaled);
+            auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
+            Bitmap aScaledBmp = pVDev->GetBitmap(Point(0,0), pVDev->GetOutputSizePixel());
+            mxFrameIV->append(OUString::number(i), aImgVec[i-1].second, &aScaledBmp);
         }
 
     mxFrameIV->connect_mouse_press(LINK(this, SvxFrameWindow_Impl, MousePressHdl));
@@ -2876,12 +2878,16 @@ IMPL_LINK(SvxFrameWindow_Impl, KeyReleaseHdl, const KeyEvent&, /*rKEvt*/, bool)
     return true;
 }
 
-Bitmap SvxFrameWindow_Impl::ScaleBitmapForDPI(Bitmap aPreviewBitmap)
+ScopedVclPtr<VirtualDevice> SvxFrameWindow_Impl::GetVirtualDevice(Bitmap aPreviewBitmap)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Point aNull(0, 0);
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
-    return aPreviewBitmap;
+    const Size aSize(aPreviewBitmap.GetSizePixel());
+    pVDev->SetOutputSizePixel(aSize);
+    pVDev->DrawBitmap(aNull, aPreviewBitmap);
+    return pVDev;
 }
 
 IMPL_LINK(SvxFrameWindow_Impl, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
@@ -2953,9 +2959,10 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
     {
         for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
         {
-            Bitmap aScaled = ScaleBitmapForDPI(aImgVec[i-1].first);
+            auto pVDev = GetVirtualDevice(aImgVec[i-1].first);
+            Bitmap aScaledBmp = pVDev->GetBitmap(Point(0,0), pVDev->GetOutputSizePixel());
             OUString sId = OUString::number(i);
-            mxFrameIV->insert(i - 1, &aImgVec[i-1].second, &sId, &aScaled, nullptr);
+            mxFrameIV->insert(i - 1, &aImgVec[i-1].second, &sId, &aScaledBmp, nullptr);
         }
     }
 }

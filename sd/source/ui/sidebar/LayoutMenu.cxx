@@ -436,7 +436,7 @@ SfxRequest LayoutMenu::CreateRequest (
     return aRequest;
 }
 
-VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
+ScopedVclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
 {
     Bitmap aPreviewBitmap = pImage.GetBitmap();
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
@@ -448,16 +448,6 @@ VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
     pVDev->DrawBitmap(aNull, aPreviewBitmap);
 
     return pVDev;
-}
-
-Bitmap LayoutMenu::GetPreviewAsBitmap(const Image& rImage)
-{
-    Bitmap aPreviewBitmap(rImage.GetBitmap());
-    ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    if (pVDev->GetDPIScaleFactor() > 1)
-        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
-
-    return aPreviewBitmap;
 }
 
 void LayoutMenu::Fill()
@@ -518,19 +508,18 @@ void LayoutMenu::Fill()
             if (aImg.GetSizePixel().Width() > 0)
             {
                 OUString sId = OUString::number(static_cast<int>(elem.maAutoLayout));
+                auto aVDev = GetVirtualDevice(aImg);
                 OUString sLayoutName = SdResId(elem.mpStrResId);
                 if (!mxLayoutIconView->get_id(id).isEmpty())
                 {
-                    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aImg);
-                    mxLayoutIconView->set_image(id, *pVDev);
+                    mxLayoutIconView->set_image(id, *aVDev);
                     mxLayoutIconView->set_id(id, sId);
                     mxLayoutIconView->set_text(id, sLayoutName);
-                    pVDev.disposeAndClear();
                 }
                 else
                 {
-                    Bitmap aPreviewBitmap = GetPreviewAsBitmap(aImg);
-                    mxLayoutIconView->insert(id, nullptr, &sId, &aPreviewBitmap, nullptr);
+                    Bitmap aScaledBmp = aVDev->GetBitmap(Point(0,0), aVDev->GetOutputSizePixel());
+                    mxLayoutIconView->insert(id, nullptr, &sId, &aScaledBmp, nullptr);
                 }
                 maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;
 

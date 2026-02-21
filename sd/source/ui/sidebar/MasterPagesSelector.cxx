@@ -360,8 +360,8 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
                 Image aPreview(mpContainer->GetPreviewForToken(rEvent.maChildToken));
                 if (aPreview.GetSizePixel().Width() > 0)
                 {
-                    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
-                    mxPreviewIconView->set_image(nIndex, *pVDev);
+                    auto aDev = GetVirtualDevice(aPreview);
+                    mxPreviewIconView->set_image(nIndex, *aDev);
                 }
             }
         }
@@ -417,18 +417,17 @@ void MasterPagesSelector::SetItem (
 
         if (aPreview.GetSizePixel().Width() > 0)
         {
+            auto aVDev = GetVirtualDevice(aPreview);
             if (!mxPreviewIconView->get_id(nIndex).isEmpty())
             {
-                VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
-                mxPreviewIconView->set_image(nIndex, *pVDev);
+                mxPreviewIconView->set_image(nIndex, *aVDev);
                 mxPreviewIconView->set_id(nIndex, OUString::number(aToken));
-                pVDev.disposeAndClear();
             }
             else
             {
-                Bitmap aPreviewBitmap = GetPreviewAsBitmap(aPreview);
                 OUString sId = OUString::number(aToken);
-                mxPreviewIconView->insert(nIndex, nullptr, &sId, &aPreviewBitmap, nullptr);
+                Bitmap aScaledBmp = aVDev->GetBitmap(Point(0,0), aVDev->GetOutputSizePixel());
+                mxPreviewIconView->insert(nIndex, nullptr, &sId, &aScaledBmp, nullptr);
                 mxPreviewIconView->set_item_accessible_name(
                     nIndex, mpContainer->GetPageNameForToken(aToken));
             }
@@ -495,7 +494,7 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
     }
 }
 
-VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
+ScopedVclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
 {
     Bitmap aPreviewBitmap = rImage.GetBitmap();
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
@@ -507,16 +506,6 @@ VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
     pVDev->DrawBitmap(aNull, aPreviewBitmap);
 
     return pVDev;
-}
-
-Bitmap MasterPagesSelector::GetPreviewAsBitmap(const Image& rImage)
-{
-    Bitmap aPreviewBitmap(rImage.GetBitmap());
-    ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    if (pVDev->GetDPIScaleFactor() > 1)
-        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
-
-    return aPreviewBitmap;
 }
 
 void MasterPagesSelector::UpdateAllPreviews()
@@ -532,7 +521,7 @@ void MasterPagesSelector::UpdateAllPreviews()
         Image aPreview(mpContainer->GetPreviewForToken(aToken));
         if (aPreview.GetSizePixel().Width() > 0)
         {
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
+            auto pVDev = GetVirtualDevice(aPreview);
             mxPreviewIconView->set_image(aIndex, *pVDev);
         }
         else if (mpContainer->GetPreviewState(aToken) == MasterPageContainer::PS_CREATABLE)

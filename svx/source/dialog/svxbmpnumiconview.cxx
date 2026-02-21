@@ -98,7 +98,7 @@ void SvxBmpNumIconView::PopulateIconView(
 
         for (sal_Int32 i = 0; i < std::min(aBulletSymbols.getLength(), sal_Int32(8)); ++i)
         {
-            VclPtr<VirtualDevice> pVDev = CreatePreviewFromUserDraw(NumberingPageType::BULLET, i, previewSize, rNumSettings, rOutlineSettings, xFormatter, rLocale);
+            auto pVDev = CreatePreviewFromUserDraw(NumberingPageType::BULLET, i, previewSize, rNumSettings, rOutlineSettings, xFormatter, rLocale);
             Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
             OUString sId = OUString::number(i);
             OUString sText = GetNumberingDescription(ePageType, i);
@@ -107,7 +107,7 @@ void SvxBmpNumIconView::PopulateIconView(
     }
 }
 
-VclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
+ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
     NumberingPageType ePageType,
     sal_Int32 nIndex,
     Size previewSize,
@@ -422,7 +422,7 @@ VclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
     return pVDev;
 }
 
-VclPtr<VirtualDevice> SvxBmpNumIconView::CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName)
+ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     Size aSize(80, 100);
@@ -506,7 +506,7 @@ void SvxBmpNumIconView::SetNumberingSettings(
 
     for (sal_Int32 i = 0; i < aNum.getLength(); ++i)
     {
-        VclPtr<VirtualDevice> pVDev = CreatePreviewFromUserDraw(
+        auto pVDev = CreatePreviewFromUserDraw(
             NumberingPageType::SINGLENUM, i, previewSize, aNum, Sequence<Reference<XIndexAccess>>(),
             xFormat, rLocale, maCustomBullets);
 
@@ -529,7 +529,7 @@ void SvxBmpNumIconView::SetOutlineNumberingSettings(
 
     for (sal_Int32 i = 0; i < rOutline.getLength(); ++i)
     {
-        VclPtr<VirtualDevice> pVDev = CreatePreviewFromUserDraw(
+        auto pVDev = CreatePreviewFromUserDraw(
             NumberingPageType::OUTLINE, i, previewSize, Sequence<Sequence<PropertyValue>>(), rOutline,
             xFormat, rLocale, maCustomBullets);
 
@@ -540,7 +540,7 @@ void SvxBmpNumIconView::SetOutlineNumberingSettings(
     }
 }
 
-VclPtr<VirtualDevice> SvxBmpNumIconView::CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex)
+ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     Size aRectSize(150, 200);
@@ -602,7 +602,7 @@ void SvxBmpNumIconView::PopulateBitmapIconView(weld::IconView* pIconView)
 
     for (sal_uInt32 i = 0; i < std::min(nCount, sal_uInt32(8)); ++i)
     {
-        VclPtr<VirtualDevice> pVDev = CreateBitmapBulletPreview(i);
+        auto pVDev = CreateBitmapBulletPreview(i);
         Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(i);
         pIconView->insert(-1, nullptr, &sId, &aBmp, nullptr);
