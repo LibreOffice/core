@@ -137,18 +137,18 @@ public:
 
 struct SumFunction24
 {
-    static inline void add(sal_Int32*& pValue1, sal_Int32 nConstant)
-    {
-        pValue1[0] += nConstant;
-        pValue1[1] += nConstant;
-        pValue1[2] += nConstant;
-    }
-
     static inline void set(sal_Int32*& pValue1, sal_Int32 nConstant)
     {
         pValue1[0] = nConstant;
         pValue1[1] = nConstant;
         pValue1[2] = nConstant;
+    }
+
+    static inline void mulAndAdd(sal_Int32*& pValue1, const sal_uInt8* pValue2, sal_Int32 nConstant)
+    {
+        pValue1[0] += pValue2[0] * nConstant;
+        pValue1[1] += pValue2[1] * nConstant;
+        pValue1[2] += pValue2[2] * nConstant;
     }
 
     static inline void add(sal_Int32*& pValue1, const sal_uInt8* pValue2)
@@ -197,9 +197,12 @@ struct SumFunction24
 
 struct SumFunction8
 {
-    static inline void add(sal_Int32*& pValue1, sal_Int32 nConstant) { pValue1[0] += nConstant; }
-
     static inline void set(sal_Int32*& pValue1, sal_Int32 nConstant) { pValue1[0] = nConstant; }
+
+    static inline void mulAndAdd(sal_Int32*& pValue1, const sal_uInt8* pValue2, sal_Int32 nConstant)
+    {
+        pValue1[0] += pValue2[0] * nConstant;
+    }
 
     static inline void add(sal_Int32*& pValue1, const sal_uInt8* pValue2)
     {
@@ -286,7 +289,7 @@ void stackBlurHorizontal(BlurSharedData const& rShared, sal_Int32 nStart, sal_In
 
             SumFunction::assignPtr(pStackPtr, pSourcePointer);
 
-            SumFunction::add(nSum, pSourcePointer[0] * pWeightPointer[i]);
+            SumFunction::mulAndAdd(nSum, pSourcePointer, pWeightPointer[i]);
 
             if (i - nRadius > 0)
             {
@@ -398,7 +401,7 @@ void stackBlurVertical(BlurSharedData const& rShared, sal_Int32 nStart, sal_Int3
 
             SumFunction::assignPtr(pStackPtr, pSourcePointer);
 
-            SumFunction::add(nSum, pSourcePointer[0] * pWeightPointer[i]);
+            SumFunction::mulAndAdd(nSum, pSourcePointer, pWeightPointer[i]);
 
             if (i - nRadius > 0)
             {
