@@ -173,7 +173,7 @@ void SvxBitmapTabPage::FillPresetListBox()
 
         OUString sId = OUString::number(nId);
         Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview(nId, aIconSize);
-        VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aBitmap);
+        auto aVDev = GetVirtualDevice(aBitmap);
         Bitmap aBmp = aVDev->GetBitmap(Point(), aVDev->GetOutputSizePixel());
         OUString sImageName = pEntry->GetName();
 
@@ -895,7 +895,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
             OUString sId = nCount > 0 ? m_xBitmapLB->get_id( nCount - 1 ) : OUString();
             sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
             Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, aIconSize );
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+            auto pVDev = GetVirtualDevice(aBitmap);
             Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
             m_xBitmapLB->insert( nId + 1, &aName, &sId, &aBmp, nullptr);
@@ -916,7 +916,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
     }
 }
 
-VclPtr<VirtualDevice> SvxBitmapTabPage::GetVirtualDevice(Bitmap aBitmap)
+ScopedVclPtr<VirtualDevice> SvxBitmapTabPage::GetVirtualDevice(Bitmap aBitmap)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);

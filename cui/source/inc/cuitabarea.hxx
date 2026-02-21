@@ -556,7 +556,7 @@ private:
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
     tools::Long AddBitmap(const GraphicObject& rGraphicObject, const OUString& rName,
                           bool bOnlyForThisDocument = false);
-    static VclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Bitmap aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
     void ClickRenameHdl();
