@@ -585,7 +585,7 @@ namespace
                 new OutputWrapString(aOutput),
                 nullptr));
             // This ensures that the imported image arrives properly flipped
-            CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"matrix(-21488.4 0 0 -27978.1 21488.4 27978.1)\"") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("draw:transform=\"matrix(-21488.4 0 -0 -27978.1 21488.4 27978.1)\"") != -1);
 #endif
         }
 
