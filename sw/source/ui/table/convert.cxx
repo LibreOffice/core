@@ -242,7 +242,7 @@ std::unique_ptr<SwTableAutoFormat> SwConvertTableDlg::FillAutoFormatOfIndex() co
 
 IMPL_LINK(SwConvertTableDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
-    if (m_nIndex != -1)
+    if (m_nIndex == -1)
         return;
 
     SwTableAutoFormat& rData = (*m_xTableTable)[m_nIndex];
